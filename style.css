@@ -1,6 +1,11 @@
-.color{
-  width:100%;
+.color {
+  width: 100%;
 }
-#colors{
-  height:400px;
+#colors {
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+}
+#coloredNick p {
+  font-size: 4rem;
 }
