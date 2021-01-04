@@ -115,15 +115,15 @@ function updateSpitter() {
   }
   document.getElementById("colors").innerHTML = html.join("");
   //update the pre element
-  fixedjson1 = JSON.stringify(essentialscolorsout).replace("[", "").replace("]", "").replace(/,/g, "").replace(/"/g, "").replace(/ /g, "");
-  peen1 = `/nick ${fixedjson1}`;
-  spitter.innerText = peen1;
+  essentialscolorsout.forEach(p => { if (p.includes(' ')) { essentialscolorsout[essentialscolorsout.indexOf(p)] = '' } });
+  fixedjson1 = essentialscolorsout.join('');
+  spitter.innerText = `/nick ${fixedjson1}`;
 
   document.getElementById("color1").innerHTML = html.join("");
   //update the pre element
-  fixedjson2 = JSON.stringify(othercolorsout).replace("[", "").replace("]", "").replace(/,/g, "").replace(/"/g, "").replace(/ /g, "");
-  peen2 = `/nick ${fixedjson2}`;
-  spitter1.innerText = peen2;
+  othercolorsout.forEach(p => { if (p.includes(' ')) { othercolorsout[othercolorsout.indexOf(p)] = '' } });
+  fixedjson2 = othercolorsout.join('');
+  spitter1.innerText = `/nick ${fixedjson2}`;
 
   //bear func
 
