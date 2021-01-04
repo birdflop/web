@@ -10,13 +10,13 @@
     <p style="padding-bottom: 10px;">Hex color nickname creator</p>
     <div class="editors col-md-2" style="padding-left: 0;">
       <label for="color1">First Hex Color</label> 
-      <input class="form-control col-md-2" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" onchange="javascript: updateSpitter()">
+      <input class="form-control col-md-2" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()">
 
       <label for="color2">Second Hex Color</label>
-      <input class="form-control col-md-2" id="color2" name="color2" type="text" placeholder="Color 2 (hex, rgb, rgba)" value="#ff3300" onchange="javascript: updateSpitter()">
+      <input class="form-control col-md-2" id="color2" name="color2" type="text" placeholder="Color 2 (hex, rgb, rgba)" value="#ff3300" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()">
       
       <label for="steps">Nickname</label>
-      <input class="form-control col-md-2" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" onchange="javascript: updateSpitter()">
+      <input class="form-control col-md-2" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()">
     </div><div class="col-md-2" style="padding-left: 0;">
       <div id="colors"></div>
       <div id="colors1"></div>
