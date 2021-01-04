@@ -6,6 +6,23 @@
   display: flex;
   flex-direction: row;
 }
+@font-face {
+   font-family: MinecraftRegular;
+   src: url(./assets/fonts/MinecraftRegular.otf);
+}
+@font-face {
+   font-family: MinecraftBold;
+   src: url(./assets/fonts/MinecraftBold.otf);
+}
+@font-face {
+   font-family: MinecraftItalic;
+   src: url(./assets/fonts/MinecraftItalic.otf);
+}
+@font-face {
+   font-family: MinecraftBoldItalic;
+   src: url(./assets/fonts/MinecraftBoldItalic.otf);
+}
 #coloredNick p {
   font-size: 4rem;
+  font-family: MinecraftRegular;
 }
