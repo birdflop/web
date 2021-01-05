@@ -7,7 +7,16 @@ const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
 const gradiantDiv = document.getElementById("colors").children;
 let newNick = nickName.value;
-nickName.addEventListener("input", (e) => (newNick = e.target.value));
+
+console.log("#" + val1El.value)
+
+function cuttext(text, length) {
+  if (text.length <= length) {
+    return text;
+  }
+
+  return text.substr(0, length)
+}
 
 // constants for switch/case checking representation type
 const HEX = 1;
@@ -68,10 +77,11 @@ function processHEX(val) {
 }
 
 function updateSpitter() {
+  newNick = nickName.value.replace(/ /g, '');
   //attach start value
   var hasSpun = 0;
-  val1El.dataType = getType(val1El.value);
-  val2El.dataType = getType(val2El.value);
+  val1El.dataType = getType("#" + val1El.value);
+  val2El.dataType = getType("#" + val2El.value);
 
   var val1RGB = processValue(val1El);
   var val2RGB = processValue(val2El);
@@ -88,11 +98,11 @@ function updateSpitter() {
   var spitter = document.getElementById("spitter");
 
   //the number of steps in the gradient
-  var stepsInt = parseInt(nickname.value.length, 10);
+  var stepsInt = parseInt(newNick.length, 10);
   //the percentage representation of the step
   var stepsPerc = 100 / (stepsInt + 1);
 
-  var nickspaced = nickname.value.split("");
+  var nickspaced = newNick.split("");
 
   // diffs between two values
   var valClampRGB = [val2RGB[0] - val1RGB[0], val2RGB[1] - val1RGB[1], val2RGB[2] - val1RGB[2]];
@@ -108,6 +118,7 @@ function updateSpitter() {
     essentialscolorsout[i] = ["&#", clampedR, clampedG, clampedB, nickspaced[i]].join("");
     othercolorsout[i] = ["&x", clampedR.split("").toString().replace(/,/g, "&"), "&", clampedG.split("").toString().replace(/,/g, "&"), "&", clampedB.split("").toString().replace(/,/g, "&"), nickspaced[i]].join("");
   }
+
   //build div representation of gradient
   var html = [];
   for (var i = 0; i < colors.length; i++) {
@@ -115,19 +126,37 @@ function updateSpitter() {
   }
   document.getElementById("colors").innerHTML = html.join("");
   //update the pre element
-  fixedjson1 = JSON.stringify(essentialscolorsout).replace("[", "").replace("]", "").replace(/,/g, "").replace(/"/g, "").replace(/ /g, "");
-  peen1 = `/nick ${fixedjson1}`;
-  spitter.innerText = peen1;
+  fixedjson1 = essentialscolorsout.join('');
+  spitter.innerText = `/nick ${cuttext(fixedjson1, 250)}`;
 
   document.getElementById("color1").innerHTML = html.join("");
   //update the pre element
-  fixedjson2 = JSON.stringify(othercolorsout).replace("[", "").replace("]", "").replace(/,/g, "").replace(/"/g, "").replace(/ /g, "");
-  peen2 = `/nick ${fixedjson2}`;
-  spitter1.innerText = peen2;
+  fixedjson2 = othercolorsout.join('');
+  spitter1.innerText = `/nick ${cuttext(fixedjson2, 250)}`;
+
+  if(fixedjson1.length >= 250){
+  document.getElementById("warning1").innerHTML = html.join("");
+  //update the pre element
+  warning1.innerText = `Max minecraft chat length is 256 characters this command is ${fixedjson1.length + 6}\n characters long and has been cut to 256`;
+  }else{
+    document.getElementById("warning1").innerHTML = html.join("");
+    //update the pre element
+    warning1.innerText;
+  }
+
+  if(fixedjson2.length >= 250){
+    document.getElementById("warning2").innerHTML = html.join("");
+    //update the pre element
+    warning2.innerText = `Max minecraft chat length is 256 characters this command is ${fixedjson2.length + 6}\n characters long and has been cut to 256`;
+    }else{
+      document.getElementById("warning2").innerHTML = html.join("");
+      //update the pre element
+      warning2.innerText;
+    }
 
   //bear func
 
-  displayColoredName(newNick);
+  displayColoredName(cuttext(newNick, 256));
 }
 /**
  * padding function:

@@ -1,11 +1,3 @@
-.color {
-  width: 100%;
-}
-#colors {
-  height: 120px;
-  display: flex;
-  flex-direction: row;
-}
-#coloredNick p {
-  font-size: 4rem;
+body {
+  background: rgb(49, 49, 49); /* Green background with 30% opacity */
 }

@@ -1,0 +1,50 @@
+<html>
+  <head>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">EasyMC</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="../index.html">Home</a></li>
+          <li class="active" ><a href="#">RGB Nicknames</a></li>
+          <li><a href="#">Coming Soon</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="assets/images/rgb.png" type="image/x-icon">
+    <title>RGB Gradient Creator</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  
+  </head>
+  <body class="container">
+    <h1 id="title" style="word-wrap: break-word;" >
+      <span style="color:red">R</span><span style="color:green">G</span><span style="color:blue">B</span> 
+      Nicknames</h1>
+    <p style="padding-bottom: 10px;">Hex color nickname creator</p>
+    <div class="editors col-md-2"">
+      <label for="color1">First Hex Color</label> 
+      <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()" ">
+      <!-- <input class="form-control col-md-1" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()"> -->
+
+      <label for="color2">Second Hex Color</label>
+      <input class="form-control col-md-1" id="color2" name="color2" value="ff3300" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()" ">
+
+      <label for="steps">Nickname</label>
+      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()">
+    </div><div class="col-md-2"">
+      <div class="colorpadding"><div id="colors"></div></div>
+    </div>
+    <pre id="spitter"></pre>
+    <div id="warning1"></div>
+    <pre id="spitter1"></pre>
+    <div id="warning2"></div>
+    <div id="coloredNick" style="word-wrap: break-word;"></div>
+    <script src="script.js"></script>
+    <script src="../assets/js/jscolor.js"></script>
+  </body>
+</html>
