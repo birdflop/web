@@ -25,6 +25,7 @@
 #coloredNick p {
   font-size: 4rem;
   font-family: MinecraftRegular;
+  margin-right: 15px;
 }
 #title {
   font-family: MinecraftRegular;
@@ -41,13 +42,18 @@
 #spitter1 {
   white-space: pre-wrap;
   height: 56.5px;
-  margin-right: 15px;
+  margin-right: 0px;
 }
 #spitter {
   white-space: pre-wrap;
   height: 56.5px;
-  margin-right: 15px;
-  margin-bottom: 7px;
+  margin-right: 0px;
+}
+#color1 {
+  margin-left: 0px;
+}
+#color2 {
+  margin-left: 0px;
 }
 body {
   background: rgb(49, 49, 49); /* Green background with 30% opacity */
