@@ -7,6 +7,7 @@ const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
 const gradiantDiv = document.getElementById("colors").children;
 let newNick = nickName.value;
+var rgbtype = 'chat (&#rrggbb)';
 
 console.log("#" + val1El.value)
 
@@ -45,6 +46,34 @@ function processValue(el) {
     }
   }
 }
+
+//copy contents to clipboard  
+function copyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  document.execCommand('copy');
+  alert('Copied output!')
+  document.body.removeChild(textArea);
+}
+
+
+function showError() {
+  if (document.getElementById('spitter').textContent.length > "256") {
+    document.getElementById('error').style.display = "block";
+    document.getElementById('spitter').style.height = "70px";
+    document.getElementById('spitter').style.marginBottom = "5px";
+  } else {
+    document.getElementById('error').style.display = "none";
+    document.getElementById('spitter').style.height = "95px";
+    document.getElementById('spitter').style.marginBottom = "10px";
+  }
+}
+
 
 //return a workable RGB int array [r,g,b] from rgb/rgba representation
 function processRGB(val) {
@@ -88,10 +117,7 @@ function updateSpitter() {
   var colors = [
     // somewhere to dump gradient
   ];
-  var essentialscolorsout = [
-    //yes
-  ];
-  var othercolorsout = [
+  var colorsout = [
     //yes
   ];
   // the pre element where we spit array to user
@@ -115,10 +141,12 @@ function updateSpitter() {
 
     var clampedB = valClampRGB[2] > 0 ? pad(Math.round((valClampRGB[2] / 100) * (stepsPerc * (i + 1))).toString(16), 2) : pad(Math.round(val1RGB[2] + (valClampRGB[2] / 100) * (stepsPerc * (i + 1))).toString(16), 2);
     colors[i] = ["#", clampedR, clampedG, clampedB].join("");
-    essentialscolorsout[i] = ["&#", clampedR, clampedG, clampedB, nickspaced[i]].join("");
-    othercolorsout[i] = ["&x", clampedR.split("").toString().replace(/,/g, "&"), "&", clampedG.split("").toString().replace(/,/g, "&"), "&", clampedB.split("").toString().replace(/,/g, "&"), nickspaced[i]].join("");
+    if (rgbtype.includes('&#rrggbb')) {
+      colorsout[i] = ["&#", clampedR, clampedG, clampedB, nickspaced[i]].join("");
+    } else {
+      colorsout[i] = ["&x&", clampedR.split("").join("&") + '&', clampedG.split("").join("&") + '&', clampedB.split("").join("&"), nickspaced[i]].join("");
+    }
   }
-
   //build div representation of gradient
   var html = [];
   for (var i = 0; i < colors.length; i++) {
@@ -126,33 +154,16 @@ function updateSpitter() {
   }
   document.getElementById("colors").innerHTML = html.join("");
   //update the pre element
-  fixedjson1 = essentialscolorsout.join('');
-  spitter.innerText = `/nick ${cuttext(fixedjson1, 250)}`;
-
-  document.getElementById("color1").innerHTML = html.join("");
-  //update the pre element
-  fixedjson2 = othercolorsout.join('');
-  spitter1.innerText = `/nick ${cuttext(fixedjson2, 250)}`;
-
-  if(fixedjson1.length >= 250){
-  document.getElementById("warning1").innerHTML = html.join("");
-  //update the pre element
-  warning1.innerText = `Max minecraft chat length is 256 characters this command is ${fixedjson1.length + 6}\n characters long and has been cut to 256`;
-  }else{
-    document.getElementById("warning1").innerHTML = html.join("");
-    //update the pre element
-    warning1.innerText;
+  colorsout.forEach(p => { if (p.includes(' ')) { colorsout[colorsout.indexOf(p)] = ' ' } });
+  if (rgbtype.includes('/nick')) {
+    spitter.innerText = '/nick ' + colorsout.join('')
+  } else if (rgbtype.includes('console')) {
+    spitter.innerText = colorsout.join('').replace(/&/g, '§')
+  } else {
+    spitter.innerText = colorsout.join('')
   }
 
-  if(fixedjson2.length >= 250){
-    document.getElementById("warning2").innerHTML = html.join("");
-    //update the pre element
-    warning2.innerText = `Max minecraft chat length is 256 characters this command is ${fixedjson2.length + 6}\n characters long and has been cut to 256`;
-    }else{
-      document.getElementById("warning2").innerHTML = html.join("");
-      //update the pre element
-      warning2.innerText;
-    }
+  showError()
 
   //bear func
 
