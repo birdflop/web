@@ -142,6 +142,7 @@ function updateSpitter(event) {
   }
   if (rgbtype.includes('/nick')) output = '/nick ' + output;
   spitter.innerText = output
+  showError()
   displayColoredName(newNick, colors);
 }
 /**
