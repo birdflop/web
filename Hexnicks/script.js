@@ -5,7 +5,6 @@ var stepsEl = document.getElementById("steps");
 const nickName = document.getElementById("nickname");
 const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
-const gradiantDiv = document.getElementById("colors").children;
 let newNick = nickName.value;
 var rgbtype = 'chat (&#rrggbb)';
 
@@ -17,24 +16,6 @@ function cuttext(text, length) {
   }
 
   return text.substr(0, length)
-}
-
-// constants for switch/case checking representation type
-const HEX = 1;
-
-// get the string representation
-// type and set it on the element (HEX/RGB/RGBA)
-function getType(val) {
-  if (val.indexOf("#") > -1) return HEX;
-}
-
-// process the value irrespective of representation type
-function processValue(el) {
-  switch (el.dataType) {
-    case HEX: {
-      return processHEX(el.value);
-    }
-  }
 }
 
 //copy contents to clipboard  
@@ -51,7 +32,6 @@ function copyTextToClipboard(text) {
   document.body.removeChild(textArea);
 }
 
-
 function showError() {
   if (document.getElementById('spitter').textContent.length > "256") {
     document.getElementById('error').style.display = "block";
@@ -64,100 +44,105 @@ function showError() {
   }
 }
 
-
-//return a workable RGB int array [r,g,b] from rgb/rgba representation
-function processRGB(val) {
-  var rgb = val.split("(")[1].split(")")[0].split(",");
-  alert(rgb.toString());
-  return [parseInt(rgb[0], 10), parseInt(rgb[1], 10), parseInt(rgb[2], 10)];
+function hex (c) {
+  var s = "0123456789abcdef";
+  var i = parseInt (c);
+  if (i == 0 || isNaN (c))
+    return "00";
+  i = Math.round (Math.min (Math.max (0, i), 255));
+  return s.charAt ((i - i % 16) / 16) + s.charAt (i % 16);
 }
 
-//return a workable RGB int array [r,g,b] from hex representation
-function processHEX(val) {
-  //does the hex contain extra char?
-  var hex = val.length > 6 ? val.substr(1, val.length - 1) : val;
-  // is it a six character hex?
-  if (hex.length > 3) {
-    //scrape out the numerics
-    var r = hex.substr(0, 2);
-    var g = hex.substr(2, 2);
-    var b = hex.substr(4, 2);
+/* Convert an RGB triplet to a hex string */
+function convertToHex (rgb) {
+  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+}
 
-    // if not six character hex,
-    // then work as if its a three character hex
-  } else {
-    // just concat the pieces with themselves
-    var r = hex.substr(0, 1) + hex.substr(0, 1);
-    var g = hex.substr(1, 1) + hex.substr(1, 1);
-    var b = hex.substr(2, 1) + hex.substr(2, 1);
+/* Remove '#' in color hex string */
+function trim (s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
+
+/* Convert a hex string to an RGB triplet */
+function convertToRGB (hex) {
+  var color = [];
+  color[0] = parseInt ((trim(hex)).substring (0, 2), 16);
+  color[1] = parseInt ((trim(hex)).substring (2, 4), 16);
+  color[2] = parseInt ((trim(hex)).substring (4, 6), 16);
+  return color;
+}
+
+function generateColor(colorStart,colorEnd,colorCount){
+
+	// The beginning of your gradient
+	var start = convertToRGB (colorStart);    
+
+	// The end of your gradient
+	var end   = convertToRGB (colorEnd);    
+
+	// The number of colors to compute
+	var len = colorCount;
+
+	//Alpha blending amount
+	var alpha = 0.0;
+
+	var saida = [];
+	
+	for (i = 0; i < len; i++) {
+		var c = [];
+		alpha += (1.0/len);
+		
+		c[0] = start[0] * alpha + (1 - alpha) * end[0];
+		c[1] = start[1] * alpha + (1 - alpha) * end[1];
+		c[2] = start[2] * alpha + (1 - alpha) * end[2];
+
+		saida.push(convertToHex (c));
+		
+	}
+	
+	return saida;
+	
+}
+
+function updateSpitter(event) {
+  if (rgbtype.includes('/nick')) {
+    nickName.value = nickName.value.replace(/ /g, '');
+    if(nickName.value != '') {
+      var letters = /^[0-9a-zA-Z_]+$/;
+      if(!nickName.value.match(letters)) nickName.value = nickName.value.replace(event.data, '');
+      if(!nickName.value.match(letters)) nickName.value = 'Gradieeennnttt';
+    }
   }
-  // return our clean values
-  return [parseInt(r, 16), parseInt(g, 16), parseInt(b, 16)];
-}
-
-function updateSpitter() {
-  newNick = nickName.value.replace(/ /g, '').replace(/\*/g, '');
-  //attach start value
-  var hasSpun = 0;
-  val1El.dataType = getType("#" + val1El.value);
-  val2El.dataType = getType("#" + val2El.value);
-
-  var val1RGB = processValue(val1El);
-  var val2RGB = processValue(val2El);
-  var colors = [
-    // somewhere to dump gradient
-  ];
-  var colorsout = [
-    //yes
-  ];
+  newNick = nickName.value
+  if(newNick == '') {
+    newNick = 'Type something!'
+  }
+  
+  var essentialscolorsout = [];
+  var othercolorsout = [];
   // the pre element where we spit array to user
   var spitter = document.getElementById("spitter");
 
-  //the number of steps in the gradient
-  var stepsInt = parseInt(newNick.length, 10);
-  //the percentage representation of the step
-  var stepsPerc = 100 / (stepsInt + 1);
+  var colors = generateColor(val2El.value,val1El.value,newNick.length);
 
   var nickspaced = newNick.split("");
-
-  // diffs between two values
-  var valClampRGB = [val2RGB[0] - val1RGB[0], val2RGB[1] - val1RGB[1], val2RGB[2] - val1RGB[2]];
-
-  // build the color array out with color steps
-  for (var i = 0; i < stepsInt; i++) {
-    var clampedR = valClampRGB[0] > 0 ? pad(Math.round((valClampRGB[0] / 100) * (stepsPerc * (i + 1))).toString(16), 2) : pad(Math.round(val1RGB[0] + (valClampRGB[0] / 100) * (stepsPerc * (i + 1))).toString(16), 2);
-
-    var clampedG = valClampRGB[1] > 0 ? pad(Math.round((valClampRGB[1] / 100) * (stepsPerc * (i + 1))).toString(16), 2) : pad(Math.round(val1RGB[1] + (valClampRGB[1] / 100) * (stepsPerc * (i + 1))).toString(16), 2);
-
-    var clampedB = valClampRGB[2] > 0 ? pad(Math.round((valClampRGB[2] / 100) * (stepsPerc * (i + 1))).toString(16), 2) : pad(Math.round(val1RGB[2] + (valClampRGB[2] / 100) * (stepsPerc * (i + 1))).toString(16), 2);
-    colors[i] = ["#", clampedR, clampedG, clampedB].join("");
-    if (rgbtype.includes('&#rrggbb')) {
-      colorsout[i] = ["&#", clampedR, clampedG, clampedB, nickspaced[i]].join("");
+  var colorspp = ('&' + colors.join('').split('').join('&')).match(/.{1,12}/g);
+  for (var i = 0; i < newNick.length; i++) {
+    colorspp[i] = colorspp[i].replace('&', '&x&');
+    essentialscolorsout[i] = '&#' + colors[i] + nickspaced[i]
+    othercolorsout[i] = colorspp[i] + nickspaced[i]
+  }
+  var output = ''
+  if (rgbtype.includes('x')) {
+    if (rgbtype.includes('§')) {
+      output = othercolorsout.join('').replace(/&/g, '§');
     } else {
-      colorsout[i] = ["&x&", clampedR.split("").join("&") + '&', clampedG.split("").join("&") + '&', clampedB.split("").join("&"), nickspaced[i]].join("");
+      output = othercolorsout.join('');
     }
-  }
-  //build div representation of gradient
-  var html = [];
-  for (var i = 0; i < colors.length; i++) {
-    html.push("<div class='color' style='background-color:" + colors[i] + "; width:" + ((i - (i - 1)) / colors.length) * 120 + "%;'></div>");
-  }
-  document.getElementById("colors").innerHTML = html.join("");
-  //update the pre element
-  colorsout.forEach(p => { if (p.includes(' ')) { colorsout[colorsout.indexOf(p)] = ' ' } });
-  if (rgbtype.includes('/nick')) {
-    spitter.innerText = '/nick ' + colorsout.join('')
-  } else if (rgbtype.includes('console')) {
-    spitter.innerText = colorsout.join('').replace(/&/g, '§')
   } else {
-    spitter.innerText = colorsout.join('')
+    output = essentialscolorsout.join('');
   }
-
-  showError()
-
-  //bear func
-
-  displayColoredName(cuttext(newNick, 256));
+  if (rgbtype.includes('/nick')) output = '/nick ' + output;
+  spitter.innerText = output
+  displayColoredName(newNick, colors);
 }
 /**
  * padding function:
@@ -172,17 +157,11 @@ function pad(n, width, z) {
 }
 updateSpitter();
 
-async function displayColoredName(nickName) {
-  allColors = [];
-  for (let i = 0; i < gradiantDiv.length; i++) {
-    allColors.push(gradiantDiv[i].getAttribute("Style").split(";")[0].split(":")[1]);
-  }
-
+async function displayColoredName(nickName, colors) {
   coloredNickP.innerHTML = "";
-
   for (let i = 0; i < nickName.length; i++) {
     const coloredNickSpan = document.createElement("span");
-    coloredNickSpan.style.color = allColors[i];
+    coloredNickSpan.style.color = colors[i];
     coloredNickSpan.textContent = nickName[i];
     coloredNickP.append(coloredNickSpan);
   }

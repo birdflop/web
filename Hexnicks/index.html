@@ -28,16 +28,15 @@
     <p style="padding-bottom: 10px;">Hex color nickname creator</p>
     <div class="editors col-md-2"">
       <label for="color1">First Hex Color</label> 
-      <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()" ">
+      <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
       <!-- <input class="form-control col-md-1" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()"> -->
 
       <label for="color2">Second Hex Color</label>
-      <input class="form-control col-md-1" id="color2" name="color2" value="ff3300" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()" ">
+      <input class="form-control col-md-1" id="color2" name="color2" value="ff3300" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
 
       <label for="steps">Nickname</label>
-      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()">
+      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
     </div>
-    <div id="colors" class="col-md-2" style="padding-left: 0;"></div>
 
     <div id="output">
       <label id="label4" for="spitter">Output</label>
@@ -46,12 +45,11 @@
       <p id="error" style="display: none; margin-bottom: 10px;">This is more than 256 characters and may not fit in the chat box. You may ignore this if you're using a server console.</p>
     </div>
 
-
     <div id="coloredNick" style="word-wrap: break-word;"></div>
 
     <div id="typeslist"><!--  Yoinked from saboor -->
       <label id="Typelabel" style="margin-bottom: 0px;">Type</label>
-      <select type="select" id="types" onchange="rgbtype = this.options[this.selectedIndex].innerText; updateSpitter();">
+      <select type="select" id="types" style="width:120px; border-radius: 5px;" onchange="rgbtype = this.options[this.selectedIndex].innerText; updateSpitter(event);">
         <option value='0'>chat (&#rrggbb)</option>
         <option value='1'>chat (&x&r&r&g&g&b&b)</option>
         <option value='2'>/nick (&#rrggbb)</option> 
