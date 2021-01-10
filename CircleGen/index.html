@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">EasyMC</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="./Hexnicks/">RGB Nicknames</a></li>
+            <li class="active"><a href="./CircleGen/">Circle Generator</a></li>
+            <li><a href="#">Coming Soon</a></li>
+          </ul>
+        </div>
+      </nav>
+<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools.js"></script>
+<script src="Base64.js"></script>
+<script src="range-polyfill.js"></script>
+<script src="number-polyfill.js"></script>
+<script src="renderers/svg.js"></script>
+<script src="renderers/table.js"></script>
+<script src="FileSaver.js"></script>
+<script src="Blob.js"></script>
+<script src="generator.js"></script>
+</head>
+
+<body>
+<noscript><strong>Circle generator requires JavaScript to be turned on!</strong><br /></noscript>
+Width :
+<input tabindex="1" type="number" size="5" id="diameter" value="9" autocomplete="off" autofocus="autofocus">
+<label><input id="linked" type="checkbox" checked="checked" value="1" /> Force Circle</label>
+&mdash;
+Block Count: <span id="blockcount"></span><br />
+Height:
+<input tabindex="2" type="number" size="5" id="height" value="9" autocomplete="off" autofocus="autofocus">
+<select id="thickness">
+	<option selected="selected">thick</option>
+	<option>thin</option>
+	<option>filled</option>
+</select>
+
+Download:
+<button type="button" id="downloadSVG">SVG</button>
+<button type="button" id="downloadPNG">PNG</button>
+<br />
+Scale :
+<input type="range" min="50" max="3000" value="720" id="scaler" data-poly-scale=".1" />
+<br />
+
+<div id="result"></div>
+
+</body>
+</html>

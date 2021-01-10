@@ -1,0 +1,46 @@
+body {
+  font-size: 11px;
+  background: rgb(49, 49, 49);
+  color: lightgray;
+}
+
+input.linked {
+  color: lightgray;
+}
+
+table.circle_output td {
+  border-collapse: collapse;
+}
+
+table.circle_output td {
+  border: 1px solid rgb(255, 0, 0);
+  width: 15px;
+  height: 15px;
+}
+
+.filled {
+  background: red;
+}
+
+.cgy0,
+.cgx0 {
+  background: #eee;
+}
+
+.filled.cgy0,
+.filled.cgx0 {
+  background: #808080;
+}
+
+#downloadSVG,
+#downloadPNG,
+#thickness {
+  color: black;
+}
+
+#height,
+#diameter,
+#scaler {
+  width: 150px;
+  color: black;
+}
