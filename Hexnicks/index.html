@@ -58,7 +58,22 @@
         <option value='4'>console (§x§r§r§g§g§b§b)</option>
       </select>
     </div>
-
+    <div id="dbold">
+      <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
+      <label for="bold" style="margin-bottom: 0px;margin-top: 15px;"> Bold output</label>
+    </div>
+    <div id="ditalics">
+      <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
+      <label for="italics" style="margin-bottom: 0px;margin-top: 0px;"> Italic output</label>
+    </div>
+    <div id="dunderline">
+      <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
+      <label for="underline" style="margin-bottom: 0px;margin-top: 0px;"> Underlined output</label>
+    </div>
+    <div id="dstrike">
+      <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
+      <label for="strike" style="margin-bottom: 0px;margin-top: 0px;"> Striked output</label>
+    </div>
     <script src="script.js"></script>
     <script src="../assets/js/jscolor.js"></script>
   </body>
