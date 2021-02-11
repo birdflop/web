@@ -126,6 +126,10 @@ function updateSpitter(event) {
   var nickspaced = newNick.split("");
   var colorspp = ('&' + colors.join('').split('').join('&')).match(/.{1,12}/g);
   for (var i = 0; i < newNick.length; i++) {
+    if (document.getElementById('bold').checked == true) nickspaced[i] = '&l' + nickspaced[i];
+    if (document.getElementById('italics').checked == true) nickspaced[i] = '&o' + nickspaced[i];
+    if (document.getElementById('underline').checked == true) nickspaced[i] = '&n' + nickspaced[i];
+    if (document.getElementById('strike').checked == true) nickspaced[i] = '&m' + nickspaced[i];
     colorspp[i] = colorspp[i].replace('&', '&x&');
     essentialscolorsout[i] = '&#' + colors[i] + nickspaced[i]
     othercolorsout[i] = colorspp[i] + nickspaced[i]
@@ -159,9 +163,26 @@ function pad(n, width, z) {
 updateSpitter();
 
 async function displayColoredName(nickName, colors) {
+  coloredNick.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
+  if (document.getElementById('bold').checked == true) {
+    if (document.getElementById('italics').checked == true) {
+      coloredNick.classList.add('minecraftibold');
+    } else {
+      coloredNick.classList.add('minecraftbold');
+    }
+  } else if (document.getElementById('italics').checked == true) {
+    coloredNick.classList.add('minecraftitalic');
+  }
   coloredNickP.innerHTML = "";
   for (let i = 0; i < nickName.length; i++) {
     const coloredNickSpan = document.createElement("span");
+    if (document.getElementById('underline').checked == true) {
+      if (document.getElementById('strike').checked == true) {
+        coloredNickSpan.classList.add('minecraftustrike');
+      } else coloredNickSpan.classList.add('minecraftunderline');
+    } else if (document.getElementById('strike').checked == true) {
+      coloredNickSpan.classList.add('minecraftstrike');
+    }
     coloredNickSpan.style.color = colors[i];
     coloredNickSpan.textContent = nickName[i];
     coloredNickP.append(coloredNickSpan);

@@ -46,6 +46,10 @@
 #color2 {
   margin-left: 0px;
 }
+#dbold, #ditalics, #dunderline, #dstrike{
+  font-family: MinecraftRegular;
+  color: lightgrey;
+}
 body {
   background: rgb(49, 49, 49);
 }
@@ -69,4 +73,25 @@ body {
   font-size: 20;
   font-family: MinecraftBoldItalic;
   color: red;
+}
+.minecraft {
+  font-family: MinecraftRegular;
+}
+.minecraftbold {
+  font-family: MinecraftBold;
+}
+.minecraftitalic {
+  font-family: MinecraftItalic;
+}
+.minecraftibold {
+  font-family: MinecraftBoldItalic;
+}
+.minecraftunderline {
+  text-decoration: underline;
+}
+.minecraftustrike {
+  text-decoration: underline line-through;
+}
+.minecraftstrike {
+  text-decoration: line-through;
 }
