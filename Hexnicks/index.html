@@ -1,5 +1,13 @@
 <html>
   <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="/assets/images/rgb.png" type="image/x-icon">
+    <title>RGB Gradient Creator</title>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  
+  </head>
+  <body>
 
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -15,19 +23,10 @@
       </div>
     </nav>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="shortcut icon" href="../assets/images/rgb.png" type="image/x-icon">
-    <title>RGB Gradient Creator</title>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  
-  </head>
-  <body class="container">
     <h1 id="title" style="word-wrap: break-word;" >
-      <span style="color:red">R</span><span style="color:green">G</span><span style="color:blue">B</span> 
-      Nicknames</h1>
+      RGB Nicknames</h1>
     <p style="padding-bottom: 10px;">Hex color nickname creator</p>
-    <div class="editors col-md-2"">
+    <div class="editors col-md-2">
       <label for="color1">First Hex Color</label> 
       <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
       <!-- <input class="form-control col-md-1" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()"> -->
