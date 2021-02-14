@@ -45,6 +45,11 @@
 }
 #color2 {
   margin-left: 0px;
+
+}
+.control-label{
+  font-family: MinecraftRegular;
+  color: lightgrey;
 }
 #dbold, #ditalics, #dunderline, #dstrike{
   font-family: MinecraftRegular;
@@ -52,9 +57,7 @@
 }
 body {
   background: rgb(49, 49, 49);
-}
-.navbar-header {
-  width: 100;
+  color: lightgray;
 }
 #graylabel2 {
   color: lightgrey;
@@ -94,4 +97,22 @@ body {
 }
 .minecraftstrike {
   text-decoration: line-through;
+}
+#title {
+  background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #6666ff, #ff0000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+
+  50% {
+      background-position: 100% 0;
+  }
 }
