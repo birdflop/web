@@ -1,11 +1,3 @@
-.color {
-  width: 100%;
-}
-#colors {
-  height: 150px;
-  display: flex;
-  flex-direction: row;
-}
 @font-face {
   font-family: MinecraftRegular;
   src: url(../assets/fonts/MinecraftRegular.otf);
@@ -27,6 +19,11 @@
   font-family: MinecraftRegular;
   margin-right: 15px;
 }
+#colors {
+  height: 150px;
+  display: flex;
+  flex-direction: row;
+}
 #title {
   font-family: MinecraftRegular;
   color: lightgrey;
@@ -47,17 +44,9 @@
   margin-left: 0px;
 
 }
-.control-label{
-  font-family: MinecraftRegular;
-  color: lightgrey;
-}
 #dbold, #ditalics, #dunderline, #dstrike{
   font-family: MinecraftRegular;
   color: lightgrey;
-}
-body {
-  background: rgb(49, 49, 49);
-  color: lightgray;
 }
 #graylabel2 {
   color: lightgrey;
@@ -76,6 +65,10 @@ body {
   font-size: 20;
   font-family: MinecraftBoldItalic;
   color: red;
+}
+#types{
+  position: relative;
+  color: #000;
 }
 .minecraft {
   font-family: MinecraftRegular;
@@ -98,6 +91,13 @@ body {
 .minecraftstrike {
   text-decoration: line-through;
 }
+.control-label{
+  font-family: MinecraftRegular;
+  color: lightgrey;
+}
+.color {
+  width: 100%;
+}
 #title {
   background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #6666ff, #ff0000);
   -webkit-background-clip: text;
@@ -106,7 +106,6 @@ body {
   animation: rainbow_animation 6s ease-in-out infinite;
   background-size: 400% 100%;
 }
-
 @keyframes rainbow_animation {
   0%,100% {
       background-position: 0 0;
@@ -115,4 +114,11 @@ body {
   50% {
       background-position: 100% 0;
   }
+}
+body {
+  position: relative;
+  width: inherit;
+  background: rgb(49, 49, 49);
+  color: lightgray;
+  font-family: MinecraftRegular;
 }
