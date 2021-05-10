@@ -1,7 +1,25 @@
+@font-face {
+  font-family: MinecraftRegular;
+  src: url(../assets/fonts/MinecraftRegular.otf);
+}
+@font-face {
+  font-family: MinecraftBold;
+  src: url(../assets/fonts/MinecraftBold.otf);
+}
+@font-face {
+  font-family: MinecraftItalic;
+  src: url(../assets/fonts/MinecraftItalic.otf);
+}
+@font-face {
+  font-family: MinecraftBoldItalic;
+  src: url(../assets/fonts/MinecraftBoldItalic.otf);
+}
+
 body {
   font-size: 11px;
   background: rgb(49, 49, 49);
   color: lightgray;
+  font-family: MinecraftRegular;
 }
 
 input.linked {

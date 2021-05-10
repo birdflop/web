@@ -1,3 +1,20 @@
+@font-face {
+  font-family: MinecraftRegular;
+  src: url(./assets/fonts/MinecraftRegular.otf);
+}
+@font-face {
+  font-family: MinecraftBold;
+  src: url(./assets/fonts/MinecraftBold.otf);
+}
+@font-face {
+  font-family: MinecraftItalic;
+  src: url(./assets/fonts/MinecraftItalic.otf);
+}
+@font-face {
+  font-family: MinecraftBoldItalic;
+  src: url(./assets/fonts/MinecraftBoldItalic.otf);
+}
 body {
   background: rgb(49, 49, 49); /* Green background with 30% opacity */
+
 }
