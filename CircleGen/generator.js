@@ -18,7 +18,7 @@ window.addEvent('domready', function() {
 		try {
 			var hashval = {};
 
-			if( !!window.location.hash ) {
+			if( window.location.hash ) {
 				hashval = JSON.decode(window.location.hash.replace(/^[# ]+/g, "").decodeBase64());
 			} else {
 				hashval = JSON.decode(window.localStorage.CircleHash);

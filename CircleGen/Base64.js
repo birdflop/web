@@ -42,11 +42,11 @@ provides: [String.toBase64, String.decodeBase64]
                     enc3 = enc4 = 64;
                 } else if (isNaN(chr3)) {
                     enc4 = 64;
-                };
+                }
                 output = output +
                 this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
                     this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
-            };
+            }
             return output;
         },
 
@@ -67,11 +67,11 @@ provides: [String.toBase64, String.decodeBase64]
                 output = output + String.fromCharCode(chr1);
                 if (enc3 != 64) {
                     output = output + String.fromCharCode(chr2);
-                };
+                }
                 if (enc4 != 64) {
                     output = output + String.fromCharCode(chr3);
-                };
-            };
+                }
+            }
             output = Base64._utf8_decode(output);
             return output;
         },
@@ -91,9 +91,9 @@ provides: [String.toBase64, String.decodeBase64]
                 utftext += String.fromCharCode((c >> 12) | 224);
                 utftext += String.fromCharCode(((c >> 6) & 63) | 128);
                 utftext += String.fromCharCode((c & 63) | 128);
-            };
+            }
 
-        };
+        }
         return utftext;
         },
 
@@ -116,8 +116,8 @@ provides: [String.toBase64, String.decodeBase64]
                 c3 = utftext.charCodeAt(i+2);
                 string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
                 i += 3;
-            };
-        };
+            }
+        }
         return string;
     }
 
