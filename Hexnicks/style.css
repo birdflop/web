@@ -26,7 +26,6 @@
 }
 #title {
   font-family: MinecraftRegular;
-  color: lightgrey;
   background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #0099ff, #ff0000);
   -webkit-background-clip: text;
   background-clip: text;
@@ -41,7 +40,6 @@
 #spitter {
   white-space: pre-wrap;
   height: 56.5px;
-  margin-right: 0px;
 }
 #dbold, #ditalics, #dunderline, #dstrike{
   font-family: MinecraftRegular;
