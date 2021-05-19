@@ -27,6 +27,12 @@
 #title {
   font-family: MinecraftRegular;
   color: lightgrey;
+  background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #0099ff, #ff0000);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
 }
 #warning {
   font-family: Minecraftbold;
@@ -36,13 +42,6 @@
   white-space: pre-wrap;
   height: 56.5px;
   margin-right: 0px;
-}
-#color1 {
-  margin-left: 0px;
-}
-#color2 {
-  margin-left: 0px;
-
 }
 #dbold, #ditalics, #dunderline, #dstrike{
   font-family: MinecraftRegular;
@@ -97,14 +96,6 @@
 }
 .color {
   width: 100%;
-}
-#title {
-  background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #6666ff, #ff0000);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: rainbow_animation 6s ease-in-out infinite;
-  background-size: 400% 100%;
 }
 @keyframes rainbow_animation {
   0%,100% {
