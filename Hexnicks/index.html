@@ -24,18 +24,23 @@
     </nav>
 
     <h1 id="title" style="word-wrap: break-word;" >
-      RGB Nicknames</h1>
+      RGB Nicknames
+    </h1>
     <p style="padding-bottom: 10px;">Hex color nickname creator</p>
-    <div class="editors col-md-2">
+    <div id="inputOutput">
+    <div class="editors col-md-2" id="inputs">
       <label for="color1">First Hex Color</label> 
-      <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
+      <input class="form-control col-md-1" id="color1" name="color1" value="00FFE0" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
       <!-- <input class="form-control col-md-1" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()"> -->
 
       <label for="color2">Second Hex Color</label>
-      <input class="form-control col-md-1" id="color2" name="color2" value="ff3300" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
+      <input class="form-control col-md-1" id="color2" name="color2" value="EB00FF" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
+
+      <label for="color3">Third Hex Color</label>
+      <input class="form-control col-md-1" id="color3" name="color2" value="FF0000" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
 
       <label for="steps">Nickname</label>
-      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="OliBest" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
+      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="EasyMC" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
     </div>
 
     <div id="output">
@@ -46,7 +51,7 @@
     </div>
 
     <div id="coloredNick" style="word-wrap: break-word;"></div>
-
+  </div>
     <div id="typeslist"><!--  Yoinked from saboor -->
       <label id="Typelabel">Type</label>
       <!--  Yoinked from saboor -->
@@ -58,21 +63,27 @@
         <option value='4'>console (§x§r§r§g§g§b§b)</option>
       </select>
     </div>
-    <div id="dbold">
-      <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
-      <label for="bold" style="margin-top: 15px;"> Bold output</label>
-    </div>
-    <div id="ditalics">
-      <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
-      <label for="italics"> Italic output</label>
-    </div>
-    <div id="dunderline">
-      <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
-      <label for="underline"> Underlined output</label>
-    </div>
-    <div id="dstrike">
-      <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
-      <label for="strike"> Striked output</label>
+    <div id="formats">
+      <div id="dbold">
+        <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
+        <label for="bold"> Bold output</label>
+      </div>
+      <div id="ditalics">
+        <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
+        <label for="italics"> Italic output</label>
+      </div>
+      <div id="dunderline">
+        <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
+        <label for="underline"> Underlined output</label>
+      </div>
+      <div id="dstrike">
+        <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
+        <label for="strike"> Striked output</label>
+      </div>
+      <div id="d3colors">
+        <input type="checkbox" id="threecolors" onclick="updateSpitter(event);"></input>
+        <label for="strike"> Use 3 Colors</label>
+      </div>
     </div>
     <script src="script.js"></script>
     <script src="../assets/js/jscolor.js"></script>
