@@ -49,11 +49,15 @@
 #graylabel2 {
   color: lightgrey;
 }
-#label4 {
+#label5 {
   color: #782d2d;
 }
 #Typelabel {
   color: white;
+}
+#coloramountlist {
+  position: relative;
+  right: -20px;
 }
 #typeslist {
   position: relative;

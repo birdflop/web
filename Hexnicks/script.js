@@ -2,14 +2,33 @@
 let val1El = document.getElementById("color1");
 let val2El = document.getElementById("color2");
 let val3El = document.getElementById("color3");
+let val4El = document.getElementById("color4");
 let stepsEl = document.getElementById("steps");
 const nickName = document.getElementById("nickname");
 const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
 let newNick = nickName.value;
 let rgbtype = 'chat (&#rrggbb)';
+let numberOfColors = 2;
 
-//if(document.getElementById("threecolors").checked != true){document.getElementById("color3").style.display="none"}else{document.getElementById("color3").style.visibility="block"} 
+function hideColors() {
+  if (numberOfColors == 2) {
+    document.getElementById("color3").style.display = "none";
+    document.getElementById("label3").style.display = "none";
+    document.getElementById("color4").style.display = "none";
+    document.getElementById("label4").style.display = "none";
+  } else if (numberOfColors == 3) {
+    document.getElementById("color3").style.display = "block";
+    document.getElementById("label3").style.display = "block";
+    document.getElementById("color4").style.display = "none";
+    document.getElementById("label4").style.display = "none";
+  } else if (numberOfColors == 4) {
+    document.getElementById("color3").style.display = "block";
+    document.getElementById("label3").style.display = "block";
+    document.getElementById("color4").style.display = "block";
+    document.getElementById("label4").style.display = "block";
+  }
+}
 
 function cuttext(text, length) {
   if (text.length <= length) {
@@ -103,7 +122,7 @@ function generateColor(colorStart,colorEnd,colorCount){
 	
 }
 
-function combineGradient(gradient1,gradient2) {
+function CombineGradient(gradient1,gradient2) {
   result = [];
   result = gradient1.concat(gradient2)
   return result;
@@ -122,14 +141,29 @@ function updateSpitter(event) {
   if(newNick == '') {
     newNick = 'Type something!'
   }
+
+  let spitter = document.getElementById("spitter");
   let half = newNick.length/2
+  let thirds = newNick.length/3
+  let gradientHalf1 = generateColor(val2El.value,val1El.value,half)
+  let gradientHalf2 = generateColor(val3El.value,val2El.value,half)
+  let gradientThirds1 = generateColor(val2El.value,val1El.value,thirds)
+  let gradientThirds2 = generateColor(val3El.value,val2El.value,thirds)
+  let gradientThirds3 = generateColor(val4El.value,val3El.value,half)
   let essentialscolorsout = [];
   let othercolorsout = [];
   // the pre element where we spit array to user
-  let spitter = document.getElementById("spitter");
-  let gradienthalf2 = generateColor(val3El.value,val2El.value,half)
-  let gradienthalf1 = generateColor(val2El.value,val1El.value,half)  
-  let colors = document.getElementById("threecolors").checked == true ? combineGradient(gradienthalf1,gradienthalf2) : generateColor(val2El.value,val1El.value,newNick.length)
+
+  var colors
+  numberOfColors == 3 ? CombineGradient(gradientHalf1,gradientHalf2) : generateColor(val2El.value,val1El.value,newNick.length)
+  if (numberOfColors == 2) {
+    colors = generateColor(val2El.value,val1El.value,newNick.length)
+  }else if (numberOfColors == 3) {
+    colors = CombineGradient(gradientHalf1,gradientHalf2)
+  }else if (numberOfColors == 4) {
+    let uwu = CombineGradient(gradientThirds1,gradientThirds2)
+    colors = CombineGradient(uwu,gradientThirds3)
+  }
 
   let nickspaced = newNick.split("");
   let colorspp = ('&' + colors.join('').split('').join('&')).match(/.{1,12}/g);
