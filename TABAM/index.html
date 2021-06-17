@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="assets/images/nd-128x128.png" type="image/x-icon">
+    <title>RGB Gradient Creator</title>
+  </head>
+
+  <body id="bg" class="container" style="font-family: Quicksand;">
+
+    <div id="header">
+      <h1 id="title">RGB Gradients</h1>
+      <p id="graylabel1" class="gray" style="padding-bottom: 10px;">Minecraft Hex Gradient Message Creator</p>
+    </div>
+
+    <div id="input" class="col-md-2" style="padding-left: 0;">
+      <label id="label1" for="color1">First Hex Color</label> 
+      <input style="border-radius: 10px;" class="form-control col-md-2" id="color1" name="color1" value="FB4F5A" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
+      <label id="label2" for="color2">Second Hex Color</label>
+      <input style="border-radius: 10px;" class="form-control col-md-1" id="color2" name="color2" value="FDAD4F" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
+      <label id="label3" for="steps">Message</label>
+      <input style="border-radius: 10px;" class="form-control col-md-2" id="nickname" name="nickname" type="text" placeholder="Message" value="Gradieeennnttt" oninput="updateSpitter(event);" onchange="updateSpitter(event)">
+      <div id="options">
+        <div id="bald">
+          <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
+          <label for="bold" style="margin-bottom: 0; margin-top: 0;"> Bold output</label>
+        </div>
+        <div id="italy">
+          <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
+          <label for="italics" style="margin-bottom: 0; margin-top: 0;"> Italic output</label>
+        </div>
+        <div id="line">
+          <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
+          <label for="underline" style="margin-bottom: 0; margin-top: 0;"> Underlined output</label>
+        </div>
+        <div id="lineon">
+          <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
+          <label for="strike" style="margin-bottom: 0; margin-top: 0;"> Striked output</label>
+        </div>
+        <div id="appearance">
+          <input type="checkbox" id="darkmode" onclick="darkMode();"></input>
+          <label for="darkmode" style="margin-bottom: 0; margin-top: 0;"> Dark Mode</label>
+        </div>
+      </div>
+    </div>
+    <div id="output">
+      <label id="label4" for="spitter">Output</label>
+      <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the chat. Click on it to copy.</label>
+      <pre id="spitter" class="pp" style="border-radius: 10px; white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;" onclick="copyTextToClipboard(document.getElementById('spitter').innerText);"></pre>
+      <p id="error" style="display: none; margin-bottom: 10px;">This is more than 256 characters and may not fit in the chat box. You may ignore this if you're using a server console.</p>
+    </div>
+
+    <div id="animatedNick" class="minecraft" style="word-wrap: break-word; font-size: 4rem;"></div>
+
+    <script src="scripta=.js"></script>
+    <script src="../assets/js/jscolor.js"></script>
+  </body>
+
+</html>
