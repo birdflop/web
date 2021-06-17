@@ -1,12 +1,15 @@
 // elements for obtaining vals
-var val1El = document.getElementById("color1");
-var val2El = document.getElementById("color2");
-var stepsEl = document.getElementById("steps");
+let val1El = document.getElementById("color1");
+let val2El = document.getElementById("color2");
+let val3El = document.getElementById("color3");
+let stepsEl = document.getElementById("steps");
 const nickName = document.getElementById("nickname");
 const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
 let newNick = nickName.value;
-var rgbtype = 'chat (&#rrggbb)';
+let rgbtype = 'chat (&#rrggbb)';
+
+//if(document.getElementById("threecolors").checked != true){document.getElementById("color3").style.display="none"}else{document.getElementById("color3").style.visibility="block"} 
 
 function cuttext(text, length) {
   if (text.length <= length) {
@@ -18,7 +21,7 @@ function cuttext(text, length) {
 
 //copy contents to clipboard  
 function copyTextToClipboard(text) {
-  var textArea = document.createElement("textarea");
+  let textArea = document.createElement("textarea");
   textArea.value = text;
 
   document.body.appendChild(textArea);
@@ -43,8 +46,8 @@ function showError() {
 }
 
 function hex (c) {
-  var s = "0123456789abcdef";
-  var i = parseInt (c);
+  let s = "0123456789abcdef";
+  let i = parseInt (c);
   if (i == 0 || isNaN (c))
     return "00";
   i = Math.round (Math.min (Math.max (0, i), 255));
@@ -61,7 +64,7 @@ function trim (s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
 
 /* Convert a hex string to an RGB triplet */
 function convertToRGB (hex) {
-  var color = [];
+  let color = [];
   color[0] = parseInt ((trim(hex)).substring (0, 2), 16);
   color[1] = parseInt ((trim(hex)).substring (2, 4), 16);
   color[2] = parseInt ((trim(hex)).substring (4, 6), 16);
@@ -71,23 +74,23 @@ function convertToRGB (hex) {
 function generateColor(colorStart,colorEnd,colorCount){
 
 	// The beginning of your gradient
-	var start = convertToRGB (colorStart);    
+	let start = convertToRGB (colorStart);      
 
 	// The end of your gradient
-	var end   = convertToRGB (colorEnd);    
+	let end   = convertToRGB (colorEnd);    
 
 	// The number of colors to compute
-	var len = colorCount;
+	let len = colorCount;
 
 	//Alpha blending amount
-	var alpha = 0.0;
+	let alpha = 0.0;
 
-	var saida = [];
+	let saida = [];
 	
 	for (i = 0; i < len; i++) {
-		var c = [];
+		let c = [];
 		alpha += (1.0/len);
-		
+
 		c[0] = start[0] * alpha + (1 - alpha) * end[0];
 		c[1] = start[1] * alpha + (1 - alpha) * end[1];
 		c[2] = start[2] * alpha + (1 - alpha) * end[2];
@@ -100,30 +103,37 @@ function generateColor(colorStart,colorEnd,colorCount){
 	
 }
 
+function combineGradient(gradient1,gradient2) {
+  result = [];
+  result = gradient1.concat(gradient2)
+  return result;
+}
+
 function updateSpitter(event) {
   if (rgbtype.includes('/nick')) {
     nickName.value = nickName.value.replace(/ /g, '');
     if(nickName.value != '') {
-      var letters = /^[0-9a-zA-Z_]+$/;
+      let letters = /^[0-9a-zA-Z_]+$/;
       if(!nickName.value.match(letters)) nickName.value = nickName.value.replace(event.data, '');
-      if(!nickName.value.match(letters)) nickName.value = 'Gradieeennnttt';
+      if(!nickName.value.match(letters)) nickName.value = 'EasyMC';
     }
   }
   newNick = nickName.value
   if(newNick == '') {
     newNick = 'Type something!'
   }
-  
-  var essentialscolorsout = [];
-  var othercolorsout = [];
+  let half = newNick.length/2
+  let essentialscolorsout = [];
+  let othercolorsout = [];
   // the pre element where we spit array to user
-  var spitter = document.getElementById("spitter");
+  let spitter = document.getElementById("spitter");
+  let gradienthalf2 = generateColor(val3El.value,val2El.value,half)
+  let gradienthalf1 = generateColor(val2El.value,val1El.value,half)  
+  let colors = document.getElementById("threecolors").checked == true ? combineGradient(gradienthalf1,gradienthalf2) : generateColor(val2El.value,val1El.value,newNick.length)
 
-  var colors = generateColor(val2El.value,val1El.value,newNick.length);
-
-  var nickspaced = newNick.split("");
-  var colorspp = ('&' + colors.join('').split('').join('&')).match(/.{1,12}/g);
-  for (var i = 0; i < newNick.length; i++) {
+  let nickspaced = newNick.split("");
+  let colorspp = ('&' + colors.join('').split('').join('&')).match(/.{1,12}/g);
+  for (let i = 0; i < newNick.length; i++) {
     if (document.getElementById('bold').checked == true) nickspaced[i] = '&l' + nickspaced[i];
     if (document.getElementById('italics').checked == true) nickspaced[i] = '&o' + nickspaced[i];
     if (document.getElementById('underline').checked == true) nickspaced[i] = '&n' + nickspaced[i];
@@ -132,7 +142,7 @@ function updateSpitter(event) {
     essentialscolorsout[i] = '&#' + colors[i] + nickspaced[i]
     othercolorsout[i] = colorspp[i] + nickspaced[i]
   }
-  var output = ''
+  let output = ''
   if (rgbtype.includes('x')) {
     if (rgbtype.includes('§')) {
       output = othercolorsout.join('').replace(/&/g, '§');
