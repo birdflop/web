@@ -6,6 +6,7 @@
       <img src="https://estruyf-github.azurewebsites.net/api/VisitorHit?user=oli-idk&repo=easymc&countColor=%237B1E7A" />
    </a>
 </p>
+
 ![Discord](https://img.shields.io/discord/740705740221841450)
 ![GitHub last commit](https://img.shields.io/github/last-commit/oli-idk/easymc)
 ![GitHub stars](https://img.shields.io/github/stars/oli-idk/easymc)
