@@ -5,9 +5,14 @@
     <link rel="shortcut icon" href="/assets/images/rgb.png" type="image/x-icon">
     <title>RGB Gradient Creator</title>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  
+    <script>
+      function warning() {
+        alert("Slight visua bugs are still present working on fixing those!");
+      }
+      </script>
   </head>
-  <body>
+  
+  <body onload="warning()">
 
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
@@ -18,6 +23,7 @@
           <li><a href="../index.html">Home</a></li>
           <li class="active" ><a href="#">RGB Nicknames</a></li>
           <li><a href="../CircleGen/">Circle Generator</a></li>
+          <li><a href="../AnimTAB/">Animated TAB</a></li>
           <li><a href="#">Coming Soon</a></li>
         </ul>
       </div>
@@ -37,10 +43,10 @@
       <input class="form-control col-md-1" id="color2" name="color2" value="EB00FF" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
 
       <label id="label3" for="color3" style="display: none;">Third Hex Color</label>
-      <input style="position: inherit; display: none;" class="form-control col-md-2" id="color3" name="color3" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
+      <input style="display: none;" class="form-control col-md-2" id="color3" name="color3" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
 
       <label id="label4" for="color4" style="display: none;">Fourth Hex Color</label>
-      <input style="position: inherit; display: none;" class="form-control col-md-1" id="color4" name="color4" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
+      <input style="display: none;" class="form-control col-md-1" id="color4" name="color4" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
 
       <label for="steps">Nickname</label>
       <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="EasyMC" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
@@ -55,7 +61,7 @@
 
     <div id="coloredNick" style="word-wrap: break-word;"></div>
   </div>
-    <div id="typeslist"><!--  Yoinked from saboor -->
+    <div id="typeslist" style="display: flex; flex-direction: column;"><!--  Yoinked from saboor -->
       <label style="margin-top: 15px;">Type</label>
       <!--  Yoinked from saboor -->
       <select type="select" id="types" style="width:150px; border-radius: 10px; padding-right: 6px; padding-left: 6px; padding-top: 6px; padding-bottom: 6px; color:black;" onchange="rgbtype = this.options[this.selectedIndex].innerText; updateSpitter(event);">
@@ -67,7 +73,7 @@
       </select>
     </div>
     <div id="coloramountlist">
-      <label style="margin-top: 15px;">Number of colors</label>
+      <label for="numOfColors"style="margin-top: 15px; display: flex;">Number of colors</label>
       <select style="width:50px; border-radius: 10px; padding-right: 6px; padding-left: 6px; padding-top: 6px; padding-bottom: 6px; color:black;" type="select" id="numOfColors" onchange="numberOfColors = this.options[this.selectedIndex].innerText; updateSpitter(event); hideColors();">
         <option value='2'>2</option>
         <option value='3'>3</option>

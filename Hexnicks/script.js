@@ -11,22 +11,10 @@ let newNick = nickName.value;
 let rgbtype = 'chat (&#rrggbb)';
 let numberOfColors = 2;
 
-function hideColors() {
-  if (numberOfColors == 2) {
-    document.getElementById("color3").style.display = "none";
-    document.getElementById("label3").style.display = "none";
-    document.getElementById("color4").style.display = "none";
-    document.getElementById("label4").style.display = "none";
-  } else if (numberOfColors == 3) {
-    document.getElementById("color3").style.display = "block";
-    document.getElementById("label3").style.display = "block";
-    document.getElementById("color4").style.display = "none";
-    document.getElementById("label4").style.display = "none";
-  } else if (numberOfColors == 4) {
-    document.getElementById("color3").style.display = "block";
-    document.getElementById("label3").style.display = "block";
-    document.getElementById("color4").style.display = "block";
-    document.getElementById("label4").style.display = "block";
+const hideColors = () => {
+  for(const num of [3, 4]){
+    for(const selector of ["label", "color"])
+      document.getElementById(`${selector}${num}`).style.display = num <= numberOfColors ? "block" : "none";
   }
 }
 
@@ -149,7 +137,7 @@ function updateSpitter(event) {
   let gradientHalf2 = generateColor(val3El.value,val2El.value,half)
   let gradientThirds1 = generateColor(val2El.value,val1El.value,thirds)
   let gradientThirds2 = generateColor(val3El.value,val2El.value,thirds)
-  let gradientThirds3 = generateColor(val4El.value,val3El.value,half)
+  let gradientThirds3 = generateColor(val4El.value,val3El.value,half+1)
   let essentialscolorsout = [];
   let othercolorsout = [];
   // the pre element where we spit array to user
