@@ -3,19 +3,31 @@ let val1El = document.getElementById("color1");
 let val2El = document.getElementById("color2");
 let stepsEl = document.getElementById("steps");
 let speed = document.getElementById("updateSpeed")
-console.log(speed.value)
 const nickName = document.getElementById("animationText");
 const coloredNick = document.getElementById("coloredNick");
 const coloredNickP = document.createElement("p");
 let newNick = nickName.value;
 let rgbtype = 'chat (&#rrggbb)';
 let updatespeed;
+
 function cuttext(text, length) {
   if (text.length <= length) {
     return text;
   }
-
   return text.substr(0, length)
+}
+
+
+function showError() {
+  if (speed.value %50 != 0) {
+    document.getElementById('error').style.display = "block";
+    document.getElementById('spitter').style.height = "70px";
+    document.getElementById('spitter').style.marginBottom = "5px";
+  } else {
+    document.getElementById('error').style.display = "none";
+    document.getElementById('spitter').style.height = "95px";
+    document.getElementById('spitter').style.marginBottom = "10px";
+  }
 }
 
 function hex (c) {
@@ -83,6 +95,7 @@ function CombineGradient(gradient1,gradient2) {
 }
 let colors
 function updateSpitter(event) {
+  console.log(speed.value %50 === 0)
   clearInterval(updatespeed)
   newNick = nickName.value
   if(newNick == '') {
@@ -106,15 +119,23 @@ function updateSpitter(event) {
       if (document.getElementById('strike').checked == true) wordSpaced[i] = '&m' + wordSpaced[i];
       colorsout[i] = '&#' + colors[i] + wordSpaced[i]
     }
-    animationout.push("      - \""+colorsout.join("")+"\"")
+      animationout.push("  - \""+colorsout.join("")+"\"")
     colors.unshift(colors.pop())
   }
   let output = animationout.join('\n');
-  spitter.innerText = "  logo:\n"+`    change-interval: ${speed.value}\n`+output
-  updatespeed = setInterval(() => {
-    colors.unshift(colors.pop())
-    displayColoredName(newNick, colors);
-  }, speed.value);
+    spitter.innerText = "logo:\n"+`  change-interval: ${Math.ceil(speed.value/50)*50}\n`+"  texts:\n"+output
+  if (speed.value %50 === 0) {
+    updatespeed = setInterval(() => {
+      colors.unshift(colors.pop())
+      displayColoredName(newNick, colors);
+    }, speed.value); 
+  }else{
+    updatespeed = setInterval(() => {
+      colors.unshift(colors.pop())
+      displayColoredName(newNick, colors);
+    }, Math.ceil(speed.value/50)*50); 
+  }
+  showError()
 }
 
 /**

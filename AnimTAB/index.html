@@ -7,7 +7,7 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script>
       function warning() {
-        alert("Slight visua bugs are still present working on fixing those!");
+        alert("Slight visual bugs are still present working on fixing those!");
       }
       </script>
   </head>
@@ -49,26 +49,28 @@
       <label id="label4" for="spitter">Output</label>
       <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the animations.yml file. the file location is plugins/TAB/animations.yml.</label>
       <pre id="spitter" style="white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;"></pre>
+      <p id="error" style="display: none; margin-bottom: 10px;">TAB only allows the change-interval to be divisible by 50, Your number has been rounded up</p>
     </div>
 
     <div id="coloredNick" style="word-wrap: break-word;"></div>
 
-    <div id="typeslist" style="display: flex; flex-direction: column;"><!--  Yoinked from saboor -->
-    <div id="dbold">
-      <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
-      <label for="bold"> Bold output</label>
-    </div>
-    <div id="ditalics">
-      <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
-      <label for="italics"> Italic output</label>
-    </div>
-    <div id="dunderline">
-      <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
-      <label for="underline"> Underlined output</label>
-    </div>
-    <div id="dstrike">
-      <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
-      <label for="strike"> Striked output</label>
+    <div id="typeslist" style="display: flex; flex-direction: column;">
+      <div id="dbold">
+        <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
+        <label for="bold"> Bold output</label>
+      </div>
+      <div id="ditalics">
+        <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
+        <label for="italics"> Italic output</label>
+      </div>
+      <div id="dunderline">
+        <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
+        <label for="underline"> Underlined output</label>
+      </div>
+      <div id="dstrike">
+        <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
+        <label for="strike"> Striked output</label>
+      </div>
     </div>
     <script src="script.js"></script>
     <script src="../assets/js/jscolor.js"></script>
