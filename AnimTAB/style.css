@@ -25,9 +25,8 @@
   flex-direction: row;
 }
 #title {
-  position: relative;
   font-family: MinecraftRegular;
-  background: linear-gradient(to right, #ff0000, #00ff00 , #0099ff, #00ff00, #ff0000);
+  background: linear-gradient(to right, #ff0000, #0099ff , #00ff00, #0099ff, #ff0000);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -49,15 +48,11 @@
 #graylabel2 {
   color: lightgrey;
 }
-#label5 {
+#label4 {
   color: #782d2d;
 }
 #Typelabel {
   color: white;
-}
-#coloramountlist {
-  position: relative;
-  right: -20px;
 }
 #typeslist {
   position: relative;
@@ -72,26 +67,9 @@
   position: relative;
   color: #000;
 }
-#inputs{
-  position: relative;
-  text-align: left;
+#coloramountlist{
   display: flex;
-  flex-direction: column;
-}
-#formats{
-  position: relative;
-  text-align: left;
-  bottom: -50;
-}
-#bold{
-  text-align: left;
-}
-#inputOutput{
-  display: inline;
-  flex-direction: row;
-}
-#nav-headbar{
-  display: flex;
+  position:relative;
 }
 .minecraft {
   font-family: MinecraftRegular;
@@ -131,8 +109,6 @@
   }
 }
 body {
-  margin: auto;
-  position: relative;
   background: rgb(49, 49, 49);
   color: lightgray;
   font-family: MinecraftRegular;
