@@ -71,6 +71,19 @@
   display: flex;
   position:relative;
 }
+#inputs{
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+#inputOutput{
+  display: flex;
+  flex-direction: row;
+}
+#outputColumn{
+  width: 100%;
+}
 .minecraft {
   font-family: MinecraftRegular;
 }
