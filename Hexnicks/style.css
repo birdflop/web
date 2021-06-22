@@ -87,8 +87,11 @@
   text-align: left;
 }
 #inputOutput{
-  display: inline;
+  display: flex;
   flex-direction: row;
+}
+#outputColumn{
+  width: 100%;
 }
 #nav-headbar{
   display: flex;
