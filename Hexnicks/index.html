@@ -52,14 +52,16 @@
       <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="EasyMC" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
     </div>
 
-    <div id="output">
-      <label id="label5" for="spitter">Output</label>
-      <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the chat. Click on it to copy.</label>
-      <pre id="spitter" style="white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;" onclick="copyTextToClipboard(document.getElementById('spitter').textContent);"></pre>
-      <p id="error" style="display: none; margin-bottom: 10px;">This is more than 256 characters and may not fit in the chat box. You may ignore this if you're using a server console.</p>
-    </div>
+    <div id="outputColumn">
+      <div id="output">
+        <label id="label5" for="spitter">Output</label>
+        <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the chat. Click on it to copy.</label>
+        <pre id="spitter" style="white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;" onclick="copyTextToClipboard(document.getElementById('spitter').textContent);"></pre>
+        <p id="error" style="display: none; margin-bottom: 10px;">This is more than 256 characters and may not fit in the chat box. You may ignore this if you're using a server console.</p>
+      </div>
 
-    <div id="coloredNick" style="word-wrap: break-word;"></div>
+      <div id="coloredNick" style="word-wrap: break-word;"></div>
+    </div>
   </div>
     <div id="typeslist" style="display: flex; flex-direction: column;"><!--  Yoinked from saboor -->
       <label style="margin-top: 15px;">Type</label>

@@ -87,8 +87,12 @@
   text-align: left;
 }
 #inputOutput{
-  display: inline;
+  display: flex;
   flex-direction: row;
+}
+#outputColumn{
+  width: min-content;
+  min-width: 33.3%;
 }
 #nav-headbar{
   display: flex;
