@@ -140,6 +140,7 @@ function updateSpitter(event) {
   let gradientThirds3 = generateColor(val4El.value,val3El.value,half+1)
   let essentialscolorsout = [];
   let othercolorsout = [];
+  let specialcolorsout = [];
   // the pre element where we spit array to user
 
   var colors
@@ -163,6 +164,7 @@ function updateSpitter(event) {
     colorspp[i] = colorspp[i].replace('&', '&x&');
     essentialscolorsout[i] = '&#' + colors[i] + nickspaced[i]
     othercolorsout[i] = colorspp[i] + nickspaced[i]
+    specialcolorsout[i] = '<#' + colors[i] + '>' + nickspaced[i]
   }
   let output = ''
   if (rgbtype.includes('x')) {
@@ -171,6 +173,8 @@ function updateSpitter(event) {
     } else {
       output = othercolorsout.join('');
     }
+  } else if (rgbtype.includes('<')) {
+    output = specialcolorsout.join('')
   } else {
     output = essentialscolorsout.join('');
   }
