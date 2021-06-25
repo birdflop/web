@@ -155,6 +155,13 @@ class TwoStopGradient {
 
 /* Toggles the number of gradient colors between 2 and 10 based on user input */
 function toggleColors(colors) {
+  let clamped = Math.min(10, Math.max(2, colors));
+  if (colors == 1 || colors == '') {
+    colors = getColors().length;
+  } else if (colors != clamped) {
+    $('#numOfColors').val(clamped);
+    colors = clamped;
+  }
   const container = $('#hexColors');
   const hexColors = container.find('.hexColor');
   const number = hexColors.size();
