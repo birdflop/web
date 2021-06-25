@@ -1,107 +1,122 @@
-<html>
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="shortcut icon" href="/assets/images/rgb.png" type="image/x-icon">
-    <title>RGB Gradient Creator</title>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script>
-      function warning() {
-        alert("Slight visual bugs are still present working on fixing those!");
-      }
-      </script>
-  </head>
-  
-  <body onload="warning()">
+<html lang="en">
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">EasyMC</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="../index.html">Home</a></li>
-          <li class="active" ><a href="#">RGB Nicknames</a></li>
-          <li><a href="../CircleGen/">Circle Generator</a></li>
-          <li><a href="../AnimTAB/">Animated TAB</a></li>
-          <li><a href="#">Coming Soon</a></li>
-        </ul>
-      </div>
-    </nav>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="shortcut icon" href="/assets/images/rgb.png" type="image/x-icon">
+  <title>RGB Gradient Creator</title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+</head>
 
-    <h1 id="title" style="word-wrap: break-word;" >
-      RGB Nicknames
-    </h1>
-    <p style="padding-bottom: 10px;">Hex color nickname creator</p>
-    <div id="inputOutput">
-    <div class="editors col-md-2" id="inputs">
-      <label for="color1">First Hex Color</label> 
-      <input class="form-control col-md-1" id="color1" name="color1" value="00FFE0" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
-      <!-- <input class="form-control col-md-1" id="color1" name="color1" type="text" placeholder="Color 1 (hex, rgb, rgba)" value="#0000ff" oninput="javascript: updateSpitter()" onchange="javascript: updateSpitter()"> -->
+<body>
 
-      <label for="color2">Second Hex Color</label>
-      <input class="form-control col-md-1" id="color2" name="color2" value="EB00FF" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
-
-      <label id="label3" for="color3" style="display: none;">Third Hex Color</label>
-      <input style="display: none;" class="form-control col-md-2" id="color3" name="color3" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
-
-      <label id="label4" for="color4" style="display: none;">Fourth Hex Color</label>
-      <input style="display: none;" class="form-control col-md-1" id="color4" name="color4" value="FFFFFF" data-jscolor="{preset:'small dark', position:'right'}" oninput="updateSpitter(event)" onchange="updateSpitter(event)">
-
-      <label for="steps">Nickname</label>
-      <input class="form-control col-md-3" id="nickname" name="nickname" type="text" placeholder="Your Nickname" value="EasyMC" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">EasyMC</a>
     </div>
+    <ul class="nav navbar-nav">
+      <li><a href="../index.html">Home</a></li>
+      <li class="active"><a href="#">RGB Nicknames</a></li>
+      <li><a href="../CircleGen/index.html">Circle Generator</a></li>
+      <li><a href="../AnimTAB/index.html">Animated TAB</a></li>
+      <li><a href="#">Coming Soon</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <div id="outputColumn">
-      <div id="output">
-        <label id="label5" for="spitter">Output</label>
-        <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the chat. Click on it to copy.</label>
-        <pre id="spitter" style="white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;" onclick="copyTextToClipboard(document.getElementById('spitter').textContent);"></pre>
-        <p id="error" style="display: none; margin-bottom: 10px;">This is more than 256 characters and may not fit in the chat box. You may ignore this if you're using a server console.</p>
+<div id="hexColorTemplate" style="display:none;">
+  <div class="row">
+    <label for="color-$NUM">Hex Color #$NUM</label>
+    <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
+           data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)"
+           onchange="javascript: updateSpitter(event)"/>
+  </div>
+</div>
+
+<div id="content">
+  <h1 id="title">RGB Nicknames</h1>
+  <p>Hex color nickname creator</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2" style="padding-left: 0;">
+        <div id="hexColors" class="container-fluid">
+          <!-- Will be populated in JavaScript -->
+        </div>
       </div>
-
-      <div id="coloredNick" style="word-wrap: break-word;"></div>
+      <div class="col-md-10" style="padding-right: 0;">
+        <div class="container-fluid">
+          <div class="row">
+            <div id="output">
+              <label for="outputText" style="color: #782d2d;">Output</label>
+              <label for="outputText" style="font-weight: normal;">This is what you put in the
+                chat. Click on it to copy.</label>
+              <pre id="outputText"
+                   onclick="copyTextToClipboard(this.textContent);"></pre>
+              <p id="error">This is more than 256 characters and may not fit
+                in the chat box. You may ignore this if you're using a server console.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div id="coloredNick"></div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="nickname">Nickname</label>
+              <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Nickname"
+                     value="EasyMC" oninput="javascript: updateOutputText(event)"
+                     onchange="javascript: updateOutputText(event)">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="output-format">Output Format</label>
+              <select id="output-format"
+                      class="form-control"
+                      onchange="updateOutputText(event);">
+                <option value='0'>chat (&#rrggbb)</option>
+                <option value='1'>chat (<#rrggbb>)</option>
+                <option value='2'>chat (&x&r&r&g&g&b&b)</option>
+                <option value='3'>/nick (&#rrggbb)</option>
+                <option value='4'>/nick (<#rrggbb>)</option>
+                <option value='5'>/nick (&x&r&r&g&g&b&b)</option>
+                <option value='6'>console (§x§r§r§g§g§b§b)</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <label for="numOfColors">Number of Colors</label>
+            <input class="form-control"
+                   style="width: 75px;"
+                   value="2" id="numOfColors" type="number" min="2" max="10"
+                   onchange="updateOutputText(event); toggleColors(this.value);"
+                   oninput="updateOutputText(event); toggleColors(this.value);"/>
+          </div>
+          <div class="row">
+            <div id="dbold">
+              <input type="checkbox" id="bold" onclick="updateOutputText(event);"/>
+              <label for="bold">Bold</label>
+            </div>
+            <div id="ditalics">
+              <input type="checkbox" id="italics" onclick="updateOutputText(event);"/>
+              <label for="italics">Italic</label>
+            </div>
+            <div id="dunderline">
+              <input type="checkbox" id="underline" onclick="updateOutputText(event);"/>
+              <label for="underline">Underline</label>
+            </div>
+            <div id="dstrike">
+              <input type="checkbox" id="strike" onclick="updateOutputText(event);"/>
+              <label for="strike">Strikethrough</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-    <div id="typeslist" style="display: flex; flex-direction: column;"><!--  Yoinked from saboor -->
-      <label style="margin-top: 15px;">Type</label>
-      <!--  Yoinked from saboor -->
-      <select type="select" id="types" style="width:150px; border-radius: 10px; padding-right: 6px; padding-left: 6px; padding-top: 6px; padding-bottom: 6px; color:black;" onchange="rgbtype = this.options[this.selectedIndex].innerText; updateSpitter(event);">
-        <option value='0'>chat (&#rrggbb)</option>
-        <option value='1'>chat (<#rrggbb>)</option>
-        <option value='2'>chat (&x&r&r&g&g&b&b)</option>
-        <option value='3'>/nick (&#rrggbb)</option> 
-        <option value='4'>/nick (&x&r&r&g&g&b&b)</option>
-        <option value='5'>console (§x§r§r§g§g§b§b)</option>
-      </select>
-    </div>
-    <div id="coloramountlist">
-      <label for="numOfColors"style="margin-top: 15px; display: flex;">Number of colors</label>
-      <select style="width:50px; border-radius: 10px; padding-right: 6px; padding-left: 6px; padding-top: 6px; padding-bottom: 6px; color:black;" type="select" id="numOfColors" onchange="numberOfColors = this.options[this.selectedIndex].innerText; updateSpitter(event); hideColors();">
-        <option value='2'>2</option>
-        <option value='3'>3</option>
-        <option value='4'>4</option>
-      </select>
-    </div>
-    <div id="formats">
-      <div id="dbold">
-        <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
-        <label for="bold"> Bold output</label>
-      </div>
-      <div id="ditalics">
-        <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
-        <label for="italics"> Italic output</label>
-      </div>
-      <div id="dunderline">
-        <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
-        <label for="underline"> Underlined output</label>
-      </div>
-      <div id="dstrike">
-        <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
-        <label for="strike"> Striked output</label>
-      </div>
-    </div>
-    <script src="script.js"></script>
-    <script src="../assets/js/jscolor.js"></script>
-  </body>
+</div>
+<script src="../assets/js/jscolor.js"></script>
+<script src="script.js"></script>
+</body>
+
 </html>
