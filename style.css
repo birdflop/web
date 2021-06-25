@@ -17,4 +17,12 @@
 body {
   background: rgb(49, 49, 49); /* Green background with 30% opacity */
   font-family: MinecraftRegular;
+  color: lightgray;
+}
+#title{
+  font-size: 50;
+}
+#description{
+
+  font-size: 25;
 }
