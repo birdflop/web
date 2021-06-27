@@ -1,6 +1,6 @@
 <img width="200" src="https://www.pngkit.com/png/full/156-1563098_command-block-old-texture-minecraft-command-block-png.png" alt="SimplyMC" align="right">
 <h1>SimplyMC</h1>
-<a href="https://SimplyMC.akiradev.xyz/">SimplyMC</a> is a Minecraft multitool for developers, server owners and players.
+<a href="https://www.simplymc.art/">SimplyMC</a> is a Minecraft multitool for developers, server owners and players.
 <br><br>
 💖 Consider donating if we helped you:<br>
 <a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
