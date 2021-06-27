@@ -1,232 +1,140 @@
 // elements for obtaining vals
-const animationText = document.getElementById('animationText');
-const coloredNick = document.getElementById('coloredNick');
-const speed = document.getElementById('animation-speed')
-const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
-const formats = {
-  0: {
-    outputPrefix: '',
-    color: '&#$1$2$3$4$5$6',
-    char: '&'
-  }
-};
+let val1El = document.getElementById("color1");
+let val2El = document.getElementById("color2");
+let stepsEl = document.getElementById("steps");
+let speed = document.getElementById("updateSpeed")
+const nickName = document.getElementById("animationText");
+const coloredNick = document.getElementById("coloredNick");
+const coloredNickP = document.createElement("p");
+let newNick = nickName.value;
 let updatespeed;
 
-/* Copies contents to clipboard */
-function copyTextToClipboard(text) {
-  let textArea = document.createElement('textarea');
-  textArea.value = text;
-
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-
-  document.execCommand('copy');
-  alert('Copied output!');
-  document.body.removeChild(textArea);
+function cuttext(text, length) {
+  if (text.length <= length) {
+    return text;
+  }
+  return text.substr(0, length)
 }
 
+
 function showError() {
-  if (speed.value %50 != 0) { 
-    document.getElementById('error').style.display = 'block';
-    document.getElementById('outputText').style.height = '70px';
-    document.getElementById('outputText').style.marginBottom = '5px';
+  if (speed.value %50 != 0) {
+    document.getElementById('error').style.display = "block";
+    document.getElementById('spitter').style.height = "70px";
+    document.getElementById('spitter').style.marginBottom = "5px";
   } else {
-    document.getElementById('error').style.display = 'none';
-    document.getElementById('outputText').style.height = '95px';
-    document.getElementById('outputText').style.marginBottom = '10px';
+    document.getElementById('error').style.display = "none";
+    document.getElementById('spitter').style.height = "95px";
+    document.getElementById('spitter').style.marginBottom = "10px";
   }
 }
 
-function hex(c) {
-  let s = '0123456789abcdef';
-  let i = parseInt(c);
-  if (i == 0 || isNaN(c))
-    return '00';
-  i = Math.round(Math.min(Math.max(0, i), 255));
-  return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
+function hex (c) {
+  let s = "0123456789abcdef";
+  let i = parseInt (c);
+  if (i == 0 || isNaN (c))
+    return "00";
+  i = Math.round (Math.min (Math.max (0, i), 255));
+  return s.charAt ((i - i % 16) / 16) + s.charAt (i % 16);
 }
 
 /* Convert an RGB triplet to a hex string */
-function convertToHex(rgb) {
+function convertToHex (rgb) {
   return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
 }
 
 /* Remove '#' in color hex string */
-function trim(s) {
-  return (s.charAt(0) == '#') ? s.substring(1, 7) : s
-}
+function trim (s) { return (s.charAt(0) == '#') ? s.substring(1, 7) : s }
 
 /* Convert a hex string to an RGB triplet */
-function convertToRGB(hex) {
+function convertToRGB (hex) {
   let color = [];
-  color[0] = parseInt((trim(hex)).substring(0, 2), 16);
-  color[1] = parseInt((trim(hex)).substring(2, 4), 16);
-  color[2] = parseInt((trim(hex)).substring(4, 6), 16);
+  color[0] = parseInt ((trim(hex)).substring (0, 2), 16);
+  color[1] = parseInt ((trim(hex)).substring (2, 4), 16);
+  color[2] = parseInt ((trim(hex)).substring (4, 6), 16);
   return color;
 }
 
-/**
- * JavaScript implementation of HexUtils Gradients from RoseGarden.
- * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
- */
-class Gradient {
-  constructor(colors, numSteps) {
-    this.colors = colors;
-    this.gradients = [];
-    this.steps = numSteps - 1;
-    this.step = 0;
+function generateColor(colorStart,colorEnd,colorCount){
 
-    const increment = this.steps / (colors.length - 1);
-    for (let i = 0; i < colors.length - 1; i++)
-      this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));
-  }
+	// The beginning of your gradient
+	let start = convertToRGB (colorStart);    
 
-  /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
-  next() {
-    if (this.steps <= 1)
-      return this.colors[0];
+	// The end of your gradient
+	let end   = convertToRGB (colorEnd);    
 
-    const adjustedStep = Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
-    let color;
-    if (this.gradients.length < 2) {
-      color = this.gradients[0].colorAt(adjustedStep);
-    } else {
-      const segment = this.steps / this.gradients.length;
-      const index = Math.min(Math.floor(adjustedStep / segment), this.gradients.length - 1);
-      color = this.gradients[index].colorAt(adjustedStep);
-    }
+	// The number of colors to compute
+	let len = colorCount;
 
-    this.step++;
-    return color;
-  }
+	//Alpha blending amount
+	let alpha = 0.0;
+
+	let saida = [];
+	
+	for (let i = 0; i < len; i++) {
+		let c = [];
+		alpha += (1.0/len);
+		
+		c[0] = start[0] * alpha + (1 - alpha) * end[0];
+		c[1] = start[1] * alpha + (1 - alpha) * end[1];
+		c[2] = start[2] * alpha + (1 - alpha) * end[2];
+
+		saida.push(convertToHex (c));
+		
+	}
+	
+	return saida;
+	
 }
 
-class TwoStopGradient {
-  constructor(startColor, endColor, lowerRange, upperRange) {
-    this.startColor = startColor;
-    this.endColor = endColor;
-    this.lowerRange = lowerRange;
-    this.upperRange = upperRange;
-  }
-
-  colorAt(step) {
-    return [
-      this.calculateHexPiece(step, this.startColor[0], this.endColor[0]),
-      this.calculateHexPiece(step, this.startColor[1], this.endColor[1]),
-      this.calculateHexPiece(step, this.startColor[2], this.endColor[2])
-    ];
-  }
-
-  calculateHexPiece(step, channelStart, channelEnd) {
-    const range = this.upperRange - this.lowerRange;
-    const interval = (channelEnd - channelStart) / range;
-    return Math.round(interval * (step - this.lowerRange) + channelStart);
-  }
+function CombineGradient(gradient1,gradient2) {
+  result = [];
+  result = gradient1.concat(gradient2)
+  return result;
 }
-
-/* Toggles the number of gradient colors between 2 and 10 based on user input */
-function toggleColors(colors) {
-  let clamped = Math.min(10, Math.max(2, colors));
-  if (colors == 1 || colors == '') {
-    colors = getColors().length;
-  } else if (colors != clamped) {
-    $('#numOfColors').val(clamped);
-    colors = clamped;
-  }
-  const container = $('#hexColors');
-  const hexColors = container.find('.hexColor');
-  const number = hexColors.size();
-  if (number > colors) {
-    // Need to remove some colors
-    hexColors.each((index, element) => {
-      if (index + 1 > colors) {
-        savedColors[index] = $(element).val();
-        $(element).parent().remove();
-      }
-    });
-  } else if (number < colors) {
-    // Need to add some colors
-    let template = $('#hexColorTemplate').html();
-    for (let i = number + 1; i <= colors; i++) {
-      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, savedColors[i - 1]);
-      container.append(html);
-    }
-    jscolor.install(); // Refresh all jscolor elements
-  }
-}
-
-/* Gets all colored entered by the user */
-function getColors() {
-  const hexColors = $('#hexColors').find('.hexColor');
-  const colors = [];
-  hexColors.each((index, element) => {
-    const value = $(element).val();
-    savedColors[index] = value;
-    colors[index] = convertToRGB(value);
-  });
-  return colors;
-}
-
-function updateOutputText(event) {
+let colors
+function updateSpitter(event) {
+  console.log(speed.value %50 === 0)
   clearInterval(updatespeed)
-  let format = formats[0];
-
-  let newNick = animationText.value
-  if (!newNick) {
+  newNick = nickName.value
+  if(newNick == '') {
     newNick = 'Type something!'
   }
+  
+  let colorsout = [];
+  let animationout = [];
+  // the pre element where we spit array to user
+  let spitter = document.getElementById("spitter");
 
-  const bold = document.getElementById('bold').checked;
-  const italic = document.getElementById('italics').checked;
-  const underline = document.getElementById('underline').checked;
-  const strike = document.getElementById('strike').checked;
-
-  let outputText = document.getElementById('outputText');
-  let gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
-  let charColors = [];
-  let charColors2 = [];
-  let output = []
+  let colorsFirst = generateColor(val2El.value,val1El.value,newNick.length);
+  let colorsSecond = generateColor(val1El.value,val2El.value,newNick.length);
+  colors = CombineGradient(colorsFirst,colorsSecond)
+  let wordSpaced = newNick.split("");
   for (let index = 0; index < newNick.length*2; index++) {
-    console.log(output)
     for (let i = 0; i < newNick.length; i++) {
-      let char = newNick.charAt(i);
-      if (char == ' ') {
-        output += char;
-        charColors.push(null);
-        charColors2.push(null);
-        continue;
-      }
-
-      let hex = convertToHex(gradient.next());
-      charColors.push(hex);
-      charColors2.push(hex);
-      let hexOutput = format.color;
-      for (let n = 1; n <= 6; n++)
-        hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-      output[i] += hexOutput;
-      if (bold) output += format.char + 'l';
-      if (italic) output += format.char + 'o';
-      if (underline) output += format.char + 'n';
-      if (strike) output += format.char + 'm';
-      output[i] += char;
+      if (document.getElementById('bold').checked == true) wordSpaced[i] = '&l' + wordSpaced[i];
+      if (document.getElementById('italics').checked == true) wordSpaced[i] = '&o' + wordSpaced[i];
+      if (document.getElementById('underline').checked == true) wordSpaced[i] = '&n' + wordSpaced[i];
+      if (document.getElementById('strike').checked == true) wordSpaced[i] = '&m' + wordSpaced[i];
+      colorsout[i] = '&#' + colors[i] + wordSpaced[i]
     }
+      animationout.push("  - \""+colorsout.join("")+"\"")
+    colors.unshift(colors.pop())
   }
-  charColors2.reverse();
-  charColors = charColors.concat(charColors2)
-  outputText.innerText = output.join("\n");
+  let output = animationout.join('\n');
+    spitter.innerText = "logo:\n"+`  change-interval: ${Math.ceil(speed.value/50)*50}\n`+"  texts:\n"+output
   if (speed.value %50 === 0) {
     updatespeed = setInterval(() => {
-      charColors.unshift(charColors.pop())
-      displayColoredName(newNick, charColors);
+      colors.unshift(colors.pop())
+      displayColoredName(newNick, colors);
     }, speed.value); 
   }else{
     updatespeed = setInterval(() => {
-      charColors.unshift(charColors.pop())
-      displayColoredName(newNick, charColors);
+      colors.unshift(colors.pop())
+      displayColoredName(newNick, colors);
     }, Math.ceil(speed.value/50)*50); 
   }
-  showError();
+  showError()
 }
 
 /**
@@ -236,37 +144,36 @@ function updateOutputText(event) {
  * source: http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
  */
 function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
+  z = z || "0";
+  n = n + "";
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
+updateSpitter();
 
-function displayColoredName(nickName, colors) {
+async function displayColoredName(nickName, colors) {
   coloredNick.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
-  if (document.getElementById('bold').checked) {
-    if (document.getElementById('italics').checked) {
+  if (document.getElementById('bold').checked == true) {
+    if (document.getElementById('italics').checked == true) {
       coloredNick.classList.add('minecraftibold');
     } else {
       coloredNick.classList.add('minecraftbold');
     }
-  } else if (document.getElementById('italics').checked) {
+  } else if (document.getElementById('italics').checked == true) {
     coloredNick.classList.add('minecraftitalic');
   }
-  coloredNick.innerHTML = '';
+  coloredNickP.innerHTML = "";
   for (let i = 0; i < nickName.length; i++) {
-    const coloredNickSpan = document.createElement('span');
-    if (document.getElementById('underline').checked) {
-      if (document.getElementById('strike').checked) {
+    const coloredNickSpan = document.createElement("span");
+    if (document.getElementById('underline').checked == true) {
+      if (document.getElementById('strike').checked == true) {
         coloredNickSpan.classList.add('minecraftustrike');
       } else coloredNickSpan.classList.add('minecraftunderline');
-    } else if (document.getElementById('strike').checked) {
+    } else if (document.getElementById('strike').checked == true) {
       coloredNickSpan.classList.add('minecraftstrike');
     }
     coloredNickSpan.style.color = colors[i];
     coloredNickSpan.textContent = nickName[i];
-    coloredNick.append(coloredNickSpan);
+    coloredNickP.append(coloredNickSpan);
   }
+  coloredNick.append(coloredNickP);
 }
-
-toggleColors(2);
-updateOutputText();
