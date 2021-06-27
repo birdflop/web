@@ -1,84 +1,124 @@
-<html>
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
-    <title>Animated TAB</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  </head>
-  <body>
+<html lang="en">
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">EasyMC</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="../">Home</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Gradients <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="../Hexnicks/">RGB Nicknames</a></li>
-              <li class="active"><a href="#">Animated TAB</a></li>
-            </ul>
-          </li>
-          <li><a href="../CircleGen/">Circle Generator</a></li>
-          <li><a href="#">Coming Soon</a></li>
-          <li><a href="https://github.com/Oli-idk/EasyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
-          <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></a></li>
-        </ul>
-      </div>
-    </nav>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
+  <title>RGB Gradient Creator</title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
 
-    <h1 id="title" style="word-wrap: break-word;" >
-      Animated TAB</h1>
-    <p style="padding-bottom: 10px;">Hex color nickname creator</p>
-    <div id="inputOutput">
-    <div class="editors col-md-2">
-      <label for="color1">First Hex Color</label> 
-      <input class="form-control col-md-1" id="color1" name="color1" value="0000ff" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
+<body>
 
-      <label for="color2">Second Hex Color</label>
-      <input class="form-control col-md-1" id="color2" name="color2" value="ff3300" data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)" ">
-
-      <label for="steps">Animation Text</label>
-      <input class="form-control col-md-3" id="animationText" name="animationText" type="text" placeholder="Your Text" value="EasyMC" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
-
-      <label for="speed">Update Speed</label>
-      <input class="form-control col-md-3" id="updateSpeed" name="updateSpeed" type="text" placeholder="Update Speed" value="50" oninput="javascript: updateSpitter(event)" onchange="javascript: updateSpitter(event)">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">EasyMC</a>
     </div>
+    <ul class="nav navbar-nav">
+      <li><a href="../">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+           aria-expanded="true">Gradients <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li class="active"><a href="#">RGB Nicknames</a></li>
+          <li><a href="../AnimTAB/">Animated TAB</a></li>
+        </ul>
+      </li>
+      <li><a href="../CircleGen/">Circle Generator</a></li>
+      <li><a href="#">Coming Soon</a></li>
+      <li><a href="https://github.com/Oli-idk/EasyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
+      <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></a></li>
+    </ul>
+  </div>
+</nav>
 
-    <div id="outputColumn">
-      <div id="output">
-        <label id="label4" for="spitter">Output</label>
-        <label id="graylabel2" class="gray" for="spitter" style="font-weight: normal;">This is what you put in the animations.yml file. the file location is plugins/TAB/animations.yml.</label>
-        <pre id="spitter" style="white-space: pre-wrap; height: 95px; margin-right: 15px; font-family: MinecraftRegular;"></pre>
-        <p id="error" style="display: none; margin-bottom: 10px;">TAB only allows the change-interval to be divisible by 50, Your number has been rounded up</p>
+<div id="hexColorTemplate" style="display:none;">
+  <div class="row">
+    <label for="color-$NUM">Hex Color #$NUM</label>
+    <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
+           data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
+           onchange="javascript: updateOutputText(event)"/>
+  </div>
+</div>
+
+<div id="content">
+  <h1 id="title">Animated TAB</h1>
+  <p>TAB plugin gradient animations</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2" style="padding-left: 0;">
+        <div id="hexColors" class="container-fluid">
+          <!-- Will be populated in JavaScript -->
+        </div>
       </div>
-
-      <div id="coloredNick" style="word-wrap: break-word;"></div>
+      <div class="col-md-10" style="padding-right: 0;">
+        <div class="container-fluid">
+          <div class="row">
+            <div id="output">
+              <label for="outputText" style="color: #782d2d;">Output</label>
+              <label for="outputText" style="font-weight: normal;">This is what you put in the
+                animations.yml. Click on it to copy.</label>
+              <pre id="outputText"
+                   onclick="copyTextToClipboard(this.innerText);"></pre>
+              <p id="error">TAB only allows the change-interval to be divisible by 50, Your number has been rounded
+                up</p>
+            </div>
+          </div>
+          <div class="row">
+            <div id="coloredNick"></div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="animationText">Animation Text</label>
+              <input class="form-control" id="animationText" type="text" maxlength="100" placeholder="Your Text"
+                     value="EasyMC" oninput="javascript: onUserInput()"
+                     onchange="javascript: onUserInput()">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="animation-speed">Animation Speed</label>
+              <input id="animation-speed" class="form-control"
+                     style="width: 75px;"
+                     type="number" min="50" max="9999" step="50" value="50"
+                     oninput="updateOutputText(event);" />
+            </div>
+          </div>
+          <div class="row">
+            <label for="numOfColors">Number of Colors</label>
+            <input class="form-control"
+                   style="width: 75px;"
+                   value="2" id="numOfColors" type="number" min="2" max="10"
+                   onchange="updateOutputText(); toggleColors(this.value);"
+                   oninput="updateOutputText(); toggleColors(this.value);"/>
+          </div>
+          <div class="row">
+            <div id="dbold">
+              <input type="checkbox" id="bold" onclick="updateOutputText();"/>
+              <label for="bold">Bold</label>
+            </div>
+            <div id="ditalics">
+              <input type="checkbox" id="italics" onclick="updateOutputText();"/>
+              <label for="italics">Italic</label>
+            </div>
+            <div id="dunderline">
+              <input type="checkbox" id="underline" onclick="updateOutputText();"/>
+              <label for="underline">Underline</label>
+            </div>
+            <div id="dstrike">
+              <input type="checkbox" id="strike" onclick="updateOutputText();"/>
+              <label for="strike">Strikethrough</label>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-    <div id="typeslist" style="display: flex; flex-direction: column;">
-      <div id="dbold">
-        <input type="checkbox" id="bold" onclick="updateSpitter(event);"></input>
-        <label for="bold"> Bold output</label>
-      </div>
-      <div id="ditalics">
-        <input type="checkbox" id="italics" onclick="updateSpitter(event);"></input>
-        <label for="italics"> Italic output</label>
-      </div>
-      <div id="dunderline">
-        <input type="checkbox" id="underline" onclick="updateSpitter(event);"></input>
-        <label for="underline"> Underlined output</label>
-      </div>
-      <div id="dstrike">
-        <input type="checkbox" id="strike" onclick="updateSpitter(event);"></input>
-        <label for="strike"> Striked output</label>
-      </div>
-    </div>
-    <script src="script.js"></script>
-    <script src="../assets/js/jscolor.js"></script>
-  </body>
+</div>
+<script src="../assets/js/jscolor.js"></script>
+<script src="script.js"></script>
+</body>
+
 </html>
