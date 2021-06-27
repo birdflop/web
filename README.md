@@ -2,7 +2,7 @@
 <h1>SimplyMC</h1>
 <a href="https://SimplyMC.akiradev.xyz/">SimplyMC</a> is a Minecraft multitool for developers, server owners and players.
 <br><br>
-💖 Considering donating if we helped you:<br>
+💖 Consider donating if we helped you:<br>
 <a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
 <br><br>
 <a href="https://discord.akiradev.xyz/"> <img src="https://img.shields.io/discord/740705740221841450"></a>
