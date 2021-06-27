@@ -73,8 +73,8 @@
             <div class="col-md-3" style="padding-left: 0;">
               <label for="animationText">Animation Text</label>
               <input class="form-control" id="animationText" type="text" maxlength="100" placeholder="Your Text"
-                     value="EasyMC" oninput="javascript: updateOutputText(event)"
-                     onchange="javascript: updateOutputText(event)">
+                     value="EasyMC" oninput="javascript: onUserInput()"
+                     onchange="javascript: onUserInput()">
             </div>
           </div>
           <div class="row">
@@ -91,24 +91,24 @@
             <input class="form-control"
                    style="width: 75px;"
                    value="2" id="numOfColors" type="number" min="2" max="10"
-                   onchange="updateOutputText(event); toggleColors(this.value);"
-                   oninput="updateOutputText(event); toggleColors(this.value);"/>
+                   onchange="updateOutputText(); toggleColors(this.value);"
+                   oninput="updateOutputText(); toggleColors(this.value);"/>
           </div>
           <div class="row">
             <div id="dbold">
-              <input type="checkbox" id="bold" onclick="updateOutputText(event);"/>
+              <input type="checkbox" id="bold" onclick="updateOutputText();"/>
               <label for="bold">Bold</label>
             </div>
             <div id="ditalics">
-              <input type="checkbox" id="italics" onclick="updateOutputText(event);"/>
+              <input type="checkbox" id="italics" onclick="updateOutputText();"/>
               <label for="italics">Italic</label>
             </div>
             <div id="dunderline">
-              <input type="checkbox" id="underline" onclick="updateOutputText(event);"/>
+              <input type="checkbox" id="underline" onclick="updateOutputText();"/>
               <label for="underline">Underline</label>
             </div>
             <div id="dstrike">
-              <input type="checkbox" id="strike" onclick="updateOutputText(event);"/>
+              <input type="checkbox" id="strike" onclick="updateOutputText();"/>
               <label for="strike">Strikethrough</label>
             </div>
           </div>

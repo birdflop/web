@@ -11,6 +11,7 @@ const formats = {
   }
 };
 let updatespeed;
+let inputDelay;
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
@@ -171,8 +172,12 @@ function getColors() {
   return colors;
 }
 
-function updateOutputText(event) {
-  clearInterval(updatespeed);
+function onUserInput() {
+  clearTimeout(inputDelay);
+  inputDelay = setTimeout(updateOutputText, 300);
+}
+
+function updateOutputText() {
   let format = formats[0];
 
   let newNick = animationText.value
@@ -223,6 +228,7 @@ function updateOutputText(event) {
 
   // Generate the actual text animation
   let step = 0;
+  clearInterval(updatespeed)
   updatespeed = setInterval(() => {
     const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
     const colors = [];
