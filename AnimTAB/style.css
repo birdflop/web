@@ -60,7 +60,7 @@ label {
 #outputText {
   white-space: pre-wrap;
   cursor: pointer;
-  height: 95px;
+  height: 200px;
   font-family: MinecraftRegular;
 }
 
