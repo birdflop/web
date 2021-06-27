@@ -1,12 +1,18 @@
 <html lang="en">
 
 <head>
+  <meta content="SimplyMC" property="og:title" />
+  <meta content="Minecraft multitool for everyone" property="og:description" />
+  <meta content="https://www.simplymc.art/" property="og:url" />
+  <meta content="https://www.simplemc.art/assets/images/emc.png" property="og:image" />
+  <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="./style.css">
   <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
   <title>RGB Gradient Creator</title>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript"  src="/assets/js/js.cookie.js"></script>
 </head>
 
 <body>
@@ -14,7 +20,7 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">EasyMC</a>
+      <a class="navbar-brand" href="#">SimplyMC</a>
     </div>
     <ul class="nav navbar-nav">
       <li><a href="../">Home</a></li>
@@ -27,7 +33,7 @@
       </li>
       <li><a href="../CircleGen/">Circle Generator</a></li>
       <li><a href="#">Coming Soon</a></li>
-      <li><a href="https://github.com/Oli-idk/EasyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
+      <li><a href="https://github.com/Oli-idk/SimplyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
       <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></a></li>
     </ul>
   </div>
@@ -38,7 +44,7 @@
     <label for="color-$NUM">Hex Color #$NUM</label>
     <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
            data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
-           onchange="javascript: updateOutputText(event)"/>
+           onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })"/>
   </div>
 </div>
 
@@ -72,7 +78,7 @@
             <div class="col-md-3" style="padding-left: 0;">
               <label for="nickname">Nickname</label>
               <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Nickname"
-                     value="EasyMC" oninput="javascript: updateOutputText(event)"
+                     value="SimplyMC" oninput="javascript: updateOutputText(event);"
                      onchange="javascript: updateOutputText(event)">
             </div>
           </div>
