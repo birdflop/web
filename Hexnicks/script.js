@@ -1,7 +1,7 @@
 // elements for obtaining vals
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
-const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
+const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
 const formats = {
   0: {
     outputPrefix: '',
@@ -39,6 +39,11 @@ const formats = {
     char: '§'
   }
 };
+
+/* Get a random HEX color */
+function getRandomHexColor() {
+     return Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+}
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
