@@ -3283,12 +3283,12 @@ jsc.pub.presets['thick'] = { borderWidth:2, controlBorderWidth:2, pointerBorderW
 jsc.pub.sliderInnerSpace = 3; // px
 
 // transparency chessboard
-jsc.pub.chessboardSize = 8; // px
-jsc.pub.chessboardColor1 = '#666666';
-jsc.pub.chessboardColor2 = '#999999';
+jsc.pub.chessboardSize = 1; // px
+jsc.pub.chessboardColor1 = '#ffffff';
+jsc.pub.chessboardColor2 = '#ffffff';
 
 // preview separator
-jsc.pub.previewSeparator = ['rgba(255,255,255,.65)', 'rgba(128,128,128,.65)'];
+jsc.pub.previewSeparator = [/*'rgba(255,255,255,.65)', 'rgba(128,128,128,.65)'*/];
 
 
 // Initializes jscolor

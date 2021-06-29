@@ -6,60 +6,61 @@
   <meta content="https://www.simplymc.art/" property="og:url" />
   <meta content="https://www.simplemc.art/assets/images/emc.png" property="og:image" />
   <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.css">
   <link rel="stylesheet" href="./style.css">
-  <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
-  <title>RGB Gradient Creator</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <link rel="shortcut icon" href="../assets/images/emc.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/styles/common.css" type="text/css">
+  <title>SimplyMC | RGB Gradient Creator</title>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">SimplyMC</a>
+<div class="ui inverted menu">
+  <div class="header item">SimplyMC</div>
+  <a class="item" href="../index.html">Home</a>
+  <div class="ui inverted dropdown item">
+    Gradients
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <a class="item" href="../Hexnicks/index.html">RGB Nicknames</a>
+      <a class="item" href="#">Animated TAB</a>
     </div>
-    <ul class="nav navbar-nav">
-      <li><a href="../">Home</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="true">Gradients <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="../AnimTAB/">RGB Nicknames</a></li>
-          <li class="active"><a href="#">Animated TAB</a></li>
-        </ul>
-      </li>
-      <li><a href="../CircleGen/">Circle Generator</a></li>
-      <li><a href="#">Coming Soon</a></li>
-      <li><a href="https://github.com/Oli-idk/SimplyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
-      <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></a></li>
-    </ul>
   </div>
-</nav>
+  <a class="item" href="../CircleGen/index.html">Circle Generator</a>
+  <a class="item" href="#">Coming Soon</a>
+  <a class="icon item" href="https://github.com/Oli-idk/SimplyMC">
+    <i class="github icon"></i>
+  </a>
+  <a class="icon item" href="https://discord.akiradev.xyz">
+    <i class="discord icon"></i>
+  </a>
+</div>
 
 <div id="hexColorTemplate" style="display:none;">
-  <div class="row">
-    <label for="color-$NUM">Hex Color #$NUM</label>
-    <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
-           data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
-           onchange="javascript: updateOutputText(event)"/>
+  <div class="row" style="margin-bottom: 0.25em; margin-top: 0;">
+    <div class="column">
+      <label for="color-$NUM" style="color: lightgrey;">Hex Color #$NUM</label>
+      <input class="hexColor" id="color-$NUM" value="$VAL" style="border-left: 0;"
+             data-jscolor="{preset:'small dark', position:'right', previewSize: 36}" oninput="updateOutputText(event)"
+             onchange="updateOutputText(event)"/>
+    </div>
   </div>
 </div>
 
-<div id="content">
-  <h1 id="title">Animated TAB</h1>
-  <p>TAB plugin gradient animations</p>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2" style="padding-left: 0;">
-        <div id="hexColors" class="container-fluid">
+<div class="ui container">
+  <div id="title" class="ui centered header" style="font-size: 3em; margin-bottom: 0;">Animated TAB</div>
+  <p class="minecraft" style="width: 100%; text-align: center; font-size: 1.3em;">TAB plugin gradient animations</p>
+  <div class="ui form">
+    <div class="ui grid">
+      <div class="three wide column">
+        <div id="hexColors" class="ui very compact grid">
           <!-- Will be populated in JavaScript -->
         </div>
       </div>
-      <div class="col-md-10" style="padding-right: 0;">
-        <div class="container-fluid">
+      <div class="thirteen wide column">
+        <div id="controls" class="ui grid">
           <div class="row">
             <div id="output">
               <label for="outputText" style="color: #782d2d;">Output</label>
@@ -75,47 +76,44 @@
             <div id="coloredNick"></div>
           </div>
           <div class="row">
-            <div class="col-md-3" style="padding-left: 0;">
+            <div class="six wide column">
               <label for="animationText">Animation Text</label>
-              <input class="form-control" id="animationText" type="text" maxlength="100" placeholder="Your Text"
-                     value="SimplyMC" oninput="javascript: onUserInput()"
-                     onchange="javascript: onUserInput()">
+              <input id="animationText" type="text" maxlength="100" placeholder="Your Text"
+                     value="SimplyMC" oninput="onUserInput()"
+                     onchange="onUserInput()">
             </div>
           </div>
           <div class="row">
-            <div class="col-md-3" style="padding-left: 0;">
+            <div class="three wide column">
               <label for="animation-speed">Animation Speed</label>
-              <input id="animation-speed" class="form-control"
+              <input id="animation-speed"
                      style="width: 75px;"
                      type="number" min="50" max="9999" step="50" value="50"
                      oninput="updateOutputText(event);" />
             </div>
+            <div class="three wide column">
+              <label for="numOfColors">Number of Colors</label>
+              <input style="width: 75px;"
+                     value="2" id="numOfColors" type="number" min="2" max="10"
+                     onchange="updateOutputText(); toggleColors(this.value);"
+                     oninput="updateOutputText(); toggleColors(this.value);"/>
+            </div>
           </div>
-          <div class="row">
-            <label for="numOfColors">Number of Colors</label>
-            <input class="form-control"
-                   style="width: 75px;"
-                   value="2" id="numOfColors" type="number" min="2" max="10"
-                   onchange="updateOutputText(); toggleColors(this.value);"
-                   oninput="updateOutputText(); toggleColors(this.value);"/>
+          <div class="ui checkbox row first">
+            <label for="bold" class="minecraftbold dbold">Bold</label>
+            <input type="checkbox" id="bold" onclick="updateOutputText();"/>
           </div>
-          <div class="row">
-            <div id="dbold">
-              <input type="checkbox" id="bold" onclick="updateOutputText();"/>
-              <label for="bold">Bold</label>
-            </div>
-            <div id="ditalics">
-              <input type="checkbox" id="italics" onclick="updateOutputText();"/>
-              <label for="italics">Italic</label>
-            </div>
-            <div id="dunderline">
-              <input type="checkbox" id="underline" onclick="updateOutputText();"/>
-              <label for="underline">Underline</label>
-            </div>
-            <div id="dstrike">
-              <input type="checkbox" id="strike" onclick="updateOutputText();"/>
-              <label for="strike">Strikethrough</label>
-            </div>
+          <div class="ui checkbox row">
+            <label for="italics" class="minecraftitalic ditalics">Italic</label>
+            <input type="checkbox" id="italics" onclick="updateOutputText();"/>
+          </div>
+          <div class="ui checkbox row">
+            <label for="underline" class="minecraftunderline dunderline">Underline</label>
+            <input type="checkbox" id="underline" onclick="updateOutputText();"/>
+          </div>
+          <div class="ui checkbox row last">
+            <label for="strike" class="minecraftstrike dstrike">Strikethrough</label>
+            <input type="checkbox" id="strike" onclick="updateOutputText();"/>
           </div>
         </div>
       </div>

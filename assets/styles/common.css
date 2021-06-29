@@ -1,0 +1,56 @@
+@font-face {
+  font-family: MinecraftRegular;
+  src: url(../fonts/MinecraftRegular.otf);
+}
+
+@font-face {
+  font-family: MinecraftBold;
+  src: url(../fonts/MinecraftBold.otf);
+}
+
+@font-face {
+  font-family: MinecraftItalic;
+  src: url(../fonts/MinecraftItalic.otf);
+}
+
+@font-face {
+  font-family: MinecraftBoldItalic;
+  src: url(../fonts/MinecraftBoldItalic.otf);
+}
+
+* {
+  font-family: MinecraftRegular;
+}
+
+.minecraft {
+  font-family: MinecraftRegular !important;
+}
+
+.minecraftbold > * {
+  font-family: MinecraftBold;
+}
+
+.minecraftitalic > * {
+  font-family: MinecraftItalic;
+}
+
+.minecraftibold > * {
+  font-family: MinecraftBoldItalic;
+}
+
+.minecraftunderline {
+  text-decoration: underline;
+}
+
+.minecraftustrike {
+  text-decoration: underline line-through;
+}
+
+.minecraftstrike {
+  text-decoration: line-through;
+}
+
+.compact {
+  margin-top: 0;
+  margin-bottom: 0;
+}

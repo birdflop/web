@@ -2,7 +2,7 @@
 const animationText = document.getElementById('animationText');
 const coloredNick = document.getElementById('coloredNick');
 const speed = document.getElementById('animation-speed')
-const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
+const savedColors = ['00FFE0', 'EB00FF', getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex()];
 const formats = {
   0: {
     outputPrefix: '',
@@ -12,6 +12,14 @@ const formats = {
 };
 let updatespeed;
 let inputDelay;
+
+window.onload = () => {
+  toggleColors(2);
+  updateOutputText();
+
+  $('.ui.dropdown').dropdown({on: 'hover'});
+  $('.ui.checkbox').checkbox();
+};
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
@@ -33,6 +41,10 @@ function showError() {
   } else {
     document.getElementById('error').style.display = 'none';
   }
+}
+
+function getRandomHex() {
+  return convertToHex([Math.round(Math.random() * 255), Math.round(Math.random() * 255), Math.round(Math.random() * 255)]);
 }
 
 function hex(c) {
@@ -140,7 +152,7 @@ function toggleColors(colors) {
   }
   const container = $('#hexColors');
   const hexColors = container.find('.hexColor');
-  const number = hexColors.size();
+  const number = hexColors.length;
   if (number > colors) {
     // Need to remove some colors
     hexColors.each((index, element) => {
@@ -275,6 +287,3 @@ function displayColoredName(nickName, colors) {
     coloredNick.append(coloredNickSpan);
   }
 }
-
-toggleColors(2);
-updateOutputText();
