@@ -15,8 +15,11 @@
   src: url(../assets/fonts/MinecraftBoldItalic.otf);
 }
 
+#content {
+  margin: 1em;
+}
+
 body {
-  font-size: 11px;
   background: rgb(49, 49, 49);
   color: lightgray;
   font-family: MinecraftRegular;
