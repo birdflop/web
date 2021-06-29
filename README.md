@@ -6,12 +6,12 @@
 <a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
 <br><br>
 <a href="https://discord.akiradev.xyz/"> <img src="https://img.shields.io/discord/740705740221841450"></a>
-<a href="#"> <img src="https://img.shields.io/github/last-commit/oli-idk/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/contributors/oli-idk/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/languages/code-size/oli-idk/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/watchers/oli-idk/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/stars/oli-idk/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/forks/oli-idk/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/last-commit/AkiraDevelopment/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/contributors/AkiraDevelopment/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/languages/code-size/AkiraDevelopment/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/watchers/AkiraDevelopment/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/stars/AkiraDevelopment/SimplyMC"></a>
+<a href="#"> <img src="https://img.shields.io/github/forks/AkiraDevelopment/SimplyMC"></a>
 
 <h2>Contributing</h2>
 If you would like to contribute please make a pull request to the Development branch as well as make sure your code works as intended and is setup like all the others.
