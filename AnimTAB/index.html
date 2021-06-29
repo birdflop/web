@@ -13,6 +13,7 @@
   <title>SimplyMC | RGB Gradient Creator</title>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.8/dist/semantic.min.js"></script>
+  <script src="../assets/js/js.cookie.js"></script>
 </head>
 
 <body>
@@ -42,9 +43,9 @@
   <div class="row" style="margin-bottom: 0.25em; margin-top: 0;">
     <div class="column">
       <label for="color-$NUM" style="color: lightgrey;">Hex Color #$NUM</label>
-      <input class="hexColor" id="color-$NUM" value="$VAL" style="border-left: 0;"
-             data-jscolor="{preset:'small dark', position:'right', previewSize: 36}" oninput="updateOutputText(event)"
-             onchange="updateOutputText(event)"/>
+      <input class="hexColor" id="color-$NUM" value="$VAL" style="border-width: 0;"
+             data-jscolor="{preset:'small dark', position:'right', previewSize: 36}" oninput="updateOutputText()"
+             onchange="updateOutputText()"/>
     </div>
   </div>
 </div>
@@ -89,7 +90,7 @@
               <input id="animation-speed"
                      style="width: 75px;"
                      type="number" min="50" max="9999" step="50" value="50"
-                     oninput="updateOutputText(event);" />
+                     oninput="updateOutputText();" />
             </div>
             <div class="three wide column">
               <label for="numOfColors">Number of Colors</label>

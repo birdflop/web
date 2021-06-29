@@ -2,7 +2,7 @@
 const animationText = document.getElementById('animationText');
 const coloredNick = document.getElementById('coloredNick');
 const speed = document.getElementById('animation-speed')
-const savedColors = ['00FFE0', 'EB00FF', getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex(), getRandomHex()];
+const savedColors = [];
 const formats = {
   0: {
     outputPrefix: '',
@@ -10,16 +10,72 @@ const formats = {
     char: '&'
   }
 };
+let activeColors = 2;
+
 let updatespeed;
 let inputDelay;
 
 window.onload = () => {
-  toggleColors(2);
-  updateOutputText();
-
   $('.ui.dropdown').dropdown({on: 'hover'});
   $('.ui.checkbox').checkbox();
+
+  loadCookies();
+
+  toggleColors(activeColors);
+  updateOutputText();
 };
+
+function loadCookies() {
+  // Apply cookies if set
+  if (!jQuery.isEmptyObject(Cookies.get())) {
+    for (let i = 1; i <= 10; i++) {
+      let value = Cookies.get(`color-${i}`);
+      if (value) {
+        savedColors.push(value);
+      } else {
+        savedColors.push(getRandomHex());
+      }
+    }
+
+    const colors = Cookies.get('activeColors');
+    if (colors) {
+      activeColors = colors;
+      $('#numOfColors').val(activeColors);
+    }
+
+    const text = Cookies.get('text');
+    if (text)
+      $('#animationText').val(text);
+
+    const animationSpeed = Cookies.get('animationSpeed');
+    if (animationSpeed)
+      $('#animation-speed').val(animationSpeed);
+
+    if (Cookies.get('bold') == 'true') $('#bold').parent().checkbox('set checked', true);
+    if (Cookies.get('italics') == 'true') $('#italics').parent().checkbox('set checked', true);
+    if (Cookies.get('underline') == 'true') $('#underline').parent().checkbox('set checked', true);
+    if (Cookies.get('strike') == 'true') $('#strike').parent().checkbox('set checked', true);
+  } else {
+    // Otherwise randomize them instead
+    savedColors.push('00FFE0');
+    savedColors.push('EB00FF');
+    for (let i = 0; i < 8; i++)
+      savedColors.push(getRandomHex());
+    updateCookies();
+  }
+}
+
+function updateCookies() {
+  for (let i = 1; i <= savedColors.length; i++)
+    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7 });
+  Cookies.set('activeColors', activeColors, { expires: 7 });
+  Cookies.set('text', $('#animationText').val(), { expires: 7 });
+  Cookies.set('animationSpeed', $('#animation-speed').val(), { expires: 7 })
+  Cookies.set('bold', $('#bold').parent().checkbox('is checked'));
+  Cookies.set('italics', $('#italics').parent().checkbox('is checked'));
+  Cookies.set('underline', $('#underline').parent().checkbox('is checked'));
+  Cookies.set('strike', $('#strike').parent().checkbox('is checked'));
+}
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
@@ -158,7 +214,7 @@ function toggleColors(colors) {
     hexColors.each((index, element) => {
       if (index + 1 > colors) {
         savedColors[index] = $(element).val();
-        $(element).parent().remove();
+        $(element).parent().parent().remove();
       }
     });
   } else if (number < colors) {
@@ -170,6 +226,8 @@ function toggleColors(colors) {
     }
     jscolor.install(); // Refresh all jscolor elements
   }
+  activeColors = colors;
+  updateCookies();
 }
 
 /* Gets all colored entered by the user */
@@ -181,6 +239,7 @@ function getColors() {
     savedColors[index] = value;
     colors[index] = convertToRGB(value);
   });
+  updateCookies();
   return colors;
 }
 
