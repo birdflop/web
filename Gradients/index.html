@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="./style.css">
   <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
-  <title>RGB Gradient Creator</title>
+  <title>Hex Gradient Creator</title>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script type="text/javascript"  src="/assets/js/js.cookie.js"></script>
@@ -27,7 +27,7 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Gradients <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li class="active"><a href="#">RGB Nicknames</a></li>
+          <li class="active"><a href="#">Hex Gradients</a></li>
           <li><a href="../AnimTAB/">Animated TAB</a></li>
         </ul>
       </li>
@@ -49,8 +49,8 @@
 </div>
 
 <div id="content">
-  <h1 id="title">RGB Nicknames</h1>
-  <p>Hex color nickname creator</p>
+  <h1 id="title">Hex Gradients</h1>
+  <p>Hex color gradient creator</p>
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2" style="padding-left: 0;">
@@ -76,8 +76,8 @@
           </div>
           <div class="row">
             <div class="col-md-3" style="padding-left: 0;">
-              <label for="nickname">Nickname</label>
-              <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Nickname"
+              <label for="nickname">Text</label>
+              <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Text"
                      value="SimplyMC" oninput="javascript: updateOutputText(event);"
                      onchange="javascript: updateOutputText(event)">
             </div>
@@ -95,6 +95,7 @@
                 <option value='4'>/nick (<#rrggbb>)</option>
                 <option value='5'>/nick (&x&r&r&g&g&b&b)</option>
                 <option value='6'>console (§x§r§r§g§g§b§b)</option>
+                <option value='7'>bbcode [COLOR=#rrggbb]</option>
               </select>
             </div>
           </div>
