@@ -1,44 +1,62 @@
 // elements for obtaining vals
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
-const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
+const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
 const formats = {
   0: {
     outputPrefix: '',
-    color: '&#$1$2$3$4$5$6',
-    char: '&'
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   1: {
     outputPrefix: '',
-    color: '<#$1$2$3$4$5$6>',
-    char: '&'
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   2: {
     outputPrefix: '',
-    color: '&x&$1&$2&$3&$4&$5&$6',
-    char: '&'
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   3: {
     outputPrefix: '/nick ',
-    color: '&#$1$2$3$4$5$6',
-    char: '&'
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   4: {
     outputPrefix: '/nick ',
-    color: '<#$1$2$3$4$5$6>',
-    char: '&'
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   5: {
     outputPrefix: '/nick ',
-    color: '&x&$1&$2&$3&$4&$5&$6',
-    char: '&'
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&',
+    maxLength: 256
   },
   6: {
     outputPrefix: '',
-    color: '§x§$1§$2§$3§$4§$5§$6',
-    char: '§'
+    template: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    formatChar: '§',
+    maxLength: null
+  },
+  7: {
+    outputPrefix: '',
+    template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+    formatChar: null,
+    maxLength: null
   }
 };
+
+/* Get a random HEX color */
+function getRandomHexColor() {
+     return Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+}
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
@@ -54,8 +72,8 @@ function copyTextToClipboard(text) {
   document.body.removeChild(textArea);
 }
 
-function showError() {
-  if (document.getElementById('outputText').textContent.length > '256') {
+function showError(show) {
+  if (show) {
     document.getElementById('error').style.display = 'block';
     document.getElementById('outputText').style.height = '70px';
     document.getElementById('outputText').style.marginBottom = '5px';
@@ -231,19 +249,23 @@ function updateOutputText(event) {
 
     let hex = convertToHex(gradient.next());
     charColors.push(hex);
-    let hexOutput = format.color;
+    let hexOutput = format.template;
     for (let n = 1; n <= 6; n++)
       hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+    let formatCodes = '';
+    if (format.formatChar != null) {
+      if (bold) formatCodes += format.formatChar + 'l';
+      if (italic) formatCodes += format.formatChar + 'o';
+      if (underline) formatCodes += format.formatChar + 'n';
+      if (strike) formatCodes += format.formatChar + 'm';
+    }
+    hexOutput = hexOutput.replace('$f', formatCodes);
+    hexOutput = hexOutput.replace('$c', char);
     output += hexOutput;
-    if (bold) output += format.char + 'l';
-    if (italic) output += format.char + 'o';
-    if (underline) output += format.char + 'n';
-    if (strike) output += format.char + 'm';
-    output += char;
   }
 
   outputText.innerText = output;
-  showError();
+  showError(format.maxLength != null && format.maxLength < output.length);
   displayColoredName(newNick, charColors);
 }
 
