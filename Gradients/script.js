@@ -5,38 +5,43 @@ const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(
 const formats = {
   0: {
     outputPrefix: '',
-    color: '&#$1$2$3$4$5$6',
-    char: '&'
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&'
   },
   1: {
     outputPrefix: '',
-    color: '<#$1$2$3$4$5$6>',
-    char: '&'
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&'
   },
   2: {
     outputPrefix: '',
-    color: '&x&$1&$2&$3&$4&$5&$6',
-    char: '&'
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&'
   },
   3: {
     outputPrefix: '/nick ',
-    color: '&#$1$2$3$4$5$6',
-    char: '&'
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&'
   },
   4: {
     outputPrefix: '/nick ',
-    color: '<#$1$2$3$4$5$6>',
-    char: '&'
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&'
   },
   5: {
     outputPrefix: '/nick ',
-    color: '&x&$1&$2&$3&$4&$5&$6',
-    char: '&'
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&'
   },
   6: {
     outputPrefix: '',
-    color: '§x§$1§$2§$3§$4§$5§$6',
-    char: '§'
+    template: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    formatChar: '§'
+  },
+  7: {
+    outputPrefix: '',
+    template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+    formatChar: null
   }
 };
 
@@ -236,15 +241,19 @@ function updateOutputText(event) {
 
     let hex = convertToHex(gradient.next());
     charColors.push(hex);
-    let hexOutput = format.color;
+    let hexOutput = format.template;
     for (let n = 1; n <= 6; n++)
       hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+    let formatCodes = '';
+    if (format.formatChar != null) {
+      if (bold) formatCodes += format.formatChar + 'l';
+      if (italic) formatCodes += format.formatChar + 'o';
+      if (underline) formatCodes += format.formatChar + 'n';
+      if (strike) formatCodes += format.formatChar + 'm';
+    }
+    hexOutput = hexOutput.replace('$f', formatCodes);
+    hexOutput = hexOutput.replace('$c', char);
     output += hexOutput;
-    if (bold) output += format.char + 'l';
-    if (italic) output += format.char + 'o';
-    if (underline) output += format.char + 'n';
-    if (strike) output += format.char + 'm';
-    output += char;
   }
 
   outputText.innerText = output;
