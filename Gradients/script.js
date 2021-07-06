@@ -6,42 +6,50 @@ const formats = {
   0: {
     outputPrefix: '',
     template: '&#$1$2$3$4$5$6$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   1: {
     outputPrefix: '',
     template: '<#$1$2$3$4$5$6>$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   2: {
     outputPrefix: '',
     template: '&x&$1&$2&$3&$4&$5&$6$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   3: {
     outputPrefix: '/nick ',
     template: '&#$1$2$3$4$5$6$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   4: {
     outputPrefix: '/nick ',
     template: '<#$1$2$3$4$5$6>$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   5: {
     outputPrefix: '/nick ',
     template: '&x&$1&$2&$3&$4&$5&$6$f$c',
-    formatChar: '&'
+    formatChar: '&',
+    maxLength: 256
   },
   6: {
     outputPrefix: '',
     template: '§x§$1§$2§$3§$4§$5§$6$f$c',
-    formatChar: '§'
+    formatChar: '§',
+    maxLength: null
   },
   7: {
     outputPrefix: '',
     template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
-    formatChar: null
+    formatChar: null,
+    maxLength: null
   }
 };
 
@@ -64,8 +72,8 @@ function copyTextToClipboard(text) {
   document.body.removeChild(textArea);
 }
 
-function showError() {
-  if (document.getElementById('outputText').textContent.length > '256') {
+function showError(show) {
+  if (show) {
     document.getElementById('error').style.display = 'block';
     document.getElementById('outputText').style.height = '70px';
     document.getElementById('outputText').style.marginBottom = '5px';
@@ -257,7 +265,7 @@ function updateOutputText(event) {
   }
 
   outputText.innerText = output;
-  showError();
+  showError(format.maxLength != null && format.maxLength < output.length);
   displayColoredName(newNick, charColors);
 }
 
