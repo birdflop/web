@@ -1,6 +1,6 @@
 // elements for obtaining vals
 const animationText = document.getElementById('animationText');
-const coloredNick = document.getElementById('coloredNick');
+const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed')
 const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
 const formats = {
@@ -241,38 +241,38 @@ function updateOutputText() {
 }
 
 function displayColoredName(nickName, colors) {
-  coloredNick.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
+  animation.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
   if (document.getElementById('bold').checked) {
     if (document.getElementById('italics').checked) {
-      coloredNick.classList.add('minecraftibold');
+      animation.classList.add('minecraftibold');
     } else {
-      coloredNick.classList.add('minecraftbold');
+      animation.classList.add('minecraftbold');
     }
   } else if (document.getElementById('italics').checked) {
-    coloredNick.classList.add('minecraftitalic');
+    animation.classList.add('minecraftitalic');
   }
-  coloredNick.innerHTML = '';
+  animation.innerHTML = '';
   let colorIndex = 0;
   for (let i = 0; i < nickName.length; i++) {
-    const coloredNickSpan = document.createElement('span');
+    const animationSpan = document.createElement('span');
     if (document.getElementById('underline').checked) {
       if (document.getElementById('strike').checked) {
-        coloredNickSpan.classList.add('minecraftustrike');
-      } else coloredNickSpan.classList.add('minecraftunderline');
+        animationSpan.classList.add('minecraftustrike');
+      } else animationSpan.classList.add('minecraftunderline');
     } else if (document.getElementById('strike').checked) {
-      coloredNickSpan.classList.add('minecraftstrike');
+      animationSpan.classList.add('minecraftstrike');
     }
 
     const char = nickName[i];
     if (char == ' ') {
-      coloredNickSpan.style.color = colors[colorIndex];
-      coloredNickSpan.textContent = char;
+      animationSpan.style.color = colors[colorIndex];
+      animationSpan.textContent = char;
     } else {
-      coloredNickSpan.style.color = colors[colorIndex];
-      coloredNickSpan.textContent = char;
+      animationSpan.style.color = colors[colorIndex];
+      animationSpan.textContent = char;
       colorIndex++;
     }
-    coloredNick.append(coloredNickSpan);
+      animation.append(animationSpan);
   }
 }
 
