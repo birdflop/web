@@ -84,6 +84,19 @@
           </div>
           <div class="row">
             <div class="col-md-3" style="padding-left: 0;">
+              <label for="animationType">Animation Type</label>
+              <select id="animationType"
+                      class="form-control"
+                      onchange="updateOutputText(event);">
+                <option value='0'>Normal (left -> right)</option>
+                <option value='1'>Reverse (right -> left)</option>
+                <option value='2'>Bouncing (UNFINISHED)</option>
+                <option value='3'>Full text cycle (UNFINISHED)</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
               <label for="animation-speed">Animation Speed</label>
               <input id="animation-speed" class="form-control"
                      style="width: 75px;"

@@ -1,5 +1,6 @@
 // elements for obtaining vals
 const animationText = document.getElementById('animationText');
+const animationTypes = document.getElementById('animationType');
 const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed')
 const savedColors = ['00FFE0', 'EB00FF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF', 'FFFFFF'];
@@ -179,7 +180,6 @@ function onUserInput() {
 
 function updateOutputText() {
   let format = formats[0];
-
   let newNick = animationText.value
   if (!newNick) {
     newNick = 'Type something!'
@@ -191,51 +191,190 @@ function updateOutputText() {
   const strike = document.getElementById('strike').checked;
 
   const outputText = document.getElementById('outputText');
+  const outputArray = [];
   const clampedSpeed = Math.ceil(speed.value / 50) * 50;
   outputText.innerText = '';
 
   // Generate the output text
   const charColors = []; // array of arrays
-  for (let n = 0; n < newNick.length * 2; n++) {
-    const colors = [];
-    const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-    let output = format.outputPrefix;
-    for (let i = 0; i < newNick.length; i++) {
-      let char = newNick.charAt(i);
-      if (char == ' ') {
+  if (animationTypes.value == '0'){
+    for (let n = 0; n < newNick.length * 2 - 2; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
         output += char;
-        colors.push(null);
-        continue;
       }
 
-      let hex = convertToHex(gradient.next());
-      colors.push(hex);
-      let hexOutput = format.color;
-      for (let n = 1; n <= 6; n++)
-        hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-      output += hexOutput;
-      if (bold) output += format.char + 'l';
-      if (italic) output += format.char + 'o';
-      if (underline) output += format.char + 'n';
-      if (strike) output += format.char + 'm';
-      output += char;
+      outputText.innerText = `  - "${output}"\n${outputText.innerText}`;
     }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputText.innerText}`
+  } else if (animationTypes.value == '1') {
+    for (let n = 0; n < newNick.length * 2 - 2; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
 
-    outputText.innerText = `  - "${output}"\n${outputText.innerText}`;
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      outputArray.push(`  - "${output}"`);
+    }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`
+  } else if (animationTypes.value == '2') {
+    let output1 = []
+    let output2 = []
+    for (let n = 0; n < newNick.length; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      output1.push(`  - "${output}"`);
+    }
+    for (let n = 0; n < newNick.length; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      output2.push(`  - "${output}"`);
+    }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${output1.reverse().concat(output2).join("\n")}`
+  } else if (animationTypes.value == '3') {
+    for (let n = 0; n < newNick.length * 2 - 2; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      outputArray.push(`  - "${output}"`);
+    }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`
   }
-
-  outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputText.innerText}`
 
   // Generate the actual text animation
   let step = 0;
   clearInterval(updatespeed)
   updatespeed = setInterval(() => {
-    const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
     const colors = [];
-    for (let i = 0; i < newNick.length; i++)
-      if (newNick.charAt(i) != ' ')
-        colors.push(convertToHex(gradient.next()));
-    displayColoredName(newNick, colors.reverse());
+    let colors2 = [];
+    if(animationTypes.value == '0'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+      }
+      displayColoredName(newNick, colors.reverse());
+    } else if (animationTypes.value == '1'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+      }
+      displayColoredName(newNick, colors);
+    } else if (animationTypes.value == '2'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+          colors2.push(convertToHex(gradient.next()));
+      }
+      colors2 = colors.concat(colors.reverse())
+      displayColoredName("Preview Broken fixing soon", colors2);
+      console.log(colors2)
+    }
   }, clampedSpeed);
   showError();
 }
