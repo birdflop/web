@@ -256,7 +256,65 @@ function updateOutputText() {
     }
     outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`
   } else if (animationTypes.value == '2') {
-    for (let n = 0; n < newNick.length * 2; n++) {
+    let output1 = []
+    let output2 = []
+    for (let n = 0; n < newNick.length; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      output1.push(`  - "${output}"`);
+    }
+    for (let n = 0; n < newNick.length; n++) {
+      const colors = [];
+      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
+      let output = format.outputPrefix;
+      for (let i = 0; i < newNick.length; i++) {
+        let char = newNick.charAt(i);
+        if (char == ' ') {
+          output += char;
+          colors.push(null);
+          continue;
+        }
+
+        let hex = convertToHex(gradient.next());
+        colors.push(hex);
+        let hexOutput = format.color;
+        for (let n = 1; n <= 6; n++)
+          hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        output += hexOutput;
+        if (bold) output += format.char + 'l';
+        if (italic) output += format.char + 'o';
+        if (underline) output += format.char + 'n';
+        if (strike) output += format.char + 'm';
+        output += char;
+      }
+
+      output2.push(`  - "${output}"`);
+    }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${output1.reverse().concat(output2).join("\n")}`
+  } else if (animationTypes.value == '3') {
+    for (let n = 0; n < newNick.length * 2 - 2; n++) {
       const colors = [];
       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
       let output = format.outputPrefix;
@@ -282,23 +340,40 @@ function updateOutputText() {
       }
 
       outputArray.push(`  - "${output}"`);
-      outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.reverse().join("\n")}`
     }
+    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`
   }
 
   // Generate the actual text animation
   let step = 0;
   clearInterval(updatespeed)
   updatespeed = setInterval(() => {
-    const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
     const colors = [];
-    for (let i = 0; i < newNick.length; i++)
-      if (newNick.charAt(i) != ' ')
-        colors.push(convertToHex(gradient.next()));
+    let colors2 = [];
     if(animationTypes.value == '0'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+      }
       displayColoredName(newNick, colors.reverse());
     } else if (animationTypes.value == '1'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+      }
       displayColoredName(newNick, colors);
+    } else if (animationTypes.value == '2'){
+      let gradient = new AnimatedGradient(getColors(), newNick.length, step++);
+      for (let i = 0; i < newNick.length * 2; i++){
+        if (newNick.charAt(i) != ' ')
+          colors.push(convertToHex(gradient.next()));
+          colors2.push(convertToHex(gradient.next()));
+      }
+      colors2 = colors.concat(colors.reverse())
+      displayColoredName("Preview Broken fixing soon", colors2);
+      console.log(colors2)
     }
   }, clampedSpeed);
   showError();
