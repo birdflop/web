@@ -2,6 +2,11 @@
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
+const presets = {
+  1: {
+    colors: ["FF0000", "FF7F00", "FFFF00", "00FF00", "0000FF", "4B0082", "9400D3"],
+  }
+}
 const formats = {
   0: {
     outputPrefix: '',
@@ -306,6 +311,19 @@ function displayColoredName(nickName, colors) {
     coloredNickSpan.textContent = nickName[i];
     coloredNick.append(coloredNickSpan);
   }
+}
+
+function preset(n) {
+  const colors = presets[n].colors
+  const container = $('#hexColors');
+  container.empty();
+    // Need to add some colors
+    let template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    jscolor.install(); // Refresh all jscolor elements
 }
 
 toggleColors(2);

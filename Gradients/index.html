@@ -99,6 +99,17 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="color-preset">Color Preset</label>
+              <select id="color-preset"
+                      class="form-control"
+                      onchange="preset(this.value); updateOutputText(event); ">
+                <option value='0'>None</option>
+                <option value='1'>Rainbow</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
             <label for="numOfColors">Number of Colors</label>
             <input class="form-control"
                    style="width: 75px;"
