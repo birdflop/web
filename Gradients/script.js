@@ -315,18 +315,15 @@ function displayColoredName(nickName, colors) {
 
 function preset(n) {
   const colors = presets[n].colors
-  document.getElementById("numOfColors").value = colors.length;
-  toggleColors(document.getElementById("numOfColors").value);
-
   const container = $('#hexColors');
-  const hexColors = container.find('.hexColor');
-  for (let index = 0; index < hexColors.length; index++) {
-    hexColors[index].value = colors[index]
-    hexColors[index].innerHTML = colors[index]
-    hexColors[index].style.backgroundImage = `linear-gradient(to right, rgb(${convertToRGB(colors[index]).join(",")}) 0%, rgb(${convertToRGB(colors[index]).join(",")}) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%)`
-  }
-  console.log(hexColors)
-
+  container.empty();
+    // Need to add some colors
+    let template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    jscolor.install(); // Refresh all jscolor elements
 }
 
 toggleColors(2);
