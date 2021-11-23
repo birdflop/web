@@ -2,6 +2,11 @@
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
+const presets = {
+  1: {
+    colors: ["FF0000", "FF7F00", "FFFF00", "00FF00", "0000FF", "4B0082", "9400D3"],
+  }
+}
 const formats = {
   0: {
     outputPrefix: '',
@@ -306,6 +311,22 @@ function displayColoredName(nickName, colors) {
     coloredNickSpan.textContent = nickName[i];
     coloredNick.append(coloredNickSpan);
   }
+}
+
+function preset(n) {
+  const colors = presets[n].colors
+  document.getElementById("numOfColors").value = colors.length;
+  toggleColors(document.getElementById("numOfColors").value);
+
+  const container = $('#hexColors');
+  const hexColors = container.find('.hexColor');
+  for (let index = 0; index < hexColors.length; index++) {
+    hexColors[index].value = colors[index]
+    hexColors[index].innerHTML = colors[index]
+    hexColors[index].style.backgroundImage = `linear-gradient(to right, rgb(${convertToRGB(colors[index]).join(",")}) 0%, rgb(${convertToRGB(colors[index]).join(",")}) 30px, rgba(0, 0, 0, 0) 31px, rgba(0, 0, 0, 0) 100%)`
+  }
+  console.log(hexColors)
+
 }
 
 toggleColors(2);
