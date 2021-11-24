@@ -331,6 +331,7 @@ function preset(n) {
       container.append(html);
     }
     nickName.value = presets[n].text
+    document.getElementById("numOfColors").value = colors.length
     jscolor.install(); // Refresh all jscolor elements
 }
 
@@ -361,6 +362,7 @@ function importPreset(p) {
       container.append(html);
     }
     nickName.value = nickname
+    document.getElementById("numOfColors").value = colors.length
     jscolor.install(); // Refresh all jscolor elements
     try {
       updateOutputText()
