@@ -110,6 +110,14 @@
             </div>
           </div>
           <div class="row">
+            <label for="points">Number of Points</label>
+            <input class="form-control"
+                   style="width: 75px;"
+                   value="1" id="points" type="number" min="1" max="10"
+                   onchange="updateOutputText(event);"
+                   oninput="updateOutputText(event);"/>
+          </div>
+          <div class="row">
             <label for="numOfColors">Number of Colors</label>
             <input class="form-control"
                    style="width: 75px;"
