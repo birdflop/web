@@ -110,6 +110,27 @@
             </div>
           </div>
           <div class="row">
+            <label for="exportPreset">Export Preset</label>
+            <button class="form-control" 
+            style="width: 125px;" 
+            type="button" id="exportPreset"
+            onclick="copyTextToClipboard(exportPreset());">Copy Preset</button>
+          </div>
+          <div class="row">
+            <label for="importPreset">Import Preset</label>
+            <button class="form-control" 
+            style="width: 125px;" 
+            type="button" id="importPreset"
+            onclick="showfield()"
+            >Import Preset</button>
+          <div id="importInput" style="display: none;">
+            Paste Here: <input type="text" name="ImportInput"
+            class="form-control"
+            style="width: 400px;"
+            onchange="javascript: importPreset(this.value)" />
+          </div>
+          </div>
+          <div class="row">
             <label for="points">Number of Points</label>
             <input class="form-control"
                    style="width: 75px;"
