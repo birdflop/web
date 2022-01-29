@@ -2,6 +2,17 @@
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
+const toggled = false;
+const presets = {
+  0: {
+    colors: ["00FFE0", "EB00FF"],
+    text: "SimplyMC"
+  },
+  1: {
+    colors: ["FF0000", "FF7F00", "FFFF00", "00FF00", "0000FF", "4B0082", "9400D3"],
+    text: "Rainbow"
+  }
+}
 const formats = {
   0: {
     outputPrefix: '',
@@ -68,7 +79,7 @@ function copyTextToClipboard(text) {
   textArea.select();
 
   document.execCommand('copy');
-  alert('Copied output!');
+  alert('Copied to clipboard!');
   document.body.removeChild(textArea);
 }
 
@@ -236,6 +247,7 @@ function updateOutputText(event) {
   const strike = document.getElementById('strike').checked;
 
   let outputText = document.getElementById('outputText');
+  console.log(getColors())
   let gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
   let charColors = [];
   let output = format.outputPrefix;
@@ -305,6 +317,66 @@ function displayColoredName(nickName, colors) {
     coloredNickSpan.style.color = colors[i];
     coloredNickSpan.textContent = nickName[i];
     coloredNick.append(coloredNickSpan);
+  }
+}
+
+function preset(n) {
+  const colors = presets[n].colors
+  const container = $('#hexColors');
+  container.empty();
+    // Need to add some colors
+    let template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    nickName.value = presets[n].text
+    document.getElementById("numOfColors").value = colors.length
+    jscolor.install(); // Refresh all jscolor elements
+}
+
+function exportPreset() {
+  const hexColors = $('#hexColors').find('.hexColor');
+  const colors = [];
+  hexColors.each((index, element) => {
+    const value = $(element).val();
+    savedColors[index] = value;
+    colors[index] = value;
+  });
+  let preset = btoa(colors + ":-:" + nickName.value)
+  return preset;
+}
+
+function importPreset(p) {
+  let preset = atob(p)
+  preset = preset.split(":-:")
+  let colors = preset[0].split(",")
+  let nickname = preset[1]
+
+  const container = $('#hexColors');
+  container.empty();
+    // Need to add some colors
+    let template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    nickName.value = nickname
+    document.getElementById("numOfColors").value = colors.length
+    jscolor.install(); // Refresh all jscolor elements
+    try {
+      updateOutputText()
+    } catch (error) {
+      alert("Invalid Preset")
+    }
+}
+
+function showfield(){
+  targetDiv = document.getElementById("importInput")
+  if (targetDiv.style.display !== "none") {
+    targetDiv.style.display = "none";
+  } else {
+    targetDiv.style.display = "block";
   }
 }
 

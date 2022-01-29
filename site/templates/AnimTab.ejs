@@ -1,43 +1,5 @@
-<html lang="en">
-
-<head>
-  <meta content="SimplyMC" property="og:title" />
-  <meta content="Minecraft multitool for everyone" property="og:description" />
-  <meta content="https://www.simplymc.art/" property="og:url" />
-  <meta content="https://www.simplemc.art/assets/images/emc.png" property="og:image" />
-  <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./style.css">
-  <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
-  <title>RGB Gradient Creator</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-</head>
-
-<body>
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">SimplyMC</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="../">Home</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="true">Gradients <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="../Gradients/">Hex Gradients</a></li>
-          <li class="active"><a href="#">Animated TAB</a></li>
-        </ul>
-      </li>
-      <li><a href="../CircleGen/">Circle Generator</a></li>
-      <li><a href="#">Coming Soon</a></li>
-      <li><a href="https://github.com/Oli-idk/SimplyMC"><img src="/assets/images/github.png" height="20px"></a></a></li>
-      <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></a></li>
-    </ul>
-  </div>
-</nav>
+<%- include("partials/header", { path, title: "Animated TAB"}) %>
+<link rel="stylesheet" href="/css/AnimTabStyle.css">
 
 <div id="hexColorTemplate" style="display:none;">
   <div class="row">
@@ -84,6 +46,19 @@
           </div>
           <div class="row">
             <div class="col-md-3" style="padding-left: 0;">
+              <label for="animationType">Animation Type</label>
+              <select id="animationType"
+                      class="form-control"
+                      onchange="updateOutputText(event);">
+                <option value='0'>Normal (left -> right)</option>
+                <option value='1'>Reverse (right -> left)</option>
+                <option value='2'>Bouncing (UNFINISHED)</option>
+                <option value='3'>Full text cycle (UNFINISHED)</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
               <label for="animation-speed">Animation Speed</label>
               <input id="animation-speed" class="form-control"
                      style="width: 75px;"
@@ -122,8 +97,6 @@
     </div>
   </div>
 </div>
-<script src="../assets/js/jscolor.js"></script>
-<script src="script.js"></script>
-</body>
-
-</html>
+<script src="/js/jscolor.js"></script>
+<script src="/js/AnimTabScript.js"></script>
+<%- include("partials/footer") %>

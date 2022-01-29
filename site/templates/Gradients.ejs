@@ -1,43 +1,5 @@
-<html lang="en">
-
-<head>
-  <meta content="SimplyMC" property="og:title" />
-  <meta content="Minecraft multitool for everyone" property="og:description" />
-  <meta content="https://www.simplymc.art/" property="og:url" />
-  <meta content="https://www.simplemc.art/assets/images/emc.png" property="og:image" />
-  <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./style.css">
-  <link rel="shortcut icon" href="/assets/images/emc.png" type="image/x-icon">
-  <title>Hex Gradient Creator</title>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script type="text/javascript"  src="/assets/js/js.cookie.js"></script>
-</head>
-
-<body>
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">SimplyMC</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="../">Home</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Gradients <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li class="active"><a href="#">Hex Gradients</a></li>
-          <li><a href="../AnimTAB/">Animated TAB</a></li>
-        </ul>
-      </li>
-      <li><a href="../CircleGen/">Circle Generator</a></li>
-      <li><a href="#">Coming Soon</a></li>
-      <li><a href="https://github.com/Oli-idk/SimplyMC"><img src="/assets/images/github.png" height="20px"></a></li>
-      <li><a href="https://discord.akiradev.xyz"><img src="/assets/images/discord.png" height="20px"></a></li>
-    </ul>
-  </div>
-</nav>
+<%- include("partials/header", { path, title: "Hex Gradient Creator"}) %>
+<link rel="stylesheet" href="/css/GradientsStyle.css">
 
 <div id="hexColorTemplate" style="display:none;">
   <div class="row">
@@ -99,6 +61,38 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="color-preset">Color Preset</label>
+              <select id="color-preset"
+                      class="form-control"
+                      onchange="preset(this.value); updateOutputText(event); ">
+                <option value='0'>None</option>
+                <option value='1'>Rainbow</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <label for="exportPreset">Export Preset</label>
+            <button class="form-control" 
+            style="width: 125px;" 
+            type="button" id="exportPreset"
+            onclick="copyTextToClipboard(exportPreset());">Copy Preset</button>
+          </div>
+          <div class="row">
+            <label for="importPreset">Import Preset</label>
+            <button class="form-control" 
+            style="width: 125px;" 
+            type="button" id="importPreset"
+            onclick="showfield()"
+            >Import Preset</button>
+          <div id="importInput" style="display: none;">
+            Paste Here: <input type="text" name="ImportInput"
+            class="form-control"
+            style="width: 400px;"
+            onchange="javascript: importPreset(this.value)" />
+          </div>
+          </div>
+          <div class="row">
             <label for="numOfColors">Number of Colors</label>
             <input class="form-control"
                    style="width: 75px;"
@@ -129,8 +123,6 @@
     </div>
   </div>
 </div>
-<script src="../assets/js/jscolor.js"></script>
-<script src="script.js"></script>
-</body>
-
-</html>
+<script src="/js/jscolor.js"></script>
+<script src="/js/GradientScript.js"></script>
+<%- include("partials/footer") %>

@@ -1,0 +1,24 @@
+{
+  "name": "simplymc",
+  "version": "1.0.0",
+  "description": "The official website for the minecraft multitool simplymc.art",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkiraDevelopment/SimplyMC.git"
+  },
+  "author": "Akiradev, Esophose",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AkiraDevelopment/SimplyMC/issues"
+  },
+  "homepage": "https://github.com/AkiraDevelopment/SimplyMC#readme",
+  "dependencies": {
+    "canvas": "^2.9.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2"
+  }
+}
