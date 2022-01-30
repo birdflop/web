@@ -40,7 +40,7 @@ app.get('/Gradients', (req, res) => {
 });
 
 app.get('/AnimTAB', (req, res) => {
-    renderTemplate(res, req, 'AnimTAB.ejs');
+    renderTemplate(res, req, 'AnimTab.ejs');
 });
 
 app.post('/api/render/gradient', (req, res) => {
