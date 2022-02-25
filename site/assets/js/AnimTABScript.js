@@ -418,12 +418,17 @@ function displayColoredName(nickName, colors) {
 function exportPreset() {
   const hexColors = $('#hexColors').find('.hexColor');
   const colors = [];
+  const bold = document.getElementById('bold').checked;
+  const italic = document.getElementById('italics').checked;
+  const underline = document.getElementById('underline').checked;
+  const strike = document.getElementById('strike').checked;
+  let formats = [bold, italic, underline, strike];
   hexColors.each((index, element) => {
     const value = $(element).val();
     savedColors[index] = value;
     colors[index] = value;
   });
-  let preset = btoa(colors + ":-:" + animationText.value + ":-:" + speed.value + ":-:" + animationTypes.value);
+  let preset = btoa(colors + ":-:" + animationText.value + ":-:" + speed.value + ":-:" + animationTypes.value + ":-:" + compress(formats));
   return preset;
 }
 
@@ -434,7 +439,11 @@ function importPreset(p) {
   animationText.value = preset[1]
   speed.value = preset[2]
   animationTypes.value = preset[3]
-
+  let formats = decompress(preset[4], 4)
+  document.getElementById('bold').checked = formats[0];
+  document.getElementById('italics').checked = formats[1];
+  document.getElementById('underline').checked = formats[2];
+  document.getElementById('strike').checked = formats[3];
 
   const container = $('#hexColors');
   container.empty();
@@ -460,6 +469,27 @@ function showfield(field){
   } else {
     targetDiv.style.display = "block";
   }
+}
+
+// Takes an array of boolean values and turns them into a number
+function compress(values) {
+  let output = 0;
+  for (let i = 0; i < values.length; i++) {
+      const value = values[i];
+      output |= ~~value << i;
+  }
+  return output;
+}
+
+// Takes a number and turns it into an array of boolean values
+// Second parameter is how many values to parse out of the number
+function decompress(input, expectedValues) {
+  const values = [];
+  for (let i = 0; i < expectedValues; i++) {
+      const value = !!((input >> i) & 1);
+      values.push(value);
+  }
+  return values;
 }
 
 toggleColors(2);
