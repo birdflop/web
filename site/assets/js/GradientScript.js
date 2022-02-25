@@ -371,8 +371,8 @@ function importPreset(p) {
     }
 }
 
-function showfield(){
-  targetDiv = document.getElementById("importInput")
+function showfield(field){
+  targetDiv = document.getElementById(field)
   if (targetDiv.style.display !== "none") {
     targetDiv.style.display = "none";
   } else {

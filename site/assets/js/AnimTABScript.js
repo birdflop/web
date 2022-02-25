@@ -415,5 +415,52 @@ function displayColoredName(nickName, colors) {
   }
 }
 
+function exportPreset() {
+  const hexColors = $('#hexColors').find('.hexColor');
+  const colors = [];
+  hexColors.each((index, element) => {
+    const value = $(element).val();
+    savedColors[index] = value;
+    colors[index] = value;
+  });
+  let preset = btoa(colors + ":-:" + animationText.value + ":-:" + speed.value + ":-:" + animationTypes.value);
+  return preset;
+}
+
+function importPreset(p) {
+  let preset = atob(p)
+  preset = preset.split(":-:")
+  let colors = preset[0].split(",")
+  animationText.value = preset[1]
+  speed.value = preset[2]
+  animationTypes.value = preset[3]
+
+
+  const container = $('#hexColors');
+  container.empty();
+    // Need to add some colors
+    let template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    document.getElementById("numOfColors").value = colors.length
+    jscolor.install(); // Refresh all jscolor elements
+    try {
+      updateOutputText()
+    } catch (error) {
+      alert("Invalid Preset")
+    }
+}
+
+function showfield(field){
+  targetDiv = document.getElementById(field)
+  if (targetDiv.style.display !== "none") {
+    targetDiv.style.display = "none";
+  } else {
+    targetDiv.style.display = "block";
+  }
+}
+
 toggleColors(2);
 updateOutputText();

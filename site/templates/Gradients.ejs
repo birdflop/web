@@ -1,4 +1,4 @@
-<%- include("partials/header", { path, title: "Hex Gradient Creator"}) %>
+<%- include("partials/header", { queryPreset, path, title: "Hex Gradient Creator"}) %>
 <link rel="stylesheet" href="/css/GradientsStyle.css">
 
 <div id="hexColorTemplate" style="display:none;">
@@ -83,14 +83,14 @@
             <button class="form-control" 
             style="width: 125px;" 
             type="button" id="importPreset"
-            onclick="showfield()"
+            onclick="showfield('importInput')"
             >Import Preset</button>
-          <div id="importInput" style="display: none;">
-            Paste Here: <input type="text" name="ImportInput"
-            class="form-control"
-            style="width: 400px;"
-            onchange="javascript: importPreset(this.value)" />
-          </div>
+            <div id="importInput" style="display: none;">
+              Paste Here: <input type="text" name="ImportInput"
+              class="form-control"
+              style="width: 400px;"
+              onchange="javascript: importPreset(this.value)" />
+            </div>
           </div>
           <div class="row">
             <label for="numOfColors">Number of Colors</label>
@@ -125,4 +125,8 @@
 </div>
 <script src="/js/jscolor.js"></script>
 <script src="/js/GradientScript.js"></script>
+<script>
+  let qPreset = '<%- queryPreset %>';
+  if(qPreset) importPreset(qPreset);
+</script>
 <%- include("partials/footer") %>

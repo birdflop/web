@@ -36,11 +36,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/Gradients', (req, res) => {
-    renderTemplate(res, req, 'Gradients.ejs');
+    renderTemplate(res, req, 'Gradients.ejs', {
+        queryPreset: req.query.preset
+    });
 });
 
 app.get('/AnimTAB', (req, res) => {
-    renderTemplate(res, req, 'AnimTab.ejs');
+    renderTemplate(res, req, 'AnimTab.ejs', {
+        queryPreset: req.query.preset
+    });
 });
 
 app.post('/api/render/gradient', (req, res) => {
