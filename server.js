@@ -3,12 +3,18 @@ const path = require("path");
 const Canvas = require('canvas');
 const express = require('express');
 const config = require('./config');
+const GIFEncoder = require('gifencoder');
 const bodyParser = require("body-parser");
-const { buffer } = require('stream/consumers');
 const app = express();
 
 const dataDir = path.resolve(`${process.cwd()}${path.sep}site`); // The absolute path of current this directory.
 const templateDir = path.resolve(`${dataDir}${path.sep}templates`); // Absolute path of ./templates directory.
+
+Canvas.registerFont("./site/assets/fonts/MinecraftBold.otf", {family: "MinecraftBold"});
+Canvas.registerFont("./site/assets/fonts/MinecraftItalic.otf", {family: "MinecraftItalic"});
+Canvas.registerFont("./site/assets/fonts/MinecraftRegular.otf", {family: "MinecraftRegular"});
+Canvas.registerFont("./site/assets/fonts/MinecraftBoldItalic.otf", {family: "MinecraftBoldItalic"});
+
 
 app.engine('ejs', ejs.renderFile);
 app.set("view engine", "ejs");
@@ -48,8 +54,19 @@ app.get('/AnimTAB', (req, res) => {
 });
 
 app.post('/api/render/gradient', (req, res) => {
-    let preset = decode(req.body.preset);
-    let preview = createPreview(preset.colors, preset.text);
+    let preset = decodeGradient(req.body.preset);
+    let preview = createPreview(preset.colors, preset.text, preset.formats);
+    let output = createOutput(preset.colors, preset.text);
+    res.status(200)
+    res.json({
+        Image: preview,
+        Output: output
+    })
+});
+
+app.post('/api/render/AnimTAB', (req, res) => {
+    let preset = decodeAnimTAB(req.body.preset);
+    let preview = createPreviewGIF(preset.colors, preset.text, preset.speed, preset.type, preset.formats);
     let output = createOutput(preset.colors, preset.text);
     res.status(200)
     res.json({
@@ -61,13 +78,44 @@ app.post('/api/render/gradient', (req, res) => {
 app.listen(config.port, null, null);
 console.log('Server started on port ' + config.port);
 
-function decode(preset) {
-    let buffer = Buffer.from(preset, 'base64')
-    buffer = buffer.toString('utf8')
-    let data = buffer.split(':-:')
+function fromBinary(encoded) {
+    binary = atob(encoded)
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+}
+
+function decodeGradient(preset) {
+    let string = fromBinary(preset)
+    let data = string.split(':-:')
     let colors = data[0].split(',')
     let text = data[1]
-    return {colors, text}
+    let formats = decompress(data[2], 4)
+    return {colors, text, formats}
+}
+
+function decodeAnimTAB(preset) {
+    let string = fromBinary(preset)
+    let data = string.split(':-:')
+    let colors = data[0].split(',')
+    let text = data[1]
+    let speed = data[2]
+    let type = data[3]
+    let formats = decompress(data[4], 4)
+    return {colors, text, speed, type, formats}
+}
+
+// Takes a number and turns it into an array of boolean values
+// Second parameter is how many values to parse out of the number
+function decompress(input, expectedValues) {
+    const values = [];
+    for (let i = 0; i < expectedValues; i++) {
+        const value = !!((input >> i) & 1);
+        values.push(value);
+    }
+    return values;
 }
 
 function hex(c) {
@@ -134,6 +182,13 @@ class Gradient {
     }
 }
 
+class AnimatedGradient extends Gradient {
+    constructor(colors, numSteps, offset) {
+        super(colors, numSteps);
+        this.step = offset;
+    }
+}
+
 class TwoStopGradient {
     constructor(startColor, endColor, lowerRange, upperRange) {
     this.startColor = startColor;
@@ -157,15 +212,27 @@ class TwoStopGradient {
     }
 }
 
-const applyText = (canvas, text) => {
+const applyText = (canvas, text, formats) => {
     const context = canvas.getContext('2d');
 
     // Declare a base size of the font
     let fontSize = 70;
 
+    let font = "MinecraftRegular"
+
+    if (formats[0] === true){
+        if(formats[1] === true){
+            font = "MinecraftBoldItalic"
+        }else{
+            font = "MinecraftBold"
+        }
+    }else if(formats[1] === true){
+        font = "MinecraftItalic"
+    }
+
     do {
         // Assign the font to the context and decrement it so it can be measured again
-        context.font = `${fontSize -= 1}px sans-serif`;
+        context.font = `${fontSize -= 1}px ${font}`;
         // Compare pixel width of the text to the canvas minus the approximate avatar size
         
     } while (context.measureText(text).width > canvas.width - 50);
@@ -174,20 +241,22 @@ const applyText = (canvas, text) => {
     return context.font;
 };
 
-
-function texter(canvas, str, colors, x, y){
+function texter(canvas, str, colors, x, y, formats){
     let ctx = canvas.getContext('2d');
-    ctx.font = applyText(canvas, str);
+    ctx.font = applyText(canvas, str, formats);
     for(var i = 0; i <= str.length; ++i){
         let hex = colors[i]
         var ch = str.charAt(i);
         ctx.fillStyle = '#' + hex
         ctx.fillText(ch, x, y);
+        let {width} = ctx.measureText(ch);
+        if(formats[2] === true) ctx.fillRect(x, y*1.05, width, width/6);
+        if(formats[3] === true) ctx.fillRect(x, y/1.25, width, width/6);
         x += ctx.measureText(ch).width;
     }
 }
 
-function createPreview(colors, text){
+function createPreview(colors, text, formats){
     let newColors = []
     for(var i = 0; i < colors.length; ++i){
         newColors.push(convertToRGB(colors[i]))
@@ -199,8 +268,41 @@ function createPreview(colors, text){
         outputColors.push(hex);
     }
     const canvas = Canvas.createCanvas(700, 250);
-    texter(canvas, text, outputColors, 10, 60);
+    texter(canvas, text, outputColors, 10, 60, formats);
     return canvas.toDataURL();
+}
+
+function createPreviewGIF(colors, text, speed, type, formats){
+    const encoder = new GIFEncoder(700, 250);
+    encoder.setRepeat(0);
+    encoder.setDelay(speed);
+    encoder.setQuality(50)
+    encoder.setTransparent();
+    encoder.start();
+
+    let newColors = []
+    for(var i = 0; i < colors.length; ++i){
+        newColors.push(convertToRGB(colors[i]))
+    }
+    const canvas = Canvas.createCanvas(700, 250);
+    const ctx = canvas.getContext('2d');
+    ctx.fillRect()
+    let length = text.length * 2 - 2
+    for (let n = length; n > 0; n--){
+        // ctx.fillStyle = "#3A3A3A";
+        // ctx.fillRect(0, 0, 0, canvas.width);
+        let gradient = new AnimatedGradient(newColors, text.length, n);
+        let outputColors = [];
+        for (let i = 0; i < text.length; i++) {
+            let hex = convertToHex(gradient.next());
+            outputColors.push(hex);
+        }
+        texter(canvas, text, outputColors, 10, 60, formats);
+        encoder.addFrame(ctx);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    encoder.finish();
+    return encoder.out.getData();
 }
 
 function createOutput(colors, text){
