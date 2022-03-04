@@ -56,7 +56,7 @@ app.get('/AnimTAB', (req, res) => {
 app.post('/api/render/gradient', (req, res) => {
     let preset = decodeGradient(req.body.preset);
     let preview = createPreview(preset.colors, preset.text, preset.formats);
-    let output = createOutput(preset.colors, preset.text);
+    let output = createOutput(preset.colors, preset.text, preset.formats);
     res.status(200)
     res.json({
         Image: preview,
@@ -67,7 +67,7 @@ app.post('/api/render/gradient', (req, res) => {
 app.post('/api/render/AnimTAB', (req, res) => {
     let preset = decodeAnimTAB(req.body.preset);
     let preview = createPreviewGIF(preset.colors, preset.text, preset.speed, preset.type, preset.formats);
-    let output = createOutput(preset.colors, preset.text);
+    let output = createOutput(preset.colors, preset.text, preset.formats);
     res.status(200)
     res.json({
         Image: preview,
@@ -305,7 +305,7 @@ function createPreviewGIF(colors, text, speed, type, formats){
     return encoder.out.getData();
 }
 
-function createOutput(colors, text){
+function createOutput(colors, text, formats){
     let newColors = []
     for(var i = 0; i < colors.length; ++i){
         newColors.push(convertToRGB(colors[i]))
@@ -313,9 +313,14 @@ function createOutput(colors, text){
     let gradient = new Gradient(newColors, text.replace(/ /g, '').length);
     let output = [];
     for (let i = 0; i < text.length; i++) {
+        let format = ""
+        if (formats[0]) format += '&l';
+        if (formats[1]) format += '&o';
+        if (formats[2]) format += '&n';
+        if (formats[3]) format += '&m';
         let hex = convertToHex(gradient.next());
         let char = text.charAt(i);
-        output.push(`&${hex}${char}`);
+        output.push(`${format}&${hex}${char}`);
     }
     return output.join('');
 }
