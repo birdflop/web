@@ -247,7 +247,6 @@ function updateOutputText(event) {
   const strike = document.getElementById('strike').checked;
 
   let outputText = document.getElementById('outputText');
-  console.log(getColors())
   let gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
   let charColors = [];
   let output = format.outputPrefix;
