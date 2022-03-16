@@ -14,6 +14,6 @@
 <a href="#"> <img src="https://img.shields.io/github/forks/AkiraDevelopment/SimplyMC"></a>
 
 <h2>Contributing</h2>
-If you would like to contribute please make a pull request to the Development branch as well as make sure your code works as intended and is setup like all the others.
+If you would like to contribute please make sure your code works as intended and formatted properly.
 <br><br>
 <img src="https://estruyf-github.azurewebsites.net/api/VisitorHit?user=oli-idk&repo=SimplyMC&countColor=%237B1E7A"/>
