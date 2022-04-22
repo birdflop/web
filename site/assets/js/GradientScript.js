@@ -1,6 +1,13 @@
 // elements for obtaining vals
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
+const outputText = document.getElementById('outputText');
+
+const boldElement = document.getElementById('bold')
+const italicElement = document.getElementById('italics')
+const underlineElement = document.getElementById('underline')
+const strikeElement = document.getElementById('strike')
+
 const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
 const toggled = false;
 const presets = {
@@ -77,14 +84,14 @@ const formats = {
   6: {
     outputPrefix: '',
     template: '§x§$1§$2§$3§$4§$5§$6$f$c',
-    formatChar: '§',
-    maxLength: null
+    formatChar: '§'
   },
   7: {
     outputPrefix: '',
     template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
-    formatChar: null,
-    maxLength: null
+  },
+  8: {
+    custom: true
   }
 };
 
@@ -95,27 +102,21 @@ function getRandomHexColor() {
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
-  let textArea = document.createElement('textarea');
-  textArea.value = text;
-
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-
-  document.execCommand('copy');
-  alert('Copied to clipboard!');
-  document.body.removeChild(textArea);
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Copied to clipboard!');
+  })
 }
 
+const errorElement = document.getElementById('error')
 function showError(show) {
   if (show) {
-    document.getElementById('error').style.display = 'block';
-    document.getElementById('outputText').style.height = '70px';
-    document.getElementById('outputText').style.marginBottom = '5px';
+    errorElement.style.display = 'block';
+    outputText.style.height = '70px';
+    outputText.style.marginBottom = '5px';
   } else {
-    document.getElementById('error').style.display = 'none';
-    document.getElementById('outputText').style.height = '95px';
-    document.getElementById('outputText').style.marginBottom = '10px';
+    errorElement.style.display = 'none';
+    outputText.style.height = '95px';
+    outputText.style.marginBottom = '10px';
   }
 }
 
@@ -249,8 +250,19 @@ function getColors() {
   return colors;
 }
 
+const outputFormat = document.getElementById('output-format');
+const customFormatWrapper = document.getElementById('customFormatWrapper');
+const customFormat = document.getElementById('customFormat')
+const formatSelector = document.getElementById('formatSelector');
 function updateOutputText(event) {
-  let format = formats[document.getElementById('output-format').value];
+  let format = formats[outputFormat.value];
+
+  if (format.custom) {
+    customFormatWrapper.classList.remove('hidden');
+  } else {
+    customFormatWrapper.classList.add('hidden');
+  }
+
   if (format.outputPrefix) {
     nickName.value = nickName.value.replace(/ /g, '');
     if (nickName.value) {
@@ -265,15 +277,14 @@ function updateOutputText(event) {
     newNick = 'Type something!'
   }
 
-  const bold = document.getElementById('bold').checked;
-  const italic = document.getElementById('italics').checked;
-  const underline = document.getElementById('underline').checked;
-  const strike = document.getElementById('strike').checked;
+  const bold = boldElement.checked;
+  const italic = italicElement.checked;
+  const underline = underlineElement.checked;
+  const strike = strikeElement.checked;
 
-  let outputText = document.getElementById('outputText');
   let gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
   let charColors = [];
-  let output = format.outputPrefix;
+  let output = format.outputPrefix || "";
   for (let i = 0; i < newNick.length; i++) {
     let char = newNick.charAt(i);
     if (char == ' ') {
@@ -284,24 +295,32 @@ function updateOutputText(event) {
 
     let hex = convertToHex(gradient.next());
     charColors.push(hex);
-    let hexOutput = format.template;
+    let hexOutput = format.custom ? customFormat.value : format.template;
     for (let n = 1; n <= 6; n++)
       hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
     let formatCodes = '';
-    if (format.formatChar != null) {
+    if (format.formatChar) {
+      formatSelector.classList.remove('hidden');
+
       if (bold) formatCodes += format.formatChar + 'l';
       if (italic) formatCodes += format.formatChar + 'o';
       if (underline) formatCodes += format.formatChar + 'n';
       if (strike) formatCodes += format.formatChar + 'm';
+    } else {
+      formatSelector.classList.add('hidden');
     }
-    hexOutput = hexOutput.replace('$f', formatCodes);
+
+    if (!format.custom) {
+      hexOutput = hexOutput.replace('$f', formatCodes);
+    }
+
     hexOutput = hexOutput.replace('$c', char);
     output += hexOutput;
   }
 
   outputText.innerText = output;
-  showError(format.maxLength != null && format.maxLength < output.length);
-  displayColoredName(newNick, charColors);
+  showError(format.maxLength && format.maxLength < output.length);
+  displayColoredName(newNick, charColors, format.formatChar);
 }
 
 /**
@@ -316,25 +335,29 @@ function pad(n, width, z) {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
-function displayColoredName(nickName, colors) {
+function displayColoredName(nickName, colors, format) {
   coloredNick.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
-  if (document.getElementById('bold').checked) {
-    if (document.getElementById('italics').checked) {
-      coloredNick.classList.add('minecraftibold');
-    } else {
-      coloredNick.classList.add('minecraftbold');
+
+  if (format) {
+    if (boldElement.checked) {
+      if (italicElement.checked) {
+        coloredNick.classList.add('minecraftibold');
+      } else {
+        coloredNick.classList.add('minecraftbold');
+      }
+    } else if (italicElement.checked) {
+      coloredNick.classList.add('minecraftitalic');
     }
-  } else if (document.getElementById('italics').checked) {
-    coloredNick.classList.add('minecraftitalic');
   }
+
   coloredNick.innerHTML = '';
   for (let i = 0; i < nickName.length; i++) {
     const coloredNickSpan = document.createElement('span');
-    if (document.getElementById('underline').checked) {
-      if (document.getElementById('strike').checked) {
+    if (underlineElement.checked) {
+      if (strikeElement.checked) {
         coloredNickSpan.classList.add('minecraftustrike');
       } else coloredNickSpan.classList.add('minecraftunderline');
-    } else if (document.getElementById('strike').checked) {
+    } else if (strikeElement.checked) {
       coloredNickSpan.classList.add('minecraftstrike');
     }
     coloredNickSpan.style.color = colors[i];
@@ -343,6 +366,7 @@ function displayColoredName(nickName, colors) {
   }
 }
 
+const numOfColors = document.getElementById("numOfColors")
 function preset(n) {
   const colors = presets[n].colors
   const container = $('#hexColors');
@@ -354,39 +378,61 @@ function preset(n) {
       container.append(html);
     }
     nickName.value = presets[n].text
-    document.getElementById("numOfColors").value = colors.length
+    numOfColors.value = colors.length
     jscolor.install(); // Refresh all jscolor elements
 }
 
+//todo
+const presetSeparator = ":-:"
 function exportPreset() {
   const hexColors = $('#hexColors').find('.hexColor');
   const colors = [];
-  const bold = document.getElementById('bold').checked;
-  const italic = document.getElementById('italics').checked;
-  const underline = document.getElementById('underline').checked;
-  const strike = document.getElementById('strike').checked;
-  let formats = [bold, italic, underline, strike];
-  compress(formats);
+  const bold = boldElement.checked;
+  const italic = italicElement.checked;
+  const underline = underlineElement.checked;
+  const strike = strikeElement.checked;
+  let selectedFormats = [bold, italic, underline, strike];
+  compress(selectedFormats);
   hexColors.each((index, element) => {
     const value = $(element).val();
     savedColors[index] = value;
     colors[index] = value;
   });
-  let preset = toBinary(colors + ":-:" + nickName.value + ":-:" +   compress(formats));
+
+  let string = colors + presetSeparator +
+      nickName.value + presetSeparator +
+      compress(selectedFormats) + presetSeparator +
+      outputFormat.value
+
+  if (formats[outputFormat.value].custom) {
+    string += presetSeparator + customFormat.value
+  }
+
+  let preset = toBinary(string);
   return preset;
 }
 
 function importPreset(p) {
   let preset = fromBinary(p)
-  preset = preset.split(":-:")
+  preset = preset.split(presetSeparator)
   let colors = preset[0].split(",")
   let nickname = preset[1]
   let formats = decompress(preset[2], 4)
+  let selectedOutputFormat = preset[3]
+  let selectedCustomFormat = preset[4]
 
-  document.getElementById('bold').checked = formats[0];
-  document.getElementById('italics').checked = formats[1];
-  document.getElementById('underline').checked = formats[2];
-  document.getElementById('strike').checked = formats[3];
+  if (selectedOutputFormat) {
+    outputFormat.value = selectedOutputFormat
+  }
+
+  if (selectedCustomFormat) {
+    customFormat.value = selectedCustomFormat
+  }
+
+  boldElement.checked = formats[0];
+  italicElement.checked = formats[1];
+  underlineElement.checked = formats[2];
+  strikeElement.checked = formats[3];
 
   const container = $('#hexColors');
   container.empty();
@@ -397,7 +443,7 @@ function importPreset(p) {
       container.append(html);
     }
     nickName.value = nickname
-    document.getElementById("numOfColors").value = colors.length
+    numOfColors.value = colors.length
     jscolor.install(); // Refresh all jscolor elements
     try {
       updateOutputText()
