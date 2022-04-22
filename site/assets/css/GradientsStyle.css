@@ -122,3 +122,7 @@ body {
   color: lightgray;
   font-family: MinecraftRegular;
 }
+
+.hidden {
+  display: none;
+}

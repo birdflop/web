@@ -39,8 +39,7 @@
             <div class="col-md-3" style="padding-left: 0;">
               <label for="nickname">Text</label>
               <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Text"
-                     value="SimplyMC" oninput="javascript: updateOutputText(event);"
-                     onchange="javascript: updateOutputText(event)">
+                     value="SimplyMC" oninput="updateOutputText(event);">
             </div>
           </div>
           <div class="row">
@@ -57,7 +56,27 @@
                 <option value='5'>/nick (&x&r&r&g&g&b&b)</option>
                 <option value='6'>console (§x§r§r§g§g§b§b)</option>
                 <option value='7'>bbcode [COLOR=#rrggbb]</option>
+                <option value='8'>custom</option>
               </select>
+            </div>
+          </div>
+          <div class="row hidden" id="customFormatWrapper">
+            <div class="col-md-3" style="padding-left: 0;">
+              <label for="customFormat">Custom Format</label>
+              <input type="text"
+                     class="form-control"
+                     id="customFormat"
+                     oninput="updateOutputText(event);">
+              <p>Placeholders:</p>
+              <ul>
+                <li>$1 - First RR hex</li>
+                <li>$2 - Second RR hex</li>
+                <li>$3 - First GG hex</li>
+                <li>$4 - Second GG hex</li>
+                <li>$5 - First BB hex</li>
+                <li>$6 - Second BB hex</li>
+                <li>$c - Character to format</li>
+              </ul>
             </div>
           </div>
           <div class="row">
@@ -79,15 +98,15 @@
           </div>
           <div class="row">
             <label for="exportPreset">Export Preset</label>
-            <button class="form-control" 
-            style="width: 125px;" 
+            <button class="form-control"
+            style="width: 125px;"
             type="button" id="exportPreset"
             onclick="copyTextToClipboard(exportPreset());">Copy Preset</button>
           </div>
           <div class="row">
             <label for="importPreset">Import Preset</label>
-            <button class="form-control" 
-            style="width: 125px;" 
+            <button class="form-control"
+            style="width: 125px;"
             type="button" id="importPreset"
             onclick="showfield('importInput')"
             >Import Preset</button>
@@ -106,7 +125,7 @@
                    onchange="updateOutputText(event); toggleColors(this.value);"
                    oninput="updateOutputText(event); toggleColors(this.value);"/>
           </div>
-          <div class="row">
+          <div class="row" id="formatSelector">
             <div id="dbold">
               <input type="checkbox" id="bold" onclick="updateOutputText(event);"/>
               <label for="bold">Bold</label>
