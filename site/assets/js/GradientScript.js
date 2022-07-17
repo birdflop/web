@@ -91,6 +91,11 @@ const formats = {
     template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
   },
   8: {
+    outputPrefix: '',
+    template: '<##$1$2$3$4$5$6>$f$c',
+    formatChar: '&',
+  },
+  9: {
     custom: true
   }
 };
