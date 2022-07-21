@@ -5,6 +5,7 @@ const express = require('express');
 const config = require('./config');
 const GIFEncoder = require('gifencoder');
 const bodyParser = require("body-parser");
+const { existsSync } = require('fs');
 const app = express();
 
 const dataDir = path.resolve(`${process.cwd()}${path.sep}site`); // The absolute path of current this directory.
@@ -41,20 +42,11 @@ app.get('/', (req, res) => {
     renderTemplate(res, req, 'index.ejs');
 });
 
-app.get('/Gradients', (req, res) => {
-    renderTemplate(res, req, 'Gradients.ejs', {
+app.get('/:page', (req, res) => {
+    if (!existsSync(`./site/templates/${req.params.page.toLowerCase()}.ejs`)) return renderTemplate(res, req, 'notfound.ejs');
+    renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset
     });
-});
-
-app.get('/AnimTAB', (req, res) => {
-    renderTemplate(res, req, 'AnimTab.ejs', {
-        queryPreset: req.query.preset
-    });
-});
-
-app.get('/AnimTexture', (req, res) => {
-    renderTemplate(res, req, 'AnimTexture.ejs');
 });
 
 app.post('/api/render/gradient', (req, res) => {
@@ -328,4 +320,3 @@ function createOutput(colors, text, formats){
     }
     return output.join('');
 }
-
