@@ -5,6 +5,7 @@ const express = require('express');
 const config = require('./config');
 const GIFEncoder = require('gifencoder');
 const bodyParser = require("body-parser");
+const { existsSync } = require('fs');
 const app = express();
 
 const dataDir = path.resolve(`${process.cwd()}${path.sep}site`); // The absolute path of current this directory.
@@ -42,6 +43,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:page', (req, res) => {
+    if (!existsSync(`./site/templates/${req.params.page.toLowerCase()}.ejs`)) return res.redirect('/NotFound');
     renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset
     });
