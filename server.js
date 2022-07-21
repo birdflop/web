@@ -41,20 +41,10 @@ app.get('/', (req, res) => {
     renderTemplate(res, req, 'index.ejs');
 });
 
-app.get('/Gradients', (req, res) => {
-    renderTemplate(res, req, 'Gradients.ejs', {
+app.get('/:page', (req, res) => {
+    renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset
     });
-});
-
-app.get('/AnimTAB', (req, res) => {
-    renderTemplate(res, req, 'AnimTab.ejs', {
-        queryPreset: req.query.preset
-    });
-});
-
-app.get('/AnimTexture', (req, res) => {
-    renderTemplate(res, req, 'AnimTexture.ejs');
 });
 
 app.post('/api/render/gradient', (req, res) => {
@@ -328,4 +318,3 @@ function createOutput(colors, text, formats){
     }
     return output.join('');
 }
-
