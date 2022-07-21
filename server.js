@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:page', (req, res) => {
-    if (!existsSync(`./site/templates/${req.params.page.toLowerCase()}.ejs`)) return res.redirect('/NotFound');
+    if (!existsSync(`./site/templates/${req.params.page.toLowerCase()}.ejs`)) return renderTemplate(res, req, 'notfound.ejs');
     renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset
     });
