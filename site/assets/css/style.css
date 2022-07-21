@@ -15,7 +15,7 @@
     src: url(/fonts/MinecraftBoldItalic.otf);
   }
   body {
-    background: rgb(49, 49, 49); /* Green background with 30% opacity */
+    background: rgb(49, 49, 49);
     font-family: MinecraftRegular;
     color: lightgray;
   }
@@ -23,6 +23,5 @@
     font-size: 50;
   }
   #description{
-  
     font-size: 25;
   }

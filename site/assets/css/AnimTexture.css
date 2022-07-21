@@ -1,0 +1,61 @@
+@font-face {
+    font-family: MinecraftRegular;
+    src: url(/fonts/MinecraftRegular.otf);
+  }
+  
+  @font-face {
+    font-family: MinecraftBold;
+    src: url(/fonts/MinecraftBold.otf);
+  }
+  
+  @font-face {
+    font-family: MinecraftItalic;
+    src: url(/fonts/MinecraftItalic.otf);
+  }
+  
+  @font-face {
+    font-family: MinecraftBoldItalic;
+    src: url(/fonts/MinecraftBoldItalic.otf);
+  }
+
+  #imgs{
+    height: 64px;
+    overflow: auto;
+  }
+
+  #content {
+    margin: 1em;
+  }
+
+  #fps{
+    height: 5em;
+    color: black;
+    overflow: auto;
+  }
+
+  body {
+    background: rgb(49, 49, 49);
+    color: lightgray;
+    font-family: MinecraftRegular;
+  }
+
+  .form-control {
+    color: black;
+  }
+
+  .row {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .img{
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+    margin: 0px;
+    padding: 0px;
+  }

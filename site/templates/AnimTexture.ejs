@@ -1,0 +1,37 @@
+<%- include("partials/header", { path, title: "Animated Texture Creator"}) %>
+<link rel="stylesheet" href="/css/AnimTexture.css">
+
+<div id="content">
+  <div class="container-fluid">
+    <div class="row">
+      <h1 id="title">Animated Textures</h1>
+      <p>Easily merge textures for resource pack animations</p>
+      <p>THIS PAGE IS HEAVILY A WORK IN PROGRESS</p>
+
+      <label>Select Frame</label>
+      <input type="file" onchange="readFile(this);this.value='';" accept="image/*"/>
+
+      <div id="imgs">
+      </div>
+      <div id="fps">
+      </div>
+      <div>
+        <label>Texture name: </label>
+        <input type="text" id="tname"/>
+      </div>
+      <br>
+        <div>
+          <input type="button" value="Generate" onclick="generate();" style="color: black;"/>
+        </div> 
+      </div>
+      <div id="links" style="display:none;">
+        <a id="pngd">Download PNG</a>
+        <br/>
+        <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank">Download MCMETA</a>
+      </div>
+    </div>
+    <canvas id="c" style="width: 10em;"></canvas>
+</div>
+<script src="/js/AnimTextureScript.js"></script>
+<script src="/js/gif-frames.js"></script>
+<%- include("partials/footer") %>

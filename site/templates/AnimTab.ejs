@@ -1,12 +1,15 @@
 <%- include("partials/header", { queryPreset, path, title: "Animated TAB"}) %>
 <link rel="stylesheet" href="/css/AnimTABStyle.css">
+<link rel="preload" href="/fonts/MinecraftBold.otf" as="font" type="font/otf">
+<link rel="preload" href="/fonts/MinecraftItalic.otf" as="font" type="font/otf">
+<link rel="preload" href="/fonts/MinecraftBoldItalic.otf" as="font" type="font/otf">
 
 <div id="hexColorTemplate" style="display:none;">
   <div class="row">
     <label for="color-$NUM">Hex Color #$NUM</label>
     <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
-           data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
-           onchange="javascript: updateOutputText(event)"/>
+          data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
+          onchange="javascript: updateOutputText(event)"/>
   </div>
 </div>
 
@@ -28,7 +31,7 @@
               <label for="outputText" style="font-weight: normal;">This is what you put in the
                 animations.yml. Click on it to copy.</label>
               <pre id="outputText"
-                   onclick="copyTextToClipboard(this.innerText);"></pre>
+                  onclick="copyTextToClipboard(this.innerText);"></pre>
               <p id="error">TAB only allows the change-interval to be divisible by 50, Your number has been rounded
                 up</p>
             </div>
@@ -40,8 +43,8 @@
             <div class="col-md-3" style="padding-left: 0;">
               <label for="animationText">Animation Text</label>
               <input class="form-control" id="animationText" type="text" maxlength="100" placeholder="Your Text"
-                     value="SimplyMC" oninput="javascript: onUserInput()"
-                     onchange="javascript: onUserInput()">
+                    value="SimplyMC" oninput="javascript: onUserInput()"
+                    onchange="javascript: onUserInput()">
             </div>
           </div>
           <div class="row">
@@ -61,18 +64,18 @@
             <div class="col-md-3" style="padding-left: 0;">
               <label for="animation-speed">Animation Speed</label>
               <input id="animation-speed" class="form-control"
-                     style="width: 75px;"
-                     type="number" min="50" max="9999" step="50" value="50"
-                     oninput="updateOutputText(event);" />
+                    style="width: 75px;"
+                    type="number" min="50" max="9999" step="50" value="50"
+                    oninput="updateOutputText(event);" />
             </div>
           </div>
           <div class="row">
             <label for="numOfColors">Number of Colors</label>
             <input class="form-control"
-                   style="width: 75px;"
-                   value="2" id="numOfColors" type="number" min="2" max="10"
-                   onchange="updateOutputText(); toggleColors(this.value);"
-                   oninput="updateOutputText(); toggleColors(this.value);"/>
+                  style="width: 75px;"
+                  value="2" id="numOfColors" type="number" min="2" max="10"
+                  onchange="updateOutputText(); toggleColors(this.value);"
+                  oninput="updateOutputText(); toggleColors(this.value);"/>
           </div>
           <div class="row">
             <label for="exportPreset">Export Preset</label>

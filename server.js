@@ -53,6 +53,10 @@ app.get('/AnimTAB', (req, res) => {
     });
 });
 
+app.get('/AnimTexture', (req, res) => {
+    renderTemplate(res, req, 'AnimTexture.ejs');
+});
+
 app.post('/api/render/gradient', (req, res) => {
     let preset = decodeGradient(req.body.preset);
     let preview = createPreview(preset.colors, preset.text, preset.formats);
