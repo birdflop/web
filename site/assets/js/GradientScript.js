@@ -360,7 +360,7 @@ function displayColoredName(nickName, colors, format) {
     } else if (strikeElement.checked) {
       coloredNickSpan.classList.add('minecraftstrike');
     }
-    coloredNickSpan.style.color = colors[i];
+    coloredNickSpan.style.color = `#${colors[i]}`;
     coloredNickSpan.textContent = nickName[i];
     coloredNick.append(coloredNickSpan);
   }

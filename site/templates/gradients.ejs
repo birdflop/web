@@ -1,157 +1,140 @@
 <%- include("partials/header", { queryPreset, path, title: "Hex Gradient Creator"}) %>
 <link rel="stylesheet" href="/css/GradientsStyle.css">
-<link rel="preload" href="/fonts/MinecraftBold.otf" as="font" type="font/otf">
-<link rel="preload" href="/fonts/MinecraftItalic.otf" as="font" type="font/otf">
-<link rel="preload" href="/fonts/MinecraftBoldItalic.otf" as="font" type="font/otf">
 
 <div id="hexColorTemplate" style="display:none;">
   <div class="row">
     <label for="color-$NUM">Hex Color #$NUM</label>
-    <input class="form-control col-md-1 hexColor" id="color-$NUM" value="$VAL"
-           data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
-           onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })"/>
+    <input class="input col-md-1 hexColor" id="color-$NUM" value="$VAL"
+      data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
+      onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })"/>
   </div>
 </div>
 
-<div id="content">
-  <h1 id="title">Hex Gradients</h1>
-  <p>Hex color gradient creator</p>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2" style="padding-left: 0;">
-        <div id="hexColors" class="container-fluid">
-          <!-- Will be populated in JavaScript -->
+<section class="hero is-dark is-fullheight-with-navbar">
+  <div class="hero-body">
+    <div class="container">
+      <div class="container">
+        <p class="title" id="title">
+          Hex Gradients
+        </p>
+        <p class="subtitle">
+          Hex color gradient creator
+        </p>
+      </div>
+      <br><br>
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child">
+            <p class="title">Output</p>
+            <p class="subtitle">This is what you put in the chat. Click on it to copy.</p>
+            <div class="content">
+              <pre class="textarea" id="outputText" placeholder="Output will appear here" onclick="navigator.clipboard.writeText(this.innerText).then(() => alert('Copied text successfully!')).catch(() => alert('Failed to copy text!'))"></pre>
+            </div>
+            <p id="error">This is more than 256 characters and may not fit in the chat box.</p>
+          </div>
         </div>
       </div>
-      <div class="col-md-10" style="padding-right: 0;">
-        <div class="container-fluid">
-          <div class="row">
-            <div id="output">
-              <label for="outputText" style="color: #782d2d;">Output</label>
-              <label for="outputText" style="font-weight: normal;">This is what you put in the
-                chat. Click on it to copy.</label>
-              <pre id="outputText"
-                   onclick="copyTextToClipboard(this.textContent);"></pre>
-              <p id="error">This is more than 256 characters and may not fit in the chat box.</p>
-            </div>
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child">
+            <div id="coloredNick" class="title minecraft"></div>
           </div>
-          <div class="row">
-            <div id="coloredNick"></div>
+        </div>
+      </div>
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <div class="tile is-child">
+            <label for='numOfColors'>Number of Colors</label>
+            <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2" oninput="toggleColors(this.value); updateOutputText(event);"></input>
+            <div id="hexColors" class="content"></div>
           </div>
-          <div class="row">
-            <div class="col-md-3" style="padding-left: 0;">
-              <label for="nickname">Text</label>
-              <input class="form-control" id="nickname" type="text" maxlength="100" placeholder="Your Text"
-                     value="SimplyMC" oninput="javascript: updateOutputText(event);"
-                     onchange="javascript: updateOutputText(event)">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3" style="padding-left: 0;">
-              <label for="output-format">Output Format</label>
-              <select id="output-format"
-                      class="form-control"
-                      onchange="updateOutputText(event);">
-                <option value='0'>chat (&#rrggbb)</option>
-                <option value='1'>chat (<#rrggbb>)</option>
-                <option value='2'>chat (&x&r&r&g&g&b&b)</option>
-                <option value='3'>/nick (&#rrggbb)</option>
-                <option value='4'>/nick (<#rrggbb>)</option>
-                <option value='5'>/nick (&x&r&r&g&g&b&b)</option>
-                <option value='6'>console (§x§r§r§g§g§b§b)</option>
-                <option value='7'>bbcode [COLOR=#rrggbb]</option>
-                <option value='8'>custom</option>
-              </select>
-            </div>
-          </div>
-          <div class="row hidden" id="customFormatWrapper">
-            <div class="col-md-3" style="padding-left: 0;">
-              <label for="customFormat">Custom Format</label>
-              <input type="text"
-                     class="form-control"
-                     id="customFormat"
-                     oninput="updateOutputText(event);">
-              <p>Placeholders:</p>
-              <ul>
-                <li>$1 - First RR hex</li>
-                <li>$2 - Second RR hex</li>
-                <li>$3 - First GG hex</li>
-                <li>$4 - Second GG hex</li>
-                <li>$5 - First BB hex</li>
-                <li>$6 - Second BB hex</li>
-                <li>$c - Character to format</li>
-              </ul>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3" style="padding-left: 0;">
+        </div>
+        <div class="tile is-parent is-8">
+          <div class="tile is-child">
+            <div class="content">
+              <label for='nickname'>Input Text</label>
+              <input id="nickname" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);"></input>
+              <label for='output-format'>Output Format</label><br>
+              <div class="select" style="width:100%">
+                <select style="width:100%" id="output-format" onchange="updateOutputText(event);">
+                  <option value='0'>chat (&#rrggbb)</option>
+                  <option value='1'>chat (<#rrggbb>)</option>
+                  <option value='2'>chat (&x&r&r&g&g&b&b)</option>
+                  <option value='3'>/nick (&#rrggbb)</option>
+                  <option value='4'>/nick (<#rrggbb>)</option>
+                  <option value='5'>/nick (&x&r&r&g&g&b&b)</option>
+                  <option value='6'>console (§x§r§r§g§g§b§b)</option>
+                  <option value='7'>bbcode [COLOR=#rrggbb]</option>
+                  <option value='8'>custom</option>
+                </select>
+              </div>
+              <div class="hidden" id="customFormatWrapper">
+                <label for='customFormat'>Input Text</label>
+                <input id="customFormat" class="input" type="text" oninput="updateOutputText(event);"></input>
+                <p>Placeholders:</p>
+                <ul>
+                  <li>$1 - First RR hex</li>
+                  <li>$2 - Second RR hex</li>
+                  <li>$3 - First GG hex</li>
+                  <li>$4 - Second GG hex</li>
+                  <li>$5 - First BB hex</li>
+                  <li>$6 - Second BB hex</li>
+                  <li>$c - Character to format</li>
+                </ul>
+              </div>
               <label for="color-preset">Color Preset</label>
-              <select id="color-preset"
-                      class="form-control"
-                      onchange="preset(this.value); updateOutputText(event); ">
-                <option value='0'>None</option>
-                <option value='1'>Rainbow</option>
-                <option value='2'>Skyline</option>
-                <option value='3'>Mango</option>
-                <option value='4'>Vice City</option>
-                <option value='5'>Dawn</option>
-                <option value='6'>Rose</option>
-                <option value='7'>Firewatch</option>
-              </select>
-            </div>
-          </div>
-          <div class="row">
-            <label for="exportPreset">Export Preset</label>
-            <button class="form-control" 
-            style="width: 125px;" 
-            type="button" id="exportPreset"
-            onclick="copyTextToClipboard(exportPreset());">Copy Preset</button>
-          </div>
-          <div class="row">
-            <label for="importPreset">Import Preset</label>
-            <button class="form-control" 
-            style="width: 125px;" 
-            type="button" id="importPreset"
-            onclick="showfield('importInput')"
-            >Import Preset</button>
-            <div id="importInput" style="display: none;">
-              Paste Here: <input type="text" name="ImportInput"
-              class="form-control"
-              style="width: 400px;"
-              onchange="javascript: importPreset(this.value)" />
-            </div>
-          </div>
-          <div class="row">
-            <label for="numOfColors">Number of Colors</label>
-            <input class="form-control"
-                   style="width: 75px;"
-                   value="2" id="numOfColors" type="number" min="2" max="10"
-                   onchange="updateOutputText(event); toggleColors(this.value);"
-                   oninput="updateOutputText(event); toggleColors(this.value);"/>
-          </div>
-          <div class="row" id="formatSelector">
-            <div id="dbold">
-              <input type="checkbox" id="bold" onclick="updateOutputText(event);"/>
-              <label for="bold">Bold</label>
-            </div>
-            <div id="ditalics">
-              <input type="checkbox" id="italics" onclick="updateOutputText(event);"/>
-              <label for="italics">Italic</label>
-            </div>
-            <div id="dunderline">
-              <input type="checkbox" id="underline" onclick="updateOutputText(event);"/>
-              <label for="underline">Underline</label>
-            </div>
-            <div id="dstrike">
-              <input type="checkbox" id="strike" onclick="updateOutputText(event);"/>
-              <label for="strike">Strikethrough</label>
+              <div class="select" style="width:100%">
+                <select style="width:100%" id="color-preset" onchange="preset(this.value); updateOutputText(event);">
+                  <option value='0'>None</option>
+                  <option value='1'>Rainbow</option>
+                  <option value='2'>Skyline</option>
+                  <option value='3'>Mango</option>
+                  <option value='4'>Vice City</option>
+                  <option value='5'>Dawn</option>
+                  <option value='6'>Rose</option>
+                  <option value='7'>Firewatch</option>
+                </select>
+              </div>
+              <label for="exportPreset">Custom Presets</label><br>
+              <button class="button" type="button" id="exportPreset"
+                onclick="copyTextToClipboard(exportPreset());">
+                Copy Preset
+              </button>
+              <button class="button" type="button" id="importPreset"
+                onclick="showfield('importInput')">
+                Import Preset
+              </button>
+              <div id="importInput" style="display: none;">
+                <label for='import'>Paste Here</label>
+                <input id="import" name="ImportInput" class="input" type="text" onchange="javascript: importPreset(this.value)"></input>  
+              </div>
+              <br><br>
+              <div id="formatSelector">
+                <label class="checkbox">
+                  <input type="checkbox" id="bold" onclick="updateOutputText();">
+                  Bold
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" id="italics" onclick="updateOutputText();">
+                  Italic
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" id="underline" onclick="updateOutputText();">
+                  Underline
+                </label>
+                <label class="checkbox">
+                  <input type="checkbox" id="strike" onclick="updateOutputText();">
+                  Strikethrough
+                </label>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
 <script src="/js/jscolor.js"></script>
 <script src="/js/GradientScript.js"></script>
 <script>
