@@ -2,12 +2,12 @@
 Typer.js Plugin v1.2.0
 (c) 2016 123Apps. (http://123apps.org)
 */
-(function ($) {
+(function($) {
   "use strict";
 
   $.fn.typer = function(options) {
     // merge options
-    var settings = $.extend({
+    const settings = $.extend({
       typeSpeed: 60,
       backspaceSpeed: 20,
       backspaceDelay: 800,
@@ -17,16 +17,15 @@ Typer.js Plugin v1.2.0
       startDelay: 100,
       useCursor: true,
       strings: [
-        "Typer.js plugin"
-      ]
+        "Typer.js plugin",
+      ],
     }, options);
 
     // global variables
-    var chars,
+    let chars,
         charsLength,
         charIndex = 0,
-        stringIndex = 0,
-        typerIndex = 0;
+        stringIndex = 0;
 
     function type(typedElement, strings) {
       if (stringIndex < strings.length) {
@@ -38,7 +37,8 @@ Typer.js Plugin v1.2.0
           charIndex++;
           if (charIndex < charsLength) {
             type(typedElement, strings);
-          } else {
+          }
+      else {
             charIndex = 0;
             stringIndex++;
 
@@ -50,12 +50,11 @@ Typer.js Plugin v1.2.0
             }, settings.backspaceDelay);
           }
         }, settings.typeSpeed);
-      } else {
+      }
+    else if (settings.repeat) {
         // all strings are typed
         // repeat
-        if (settings.repeat) {
-          repeat(typedElement, strings);
-        }
+        repeat(typedElement, strings);
       }
     }
 
@@ -71,13 +70,12 @@ Typer.js Plugin v1.2.0
     function backspace(typedElement, callback) {
       setTimeout(function() {
         typedElement.text(typedElement.text().slice(0, -1));
-        if (0 < typedElement.text().length) {
+        if (typedElement.text().length > 0) {
           backspace(typedElement, callback);
-        } else {
-          if ("function" === typeof callback) {
+        }
+      else if (typeof callback === "function") {
             callback();
           }
-        }
       }, settings.backspaceSpeed);
     }
 
@@ -89,9 +87,8 @@ Typer.js Plugin v1.2.0
 
 
     return this.each(function() {
-      var t = $(this),
-          typedElement,
-          cursorElement;
+      const t = $(this);
+      let typedElement, cursorElement;
 
       if (settings.autoStart) {
         // add typed element

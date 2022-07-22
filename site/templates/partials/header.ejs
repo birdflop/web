@@ -1,34 +1,71 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta content="SimplyMC" property="og:title" />
-    <meta content="Minecraft multitool for everyone" property="og:description" />
-    <meta content="https://www.simplymc.art/" property="og:url" />
-    <meta content="https://www.simplemc.art/images/emc.png" property="og:image" />
-    <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
-    <link rel="shortcut icon" href="/images/emc.png" type="image/x-icon">
-    <title><%= title %> </title>
-    <link rel="stylesheet"  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="SimplyMC" property="og:title" />
+  <meta content="Minecraft multitool for everyone" property="og:description" />
+  <meta content="https://www.simplymc.art/" property="og:url" />
+  <meta content="https://www.simplemc.art/images/emc.png" property="og:image" />
+  <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
+  <link rel="shortcut icon" href="/images/emc.png" type="image/x-icon">
+  <title><%= title %></title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/bulma-prefers-dark">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-    <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-        <a class="navbar-brand" href="/">SimplyMC</a>
-        </div>
-        <ul class="nav navbar-nav">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Gradients <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-            <li><a href="/Gradients">Hex Gradients</a></li>
-            <li><a href="/AnimTAB">Animated TAB</a></li>
-            </ul>
-        </li>
-        <li><a href="/AnimTexture">Animated Texture</a></li>
-        <li><a href="#">More Coming Soon</a></li>
-        <li><a href="https://github.com/Oli-idk/SimplyMC"><img src="/images/github.png" height="20px"></a></a></li>
-        <li><a href="https://discord.akiradev.xyz"><img src="/images/discord.png" height="20px"></a></a></li>
-        </ul>
+<body class="has-navbar-fixed-top">
+  <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        SimplyMC
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplymc-navbar">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    </nav>
+
+    <div id="simplymc-navbar" class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Gradients
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="/Gradients">
+              Hex Gradients
+            </a>
+            <a class="navbar-item" href="/AnimTab">
+              Animated TAB
+            </a>
+          </div>
+        </div>
+        <a class="navbar-item" href="/AnimTexture">
+          Animated Texture
+        </a>
+        <a class="navbar-item">
+          More Coming Soon
+        </a>
+      </div>
+    
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/AkiraDevelopment/SimplyMC">
+          GitHub
+        </a>
+        <a class="navbar-item" href="https://discord.akiradev.xyz/">
+          Discord
+        </a>
+      </div>
+    </div>
+  </nav>
+  <script>
+    $(document).ready(() => {
+      $(".navbar-burger").click(() => {
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+      });
+    });
+  </script>

@@ -1,12 +1,12 @@
-/*!
+/* !
  * JavaScript Cookie v2.2.1
  * https://github.com/js-cookie/js-cookie
  *
  * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
  * Released under the MIT license
  */
-(function (factory) {
-	var registeredInModuleLoader;
+(function(factory) {
+	let registeredInModuleLoader;
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
 		registeredInModuleLoader = true;
@@ -16,40 +16,40 @@
 		registeredInModuleLoader = true;
 	}
 	if (!registeredInModuleLoader) {
-		var OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
+		const OldCookies = window.Cookies;
+		const api = window.Cookies = factory();
+		api.noConflict = function() {
 			window.Cookies = OldCookies;
 			return api;
 		};
 	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
+}(function() {
+	function extend() {
+		let i = 0;
+		const result = {};
 		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
+			const attributes = arguments[ i ];
+			for (const key in attributes) {
 				result[key] = attributes[key];
 			}
 		}
 		return result;
 	}
 
-	function decode (s) {
+	function decode(s) {
 		return s.replace(/(%[0-9A-Z]{2})+/g, decodeURIComponent);
 	}
 
-	function init (converter) {
-		function api() {}
+	function init(converter) {
+		function api() { return; }
 
-		function set (key, value, attributes) {
+		function set(key, value, attributes) {
 			if (typeof document === 'undefined') {
 				return;
 			}
 
 			attributes = extend({
-				path: '/'
+				path: '/',
 			}, api.defaults, attributes);
 
 			if (typeof attributes.expires === 'number') {
@@ -60,11 +60,14 @@
 			attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
 
 			try {
-				var result = JSON.stringify(value);
-				if (/^[\{\[]/.test(result)) {
+				const result = JSON.stringify(value);
+				if (/^[{[]/.test(result)) {
 					value = result;
 				}
-			} catch (e) {}
+			}
+			catch (e) {
+				return;
+			}
 
 			value = converter.write ?
 				converter.write(value, key) :
@@ -73,10 +76,10 @@
 
 			key = encodeURIComponent(String(key))
 				.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
-				.replace(/[\(\)]/g, escape);
+				.replace(/[()]/g, escape);
 
-			var stringifiedAttributes = '';
-			for (var attributeName in attributes) {
+			let stringifiedAttributes = '';
+			for (const attributeName in attributes) {
 				if (!attributes[attributeName]) {
 					continue;
 				}
@@ -98,34 +101,35 @@
 			return (document.cookie = key + '=' + value + stringifiedAttributes);
 		}
 
-		function get (key, json) {
+		function get(key, json) {
 			if (typeof document === 'undefined') {
 				return;
 			}
 
-			var jar = {};
+			const jar = {};
 			// To prevent the for loop in the first place assign an empty array
 			// in case there are no cookies at all.
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var i = 0;
+			const cookies = document.cookie ? document.cookie.split('; ') : [];
+			let i = 0;
 
 			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var cookie = parts.slice(1).join('=');
+				const parts = cookies[i].split('=');
+				let cookie = parts.slice(1).join('=');
 
 				if (!json && cookie.charAt(0) === '"') {
 					cookie = cookie.slice(1, -1);
 				}
 
 				try {
-					var name = decode(parts[0]);
+					const name = decode(parts[0]);
 					cookie = (converter.read || converter)(cookie, name) ||
 						decode(cookie);
 
 					if (json) {
 						try {
 							cookie = JSON.parse(cookie);
-						} catch (e) {}
+						}
+						catch (e) { return; }
 					}
 
 					jar[name] = cookie;
@@ -133,22 +137,23 @@
 					if (key === name) {
 						break;
 					}
-				} catch (e) {}
+				}
+				catch (e) { return; }
 			}
 
 			return key ? jar[key] : jar;
 		}
 
 		api.set = set;
-		api.get = function (key) {
-			return get(key, false /* read as raw */);
+		api.get = function(key) {
+			return get(key, false);
 		};
-		api.getJSON = function (key) {
-			return get(key, true /* read as json */);
+		api.getJSON = function(key) {
+			return get(key, true);
 		};
-		api.remove = function (key, attributes) {
+		api.remove = function(key, attributes) {
 			set(key, '', extend(attributes, {
-				expires: -1
+				expires: -1,
 			}));
 		};
 
@@ -159,5 +164,5 @@
 		return api;
 	}
 
-	return init(function () {});
+	return init(function() { return; });
 }));

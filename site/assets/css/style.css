@@ -1,27 +1,19 @@
 @font-face {
-    font-family: MinecraftRegular;
-    src: url(/fonts/MinecraftRegular.otf);
-  }
-  @font-face {
-    font-family: MinecraftBold;
-    src: url(/fonts/MinecraftBold.otf);
-  }
-  @font-face {
-    font-family: MinecraftItalic;
-    src: url(/fonts/MinecraftItalic.otf);
-  }
-  @font-face {
-    font-family: MinecraftBoldItalic;
-    src: url(/fonts/MinecraftBoldItalic.otf);
-  }
-  body {
-    background: rgb(49, 49, 49);
-    font-family: MinecraftRegular;
-    color: lightgray;
-  }
-  #title{
-    font-size: 50;
-  }
-  #description{
-    font-size: 25;
-  }
+  font-family: MinecraftRegular;
+  src: url(/fonts/MinecraftRegular.otf);
+}
+@font-face {
+  font-family: MinecraftBold;
+  src: url(/fonts/MinecraftBold.otf);
+}
+@font-face {
+  font-family: MinecraftItalic;
+  src: url(/fonts/MinecraftItalic.otf);
+}
+@font-face {
+  font-family: MinecraftBoldItalic;
+  src: url(/fonts/MinecraftBoldItalic.otf);
+}
+body {
+  font-family: MinecraftRegular;
+}

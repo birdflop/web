@@ -3,149 +3,110 @@ const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const outputText = document.getElementById('outputText');
 
-const boldElement = document.getElementById('bold')
-const italicElement = document.getElementById('italics')
-const underlineElement = document.getElementById('underline')
-const strikeElement = document.getElementById('strike')
+const boldElement = document.getElementById('bold');
+const italicElement = document.getElementById('italics');
+const underlineElement = document.getElementById('underline');
+const strikeElement = document.getElementById('strike');
 
 const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
 const toggled = false;
 const presets = {
   0: {
     colors: ["00FFE0", "EB00FF"],
-    text: "SimplyMC"
+    text: "SimplyMC",
   },
   1: {
     colors: ["FF0000", "FF7F00", "FFFF00", "00FF00", "0000FF", "4B0082", "9400D3"],
-    text: "Rainbow"
+    text: "Rainbow",
   },
   2: {
     colors: ["1488CC", "2B32B2"],
-    text: "Skyline"
+    text: "Skyline",
   },
   3: {
     colors: ["FFE259", "FFA751"],
-    text: "Mango"
+    text: "Mango",
   },
   4: {
     colors: ["3494E6", "EC6EAD"],
-    text: "Vice City"
+    text: "Vice City",
   },
   5: {
     colors: ["F3904F", "3B4371"],
-    text: "Dawn"
+    text: "Dawn",
   },
   6: {
     colors: ["F4C4F3", "FC67FA"],
-    text: "Rose"
+    text: "Rose",
   },
   7: {
     colors: ["CB2D3E", "EF473A"],
-    text: "Firewatch"
-  }
-}
+    text: "Firewatch",
+  },
+};
 const formats = {
   0: {
     outputPrefix: '',
     template: '&#$1$2$3$4$5$6$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   1: {
     outputPrefix: '',
     template: '<#$1$2$3$4$5$6>$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   2: {
     outputPrefix: '',
     template: '&x&$1&$2&$3&$4&$5&$6$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   3: {
     outputPrefix: '/nick ',
     template: '&#$1$2$3$4$5$6$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   4: {
     outputPrefix: '/nick ',
     template: '<#$1$2$3$4$5$6>$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   5: {
     outputPrefix: '/nick ',
     template: '&x&$1&$2&$3&$4&$5&$6$f$c',
     formatChar: '&',
-    maxLength: 256
+    maxLength: 256,
   },
   6: {
     outputPrefix: '',
     template: '§x§$1§$2§$3§$4§$5§$6$f$c',
-    formatChar: '§'
+    formatChar: '§',
   },
   7: {
     outputPrefix: '',
     template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
   },
   8: {
-    custom: true
-  }
+    custom: true,
+  },
 };
 
-/* Get a random HEX color */
-function getRandomHexColor() {
-     return Math.floor(Math.random()*16777215).toString(16).toUpperCase();
-}
-
-/* Copies contents to clipboard */
-function copyTextToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    alert('Copied to clipboard!');
-  })
-}
-
-const errorElement = document.getElementById('error')
+const errorElement = document.getElementById('error');
 function showError(show) {
   if (show) {
     errorElement.style.display = 'block';
     outputText.style.height = '70px';
     outputText.style.marginBottom = '5px';
-  } else {
+  }
+ else {
     errorElement.style.display = 'none';
     outputText.style.height = '95px';
     outputText.style.marginBottom = '10px';
   }
-}
-
-function hex(c) {
-  let s = '0123456789abcdef';
-  let i = parseInt(c);
-  if (i == 0 || isNaN(c))
-    return '00';
-  i = Math.round(Math.min(Math.max(0, i), 255));
-  return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
-}
-
-/* Convert an RGB triplet to a hex string */
-function convertToHex(rgb) {
-  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
-}
-
-/* Remove '#' in color hex string */
-function trim(s) {
-  return (s.charAt(0) == '#') ? s.substring(1, 7) : s
-}
-
-/* Convert a hex string to an RGB triplet */
-function convertToRGB(hex) {
-  let color = [];
-  color[0] = parseInt((trim(hex)).substring(0, 2), 16);
-  color[1] = parseInt((trim(hex)).substring(2, 4), 16);
-  color[2] = parseInt((trim(hex)).substring(4, 6), 16);
-  return color;
 }
 
 /**
@@ -160,20 +121,19 @@ class Gradient {
     this.step = 0;
 
     const increment = this.steps / (colors.length - 1);
-    for (let i = 0; i < colors.length - 1; i++)
-      this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));
+    for (let i = 0; i < colors.length - 1; i++) {this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));}
   }
 
   /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
   next() {
-    if (this.steps <= 1)
-      return this.colors[0];
+    if (this.steps <= 1) {return this.colors[0];}
 
     const adjustedStep = Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
     let color;
     if (this.gradients.length < 2) {
       color = this.gradients[0].colorAt(adjustedStep);
-    } else {
+    }
+ else {
       const segment = this.steps / this.gradients.length;
       const index = Math.min(Math.floor(adjustedStep / segment), this.gradients.length - 1);
       color = this.gradients[index].colorAt(adjustedStep);
@@ -196,7 +156,7 @@ class TwoStopGradient {
     return [
       this.calculateHexPiece(step, this.startColor[0], this.endColor[0]),
       this.calculateHexPiece(step, this.startColor[1], this.endColor[1]),
-      this.calculateHexPiece(step, this.startColor[2], this.endColor[2])
+      this.calculateHexPiece(step, this.startColor[2], this.endColor[2]),
     ];
   }
 
@@ -207,74 +167,32 @@ class TwoStopGradient {
   }
 }
 
-/* Toggles the number of gradient colors between 2 and 10 based on user input */
-function toggleColors(colors) {
-  let clamped = Math.min(10, Math.max(2, colors));
-  if (colors == 1 || colors == '') {
-    colors = getColors().length;
-  } else if (colors != clamped) {
-    $('#numOfColors').val(clamped);
-    colors = clamped;
-  }
-  const container = $('#hexColors');
-  const hexColors = container.find('.hexColor');
-  const number = hexColors.size();
-  if (number > colors) {
-    // Need to remove some colors
-    hexColors.each((index, element) => {
-      if (index + 1 > colors) {
-        savedColors[index] = $(element).val();
-        $(element).parent().remove();
-      }
-    });
-  } else if (number < colors) {
-    // Need to add some colors
-    let template = $('#hexColorTemplate').html();
-    for (let i = number + 1; i <= colors; i++) {
-      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, savedColors[i - 1]);
-      container.append(html);
-    }
-    jscolor.install(); // Refresh all jscolor elements
-  }
-}
-
-/* Gets all colored entered by the user */
-function getColors() {
-  const hexColors = $('#hexColors').find('.hexColor');
-  const colors = [];
-  hexColors.each((index, element) => {
-    const value = $(element).val();
-    savedColors[index] = value;
-    colors[index] = convertToRGB(value);
-  });
-  return colors;
-}
-
 const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
-const customFormat = document.getElementById('customFormat')
+const customFormat = document.getElementById('customFormat');
 const formatSelector = document.getElementById('formatSelector');
 function updateOutputText(event) {
-  let format = formats[outputFormat.value];
+  const format = formats[outputFormat.value];
 
   if (format.custom) {
     customFormatWrapper.classList.remove('hidden');
-  } else {
+  }
+ else {
     customFormatWrapper.classList.add('hidden');
   }
 
   if (format.outputPrefix) {
     nickName.value = nickName.value.replace(/ /g, '');
     if (nickName.value) {
-      let letters = /^[0-9a-zA-Z_]+$/;
+      const letters = /^[0-9a-zA-Z_]+$/;
       if (!nickName.value.match(letters)) nickName.value = nickName.value.replace(event.data, '');
       if (!nickName.value.match(letters)) nickName.value = 'SimplyMC';
     }
   }
 
-  let newNick = nickName.value
+  let newNick = nickName.value;
   if (!newNick) {
-    newNick = 'Type something!'
+    newNick = 'Type something!';
   }
 
   const bold = boldElement.checked;
@@ -282,22 +200,21 @@ function updateOutputText(event) {
   const underline = underlineElement.checked;
   const strike = strikeElement.checked;
 
-  let gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
-  let charColors = [];
+  const gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
+  const charColors = [];
   let output = format.outputPrefix || "";
   for (let i = 0; i < newNick.length; i++) {
-    let char = newNick.charAt(i);
+    const char = newNick.charAt(i);
     if (char == ' ') {
       output += char;
       charColors.push(null);
       continue;
     }
 
-    let hex = convertToHex(gradient.next());
+    const hex = convertToHex(gradient.next());
     charColors.push(hex);
     let hexOutput = format.custom ? customFormat.value : format.template;
-    for (let n = 1; n <= 6; n++)
-      hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+    for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
     let formatCodes = '';
     if (format.formatChar) {
       formatSelector.classList.remove('hidden');
@@ -306,7 +223,8 @@ function updateOutputText(event) {
       if (italic) formatCodes += format.formatChar + 'o';
       if (underline) formatCodes += format.formatChar + 'n';
       if (strike) formatCodes += format.formatChar + 'm';
-    } else {
+    }
+ else {
       formatSelector.classList.add('hidden');
     }
 
@@ -323,18 +241,6 @@ function updateOutputText(event) {
   displayColoredName(newNick, charColors, format.formatChar);
 }
 
-/**
- * padding function:
- * cba to roll my own, thanks Pointy!
- * ==================================
- * source: http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
- */
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
 function displayColoredName(nickName, colors, format) {
   coloredNick.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
 
@@ -342,10 +248,12 @@ function displayColoredName(nickName, colors, format) {
     if (boldElement.checked) {
       if (italicElement.checked) {
         coloredNick.classList.add('minecraftibold');
-      } else {
+      }
+ else {
         coloredNick.classList.add('minecraftbold');
       }
-    } else if (italicElement.checked) {
+    }
+ else if (italicElement.checked) {
       coloredNick.classList.add('minecraftitalic');
     }
   }
@@ -356,34 +264,37 @@ function displayColoredName(nickName, colors, format) {
     if (underlineElement.checked) {
       if (strikeElement.checked) {
         coloredNickSpan.classList.add('minecraftustrike');
-      } else coloredNickSpan.classList.add('minecraftunderline');
-    } else if (strikeElement.checked) {
+      }
+ else {coloredNickSpan.classList.add('minecraftunderline');}
+    }
+ else if (strikeElement.checked) {
       coloredNickSpan.classList.add('minecraftstrike');
     }
-    coloredNickSpan.style.color = colors[i];
+    coloredNickSpan.style.color = `#${colors[i]}`;
     coloredNickSpan.textContent = nickName[i];
     coloredNick.append(coloredNickSpan);
   }
 }
 
-const numOfColors = document.getElementById("numOfColors")
+const numOfColors = document.getElementById("numOfColors");
 function preset(n) {
-  const colors = presets[n].colors
+  const colors = presets[n].colors;
   const container = $('#hexColors');
   container.empty();
     // Need to add some colors
-    let template = $('#hexColorTemplate').html();
+    const template = $('#hexColorTemplate').html();
     for (let i = 0 + 1; i <= colors.length; i++) {
-      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      const html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
       container.append(html);
     }
-    nickName.value = presets[n].text
-    numOfColors.value = colors.length
-    jscolor.install(); // Refresh all jscolor elements
+    nickName.value = presets[n].text;
+    numOfColors.value = colors.length;
+    // Refresh all jscolor elements
+    jscolor.install();
 }
 
-//todo
-const presetSeparator = ":-:"
+// todo
+const presetSeparator = ":-:";
 function exportPreset() {
   const hexColors = $('#hexColors').find('.hexColor');
   const colors = [];
@@ -391,7 +302,7 @@ function exportPreset() {
   const italic = italicElement.checked;
   const underline = underlineElement.checked;
   const strike = strikeElement.checked;
-  let selectedFormats = [bold, italic, underline, strike];
+  const selectedFormats = [bold, italic, underline, strike];
   compress(selectedFormats);
   hexColors.each((index, element) => {
     const value = $(element).val();
@@ -402,31 +313,31 @@ function exportPreset() {
   let string = colors + presetSeparator +
       nickName.value + presetSeparator +
       compress(selectedFormats) + presetSeparator +
-      outputFormat.value
+      outputFormat.value;
 
   if (formats[outputFormat.value].custom) {
-    string += presetSeparator + customFormat.value
+    string += presetSeparator + customFormat.value;
   }
 
-  let preset = toBinary(string);
+  const preset = toBinary(string);
   return preset;
 }
 
 function importPreset(p) {
-  let preset = fromBinary(p)
-  preset = preset.split(presetSeparator)
-  let colors = preset[0].split(",")
-  let nickname = preset[1]
-  let formats = decompress(preset[2], 4)
-  let selectedOutputFormat = preset[3]
-  let selectedCustomFormat = preset[4]
+  let preset = fromBinary(p);
+  preset = preset.split(presetSeparator);
+  const colors = preset[0].split(",");
+  const nickname = preset[1];
+  const formats = decompress(preset[2], 4);
+  const selectedOutputFormat = preset[3];
+  const selectedCustomFormat = preset[4];
 
   if (selectedOutputFormat) {
-    outputFormat.value = selectedOutputFormat
+    outputFormat.value = selectedOutputFormat;
   }
 
   if (selectedCustomFormat) {
-    customFormat.value = selectedCustomFormat
+    customFormat.value = selectedCustomFormat;
   }
 
   boldElement.checked = formats[0];
@@ -437,68 +348,21 @@ function importPreset(p) {
   const container = $('#hexColors');
   container.empty();
     // Need to add some colors
-    let template = $('#hexColorTemplate').html();
+    const template = $('#hexColorTemplate').html();
     for (let i = 0 + 1; i <= colors.length; i++) {
-      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      const html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
       container.append(html);
     }
-    nickName.value = nickname
-    numOfColors.value = colors.length
-    jscolor.install(); // Refresh all jscolor elements
+    nickName.value = nickname;
+    numOfColors.value = colors.length;
+    // Refresh all jscolor elements
+    jscolor.install();
     try {
-      updateOutputText()
-    } catch (error) {
-      alert("Invalid Preset")
+      updateOutputText();
     }
-}
-
-function showfield(field){
-  targetDiv = document.getElementById(field)
-  if (targetDiv.style.display !== "none") {
-    targetDiv.style.display = "none";
-  } else {
-    targetDiv.style.display = "block";
-  }
-}
-
-// Takes an array of boolean values and turns them into a number
-function compress(values) {
-  let output = 0;
-  for (let i = 0; i < values.length; i++) {
-      const value = values[i];
-      output |= ~~value << i;
-  }
-  return output;
-}
-
-// Takes a number and turns it into an array of boolean values
-// Second parameter is how many values to parse out of the number
-function decompress(input, expectedValues) {
-  const values = [];
-  for (let i = 0; i < expectedValues; i++) {
-      const value = !!((input >> i) & 1);
-      values.push(value);
-  }
-  return values;
-}
-
-// convert a Unicode string to a string in which
-// each 16-bit unit occupies only one byte
-function toBinary(string) {
-  const codeUnits = new Uint16Array(string.length);
-  for (let i = 0; i < codeUnits.length; i++) {
-    codeUnits[i] = string.charCodeAt(i);
-  }
-  return btoa(String.fromCharCode(...new Uint8Array(codeUnits.buffer)));
-}
-
-function fromBinary(encoded) {
-  binary = atob(encoded)
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < bytes.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return String.fromCharCode(...new Uint16Array(bytes.buffer));
+ catch (error) {
+      alert("Invalid Preset");
+    }
 }
 
 toggleColors(2);

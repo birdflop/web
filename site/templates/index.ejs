@@ -1,27 +1,34 @@
 <%- include("partials/header", { path, title: "SimplyMC - A Minecraft Multitool"}) %>
-<link rel="stylesheet" href="/css/style.css">
-      <div>
-        <center id="title">SimplyMC</center>
-        <center id="description">
-          <h1> Minecraft multitool for</h1>
-          <h1 id="typing"></h1>
-          <br>💖 Consider donating if this helped you:<br>
-          <a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
+
+  <section class="hero is-dark is-fullheight-with-navbar">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title">SimplyMC</p>
+        <p class="subtitle">
+          Minecraft multitool for <span id="typing"></span>
           <br><br>
-        </center>
+          💖 Consider donating if this helped you:
+          <br>
+          <a href="https://ko-fi.com/N4N550HUP">
+            <img src="https://ko-fi.com/img/githubbutton_sm.svg">
+          </a>
+        </p>
       </div>
-      
-    <script type="text/javascript" src="js/typer.js"></script>
-    <script>
-      $("#typing").typer({
-        strings: [
-          "developers",
-          "server owners",
-          "players",
-          "you"
-        ],
+    </div>
+  </section>
+
+  <script type="text/javascript" src="js/typer.js"></script>
+  <script>
+    $("#typing").typer({
+      strings: [
+        "developers",
+        "server owners",
+        "players",
+        "you"
+      ],
       typeSpeed: 100,
       backspaceSpeed: 50,
     })
-    </script>
+  </script>
+
 <%- include("partials/footer") %>

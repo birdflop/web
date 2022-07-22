@@ -1,37 +1,47 @@
 <%- include("partials/header", { path, title: "Animated Texture Creator"}) %>
 <link rel="stylesheet" href="/css/AnimTexture.css">
 
-<div id="content">
-  <div class="container-fluid">
-    <div class="row">
-      <h1 id="title">Animated Textures</h1>
-      <p>Easily merge textures for resource pack animations</p>
-      <p>THIS PAGE IS HEAVILY A WORK IN PROGRESS</p>
+<section class="hero is-dark is-fullheight-with-navbar">
+  <div class="hero-body">
+    <div class="container">
+      <div class="row">
+        <p class="title">Animated Textures</p>
+        <p class="subtitle">Easily merge textures for resource pack animations</p>
+        <p>THIS PAGE IS HEAVILY A WORK IN PROGRESS</p>
 
-      <label>Select Frame</label>
-      <input type="file" onchange="readFile(this);this.value='';" accept="image/*"/>
+        <div class="file is-normal is-boxed">
+          <label class="file-label">
+            <input class="file-input" type="file" onchange="readFile(this);this.value='';" accept="image/*">
+            <span class="file-cta">
+              <span class="file-label">
+                Select Frame
+              </span>
+            </span>
+          </label>
+        </div>
 
-      <div id="imgs">
+        <div id="imgs">
+        </div>
+        <div id="fps">
+        </div>
+
+        <label for='tname'>Texture name</label>
+        <input id="tname" class="input" type="text"></input>
+        <br>
+        <br>
+        <button class="button is-black" onclick="generate();">Generate</button>
+
+        </div>
+        <div id="links" style="display:none;">
+          <a id="pngd">Download PNG</a>
+          <br/>
+          <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank">Download MCMETA</a>
+        </div>
       </div>
-      <div id="fps">
-      </div>
-      <div>
-        <label>Texture name: </label>
-        <input type="text" id="tname"/>
-      </div>
-      <br>
-        <div>
-          <input type="button" value="Generate" onclick="generate();" style="color: black;"/>
-        </div> 
-      </div>
-      <div id="links" style="display:none;">
-        <a id="pngd">Download PNG</a>
-        <br/>
-        <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank">Download MCMETA</a>
-      </div>
-    </div>
-    <canvas id="c" style="width: 10em;"></canvas>
-</div>
+      <canvas id="c" style="width: 10em;"></canvas>
+  </div>
+</section>
+
 <script src="/js/AnimTextureScript.js"></script>
 <script src="/js/gif-frames.js"></script>
 <%- include("partials/footer") %>
