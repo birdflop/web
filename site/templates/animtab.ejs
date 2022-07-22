@@ -79,19 +79,6 @@
                     <li>$c - Character to format</li>
                   </ul>
                 </div>
-                <label for="color-preset">Color Preset</label>
-                <div class="select" style="width:100%">
-                  <select style="width:100%" id="color-preset" onchange="preset(this.value); updateOutputText(event);">
-                    <option value='0'>None</option>
-                    <option value='1'>Rainbow</option>
-                    <option value='2'>Skyline</option>
-                    <option value='3'>Mango</option>
-                    <option value='4'>Vice City</option>
-                    <option value='5'>Dawn</option>
-                    <option value='6'>Rose</option>
-                    <option value='7'>Firewatch</option>
-                  </select>
-                </div>
                 <label for="exportPreset">Custom Presets</label><br>
                 <button class="button" type="button" id="exportPreset"
                   onclick="copyTextToClipboard(exportPreset());">
@@ -133,6 +120,7 @@
   </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.8/jscolor.min.js"></script>
+  <script src="/js/RGBScript.js"></script>
   <script src="/js/AnimTABScript.js"></script>
   <script>
     let qPreset = '<%- queryPreset %>';
