@@ -218,7 +218,7 @@ function toggleColors(colors) {
   }
   const container = $('#hexColors');
   const hexColors = container.find('.hexColor');
-  const number = hexColors.size();
+  const number = hexColors.length;
   if (number > colors) {
     // Need to remove some colors
     hexColors.each((index, element) => {

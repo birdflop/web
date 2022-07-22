@@ -141,7 +141,7 @@ function toggleColors(colors) {
   }
   const container = $('#hexColors');
   const hexColors = container.find('.hexColor');
-  const number = hexColors.size();
+  const number = hexColors.length;
   if (number > colors) {
     // Need to remove some colors
     hexColors.each((index, element) => {
@@ -403,15 +403,10 @@ function displayColoredName(nickName, colors) {
     }
 
     const char = nickName[i];
-    if (char == ' ') {
-      animationSpan.style.color = colors[colorIndex];
-      animationSpan.textContent = char;
-    } else {
-      animationSpan.style.color = colors[colorIndex];
-      animationSpan.textContent = char;
-      colorIndex++;
-    }
-      animation.append(animationSpan);
+    if (char != ' ') colorIndex++;
+    animationSpan.style.color = `#${colors[colorIndex]}`;
+    animationSpan.textContent = char;
+    animation.append(animationSpan);
   }
 }
 

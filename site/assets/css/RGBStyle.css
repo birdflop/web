@@ -1,35 +1,12 @@
-#content {
-  margin: 1em;
-}
-
-.row {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-label {
-  margin-bottom: 0;
-}
-
-.form-control {
-  color: black;
-}
-
-#animation {
-  font-size: 4rem;
-  word-wrap: break-word;
-}
-
 #colors {
   height: 150px;
   display: flex;
   flex-direction: row;
 }
-
+  
 #title {
   position: relative;
-  font-family: MinecraftRegular;
-  background: linear-gradient(124deg, #00FFE0,#EB00FF);
+  background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -38,30 +15,20 @@ label {
 }
 
 #outputText {
+  word-wrap: break-word;
   white-space: pre-wrap;
   cursor: pointer;
-  height: 200px;
   font-family: MinecraftRegular;
 }
 
-#dbold,
-#ditalics,
-#dunderline,
-#dstrike {
-  font-family: MinecraftRegular;
-  color: lightgrey;
+#animation, #coloredNick {
+  font-size: 4rem;
+  word-wrap: break-word;
 }
 
 #error {
-  font-size: 20px;
-  font-family: MinecraftBoldItalic;
   color: red;
   display: none;
-  margin-bottom: 10px;
-}
-
-.minecraft {
-  font-family: MinecraftRegular;
 }
 
 .minecraftbold {
@@ -97,8 +64,6 @@ label {
   }
 }
 
-body {
-  background: rgb(49, 49, 49);
-  color: lightgray;
-  font-family: MinecraftRegular;
+.hidden {
+  display: none;
 }
