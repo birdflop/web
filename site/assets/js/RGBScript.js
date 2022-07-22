@@ -1,27 +1,26 @@
 /* Get a random HEX color */
 function getRandomHexColor() {
-    return Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+    return Math.floor(Math.random() * 16777215).toString(16).toUpperCase();
 }
 
 /* Copies contents to clipboard */
 function copyTextToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         alert('Copied to clipboard!');
-    })
+    });
 }
 
 function hex(c) {
-    let s = '0123456789abcdef';
+    const s = '0123456789abcdef';
     let i = parseInt(c);
-    if (i == 0 || isNaN(c))
-    return '00';
+    if (i == 0 || isNaN(c)) {return '00';}
     i = Math.round(Math.min(Math.max(0, i), 255));
     return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
 }
 
 /* Convert a hex string to an RGB triplet */
 function convertToRGB(hex) {
-  let color = [];
+  const color = [];
   color[0] = parseInt((trim(hex)).substring(0, 2), 16);
   color[1] = parseInt((trim(hex)).substring(2, 4), 16);
   color[2] = parseInt((trim(hex)).substring(4, 6), 16);
@@ -45,11 +44,12 @@ function getColors() {
   return colors;
 }
 
-function showfield(field){
-  targetDiv = document.getElementById(field)
+function showfield(field) {
+  targetDiv = document.getElementById(field);
   if (targetDiv.style.display !== "none") {
     targetDiv.style.display = "none";
-  } else {
+  }
+ else {
     targetDiv.style.display = "block";
   }
 }
@@ -86,7 +86,7 @@ function toBinary(string) {
 }
 
 function fromBinary(encoded) {
-  binary = atob(encoded)
+  binary = atob(encoded);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < bytes.length; i++) {
     bytes[i] = binary.charCodeAt(i);
@@ -96,15 +96,16 @@ function fromBinary(encoded) {
 
 /* Remove '#' in color hex string */
 function trim(s) {
-  return (s.charAt(0) == '#') ? s.substring(1, 7) : s
+  return (s.charAt(0) == '#') ? s.substring(1, 7) : s;
 }
 
 /* Toggles the number of gradient colors between 2 and 10 based on user input */
 function toggleColors(colors) {
-  let clamped = Math.min(10, Math.max(2, colors));
+  const clamped = Math.min(10, Math.max(2, colors));
   if (colors == 1 || colors == '') {
     colors = getColors().length;
-  } else if (colors != clamped) {
+  }
+ else if (colors != clamped) {
     $('#numOfColors').val(clamped);
     colors = clamped;
   }
@@ -119,13 +120,15 @@ function toggleColors(colors) {
         $(element).parent().remove();
       }
     });
-  } else if (number < colors) {
+  }
+ else if (number < colors) {
     // Need to add some colors
-    let template = $('#hexColorTemplate').html();
+    const template = $('#hexColorTemplate').html();
     for (let i = number + 1; i <= colors; i++) {
-      let html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, savedColors[i - 1]);
+      const html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, savedColors[i - 1]);
       container.append(html);
     }
-    jscolor.install(); // Refresh all jscolor elements
+    // Refresh all jscolor elements
+    jscolor.install();
   }
 }
