@@ -1,5 +1,31 @@
 const frames = [];
-const cumulative = document.getElementById("cumulative").value;
+const cumulative = document.getElementById("cumulative").checked;
+const imglist = document.getElementById("imgs");
+const canvas = document.getElementById("c");
+
+function addImgElement(b64, frame) {
+	const newFigure = document.createElement("FIGURE");
+	newFigure.className = "image";
+	newFigure.style.width = "96px";
+
+	const newImage = document.createElement("IMG");
+	newImage.src = b64;
+	newImage.width = "96";
+	newImage.height = "96";
+	newImage.className = "img";
+	if (frame) newImage.id = frame.frameIndex;
+	newImage.style.borderRadius = "2px";
+	newFigure.appendChild(newImage);
+
+	const frameDelay = document.createElement("INPUT");
+	frameDelay.type = "number";
+	frameDelay.value = frame ? Math.ceil(20 * frame.frameInfo.delay / 100) : 20;
+	frameDelay.className = "input";
+	newFigure.appendChild(frameDelay);
+
+	imglist.appendChild(newFigure);
+}
+
 function readFile(g) {
 	const f = new FileReader();
 	f.readAsDataURL(g.files[0]);
@@ -11,45 +37,20 @@ function readFile(g) {
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
 				frames.push(b64);
-				const imglist = document.getElementById("imgs");
-				const newImage = document.createElement("IMG");
-				newImage.src = b64;
-				newImage.width = "64";newImage.height = "64";
-				newImage.className = "img";
-				newImage.id = frame.frameIndex;
-				imglist.appendChild(newImage);
-
-				const te = document.createElement("INPUT");
-				te.type = "text";
-				te.value = Math.ceil(20 * frame.frameInfo.delay / 100);
-				te.style.width = "64px";
-				document.getElementById("fps").appendChild(te);
+				addImgElement(b64, frame);
             });
         }
 		else {
             const b64 = e.target.result;
             frames.push(b64);
-            const imglist = document.getElementById("imgs");
-            const newImage = document.createElement("IMG");
-            newImage.src = b64;
-            newImage.width = "64";
-			newImage.height = "64";
-            newImage.className = "img";
-            imglist.appendChild(newImage);
-
-            const te = document.createElement("INPUT");
-            te.type = "text";
-            te.value = "20";
-            te.style.width = "5em";
-            document.getElementById("fps").appendChild(te);
-        }
+			addImgElement(b64);
+		}
 	};
 }
 
 function generate() {
-	const canvas = document.getElementById("c");
 	const ctx = canvas.getContext("2d");
-	const imgs = document.getElementById("imgs").getElementsByTagName("IMG");
+	const imgs = imglist.getElementsByTagName("IMG");
 	let max = 0;
 	for (let i = 0; i != imgs.length; i++) {
 		if (imgs[i].naturalWidth > max)max = imgs[i].naturalWidth;
