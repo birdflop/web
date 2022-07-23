@@ -1,12 +1,12 @@
 const frames = [];
-
+const cumulative = document.getElementById("cumulative").value;
 function readFile(g) {
 	const f = new FileReader();
 	f.readAsDataURL(g.files[0]);
 	f.onloadend = async function(e) {
         const type = e.target.result.split(",")[0].split(";")[0].split(":")[1];
         if (type == "image/gif") {
-            const gifframes = await gifFrames({ url: e.target.result, frames: 'all', outputType: 'canvas' });
+            const gifframes = await gifFrames({ url: e.target.result, frames: 'all', outputType: 'canvas', cumulative: cumulative });
             console.log(gifframes);
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
