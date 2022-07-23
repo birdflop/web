@@ -3,7 +3,7 @@ const cumulative = document.getElementById("cumulative").checked;
 const imglist = document.getElementById("imgs");
 const canvas = document.getElementById("c");
 
-function addImgElement(frame, b64, gif) {
+function addImgElement(b64, frame) {
 	const newFigure = document.createElement("FIGURE");
 	newFigure.className = "image";
 	newFigure.style.width = "96px";
@@ -13,13 +13,13 @@ function addImgElement(frame, b64, gif) {
 	newImage.width = "96";
 	newImage.height = "96";
 	newImage.className = "img";
-	newImage.id = frame.frameIndex;
+	if (frame) newImage.id = frame.frameIndex;
 	newImage.style.borderRadius = "2px";
 	newFigure.appendChild(newImage);
 
 	const frameDelay = document.createElement("INPUT");
 	frameDelay.type = "number";
-	frameDelay.value = gif ? Math.ceil(20 * frame.frameInfo.delay / 100) : 20;
+	frameDelay.value = frame ? Math.ceil(20 * frame.frameInfo.delay / 100) : 20;
 	frameDelay.className = "input";
 	newFigure.appendChild(frameDelay);
 
@@ -37,13 +37,13 @@ function readFile(g) {
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
 				frames.push(b64);
-				addImgElement(frame, b64, true);
+				addImgElement(b64, frame);
             });
         }
 		else {
             const b64 = e.target.result;
             frames.push(b64);
-			addImgElement(frame, b64);
+			addImgElement(b64);
 		}
 	};
 }
