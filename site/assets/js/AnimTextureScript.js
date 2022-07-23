@@ -3,7 +3,7 @@ const cumulative = document.getElementById("cumulative").checked;
 const imglist = document.getElementById("imgs");
 const canvas = document.getElementById("c");
 
-function addImgElement(frame, b64) {
+function addImgElement(frame, b64, gif) {
 	const newFigure = document.createElement("FIGURE");
 	newFigure.className = "image";
 	newFigure.style.width = "96px";
@@ -19,7 +19,7 @@ function addImgElement(frame, b64) {
 
 	const frameDelay = document.createElement("INPUT");
 	frameDelay.type = "number";
-	frameDelay.value = Math.ceil(20 * frame.frameInfo.delay / 100);
+	frameDelay.value = gif ? Math.ceil(20 * frame.frameInfo.delay / 100) : 20;
 	frameDelay.className = "input";
 	newFigure.appendChild(frameDelay);
 
@@ -37,7 +37,7 @@ function readFile(g) {
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
 				frames.push(b64);
-				addImgElement(frame, b64);
+				addImgElement(frame, b64, true);
             });
         }
 		else {
