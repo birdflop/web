@@ -11,19 +11,29 @@ function readFile(g) {
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
 				frames.push(b64);
+
 				const imglist = document.getElementById("imgs");
+
+				const newFigure = document.createElement("FIGURE");
+				newFigure.className = "image";
+				newFigure.style.width = "96px";
+
 				const newImage = document.createElement("IMG");
 				newImage.src = b64;
-				newImage.width = "64";newImage.height = "64";
+				newImage.width = "96";
+				newImage.height = "96";
 				newImage.className = "img";
 				newImage.id = frame.frameIndex;
-				imglist.appendChild(newImage);
+				newImage.style.borderRadius = "2px";
+				newFigure.appendChild(newImage);
 
-				const te = document.createElement("INPUT");
-				te.type = "text";
-				te.value = Math.ceil(20 * frame.frameInfo.delay / 100);
-				te.style.width = "64px";
-				document.getElementById("fps").appendChild(te);
+				const frameDelay = document.createElement("INPUT");
+				frameDelay.type = "number";
+				frameDelay.value = Math.ceil(20 * frame.frameInfo.delay / 100);
+				frameDelay.className = "input";
+				newFigure.appendChild(frameDelay);
+
+				imglist.appendChild(newFigure);
             });
         }
 		else {
@@ -41,7 +51,7 @@ function readFile(g) {
             te.type = "text";
             te.value = "20";
             te.style.width = "5em";
-            document.getElementById("fps").appendChild(te);
+            imglist.appendChild(te);
         }
 	};
 }
