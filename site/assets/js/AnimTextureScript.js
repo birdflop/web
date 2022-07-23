@@ -1,5 +1,31 @@
 const frames = [];
 const cumulative = document.getElementById("cumulative").checked;
+const imglist = document.getElementById("imgs");
+const canvas = document.getElementById("c");
+
+function addImgElement(frame, b64) {
+	const newFigure = document.createElement("FIGURE");
+	newFigure.className = "image";
+	newFigure.style.width = "96px";
+
+	const newImage = document.createElement("IMG");
+	newImage.src = b64;
+	newImage.width = "96";
+	newImage.height = "96";
+	newImage.className = "img";
+	newImage.id = frame.frameIndex;
+	newImage.style.borderRadius = "2px";
+	newFigure.appendChild(newImage);
+
+	const frameDelay = document.createElement("INPUT");
+	frameDelay.type = "number";
+	frameDelay.value = Math.ceil(20 * frame.frameInfo.delay / 100);
+	frameDelay.className = "input";
+	newFigure.appendChild(frameDelay);
+
+	imglist.appendChild(newFigure);
+}
+
 function readFile(g) {
 	const f = new FileReader();
 	f.readAsDataURL(g.files[0]);
@@ -11,65 +37,20 @@ function readFile(g) {
             gifframes.forEach(frame => {
                 const b64 = frame.getImage().toDataURL();
 				frames.push(b64);
-
-				const imglist = document.getElementById("imgs");
-
-				const newFigure = document.createElement("FIGURE");
-				newFigure.className = "image";
-				newFigure.style.width = "96px";
-
-				const newImage = document.createElement("IMG");
-				newImage.src = b64;
-				newImage.width = "96";
-				newImage.height = "96";
-				newImage.className = "img";
-				newImage.id = frame.frameIndex;
-				newImage.style.borderRadius = "2px";
-				newFigure.appendChild(newImage);
-
-				const frameDelay = document.createElement("INPUT");
-				frameDelay.type = "number";
-				frameDelay.value = Math.ceil(20 * frame.frameInfo.delay / 100);
-				frameDelay.className = "input";
-				newFigure.appendChild(frameDelay);
-
-				imglist.appendChild(newFigure);
+				addImgElement(frame, b64);
             });
         }
 		else {
             const b64 = e.target.result;
             frames.push(b64);
-
-            const imglist = document.getElementById("imgs");
-
-			const newFigure = document.createElement("FIGURE");
-			newFigure.className = "image";
-			newFigure.style.width = "96px";
-
-			const newImage = document.createElement("IMG");
-			newImage.src = b64;
-			newImage.width = "96";
-			newImage.height = "96";
-			newImage.className = "img";
-			newImage.id = frame.frameIndex;
-			newImage.style.borderRadius = "2px";
-			newFigure.appendChild(newImage);
-
-			const frameDelay = document.createElement("INPUT");
-			frameDelay.type = "number";
-			frameDelay.value = Math.ceil(20 * frame.frameInfo.delay / 100);
-			frameDelay.className = "input";
-			newFigure.appendChild(frameDelay);
-
-			imglist.appendChild(newFigure);
+			addImgElement(frame, b64);
 		}
 	};
 }
 
 function generate() {
-	const canvas = document.getElementById("c");
 	const ctx = canvas.getContext("2d");
-	const imgs = document.getElementById("imgs").getElementsByTagName("IMG");
+	const imgs = imglist.getElementsByTagName("IMG");
 	let max = 0;
 	for (let i = 0; i != imgs.length; i++) {
 		if (imgs[i].naturalWidth > max)max = imgs[i].naturalWidth;
