@@ -135,13 +135,13 @@ function loadCookies() {
 
 function updateCookies() {
   for (let i = 1; i <= savedColors.length; i++) 
-    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '' });
-  Cookies.set('activeColors', activeColors, { expires: 7, path: '' });
-  Cookies.set('nickname', nickName.value, { expires: 7, path: '' });
-  Cookies.set('bold', boldElement.checked, { expires: 7, path: '' });
-  Cookies.set('italics', italicElement.checked, { expires: 7, path: '' });
-  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '' });
-  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '' });
+    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/Gradients' });
+  Cookies.set('activeColors', activeColors, { expires: 7, path: '/Gradients' });
+  Cookies.set('nickname', nickName.value, { expires: 7, path: '/Gradients' });
+  Cookies.set('bold', boldElement.checked, { expires: 7, path: '/Gradients' });
+  Cookies.set('italics', italicElement.checked, { expires: 7, path: '/Gradients' });
+  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/Gradients' });
+  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/Gradients' });
 }
 
 const errorElement = document.getElementById('error');

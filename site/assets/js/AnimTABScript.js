@@ -63,14 +63,14 @@ function loadCookies() {
 
 function updateCookies() {
   for (let i = 1; i <= savedColors.length; i++) 
-    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '' });
-  Cookies.set('activeColors', activeColors, { expires: 7, path: '' });
-  Cookies.set('text', animationText.value, { expires: 7, path: '' });
-  Cookies.set('animationSpeed', speed.value, { expires: 7, path: '' });
-  Cookies.set('bold', boldElement.checked, { expires: 7, path: '' });
-  Cookies.set('italics', italicElement.checked, { expires: 7, path: '' });
-  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '' });
-  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '' });
+    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/AnimTab' });
+  Cookies.set('activeColors', activeColors, { expires: 7, path: '/AnimTab' });
+  Cookies.set('text', animationText.value, { expires: 7, path: '/AnimTab' });
+  Cookies.set('animationSpeed', speed.value, { expires: 7, path: '/AnimTab' });
+  Cookies.set('bold', boldElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('italics', italicElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/AnimTab' });
 }
 
 function showError() {
