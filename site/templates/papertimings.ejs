@@ -22,8 +22,8 @@
       <br><br>
       <div id="error" class="notification is-danger" style="display: none;"></div>
       <p>
-        You can also copy the id into the link<br>
-        <span style="color: darkgray">e.g. https://simplymc.art/timings-results/?id=b7fe8cdae83d48eda8aab7cf18264aee</span><br>
+        You can also copy the id into a link<br>
+        <span style="color: darkgray">e.g. https://simplymc.art/timings-result/b7fe8cdae83d48eda8aab7cf18264aee</span><br>
         Powered by <a href="https://github.com/Pemigrade/botflop" style="text-decoration: underline;">botflop</a>
       </p>
     </div>
@@ -43,14 +43,14 @@
 		if (link.startsWith('https://spark.lucko.me')) {
       return showError('<p class="subtitle">⚠️ Spark Profile</p> This is a Spark Profile. <a href="/SparkProfile" style="text-decoration: underline;">Click here</a> instead for this type of report.')
 		}
-		if (arg.startsWith('https://www.spigotmc.org/go/timings?url=') || arg.startsWith('https://spigotmc.org/go/timings?url=')) {
+		if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
       return showError('<p class="subtitle">❌ Spigot</p> Spigot timings have limited information. Switch to <a href="https://purpurmc.org" style="text-decoration: underline;">Purpur</a> for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.')
 		}
-		if (!arg.startsWith('https://timin') || !arg.includes('?id=')) {
+		if (!link.startsWith('https://timin') || !link.includes('?id=')) {
       return showError('<p class="subtitle">⚠️ Not a valid URL</p> This is not a timings link.')
     }
     const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
-    window.location.href = `/timings-results/${code}`;
+    window.location.href = `/timings-result/${code}`;
   }
 </script>
 

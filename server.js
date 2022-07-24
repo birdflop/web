@@ -5,6 +5,8 @@ const express = require('express');
 const config = require('./config');
 const GIFEncoder = require('gifencoder');
 const bodyParser = require("body-parser");
+const analyzeTimings = require('./analyze/functions/analyzeTimings');
+const analyzeProfile = require('./analyze/functions/analyzeProfile');
 const { existsSync } = require('fs');
 const app = express();
 
@@ -50,6 +52,23 @@ app.get('/:page', (req, res) => {
     renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset,
         error: null,
+    });
+});
+
+app.get('/timings-result/:id', async (req, res) => {
+    const fields = await analyzeTimings(req.params.id);
+    renderTemplate(res, req, `timings-result.ejs`, {
+        error: null,
+        fields,
+    });
+});
+
+app.get('/profile-result/:id', async (req, res) => {
+    const fields = await analyzeProfile(req.params.id);
+    console.log(fields);
+    renderTemplate(res, req, `profile-result.ejs`, {
+        error: null,
+        fields,
     });
 });
 

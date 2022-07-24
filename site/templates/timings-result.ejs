@@ -1,0 +1,39 @@
+<%- include("partials/header", { path, title: "Animated Texture Creator" }) %>
+
+<section class="hero is-dark is-fullheight-with-navbar">
+  <div class="hero-body">
+    <div class="container is-fluid">
+      <p class="title">
+        Paper Timings Analysis
+      </p>
+      <p class="subtitle">
+        These are not magic values. Many of these settings have real consequences on your server's mechanics.<br>
+        See this guide for detailed information on the functionality of each setting.
+      </p>
+
+      <div id="imgs" style="display: flex; flex-wrap: wrap;">
+        <% fields.forEach(field => { %>
+          <div class="tile is-parent" style="min-width: 512px;">
+            <article class="tile is-child notification is-black">
+              <p class="title"><%= field.name %></p>
+              <p><%- field.value %></p>
+              <% if (field.buttons) { %>
+                <br>
+                <% field.buttons.forEach(button => { %>
+                  <a class="button is-dark" href="<%= button.url %>"><%= button.text %></a>
+                <% }) %>
+              <% } %>
+            </article>
+          </div>
+        <% }) %>
+      </div>
+
+      <br>
+      <p>
+        Powered by <a href="https://github.com/Pemigrade/botflop" style="text-decoration: underline;">botflop</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

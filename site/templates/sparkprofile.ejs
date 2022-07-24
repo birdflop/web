@@ -23,8 +23,8 @@
       <br><br>
       <div id="error" class="notification is-danger" style="display: none;"></div>
       <p>
-        You can also copy the code into the link<br>
-        <span style="color: darkgray">e.g. https://simplymc.art/profile-results/010CZJBz2E</span><br>
+        You can also copy the code into a link<br>
+        <span style="color: darkgray">e.g. https://simplymc.art/profile-result/010CZJBz2E</span><br>
         Powered by <a href="https://github.com/Pemigrade/botflop" style="text-decoration: underline;">botflop</a>
       </p>
     </div>
@@ -48,7 +48,7 @@
       return showError('<p class="subtitle">⚠️ Not a valid URL</p> This is not a spark link.')
 		}
     const code = link.replace('https://spark.lucko.me/', '');
-    window.location.href = `/profile-results/${code}`;
+    window.location.href = `/profile-result/${code}`;
   }
 </script>
 
