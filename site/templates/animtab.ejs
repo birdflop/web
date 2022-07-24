@@ -1,4 +1,4 @@
-<%- include("partials/header", { queryPreset, path, title: "Animated TAB"}) %>
+<%- include("partials/header", { queryPreset, path, title: "Animated TAB" }) %>
   <link rel="stylesheet" href="/css/RGBStyle.css">
 
   <div id="hexColorTemplate" style="display:none;">
@@ -13,15 +13,13 @@
   <section class="hero is-dark is-fullheight-with-navbar">
     <div class="hero-body">
       <div class="container">
-        <div class="container">
-          <p class="title" id="title">
-            Animated TAB
-          </p>
-          <p class="subtitle">
-            TAB plugin gradient animations
-          </p>
-        </div>
-        <br><br>
+        <p class="title" id="title">
+          Animated TAB
+        </p>
+        <p class="subtitle">
+          TAB plugin gradient animations
+        </p>
+        <br>
         <div class="tile is-ancestor">
           <div class="tile is-parent">
             <div class="tile is-child">
@@ -45,7 +43,7 @@
           <div class="tile is-parent">
             <div class="tile is-child">
               <label for='numOfColors'>Number of Colors</label>
-              <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2" oninput="toggleColors(this.value); updateOutputText(event);"></input>
+              <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2" oninput="toggleColors(this.value); updateOutputText(event);">
               <div id="hexColors" class="content"></div>
             </div>
           </div>
@@ -53,7 +51,7 @@
             <div class="tile is-child">
               <div class="content">
                 <label for='animationText'>Animation Text</label>
-                <input id="animationText" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);"></input>
+                <input id="animationText" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);">
                 <label for="animationType">Animation Type</label>
                 <div class="select" style="width:100%">
                   <select style="width:100%" id="animationType" onchange="updateOutputText(event);">
@@ -64,10 +62,10 @@
                   </select>
                 </div>
                 <label for='animation-speed'>Animation Speed</label>
-                <input type="number" id="animation-speed" class="input" type="text" min="50" max="9999" step="50" value="50" oninput="updateOutputText(event);"></input>  
+                <input type="number" id="animation-speed" class="input" type="text" min="50" max="9999" step="50" value="50" oninput="updateOutputText(event);">  
                 <div class="hidden" id="customFormatWrapper">
                   <label for='customFormat'>Input Text</label>
-                  <input id="customFormat" class="input" type="text" oninput="updateOutputText(event);"></input>
+                  <input id="customFormat" class="input" type="text" oninput="updateOutputText(event);">
                   <p>Placeholders:</p>
                   <ul>
                     <li>$1 - First RR hex</li>
@@ -90,7 +88,7 @@
                 </button>
                 <div id="importInput" style="display: none;">
                   <label for='import'>Paste Here</label>
-                  <input id="import" name="ImportInput" class="input" type="text" onchange="javascript: importPreset(this.value)"></input>  
+                  <input id="import" name="ImportInput" class="input" type="text" onchange="javascript: importPreset(this.value)">  
                 </div>
                 <br><br>
                 <div id="formatSelector">

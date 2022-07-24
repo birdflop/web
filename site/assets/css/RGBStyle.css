@@ -19,6 +19,7 @@
   white-space: pre-wrap;
   cursor: pointer;
   font-family: MinecraftRegular;
+  width: 100px;
 }
 
 #animation, #coloredNick {

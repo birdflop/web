@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title><%= title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="SimplyMC" property="og:title" />
   <meta content="Minecraft multitool for everyone" property="og:description" />
   <meta content="https://www.simplymc.art/" property="og:url" />
-  <meta content="https://www.simplemc.art/images/emc.png" property="og:image" />
+  <meta content="https://www.simplymc.art/images/emc.png" property="og:image" />
   <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
   <link rel="shortcut icon" href="/images/emc.png" type="image/x-icon">
-  <title><%= title %></title>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/bulma-prefers-dark">
   <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel="preload" href="/fonts/MinecraftRegular.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="/fonts/MinecraftBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="/fonts/MinecraftItalic.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="/fonts/MinecraftBoldItalic.otf" as="font" type="font/otf" crossorigin>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="has-navbar-fixed-top">
@@ -46,6 +50,19 @@
         <a class="navbar-item" href="/AnimTexture">
           Animated Texture
         </a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Analysis
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="/SparkProfile">
+              Spark Profile
+            </a>
+            <a class="navbar-item" href="/PaperTimings">
+              Paper Timings
+            </a>
+          </div>
+        </div>
         <a class="navbar-item">
           More Coming Soon
         </a>
