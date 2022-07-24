@@ -3,7 +3,11 @@ const animationText = document.getElementById('animationText');
 const animationTypes = document.getElementById('animationType');
 const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed');
-const savedColors = ['00FFE0', 'EB00FF', getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
+const boldElement = document.getElementById('bold');
+const italicElement = document.getElementById('italics');
+const underlineElement = document.getElementById('underline');
+const strikeElement = document.getElementById('strike');
+const savedColors = [];
 const formats = {
   0: {
     outputPrefix: '',
@@ -13,6 +17,61 @@ const formats = {
 };
 let updatespeed;
 let inputDelay;
+
+let activeColors = 2;
+
+function loadCookies() {
+  // Apply cookies if set
+  if(!jQuery.isEmptyObject(Cookies.get())){
+    for(let i = 1; i <= 10; i++){
+      let value = Cookies.get(`color-${i}`);
+      if(value){
+        savedColors.push(value);
+      }else{
+        savedColors.push(getRandomHexColor());
+      }
+    }
+
+    const colors = Cookies.get('activeColors');
+    if (colors) {
+      activeColors = colors;
+      numOfColors.value = colors;
+    }
+
+    const text = Cookies.get('text');
+    if (text){
+      animationText.value = text;
+    }
+
+    const animationSpeed = Cookies.get('animationSpeed');
+    if (animationSpeed)
+      speed.value = animationSpeed;
+
+    if (Cookies.get('bold') === 'true') boldElement.checked = true;
+    if (Cookies.get('italics') === 'true') italicElement.checked = true;
+    if (Cookies.get('underline') === 'true') underlineElement.checked = true;
+    if (Cookies.get('strike') === 'true') strikeElement.checked = true; 
+  } else {
+    // Otherwise randomize them instead
+    savedColors.push('00FFE0');
+    savedColors.push('EB00FF');
+    for (let i = 0; i < 8; i++)
+      savedColors.push(getRandomHexColor());
+    updateCookies();
+  }
+}
+
+function updateCookies() {
+  for (let i = 1; i <= savedColors.length; i++) 
+    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/AnimTab' });
+  Cookies.set('activeColors', activeColors, { expires: 7, path: '/AnimTab' });
+  Cookies.set('text', animationText.value, { expires: 7, path: '/AnimTab' });
+  Cookies.set('animationSpeed', speed.value, { expires: 7, path: '/AnimTab' });
+  Cookies.set('bold', boldElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('italics', italicElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/AnimTab' });
+  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/AnimTab' });
+}
 
 function showError() {
   if (speed.value % 50 != 0) {
@@ -89,16 +148,18 @@ class TwoStopGradient {
 }
 
 function updateOutputText() {
+  console.log('Updating output text');
+  updateCookies();
   const format = formats[0];
   let newNick = animationText.value;
   if (!newNick) {
     newNick = 'Type something!';
   }
 
-  const bold = document.getElementById('bold').checked;
-  const italic = document.getElementById('italics').checked;
-  const underline = document.getElementById('underline').checked;
-  const strike = document.getElementById('strike').checked;
+  const bold = boldElement.checked;
+  const italic = italicElement.checked;
+  const underline = underlineElement.checked;
+  const strike = strikeElement.checked;
 
   const outputText = document.getElementById('outputText');
   const outputArray = [];
@@ -287,28 +348,28 @@ function updateOutputText() {
 
 function displayColoredName(nickName, colors) {
   animation.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
-  if (document.getElementById('bold').checked) {
-    if (document.getElementById('italics').checked) {
+  if (boldElement.checked) {
+    if (italicElement.checked) {
       animation.classList.add('minecraftibold');
     }
  else {
       animation.classList.add('minecraftbold');
     }
   }
- else if (document.getElementById('italics').checked) {
+ else if (italicElement.checked) {
     animation.classList.add('minecraftitalic');
   }
   animation.innerHTML = '';
   let colorIndex = 0;
   for (let i = 0; i < nickName.length; i++) {
     const animationSpan = document.createElement('span');
-    if (document.getElementById('underline').checked) {
-      if (document.getElementById('strike').checked) {
+    if (underlineElement.checked) {
+      if (strikeElement.checked) {
         animationSpan.classList.add('minecraftustrike');
       }
  else {animationSpan.classList.add('minecraftunderline');}
     }
- else if (document.getElementById('strike').checked) {
+ else if (strikeElement.checked) {
       animationSpan.classList.add('minecraftstrike');
     }
 
@@ -323,10 +384,10 @@ function displayColoredName(nickName, colors) {
 function exportPreset() {
   const hexColors = $('#hexColors').find('.hexColor');
   const colors = [];
-  const bold = document.getElementById('bold').checked;
-  const italic = document.getElementById('italics').checked;
-  const underline = document.getElementById('underline').checked;
-  const strike = document.getElementById('strike').checked;
+  const bold = boldElement.checked;
+  const italic = italicElement.checked;
+  const underline = underlineElement.checked;
+  const strike = strikeElement.checked;
   const formats = [bold, italic, underline, strike];
   hexColors.each((index, element) => {
     const value = $(element).val();
@@ -345,10 +406,10 @@ function importPreset(p) {
   speed.value = preset[2];
   animationTypes.value = preset[3];
   const formats = decompress(preset[4], 4);
-  document.getElementById('bold').checked = formats[0];
-  document.getElementById('italics').checked = formats[1];
-  document.getElementById('underline').checked = formats[2];
-  document.getElementById('strike').checked = formats[3];
+  boldElement.checked = formats[0];
+  italicElement.checked = formats[1];
+  underlineElement.checked = formats[2];
+  strikeElement.checked = formats[3];
 
   const container = $('#hexColors');
   container.empty();
@@ -369,5 +430,7 @@ function importPreset(p) {
     }
 }
 
-toggleColors(2);
+loadCookies();
+
+toggleColors(activeColors);
 updateOutputText();
