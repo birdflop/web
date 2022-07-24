@@ -5,10 +5,6 @@ const createField = require('./createField.js');
 const evalField = require('./evalField.js');
 const Pbf = require('pbf');
 const { SamplerData } = require('../config/profile/protos');
-function componentToHex(c) {
-	const hex = c.toString(16);
-	return hex.length == 1 ? '0' + hex : hex;
-}
 
 // Function to parse the data payload from a request given the schema type
 function parse(buf, schema) {
