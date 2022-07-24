@@ -131,4 +131,5 @@ function toggleColors(colors) {
     // Refresh all jscolor elements
     jscolor.install();
   }
+  activeColors = colors;
 }
