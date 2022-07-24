@@ -22,7 +22,7 @@
   <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="/images/icon.png">
+        <img src="/images/full.png">
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplymc-navbar">
@@ -39,30 +39,30 @@
             Gradients
           </a>
           <div class="navbar-dropdown">
-            <a class="navbar-item" href="/Gradients">
+            <a class="navbar-item <% if (title == 'Hex Gradients Creator') { %> is-active <% } %>" href="/Gradients">
               Hex Gradients
             </a>
-            <a class="navbar-item" href="/AnimTab">
+            <a class="navbar-item <% if (title == 'Animated TAB Creator') { %> is-active <% } %>" href="/AnimTab">
               Animated TAB
             </a>
           </div>
         </div>
-        <a class="navbar-item" href="/AnimTexture">
-          Animated Texture
-        </a>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Analysis
           </a>
           <div class="navbar-dropdown">
-            <a class="navbar-item" href="/SparkProfile">
+            <a class="navbar-item <% if (title == 'Analyze Spark Profile') { %> is-active <% } %>" href="/SparkProfile">
               Spark Profile
             </a>
-            <a class="navbar-item" href="/PaperTimings">
+            <a class="navbar-item <% if (title == 'Analyze Timings') { %> is-active <% } %>" href="/PaperTimings">
               Paper Timings
             </a>
           </div>
         </div>
+        <a class="navbar-item <% if (title == 'Animated Texture Creator') { %> is-active <% } %>" href="/AnimTexture">
+          Animated Textures
+        </a>
         <a class="navbar-item">
           More Coming Soon
         </a>
