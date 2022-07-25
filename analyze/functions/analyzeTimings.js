@@ -25,19 +25,24 @@ module.exports = async function analyzeTimings(timings_id) {
 
 	if (version.endsWith('(MC: 1.17)')) version = version.replace('(MC: 1.17)', '(MC: 1.17.0)');
 
+	let server_properties, bukkit, spigot, paper, pufferfish, purpur;
+
 	const plugins = Object.keys(request.timingsMaster.plugins).map(i => { return request.timingsMaster.plugins[i]; });
-	const server_properties = request.timingsMaster.config ? request.timingsMaster.config['server.properties'] : null;
-	const bukkit = request.timingsMaster.config ? request.timingsMaster.config.bukkit : null;
-	const spigot = request.timingsMaster.config ? request.timingsMaster.config.spigot : null;
-	const paper = request.timingsMaster.config ? (request.timingsMaster.config.paper ?? request.timingsMaster.config.paperspigot) : null;
-	const pufferfish = request.timingsMaster.config ? request.timingsMaster.config.pufferfish : null;
-	const purpur = request.timingsMaster.config ? request.timingsMaster.config.purpur : null;
+	const configs = request.timingsMaster.config;
+	if (configs) {
+		if (configs['server.properties']) server_properties = configs['server.properties'];
+		if (configs['bukkit']) bukkit = configs['bukkit'];
+		if (configs['spigot']) spigot = configs['spigot'];
+		if (configs['paper'] || configs['paperspigot']) paper = configs['paper'] ?? configs['paperspigot'];
+		if (configs['pufferfish']) pufferfish = configs['pufferfish'];
+		if (configs['purpur']) purpur = configs['purpur'];
+	}
 
 	const TIMINGS_CHECK = {
 		servers: await YAML.parse(fs.readFileSync('./analyze/config/servers.yml', 'utf8')),
 		plugins: {
-			paper: await YAML.parse(fs.readFileSync('./analyze/config/timings/plugins/paper.yml', 'utf8')),
-			purpur: await YAML.parse(fs.readFileSync('./analyze/config/timings/plugins/purpur.yml', 'utf8')),
+			paper: await YAML.parse(fs.readFileSync('./analyze/config/plugins/paper.yml', 'utf8')),
+			purpur: await YAML.parse(fs.readFileSync('./analyze/config/plugins/purpur.yml', 'utf8')),
 		},
 		config: {
 			'server.properties': await YAML.parse(fs.readFileSync('./analyze/config/server.properties.yml', 'utf8')),
