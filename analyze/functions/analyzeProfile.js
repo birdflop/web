@@ -38,6 +38,7 @@ module.exports = async function analyzeProfile(id) {
 
 	let server_properties, bukkit, spigot, paper, purpur;
 
+	const plugins = Object.values(sampler.classSources);
 	const configs = sampler.metadata.serverConfigurations;
 	if (configs) {
 		if (configs['server.properties']) server_properties = JSON.parse(configs['server.properties']);
@@ -49,16 +50,15 @@ module.exports = async function analyzeProfile(id) {
 
 	const PROFILE_CHECK = {
 		servers: await YAML.parse(fs.readFileSync('./analyze/config/servers.yml', 'utf8')),
-		// No way to get plugins from spark
-		// plugins: {
-		// 	paper: await YAML.parse(fs.readFileSync('./analysis_config/timings/plugins/paper.yml', 'utf8')),
-		// 	purpur: await YAML.parse(fs.readFileSync('./analysis_config/timings/plugins/purpur.yml', 'utf8')),
-		// },
+		plugins: {
+			paper: await YAML.parse(fs.readFileSync('./analyze/config/plugins/paper.yml', 'utf8')),
+			purpur: await YAML.parse(fs.readFileSync('./analyze/config/plugins/purpur.yml', 'utf8')),
+		},
 		config: {
 			'server.properties': await YAML.parse(fs.readFileSync('./analyze/config/server.properties.yml', 'utf8')),
 			bukkit: await YAML.parse(fs.readFileSync('./analyze/config/bukkit.yml', 'utf8')),
 			spigot: await YAML.parse(fs.readFileSync('./analyze/config/spigot.yml', 'utf8')),
-			paper: await YAML.parse(fs.readFileSync('./analyze/config/profile/config/paper.yml', 'utf8')),
+			paper: await YAML.parse(fs.readFileSync('./analyze/config/profile/paper.yml', 'utf8')),
 			purpur: await YAML.parse(fs.readFileSync('./analyze/config/purpur.yml', 'utf8')),
 		},
 	};
@@ -151,40 +151,38 @@ module.exports = async function analyzeProfile(id) {
 	// 	}
 	// });
 
-	// No way to get plugins from spark
-	// if (TIMINGS_CHECK.plugins) {
-	// 	Object.keys(TIMINGS_CHECK.plugins).forEach(server_name => {
-	//		if (Object.keys(request.timingsMaster.config).includes(server_name)) {
-	// 			plugins.forEach(plugin => {
-	// 				Object.keys(TIMINGS_CHECK.plugins[server_name]).forEach(plugin_name => {
-	// 					if (plugin.name == plugin_name) {
-	// 						const stored_plugin = TIMINGS_CHECK.plugins[server_name][plugin_name];
-	// 						stored_plugin.name = plugin_name;
-	//						fields.push(createField(stored_plugin));
-	// 					}
-	// 				});
-	// 			});
-	//		}
-	// 	});
-	// }
+	if (PROFILE_CHECK.plugins) {
+		Object.keys(PROFILE_CHECK.plugins).forEach(server_name => {
+			if (Object.keys(configs).includes(server_name)) {
+				plugins.forEach(plugin => {
+					Object.keys(PROFILE_CHECK.plugins[server_name]).forEach(plugin_name => {
+						if (plugin.name == plugin_name) {
+							const stored_plugin = PROFILE_CHECK.plugins[server_name][plugin_name];
+							stored_plugin.name = plugin_name;
+							fields.push(createField(stored_plugin));
+						}
+					});
+				});
+			}
+		});
+	}
 
 	if (PROFILE_CHECK.config) {
 		Object.keys(PROFILE_CHECK.config).map(i => { return PROFILE_CHECK.config[i]; }).forEach(config => {
 			Object.keys(config).forEach(option_name => {
 				const option = config[option_name];
-				evalField(fields, option, option_name, null, server_properties, bukkit, spigot, paper, null, purpur);
+				evalField(fields, option, option_name, plugins, server_properties, bukkit, spigot, paper, null, purpur);
 			});
 		});
 	}
 
-	// No way to get plugins from spark
-	// plugins.forEach(plugin => {
-	// 	if (plugin.authors && plugin.authors.toLowerCase().includes('songoda')) {
-	// 		if (plugin.name == 'EpicHeads') fields.push({ name: '❌ EpicHeads', value: 'This plugin was made by Songoda. Songoda is sketchy. You should find an alternative such as [HeadsPlus](https://spigotmc.org/resources/headsplus-»-1-8-1-16-4.40265/) or [HeadDatabase](https://www.spigotmc.org/resources/head-database.14280/).' });
-	// 		else if (plugin.name == 'UltimateStacker') fields.push({ name: '❌ UltimateStacker', value: 'Stacking plugins actually causes more lag.\nRemove UltimateStacker.' });
-	// 		else fields.push({ name: `❌ ${plugin.name}`, value: 'This plugin was made by Songoda. Songoda is sketchy. You should find an alternative.' });
-	// 	}
-	// });
+	plugins.forEach(plugin => {
+		if (plugin.authors && plugin.authors.toLowerCase().includes('songoda')) {
+			if (plugin.name == 'EpicHeads') fields.push({ name: '❌ EpicHeads', value: 'This plugin was made by Songoda. Songoda is sketchy. You should find an alternative such as [HeadsPlus](https://spigotmc.org/resources/headsplus-»-1-8-1-16-4.40265/) or [HeadDatabase](https://www.spigotmc.org/resources/head-database.14280/).', inline: true });
+			else if (plugin.name == 'UltimateStacker') fields.push({ name: '❌ UltimateStacker', value: 'Stacking plugins actually causes more lag.\nRemove UltimateStacker.', inline: true });
+			else fields.push({ name: `❌ ${plugin.name}`, value: 'This plugin was made by Songoda. Songoda is sketchy. You should find an alternative.', inline: true });
+		}
+	});
 
 	// No way to get gamerules from spark
 	// const worlds = sampler.metadata.platformStatistics.world.worlds;
