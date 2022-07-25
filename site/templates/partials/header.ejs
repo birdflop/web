@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title><%= title %></title>
+  <title>SimplyMC: <%= title %></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="SimplyMC: <%= title %>" property="og:title" />
   <meta content="<%= description %>" property="og:description" />
@@ -53,10 +53,10 @@
             Analysis
           </a>
           <div class="navbar-dropdown">
-            <a class="navbar-item <% if (title == 'Analyze Spark Profile') { %> is-active <% } %>" href="/SparkProfile">
+            <a class="navbar-item <% if (title == 'Analyze Spark Profile' || title == 'Profile Analysis Result') { %> is-active <% } %>" href="/SparkProfile">
               Spark Profile
             </a>
-            <a class="navbar-item <% if (title == 'Analyze Timings') { %> is-active <% } %>" href="/PaperTimings">
+            <a class="navbar-item <% if (title == 'Analyze Timings' || title == 'Timings Analysis Result') { %> is-active <% } %>" href="/PaperTimings">
               Paper Timings
             </a>
           </div>

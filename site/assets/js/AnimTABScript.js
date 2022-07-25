@@ -3,10 +3,7 @@ const animationText = document.getElementById('animationText');
 const animationTypes = document.getElementById('animationType');
 const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed');
-const boldElement = document.getElementById('bold');
-const italicElement = document.getElementById('italics');
-const underlineElement = document.getElementById('underline');
-const strikeElement = document.getElementById('strike');
+
 const savedColors = [];
 const formats = {
   0: {
@@ -22,14 +19,11 @@ let activeColors = 2;
 
 function loadCookies() {
   // Apply cookies if set
-  if(!jQuery.isEmptyObject(Cookies.get())){
-    for(let i = 1; i <= 10; i++){
-      let value = Cookies.get(`color-${i}`);
-      if(value){
-        savedColors.push(value);
-      }else{
-        savedColors.push(getRandomHexColor());
-      }
+  if (!jQuery.isEmptyObject(Cookies.get())) {
+    for (let i = 1; i <= 10; i++) {
+      const value = Cookies.get(`color-${i}`);
+      if (value) savedColors.push(value);
+      else savedColors.push(getRandomHexColor());
     }
 
     const colors = Cookies.get('activeColors');
@@ -39,31 +33,27 @@ function loadCookies() {
     }
 
     const text = Cookies.get('text');
-    if (text){
-      animationText.value = text;
-    }
+    if (text) animationText.value = text;
 
     const animationSpeed = Cookies.get('animationSpeed');
-    if (animationSpeed)
-      speed.value = animationSpeed;
+    if (animationSpeed) speed.value = animationSpeed;
 
     if (Cookies.get('bold') === 'true') boldElement.checked = true;
     if (Cookies.get('italics') === 'true') italicElement.checked = true;
     if (Cookies.get('underline') === 'true') underlineElement.checked = true;
-    if (Cookies.get('strike') === 'true') strikeElement.checked = true; 
-  } else {
+    if (Cookies.get('strike') === 'true') strikeElement.checked = true;
+  }
+  else {
     // Otherwise randomize them instead
     savedColors.push('00FFE0');
     savedColors.push('EB00FF');
-    for (let i = 0; i < 8; i++)
-      savedColors.push(getRandomHexColor());
+    for (let i = 0; i < 8; i++) savedColors.push(getRandomHexColor());
     updateCookies();
   }
 }
 
 function updateCookies() {
-  for (let i = 1; i <= savedColors.length; i++) 
-    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/AnimTab' });
+  for (let i = 1; i <= savedColors.length; i++) Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/AnimTab' });
   Cookies.set('activeColors', activeColors, { expires: 7, path: '/AnimTab' });
   Cookies.set('text', animationText.value, { expires: 7, path: '/AnimTab' });
   Cookies.set('animationSpeed', speed.value, { expires: 7, path: '/AnimTab' });
@@ -73,77 +63,10 @@ function updateCookies() {
   Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/AnimTab' });
 }
 
-function showError() {
-  if (speed.value % 50 != 0) {
-    document.getElementById('error').style.display = 'block';
-  }
- else {
-    document.getElementById('error').style.display = 'none';
-  }
-}
-
-/**
- * JavaScript implementation of HexUtils Gradients from RoseGarden.
- * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
- */
-class Gradient {
-  constructor(colors, numSteps) {
-    this.colors = colors;
-    this.gradients = [];
-    this.steps = numSteps - 1;
-    this.step = 0;
-
-    const increment = this.steps / (colors.length - 1);
-    for (let i = 0; i < colors.length - 1; i++) {this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));}
-  }
-
-  /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
-  next() {
-    if (this.steps <= 1) {return this.colors[0];}
-
-    const adjustedStep = Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
-    let color;
-    if (this.gradients.length < 2) {
-      color = this.gradients[0].colorAt(adjustedStep);
-    }
- else {
-      const segment = this.steps / this.gradients.length;
-      const index = Math.min(Math.floor(adjustedStep / segment), this.gradients.length - 1);
-      color = this.gradients[index].colorAt(adjustedStep);
-    }
-
-    this.step++;
-    return color;
-  }
-}
-
 class AnimatedGradient extends Gradient {
   constructor(colors, numSteps, offset) {
     super(colors, numSteps);
     this.step = offset;
-  }
-}
-
-class TwoStopGradient {
-  constructor(startColor, endColor, lowerRange, upperRange) {
-    this.startColor = startColor;
-    this.endColor = endColor;
-    this.lowerRange = lowerRange;
-    this.upperRange = upperRange;
-  }
-
-  colorAt(step) {
-    return [
-      this.calculateHexPiece(step, this.startColor[0], this.endColor[0]),
-      this.calculateHexPiece(step, this.startColor[1], this.endColor[1]),
-      this.calculateHexPiece(step, this.startColor[2], this.endColor[2]),
-    ];
-  }
-
-  calculateHexPiece(step, channelStart, channelEnd) {
-    const range = this.upperRange - this.lowerRange;
-    const interval = (channelEnd - channelStart) / range;
-    return Math.round(interval * (step - this.lowerRange) + channelStart);
   }
 }
 
@@ -318,45 +241,41 @@ function updateOutputText() {
   updatespeed = setInterval(() => {
     const colors = [];
     let colors2 = [];
-    if(animationTypes.value == '0') {
+    if (animationTypes.value == '0') {
       const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
       for (let i = 0; i < newNick.length * 2; i++) {
-        if (newNick.charAt(i) != ' ') {colors.push(convertToHex(gradient.next()));}
+        if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
       }
       displayColoredName(newNick, colors.reverse());
     }
- else if (animationTypes.value == '1') {
+    else if (animationTypes.value == '1') {
       const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
       for (let i = 0; i < newNick.length * 2; i++) {
-        if (newNick.charAt(i) != ' ') {colors.push(convertToHex(gradient.next()));}
+        if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
       }
       displayColoredName(newNick, colors);
     }
- else if (animationTypes.value == '2') {
+    else if (animationTypes.value == '2') {
       const gradient = new AnimatedGradient(getColors(), newNick.length, step++);
       for (let i = 0; i < newNick.length * 2; i++) {
-        if (newNick.charAt(i) != ' ') {colors.push(convertToHex(gradient.next()));}
-          colors2.push(convertToHex(gradient.next()));
+        if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
+        colors2.push(convertToHex(gradient.next()));
       }
       colors2 = colors.concat(colors.reverse());
       displayColoredName("Preview Broken fixing soon", colors2);
       console.log(colors2);
     }
   }, clampedSpeed);
-  showError();
+  showError(speed.value % 50 != 0);
 }
 
 function displayColoredName(nickName, colors) {
   animation.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
   if (boldElement.checked) {
-    if (italicElement.checked) {
-      animation.classList.add('minecraftibold');
-    }
- else {
-      animation.classList.add('minecraftbold');
-    }
+    if (italicElement.checked) animation.classList.add('minecraftibold');
+    else animation.classList.add('minecraftbold');
   }
- else if (italicElement.checked) {
+  else if (italicElement.checked) {
     animation.classList.add('minecraftitalic');
   }
   animation.innerHTML = '';
@@ -364,12 +283,10 @@ function displayColoredName(nickName, colors) {
   for (let i = 0; i < nickName.length; i++) {
     const animationSpan = document.createElement('span');
     if (underlineElement.checked) {
-      if (strikeElement.checked) {
-        animationSpan.classList.add('minecraftustrike');
-      }
- else {animationSpan.classList.add('minecraftunderline');}
+      if (strikeElement.checked) animationSpan.classList.add('minecraftustrike');
+      else animationSpan.classList.add('minecraftunderline');
     }
- else if (strikeElement.checked) {
+    else if (strikeElement.checked) {
       animationSpan.classList.add('minecraftstrike');
     }
 
@@ -425,7 +342,7 @@ function importPreset(p) {
     try {
       updateOutputText();
     }
- catch (error) {
+    catch (error) {
       alert("Invalid Preset");
     }
 }

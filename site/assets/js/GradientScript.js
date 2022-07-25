@@ -3,11 +3,6 @@ const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const outputText = document.getElementById('outputText');
 
-const boldElement = document.getElementById('bold');
-const italicElement = document.getElementById('italics');
-const underlineElement = document.getElementById('underline');
-const strikeElement = document.getElementById('strike');
-
 const savedColors = [];
 const toggled = false;
 const presets = {
@@ -99,14 +94,11 @@ let activeColors = 2;
 
 function loadCookies() {
   // Apply cookies if set
-  if(!jQuery.isEmptyObject(Cookies.get())){
-    for(let i = 1; i <= 10; i++){
-      let value = Cookies.get(`color-${i}`);
-      if(value){
-        savedColors.push(value);
-      }else{
-        savedColors.push(getRandomHexColor());
-      }
+  if (!jQuery.isEmptyObject(Cookies.get())) {
+    for (let i = 1; i <= 10; i++) {
+      const value = Cookies.get(`color-${i}`);
+      if (value) savedColors.push(value);
+      else savedColors.push(getRandomHexColor());
     }
 
     const colors = Cookies.get('activeColors');
@@ -116,104 +108,30 @@ function loadCookies() {
     }
 
     const nickname = Cookies.get('nickname');
-    if (nickname)
-      nickName.value = nickname;
+    if (nickname) nickName.value = nickname;
 
     if (Cookies.get('bold') === 'true') boldElement.checked = true;
     if (Cookies.get('italics') === 'true') italicElement.checked = true;
     if (Cookies.get('underline') === 'true') underlineElement.checked = true;
-    if (Cookies.get('strike') === 'true') strikeElement.checked = true; 
-  } else {
+    if (Cookies.get('strike') === 'true') strikeElement.checked = true;
+  }
+  else {
     // Otherwise randomize them instead
     savedColors.push('00FFE0');
     savedColors.push('EB00FF');
-    for (let i = 0; i < 8; i++)
-      savedColors.push(getRandomHexColor());
+    for (let i = 0; i < 8; i++) savedColors.push(getRandomHexColor());
     updateCookies();
   }
 }
 
 function updateCookies() {
-  for (let i = 1; i <= savedColors.length; i++) 
-    Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/Gradients' });
+  for (let i = 1; i <= savedColors.length; i++) Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/Gradients' });
   Cookies.set('activeColors', activeColors, { expires: 7, path: '/Gradients' });
   Cookies.set('nickname', nickName.value, { expires: 7, path: '/Gradients' });
   Cookies.set('bold', boldElement.checked, { expires: 7, path: '/Gradients' });
   Cookies.set('italics', italicElement.checked, { expires: 7, path: '/Gradients' });
   Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/Gradients' });
   Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/Gradients' });
-}
-
-const errorElement = document.getElementById('error');
-function showError(show) {
-  if (show) {
-    errorElement.style.display = 'block';
-    outputText.style.height = '70px';
-    outputText.style.marginBottom = '5px';
-  }
- else {
-    errorElement.style.display = 'none';
-    outputText.style.height = '95px';
-    outputText.style.marginBottom = '10px';
-  }
-}
-
-/**
- * JavaScript implementation of HexUtils Gradients from RoseGarden.
- * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
- */
-class Gradient {
-  constructor(colors, numSteps) {
-    this.colors = colors;
-    this.gradients = [];
-    this.steps = numSteps - 1;
-    this.step = 0;
-
-    const increment = this.steps / (colors.length - 1);
-    for (let i = 0; i < colors.length - 1; i++) {this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));}
-  }
-
-  /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
-  next() {
-    if (this.steps <= 1) {return this.colors[0];}
-
-    const adjustedStep = Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
-    let color;
-    if (this.gradients.length < 2) {
-      color = this.gradients[0].colorAt(adjustedStep);
-    }
- else {
-      const segment = this.steps / this.gradients.length;
-      const index = Math.min(Math.floor(adjustedStep / segment), this.gradients.length - 1);
-      color = this.gradients[index].colorAt(adjustedStep);
-    }
-
-    this.step++;
-    return color;
-  }
-}
-
-class TwoStopGradient {
-  constructor(startColor, endColor, lowerRange, upperRange) {
-    this.startColor = startColor;
-    this.endColor = endColor;
-    this.lowerRange = lowerRange;
-    this.upperRange = upperRange;
-  }
-
-  colorAt(step) {
-    return [
-      this.calculateHexPiece(step, this.startColor[0], this.endColor[0]),
-      this.calculateHexPiece(step, this.startColor[1], this.endColor[1]),
-      this.calculateHexPiece(step, this.startColor[2], this.endColor[2]),
-    ];
-  }
-
-  calculateHexPiece(step, channelStart, channelEnd) {
-    const range = this.upperRange - this.lowerRange;
-    const interval = (channelEnd - channelStart) / range;
-    return Math.round(interval * (step - this.lowerRange) + channelStart);
-  }
 }
 
 const outputFormat = document.getElementById('output-format');
@@ -223,12 +141,8 @@ const formatSelector = document.getElementById('formatSelector');
 function updateOutputText(event) {
   const format = formats[outputFormat.value];
 
-  if (format.custom) {
-    customFormatWrapper.classList.remove('hidden');
-  }
- else {
-    customFormatWrapper.classList.add('hidden');
-  }
+  if (format.custom) customFormatWrapper.classList.remove('hidden');
+  else customFormatWrapper.classList.add('hidden');
 
   if (format.outputPrefix) {
     nickName.value = nickName.value.replace(/ /g, '');
@@ -240,15 +154,13 @@ function updateOutputText(event) {
   }
 
   let newNick = nickName.value;
-  if (!newNick) {
-    newNick = 'Type something!';
-  }
+  if (!newNick) newNick = 'Type something!';
 
   const bold = boldElement.checked;
   const italic = italicElement.checked;
   const underline = underlineElement.checked;
   const strike = strikeElement.checked;
-  updateCookies()
+  updateCookies();
   const gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
   const charColors = [];
   let output = format.outputPrefix || "";
@@ -263,7 +175,7 @@ function updateOutputText(event) {
     const hex = convertToHex(gradient.next());
     charColors.push(hex);
     let hexOutput = format.custom ? customFormat.value : format.template;
-    for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
+    for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
     let formatCodes = '';
     if (format.formatChar) {
       formatSelector.classList.remove('hidden');
@@ -273,13 +185,11 @@ function updateOutputText(event) {
       if (underline) formatCodes += format.formatChar + 'n';
       if (strike) formatCodes += format.formatChar + 'm';
     }
- else {
+    else {
       formatSelector.classList.add('hidden');
     }
 
-    if (!format.custom) {
-      hexOutput = hexOutput.replace('$f', formatCodes);
-    }
+    if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
 
     hexOutput = hexOutput.replace('$c', char);
     output += hexOutput;
@@ -295,14 +205,10 @@ function displayColoredName(nickName, colors, format) {
 
   if (format) {
     if (boldElement.checked) {
-      if (italicElement.checked) {
-        coloredNick.classList.add('minecraftibold');
-      }
- else {
-        coloredNick.classList.add('minecraftbold');
-      }
+      if (italicElement.checked) coloredNick.classList.add('minecraftibold');
+      else coloredNick.classList.add('minecraftbold');
     }
- else if (italicElement.checked) {
+    else if (italicElement.checked) {
       coloredNick.classList.add('minecraftitalic');
     }
   }
@@ -311,12 +217,10 @@ function displayColoredName(nickName, colors, format) {
   for (let i = 0; i < nickName.length; i++) {
     const coloredNickSpan = document.createElement('span');
     if (underlineElement.checked) {
-      if (strikeElement.checked) {
-        coloredNickSpan.classList.add('minecraftustrike');
-      }
- else {coloredNickSpan.classList.add('minecraftunderline');}
+      if (strikeElement.checked) coloredNickSpan.classList.add('minecraftustrike');
+      else coloredNickSpan.classList.add('minecraftunderline');
     }
- else if (strikeElement.checked) {
+    else if (strikeElement.checked) {
       coloredNickSpan.classList.add('minecraftstrike');
     }
     coloredNickSpan.style.color = `#${colors[i]}`;
@@ -381,13 +285,9 @@ function importPreset(p) {
   const selectedOutputFormat = preset[3];
   const selectedCustomFormat = preset[4];
 
-  if (selectedOutputFormat) {
-    outputFormat.value = selectedOutputFormat;
-  }
+  if (selectedOutputFormat) outputFormat.value = selectedOutputFormat;
 
-  if (selectedCustomFormat) {
-    customFormat.value = selectedCustomFormat;
-  }
+  if (selectedCustomFormat) customFormat.value = selectedCustomFormat;
 
   boldElement.checked = formats[0];
   italicElement.checked = formats[1];
@@ -409,7 +309,7 @@ function importPreset(p) {
     try {
       updateOutputText();
     }
- catch (error) {
+    catch (error) {
       alert("Invalid Preset");
     }
 }
