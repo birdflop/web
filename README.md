@@ -14,6 +14,9 @@
 <h2>Contributing</h2>
 If you would like to contribute please make sure your code works as intended and formatted properly.
 <br><br>
+<h2>Forking</h2>
+If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
+<br><br>
 <a href="https://github.com/AkiraDevelopment/SimplyMC/graphs/contributors"><img src="https://contrib.rocks/image?repo=AkiraDevelopment/SimplyMC"></a>
 <br><br>
 <img src="https://estruyf-github.azurewebsites.net/api/VisitorHit?user=oli-idk&repo=SimplyMC&countColor=%237B1E7A"/>
