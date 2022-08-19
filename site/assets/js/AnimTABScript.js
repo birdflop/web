@@ -176,31 +176,6 @@ function updateOutputText() {
       }
 
       output1.push(`  - "${output}"`);
-    }
-    for (let n = 0; n < newNick.length; n++) {
-      const colors = [];
-      const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-      let output = format.outputPrefix;
-      for (let i = 0; i < newNick.length; i++) {
-        const char = newNick.charAt(i);
-        if (char == ' ') {
-          output += char;
-          colors.push(null);
-          continue;
-        }
-
-        const hex = convertToHex(gradient.next());
-        colors.push(hex);
-        let hexOutput = format.color;
-        for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
-        output += hexOutput;
-        if (bold) output += format.char + 'l';
-        if (italic) output += format.char + 'o';
-        if (underline) output += format.char + 'n';
-        if (strike) output += format.char + 'm';
-        output += char;
-      }
-
       output2.push(`  - "${output}"`);
     }
     outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${output1.reverse().concat(output2).join("\n")}`;
