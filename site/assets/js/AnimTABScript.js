@@ -123,10 +123,10 @@ function updateOutputText() {
         let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
         output += hexOutput;
-        if (bold) output += formatChar.char + 'l';
-        if (italic) output += formatChar.char + 'o';
-        if (underline) output += formatChar.char + 'n';
-        if (strike) output += formatChar.char + 'm';
+        if (bold) output += format.formatChar + 'l';
+        if (italic) output += format.formatChar + 'o';
+        if (underline) output += format.formatChar + 'n';
+        if (strike) output += format.formatChar + 'm';
         output += char;
       }
 
