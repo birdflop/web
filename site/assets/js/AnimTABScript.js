@@ -8,8 +8,16 @@ const savedColors = [];
 const formats = {
   0: {
     outputPrefix: '',
-    color: '&#$1$2$3$4$5$6',
-    char: '&',
+    template: '&#$1$2$3$4$5$6',
+    formatChar: '&',
+  },
+  1: {
+    outputPrefix: '',
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&',
+  },
+  2: {
+    custom: true,
   },
 };
 let updatespeed;
@@ -70,10 +78,17 @@ class AnimatedGradient extends Gradient {
   }
 }
 
+const outputFormat = document.getElementById('output-format');
+const customFormatWrapper = document.getElementById('customFormatWrapper');
+const customFormat = document.getElementById('customFormat');
 function updateOutputText() {
   console.log('Updating output text');
   updateCookies();
-  const format = formats[0];
+  const format = formats[outputFormat.value];
+
+  if (format.custom) customFormatWrapper.classList.remove('hidden');
+  else customFormatWrapper.classList.add('hidden');
+
   let newNick = animationText.value;
   if (!newNick) {
     newNick = 'Type something!';
@@ -105,13 +120,13 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.color;
+        let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
         output += hexOutput;
-        if (bold) output += format.char + 'l';
-        if (italic) output += format.char + 'o';
-        if (underline) output += format.char + 'n';
-        if (strike) output += format.char + 'm';
+        if (bold) output += formatChar.char + 'l';
+        if (italic) output += formatChar.char + 'o';
+        if (underline) output += formatChar.char + 'n';
+        if (strike) output += formatChar.char + 'm';
         output += char;
       }
 
@@ -134,13 +149,13 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.color;
+        let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
         output += hexOutput;
-        if (bold) output += format.char + 'l';
-        if (italic) output += format.char + 'o';
-        if (underline) output += format.char + 'n';
-        if (strike) output += format.char + 'm';
+        if (bold) output += format.formatChar + 'l';
+        if (italic) output += format.formatChar + 'o';
+        if (underline) output += format.formatChar + 'n';
+        if (strike) output += format.formatChar + 'm';
         output += char;
       }
 
@@ -165,13 +180,13 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.color;
+        let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
         output += hexOutput;
-        if (bold) output += format.char + 'l';
-        if (italic) output += format.char + 'o';
-        if (underline) output += format.char + 'n';
-        if (strike) output += format.char + 'm';
+        if (bold) output += format.formatChar + 'l';
+        if (italic) output += format.formatChar + 'o';
+        if (underline) output += format.formatChar + 'n';
+        if (strike) output += format.formatChar + 'm';
         output += char;
       }
 
@@ -195,13 +210,13 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.color;
+        let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
         output += hexOutput;
-        if (bold) output += format.char + 'l';
-        if (italic) output += format.char + 'o';
-        if (underline) output += format.char + 'n';
-        if (strike) output += format.char + 'm';
+        if (bold) output += format.formatChar + 'l';
+        if (italic) output += format.formatChar + 'o';
+        if (underline) output += format.formatChar + 'n';
+        if (strike) output += format.formatChar + 'm';
         output += char;
       }
 

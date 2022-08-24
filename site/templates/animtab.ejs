@@ -62,7 +62,15 @@
                   </select>
                 </div>
                 <label for='animation-speed'>Animation Speed</label>
-                <input type="number" id="animation-speed" class="input" type="text" min="50" max="9999" step="50" value="50" oninput="updateOutputText(event);">  
+                <input type="number" id="animation-speed" class="input" type="text" min="50" max="10000" step="50" value="50" oninput="updateOutputText(event);">  
+                <label for='output-format'>Output Format</label><br>
+                <div class="select" style="width:100%">
+                  <select style="width:100%" id="output-format" onchange="updateOutputText(event);">
+                    <option value='0'>&#rrggbb</option>
+                    <option value='1'>&x&r&r&g&g&b&b</option>
+                    <option value='2'>custom</option>
+                  </select>
+                </div>
                 <div class="hidden" id="customFormatWrapper">
                   <label for='customFormat'>Input Text</label>
                   <input id="customFormat" class="input" type="text" oninput="updateOutputText(event);">
