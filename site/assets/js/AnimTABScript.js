@@ -120,16 +120,19 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.template;
+        let hexOutput = format.custom ? customFormat.value : format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
-        output += hexOutput;
-        if (bold) output += format.formatChar + 'l';
-        if (italic) output += format.formatChar + 'o';
-        if (underline) output += format.formatChar + 'n';
-        if (strike) output += format.formatChar + 'm';
-        output += char;
-      }
+        let formatCodes = '';
+        if (bold) formatCodes += format.formatChar + 'l';
+        if (italic) formatCodes += format.formatChar + 'o';
+        if (underline) formatCodes += format.formatChar + 'n';
+        if (strike) formatCodes += format.formatChar + 'm';
 
+        if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
+
+        hexOutput = hexOutput.replace('$c', char);
+        output += hexOutput;
+      }
       outputText.innerText = `  - "${output}"\n${outputText.innerText}`;
     }
     outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputText.innerText}`;

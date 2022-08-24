@@ -5,6 +5,41 @@ const underlineElement = document.getElementById('underline');
 const strikeElement = document.getElementById('strike');
 const errorElement = document.getElementById('error');
 
+const presets = {
+  0: {
+    colors: ["00FFE0", "EB00FF"],
+    text: "SimplyMC",
+  },
+  1: {
+    colors: ["FF0000", "FF7F00", "FFFF00", "00FF00", "0000FF", "4B0082", "9400D3"],
+    text: "Rainbow",
+  },
+  2: {
+    colors: ["1488CC", "2B32B2"],
+    text: "Skyline",
+  },
+  3: {
+    colors: ["FFE259", "FFA751"],
+    text: "Mango",
+  },
+  4: {
+    colors: ["3494E6", "EC6EAD"],
+    text: "Vice City",
+  },
+  5: {
+    colors: ["F3904F", "3B4371"],
+    text: "Dawn",
+  },
+  6: {
+    colors: ["F4C4F3", "FC67FA"],
+    text: "Rose",
+  },
+  7: {
+    colors: ["CB2D3E", "EF473A"],
+    text: "Firewatch",
+  },
+};
+
 function getRandomHexColor() {
     return Math.floor(Math.random() * 16777215).toString(16).toUpperCase();
 }
