@@ -26,7 +26,7 @@
               <p class="title">Output</p>
               <p class="subtitle">This is what you put in animations.yml. Click on it to copy.</p>
               <div class="content">
-                <pre class="textarea" style="white-space: pre-wrap;"id="outputText" placeholder="Output will appear here" onclick="copyTextToClipboard(this.innerText)"></pre>
+                <pre class="textarea" id="outputText" placeholder="Output will appear here" onclick="copyTextToClipboard(this.innerText)"></pre>
               </div>
               <p id="error">This is more than 256 characters and may not fit in the chat box.</p>
             </div>
@@ -88,7 +88,12 @@
                   </ul>
                 </div>
                 <label for='animationFormatting'>Animation Formatting</label>
-                <input id="animationFormatting" class="textarea" type="text" placeholder="Your Text" value="%name%:\n  change-interval: %speed%\n  texts:\n%output%" oninput="updateOutputText(event);" style="white-space: pre-wrap;">
+                <textarea id="animationFormatting" class="textarea has-fixed-size" type="text" placeholder="Your Text" oninput="updateOutputText(event);">
+%name%:
+  change-interval: %speed%
+  texts:
+%output%
+                </textarea>
                 <label for="exportPreset">Custom Presets</label><br>
                 <button class="button" type="button" id="exportPreset"
                   onclick="copyTextToClipboard(exportPreset());">
