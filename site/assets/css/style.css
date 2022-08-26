@@ -17,3 +17,6 @@
 body {
   font-family: MinecraftRegular;
 }
+.input{
+  overflow: hidden;
+}

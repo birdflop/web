@@ -1,6 +1,8 @@
 // elements for obtaining vals
+const animationName = document.getElementById('animationName');
 const animationText = document.getElementById('animationText');
 const animationTypes = document.getElementById('animationType');
+const animationFormatting = document.getElementById('animationFormatting');
 const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed');
 
@@ -82,7 +84,6 @@ const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
 const customFormat = document.getElementById('customFormat');
 function updateOutputText() {
-  console.log('Updating output text');
   updateCookies();
   const format = formats[outputFormat.value];
 
@@ -101,6 +102,7 @@ function updateOutputText() {
 
   const outputText = document.getElementById('outputText');
   const outputArray = [];
+  let finalOutput = [];
   const clampedSpeed = Math.ceil(speed.value / 50) * 50;
   outputText.innerText = '';
 
@@ -120,22 +122,18 @@ function updateOutputText() {
 
         const hex = convertToHex(gradient.next());
         colors.push(hex);
-        let hexOutput = format.custom ? customFormat.value : format.template;
+        let hexOutput = format.template;
         for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
-        let formatCodes = '';
-        if (bold) formatCodes += format.formatChar + 'l';
-        if (italic) formatCodes += format.formatChar + 'o';
-        if (underline) formatCodes += format.formatChar + 'n';
-        if (strike) formatCodes += format.formatChar + 'm';
-
-        if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
-
-        hexOutput = hexOutput.replace('$c', char);
         output += hexOutput;
+        if (bold) output += format.formatChar + 'l';
+        if (italic) output += format.formatChar + 'o';
+        if (underline) output += format.formatChar + 'n';
+        if (strike) output += format.formatChar + 'm';
+        output += char;
       }
-      outputText.innerText = `  - "${output}"\n${outputText.innerText}`;
+      outputArray.push(`  - "${output}"`);
     }
-    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputText.innerText}`;
+    finalOutput = outputArray.reverse();
   }
  else if (animationTypes.value == '1') {
     for (let n = 0; n < newNick.length * 2 - 2; n++) {
@@ -161,10 +159,9 @@ function updateOutputText() {
         if (strike) output += format.formatChar + 'm';
         output += char;
       }
-
       outputArray.push(`  - "${output}"`);
     }
-    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`;
+    finalOutput = outputArray;
   }
  else if (animationTypes.value == '2') {
     const output1 = [];
@@ -196,73 +193,65 @@ function updateOutputText() {
       output1.push(`  - "${output}"`);
       output2.push(`  - "${output}"`);
     }
-    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${output1.reverse().concat(output2).join("\n")}`;
+    finalOutput = output1.reverse().concat(output2);
   }
  else if (animationTypes.value == '3') {
     for (let n = 0; n < newNick.length * 2 - 2; n++) {
       const colors = [];
       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
       let output = format.outputPrefix;
-      for (let i = 0; i < newNick.length; i++) {
-        const char = newNick.charAt(i);
-        if (char == ' ') {
-          output += char;
-          colors.push(null);
-          continue;
-        }
 
-        const hex = convertToHex(gradient.next());
-        colors.push(hex);
-        let hexOutput = format.template;
-        for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
-        output += hexOutput;
-        if (bold) output += format.formatChar + 'l';
-        if (italic) output += format.formatChar + 'o';
-        if (underline) output += format.formatChar + 'n';
-        if (strike) output += format.formatChar + 'm';
-        output += char;
-      }
-
-      outputArray.push(`  - "${output}"`);
+      const hex = convertToHex(gradient.next());
+      colors.push(hex);
+      let hexOutput = format.template;
+      for (let n = 1; n <= 6; n++) {hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));}
+      output += hexOutput;
+      if (bold) output += format.formatChar + 'l';
+      if (italic) output += format.formatChar + 'o';
+      if (underline) output += format.formatChar + 'n';
+      if (strike) output += format.formatChar + 'm';
+      outputArray.push(`  - "${output + newNick}"`);
     }
-    outputText.innerText = `logo:\n  change-interval: ${clampedSpeed}\n  texts:\n${outputArray.join("\n")}`;
+    finalOutput = outputArray;
   }
-
+  outputText.innerText = animationFormatting.value.replace("%name%", animationName.value).replace("%speed%", clampedSpeed).replace("%output%", finalOutput.join("\n")).replaceAll("\\n", "\n");
   // Generate the actual text animation
   let step = 0;
   clearInterval(updatespeed);
   updatespeed = setInterval(() => {
     const colors = [];
-    let colors2 = [];
     if (animationTypes.value == '0') {
       const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
       for (let i = 0; i < newNick.length * 2; i++) {
         if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
       }
-      displayColoredName(newNick, colors.reverse());
+      displayColoredName(newNick, colors.reverse(), false);
     }
     else if (animationTypes.value == '1') {
       const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
       for (let i = 0; i < newNick.length * 2; i++) {
         if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
       }
-      displayColoredName(newNick, colors);
+      displayColoredName(newNick, colors, false);
     }
     else if (animationTypes.value == '2') {
       const gradient = new AnimatedGradient(getColors(), newNick.length, step++);
-      for (let i = 0; i < newNick.length * 2; i++) {
+      for (let i = 0; i < newNick.length; i++) {
         if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
-        colors2.push(convertToHex(gradient.next()));
       }
-      colors2 = colors.concat(colors.reverse());
-      displayColoredName("Preview Broken fixing soon", colors2);
-      console.log(colors2);
+      displayColoredName("Pls fix i have no idea anymore", colors, false);
+    }else if(animationTypes.value == '3'){
+      const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
+      for (let i = 0; i < newNick.length; i++) {
+        if (newNick.charAt(i)) colors.push(convertToHex(gradient.next()));
+      }
+      displayColoredName(newNick, colors, true);
     }
   }, clampedSpeed);
   showError(speed.value % 50 != 0);
 }
 
-function displayColoredName(nickName, colors) {
+function displayColoredName(nickName, colors, fulltext) {
   animation.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
   if (boldElement.checked) {
     if (italicElement.checked) animation.classList.add('minecraftibold');
@@ -273,7 +262,7 @@ function displayColoredName(nickName, colors) {
   }
   animation.innerHTML = '';
   let colorIndex = 0;
-  for (let i = 0; i < nickName.length; i++) {
+  if(fulltext){
     const animationSpan = document.createElement('span');
     if (underlineElement.checked) {
       if (strikeElement.checked) animationSpan.classList.add('minecraftustrike');
@@ -283,11 +272,26 @@ function displayColoredName(nickName, colors) {
       animationSpan.classList.add('minecraftstrike');
     }
 
-    const char = nickName[i];
-    if (char != ' ') colorIndex++;
     animationSpan.style.color = `#${colors[colorIndex]}`;
-    animationSpan.textContent = char;
+    animationSpan.textContent = nickName;
     animation.append(animationSpan);
+  }else{
+    for (let i = 0; i < nickName.length; i++) {
+      const animationSpan = document.createElement('span');
+      if (underlineElement.checked) {
+        if (strikeElement.checked) animationSpan.classList.add('minecraftustrike');
+        else animationSpan.classList.add('minecraftunderline');
+      }
+      else if (strikeElement.checked) {
+        animationSpan.classList.add('minecraftstrike');
+      }
+
+      const char = nickName[i];
+      if (char != ' ') colorIndex++;
+      animationSpan.style.color = `#${colors[colorIndex]}`;
+      animationSpan.textContent = char;
+      animation.append(animationSpan);
+    }
   }
 }
 

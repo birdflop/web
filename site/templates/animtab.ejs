@@ -26,7 +26,7 @@
               <p class="title">Output</p>
               <p class="subtitle">This is what you put in animations.yml. Click on it to copy.</p>
               <div class="content">
-                <pre class="textarea" id="outputText" placeholder="Output will appear here" onclick="navigator.clipboard.writeText(this.innerText).then(() => alert('Copied text successfully!')).catch(() => alert('Failed to copy text!'))"></pre>
+                <pre class="textarea" style="white-space: pre-wrap;"id="outputText" placeholder="Output will appear here" onclick="copyTextToClipboard(this.innerText)"></pre>
               </div>
               <p id="error">This is more than 256 characters and may not fit in the chat box.</p>
             </div>
@@ -50,6 +50,8 @@
           <div class="tile is-parent is-8">
             <div class="tile is-child">
               <div class="content">
+                <label for='animationName'>Animation Name</label>
+                <input id="animationName" class="input" type="text" placeholder="Your Text" value="logo" oninput="updateOutputText(event);">
                 <label for='animationText'>Animation Text</label>
                 <input id="animationText" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);">
                 <label for="animationType">Animation Type</label>
@@ -58,7 +60,7 @@
                     <option value='0'>Normal (left -> right)</option>
                     <option value='1'>Reverse (right -> left)</option>
                     <option value='2'>Bouncing (UNFINISHED)</option>
-                    <option value='3'>Full text cycle (UNFINISHED)</option>
+                    <option value='3'>Full text cycle</option>
                   </select>
                 </div>
                 <label for='animation-speed'>Animation Speed</label>
@@ -85,6 +87,8 @@
                     <li>$c - Character to format</li>
                   </ul>
                 </div>
+                <label for='animationFormatting'>Animation Formatting</label>
+                <input id="animationFormatting" class="textarea" type="text" placeholder="Your Text" value="%name%:\n  change-interval: %speed%\n  texts:\n%output%" oninput="updateOutputText(event);" style="white-space: pre-wrap;">
                 <label for="exportPreset">Custom Presets</label><br>
                 <button class="button" type="button" id="exportPreset"
                   onclick="copyTextToClipboard(exportPreset());">

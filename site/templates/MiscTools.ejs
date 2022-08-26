@@ -1,0 +1,32 @@
+<%- include("partials/header", { path, title: "Misc Tools" , description: "Random minecraft server tools" }) %>
+  <link rel="stylesheet" href="/css/MiscTools.css">
+
+  <section class="hero is-dark is-fullheight-with-navbar">
+    <div class="hero-body">
+      <div class="container">
+        <p class="title" id="title">
+          Random Misc minecraft server tools
+        </p>
+        <p class="subtitle">
+          These are all random useful things that i thought were too small to dedicate a whole page to.<br>
+        </p>
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <div class="tile is-child">
+              <p class="title">Ram Calculator</p>
+              <p class="subtitle">This will help calculate how much ram to use for aikars flags.</p>
+              <div class="content">
+                <label for='RamAmount'>Ram Amount</label>
+                <input type="number" id="RamAmount" class="input" value="4000" oninput="calculateRam()">
+                <label for='RamOutputText'>Output</label>
+                <pre class="input" id="RamOutputText" onclick="copyTextToClipboard(this.innerText)"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <script src="/js/MiscToolsScript.js"></script>
+  <%- include("partials/footer") %>

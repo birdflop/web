@@ -1,4 +1,5 @@
-<%- include("partials/header", { queryPreset, path, title: "Hex Gradient Creator", description: "Hex color gradient creator" }) %>
+<%- include("partials/header", { queryPreset, path, title: "Hex Gradient Creator" ,
+  description: "Hex color gradient creator" }) %>
   <link rel="stylesheet" href="/css/RGBStyle.css">
 
   <div id="hexColorTemplate" style="display:none;">
@@ -6,7 +7,7 @@
       <label for="color-$NUM">Hex Color #$NUM</label>
       <input class="input col-md-1 hexColor" id="color-$NUM" value="$VAL"
         data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
-        onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })"/>
+        onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })" />
     </div>
   </div>
 
@@ -26,7 +27,8 @@
               <p class="title">Output</p>
               <p class="subtitle">This is what you put in the chat. Click on it to copy.</p>
               <div class="content">
-                <pre class="textarea" id="outputText" placeholder="Output will appear here" onclick="navigator.clipboard.writeText(this.innerText).then(() => alert('Copied text successfully!')).catch(() => alert('Failed to copy text!'))"></pre>
+                <pre class="textarea" id="outputText" placeholder="Output will appear here"
+                  onclick="copyTextToClipboard(this.innerText)"></pre>
               </div>
               <p id="error">This is more than 256 characters and may not fit in the chat box.</p>
             </div>
@@ -43,7 +45,8 @@
           <div class="tile is-parent">
             <div class="tile is-child">
               <label for='numOfColors'>Number of Colors</label>
-              <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2" oninput="toggleColors(this.value); updateOutputText(event);">
+              <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2"
+                oninput="toggleColors(this.value); updateOutputText(event);">
               <div id="hexColors" class="content"></div>
             </div>
           </div>
@@ -51,7 +54,8 @@
             <div class="tile is-child">
               <div class="content">
                 <label for='nickname'>Input Text</label>
-                <input id="nickname" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);">
+                <input id="nickname" class="input" type="text" placeholder="Your Text" value="SimplyMC"
+                  oninput="updateOutputText(event);">
                 <label for='output-format'>Output Format</label><br>
                 <div class="select" style="width:100%">
                   <select style="width:100%" id="output-format" onchange="updateOutputText(event);">
@@ -94,17 +98,16 @@
                   </select>
                 </div>
                 <label for="exportPreset">Custom Presets</label><br>
-                <button class="button" type="button" id="exportPreset"
-                  onclick="copyTextToClipboard(exportPreset());">
+                <button class="button" type="button" id="exportPreset" onclick="copyTextToClipboard(exportPreset());">
                   Copy Preset
                 </button>
-                <button class="button" type="button" id="importPreset"
-                  onclick="showfield('importInput')">
+                <button class="button" type="button" id="importPreset" onclick="showfield('importInput')">
                   Import Preset
                 </button>
                 <div id="importInput" style="display: none;">
                   <label for='import'>Paste Here</label>
-                  <input id="import" name="ImportInput" class="input" type="text" onchange="javascript: importPreset(this.value)">  
+                  <input id="import" name="ImportInput" class="input" type="text"
+                    onchange="javascript: importPreset(this.value)">
                 </div>
                 <br><br>
                 <div id="formatSelector">
@@ -138,6 +141,6 @@
   <script src="/js/GradientScript.js"></script>
   <script>
     let qPreset = '<%- queryPreset %>';
-    if(qPreset) importPreset(qPreset);
+    if (qPreset) importPreset(qPreset);
   </script>
-<%- include("partials/footer") %>
+  <%- include("partials/footer") %>
