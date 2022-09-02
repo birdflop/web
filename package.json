@@ -4,7 +4,8 @@
   "description": "The official website for the minecraft multitool simplymc.art",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -16,19 +17,34 @@
     "url": "https://github.com/AkiraDevelopment/SimplyMC/issues"
   },
   "homepage": "https://github.com/AkiraDevelopment/SimplyMC#readme",
+  "build": {
+    "appId": "xyz.akiradev.simplymc",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "category": "Utility",
+      "icon": "./site/assets/images/icon.png"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "./site/assets/images/icon.png"
+    }
+  },
   "dependencies": {
-    "canvas": "^2.9.3",
     "ejs": "^3.1.8",
     "ejs-electron": "^2.1.1",
     "eslint": "^8.20.0",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
-    "gifencoder": "^2.0.1",
     "node-fetch": "^3.2.9",
     "pbf": "^3.2.1",
     "yaml": "^2.1.1"
   },
   "devDependencies": {
-    "electron": "^20.1.1"
+    "electron": "^20.1.1",
+    "electron-builder": "^23.3.3"
   }
 }
