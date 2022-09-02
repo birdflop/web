@@ -5,6 +5,8 @@ const underlineElement = document.getElementById('underline');
 const strikeElement = document.getElementById('strike');
 const errorElement = document.getElementById('error');
 
+const savedColors = ['#00FFE0', '#EB00FF'];
+
 const presets = {
   0: {
     colors: ["00FFE0", "EB00FF"],

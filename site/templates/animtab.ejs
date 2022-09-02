@@ -1,5 +1,5 @@
-<%- include("partials/header", { queryPreset, path, title: "Animated TAB Creator", description: "TAB plugin gradient animation creator" }) %>
-  <link rel="stylesheet" href="/css/RGBStyle.css">
+<%- include("partials/header", { path, title: "Animated TAB Creator", description: "TAB plugin gradient animation creator" }) %>
+  <link rel="stylesheet" href="../assets/css/RGBStyle.css">
 
   <div id="hexColorTemplate" style="display:none;">
     <div class="row">
@@ -135,10 +135,6 @@
   </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.8/jscolor.min.js"></script>
-  <script src="/js/RGBScript.js"></script>
-  <script src="/js/AnimTABScript.js"></script>
-  <script>
-    let qPreset = '<%- queryPreset %>';
-    if(qPreset) importPreset(qPreset);
-  </script>
+  <script src="../assets/js/RGBScript.js"></script>
+  <script src="../assets/js/AnimTABScript.js"></script>
 <%- include("partials/footer") %>

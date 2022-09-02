@@ -6,7 +6,6 @@ const animationFormatting = document.getElementById('animationFormatting');
 const animation = document.getElementById('animation');
 const speed = document.getElementById('animation-speed');
 
-const savedColors = [];
 const formats = {
   0: {
     outputPrefix: '',
@@ -27,52 +26,6 @@ let inputDelay;
 
 let activeColors = 2;
 
-function loadCookies() {
-  // Apply cookies if set
-  if (!jQuery.isEmptyObject(Cookies.get())) {
-    for (let i = 1; i <= 10; i++) {
-      const value = Cookies.get(`color-${i}`);
-      if (value) savedColors.push(value);
-      else savedColors.push(getRandomHexColor());
-    }
-
-    const colors = Cookies.get('activeColors');
-    if (colors) {
-      activeColors = colors;
-      numOfColors.value = colors;
-    }
-
-    const text = Cookies.get('text');
-    if (text) animationText.value = text;
-
-    const animationSpeed = Cookies.get('animationSpeed');
-    if (animationSpeed) speed.value = animationSpeed;
-
-    if (Cookies.get('bold') === 'true') boldElement.checked = true;
-    if (Cookies.get('italics') === 'true') italicElement.checked = true;
-    if (Cookies.get('underline') === 'true') underlineElement.checked = true;
-    if (Cookies.get('strike') === 'true') strikeElement.checked = true;
-  }
-  else {
-    // Otherwise randomize them instead
-    savedColors.push('00FFE0');
-    savedColors.push('EB00FF');
-    for (let i = 0; i < 8; i++) savedColors.push(getRandomHexColor());
-    updateCookies();
-  }
-}
-
-function updateCookies() {
-  for (let i = 1; i <= savedColors.length; i++) Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/AnimTab' });
-  Cookies.set('activeColors', activeColors, { expires: 7, path: '/AnimTab' });
-  Cookies.set('text', animationText.value, { expires: 7, path: '/AnimTab' });
-  Cookies.set('animationSpeed', speed.value, { expires: 7, path: '/AnimTab' });
-  Cookies.set('bold', boldElement.checked, { expires: 7, path: '/AnimTab' });
-  Cookies.set('italics', italicElement.checked, { expires: 7, path: '/AnimTab' });
-  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/AnimTab' });
-  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/AnimTab' });
-}
-
 class AnimatedGradient extends Gradient {
   constructor(colors, numSteps, offset) {
     super(colors, numSteps);
@@ -84,7 +37,6 @@ const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
 const customFormat = document.getElementById('customFormat');
 function updateOutputText() {
-  updateCookies();
   const format = formats[outputFormat.value];
 
   if (format.custom) customFormatWrapper.classList.remove('hidden');
@@ -343,8 +295,6 @@ function importPreset(p) {
       alert("Invalid Preset");
     }
 }
-
-loadCookies();
 
 toggleColors(activeColors);
 updateOutputText();

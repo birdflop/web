@@ -6,24 +6,24 @@
   <meta content="SimplyMC: <%= title %>" property="og:title" />
   <meta content="<%= description %>" property="og:description" />
   <meta content="https://www.simplymc.art/" property="og:url" />
-  <meta content="/images/icon.png" property="og:image" />
+  <meta content="../assets/images/icon.png" property="og:image" />
   <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
-  <link rel="shortcut icon" href="/images/icon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="../assets/images/icon.png" type="image/x-icon">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/bulma-prefers-dark">
-  <link rel="stylesheet" type="text/css" href="/css/style.css">
-  <link rel="preload" href="/fonts/MinecraftRegular.otf" as="font" type="font/otf" crossorigin>
-  <link rel="preload" href="/fonts/MinecraftBold.otf" as="font" type="font/otf" crossorigin>
-  <link rel="preload" href="/fonts/MinecraftItalic.otf" as="font" type="font/otf" crossorigin>
-  <link rel="preload" href="/fonts/MinecraftBoldItalic.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+  <link rel="font" href="../assets/fonts/MinecraftRegular.otf" type="font/otf" crossorigin>
+  <link rel="font" href="../assets/fonts/MinecraftBold.otf" type="font/otf" crossorigin>
+  <link rel="font" href="../assets/fonts/MinecraftItalic.otf" type="font/otf" crossorigin>
+  <link rel="font" href="../assets/fonts/MinecraftBoldItalic.otf" type="font/otf" crossorigin>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/js/js.cookie.js"></script>
+
 </head>
 <body class="has-navbar-fixed-top">
   <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="/images/full.png">
+        <img src="../assets/images/full.png">
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="simplymc-navbar">
@@ -40,10 +40,10 @@
             Gradients
           </a>
           <div class="navbar-dropdown">
-            <a class="navbar-item <% if (title == 'Hex Gradient Creator') { %> is-active <% } %>" href="/Gradients">
+            <a class="navbar-item <% if (title == 'Hex Gradient Creator') { %> is-active <% } %>" href="./gradients.ejs">
               Hex Gradients
             </a>
-            <a class="navbar-item <% if (title == 'Animated TAB Creator') { %> is-active <% } %>" href="/AnimTab">
+            <a class="navbar-item <% if (title == 'Animated TAB Creator') { %> is-active <% } %>" href="./animtab.ejs">
               Animated TAB
             </a>
           </div>
@@ -53,18 +53,18 @@
             Analysis
           </a>
           <div class="navbar-dropdown">
-            <a class="navbar-item <% if (title == 'Analyze Spark Profile' || title == 'Profile Analysis Result') { %> is-active <% } %>" href="/SparkProfile">
+            <a class="navbar-item <% if (title == 'Analyze Spark Profile' || title == 'Profile Analysis Result') { %> is-active <% } %>" href="./sparkprofile.ejs">
               Spark Profile
             </a>
-            <a class="navbar-item <% if (title == 'Analyze Timings' || title == 'Timings Analysis Result') { %> is-active <% } %>" href="/PaperTimings">
+            <a class="navbar-item <% if (title == 'Analyze Timings' || title == 'Timings Analysis Result') { %> is-active <% } %>" href="./papertimings.ejs">
               Paper Timings
             </a>
           </div>
         </div>
-        <a class="navbar-item <% if (title == 'Animated Texture Creator') { %> is-active <% } %>" href="/AnimTexture">
+        <a class="navbar-item <% if (title == 'Animated Texture Creator') { %> is-active <% } %>" href="./animtexture.ejs">
           Animated Textures
         </a>
-        <a class="navbar-item <% if (title == 'Misc Tools') { %> is-active <% } %>" href="/MiscTools">
+        <a class="navbar-item <% if (title == 'Misc Tools') { %> is-active <% } %>" href="./misctools.ejs">
           Misc Tools
         </a>
         <a class="navbar-item">

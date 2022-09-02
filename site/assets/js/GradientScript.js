@@ -3,7 +3,6 @@ const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const outputText = document.getElementById('outputText');
 
-const savedColors = [];
 const toggled = false;
 const formats = {
   0: {
@@ -58,48 +57,6 @@ const formats = {
 
 let activeColors = 2;
 
-function loadCookies() {
-  // Apply cookies if set
-  if (!jQuery.isEmptyObject(Cookies.get())) {
-    for (let i = 1; i <= 10; i++) {
-      const value = Cookies.get(`color-${i}`);
-      if (value) savedColors.push(value);
-      else savedColors.push(getRandomHexColor());
-    }
-
-    const colors = Cookies.get('activeColors');
-    if (colors) {
-      activeColors = colors;
-      numOfColors.value = colors;
-    }
-
-    const nickname = Cookies.get('nickname');
-    if (nickname) nickName.value = nickname;
-
-    if (Cookies.get('bold') === 'true') boldElement.checked = true;
-    if (Cookies.get('italics') === 'true') italicElement.checked = true;
-    if (Cookies.get('underline') === 'true') underlineElement.checked = true;
-    if (Cookies.get('strike') === 'true') strikeElement.checked = true;
-  }
-  else {
-    // Otherwise randomize them instead
-    savedColors.push('00FFE0');
-    savedColors.push('EB00FF');
-    for (let i = 0; i < 8; i++) savedColors.push(getRandomHexColor());
-    updateCookies();
-  }
-}
-
-function updateCookies() {
-  for (let i = 1; i <= savedColors.length; i++) Cookies.set(`color-${i}`, savedColors[i - 1], { expires: 7, path: '/Gradients' });
-  Cookies.set('activeColors', activeColors, { expires: 7, path: '/Gradients' });
-  Cookies.set('nickname', nickName.value, { expires: 7, path: '/Gradients' });
-  Cookies.set('bold', boldElement.checked, { expires: 7, path: '/Gradients' });
-  Cookies.set('italics', italicElement.checked, { expires: 7, path: '/Gradients' });
-  Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/Gradients' });
-  Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/Gradients' });
-}
-
 const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
 const customFormat = document.getElementById('customFormat');
@@ -126,7 +83,6 @@ function updateOutputText(event) {
   const italic = italicElement.checked;
   const underline = underlineElement.checked;
   const strike = strikeElement.checked;
-  updateCookies();
   const gradient = new Gradient(getColors(), newNick.replace(/ /g, '').length);
   const charColors = [];
   let output = format.outputPrefix || "";
@@ -279,9 +235,6 @@ function importPreset(p) {
       alert("Invalid Preset");
     }
 }
-
-
-loadCookies();
 
 toggleColors(activeColors);
 updateOutputText();

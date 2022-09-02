@@ -1,6 +1,6 @@
-<%- include("partials/header", { queryPreset, path, title: "Hex Gradient Creator" ,
+<%- include("partials/header", { path, title: "Hex Gradient Creator" ,
   description: "Hex color gradient creator" }) %>
-  <link rel="stylesheet" href="/css/RGBStyle.css">
+  <link rel="stylesheet" href="../assets/css/RGBStyle.css">
 
   <div id="hexColorTemplate" style="display:none;">
     <div class="row">
@@ -137,10 +137,6 @@
   </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.8/jscolor.min.js"></script>
-  <script src="/js/RGBScript.js"></script>
-  <script src="/js/GradientScript.js"></script>
-  <script>
-    let qPreset = '<%- queryPreset %>';
-    if (qPreset) importPreset(qPreset);
-  </script>
+  <script src="../assets/js/RGBScript.js"></script>
+  <script src="../assets/js/GradientScript.js"></script>
   <%- include("partials/footer") %>
