@@ -21,3 +21,16 @@ html {
 .input {
   overflow: hidden;
 }
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar:hover {
+  width: 14px;
+}
+*::-webkit-scrollbar-track {
+  background: #00000000;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #0A0A0A50;
+  border-radius: 3px;
+}
