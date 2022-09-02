@@ -14,9 +14,10 @@
   font-family: MinecraftBoldItalic;
   src: url(../fonts/MinecraftBoldItalic.otf);
 }
-body {
+html {
+  overflow: overlay;
   font-family: MinecraftRegular;
 }
-.input{
+.input {
   overflow: hidden;
 }
