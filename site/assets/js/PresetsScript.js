@@ -1,10 +1,10 @@
-$(document).ready(function () {
+$(document).ready(function() {
     $('#presets').DataTable();
 });
 
 
 function createPreview(preset, button) {
-    const El = button
+    const El = button;
     const decodedpreset = decodeGradient(preset);
     const text = decodedpreset.text;
     const formats = decodedpreset.formats;
@@ -24,7 +24,7 @@ function createPreview(preset, button) {
       colors.push(hex);
     }
     El.classList.remove('minecraftbold', 'minecraftibold', 'minecraftitalic');
-  
+
     if (formats) {
       if (formats[0]) {
         if (formats[1]) El.classList.add('minecraftibold');

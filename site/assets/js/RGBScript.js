@@ -132,7 +132,8 @@ function toBinary(string) {
 function fromBinary(encoded) {
   try {
     binary = atob(encoded);
-  } catch (error) {
+  }
+ catch (error) {
     alert("Unable to decode preset, is it valid?");
   }
   const bytes = new Uint8Array(binary.length);
@@ -273,16 +274,17 @@ function importPreset(p) {
   let preset = fromBinary(p);
   try{
     preset = JSON.parse(preset);
-  }catch(e){
+  }
+catch(e) {
     alert("Invalid preset!");
     return;
   }
   const colors = preset.colors;
   text.value = preset.text;
-  if(speed){
+  if(speed) {
     speed.value = preset.speed;
   }
-  if(animationType){
+  if(animationType) {
     animationTypes.value = preset.type;
   }
   const formats = decompress(preset.formats, 4);

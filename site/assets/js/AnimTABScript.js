@@ -239,7 +239,8 @@ function updateOutputText() {
         if (newNick.charAt(i) != ' ') colors.push(convertToHex(gradient.next()));
       }
       displayColoredName("Pls fix i have no idea anymore", colors, false);
-    }else if(animationTypes.value == '3'){
+    }
+else if(animationTypes.value == '3') {
       const gradient = new AnimatedGradient(getColors(), newNick.length * 2, step++);
       for (let i = 0; i < newNick.length; i++) {
         if (newNick.charAt(i)) colors.push(convertToHex(gradient.next()));
@@ -261,7 +262,7 @@ function displayColoredName(nickName, colors, fulltext) {
   }
   animation.innerHTML = '';
   let colorIndex = 0;
-  if(fulltext){
+  if(fulltext) {
     const animationSpan = document.createElement('span');
     if (underlineElement.checked) {
       if (strikeElement.checked) animationSpan.classList.add('minecraftustrike');
@@ -274,7 +275,8 @@ function displayColoredName(nickName, colors, fulltext) {
     animationSpan.style.color = `#${colors[colorIndex]}`;
     animationSpan.textContent = nickName;
     animation.append(animationSpan);
-  }else{
+  }
+else{
     for (let i = 0; i < nickName.length; i++) {
       const animationSpan = document.createElement('span');
       if (underlineElement.checked) {
@@ -298,7 +300,8 @@ function importPreset(p) {
   let preset = fromBinary(p);
   try{
     preset = JSON.parse(preset);
-  }catch(e){
+  }
+catch(e) {
     alert("Invalid preset!");
     return;
   }
