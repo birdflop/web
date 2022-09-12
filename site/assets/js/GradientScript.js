@@ -1,5 +1,5 @@
 // elements for obtaining vals
-const nickName = document.getElementById('nickname');
+const nickName = document.getElementById('text');
 const coloredNick = document.getElementById('coloredNick');
 const outputText = document.getElementById('outputText');
 
@@ -211,75 +211,6 @@ function preset(n) {
     // Refresh all jscolor elements
     jscolor.install();
 }
-
-// todo
-const presetSeparator = ":-:";
-function exportPreset() {
-  const hexColors = $('#hexColors').find('.hexColor');
-  const colors = [];
-  const bold = boldElement.checked;
-  const italic = italicElement.checked;
-  const underline = underlineElement.checked;
-  const strike = strikeElement.checked;
-  const selectedFormats = [bold, italic, underline, strike];
-  compress(selectedFormats);
-  hexColors.each((index, element) => {
-    const value = $(element).val();
-    savedColors[index] = value;
-    colors[index] = value;
-  });
-
-  let string = colors + presetSeparator +
-      nickName.value + presetSeparator +
-      compress(selectedFormats) + presetSeparator +
-      outputFormat.value;
-
-  if (formats[outputFormat.value].custom) {
-    string += presetSeparator + customFormat.value;
-  }
-
-  const preset = toBinary(string);
-  return preset;
-}
-
-function importPreset(p) {
-  let preset = fromBinary(p);
-  preset = preset.split(presetSeparator);
-  const colors = preset[0].split(",");
-  const nickname = preset[1];
-  const formats = decompress(preset[2], 4);
-  const selectedOutputFormat = preset[3];
-  const selectedCustomFormat = preset[4];
-
-  if (selectedOutputFormat) outputFormat.value = selectedOutputFormat;
-
-  if (selectedCustomFormat) customFormat.value = selectedCustomFormat;
-
-  boldElement.checked = formats[0];
-  italicElement.checked = formats[1];
-  underlineElement.checked = formats[2];
-  strikeElement.checked = formats[3];
-
-  const container = $('#hexColors');
-  container.empty();
-    // Need to add some colors
-    const template = $('#hexColorTemplate').html();
-    for (let i = 0 + 1; i <= colors.length; i++) {
-      const html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
-      container.append(html);
-    }
-    nickName.value = nickname;
-    numOfColors.value = colors.length;
-    // Refresh all jscolor elements
-    jscolor.install();
-    try {
-      updateOutputText();
-    }
-    catch (error) {
-      alert("Invalid Preset");
-    }
-}
-
 
 loadCookies();
 

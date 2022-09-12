@@ -1,0 +1,62 @@
+<%- include("partials/header", { path, presets, utils, title: "A Minecraft Multitool", description: "A Minecraft multitool for you" }) %>
+
+  <section class="hero is-dark is-fullheight-with-navbar">
+    <div class="hero-body">
+      <div class="container">
+        <p class="title" id="title">
+            User Submitted Presets
+          </p>
+          <p class="subtitle">
+            Presets submitted by users and approved by moderators
+          </p>
+          <br>
+        <table id="presets" class="table is-striped is-dark" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Description</th>
+                    <th>Preview</th>
+                    <th>Click To Use</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Description</th>
+                    <th>Preview</th>
+                    <th>Click To Use</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <% for (let i = 0; i < presets.length; i++) { %>
+                    <tr>
+                        <td><%= presets[i].id %></td>
+                        <td><%= presets[i].name %></td>
+                        <td><%= presets[i].author %></td>
+                        <td><%= presets[i].description %></td>
+                        <td>
+                            <button class="button" onclick="createPreview('<%= presets[i].data %>', this)">Show Preview</button>
+                        </td>
+                        <td>
+                            <a href="/gradients?preset=<%= presets[i].data %> ">Use As Gradient</a>
+                            <br>
+                            <a href="/AnimTab?preset=<%= presets[i].data %> ">Use As AnimTab</a>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bulma.min.js"></script>
+<script src="/js/PresetsScript.js"></script>
+<script src="/js/RGBScript.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/Presets.css">
+<%- include("partials/footer") %>

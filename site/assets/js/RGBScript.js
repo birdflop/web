@@ -1,4 +1,7 @@
 /* Get a random HEX color */
+const text = document.getElementById("text");
+const speed = document.getElementById('animation-speed');
+const animationType = document.getElementById('animationType');
 const boldElement = document.getElementById('bold');
 const italicElement = document.getElementById('italics');
 const underlineElement = document.getElementById('underline');
@@ -127,7 +130,11 @@ function toBinary(string) {
 }
 
 function fromBinary(encoded) {
-  binary = atob(encoded);
+  try {
+    binary = atob(encoded);
+  } catch (error) {
+    alert("Unable to decode preset, is it valid?");
+  }
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < bytes.length; i++) {
     bytes[i] = binary.charCodeAt(i);
@@ -236,3 +243,80 @@ class TwoStopGradient {
     return Math.round(interval * (step - this.lowerRange) + channelStart);
   }
 }
+
+function exportPreset() {
+  const hexColors = $('#hexColors').find('.hexColor');
+  const colors = [];
+  const bold = boldElement.checked;
+  const italic = italicElement.checked;
+  const underline = underlineElement.checked;
+  const strike = strikeElement.checked;
+  const formats = [bold, italic, underline, strike];
+  hexColors.each((index, element) => {
+    const value = $(element).val();
+    savedColors[index] = value;
+    colors[index] = value;
+  });
+  const presetJSON = {
+    "version": 1,
+    "colors": colors,
+    "text": text.value,
+    "speed": speed ? speed.value : 50,
+    "formats": compress(formats),
+    "type": animationType ? animationType.value : 0,
+  };
+  const preset = toBinary(JSON.stringify(presetJSON));
+  return preset;
+}
+
+function importPreset(p) {
+  let preset = fromBinary(p);
+  try{
+    preset = JSON.parse(preset);
+  }catch(e){
+    alert("Invalid preset!");
+    return;
+  }
+  const colors = preset.colors;
+  text.value = preset.text;
+  if(speed){
+    speed.value = preset.speed;
+  }
+  if(animationType){
+    animationTypes.value = preset.type;
+  }
+  const formats = decompress(preset.formats, 4);
+  boldElement.checked = formats[0];
+  italicElement.checked = formats[1];
+  underlineElement.checked = formats[2];
+  strikeElement.checked = formats[3];
+
+  const container = $('#hexColors');
+  container.empty();
+    // Need to add some colors
+    const template = $('#hexColorTemplate').html();
+    for (let i = 0 + 1; i <= colors.length; i++) {
+      const html = template.replace(/\$NUM/g, i).replace(/\$VAL/g, colors[i - 1]);
+      container.append(html);
+    }
+    document.getElementById("numOfColors").value = colors.length;
+    // Refresh all jscolor elements
+    jscolor.install();
+    try {
+      updateOutputText();
+    }
+    catch (error) {
+      alert("Invalid Preset");
+    }
+}
+
+function writeToElement(id, text) {
+  document.getElementById(id).value = text;
+}
+
+function deleteElement(id) {
+  document.getElementById(id).remove();
+}
+
+function openModal(element) {element.classList.add('is-active');}
+function closeModal(element) { element.classList.remove('is-active'); }

@@ -14,9 +14,119 @@
   font-family: MinecraftBoldItalic;
   src: url(/fonts/MinecraftBoldItalic.otf);
 }
-body {
+body{
+  font-family: MinecraftRegular;
+  overflow: overlay;
+  background-color: #1b1b1b;
+  color: white;
+}
+.hero-body{
+  background-color: #1b1b1b
+}
+html {
+  overflow: overlay;
   font-family: MinecraftRegular;
 }
-.input{
+.input {
   overflow: hidden;
+}
+* {
+  scroll-behavior: smooth;
+}
+.navbar.is-dark, .navbar-dropdown {
+  background-color: #0000009c;
+  border-top: #0000009c;
+  color: rgb(255, 255, 255);
+  
+}
+.navbar-item{
+  color: white;
+}
+.navbar-dropdown a.navbar-item:focus, .navbar-dropdown a.navbar-item:hover {
+  background-color: transparent;
+  color: #b6b6b6;
+}
+.tags-input, .input, .select select, .textarea{
+  border-color: #363636;
+  background-color: #0a0a0a;
+  color: #dbdbdb;
+}
+.button, .file-cta {
+  background-color: #242424;
+  border-color: #363636;
+  color: #b5b5b5;
+}
+.button:hover, .file-cta:hover {
+  background-color: #3d3d3d;
+  border-color: #585858;
+  color: #d8d8d8;
+}
+.navbar.is-spaced .navbar-link, .navbar.is-spaced a.navbar-item {
+  color: white;
+  filter: drop-shadow(0 0 2rem black);
+  border-radius: 50px;
+  padding: 10px 15px;
+  margin: 5px
+}
+.card-content {
+  background-color: #2e2e2e;
+  color: #dbdbdb;
+}
+a.navbar-item.is-active{
+  background-color: #ff0000ad;
+}
+a, button, .is-parent {
+  transition: 300ms;
+}
+.label, .content h1 {
+  color: #dbdbdb;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar:hover {
+  width: 14px;
+}
+*::-webkit-scrollbar-track {
+  background: #00000000;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #0A0A0A50;
+  border-radius: 3px;
+}
+.minecraftbold {
+  font-family: MinecraftBold;
+}
+.minecraftitalic {
+  font-family: MinecraftItalic;
+}
+.minecraftibold {
+  font-family: MinecraftBoldItalic;
+}
+.minecraftunderline {
+  text-decoration: underline;
+}
+.minecraftustrike {
+  text-decoration: underline line-through;
+}
+.minecraftstrike {
+  text-decoration: line-through;
+}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.modal-card-head, .modal-card-title, .modal-card-foot { background-color: #222; }
+.modal-card-body {
+  background-color: #111;
+  height: 50vh
+}
+.modal-card-head, .modal-card-title, .modal-card-body, .modal-card-foot {
+  border: none;
+  color: white;
 }

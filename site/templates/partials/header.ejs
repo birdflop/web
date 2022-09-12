@@ -9,8 +9,8 @@
   <meta content="/images/icon.png" property="og:image" />
   <meta content="#9C0000" data-react-helmet="true" name="theme-color" />
   <link rel="shortcut icon" href="/images/icon.png" type="image/x-icon">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/bulma-prefers-dark">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-switch">
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   <link rel="preload" href="/fonts/MinecraftRegular.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="/fonts/MinecraftBold.otf" as="font" type="font/otf" crossorigin>
@@ -46,6 +46,9 @@
             <a class="navbar-item <% if (title == 'Animated TAB Creator') { %> is-active <% } %>" href="/AnimTab">
               Animated TAB
             </a>
+            <a class="navbar-item <% if (title == 'User Submitted Presets') { %> is-active <% } %>" href="/presets">
+              Presets
+            </a>
           </div>
         </div>
         <div class="navbar-item has-dropdown is-hoverable">
@@ -76,9 +79,30 @@
         <a class="navbar-item" href="https://github.com/AkiraDevelopment/SimplyMC">
           GitHub
         </a>
-        <a class="navbar-item" href="https://discord.akiradev.xyz/">
+        <a class="navbar-item" href="https://discord.simplymc.art/">
           Discord
         </a>
+        <% if(user) { %>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link" href="#">
+              <img src=<%= `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}` %> alt=<%= `${user.username}'s avatar` %> style="width:24px;height:24px; border-radius: 50px">
+              <%= user.username %>#<%= user.discriminator %>
+            </a>
+            <div class="navbar-dropdown">
+              <% if(user.id == "798738506859282482") {%>
+                <a class="navbar-item" href="/admin">
+                  Admin Panel
+                </a>
+              <% } %>
+              <a class="navbar-item" href="/logout">
+                Logout
+              </a>
+          </div>
+        <% } else { %>
+          <a class="navbar-item" href="/login">
+            Login
+          </a>
+        <% } %>
       </div>
     </div>
   </nav>
