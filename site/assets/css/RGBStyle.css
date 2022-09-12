@@ -32,30 +32,6 @@
   display: none;
 }
 
-.minecraftbold {
-  font-family: MinecraftBold;
-}
-
-.minecraftitalic {
-  font-family: MinecraftItalic;
-}
-
-.minecraftibold {
-  font-family: MinecraftBoldItalic;
-}
-
-.minecraftunderline {
-  text-decoration: underline;
-}
-
-.minecraftustrike {
-  text-decoration: underline line-through;
-}
-
-.minecraftstrike {
-  text-decoration: line-through;
-}
-
 @keyframes rainbow_animation {
   0%, 100% {
     background-position: 0 82%;

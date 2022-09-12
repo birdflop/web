@@ -1,0 +1,196 @@
+@media (prefers-color-scheme: dark) {
+.table {
+    background-color: #0a0a0a;
+    color: #dbdbdb;
+  }
+  .table td,
+  .table th {
+    border: 1px solid #363636;
+  }
+  .table td.is-white,
+  .table th.is-white {
+    background-color: #e6e6e6;
+    border-color: #e6e6e6;
+    color: #0a0a0a;
+  }
+  .table td.is-black,
+  .table th.is-black {
+    background-color: black;
+    border-color: black;
+    color: white;
+  }
+  .table td.is-light,
+  .table th.is-light {
+    background-color: #dbdbdb;
+    border-color: #dbdbdb;
+    color: #363636;
+  }
+  .table td.is-dark,
+  .table th.is-dark {
+    background-color: #1c1c1c;
+    border-color: #1c1c1c;
+    color: whitesmoke;
+  }
+  .table td.is-primary,
+  .table th.is-primary {
+    background-color: #009e86;
+    border-color: #009e86;
+    color: #fff;
+  }
+  .table td.is-link,
+  .table th.is-link {
+    background-color: #205bbc;
+    border-color: #205bbc;
+    color: #fff;
+  }
+  .table td.is-info,
+  .table th.is-info {
+    background-color: #0f81cc;
+    border-color: #0f81cc;
+    color: #fff;
+  }
+  .table td.is-success,
+  .table th.is-success {
+    background-color: #1ca64c;
+    border-color: #1ca64c;
+    color: #fff;
+  }
+  .table td.is-warning,
+  .table th.is-warning {
+    background-color: #ffd324;
+    border-color: #ffd324;
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .table td.is-danger,
+  .table th.is-danger {
+    background-color: #ff0537;
+    border-color: #ff0537;
+    color: #fff;
+  }
+  .table td.is-white-dark,
+  .table th.is-white-dark {
+    background-color: white;
+    border-color: white;
+    color: #0a0a0a;
+  }
+  .table td.is-black-dark,
+  .table th.is-black-dark {
+    background-color: #0a0a0a;
+    border-color: #0a0a0a;
+    color: white;
+  }
+  .table td.is-light-dark,
+  .table th.is-light-dark {
+    background-color: whitesmoke;
+    border-color: whitesmoke;
+    color: #363636;
+  }
+  .table td.is-dark-dark,
+  .table th.is-dark-dark {
+    background-color: #363636;
+    border-color: #363636;
+    color: whitesmoke;
+  }
+  .table td.is-primary-dark,
+  .table th.is-primary-dark {
+    background-color: #00d1b2;
+    border-color: #00d1b2;
+    color: #fff;
+  }
+  .table td.is-link-dark,
+  .table th.is-link-dark {
+    background-color: #3273dc;
+    border-color: #3273dc;
+    color: #fff;
+  }
+  .table td.is-info-dark,
+  .table th.is-info-dark {
+    background-color: #209cee;
+    border-color: #209cee;
+    color: #fff;
+  }
+  .table td.is-success-dark,
+  .table th.is-success-dark {
+    background-color: #23d160;
+    border-color: #23d160;
+    color: #fff;
+  }
+  .table td.is-warning-dark,
+  .table th.is-warning-dark {
+    background-color: #ffdd57;
+    border-color: #ffdd57;
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .table td.is-danger-dark,
+  .table th.is-danger-dark {
+    background-color: #ff3860;
+    border-color: #ff3860;
+    color: #fff;
+  }
+  .table td.is-selected,
+  .table th.is-selected {
+    background-color: #009e86;
+    color: #e6e6e6;
+  }
+  .table th {
+    color: #dbdbdb;
+  }
+  .table tr.is-selected {
+    background-color: #009e86;
+    color: #e6e6e6;
+  }
+  .table tr.is-selected td,
+  .table tr.is-selected th {
+    border-color: #e6e6e6;
+  }
+  .table thead td,
+  .table thead th {
+    color: #dbdbdb;
+  }
+  .table tfoot td,
+  .table tfoot th {
+    color: #dbdbdb;
+  }
+  .table.is-hoverable tbody tr:not(.is-selected):hover {
+    background-color: #121212;
+  }
+  .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+    background-color: #121212;
+  }
+  .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
+    background-color: #242424;
+  }
+  .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+    background-color: #121212;
+  }
+  .content table td,
+  .content table th {
+    border: 1px solid #363636;
+  }
+  .content table th {
+    color: #dbdbdb;
+  }
+  .content table thead td,
+  .content table thead th {
+    color: #dbdbdb;
+  }
+  .content table tfoot td,
+  .content table tfoot th {
+    color: #dbdbdb;
+  }
+  table th {
+    color: #dbdbdb;
+  }
+  .table.is-hoverable tbody tr:not(.is-selected):hover {
+    background-color: #121212;
+  }
+  .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+    background-color: #121212;
+  }
+  .table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
+    background-color: #242424;
+  }
+  .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+    background-color: #121212;
+  }
+}

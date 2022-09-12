@@ -1,10 +1,9 @@
 // elements for obtaining vals
 const animationName = document.getElementById('animationName');
-const animationText = document.getElementById('animationText');
+const animationText = document.getElementById('text');
 const animationTypes = document.getElementById('animationType');
 const animationFormatting = document.getElementById('animationFormatting');
 const animation = document.getElementById('animation');
-const speed = document.getElementById('animation-speed');
 
 const savedColors = [];
 const formats = {
@@ -295,31 +294,19 @@ function displayColoredName(nickName, colors, fulltext) {
   }
 }
 
-function exportPreset() {
-  const hexColors = $('#hexColors').find('.hexColor');
-  const colors = [];
-  const bold = boldElement.checked;
-  const italic = italicElement.checked;
-  const underline = underlineElement.checked;
-  const strike = strikeElement.checked;
-  const formats = [bold, italic, underline, strike];
-  hexColors.each((index, element) => {
-    const value = $(element).val();
-    savedColors[index] = value;
-    colors[index] = value;
-  });
-  const preset = toBinary(colors + ":-:" + animationText.value + ":-:" + speed.value + ":-:" + animationTypes.value + ":-:" + compress(formats));
-  return preset;
-}
-
 function importPreset(p) {
   let preset = fromBinary(p);
-  preset = preset.split(":-:");
-  const colors = preset[0].split(",");
-  animationText.value = preset[1];
-  speed.value = preset[2];
-  animationTypes.value = preset[3];
-  const formats = decompress(preset[4], 4);
+  try{
+    preset = JSON.parse(preset);
+  }catch(e){
+    alert("Invalid preset!");
+    return;
+  }
+  const colors = preset.colors;
+  animationText.value = preset.text;
+  speed.value = preset.speed;
+  animationTypes.value = preset.type;
+  const formats = decompress(preset.formats, 4);
   boldElement.checked = formats[0];
   italicElement.checked = formats[1];
   underlineElement.checked = formats[2];

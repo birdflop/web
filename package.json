@@ -4,7 +4,7 @@
   "description": "The official website for the minecraft multitool simplymc.art",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -17,14 +17,17 @@
   },
   "homepage": "https://github.com/AkiraDevelopment/SimplyMC#readme",
   "dependencies": {
-    "canvas": "^2.9.3",
+    "discord-webhook-node": "^1.1.8",
     "ejs": "^3.1.8",
     "eslint": "^8.20.0",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
-    "gifencoder": "^2.0.1",
-    "node-fetch": "^3.2.9",
+    "memorystore": "^1.6.7",
+    "passport": "^0.6.0",
+    "passport-discord": "^0.1.4",
     "pbf": "^3.2.1",
+    "sqlite3": "^5.0.11",
     "yaml": "^2.1.1"
   }
 }
