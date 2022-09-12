@@ -12,7 +12,7 @@ const Strategy = require("passport-discord").Strategy;
 const analyzeTimings = require('./analyze/functions/analyzeTimings');
 const analyzeProfile = require('./analyze/functions/analyzeProfile');
 const { existsSync } = require('fs');
-const {getPending, addPreset, deletePending, getPresets, addPending} = require('./database/database');
+const { getPending, addPreset, deletePending, getPresets, addPending } = require('./database/database');
 const utils = require('./utils');
 const app = express();
 const MemoryStore = require("memorystore")(session);
@@ -43,7 +43,7 @@ passport.use(
         {
         clientID: CLIENT_ID,
         clientSecret: CLIENT_SECRET,
-        callbackURL: URL+"/callback",
+        callbackURL: URL + "/callback",
         scope: ["identify"],
         },
         (accessToken, refreshToken, profile, done) => {
@@ -92,20 +92,22 @@ app.get("/login", (req, res, next) => {
       if (parsed.hostname === app.locals.domain) {
           req.session.backURL = parsed.path;
       }
-    } else {
+    }
+ else {
       req.session.backURL = "/";
     }
   next();
   }, passport.authenticate("discord"));
 
-app.get("/callback", passport.authenticate("discord", { failureRedirect: "/" }), ( req,res ) => {
+app.get("/callback", passport.authenticate("discord", { failureRedirect: "/" }), (req,res) => {
   // log when a user logs in
   console.log(`User logged in: ${req.user.username + "#" + req.user.discriminator}`);
   if (req.session.backURL) {
       const backURL = req.session.backURL;
       req.session.backURL = null;
       res.redirect(backURL);
-  } else {
+  }
+ else {
       res.redirect("/");
   }
 });
@@ -128,14 +130,14 @@ app.get('/admin', checkAuth, (req, res) => {
 
 app.get('/:page', (req, res) => {
     if (!existsSync(`./site/templates/${req.params.page.toLowerCase()}.ejs`)) return renderTemplate(res, req, 'notfound.ejs');
-    if(req.params.page.toLowerCase() == "presets"){
+    if(req.params.page.toLowerCase() == "presets") {
         getPresets().then((presets) => {
             renderTemplate(res, req, 'presets.ejs', {
                 presets: presets,
                 utils: utils,
             });
         });
-        return
+        return;
     }
     renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
         queryPreset: req.query.preset,
@@ -162,7 +164,8 @@ app.post("/admin", checkAuth, async (req, res) => {
     if(req.user.id != "798738506859282482") return res.redirect('/');
     if(req.body.approved) {
         await addPreset(req.body.name, req.body.description, req.body.author, req.body.data, req.body.date);
-    }else{
+    }
+else{
         const embed = new MessageBuilder()
             .setTitle("Preset Rejected")
             .setDescription(`${req.body.author}'s preset **${req.body.name}** has been rejected by the staff team.`)
@@ -173,15 +176,17 @@ app.post("/admin", checkAuth, async (req, res) => {
     }
     await deletePending(req.body.id);
     await res.redirect('/admin');
-})
+});
 
 app.post('/:page', (req, res) => {
-    if(req.params.page.toLowerCase() == "gradients" || req.params.page.toLowerCase() == "animtab"){
-        if(!req.body.name || !req.body.description || !req.user || !req.body.preset) return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
+    if(req.params.page.toLowerCase() == "gradients" || req.params.page.toLowerCase() == "animtab") {
+        if(!req.body.name || !req.body.description || !req.user || !req.body.preset) {
+return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
             alert: "Please fill out all fields.",
             alert_type: "danger",
             queryPreset: req.query.preset,
         });
+}
         addPending(req.body.name, req.body.description, req.user.username, req.body.preset, Date.now());
         return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
             alert: "Your preset has been submitted for approval.",
@@ -189,7 +194,7 @@ app.post('/:page', (req, res) => {
             queryPreset: req.query.preset,
         });
     }
-    return
+    return;
 });
 
 app.listen(PORT, null, null, () => {

@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3');
-const {PENDING_WEBHOOK, APPROVED_WEBHOOK} = require("../config.json")
+const { PENDING_WEBHOOK, APPROVED_WEBHOOK } = require("../config.json");
 const { Webhook, MessageBuilder } = require('discord-webhook-node');
 const pendingHook = new Webhook(PENDING_WEBHOOK);
 const approvedHook = new Webhook(APPROVED_WEBHOOK);
@@ -8,7 +8,7 @@ database.db = new sqlite3.Database('./database.db', (err) => {
     if (err) {
         console.error(err.message);
     }
-    database.createPresetTable(); 
+    database.createPresetTable();
     database.createPendingTable();
     console.log('Connected to the database.');
 });
@@ -27,7 +27,7 @@ database.createPresetTable = () => {
         }
         console.log('Created table presets');
     });
-}
+};
 
 database.createPendingTable = () => {
     database.db.run(`CREATE TABLE IF NOT EXISTS pending (
@@ -43,7 +43,7 @@ database.createPendingTable = () => {
         }
         console.log('Created table pending');
     });
-}
+};
 
 database.getPending = function getPending() {
     return new Promise((resolve, reject) => {
@@ -54,7 +54,7 @@ database.getPending = function getPending() {
             resolve(rows);
         });
     });
-}
+};
 
 database.deletePending = function deletePending(id) {
     return new Promise((resolve, reject) => {
@@ -65,7 +65,7 @@ database.deletePending = function deletePending(id) {
             resolve();
         });
     });
-}
+};
 
 database.deletePreset = function deletePreset(id) {
     return new Promise((resolve, reject) => {
@@ -76,7 +76,7 @@ database.deletePreset = function deletePreset(id) {
             resolve();
         });
     });
-}
+};
 
 database.getSinglePreset = function getSinglePreset(id) {
     return new Promise((resolve, reject) => {
@@ -87,7 +87,7 @@ database.getSinglePreset = function getSinglePreset(id) {
             resolve(rows);
         });
     });
-}
+};
 
 database.getPresets = function getPresets() {
     return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@ database.getPresets = function getPresets() {
             resolve(rows);
         });
     });
-}
+};
 
 database.addPreset = function addPreset(name, description, author, data, date) {
     return new Promise((resolve, reject) => {
@@ -112,12 +112,12 @@ database.addPreset = function addPreset(name, description, author, data, date) {
                 .addField('Description', description)
                 .addField('Author', author)
                 .addField('Date', date)
-                .setColor('#00ff00')
+                .setColor('#00ff00');
             approvedHook.send(embed);
             resolve();
         });
     });
-}
+};
 
 database.addPending = function addPending(name, description, author, data, date) {
     return new Promise((resolve, reject) => {
@@ -131,11 +131,11 @@ database.addPending = function addPending(name, description, author, data, date)
                 .addField('Description', description)
                 .addField('Author', author)
                 .addField('Date', date)
-                .setColor('#ffff00')
+                .setColor('#ffff00');
             pendingHook.send(embed);
             resolve();
         });
     });
-}
+};
 
 module.exports = database;

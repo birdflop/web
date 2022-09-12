@@ -9,6 +9,6 @@ const fetchUser = async function fetchUser(id) {
         }
     });
     return await res.json();
-}
+};
 
 exports.fetchUser = fetchUser;
