@@ -19,13 +19,13 @@ database.createPresetTable = () => {
         name TEXT NOT NULL,
         description TEXT NOT NULL,
         author TEXT NOT NULL,
+        authorid TEXT NOT NULL,
         data TEXT NOT NULL,
         date TEXT NOT NULL
     )`, (err) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log('Created table presets');
     });
 };
 
@@ -35,13 +35,13 @@ database.createPendingTable = () => {
         name TEXT NOT NULL,
         description TEXT NOT NULL,
         author TEXT NOT NULL,
+        authorid TEXT NOT NULL,
         data TEXT NOT NULL,
         date TEXT NOT NULL
     )`, (err) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log('Created table pending');
     });
 };
 
@@ -100,9 +100,9 @@ database.getPresets = function getPresets() {
     });
 };
 
-database.addPreset = function addPreset(name, description, author, data, date) {
+database.addPreset = function addPreset(name, description, author, authorid, data, date) {
     return new Promise((resolve, reject) => {
-        database.db.run(`INSERT INTO presets (name, description, author, data, date) VALUES (?, ?, ?, ?, ?)`, [name, description, author, data, date], (err) => {
+        database.db.run(`INSERT INTO presets (name, description, author, authorid, data, date) VALUES (?, ?, ?, ?, ?, ?)`, [name, description, author, authorid, data, date], (err) => {
             if (err) {
                 reject(err);
             }
@@ -119,9 +119,9 @@ database.addPreset = function addPreset(name, description, author, data, date) {
     });
 };
 
-database.addPending = function addPending(name, description, author, data, date) {
+database.addPending = function addPending(name, description, author, authorid, data, date) {
     return new Promise((resolve, reject) => {
-        database.db.run(`INSERT INTO pending (name, description, author, data, date) VALUES (?, ?, ?, ?, ?)`, [name, description, author, data, date], (err) => {
+        database.db.run(`INSERT INTO pending (name, description, author, authorid, data, date) VALUES (?, ?, ?, ?, ?, ?)`, [name, description, author, authorid, data, date], (err) => {
             if (err) {
                 reject(err);
             }

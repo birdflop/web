@@ -163,7 +163,7 @@ app.get('/profile-result/:id', async (req, res) => {
 app.post("/admin", checkAuth, async (req, res) => {
     if(req.user.id != "798738506859282482") return res.redirect('/');
     if(req.body.approved) {
-        await addPreset(req.body.name, req.body.description, req.body.author, req.body.data, req.body.date);
+        await addPreset(req.body.name, req.body.description, req.body.author, req.body.id, req.body.data, req.body.date);
     }
 else{
         const embed = new MessageBuilder()
@@ -181,13 +181,13 @@ else{
 app.post('/:page', (req, res) => {
     if(req.params.page.toLowerCase() == "gradients" || req.params.page.toLowerCase() == "animtab") {
         if(!req.body.name || !req.body.description || !req.user || !req.body.preset) {
-return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
-            alert: "Please fill out all fields.",
-            alert_type: "danger",
-            queryPreset: req.query.preset,
-        });
-}
-        addPending(req.body.name, req.body.description, req.user.username, req.body.preset, Date.now());
+            return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
+                alert: "Please fill out all fields.",
+                alert_type: "danger",
+                queryPreset: req.query.preset,
+            });
+        }
+        addPending(req.body.name, req.body.description, req.user.username, req.user.id, req.body.preset, Date.now());
         return renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
             alert: "Your preset has been submitted for approval.",
             alert_type: "success",
