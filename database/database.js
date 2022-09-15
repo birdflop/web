@@ -45,6 +45,51 @@ database.createPendingTable = () => {
     });
 };
 
+database.createBlacklistTable = () => {
+    database.db.run(`CREATE TABLE IF NOT EXISTS blacklist (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userid TEXT NOT NULL,
+        reason TEXT NOT NULL
+    )`, (err) => {
+        if (err) {
+            return console.error(err.message);
+        }
+    });
+};
+
+database.getBlacklist = function getBlacklist() {
+    return new Promise((resolve, reject) => {
+        database.db.all(`SELECT * FROM blacklist`, (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(rows);
+        });
+    });
+};
+
+database.addBlacklist = function addBlacklist(userid, reason) {
+    return new Promise((resolve, reject) => {
+        database.db.run(`INSERT INTO blacklist (userid, reason) VALUES (?, ?)`, [userid, reason], function (err) {
+            if (err) {
+                reject(err);
+            }
+            resolve(this.lastID);
+        });
+    });
+};
+
+database.deleteBlacklist = function deleteBlacklist(id) {
+    return new Promise((resolve, reject) => {
+        database.db.run(`DELETE FROM blacklist WHERE id = ?`, [id], function (err) {
+            if (err) {
+                reject(err);
+            }
+            resolve(this.lastID);
+        });
+    });
+};
+
 database.getPending = function getPending() {
     return new Promise((resolve, reject) => {
         database.db.all(`SELECT * FROM pending`, (err, rows) => {
