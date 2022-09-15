@@ -12,7 +12,7 @@
         </p>
         <div class="tile is-ancestor">
           <div class="tile is-parent">
-            <div class="tile is-child">
+            <div class="tile is-child is-6">
               <p class="title">Ram Calculator</p>
               <p class="subtitle">This will help calculate how much ram to use for aikars flags.</p>
               <div class="content">
@@ -20,6 +20,27 @@
                 <input type="number" id="RamAmount" class="input" value="4000" oninput="calculateRam()">
                 <label for='RamOutputText'>Output</label>
                 <pre class="input" id="RamOutputText" onclick="copyTextToClipboard(this.innerText)"></pre>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-parent">
+            <div class="tile is-child is-6">
+              <p class="title">Gradient Decoder</p>
+              <p class="subtitle">Strips all color/format codes from text</p>
+              <div class="content">
+                <label for='GradientText'>Text</label>
+                <input type="text" id="GradientText" class="input" oninput="decodeGradient()">
+                <label for="GradientType">Gradient Type</label>
+                <div class="select" style="width:100%">
+                  <select style="width:100%" id="GradientType" onchange="decodeGradient()">
+                    <option value='0'>&amp;#rrggbb</option>
+                    <option value="1">&lt;#rrggbb&gt;</option>
+                    <option value="2">&amp;x&amp;r&amp;r&amp;g&amp;g&amp;b&amp;b</option>
+                    <option value="3">§x§r§r§g§g§b§b</option>
+                  </select>
+                </div>
+                <label for='DecodedOutput'>Output</label>
+                <textarea class="textarea" id="DecodedOutput" onclick="copyTextToClipboard(this.innerText)" readonly></textarea>
               </div>
             </div>
           </div>
