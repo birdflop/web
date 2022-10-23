@@ -20,6 +20,9 @@ body{
   background-color: #1b1b1b;
   color: white;
 }
+/* translatable{
+  color:rgb(168, 63, 63)
+} */
 .hero-body{
   background-color: #1b1b1b
 }

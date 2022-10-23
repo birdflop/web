@@ -4,31 +4,55 @@
     <div class="hero-body">
       <div class="container">
         <p class="title" id="title">
-            User Submitted Presets
+            <translatable data-translate="title"></translatable>
           </p>
           <p class="subtitle">
-            Presets submitted by users and approved by moderators
+            <translatable data-translate="subtitle"></translatable>
           </p>
           <br>
         <table id="presets" class="table is-striped is-dark" style="width:100%">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Author</th>
-                    <th>Description</th>
-                    <th>Preview</th>
-                    <th>Click To Use</th>
+                    <th>
+                      <translatable data-translate="id"></translatable>
+                    </th>
+                    <th>
+                      <translatable data-translate="name"></translatable>
+                    </th>
+                    <th>
+                      <translatable data-translate="author"></translatable>
+                    </th>
+                    <th>
+                      <translatable data-translate="description"></translatable>
+                    </th>
+                    <th>
+                      <translatable data-translate="preview"></translatable>
+                    </th>
+                    <th>
+                      <translatable data-translate="click_to_use"></translatable>
+                    </th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Author</th>
-                    <th>Description</th>
-                    <th>Preview</th>
-                    <th>Click To Use</th>
+                  <th>
+                    <translatable data-translate="id"></translatable>
+                  </th>
+                  <th>
+                    <translatable data-translate="name"></translatable>
+                  </th>
+                  <th>
+                    <translatable data-translate="author"></translatable>
+                  </th>
+                  <th>
+                    <translatable data-translate="description"></translatable>
+                  </th>
+                  <th>
+                    <translatable data-translate="preview"></translatable>
+                  </th>
+                  <th>
+                    <translatable data-translate="click_to_use"></translatable>
+                  </th>
                 </tr>
             </tfoot>
             <tbody>
@@ -39,12 +63,18 @@
                         <td><%= presets[i].author %></td>
                         <td><%= presets[i].description %></td>
                         <td>
-                            <button class="button" onclick="createPreview('<%= presets[i].data %>', this)">Show Preview</button>
+                            <button class="button" onclick="createPreview('<%= presets[i].data %>', this)">
+                              <translatable data-translate="show_preview"></translatable>
+                            </button>
                         </td>
                         <td>
-                            <a href="/gradients?preset=<%= presets[i].data %> ">Use As Gradient</a>
+                            <a href="/gradients?preset=<%= presets[i].data %> ">
+                              <translatable data-translate="use_gradient"></translatable>
+                            </a>
                             <br>
-                            <a href="/AnimTab?preset=<%= presets[i].data %> ">Use As AnimTab</a>
+                            <a href="/AnimTab?preset=<%= presets[i].data %> ">
+                              <translatable data-translate="use_animtab"></translatable>
+                            </a>
                         </td>
                     </tr>
                 <% } %>

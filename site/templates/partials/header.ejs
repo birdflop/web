@@ -21,6 +21,10 @@
   <link rel="preload" href="/fonts/MinecraftBoldItalic.otf" as="font" type="font/otf" crossorigin>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/js/js.cookie.js"></script>
+  <script src="/js/MultiScript.js"></script>
+  <script>
+    loadLang("<%= page %>")
+  </script>
 </head>
 <body class="has-navbar-fixed-top">
   <nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
@@ -40,50 +44,58 @@
       <div class="navbar-start">
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
-            Gradients
+            <translatable data-translate-header="gradients"></translatable>
           </a>
           <div class="navbar-dropdown">
             <a class="navbar-item <% if (title == 'Hex Gradient Creator') { %> is-active <% } %>" href="/Gradients">
-              Hex Gradients
+              <translatable data-translate-header="hex_gradients"></translatable>
             </a>
             <a class="navbar-item <% if (title == 'Animated TAB Creator') { %> is-active <% } %>" href="/AnimTab">
-              Animated TAB
+              <translatable data-translate-header="animated_tab"></translatable>
             </a>
             <a class="navbar-item <% if (title == 'User Submitted Presets') { %> is-active <% } %>" href="/Presets">
-              Presets
+              <translatable data-translate-header="presets"></translatable>
             </a>
           </div>
         </div>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
-            Analysis
+            <translatable data-translate-header="analysis"></translatable>
           </a>
           <div class="navbar-dropdown">
             <a class="navbar-item <% if (title == 'Analyze Spark Profile' || title == 'Profile Analysis Result') { %> is-active <% } %>" href="/SparkProfile">
-              Spark Profile
+              <translatable data-translate-header="spark_profile"></translatable>
             </a>
             <a class="navbar-item <% if (title == 'Analyze Timings' || title == 'Timings Analysis Result') { %> is-active <% } %>" href="/PaperTimings">
-              Paper Timings
+              <translatable data-translate-header="paper_timings"></translatable>
             </a>
           </div>
         </div>
         <a class="navbar-item <% if (title == 'Animated Texture Creator') { %> is-active <% } %>" href="/AnimTexture">
-          Animated Textures
+          <translatable data-translate-header="animated_textures"></translatable>
         </a>
         <a class="navbar-item <% if (title == 'Misc Tools') { %> is-active <% } %>" href="/MiscTools">
-          Misc Tools
+          <translatable data-translate-header="misc_tools"></translatable>
         </a>
         <a class="navbar-item <% if (title == 'Privacy policy') { %> is-active <% } %>" href="/Privacy">
-          Privacy Policy
+          <translatable data-translate-header="privacy_policy"></translatable>
         </a>
       </div>
     
       <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            <translatable data-translate-header="language"></translatable>
+          </a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" onclick="setLang('en_US')">English</a>
+          </div>
+        </div>
         <a class="navbar-item" href="https://github.com/AkiraDevelopment/SimplyMC">
-          GitHub
+          <translatable data-translate-header="github"></translatable>
         </a>
         <a class="navbar-item" href="https://discord.simplymc.art/">
-          Discord
+          <translatable data-translate-header="discord"></translatable>
         </a>
         <% if(user) { %>
           <div class="navbar-item has-dropdown is-hoverable">
@@ -98,12 +110,12 @@
                 </a>
               <% } %>
               <a class="navbar-item" href="/logout">
-                Logout
+                <translatable data-translate-header="logout"></translatable>
               </a>
           </div>
         <% } else { %>
           <a class="navbar-item" href="/login">
-            Login
+            <translatable data-translate-header="login"></translatable>
           </a>
         <% } %>
       </div>

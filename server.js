@@ -81,7 +81,9 @@ const checkAuth = (req, res, next) => {
 };
 
 app.get('/', (req, res) => {
-    renderTemplate(res, req, 'index.ejs');
+    renderTemplate(res, req, 'index.ejs', {
+        page: "index"
+    });
 });
 
 
@@ -133,6 +135,7 @@ app.get('/:page', (req, res) => {
     if(req.params.page.toLowerCase() == "presets") {
         getPresets().then((presets) => {
             renderTemplate(res, req, 'presets.ejs', {
+                page: req.params.page.toLowerCase(),
                 presets: presets,
                 utils: utils,
             });
@@ -140,6 +143,7 @@ app.get('/:page', (req, res) => {
         return;
     }
     renderTemplate(res, req, `${req.params.page.toLowerCase()}.ejs`, {
+        page: req.params.page.toLowerCase(),
         queryPreset: req.query.preset,
         alert: null,
         alert_type: null

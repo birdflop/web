@@ -3,7 +3,9 @@
 
   <div id="hexColorTemplate" style="display:none;">
     <div class="row">
-      <label for="color-$NUM">Hex Color #$NUM</label>
+      <label for="color-$NUM">
+        <translatable data-translate="hex_color_title"></translatable>
+        #$NUM</label>
       <input class="input col-md-1 hexColor" id="color-$NUM" value="$VAL"
         data-jscolor="{preset:'small dark', position:'right'}" oninput="javascript: updateOutputText(event)"
         onchange="javascript: updateOutputText(event); Cookies.set(`#${$NUM}`, document.getElementById('color-$NUM').value, { expires: 7, path: '' })"/>
@@ -14,10 +16,10 @@
     <div class="hero-body">
       <div class="container">
         <p class="title" id="title">
-          Animated TAB
+          <translatable data-translate="title"></translatable>
         </p>
         <p class="subtitle">
-          TAB plugin gradient animation creator
+          <translatable data-translate="subtitle"></translatable>
         </p>
         <br>
         <% if (alert) { %>
@@ -29,12 +31,18 @@
         <div class="tile is-ancestor">
           <div class="tile is-parent">
             <div class="tile is-child">
-              <p class="title">Output</p>
-              <p class="subtitle">This is what you put in animations.yml. Click on it to copy.</p>
+              <p class="title">
+                <translatable data-translate="output_title"></translatable>
+              </p>
+              <p class="subtitle">
+                <translatable data-translate="output_subtitle"></translatable>
+              </p>
               <div class="content">
                 <pre class="textarea" id="outputText" placeholder="Output will appear here" onclick="copyTextToClipboard(this.innerText)"></pre>
               </div>
-              <p id="error">Speed can only be multiples of 50</p>
+              <p id="error">
+                <translatable data-translate="error"></translatable>
+              </p>
             </div>
           </div>
         </div>
@@ -48,7 +56,9 @@
         <div class="tile is-ancestor">
           <div class="tile is-parent">
             <div class="tile is-child">
-              <label for='numOfColors'>Number of Colors</label>
+              <label for='numOfColors'>
+                <translatable data-translate="num_colors"></translatable>
+              </label>
               <input type="number" id="numOfColors" class="input" type="text" min="2" max="10" value="2" oninput="toggleColors(this.value); updateOutputText(event);">
               <div id="hexColors" class="content"></div>
             </div>
@@ -56,22 +66,40 @@
           <div class="tile is-parent is-8">
             <div class="tile is-child">
               <div class="content">
-                <label for='animationName'>Animation Name</label>
+                <label for='animationName'>
+                  <translatable data-translate="anim_name"></translatable>
+                </label>
                 <input id="animationName" class="input" type="text" placeholder="Your Text" value="logo" oninput="updateOutputText(event);">
-                <label for='animationText'>Animation Text</label>
+                <label for='animationText'>
+                  <translatable data-translate="anim_text"></translatable>
+                </label>
                 <input id="text" class="input" type="text" placeholder="Your Text" value="SimplyMC" oninput="updateOutputText(event);">
-                <label for="animationType">Animation Type</label>
+                <label for="animationType">
+                  <translatable data-translate="anim_type"></translatable>
+                </label>
                 <div class="select" style="width:100%">
                   <select style="width:100%" id="animationType" onchange="updateOutputText(event);">
-                    <option value='0'>Normal (left -> right)</option>
-                    <option value='1'>Reverse (right -> left)</option>
-                    <option value='2'>Bouncing (UNFINISHED)</option>
-                    <option value='3'>Full text cycle</option>
+                    <option value='0'>
+                      Normal (left -> right)
+                    </option>
+                    <option value='1'>
+                      Reversed (right -> left)
+                    </option>
+                    <option value='2'>
+                      Bouncing (UNFINISHED)
+                    </option>
+                    <option value='3'>
+                      Full text cycle
+                    </option>
                   </select>
                 </div>
-                <label for='animation-speed'>Animation Speed</label>
+                <label for='animation-speed'>
+                  <translatable data-translate="anim_speed"></translatable>
+                </label>
                 <input type="number" id="animation-speed" class="input" type="text" min="50" max="10000" step="50" value="50" oninput="updateOutputText(event);">  
-                <label for='output-format'>Output Format</label><br>
+                <label for='output-format'>
+                  <translatable data-translate="output_format"></translatable>
+                </label><br>
                 <div class="select" style="width:100%">
                   <select style="width:100%" id="output-format" onchange="updateOutputText(event);">
                     <option value='0'>&#rrggbb</option>
@@ -80,34 +108,56 @@
                   </select>
                 </div>
                 <div class="hidden" id="customFormatWrapper">
-                  <label for='customFormat'>Input Text</label>
+                  <label for='customFormat'>
+                    <translatable data-translate="custom_format_label"></translatable>
+                  </label>
                   <input id="customFormat" class="input" type="text" oninput="updateOutputText(event);">
-                  <p>Placeholders:</p>
+                  <p>
+                    <translatable data-translate="custom_format_label"></translatable>
+                  </p>
                   <ul>
-                    <li>$1 - First RR hex</li>
-                    <li>$2 - Second RR hex</li>
-                    <li>$3 - First GG hex</li>
-                    <li>$4 - Second GG hex</li>
-                    <li>$5 - First BB hex</li>
-                    <li>$6 - Second BB hex</li>
-                    <li>$c - Character to format</li>
+                    <li>
+                      <translatable data-translate="custom_format_char1"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char2"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char3"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char4"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char5"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char6"></translatable>
+                    </li>
+                    <li>
+                      <translatable data-translate="custom_format_char7"></translatable>
+                    </li>
                   </ul>
                 </div>
-                <label for='animationFormatting'>Animation Formatting</label>
+                <label for='animationFormatting'>
+                  <translatable data-translate="anim_formatting"></translatable>
+                </label>
                 <textarea id="animationFormatting" class="textarea has-fixed-size" type="text" placeholder="Your Text" oninput="updateOutputText(event);">
 %name%:
   change-interval: %speed%
   texts:
 %output%
                 </textarea>
-                <label for="exportPreset">Custom Presets</label><br>
+                <label for="exportPreset">
+                  <translatable data-translate="custom_preset"></translatable>
+                </label><br>
                 <button class="button" type="button" id="exportPreset"
                   onclick="copyTextToClipboard(exportPreset());">
-                  Copy Preset
+                  <translatable data-translate="copy_preset"></translatable>
                 </button>
                 <button class="button" type="button" id="importPreset"
                   onclick="showfield('importInput')">
-                  Import Preset
+                  <translatable data-translate="import_preset"></translatable>
                 </button>
                 <% if(user){ %> 
                   <button class="button" type="button" id="importPreset" onclick="openModal(document.getElementById('preset'))">
@@ -158,19 +208,27 @@
                 <div id="formatSelector">
                   <div class="field">
                     <input type="checkbox" class="switch" id="bold" onclick="updateOutputText();">
-                    <label for="bold" class="noselect">Bold</label>
+                    <label for="bold" class="noselect">
+                      <translatable data-translate="bold"></translatable>
+                    </label>
                   </div>
                   <div class="field">
                     <input type="checkbox" class="switch" id="italics" onclick="updateOutputText();">
-                    <label for="italics" class="noselect">Italic</label>
+                    <label for="italics" class="noselect">
+                      <translatable data-translate="italic"></translatable>
+                    </label>
                   </div>
                   <div class="field">
                     <input type="checkbox" class="switch" id="underline" onclick="updateOutputText();">
-                    <label for="underline" class="noselect">Underline</label>
+                    <label for="underline" class="noselect">
+                      <translatable data-translate="underline"></translatable>
+                    </label>
                   </div>
                   <div class="field">
                     <input type="checkbox" class="switch" id="strike" onclick="updateOutputText();">
-                    <label for="strike" class="noselect">Strikethrough</label>
+                    <label for="strike" class="noselect">
+                      <translatable data-translate="strike"></translatable>
+                    </label>
                   </div>
                 </div>
               </div>

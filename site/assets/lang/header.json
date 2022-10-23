@@ -1,0 +1,47 @@
+{
+    "gradients": {
+      "en_US": "Gradients"
+    },
+    "hex_gradients": {
+      "en_US": "Hex Gradients"
+    },
+    "animated_tab": {
+      "en_US": "Animated Tab"
+    },
+    "presets": {
+      "en_US": "Presets"
+    },
+    "analysis": {
+      "en_US": "Analysis"
+    },
+    "spark_profile": {
+      "en_US": "Spark Profile"
+    },
+    "paper_timings": {
+      "en_US": "Paper Timings"
+    },
+    "animated_textures": {
+      "en_US": "Animated Textures"
+    },
+    "misc_tools": {
+      "en_US": "Misc Tools"
+    },
+    "privacy_policy": {
+      "en_US": "Privacy Policy"
+    },
+    "language": {
+      "en_US": "Language"
+    },
+    "github": {
+      "en_US": "GitHub"
+    },
+    "discord": {
+      "en_US": "Discord"
+    },
+    "login": {
+      "en_US": "Login"
+    },
+    "logout": {
+      "en_US": "Logout"
+    }
+}
