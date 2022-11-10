@@ -2,11 +2,13 @@
 const text = document.getElementById("text");
 const speed = document.getElementById('animation-speed');
 const animationType = document.getElementById('animationType');
+const outputFormat = document.getElementById('output-format');
 const boldElement = document.getElementById('bold');
 const italicElement = document.getElementById('italics');
 const underlineElement = document.getElementById('underline');
 const strikeElement = document.getElementById('strike');
 const errorElement = document.getElementById('error');
+const customFormatElement = document.getElementById('customFormat');
 
 const presets = {
   0: {
@@ -264,8 +266,11 @@ function exportPreset() {
     "text": text.value,
     "speed": speed ? speed.value : 50,
     "formats": compress(formats),
+    "output-format": outputFormat ? outputFormat.value : 0,
+    "custom-format": customFormatElement ? customFormatElement.value : "&#$1$2$3$4$5$6$c",
     "type": animationType ? animationType.value : 0,
   };
+  console.log(presetJSON);
   const preset = toBinary(JSON.stringify(presetJSON));
   return preset;
 }
@@ -286,6 +291,12 @@ catch(e) {
   }
   if(animationType) {
     animationTypes.value = preset.type;
+  }
+  if(outputFormat) {
+    outputFormat.value = preset["output-format"];
+  }
+  if(customFormatElement) {
+    customFormatElement.value = preset["custom-format"];
   }
   const formats = decompress(preset.formats, 4);
   boldElement.checked = formats[0];

@@ -80,6 +80,8 @@ function loadCookies() {
     if (Cookies.get('italics') === 'true') italicElement.checked = true;
     if (Cookies.get('underline') === 'true') underlineElement.checked = true;
     if (Cookies.get('strike') === 'true') strikeElement.checked = true;
+    if (Cookies.get('output-format')) outputFormat.value = Cookies.get('output-format');
+    if (Cookies.get('custom-format')) customFormatElement.value = Cookies.get('custom-format');
   }
   else {
     // Otherwise randomize them instead
@@ -98,9 +100,10 @@ function updateCookies() {
   Cookies.set('italics', italicElement.checked, { expires: 7, path: '/Gradients' });
   Cookies.set('underline', underlineElement.checked, { expires: 7, path: '/Gradients' });
   Cookies.set('strike', strikeElement.checked, { expires: 7, path: '/Gradients' });
+  Cookies.set('output-format', outputFormat.value, { expires: 7, path: '/Gradients' });
+  Cookies.set('custom-format', customFormatElement.value, { expires: 7, path: '/Gradients' });
 }
 
-const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
 const customFormat = document.getElementById('customFormat');
 const formatSelector = document.getElementById('formatSelector');
