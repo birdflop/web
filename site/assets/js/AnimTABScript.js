@@ -79,7 +79,6 @@ class AnimatedGradient extends Gradient {
   }
 }
 
-const outputFormat = document.getElementById('output-format');
 const customFormatWrapper = document.getElementById('customFormatWrapper');
 const customFormat = document.getElementById('customFormat');
 function updateOutputText() {
