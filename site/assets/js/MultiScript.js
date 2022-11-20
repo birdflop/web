@@ -7,33 +7,33 @@ function getLang() {
 }
 
 function loadLang(page) {
-    var lang = getLang();
+    let lang = getLang();
     if (lang == null) {
         lang = "en_US";
     }
-    $.getJSON("lang/" + page + ".json", function (data) {
-        $("[data-translate]").each(function(){
-            var key = $(this).data("translate");
+    $.getJSON("/lang/" + page + ".json", function(data) {
+        $("[data-translate]").each(function() {
+            const key = $(this).data("translate");
             console.log(data[key], key);
-            if(!data[key][lang]){
+            if(!data[key][lang]) {
                 console.log("Error: " + key + " not found in " + lang);
                 return $(this).html(data[key]["en_US"]);
             }
             $(this).html(data[key][lang]);
-        }); 
+        });
     });
-};
+}
 
-function loadLangHeader(){
-    var lang = getLang();
+function loadLangHeader() {
+    let lang = getLang();
     if (lang == null) {
         lang = "en_US";
     }
-    $.getJSON("lang/header.json", function (data) {
-        $("[data-translate-header]").each(function(){
-            var key = $(this).data("translate-header");
+    $.getJSON("/lang/header.json", function(data) {
+        $("[data-translate-header]").each(function() {
+            const key = $(this).data("translate-header");
             $(this).html(data[key][lang]);
-        }); 
+        });
     });
 }
 
