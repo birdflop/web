@@ -82,7 +82,7 @@ const checkAuth = (req, res, next) => {
 
 app.get('/', (req, res) => {
     renderTemplate(res, req, 'index.ejs', {
-        page: "index"
+        page: "index",
     });
 });
 
@@ -101,7 +101,7 @@ app.get("/login", (req, res, next) => {
   next();
   }, passport.authenticate("discord"));
 
-app.get("/callback", passport.authenticate("discord", { failureRedirect: "/" }), (req,res) => {
+app.get("/callback", passport.authenticate("discord", { failureRedirect: "/" }), (req, res) => {
   // log when a user logs in
   console.log(`User logged in: ${req.user.username + "#" + req.user.discriminator}`);
   if (req.session.backURL) {
@@ -146,13 +146,14 @@ app.get('/:page', (req, res) => {
         page: req.params.page.toLowerCase(),
         queryPreset: req.query.preset,
         alert: null,
-        alert_type: null
+        alert_type: null,
     });
 });
 
 app.get('/timings-result/:id', async (req, res) => {
     const fields = await analyzeTimings(req.params.id);
     renderTemplate(res, req, `timings-result.ejs`, {
+        page: "timings-result",
         fields,
     });
 });
@@ -160,6 +161,7 @@ app.get('/timings-result/:id', async (req, res) => {
 app.get('/profile-result/:id', async (req, res) => {
     const fields = await analyzeProfile(req.params.id);
     renderTemplate(res, req, `profile-result.ejs`, {
+        page: "profile-result",
         fields,
     });
 });
