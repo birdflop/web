@@ -14,7 +14,6 @@ function loadLang(page) {
     $.getJSON("/lang/" + page + ".json", function(data) {
         $("[data-translate]").each(function() {
             const key = $(this).data("translate");
-            console.log(data[key], key);
             if(!data[key][lang]) {
                 console.log("Error: " + key + " not found in " + lang);
                 return $(this).html(data[key]["en_US"]);
