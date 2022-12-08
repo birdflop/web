@@ -9,7 +9,7 @@ const savedColors = [];
 const formats = {
   0: {
     outputPrefix: '',
-    template: '&#$1$2$3$4$5$6',
+    template: '&#$1$2$3$4$5$6$f$c',
     formatChar: '&',
   },
   1: {
