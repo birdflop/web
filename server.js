@@ -125,6 +125,7 @@ app.get('/admin', checkAuth, (req, res) => {
     if(req.user.id != "798738506859282482") return res.redirect('/');
     getPending().then((pending) => {
         renderTemplate(res, req, 'admin.ejs', {
+            page: "admin",
             presets: pending,
         });
     });
