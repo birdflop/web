@@ -76,5 +76,8 @@
     },
     "strike": {
         "en_US": "Strikethrough"
+    },
+    "mini-message": {
+        "en_US": "Use Mini-Message"
     }
 }
