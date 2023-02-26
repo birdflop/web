@@ -47,5 +47,3 @@ config.json
 
 # Cloudflare
 functions/**/*.js
-
-*partytown*
