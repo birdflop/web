@@ -77,15 +77,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Welcome to sab\'s hellhole'
+      content: 'A Minecraft multitool for you'
     },
     {
       name: 'og:description',
-      content: 'Welcome to sab\'s hellhole'
+      content: 'A Minecraft multitool for you'
     },
     {
       name: 'og:image',
-      content: 'https://avatars.githubusercontent.com/u/42164502'
+      content: 'https://simplymc.art/images/icon.png'
     }
   ]
 }

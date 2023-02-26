@@ -14,7 +14,7 @@ export const RouterHead = component$(() => {
     <>
       <title>{`SimplyMC: ${head.title}`}</title>
       <meta content={`SimplyMC: ${head.title}`} property="og:title"/>
-      <meta content="#0D0D0D" name="theme-color"/>
+      <meta content="#881645" name="theme-color"/>
 
       <link rel="canonical" href={loc.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />

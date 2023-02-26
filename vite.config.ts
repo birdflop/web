@@ -7,16 +7,13 @@ import { partytownVite } from "@builder.io/partytown/utils";
 import { join } from "path";
 export default defineConfig(() => {
     return {
-        plugins: [qwikCity(), qwikVite(), tsconfigPaths(), imagetools(), partytownVite({ dest: join(__dirname, "public", "~partytown") })
+        plugins: [
+            qwikCity(),
+            qwikVite(),
+            tsconfigPaths(),
+            imagetools(),
+            partytownVite({ dest: join(__dirname, "public", "~partytown") })
         ],
-        build: {
-            target: "es2022"
-        },
-        optimizeDeps: {
-            esbuildOptions: {
-                target: "es2022"
-            }
-        },
         preview: {
             headers: {
                 "Cache-Control": "public, max-age=600",
