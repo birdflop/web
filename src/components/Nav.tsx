@@ -1,10 +1,13 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-import { GitPullRequestIcon, FileTextIcon, FolderIcon, MoreHorizontalIcon, GithubIcon, DollarSignIcon, MenuIcon, ChevronDownIcon } from "qwik-feather-icons";
+import { MenuIcon, ChevronDownIcon } from "qwik-feather-icons";
 
+// @ts-ignore
 import logoAVIF from "~/images/logo.png?avif";
+// @ts-ignore
 import logoWEBP from "~/images/logo.png?webp";
+// @ts-ignore
 import { src as logoPlaceholder } from "~/images/logo.png?metadata";
 
 export default component$(() => {
