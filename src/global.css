@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: MinecraftRegular;
+  src: url(/fonts/MinecraftRegular.otf);
+}
+
+@font-face {
+  font-family: MinecraftBold;
+  src: url(/fonts/MinecraftBold.otf);
+}
+
+@font-face {
+  font-family: MinecraftItalic;
+  src: url(/fonts/MinecraftItalic.otf);
+}
+
+@font-face {
+  font-family: MinecraftBoldItalic;
+  src: url(/fonts/MinecraftBoldItalic.otf);
+}
+
+@layer utilities {
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
+}
+
+html {
+  overflow: overlay;
+  background-color: hsl(0deg, 0%, 5%);
+  font-family: MinecraftRegular;
+}
+
+* { scroll-behavior: smooth; }
+*::-webkit-scrollbar {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background-color: #00000000;
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #ffffff60;
+  border-radius: 2px;
+}

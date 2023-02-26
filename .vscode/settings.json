@@ -1,4 +1,5 @@
 {
-    "liveServer.settings.port": 5501,
-    "deepscan.enable": true
+  "liveServer.settings.port": 5501,
+  "deepscan.enable": true,
+  "css.lint.unknownAtRules": "ignore",
 }
