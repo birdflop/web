@@ -12,7 +12,7 @@ export default defineConfig(() => {
             qwikVite(),
             tsconfigPaths(),
             imagetools(),
-            partytownVite({ dest: join(__dirname, "public", "~partytown") })
+            partytownVite({ dest: join(__dirname, "dist", "~partytown") })
         ],
         preview: {
             headers: {
