@@ -30,7 +30,7 @@ export default component$(() => {
                 const b64 = e!.target!.result;
                 const type = b64!.toString().split(",")[0].split(";")[0].split(":")[1];
                 if (type == "image/gif") {
-                  //@ts-ignore
+                  // @ts-ignore
                   const gifframes = await gifFrames({ url: b64, frames: 'all' });
                   gifframes.forEach((frame: any) => {
                     const contentStream = frame.getImage();
@@ -48,20 +48,72 @@ export default component$(() => {
         } />
         
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
-          {store.frames.map(frame => {
+          {store.frames.map((frame, i) => {
             return <div class="w-24 rounded-lg border-gray-700 border-2">
               <img width={96} height={96} class="rounded-t-md" src={frame.img} />
-              <input type="number" value={frame.delay} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
+              <input type="number" value={frame.delay} onInput$={(event: any) => { store.frames[i].delay = event.target!.value }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
             </div>
           })}
         </div>
 
         <p>Texture Name</p>
         <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={(event: any) => {store.textureName = event.target!.value}} />
-        <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">
+        <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2" onClick$={
+          () => {
+            const canvas: any = document.getElementById("c")!;
+            const imglist: any = document.getElementById("imgs")!;
+            const ctx = canvas.getContext("2d");
+            const imgs = imglist.getElementsByTagName("IMG");
+            let max = 0;
+            for (let i = 0; i != imgs.length; i++) {
+              if (imgs[i].naturalWidth > max)max = imgs[i].naturalWidth;
+            }
+            canvas.width = max;
+            canvas.height = max * imgs.length;
+            ctx.imageSmoothingEnabled = false;
+            for (let i = 0; i != imgs.length; i++) {
+              ctx.drawImage(imgs[i], 0, i * max);
+              ctx.drawImage(imgs[i], 0, max * i, max, max);
+            }
+            const b64 = canvas.toDataURL();
+            const pngd: any = document.getElementById("pngd")!;
+            const mcmeta: any = document.getElementById("mcmeta")!;
+            pngd.href = b64;
+            pngd.download = store.textureName + ".png";
+            mcmeta.download = store.textureName + ".png.mcmeta";
+
+            const start = '{"animation":{"frames": [';
+            const frameBase = '{"index": ';
+            const frameMid = ', "time": ';
+            const frameEnd = '},';
+            let res = start;
+            for (let i = 0; i != store.frames.length; i++) {
+              let tmp = frameBase;
+              tmp += i;
+              tmp += frameMid;
+              tmp += store.frames[i].delay;
+              tmp += frameEnd;
+              res += tmp;
+            }
+            res = res.substring(0, res.length - 1);
+            res += "]}}";
+
+            mcmeta.href = "data:text/plain;charset=utf-8," + res;
+
+            const links = document.getElementById("links")!
+            links.style.display = "inline";
+          }
+        }>
           Generate
         </button>
+        <br/><br/>
+        <div id="links" style="display: none;">
+          <p class="mb-4">Animated Texture Generated Successfully!</p>
+          <a id="pngd" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Download PNG</a>
+          <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">Download MCMETA</a>
+        </div>
       </div>
+      <canvas id="c" class="w-24 max-h-screen ml-48"></canvas>
     </section>
   );
 });
