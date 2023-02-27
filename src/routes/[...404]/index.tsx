@@ -4,27 +4,26 @@ import { DocumentHead } from '@builder.io/qwik-city';
 export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="text-center justify-center">
-        <div class="mt-10 space-y-3 min-h-[60px]">
-          <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-12 ease-in-out">
-            404: Page not found
-          </h1>
-        </div>
-      </div>
+      <h1 class="font-bold tracking-tight text-red-400 text-4xl mb-12 ease-in-out">
+        404: Page not found
+        <p class="text-gray-400 text-xl">
+          Whoops! You've hit a dead-end. <a href="/" class="text-blue-300/50 underline">Go back home</a>
+        </p>
+      </h1>
     </section>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'A Minecraft Multitool',
+  title: '404: Page not found',
   meta: [
     {
       name: 'description',
-      content: 'A Minecraft multitool for you'
+      content: 'Whoops! You\'ve hit a dead-end.'
     },
     {
       name: 'og:description',
-      content: 'A Minecraft multitool for you'
+      content: 'Whoops! You\'ve hit a dead-end.'
     },
     {
       name: 'og:image',

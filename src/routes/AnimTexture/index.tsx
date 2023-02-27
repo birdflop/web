@@ -19,7 +19,7 @@ export default component$(() => {
         </h2>
 
         <script async src="/scripts/gif-frames.js" />
-        <p>Select Frame(s)</p>
+        <p>Select Frame(s) or a GIF</p>
         <input type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" onChange$={
           (event) => {
             if (!event.target.files) return;
@@ -123,11 +123,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'A Minecraft multitool for you'
+      content: 'Easily merge textures for resource pack animations or convert from GIF'
     },
     {
       name: 'og:description',
-      content: 'A Minecraft multitool for you'
+      content: 'Easily merge textures for resource pack animations or convert from GIF'
     },
     {
       name: 'og:image',

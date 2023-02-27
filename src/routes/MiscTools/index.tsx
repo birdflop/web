@@ -77,11 +77,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'A Minecraft multitool for you'
+      content: 'Random minecraft server tools'
     },
     {
       name: 'og:description',
-      content: 'A Minecraft multitool for you'
+      content: 'Random minecraft server tools'
     },
     {
       name: 'og:image',
