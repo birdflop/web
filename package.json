@@ -31,7 +31,6 @@
     "eslint": "8.35.0",
     "eslint-plugin-qwik": "0.19.2",
     "express": "^4.18.2",
-    "gif-extract-frames": "^1.0.2",
     "imagetools-core": "^3.3.1",
     "node-fetch": "3.3.0",
     "path": "^0.12.7",

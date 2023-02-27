@@ -1,27 +1,5 @@
 import { component$, useStore, } from '@builder.io/qwik';
-import { DocumentHead, server$ } from '@builder.io/qwik-city';
-
-//@ts-ignore
-import extractFrames from 'gif-extract-frames';
-
-import fs from 'fs';
-
-export const getgifFrames = server$(async (e, b64) => {
-  const date = Date.now();
-  fs.mkdirSync(`tmp${date}`);
-  await extractFrames({
-    input: b64,
-    output: `tmp${date}/%d.png`
-  });
-  const filenames = fs.readdirSync(`tmp${date}`);
-  const files = filenames.map(filename => {
-    return fs.readFileSync(`tmp${date}/${filename}`).toString('base64');
-  });
-  fs.rmSync(`tmp${date}`, { recursive: true });
-  console.log('i did something')
-  return files;
-});
-
+import { DocumentHead } from '@builder.io/qwik-city';
 
 export default component$(() => {
   const store = useStore({
@@ -40,6 +18,7 @@ export default component$(() => {
           (THIS PAGE IS HEAVILY A WORK IN PROGRESS)
         </h2>
 
+        <script async src="/scripts/gif-frames.js" />
         <p>Select Frame(s)</p>
         <input type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" onChange$={
           (event) => {
@@ -51,23 +30,28 @@ export default component$(() => {
                 const b64 = e!.target!.result;
                 const type = b64!.toString().split(",")[0].split(";")[0].split(":")[1];
                 if (type == "image/gif") {
-                  const gifframes = await getgifFrames(b64)
-                  gifframes.forEach((b64: any) => {
-                    store.frames = [...store.frames, `data:image/png;base64,${b64}`];
+                  //@ts-ignore
+                  const gifframes = await gifFrames({ url: b64, frames: 'all' });
+                  gifframes.forEach((frame: any) => {
+                    const contentStream = frame.getImage();
+                    const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
+                    const b64frame = `data:image/png;base64,${imageData}`;
+
+                    store.frames = [...store.frames, { img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) }];
                   });
                   return;
                 }
-                store.frames = [...store.frames, b64];
+                store.frames = [...store.frames, { img: b64, delay: 20 }];
               }
             })
           }
         } />
         
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
-          {store.frames.map(b64 => {
+          {store.frames.map(frame => {
             return <div class="w-24 rounded-lg border-gray-700 border-2">
-              <img width={96} height={96} class="rounded-t-md" src={b64} />
-              <input type="number" value={20} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
+              <img width={96} height={96} class="rounded-t-md" src={frame.img} />
+              <input type="number" value={frame.delay} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
             </div>
           })}
         </div>
