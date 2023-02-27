@@ -5,19 +5,20 @@ import { imagetools } from "vite-imagetools";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { partytownVite } from "@builder.io/partytown/utils";
 import { join } from "path";
+
 export default defineConfig(() => {
-    return {
-        plugins: [
-            qwikCity(),
-            qwikVite(),
-            tsconfigPaths(),
-            imagetools(),
-            partytownVite({ dest: join(__dirname, "dist", "~partytown") })
-        ],
-        preview: {
-            headers: {
-                "Cache-Control": "public, max-age=600",
-            },
-        }
-    };
+  return {
+    plugins: [
+      qwikCity(),
+      qwikVite(),
+      tsconfigPaths(),
+      imagetools(),
+      partytownVite({ dest: join(__dirname, "dist", "~partytown") })
+],
+    preview: {
+      headers: {
+        "Cache-Control": "public, max-age=600",
+      },
+    },
+  };
 });

@@ -1,8 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
-import icon from "~/images/icon.png";
-
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
  */
@@ -12,13 +10,11 @@ export const RouterHead = component$(() => {
 
   return (
     <>
-      <title>{`SimplyMC: ${head.title}`}</title>
-      <meta content={`SimplyMC: ${head.title}`} property="og:title"/>
-      <meta content="#881645" name="theme-color"/>
+      <title>{head.title}</title>
 
       <link rel="canonical" href={loc.href} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" type="image/svg+xml" href={icon} />
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
       {head.meta.map((m) => (
         <meta {...m} />

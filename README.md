@@ -1,25 +1,68 @@
-<img width="400" src="https://www.simplymc.art/images/full.png" alt="SimplyMC">
-<a href="https://www.simplymc.art/">SimplyMC</a> is a Minecraft multitool for developers, server owners and players.
-<br><br>
-💖 Consider donating if we helped you:<br>
-<a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
-<br><br>
-<a href="https://discord.simplymc.art/"> <img src="https://img.shields.io/discord/1017694167155093554"></a>
-<a href="https://github.com/AkiraDevelopment/SimplyMC/commits"> <img src="https://img.shields.io/github/last-commit/AkiraDevelopment/SimplyMC"></a>
-<a href="#"> <img src="https://img.shields.io/github/languages/code-size/AkiraDevelopment/SimplyMC"></a>
-<a href="https://github.com/AkiraDevelopment/SimplyMC/watchers"> <img src="https://img.shields.io/github/watchers/AkiraDevelopment/SimplyMC"></a>
-<a href="https://github.com/AkiraDevelopment/SimplyMC/stargazers"> <img src="https://img.shields.io/github/stars/AkiraDevelopment/SimplyMC"></a>
-<a href="https://github.com/AkiraDevelopment/SimplyMC/network/members"> <img src="https://img.shields.io/github/forks/AkiraDevelopment/SimplyMC"></a>
+# Qwik City App ⚡️
 
-<h2>Contributing</h2>
-If you would like to contribute please make sure your code works as intended and formatted properly.
-<br><br>
-<h2>Forking</h2>
-If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
-<br><br>
-<a href="https://github.com/AkiraDevelopment/SimplyMC/graphs/contributors"><img src="https://contrib.rocks/image?repo=AkiraDevelopment/SimplyMC"></a>
-<br><br>
-<img src="https://estruyf-github.azurewebsites.net/api/VisitorHit?user=oli-idk&repo=SimplyMC&countColor=%237B1E7A"/>
+- [Qwik Docs](https://qwik.builder.io/)
+- [Discord](https://qwik.builder.io/chat)
+- [Qwik GitHub](https://github.com/BuilderIO/qwik)
+- [@QwikDev](https://twitter.com/QwikDev)
+- [Vite](https://vitejs.dev/)
+
+---
+
+## Project Structure
+
+This project is using Qwik with [QwikCity](https://qwik.builder.io/qwikcity/overview/). QwikCity is just a extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
+
+Inside your project, you'll see the following directory structure:
+
+```
+├── public/
+│   └── ...
+└── src/
+    ├── components/
+    │   └── ...
+    └── routes/
+        └── ...
+```
+
+- `src/routes`: Provides the directory based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.builder.io/qwikcity/routing/overview/) for more info.
+
+- `src/components`: Recommended directory for components.
+
+- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
+
+## Add Integrations and deployment
+
+Use the `pnpm qwik add` command to add additional integrations. Some examples of integrations include: Cloudflare, Netlify or Express server, and the [Static Site Generator (SSG)](https://qwik.builder.io/qwikcity/guides/static-site-generation/).
+
+```shell
+pnpm qwik add # or `yarn qwik add`
+```
+
+## Development
+
+Development mode uses [Vite's development server](https://vitejs.dev/). During development, the `dev` command will server-side render (SSR) the output.
+
+```shell
+npm start # or `yarn start`
+```
+
+> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
+
+## Preview
+
+The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to locally preview a production build, and it should not be used as a production server.
+
+```shell
+pnpm preview # or `yarn preview`
+```
+
+## Production
+
+The production build will generate client and server modules by running both client and server build commands. Additionally, the build command will use Typescript to run a type check on the source code.
+
+```shell
+pnpm build # or `yarn build`
+```
 
 ## Cloudflare Pages
 
