@@ -1,5 +1,7 @@
 import { component$, useStore, } from '@builder.io/qwik';
 import { DocumentHead, server$ } from '@builder.io/qwik-city';
+
+//@ts-ignore
 import extractFrames from 'gif-extract-frames';
 
 import fs from 'fs';
