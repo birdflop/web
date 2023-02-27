@@ -10,7 +10,7 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px]">
+      <div class="mt-10 min-h-[60px] p-20">
         <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-2 ease-in-out">
           Random Misc minecraft server tools
         </h1>
@@ -25,12 +25,12 @@ export default component$(() => {
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
         
-        <p>RAM Amount</p>
+        <label for="ram">RAM Amount</label>
         <div class="flex w-48 h-9 mt-2.5">
           <button data-action="decrement" onClick$={() => {store.ram -= 512}} class="bg-gray-600 text-white text-2xl hover:bg-gray-500 h-full w-20 rounded-l-lg cursor-pointer">
               -
           </button>
-          <input type="number" onInput$={(event: any) => {store.ram = event.target!.value}} class="text-sm text-center w-full bg-gray-700 placeholder-gray-400 text-white focus:bg-gray-600 appearance-none" value={store.ram} />
+          <input type="number" id="ram" onInput$={(event: any) => {store.ram = event.target!.value}} class="text-sm text-center w-full bg-gray-700 placeholder-gray-400 text-white focus:bg-gray-600 appearance-none" value={store.ram} />
           <button data-action="increment" onClick$={() => {store.ram += 512}} class="bg-gray-600 text-white text-2xl hover:bg-gray-500 h-full w-20 rounded-r-lg cursor-pointer">
               +
           </button>
@@ -49,8 +49,8 @@ export default component$(() => {
           Strips all color/format codes from text
         </h2>
 
-        <p>Text</p>
-        <input class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onInput$={(event: any) => {store.gradientInput = event.target!.value}} />
+        <label for="gradientinput">Text</label>
+        <input id="gradientinput" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onInput$={(event: any) => {store.gradientInput = event.target!.value}} />
         <p>Gradient Type</p>
         <select class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onChange$={(event: any) => {store.gradientType = event.target!.value}}>
           <option value={0}>{'&#rrggbb'}</option>

@@ -9,7 +9,7 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px]">
+      <div class="mt-10 min-h-[60px] p-20">
         <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-2 ease-in-out">
           Animated Textures
         </h1>
@@ -101,13 +101,13 @@ export default component$(() => {
             mcmeta.href = "data:text/plain;charset=utf-8," + res;
 
             const links = document.getElementById("links")!
-            links.style.display = "inline";
+            links.className = "inline";
           }
         }>
           Generate
         </button>
         <br/><br/>
-        <div id="links" style="display: none;">
+        <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
           <a id="pngd" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Download PNG</a>
           <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">Download MCMETA</a>

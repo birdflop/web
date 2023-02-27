@@ -16,10 +16,10 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="text-center justify-center">
-        <div class="flex relative justify-center align-center mb-10" style="width: 100%;">
-          <div class="absolute top-24 w-64 h-64 bg-pink-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl" style="left: 45%"></div>
-          <div class="absolute top-24 w-64 h-64 bg-purple-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl animation-delay-2000" style="right: 50%"></div>
-          <div class="absolute bottom-32 w-64 h-64 bg-violet-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl animation-delay-4000" style="left: 30%"></div>
+        <div class="flex relative justify-center align-center mb-10 w-full">
+          <div class="absolute top-24 w-64 h-64 bg-pink-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl left-[45%]"></div>
+          <div class="absolute top-24 w-64 h-64 bg-purple-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl right-[50%] animation-delay-2000"></div>
+          <div class="absolute bottom-32 w-64 h-64 bg-violet-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl left-[30%] animation-delay-4000"></div>
           <div class="z-10">
             <picture>
               <source srcSet={iconAVIF} type="image/avif" />

@@ -4,7 +4,7 @@ import { DocumentHead } from '@builder.io/qwik-city';
 export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 space-y-3 min-h-[60px]">
+      <div class="mt-10 space-y-3 min-h-[60px] p-20">
         <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-12 ease-in-out">
           Privacy Policy for <span class="text-purple-500">SimplyMC</span>
         </h1>

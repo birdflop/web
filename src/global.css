@@ -35,8 +35,8 @@ html {
 
 * { scroll-behavior: smooth; }
 *::-webkit-scrollbar {
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   width: 8px;
 }
 *::-webkit-scrollbar-track {

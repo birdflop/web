@@ -32,13 +32,13 @@ export default component$(() => {
           </div>
           <div class="flex flex-1 items-center justify-end">
             <div class="pointer-events-auto flex gap-2 text-gray-300 whitespace-nowrap">
-              <div class="cursor-pointer transition duration-200 hidden sm:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md font-bold items-center gap-4">
+              <button class="cursor-pointer transition duration-200 hidden sm:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md font-bold items-center gap-4">
                 <div class="px-4 py-3 flex gap-4 items-center">
                   Gradients
                   <ChevronDownIcon class="transform group-hover:-rotate-180 transition duration-300 ease-in-out" />
                 </div>
                 <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
-                  <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto" style={{ maxHeight: 'calc(100svh - 128px)' }}>
+                  <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                     <Link href="/Gradients" class="transition duration-200 bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md font-bold flex items-center gap-4">
                       Hex Gradients
                     </Link>
@@ -50,14 +50,14 @@ export default component$(() => {
                     </Link>
                   </div>
                 </div>
-              </div>
-              <div class="cursor-pointer transition duration-200 hidden sm:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md font-bold items-center gap-4">
+              </button>
+              <button class="cursor-pointer transition duration-200 hidden sm:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md font-bold items-center gap-4">
                 <div class="px-4 py-3 flex gap-4 items-center">
                   Analysis
                   <ChevronDownIcon class="transform group-hover:-rotate-180 transition duration-300 ease-in-out" />
                 </div>
                 <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
-                  <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto" style={{ maxHeight: 'calc(100svh - 128px)' }}>
+                  <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                     <Link href="/SparkProfile" class="transition duration-200 bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md font-bold flex items-center gap-4">
                       Spark Profile
                     </Link>
@@ -66,7 +66,7 @@ export default component$(() => {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </button>
               <Link href="/AnimTexture" class="transition duration-200 hidden bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md font-bold md:flex items-center gap-4">
                 Animated Textures
               </Link>
