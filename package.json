@@ -22,7 +22,6 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/partytown": "^0.7.0",
     "@builder.io/qwik": "0.19.2",
     "@builder.io/qwik-city": "0.4.0",
     "@types/eslint": "8.21.1",
@@ -30,18 +29,13 @@
     "@types/node-fetch": "latest",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
-    "autoprefixer": "^10.4.13",
     "eslint": "8.34.0",
     "eslint-plugin-qwik": "0.19.2",
-    "imagetools-core": "^3.3.1",
     "node-fetch": "3.3.0",
-    "postcss": "^8.4.16",
     "prettier": "2.8.4",
-    "tailwindcss": "^3.1.8",
     "typescript": "4.9.5",
     "undici": "5.20.0",
     "vite": "4.1.4",
-    "vite-imagetools": "^4.0.18",
     "vite-tsconfig-paths": "3.5.0",
     "wrangler": "latest"
   }
