@@ -10,6 +10,7 @@ node_modules
 # Cache
 .cache
 .mf
+.vscode
 .rollup.cache
 tsconfig.tsbuildinfo
 
@@ -23,7 +24,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Editor
-.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -36,6 +36,14 @@ lerna-debug.log*
 # Yarn
 .yarn/*
 !.yarn/releases
+
+config/
+data/
+/transcript/
+/files/
+.DS_Store
+package-lock.json
+config.json
 
 # Cloudflare
 functions/**/*.js

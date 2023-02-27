@@ -1,159 +1,76 @@
 import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
-import { Link } from '@builder.io/qwik-city';
+import { DocumentHead } from '@builder.io/qwik-city';
+
+import { CoffeeIcon } from "qwik-feather-icons";
+
+// @ts-ignore
+import iconAVIF from "~/images/icon.png?avif";
+// @ts-ignore
+import iconWEBP from "~/images/icon.png?webp";
+// @ts-ignore
+import { src as iconPlaceholder } from "~/images/icon.png?metadata";
+
+import { QwikPartytown } from '~/components/partytown/partytown';
 
 export default component$(() => {
   return (
-    <div>
-      <h1>
-        Welcome to Qwik <span class="lightning">⚡️</span>
-      </h1>
-
-      <ul>
-        <li>
-          Check out the <code>src/routes</code> directory to get started.
-        </li>
-        <li>
-          Add integrations with <code>npm run qwik add</code>.
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-      </ul>
-
-      <h2>Commands</h2>
-
-      <table class="commands">
-        <tbody>
-          <tr>
-            <td>
-              <code>npm run dev</code>
-            </td>
-            <td>Start the dev server and watch for changes.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run preview</code>
-            </td>
-            <td>Production build and start preview server.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run build</code>
-            </td>
-            <td>Production build.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add</code>
-            </td>
-            <td>Select an integration to add.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Add Integrations</h2>
-
-      <table class="commands">
-        <tbody>
-          <tr>
-            <td>
-              <code>npm run qwik add azure-swa</code>
-            </td>
-            <td>
-              <a href="https://learn.microsoft.com/azure/static-web-apps/overview" target="_blank">
-                Azure Static Web Apps
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add cloudflare-pages</code>
-            </td>
-            <td>
-              <a href="https://developers.cloudflare.com/pages" target="_blank">
-                Cloudflare Pages Server
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add express</code>
-            </td>
-            <td>
-              <a href="https://expressjs.com/" target="_blank">
-                Nodejs Express Server
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add netlify-edge</code>
-            </td>
-            <td>
-              <a href="https://docs.netlify.com/" target="_blank">
-                Netlify Edge Functions
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add vercel-edge</code>
-            </td>
-            <td>
-              <a href="https://vercel.com/docs/concepts/get-started" target="_blank">
-                Vercel Edge Functions
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Community</h2>
-
-      <ul>
-        <li>
-          <span>Questions or just want to say hi? </span>
-          <a href="https://qwik.builder.io/chat" target="_blank">
-            Chat on discord!
-          </a>
-        </li>
-        <li>
-          <span>Follow </span>
-          <a href="https://twitter.com/QwikDev" target="_blank">
-            @QwikDev
-          </a>
-          <span> on Twitter</span>
-        </li>
-        <li>
-          <span>Open issues and contribute on </span>
-          <a href="https://github.com/BuilderIO/qwik" target="_blank">
-            GitHub
-          </a>
-        </li>
-        <li>
-          <span>Watch </span>
-          <a href="https://qwik.builder.io/media/" target="_blank">
-            Presentations, Podcasts, Videos, etc.
-          </a>
-        </li>
-      </ul>
-      <Link class="mindblow" href="/flower/">
-        Blow my mind 🤯
-      </Link>
-      <Link class="todolist" href="/todolist/">
-        TODO demo 📝
-      </Link>
-    </div>
+    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+      <div class="text-center justify-center">
+        <div class="flex relative justify-center align-center mb-10" style="width: 100%;">
+          <div class="absolute top-24 w-64 h-64 bg-pink-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl" style="left: 45%"></div>
+          <div class="absolute top-24 w-64 h-64 bg-purple-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl animation-delay-2000" style="right: 50%"></div>
+          <div class="absolute bottom-32 w-64 h-64 bg-violet-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl animation-delay-4000" style="left: 30%"></div>
+          <div class="z-10">
+            <picture>
+              <source srcSet={iconAVIF} type="image/avif" />
+              <source srcSet={iconWEBP} type="image/webp" />
+              <img
+                src={iconPlaceholder}
+                height={300}
+                width={300}
+                alt="SimplyMC icon"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
+          </div>
+        </div>
+        <div class="mt-10 space-y-3 min-h-[60px]">
+          <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-12 ease-in-out">
+            Minecraft multitool for <span class="typer" id="main" data-words="developers,server owners,players,you" data-colors="#cd2032,#cc1e81,#6e6abb" data-delay="50" data-deleteDelay="1000"></span>
+            <span class="cursor" data-owner="main" data-cursor-display="|"></span>
+            <QwikPartytown />
+            <script
+              async
+              type="text/partytown"
+              src="https://unpkg.com/typer-dot-js/typer.js"
+            />
+          </h1>
+          <div class="flex justify-center">
+            <a href="/menu" class="flex transition duration-200 rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 font-bold text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+              <CoffeeIcon/> Consider donating if this helped you
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Welcome to Qwik',
+  title: 'A Minecraft Multitool',
   meta: [
     {
       name: 'description',
-      content: 'Qwik site description',
+      content: 'A Minecraft multitool for you'
     },
-  ],
-};
+    {
+      name: 'og:description',
+      content: 'A Minecraft multitool for you'
+    },
+    {
+      name: 'og:image',
+      content: 'https://simplymc.art/images/icon.png'
+    }
+  ]
+}

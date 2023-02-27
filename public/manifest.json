@@ -1,9 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "qwik-project-name",
-  "short_name": "Welcome to Qwik",
+  "name": "simplymc",
+  "short_name": "simplymc",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#fff",
-  "description": "A Qwik project app."
+  "background_color": "#0D0D0D",
+  "theme_color": "#0D0D0D",
+  "description": "welcome to sab's hellhole"
 }
