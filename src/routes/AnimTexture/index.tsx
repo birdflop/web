@@ -4,9 +4,6 @@ import extractFrames from 'gif-extract-frames';
 
 import fs from 'fs';
 
-// @ts-ignore
-import iconWEBP from "~/images/icon.png?webp";
-
 export const getgifFrames = server$(async (e, b64) => {
   const date = Date.now();
   fs.mkdirSync(`tmp${date}`);
@@ -26,7 +23,8 @@ export const getgifFrames = server$(async (e, b64) => {
 
 export default component$(() => {
   const store = useStore({
-      frames: [] as any[]
+      frames: [] as any[],
+      textureName: ''
   });
 
   return (
@@ -73,7 +71,7 @@ export default component$(() => {
         </div>
 
         <p>Texture Name</p>
-        <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={(event: any) => {store.gradientInput = event.target!.value}} />
+        <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={(event: any) => {store.textureName = event.target!.value}} />
         <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">
           Generate
         </button>
