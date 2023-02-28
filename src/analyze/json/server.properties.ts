@@ -1,23 +1,25 @@
-export default {
-    "online-mode": [
-        {
-            "expressions": [
-                "!server_properties[\"online-mode\"]",
-                "spigot.settings.bungeecord == \"false\"",
-                "paper.settings[\"velocity-support\"][\"online-mode\"] == \"false\" || paper.settings[\"velocity-support\"]enabled == \"false\""
-            ],
-            "prefix": "❌",
-            "value": "Enable this in server.properties for security."
-        }
-    ],
-    "network-compression-threshold": [
-        {
-            "expressions": [
-                "parseInt(server_properties[\"network-compression-threshold\"]) <= 256",
-                "spigot[\"settings\"][\"bungeecord\"] == \"false\""
-            ],
-            "prefix": "❌",
-            "value": "Increase this in server.properties.\nRecommended: 512."
-        }
-    ]
+export default function getConfig() {
+    return {
+        "online-mode": [
+            {
+                "expressions": [
+                    "!server_properties[\"online-mode\"]",
+                    "spigot.settings.bungeecord == \"false\"",
+                    "paper.settings[\"velocity-support\"][\"online-mode\"] == \"false\" || paper.settings[\"velocity-support\"]enabled == \"false\""
+                ],
+                "prefix": "❌",
+                "value": "Enable this in server.properties for security."
+            }
+        ],
+        "network-compression-threshold": [
+            {
+                "expressions": [
+                    "parseInt(server_properties[\"network-compression-threshold\"]) <= 256",
+                    "spigot[\"settings\"][\"bungeecord\"] == \"false\""
+                ],
+                "prefix": "❌",
+                "value": "Increase this in server.properties.\nRecommended: 512."
+            }
+        ]
+    }
 }

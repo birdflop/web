@@ -47,18 +47,18 @@ export default async function analyzeTimings(id: string) {
 	}
 
 	const TIMINGS_CHECK = {
-		servers: servers,
+		servers: servers(),
 		plugins: {
-			paper: plugins_paper,
-			purpur: plugins_purpur,
+			paper: plugins_paper(),
+			purpur: plugins_purpur(),
 		},
 		config: {
-			'server.properties': config_server_properties,
-			bukkit: config_bukkit,
-			spigot: config_spigot,
-			paper: paper._version ? config_paper_28 : config_paper_27,
-			pufferfish: config_pufferfish,
-			purpur: config_purpur,
+			'server.properties': config_server_properties(),
+			bukkit: config_bukkit(),
+			spigot: config_spigot(),
+			paper: paper._version ? config_paper_28() : config_paper_27(),
+			pufferfish: config_pufferfish(),
+			purpur: config_purpur(),
 		},
 	};
 

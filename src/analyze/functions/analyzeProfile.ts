@@ -37,17 +37,17 @@ export default async function analyzeProfile(id: string) {
 	}
 
 	const PROFILE_CHECK = {
-		servers: servers,
+		servers: servers(),
 		plugins: {
-			paper: plugins_paper,
-			purpur: plugins_purpur,
+			paper: plugins_paper(),
+			purpur: plugins_purpur(),
 		},
 		config: {
-			'server.properties': config_server_properties,
-			bukkit: config_bukkit,
-			spigot: config_spigot,
-			paper: config_paper,
-			purpur: config_purpur,
+			'server.properties': config_server_properties(),
+			bukkit: config_bukkit(),
+			spigot: config_spigot(),
+			paper: config_paper(),
+			purpur: config_purpur(),
 		},
 	};
 

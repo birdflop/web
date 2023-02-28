@@ -1,20 +1,22 @@
-export default {
-    "projectile.max-loads-per-projectile": [
-        {
-            "expressions": [
-                "parseInt(pufferfish[\"projectile\"][\"max-load-per-projectile\"]) >= 9"
-            ],
-            "prefix": "❌",
-            "value": "Decrease this in pufferfish.yml.\nRecommended: 8."
-        }
-    ],
-    "dab.enabled": [
-        {
-            "expressions": [
-                "pufferfish[\"dab\"][\"enabled\"] == \"false\""
-            ],
-            "prefix": "❌",
-            "value": "Enable this in pufferfish.yml."
-        }
-    ]
+export default function getConfig() {
+    return {
+        "projectile.max-loads-per-projectile": [
+            {
+                "expressions": [
+                    "parseInt(pufferfish[\"projectile\"][\"max-load-per-projectile\"]) >= 9"
+                ],
+                "prefix": "❌",
+                "value": "Decrease this in pufferfish.yml.\nRecommended: 8."
+            }
+        ],
+        "dab.enabled": [
+            {
+                "expressions": [
+                    "pufferfish[\"dab\"][\"enabled\"] == \"false\""
+                ],
+                "prefix": "❌",
+                "value": "Enable this in pufferfish.yml."
+            }
+        ]
+    }
 }
