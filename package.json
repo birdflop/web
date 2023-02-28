@@ -24,6 +24,7 @@
     "@builder.io/qwik-city": "0.4.0",
     "@types/eslint": "8.21.1",
     "@types/node": "latest",
+    "@types/pbf": "^3.0.2",
     "@types/showdown": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "5.54.0",
     "@typescript-eslint/parser": "5.54.0",
@@ -44,6 +45,7 @@
     "vite-imagetools": "^4.0.18",
     "vite-tsconfig-paths": "4.0.5",
     "wrangler": "latest",
+    "yaml": "^2.2.1",
     "zod": "^3.20.6"
   }
 }

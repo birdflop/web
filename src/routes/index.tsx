@@ -14,7 +14,7 @@ import { QwikPartytown } from '~/components/partytown/partytown';
 
 export default component$(() => {
   return (
-    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="text-center justify-center">
         <div class="flex relative justify-center align-center mb-10 w-full">
           <div class="absolute top-24 w-64 h-64 bg-pink-400 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl left-[45%]"></div>

@@ -9,7 +9,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="mt-10 min-h-[60px] p-20">
         <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-2 ease-in-out">
           Random Misc minecraft server tools
