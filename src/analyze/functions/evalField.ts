@@ -4,12 +4,12 @@ export default function evalField(fields: Field[], option: any[], option_name: s
 	const dict_of_vars: any = { plugins, server_properties, bukkit, spigot, paper, pufferfish, purpur };
 	option.forEach(option_data => {
 		let add_to_field = true;
-		option_data.expressions.forEach((expression: string) => {
+		option_data.expressions.forEach((expression: any) => {
 			Object.keys(dict_of_vars).forEach(config_name => {
-				if (expression.includes(config_name) && !dict_of_vars[config_name]) add_to_field = false;
+				if (expression.vars.includes(config_name) && !dict_of_vars[config_name]) add_to_field = false;
 			});
 			try {
-				if (add_to_field && !eval(expression)) add_to_field = false;
+				if (add_to_field && !expression.bool(dict_of_vars)) add_to_field = false;
 			}
 			catch (err) {
 				console.log(err);
