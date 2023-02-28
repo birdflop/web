@@ -45,7 +45,7 @@ export default async function analyzeTimings(id: string) {
 			'server.properties': (await import("~/analyze/json/server.properties.json")).default,
 			bukkit: (await import("~/analyze/json/bukkit.json")).default,
 			spigot: (await import("~/analyze/json/spigot.json")).default,
-			paper: (await import(`../json/timings/paper-${paper._version ? 28 : 27}.json`)).default,
+			paper: (paper._version ? await import("~/analyze/json/timings/paper-28.json") : await import("~/analyze/json/timings/paper-27.json")).default,
 			pufferfish: (await import("~/analyze/json/timings/pufferfish.json")).default,
 			purpur: (await import("~/analyze/json/purpur.json")).default,
 		},
@@ -173,7 +173,7 @@ export default async function analyzeTimings(id: string) {
 	if (TIMINGS_CHECK.config) {
 		Object.keys(TIMINGS_CHECK.config).map(i => { return TIMINGS_CHECK.config[i as keyof typeof TIMINGS_CHECK.config]; }).forEach(config => {
 			Object.keys(config).forEach(option_name => {
-				const option = config[option_name];
+				const option = config[option_name as keyof typeof config];
 				evalField(fields, option, option_name, plugins, server_properties, bukkit, spigot, paper, pufferfish, purpur);
 			});
 		});
