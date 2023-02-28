@@ -1,5 +1,3 @@
-import YAML from 'yaml';
-import fs from 'fs';
 import createField from './createField';
 import evalField from './evalField';
 
@@ -38,18 +36,18 @@ export default async function analyzeTimings(id: string) {
 	}
 
 	const TIMINGS_CHECK = {
-		servers: await YAML.parse(fs.readFileSync('./src/analyze/yml/servers.yml', 'utf8')),
+		servers: (await import("~/analyze/json/servers.json")).default,
 		plugins: {
-			paper: await YAML.parse(fs.readFileSync('./src/analyze/yml/plugins/paper.yml', 'utf8')),
-			purpur: await YAML.parse(fs.readFileSync('./src/analyze/yml/plugins/purpur.yml', 'utf8')),
+			paper: (await import("~/analyze/json/plugins/paper.json")).default,
+			purpur: (await import("~/analyze/json/plugins/purpur.json")).default,
 		},
 		config: {
-			'server.properties': await YAML.parse(fs.readFileSync('./src/analyze/yml/server.properties.yml', 'utf8')),
-			bukkit: await YAML.parse(fs.readFileSync('./src/analyze/yml/bukkit.yml', 'utf8')),
-			spigot: await YAML.parse(fs.readFileSync('./src/analyze/yml/spigot.yml', 'utf8')),
-			paper: await YAML.parse(fs.readFileSync(`./src/analyze/yml/timings/paper-v${paper._version ? 28 : 27}.yml`, 'utf8')),
-			pufferfish: await YAML.parse(fs.readFileSync('./src/analyze/yml/timings/pufferfish.yml', 'utf8')),
-			purpur: await YAML.parse(fs.readFileSync('./src/analyze/yml/purpur.yml', 'utf8')),
+			'server.properties': (await import("~/analyze/json/server.properties.json")).default,
+			bukkit: (await import("~/analyze/json/bukkit.json")).default,
+			spigot: (await import("~/analyze/json/spigot.json")).default,
+			paper: (await import(`../json/timings/paper-${paper._version ? 28 : 27}.json`)).default,
+			pufferfish: (await import("~/analyze/json/timings/pufferfish.json")).default,
+			purpur: (await import("~/analyze/json/purpur.json")).default,
 		},
 	};
 
@@ -71,8 +69,8 @@ export default async function analyzeTimings(id: string) {
 		fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, buttons: [{ text: 'Paper', url: 'https://papermc.io' }, { text: 'Pufferfish', url: 'https://ci.pufferfish.host/job/Pufferfish-1.19/' }, { text: 'Purpur', url: 'https://purpurmc.org' }] });
 	}
 
-	if (TIMINGS_CHECK.servers) {
-		TIMINGS_CHECK.servers.forEach((server: FieldOption) => {
+	if (TIMINGS_CHECK.servers.servers) {
+		TIMINGS_CHECK.servers.servers.forEach((server: FieldOption) => {
 			if (version.includes(server.name)) fields.push(createField(server));
 		});
 	}
@@ -163,7 +161,7 @@ export default async function analyzeTimings(id: string) {
 					const server_plugins = TIMINGS_CHECK.plugins[server_name as keyof typeof TIMINGS_CHECK.plugins];
 					Object.keys(server_plugins).forEach(plugin_name => {
 						if (plugin.name == plugin_name) {
-							const stored_plugin = server_plugins[plugin_name];
+							const stored_plugin: any = server_plugins[plugin_name as keyof typeof server_plugins];
 							stored_plugin.name = plugin_name;
 							fields.push(createField(stored_plugin));
 						}
