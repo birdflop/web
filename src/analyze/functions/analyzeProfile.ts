@@ -36,18 +36,13 @@ export default async function analyzeProfile(id: string) {
 		if (configs['purpur.yml']) purpur = JSON.parse(configs['purpur.yml']);
 	}
 
-	const PROFILE_CHECK = {
-		servers: servers(),
-		plugins: {
-			paper: plugins_paper(),
-			purpur: plugins_purpur(),
-		},
+	const profileCheck = {
 		config: {
-			'server.properties': config_server_properties(),
-			bukkit: config_bukkit(),
-			spigot: config_spigot(),
-			paper: config_paper(),
-			purpur: config_purpur(),
+			'server.properties': config_server_properties,
+			bukkit: config_bukkit,
+			spigot: config_spigot,
+			paper: config_paper,
+			purpur: config_purpur,
 		},
 	};
 
@@ -64,8 +59,8 @@ export default async function analyzeProfile(id: string) {
 		fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, buttons: [{ text: 'Paper', url: 'https://papermc.io' }, { text: 'Pufferfish', url: 'https://ci.pufferfish.host/job/Pufferfish-1.19/' }, { text: 'Purpur', url: 'https://purpurmc.org' }] });
 	}
 
-	if (PROFILE_CHECK.servers.servers) {
-		PROFILE_CHECK.servers.servers.forEach((server: FieldOption) => {
+	if (servers().servers) {
+		servers().servers.forEach((server: FieldOption) => {
 			if (version.includes(server.name)) fields.push(createField(server));
 		});
 	}
@@ -141,26 +136,24 @@ export default async function analyzeProfile(id: string) {
 	// 	}
 	// });
 
-	if (PROFILE_CHECK.plugins) {
-		const server_names = Object.keys(PROFILE_CHECK.plugins);
-		server_names.forEach(server_name => {
-			if (Object.keys(configs).includes(server_name)) {
-				plugins.forEach(plugin => {
-					const server_plugins = PROFILE_CHECK.plugins[server_name as keyof typeof PROFILE_CHECK.plugins];
-					Object.keys(server_plugins).forEach(plugin_name => {
-						if (plugin.name == plugin_name) {
-							const stored_plugin: any = server_plugins[plugin_name as keyof typeof server_plugins];
-							stored_plugin.name = plugin_name;
-							fields.push(createField(stored_plugin));
-						}
-					});
+	const server_names = ['paper', 'purpur'];
+	server_names.forEach(server_name => {
+		if (Object.keys(configs).includes(server_name)) {
+			plugins.forEach(plugin => {
+				const server_plugins = server_name == 'paper' ? plugins_paper() : plugins_purpur();
+				Object.keys(server_plugins).forEach(plugin_name => {
+					if (plugin.name == plugin_name) {
+						const stored_plugin: any = server_plugins[plugin_name as keyof typeof server_plugins];
+						stored_plugin.name = plugin_name;
+						fields.push(createField(stored_plugin));
+					}
 				});
-			}
-		});
-	}
+			});
+		}
+	});
 
-	if (PROFILE_CHECK.config) {
-		Object.keys(PROFILE_CHECK.config).map(i => { return PROFILE_CHECK.config[i as keyof typeof PROFILE_CHECK.config]; }).forEach(config => {
+	if (profileCheck.config) {
+		Object.keys(profileCheck.config).map(i => { return profileCheck.config[i as keyof typeof profileCheck.config](); }).forEach(config => {
 			Object.keys(config).forEach(option_name => {
 				const option = config[option_name as keyof typeof config];
 				evalField(fields, option, option_name, plugins, server_properties, bukkit, spigot, paper, null, purpur);
