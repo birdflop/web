@@ -1,10 +1,13 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
+import Toggle from '~/components/elements/Toggle';
+
 export default component$(() => {
   const store = useStore({
-      frames: [] as any[],
-      textureName: ''
+    frames: [] as any[],
+    textureName: '',
+    cumulative: false
   });
 
   return (
@@ -31,7 +34,7 @@ export default component$(() => {
                 const type = b64!.toString().split(",")[0].split(";")[0].split(":")[1];
                 if (type == "image/gif") {
                   // @ts-ignore
-                  const gifframes = await gifFrames({ url: b64, frames: 'all' });
+                  const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
                   gifframes.forEach((frame: any) => {
                     const contentStream = frame.getImage();
                     const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
@@ -58,7 +61,12 @@ export default component$(() => {
 
         <p>Texture Name</p>
         <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={(event: any) => {store.textureName = event.target!.value}} />
-        <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2" onClick$={
+
+        <Toggle checked={store.cumulative} onChange$={(event: any) => {store.cumulative = event.target.checked}}>
+          Cumulative (Turn this on if gif frames are broken)
+        </Toggle>
+
+        <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 mt-6" onClick$={
           () => {
             const canvas: any = document.getElementById("c")!;
             const imglist: any = document.getElementById("imgs")!;
