@@ -37,7 +37,7 @@ export default component$(() => {
         </div>
         <div class="mt-10 space-y-3 min-h-[60px]">
           <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-12 ease-in-out">
-            Minecraft multitool for <span class="typer" id="main" data-words="developers,server owners,players,you" data-colors="#cd2032,#cc1e81,#6e6abb" data-delay="50" data-deleteDelay="1000"></span>
+            Minecraft multitool for <span class="typer" id="main" data-words="developers,server owners,players,you" data-colors="#cd2032,#ad3960,#8e518d,#6e6abb" data-delay="50" data-deleteDelay="1000"></span>
             <span class="cursor" data-owner="main" data-cursor-display="|"></span>
             <QwikPartytown />
             <script
