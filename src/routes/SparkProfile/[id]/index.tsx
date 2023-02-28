@@ -25,7 +25,7 @@ export default component$(() => {
                 {fields.map((field: Field) => {
                   return (
                     <div class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
-                      <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, ' > ')}</p>
+                      <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, '\n> ')}</p>
                       {field.value}
                       {field.buttons?.map((button: any) => {
                         return (
