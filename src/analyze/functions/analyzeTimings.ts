@@ -1,6 +1,17 @@
 import createField from './createField';
 import evalField from './evalField';
 
+import servers from '~/analyze/json/servers.json';
+import plugins_paper from '~/analyze/json/plugins/paper.json';
+import plugins_purpur from '~/analyze/json/plugins/purpur.json';
+import config_server_properties from '~/analyze/json/server.properties.json';
+import config_bukkit from '~/analyze/json/bukkit.json';
+import config_spigot from '~/analyze/json/spigot.json';
+import config_paper_27 from '~/analyze/json/timings/paper-27.json';
+import config_paper_28 from '~/analyze/json/timings/paper-28.json';
+import config_pufferfish from '~/analyze/json/timings/pufferfish.json';
+import config_purpur from '~/analyze/json/purpur.json';
+
 export default async function analyzeTimings(id: string) {
 	const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
 	const url_raw = `https://timings.aikar.co/?id=${id}&raw=1`;
@@ -36,18 +47,18 @@ export default async function analyzeTimings(id: string) {
 	}
 
 	const TIMINGS_CHECK = {
-		servers: (await import("~/analyze/json/servers.json")).default,
+		servers: servers,
 		plugins: {
-			paper: (await import("~/analyze/json/plugins/paper.json")).default,
-			purpur: (await import("~/analyze/json/plugins/purpur.json")).default,
+			paper: plugins_paper,
+			purpur: plugins_purpur,
 		},
 		config: {
-			'server.properties': (await import("~/analyze/json/server.properties.json")).default,
-			bukkit: (await import("~/analyze/json/bukkit.json")).default,
-			spigot: (await import("~/analyze/json/spigot.json")).default,
-			paper: (paper._version ? await import("~/analyze/json/timings/paper-28.json") : await import("~/analyze/json/timings/paper-27.json")).default,
-			pufferfish: (await import("~/analyze/json/timings/pufferfish.json")).default,
-			purpur: (await import("~/analyze/json/purpur.json")).default,
+			'server.properties': config_server_properties,
+			bukkit: config_bukkit,
+			spigot: config_spigot,
+			paper: paper._version ? config_paper_28 : config_paper_27,
+			pufferfish: config_pufferfish,
+			purpur: config_purpur,
 		},
 	};
 

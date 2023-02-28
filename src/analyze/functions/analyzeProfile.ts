@@ -1,6 +1,15 @@
 import createField from './createField';
 import evalField from './evalField';
 
+import servers from '~/analyze/json/servers.json';
+import plugins_paper from '~/analyze/json/plugins/paper.json';
+import plugins_purpur from '~/analyze/json/plugins/purpur.json';
+import config_server_properties from '~/analyze/json/server.properties.json';
+import config_bukkit from '~/analyze/json/bukkit.json';
+import config_spigot from '~/analyze/json/spigot.json';
+import config_paper from '~/analyze/json/profile/paper.json';
+import config_purpur from '~/analyze/json/purpur.json';
+
 export default async function analyzeProfile(id: string) {
 	const url_raw = `https://spark.lucko.me/${id}?raw=1`;
 
@@ -28,17 +37,17 @@ export default async function analyzeProfile(id: string) {
 	}
 
 	const PROFILE_CHECK = {
-		servers: (await import("~/analyze/json/servers.json")).default,
+		servers: servers,
 		plugins: {
-			paper: (await import("~/analyze/json/plugins/paper.json")).default,
-			purpur: (await import("~/analyze/json/plugins/purpur.json")).default,
+			paper: plugins_paper,
+			purpur: plugins_purpur,
 		},
 		config: {
-			'server.properties': (await import("~/analyze/json/server.properties.json")).default,
-			bukkit: (await import("~/analyze/json/bukkit.json")).default,
-			spigot: (await import("~/analyze/json/spigot.json")).default,
-			paper: (await import(`~/analyze/json/profile/paper.json`)).default,
-			purpur: (await import("~/analyze/json/purpur.json")).default,
+			'server.properties': config_server_properties,
+			bukkit: config_bukkit,
+			spigot: config_spigot,
+			paper: config_paper,
+			purpur: config_purpur,
 		},
 	};
 
