@@ -1,4 +1,4 @@
-{
+export default {
     "chunk-gc.period-in-ticks": [
         {
             "expressions": [

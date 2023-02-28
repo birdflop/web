@@ -1,4 +1,4 @@
-{
+export default {
     "max-auto-save-chunks-per-tick": [
         {
             "expressions": [

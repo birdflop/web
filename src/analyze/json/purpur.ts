@@ -1,4 +1,4 @@
-{
+export default {
     "settings.use-alternate-keepalive": [
         {
             "expressions": [

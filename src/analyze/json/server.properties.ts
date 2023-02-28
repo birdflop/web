@@ -1,4 +1,4 @@
-{
+export default {
     "online-mode": [
         {
             "expressions": [

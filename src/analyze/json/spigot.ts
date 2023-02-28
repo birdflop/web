@@ -1,4 +1,4 @@
-{
+export default {
     "entity-activation-range.animals": [
         {
             "expressions": [

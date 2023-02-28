@@ -1,4 +1,4 @@
-{
+export default {
     "ClearLag": {
         "prefix": "❌",
         "value": "Plugins that claim to remove lag actually cause more lag."

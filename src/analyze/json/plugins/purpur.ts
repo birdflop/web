@@ -1,4 +1,4 @@
-{
+export default {
     "SilkSpawners": {
         "prefix": "❌",
         "value": "You probably don't need SilkSpawners as Purpur already has its features."

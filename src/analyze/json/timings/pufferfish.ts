@@ -1,4 +1,4 @@
-{
+export default {
     "projectile.max-loads-per-projectile": [
         {
             "expressions": [
