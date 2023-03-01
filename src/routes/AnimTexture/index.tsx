@@ -12,11 +12,11 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px] p-20">
-        <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-2 ease-in-out">
+      <div class="mt-10 min-h-[60px]">
+        <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Animated Textures
         </h1>
-        <h2 class="font-bold tracking-tight text-purple-100 text-xl mb-12 ease-in-out">
+        <h2 class="font-bold text-purple-100 text-xl mb-12">
           Easily merge textures for resource pack animations<br/>
           (THIS PAGE IS HEAVILY A WORK IN PROGRESS)
         </h2>
@@ -121,7 +121,7 @@ export default component$(() => {
           <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">Download MCMETA</a>
         </div>
       </div>
-      <canvas id="c" class="w-24 max-h-screen ml-48"></canvas>
+      <canvas id="c" class="w-24 max-h-screen ml-48 hidden sm:flex"></canvas>
     </section>
   );
 });

@@ -8,11 +8,11 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px] p-20">
-        <h1 class="font-bold tracking-tight text-purple-100 text-4xl mb-2 ease-in-out">
+      <div class="mt-10 min-h-[60px]">
+        <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Spark Profile Analysis
         </h1>
-        <h2 class="font-bold tracking-tight text-purple-100 text-xl">
+        <h2 class="font-bold text-purple-100 text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br/>
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400">this guide</a> for detailed information on the functionality of each setting.
         </h2>
@@ -47,7 +47,7 @@ export default component$(() => {
         </a>
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
-          <span class="text-gray-300">e.g. https://simplymc.art/SparkProfile/010CZJBz2E</span><br/>
+          <span class="text-gray-300">https://simplymc.art/SparkProfile/[code]</span><br/>
           Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400">botflop</a>
         </p>
       </div>
