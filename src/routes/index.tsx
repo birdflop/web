@@ -36,7 +36,7 @@ export default component$(() => {
           </div>
         </div>
         <div class="mt-10 space-y-3 min-h-[60px]">
-          <h1 class="font-bold text-purple-100 text-4xl mb-12">
+          <h1 class="text-purple-100 text-4xl mb-12">
             Minecraft multitool for <span class="typer" id="main" data-words="developers,server owners,players,you" data-colors="#cd2032,#ad3960,#8e518d,#6e6abb" data-delay="50" data-deleteDelay="1000"></span>
             <span class="cursor" data-owner="main" data-cursor-display="|"></span>
             <QwikPartytown />
@@ -47,7 +47,7 @@ export default component$(() => {
             />
           </h1>
           <div class="flex justify-center">
-            <a href="/menu" class="flex transition duration-200 ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 font-bold text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+            <a href="/menu" class="flex transition duration-200 ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
               <CoffeeIcon/> Consider donating if this helped you
             </a>
           </div>

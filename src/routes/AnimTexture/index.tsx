@@ -16,7 +16,7 @@ export default component$(() => {
         <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Animated Textures
         </h1>
-        <h2 class="font-bold text-purple-100 text-xl mb-12">
+        <h2 class="text-purple-100 text-xl mb-12">
           Easily merge textures for resource pack animations<br/>
           (THIS PAGE IS HEAVILY A WORK IN PROGRESS)
         </h2>

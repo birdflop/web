@@ -14,14 +14,14 @@ export default component$(() => {
         <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Random Misc minecraft server tools
         </h1>
-        <h2 class="font-bold text-purple-100 text-xl mb-24">
+        <h2 class="text-purple-100 text-xl mb-24">
           These are all random useful things that are too small to dedicate a whole page to.
         </h2>
 
         <h1 class="font-bold text-purple-100 text-4xl mb-2">
           RAM Calculator
         </h1>
-        <h2 class="font-bold text-purple-100 text-xl mb-2">
+        <h2 class="text-purple-100 text-xl mb-2">
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
         
@@ -45,7 +45,7 @@ export default component$(() => {
         <h1 class="font-bold text-purple-100 text-4xl mb-2 mt-16">
           Gradient Decoder
         </h1>
-        <h2 class="font-bold text-purple-100 text-xl mb-2">
+        <h2 class="text-purple-100 text-xl mb-2">
           Strips all color/format codes from text
         </h2>
 
