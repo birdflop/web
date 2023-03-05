@@ -12,4 +12,4 @@ export default component$(({ id, checked, onChange$ }: any) => {
           </p>
         </div>
     )
-})
+});

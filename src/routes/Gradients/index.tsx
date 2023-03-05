@@ -2,7 +2,7 @@ import { component$, useBrowserVisibleTask$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
-import TextInput from '~/components/elements/TextInput';
+import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
 
@@ -107,12 +107,12 @@ export default component$(() => {
             }
             store.alerts.push(alert2);
             setTimeout(() => {
-              store.alerts = store.alerts.filter((a: any) => a !== alert2);
+              store.alerts.splice(store.alerts.indexOf(alert2), 1);
             }, 2000);
           }
           store.alerts.push(alert);
           setTimeout(() => {
-            store.alerts = store.alerts.filter((a: any) => a !== alert);
+            store.alerts.splice(store.alerts.indexOf(alert), 1);
           }, 1000);
         }}
           value={
@@ -204,7 +204,7 @@ export default component$(() => {
               Input Text
             </TextInput>
 
-            <div class="grid sm:grid-cols-2 gap-2 mb-4">
+            <div class="grid sm:grid-cols-2 gap-2">
               <div>
                 <label for="format">
                   Output Format
@@ -233,10 +233,10 @@ export default component$(() => {
 
             {
               store.customFormat && <>
-                <label for="format">
+
+                <TextInput id="format" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => store.format = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
                   Custom Format
-                </label>
-                <input id="format" value={store.format} onInput$={(event: any) => store.format = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" />
+                </TextInput>
                 <div class="pb-4">
                   <p>Placeholders:</p>
                   <p>$1 - (R)RGGBB</p>
@@ -277,9 +277,32 @@ export default component$(() => {
             <label>
               Presets
             </label>
-            <div class="my-4">
-              <a class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-3">Export</a>
-              <a class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-3 ml-2">Import</a>
+            <div class="mt-2">
+              <a class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-3 mr-2" onClick$={() => {
+                navigator.clipboard.writeText(JSON.stringify(store));
+                const alert = {
+                  class: 'text-green-500',
+                  text: 'Successfully exported preset to clipboard!',
+                }
+                store.alerts.push(alert);
+                setTimeout(() => {
+                  store.alerts.splice(store.alerts.indexOf(alert), 1);
+                }, 2000);
+              }}>Export</a>
+              <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
+                const json = JSON.parse(event.target!.value);
+                Object.keys(json).forEach((key: any) => {
+                  store[key] = json[key];
+                });
+                const alert = {
+                  class: 'text-green-500',
+                  text: 'Successfully imported preset!',
+                }
+                store.alerts.push(alert);
+                setTimeout(() => {
+                  store.alerts.splice(store.alerts.indexOf(alert), 1);
+                }, 2000);
+              }} />
             </div>
             <div class="mt-6 mb-4 space-y-4">
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => store.bold = event.target!.checked}>

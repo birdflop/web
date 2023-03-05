@@ -1,12 +1,18 @@
 import { component$, Slot } from '@builder.io/qwik';
 
-export default component$(({ id, value, placeholder, onInput$ }: any) => {
+export default component$(({ id, value, placeholder, onInput$, className }: any) => {
     return (
         <div class="flex flex-col">
-          <label for={id}>
+          <label for={id} class="mb-2">
             <Slot />
           </label>
-          <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={onInput$} value={value} placeholder={placeholder} id={id}/>
+          <RawTextInput id={id} value={value} placeholder={placeholder} onInput$={onInput$} className={`mb-3 ${className}`} />
         </div>
     )
-})
+});
+
+export const RawTextInput = component$(({ id, value, placeholder, onInput$, className }: any) => {
+  return (
+    <input class={`text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 rounded-md px-3 py-2 ${className}`} id={id} value={value} placeholder={placeholder} onInput$={onInput$}/>
+  )
+});
