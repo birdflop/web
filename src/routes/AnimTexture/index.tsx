@@ -40,11 +40,11 @@ export default component$(() => {
                     const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
                     const b64frame = `data:image/png;base64,${imageData}`;
 
-                    store.frames = [...store.frames, { img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) }];
+                    store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
                   });
                   return;
                 }
-                store.frames = [...store.frames, { img: b64, delay: 20 }];
+                store.frames.push({ img: b64, delay: 20 });
               }
             })
           }

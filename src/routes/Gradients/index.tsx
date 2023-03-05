@@ -69,7 +69,8 @@ export default component$(() => {
     italic: false,
     underline: false,
     strikethrough: false,
-  });
+    alerts: [],
+  }, { deep: true });
 
   useBrowserVisibleTask$(() => {
     store.colors = ["#00FFE0", "#EB00FF"];
@@ -92,7 +93,27 @@ export default component$(() => {
         <h2 class="text-purple-100 text-xl mb-4">
           This is what you put in the chat. Click on it to copy.
         </h2>
-        <textarea disabled class="w-full bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words"
+        <textarea disabled class="w-full bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words" onClick$={(event: any) => {
+          navigator.clipboard.writeText(event.target!.value);
+          const alert = {
+            class: 'text-green-500',
+            text: 'Copied to clipboard!',
+          }
+          if (event.target!.value.length > 256) {
+            const alert2 = {
+              class: 'text-red-500',
+              text: 'This text is over 256 characters and may not fit in the chat box!',
+            }
+            store.alerts.push(alert2);
+            setTimeout(() => {
+              store.alerts = store.alerts.filter((a: any) => a !== alert2);
+            }, 2000);
+          }
+          store.alerts.push(alert);
+          setTimeout(() => {
+            store.alerts = store.alerts.filter((a: any) => a !== alert);
+          }, 1000);
+        }}
           value={
             (() => {
               let colors = store.colors.map((color: string) => convertToRGB(color));
@@ -129,6 +150,11 @@ export default component$(() => {
             })()
           }
         />
+        {
+          store.alerts.map((alert: any) => {
+            return <p class={alert.class}>{alert.text}</p>
+          })
+        }
 
         <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
           {(() => {
@@ -154,9 +180,9 @@ export default component$(() => {
             </label>
             <div class="mt-2 mb-4">
               <a onClick$={() => {
-                store.colors = [...store.colors, getRandomColor()];
+                store.colors.push(getRandomColor());
               }} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Add</a>
-              <a onClick$={() => {store.colors.pop(); store.colors = [...store.colors]}} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2 ${store.colors.length < 3 && 'hidden'}`}>Remove</a>
+              <a onClick$={() => {store.colors.pop(); store.colors.push(store.colors)}} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2 ${store.colors.length < 3 && 'hidden'}`}>Remove</a>
             </div>
             <div class="overflow-auto max-h-32 sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
@@ -164,7 +190,7 @@ export default component$(() => {
                   <label class="text-purple-100 text-xl">
                       Hex Color {i + 1}
                   </label>
-                  <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { store.colors[i] = event.target!.value; store.colors = [...store.colors] }} />
+                  <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { store.colors[i] = event.target!.value; }} />
                   <script dangerouslySetInnerHTML={'jscolor.install()'}></script>
                 </>
               })}
