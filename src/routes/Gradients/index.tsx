@@ -3,6 +3,32 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 
+import { Gradient } from '~/analyze/functions/HexUtils';
+
+function hex(c: number) {
+  const s = '0123456789ABCDEF';
+  let i = c;
+  if (i == 0 || isNaN(c)) { return '00'; }
+  i = Math.round(Math.min(Math.max(0, i), 255));
+  return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
+}
+
+function convertToHex(rgb: number[]) {
+  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+}
+
+function trim(s: string) {
+  return (s.charAt(0) == '#') ? s.substring(1, 7) : s;
+}
+
+function convertToRGB(hex: string) {
+  const color = [];
+  color[0] = parseInt((trim(hex)).substring(0, 2), 16);
+  color[1] = parseInt((trim(hex)).substring(2, 4), 16);
+  color[2] = parseInt((trim(hex)).substring(4, 6), 16);
+  return color;
+}
+
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
   let color = '#';
@@ -46,7 +72,7 @@ export default component$(() => {
   });
 
   useBrowserVisibleTask$(() => {
-    store.colors = [getRandomColor(), getRandomColor()];
+    store.colors = ["#00FFE0", "#EB00FF"];
   });
 
   return (
@@ -69,16 +95,22 @@ export default component$(() => {
         <textarea class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words"
           value={
             (() => {
-              let output = store.prefix;
+              let colors = store.colors.map((color: string) => convertToRGB(color));
+              if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
 
-              for (let i = 0; i < store.text.length; i++) {
-                const char = store.text.charAt(i);
+              let output = store.prefix;
+              const text = store.text ? store.text : 'SimplyMC';
+
+              const gradient = new Gradient(colors, text.length);
+
+              for (let i = 0; i < text.length; i++) {
+                const char = text.charAt(i);
                 if (char == ' ') {
                   output += char;
                   continue;
                 }
 
-                const hex = 'rrggbb';
+                const hex = convertToHex(gradient.next());
                 let hexOutput = store.format;
                 for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
                 let formatCodes = '';
@@ -86,7 +118,7 @@ export default component$(() => {
                   if (store.bold) formatCodes += store.formatchar + 'l';
                   if (store.italic) formatCodes += store.formatchar + 'o';
                   if (store.underline) formatCodes += store.formatchar + 'n';
-                  if (store.strike) formatCodes += store.formatchar + 'm';
+                  if (store.strikethrough) formatCodes += store.formatchar + 'm';
                 }
             
                 hexOutput = hexOutput.replace('$f', formatCodes);
@@ -119,7 +151,7 @@ export default component$(() => {
                   <label class="font-bold text-purple-100 text-xl">
                       Hex Color {i + 1}
                   </label>
-                  <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { console.log(event) }} />
+                  <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { store.colors[i] = event.target!.value; store.colors = [...store.colors] }} />
                   <script dangerouslySetInnerHTML={'jscolor.install()'}></script>
                 </>
               })}
