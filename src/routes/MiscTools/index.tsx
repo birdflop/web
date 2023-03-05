@@ -1,6 +1,8 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
+import TextInput from '~/components/elements/TextInput';
+
 export default component$(() => {
   const store = useStore({
       ram: 4096,
@@ -11,17 +13,17 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="mt-10 min-h-[60px]">
-        <h1 class="font-bold text-purple-100 text-4xl mb-2">
+        <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Random Misc minecraft server tools
         </h1>
-        <h2 class="text-purple-100 text-xl mb-24">
+        <h2 class="text-gray-50 text-xl mb-24">
           These are all random useful things that are too small to dedicate a whole page to.
         </h2>
 
-        <h1 class="font-bold text-purple-100 text-4xl mb-2">
+        <h1 class="font-bold text-gray-50 text-4xl mb-2">
           RAM Calculator
         </h1>
-        <h2 class="text-purple-100 text-xl mb-2">
+        <h2 class="text-gray-50 text-xl mb-2">
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
         
@@ -42,15 +44,16 @@ export default component$(() => {
           {Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100}
         </pre>
 
-        <h1 class="font-bold text-purple-100 text-4xl mb-2 mt-16">
+        <h1 class="font-bold text-gray-50 text-4xl mb-2 mt-16">
           Gradient Decoder
         </h1>
-        <h2 class="text-purple-100 text-xl mb-2">
+        <h2 class="text-gray-50 text-xl mb-2">
           Strips all color/format codes from text
         </h2>
 
-        <label for="gradientinput">Text</label>
-        <input id="gradientinput" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onInput$={(event: any) => {store.gradientInput = event.target!.value}} />
+        <TextInput id="gradientinput" onInput$={(event: any) => {store.gradientInput = event.target!.value}}>
+          Input Text
+        </TextInput>
         <p>Gradient Type</p>
         <select class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onChange$={(event: any) => {store.gradientType = event.target!.value}}>
           <option value={0}>{'&#rrggbb'}</option>

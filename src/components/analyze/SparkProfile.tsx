@@ -11,10 +11,10 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="mt-10 min-h-[60px]">
-        <h1 class="font-bold text-purple-100 text-4xl mb-2">
+        <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Spark Profile Analysis
         </h1>
-        <h2 class="text-purple-100 text-xl">
+        <h2 class="text-gray-50 text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br/>
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400">this guide</a> for detailed information on the functionality of each setting.
         </h2>

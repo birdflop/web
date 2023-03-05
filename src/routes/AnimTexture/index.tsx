@@ -14,10 +14,10 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <div class="mt-10 min-h-[60px]">
-        <h1 class="font-bold text-purple-100 text-4xl mb-2">
+        <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Animated Textures
         </h1>
-        <h2 class="text-purple-100 text-xl mb-12">
+        <h2 class="text-gray-50 text-xl mb-12">
           Easily merge textures for resource pack animations<br/>
           (THIS PAGE IS HEAVILY A WORK IN PROGRESS)
         </h2>
