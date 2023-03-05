@@ -33,6 +33,30 @@ html {
   font-family: MinecraftRegular;
 }
 
+.font-bold {
+  font-family: MinecraftBold;
+}
+
+.font-italic {
+  font-family: MinecraftItalic;
+}
+
+.font-bold-italic {
+  font-family: MinecraftBoldItalic;
+}
+
+.font-underline {
+  text-decoration-line: underline;
+}
+
+.font-strikethrough {
+  text-decoration-line: line-through;
+}
+
+.font-underline-strikethrough {
+  text-decoration-line: underline line-through;
+}
+
 * { scroll-behavior: smooth; }
 *::-webkit-scrollbar {
   -webkit-appearance: none;

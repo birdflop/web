@@ -130,7 +130,7 @@ export default component$(() => {
           }
         />
 
-        <h1 class="text-6xl my-6 break-words max-w-7xl">
+        <h1 class={`text-6xl my-6 break-words max-w-7xl font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''} font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
           {store.text ? store.text : 'SimplyMC'}
         </h1>
 
