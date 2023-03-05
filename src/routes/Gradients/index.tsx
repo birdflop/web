@@ -60,7 +60,7 @@ const presets = {
 export default component$(() => {
   const store: any = useStore({
     colors: [],
-    text: 'SimplyMC',
+    text: 'Simply MC',
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
@@ -92,7 +92,7 @@ export default component$(() => {
         <h2 class="font-bold text-purple-100 text-xl mb-4">
           This is what you put in the chat. Click on it to copy.
         </h2>
-        <textarea class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words"
+        <textarea disabled class="w-full bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words"
           value={
             (() => {
               let colors = store.colors.map((color: string) => convertToRGB(color));
@@ -101,7 +101,7 @@ export default component$(() => {
               let output = store.prefix;
               const text = store.text ? store.text : 'SimplyMC';
 
-              const gradient = new Gradient(colors, text.length);
+              const gradient = new Gradient(colors, text.replace(/ /g, '').length);
 
               for (let i = 0; i < text.length; i++) {
                 const char = text.charAt(i);
@@ -130,8 +130,21 @@ export default component$(() => {
           }
         />
 
-        <h1 class={`text-6xl my-6 break-words max-w-7xl font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''} font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
-          {store.text ? store.text : 'SimplyMC'}
+        <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+          {(() => {
+            const text = store.text ? store.text : 'SimplyMC';
+
+            let colors = store.colors.map((color: string) => convertToRGB(color));
+            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+
+            const gradient = new Gradient(colors, text.replace(/ /g, '').length);
+
+            let hex = '';
+            return text.split('').map((char: string) => {
+              if (char != ' ') hex = convertToHex(gradient.next());
+              return <span style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
+            });
+          })()}
         </h1>
 
         <div class="grid sm:grid-cols-4 gap-2">
