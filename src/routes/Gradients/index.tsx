@@ -2,6 +2,7 @@ import { component$, useBrowserVisibleTask$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
+import TextInput from '~/components/elements/TextInput';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
 
@@ -83,14 +84,14 @@ export default component$(() => {
         <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Hex Gradients
         </h1>
-        <h2 class="text-purple-100 text-xl mb-24">
+        <h2 class=" mb-24">
           Hex color gradient creator
         </h2>
 
         <h1 class="font-bold text-purple-100 text-4xl mb-2">
           Output
         </h1>
-        <h2 class="text-purple-100 text-xl mb-4">
+        <h2 class=" mb-4">
           This is what you put in the chat. Click on it to copy.
         </h2>
         <textarea disabled class="w-full bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words" onClick$={(event: any) => {
@@ -175,19 +176,21 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <label class="font-bold text-purple-100 text-xl">
+            <label class="font-bold">
               {store.colors.length} Colors
             </label>
             <div class="mt-2 mb-4">
               <a onClick$={() => {
                 store.colors.push(getRandomColor());
               }} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Add</a>
-              <a onClick$={() => {store.colors.pop(); store.colors.push(store.colors)}} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2 ${store.colors.length < 3 && 'hidden'}`}>Remove</a>
+              <a onClick$={() => {
+                store.colors.pop();
+              }} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2 ${store.colors.length < 3 && 'hidden'}`}>Remove</a>
             </div>
             <div class="overflow-auto max-h-32 sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
                 return <>
-                  <label class="text-purple-100 text-xl">
+                  <label>
                       Hex Color {i + 1}
                   </label>
                   <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { store.colors[i] = event.target!.value; }} />
@@ -197,14 +200,13 @@ export default component$(() => {
             </div>
           </div>
           <div class="sm:col-span-3">
-            <label for="input" class="text-purple-100 text-xl">
+            <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
               Input Text
-            </label>
-            <input id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" />
+            </TextInput>
 
             <div class="grid sm:grid-cols-2 gap-2 mb-4">
               <div>
-                <label for="format" class="text-purple-100 text-xl">
+                <label for="format">
                   Output Format
                 </label>
                 <select id="format" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-3 mt-2" onChange$={
@@ -224,17 +226,14 @@ export default component$(() => {
                   </option>
                 </select>
               </div>
-              <div>
-                <label for="formatchar" class="text-purple-100 text-xl">
-                  Format Character
-                </label>
-                <input id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => store.formatchar = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2" />
-              </div>
+              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => store.formatchar = event.target!.value}>
+                Format Character
+              </TextInput>
             </div>
 
             {
               store.customFormat && <>
-                <label for="format" class="text-purple-100 text-xl">
+                <label for="format">
                   Custom Format
                 </label>
                 <input id="format" value={store.format} onInput$={(event: any) => store.format = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" />
@@ -252,13 +251,12 @@ export default component$(() => {
               </>
             }
 
-            <label for="prefix" class="text-purple-100 text-xl">
+
+            <TextInput id="prefix" value={store.prefix} placeholder="example: '/nick '" onInput$={(event: any) => store.prefix = event.target!.value}>
               Prefix (Usually used for commands)
-            </label>
-            <input id="prefix" value={store.prefix} placeholder="example: '/nick '" onInput$={(event: any) => store.prefix = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" />
+            </TextInput>
 
-
-            <label for="preset" class="text-purple-100 text-xl">
+            <label for="preset">
               Color Preset
             </label>
             <select id="preset" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-3 mt-2 mb-4" onChange$={
@@ -276,7 +274,7 @@ export default component$(() => {
               }
             </select>
 
-            <label class="text-purple-100 text-xl">
+            <label>
               Presets
             </label>
             <div class="my-4">

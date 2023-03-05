@@ -6,7 +6,7 @@ export default component$(() => {
       ram: 4096,
       gradientType: 0,
       gradientInput: ''
-  });
+  }, { deep: true });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">

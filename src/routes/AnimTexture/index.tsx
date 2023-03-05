@@ -2,13 +2,14 @@ import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
+import TextInput from '~/components/elements/TextInput';
 
 export default component$(() => {
   const store = useStore({
     frames: [] as any[],
     textureName: '',
     cumulative: false
-  });
+  }, { deep: true });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
@@ -59,8 +60,9 @@ export default component$(() => {
           })}
         </div>
 
-        <p>Texture Name</p>
-        <input class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={(event: any) => {store.textureName = event.target!.value}} />
+        <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => {store.textureName = event.target!.value}}>
+          Texture Name
+        </TextInput>
 
         <Toggle checked={store.cumulative} onChange$={(event: any) => {store.cumulative = event.target.checked}}>
           Cumulative (Turn this on if gif frames are broken)

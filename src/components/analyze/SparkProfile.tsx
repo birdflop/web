@@ -1,5 +1,7 @@
 import { component$, useStore, Slot } from '@builder.io/qwik';
 
+import TextInput from '~/components/elements/TextInput';
+
 export default component$(() => {
   const store = useStore({
       redirect: '',
@@ -19,8 +21,7 @@ export default component$(() => {
 
         <Slot />
         
-        <label for="link">Paste the spark profile link here</label><br/>
-        <input id="link" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-6 mt-2" onInput$={
+        <TextInput id="link" onInput$={
           (event: any) => {
             const link = event.target!.value;
             store.redirect = '';
@@ -39,7 +40,10 @@ export default component$(() => {
               store.redirect = `/SparkProfile/${code}`;
             }
           }
-        } />
+        }>
+          Paste the spark profile link here
+        </TextInput>
+
         <p class={`text-red-400 ${!store.error && 'hidden'}`}>{store.error}</p>
 
         <a href={store.redirect} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-6 py-4 ${!store.redirect && 'hidden'}`}>
