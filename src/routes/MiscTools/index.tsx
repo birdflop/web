@@ -1,5 +1,6 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
+import SelectInput from '~/components/elements/SelectInput';
 
 import TextInput from '~/components/elements/TextInput';
 
@@ -54,13 +55,14 @@ export default component$(() => {
         <TextInput id="gradientinput" onInput$={(event: any) => {store.gradientInput = event.target!.value}}>
           Input Text
         </TextInput>
-        <p>Gradient Type</p>
-        <select class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mb-4" onChange$={(event: any) => {store.gradientType = event.target!.value}}>
+
+        <SelectInput id="gradienttype" label="Gradient Type" onChange$={(event: any) => {store.gradientType = event.target!.value}}>
           <option value={0}>{'&#rrggbb'}</option>
           <option value={1}>{'<&#rrggbb>'}</option>
           <option value={2}>{'&x&r&r&g&g&b&b'}</option>
           <option value={3}>{'§x§r§r§g§g§b§b'}</option>
-        </select>
+        </SelectInput>
+
         <p>Output</p>
         <pre class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2">
           {

@@ -3,6 +3,7 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
+import SelectInput from '~/components/elements/SelectInput';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
 
@@ -205,27 +206,16 @@ export default component$(() => {
             </TextInput>
 
             <div class="grid sm:grid-cols-2 gap-2">
-              <div>
-                <label for="format">
-                  Output Format
-                </label>
-                <select id="format" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-3 mt-2" onChange$={
-                  (event: any) => {
-                    if (event.target!.value == 'custom') return store.customFormat = true;
-                    store.customFormat = false;
-                    store.format = event.target!.value;
-                  }
-                }>
-                  {
-                    formats.map((format: any) => {
-                      return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>
-                    })
-                  }
-                  <option value={"custom"}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
-                  </option>
-                </select>
-              </div>
+              <SelectInput id="format" label="Output Format" value={store.format} onChange$={(event: any) => store.format = event.target!.value}>
+                {
+                  formats.map((format: any) => {
+                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>
+                  })
+                }
+                <option value={"custom"}>
+                  {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                </option>
+              </SelectInput>
               <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => store.formatchar = event.target!.value}>
                 Format Character
               </TextInput>
@@ -233,7 +223,6 @@ export default component$(() => {
 
             {
               store.customFormat && <>
-
                 <TextInput id="format" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => store.format = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
                   Custom Format
                 </TextInput>
@@ -256,10 +245,8 @@ export default component$(() => {
               Prefix (Usually used for commands)
             </TextInput>
 
-            <label for="preset">
-              Color Preset
-            </label>
-            <select id="preset" class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-3 mt-2 mb-4" onChange$={
+
+            <SelectInput id="preset" label="Color Preset" value={store.format} onChange$={
               (event: any) => {
                 store.colors = [];
                 setTimeout(() => {
@@ -272,7 +259,7 @@ export default component$(() => {
                   return <option value={preset}>{preset}</option>
                 })
               }
-            </select>
+            </SelectInput>
 
             <label>
               Presets
