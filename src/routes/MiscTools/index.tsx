@@ -1,5 +1,6 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
+import NumberInput from '~/components/elements/NumberInput';
 import SelectInput from '~/components/elements/SelectInput';
 
 import TextInput from '~/components/elements/TextInput';
@@ -27,17 +28,11 @@ export default component$(() => {
         <h2 class="text-gray-50 text-xl mb-2">
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
-        
-        <label for="ram">RAM Amount</label>
-        <div class="flex w-48 h-9 mt-2.5">
-          <button data-action="decrement" onClick$={() => {store.ram -= 512}} class="bg-gray-600 text-white text-2xl hover:bg-gray-500 h-full w-20 rounded-l-lg cursor-pointer">
-              -
-          </button>
-          <input type="number" id="ram" onInput$={(event: any) => {store.ram = event.target!.value}} class="text-sm text-center w-full bg-gray-700 placeholder-gray-400 text-white focus:bg-gray-600 appearance-none" value={store.ram} />
-          <button data-action="increment" onClick$={() => {store.ram += 512}} class="bg-gray-600 text-white text-2xl hover:bg-gray-500 h-full w-20 rounded-r-lg cursor-pointer">
-              +
-          </button>
-        </div>
+
+        <NumberInput id="ram" input={true} value={store.ram} onInput$={(event: any) => {store.ram = event.target!.value}} onIncrement$={() => {store.ram += 512}} onDecrement$={() => {store.ram -= 512}}>
+          RAM Amount
+        </NumberInput>
+
         <p class="py-4">
           11({store.ram}) ÷ 12 - 1200 =
         </p>

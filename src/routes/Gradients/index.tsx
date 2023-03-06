@@ -4,6 +4,8 @@ import { DocumentHead } from '@builder.io/qwik-city';
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 import SelectInput from '~/components/elements/SelectInput';
+import NumberInput from '~/components/elements/NumberInput';
+import ColorInput from '~/components/elements/ColorInput';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
 
@@ -177,25 +179,15 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <label class="font-bold">
+            <NumberInput id="colors" onIncrement$={() => {store.colors.push(getRandomColor());}} onDecrement$={() => {store.colors.pop()}}>
               {store.colors.length} Colors
-            </label>
-            <div class="mt-2 mb-4">
-              <a onClick$={() => {
-                store.colors.push(getRandomColor());
-              }} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Add</a>
-              <a onClick$={() => {
-                store.colors.pop();
-              }} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2 ${store.colors.length < 3 && 'hidden'}`}>Remove</a>
-            </div>
-            <div class="overflow-auto max-h-32 sm:max-h-[500px]">
+            </NumberInput>
+            <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
               {store.colors.map((color: string, i: number) => {
                 return <>
-                  <label>
-                      Hex Color {i + 1}
-                  </label>
-                  <input id={`color${i + 1}`} value={color} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4" data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', palette: store.colors })} onInput$={(event: any) => { store.colors[i] = event.target!.value; }} />
-                  <script dangerouslySetInnerHTML={'jscolor.install()'}></script>
+                  <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }}>
+                    Hex Color {i + 1}
+                  </ColorInput>
                 </>
               })}
             </div>
