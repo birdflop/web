@@ -14,13 +14,13 @@ export default component$(({ id, value, input, onInput$, onDecrement$, onIncreme
 export const RawNumberInput = component$(({ id, value, input, onInput$, onDecrement$, onIncrement$ }: any) => {
   return (
     <div class="flex">
-      <button data-action="decrement" onClick$={onDecrement$} class={`bg-gray-${input ? 700 : 800} text-white text-2xl hover:bg-gray-${input ? 500 : 700} h-full py-1.5 w-20 rounded-l-md cursor-pointer`}>
+      <button data-action="decrement" onClick$={onDecrement$} class={`transition ease-in-out bg-gray-${input ? 700 : 800} text-white text-2xl hover:bg-gray-${input ? 500 : 700} h-full py-1.5 w-20 rounded-l-md cursor-pointer`}>
           -
       </button>
       {
-        input && <input type="number" id={id} value={value} onInput$={onInput$} class="text-lg text-center bg-gray-800 text-gray-50 hover:bg-gray-600 focus:bg-gray-700 px-3 py-2" />
+        input && <input type="number" id={id} value={value} onInput$={onInput$} class="transition ease-in-out text-lg text-center bg-gray-800 text-gray-50 hover:bg-gray-600 focus:bg-gray-700 px-3 py-2" />
       }
-      <button data-action="increment" onClick$={onIncrement$} class={`bg-gray-${input ? 700 : 800} text-white text-2xl hover:bg-gray-${input ? 500 : 700} h-full py-1.5 w-20 rounded-r-md cursor-pointer`}>
+      <button data-action="increment" onClick$={onIncrement$} class={`transition ease-in-out bg-gray-${input ? 700 : 800} text-white text-2xl hover:bg-gray-${input ? 500 : 700} h-full py-1.5 w-20 rounded-r-md cursor-pointer`}>
           +
       </button>
     </div>

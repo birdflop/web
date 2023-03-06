@@ -13,6 +13,6 @@ export default component$(({ id, value, placeholder, onInput$, className }: any)
 
 export const RawTextInput = component$(({ id, value, placeholder, onInput$, className }: any) => {
   return (
-    <input class={`text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 ${className}`} id={id} value={value} placeholder={placeholder} onInput$={onInput$}/>
+    <input class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 ${className}`} id={id} value={value} placeholder={placeholder} onInput$={onInput$}/>
   )
 });

@@ -14,7 +14,7 @@ export default component$(({ id, value, placeholder, onInput$, jscolorData, clas
 export const RawColorInput = component$(({ id, value, placeholder, onInput$, jscolorData, className }: any) => {
   return (
     <>
-      <input class={`text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md py-2 ${className}`} data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', ...jscolorData })} id={id} value={value} placeholder={placeholder} onInput$={onInput$}/>
+      <input class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md py-2 ${className}`} data-jscolor={JSON.stringify({ preset: 'small dark', position: 'bottom', ...jscolorData })} id={id} value={value} placeholder={placeholder} onInput$={onInput$}/>
       <script dangerouslySetInnerHTML={'jscolor.install()'}></script>
     </>
   )

@@ -15,7 +15,7 @@ export default component$(({ label, id, value, placeholder, onChange$, className
 
 export const RawSelectInput = component$(({ id, value, placeholder, onChange$, className }: any) => {
   return (
-    <select class={`text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-2 py-3 ${className}`} id={id} value={value} placeholder={placeholder} onChange$={onChange$}>
+    <select class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-2 py-3 ${className}`} id={id} value={value} placeholder={placeholder} onChange$={onChange$}>
       <Slot />
     </select>
   )

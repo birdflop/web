@@ -17,7 +17,7 @@ export const RawOutputField = component$(({ id, value, className }: any) => {
   }, { deep: true });
   return (
     <>
-      <textarea disabled class={`bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 break-words ${className}`} id={id} value={value} onClick$={(event: any) => {
+      <textarea disabled class={`transition ease-in-out cursor-pointer bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 break-words ${className}`} id={id} value={value} onClick$={(event: any) => {
         navigator.clipboard.writeText(event.target!.value);
         const alert = {
           class: 'text-green-500',
