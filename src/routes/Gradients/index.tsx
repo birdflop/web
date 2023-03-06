@@ -6,6 +6,7 @@ import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
+import Button from '~/components/elements/Button';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
 import OutputField from '~/components/elements/OutputField';
@@ -229,9 +230,9 @@ export default component$(() => {
             <label>
               Presets
             </label>
-            <div class="mt-2">
-              <a class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-3 mr-2" onClick$={() => {
-                navigator.clipboard.writeText(JSON.stringify(store));
+            <div class="flex gap-2 mt-2">
+              <Button.Button onClick$={() => {
+                navigator.clipboard.writeText(JSON.stringify({ ...store, alerts: undefined }));
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully exported preset to clipboard!',
@@ -240,7 +241,9 @@ export default component$(() => {
                 setTimeout(() => {
                   store.alerts.splice(store.alerts.indexOf(alert), 1);
                 }, 2000);
-              }}>Export</a>
+              }}>
+                Export
+              </Button.Button>
               <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
                 const json = JSON.parse(event.target!.value);
                 Object.keys(json).forEach((key: any) => {

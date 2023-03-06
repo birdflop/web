@@ -3,6 +3,7 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput from '~/components/elements/TextInput';
+import Button from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
@@ -68,7 +69,7 @@ export default component$(() => {
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 
-        <button class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 mt-6" onClick$={
+        <Button.Button className="my-6" onClick$={
           () => {
             const canvas: any = document.getElementById("c")!;
             const imglist: any = document.getElementById("imgs")!;
@@ -115,12 +116,16 @@ export default component$(() => {
           }
         }>
           Generate
-        </button>
-        <br/><br/>
+        </Button.Button>
+
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <a id="pngd" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">Download PNG</a>
-          <a href='data:text/plain;charset=utf-8,{"animation":{}}' id="mcmeta" target="_blank" class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2 ml-2">Download MCMETA</a>
+          <Button.External id="pngd" className="mr-2">
+            Download PNG
+          </Button.External>
+          <Button.External id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+            Download MCMETA
+          </Button.External>
         </div>
       </div>
       <canvas id="c" class="w-24 max-h-screen ml-48 hidden sm:flex"></canvas>

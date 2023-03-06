@@ -16,17 +16,17 @@ export default async function analyzeTimings(id: string) {
 	const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
 	const url_raw = `https://timings.aikar.co/?id=${id}&raw=1`;
 
-	const response_raw = await fetch(url_raw);
-	const request_raw = await response_raw.json();
-	const response_json = await fetch(timings_json);
-	const request = await response_json.json();
 
-	if (!request_raw) {
-		return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this timings report. Please use an alternative timings report.' }];
+	let request_raw: any
+	let request: any
+	try {
+		const response_raw = await fetch(url_raw);
+		request_raw = await response_raw.json();
+		const response_json = await fetch(timings_json);
+		request = await response_json.json();
 	}
-
-	if (!request_raw || !request) {
-		return [{ name: '❌ Invalid report', value: 'Create a new timings report.' }];
+	catch (err) {
+		return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this spark profile. Please use an alternative spark profile.' }];
 	}
 
 	let version = request.timingsMaster.version;

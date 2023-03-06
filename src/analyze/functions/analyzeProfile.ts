@@ -13,10 +13,12 @@ import config_purpur from '~/analyze/configs/purpur';
 export default async function analyzeProfile(id: string) {
 	const url_raw = `https://spark.lucko.me/${id}?raw=1`;
 
-	const response_raw = await fetch(url_raw);
-	const sampler = await response_raw.json();
-
-	if (!sampler) {
+	let sampler
+	try {
+		const response_raw = await fetch(url_raw);
+		sampler = await response_raw.json();
+	}
+	catch (err) {
 		return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this spark profile. Please use an alternative spark profile.' }];
 	}
 

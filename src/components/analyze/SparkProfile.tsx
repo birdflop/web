@@ -1,6 +1,7 @@
 import { component$, useStore, Slot } from '@builder.io/qwik';
 
 import TextInput from '~/components/elements/TextInput';
+import Button from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
@@ -43,12 +44,11 @@ export default component$(() => {
         }>
           Paste the spark profile link here
         </TextInput>
-
         <p class={`text-red-400 ${!store.error && 'hidden'}`}>{store.error}</p>
-
-        <a href={store.redirect} class={`text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-6 py-4 ${!store.redirect && 'hidden'}`}>
+        <Button.SPA href={store.redirect} className={`${!store.redirect && 'hidden'}`}>
           Submit
-        </a>
+        </Button.SPA>
+  
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
           <span class="text-gray-300">https://simplymc.art/SparkProfile/[code]</span><br/>
