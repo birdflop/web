@@ -236,7 +236,7 @@ export default component$(() => {
             <label>
               Presets
             </label>
-            <div class="flex gap-2 mt-2">
+            <div class="flex gap-2 my-2">
               <Button.Button onClick$={() => {
                 navigator.clipboard.writeText(JSON.stringify({ ...store, alerts: undefined }));
                 const alert = {
@@ -265,6 +265,11 @@ export default component$(() => {
                 }, 2000);
               }} />
             </div>
+            {
+              store.alerts.map((alert: any) => {
+                return <p class={alert.class}>{alert.text}</p>
+              })
+            }
             <div class="mt-6 mb-4 space-y-4">
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => store.bold = event.target!.checked}>
                 Bold - {store.formatchar + 'l'}
