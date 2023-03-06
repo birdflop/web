@@ -172,7 +172,13 @@ export default component$(() => {
             </TextInput>
 
             <div class="grid sm:grid-cols-2 gap-2">
-              <SelectInput id="format" label="Output Format" value={store.format} onChange$={(event: any) => store.format = event.target!.value}>
+              <SelectInput id="format" label="Output Format" value={store.format} onChange$={
+                (event: any) => {
+                  if (event.target!.value == 'custom') return store.customFormat = true;
+                  store.customFormat = false;
+                  store.format = event.target!.value;
+                }
+              }>
                 {
                   formats.map((format: any) => {
                     return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>
