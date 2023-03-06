@@ -1,8 +1,9 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
-import NumberInput from '~/components/elements/NumberInput';
-import SelectInput from '~/components/elements/SelectInput';
 
+import NumberInput from '~/components/elements/NumberInput';
+import OutputField from '~/components/elements/OutputField';
+import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 
 export default component$(() => {
@@ -18,14 +19,14 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Random Misc minecraft server tools
         </h1>
-        <h2 class="text-gray-50 text-xl mb-24">
+        <h2 class="text-gray-50 text-xl mb-12">
           These are all random useful things that are too small to dedicate a whole page to.
         </h2>
 
-        <h1 class="font-bold text-gray-50 text-4xl mb-2">
+        <h1 class="font-bold text-gray-50 text-3xl mb-2">
           RAM Calculator
         </h1>
-        <h2 class="text-gray-50 text-xl mb-2">
+        <h2 class="text-gray-50 text-lg mb-2">
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
 
@@ -33,17 +34,16 @@ export default component$(() => {
           RAM Amount
         </NumberInput>
 
-        <p class="py-4">
+        <OutputField value={
+          Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100
+        }>
           11({store.ram}) ÷ 12 - 1200 =
-        </p>
-        <pre class="w-48 text-lg text-center bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2">
-          {Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100}
-        </pre>
+        </OutputField>
 
-        <h1 class="font-bold text-gray-50 text-4xl mb-2 mt-16">
+        <h1 class="font-bold text-gray-50 text-3xl mb-2 mt-12">
           Gradient Decoder
         </h1>
-        <h2 class="text-gray-50 text-xl mb-2">
+        <h2 class="text-gray-50 text-lg mb-2">
           Strips all color/format codes from text
         </h2>
 
@@ -58,15 +58,14 @@ export default component$(() => {
           <option value={3}>{'§x§r§r§g§g§b§b'}</option>
         </SelectInput>
 
-        <p>Output</p>
-        <pre class="text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2">
-          {
-            store.gradientType == 0 ? store.gradientInput.replace(/&#([A-Fa-f0-9]){6}/g, "") :
-            store.gradientType == 1 ? store.gradientInput.replace(/<#([A-Fa-f0-9]){6}>/g, "") :
-            store.gradientType == 2 ? store.gradientInput.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, "") :
-            store.gradientInput.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, "")
-          }
-        </pre>
+        <OutputField value={
+          store.gradientType == 0 ? store.gradientInput.replace(/&#([A-Fa-f0-9]){6}/g, "") :
+          store.gradientType == 1 ? store.gradientInput.replace(/<#([A-Fa-f0-9]){6}>/g, "") :
+          store.gradientType == 2 ? store.gradientInput.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, "") :
+          store.gradientInput.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, "")
+        }>
+          Output
+        </OutputField>
       </div>
     </section>
   );

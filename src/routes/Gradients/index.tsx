@@ -8,6 +8,7 @@ import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
 
 import { Gradient } from '~/analyze/functions/HexUtils';
+import OutputField from '~/components/elements/OutputField';
 
 function hex(c: number) {
   const s = '0123456789ABCDEF';
@@ -87,78 +88,50 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Hex Gradients
         </h1>
-        <h2 class=" mb-24">
+        <h2 class="text-gray-50 text-xl mb-12">
           Hex color gradient creator
         </h2>
 
-        <h1 class="font-bold text-gray-50 text-4xl mb-2">
-          Output
-        </h1>
-        <h2 class=" mb-4">
-          This is what you put in the chat. Click on it to copy.
-        </h2>
-        <textarea disabled class="w-full bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-4 break-words" onClick$={(event: any) => {
-          navigator.clipboard.writeText(event.target!.value);
-          const alert = {
-            class: 'text-green-500',
-            text: 'Copied to clipboard!',
-          }
-          if (event.target!.value.length > 256) {
-            const alert2 = {
-              class: 'text-red-500',
-              text: 'This text is over 256 characters and may not fit in the chat box!',
-            }
-            store.alerts.push(alert2);
-            setTimeout(() => {
-              store.alerts.splice(store.alerts.indexOf(alert2), 1);
-            }, 2000);
-          }
-          store.alerts.push(alert);
-          setTimeout(() => {
-            store.alerts.splice(store.alerts.indexOf(alert), 1);
-          }, 1000);
-        }}
-          value={
-            (() => {
-              let colors = store.colors.map((color: string) => convertToRGB(color));
-              if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+        <OutputField value={
+          (() => {
+            let colors = store.colors.map((color: string) => convertToRGB(color));
+            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
 
-              let output = store.prefix;
-              const text = store.text ? store.text : 'SimplyMC';
+            let output = store.prefix;
+            const text = store.text ? store.text : 'SimplyMC';
 
-              const gradient = new Gradient(colors, text.replace(/ /g, '').length);
+            const gradient = new Gradient(colors, text.replace(/ /g, '').length);
 
-              for (let i = 0; i < text.length; i++) {
-                const char = text.charAt(i);
-                if (char == ' ') {
-                  output += char;
-                  continue;
-                }
-
-                const hex = convertToHex(gradient.next());
-                let hexOutput = store.format;
-                for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-                let formatCodes = '';
-                if (store.format.includes('$f')) {
-                  if (store.bold) formatCodes += store.formatchar + 'l';
-                  if (store.italic) formatCodes += store.formatchar + 'o';
-                  if (store.underline) formatCodes += store.formatchar + 'n';
-                  if (store.strikethrough) formatCodes += store.formatchar + 'm';
-                }
-            
-                hexOutput = hexOutput.replace('$f', formatCodes);
-                hexOutput = hexOutput.replace('$c', char);
-                output += hexOutput;
+            for (let i = 0; i < text.length; i++) {
+              const char = text.charAt(i);
+              if (char == ' ') {
+                output += char;
+                continue;
               }
-              return output;
-            })()
-          }
-        />
-        {
-          store.alerts.map((alert: any) => {
-            return <p class={alert.class}>{alert.text}</p>
-          })
-        }
+
+              const hex = convertToHex(gradient.next());
+              let hexOutput = store.format;
+              for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+              let formatCodes = '';
+              if (store.format.includes('$f')) {
+                if (store.bold) formatCodes += store.formatchar + 'l';
+                if (store.italic) formatCodes += store.formatchar + 'o';
+                if (store.underline) formatCodes += store.formatchar + 'n';
+                if (store.strikethrough) formatCodes += store.formatchar + 'm';
+              }
+
+              hexOutput = hexOutput.replace('$f', formatCodes);
+              hexOutput = hexOutput.replace('$c', char);
+              output += hexOutput;
+            }
+            return output;
+          })()
+        }>
+          <h1 class="font-bold text-3xl mb-2">
+            Output
+          </h1>
+          This is what you put in the chat. Click on it to copy.
+        </OutputField>
 
         <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
           {(() => {
@@ -185,7 +158,7 @@ export default component$(() => {
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
               {store.colors.map((color: string, i: number) => {
                 return <>
-                  <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }}>
+                  <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; }}>
                     Hex Color {i + 1}
                   </ColorInput>
                 </>

@@ -2,7 +2,7 @@ import { component$, Slot } from '@builder.io/qwik';
 
 export default component$(({ id, value, input, onInput$, onDecrement$, onIncrement$ }: any) => {
   return (
-    <div class="flex flex-col">
+    <div class="flex flex-col mb-3">
       <label for={id} class="mb-2">
         <Slot />
       </label>
