@@ -2,9 +2,15 @@
   "name": "simplymc",
   "version": "5.0.0",
   "description": "The official website for the minecraft multitool simplymc.art",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkiraDevelopment/SimplyMC.git"
+  },
   "engines": {
     "node": ">=15.0.0"
   },
+  "author": "AkiraDevelopment",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "qwik build",
     "build.client": "vite build",
