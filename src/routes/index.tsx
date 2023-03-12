@@ -47,7 +47,7 @@ export default component$(() => {
             />
           </h1>
           <div class="flex justify-center">
-            <a href="/menu" class="flex transition duration-200 ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+            <a href="https://ko-fi.com/akiradev" class="flex transition duration-200 ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
               <CoffeeIcon/> Consider donating if this helped you
             </a>
           </div>
