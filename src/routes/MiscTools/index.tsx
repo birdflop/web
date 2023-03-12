@@ -30,7 +30,7 @@ export default component$(() => {
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
 
-        <NumberInput id="ram" input={true} value={store.ram} onInput$={(event: any) => {store.ram = event.target!.value}} onIncrement$={() => {store.ram += 512}} onDecrement$={() => {store.ram -= 512}}>
+        <NumberInput id="ram" input value={store.ram} min={2048} step={256} onInput$={(event: any) => {store.ram = Number(event.target!.value)}} onIncrement$={() => {store.ram += 512}} onDecrement$={() => {store.ram -= 512}}>
           RAM Amount
         </NumberInput>
 

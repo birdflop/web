@@ -121,7 +121,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => {store.colors.push(getRandomColor());}} onDecrement$={() => {store.colors.pop()}}>
+            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) store.colors.push(getRandomColor()); }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
