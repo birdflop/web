@@ -26,17 +26,17 @@
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.7.5",
-    "@builder.io/qwik": "0.20.1",
-    "@builder.io/qwik-city": "0.5.2",
+    "@builder.io/qwik": "0.21.0",
+    "@builder.io/qwik-city": "0.5.3",
     "@types/eslint": "8.21.1",
     "@types/node": "latest",
     "@types/pbf": "^3.0.2",
     "@types/showdown": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "5.54.0",
-    "@typescript-eslint/parser": "5.54.0",
-    "autoprefixer": "10.4.13",
-    "eslint": "8.35.0",
-    "eslint-plugin-qwik": "0.20.1",
+    "@typescript-eslint/eslint-plugin": "5.54.1",
+    "@typescript-eslint/parser": "5.54.1",
+    "autoprefixer": "10.4.14",
+    "eslint": "8.36.0",
+    "eslint-plugin-qwik": "0.21.0",
     "express": "^4.18.2",
     "imagetools-core": "^3.3.1",
     "path": "^0.12.7",
@@ -50,6 +50,6 @@
     "vite-imagetools": "^4.0.18",
     "vite-tsconfig-paths": "4.0.5",
     "wrangler": "latest",
-    "zod": "^3.21.0"
+    "zod": "^3.21.4"
   }
 }

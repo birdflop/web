@@ -1,9 +1,9 @@
 import { component$, Resource } from '@builder.io/qwik';
-import { DocumentHead, loader$ } from '@builder.io/qwik-city';
+import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
 
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
-export const useResults = loader$(async ({ params }) => {
+export const useResults = routeLoader$(async ({ params }) => {
   return await analyzeProfile(params.id);
 });
 
