@@ -1,4 +1,4 @@
-<img width="400" src="https://www.simplymc.art/images/full.png" alt="SimplyMC">
+<img width="400" src="src/images/logo.png" alt="SimplyMC">
 <a href="https://www.simplymc.art/">SimplyMC</a> is a Minecraft multitool for developers, server owners and players.
 <br><br>
 💖 Consider donating if we helped you:<br>
