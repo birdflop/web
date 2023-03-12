@@ -8,9 +8,9 @@ import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
-import { Gradient } from '~/analyze/functions/HexUtils';
+import { Gradient } from '~/components/util/HexUtils';
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, convertToHex, getRandomColor } from '~/analyze/functions/RGBUtils';
+import { convertToRGB, convertToHex, getRandomColor } from '~/components/util/RGBUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',

@@ -9,8 +9,8 @@ import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, getRandomColor } from '~/analyze/functions/RGBUtils';
-import { AnimationOutput } from '~/analyze/functions/RGBUtils';
+import { convertToRGB, getRandomColor } from '~/components/util/RGBUtils';
+import { AnimationOutput } from '~/components/util/RGBUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
