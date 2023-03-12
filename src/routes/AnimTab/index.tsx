@@ -204,7 +204,7 @@ export default component$(() => {
             </label>
             <div class="flex gap-2 my-2">
               <Button.Button onClick$={() => {
-                navigator.clipboard.writeText(JSON.stringify({ ...store, alerts: undefined }));
+                navigator.clipboard.writeText(JSON.stringify({ ...store, alerts: undefined, frames: undefined, frame: undefined }));
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully exported preset to clipboard!',
