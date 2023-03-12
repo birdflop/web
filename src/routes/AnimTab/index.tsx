@@ -3,7 +3,6 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
-import BigTextInput from '~/components/elements/BigTextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
@@ -164,9 +163,9 @@ export default component$(() => {
               </TextInput>
             </div>
 
-            <BigTextInput id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
+            <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
               Output Format
-            </BigTextInput>
+            </TextInput>
 
             {
               store.customFormat && <>
