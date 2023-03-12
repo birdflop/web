@@ -4,7 +4,7 @@
 💖 Consider donating if we helped you:<br>
 <a href="https://ko-fi.com/N4N550HUP"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"></a>
 <br><br>
-<a href="https://discord.simplymc.art/"> <img src="https://img.shields.io/discord/1017694167155093554"></a>
+<a href="https://discord.simplymc.art"> <img src="https://discord.com/api/guilds/1017694167155093554/widget.png"></a>
 <a href="https://github.com/AkiraDevelopment/SimplyMC/commits"> <img src="https://img.shields.io/github/last-commit/AkiraDevelopment/SimplyMC"></a>
 <a href="#"> <img src="https://img.shields.io/github/languages/code-size/AkiraDevelopment/SimplyMC"></a>
 <a href="https://github.com/AkiraDevelopment/SimplyMC/watchers"> <img src="https://img.shields.io/github/watchers/AkiraDevelopment/SimplyMC"></a>
