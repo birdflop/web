@@ -98,7 +98,8 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
     else if (store.type == 3) {
         const OutPutArray2 = OutPutArray.slice();
         OutPutArray = OutPutArray.reverse().concat(OutPutArray2);
-        store.frames = frames.reverse().concat(frames.slice());
+        const frames2 = frames.slice();
+        store.frames = frames.reverse().concat(frames2);
     }
     else {
         store.frames = frames;
@@ -106,117 +107,3 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
     FinalOutput = FinalOutput.replace('%output%', OutPutArray.join('\n'));
     return FinalOutput;
 }
-
-
-// if (animationTypes.value == '0') {
-//     for (let n = 0; n < newNick.length * 2 - 2; n++) {
-//       const colors = [];
-//       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-//       let output = format.outputPrefix;
-//       for (let i = 0; i < newNick.length; i++) {
-//         const char = newNick.charAt(i);
-//         if (char == ' ') {
-//           output += char;
-//           colors.push(null);
-//           continue;
-//         }
-
-//         const hex = convertToHex(gradient.next());
-//         colors.push(hex);
-//         let hexOutput = format.custom ? customFormat.value : format.template;
-//         for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-//         let formatCodes = '';
-//         if (bold) formatCodes += format.formatChar + 'l';
-//         if (italic) formatCodes += format.formatChar + 'o';
-//         if (underline) formatCodes += format.formatChar + 'n';
-//         if (strike) formatCodes += format.formatChar + 'm';
-//         if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
-//         output += hexOutput.replace('$c', char);
-//       }
-//       outputArray.push(`  - "${output}"`);
-//     }
-//     finalOutput = outputArray.reverse();
-//   }
-//   else if (animationTypes.value == '1') {
-//     for (let n = 0; n < newNick.length * 2 - 2; n++) {
-//       const colors = [];
-//       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-//       let output = format.outputPrefix;
-//       for (let i = 0; i < newNick.length; i++) {
-//         const char = newNick.charAt(i);
-//         if (char == ' ') {
-//           output += char;
-//           colors.push(null);
-//           continue;
-//         }
-
-//         const hex = convertToHex(gradient.next());
-//         colors.push(hex);
-//         let hexOutput = format.custom ? customFormat.value : format.template;
-//         for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-//         let formatCodes = '';
-//         if (bold) formatCodes += format.formatChar + 'l';
-//         if (italic) formatCodes += format.formatChar + 'o';
-//         if (underline) formatCodes += format.formatChar + 'n';
-//         if (strike) formatCodes += format.formatChar + 'm';
-//         if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
-//         output += hexOutput.replace('$c', char);
-//       }
-//       outputArray.push(`  - "${output}"`);
-//     }
-//     finalOutput = outputArray;
-//   }
-//   else if (animationTypes.value == '2') {
-//     const output1 = [];
-//     const output2 = [];
-//     for (let n = 0; n < newNick.length; n++) {
-//       const colors = [];
-//       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-//       let output = format.outputPrefix;
-//       for (let i = 0; i < newNick.length; i++) {
-//         const char = newNick.charAt(i);
-//         if (char == ' ') {
-//           output += char;
-//           colors.push(null);
-//           continue;
-//         }
-
-//         const hex = convertToHex(gradient.next());
-//         colors.push(hex);
-//         let hexOutput = format.custom ? customFormat.value : format.template;
-//         for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-//         let formatCodes = '';
-//         if (bold) formatCodes += format.formatChar + 'l';
-//         if (italic) formatCodes += format.formatChar + 'o';
-//         if (underline) formatCodes += format.formatChar + 'n';
-//         if (strike) formatCodes += format.formatChar + 'm';
-//         if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
-//         output += hexOutput.replace('$c', char);
-//       }
-
-//       output1.push(`  - "${output}"`);
-//       output2.push(`  - "${output}"`);
-//     }
-//     finalOutput = output1.reverse().concat(output2);
-//   }
-//   else if (animationTypes.value == '3') {
-//     for (let n = 0; n < newNick.length * 2 - 2; n++) {
-//       const colors = [];
-//       const gradient = new AnimatedGradient(getColors(), newNick.length, n);
-//       let output = format.outputPrefix;
-
-//       const hex = convertToHex(gradient.next());
-//       colors.push(hex);
-//       let hexOutput = format.custom ? customFormat.value : format.template;
-//       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-//       let formatCodes = '';
-//       if (bold) formatCodes += format.formatChar + 'l';
-//       if (italic) formatCodes += format.formatChar + 'o';
-//       if (underline) formatCodes += format.formatChar + 'n';
-//       if (strike) formatCodes += format.formatChar + 'm';
-//       if (!format.custom) hexOutput = hexOutput.replace('$f', formatCodes);
-//       output += hexOutput;
-//       outputArray.push(`  - "${output + newNick}"`);
-//     }
-//     finalOutput = outputArray;
-//   }
