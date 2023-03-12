@@ -31,20 +31,23 @@ const presets = {
   'Firewatch': ["#CB2D3E", "#EF473A"],
 };
 
-
 export const setCookie = server$(function (store) {
-  const json = { ...JSON.parse(store), alerts: undefined };
+  const json = JSON.parse(store);
+  delete json.alerts;
   Object.keys(json).forEach(key => {
     const existingCookie = this.cookie.get(key);
     if (existingCookie === json[key]) return;
-    this.cookie.set(key, json[key]);
+    this.cookie.set(key, encodeURIComponent(json[key]));
   });
 });
 
 export const getCookie = server$(function (store) {
-  const json = { ...JSON.parse(store), alerts: undefined };
+  const json = JSON.parse(store);
+  delete json.alerts;
   Object.keys(json).forEach(key => {
     const existingCookie: any = this.cookie.get(key);
+
+    if (key == 'colors' && existingCookie) existingCookie.value = existingCookie?.value.split(',');
     json[key] = existingCookie?.value || json[key];
   });
   return JSON.stringify(json);
@@ -70,10 +73,7 @@ export default component$(() => {
     
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       userstore = JSON.parse(userstore);
-      userstore.colors = JSON.parse(userstore.colors);
-      console.log(userstore);
       Object.keys(userstore).forEach((key: any) => {
-        if (key == 'alerts') return;
         if (userstore[key]) store[key] = userstore[key];
       });
     });
@@ -92,7 +92,6 @@ export default component$(() => {
 
         <OutputField charlimit={256} value={
           (() => {
-            console.log(store.colors);
             let colors = store.colors.map((color: string) => convertToRGB(color));
             if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
 
@@ -152,7 +151,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store));} }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
+            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
@@ -294,7 +293,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Hex Gradient Creator',
+  title: 'Hex Gradients',
   meta: [
     {
       name: 'description',

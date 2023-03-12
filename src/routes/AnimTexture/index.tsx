@@ -134,7 +134,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Animated Texture Creator',
+  title: 'Animated Textures',
   meta: [
     {
       name: 'description',

@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import { DocumentHead, server$ } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
@@ -24,6 +24,32 @@ const types = [
   { name: 'Full Text Cycle', value: 4 },
 ]
 
+export const setCookie = server$(function (store) {
+  const json = JSON.parse(store);
+  delete json.alerts;
+  delete json.frames;
+  delete json.frame;
+  Object.keys(json).forEach(key => {
+    const existingCookie = this.cookie.get(key);
+    if (existingCookie === json[key]) return;
+    this.cookie.set(key, encodeURIComponent(json[key]));
+  });
+});
+
+export const getCookie = server$(function (store) {
+  const json = JSON.parse(store);
+  delete json.alerts;
+  delete json.frames;
+  delete json.frame;
+  Object.keys(json).forEach(key => {
+    const existingCookie: any = this.cookie.get(key);
+
+    if (key == 'colors' && existingCookie) existingCookie.value = existingCookie?.value.split(',');
+    json[key] = existingCookie?.value || json[key];
+  });
+  return JSON.stringify(json);
+});
+
 
 export default component$(() => {
   const store: any = useStore({
@@ -32,7 +58,7 @@ export default component$(() => {
     text: 'SimplyMC',
     type: 1,
     speed: 50,
-    hexFormat: '&#$1$2$3$4$5$6$f$c',
+    format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
     outputFormat: "%name%:\n  change-interval: %speed%\n  texts:\n%output%",
@@ -47,6 +73,13 @@ export default component$(() => {
 
   useVisibleTask$(() => {
     store.colors = ["#00FFE0", "#EB00FF"];
+
+    getCookie(JSON.stringify(store)).then((userstore: any) => {
+      userstore = JSON.parse(userstore);
+      Object.keys(userstore).forEach((key: any) => {
+        if (userstore[key]) store[key] = userstore[key];
+      });
+    });
 
     let speed = store.speed
 
@@ -87,7 +120,6 @@ export default component$(() => {
                 loopAmount = store.text.length;
                 break;
             }
-            // console.log(loopAmount)
             return AnimationOutput(store, colors, loopAmount);
           })()
         }>
@@ -114,13 +146,13 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) store.colors.push(getRandomColor()); }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); }}>
+            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
               {store.colors.map((color: string, i: number) => {
                 return <>
-                  <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; }}>
+                  <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     Hex Color {i + 1}
                   </ColorInput>
                 </>
@@ -128,24 +160,20 @@ export default component$(() => {
             </div>
           </div>
           <div class="sm:col-span-3">
-            <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => store.name = event.target!.value}>
+            <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
               Animation Name
             </TextInput>
 
-            <TextInput id="textinput" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
+            <TextInput id="textinput" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
               Animation Text
             </TextInput>
 
-            <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value) }} onIncrement$={() => { store.speed += 50 }} onDecrement$={() => { store.speed -= 50; }}>
+            <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed += 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed -= 50; setCookie(JSON.stringify(store)); }}>
               Speed
             </NumberInput>
 
             <div class="grid sm:grid-cols-2 gap-2">
-              <SelectInput id="type" label="Output Type" value={store.type} onChange$={
-                (event: any) => {
-                  store.type = event.target!.value;
-                }
-              }>
+              <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {
                   types.map((type: any) => {
                     return <option value={type.value}>{type.name}</option>
@@ -155,11 +183,16 @@ export default component$(() => {
             </div>
 
             <div class="grid sm:grid-cols-2 gap-2">
-              <SelectInput id="format" label="Color Format" value={store.hexFormat} onChange$={
+              <SelectInput id="format" label="Color Format" value={store.format} onChange$={
                 (event: any) => {
-                  if (event.target!.value == 'custom') return store.customFormat = true;
-                  store.customFormat = false;
-                  store.hexFormat = event.target!.value;
+                  if (event.target!.value == 'custom') {
+                    store.customFormat = true;
+                  }
+                  else {
+                    store.customFormat = false;
+                    store.format = event.target!.value;
+                  }
+                  setCookie(JSON.stringify(store));
                 }
               }>
                 {
@@ -168,21 +201,21 @@ export default component$(() => {
                   })
                 }
                 <option value={"custom"}>
-                  {store.customFormat ? store.hexFormat.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                  {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                 </option>
               </SelectInput>
-              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => store.formatchar = event.target!.value}>
+              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 Format Character
               </TextInput>
             </div>
 
-            <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
+            <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
               Output Format
             </TextInput>
 
             {
               store.customFormat && <>
-                <TextInput id="format" value={store.hexFormat} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => store.hexFormat = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                <TextInput id="format" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
                   Custom Format
                 </TextInput>
                 <div class="pb-4">
@@ -237,16 +270,16 @@ export default component$(() => {
               })
             }
             <div class="mt-6 mb-4 space-y-4">
-              <Toggle id="bold" checked={store.bold} onChange$={(event: any) => store.bold = event.target!.checked}>
+              <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 Bold - {store.formatchar + 'l'}
               </Toggle>
-              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => store.strikethrough = event.target!.checked}>
+              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 Strikethrough - {store.formatchar + 'm'}
               </Toggle>
-              <Toggle id="underline" checked={store.underline} onChange$={(event: any) => store.underline = event.target!.checked}>
+              <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 Underline - {store.formatchar + 'n'}
               </Toggle>
-              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => store.italic = event.target!.checked}>
+              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 Italic - {store.formatchar + 'o'}
               </Toggle>
             </div>
@@ -259,7 +292,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Animated Tab Creator',
+  title: 'Animated TAB',
   meta: [
     {
       name: 'description',

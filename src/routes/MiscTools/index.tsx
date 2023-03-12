@@ -76,11 +76,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Random minecraft server tools'
+      content: 'These are all random useful things that are too small to dedicate a whole page to.'
     },
     {
       name: 'og:description',
-      content: 'Random minecraft server tools'
+      content: 'These are all random useful things that are too small to dedicate a whole page to.'
     },
     {
       name: 'og:image',

@@ -46,10 +46,10 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
         if (store.type == 4) {
             const hex = convertToHex(gradient.next());
             clrs.push(hex)
-            let hexOutput = store.hexFormat;
+            let hexOutput = store.format;
             for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
             let formatCodes = '';
-            if (store.hexFormat.includes('$f')) {
+            if (store.format.includes('$f')) {
                 if (store.bold) formatCodes += store.formatchar + 'l';
                 if (store.italic) formatCodes += store.formatchar + 'o';
                 if (store.underline) formatCodes += store.formatchar + 'n';
@@ -69,10 +69,10 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
 
                 const hex = convertToHex(gradient.next());
                 clrs.push(hex);
-                let hexOutput = store.hexFormat;
+                let hexOutput = store.format;
                 for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
                 let formatCodes = '';
-                if (store.hexFormat.includes('$f')) {
+                if (store.format.includes('$f')) {
                     if (store.bold) formatCodes += store.formatchar + 'l';
                     if (store.italic) formatCodes += store.formatchar + 'o';
                     if (store.underline) formatCodes += store.formatchar + 'n';
