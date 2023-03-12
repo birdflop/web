@@ -1,4 +1,4 @@
-import { component$, useBrowserVisibleTask$, useStore } from '@builder.io/qwik';
+import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -46,7 +46,7 @@ export default component$(() => {
     alerts: [],
   }, { deep: true });
 
-  useBrowserVisibleTask$(() => {
+  useVisibleTask$(() => {
     store.colors = ["#00FFE0", "#EB00FF"];
   });
 
