@@ -42,5 +42,10 @@ module.exports = {
     'comma-dangle': ['error', 'always-multiline'],
     'no-trailing-spaces': ['error'],
     'no-multiple-empty-lines': ['error', { max: 1 }],
+    'block-spacing': ['error', 'always'],
+    'object-curly-spacing': ['error', 'always'],
+    'array-bracket-spacing': ['error', 'never'],
+    'key-spacing': ['error', { beforeColon: false, afterColon: true }],
+    'keyword-spacing': ['error', { before: true, after: true }],
   },
 };

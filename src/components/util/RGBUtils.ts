@@ -58,7 +58,7 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', text);
       OutPutArray.push(`  - "${hexOutput}"`);
-    }else{
+    } else {
       for (let i = 0; i < text.length; i++) {
         const char = text.charAt(i);
         if (char == ' ') {

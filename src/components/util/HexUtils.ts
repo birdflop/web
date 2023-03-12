@@ -20,7 +20,7 @@ export class Gradient {
 
   /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
   next() {
-    if (this.steps <= 1) {return this.colors[0];}
+    if (this.steps <= 1) { return this.colors[0]; }
 
     const adjustedStep = Math.round(Math.abs(((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps));
     let color;

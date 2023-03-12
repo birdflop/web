@@ -30,7 +30,7 @@ export default component$(() => {
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
 
-        <NumberInput id="ram" input value={store.ram} min={2048} step={256} onInput$={(event: any) => {store.ram = Number(event.target!.value);}} onIncrement$={() => {store.ram += 512;}} onDecrement$={() => {store.ram -= 512;}}>
+        <NumberInput id="ram" input value={store.ram} min={2048} step={256} onInput$={(event: any) => { store.ram = Number(event.target!.value); }} onIncrement$={() => { store.ram += 512; }} onDecrement$={() => { store.ram -= 512; }}>
           RAM Amount
         </NumberInput>
 
@@ -47,11 +47,11 @@ export default component$(() => {
           Strips all color/format codes from text
         </h2>
 
-        <TextInput id="gradientinput" onInput$={(event: any) => {store.gradientInput = event.target!.value;}}>
+        <TextInput id="gradientinput" onInput$={(event: any) => { store.gradientInput = event.target!.value; }}>
           Input Text
         </TextInput>
 
-        <SelectInput id="gradienttype" label="Gradient Type" onChange$={(event: any) => {store.gradientType = event.target!.value;}}>
+        <SelectInput id="gradienttype" label="Gradient Type" onChange$={(event: any) => { store.gradientType = event.target!.value; }}>
           <option value={0}>{'&#rrggbb'}</option>
           <option value={1}>{'<&#rrggbb>'}</option>
           <option value={2}>{'&x&r&r&g&g&b&b'}</option>

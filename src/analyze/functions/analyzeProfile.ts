@@ -16,7 +16,7 @@ export default async function analyzeProfile(id: string) {
   let sampler;
   try {
     const response_raw = await fetch(url_raw, {
-      headers: {'Accept': 'application/json'},
+      headers: { 'Accept': 'application/json' },
     });
     sampler = await response_raw.json();
   }

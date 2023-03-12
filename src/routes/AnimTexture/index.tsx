@@ -61,11 +61,11 @@ export default component$(() => {
           })}
         </div>
 
-        <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => {store.textureName = event.target!.value;}}>
+        <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
           Texture Name
         </TextInput>
 
-        <Toggle checked={store.cumulative} onChange$={(event: any) => {store.cumulative = event.target.checked;}}>
+        <Toggle checked={store.cumulative} onChange$={(event: any) => { store.cumulative = event.target.checked; }}>
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 

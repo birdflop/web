@@ -20,11 +20,11 @@ export default async function analyzeTimings(id: string) {
   let request: any;
   try {
     const response_raw = await fetch(url_raw, {
-      headers: {'Accept': 'application/json'},
+      headers: { 'Accept': 'application/json' },
     });
     request_raw = await response_raw.json();
     const response_json = await fetch(timings_json, {
-      headers: {'Accept': 'application/json'},
+      headers: { 'Accept': 'application/json' },
     });
     request = await response_json.json();
   }
