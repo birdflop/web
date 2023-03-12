@@ -106,7 +106,7 @@ export default component$(() => {
 
             let i = -1;
             return text.split('').map((char: string) => {
-              if (char != ' ') i++;
+              if (char != ' ' && i + 1 < colors.length) i++;
               return <span style={`color: #${colors[i]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
             });
           })()}
