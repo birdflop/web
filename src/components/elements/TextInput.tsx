@@ -6,7 +6,7 @@ export default component$(({ id, value, placeholder, onInput$, className, big }:
       <label for={id} class="mb-2">
         <Slot />
       </label>
-      {big ? 
+      {big ?
         <RawTextAreaInput id={id} value={value} placeholder={placeholder} onInput$={onInput$} className={`mb-3 ${className}`} /> :
         <RawTextInput id={id} value={value} placeholder={placeholder} onInput$={onInput$} className={`mb-3 ${className}`} />
       }

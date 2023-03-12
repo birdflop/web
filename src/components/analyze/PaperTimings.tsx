@@ -21,7 +21,7 @@ export default component$(() => {
         </h2>
 
         <Slot />
-        
+
         <TextInput id="link" onInput$={
           (event: any) => {
             const link = event.target!.value;

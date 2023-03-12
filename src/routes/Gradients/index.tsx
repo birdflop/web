@@ -70,7 +70,7 @@ export default component$(() => {
 
   useVisibleTask$(() => {
     store.colors = ['#00FFE0', '#EB00FF'];
-    
+
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       userstore = JSON.parse(userstore);
       Object.keys(userstore).forEach((key: any) => {
@@ -211,11 +211,9 @@ export default component$(() => {
               </>
             }
 
-
             <TextInput id="prefix" value={store.prefix} placeholder="example: '/nick '" onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
               Prefix (Usually used for commands)
             </TextInput>
-
 
             <SelectInput id="preset" label="Color Preset" value={store.format} onChange$={
               (event: any) => {
@@ -286,7 +284,7 @@ export default component$(() => {
             </div>
           </div>
         </div>
-        
+
       </div>
     </section>
   );

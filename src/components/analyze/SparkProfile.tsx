@@ -21,7 +21,7 @@ export default component$(() => {
         </h2>
 
         <Slot />
-        
+
         <TextInput id="link" onInput$={
           (event: any) => {
             const link = event.target!.value;
@@ -48,7 +48,7 @@ export default component$(() => {
         <Button.SPA href={store.redirect} className={`${!store.redirect && 'hidden'}`}>
           Submit
         </Button.SPA>
-  
+
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
           <span class="text-gray-300">https://simplymc.art/SparkProfile/[code]</span><br/>

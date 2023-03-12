@@ -16,7 +16,6 @@ export default async function analyzeTimings(id: string) {
   const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
   const url_raw = `https://timings.aikar.co/?id=${id}&raw=1`;
 
-
   let request_raw: any;
   let request: any;
   try {

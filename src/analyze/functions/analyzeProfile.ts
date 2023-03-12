@@ -189,7 +189,6 @@ export default async function analyzeProfile(id: string) {
   // });
   // if (high_mec) fields.push({ name: '❌ maxEntityCramming', value: 'Decrease this by running the /gamerule command in each world.\nRecommended: 8.' });
 
-
   if (fields.length == 0) {
     return [{ name: '✅ All good', value: 'Analyzed with no recommendations.' }];
   }

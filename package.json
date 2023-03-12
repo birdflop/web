@@ -50,9 +50,7 @@
     "vite-imagetools": "^4.0.18",
     "vite-tsconfig-paths": "4.0.5",
     "wrangler": "latest",
+    "yaml": "^2.2.1",
     "zod": "^3.21.4"
-  },
-  "dependencies": {
-    "yaml": "^2.2.1"
   }
 }

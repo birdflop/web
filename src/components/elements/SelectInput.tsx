@@ -7,7 +7,7 @@ export default component$(({ label, id, value, placeholder, onChange$, className
         {label}
       </label>
       <RawSelectInput id={id} value={value} placeholder={placeholder} onChange$={onChange$} className={`mb-3 ${className}`}>
-        <Slot />  
+        <Slot />
       </RawSelectInput>
     </div>
   );

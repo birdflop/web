@@ -50,7 +50,6 @@ export const getCookie = server$(function (store) {
   return JSON.stringify(json);
 });
 
-
 export default component$(() => {
   const store: any = useStore({
     colors: [],
@@ -113,7 +112,7 @@ export default component$(() => {
             if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
             let loopAmount;
             switch (Number(store.type)) {
-            default: 
+            default:
               loopAmount = store.text.length * 2 - 2;
               break;
             case 3:

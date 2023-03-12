@@ -51,7 +51,7 @@ export default component$(() => {
             });
           }
         } />
-        
+
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
           {store.frames.map((frame, i) => {
             return <div class="w-24 rounded-lg border-gray-700 border-2">
