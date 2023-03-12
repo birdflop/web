@@ -65,3 +65,10 @@ class TwoStopGradient {
     return Math.round(interval * (step - this.lowerRange) + channelStart);
   }
 }
+
+export class AnimatedGradient extends Gradient {
+  constructor(colors: number[][], numSteps: number, offset: number) {
+    super(colors, numSteps);
+    this.step = offset;
+  }
+}

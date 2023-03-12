@@ -3,6 +3,7 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
+import BigTextInput from '~/components/elements/BigTextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
@@ -11,34 +12,32 @@ import Button from '~/components/elements/Button';
 import { Gradient } from '~/analyze/functions/HexUtils';
 import OutputField from '~/components/elements/OutputField';
 import { convertToRGB, convertToHex, getRandomColor } from '~/analyze/functions/RGBUtils';
+import { AnimationOutput } from '~/analyze/functions/RGBUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
-  '<#$1$2$3$4$5$6>$f$c',
   '&x&$1&$2&$3&$4&$5&$6$f$c',
-  '§x§$1§$2§$3§$4§$5§$6$f$c',
-  '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]'
 ]
 
-const presets = {
-  'SimplyMC': ["#00FFE0", "#EB00FF"],
-  'Rainbow': ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"],
-  'Skyline': ["#1488CC", "#2B32B2"],
-  'Mango': ["#FFE259", "#FFA751"],
-  'Vice City': ["#3494E6", "#EC6EAD"],
-  'Dawn': ["#F3904F", "#3B4371"],
-  'Rose': ["#F4C4F3", "#FC67FA"],
-  'Firewatch': ["#CB2D3E", "#EF473A"],
-};
+const types = [
+  { name: 'Normal (Left -> Right)', value: 1 },
+  { name: 'Reversed (Right -> Left)', value: 2 },
+  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
+  { name: 'Full Text Cycle', value: 4 },
+]
+
 
 export default component$(() => {
   const store: any = useStore({
     colors: [],
+    name: 'logo',
     text: 'SimplyMC',
-    format: '&#$1$2$3$4$5$6$f$c',
+    type: 1,
+    speed: 50,
+    hexFormat: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
-    prefix: '',
+    outputFormat: "%name%:\n  change-interval: %speed%\n  texts:\n%output%",
     bold: false,
     italic: false,
     underline: false,
@@ -55,45 +54,27 @@ export default component$(() => {
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"></script>
       <div class="mt-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-4xl mb-2">
-          Hex Gradients
+          Animated TAB
         </h1>
         <h2 class="text-gray-50 text-xl mb-12">
-          Hex color gradient creator
+          TAB plugin gradient animation creator
         </h2>
 
-        <OutputField charlimit={256} value={
+        <OutputField value={
           (() => {
             let colors = store.colors.map((color: string) => convertToRGB(color));
             if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
-
-            let output = store.prefix;
-            const text = store.text ? store.text : 'SimplyMC';
-
-            const gradient = new Gradient(colors, text.replace(/ /g, '').length);
-
-            for (let i = 0; i < text.length; i++) {
-              const char = text.charAt(i);
-              if (char == ' ') {
-                output += char;
-                continue;
-              }
-
-              const hex = convertToHex(gradient.next());
-              let hexOutput = store.format;
-              for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-              let formatCodes = '';
-              if (store.format.includes('$f')) {
-                if (store.bold) formatCodes += store.formatchar + 'l';
-                if (store.italic) formatCodes += store.formatchar + 'o';
-                if (store.underline) formatCodes += store.formatchar + 'n';
-                if (store.strikethrough) formatCodes += store.formatchar + 'm';
-              }
-
-              hexOutput = hexOutput.replace('$f', formatCodes);
-              hexOutput = hexOutput.replace('$c', char);
-              output += hexOutput;
+            let loopAmount;
+            switch (Number(store.type)) {
+              default: 
+                loopAmount = store.text.length * 2 - 2;
+                break;
+              case 3:
+                loopAmount = store.text.length;
+                break;
             }
-            return output;
+            // console.log(loopAmount)
+            return AnimationOutput(store, colors, loopAmount);
           })()
         }>
           <h1 class="font-bold text-3xl mb-2">
@@ -121,7 +102,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => {store.colors.push(getRandomColor());}} onDecrement$={() => {store.colors.pop()}}>
+            <NumberInput id="colors" onIncrement$={() => { store.colors.push(getRandomColor()); }} onDecrement$={() => { store.colors.pop() }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
@@ -135,16 +116,38 @@ export default component$(() => {
             </div>
           </div>
           <div class="sm:col-span-3">
-            <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
-              Input Text
+            <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => store.name = event.target!.value}>
+              Animation Name
             </TextInput>
 
+            <TextInput id="textinput" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
+              Animation Text
+            </TextInput>
+
+            <NumberInput id="speed" input={true} value={store.speed} onInput$={(event: any) => { store.speed = Number(event.target!.value) }} onIncrement$={() => { store.speed += 50 }} onDecrement$={() => { store.speed = store.speed - 50 <= 50 ? 50 : store.speed -= 50; }}>
+              Speed: {store.speed}
+            </NumberInput>
+
             <div class="grid sm:grid-cols-2 gap-2">
-              <SelectInput id="format" label="Output Format" value={store.format} onChange$={
+              <SelectInput id="type" label="Output Type" value={store.type} onChange$={
+                (event: any) => {
+                  store.type = event.target!.value;
+                }
+              }>
+                {
+                  types.map((type: any) => {
+                    return <option value={type.value}>{type.name}</option>
+                  })
+                }
+              </SelectInput>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-2">
+              <SelectInput id="format" label="Color Format" value={store.hexFormat} onChange$={
                 (event: any) => {
                   if (event.target!.value == 'custom') return store.customFormat = true;
                   store.customFormat = false;
-                  store.format = event.target!.value;
+                  store.hexFormat = event.target!.value;
                 }
               }>
                 {
@@ -153,7 +156,7 @@ export default component$(() => {
                   })
                 }
                 <option value={"custom"}>
-                  {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                  {store.customFormat ? store.hexFormat.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                 </option>
               </SelectInput>
               <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => store.formatchar = event.target!.value}>
@@ -161,9 +164,13 @@ export default component$(() => {
               </TextInput>
             </div>
 
+            <BigTextInput id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => store.text = event.target!.value}>
+              Output Format
+            </BigTextInput>
+
             {
               store.customFormat && <>
-                <TextInput id="format" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => store.format = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                <TextInput id="format" value={store.hexFormat} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => store.hexFormat = event.target!.value} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
                   Custom Format
                 </TextInput>
                 <div class="pb-4">
@@ -179,27 +186,6 @@ export default component$(() => {
                 </div>
               </>
             }
-
-
-            <TextInput id="prefix" value={store.prefix} placeholder="example: '/nick '" onInput$={(event: any) => store.prefix = event.target!.value}>
-              Prefix (Usually used for commands)
-            </TextInput>
-
-
-            <SelectInput id="preset" label="Color Preset" value={store.format} onChange$={
-              (event: any) => {
-                store.colors = [];
-                setTimeout(() => {
-                  store.colors = presets[event.target!.value as keyof typeof presets];
-                }, 1);
-              }
-            }>
-              {
-                Object.keys(presets).map((preset: any) => {
-                  return <option value={preset}>{preset}</option>
-                })
-              }
-            </SelectInput>
 
             <label>
               Presets
@@ -254,22 +240,22 @@ export default component$(() => {
             </div>
           </div>
         </div>
-        
+
       </div>
     </section>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Hex Gradient Creator',
+  title: 'Animated Tab Creator',
   meta: [
     {
       name: 'description',
-      content: 'Hex color gradient creator'
+      content: 'TAB plugin gradient animation creator'
     },
     {
       name: 'og:description',
-      content: 'Hex color gradient creator'
+      content: 'TAB plugin gradient animation creator'
     },
     {
       name: 'og:image',

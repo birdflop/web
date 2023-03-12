@@ -1,17 +1,17 @@
 import { component$, Slot, useStore } from '@builder.io/qwik';
 
-export default component$(({ id, value, className }: any) => {
+export default component$(({ id, value, charlimit, className }: any) => {
   return (
     <div class="flex flex-col">
       <label for={id} class="mb-2">
         <Slot />
       </label>
-      <RawOutputField id={id} value={value} className={`mb-3 ${className}`} />
+      <RawOutputField id={id} value={value} charlimit={charlimit} className={`mb-3 ${className}`} />
     </div>
   )
 });
 
-export const RawOutputField = component$(({ id, value, className }: any) => {
+export const RawOutputField = component$(({ id, value, charlimit, className }: any) => {
   const store: any = useStore({
     alerts: [],
   }, { deep: true });
@@ -23,15 +23,15 @@ export const RawOutputField = component$(({ id, value, className }: any) => {
           class: 'text-green-500',
           text: 'Copied to clipboard!',
         }
-        if (event.target!.value.length > 256) {
+        if (event.target!.value.length > charlimit && charlimit > 0) {
           const alert2 = {
             class: 'text-red-500',
-            text: 'This text is over 256 characters and may not fit in the chat box!',
+            text: `This text is over ${charlimit} characters and may not fit in the chat box!`,
           }
           store.alerts.push(alert2);
           setTimeout(() => {
             store.alerts.splice(store.alerts.indexOf(alert2), 1);
-          }, 2000);
+          }, 5000);
         }
         store.alerts.push(alert);
         setTimeout(() => {
