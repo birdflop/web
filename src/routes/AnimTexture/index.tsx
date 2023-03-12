@@ -13,8 +13,8 @@ export default component$(() => {
   }, { deep: true });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px]">
+    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+      <div class="mt-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-4xl mb-2">
           Animated Textures
         </h1>
@@ -72,6 +72,7 @@ export default component$(() => {
         <Button.Button className="my-6" onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
+            canvas.classList.add('sm:flex');
             const imglist: any = document.getElementById('imgs')!;
             const ctx = canvas.getContext('2d');
             const imgs = imglist.getElementsByTagName('IMG');
@@ -127,8 +128,9 @@ export default component$(() => {
             Download MCMETA
           </Button.External>
         </div>
+
       </div>
-      <canvas id="c" class="w-24 max-h-screen ml-48 hidden sm:flex"></canvas>
+      <canvas id="c" class="w-24 max-h-screen ml-48 hidden"></canvas>
     </section>
   );
 });
