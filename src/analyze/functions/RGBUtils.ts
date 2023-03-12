@@ -38,6 +38,7 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
     let OutPutArray = [];
     const text = store.text ? store.text : 'SimplyMC';
     let FinalOutput = "";
+    const frames = [];
     for (let n = 0; n < loopAmount; n++) {
         const clrs = []
         const gradient = new AnimatedGradient(colors, text.replace(/ /g, '').length, n);
@@ -67,7 +68,7 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
                 }
 
                 const hex = convertToHex(gradient.next());
-                clrs.push(hex)
+                clrs.push(hex);
                 let hexOutput = store.hexFormat;
                 for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
                 let formatCodes = '';
@@ -84,14 +85,23 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
             }
             OutPutArray.push(`  - "${output}"`);
         }
+        frames.push(clrs);
     }
+
     const format = store.outputFormat;
     FinalOutput = format.replace('%name%', store.name);
     FinalOutput = FinalOutput.replace('%speed%', store.speed);
-    if (store.type == 1) OutPutArray.reverse();
-    if (store.type == 3) {
+    if (store.type == 1) {
+        OutPutArray.reverse();
+        store.frames = frames.reverse();
+    }
+    else if (store.type == 3) {
         const OutPutArray2 = OutPutArray.slice();
-        OutPutArray = OutPutArray.reverse().concat(OutPutArray2)
+        OutPutArray = OutPutArray.reverse().concat(OutPutArray2);
+        store.frames = frames.reverse().concat(frames.slice());
+    }
+    else {
+        store.frames = frames;
     }
     FinalOutput = FinalOutput.replace('%output%', OutPutArray.join('\n'));
     return FinalOutput;

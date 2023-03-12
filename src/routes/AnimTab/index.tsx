@@ -8,9 +8,8 @@ import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
-import { Gradient } from '~/analyze/functions/HexUtils';
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, convertToHex, getRandomColor } from '~/analyze/functions/RGBUtils';
+import { convertToRGB, getRandomColor } from '~/analyze/functions/RGBUtils';
 import { AnimationOutput } from '~/analyze/functions/RGBUtils';
 
 const formats = [
@@ -42,10 +41,26 @@ export default component$(() => {
     underline: false,
     strikethrough: false,
     alerts: [],
+    frames: [],
+    frame: 0,
   }, { deep: true });
 
   useVisibleTask$(() => {
     store.colors = ["#00FFE0", "#EB00FF"];
+
+    let speed = store.speed
+
+    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+
+    function setFrame() {
+      if (!store.frames[0]) return;
+      if (speed != store.speed) {
+        clearInterval(frameInterval);
+        speed = store.speed;
+        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+      }
+      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
+    }
   });
 
   return (
@@ -86,15 +101,13 @@ export default component$(() => {
           {(() => {
             const text = store.text ? store.text : 'SimplyMC';
 
-            let colors = store.colors.map((color: string) => convertToRGB(color));
-            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+            if (!store.frames[0]) return;
+            const colors = store.frames[store.frame];
 
-            const gradient = new Gradient(colors, text.replace(/ /g, '').length);
-
-            let hex = '';
+            let i = -1;
             return text.split('').map((char: string) => {
-              if (char != ' ') hex = convertToHex(gradient.next());
-              return <span style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
+              if (char != ' ') i++;
+              return <span style={`color: #${colors[i]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
             });
           })()}
         </h1>
