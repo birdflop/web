@@ -8,9 +8,9 @@ import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
-import { Gradient } from '~/analyze/functions/HexUtils';
+import { Gradient } from '~/components/util/HexUtils';
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, convertToHex, getRandomColor } from '~/analyze/functions/RGBUtils';
+import { convertToRGB, convertToHex, getRandomColor } from '~/components/util/RGBUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -121,7 +121,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => {store.colors.push(getRandomColor());}} onDecrement$={() => {store.colors.pop()}}>
+            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) store.colors.push(getRandomColor()); }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">

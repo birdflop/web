@@ -9,8 +9,8 @@ import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, getRandomColor } from '~/analyze/functions/RGBUtils';
-import { AnimationOutput } from '~/analyze/functions/RGBUtils';
+import { convertToRGB, getRandomColor } from '~/components/util/RGBUtils';
+import { AnimationOutput } from '~/components/util/RGBUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -114,7 +114,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-4 gap-2">
           <div class="sm:pr-4">
-            <NumberInput id="colors" onIncrement$={() => { store.colors.push(getRandomColor()); }} onDecrement$={() => { store.colors.pop() }}>
+            <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) store.colors.push(getRandomColor()); }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); }}>
               {store.colors.length} Colors
             </NumberInput>
             <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
@@ -136,8 +136,8 @@ export default component$(() => {
               Animation Text
             </TextInput>
 
-            <NumberInput id="speed" input={true} value={store.speed} onInput$={(event: any) => { store.speed = Number(event.target!.value) }} onIncrement$={() => { store.speed += 50 }} onDecrement$={() => { store.speed = store.speed - 50 <= 50 ? 50 : store.speed -= 50; }}>
-              Speed: {store.speed}
+            <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value) }} onIncrement$={() => { store.speed += 50 }} onDecrement$={() => { store.speed -= 50; }}>
+              Speed
             </NumberInput>
 
             <div class="grid sm:grid-cols-2 gap-2">
