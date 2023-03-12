@@ -8,7 +8,7 @@ export default component$(({ id, value, charlimit, className }: any) => {
       </label>
       <RawOutputField id={id} value={value} charlimit={charlimit} className={`mb-3 ${className}`} />
     </div>
-  )
+  );
 });
 
 export const RawOutputField = component$(({ id, value, charlimit, className }: any) => {
@@ -22,12 +22,12 @@ export const RawOutputField = component$(({ id, value, charlimit, className }: a
         const alert = {
           class: 'text-green-500',
           text: 'Copied to clipboard!',
-        }
+        };
         if (event.target!.value.length > charlimit && charlimit > 0) {
           const alert2 = {
             class: 'text-red-500',
             text: `This text is over ${charlimit} characters and may not fit in the chat box!`,
-          }
+          };
           store.alerts.push(alert2);
           setTimeout(() => {
             store.alerts.splice(store.alerts.indexOf(alert2), 1);
@@ -40,9 +40,9 @@ export const RawOutputField = component$(({ id, value, charlimit, className }: a
       }}/>
       {
         store.alerts.map((alert: any) => {
-          return <p class={alert.class}>{alert.text}</p>
+          return <p class={alert.class}>{alert.text}</p>;
         })
       }
     </>
-  )
+  );
 });

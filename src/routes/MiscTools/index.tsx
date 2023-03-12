@@ -8,9 +8,9 @@ import TextInput from '~/components/elements/TextInput';
 
 export default component$(() => {
   const store = useStore({
-      ram: 4096,
-      gradientType: 0,
-      gradientInput: ''
+    ram: 4096,
+    gradientType: 0,
+    gradientInput: '',
   }, { deep: true });
 
   return (
@@ -30,7 +30,7 @@ export default component$(() => {
           This will help calculate how much RAM to use for Aikar's Flags.
         </h2>
 
-        <NumberInput id="ram" input value={store.ram} min={2048} step={256} onInput$={(event: any) => {store.ram = Number(event.target!.value)}} onIncrement$={() => {store.ram += 512}} onDecrement$={() => {store.ram -= 512}}>
+        <NumberInput id="ram" input value={store.ram} min={2048} step={256} onInput$={(event: any) => {store.ram = Number(event.target!.value);}} onIncrement$={() => {store.ram += 512;}} onDecrement$={() => {store.ram -= 512;}}>
           RAM Amount
         </NumberInput>
 
@@ -47,11 +47,11 @@ export default component$(() => {
           Strips all color/format codes from text
         </h2>
 
-        <TextInput id="gradientinput" onInput$={(event: any) => {store.gradientInput = event.target!.value}}>
+        <TextInput id="gradientinput" onInput$={(event: any) => {store.gradientInput = event.target!.value;}}>
           Input Text
         </TextInput>
 
-        <SelectInput id="gradienttype" label="Gradient Type" onChange$={(event: any) => {store.gradientType = event.target!.value}}>
+        <SelectInput id="gradienttype" label="Gradient Type" onChange$={(event: any) => {store.gradientType = event.target!.value;}}>
           <option value={0}>{'&#rrggbb'}</option>
           <option value={1}>{'<&#rrggbb>'}</option>
           <option value={2}>{'&x&r&r&g&g&b&b'}</option>
@@ -59,10 +59,10 @@ export default component$(() => {
         </SelectInput>
 
         <OutputField value={
-          store.gradientType == 0 ? store.gradientInput.replace(/&#([A-Fa-f0-9]){6}/g, "") :
-          store.gradientType == 1 ? store.gradientInput.replace(/<#([A-Fa-f0-9]){6}>/g, "") :
-          store.gradientType == 2 ? store.gradientInput.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, "") :
-          store.gradientInput.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, "")
+          store.gradientType == 0 ? store.gradientInput.replace(/&#([A-Fa-f0-9]){6}/g, '') :
+            store.gradientType == 1 ? store.gradientInput.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
+              store.gradientType == 2 ? store.gradientInput.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
+                store.gradientInput.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
         }>
           Output
         </OutputField>
@@ -76,15 +76,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'These are all random useful things that are too small to dedicate a whole page to.'
+      content: 'These are all random useful things that are too small to dedicate a whole page to.',
     },
     {
       name: 'og:description',
-      content: 'These are all random useful things that are too small to dedicate a whole page to.'
+      content: 'These are all random useful things that are too small to dedicate a whole page to.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

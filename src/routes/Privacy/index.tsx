@@ -56,15 +56,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'View our Privacy Policy'
+      content: 'View our Privacy Policy',
     },
     {
       name: 'og:description',
-      content: 'View our Privacy Policy'
+      content: 'View our Privacy Policy',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

@@ -1,14 +1,14 @@
 import { component$ } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
-import { CoffeeIcon } from "qwik-feather-icons";
+import { CoffeeIcon } from 'qwik-feather-icons';
 
 // @ts-ignore
-import iconAVIF from "~/images/icon.png?avif";
+import iconAVIF from '~/images/icon.png?avif';
 // @ts-ignore
-import iconWEBP from "~/images/icon.png?webp";
+import iconWEBP from '~/images/icon.png?webp';
 // @ts-ignore
-import { src as iconPlaceholder } from "~/images/icon.png?metadata";
+import { src as iconPlaceholder } from '~/images/icon.png?metadata';
 
 import { QwikPartytown } from '~/components/partytown/partytown';
 
@@ -62,15 +62,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'A Minecraft multitool for you'
+      content: 'A Minecraft multitool for you',
     },
     {
       name: 'og:description',
-      content: 'A Minecraft multitool for you'
+      content: 'A Minecraft multitool for you',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

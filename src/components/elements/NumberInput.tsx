@@ -8,7 +8,7 @@ export default component$(({ id, value, input, onInput$, onDecrement$, onIncreme
       </label>
       <RawNumberInput id={id} value={value} input={input} onInput$={onInput$} onDecrement$={onDecrement$} onIncrement$={onIncrement$} min={min} max={max} step={step} />
     </div>
-  )
+  );
 });
 
 export const RawNumberInput = component$(({ id, value, input, onInput$, onDecrement$, onIncrement$, min, max, step }: any) => {
@@ -24,5 +24,5 @@ export const RawNumberInput = component$(({ id, value, input, onInput$, onDecrem
           +
       </button>
     </div>
-  )
+  );
 });

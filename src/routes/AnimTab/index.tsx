@@ -15,14 +15,14 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
   '&x&$1&$2&$3&$4&$5&$6$f$c',
-]
+];
 
 const types = [
   { name: 'Normal (Left -> Right)', value: 1 },
   { name: 'Reversed (Right -> Left)', value: 2 },
   { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
   { name: 'Full Text Cycle', value: 4 },
-]
+];
 
 export const setCookie = server$(function (store) {
   const json = JSON.parse(store);
@@ -61,7 +61,7 @@ export default component$(() => {
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
-    outputFormat: "%name%:\n  change-interval: %speed%\n  texts:\n%output%",
+    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
     bold: false,
     italic: false,
     underline: false,
@@ -72,7 +72,7 @@ export default component$(() => {
   }, { deep: true });
 
   useVisibleTask$(() => {
-    store.colors = ["#00FFE0", "#EB00FF"];
+    store.colors = ['#00FFE0', '#EB00FF'];
 
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       userstore = JSON.parse(userstore);
@@ -81,7 +81,7 @@ export default component$(() => {
       });
     });
 
-    let speed = store.speed
+    let speed = store.speed;
 
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
 
@@ -110,15 +110,15 @@ export default component$(() => {
         <OutputField value={
           (() => {
             let colors = store.colors.map((color: string) => convertToRGB(color));
-            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
             let loopAmount;
             switch (Number(store.type)) {
-              default: 
-                loopAmount = store.text.length * 2 - 2;
-                break;
-              case 3:
-                loopAmount = store.text.length;
-                break;
+            default: 
+              loopAmount = store.text.length * 2 - 2;
+              break;
+            case 3:
+              loopAmount = store.text.length;
+              break;
             }
             return AnimationOutput(store, colors, loopAmount);
           })()
@@ -155,7 +155,7 @@ export default component$(() => {
                   <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     Hex Color {i + 1}
                   </ColorInput>
-                </>
+                </>;
               })}
             </div>
           </div>
@@ -176,7 +176,7 @@ export default component$(() => {
               <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {
                   types.map((type: any) => {
-                    return <option value={type.value}>{type.name}</option>
+                    return <option value={type.value}>{type.name}</option>;
                   })
                 }
               </SelectInput>
@@ -197,10 +197,10 @@ export default component$(() => {
               }>
                 {
                   formats.map((format: any) => {
-                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>
+                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>;
                   })
                 }
-                <option value={"custom"}>
+                <option value={'custom'}>
                   {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                 </option>
               </SelectInput>
@@ -241,7 +241,7 @@ export default component$(() => {
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully exported preset to clipboard!',
-                }
+                };
                 store.alerts.push(alert);
                 setTimeout(() => {
                   store.alerts.splice(store.alerts.indexOf(alert), 1);
@@ -257,7 +257,7 @@ export default component$(() => {
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully imported preset!',
-                }
+                };
                 store.alerts.push(alert);
                 setTimeout(() => {
                   store.alerts.splice(store.alerts.indexOf(alert), 1);
@@ -266,7 +266,7 @@ export default component$(() => {
             </div>
             {
               store.alerts.map((alert: any) => {
-                return <p class={alert.class}>{alert.text}</p>
+                return <p class={alert.class}>{alert.text}</p>;
               })
             }
             <div class="mt-6 mb-4 space-y-4">
@@ -296,15 +296,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'TAB plugin gradient animation creator'
+      content: 'TAB plugin gradient animation creator',
     },
     {
       name: 'og:description',
-      content: 'TAB plugin gradient animation creator'
+      content: 'TAB plugin gradient animation creator',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

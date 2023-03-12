@@ -17,18 +17,18 @@ const formats = [
   '<#$1$2$3$4$5$6>$f$c',
   '&x&$1&$2&$3&$4&$5&$6$f$c',
   '§x§$1§$2§$3§$4§$5§$6$f$c',
-  '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]'
-]
+  '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+];
 
 const presets = {
-  'SimplyMC': ["#00FFE0", "#EB00FF"],
-  'Rainbow': ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"],
-  'Skyline': ["#1488CC", "#2B32B2"],
-  'Mango': ["#FFE259", "#FFA751"],
-  'Vice City': ["#3494E6", "#EC6EAD"],
-  'Dawn': ["#F3904F", "#3B4371"],
-  'Rose': ["#F4C4F3", "#FC67FA"],
-  'Firewatch': ["#CB2D3E", "#EF473A"],
+  'SimplyMC': ['#00FFE0', '#EB00FF'],
+  'Rainbow': ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'],
+  'Skyline': ['#1488CC', '#2B32B2'],
+  'Mango': ['#FFE259', '#FFA751'],
+  'Vice City': ['#3494E6', '#EC6EAD'],
+  'Dawn': ['#F3904F', '#3B4371'],
+  'Rose': ['#F4C4F3', '#FC67FA'],
+  'Firewatch': ['#CB2D3E', '#EF473A'],
 };
 
 export const setCookie = server$(function (store) {
@@ -69,7 +69,7 @@ export default component$(() => {
   }, { deep: true });
 
   useVisibleTask$(() => {
-    store.colors = ["#00FFE0", "#EB00FF"];
+    store.colors = ['#00FFE0', '#EB00FF'];
     
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       userstore = JSON.parse(userstore);
@@ -93,7 +93,7 @@ export default component$(() => {
         <OutputField charlimit={256} value={
           (() => {
             let colors = store.colors.map((color: string) => convertToRGB(color));
-            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
             let output = store.prefix;
             const text = store.text ? store.text : 'SimplyMC';
@@ -137,7 +137,7 @@ export default component$(() => {
             const text = store.text ? store.text : 'SimplyMC';
 
             let colors = store.colors.map((color: string) => convertToRGB(color));
-            if (colors.length < 2) colors = [convertToRGB("#00FFE0"), convertToRGB("#EB00FF")];
+            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
             const gradient = new Gradient(colors, text.replace(/ /g, '').length);
 
@@ -160,7 +160,7 @@ export default component$(() => {
                   <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     Hex Color {i + 1}
                   </ColorInput>
-                </>
+                </>;
               })}
             </div>
           </div>
@@ -180,10 +180,10 @@ export default component$(() => {
               }>
                 {
                   formats.map((format: any) => {
-                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>
+                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>;
                   })
                 }
-                <option value={"custom"}>
+                <option value={'custom'}>
                   {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                 </option>
               </SelectInput>
@@ -228,7 +228,7 @@ export default component$(() => {
             }>
               {
                 Object.keys(presets).map((preset: any) => {
-                  return <option value={preset}>{preset}</option>
+                  return <option value={preset}>{preset}</option>;
                 })
               }
             </SelectInput>
@@ -242,7 +242,7 @@ export default component$(() => {
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully exported preset to clipboard!',
-                }
+                };
                 store.alerts.push(alert);
                 setTimeout(() => {
                   store.alerts.splice(store.alerts.indexOf(alert), 1);
@@ -258,7 +258,7 @@ export default component$(() => {
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully imported preset!',
-                }
+                };
                 store.alerts.push(alert);
                 setTimeout(() => {
                   store.alerts.splice(store.alerts.indexOf(alert), 1);
@@ -267,7 +267,7 @@ export default component$(() => {
             </div>
             {
               store.alerts.map((alert: any) => {
-                return <p class={alert.class}>{alert.text}</p>
+                return <p class={alert.class}>{alert.text}</p>;
               })
             }
             <div class="mt-6 mb-4 space-y-4">
@@ -297,15 +297,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Hex color gradient creator'
+      content: 'Hex color gradient creator',
     },
     {
       name: 'og:description',
-      content: 'Hex color gradient creator'
+      content: 'Hex color gradient creator',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

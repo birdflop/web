@@ -5,8 +5,8 @@ import Button from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
-      redirect: '',
-      error: ''
+    redirect: '',
+    error: '',
   });
 
   return (

@@ -9,7 +9,7 @@ export default component$(() => {
   const store = useStore({
     frames: [] as any[],
     textureName: '',
-    cumulative: false
+    cumulative: false,
   }, { deep: true });
 
   return (
@@ -33,8 +33,8 @@ export default component$(() => {
               f.readAsDataURL(file);
               f.onloadend = async (e) => {
                 const b64 = e!.target!.result;
-                const type = b64!.toString().split(",")[0].split(";")[0].split(":")[1];
-                if (type == "image/gif") {
+                const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
+                if (type == 'image/gif') {
                   // @ts-ignore
                   const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
                   gifframes.forEach((frame: any) => {
@@ -47,8 +47,8 @@ export default component$(() => {
                   return;
                 }
                 store.frames.push({ img: b64, delay: 20 });
-              }
-            })
+              };
+            });
           }
         } />
         
@@ -56,25 +56,25 @@ export default component$(() => {
           {store.frames.map((frame, i) => {
             return <div class="w-24 rounded-lg border-gray-700 border-2">
               <img width={96} height={96} class="rounded-t-md" src={frame.img} />
-              <input type="number" value={frame.delay} onInput$={(event: any) => { store.frames[i].delay = event.target!.value }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
-            </div>
+              <input type="number" value={frame.delay} onInput$={(event: any) => { store.frames[i].delay = event.target!.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
+            </div>;
           })}
         </div>
 
-        <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => {store.textureName = event.target!.value}}>
+        <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => {store.textureName = event.target!.value;}}>
           Texture Name
         </TextInput>
 
-        <Toggle checked={store.cumulative} onChange$={(event: any) => {store.cumulative = event.target.checked}}>
+        <Toggle checked={store.cumulative} onChange$={(event: any) => {store.cumulative = event.target.checked;}}>
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 
         <Button.Button className="my-6" onClick$={
           () => {
-            const canvas: any = document.getElementById("c")!;
-            const imglist: any = document.getElementById("imgs")!;
-            const ctx = canvas.getContext("2d");
-            const imgs = imglist.getElementsByTagName("IMG");
+            const canvas: any = document.getElementById('c')!;
+            const imglist: any = document.getElementById('imgs')!;
+            const ctx = canvas.getContext('2d');
+            const imgs = imglist.getElementsByTagName('IMG');
             let max = 0;
             for (let i = 0; i != imgs.length; i++) {
               if (imgs[i].naturalWidth > max)max = imgs[i].naturalWidth;
@@ -87,11 +87,11 @@ export default component$(() => {
               ctx.drawImage(imgs[i], 0, max * i, max, max);
             }
             const b64 = canvas.toDataURL();
-            const pngd: any = document.getElementById("pngd")!;
-            const mcmeta: any = document.getElementById("mcmeta")!;
+            const pngd: any = document.getElementById('pngd')!;
+            const mcmeta: any = document.getElementById('mcmeta')!;
             pngd.href = b64;
-            pngd.download = store.textureName + ".png";
-            mcmeta.download = store.textureName + ".png.mcmeta";
+            pngd.download = store.textureName + '.png';
+            mcmeta.download = store.textureName + '.png.mcmeta';
 
             const start = '{"animation":{"frames": [';
             const frameBase = '{"index": ';
@@ -107,12 +107,12 @@ export default component$(() => {
               res += tmp;
             }
             res = res.substring(0, res.length - 1);
-            res += "]}}";
+            res += ']}}';
 
-            mcmeta.href = "data:text/plain;charset=utf-8," + res;
+            mcmeta.href = 'data:text/plain;charset=utf-8,' + res;
 
-            const links = document.getElementById("links")!
-            links.className = "inline";
+            const links = document.getElementById('links')!;
+            links.className = 'inline';
           }
         }>
           Generate
@@ -138,15 +138,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF'
+      content: 'Easily merge textures for resource pack animations or convert from GIF',
     },
     {
       name: 'og:description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF'
+      content: 'Easily merge textures for resource pack animations or convert from GIF',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

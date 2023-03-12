@@ -20,15 +20,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Analyze your Paper Timings to get optimization recommendations'
+      content: 'Analyze your Paper Timings to get optimization recommendations',
     },
     {
       name: 'og:description',
-      content: 'Analyze your Paper Timings to get optimization recommendations'
+      content: 'Analyze your Paper Timings to get optimization recommendations',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

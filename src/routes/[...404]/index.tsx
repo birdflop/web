@@ -19,15 +19,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Whoops! You\'ve hit a dead-end.'
+      content: 'Whoops! You\'ve hit a dead-end.',
     },
     {
       name: 'og:description',
-      content: 'Whoops! You\'ve hit a dead-end.'
+      content: 'Whoops! You\'ve hit a dead-end.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

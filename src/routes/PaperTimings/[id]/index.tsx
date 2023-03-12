@@ -32,13 +32,13 @@ export default component$(() => {
                           <a href={button.url} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
                             {button.text}
                           </a>
-                        )
+                        );
                       })}
                     </div>
-                  )
+                  );
                 })}
               </>
-            )
+            );
           }}
         />
       </div>
@@ -54,15 +54,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Analyze your Paper Timings to get optimization recommendations'
+      content: 'Analyze your Paper Timings to get optimization recommendations',
     },
     {
       name: 'og:description',
-      content: 'Analyze your Paper Timings to get optimization recommendations'
+      content: 'Analyze your Paper Timings to get optimization recommendations',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png'
-    }
-  ]
-}
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};

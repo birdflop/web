@@ -11,5 +11,5 @@ export default component$(({ id, checked, onChange$ }: any) => {
         <Slot/>
       </p>
     </div>
-  )
+  );
 });

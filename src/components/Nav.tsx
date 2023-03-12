@@ -1,14 +1,14 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-import { MenuIcon, ChevronDownIcon } from "qwik-feather-icons";
+import { MenuIcon, ChevronDownIcon } from 'qwik-feather-icons';
 
 // @ts-ignore
-import logoAVIF from "~/images/logo.png?avif";
+import logoAVIF from '~/images/logo.png?avif';
 // @ts-ignore
-import logoWEBP from "~/images/logo.png?webp";
+import logoWEBP from '~/images/logo.png?webp';
 // @ts-ignore
-import { src as logoPlaceholder } from "~/images/logo.png?metadata";
+import { src as logoPlaceholder } from '~/images/logo.png?metadata';
 
 export default component$(() => {
   return (
@@ -82,7 +82,7 @@ export default component$(() => {
               <a href="https://discord.simplymc.art/" class="transition duration-200 ease-in-out hidden bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md xl:flex items-center gap-4">
                 Discord
               </a>
-              <button id="mobile-menu-button" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle("hidden")} class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex xl:hidden items-center gap-4">
+              <button id="mobile-menu-button" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle('hidden')} class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex xl:hidden items-center gap-4">
                 <MenuIcon />
               </button>
             </div>

@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
-import icon from "~/images/icon.png";
+import icon from '~/images/icon.png';
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.

@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
-import yaml from "yaml";
+import yaml from 'yaml';
 import TextInput from '~/components/elements/TextInput';
 
 export default component$(() => {
@@ -25,7 +25,7 @@ export default component$(() => {
     - "&#6592ED&lS&#866DF2&li&#A849F6&lm&#C924FB&lp&#EB00FF&ll&#C924FB&ly&#A849F6&lM&#866DF2&lC"
     - "&#43B6E9&lS&#6592ED&li&#866DF2&lm&#A849F6&lp&#C924FB&ll&#EB00FF&ly&#C924FB&lM&#A849F6&lC"
     - "&#22DBE4&lS&#43B6E9&li&#6592ED&lm&#866DF2&lp&#A849F6&ll&#C924FB&ly&#EB00FF&lM&#C924FB&lC"
-    - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`
+    - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`,
   }, { deep: true });
 
   useVisibleTask$(() => {
@@ -55,17 +55,17 @@ export default component$(() => {
           Preview TAB Animations without the need to put them ingame
         </h2>
 
-        <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value }}>
+        <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
             YAML input
         </TextInput>
 
-        <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px]`}>
+        <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {
             (() => {
               let json = yaml.parse(store.yaml);
               json = json[Object.keys(json)[0]];
-              store.speed = json["change-interval"] ?? 50;
-              store.frames = json["texts"] ?? [];
+              store.speed = json['change-interval'] ?? 50;
+              store.frames = json['texts'] ?? [];
               return <>
                 {(() => {
                   const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
@@ -73,7 +73,7 @@ export default component$(() => {
                   return spans.map((string: string) => {
                     let result: any = string.match(pattern);
                     result = result.filter((obj: string) => { return obj; });
-                    return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>
+                    return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>;
                   });
                 })()}
               </>;
@@ -87,19 +87,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-    title: 'TAB Animation Previewer',
-    meta: [
-        {
-            name: 'description',
-            content: 'Preview TAB Animations without the need to put them ingame'
-        },
-        {
-            name: 'og:description',
-            content: 'Preview TAB Animations without the need to put them ingame'
-        },
-        {
-            name: 'og:image',
-            content: 'https://simplymc.art/images/icon.png'
-        }
-    ]
-}
+  title: 'TAB Animation Previewer',
+  meta: [
+    {
+      name: 'description',
+      content: 'Preview TAB Animations without the need to put them ingame',
+    },
+    {
+      name: 'og:description',
+      content: 'Preview TAB Animations without the need to put them ingame',
+    },
+    {
+      name: 'og:image',
+      content: 'https://simplymc.art/images/icon.png',
+    },
+  ],
+};
