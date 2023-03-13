@@ -102,14 +102,14 @@ export default component$(() => {
           </div>
         </div>
 
-        <div id="mobile-menu" class="pointer-events-auto space-y-4 py-4 px-3 justify-center items-center bg-black/50 rounded-lg mt-2 hidden">
+        <div id="mobile-menu" class="pointer-events-auto space-y-4 py-4 px-3 justify-center items-center bg-black rounded-lg mt-2 hidden">
           <Link href="/Gradients" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
             Hex Gradients
           </Link>
           <Link href="/AnimTab" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
             Animated TAB Gradients
           </Link>
-          <Link href="/AnimPreview" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex items-center gap-4">
+          <Link href="/AnimPreview" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
             Animated TAB Previewer
           </Link>
           <Link href="/SparkProfile" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
@@ -118,11 +118,14 @@ export default component$(() => {
           <Link href="/PaperTimings" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
             Paper Timings Analysis
           </Link>
-          <Link href="/AnimTexture" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex md:hidden items-center gap-4">
+          <Link href="/AnimTexture" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
             Animated Textures
           </Link>
-          <Link href="/MiscTools" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
-            Misc Tools
+          <Link href="/RAMCalc" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
+            RAM Calculator
+          </Link>
+          <Link href="/ColorStrip" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
+            Color Code Stripper
           </Link>
           <Link href="/Privacy" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
             Privacy Policy
