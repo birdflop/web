@@ -23,6 +23,8 @@ export default component$(() => {
                 <img
                   src={logoPlaceholder}
                   class="h-8"
+                  height={32}
+                  width={130}
                   alt="SimplyMC Logo"
                   loading="eager"
                   decoding="async"

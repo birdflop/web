@@ -5,21 +5,25 @@
 @font-face {
   font-family: MinecraftRegular;
   src: url(/fonts/MinecraftRegular.otf);
+  font-display: swap;
 }
 
 @font-face {
   font-family: MinecraftBold;
   src: url(/fonts/MinecraftBold.otf);
+  font-display: swap;
 }
 
 @font-face {
   font-family: MinecraftItalic;
   src: url(/fonts/MinecraftItalic.otf);
+  font-display: swap;
 }
 
 @font-face {
   font-family: MinecraftBoldItalic;
   src: url(/fonts/MinecraftBoldItalic.otf);
+  font-display: swap;
 }
 
 @layer utilities {
