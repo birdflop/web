@@ -9,7 +9,7 @@ import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, getRandomColor } from '~/components/util/RGBUtils';
+import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
 const formats = [
@@ -95,6 +95,25 @@ export default component$(() => {
     }
   });
 
+  useVisibleTask$(({ track }) => {
+    Object.keys(store).forEach((key: any) => {
+      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
+      if (key == 'colors') track(() => store.colors.length);
+      else track(() => store[key]);
+    });
+    const { frames } = getAnimFrames(store);
+    if (store.type == 1) {
+      store.frames = frames.reverse();
+    }
+    else if (store.type == 3) {
+      const frames2 = frames.slice();
+      store.frames = frames.reverse().concat(frames2);
+    }
+    else {
+      store.frames = frames;
+    }
+  });
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"></script>
@@ -106,22 +125,7 @@ export default component$(() => {
           TAB plugin gradient animation creator
         </h2>
 
-        <OutputField value={
-          (() => {
-            let colors = store.colors.map((color: string) => convertToRGB(color));
-            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
-            let loopAmount;
-            switch (Number(store.type)) {
-            default:
-              loopAmount = store.text.length * 2 - 2;
-              break;
-            case 3:
-              loopAmount = store.text.length;
-              break;
-            }
-            return AnimationOutput(store, colors, loopAmount);
-          })()
-        }>
+        <OutputField value={AnimationOutput(store)}>
           <h1 class="font-bold text-3xl mb-2">
             Output
           </h1>
@@ -167,7 +171,7 @@ export default component$(() => {
               Animation Text
             </TextInput>
 
-            <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed += 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed -= 50; setCookie(JSON.stringify(store)); }}>
+            <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
               Speed
             </NumberInput>
 
@@ -208,7 +212,7 @@ export default component$(() => {
               </TextInput>
             </div>
 
-            <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+            <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
               Output Format
             </TextInput>
 

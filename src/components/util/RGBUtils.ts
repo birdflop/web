@@ -33,11 +33,22 @@ export function getRandomColor() {
   return color;
 }
 
-export function AnimationOutput(store: any, colors: number[][], loopAmount: number) {
+export function getAnimFrames(store: any) {
+  let colors = store.colors.map((color: string) => convertToRGB(color));
+  if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
-  let OutPutArray = [];
+  let loopAmount;
+  switch (Number(store.type)) {
+  default:
+    loopAmount = store.text.length * 2 - 2;
+    break;
+  case 3:
+    loopAmount = store.text.length;
+    break;
+  }
+
+  const OutPutArray = [];
   const text = store.text ? store.text : 'SimplyMC';
-  let FinalOutput = '';
   const frames = [];
   for (let n = 0; n < loopAmount; n++) {
     const clrs = [];
@@ -88,22 +99,26 @@ export function AnimationOutput(store: any, colors: number[][], loopAmount: numb
     frames.push(clrs);
   }
 
+  return { OutPutArray, frames };
+}
+
+export function AnimationOutput(store: any) {
+  let FinalOutput = '';
+
+  const AnimFrames = getAnimFrames(store);
+  let OutPutArray = AnimFrames.OutPutArray;
+
   const format = store.outputFormat;
   FinalOutput = format.replace('%name%', store.name);
   FinalOutput = FinalOutput.replace('%speed%', store.speed);
   if (store.type == 1) {
     OutPutArray.reverse();
-    store.frames = frames.reverse();
   }
   else if (store.type == 3) {
     const OutPutArray2 = OutPutArray.slice();
     OutPutArray = OutPutArray.reverse().concat(OutPutArray2);
-    const frames2 = frames.slice();
-    store.frames = frames.reverse().concat(frames2);
   }
-  else {
-    store.frames = frames;
-  }
+
   FinalOutput = FinalOutput.replace('%output%', OutPutArray.join('\n'));
   return FinalOutput;
 }
