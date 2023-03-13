@@ -23,7 +23,7 @@ export default component$(() => {
           RAM Amount
         </NumberInput>
 
-        <OutputField value={
+        <OutputField id="OutPut" value={
           Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100
         }>
           11({store.ram}) ÷ 12 - 1200 =

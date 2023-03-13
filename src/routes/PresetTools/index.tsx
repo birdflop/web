@@ -23,9 +23,10 @@ export default component$(() => {
             Preset input
         </TextInput>
 
-        <OutputField value={
+        <OutputField id="Output" value={
           JSON.stringify(loadPreset(store.preset), null, 2)
         } className="h-96">
+          Output
         </OutputField>
       </div>
     </section>

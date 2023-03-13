@@ -32,7 +32,7 @@ export default component$(() => {
           <option value={3}>{'§x§r§r§g§g§b§b'}</option>
         </SelectInput>
 
-        <OutputField value={
+        <OutputField id="OutPut" value={
           store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
             store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
               store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :

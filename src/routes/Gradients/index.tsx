@@ -91,7 +91,7 @@ export default component$(() => {
           Hex color gradient creator
         </h2>
 
-        <OutputField charlimit={256} value={
+        <OutputField id="Output" charlimit={256} value={
           (() => {
             let colors = store.colors.map((color: string) => convertToRGB(color));
             if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];

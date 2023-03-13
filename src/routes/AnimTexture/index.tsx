@@ -65,7 +65,7 @@ export default component$(() => {
           Texture Name
         </TextInput>
 
-        <Toggle checked={store.cumulative} onChange$={(event: any) => { store.cumulative = event.target.checked; }}>
+        <Toggle id="Cumulative" checked={store.cumulative} onChange$={(event: any) => { store.cumulative = event.target.checked; }}>
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 

@@ -126,7 +126,7 @@ export default component$(() => {
           TAB plugin gradient animation creator
         </h2>
 
-        <OutputField value={AnimationOutput(store)}>
+        <OutputField id="OutPut" value={AnimationOutput(store)}>
           <h1 class="font-bold text-3xl mb-2">
             Output
           </h1>
