@@ -16,10 +16,10 @@ export const RouterHead = component$(() => {
       <meta content={`SimplyMC: ${head.title}`} property="og:title"/>
       <meta content="#881645" name="theme-color"/>
 
-      <link rel="preload" as="font" href="/fonts/MinecraftRegular.otf" />
-      <link rel="preload" as="font" href="/fonts/MinecraftBold.otf" />
-      <link rel="preload" as="font" href="/fonts/MinecraftItalic.otf" />
-      <link rel="preload" as="font" href="/fonts/MinecraftBoldItalic.otf" />
+      <link rel="preload" as="font" href="/fonts/MinecraftRegular.otf" crossOrigin="anonymous" />
+      <link rel="preload" as="font" href="/fonts/MinecraftBold.otf" crossOrigin="anonymous" />
+      <link rel="preload" as="font" href="/fonts/MinecraftItalic.otf" crossOrigin="anonymous" />
+      <link rel="preload" as="font" href="/fonts/MinecraftBoldItalic.otf" crossOrigin="anonymous" />
 
       <link rel="canonical" href={loc.url.href} />
       <link rel="icon" type="image/png" href={icon} />
