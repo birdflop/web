@@ -44,6 +44,14 @@ export default component$(() => {
     }
   });
 
+  useVisibleTask$(({ track }) => {
+    track(() => store.yaml);
+    let json = yaml.parse(store.yaml);
+    json = json[Object.keys(json)[0]];
+    store.speed = json['change-interval'] ?? 50;
+    store.frames = json['texts'] ?? [];
+  });
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"></script>
@@ -60,25 +68,16 @@ export default component$(() => {
         </TextInput>
 
         <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
-          {
-            (() => {
-              let json = yaml.parse(store.yaml);
-              json = json[Object.keys(json)[0]];
-              store.speed = json['change-interval'] ?? 50;
-              store.frames = json['texts'] ?? [];
-              return <>
-                {(() => {
-                  const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
-                  const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
-                  return spans.map((string: string) => {
-                    let result: any = string.match(pattern);
-                    result = result.filter((obj: string) => { return obj; });
-                    return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>;
-                  });
-                })()}
-              </>;
-            })()
-          }
+          {(() => {
+            if (!store.frames[store.frame]) return '';
+            const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
+            const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
+            return spans.map((string: string) => {
+              let result: any = string.match(pattern);
+              result = result.filter((obj: string) => { return obj; });
+              return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>;
+            });
+          })()}
         </h1>
 
       </div>
