@@ -138,6 +138,7 @@ export default component$(() => {
 
             if (!store.frames[0]) return;
             const colors = store.frames[store.frame];
+            if (!colors) return;
 
             let i = -1;
             return text.split('').map((char: string) => {
