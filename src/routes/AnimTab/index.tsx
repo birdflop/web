@@ -8,6 +8,7 @@ import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
 import Button from '~/components/elements/Button';
 
+import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
@@ -241,7 +242,7 @@ export default component$(() => {
             </label>
             <div class="flex gap-2 my-2">
               <Button.Button onClick$={() => {
-                navigator.clipboard.writeText(JSON.stringify({ ...store, alerts: undefined, frames: undefined, frame: undefined }));
+                navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
                 const alert = {
                   class: 'text-green-500',
                   text: 'Successfully exported preset to clipboard!',
@@ -254,7 +255,19 @@ export default component$(() => {
                 Export
               </Button.Button>
               <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
-                const json = JSON.parse(event.target!.value);
+                let json: any;
+                try {
+                  json = JSON.parse(event.target!.value);
+                } catch (error){
+                  const alert = {
+                    class: 'text-red-500',
+                    text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                  };
+                  store.alerts.push(alert);
+                  return setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 5000);
+                }
                 Object.keys(json).forEach((key: any) => {
                   store[key] = json[key];
                 });
@@ -270,7 +283,7 @@ export default component$(() => {
             </div>
             {
               store.alerts.map((alert: any) => {
-                return <p class={alert.class}>{alert.text}</p>;
+                return <p class={alert.class} dangerouslySetInnerHTML={alert.text}/>;
               })
             }
             <div class="mt-6 mb-4 space-y-4">

@@ -1,0 +1,151 @@
+export const presetVersion = 2;
+
+declare interface preset {
+  version: number;
+  colors: string[];
+  name: string;
+  text: string;
+  type: number;
+  speed: number;
+  format: string;
+  formatchar: string;
+  customFormat: boolean;
+  prefix: string;
+  outputFormat: string;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  strikethrough: boolean;
+}
+
+function decompress(input: number, expectedValues: number) {
+  const values = [];
+  for (let i = 0; i < expectedValues; i++) {
+    const value = !!((input >> i) & 1);
+    values.push(value);
+  }
+  return values;
+}
+
+const formats = {
+  0: {
+    outputPrefix: '',
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  1: {
+    outputPrefix: '',
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  2: {
+    outputPrefix: '',
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  3: {
+    outputPrefix: '/nick ',
+    template: '&#$1$2$3$4$5$6$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  4: {
+    outputPrefix: '/nick ',
+    template: '<#$1$2$3$4$5$6>$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  5: {
+    outputPrefix: '/nick ',
+    template: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    formatChar: '&',
+    maxLength: 256,
+  },
+  6: {
+    outputPrefix: '',
+    template: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    formatChar: '§',
+  },
+  7: {
+    outputPrefix: '',
+    template: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+    formatChar: '',
+  },
+  8: {
+    outputPrefix: '',
+    template: '',
+    custom: true,
+    formatChar: '',
+  },
+};
+
+export function fromBinary(encoded: string): string {
+  let binary: string;
+  try {
+    binary = atob(encoded);
+  } catch (error) {
+    return '';
+  }
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < bytes.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return String.fromCharCode(...new Uint16Array(bytes.buffer));
+}
+
+export function loadPreset(p: string) {
+  let version: number;
+  let preset: any;
+  const newPreset: preset = {
+    version: 2,
+    colors: [],
+    name: 'logo',
+    text: 'SimplyMC',
+    type: 1,
+    speed: 50,
+    format: '&#$1$2$3$4$5$6$f$c',
+    formatchar: '&',
+    prefix: '',
+    customFormat: false,
+    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
+    bold: false,
+    italic: false,
+    underline: false,
+    strikethrough: false,
+  };
+  if (fromBinary(p) !== '') {
+    preset = JSON.parse(fromBinary(p));
+    version = preset.version;
+  } else {
+    try {
+      preset = JSON.parse(p);
+      version = preset.version;
+    } catch (error){
+      return 'Invalid Preset';
+    }
+  }
+  if (version === presetVersion) {
+    return preset;
+  }
+  if (version === 1) {
+    newPreset.version = presetVersion;
+    newPreset.colors = preset.colors;
+    newPreset.name = preset.name;
+    newPreset.text = preset.text;
+    newPreset.speed = preset.speed;
+    newPreset.type = Number(preset.type) + 1;
+    newPreset.format = formats[preset['output-format'] as keyof typeof formats].template;
+    newPreset.formatchar = formats[preset['output-format'] as keyof typeof formats].formatChar;
+    newPreset.customFormat = preset['custom-format'] !== '';
+    newPreset.prefix = formats[preset['output-format'] as keyof typeof formats].outputPrefix;
+    const formatting = decompress(preset.formats, 4);
+    newPreset.bold = formatting[0];
+    newPreset.italic = formatting[1];
+    newPreset.underline = formatting[2];
+    newPreset.strikethrough = formatting[3];
+    return newPreset;
+  }
+}
