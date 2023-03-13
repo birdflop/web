@@ -24,7 +24,7 @@ export default component$(() => {
         </h2>
 
         <script async src="/scripts/gif-frames.js" />
-        <p>Select Frame(s) or a GIF</p>
+        <label for="fileInput">Select Frame(s) or a GIF</label><br/>
         <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" onChange$={
           (event) => {
             if (!event.target.files) return;
@@ -121,7 +121,7 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <Button.External id="pngd" className="mr-2">
+          <Button.External id="pngd" className="mr-2" href='/'>
             Download PNG
           </Button.External>
           <Button.External id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
