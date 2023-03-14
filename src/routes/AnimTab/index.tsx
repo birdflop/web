@@ -141,10 +141,8 @@ export default component$(() => {
             const colors = store.frames[store.frame];
             if (!colors) return;
 
-            let i = -1;
-            return text.split('').map((char: string) => {
-              if (char != ' ' && i + 1 < colors.length) i++;
-              return <span style={`color: #${colors[i]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
+            return text.split('').map((char: string, i: number) => {
+              return <span style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
             });
           })()}
         </h1>
