@@ -29,8 +29,7 @@ export const RouterHead = component$(() => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
       <QwikPartytown />
-      <script async type="text/partytown" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558"
-        crossOrigin="anonymous"></script>
+      <script async type="text/partytown" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558" />
 
       {head.meta.map((m) => (
         <meta {...m} />
