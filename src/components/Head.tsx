@@ -1,8 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
-import { QwikPartytown } from '~/components/partytown/partytown';
-
 import icon from '~/images/icon.png';
 
 /**
@@ -27,10 +25,8 @@ export const RouterHead = component$(() => {
       <link rel="icon" type="image/png" href={icon} />
       <link rel="apple-touch-icon" href="/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-      <QwikPartytown />
-      <script async type="text/partytown" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558" />
-
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558"
+        crossOrigin="anonymous"></script>
       {head.meta.map((m) => (
         <meta {...m} />
       ))}
