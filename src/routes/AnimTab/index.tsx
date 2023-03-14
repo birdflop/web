@@ -44,7 +44,6 @@ export const getCookie = server$(function (store) {
   delete json.frame;
   Object.keys(json).forEach(key => {
     const existingCookie: any = this.cookie.get(key);
-
     if (key == 'colors' && existingCookie) existingCookie.value = existingCookie?.value.split(',');
     json[key] = existingCookie?.value || json[key];
   });
@@ -72,13 +71,15 @@ export default component$(() => {
   }, { deep: true });
 
   useVisibleTask$(() => {
-    store.colors = ['#00FFE0', '#EB00FF'];
-
     getCookie(JSON.stringify(store)).then((userstore: any) => {
-      userstore = JSON.parse(userstore);
-      Object.keys(userstore).forEach((key: any) => {
-        if (userstore[key]) store[key] = userstore[key];
-      });
+      const parsedUserStore = JSON.parse(userstore);
+      for (const key of Object.keys(parsedUserStore)) {
+        const value = parsedUserStore[key];
+        if (key == 'colors') store[key] = value;
+        store[key] = value === 'true' ? true : value === 'false' ? false : value;
+      }
+      console.log(store.colors);
+      if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
     });
 
     let speed = store.speed;
@@ -300,7 +301,6 @@ export default component$(() => {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
