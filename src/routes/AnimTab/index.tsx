@@ -78,7 +78,6 @@ export default component$(() => {
         if (key == 'colors') store[key] = value;
         store[key] = value === 'true' ? true : value === 'false' ? false : value;
       }
-      console.log(store.colors);
       if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
     });
 
