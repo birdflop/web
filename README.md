@@ -10,6 +10,7 @@
 <a href="https://github.com/AkiraDevelopment/SimplyMC/watchers"> <img src="https://img.shields.io/github/watchers/AkiraDevelopment/SimplyMC?style=flat"></a>
 <a href="https://github.com/AkiraDevelopment/SimplyMC/stargazers"> <img src="https://img.shields.io/github/stars/AkiraDevelopment/SimplyMC?style=flat"></a>
 <a href="https://github.com/AkiraDevelopment/SimplyMC/network/members"> <img src="https://img.shields.io/github/forks/AkiraDevelopment/SimplyMC?style=flat"></a>
+<a href="https://www.codefactor.io/repository/github/AkiraDevelopment/SimplyMC/overview/v3"> <img src="https://www.codefactor.io/repository/github/AkiraDevelopment/SimplyMC/badge/v3"></a>
 
 <h2>Contributing</h2>
 If you would like to contribute please make sure your code works as intended and formatted properly.
