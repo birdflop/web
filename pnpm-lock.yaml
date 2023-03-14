@@ -24,7 +24,7 @@ specifiers:
   undici: ^5.21.0
   vite: 4.1.4
   vite-imagetools: ^4.0.18
-  vite-tsconfig-paths: 4.0.5
+  vite-tsconfig-paths: 4.0.7
   wrangler: latest
   yaml: ^2.2.1
   zod: ^3.21.4
@@ -34,7 +34,7 @@ devDependencies:
   '@builder.io/qwik': 0.21.0_undici@5.21.0
   '@builder.io/qwik-city': 0.5.3_@builder.io+qwik@0.21.0
   '@types/eslint': 8.21.2
-  '@types/node': 18.15.2
+  '@types/node': 18.15.3
   '@types/pbf': 3.0.2
   '@types/showdown': 2.0.0
   '@typescript-eslint/eslint-plugin': 5.55.0_342y7v4tc7ytrrysmit6jo4wri
@@ -51,9 +51,9 @@ devDependencies:
   tailwindcss: 3.2.7_postcss@8.4.21
   typescript: 4.9.5
   undici: 5.21.0
-  vite: 4.1.4_@types+node@18.15.2
+  vite: 4.1.4_@types+node@18.15.3
   vite-imagetools: 4.0.18
-  vite-tsconfig-paths: 4.0.5_typescript@4.9.5
+  vite-tsconfig-paths: 4.0.7_vwvfc4ezh6jlf6pa67auy3eulu
   wrangler: 2.12.3
   yaml: 2.2.1
   zod: 3.21.4
@@ -811,7 +811,7 @@ packages:
   /@types/better-sqlite3/7.6.3:
     resolution: {integrity: sha512-YS64N9SNDT/NAvou3QNdzAu3E2om/W/0dhORimtPGLef+zSK5l1vDzfsWb4xgXOgfhtOI5ZDTRxnvRPb22AIVQ==}
     dependencies:
-      '@types/node': 18.15.2
+      '@types/node': 18.15.3
     dev: true
 
   /@types/debug/4.1.7:
@@ -861,8 +861,8 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
-  /@types/node/18.15.2:
-    resolution: {integrity: sha512-sDPHm2wfx2QhrMDK0pOt2J4KLJMAcerqWNvnED0itPRJWvI+bK+uNHzcH1dFsBlf7G3u8tqXmRF3wkvL9yUwMw==}
+  /@types/node/18.15.3:
+    resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
     dev: true
 
   /@types/pbf/3.0.2:
@@ -3840,18 +3840,24 @@ packages:
       - rollup
     dev: true
 
-  /vite-tsconfig-paths/4.0.5_typescript@4.9.5:
-    resolution: {integrity: sha512-/L/eHwySFYjwxoYt1WRJniuK/jPv+WGwgRGBYx3leciR5wBeqntQpUE6Js6+TJemChc+ter7fDBKieyEWDx4yQ==}
+  /vite-tsconfig-paths/4.0.7_vwvfc4ezh6jlf6pa67auy3eulu:
+    resolution: {integrity: sha512-MwIYaby6kcbQGZqMH+gAK6h0UYQGOkjsuAgw4q6bP/5vWkn8VKvnmLuCQHA2+IzHAJHnE8OFTO4lnJLFMf9+7Q==}
+    peerDependencies:
+      vite: '*'
+    peerDependenciesMeta:
+      vite:
+        optional: true
     dependencies:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 2.0.1_typescript@4.9.5
+      vite: 4.1.4_@types+node@18.15.3
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
-  /vite/4.1.4_@types+node@18.15.2:
+  /vite/4.1.4_@types+node@18.15.3:
     resolution: {integrity: sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3876,7 +3882,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.15.2
+      '@types/node': 18.15.3
       esbuild: 0.16.17
       postcss: 8.4.21
       resolve: 1.22.1
