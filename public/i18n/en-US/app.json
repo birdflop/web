@@ -1,0 +1,20 @@
+{
+    "nav": {
+        "gradients": "Gradients",
+        "hexGradient": "Hex Gradient",
+        "animatedTAB": "Animated TAB",
+        "tabAnimationPreviewer": "TAB Animation Previewer",
+        "analysis": "Analysis",
+        "sparkProfile": "Spark Profile",
+        "paperTimings": "Paper Timings",
+        "misc": "Misc",
+        "animatedTextures": "Animated Textures",
+        "ramCalculator": "RAM Calculator",
+        "colorCodeStripper": "Color Code Stripper",
+        "presetTools": "Preset Tools",
+        "changeLocale": "Change Locale",
+        "privacyPolicy": "Private Policy",
+        "github": "Github",
+        "discord": "Discord"
+    }
+}
