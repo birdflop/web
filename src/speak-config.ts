@@ -17,6 +17,7 @@ export const config: SpeakConfig = {
     'gradient',
     'animpreview',
     'animtab',
+    'animtexture',
     'app',
   ],
 };
