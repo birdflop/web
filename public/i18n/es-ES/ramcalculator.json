@@ -1,0 +1,7 @@
+{
+    "ramcalculator": {
+        "title": "Calculadora de RAM",
+        "subtitle": "Esto ayudará a calcular cuánta RAM usar para las banderas de Aikar.",
+        "ramAmount": "RAM Cantidad"
+    }
+}

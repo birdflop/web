@@ -11,6 +11,7 @@ export const config: SpeakConfig = {
   supportedLocales: [
     { lang: 'en-US' },
     { lang: 'es-ES' },
+    { lang: 'nl-NL' },
   ],
   assets: [
     'home',
@@ -28,6 +29,7 @@ export const config: SpeakConfig = {
 export const languages = {
   'en-US': 'English',
   'es-ES': 'Español',
+  'nl-NL': 'Dutch',
 };
 
 export const loadTranslation$: LoadTranslationFn = $(async (lang: string, asset: string, origin?: string) => {

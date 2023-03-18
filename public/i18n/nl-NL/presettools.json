@@ -1,0 +1,8 @@
+{
+    "presettools": {
+        "title": "Instellingen Updater",
+        "subtitle": "Dit zet de oude eigen instellingen om naar de nieuwe.",
+        "input": "Preset:",
+        "output": "Uitkomst"
+    }
+}
