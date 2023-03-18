@@ -2,8 +2,8 @@ lockfileVersion: 5.4
 
 specifiers:
   '@builder.io/partytown': ^0.7.5
-  '@builder.io/qwik': 0.22.1
-  '@builder.io/qwik-city': 0.6.3
+  '@builder.io/qwik': 0.23.0
+  '@builder.io/qwik-city': 0.6.5
   '@qwikest/icons': ^0.0.5
   '@types/eslint': 8.21.2
   '@types/node': latest
@@ -13,7 +13,7 @@ specifiers:
   '@typescript-eslint/parser': 5.55.0
   autoprefixer: 10.4.14
   eslint: 8.36.0
-  eslint-plugin-qwik: 0.22.1
+  eslint-plugin-qwik: 0.23.0
   express: ^4.18.2
   imagetools-core: ^3.3.1
   path: ^0.12.7
@@ -32,9 +32,9 @@ specifiers:
 
 devDependencies:
   '@builder.io/partytown': 0.7.5
-  '@builder.io/qwik': 0.22.1_undici@5.21.0
-  '@builder.io/qwik-city': 0.6.3_@builder.io+qwik@0.22.1
-  '@qwikest/icons': 0.0.5_@builder.io+qwik@0.22.1
+  '@builder.io/qwik': 0.23.0_undici@5.21.0
+  '@builder.io/qwik-city': 0.6.5_@builder.io+qwik@0.23.0
+  '@qwikest/icons': 0.0.5_@builder.io+qwik@0.23.0
   '@types/eslint': 8.21.2
   '@types/node': 18.15.3
   '@types/pbf': 3.0.2
@@ -43,12 +43,12 @@ devDependencies:
   '@typescript-eslint/parser': 5.55.0_j4766f7ecgqbon3u7zlxn5zszu
   autoprefixer: 10.4.14_postcss@8.4.21
   eslint: 8.36.0
-  eslint-plugin-qwik: 0.22.1_eslint@8.36.0
+  eslint-plugin-qwik: 0.23.0_eslint@8.36.0
   express: 4.18.2
   imagetools-core: 3.3.1
   path: 0.12.7
   postcss: 8.4.21
-  qwik-speak: 0.8.0_@builder.io+qwik@0.22.1
+  qwik-speak: 0.8.0_@builder.io+qwik@0.23.0
   showdown: 2.1.0
   tailwindcss: 3.2.7_postcss@8.4.21
   typescript: 5.0.2
@@ -67,13 +67,13 @@ packages:
     hasBin: true
     dev: true
 
-  /@builder.io/qwik-city/0.6.3_@builder.io+qwik@0.22.1:
-    resolution: {integrity: sha512-EG1NrVTroQYMt40O+ntARnxLYt6Ym/18rzRvaM/OA+DSOOLK24aw0Z0oJvQLMNmgIv/himZxIZtPjqID4cj10Q==}
+  /@builder.io/qwik-city/0.6.5_@builder.io+qwik@0.23.0:
+    resolution: {integrity: sha512-XGEoF2Q9tBeofjwtqxyZjA+3V50WDJTfhDjlHD1w2ShqyAZOnzxySrgznLfGG86H5YqOPNW9cH5uZ+ZINssYuA==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       '@builder.io/qwik': '>=0.22.0'
     dependencies:
-      '@builder.io/qwik': 0.22.1_undici@5.21.0
+      '@builder.io/qwik': 0.23.0_undici@5.21.0
       '@mdx-js/mdx': 2.3.0
       '@types/mdx': 2.0.3
       source-map: 0.7.4
@@ -83,8 +83,8 @@ packages:
       - supports-color
     dev: true
 
-  /@builder.io/qwik/0.22.1_undici@5.21.0:
-    resolution: {integrity: sha512-mJNk6LMiiQ/IF7K4rcwV2Tn5FZY+qjIxvESXGTWDbH7HomHT6i3tqq82kIKxX1LNWnaJbzNEu1sDSQLmMlsPVw==}
+  /@builder.io/qwik/0.23.0_undici@5.21.0:
+    resolution: {integrity: sha512-srbA4o9KyeGXA0fUibZW7I6iasjYhpBlp1Iq74dLTB4Py66wfazpekZ+qi57XcuSj3cBPf/Rsz/yxvQx5DwM2g==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
     peerDependencies:
@@ -808,13 +808,13 @@ packages:
       fastq: 1.15.0
     dev: true
 
-  /@qwikest/icons/0.0.5_@builder.io+qwik@0.22.1:
+  /@qwikest/icons/0.0.5_@builder.io+qwik@0.23.0:
     resolution: {integrity: sha512-DqFP80kr2H7tkHpyurfMgKzyMRYLtPFDIFnWEL7+MKE9ooK3Twmel8t9y+DJZOmoraPlCAHQ9iCnD7q1Od4DwA==}
     engines: {node: '>=15.0.0'}
     peerDependencies:
       '@builder.io/qwik': '>=0.19.0 <1.0.0'
     dependencies:
-      '@builder.io/qwik': 0.22.1_undici@5.21.0
+      '@builder.io/qwik': 0.23.0_undici@5.21.0
       simple-icons: 8.7.0
       tsm: 2.3.0
     dev: true
@@ -1912,8 +1912,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /eslint-plugin-qwik/0.22.1_eslint@8.36.0:
-    resolution: {integrity: sha512-gpqCsa/zjEE5Rzfv89GYcWyAqvQlZymQ9YoMtDjEOFYADNv1LCqu8B3w+/psPmVd8MbA3VPxvb6nv2IvUIywCg==}
+  /eslint-plugin-qwik/0.23.0_eslint@8.36.0:
+    resolution: {integrity: sha512-UdUtDgMw5VR32PcFSC59Tr0NmVQkdmX+Neb8BxbXFqe55OZvsEX8dDljBSx46ilB2rrJn5aQy8NQZHajFgpt1w==}
     engines: {node: '>=16'}
     peerDependencies:
       eslint: '>= 8'
@@ -3677,14 +3677,14 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /qwik-speak/0.8.0_@builder.io+qwik@0.22.1:
+  /qwik-speak/0.8.0_@builder.io+qwik@0.23.0:
     resolution: {integrity: sha512-gqoBUWQYhYhjJSMp24rUOksjGW993fv36m+egDAsxUrzphskz37S/r+STbzMV/l3NtNYqYWt23cUTsWH5CokYg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
       '@builder.io/qwik': '>=0.22.0'
     dependencies:
-      '@builder.io/qwik': 0.22.1_undici@5.21.0
+      '@builder.io/qwik': 0.23.0_undici@5.21.0
     dev: true
 
   /range-parser/1.2.1:

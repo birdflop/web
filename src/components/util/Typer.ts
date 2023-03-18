@@ -58,7 +58,7 @@ export function initiateTyper() {
     delay: number;
     deleteDelay: number;
     doTyping: () => void;
-    loop: string | number;
+    loop: number;
   }) {
     const e = this.element;
     const p = this.progress;
