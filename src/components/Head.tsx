@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
 import icon from '~/images/icon.png';
@@ -9,6 +9,14 @@ import icon from '~/images/icon.png';
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
+
+  useVisibleTask$(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558';
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    document.head.appendChild(script);
+  }, { strategy: 'document-idle' });
 
   return (
     <>
@@ -25,8 +33,7 @@ export const RouterHead = component$(() => {
       <link rel="icon" type="image/png" href={icon} />
       <link rel="apple-touch-icon" href="/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558"
-        crossOrigin="anonymous"></script>
+
       {head.meta.map((m) => <>
         <meta {...m} />
       </>)}
