@@ -27,7 +27,7 @@ export default component$(() => {
                   {field.value}
                   {field.buttons?.map((button: any) => {
                     return <>
-                      <a href={button.url} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
+                      <a href={button.url} class="text-white bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
                         {button.text}
                       </a>
                     </>;

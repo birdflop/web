@@ -79,18 +79,6 @@ export default component$(() => {
               return spans.map((string: string) => {
                 let result: any = string.match(pattern);
                 result = result.filter((obj: string) => { return obj; });
-                return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>;
-              });
-            })()}
-          </h1>
-          <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
-            {(() => {
-              if (!store.frames[store.frame]) return '';
-              const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
-              const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
-              return spans.map((string: string) => {
-                let result: any = string.match(pattern);
-                result = result.filter((obj: string) => { return obj; });
                 return <>
                   <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
                     {result[result.length - 1]}
