@@ -28,8 +28,8 @@ export const config: SpeakConfig = {
 
 export const languages = {
   'en-US': 'English',
-  'es-ES': 'Español',
-  'nl-NL': 'Dutch',
+  'es-ES': 'Español (Spanish)',
+  'nl-NL': 'Nederlands (Dutch)',
 };
 
 export const loadTranslation$: LoadTranslationFn = $(async (lang: string, asset: string, origin?: string) => {
