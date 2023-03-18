@@ -20,6 +20,7 @@ export const config: SpeakConfig = {
     'animtexture',
     'colorstrip',
     'presettools',
+    'ramcalculator',
     'app',
   ],
 };
