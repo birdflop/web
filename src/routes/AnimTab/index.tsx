@@ -6,7 +6,7 @@ import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
-import Button from '~/components/elements/Button';
+import { Button } from '~/components/elements/Button';
 
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
@@ -241,7 +241,7 @@ export default component$(() => {
               Presets
             </label>
             <div class="flex gap-2 my-2">
-              <Button.Button onClick$={() => {
+              <Button onClick$={() => {
                 navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
                 const alert = {
                   class: 'text-green-500',
@@ -253,7 +253,7 @@ export default component$(() => {
                 }, 2000);
               }}>
                 Export
-              </Button.Button>
+              </Button>
               <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
                 let json: any;
                 try {

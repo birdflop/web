@@ -6,7 +6,7 @@ import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import ColorInput from '~/components/elements/ColorInput';
-import Button from '~/components/elements/Button';
+import { Button } from '~/components/elements/Button';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { presetVersion } from '~/components/util/PresetUtils';
@@ -249,7 +249,7 @@ export default component$(() => {
                 {t('gradient.presets@@Presets')}
               </label>
               <div class="flex gap-2 my-2">
-                <Button.Button  id="export" onClick$={() => {
+                <Button id="export" onClick$={() => {
                   navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
                   const alert = {
                     class: 'text-green-500',
@@ -261,7 +261,7 @@ export default component$(() => {
                   }, 2000);
                 }}>
                 Export
-                </Button.Button>
+                </Button>
                 <RawTextInput name="import" placeholder={t('gradient.importPlaceholder@@Import (Paste here)')} onInput$={(event: any) => {
                   let json: any;
                   try {

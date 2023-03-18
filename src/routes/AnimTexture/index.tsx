@@ -3,7 +3,7 @@ import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput from '~/components/elements/TextInput';
-import Button from '~/components/elements/Button';
+import { Button, ExternalButton } from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
@@ -69,7 +69,7 @@ export default component$(() => {
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 
-        <Button.Button extraClass="my-6" onClick$={
+        <Button extraClass="my-6" onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
             canvas.classList.add('sm:flex');
@@ -117,16 +117,16 @@ export default component$(() => {
           }
         }>
           Generate
-        </Button.Button>
+        </Button>
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <Button.External id="pngd" extraClass="mr-2" href='/'>
+          <ExternalButton id="pngd" extraClass="mr-2" href='/'>
             Download PNG
-          </Button.External>
-          <Button.External id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+          </ExternalButton>
+          <ExternalButton id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
             Download MCMETA
-          </Button.External>
+          </ExternalButton>
         </div>
 
       </div>
