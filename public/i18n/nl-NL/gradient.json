@@ -1,0 +1,31 @@
+{
+    "gradient": {
+        "title": "Hex Overloop",
+        "subtitle": "Hex-kleur overloop maker.",
+        "output": "Output",
+        "outputSubtitle": "Dit is wat je in de chat plaatst. Klik erop om te kopiÃ«ren.",
+        "colorAmount": {
+            "one": "{{ value }} Kleur",
+            "other": "{{ value }} Kleuren"
+        },
+        "hexColorTitle": "Hex Kleur",
+        "inputText": "Tekst:",
+        "formatCharacter": "Opmaak Letter",
+        "customFormat": "Eigen Opmaak",
+        "placeholders": "Plaatsvervangers:",
+        "formatting": "Opmaak",
+        "character": "Letter",
+        "prefix": "Voorvoegsel (normaal gebruikt voor commandos)",
+        "prefixPlaceholder": "Bijvoorbeeld: '/nick '",
+        "presets": "Vooraf ingesteld",
+        "exported": "Succesvol gekopieed!",
+        "export": "Exporteren",
+        "invalidpreset": "INVALID PRESET!\nIf this is a old preset, please update it using the <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">Developers</a>.",
+        "imported": "Succesvol de vooraf ingestelde instellingen geupload",
+        "importPlaceholder": "Importeren (Hier plakken)",
+        "bold": "Dik",
+        "strikethrough": "Doorgestreept",
+        "underline": "Understreept",
+        "italic": "Schuingedrukt"
+    }
+}

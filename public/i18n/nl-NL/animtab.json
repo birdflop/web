@@ -1,0 +1,28 @@
+{
+    "animtab": {
+        "title": "Genaimeerde TAB",
+        "subtitle": "TAB plugin overloop animatie generator",
+        "output": "Uitkomst",
+        "outputSubtitle": "Dit is wat je in de chat plaatst. Klik erop om te kopiÃ«ren.",
+        "colors": {
+            "one": "{{ value }} Kleur",
+            "other": "{{ value }} Kleuren"
+        },
+        "hexColor": "Hex Kleur",
+        "animationName": "Animatie Naam",
+        "animationText": "Animatie Tekst",
+        "speed": "Snelheid",
+        "formatCharacter": "Opmaak Letter",
+        "outputFormat": "Uitkomst Opmaak",
+        "customFormat": "Eigen Opmaak",
+        "placeholders": "Plaatsvervangers:",
+        "formatting": "Opmaken",
+        "character": "Letter",
+        "presets": "Vooraf ingesteld",
+        "export": "Exporteren",
+        "bold": "Dik",
+        "strikethrough": "Doorgestreept",
+        "underline": "Understreept",
+        "italic": "Schuingedrukt"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "nav": {
+        "gradients": "Overlopen",
+        "hexGradient": "Hex Overloop",
+        "animatedTAB": "Geanimeerde TAB",
+        "tabAnimationPreviewer": "TAB Animatie Voorbeeld",
+        "analysis": "Analyseren",
+        "sparkProfile": "Spark Profile",
+        "paperTimings": "Paper Timings",
+        "misc": "Overig",
+        "animatedTextures": "Geanimeerde Texturen",
+        "ramCalculator": "RAM Calculator",
+        "colorCodeStripper": "Kleurcode Stripper",
+        "presetTools": "Vooraf Ingestelde Tools",
+        "privacyPolicy": "Privacy Beleid"
+    }
+}
