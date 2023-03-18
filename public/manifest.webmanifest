@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "theme_color" : "#0D0D0D",
   "background_color" : "#0D0D0D",
   "name": "SimplyMC",

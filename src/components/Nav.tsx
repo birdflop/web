@@ -46,7 +46,7 @@ export default component$(() => {
             </div>
             <div class="flex flex-1 items-center justify-end">
               <div class="flex gap-2 text-gray-300 whitespace-nowrap">
-                <button class="cursor-pointer transition duration-200 ease-in-out hidden sm:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
+                <div class="cursor-pointer transition duration-200 ease-in-out hidden sm:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
                   <div class="px-4 py-3 flex gap-2 items-center">
                     {t('nav.gradients@@Gradients')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
@@ -64,8 +64,8 @@ export default component$(() => {
                       </Link>
                     </div>
                   </div>
-                </button>
-                <button class="cursor-pointer transition duration-200 ease-in-out hidden sm:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
+                </div>
+                <div class="cursor-pointer transition duration-200 ease-in-out hidden sm:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
                   <div class="px-4 py-3 flex gap-2 items-center">
                     {t('nav.analysis@@Analysis')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
@@ -80,8 +80,8 @@ export default component$(() => {
                       </Link>
                     </div>
                   </div>
-                </button>
-                <button class="cursor-pointer transition duration-200 ease-in-out hidden xl:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
+                </div>
+                <div class="cursor-pointer transition duration-200 ease-in-out hidden xl:flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4">
                   <div class="px-4 py-3 flex gap-2 items-center">
                     {t('nav.misc@@Misc')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
@@ -102,11 +102,11 @@ export default component$(() => {
                       </Link>
                     </div>
                   </div>
-                </button>
+                </div>
                 <Link href="/Privacy" class="transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg lg:flex items-center">
                   {t('nav.privacyPolicy@@Privacy Policy')}
                 </Link>
-                <button class="cursor-pointer transition duration-200 ease-in-out flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
+                <div class="cursor-pointer transition duration-200 ease-in-out flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
                   <div class="px-4 py-3">
                     <InGlobe class="transform group-hover:rotate-180 transition duration-300 ease-in-out" />
                   </div>
@@ -119,14 +119,14 @@ export default component$(() => {
                       </>)}
                     </div>
                   </div>
-                </button>
-                <a href="https://github.com/AkiraDevelopment/SimplyMC" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
+                </div>
+                <a href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
                   <InGithub />
                 </a>
-                <a href="https://discord.simplymc.art/" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
+                <a href="https://discord.simplymc.art/" title="Discord" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
                   <InDiscord />
                 </a>
-                <button id="mobile-menu-button" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle('hidden')} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
+                <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle('hidden')} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
                   <InMenu />
                 </button>
               </div>
