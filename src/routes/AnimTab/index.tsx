@@ -148,11 +148,11 @@ export default component$(() => {
               const colors = store.frames[store.frame];
               if (!colors) return;
 
-              return text.split('').map((char: string, i: number) => <>
-                <span style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+              return text.split('').map((char: string, i: number) => (
+                <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
                   {char}
                 </span>
-              </>);
+              ));
             })()}
           </h1>
 
@@ -163,11 +163,11 @@ export default component$(() => {
               </NumberInput>
               <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
-                  return <>
-                    <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  return (
+                    <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                       {t('animtab.hexColor@@Hex Color')} {i + 1}
                     </ColorInput>
-                  </>;
+                  );
                 })}
               </div>
             </div>
@@ -186,11 +186,11 @@ export default component$(() => {
 
               <div class="grid sm:grid-cols-2 gap-2">
                 <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {types.map((type: any) => <>
-                    <option value={type.value}>
+                  {types.map((type: any) => (
+                    <option key={type.name} value={type.value}>
                       {type.name}
                     </option>
-                  </>)}
+                  ))}
                 </SelectInput>
               </div>
 
@@ -207,11 +207,11 @@ export default component$(() => {
                     setCookie(JSON.stringify(store));
                   }
                 }>
-                  {formats.map((format: any) => <>
-                    <option value={format}>
+                  {formats.map((format: any) => (
+                    <option key={format} value={format}>
                       {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
                     </option>
-                  </>)}
+                  ))}
                   <option value={'custom'}>
                     {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                   </option>
@@ -288,9 +288,9 @@ export default component$(() => {
                   }, 2000);
                 }} />
               </div>
-              {store.alerts.map((alert: any) => <>
-                <p class={alert.class} dangerouslySetInnerHTML={alert.text}/>
-              </>)}
+              {store.alerts.map((alert: any, i: number) => (
+                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text}/>
+              ))}
               <div class="mt-6 mb-4 space-y-4">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.bold@@Bold')} - {store.formatchar + 'l'}

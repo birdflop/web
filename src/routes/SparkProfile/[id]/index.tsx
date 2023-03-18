@@ -20,20 +20,20 @@ export default component$(() => {
           onPending={() => <p>Loading...</p>}
           onRejected={() => <p>Error</p>}
           onResolved={(fields: Field[]) => <>
-            {fields.map((field: Field) => {
-              return <>
-                <div class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
+            {fields.map((field: Field, i: number) => {
+              return (
+                <div key={`field${i}`} class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
                   <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, '\n> ')}</p>
                   {field.value}
-                  {field.buttons?.map((button: any) => {
-                    return <>
-                      <a href={button.url} class="text-white bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
+                  {field.buttons?.map((button: any, i2: number) => {
+                    return (
+                      <a key={`button${i2}-${i}`}  href={button.url} class="text-white bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
                         {button.text}
                       </a>
-                    </>;
+                    );
                   })}
                 </div>
-              </>;
+              );
             })}
           </>}
         />

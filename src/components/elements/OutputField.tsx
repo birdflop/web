@@ -37,8 +37,8 @@ export const RawOutputField = component$(({ id, value, charlimit, extraClass }: 
         store.alerts.splice(store.alerts.indexOf(alert), 1);
       }, 1000);
     }}/>
-    {store.alerts.map((alert: any) => <>
-      <p class={alert.class}>{alert.text}</p>
-    </>)}
+    {store.alerts.map((alert: any, i: number) => (
+      <p key={`output-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
+    ))}
   </>;
 });

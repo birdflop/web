@@ -152,13 +152,13 @@ export default component$(() => {
               const gradient = new Gradient(colors, text.replace(/ /g, '').length);
 
               let hex = '';
-              return text.split('').map((char: string) => {
+              return text.split('').map((char: string, i: number) => {
                 if (char != ' ') hex = convertToHex(gradient.next());
-                return <>
-                  <span style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+                return (
+                  <span key={`char${i}`} style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
                     {char}
                   </span>
-                </>;
+                );
               });
             })()}
           </h1>
@@ -170,11 +170,11 @@ export default component$(() => {
               </NumberInput>
               <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
-                  return <>
-                    <ColorInput id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  return (
+                    <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                       {t('gradient.hexColorTitle@@Hex Color')} {i + 1}
                     </ColorInput>
-                  </>;
+                  );
                 })}
               </div>
             </div>
@@ -192,11 +192,11 @@ export default component$(() => {
                     setCookie(JSON.stringify(store));
                   }
                 }>
-                  {formats.map((format: any) => <>
-                    <option value={format}>
+                  {formats.map((format: any) => (
+                    <option key={format} value={format}>
                       {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
                     </option>
-                  </>)}
+                  ))}
                   <option value={'custom'}>
                     {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                   </option>
@@ -238,11 +238,11 @@ export default component$(() => {
                   }, 1);
                 }
               }>
-                {Object.keys(presets).map((preset: any) => <>
-                  <option value={preset}>
+                {Object.keys(presets).map((preset: any) => (
+                  <option key={preset} value={preset}>
                     {preset}
                   </option>
-                </>)}
+                ))}
               </SelectInput>
 
               <label>
@@ -289,9 +289,9 @@ export default component$(() => {
                   }, 2000);
                 }} />
               </div>
-              {store.alerts.map((alert: any) => <>
-                <p class={alert.class} dangerouslySetInnerHTML={alert.text} />
-              </>)}
+              {store.alerts.map((alert: any, i: number) => (
+                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
+              ))}
               <div class="mt-6 mb-4 space-y-4">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.bold@@Bold')} - {store.formatchar + 'l'}

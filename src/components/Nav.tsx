@@ -1,7 +1,7 @@
 import { component$, $ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-import { InDiscord, InGithub, InGlobe, InNavArrowDown, InMenu } from '@qwikest/icons/iconoir';
+import { InDiscord, InGithub, InGlobe, InNavArrowDown, InMenu, InCoffeeCup } from '@qwikest/icons/iconoir';
 // @ts-ignore
 import logoAVIF from '~/images/logo.png?avif';
 // @ts-ignore
@@ -108,23 +108,26 @@ export default component$(() => {
                 </Link>
                 <div class="cursor-pointer transition duration-200 ease-in-out flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
                   <div class="px-4 py-3">
-                    <InGlobe class="transform group-hover:rotate-180 transition duration-300 ease-in-out" />
+                    <InGlobe class="transform group-hover:rotate-180 group-hover:text-blue-400 transition duration-300 ease-in-out" />
                   </div>
                   <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16 text-base">
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
-                      {config.supportedLocales.map(value => <>
-                        <div onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
+                      {config.supportedLocales.map(value => (
+                        <div key={value.lang} onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
                           {languages[value.lang as keyof typeof languages]}
                         </div>
-                      </>)}
+                      ))}
                     </div>
                   </div>
                 </div>
-                <a href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
+                <a href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-green-300 px-4 py-2 rounded-lg text-3xl xl:flex items-center">
                   <InGithub />
                 </a>
-                <a href="https://discord.simplymc.art/" title="Discord" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:flex items-center">
+                <a href="https://discord.simplymc.art/" title="Discord" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-indigo-500 px-4 py-2 rounded-lg text-3xl xl:flex items-center">
                   <InDiscord />
+                </a>
+                <a href="https://ko-fi.com/akiradev" title="Ko-fi" class="group transition duration-200 ease-in-out hidden hover:bg-gray-800 hover:text-pink-700 px-4 py-2 rounded-lg text-3xl xl:flex items-center">
+                  <InCoffeeCup />
                 </a>
                 <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle('hidden')} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
                   <InMenu />
@@ -133,7 +136,7 @@ export default component$(() => {
             </div>
           </div>
 
-          <div id="mobile-menu" class="space-y-4 py-4 px-3 justify-center items-center bg-black rounded-lg mt-2 hidden">
+          <div id="mobile-menu" class="gap-4 py-4 px-3 justify-center items-center bg-black rounded-lg mt-2 hidden">
             <Link href="/Gradients" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex sm:hidden items-center">
               {t('nav.hexGradient@@Hex Gradients')}
             </Link>
@@ -161,12 +164,17 @@ export default component$(() => {
             <Link href="/Privacy" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex lg:hidden items-center">
               {t('nav.privacyPolicy@@Privacy Policy')}
             </Link>
-            <a href="https://github.com/AkiraDevelopment/SimplyMC" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex xl:hidden items-center">
-              GitHub
-            </a>
-            <a href="https://discord.simplymc.art/" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex xl:hidden items-center">
-              Discord
-            </a>
+            <div class="flex flex-row">
+              <a href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" class="group transition duration-200 ease-in-out hover:bg-gray-800 hover:text-green-300 px-4 py-2 rounded-lg text-3xl flex xl:hidden items-center">
+                <InGithub />
+              </a>
+              <a href="https://discord.simplymc.art/" title="Discord" class="group transition duration-200 ease-in-out hover:bg-gray-800 hover:text-indigo-500 px-4 py-2 rounded-lg text-3xl flex xl:hidden items-center">
+                <InDiscord />
+              </a>
+              <a href="https://ko-fi.com/akiradev" title="Ko-fi" class="group transition duration-200 ease-in-out hover:bg-gray-800 hover:text-pink-700 px-4 py-2 rounded-lg text-3xl flex xl:hidden items-center">
+                <InCoffeeCup />
+              </a>
+            </div>
           </div>
         </div>
       </nav>

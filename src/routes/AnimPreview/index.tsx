@@ -76,14 +76,14 @@ export default component$(() => {
               if (!store.frames[store.frame]) return '';
               const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
               const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
-              return spans.map((string: string) => {
+              return spans.map((string: string, i: number) => {
                 let result: any = string.match(pattern);
                 result = result.filter((obj: string) => { return obj; });
-                return <>
-                  <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
+                return (
+                  <span key={`char${i}`} style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
                     {result[result.length - 1]}
                   </span>
-                </>;
+                );
               });
             })()}
           </h1>
