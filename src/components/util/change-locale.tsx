@@ -15,7 +15,7 @@ export default component$(() => {
   return (
     <button class="cursor-pointer transition duration-200 ease-in-out hidden sm:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md items-center gap-4">
       <div class="px-4 py-3 flex gap-4 items-center">
-        {t('nav.changeLocale@@Change locale')}
+        {t('nav.changeLocale@@Language')}
         <ChevronDownIcon class="transform group-hover:-rotate-180 transition duration-300 ease-in-out" />
       </div>
       <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
@@ -31,7 +31,7 @@ export default component$(() => {
   );
 });
 // <div>
-//   <div>{t('app.changeLocale@@Change locale')}</div>
+//   <div>{t('app.changeLocale@@Language')}</div>
 //   {config.supportedLocales.map(value => (
 //     <button onClick$={async () => await changeLocale$(value)}>
 //       {value.lang}

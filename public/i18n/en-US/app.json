@@ -12,9 +12,7 @@
         "ramCalculator": "RAM Calculator",
         "colorCodeStripper": "Color Code Stripper",
         "presetTools": "Preset Tools",
-        "changeLocale": "Change Locale",
-        "privacyPolicy": "Privacy Policy",
-        "github": "GitHub",
-        "discord": "Discord"
+        "changeLocale": "Language",
+        "privacyPolicy": "Privacy Policy"
     }
 }

@@ -1,0 +1,28 @@
+{
+    "animtab": {
+        "title": "TAB animado",
+        "subtitle": "Creador de animaciones de gradiente de complemento TAB",
+        "output": "Salida",
+        "outputSubtitle": "Esto es lo que pones en el chat. Haz clic en él para copiarlo.",
+        "colors": {
+            "one": "{{ value }} color",
+            "other": "{{ value }} colores"
+        },
+        "hexColor": "Color Hex",
+        "animationName": "Nombre de la animación",
+        "animationText": "Texto de animación",
+        "speed": "Velocidad",
+        "formatCharacter": "Carácter de formato",
+        "outputFormat": "Formato de salida",
+        "customFormat": "Formato personalizado",
+        "placeholders": "Marcadores de posición:",
+        "formatting": "Formato",
+        "character": "Carácter",
+        "presets": "Preajustes",
+        "export": "Exportar",
+        "bold": "Negrita",
+        "strikethrough": "Tachado",
+        "underline": "Subrayado",
+        "italic": "Itálico"
+    }
+}

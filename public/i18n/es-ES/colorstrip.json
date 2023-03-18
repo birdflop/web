@@ -1,0 +1,8 @@
+{
+    "colorstrip": {
+        "title": "Quitar código de color",
+        "subtitle": "Quita todos los códigos de color / formato del texto",
+        "inputText": "Introducir texto",
+        "output": "Salida"
+    }
+}
