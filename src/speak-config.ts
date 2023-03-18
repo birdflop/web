@@ -18,6 +18,8 @@ export const config: SpeakConfig = {
     'animpreview',
     'animtab',
     'animtexture',
+    'colorstrip',
+    'presettools',
     'app',
   ],
 };
