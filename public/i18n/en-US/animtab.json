@@ -1,0 +1,28 @@
+{
+    "animtab": {
+        "title": "Animated TAB",
+        "subtitle": "TAB plugin gradient animation creator",
+        "output": "Output",
+        "outputSubtitle": "This is what you put in the chat. Click on it to copy.",
+        "colors": {
+            "one": "{{ value }} color",
+            "other": "{{ value }} colors"
+        },
+        "hexColor": "Hex Color",
+        "animationName": "Animation Name",
+        "animationText": "Animation Text",
+        "speed": "Speed",
+        "formatCharacter": "Format Character",
+        "outputFormat": "Output Format",
+        "customFormat": "Custom Format",
+        "placeholders": "Placeholders:",
+        "formatting": "Formatting",
+        "character": "Character",
+        "presets": "Presets",
+        "export": "Export",
+        "bold": "Bold",
+        "strikethrough": "Strikethrough",
+        "underline": "Underline",
+        "italic": "Italic"
+    }
+}
