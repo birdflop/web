@@ -15,6 +15,8 @@ export const config: SpeakConfig = {
   assets: [
     'home',
     'gradient',
+    'animpreview',
+    'animtab',
     'app',
   ],
 };
