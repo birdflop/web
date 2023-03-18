@@ -74,7 +74,11 @@ export default component$(() => {
             return spans.map((string: string) => {
               let result: any = string.match(pattern);
               result = result.filter((obj: string) => { return obj; });
-              return <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >{result[result.length - 1]}</span>;
+              return <>
+                <span style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
+                  {result[result.length - 1]}
+                </span>
+              </>;
             });
           })()}
         </h1>

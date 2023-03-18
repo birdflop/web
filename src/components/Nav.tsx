@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, $ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
 import { MenuIcon, ChevronDownIcon } from 'qwik-feather-icons';
@@ -9,13 +9,18 @@ import logoAVIF from '~/images/logo.png?avif';
 import logoWEBP from '~/images/logo.png?webp';
 // @ts-ignore
 import { src as logoPlaceholder } from '~/images/logo.png?metadata';
-import ChangeLocale from './util/change-locale';
-import {
-  $translate as t,
-  Speak,
-} from 'qwik-speak';
+import { changeLocale, $translate as t, useSpeakContext, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
 
 export default component$(() => {
+  const ctx = useSpeakContext();
+  const config = useSpeakConfig();
+
+  const changeLocale$ = $(async (newLocale: SpeakLocale) => {
+    await changeLocale(newLocale, ctx);
+
+    document.cookie = `locale=${JSON.stringify(newLocale)};max-age=86400;path=/`;
+  });
+
   return (
     <Speak assets={['app']}>
       <nav class="z-20 fixed top-0 w-screen my-3 pointer-events-none drop-shadow-lg">
@@ -97,7 +102,21 @@ export default component$(() => {
                     </div>
                   </div>
                 </button>
-                <ChangeLocale />
+                <button class="cursor-pointer transition duration-200 ease-in-out hidden lg:flex bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 group rounded-lg text-md items-center gap-4">
+                  <div class="px-4 py-3 flex gap-4 items-center">
+                    {t('nav.changeLocale@@Change Locale')}
+                    <ChevronDownIcon class="transform group-hover:-rotate-180 transition duration-300 ease-in-out" />
+                  </div>
+                  <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
+                    <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
+                      {config.supportedLocales.map(value => <>
+                        <div onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex items-center gap-4">
+                          {value.lang}
+                        </div>
+                      </>)}
+                    </div>
+                  </div>
+                </button>
                 <Link href="/Privacy" class="transition duration-200 ease-in-out hidden bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md lg:flex items-center gap-4">
                   {t('nav.privacyPolicy@@Privacy Policy')}
                 </Link>
@@ -116,37 +135,37 @@ export default component$(() => {
 
           <div id="mobile-menu" class="pointer-events-auto space-y-4 py-4 px-3 justify-center items-center bg-black rounded-lg mt-2 hidden">
             <Link href="/Gradients" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
-            Hex Gradients
+              {t('nav.hexGradients@@Hex Gradients')}
             </Link>
             <Link href="/AnimTab" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
-            Animated TAB Gradients
+              {t('nav.animatebTAB@@Animated TAB')}
             </Link>
             <Link href="/AnimPreview" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
-            Animated TAB Previewer
+              {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
             </Link>
             <Link href="/SparkProfile" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
-            Spark Profile Analysis
+              {t('nav.sparkProfile@@Spark Profile')}
             </Link>
             <Link href="/PaperTimings" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex sm:hidden items-center gap-4">
-            Paper Timings Analysis
+              {t('nav.paperTimings@@Paper Timings')}
             </Link>
             <Link href="/AnimTexture" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
-            Animated Textures
+              {t('nav.animatedTextures@@Animated Textures')}
             </Link>
             <Link href="/RAMCalc" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
-            RAM Calculator
+              {t('nav.ramCalculator@@RAM Caolculator')}
             </Link>
             <Link href="/ColorStrip" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
-            Color Code Stripper
+              {t('nav.colorCodeStripper@@Color Code Stripper')}
             </Link>
             <Link href="/Privacy" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex lg:hidden items-center gap-4">
-            Privacy Policy
+              {t('nav.privacyPolicy@@Privacy Policy')}
             </Link>
             <a href="https://github.com/AkiraDevelopment/SimplyMC" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex xl:hidden items-center gap-4">
-            GitHub
+              {t('nav.github@@GitHub')}
             </a>
             <a href="https://discord.simplymc.art/" class="transition duration-200 ease-in-out bg-gray-900 hover:bg-gray-800 hover:text-white hover:drop-shadow-2xl border-2 border-gray-900 hover:border-gray-700 px-4 py-2 rounded-lg text-md flex xl:hidden items-center gap-4">
-            Discord
+              {t('nav.discord@@Discord')}
             </a>
           </div>
         </div>

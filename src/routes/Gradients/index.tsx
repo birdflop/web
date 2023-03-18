@@ -97,7 +97,7 @@ export default component$(() => {
             {t('gradient.title@@Hex Gradient')}
           </h1>
           <h2 class="text-gray-50 text-xl mb-12">
-            {t('gradient.title@@Hex color gradient creator')}
+            {t('gradient.subtitle@@Hex color gradient creator')}
           </h2>
 
           <OutputField id="Output" charlimit={256} value={
@@ -139,7 +139,7 @@ export default component$(() => {
             <h1 class="font-bold text-3xl mb-2">
               {t('gradient.output@@Output')}
             </h1>
-            {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy')}
+            {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
           </OutputField>
 
           <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
@@ -154,7 +154,11 @@ export default component$(() => {
               let hex = '';
               return text.split('').map((char: string) => {
                 if (char != ' ') hex = convertToHex(gradient.next());
-                return <span style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
+                return <>
+                  <span style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+                    {char}
+                  </span>
+                </>;
               });
             })()}
           </h1>
@@ -188,11 +192,11 @@ export default component$(() => {
                     setCookie(JSON.stringify(store));
                   }
                 }>
-                  {
-                    formats.map((format: any) => {
-                      return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>;
-                    })
-                  }
+                  {formats.map((format: any) => <>
+                    <option value={format}>
+                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                    </option>
+                  </>)}
                   <option value={'custom'}>
                     {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                   </option>
@@ -234,11 +238,11 @@ export default component$(() => {
                   }, 1);
                 }
               }>
-                {
-                  Object.keys(presets).map((preset: any) => {
-                    return <option value={preset}>{preset}</option>;
-                  })
-                }
+                {Object.keys(presets).map((preset: any) => <>
+                  <option value={preset}>
+                    {preset}
+                  </option>
+                </>)}
               </SelectInput>
 
               <label>
@@ -285,11 +289,9 @@ export default component$(() => {
                   }, 2000);
                 }} />
               </div>
-              {
-                store.alerts.map((alert: any) => {
-                  return <p class={alert.class} dangerouslySetInnerHTML={alert.text} />;
-                })
-              }
+              {store.alerts.map((alert: any) => <>
+                <p class={alert.class} dangerouslySetInnerHTML={alert.text} />
+              </>)}
               <div class="mt-6 mb-4 space-y-4">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.bold@@Bold')} - {store.formatchar + 'l'}

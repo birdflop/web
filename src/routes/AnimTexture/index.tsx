@@ -53,12 +53,12 @@ export default component$(() => {
         } />
 
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
-          {store.frames.map((frame, i) => {
-            return <div class="w-24 rounded-lg border-gray-700 border-2">
+          {store.frames.map((frame, i) => <>
+            <div class="w-24 rounded-lg border-gray-700 border-2">
               <img width={96} height={96} class="rounded-t-md" src={frame.img} />
               <input type="number" value={frame.delay} onInput$={(event: any) => { store.frames[i].delay = event.target!.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md"/>
-            </div>;
-          })}
+            </div>
+          </>)}
         </div>
 
         <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
@@ -69,7 +69,7 @@ export default component$(() => {
           Cumulative (Turn this on if gif frames are broken)
         </Toggle>
 
-        <Button.Button className="my-6" onClick$={
+        <Button.Button extraClass="my-6" onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
             canvas.classList.add('sm:flex');
@@ -121,7 +121,7 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <Button.External id="pngd" className="mr-2" href='/'>
+          <Button.External id="pngd" extraClass="mr-2" href='/'>
             Download PNG
           </Button.External>
           <Button.External id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>

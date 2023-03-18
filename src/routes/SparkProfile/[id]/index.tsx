@@ -19,27 +19,23 @@ export default component$(() => {
           value={results}
           onPending={() => <p>Loading...</p>}
           onRejected={() => <p>Error</p>}
-          onResolved={(fields: Field[]) => {
-            return (
-              <>
-                {fields.map((field: Field) => {
-                  return (
-                    <div class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
-                      <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, '\n> ')}</p>
-                      {field.value}
-                      {field.buttons?.map((button: any) => {
-                        return (
-                          <a href={button.url} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
-                            {button.text}
-                          </a>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </>
-            );
-          }}
+          onResolved={(fields: Field[]) => <>
+            {fields.map((field: Field) => {
+              return <>
+                <div class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
+                  <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, '\n> ')}</p>
+                  {field.value}
+                  {field.buttons?.map((button: any) => {
+                    return <>
+                      <a href={button.url} class="text-white text-md bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
+                        {button.text}
+                      </a>
+                    </>;
+                  })}
+                </div>
+              </>;
+            })}
+          </>}
         />
       </div>
       <p class="text-white">

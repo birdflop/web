@@ -141,9 +141,11 @@ export default component$(() => {
             const colors = store.frames[store.frame];
             if (!colors) return;
 
-            return text.split('').map((char: string, i: number) => {
-              return <span style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>{char}</span>;
-            });
+            return text.split('').map((char: string, i: number) => <>
+              <span style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+                {char}
+              </span>
+            </>);
           })()}
         </h1>
 
@@ -177,11 +179,11 @@ export default component$(() => {
 
             <div class="grid sm:grid-cols-2 gap-2">
               <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {
-                  types.map((type: any) => {
-                    return <option value={type.value}>{type.name}</option>;
-                  })
-                }
+                {types.map((type: any) => <>
+                  <option value={type.value}>
+                    {type.name}
+                  </option>
+                </>)}
               </SelectInput>
             </div>
 
@@ -198,11 +200,11 @@ export default component$(() => {
                   setCookie(JSON.stringify(store));
                 }
               }>
-                {
-                  formats.map((format: any) => {
-                    return <option value={format}>{format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}</option>;
-                  })
-                }
+                {formats.map((format: any) => <>
+                  <option value={format}>
+                    {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                  </option>
+                </>)}
                 <option value={'custom'}>
                   {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
                 </option>
@@ -279,11 +281,9 @@ export default component$(() => {
                 }, 2000);
               }} />
             </div>
-            {
-              store.alerts.map((alert: any) => {
-                return <p class={alert.class} dangerouslySetInnerHTML={alert.text}/>;
-              })
-            }
+            {store.alerts.map((alert: any) => <>
+              <p class={alert.class} dangerouslySetInnerHTML={alert.text}/>
+            </>)}
             <div class="mt-6 mb-4 space-y-4">
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 Bold - {store.formatchar + 'l'}

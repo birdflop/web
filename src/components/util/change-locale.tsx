@@ -20,11 +20,11 @@ export default component$(() => {
       </div>
       <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
         <div class="bg-black/50 rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
-          {config.supportedLocales.map(value => (
+          {config.supportedLocales.map(value => <>
             <div onClick$={async () => await changeLocale$(value)}>
               {value.lang}
             </div>
-          ))}
+          </>)}
         </div>
       </div>
     </button>

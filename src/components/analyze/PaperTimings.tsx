@@ -45,7 +45,7 @@ export default component$(() => {
           Paste the timings report link here
         </TextInput>
         <p class={`text-red-400 ${!store.error && 'hidden'}`}>{store.error}</p>
-        <Button.SPA href={store.redirect} className={`${!store.redirect && 'hidden'}`}>
+        <Button.SPA href={store.redirect} extraClass={`${!store.redirect && 'hidden'}`}>
           Submit
         </Button.SPA>
 

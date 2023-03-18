@@ -25,7 +25,7 @@ export default component$(() => {
 
         <OutputField id="Output" value={
           JSON.stringify(loadPreset(store.preset), null, 2)
-        } className="h-96">
+        } extraClass="h-96">
           Output
         </OutputField>
       </div>
