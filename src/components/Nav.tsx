@@ -10,6 +10,8 @@ import logoWEBP from '~/images/logo.png?webp';
 import { src as logoPlaceholder } from '~/images/logo.png?metadata';
 import { changeLocale, $translate as t, useSpeakContext, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
 
+import { languages } from '~/speak-config';
+
 export default component$(() => {
   const ctx = useSpeakContext();
   const config = useSpeakConfig();
@@ -112,7 +114,7 @@ export default component$(() => {
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                       {config.supportedLocales.map(value => <>
                         <div onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
-                          {value.lang}
+                          {languages[value.lang as keyof typeof languages]}
                         </div>
                       </>)}
                     </div>

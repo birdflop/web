@@ -24,6 +24,11 @@ export const config: SpeakConfig = {
   ],
 };
 
+export const languages = {
+  'en-US': 'English',
+  'es-ES': 'Español',
+};
+
 export const loadTranslation$: LoadTranslationFn = $(async (lang: string, asset: string, origin?: string) => {
   let url = '';
   if (isServer && origin) {
