@@ -51,7 +51,7 @@ export default component$(() => {
                     {t('nav.gradients@@Gradients')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
                   </div>
-                  <div class="absolute top-0 right-0 z-10 hidden group-hover:flex pt-16">
+                  <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                       <Link href="/Gradients" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
                         {t('nav.hexGradient@@Hex Gradients')}
@@ -70,7 +70,7 @@ export default component$(() => {
                     {t('nav.analysis@@Analysis')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
                   </div>
-                  <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
+                  <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                       <Link href="/SparkProfile" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
                         {t('nav.sparkProfile@@Spark Profile')}
@@ -86,7 +86,7 @@ export default component$(() => {
                     {t('nav.misc@@Misc')}
                     <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
                   </div>
-                  <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16">
+                  <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                       <Link href="/AnimTexture" class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
                         {t('nav.animatedTextures@@Animated Textures')}
@@ -110,7 +110,7 @@ export default component$(() => {
                   <div class="px-4 py-3">
                     <InGlobe class="transform group-hover:rotate-180 group-hover:text-blue-400 transition duration-300 ease-in-out" />
                   </div>
-                  <div class="absolute top-0 left-0 z-10 hidden group-hover:flex pt-16 text-base">
+                  <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
                     <div class="bg-black rounded-xl px-3 py-4 flex flex-col space-y-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
                       {config.supportedLocales.map(value => (
                         <div key={value.lang} onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
