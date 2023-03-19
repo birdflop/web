@@ -10,21 +10,21 @@ import {
   Speak,
 } from 'qwik-speak';
 
-useVisibleTask$(() => {
-  if (document.getElementById('gifframes')) return;
-  const script = document.createElement('script');
-  script.src = '/scripts/gif-frames.js';
-  script.defer = true;
-  script.id = 'gifframes';
-  document.head.appendChild(script);
-}, { strategy: 'document-idle' });
-
 export default component$(() => {
   const store = useStore({
     frames: [] as any[],
     textureName: '',
     cumulative: false,
   }, { deep: true });
+
+  useVisibleTask$(() => {
+    if (document.getElementById('gifframes')) return;
+    const script = document.createElement('script');
+    script.src = '/scripts/gif-frames.js';
+    script.defer = true;
+    script.id = 'gifframes';
+    document.head.appendChild(script);
+  }, { strategy: 'document-idle' });
 
   return (
     <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
