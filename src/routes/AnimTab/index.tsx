@@ -144,7 +144,7 @@ export default component$(() => {
             </span>
           </OutputField>
 
-          <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+          <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
             {(() => {
               const text = store.text ? store.text : 'SimplyMC';
 
