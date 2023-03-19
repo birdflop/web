@@ -39,7 +39,7 @@ export const setCookie = server$(function (store) {
   Object.keys(json).forEach(key => {
     const existingCookie = this.cookie.get(key);
     if (existingCookie === json[key]) return;
-    this.cookie.set(key, encodeURIComponent(json[key]));
+    this.cookie.set(key, encodeURIComponent(json[key]), { path: '/' });
   });
 });
 
