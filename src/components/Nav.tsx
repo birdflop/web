@@ -163,7 +163,7 @@ export const MainNav = component$(() => {
 
 export const MobileNav = component$(() => {
   return (
-    <div id="mobile-menu" class="gap-4 py-4 px-3 bg-black rounded-lg mt-2 hidden flex-col">
+    <div id="mobile-menu" class="gap-4 py-4 px-3 bg-black rounded-lg mt-2 hidden flex-col xl:hidden">
       <Slot />
     </div>
   );
