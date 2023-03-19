@@ -236,7 +236,7 @@ export default component$(() => {
                 {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
 
-              <SelectInput id="preset" label="Color Preset" value={store.format} onChange$={
+              <SelectInput id="preset" label="Color Preset" onChange$={
                 (event: any) => {
                   store.colors = [];
                   setTimeout(() => {
