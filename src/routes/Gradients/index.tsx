@@ -13,6 +13,8 @@ import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
 import { convertToRGB, convertToHex, getRandomColor } from '~/components/util/RGBUtils';
 
+import { InFillColor, InSettings, InText } from '@qwikest/icons/iconoir';
+
 import {
   $translate as t,
   $plural as p,
@@ -147,7 +149,7 @@ export default component$(() => {
             {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
           </OutputField>
 
-          <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+          <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
             {(() => {
               const text = store.text ? store.text : 'SimplyMC';
 
@@ -169,18 +171,27 @@ export default component$(() => {
           </h1>
 
           <div id="mobile-navbuttons" class="my-4 sm:hidden">
-            <div class="grid grid-cols-2 gap-2">
+            <div class="flex gap-2 justify-center">
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.remove('hidden');
                 document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                {p(store.colors.length, 'gradient.colorAmount')}
+                <InFillColor/>
               </Button>
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
                 document.getElementById('inputs')!.classList.remove('hidden');
+                document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                {t('gradient.settings@@Settings')}
+                <InSettings/>
+              </Button>
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('formatting')!.classList.remove('hidden');
+              }}>
+                <InText/>
               </Button>
             </div>
           </div>
@@ -200,121 +211,123 @@ export default component$(() => {
                 })}
               </div>
             </div>
-            <div class="sm:col-span-3" id="inputs">
-              <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('gradient.inputText@@Input Text')}
-              </TextInput>
+            <div class="sm:col-span-3">
+              <div class="sm:block" id="inputs">
+                <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  {t('gradient.inputText@@Input Text')}
+                </TextInput>
 
-              <div class="grid sm:grid-cols-2 gap-2">
-                <SelectInput id="format" label="Output Format" value={store.format} onChange$={
+                <div class="grid sm:grid-cols-2 gap-2">
+                  <SelectInput id="format" label="Output Format" value={store.format} onChange$={
+                    (event: any) => {
+                      if (event.target!.value == 'custom') return store.customFormat = true;
+                      store.customFormat = false;
+                      store.format = event.target!.value;
+                      setCookie(JSON.stringify(store));
+                    }
+                  }>
+                    {formats.map((format: any) => (
+                      <option key={format} value={format}>
+                        {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                      </option>
+                    ))}
+                    <option value={'custom'}>
+                      {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                    </option>
+                  </SelectInput>
+                  <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                    {t('gradient.formatCharacter@@Format Character')}
+                  </TextInput>
+                </div>
+
+                {
+                  store.customFormat && <>
+                    <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                      {t('gradient.customFormat@@Custom Format')}
+                    </TextInput>
+                    <div class="pb-4">
+                      <p>{t('gradient.placeholders@@Placeholders:')}</p>
+                      <p>$1 - (R)RGGBB</p>
+                      <p>$2 - R(R)GGBB</p>
+                      <p>$3 - RR(G)GBB</p>
+                      <p>$4 - RRG(G)BB</p>
+                      <p>$5 - RRGG(B)B</p>
+                      <p>$6 - RRGGB(B)</p>
+                      <p>$f - {t('gradient.formatting@@Formatting')}</p>
+                      <p>$c - {t('gradient.character@@Character')}</p>
+                    </div>
+                  </>
+                }
+
+                <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  {t('gradient.prefix@@Prefix (Usually used for commands)')}
+                </TextInput>
+
+                <SelectInput id="preset" label="Color Preset" onChange$={
                   (event: any) => {
-                    if (event.target!.value == 'custom') return store.customFormat = true;
-                    store.customFormat = false;
-                    store.format = event.target!.value;
-                    setCookie(JSON.stringify(store));
+                    store.colors = [];
+                    setTimeout(() => {
+                      store.colors = presets[event.target!.value as keyof typeof presets];
+                      setCookie(JSON.stringify(store));
+                    }, 1);
                   }
                 }>
-                  {formats.map((format: any) => (
-                    <option key={format} value={format}>
-                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                  {Object.keys(presets).map((preset: any) => (
+                    <option key={preset} value={preset}>
+                      {preset}
                     </option>
                   ))}
-                  <option value={'custom'}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
-                  </option>
                 </SelectInput>
-                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.formatCharacter@@Format Character')}
-                </TextInput>
-              </div>
 
-              {
-                store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
-                    {t('gradient.customFormat@@Custom Format')}
-                  </TextInput>
-                  <div class="pb-4">
-                    <p>{t('gradient.placeholders@@Placeholders:')}</p>
-                    <p>$1 - (R)RGGBB</p>
-                    <p>$2 - R(R)GGBB</p>
-                    <p>$3 - RR(G)GBB</p>
-                    <p>$4 - RRG(G)BB</p>
-                    <p>$5 - RRGG(B)B</p>
-                    <p>$6 - RRGGB(B)</p>
-                    <p>$f - {t('gradient.formatting@@Formatting')}</p>
-                    <p>$c - {t('gradient.character@@Character')}</p>
-                  </div>
-                </>
-              }
-
-              <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('gradient.prefix@@Prefix (Usually used for commands)')}
-              </TextInput>
-
-              <SelectInput id="preset" label="Color Preset" onChange$={
-                (event: any) => {
-                  store.colors = [];
-                  setTimeout(() => {
-                    store.colors = presets[event.target!.value as keyof typeof presets];
-                    setCookie(JSON.stringify(store));
-                  }, 1);
-                }
-              }>
-                {Object.keys(presets).map((preset: any) => (
-                  <option key={preset} value={preset}>
-                    {preset}
-                  </option>
-                ))}
-              </SelectInput>
-
-              <label>
-                {t('gradient.presets@@Presets')}
-              </label>
-              <div class="flex gap-2 my-2">
-                <Button id="export" onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                Export
-                </Button>
-                <RawTextInput name="import" placeholder={t('gradient.importPlaceholder@@Import (Paste here)')} onInput$={(event: any) => {
-                  let json: any;
-                  try {
-                    json = JSON.parse(event.target!.value);
-                  } catch (error) {
+                <label>
+                  {t('gradient.presets@@Presets')}
+                </label>
+                <div class="flex gap-2 my-2">
+                  <Button id="export" onClick$={() => {
+                    navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
                     const alert = {
-                      class: 'text-red-500',
-                      text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                      class: 'text-green-500',
+                      text: 'Successfully exported preset to clipboard!',
                     };
                     store.alerts.push(alert);
-                    return setTimeout(() => {
+                    setTimeout(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
-                    }, 5000);
-                  }
-                  Object.keys(json).forEach((key: any) => {
-                    store[key] = json[key];
-                  });
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'Successfully imported preset!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }} />
+                    }, 2000);
+                  }}>
+                    Export
+                  </Button>
+                  <RawTextInput name="import" placeholder={t('gradient.importPlaceholder@@Import (Paste here)')} onInput$={(event: any) => {
+                    let json: any;
+                    try {
+                      json = JSON.parse(event.target!.value);
+                    } catch (error) {
+                      const alert = {
+                        class: 'text-red-500',
+                        text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                      };
+                      store.alerts.push(alert);
+                      return setTimeout(() => {
+                        store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      }, 5000);
+                    }
+                    Object.keys(json).forEach((key: any) => {
+                      store[key] = json[key];
+                    });
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'Successfully imported preset!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }} />
+                </div>
+                {store.alerts.map((alert: any, i: number) => (
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
+                ))}
               </div>
-              {store.alerts.map((alert: any, i: number) => (
-                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
-              ))}
-              <div class="mt-6 mb-4 space-y-4">
+              <div class="sm:mt-6 mb-4 space-y-4 sm:block" id="formatting">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.bold@@Bold')} - {store.formatchar + 'l'}
                 </Toggle>
