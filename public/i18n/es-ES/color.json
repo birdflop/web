@@ -1,0 +1,29 @@
+{
+    "color": {
+        "output": "Salida",
+        "outputSubtitle": "Esto es lo que pones en el chat. Haz click en él para copiarlo.",
+        "colorAmount": {
+            "one": "{{ value }} Color",
+            "other": "{{ value }} Colores"
+        },
+        "hexColor": "Color Hex",
+        "inputText": "Texto de entrada",
+        "presets": "Predefinidos",
+        "exportedPreset": "Exportado predefinido exitosamente a portapapeles!",
+        "importedPreset": "¡Importado con éxito!",
+        "invalidPreset": "PREAJUSTE NO VÁLIDO!\nSi este es un preajuste antiguo, actualícelo utilizando la página de <a class=\"text-blue-500\" href=\"/PresetTools\">herramientas de preajuste</a>, si no, informe a los <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">desarrolladores</a>.",
+        "export": "Exportar",
+        "import": "Importar (Pegar aquí)",
+        "bold": "Negrita",
+        "strikethrough": "Tachado",
+        "underline": "Subrayado",
+        "italic": "Itálica",
+        "customFormat": "Formato personalizado",
+        "placeholders": "Marcadores de posición:",
+        "formatting": "Formato",
+        "character": "Carácter",
+        "formatCharacter": "Carácter de formato",
+        "colorPreset": "Color Preestablecido",
+        "colorFormat": "Formato de color"
+    }
+}

@@ -1,7 +1,7 @@
 import { component$, useStore, Slot } from '@builder.io/qwik';
 
 import TextInput from '~/components/elements/TextInput';
-import Button from '~/components/elements/Button';
+import { SPAButton } from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
@@ -10,12 +10,12 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
-      <div class="mt-10 min-h-[60px]">
-        <h1 class="font-bold text-gray-50 text-4xl mb-2">
+    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
+      <div class="my-10 min-h-[60px]">
+        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           Paper Timings Analysis
         </h1>
-        <h2 class="text-gray-50 text-xl">
+        <h2 class="text-gray-50 text-base sm:text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br/>
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400">this guide</a> for detailed information on the functionality of each setting.
         </h2>
@@ -45,9 +45,9 @@ export default component$(() => {
           Paste the timings report link here
         </TextInput>
         <p class={`text-red-400 ${!store.error && 'hidden'}`}>{store.error}</p>
-        <Button.SPA href={store.redirect} className={`${!store.redirect && 'hidden'}`}>
+        <SPAButton href={store.redirect} extraClass={`${!store.redirect && 'hidden'}`}>
           Submit
-        </Button.SPA>
+        </SPAButton>
 
         <p class="text-white my-12">
           You can also copy the code into a link<br/>

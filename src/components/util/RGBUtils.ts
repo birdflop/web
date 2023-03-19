@@ -54,6 +54,7 @@ export function getAnimFrames(store: any) {
     const clrs = [];
     const gradient = new AnimatedGradient(colors, text.replace(/ /g, '').length, n);
     let output = '';
+    gradient.next();
     if (store.type == 4) {
       const hex = convertToHex(gradient.next());
       clrs.push(hex);

@@ -1,0 +1,11 @@
+{
+    "animtexture": {
+        "title": "Texturas animadas",
+        "subtitle": "Fácilmente fusiona texturas para animaciones de paquetes de recursos",
+        "textureName": "Nombre de la textura",
+        "cumulative": "Acumulativo (Activa esto si los fotogramas de gif están rotos)",
+        "generate": "Generar",
+        "downloadPNG": "Descargar PNG",
+        "downloadMCMETA": "Descargar MCMETA"
+    }
+}

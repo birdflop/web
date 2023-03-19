@@ -1,0 +1,29 @@
+{
+    "color": {
+        "output": "Output",
+        "outputSubtitle": "Dit is wat je in de chat plaatst. Klik erop om te kopiëren.",
+        "colorAmount": {
+            "one": "{{ value }} Kleur",
+            "other": "{{ value }} Kleuren"
+        },
+        "hexColor": "Hex Kleur",
+        "inputText": "Tekst:",
+        "presets": "Vooraf ingesteld",
+        "exportedPreset": "Succesvol gekopieed!",
+        "importedPreset": "Succesvol de vooraf ingestelde instellingen geupload",
+        "invalidPreset": "Ongeldige preset!\nAls dit een oude preset is, update deze dan met de <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> pagina, Zo niet, rapporteer dit dan bij de <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">Ontwikkelaars</a>.",
+        "export": "Exporteren",
+        "import": "Importeren (Hier plakken)",
+        "bold": "Dik",
+        "strikethrough": "Doorgestreept",
+        "underline": "Understreept",
+        "italic": "Schuingedrukt",
+        "customFormat": "Eigen Opmaak",
+        "placeholders": "Plaatsvervangers:",
+        "formatting": "Opmaak",
+        "character": "Letter",
+        "formatCharacter": "Opmaak Letter",
+        "colorPreset": "Kleur preset",
+        "colorFormat": "Kleur Opmaak"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "animtexture": {
+        "title": "Geanimeerde Texturen",
+        "subtitle": "Voeg gemakkelijk texture pack animaties samen.",
+        "textureName": "Textuur Naam",
+        "cumulative": "Cumulatief (Zet dit aan als GIF Frames weg zijn)",
+        "generate": "Genereer",
+        "downloadPNG": "Download PNG",
+        "downloadMCMETA": "Download MCMETA"
+    }
+}

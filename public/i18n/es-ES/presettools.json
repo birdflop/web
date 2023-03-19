@@ -1,0 +1,8 @@
+{
+    "presettools": {
+        "title": "Actualizador de Preajustes",
+        "subtitle": "Esto actualizará las versiones antiguas de los preajustes a la versión más nueva.",
+        "input": "Entrada de preajuste",
+        "output": "Salida"
+    }
+}

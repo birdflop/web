@@ -1,0 +1,10 @@
+{
+    "animtab": {
+        "title": "Genaimeerde TAB",
+        "subtitle": "TAB plugin overloop animatie generator",
+        "animationName": "Animatie Naam",
+        "speed": "Snelheid",
+        "outputFormat": "Uitkomst Opmaak",
+        "outputType": "Uitkomst Type"
+    }
+}
