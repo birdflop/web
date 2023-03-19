@@ -84,17 +84,15 @@ export default component$(() => {
         store[key] = value === 'true' ? true : value === 'false' ? false : value;
       }
       if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
+
+      if (document.getElementsByName('jscolor')[0]) return;
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js';
+      script.defer = true;
+      script.setAttribute('name', 'jscolor');
+      document.head.appendChild(script);
     });
   });
-
-  useVisibleTask$(() => {
-    if (document.getElementById('jscolor')) return;
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js';
-    script.defer = true;
-    script.id = 'jscolor';
-    document.head.appendChild(script);
-  }, { strategy: 'document-idle' });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">

@@ -18,11 +18,11 @@ export default component$(() => {
   }, { deep: true });
 
   useVisibleTask$(() => {
-    if (document.getElementById('gifframes')) return;
+    if (document.getElementsByName('gifframes')[0]) return;
     const script = document.createElement('script');
     script.src = '/scripts/gif-frames.js';
     script.defer = true;
-    script.id = 'gifframes';
+    script.setAttribute('name', 'gifframes');
     document.head.appendChild(script);
   }, { strategy: 'document-idle' });
 
