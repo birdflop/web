@@ -1,4 +1,4 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -9,6 +9,15 @@ import {
   $translate as t,
   Speak,
 } from 'qwik-speak';
+
+useVisibleTask$(() => {
+  if (document.getElementById('gifframes')) return;
+  const script = document.createElement('script');
+  script.src = '/scripts/gif-frames.js';
+  script.defer = true;
+  script.id = 'gifframes';
+  document.head.appendChild(script);
+}, { strategy: 'document-idle' });
 
 export default component$(() => {
   const store = useStore({
@@ -28,7 +37,6 @@ export default component$(() => {
             {t('animtexture.subtitle@@Easily merge textures for resource pack animations')}
           </h2>
 
-          <script async src="/scripts/gif-frames.js" />
           <label for="fileInput">Select Frame(s) or a GIF</label><br/>
           <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" onChange$={
             (event) => {

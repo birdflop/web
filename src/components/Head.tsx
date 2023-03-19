@@ -12,7 +12,7 @@ export const RouterHead = component$(() => {
 
   useVisibleTask$(() => {
     const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558';\
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558';
     script.crossOrigin = 'anonymous';
     script.defer = true;
     document.head.appendChild(script);

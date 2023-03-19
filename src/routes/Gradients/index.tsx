@@ -76,7 +76,6 @@ export default component$(() => {
   }, { deep: true });
 
   useVisibleTask$(() => {
-
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       const parsedUserStore = JSON.parse(userstore);
       for (const key of Object.keys(parsedUserStore)) {
@@ -88,10 +87,18 @@ export default component$(() => {
     });
   });
 
+  useVisibleTask$(() => {
+    if (document.getElementById('jscolor')) return;
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js';
+    script.defer = true;
+    script.id = 'jscolor';
+    document.head.appendChild(script);
+  }, { strategy: 'document-idle' });
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <Speak assets={['gradient']}>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"></script>
         <div class="mt-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-4xl mb-2">
             {t('gradient.title@@Hex Gradient')}
