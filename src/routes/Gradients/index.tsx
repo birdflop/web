@@ -93,7 +93,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"/>
       <Speak assets={['gradient', 'color']}>
-        <div class="mt-10 min-h-[60px] w-full">
+        <div class="my-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('gradient.title@@Hex Gradient')}
           </h1>
