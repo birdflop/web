@@ -1,5 +1,5 @@
 import { component$, $, Slot } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+import { Link, useNavigate } from '@builder.io/qwik-city';
 
 import { InDiscord, InGithub, InGlobe, InNavArrowDown, InMenu, InCoffeeCup } from '@qwikest/icons/iconoir';
 // @ts-ignore
@@ -63,7 +63,11 @@ export default component$(() => {
           <NavButton external icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass="hidden xl:flex">
             <InCoffeeCup />
           </NavButton>
-          <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => document.getElementById('mobile-menu')?.classList.toggle('hidden')} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
+          <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => {
+            const classList = document.getElementById('mobile-menu')?.classList;
+            if (classList?.contains('hidden')) classList.replace('hidden', 'flex');
+            else classList?.replace('flex', 'hidden');
+          }} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
             <InMenu />
           </button>
         </MainNav>
@@ -86,7 +90,7 @@ export default component$(() => {
           <NavButton mobile href="/AnimTexture" extraClass="flex lg:hidden">
             {t('nav.animatedTextures@@Animated Textures')}
           </NavButton>
-          <NavButton mobile href="/RAMCalc" extraClass="flex lg:hidden">
+          <NavButton mobile href="/RamCalc" extraClass="flex lg:hidden">
             {t('nav.ramCalculator@@RAM Caolculator')}
           </NavButton>
           <NavButton mobile href="/ColorStrip" extraClass="flex lg:hidden">
@@ -159,13 +163,14 @@ export const MainNav = component$(() => {
 
 export const MobileNav = component$(() => {
   return (
-    <div id="mobile-menu" class="gap-4 py-4 px-3 justify-center items-center bg-black rounded-lg mt-2 hidden">
+    <div id="mobile-menu" class="gap-4 py-4 px-3 bg-black rounded-lg mt-2 hidden flex-col">
       <Slot />
     </div>
   );
 });
 
 export const NavButton = component$(({ href, title, icon, external, extraClass }: any) => {
+  const nav = useNavigate();
   return <>
     {external &&
       <a href={href} title={title} class={`group transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg ${icon ? 'text-3xl' : ''} items-center`}>
@@ -173,9 +178,9 @@ export const NavButton = component$(({ href, title, icon, external, extraClass }
       </a>
     }
     {!external &&
-      <Link href={href} title={title} class={`group transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg ${icon ? 'text-3xl' : ''} items-center`}>
+      <button onClick$={() => { document.getElementById('mobile-menu')?.classList.replace('flex', 'hidden'); nav(href); }} title={title} class={`group transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg ${icon ? 'text-3xl' : ''} items-center`}>
         <Slot />
-      </Link>
+      </button>
     }
   </>;
 });
