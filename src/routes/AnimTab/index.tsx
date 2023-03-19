@@ -13,6 +13,8 @@ import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
+import { InFillColor, InSettings, InText } from '@qwikest/icons/iconoir';
+
 import {
   $translate as t,
   $plural as p,
@@ -137,7 +139,9 @@ export default component$(() => {
             <h1 class="font-bold text-xl sm:text-3xl mb-2">
               {t('animtab.output@@Output')}
             </h1>
-            {t('animtab.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            <span class="text-sm sm:text-base pb-4">
+              {t('animtab.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            </span>
           </OutputField>
 
           <h1 class={`text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
@@ -156,12 +160,38 @@ export default component$(() => {
             })()}
           </h1>
 
+          <div id="mobile-navbuttons" class="my-4 sm:hidden">
+            <div class="flex gap-2">
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.remove('hidden');
+                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('formatting')!.classList.add('hidden');
+              }}>
+                <InFillColor/>
+              </Button>
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.remove('hidden');
+                document.getElementById('formatting')!.classList.add('hidden');
+              }}>
+                <InSettings/>
+              </Button>
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('formatting')!.classList.remove('hidden');
+              }}>
+                <InText/>
+              </Button>
+            </div>
+          </div>
+
           <div class="grid sm:grid-cols-4 gap-2">
-            <div class="sm:pr-4">
-              <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
+            <div class="sm:pr-4 hidden sm:block" id="colors">
+              <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
                 {p(store.colors.length, 'animtab.colors')}
               </NumberInput>
-              <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
+              <div class="overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
                   return (
                     <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
@@ -172,126 +202,128 @@ export default component$(() => {
               </div>
             </div>
             <div class="sm:col-span-3">
-              <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.animationName@@Animation Name')}
-              </TextInput>
-
-              <TextInput id="textinput" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.animationText@@Animation Text')}
-              </TextInput>
-
-              <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.speed@@Speed')}
-              </NumberInput>
-
-              <div class="grid sm:grid-cols-2 gap-2">
-                <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {types.map((type: any) => (
-                    <option key={type.name} value={type.value}>
-                      {type.name}
-                    </option>
-                  ))}
-                </SelectInput>
-              </div>
-
-              <div class="grid sm:grid-cols-2 gap-2">
-                <SelectInput id="format" label="Color Format" value={store.format} onChange$={
-                  (event: any) => {
-                    if (event.target!.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = event.target!.value;
-                    }
-                    setCookie(JSON.stringify(store));
-                  }
-                }>
-                  {formats.map((format: any) => (
-                    <option key={format} value={format}>
-                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
-                    </option>
-                  ))}
-                  <option value={'custom'}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
-                  </option>
-                </SelectInput>
-                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {t('animtab.formatCharacter@@Format Character')}
+              <div class="sm:block" id="inputs">
+                <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  {t('animtab.animationName@@Animation Name')}
                 </TextInput>
-              </div>
 
-              <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.outputFormat@@Output Format')}
-              </TextInput>
+                <TextInput id="textinput" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  {t('animtab.animationText@@Animation Text')}
+                </TextInput>
 
-              {
-                store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
-                    {t('animtab.customFormat@@Custom Format')}
+                <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
+                  {t('animtab.speed@@Speed')}
+                </NumberInput>
+
+                <div class="grid sm:grid-cols-2 sm:gap-2">
+                  <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                    {types.map((type: any) => (
+                      <option key={type.name} value={type.value}>
+                        {type.name}
+                      </option>
+                    ))}
+                  </SelectInput>
+                </div>
+
+                <div class="grid sm:grid-cols-2 sm:gap-2">
+                  <SelectInput id="format" label="Color Format" value={store.format} onChange$={
+                    (event: any) => {
+                      if (event.target!.value == 'custom') {
+                        store.customFormat = true;
+                      }
+                      else {
+                        store.customFormat = false;
+                        store.format = event.target!.value;
+                      }
+                      setCookie(JSON.stringify(store));
+                    }
+                  }>
+                    {formats.map((format: any) => (
+                      <option key={format} value={format}>
+                        {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                      </option>
+                    ))}
+                    <option value={'custom'}>
+                      {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                    </option>
+                  </SelectInput>
+                  <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                    {t('animtab.formatCharacter@@Format Character')}
                   </TextInput>
-                  <div class="pb-4">
-                    <p>{t('animtab.placeholders@@Placeholders:')}</p>
-                    <p>$1 - (R)RGGBB</p>
-                    <p>$2 - R(R)GGBB</p>
-                    <p>$3 - RR(G)GBB</p>
-                    <p>$4 - RRG(G)BB</p>
-                    <p>$5 - RRGG(B)B</p>
-                    <p>$6 - RRGGB(B)</p>
-                    <p>$f - {t('animtab.formatting@@Formatting')}</p>
-                    <p>$c - {t('animtab.character@@Character')}</p>
-                  </div>
-                </>
-              }
+                </div>
 
-              <label>
-                {t('animtab.presets@@Presets')}
-              </label>
-              <div class="flex gap-2 my-2">
-                <Button onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('animtab.export@@Export')}
-                </Button>
-                <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
-                  let json: any;
-                  try {
-                    json = JSON.parse(event.target!.value);
-                  } catch (error){
+                <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  {t('animtab.outputFormat@@Output Format')}
+                </TextInput>
+
+                {
+                  store.customFormat && <>
+                    <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                      {t('animtab.customFormat@@Custom Format')}
+                    </TextInput>
+                    <div class="pb-4">
+                      <p>{t('animtab.placeholders@@Placeholders:')}</p>
+                      <p>$1 - (R)RGGBB</p>
+                      <p>$2 - R(R)GGBB</p>
+                      <p>$3 - RR(G)GBB</p>
+                      <p>$4 - RRG(G)BB</p>
+                      <p>$5 - RRGG(B)B</p>
+                      <p>$6 - RRGGB(B)</p>
+                      <p>$f - {t('animtab.formatting@@Formatting')}</p>
+                      <p>$c - {t('animtab.character@@Character')}</p>
+                    </div>
+                  </>
+                }
+
+                <label>
+                  {t('animtab.presets@@Presets')}
+                </label>
+                <div class="flex gap-2 my-2">
+                  <Button onClick$={() => {
+                    navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
                     const alert = {
-                      class: 'text-red-500',
-                      text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                      class: 'text-green-500',
+                      text: 'Successfully exported preset to clipboard!',
                     };
                     store.alerts.push(alert);
-                    return setTimeout(() => {
+                    setTimeout(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
-                    }, 5000);
-                  }
-                  Object.keys(json).forEach((key: any) => {
-                    store[key] = json[key];
-                  });
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'Successfully imported preset!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }} />
+                    }, 2000);
+                  }}>
+                    {t('animtab.export@@Export')}
+                  </Button>
+                  <RawTextInput name="import" placeholder="Import (Paste here)" onInput$={(event: any) => {
+                    let json: any;
+                    try {
+                      json = JSON.parse(event.target!.value);
+                    } catch (error){
+                      const alert = {
+                        class: 'text-red-500',
+                        text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                      };
+                      store.alerts.push(alert);
+                      return setTimeout(() => {
+                        store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      }, 5000);
+                    }
+                    Object.keys(json).forEach((key: any) => {
+                      store[key] = json[key];
+                    });
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'Successfully imported preset!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }} />
+                </div>
+                {store.alerts.map((alert: any, i: number) => (
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text}/>
+                ))}
               </div>
-              {store.alerts.map((alert: any, i: number) => (
-                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text}/>
-              ))}
-              <div class="mt-6 mb-4 space-y-4">
+              <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.bold@@Bold')} - {store.formatchar + 'l'}
                 </Toggle>

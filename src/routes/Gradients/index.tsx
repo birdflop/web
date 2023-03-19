@@ -167,7 +167,7 @@ export default component$(() => {
           </h1>
 
           <div id="mobile-navbuttons" class="my-4 sm:hidden">
-            <div class="flex gap-2 justify-center">
+            <div class="flex gap-2">
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.remove('hidden');
                 document.getElementById('inputs')!.classList.add('hidden');
