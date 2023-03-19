@@ -2,30 +2,7 @@
     "gradient": {
         "title": "Hex Gradient",
         "subtitle": "Hex color gradient creator",
-        "output": "Output",
-        "outputSubtitle": "This is what you put in the chat. Click on it to copy.",
-        "colorAmount": {
-            "one": "{{ value }} Color",
-            "other": "{{ value }} Colors"
-        },
-        "hexColorTitle": "Hex Color",
-        "inputText": "Input Text",
-        "formatCharacter": "Format Character",
-        "customFormat": "Custom Format",
-        "placeholders": "Placeholders:",
-        "formatting": "Formatting",
-        "character": "Character",
         "prefix": "Prefix (Usually used for commands)",
-        "prefixPlaceholder": "example: '/nick '",
-        "presets": "Presets",
-        "exported": "Successfully exported preset to clipboard!",
-        "export": "Export",
-        "invalidpreset": "INVALID PRESET!\nIf this is a old preset, please update it using the <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">Developers</a>.",
-        "imported": "Successfully imported preset!",
-        "importPlaceholder": "Import (Paste here)",
-        "bold": "Bold",
-        "strikethrough": "Strikethrough",
-        "underline": "Underline",
-        "italic": "Italic"
+        "prefixPlaceholder": "example: '/nick '"
     }
 }

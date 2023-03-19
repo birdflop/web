@@ -92,7 +92,7 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"/>
-      <Speak assets={['gradient']}>
+      <Speak assets={['gradient', 'color']}>
         <div class="mt-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('gradient.title@@Hex Gradient')}
@@ -138,10 +138,10 @@ export default component$(() => {
             })()
           }>
             <h1 class="font-bold text-xl sm:text-3xl mb-2">
-              {t('gradient.output@@Output')}
+              {t('color.output@@Output')}
             </h1>
             <span class="text-sm sm:text-base pb-4">
-              {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+              {t('color.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
             </span>
           </OutputField>
 
@@ -195,13 +195,13 @@ export default component$(() => {
           <div class="grid sm:grid-cols-4 gap-2">
             <div class="sm:pr-4 hidden sm:block" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
-                {p(store.colors.length, 'gradient.colorAmount')}
+                {p(store.colors.length, 'color.colorAmount')}
               </NumberInput>
               <div class="overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
                   return (
                     <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                      {t('gradient.hexColorTitle@@Hex Color')} {i + 1}
+                      {t('color.hexColor@@Hex Color')} {i + 1}
                     </ColorInput>
                   );
                 })}
@@ -210,11 +210,11 @@ export default component$(() => {
             <div class="sm:col-span-3">
               <div class="sm:block" id="inputs">
                 <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.inputText@@Input Text')}
+                  {t('color.inputText@@Input Text')}
                 </TextInput>
 
                 <div class="grid sm:grid-cols-2 sm:gap-2">
-                  <SelectInput id="format" label="Output Format" value={store.format} onChange$={
+                  <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') return store.customFormat = true;
                       store.customFormat = false;
@@ -232,25 +232,25 @@ export default component$(() => {
                     </option>
                   </SelectInput>
                   <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                    {t('gradient.formatCharacter@@Format Character')}
+                    {t('color.formatCharacter@@Format Character')}
                   </TextInput>
                 </div>
 
                 {
                   store.customFormat && <>
                     <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
-                      {t('gradient.customFormat@@Custom Format')}
+                      {t('color.customFormat@@Custom Format')}
                     </TextInput>
                     <div class="pb-4">
-                      <p>{t('gradient.placeholders@@Placeholders:')}</p>
+                      <p>{t('color.placeholders@@Placeholders:')}</p>
                       <p>$1 - (R)RGGBB</p>
                       <p>$2 - R(R)GGBB</p>
                       <p>$3 - RR(G)GBB</p>
                       <p>$4 - RRG(G)BB</p>
                       <p>$5 - RRGG(B)B</p>
                       <p>$6 - RRGGB(B)</p>
-                      <p>$f - {t('gradient.formatting@@Formatting')}</p>
-                      <p>$c - {t('gradient.character@@Character')}</p>
+                      <p>$f - {t('color.formatting@@Formatting')}</p>
+                      <p>$c - {t('color.character@@Character')}</p>
                     </div>
                   </>
                 }
@@ -259,7 +259,7 @@ export default component$(() => {
                   {t('gradient.prefix@@Prefix (Usually used for commands)')}
                 </TextInput>
 
-                <SelectInput id="preset" label="Color Preset" onChange$={
+                <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
                   (event: any) => {
                     store.colors = [];
                     setTimeout(() => {
@@ -276,13 +276,14 @@ export default component$(() => {
                 </SelectInput>
 
                 <label>
-                  {t('gradient.presets@@Presets')}
+                  {t('color.presets@@Presets')}
                 </label>
                 <div class="flex gap-2 my-2">
                   <Button id="export" onClick$={() => {
                     navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
                     const alert = {
                       class: 'text-green-500',
+                      translate: 'color.exportedPreset',
                       text: 'Successfully exported preset to clipboard!',
                     };
                     store.alerts.push(alert);
@@ -290,16 +291,17 @@ export default component$(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
-                    Export
+                    {t('color.export@@Export')}
                   </Button>
-                  <RawTextInput name="import" placeholder={t('gradient.importPlaceholder@@Import (Paste here)')} onInput$={(event: any) => {
+                  <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                     let json: any;
                     try {
                       json = JSON.parse(event.target!.value);
                     } catch (error) {
                       const alert = {
                         class: 'text-red-500',
-                        text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                        translate: 'color.invalidPreset',
+                        text: 'INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
                       };
                       store.alerts.push(alert);
                       return setTimeout(() => {
@@ -311,6 +313,7 @@ export default component$(() => {
                     });
                     const alert = {
                       class: 'text-green-500',
+                      translate: 'color.importedPreset',
                       text: 'Successfully imported preset!',
                     };
                     store.alerts.push(alert);
@@ -320,21 +323,21 @@ export default component$(() => {
                   }} />
                 </div>
                 {store.alerts.map((alert: any, i: number) => (
-                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
                 ))}
               </div>
               <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.bold@@Bold')} - {store.formatchar + 'l'}
+                  {t('color.bold@@Bold')} - {store.formatchar + 'l'}
                 </Toggle>
                 <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
+                  {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
                 </Toggle>
                 <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.underline@@Underline')} - {store.formatchar + 'n'}
+                  {t('color.underline@@Underline')} - {store.formatchar + 'n'}
                 </Toggle>
                 <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                  {t('gradient.italic@@Italic')} - {store.formatchar + 'o'}
+                  {t('color.italic@@Italic')} - {store.formatchar + 'o'}
                 </Toggle>
               </div>
             </div>

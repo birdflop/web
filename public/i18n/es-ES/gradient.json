@@ -2,30 +2,7 @@
     "gradient": {
         "title": "Degradado Hex",
         "subtitle": "Creador de degradados de color hex",
-        "output": "Salida",
-        "outputSubtitle": "Esto es lo que pones en el chat. Haz click en él para copiarlo.",
-        "colorAmount": {
-            "one": "{{ value }} Color",
-            "other": "{{ value }} Colores"
-        },
-        "hexColorTitle": "Color Hex",
-        "inputText": "Texto de entrada",
-        "formatCharacter": "Carácter de formato",
-        "customFormat": "Formato personalizado",
-        "placeholders": "Marcadores de posición:",
-        "formatting": "Formato",
-        "character": "Carácter",
         "prefix": "Prefijo (generalmente usado para comandos)",
-        "prefixPlaceholder": "ejemplo: '/nick '",
-        "presets": "Predefinidos",
-        "exported": "Exportado predefinido exitosamente a portapapeles!",
-        "export": "Exportar",
-        "invalidpreset": "PREAJUSTE NO VÁLIDO!\nSi este es un preajuste antiguo, actualícelo utilizando la página de <a class=\"text-blue-500\" href=\"/PresetTools\">herramientas de preajuste</a>, si no, informe a los <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">desarrolladores</a>.",
-        "imported": "¡Importado con éxito!",
-        "importPlaceholder": "Importar (Pegar aquí)",
-        "bold": "Negrita",
-        "strikethrough": "Tachado",
-        "underline": "Subrayado",
-        "italic": "Itálica"
+        "prefixPlaceholder": "ejemplo: '/nick '"
     }
 }
