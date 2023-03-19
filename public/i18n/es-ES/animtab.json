@@ -4,6 +4,7 @@
         "subtitle": "Creador de animaciones de gradiente de complemento TAB",
         "animationName": "Nombre de la animación",
         "speed": "Velocidad",
-        "outputFormat": "Formato de salida"
+        "outputFormat": "Formato de salida",
+        "outputType": "Tipo de salida"
     }
 }

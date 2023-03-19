@@ -227,7 +227,7 @@ export default component$(() => {
                 </NumberInput>
 
                 <div class="grid sm:grid-cols-2 sm:gap-2">
-                  <SelectInput id="type" label="Output Type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <SelectInput id="type" label={t('animtab.outputType@@Output Type')} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     {types.map((type: any) => (
                       <option key={type.name} value={type.value}>
                         {type.name}

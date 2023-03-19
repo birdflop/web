@@ -31,7 +31,7 @@ export default component$(() => {
             {t('colorstrip.inputText@@Input Text')}
           </TextInput>
 
-          <SelectInput id="gradienttype" label="Color Code Type" onChange$={(event: any) => { store.type = event.target!.value; }}>
+          <SelectInput id="gradienttype" label={t('colorstrip.colorCodeType@@Color Code Type')} onChange$={(event: any) => { store.type = event.target!.value; }}>
             <option value={0}>{'&#rrggbb'}</option>
             <option value={1}>{'<&#rrggbb>'}</option>
             <option value={2}>{'&x&r&r&g&g&b&b'}</option>
