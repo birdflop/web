@@ -95,7 +95,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
       <Speak assets={['gradient']}>
         <div class="mt-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-4xl mb-2">
@@ -168,12 +168,29 @@ export default component$(() => {
             })()}
           </h1>
 
+          <div id="mobile-navbuttons" class="my-4 sm:hidden">
+            <div class="grid grid-cols-2 gap-2">
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.remove('hidden');
+                document.getElementById('inputs')!.classList.add('hidden');
+              }}>
+                {p(store.colors.length, 'gradient.colorAmount')}
+              </Button>
+              <Button onClick$={() => {
+                document.getElementById('colors')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.remove('hidden');
+              }}>
+                {t('gradient.settings@@Settings')}
+              </Button>
+            </div>
+          </div>
+
           <div class="grid sm:grid-cols-4 gap-2">
-            <div class="sm:pr-4">
-              <NumberInput id="colors" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
+            <div class="sm:pr-4 hidden sm:block" id="colors">
+              <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
                 {p(store.colors.length, 'gradient.colorAmount')}
               </NumberInput>
-              <div class="overflow-auto max-h-32 sm:max-h-[500px] mt-3">
+              <div class="overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
                   return (
                     <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
@@ -183,7 +200,7 @@ export default component$(() => {
                 })}
               </div>
             </div>
-            <div class="sm:col-span-3">
+            <div class="sm:col-span-3" id="inputs">
               <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('gradient.inputText@@Input Text')}
               </TextInput>
