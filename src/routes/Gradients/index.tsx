@@ -86,24 +86,18 @@ export default component$(() => {
         store[key] = value === 'true' ? true : value === 'false' ? false : value;
       }
       if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
-
-      if (document.getElementsByName('jscolor')[0]) return;
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js';
-      script.defer = true;
-      script.setAttribute('name', 'jscolor');
-      document.head.appendChild(script);
     });
   });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"/>
       <Speak assets={['gradient']}>
         <div class="mt-10 min-h-[60px] w-full">
-          <h1 class="font-bold text-gray-50 text-4xl mb-2">
+          <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('gradient.title@@Hex Gradient')}
           </h1>
-          <h2 class="text-gray-50 text-xl mb-12">
+          <h2 class="text-gray-50 text-base sm:text-xl mb-12">
             {t('gradient.subtitle@@Hex color gradient creator')}
           </h2>
 
@@ -143,10 +137,12 @@ export default component$(() => {
               return output;
             })()
           }>
-            <h1 class="font-bold text-3xl mb-2">
+            <h1 class="font-bold text-xl sm:text-3xl mb-2">
               {t('gradient.output@@Output')}
             </h1>
-            {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            <span class="text-sm sm:text-base pb-4">
+              {t('gradient.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            </span>
           </OutputField>
 
           <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
@@ -217,7 +213,7 @@ export default component$(() => {
                   {t('gradient.inputText@@Input Text')}
                 </TextInput>
 
-                <div class="grid sm:grid-cols-2 gap-2">
+                <div class="grid sm:grid-cols-2 sm:gap-2">
                   <SelectInput id="format" label="Output Format" value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') return store.customFormat = true;
@@ -327,7 +323,7 @@ export default component$(() => {
                   <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={alert.text} />
                 ))}
               </div>
-              <div class="sm:mt-6 mb-4 space-y-4 sm:block" id="formatting">
+              <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
                 <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.bold@@Bold')} - {store.formatchar + 'l'}
                 </Toggle>

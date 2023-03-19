@@ -100,13 +100,6 @@ export default component$(() => {
       }
       store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
     }
-
-    if (document.getElementsByName('jscolor')[0]) return;
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js';
-    script.defer = true;
-    script.setAttribute('name', 'jscolor');
-    document.head.appendChild(script);
   });
 
   useVisibleTask$(({ track }) => {
@@ -130,17 +123,18 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"/>
       <Speak assets={['animtab']}>
         <div class="mt-10 min-h-[60px] w-full">
-          <h1 class="font-bold text-gray-50 text-4xl mb-2">
+          <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('animtab.title@@Animated TAB')}
           </h1>
-          <h2 class="text-gray-50 text-xl mb-12">
+          <h2 class="text-gray-50 text-base sm:text-xl mb-12">
             {t('animtab.subtitle@@TAB plugin gradient animation creator')}
           </h2>
 
           <OutputField id="OutPut" value={AnimationOutput(store)}>
-            <h1 class="font-bold text-3xl mb-2">
+            <h1 class="font-bold text-xl sm:text-3xl mb-2">
               {t('animtab.output@@Output')}
             </h1>
             {t('animtab.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}

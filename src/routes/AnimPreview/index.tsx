@@ -60,10 +60,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
       <Speak assets={['animpreview']}>
         <div class="mt-10 min-h-[60px] w-full">
-          <h1 class="font-bold text-gray-50 text-4xl mb-2">
+          <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('animpreview.title@@Animation Previewer')}
           </h1>
-          <h2 class="text-gray-50 text-xl mb-12">
+          <h2 class="text-gray-50 text-base sm:text-xl mb-12">
             {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
           </h2>
 

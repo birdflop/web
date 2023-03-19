@@ -61,7 +61,10 @@ html {
   text-decoration-line: underline line-through;
 }
 
-* { scroll-behavior: smooth; }
+* {
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
 *::-webkit-scrollbar {
   -webkit-appearance: none;
   appearance: none;

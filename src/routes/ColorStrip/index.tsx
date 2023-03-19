@@ -20,10 +20,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
       <Speak assets={['colorstrip']}>
         <div class="mt-10 min-h-[60px]">
-          <h1 class="font-bold text-gray-50 text-4xl mb-2">
+          <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('colorstrip.title@@Color Code Stripper')}
           </h1>
-          <h2 class="text-gray-50 text-xl mb-12">
+          <h2 class="text-gray-50 text-base sm:text-xl mb-12">
             {t('colorstrip.subtitle@@Strips all color / format codes from text')}
           </h2>
 
