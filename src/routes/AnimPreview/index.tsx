@@ -68,7 +68,7 @@ export default component$(() => {
           </h2>
 
           <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
-            {t('animpreview.yamlInput@@YAML input')}
+            {t('animpreview.yamlInput@@YAML Input')}
           </TextInput>
 
           <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
