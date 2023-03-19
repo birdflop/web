@@ -15,9 +15,8 @@ export const RouterHead = component$(() => {
     script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558';
     script.crossOrigin = 'anonymous';
     script.async = true;
-    setTimeout(() => {
-      document.head.appendChild(script);
-    }, 500);
+    script.defer = true;
+    document.head.appendChild(script);
   }, { strategy: 'document-idle' });
 
   return (
