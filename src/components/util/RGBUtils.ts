@@ -37,20 +37,20 @@ export function getAnimFrames(store: any) {
   let colors = store.colors.map((color: string) => convertToRGB(color));
   if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
-  const text = store.text ? store.text : 'SimplyMC';
+  const text = store.text ?? 'SimplyMC';
   let loopAmount;
   switch (Number(store.type)) {
   default:
-    loopAmount = store.text.length * 2 - 2;
+    loopAmount = text.length * store.length * 2 - 2;
     break;
   case 3:
-    loopAmount = store.text.length;
+    loopAmount = text.length * store.length;
     break;
   }
 
   const OutPutArray = [];
   const frames = [];
-  for (let n = 0; n < loopAmount * store.length; n++) {
+  for (let n = 0; n < loopAmount; n++) {
     const clrs = [];
     const gradient = new AnimatedGradient(colors, text.length * store.length, n);
     let output = '';
@@ -107,7 +107,7 @@ export function AnimationOutput(store: any) {
   let FinalOutput = '';
 
   const AnimFrames = getAnimFrames(store);
-  let OutPutArray = AnimFrames.OutPutArray;
+  let { OutPutArray } = AnimFrames;
 
   const format = store.outputFormat;
   FinalOutput = format.replace('%name%', store.name);
