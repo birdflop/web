@@ -9,9 +9,9 @@ import ColorInput from '~/components/elements/ColorInput';
 import { Button } from '~/components/elements/Button';
 
 import { Gradient } from '~/components/util/HexUtils';
+import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/components/util/RGBUtils';
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
-import { convertToRGB, convertToHex, getRandomColor } from '~/components/util/RGBUtils';
 
 import { InFillColor, InSettings, InText } from '@qwikest/icons/iconoir';
 
@@ -101,42 +101,7 @@ export default component$(() => {
             {t('gradient.subtitle@@Hex color gradient creator')}
           </h2>
 
-          <OutputField id="Output" charlimit={256} value={
-            (() => {
-              let colors = store.colors.map((color: string) => convertToRGB(color));
-              if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
-
-              let output = store.prefix;
-              const text = store.text ? store.text : 'SimplyMC';
-
-              const gradient = new Gradient(colors, text.replace(/ /g, '').length);
-
-              for (let i = 0; i < text.length; i++) {
-                const char = text.charAt(i);
-                if (char == ' ') {
-                  output += char;
-                  continue;
-                }
-
-                const hex = convertToHex(gradient.next());
-                let hexOutput = store.format;
-                for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-                let formatCodes = '';
-                if (store.format.includes('$f')) {
-                  if (store.bold) formatCodes += store.formatchar + 'l';
-                  if (store.italic) formatCodes += store.formatchar + 'o';
-                  if (store.underline) formatCodes += store.formatchar + 'n';
-                  if (store.strikethrough) formatCodes += store.formatchar + 'm';
-                }
-
-                hexOutput = hexOutput.replace('$f', formatCodes);
-                hexOutput = hexOutput.replace('$c', char);
-                output += hexOutput;
-              }
-
-              return output;
-            })()
-          }>
+          <OutputField id="Output" charlimit={256} value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
             <h1 class="font-bold text-xl sm:text-3xl mb-2">
               {t('color.output@@Output')}
             </h1>
