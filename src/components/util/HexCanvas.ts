@@ -1,15 +1,15 @@
 import { convertToRGB, convertToHex } from '~/components/util/RGBUtils';
 import { Gradient } from '~/components/util/HexUtils';
 
-import Canvas from 'canvas';
+import { createCanvas, registerFont, Canvas } from 'canvas';
+registerFont('~/../public/fonts/MinecraftBold.otf', { family: 'MinecraftBold' });
+registerFont('~/../public/fonts/MinecraftItalic.otf', { family: 'MinecraftItalic' });
+registerFont('~/../public/fonts/MinecraftRegular.otf', { family: 'MinecraftRegular' });
+registerFont('~/../public/fonts/MinecraftBoldItalic.otf', { family: 'MinecraftBoldItalic' });
 
 export function createPreview(text: string = 'SimplyMC', colors: string[] = ['#00FFE0', '#EB00FF'], prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
   return new Promise<string>((resolve) => {
-    //Canvas.registerFont('~/../public/fonts/MinecraftBold.otf', { family: 'MinecraftBold' });
-    //Canvas.registerFont('~/../public/fonts/MinecraftItalic.otf', { family: 'MinecraftItalic' });
-    //Canvas.registerFont('~/../public/fonts/MinecraftRegular.otf', { family: 'MinecraftRegular' });
-    //Canvas.registerFont('~/../public/fonts/MinecraftBoldItalic.otf', { family: 'MinecraftBoldItalic' });
-    const canvas = Canvas.createCanvas(500, 100);
+    const canvas = createCanvas(500, 100);
     const ctx = canvas.getContext('2d');
     ctx.font = applyText(canvas, text, bold, italic, underline, strikethrough);
     ctx.fillStyle = '#000000';
@@ -21,7 +21,7 @@ export function createPreview(text: string = 'SimplyMC', colors: string[] = ['#0
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function applyText(canvas: Canvas.Canvas, text: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
+export function applyText(canvas: Canvas, text: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
   const context = canvas.getContext('2d');
   let fontSize = 70;
   let font = 'MinecraftRegular';
@@ -45,7 +45,7 @@ export function applyText(canvas: Canvas.Canvas, text: string, bold?: boolean, i
   }
 }
 
-export function texter(canvas: Canvas.Canvas, str: string, colors: string[], x: number, y: number, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean): void {
+export function texter(canvas: Canvas, str: string, colors: string[], x: number, y: number, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean): void {
   const ctx = canvas.getContext('2d');
   const gradient = new Gradient(colors.map((color: string) => convertToRGB(color)), str.replace(/ /g, '').length);
   for (let i = 0; i < str.length; i++) {
