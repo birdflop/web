@@ -2,10 +2,12 @@ import { convertToRGB, convertToHex } from '~/components/util/RGBUtils';
 import { Gradient } from '~/components/util/HexUtils';
 
 import { createCanvas, registerFont, Canvas } from 'node-canvas';
-registerFont('~/../public/fonts/MinecraftBold.otf', { family: 'MinecraftBold' });
-registerFont('~/../public/fonts/MinecraftItalic.otf', { family: 'MinecraftItalic' });
-registerFont('~/../public/fonts/MinecraftRegular.otf', { family: 'MinecraftRegular' });
-registerFont('~/../public/fonts/MinecraftBoldItalic.otf', { family: 'MinecraftBoldItalic' });
+if (registerFont) {
+  registerFont('~/../public/fonts/MinecraftBold.otf', { family: 'MinecraftBold' });
+  registerFont('~/../public/fonts/MinecraftItalic.otf', { family: 'MinecraftItalic' });
+  registerFont('~/../public/fonts/MinecraftRegular.otf', { family: 'MinecraftRegular' });
+  registerFont('~/../public/fonts/MinecraftBoldItalic.otf', { family: 'MinecraftBoldItalic' });
+}
 
 export function createPreview(text: string = 'SimplyMC', colors: string[] = ['#00FFE0', '#EB00FF'], prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
   return new Promise<string>((resolve) => {
