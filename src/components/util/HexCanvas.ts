@@ -1,7 +1,7 @@
 import { convertToRGB, convertToHex } from '~/components/util/RGBUtils';
 import { Gradient } from '~/components/util/HexUtils';
 
-import { createCanvas, registerFont, Canvas } from 'node-canvas';
+import { createCanvas, registerFont, Canvas } from 'canvas';
 if (registerFont) {
   registerFont('~/../public/fonts/MinecraftBold.otf', { family: 'MinecraftBold' });
   registerFont('~/../public/fonts/MinecraftItalic.otf', { family: 'MinecraftItalic' });
