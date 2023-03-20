@@ -222,11 +222,11 @@ export default component$(() => {
                   {t('color.inputText@@Input Text')}
                 </TextInput>
 
-                <NumberInput id="speed" input value={store.speed} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
-                  {t('animtab.speed@@Speed')}
-                </NumberInput>
-
                 <div class="grid sm:grid-cols-2 sm:gap-2">
+                  <NumberInput id="speed" input value={store.speed} extraClass="w-full" step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
+                    {t('animtab.speed@@Speed')}
+                  </NumberInput>
+
                   <SelectInput id="type" label={t('animtab.outputType@@Output Type')} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     {types.map((type: any) => (
                       <option key={type.name} value={type.value}>
@@ -234,9 +234,7 @@ export default component$(() => {
                       </option>
                     ))}
                   </SelectInput>
-                </div>
 
-                <div class="grid sm:grid-cols-2 sm:gap-2">
                   <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') {
