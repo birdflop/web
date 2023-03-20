@@ -1,5 +1,5 @@
 /**
- * JavaScript implementation of HexUtils Gradients from RoseGarden.
+ * Typescript implementation of HexUtils Gradients from RoseGarden.
  * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
  */
 export class Gradient {
@@ -15,7 +15,15 @@ export class Gradient {
     this.step = 0;
 
     const increment = this.steps / (colors.length - 1);
-    for (let i = 0; i < colors.length - 1; i++) this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));
+    for (let i = 0; i < colors.length - 1; i++) {
+      this.gradients.push(
+        new TwoStopGradient(
+          colors[i],
+          colors[i + 1],
+          increment * i,
+          increment * (i + 1)),
+      );
+    }
   }
 
   /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
