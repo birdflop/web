@@ -11,6 +11,7 @@ import { src as logoPlaceholder } from '~/images/logo.png?metadata';
 import { changeLocale, $translate as t, useSpeakContext, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
+import { version } from '~/../package.json';
 
 export default component$(() => {
   return (
@@ -52,6 +53,9 @@ export default component$(() => {
           </Dropdown>
           <NavButton href="/Privacy" extraClass="hidden xl:flex">
             {t('nav.privacyPolicy@@Privacy Policy')}
+          </NavButton>
+          <NavButton href="/">
+            v{version}
           </NavButton>
           <LangPicker />
           <NavButton external icon href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
