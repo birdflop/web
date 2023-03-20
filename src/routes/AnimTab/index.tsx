@@ -87,6 +87,7 @@ export default component$(() => {
     alerts: [],
     frames: [],
     frame: 0,
+    length: 1,
   }, { deep: true });
 
   useVisibleTask$(() => {
@@ -201,6 +202,9 @@ export default component$(() => {
             <div class="sm:pr-4 hidden sm:block" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
                 {p(store.colors.length, 'color.colorAmount')}
+              </NumberInput>
+              <NumberInput id="length" step={1} min={1} onIncrement$={() => { store.length++; setCookie(JSON.stringify(store)); }} onDecrement$={() => { if (store.length > 1) store.length--; setCookie(JSON.stringify(store)); }}>
+                {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
               </NumberInput>
               <div class="overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {

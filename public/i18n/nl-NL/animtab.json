@@ -5,6 +5,7 @@
         "animationName": "Animatie Naam",
         "speed": "Snelheid",
         "outputFormat": "Uitkomst Opmaak",
-        "outputType": "Uitkomst Type"
+        "outputType": "Uitkomst Type",
+        "length": "Gradient lengte"
     }
 }

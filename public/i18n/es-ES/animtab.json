@@ -5,6 +5,7 @@
         "animationName": "Nombre de la animación",
         "speed": "Velocidad",
         "outputFormat": "Formato de salida",
-        "outputType": "Tipo de salida"
+        "outputType": "Tipo de salida",
+        "length": "Longitud de la gradiente"
     }
 }
