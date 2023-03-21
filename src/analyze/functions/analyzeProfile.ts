@@ -30,7 +30,7 @@ export default async function analyzeProfile(id: string) {
 
   let server_properties: any, bukkit: any, spigot: any, paper: any, purpur: any;
 
-  const plugins: any[] = Object.values(sampler.classSources);
+  const plugins: any[] = Object.values(sampler.metadata.sources);
   const configs = sampler.metadata.serverConfigurations;
   if (configs) {
     if (configs['server.properties']) server_properties = JSON.parse(configs['server.properties']);
