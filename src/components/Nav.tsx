@@ -104,7 +104,7 @@ export default component$(() => {
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
           <div class="flex flex-row">
-            <NavButton external mobile icon href="https://github.com/AkiraDevelopment/SimplyMC" title="GitHub" extraClass="flex xl:hidden">
+            <NavButton external mobile icon href="https://github.com/LuminescentDevelopment/SimplyMC" title="GitHub" extraClass="flex xl:hidden">
               <InGithub />
             </NavButton>
             <NavButton external mobile icon href="https://discord.simplymc.art" title="Discord" extraClass="flex xl:hidden">
