@@ -58,7 +58,7 @@ export default component$(() => {
             v{version}
           </NavButton>
           <LangPicker />
-          <NavButton external icon href="https://github.com/LuminescentDevelopment/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
+          <NavButton external icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
             <InGithub />
           </NavButton>
           <NavButton external icon href="https://discord.simplymc.art" title="Discord" extraClass="hidden xl:flex">
@@ -104,7 +104,7 @@ export default component$(() => {
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
           <div class="flex flex-row">
-            <NavButton external mobile icon href="https://github.com/LuminescentDevelopment/SimplyMC" title="GitHub" extraClass="flex xl:hidden">
+            <NavButton external mobile icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="flex xl:hidden">
               <InGithub />
             </NavButton>
             <NavButton external mobile icon href="https://discord.simplymc.art" title="Discord" extraClass="flex xl:hidden">

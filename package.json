@@ -4,12 +4,12 @@
   "description": "The official website for the minecraft multitool simplymc.art",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LuminescentDevelopment/SimplyMC.git"
+    "url": "git+https://github.com/LuminescentDev/SimplyMC.git"
   },
   "engines": {
     "node": ">=15.0.0"
   },
-  "author": "LuminescentDevelopment",
+  "author": "LuminescentDev",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "qwik build",
