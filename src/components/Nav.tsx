@@ -8,7 +8,7 @@ import logoAVIF from '~/images/logo.png?avif';
 import logoWEBP from '~/images/logo.png?webp';
 // @ts-ignore
 import { src as logoPlaceholder } from '~/images/logo.png?metadata';
-import { changeLocale, $translate as t, useSpeakContext, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
+import { $translate as t, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
 import { version } from '~/../package.json';
@@ -206,13 +206,11 @@ export const Dropdown = component$(({ name, extraClass }: any) => {
 });
 
 export const LangPicker = component$(() => {
-  const ctx = useSpeakContext();
   const config = useSpeakConfig();
 
   const changeLocale$ = $(async (newLocale: SpeakLocale) => {
-    await changeLocale(newLocale, ctx);
-
     document.cookie = `locale=${JSON.stringify(newLocale)};max-age=86400;path=/`;
+    location.reload();
   });
 
   return (
