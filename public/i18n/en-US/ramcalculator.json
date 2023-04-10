@@ -1,7 +1,7 @@
 {
     "ramcalculator": {
-        "title": "Calculador de RAM",
-        "subtitle": "Isto irá ajudar a calcular a RAM necessária para as Aikar's Flags.",
-        "ramAmount": "Quantidade de RAM"
+        "title": "RAM Calculator",
+        "subtitle": "This will help calculate how much RAM to use for Aikar's Flags.",
+        "ramAmount": "RAM Amount"
     }
 }
