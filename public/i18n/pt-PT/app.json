@@ -1,0 +1,17 @@
+{
+    "nav": {
+        "gradients": "Gradientes",
+        "hexGradient": "Hexadecimal Gradiente",
+        "animatedTAB": "TAB Animado",
+        "tabAnimationPreviewer": "Visualizador da animação do TAB",
+        "analysis": "Analise",
+        "sparkProfile": "Perfil spark",
+        "paperTimings": "Timings do Paper",
+        "misc": "Misc",
+        "animatedTextures": "Texturas animadas",
+        "ramCalculator": "Calculadora de RAM",
+        "colorCodeStripper": "Divisor de códigos de cor",
+        "presetTools": "Ferramentas de preset",
+        "privacyPolicy": "Politica de privacidade"
+    }
+}
