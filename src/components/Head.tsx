@@ -1,8 +1,6 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
-import icon from '~/images/icon.png';
-
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
  */
@@ -30,7 +28,7 @@ export const RouterHead = component$(() => {
       <link rel="preload" as="font" href="/fonts/MinecraftBoldItalic.otf" crossOrigin="anonymous" />
 
       <link rel="canonical" href={loc.url.href} />
-      <link rel="icon" type="image/png" href={icon} />
+      <link rel="icon" type="image/png" href="/apple-icon.png" />
       <link rel="apple-touch-icon" href="/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
