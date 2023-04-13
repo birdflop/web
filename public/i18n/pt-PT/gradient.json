@@ -1,0 +1,8 @@
+{
+    "gradient": {
+        "title": "Gradiente Hexadecimal",
+        "subtitle": "Criador de cores em gradiente hexadecimal",
+        "prefix": "Prefixo (Geralmente usado em comandos)",
+        "prefixPlaceholder": "exemplo: '/nick '"
+    }
+}
