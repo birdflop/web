@@ -12,7 +12,7 @@ export const config: SpeakConfig = {
     { lang: 'en-US' },
     { lang: 'es-ES' },
     { lang: 'nl-NL' },
-	{ lang: 'pt-PT' },
+    { lang: 'pt-PT' },
   ],
   assets: [
     'home',
