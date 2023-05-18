@@ -3,22 +3,33 @@ import { useNavigate } from '@builder.io/qwik-city';
 
 import LoadingIcon from '~/components/icons/LoadingIcon';
 
-export const Button = component$(({ id, onClick$, extraClass }: any) => {
+const classes = {
+  primary: 'bg-purple-600 hover:bg-purple-500 focus:bg-purple-500',
+  secondary: 'bg-gray-800 hover:bg-gray-700 focus:bg-gray-700',
+  danger: 'bg-red-600 hover:bg-red-500 focus:bg-red-500',
+  success: 'bg-green-600 hover:bg-green-500 focus:bg-green-500',
+  warning: 'bg-yellow-600 hover:bg-yellow-500 focus:bg-yellow-500',
+  info: 'bg-blue-600 hover:bg-blue-500 focus:bg-blue-500',
+};
+
+export const Button = component$((props: any) => {
+  const color = props.color ? classes[props.color as keyof typeof classes] : classes.secondary;
   return (
-    <button class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 ${extraClass}`} id={id} onClick$={onClick$}>
+    <button {...props} class={`transition ease-in-out text-lg ${color} text-gray-50 rounded-md px-3 py-2 ${props.extraClass}`}>
       <Slot />
     </button>
   );
 });
 
-export const SPAButton = component$(({ id, extraClass, href }: any) => {
+export const SPAButton = component$((props: any) => {
+  const color = props.color ? classes[props.color as keyof typeof classes] : classes.secondary;
   const store = useStore({
     loading: false,
   });
   const nav = useNavigate();
   return (
     <div class="flex flex-cols">
-      <button class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 ${extraClass}`} id={id} onClick$={() => { store.loading = true; nav(href); }}>
+      <button {...props} onClick$={async () => { store.loading = true; await nav(props.href); store.loading = false; }} class={`transition ease-in-out text-lg ${color} text-gray-50 rounded-md px-3 py-2 ${props.extraClass}`}>
         <div class="flex items-center">
           <Slot /> <LoadingIcon extraClass={`${!store.loading && 'hidden'}`}/>
         </div>
@@ -27,9 +38,10 @@ export const SPAButton = component$(({ id, extraClass, href }: any) => {
   );
 });
 
-export const ExternalButton = component$(({ id, extraClass, href }: any) => {
+export const ExternalButton = component$((props: any) => {
+  const color = props.color ? classes[props.color as keyof typeof classes] : classes.secondary;
   return (
-    <a href={href} class={`transition ease-in-out text-lg bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-3 py-2 ${extraClass}`} id={id}>
+    <a {...props} class={`transition ease-in-out text-lg ${color} text-gray-50 rounded-md px-3 py-2 ${props.extraClass}`}>
       <Slot />
     </a>
   );

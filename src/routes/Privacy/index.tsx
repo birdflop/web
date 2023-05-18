@@ -17,13 +17,6 @@ export default component$(() => {
           <p dangerouslySetInnerHTML={t('privacypolicy.2')} />
           <p dangerouslySetInnerHTML={t('privacypolicy.3')} />
           <p dangerouslySetInnerHTML={t('privacypolicy.4')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.5')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.6')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.7')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.8')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.9')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.10')} />
-          <p dangerouslySetInnerHTML={t('privacypolicy.11')} />
         </Speak>
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 
 /**
@@ -7,14 +7,6 @@ import { useDocumentHead, useLocation } from '@builder.io/qwik-city';
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
-
-  useVisibleTask$(() => {
-    const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3195633076316558';
-    script.crossOrigin = 'anonymous';
-    script.defer = true;
-    document.head.appendChild(script);
-  }, { strategy: 'document-idle' });
 
   return (
     <>
