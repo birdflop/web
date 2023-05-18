@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { InCoffeeCup } from '@qwikest/icons/iconoir';
+import { CafeOutline } from 'qwik-ionicons';
 
 // @ts-ignore
 import iconAVIF from '~/images/icon.png?format=avif';
@@ -49,8 +49,8 @@ export default component$(() => {
               <span class="cursor" data-owner="main" data-cursor-display="|"></span>
             </h1>
             <div class="flex justify-center">
-              <a href="https://ko-fi.com/akiradev" class="flex transition duration-200 ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
-                <InCoffeeCup class="text-3xl"/> {t('home.kofi@@Consider donating if this helped you')}
+              <a href="https://ko-fi.com/akiradev" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-gradient-to-b from-pink-900/80 to-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+                <CafeOutline width="30" class="text-3xl"/> {t('home.kofi@@Consider donating if this helped you')}
               </a>
             </div>
           </div>

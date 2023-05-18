@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 import yaml from 'yaml';
 import TextInput from '~/components/elements/TextInput';
 import {

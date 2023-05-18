@@ -1,5 +1,5 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput from '~/components/elements/TextInput';
@@ -74,7 +74,7 @@ export default component$(() => {
             ))}
           </div>
 
-          <TextInput id="textureName" value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
+          <TextInput id="textureName" extraClass="mb-3" value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
             {t('animtexture.textureName@@Texture Name')}
           </TextInput>
 

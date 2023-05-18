@@ -1,5 +1,6 @@
 import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
-import { DocumentHead, server$ } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
+import { server$ } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
@@ -13,13 +14,9 @@ import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
-import { InFillColor, InSettings, InText } from '@qwikest/icons/iconoir';
+import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import {
-  $translate as t,
-  $plural as p,
-  Speak,
-} from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, $plural as p, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -70,6 +67,8 @@ export const getCookie = server$(function (store) {
 });
 
 export default component$(() => {
+  const ctx = useSpeakContext();
+
   const store: any = useStore({
     colors: [],
     name: 'logo',
@@ -147,7 +146,7 @@ export default component$(() => {
             {t('animtab.subtitle@@TAB plugin gradient animation creator')}
           </h2>
 
-          <OutputField id="OutPut" value={AnimationOutput(store)}>
+          <OutputField value={AnimationOutput(store)}>
             <h1 class="font-bold text-xl sm:text-3xl mb-2">
               {t('color.output@@Output')}
             </h1>
@@ -179,21 +178,21 @@ export default component$(() => {
                 document.getElementById('inputs')!.classList.add('hidden');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                <InFillColor/>
+                <ColorFillOutline width="24" />
               </Button>
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
                 document.getElementById('inputs')!.classList.remove('hidden');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                <InSettings/>
+                <SettingsOutline width="24" />
               </Button>
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
                 document.getElementById('inputs')!.classList.add('hidden');
                 document.getElementById('formatting')!.classList.remove('hidden');
               }}>
-                <InText/>
+                <Text width="24" class="fill-white" />
               </Button>
             </div>
           </div>
@@ -231,7 +230,7 @@ export default component$(() => {
                     {t('animtab.speed@@Speed')}
                   </NumberInput>
 
-                  <SelectInput id="type" label={t('animtab.outputType@@Output Type')} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <SelectInput id="type" label={it('animtab.outputType@@Output Type', ctx)} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     {types.map((type: any) => (
                       <option key={type.name} value={type.value}>
                         {type.name}
@@ -239,7 +238,7 @@ export default component$(() => {
                     ))}
                   </SelectInput>
 
-                  <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
+                  <SelectInput id="format" label={it('color.colorFormat@@Color Format', ctx)} value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') {
                         store.customFormat = true;
@@ -284,7 +283,7 @@ export default component$(() => {
                   </>
                 }
 
-                <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+                <SelectInput id="preset" label={it('color.colorPreset@@Color Preset', ctx)} onChange$={
                   (event: any) => {
                     store.colors = [];
                     setTimeout(() => {
@@ -322,7 +321,7 @@ export default component$(() => {
                   }}>
                     {t('color.export@@Export')}
                   </Button>
-                  <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={(event: any) => {
+                  <RawTextInput name="import" placeholder={it('color.import@@Import (Paste here)', ctx)} onInput$={(event: any) => {
                     let json: any;
                     try {
                       json = JSON.parse(event.target!.value);
@@ -352,7 +351,7 @@ export default component$(() => {
                   }} />
                 </div>
                 {store.alerts.map((alert: any, i: number) => (
-                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={it(`${alert.translate}@@${alert.text}`, ctx)} />
                 ))}
               </div>
               <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">

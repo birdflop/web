@@ -44,10 +44,18 @@ export default component$(() => {
         }>
           Paste the timings report link here
         </TextInput>
-        <p class={`text-red-400 ${!store.error && 'hidden'}`}>{store.error}</p>
-        <SPAButton href={store.redirect} extraClass={`${!store.redirect && 'hidden'}`}>
-          Submit
-        </SPAButton>
+        <p class={{
+          'text-red-400 mt-3': true,
+          'hidden': !store.error,
+        }}>{store.error}</p>
+        <div class={{
+          'flex mt-3': true,
+          'hidden': !store.redirect,
+        }}>
+          <SPAButton href={store.redirect}>
+            Submit
+          </SPAButton>
+        </div>
 
         <p class="text-white my-12">
           You can also copy the code into a link<br/>

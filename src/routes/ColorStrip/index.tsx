@@ -1,16 +1,14 @@
 import { component$, useStore } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
 import OutputField from '~/components/elements/OutputField';
 import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 
-import {
-  $translate as t,
-  Speak,
-} from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 export default component$(() => {
+  const ctx = useSpeakContext();
   const store = useStore({
     type: 0,
     input: '',
@@ -27,25 +25,27 @@ export default component$(() => {
             {t('colorstrip.subtitle@@Strips all color / format codes from text')}
           </h2>
 
-          <TextInput id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
+          <TextInput extraClass="mb-3" id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
             {t('colorstrip.inputText@@Input Text')}
           </TextInput>
 
-          <SelectInput id="gradienttype" label={t('colorstrip.colorCodeType@@Color Code Type')} onChange$={(event: any) => { store.type = event.target!.value; }}>
+          <SelectInput id="gradienttype" label={it('colorstrip.colorCodeType@@Color Code Type', ctx)} onChange$={(event: any) => { store.type = event.target!.value; }}>
             <option value={0}>{'&#rrggbb'}</option>
             <option value={1}>{'<&#rrggbb>'}</option>
             <option value={2}>{'&x&r&r&g&g&b&b'}</option>
             <option value={3}>{'§x§r§r§g§g§b§b'}</option>
           </SelectInput>
 
-          <OutputField id="OutPut" value={
-            store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
-              store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
-                store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
-                  store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
-          }>
-            {t('colorstrip.output@@Output')}
-          </OutputField>
+          <div class="mt-3">
+            <OutputField value={
+              store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
+                store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
+                  store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
+                    store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
+            }>
+              {t('colorstrip.output@@Output')}
+            </OutputField>
+          </div>
         </div>
       </Speak>
     </section>

@@ -66,8 +66,8 @@ html {
   touch-action: manipulation;
 }
 *::-webkit-scrollbar {
-  -webkit-appearance: none;
   appearance: none;
+  -webkit-appearance: none;
   width: 8px;
 }
 *::-webkit-scrollbar-track {
@@ -75,6 +75,47 @@ html {
   border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #ffffff60;
+  background-color: #ffffff20;
   border-radius: 2px;
+}
+
+/* NAVBAR TRANSITION */
+nav {
+  view-transition-name: nav;
+}
+
+/* MAIN TRANSITION */
+main {
+  view-transition-name: root;
+}
+
+::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-bottom;
+}
+
+::view-transition-new(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-top;
+}
+
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+@keyframes slide-from-top {
+  from {
+    transform: translateY(30px);
+    scale: 0.95;
+  }
+}
+@keyframes slide-to-bottom {
+  to {
+    transform: translateY(-30px);
+    scale: 0.95;
+  }
 }

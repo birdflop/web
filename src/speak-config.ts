@@ -1,10 +1,4 @@
-import { $ } from '@builder.io/qwik';
-import { isServer } from '@builder.io/qwik/build';
-import type {
-  LoadTranslationFn,
-  SpeakConfig,
-  TranslationFn,
-} from 'qwik-speak';
+import type { SpeakConfig } from 'qwik-speak';
 
 export const config: SpeakConfig = {
   defaultLocale: { lang: 'en-US' },
@@ -21,6 +15,7 @@ export const config: SpeakConfig = {
     'animtab',
     'animtexture',
     'colorstrip',
+    'privacypolicy',
     'presettools',
     'ramcalculator',
     'app',
@@ -32,24 +27,4 @@ export const languages = {
   'es-ES': 'Español (Spanish - ES)',
   'nl-NL': 'Nederlands (Dutch - NL)',
   'pt-PT': 'Português (Portuguese - PT)',
-};
-
-export const loadTranslation$: LoadTranslationFn = $(async (lang: string, asset: string, origin?: string) => {
-  let url = '';
-  if (isServer && origin) {
-    url = origin;
-  }
-  url += `/i18n/${lang}/${asset}.json`;
-  const response = await fetch(url);
-
-  if (response.ok) {
-    return response.json();
-  }
-  else if (response.status === 404) {
-    console.warn(`loadTranslation$: ${url} not found`);
-  }
-});
-
-export const translationFn: TranslationFn = {
-  loadTranslation$: loadTranslation$,
 };

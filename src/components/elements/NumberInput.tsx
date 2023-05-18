@@ -13,17 +13,28 @@ export default component$((props: any) => {
   );
 });
 
-export const RawNumberInput = component$((props: any) => {
+export const RawNumberInput = component$(({ id, input, value, min, max, onDecrement$, onIncrement$, onChange$ }: any) => {
   return (
-    <div class={`flex ${props.input ? '' : 'gap-2'}`}>
-      <button data-action="decrement" disabled={props.value <= props.min} onClick$={props.onDecrement$} class={`flex justify-center items-center transition ease-in-out bg-gray-700 text-white text-2xl hover:bg-gray-600 h-full py-1.5 ${props.input ? 'w-20 rounded-l-md' : 'w-[50%] rounded-md'} cursor-pointer`}>
-        <Remove width="36" class="fill-current" />
+    <div class={{
+      'flex': true,
+      'gap-2': !input,
+    }}>
+      <button data-action="decrement" disabled={value <= min} onClick$={onDecrement$} class={{
+        'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
+        'w-20 rounded-l-md border-r-0': input,
+        'w-[50%] rounded-md': !input,
+      }}>
+        <Remove width="24" class="fill-current" />
       </button>
       {
-        props.input && <input type="number" id={...props} class="transition ease-in-out text-lg text-center bg-gray-800 text-gray-50 hover:bg-gray-600 focus:bg-gray-600 px-3 py-2 w-[calc(100%-10rem)]" />
+        input && <input type="number" {...{ id, value, min, max, onChange$ }} class="transition ease-in-out text-lg text-center border border-gray-600 bg-gray-700 text-gray-50 hover:bg-gray-600 focus:bg-gray-500 px-3 py-1 w-[calc(100%-10rem)]" />
       }
-      <button data-action="increment" disabled={props.value >= props.max} onClick$={props.onIncrement$} class={`flex justify-center items-center transition ease-in-out bg-gray-700 text-white text-2xl hover:bg-gray-600 h-full py-1.5 ${props.input ? 'w-20 rounded-r-md' : 'w-[50%] rounded-md'} cursor-pointer`}>
-        <Add width="36" class="fill-current" />
+      <button data-action="increment" disabled={value >= max} onClick$={onIncrement$} class={{
+        'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
+        'w-20 rounded-r-md border-l-0': input,
+        'w-[50%] rounded-md': !input,
+      }}>
+        <Add width="24" class="fill-current" />
       </button>
     </div>
   );

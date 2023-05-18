@@ -1,5 +1,5 @@
 import { component$, useStore } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 import { loadPreset } from '~/components/util/PresetUtils';
 import TextInput from '~/components/elements/TextInput';
 import OutputField from '~/components/elements/OutputField';
@@ -28,11 +28,13 @@ export default component$(() => {
             {t('presettools.input@@Preset Input')}
           </TextInput>
 
-          <OutputField id="Output" value={
-            JSON.stringify(loadPreset(store.preset), null, 2)
-          } extraClass="h-96">
-            {t('presettools.output@@Output')}
-          </OutputField>
+          <div class="mt-3">
+            <OutputField id="Output" value={
+              JSON.stringify(loadPreset(store.preset), null, 2)
+            } extraClass="h-96">
+              {t('presettools.output@@Output')}
+            </OutputField>
+          </div>
         </div>
       </Speak>
     </section>

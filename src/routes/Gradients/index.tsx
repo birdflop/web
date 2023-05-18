@@ -1,5 +1,6 @@
 import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
-import { DocumentHead, server$ } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
+import { server$ } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
@@ -13,13 +14,9 @@ import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/co
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
 
-import { InFillColor, InSettings, InText } from '@qwikest/icons/iconoir';
+import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import {
-  $translate as t,
-  $plural as p,
-  Speak,
-} from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, $plural as p, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -63,6 +60,8 @@ export const getCookie = server$(function (store) {
 });
 
 export default component$(() => {
+  const ctx = useSpeakContext();
+
   const store: any = useStore({
     colors: [],
     text: 'SimplyMC',
@@ -135,24 +134,24 @@ export default component$(() => {
             <div class="flex gap-2">
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.remove('hidden');
-                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.replace('flex', 'hidden');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                <InFillColor/>
+                <ColorFillOutline width="24" />
               </Button>
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
-                document.getElementById('inputs')!.classList.remove('hidden');
+                document.getElementById('inputs')!.classList.replace('hidden', 'flex');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
-                <InSettings/>
+                <SettingsOutline width="24" />
               </Button>
               <Button onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
-                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.replace('flex', 'hidden');
                 document.getElementById('formatting')!.classList.remove('hidden');
               }}>
-                <InText/>
+                <Text width="24" class="fill-white" />
               </Button>
             </div>
           </div>
@@ -173,13 +172,13 @@ export default component$(() => {
               </div>
             </div>
             <div class="sm:col-span-3">
-              <div class="sm:block" id="inputs">
+              <div class="flex sm:flex flex-col gap-3" id="inputs">
                 <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('color.inputText@@Input Text')}
                 </TextInput>
 
                 <div class="grid sm:grid-cols-2 sm:gap-2">
-                  <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
+                  <SelectInput id="format" label={it('color.colorFormat@@Color Format', ctx)} value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') return store.customFormat = true;
                       store.customFormat = false;
@@ -220,11 +219,11 @@ export default component$(() => {
                   </>
                 }
 
-                <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                <TextInput id="prefix" value={store.prefix} placeholder={it('gradient.prefixPlaceholder@@example: \'/nick \'', ctx)} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.prefix@@Prefix (Usually used for commands)')}
                 </TextInput>
 
-                <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+                <SelectInput id="preset" label={it('color.colorPreset@@Color Preset', ctx)} onChange$={
                   (event: any) => {
                     store.colors = [];
                     setTimeout(() => {
@@ -258,7 +257,7 @@ export default component$(() => {
                   }}>
                     {t('color.export@@Export')}
                   </Button>
-                  <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+                  <RawTextInput name="import" placeholder={it('color.import@@Import (Paste here)', ctx)} onInput$={async (event: any) => {
                     let json: any;
                     try {
                       json = JSON.parse(event.target!.value);
@@ -288,7 +287,7 @@ export default component$(() => {
                   }} />
                 </div>
                 {store.alerts.map((alert: any, i: number) => (
-                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={it(`${alert.translate}@@${alert.text}`, ctx)} />
                 ))}
               </div>
               <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">

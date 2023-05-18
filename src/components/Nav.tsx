@@ -1,24 +1,30 @@
 import { component$, $, Slot } from '@builder.io/qwik';
-import { Link, useNavigate } from '@builder.io/qwik-city';
+import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { InDiscord, InGithub, InGlobe, InNavArrowDown, InMenu, InCoffeeCup } from '@qwikest/icons/iconoir';
+import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline } from 'qwik-ionicons';
 // @ts-ignore
 import logoAVIF from '~/images/logo.png?format=avif';
 // @ts-ignore
 import logoWEBP from '~/images/logo.png?format=webp';
 // @ts-ignore
 import logo from '~/images/logo.png?metadata';
-import { $translate as t, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
+import type { SpeakLocale } from 'qwik-speak';
+import { useSpeakContext } from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, useSpeakConfig, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
 import { version } from '~/../package.json';
 
+import Luminescent from './icons/Luminescent';
+import LoadingIcon from './icons/LoadingIcon';
+
 export default component$(() => {
+  const ctx = useSpeakContext();
   return (
     <Nav>
       <Speak assets={['app']}>
         <MainNav>
-          <Dropdown name={t('nav.gradients@@Gradients')} extraClass="hidden sm:flex">
+          <Dropdown name={it('nav.gradients@@Gradients', ctx)} extraClass="hidden sm:flex gap-3">
             <NavButton href="/Gradients">
               {t('nav.hexGradient@@Hex Gradients')}
             </NavButton>
@@ -29,7 +35,7 @@ export default component$(() => {
               {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
             </NavButton>
           </Dropdown>
-          <Dropdown name={t('nav.analysis@@Analysis')} extraClass="hidden sm:flex">
+          <Dropdown name={it('nav.analysis@@Analysis', ctx)} extraClass="hidden sm:flex gap-3">
             <NavButton href="/SparkProfile">
               {t('nav.sparkProfile@@Spark Profile')}
             </NavButton>
@@ -37,7 +43,7 @@ export default component$(() => {
               {t('nav.paperTimings@@Paper Timings')}
             </NavButton>
           </Dropdown>
-          <Dropdown name={t('nav.misc@@Misc')} extraClass="hidden lg:flex">
+          <Dropdown name={it('nav.misc@@Misc', ctx)} extraClass="hidden lg:flex gap-3">
             <NavButton href="/AnimTexture">
               {t('nav.animatedTextures@@Animated Textures')}
             </NavButton>
@@ -51,28 +57,35 @@ export default component$(() => {
               {t('nav.presetTools@@Preset Tools')}
             </NavButton>
           </Dropdown>
-          <NavButton href="/Privacy" extraClass="hidden xl:flex">
+          <NavButton href="/Privacy" extraClass="hidden xl:flex gap-3">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
-          <NavButton href="/">
+          <NavButton href="/" extraClass="flex">
             v{version}
           </NavButton>
           <LangPicker />
           <NavButton external icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
-            <InGithub />
+            <LogoGithub width="24" class="fill-green-100" />
           </NavButton>
           <NavButton external icon href="https://discord.simplymc.art" title="Discord" extraClass="hidden xl:flex">
-            <InDiscord />
+            <LogoDiscord width="24" class="fill-indigo-200" />
           </NavButton>
           <NavButton external icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass="hidden xl:flex">
-            <InCoffeeCup />
+            <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
+          </NavButton>
+          <NavButton external icon href="https://luminescent.dev" title="Luminescent" extraClass="hidden xl:flex justify-center w-10 h-10">
+            <div style={{ filter: 'drop-shadow(0 0 0 #DD6CFF)' }}>
+              <div style={{ filter: 'drop-shadow(0 0 1rem #CB6CE6)' }} class="w-10 h-10">
+                <Luminescent/>
+              </div>
+            </div>
           </NavButton>
           <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => {
             const classList = document.getElementById('mobile-menu')?.classList;
             if (classList?.contains('hidden')) classList.replace('hidden', 'flex');
             else classList?.replace('flex', 'hidden');
-          }} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg text-3xl xl:hidden">
-            <InMenu />
+          }} class="transition ease-in-out hover:bg-gray-800 hover:text-white p-2 rounded-lg text-3xl xl:hidden">
+            <Menu width="24" />
           </button>
         </MainNav>
         <MobileNav>
@@ -103,15 +116,22 @@ export default component$(() => {
           <NavButton mobile href="/Privacy" extraClass="flex xl:hidden">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
-          <div class="flex flex-row">
+          <div class="flex justify-evenly">
             <NavButton external mobile icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="flex xl:hidden">
-              <InGithub />
+              <LogoGithub width="24" class="fill-green-100" />
             </NavButton>
             <NavButton external mobile icon href="https://discord.simplymc.art" title="Discord" extraClass="flex xl:hidden">
-              <InDiscord />
+              <LogoDiscord width="24" class="fill-indigo-200" />
             </NavButton>
             <NavButton external mobile icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass="flex xl:hidden">
-              <InCoffeeCup />
+              <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
+            </NavButton>
+            <NavButton external mobile icon href="https://luminescent.dev" title="Luminescent" extraClass="flex xl:hidden justify-center w-10 h-10">
+              <div style={{ filter: 'drop-shadow(0 0 0 #DD6CFF)' }}>
+                <div style={{ filter: 'drop-shadow(0 0 1rem #CB6CE6)' }} class="w-10 h-10">
+                  <Luminescent/>
+                </div>
+              </div>
             </NavButton>
           </div>
         </MobileNav>
@@ -131,9 +151,10 @@ export const Nav = component$(() => {
 });
 
 export const Brand = component$(() => {
+  const location = useLocation();
   return (
-    <div class="flex flex-1 items-center justify-start">
-      <Link href="/" class="transition duration-200 ease-in-out text-gray-300 hover:bg-gray-800 hover:text-white drop-shadow-2xl px-3 pt-3 pb-2 rounded-lg text-lg flex items-center whitespace-nowrap">
+    <div class="flex items-center justify-start">
+      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-gray-800 hover:text-white drop-shadow-2xl px-3 pt-3 pb-2 rounded-lg text-lg flex gap-2 items-center whitespace-nowrap">
         <picture>
           <source srcSet={logoAVIF} type="image/avif" />
           <source srcSet={logoWEBP} type="image/webp" />
@@ -147,6 +168,9 @@ export const Brand = component$(() => {
             decoding="async"
           />
         </picture>
+        <div class={`${location.isNavigating ? '' : '-ml-10 opacity-0'} transition-all`}>
+          <LoadingIcon/>
+        </div>
       </Link>
     </div>
   );
@@ -173,30 +197,29 @@ export const MobileNav = component$(() => {
   );
 });
 
-export const NavButton = component$(({ href, title, icon, external, extraClass }: any) => {
-  const nav = useNavigate();
+export const NavButton = component$(({ href, title, icon, external, extraClass, style }: any) => {
   return <>
     {external &&
-      <a href={href} title={title} class={`group transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg ${icon ? 'text-3xl' : ''} items-center`}>
+      <a href={href} title={title} style={style} class={`group transition ease-in-out hover:bg-gray-800 hover:text-white ${icon ? 'text-3xl px-2' : 'px-4'} py-2 rounded-lg items-center ${extraClass}`}>
         <Slot />
       </a>
     }
     {!external &&
-      <button onClick$={() => { document.getElementById('mobile-menu')?.classList.replace('flex', 'hidden'); nav(href); }} title={title} class={`group transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg ${icon ? 'text-3xl' : ''} items-center`}>
+      <Link href={href} onClick$={async () => { document.getElementById('mobile-menu')?.classList.replace('flex', 'hidden'); }} title={title} style={style} class={`group transition ease-in-out hover:bg-gray-800 hover:text-white ${icon ? 'text-3xl px-2' : 'px-4'} py-2 rounded-lg items-center ${extraClass}`}>
         <Slot />
-      </button>
+      </Link>
     }
   </>;
 });
 
 export const Dropdown = component$(({ name, extraClass }: any) => {
   return (
-    <div class={`cursor-pointer transition duration-200 ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4`}>
-      <div class="px-4 py-3 flex gap-2 items-center">
+    <div class={`cursor-pointer transition ease-in-out ${extraClass} hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg items-center gap-4`}>
+      <div class="px-4 py-2 flex gap-2 items-center">
         {name}
-        <InNavArrowDown class="transform group-hover:-rotate-180 transition duration-300 ease-in-out text-2xl" />
+        <ChevronDown width="24" class="transform group-hover:-rotate-180 transition ease-in-out text-2xl" />
       </div>
-      <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
+      <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-4 text-base">
         <div class="bg-black rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           <Slot/>
         </div>
@@ -214,14 +237,14 @@ export const LangPicker = component$(() => {
   });
 
   return (
-    <div class="cursor-pointer transition duration-200 ease-in-out flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
-      <div class="px-4 py-3">
-        <InGlobe class="transform group-hover:rotate-180 group-hover:text-white transition duration-300 ease-in-out" />
+    <div class="cursor-pointer transition ease-in-out flex hover:bg-gray-800 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
+      <div class="p-2">
+        <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
       </div>
-      <div class="absolute top-12 left-0 z-10 hidden group-hover:flex pt-4 text-base">
+      <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-4 text-base">
         <div class="bg-black rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           {config.supportedLocales.map(value => (
-            <div key={value.lang} onClick$={async () => await changeLocale$(value)} class="transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
+            <div key={value.lang} onClick$={async () => await changeLocale$(value)} class="transition ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg flex items-center">
               {languages[value.lang as keyof typeof languages]}
             </div>
           ))}

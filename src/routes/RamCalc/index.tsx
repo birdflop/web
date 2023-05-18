@@ -1,5 +1,5 @@
 import { component$, useStore } from '@builder.io/qwik';
-import { DocumentHead } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
 import NumberInput from '~/components/elements/NumberInput';
 import OutputField from '~/components/elements/OutputField';
@@ -29,11 +29,13 @@ export default component$(() => {
             {t('ramcalculator.ramAmount@@RAM Amount')}
           </NumberInput>
 
-          <OutputField id="OutPut" value={
-            Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100
-          }>
-            11({store.ram}) ÷ 12 - 1200 =
-          </OutputField>
+          <div class="mt-3">
+            <OutputField value={
+              Math.ceil((11 * store.ram / 12 - 1200) / 100) * 100
+            }>
+              11({store.ram}) ÷ 12 - 1200 =
+            </OutputField>
+          </div>
         </div>
       </Speak>
     </section>

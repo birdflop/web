@@ -1,10 +1,11 @@
-import { component$, useStyles$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
 import { RouterHead } from './components/Head';
 import { QwikSpeakProvider } from 'qwik-speak';
 
-import globalStyles from './global.css?inline';
-import { config, translationFn } from '~/speak-config';
+import './global.css';
+import { config } from '~/speak-config';
+import { translationFn } from '~/speak-functions';
 
 export default component$(() => {
   /**
@@ -13,7 +14,6 @@ export default component$(() => {
    *
    * Dont remove the `<head>` and `<body>` elements.
    */
-  useStyles$(globalStyles);
 
   return (
     <QwikSpeakProvider config={config} translationFn={translationFn}>
@@ -23,7 +23,7 @@ export default component$(() => {
           <link rel="manifest" href="/manifest.webmanifest" />
           <RouterHead />
         </head>
-        <body class="bg-gray-900 text-gray-300" lang='en'>
+        <body class="bg-gray-900 text-gray-300">
           <RouterOutlet />
           <ServiceWorkerRegister />
         </body>

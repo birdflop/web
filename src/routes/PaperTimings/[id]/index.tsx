@@ -1,5 +1,6 @@
 import { component$, Resource } from '@builder.io/qwik';
-import { DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
+import type { DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 
