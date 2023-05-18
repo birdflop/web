@@ -3,11 +3,11 @@ import { Link, useNavigate } from '@builder.io/qwik-city';
 
 import { InDiscord, InGithub, InGlobe, InNavArrowDown, InMenu, InCoffeeCup } from '@qwikest/icons/iconoir';
 // @ts-ignore
-import logoAVIF from '~/images/logo.png?avif';
+import logoAVIF from '~/images/logo.png?format=avif';
 // @ts-ignore
-import logoWEBP from '~/images/logo.png?webp';
+import logoWEBP from '~/images/logo.png?format=webp';
 // @ts-ignore
-import { src as logoPlaceholder } from '~/images/logo.png?metadata';
+import logo from '~/images/logo.png?metadata';
 import { $translate as t, useSpeakConfig, SpeakLocale, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
@@ -138,7 +138,7 @@ export const Brand = component$(() => {
           <source srcSet={logoAVIF} type="image/avif" />
           <source srcSet={logoWEBP} type="image/webp" />
           <img
-            src={logoPlaceholder}
+            src={logo}
             class="h-8"
             height={32}
             width={130}

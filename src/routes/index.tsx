@@ -4,11 +4,11 @@ import { DocumentHead } from '@builder.io/qwik-city';
 import { InCoffeeCup } from '@qwikest/icons/iconoir';
 
 // @ts-ignore
-import iconAVIF from '~/images/icon.png?avif';
+import iconAVIF from '~/images/icon.png?format=avif';
 // @ts-ignore
-import iconWEBP from '~/images/icon.png?webp';
+import iconWEBP from '~/images/icon.png?format=webp';
 // @ts-ignore
-import { src as iconPlaceholder } from '~/images/icon.png?metadata';
+import icon from '~/images/icon.png?metadata';
 
 import { initiateTyper } from '~/components/util/Typer';
 import {
@@ -33,7 +33,7 @@ export default component$(() => {
                 <source srcSet={iconAVIF} type="image/avif" />
                 <source srcSet={iconWEBP} type="image/webp" />
                 <img
-                  src={iconPlaceholder}
+                  src={icon}
                   height={300}
                   width={300}
                   alt="SimplyMC icon"
