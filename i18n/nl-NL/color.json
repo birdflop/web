@@ -2,10 +2,7 @@
     "color": {
         "output": "Output",
         "outputSubtitle": "Dit is wat je in de chat plaatst. Klik erop om te kopiëren.",
-        "colorAmount": {
-            "one": "{{ value }} Kleur",
-            "other": "{{ value }} Kleuren"
-        },
+        "colorAmount": "Color Amount",
         "hexColor": "Hex Kleur",
         "inputText": "Tekst:",
         "presets": "Vooraf ingesteld",

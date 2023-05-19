@@ -16,7 +16,7 @@ import OutputField from '~/components/elements/OutputField';
 
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { $translate as t, $inlineTranslate as it, $plural as p, Speak, useSpeakContext } from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -162,7 +162,7 @@ export default component$(() => {
           <div class="grid sm:grid-cols-4 gap-6">
             <div class="hidden sm:block" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
-                {p(store.colors.length, 'color.colorAmount')}
+                {t('color.colorAmount@@Color Amount')} - {store.colors.length}
               </NumberInput>
               <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {

@@ -2,10 +2,7 @@
     "color": {
         "output": "Output",
         "outputSubtitle": "This is what you put in the chat. Click on it to copy.",
-        "colorAmount": {
-            "one": "{{ value }} Color",
-            "other": "{{ value }} Colors"
-        },
+        "colorAmount": "Color Amount",
         "hexColor": "Hex Color",
         "inputText": "Input Text",
         "presets": "Presets",

@@ -24,17 +24,17 @@ export const RouterHead = component$(() => {
       <link rel="apple-touch-icon" href="/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      {head.meta.map((m) => <>
-        <meta {...m} />
-      </>)}
+      {head.meta.map((m, i) => (
+        <meta {...m} key={i} />
+      ))}
 
-      {head.links.map((l) => <>
-        <link {...l} />
-      </>)}
+      {head.links.map((l, i) => (
+        <link {...l} key={i} />
+      ))}
 
-      {head.styles.map((s) => <>
-        <style {...s.props} dangerouslySetInnerHTML={s.style} />
-      </>)}
+      {head.styles.map((s, i) => (
+        <style {...s.props} key={i} dangerouslySetInnerHTML={s.style} />
+      ))}
     </>
   );
 });

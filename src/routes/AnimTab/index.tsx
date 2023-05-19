@@ -16,7 +16,7 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { $translate as t, $inlineTranslate as it, $plural as p, Speak, useSpeakContext } from 'qwik-speak';
+import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -199,7 +199,7 @@ export default component$(() => {
           <div class="grid sm:grid-cols-4 gap-2">
             <div class="sm:pr-4 hidden sm:block" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
-                {p(store.colors.length, 'color.colorAmount')}
+                {t('color.colorAmount@@Color Amount')} - {store.colors.length}
               </NumberInput>
               <NumberInput id="length" step={1} min={1} onIncrement$={() => { store.length++; setCookie(JSON.stringify(store)); }} onDecrement$={() => { if (store.length > 1) store.length--; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
