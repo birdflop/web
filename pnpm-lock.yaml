@@ -58,6 +58,9 @@ devDependencies:
   showdown:
     specifier: ^2.1.0
     version: 2.1.0
+  simple-color-picker:
+    specifier: ^1.0.5
+    version: 1.0.5
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -769,6 +772,10 @@ packages:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}
     dependencies:
       '@types/unist': 2.0.6
+    dev: true
+
+  /@types/insert-css@2.0.1:
+    resolution: {integrity: sha512-slUriXg8Y0JvpQoZlQ96bzzi86AU0DvtstKmGtBWpzJilFnpMUDbREi28Gpa+ZaIrTTCQUfvpDS7z7F1uwlYjQ==}
     dev: true
 
   /@types/json-schema@7.0.11:
@@ -2194,6 +2201,10 @@ packages:
     resolution: {integrity: sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==}
     dev: true
 
+  /insert-css@2.0.0:
+    resolution: {integrity: sha512-xGq5ISgcUP5cvGkS2MMFLtPDBtrtQPSFfC6gA6U8wHKqfjTIMZLZNxOItQnoSjdOzlXOLU/yD32RKC4SvjNbtA==}
+    dev: true
+
   /internal-slot@1.0.5:
     resolution: {integrity: sha512-Y+R5hJrzs52QCG2laLn4udYVnxsfny9CpOhNhUvk/SSSVyF6T27FzRbF0sroPidSu3X8oEAkOn2K804mjpt6UQ==}
     engines: {node: '>= 0.4'}
@@ -3594,6 +3605,13 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.2.0
       object-inspect: 1.12.3
+    dev: true
+
+  /simple-color-picker@1.0.5:
+    resolution: {integrity: sha512-MUsSVfO/51zTrBA6nsmX5ABe/FXmhd6N+hie6EAWb6Ph4eydtQNRZ9hyb/HmLaG403YB/JAtpry70AaCd8AwBw==}
+    dependencies:
+      '@types/insert-css': 2.0.1
+      insert-css: 2.0.0
     dev: true
 
   /simple-concat@1.0.1:

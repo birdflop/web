@@ -10,28 +10,28 @@ const classes = {
   info: 'bg-blue-700/90 border-blue-600 hover:bg-blue-600 focus:bg-blue-600',
 };
 
-export const Button = component$((props: any) => {
-  const color = props.color ? classes[props.color as keyof typeof classes] : classes.secondary;
+export const Button = component$(({ color, small, big, massive, bold, extraClass, ...props }: any) => {
+  const colorClasses = color ? classes[color as keyof typeof classes] : classes.secondary;
   return (
     <button {...props} class={{
       'relative flex items-center gap-3 transition ease-in-out border text-gray-50': true,
-      [color]: true,
-      'text-sm px-2 py-1 rounded-md': props.small,
-      'text-base px-6 py-3 rounded-lg': props.big,
-      'text-base px-8 py-4 rounded-xl': props.massive,
-      'font-bold': props.bold,
-      'text-base px-4 py-2 rounded-md': !props.small && !props.big && !props.massive,
-      [props.extraClass]: !!props.extraClass,
+      [colorClasses]: true,
+      'text-sm px-2 py-1 rounded-md': small,
+      'text-base px-6 py-3 rounded-lg': big,
+      'text-base px-8 py-4 rounded-xl': massive,
+      'font-bold': bold,
+      'text-base px-4 py-2 rounded-md': !small && !big && !massive,
+      [extraClass]: !!extraClass,
     }}>
       <Slot />
     </button>
   );
 });
 
-export const SPAButton = component$(({ href, color, small, big, massive, bold, extraClass }: any) => {
+export const SPAButton = component$(({ color, small, big, massive, bold, extraClass, ...props }: any) => {
   const colorClasses = color ? classes[color as keyof typeof classes] : classes.secondary;
   return (
-    <Link href={href} class={{
+    <Link {...props} class={{
       'relative flex items-center gap-3 transition ease-in-out border text-gray-50': true,
       [colorClasses]: true,
       'text-sm px-2 py-1 rounded-md': small,
@@ -46,18 +46,18 @@ export const SPAButton = component$(({ href, color, small, big, massive, bold, e
   );
 });
 
-export const ExternalButton = component$((props: any) => {
-  const color = props.color ? classes[props.color as keyof typeof classes] : classes.secondary;
+export const ExternalButton = component$(({ color, small, big, massive, bold, extraClass, ...props }: any) => {
+  const colorClasses = color ? classes[color as keyof typeof classes] : classes.secondary;
   return (
     <a {...props} class={{
       'relative flex items-center gap-3 transition ease-in-out border text-gray-50': true,
-      [color]: true,
-      'text-sm px-2 py-1 rounded-md': props.small,
-      'text-base px-6 py-3 rounded-xl': props.big,
-      'text-base px-8 py-4 rounded-xl': props.massive,
-      'font-bold': props.bold,
-      'text-base px-4 py-2 rounded-md': !props.small && !props.big && !props.massive,
-      [props.extraClass]: !!props.extraClass,
+      [colorClasses]: true,
+      'text-sm px-2 py-1 rounded-md': small,
+      'text-base px-6 py-3 rounded-xl': big,
+      'text-base px-8 py-4 rounded-xl': massive,
+      'font-bold': bold,
+      'text-base px-4 py-2 rounded-md': !small && !big && !massive,
+      [extraClass]: !!extraClass,
     }}>
       <Slot />
     </a>

@@ -119,3 +119,13 @@ main {
     scale: 0.95;
   }
 }
+
+.Scp {
+  display: flex;
+  height: 170px !important;
+  width: 170px !important;
+  padding: 10px !important;
+  border-radius: 0.375rem;
+  border: hsl(0, 27%, 76%);
+  border-width: 1px;
+}

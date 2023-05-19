@@ -4,6 +4,7 @@ import { server$ } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
+import ColorInput from '~/components/elements/ColorInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import { Button } from '~/components/elements/Button';
@@ -162,9 +163,9 @@ export default component$(() => {
               <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
                   return (
-                    <TextInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                    <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} onInput$={(color: string) => { store.colors[i] = color; setCookie(JSON.stringify(store)); }}>
                       {t('color.hexColor@@Hex Color')} {i + 1}
-                    </TextInput>
+                    </ColorInput>
                   );
                 })}
               </div>
