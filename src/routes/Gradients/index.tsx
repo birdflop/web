@@ -59,6 +59,10 @@ export const getCookie = server$(function (store) {
   return JSON.stringify(json);
 });
 
+export const getCookieFn = server$(function (cookie: string) {
+  this.cookie.get(cookie);
+});
+
 export default component$(() => {
   const ctx = useSpeakContext();
 

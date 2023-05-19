@@ -1,6 +1,6 @@
 import { component$, Slot } from '@builder.io/qwik';
 
-export default component$((props: any) => {
+export default component$(({ nolabel, ...props }: any) => {
   return (
     <div class="flex gap-3 items-center">
       <label class="inline-flex relative items-center cursor-pointer">
@@ -12,7 +12,7 @@ export default component$((props: any) => {
           'peer-checked:after:translate-x-full peer-checked:after:bg-luminescent-500 peer-checked:after:border-luminescent-400 peer-checked:hover:after:bg-luminescent-400': true,
         }} />
       </label>
-      {!props.nolabel &&
+      {!nolabel &&
         <label for={props.id} class="text-gray-100">
           <Slot/>
         </label>

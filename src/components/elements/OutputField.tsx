@@ -1,12 +1,12 @@
 import { component$, Slot, useStore } from '@builder.io/qwik';
 
-export default component$(({ id, value, charlimit, extraClass }: any) => {
+export default component$(({ extraClass, ...props }: any) => {
   return (
     <div class="flex flex-col">
-      <label for={id} class="mb-2">
+      <label for={props.id} class="mb-2">
         <Slot />
       </label>
-      <RawOutputField id={id} value={value} charlimit={charlimit} extraClass={`mb-3 ${extraClass}`} />
+      <RawOutputField {...props} extraClass={`mb-3 ${extraClass}`} />
     </div>
   );
 });
