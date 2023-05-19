@@ -18,13 +18,16 @@ export default component$(() => {
         <Slot />
       </section>
       {!cookies.value &&
-        <div class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
+        <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
           <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
             We use cookies to automatically save and load your preferences.
           </span>
           <div class="flex items-center gap-2">
             <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/Privacy">Privacy Policy</a>
-            <Button color="primary" onClick$={async () => await dismissCookies()}>
+            <Button color="primary" onClick$={async () => {
+              await dismissCookies();
+              document.getElementById('cookieprompt')!.remove();
+            }}>
               Okay
             </Button>
           </div>
