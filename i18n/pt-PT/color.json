@@ -2,7 +2,7 @@
     "color": {
         "output": "Output",
         "outputSubtitle": "Isto é o que metes no chat. Clica para copia",
-        "colorAmount": "Color Amount",
+        "colorAmount": false,
         "hexColor": "Cor Hexadecimal",
         "inputText": "Texto de Input",
         "presets": "Presets",
