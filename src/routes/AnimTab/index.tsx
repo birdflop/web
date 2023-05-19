@@ -6,7 +6,6 @@ import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
 import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
-import ColorInput from '~/components/elements/ColorInput';
 import { Button } from '~/components/elements/Button';
 
 import { presetVersion } from '~/components/util/PresetUtils';
@@ -136,7 +135,6 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.5.1/jscolor.min.js"/>
       <Speak assets={['animtab', 'color']}>
         <div class="my-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
@@ -208,9 +206,9 @@ export default component$(() => {
               <div class="overflow-auto sm:max-h-[500px] mt-3">
                 {store.colors.map((color: string, i: number) => {
                   return (
-                    <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} jscolorData={{ palette: store.colors }} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                    <TextInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} onInput$={(event: any) => { store.colors[i] = event.target!.value; setCookie(JSON.stringify(store)); }}>
                       {t('color.hexColor@@Hex Color')} {i + 1}
-                    </ColorInput>
+                    </TextInput>
                   );
                 })}
               </div>
