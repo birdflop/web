@@ -197,14 +197,14 @@ export default component$(() => {
           </div>
 
           <div class="grid sm:grid-cols-4 gap-2">
-            <div class="sm:pr-4 hidden sm:block" id="colors">
+            <div class="sm:pr-4 hidden sm:flex flex-col gap-3" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
                 {t('color.colorAmount@@Color Amount')} - {store.colors.length}
               </NumberInput>
               <NumberInput id="length" step={1} min={1} onIncrement$={() => { store.length++; setCookie(JSON.stringify(store)); }} onDecrement$={() => { if (store.length > 1) store.length--; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
               </NumberInput>
-              <div class="overflow-auto sm:max-h-[500px] mt-3">
+              <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
                 {store.colors.map((color: string, i: number) => {
                   return (
                     <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} onInput$={(color: string) => { store.colors[i] = color; setCookie(JSON.stringify(store)); }}>
@@ -215,7 +215,7 @@ export default component$(() => {
               </div>
             </div>
             <div class="sm:col-span-3">
-              <div class="sm:block" id="inputs">
+              <div class="flex sm:flex flex-col gap-3" id="inputs">
                 <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.animationName@@Animation Name')}
                 </TextInput>
