@@ -1,16 +1,35 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { RequestHandler } from '@builder.io/qwik-city';
+import type { RequestHandler } from '@builder.io/qwik-city';
+import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
+import { Button } from '~/components/elements/Button';
+
+export const useCookies = routeLoader$(({ cookie }) => cookie.get('cookies')?.value);
+export const dismissCookies = server$(function() { return this.cookie.set('cookies', 'true'); });
 
 export default component$(() => {
+  const cookies = useCookies();
   return (
     <main>
       <Nav />
       <section class="pt-16">
         <Slot />
       </section>
+      {!cookies.value &&
+        <div class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
+          <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
+            We use cookies to automatically save and load your preferences.
+          </span>
+          <div class="flex items-center gap-2">
+            <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/Privacy">Privacy Policy</a>
+            <Button color="primary" onClick$={async () => await dismissCookies()}>
+              Okay
+            </Button>
+          </div>
+        </div>
+      }
     </main>
   );
 });
