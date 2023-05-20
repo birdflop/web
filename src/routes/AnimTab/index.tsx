@@ -1,6 +1,5 @@
-import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
+import { component$, useVisibleTask$, useStore, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { server$ } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
@@ -41,27 +40,33 @@ const types = [
   { name: 'Full Text Cycle', value: 4 },
 ];
 
-export const setCookie = server$(function (store) {
+export const setCookie = $(function (store: any) {
   const json = JSON.parse(store);
   delete json.alerts;
-  delete json.frames;
-  delete json.frame;
+  const cookie: { [key: string]: string; } = {};
+  document.cookie.split(/\s*;\s*/).forEach(function(pair) {
+    const pairsplit = pair.split(/\s*=\s*/);
+    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+  });
   Object.keys(json).forEach(key => {
-    const existingCookie = this.cookie.get(key);
+    const existingCookie = cookie[key];
     if (existingCookie === json[key]) return;
-    this.cookie.set(key, encodeURIComponent(json[key]), { path: '/' });
+    document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
   });
 });
 
-export const getCookie = server$(function (store) {
+export const getCookie = $(function (store: any) {
   const json = JSON.parse(store);
   delete json.alerts;
-  delete json.frames;
-  delete json.frame;
+  const cookie: { [key: string]: string; } = {};
+  document.cookie.split(/\s*;\s*/).forEach(function(pair) {
+    const pairsplit = pair.split(/\s*=\s*/);
+    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+  });
   Object.keys(json).forEach(key => {
-    const existingCookie: any = this.cookie.get(key);
-    if (key == 'colors' && existingCookie) existingCookie.value = existingCookie?.value.split(',');
-    json[key] = existingCookie?.value || json[key];
+    let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
+    if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
+    json[key] = existingCookie || json[key];
   });
   return JSON.stringify(json);
 });

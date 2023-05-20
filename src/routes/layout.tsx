@@ -1,14 +1,12 @@
 import { component$, Slot } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { routeLoader$, server$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
 
 export const useCookies = routeLoader$(({ cookie }) => cookie.get('cookies')?.value);
-export const dismissCookies = server$(function() { return this.cookie.set('cookies', 'true'); });
-
 export default component$(() => {
   const cookies = useCookies();
   return (
@@ -25,7 +23,7 @@ export default component$(() => {
           <div class="flex items-center gap-2">
             <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/Privacy">Privacy Policy</a>
             <Button color="primary" onClick$={async () => {
-              await dismissCookies();
+              document.cookie = 'cookies=true; path=/';
               document.getElementById('cookieprompt')!.remove();
             }}>
               Okay
