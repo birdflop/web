@@ -43,6 +43,9 @@ const types = [
 export const setCookie = $(function (store: any) {
   const json = JSON.parse(store);
   delete json.alerts;
+  delete json.frames;
+  delete json.frame;
+
   const cookie: { [key: string]: string; } = {};
   document.cookie.split(/\s*;\s*/).forEach(function(pair) {
     const pairsplit = pair.split(/\s*=\s*/);
@@ -58,6 +61,8 @@ export const setCookie = $(function (store: any) {
 export const getCookie = $(function (store: any) {
   const json = JSON.parse(store);
   delete json.alerts;
+  delete json.frames;
+  delete json.frame;
   const cookie: { [key: string]: string; } = {};
   document.cookie.split(/\s*;\s*/).forEach(function(pair) {
     const pairsplit = pair.split(/\s*=\s*/);
