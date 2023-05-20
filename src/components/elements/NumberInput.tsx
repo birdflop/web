@@ -23,6 +23,7 @@ export const RawNumberInput = component$(({ input, onDecrement$, onIncrement$, .
         'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
         'w-20 rounded-l-md border-r-0': input,
         'w-[50%] rounded-md': !input,
+        'opacity-50 pointer-events-none': props.value <= props.min,
       }}>
         <Remove width="24" class="fill-current" />
       </button>
@@ -33,6 +34,7 @@ export const RawNumberInput = component$(({ input, onDecrement$, onIncrement$, .
         'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
         'w-20 rounded-r-md border-l-0': input,
         'w-[50%] rounded-md': !input,
+        'opacity-50 pointer-events-none': props.value <= props.max,
       }}>
         <Add width="24" class="fill-current" />
       </button>
