@@ -177,21 +177,21 @@ export default component$(() => {
 
           <div id="mobile-navbuttons" class="my-4 sm:hidden">
             <div class="flex gap-2">
-              <Button onClick$={() => {
+              <Button aria-label="Colors" onClick$={() => {
                 document.getElementById('colors')!.classList.remove('hidden');
-                document.getElementById('inputs')!.classList.add('hidden');
+                document.getElementById('inputs')!.classList.replace('flex', 'hidden');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
                 <ColorFillOutline width="24" />
               </Button>
-              <Button onClick$={() => {
+              <Button aria-label="Inputs" onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
-                document.getElementById('inputs')!.classList.remove('hidden');
+                document.getElementById('inputs')!.classList.replace('hidden', 'flex');
                 document.getElementById('formatting')!.classList.add('hidden');
               }}>
                 <SettingsOutline width="24" />
               </Button>
-              <Button onClick$={() => {
+              <Button aria-label="Formatting" onClick$={() => {
                 document.getElementById('colors')!.classList.add('hidden');
                 document.getElementById('inputs')!.classList.add('hidden');
                 document.getElementById('formatting')!.classList.remove('hidden');
