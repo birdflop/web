@@ -19,7 +19,7 @@ export const RawNumberInput = component$(({ input, onDecrement$, onIncrement$, .
       'flex': true,
       'gap-2': !input,
     }}>
-      <button data-action="decrement" disabled={props.value <= props.min} onClick$={onDecrement$} class={{
+      <button data-action="decrement" aria-label="Decrement" disabled={props.value <= props.min} onClick$={onDecrement$} class={{
         'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
         'w-20 rounded-l-md border-r-0': input,
         'w-[50%] rounded-md': !input,
@@ -29,7 +29,7 @@ export const RawNumberInput = component$(({ input, onDecrement$, onIncrement$, .
       {
         input && <input type="number" {...props} class="transition ease-in-out text-lg text-center border border-gray-600 bg-gray-700 text-gray-50 hover:bg-gray-600 focus:bg-gray-500 px-3 py-1 w-[calc(100%-10rem)]" />
       }
-      <button data-action="increment" disabled={props.value >= props.max} onClick$={onIncrement$} class={{
+      <button data-action="increment" aria-label="Increment" disabled={props.value >= props.max} onClick$={onIncrement$} class={{
         'flex justify-center items-center transition ease-in-out border border-gray-700 bg-gray-800 text-2xl hover:bg-gray-600 h-full py-1.5 cursor-pointer': true,
         'w-20 rounded-r-md border-l-0': input,
         'w-[50%] rounded-md': !input,
