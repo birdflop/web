@@ -69,9 +69,10 @@ export const getCookie = $(function (store: any) {
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
   Object.keys(json).forEach(key => {
+    if (!cookie[key]) return;
     let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
     if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
-    json[key] = existingCookie || json[key];
+    json[key] = existingCookie;
   });
   return JSON.stringify(json);
 });

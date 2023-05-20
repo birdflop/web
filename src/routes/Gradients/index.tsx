@@ -60,9 +60,10 @@ export const getCookie = $(function (store: any) {
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
   Object.keys(json).forEach(key => {
+    if (!cookie[key]) return;
     let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
     if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
-    json[key] = existingCookie || json[key];
+    json[key] = existingCookie;
   });
   return JSON.stringify(json);
 });
@@ -84,16 +85,15 @@ export default component$(() => {
     alerts: [],
   }, { deep: true });
 
-  useVisibleTask$(() => {
-    getCookie(JSON.stringify(store)).then((userstore: any) => {
-      const parsedUserStore = JSON.parse(userstore);
-      for (const key of Object.keys(parsedUserStore)) {
-        const value = parsedUserStore[key];
-        if (key == 'colors') store[key] = value;
-        store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      }
-      if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
-    });
+  useVisibleTask$(async () => {
+    const userstore = await getCookie(JSON.stringify(store));
+    const parsedUserStore = JSON.parse(userstore);
+    for (const key of Object.keys(parsedUserStore)) {
+      const value = parsedUserStore[key];
+      if (key == 'colors') store[key] = value;
+      store[key] = value === 'true' ? true : value === 'false' ? false : value;
+    }
+    if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
   });
 
   return (
