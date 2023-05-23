@@ -5,10 +5,7 @@ import Toggle from '~/components/elements/Toggle';
 import TextInput from '~/components/elements/TextInput';
 import { Button, ExternalButton } from '~/components/elements/Button';
 
-import {
-  $translate as t,
-  Speak,
-} from 'qwik-speak';
+import { useTranslate, Speak } from 'qwik-speak';
 
 export default component$(() => {
   const store = useStore({
@@ -25,6 +22,8 @@ export default component$(() => {
     script.setAttribute('name', 'gifframes');
     document.head.appendChild(script);
   }, { strategy: 'document-idle' });
+
+  const t = useTranslate();
 
   return (
     <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">

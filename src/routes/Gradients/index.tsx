@@ -15,7 +15,7 @@ import OutputField from '~/components/elements/OutputField';
 
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
+import { useTranslate, Speak } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -69,7 +69,7 @@ export const getCookie = $(function (store: any) {
 });
 
 export default component$(() => {
-  const ctx = useSpeakContext();
+  const t = useTranslate();
 
   const store: any = useStore({
     colors: [],
@@ -185,7 +185,7 @@ export default component$(() => {
                 </TextInput>
 
                 <div class="grid sm:grid-cols-2 sm:gap-2">
-                  <SelectInput id="format" label={it('color.colorFormat@@Color Format', ctx)} value={store.format} onChange$={
+                  <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') return store.customFormat = true;
                       store.customFormat = false;
@@ -226,11 +226,11 @@ export default component$(() => {
                   </>
                 }
 
-                <TextInput id="prefix" value={store.prefix} placeholder={it('gradient.prefixPlaceholder@@example: \'/nick \'', ctx)} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('gradient.prefix@@Prefix (Usually used for commands)')}
                 </TextInput>
 
-                <SelectInput id="preset" label={it('color.colorPreset@@Color Preset', ctx)} onChange$={
+                <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
                   (event: any) => {
                     store.colors = [];
                     setTimeout(() => {
@@ -264,7 +264,7 @@ export default component$(() => {
                   }}>
                     {t('color.export@@Export')}
                   </Button>
-                  <RawTextInput name="import" placeholder={it('color.import@@Import (Paste here)', ctx)} onInput$={async (event: any) => {
+                  <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                     let json: any;
                     try {
                       json = JSON.parse(event.target!.value);
@@ -294,7 +294,7 @@ export default component$(() => {
                   }} />
                 </div>
                 {store.alerts.map((alert: any, i: number) => (
-                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={it(`${alert.translate}@@${alert.text}`, ctx)} />
+                  <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
                 ))}
               </div>
               <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">

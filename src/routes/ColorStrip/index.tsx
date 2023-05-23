@@ -5,10 +5,10 @@ import OutputField from '~/components/elements/OutputField';
 import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 
-import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
+import { useTranslate, Speak } from 'qwik-speak';
 
 export default component$(() => {
-  const ctx = useSpeakContext();
+  const t = useTranslate();
   const store = useStore({
     type: 0,
     input: '',
@@ -29,7 +29,7 @@ export default component$(() => {
             {t('colorstrip.inputText@@Input Text')}
           </TextInput>
 
-          <SelectInput id="gradienttype" label={it('colorstrip.colorCodeType@@Color Code Type', ctx)} onChange$={(event: any) => { store.type = event.target!.value; }}>
+          <SelectInput id="gradienttype" label={t('colorstrip.colorCodeType@@Color Code Type')} onChange$={(event: any) => { store.type = event.target!.value; }}>
             <option value={0}>{'&#rrggbb'}</option>
             <option value={1}>{'<&#rrggbb>'}</option>
             <option value={2}>{'&x&r&r&g&g&b&b'}</option>

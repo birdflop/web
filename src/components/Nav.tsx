@@ -8,9 +8,8 @@ import logoAVIF from '~/images/logo.png?format=avif';
 import logoWEBP from '~/images/logo.png?format=webp';
 // @ts-ignore
 import logo from '~/images/logo.png?metadata';
+import { useTranslate, useSpeakConfig, Speak } from 'qwik-speak';
 import type { SpeakLocale } from 'qwik-speak';
-import { useSpeakContext } from 'qwik-speak';
-import { $translate as t, $inlineTranslate as it, useSpeakConfig, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
 import { version } from '~/../package.json';
@@ -19,12 +18,13 @@ import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
 export default component$(() => {
-  const ctx = useSpeakContext();
+  const t = useTranslate();
+
   return (
     <Nav>
       <Speak assets={['app']}>
         <MainNav>
-          <Dropdown name={it('nav.gradients@@Gradients', ctx)} extraClass="hidden sm:flex gap-3">
+          <Dropdown name={t('nav.gradients@@Gradients')} extraClass="hidden sm:flex gap-3">
             <NavButton href="/Gradients">
               {t('nav.hexGradient@@Hex Gradients')}
             </NavButton>
@@ -35,7 +35,7 @@ export default component$(() => {
               {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
             </NavButton>
           </Dropdown>
-          <Dropdown name={it('nav.analysis@@Analysis', ctx)} extraClass="hidden sm:flex gap-3">
+          <Dropdown name={t('nav.analysis@@Analysis')} extraClass="hidden sm:flex gap-3">
             <NavButton href="/SparkProfile">
               {t('nav.sparkProfile@@Spark Profile')}
             </NavButton>
@@ -43,7 +43,7 @@ export default component$(() => {
               {t('nav.paperTimings@@Paper Timings')}
             </NavButton>
           </Dropdown>
-          <Dropdown name={it('nav.misc@@Misc', ctx)} extraClass="hidden lg:flex gap-3">
+          <Dropdown name={t('nav.misc@@Misc')} extraClass="hidden lg:flex gap-3">
             <NavButton href="/AnimTexture">
               {t('nav.animatedTextures@@Animated Textures')}
             </NavButton>
