@@ -2,7 +2,10 @@ import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import yaml from 'yaml';
 import TextInput from '~/components/elements/TextInput';
-import { useTranslate, Speak } from 'qwik-speak';
+import {
+  $translate as t,
+  Speak,
+} from 'qwik-speak';
 
 export default component$(() => {
   const store: any = useStore({
@@ -52,8 +55,6 @@ export default component$(() => {
     store.speed = json['change-interval'] ?? 50;
     store.frames = json['texts'] ?? [];
   });
-
-  const t = useTranslate();
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">

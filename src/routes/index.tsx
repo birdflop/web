@@ -11,14 +11,15 @@ import iconWEBP from '~/images/icon.png?format=webp';
 import icon from '~/images/icon.png?metadata';
 
 import { initiateTyper } from '~/components/util/Typer';
-import { useTranslate, Speak } from 'qwik-speak';
+import {
+  $translate as t,
+  Speak,
+} from 'qwik-speak';
 
 export default component$(() => {
   useVisibleTask$(() => {
     initiateTyper();
   }, { strategy: 'document-idle' });
-  const t = useTranslate();
-
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
       <Speak assets={['home']}>

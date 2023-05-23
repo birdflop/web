@@ -4,13 +4,15 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 import NumberInput from '~/components/elements/NumberInput';
 import OutputField from '~/components/elements/OutputField';
 
-import { useTranslate,  Speak } from 'qwik-speak';
+import {
+  $translate as t,
+  Speak,
+} from 'qwik-speak';
 
 export default component$(() => {
   const store = useStore({
     ram: 4096,
   }, { deep: true });
-  const t = useTranslate();
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-80px)]">
