@@ -41,7 +41,7 @@
     "path": "^0.12.7",
     "postcss": "^8.4.23",
     "qwik-ionicons": "^1.0.5",
-    "qwik-speak": "^0.14.0",
+    "qwik-speak": "^0.13.0",
     "showdown": "^2.1.0",
     "simple-color-picker": "^1.0.5",
     "tailwindcss": "^3.3.2",
