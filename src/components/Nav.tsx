@@ -1,4 +1,4 @@
-import { component$, $, Slot } from '@builder.io/qwik';
+import { component$, $, Slot, useSignal } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
 import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline } from 'qwik-ionicons';
@@ -18,8 +18,16 @@ import { version } from '~/../package.json';
 import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
+import { invoke } from '@tauri-apps/api/tauri';
+
 export default component$(() => {
   const ctx = useSpeakContext();
+
+  const greetMsg = useSignal('');
+  const greet = $(async (name: string) => {
+    greetMsg.value = await invoke('greet', { name });
+  });
+
   return (
     <Nav>
       <Speak assets={['app']}>
@@ -60,9 +68,9 @@ export default component$(() => {
           <NavButton href="/Privacy" extraClass="hidden xl:flex gap-3">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
-          <NavButton href="/" extraClass="flex">
-            v{version}
-          </NavButton>
+          <button onClick$={() => greet('Tauri')} class="group transition ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg items-center flex">
+            v{version} {greetMsg.value}
+          </button>
           <LangPicker />
           <NavButton external icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
             <LogoGithub width="24" class="fill-green-100" />

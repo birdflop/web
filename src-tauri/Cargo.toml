@@ -1,6 +1,6 @@
 [package]
 name = "simplymc"
-version = "0.1.0"
+version = "0.1.1"
 description = "SimplyMC but an app"
 authors = ["LuminescentDev"]
 license = "AGPL-3.0-or-later"
