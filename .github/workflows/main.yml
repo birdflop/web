@@ -14,6 +14,7 @@ jobs:
         platform: [macos-latest, ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
+    if: startsWith(github.event.head_commit.message, '[tauri]')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -43,6 +44,8 @@ jobs:
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'App v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
+          releaseBody: |
+            Note for Linux users:
+            The WebKit implementation is really laggy and outdated on Linux for Tauri so you're better off installing SimplyMC as a web app through your preferred browser.
           releaseDraft: true
           prerelease: true
