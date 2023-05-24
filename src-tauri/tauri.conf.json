@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "SimplyMC",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "tauri": {
     "bundle": {
@@ -49,6 +49,7 @@
     },
     "windows": [
       {
+        "decorations": false,
         "fullscreen": false,
         "height": 600,
         "resizable": true,

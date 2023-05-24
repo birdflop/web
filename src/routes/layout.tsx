@@ -1,21 +1,30 @@
-import { component$, Slot } from '@builder.io/qwik';
+import { component$, Slot, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
+import { getVersion } from '@tauri-apps/plugin-app';
 
 export const useCookies = routeLoader$(({ cookie }) => cookie.get('cookies')?.value);
+
 export default component$(() => {
   const cookies = useCookies();
+
+  const tauriVersion = useSignal('');
+  useVisibleTask$(async () => {
+    try { tauriVersion.value = await getVersion(); }
+    catch (e) { tauriVersion.value = ''; }
+  });
+
   return (
     <main>
-      <Nav />
+      <Nav tauriVersion={tauriVersion.value} />
       <section class="pt-16">
         <Slot />
       </section>
-      {!cookies.value &&
+      {(!tauriVersion.value && !cookies.value) &&
         <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
           <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
             We use cookies to automatically save and load your preferences.

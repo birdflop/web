@@ -1,6 +1,6 @@
 [package]
 name = "simplymc"
-version = "0.1.1"
+version = "0.2.0"
 description = "SimplyMC but an app"
 authors = ["LuminescentDev"]
 license = "AGPL-3.0-or-later"
@@ -21,6 +21,9 @@ tauri-build = { version = "2.0.0-alpha.5", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "2.0.0-alpha.9", features = [] }
+tauri-plugin-window = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
+tauri-plugin-app = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

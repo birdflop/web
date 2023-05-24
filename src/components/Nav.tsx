@@ -1,7 +1,7 @@
-import { component$, $, Slot, useSignal } from '@builder.io/qwik';
+import { component$, $, Slot } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline } from 'qwik-ionicons';
+import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline, CloseOutline, SquareOutline, RemoveOutline } from 'qwik-ionicons';
 // @ts-ignore
 import logoAVIF from '~/images/logo.png?format=avif';
 // @ts-ignore
@@ -18,18 +18,13 @@ import { version } from '~/../package.json';
 import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
-import { invoke } from '@tauri-apps/api/tauri';
+import { appWindow } from '@tauri-apps/plugin-window';
 
-export default component$(() => {
+export default component$(({ tauriVersion }: any) => {
   const ctx = useSpeakContext();
 
-  const greetMsg = useSignal('');
-  const greet = $(async (name: string) => {
-    greetMsg.value = await invoke('greet', { name });
-  });
-
   return (
-    <Nav>
+    <Nav tauriVersion={tauriVersion}>
       <Speak assets={['app']}>
         <MainNav>
           <Dropdown name={it('nav.gradients@@Gradients', ctx)} extraClass="hidden sm:flex gap-3">
@@ -68,8 +63,8 @@ export default component$(() => {
           <NavButton href="/Privacy" extraClass="hidden xl:flex gap-3">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
-          <button onClick$={() => greet('Tauri')} class="group transition ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg items-center flex">
-            v{version} {greetMsg.value}
+          <button class="group transition ease-in-out hover:bg-gray-800 hover:text-white px-4 py-2 rounded-lg items-center flex">
+            v{version} {tauriVersion && `(${tauriVersion})`}
           </button>
           <LangPicker />
           <NavButton external icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass="hidden xl:flex">
@@ -95,6 +90,23 @@ export default component$(() => {
           }} class="transition ease-in-out hover:bg-gray-800 hover:text-white p-2 rounded-lg text-3xl xl:hidden">
             <Menu width="24" />
           </button>
+          { tauriVersion && <>
+            <button title="Minimize" class="transition ease-in-out hover:bg-gray-800 hover:text-white p-1 rounded-lg text-3xl" onClick$={() => {
+              appWindow.minimize();
+            }}>
+              <RemoveOutline width="24" />
+            </button>
+            <button title="Maximize" class="transition ease-in-out hover:bg-gray-800 hover:text-white p-2 rounded-lg text-3xl" onClick$={() => {
+              appWindow.toggleMaximize();
+            }}>
+              <SquareOutline width="20" />
+            </button>
+            <button title="Close" class="transition ease-in-out hover:bg-gray-800 hover:text-white p-1 rounded-lg text-3xl" onClick$={() => {
+              appWindow.close();
+            }}>
+              <CloseOutline width="24" />
+            </button>
+          </> }
         </MainNav>
         <MobileNav>
           <NavButton mobile href="/Gradients" extraClass="flex sm:hidden">
@@ -148,10 +160,17 @@ export default component$(() => {
   );
 });
 
-export const Nav = component$(() => {
+export const Nav = component$(({ tauriVersion }: any) => {
   return (
-    <nav class="z-20 fixed top-0 w-screen py-2 bg-gray-900/70 backdrop-blur-xl">
-      <div class="mx-auto max-w-7xl px-4 lg:px-6">
+    <nav class={{
+      'z-20 fixed top-0 w-screen backdrop-blur-xl': true,
+      'py-2 bg-gray-900/70': !tauriVersion,
+      'bg-violet-900/20': tauriVersion,
+    }}>
+      <div class={{
+        'mx-auto max-w-7xl px-4 lg:px-6': !tauriVersion,
+        'px-3': tauriVersion,
+      }}>
         <Slot />
       </div>
     </nav>
@@ -186,9 +205,9 @@ export const Brand = component$(() => {
 
 export const MainNav = component$(() => {
   return (
-    <div class="relative flex h-16 items-center justify-between">
+    <div class="relative flex h-16 items-center justify-between" data-tauri-drag-region>
       <Brand/>
-      <div class="flex flex-1 items-center justify-end">
+      <div class="flex flex-1 items-center justify-end" data-tauri-drag-region>
         <div class="flex gap-2 text-gray-300 whitespace-nowrap">
           <Slot/>
         </div>

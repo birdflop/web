@@ -35,6 +35,8 @@ html {
   overflow: overlay;
   background-color: hsl(0deg, 0%, 5%);
   font-family: MinecraftRegular;
+  height: 100%;
+  border: hsl(0deg, 0%, 10%) 1px solid;
 }
 
 .font-bold {
