@@ -6,11 +6,13 @@ import TextInput from '~/components/elements/TextInput';
 import { Button, ExternalButton } from '~/components/elements/Button';
 
 import {
-  $translate as t,
+  useTranslate,
   Speak,
 } from 'qwik-speak';
 
 export default component$(() => {
+  const t = useTranslate();
+
   const store = useStore({
     frames: [] as any[],
     textureName: '',

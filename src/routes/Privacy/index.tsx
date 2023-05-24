@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import {
-  $translate as it,
+  inlineTranslate as it,
   Speak,
   useSpeakContext,
 } from 'qwik-speak';

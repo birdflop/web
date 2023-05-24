@@ -15,7 +15,7 @@ import OutputField from '~/components/elements/OutputField';
 
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
+import { useTranslate, inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -69,6 +69,7 @@ export const getCookie = $(function (store: any) {
 });
 
 export default component$(() => {
+  const t = useTranslate();
   const ctx = useSpeakContext();
 
   const store: any = useStore({

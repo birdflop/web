@@ -15,7 +15,7 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
+import { useTranslate, inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -79,6 +79,7 @@ export const getCookie = $(function (store: any) {
 
 export default component$(() => {
   const ctx = useSpeakContext();
+  const t = useTranslate();
 
   const store: any = useStore({
     colors: [],

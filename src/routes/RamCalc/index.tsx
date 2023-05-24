@@ -5,11 +5,13 @@ import NumberInput from '~/components/elements/NumberInput';
 import OutputField from '~/components/elements/OutputField';
 
 import {
-  $translate as t,
+  useTranslate,
   Speak,
 } from 'qwik-speak';
 
 export default component$(() => {
+  const t = useTranslate();
+
   const store = useStore({
     ram: 4096,
   }, { deep: true });

@@ -5,11 +5,13 @@ import TextInput from '~/components/elements/TextInput';
 import OutputField from '~/components/elements/OutputField';
 
 import {
-  $translate as t,
+  useTranslate,
   Speak,
 } from 'qwik-speak';
 
 export default component$(() => {
+  const t = useTranslate();
+
   const store = useStore({
     preset: 'ewAiAHYAZQByAHMAaQBvAG4AIgA6ADEALAAiAGMAbwBsAG8AcgBzACIAOgBbACIAIwAwADAARgBGAEUAMAAiACwAIgAjAEUAQgAwADAARgBGACIAXQAsACIAdABlAHgAdAAiADoAIgBTAGkAbQBwAGwAeQBNAEMAIgAsACIAcwBwAGUAZQBkACIAOgA1ADAALAAiAGYAbwByAG0AYQB0AHMAIgA6ADAALAAiAG8AdQB0AHAAdQB0AC0AZgBvAHIAbQBhAHQAIgA6ACIAMAAiACwAIgBjAHUAcwB0AG8AbQAtAGYAbwByAG0AYQB0ACIAOgAiACIALAAiAHQAeQBwAGUAIgA6ADAAfQA=',
   }, { deep: true });

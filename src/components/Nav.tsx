@@ -10,7 +10,7 @@ import logoWEBP from '~/images/logo.png?format=webp';
 import logo from '~/images/logo.png?metadata';
 import type { SpeakLocale } from 'qwik-speak';
 import { useSpeakContext } from 'qwik-speak';
-import { $translate as t, $inlineTranslate as it, useSpeakConfig, Speak } from 'qwik-speak';
+import { useTranslate, inlineTranslate as it, useSpeakConfig, Speak } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
 import { version } from '~/../package.json';
@@ -22,6 +22,7 @@ import { appWindow } from '@tauri-apps/plugin-window';
 
 export default component$(({ tauriVersion }: any) => {
   const ctx = useSpeakContext();
+  const t = useTranslate();
 
   return (
     <Nav tauriVersion={tauriVersion}>

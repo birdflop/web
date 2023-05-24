@@ -3,11 +3,13 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 import yaml from 'yaml';
 import TextInput from '~/components/elements/TextInput';
 import {
-  $translate as t,
+  useTranslate,
   Speak,
 } from 'qwik-speak';
 
 export default component$(() => {
+  const t = useTranslate();
+
   const store: any = useStore({
     text: 'SimplyMC',
     speed: 50,

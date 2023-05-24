@@ -5,10 +5,12 @@ import OutputField from '~/components/elements/OutputField';
 import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 
-import { $translate as t, $inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
+import { useTranslate, inlineTranslate as it, Speak, useSpeakContext } from 'qwik-speak';
 
 export default component$(() => {
+  const t = useTranslate();
   const ctx = useSpeakContext();
+
   const store = useStore({
     type: 0,
     input: '',

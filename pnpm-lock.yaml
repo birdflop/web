@@ -65,8 +65,8 @@ devDependencies:
     specifier: ^1.0.5
     version: 1.0.5
   qwik-speak:
-    specifier: ^0.13.0
-    version: 0.13.0(@builder.io/qwik@1.1.4)
+    specifier: ^0.14.0
+    version: 0.14.0(@builder.io/qwik@1.1.4)
   showdown:
     specifier: ^2.1.0
     version: 2.1.0
@@ -3443,12 +3443,12 @@ packages:
     engines: {node: '>=15.0.0'}
     dev: true
 
-  /qwik-speak@0.13.0(@builder.io/qwik@1.1.4):
-    resolution: {integrity: sha512-bEvQarUNBKJkBdRzE2wgdkqokDGeYmaWag6PZGH83+oiNCOfPlvU925OhUm/xRRBuogUHyqPrv8uIn5twh2+7A==}
+  /qwik-speak@0.14.0(@builder.io/qwik@1.1.4):
+    resolution: {integrity: sha512-bGTkkq1NTwxF/lHIBmYUZPakivPF9wp/LE2itiCZUmdi+IsDk3im3v6dXfIvfmQo8F1rwbsw3lIxbMLIIQ5Jxg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
-      '@builder.io/qwik': '>=1.0.0'
+      '@builder.io/qwik': '>=1.1.4'
     dependencies:
       '@builder.io/qwik': 1.1.4(undici@5.22.1)
     dev: true
