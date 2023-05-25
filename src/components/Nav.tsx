@@ -1,7 +1,7 @@
 import { component$, $, Slot } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline, CloseOutline, SquareOutline, RemoveOutline, DownloadOutline } from 'qwik-ionicons';
+import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline, CloseOutline, SquareOutline, RemoveOutline } from 'qwik-ionicons';
 // @ts-ignore
 import logoAVIF from '~/images/logo.png?format=avif';
 // @ts-ignore
