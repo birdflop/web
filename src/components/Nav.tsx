@@ -1,4 +1,4 @@
-import { component$, $, Slot, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, $, Slot } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
 import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline, CloseOutline, SquareOutline, RemoveOutline, DownloadOutline } from 'qwik-ionicons';
@@ -20,9 +20,8 @@ import LoadingIcon from './icons/LoadingIcon';
 
 import { appWindow } from '@tauri-apps/plugin-window';
 
-import { type Update, check } from '@tauri-apps/plugin-updater';
+import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
-
 
 export default component$(({ tauriVersion }: any) => {
   const ctx = useSpeakContext();
