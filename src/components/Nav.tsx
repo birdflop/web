@@ -19,6 +19,7 @@ import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
 import { appWindow } from '@tauri-apps/plugin-window';
+import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
 
 export default component$(({ tauriVersion }: any) => {
   const ctx = useSpeakContext();
@@ -91,7 +92,21 @@ export default component$(({ tauriVersion }: any) => {
           <NavButton href="/Privacy" extraClass="hidden xl:flex gap-3">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
-          <button class="group transition ease-in-out hover:bg-gray-900 hover:text-white px-4 py-2 rounded-lg items-center hidden sm:flex">
+          <button onClick$={async () => {
+            if (tauriVersion) {
+              const perm = await isPermissionGranted();
+              if (!perm) await requestPermission();
+              try {
+                sendNotification({
+                  title: 'SimplyMC',
+                  body: 'Hello Tauri!',
+                });
+              }
+              catch (e) {
+                console.error(e);
+              }
+            }
+          }} class="group transition ease-in-out hover:bg-gray-900 hover:text-white px-4 py-2 rounded-lg items-center hidden sm:flex">
             v{version} {tauriVersion && `(${tauriVersion})`}
           </button>
           <LangPicker />

@@ -16,6 +16,9 @@ devDependencies:
   '@tauri-apps/plugin-app':
     specifier: github:tauri-apps/tauri-plugin-app#v2
     version: github.com/tauri-apps/tauri-plugin-app/31d94f18e1350af9f00cbf04baf9ce32c327bdf4
+  '@tauri-apps/plugin-notification':
+    specifier: github:tauri-apps/tauri-plugin-notification#v2
+    version: github.com/tauri-apps/tauri-plugin-notification/cef11e81fd6913244cf94e814b6b770e522f82e3
   '@tauri-apps/plugin-window':
     specifier: github:tauri-apps/tauri-plugin-window#v2
     version: github.com/tauri-apps/tauri-plugin-window/e490c0cff05ffb7ce8056a353e23c11129b10606
@@ -4385,6 +4388,14 @@ packages:
   github.com/tauri-apps/tauri-plugin-app/31d94f18e1350af9f00cbf04baf9ce32c327bdf4:
     resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-app/tar.gz/31d94f18e1350af9f00cbf04baf9ce32c327bdf4}
     name: '@tauri-apps/plugin-app'
+    version: 2.0.0-alpha.0
+    dependencies:
+      '@tauri-apps/api': 2.0.0-alpha.4
+    dev: true
+
+  github.com/tauri-apps/tauri-plugin-notification/cef11e81fd6913244cf94e814b6b770e522f82e3:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-notification/tar.gz/cef11e81fd6913244cf94e814b6b770e522f82e3}
+    name: '@tauri-apps/plugin-notification'
     version: 2.0.0-alpha.0
     dependencies:
       '@tauri-apps/api': 2.0.0-alpha.4

@@ -30,6 +30,7 @@ pub fn run() {
         _ => {}
       }
     })
+    .plugin(tauri_plugin_notification::init())
     .plugin(tauri_plugin_window::init())
     .plugin(tauri_plugin_window_state::Builder::default().build())
     .plugin(tauri_plugin_app::init())

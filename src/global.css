@@ -32,11 +32,14 @@
 }
 
 html {
-  overflow: overlay;
   background-color: hsl(0deg, 0%, 5%);
   font-family: MinecraftRegular;
-  height: 100%;
-  border: hsl(0deg, 0%, 10%) 1px solid;
+}
+
+main {
+  overflow: auto;
+  height: calc(100lvh - 68px);
+  margin-top: 68px;
 }
 
 .font-bold {
@@ -71,10 +74,6 @@ html {
   appearance: none;
   -webkit-appearance: none;
   width: 8px;
-}
-*::-webkit-scrollbar-track {
-  background-color: #00000000;
-  border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb {
   background-color: #ffffff20;
