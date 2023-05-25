@@ -32,14 +32,11 @@
 }
 
 html {
+  overflow: overlay;
   background-color: hsl(0deg, 0%, 5%);
   font-family: MinecraftRegular;
-}
-
-main {
-  overflow: auto;
-  height: calc(100lvh - 68px);
-  margin-top: 68px;
+  height: 100%;
+  border: hsl(0deg, 0%, 10%) 1px solid;
 }
 
 .font-bold {
@@ -74,6 +71,10 @@ main {
   appearance: none;
   -webkit-appearance: none;
   width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background-color: #00000000;
+  border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb {
   background-color: #ffffff20;
@@ -119,4 +120,14 @@ main {
     transform: translateY(-30px);
     scale: 0.95;
   }
+}
+
+.Scp {
+  display: flex;
+  height: 170px !important;
+  width: 170px !important;
+  padding: 10px !important;
+  border-radius: 0.375rem;
+  border: hsl(0, 27%, 76%);
+  border-width: 1px;
 }
