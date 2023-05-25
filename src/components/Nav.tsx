@@ -20,9 +20,6 @@ import LoadingIcon from './icons/LoadingIcon';
 
 import { appWindow } from '@tauri-apps/plugin-window';
 
-import { check } from '@tauri-apps/plugin-updater';
-import { relaunch } from '@tauri-apps/plugin-process';
-
 export default component$(({ tauriVersion }: any) => {
   const ctx = useSpeakContext();
   const t = useTranslate();
@@ -122,15 +119,6 @@ export default component$(({ tauriVersion }: any) => {
             <Menu width="24" />
           </button>
           { tauriVersion && <>
-            <button title="Update" class="transition ease-in-out hover:bg-gray-900 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={async () => {
-              const update = await check();
-              console.log(update.response);
-              if (update) await update.downloadAndInstall();
-              else return;
-              await relaunch();
-            }}>
-              <DownloadOutline width="24" />
-            </button>
             <button title="Minimize" class="transition ease-in-out hover:bg-gray-900 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
               appWindow.minimize();
             }}>

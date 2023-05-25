@@ -10,14 +10,6 @@
     "productName": "SimplyMC",
     "version": "0.3.0"
   },
-  "plugins": {
-    "updater": {
-      "active": true,
-      "endpoints": [
-        "https://github.com/LuminescentDev/SimplyMC/releases/latest/download/latest.json"
-      ]
-    }
-  },
   "tauri": {
     "bundle": {
       "active": true,

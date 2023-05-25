@@ -24,8 +24,6 @@ tauri = { version = "2.0.0-alpha.9", features = [] }
 tauri-plugin-window = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 tauri-plugin-notification = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
-tauri-plugin-process = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
-tauri-plugin-updater = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 tauri-plugin-app = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v2" }
 
 [features]
