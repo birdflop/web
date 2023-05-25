@@ -18,10 +18,10 @@ export default component$(() => {
     catch (e) { tauriVersion.value = ''; }
   });
 
-  return (
+  return <>
+    <Nav tauriVersion={tauriVersion.value} />
     <main>
-      <Nav tauriVersion={tauriVersion.value} />
-      <section class="pt-16">
+      <section>
         <Slot />
       </section>
       {(!tauriVersion.value && !cookies.value) &&
@@ -41,7 +41,7 @@ export default component$(() => {
         </div>
       }
     </main>
-  );
+  </>;
 });
 
 export const onRequest: RequestHandler = ({ request, locale }) => {

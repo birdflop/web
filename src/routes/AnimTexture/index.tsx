@@ -29,7 +29,7 @@ export default component$(() => {
   }, { strategy: 'document-idle' });
 
   return (
-    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
       <Speak assets={['animtexture']}>
         <div class="my-10 min-h-[60px] w-full">
           <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">

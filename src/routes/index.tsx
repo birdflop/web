@@ -24,7 +24,7 @@ export default component$(() => {
   }, { strategy: 'document-idle' });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-80px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
       <Speak assets={['home']}>
         <div class="text-center justify-center">
           <div id="noise" class="flex relative justify-center align-center mb-10">
