@@ -25,19 +25,6 @@ export default async function analyzeProfile(id: string) {
   }
 
   const platform = sampler.metadata.platform.name;
-  const notSupportedPlatforms = [
-    { platform: 'Forge', message: 'Forge is not supported.' },
-    { platform: 'Fabric', message: 'Fabric is not supported.' },
-    { platform: 'Magma', message: 'Magma is not supported.' },
-    { platform: 'Sponge', message: 'Sponge is not supported.' },
-    { platform: 'Glowstone', message: 'Glowstone is not supported.' },
-  ];
-
-  for (const unsupported of notSupportedPlatforms) {
-    if (platform === unsupported.platform) {
-      return [{ name: `❌ ${unsupported.platform}`, value: unsupported.message }];
-    }
-  }
 
   let version = sampler.metadata.platform.version;
 
@@ -83,7 +70,7 @@ export default async function analyzeProfile(id: string) {
     return [
       {
         name: '❌ Processing Error',
-        value: `SimplyMC is unable to process this spark profile. It appears that the platform is not supported. Please provide a screenshot to the developers for further assistance. Platform: ${platform}`,
+        value: `SimplyMC is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
       },
     ];
   }
