@@ -43,3 +43,4 @@ lerna-debug.log*
 
 # Cloudflare
 functions/**/*.js
+pnpm-lock.yaml

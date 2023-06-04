@@ -24,6 +24,8 @@ export default async function analyzeProfile(id: string) {
     return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this spark profile. Please use an alternative spark profile.' }];
   }
 
+  const platform = sampler.metadata.platform.name;
+
   let version = sampler.metadata.platform.version;
 
   if (version.endsWith('(MC: 1.17)')) version = version.replace('(MC: 1.17)', '(MC: 1.17.0)');
@@ -63,7 +65,16 @@ export default async function analyzeProfile(id: string) {
   const fields: Field[] = [];
 
   // ghetto version check
-  if (version.split('(MC: ')[1].split(')')[0] != latest) {
+  const mcversion = version.split('(MC: ')[1];
+  if (mcversion == undefined) {
+    return [
+      {
+        name: '❌ Processing Error',
+        value: `SimplyMC is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
+      },
+    ];
+  }
+  if (mcversion.split(')')[0] != latest) {
     version = version.replace('git-', '').replace('MC: ', '');
     fields.push({ name: '❌ Outdated', value: `You are using \`${version}\`. Update to \`${latest}\`.`, buttons: [{ text: 'Paper', url: 'https://papermc.io' }, { text: 'Pufferfish', url: 'https://ci.pufferfish.host/job/Pufferfish-1.19/' }, { text: 'Purpur', url: 'https://purpurmc.org' }] });
   }
