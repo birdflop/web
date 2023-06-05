@@ -95,9 +95,7 @@ export default async function analyzeTimings(id: string) {
     const flaglist = flags.split(' ');
     flaglist.forEach((flag: string) => {
       if (flag.startsWith('-Xmx')) {
-        let max_mem = flag.split('-Xmx')[1];
-        max_mem = max_mem.replace('G', '000');
-        max_mem = max_mem.replace('M', '');
+        let max_mem = flag.split('-Xmx')[1].toLocaleLowerCase();
         max_mem = max_mem.replace('g', '000');
         max_mem = max_mem.replace('m', '');
         if (parseInt(max_mem) < 10000) fields.push({ name: '❌ Low Memory', value: 'ZGC is only good with a lot of memory.', buttons: [{ text: 'Learn More', url: 'https://developers.redhat.com/articles/2021/11/02/how-choose-best-java-garbage-collector#z_garbage_collector__zgc_' }] });
@@ -113,9 +111,7 @@ export default async function analyzeTimings(id: string) {
       const flaglist = flags.split(' ');
       flaglist.forEach((flag: string) => {
         if (flag.startsWith('-Xmx')) {
-          flag = flag.split('-Xmx')[1];
-          flag = flag.replace('G', '000');
-          flag = flag.replace('M', '');
+          flag = flag.split('-Xmx')[1].toLocaleLowerCase();
           flag = flag.replace('g', '000');
           flag = flag.replace('m', '');
           max_mem = parseInt(flag);
@@ -136,9 +132,7 @@ export default async function analyzeTimings(id: string) {
         let min_mem = 0;
         flaglist.forEach((flag: string) => {
           if (flag.startsWith('-Xms')) {
-            flag = flag.split('-Xms')[1];
-            flag = flag.replace('G', '000');
-            flag = flag.replace('M', '');
+            flag = flag.split('-Xms')[1].toLocaleLowerCase();
             flag = flag.replace('g', '000');
             flag = flag.replace('m', '');
             min_mem = parseInt(flag);
