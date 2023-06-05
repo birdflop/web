@@ -3,6 +3,10 @@
         "title": "Politica de privacidade para <span class=\"text-purple-500\">SimplyMC</span>",
         "1": "A privacidade dos nossos visitantes do SimplyMC é importante para nós",
         "2": "Na SimplyMC, reconhecemos que a sua privacidade e da sua informação pessoal é importante. Aqui está uma lista da informação que recolhemos quando visita o SimplyMC, e como asseguramos a sua segurança. Nunca venderemos a informação a terceiros.",
-        "3": "Cookies"
+        "3": "Cookies",
+        "4": "We do use cookies to store information, such as your personal preferences when you visit our site. This could include only showing you a popup once in your visit, or the ability to login to some of our features, such as forums.",
+        "5": "Telemetry Data",
+        "6": "In order to improve our services, we collect anonymous telemetry data with the <a href=\"https://clarity.microsoft.com/\" class=\"text-blue-400\">Microsoft Clarity</a> tool. This data is used to improve our services and is not sold to third parties. to opt out, <a href=\"/Privacy/optout\" class=\"text-blue-400\">click here</a>.",
+        "optedout": "You have opted out of telemetry data collection for the next 30 days."
     }
 }

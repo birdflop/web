@@ -7,7 +7,9 @@ import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
 import { getVersion } from '@tauri-apps/plugin-app';
 
-export const useCookies = routeLoader$(({ cookie }) => cookie.get('cookies')?.value);
+export const useCookies = routeLoader$(({ cookie }) => {
+  return { cookies: cookie.get('cookies')?.value, telemetry: cookie.get('telemetry')?.value };
+});
 
 export default component$(() => {
   const cookies = useCookies();
@@ -16,17 +18,17 @@ export default component$(() => {
   useVisibleTask$(async () => {
     try { tauriVersion.value = await getVersion(); }
     catch (e) { tauriVersion.value = ''; }
-  });
 
-  useVisibleTask$(() => {
-    (window as any).clarity = (window as any).clarity || function(...args: any) {
-      ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
-    };
-    const t = document.createElement('script');
-    t.async = true;
-    t.src = 'https://www.clarity.ms/tag/hf0q6m860a';
-    const y = document.getElementsByTagName('script')[0];
-    y.parentNode!.insertBefore(t, y);
+    if (!tauriVersion.value && cookies.value.telemetry != 'false') {
+      (window as any).clarity = (window as any).clarity || function(...args: any) {
+        ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
+      };
+      const t = document.createElement('script');
+      t.async = true;
+      t.src = 'https://www.clarity.ms/tag/hf0q6m860a';
+      const y = document.getElementsByTagName('script')[0];
+      y.parentNode!.insertBefore(t, y);
+    }
   }, { strategy: 'document-idle' });
 
   return <>
@@ -35,7 +37,7 @@ export default component$(() => {
       <section>
         <Slot />
       </section>
-      {(!tauriVersion.value && !cookies.value) &&
+      {(!tauriVersion.value && !cookies.value.cookies) &&
         <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
           <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
             We use cookies to automatically save and load your preferences.

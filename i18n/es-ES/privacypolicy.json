@@ -4,6 +4,9 @@
         "1": "La privacidad de nuestros visitantes a SimplyMC es importante para nosotros. (Esta Política de privacidad se tradujo utilizando IA. Si desea verificar esta traducción, comuníquese con nosotros en <a href=\"https://discord.simplymc.art\" class=\"text-blue-400\">Discord</a> o <a href=\"https://github.com/LuminescentDev/SimplyMC\" class=\"text-blue-400\">GitHub</a>.)",
         "2": "En SimplyMC, reconocemos que la privacidad de sus datos personales es importante. Aquí se encuentra información sobre qué tipos de información personal recibimos y recopilamos cuando utiliza y visita SimplyMC, y cómo protegemos su información. Nunca vendemos su información personal a terceros.",
         "3": "Cookies",
-        "4": "Utilizamos cookies para almacenar información, como sus preferencias personales cuando visita nuestro sitio. Esto podría incluir sólo mostrarle una ventana emergente una vez en su visita, o la capacidad de iniciar sesión en algunas de nuestras características, como foros."
+        "4": "Utilizamos cookies para almacenar información, como sus preferencias personales cuando visita nuestro sitio. Esto podría incluir sólo mostrarle una ventana emergente una vez en su visita, o la capacidad de iniciar sesión en algunas de nuestras características, como foros.",
+        "5": "Telemetry Data",
+        "6": "In order to improve our services, we collect anonymous telemetry data with the <a href=\"https://clarity.microsoft.com/\" class=\"text-blue-400\">Microsoft Clarity</a> tool. This data is used to improve our services and is not sold to third parties. to opt out, <a href=\"/Privacy/optout\" class=\"text-blue-400\">click here</a>.",
+        "optedout": "You have opted out of telemetry data collection for the next 30 days."
     }
 }
