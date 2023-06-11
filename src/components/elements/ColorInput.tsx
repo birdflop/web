@@ -3,6 +3,24 @@ import { component$, Slot, useVisibleTask$ } from '@builder.io/qwik';
 import ColorPicker from 'simple-color-picker';
 import { RawTextInput } from './TextInput';
 
+// COLOR INPUT
+// ====================
+// This is a custom input component that uses a color picker.
+// It requires the following CSS:
+// .Scp {
+//   display: flex;
+//   height: 170px !important;
+//   width: 170px !important;
+//   padding: 10px !important;
+//   border-radius: 0.375rem;
+//   border: hsl(0, 27%, 76%);
+//   border-width: 1px;
+// }
+// ====================
+// It also requires the parent element to have position: relative.
+// This is because the color picker is absolutely positioned.
+// ====================
+
 export default component$(({ onInput$, ...props }: any) => {
   useVisibleTask$(() => {
     const picker = new ColorPicker({

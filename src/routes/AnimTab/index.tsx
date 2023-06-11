@@ -209,7 +209,7 @@ export default component$(() => {
           </div>
 
           <div class="grid sm:grid-cols-4 gap-2">
-            <div class="sm:pr-4 hidden sm:flex flex-col gap-3" id="colors">
+            <div class="sm:pr-4 hidden sm:flex flex-col gap-3 relative" id="colors">
               <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
                 {t('color.colorAmount@@Color Amount')} - {store.colors.length}
               </NumberInput>

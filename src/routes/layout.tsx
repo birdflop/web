@@ -1,25 +1,31 @@
-import { component$, Slot, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, Slot, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { routeLoader$ } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
 import { getVersion } from '@tauri-apps/plugin-app';
 
-export const useCookies = routeLoader$(({ cookie }) => {
-  return { cookies: cookie.get('cookies')?.value, telemetry: cookie.get('telemetry')?.value };
-});
-
 export default component$(() => {
-  const cookies = useCookies();
+  const store = useStore({
+    cookies: 'true',
+    telemetry: 'false',
+  });
 
   const tauriVersion = useSignal('');
   useVisibleTask$(async () => {
+    // convert cookies to json
+    const cookieJSON: any = document.cookie.split(';').reduce((res, c) => {
+      const [key, val] = c.trim().split('=').map(decodeURIComponent);
+      return Object.assign(res, { [key]: val });
+    }, {});
+    if (!cookieJSON['cookies']) store.cookies = 'false';
+    if (!cookieJSON['telemetry']) store.telemetry = 'true';
+
     try { tauriVersion.value = await getVersion(); }
     catch (e) { tauriVersion.value = ''; }
 
-    if (!tauriVersion.value && cookies.value.telemetry != 'false') {
+    if (!tauriVersion.value && store.telemetry != 'false') {
       (window as any).clarity = (window as any).clarity || function(...args: any) {
         ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
       };
@@ -37,7 +43,7 @@ export default component$(() => {
       <section>
         <Slot />
       </section>
-      {(!tauriVersion.value && !cookies.value.cookies) &&
+      {(!tauriVersion.value && store.cookies != 'true') &&
         <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
           <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
             We use cookies to automatically save and load your preferences.
