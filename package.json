@@ -29,8 +29,8 @@
   "devDependencies": {
     "@builder.io/qwik": "1.2.6",
     "@builder.io/qwik-city": "1.2.6",
-    "@tauri-apps/api": "2.0.0-alpha.4",
-    "@tauri-apps/cli": "2.0.0-alpha.9",
+    "@tauri-apps/api": "2.0.0-alpha.5",
+    "@tauri-apps/cli": "2.0.0-alpha.10",
     "@tauri-apps/plugin-app": "github:tauri-apps/tauri-plugin-app#v2",
     "@tauri-apps/plugin-notification": "github:tauri-apps/tauri-plugin-notification#v2",
     "@tauri-apps/plugin-window": "github:tauri-apps/tauri-plugin-window#v2",
