@@ -1,6 +1,6 @@
 {
   "name": "simplymc",
-  "version": "5.8.6",
+  "version": "5.8.7",
   "description": "The official website for the minecraft multitool simplymc.art",
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "6.3.0",
     "@typescript-eslint/parser": "6.3.0",
     "autoprefixer": "10.4.14",
-    "eslint": "8.46.0",
+    "eslint": "8.47.0",
     "eslint-plugin-qwik": "1.2.6",
     "postcss": "^8.4.27",
     "qwik-ionicons": "^1.0.5",
