@@ -18,7 +18,7 @@ import { version } from '~/../package.json';
 import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
-import { appWindow } from '@tauri-apps/plugin-window';
+import { Window } from '@tauri-apps/plugin-window';
 import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
 
 export default component$(({ tauriVersion }: any) => {
@@ -135,17 +135,17 @@ export default component$(({ tauriVersion }: any) => {
           </button>
           { tauriVersion && <>
             <button title="Minimize" class="transition ease-in-out hover:bg-gray-900 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
-              appWindow.minimize();
+              Window.getCurrent().minimize();
             }}>
               <RemoveOutline width="24" />
             </button>
             <button title="Maximize" class="transition ease-in-out hover:bg-gray-900 hover:text-white p-2 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
-              appWindow.toggleMaximize();
+              Window.getCurrent().toggleMaximize();
             }}>
               <SquareOutline width="20" />
             </button>
             <button title="Close" class="transition ease-in-out hover:bg-gray-900 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
-              appWindow.close();
+              Window.getCurrent().close();
             }}>
               <CloseOutline width="24" />
             </button>
