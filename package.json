@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "6.4.1",
     "@typescript-eslint/parser": "6.4.1",
     "autoprefixer": "10.4.15",
-    "eslint": "8.48.0",
+    "eslint": "8.45.0",
     "eslint-plugin-qwik": "1.2.9",
     "postcss": "^8.4.28",
     "qwik-ionicons": "^1.0.5",
