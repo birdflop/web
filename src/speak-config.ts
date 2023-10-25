@@ -19,6 +19,7 @@ export const config: SpeakConfig = {
     'presettools',
     'ramcalculator',
     'app',
+    'flags',
   ],
 };
 

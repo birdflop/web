@@ -28,9 +28,9 @@ export default component$(() => {
       <Speak assets={['home']}>
         <div class="text-center justify-center">
           <div id="noise" class="flex relative justify-center align-center mb-10">
-            <div class="absolute top-24 w-32 h-32 sm:w-64 sm:h-64 bg-pink-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl left-[45%]"></div>
-            <div class="absolute top-24 w-32 h-32 sm:w-64 sm:h-64 bg-luminescent-600 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl right-[50%] animation-delay-2000"></div>
-            <div class="absolute bottom-32 w-32 h-32 sm:w-64 sm:h-64 bg-violet-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-2xl left-[30%] animation-delay-4000"></div>
+            <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-pink-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl"></div>
+            <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-luminescent-600 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl animation-delay-5"></div>
+            <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-violet-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl animation-delay-10"></div>
             <div class="z-10">
               <picture>
                 <source srcSet={iconAVIF} type="image/avif" />

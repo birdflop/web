@@ -30,44 +30,47 @@ export default component$(({ tauriVersion }: any) => {
       <Speak assets={['app']}>
         <MainNav>
           <Dropdown name={it('nav.gradients@@Gradients', ctx)} extraClass="hidden md:flex gap-3">
-            <NavButton href="/Gradients">
+            <NavButton href="/gradients">
               {t('nav.hexGradient@@Hex Gradients')}
             </NavButton>
-            <NavButton href="/AnimTab">
+            <NavButton href="/animtab">
               {t('nav.animatedTAB@@Animated TAB')}
             </NavButton>
-            <NavButton href="/AnimPreview">
+            <NavButton href="/animpreview">
               {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
             </NavButton>
           </Dropdown>
           <Dropdown name={it('nav.analysis@@Analysis', ctx)} extraClass="hidden lg:flex gap-3">
-            <NavButton href="/SparkProfile">
+            <NavButton href="/sparkprofile">
               {t('nav.sparkProfile@@Spark Profile')}
             </NavButton>
-            <NavButton href="/PaperTimings">
+            <NavButton href="/papertimings">
               {t('nav.paperTimings@@Paper Timings')}
             </NavButton>
           </Dropdown>
+          <NavButton href="/flags">
+            {t('nav.flags@@Flags')}
+          </NavButton>
           <Dropdown name={it('nav.more@@More', ctx)} extraClass="hidden sm:flex gap-3">
-            <NavButton href="/AnimTexture">
+            <NavButton href="/animtexture">
               {t('nav.animatedTextures@@Animated Textures')}
             </NavButton>
-            <NavButton href="/RamCalc">
+            <NavButton href="/ramcalc">
               {t('nav.ramCalculator@@RAM Calculator')}
             </NavButton>
-            <NavButton href="/ColorStrip">
+            <NavButton href="/colorstrip">
               {t('nav.colorCodeStripper@@Color Code Stripper')}
             </NavButton>
-            <NavButton href="/PresetTools">
+            <NavButton href="/presettools">
               {t('nav.presetTools@@Preset Tools')}
             </NavButton>
-            <NavButton href="/Privacy" extraClass="flex xl:hidden">
+            <NavButton href="/privacy" extraClass="flex xl:hidden">
               {t('nav.privacyPolicy@@Privacy Policy')}
             </NavButton>
-            <NavButton href="/SparkProfile" extraClass="flex lg:hidden">
+            <NavButton href="/sparkprofile" extraClass="flex lg:hidden">
               {t('nav.sparkProfile@@Spark Profile')}
             </NavButton>
-            <NavButton href="/PaperTimings" extraClass="flex lg:hidden">
+            <NavButton href="/papertimings" extraClass="flex lg:hidden">
               {t('nav.paperTimings@@Paper Timings')}
             </NavButton>
             <div class="flex lg:hidden justify-evenly">
@@ -89,7 +92,7 @@ export default component$(({ tauriVersion }: any) => {
               </NavButton>
             </div>
           </Dropdown>
-          <NavButton href="/Privacy" extraClass="hidden xl:flex gap-3">
+          <NavButton href="/privacy" extraClass="hidden xl:flex gap-3">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
           <button onClick$={async () => {
@@ -152,31 +155,34 @@ export default component$(({ tauriVersion }: any) => {
           </> }
         </MainNav>
         <MobileNav>
-          <NavButton mobile href="/Gradients">
+          <NavButton mobile href="/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
-          <NavButton mobile href="/AnimTab">
+          <NavButton mobile href="/animtab">
             {t('nav.animatedTAB@@Animated TAB')}
           </NavButton>
-          <NavButton mobile href="/AnimPreview">
+          <NavButton mobile href="/animpreview">
             {t('nav.tabAnimationPreview@@TAB Animation Previewer')}
           </NavButton>
-          <NavButton mobile href="/SparkProfile">
+          <NavButton mobile href="/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
-          <NavButton mobile href="/PaperTimings">
+          <NavButton mobile href="/papertimings">
             {t('nav.paperTimings@@Paper Timings')}
           </NavButton>
-          <NavButton mobile href="/AnimTexture">
+          <NavButton mobile href="/flags">
+            {t('nav.flags@@Flags')}
+          </NavButton>
+          <NavButton mobile href="/animtexture">
             {t('nav.animatedTextures@@Animated Textures')}
           </NavButton>
-          <NavButton mobile href="/RamCalc">
+          <NavButton mobile href="/ramcalc">
             {t('nav.ramCalculator@@RAM Caolculator')}
           </NavButton>
-          <NavButton mobile href="/ColorStrip">
+          <NavButton mobile href="/colorstrip">
             {t('nav.colorCodeStripper@@Color Code Stripper')}
           </NavButton>
-          <NavButton mobile href="/Privacy">
+          <NavButton mobile href="/privacy">
             {t('nav.privacyPolicy@@Privacy Policy')}
           </NavButton>
           <div class="flex justify-evenly">

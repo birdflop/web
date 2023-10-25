@@ -1,8 +1,11 @@
 import { component$, Slot } from '@builder.io/qwik';
 
-export default component$(({ nolabel, ...props }: any) => {
+export default component$(({ nolabel, center, ...props }: any) => {
   return (
-    <div class="flex gap-3 items-center">
+    <div class={{
+      'flex gap-3 items-center': true,
+      'justify-center': center,
+    }}>
       <label class="inline-flex relative items-center cursor-pointer">
         <input type="checkbox" {...props} class="sr-only peer" />
         <div class={{

@@ -1,0 +1,85 @@
+{
+  "flags": {
+    "title": "Flags Generator",
+    "subtitle": "A simple script generator to start your Minecraft servers with optimal flags.",
+    "software": {
+      "label": "Software",
+      "description": "The software in which your Minecraft server will run on."
+    },
+    "config": {
+      "label": "Config",
+      "description": "The various additions and modifications that can be made to your start script."
+    },
+    "result": "Result",
+    "environments": {
+      "label": "Operating System",
+      "description": "The operating system that the server runs on.",
+      "linux": {
+        "label": "Linux",
+        "description": "The most common operating system used for servers"
+      },
+      "windows": {
+        "label": "Windows",
+        "description": "The most common operating system used for home desktops"
+      },
+      "macos": {
+        "label": "macOS",
+        "description": "Apple's operating system"
+      },
+      "pterodactyl": {
+        "label": "Pterodactyl",
+        "description": "Web-based server management platform used by most hosts"
+      },
+      "command": {
+        "label": "Command",
+        "description": "Only the java command required to start the server"
+      }
+    },
+    "serverType": {
+      "paper": {
+        "label": "Paper",
+        "description": "Bukkit-based plugin loader"
+      },
+      "purpur": {
+        "label": "Purpur",
+        "description": "Bukkit-based plugin loader but more"
+      },
+      "velocity": {
+        "label": "Velocity",
+        "description": "Proxy with plugin loader"
+      },
+      "forge": {
+        "label": "Forge",
+        "description": "Mod loader"
+      },
+      "fabric": {
+        "label": "Fabric",
+        "description": "Better mod loader"
+      },
+      "waterfall": {
+        "label": "Waterfall",
+        "description": "Deprecated Proxy"
+      }
+    },
+    "gui": {
+      "label": "Use GUI",
+      "description": "Whether to display the built-in server management GUI."
+    },
+    "autoRestart": {
+        "label": "Auto-restart",
+        "description": "Whether to automatically restart after it is stopped."
+    },
+    "variables": {
+        "label": "Use Variables",
+        "description": "Whether to use environment variables within the script to define memory, file name, and other commonly changed elements."
+    },
+    "fileName": {
+      "label": "File Name",
+      "description": "The name of the file that will be used to start your server."
+    },
+    "script": {
+        "label": "Script",
+        "description": "The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!"
+    }
+  }
+}

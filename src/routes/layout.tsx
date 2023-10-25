@@ -49,7 +49,7 @@ export default component$(() => {
             We use cookies to automatically save and load your preferences.
           </span>
           <div class="flex items-center gap-2">
-            <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/Privacy">Privacy Policy</a>
+            <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/privacy">Privacy Policy</a>
             <Button color="primary" onClick$={async () => {
               document.cookie = 'cookies=true; path=/';
               document.getElementById('cookieprompt')!.remove();
