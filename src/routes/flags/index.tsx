@@ -2,9 +2,10 @@ import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
 
-import { useTranslate, Speak } from 'qwik-speak';
+import { useTranslate, Speak, inlineTranslate as it, useSpeakContext } from 'qwik-speak';
 import Card, { CardHeader } from '~/components/elements/Card';
 import OutputField from '~/components/elements/OutputField';
+import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 import Toggle from '~/components/elements/Toggle';
 import Pterodactyl from '~/components/icons/Pterodactyl';
@@ -14,8 +15,21 @@ import Paper from '~/components/icons/paper';
 import Purpur from '~/components/icons/purpur';
 import Velocity from '~/components/icons/velocity';
 import Waterfall from '~/components/icons/waterfall';
+
+const flagTypes = {
+  'Aikars': 'Aikar\'s Flags',
+  'benchmarkedG1GC': 'Benchmarked (G1GC)',
+  'benchmarkedZGC': 'Benchmarked (ZGC)',
+  'benchmarkedShenandoah': 'Benchmarked (Shenandoah)',
+  'hillttys': 'hilltty\'s Flags',
+  'obyduxs': 'Obydux\'s Flags',
+  'etils': 'Etil\'s Flags',
+  'proxy': 'Proxy',
+};
+
 export default component$(() => {
   const t = useTranslate();
+  const ctx = useSpeakContext();
 
   const store = useStore({
     step: 1,
@@ -25,6 +39,7 @@ export default component$(() => {
     variables: false,
     autorestarts: false,
     filename: '',
+    flags: 'aikars',
   }, { deep: true });
 
   return (
@@ -333,6 +348,16 @@ export default component$(() => {
                   </CardHeader>
                   {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                 </TextInput>
+                <SelectInput id="preset" label={it('flags.flags.label.colorPreset@@Color Preset', ctx)} onChange$={(event: any) => { store.flags = event.target!.value; }} >
+                  <option value={'none'}>
+                    None
+                  </option>
+                  {Object.keys(flagTypes).map((flag: string) => (
+                    <option key={flag} value={flag}>
+                      {flagTypes[flag as keyof typeof flagTypes] }
+                    </option>
+                  ))}
+                </SelectInput>
                 <input type="range" class="w-full" min="1" max="32" step="1" />
               </div>
             </div>
@@ -341,7 +366,7 @@ export default component$(() => {
             store.step == 4 &&
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               <div>
-                <OutputField extraClass={ 'h-60' } id="Output">
+                <OutputField extraClass={'h-60'} id="Output">
                   <h1 class="font-bold text-xl sm:text-3xl mb-2">
                     {t('flags.script.label@@Script')}
                   </h1>
