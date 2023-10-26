@@ -15,9 +15,11 @@ import Paper from '~/components/icons/paper';
 import Purpur from '~/components/icons/purpur';
 import Velocity from '~/components/icons/velocity';
 import Waterfall from '~/components/icons/waterfall';
+import { generateResult } from '~/components/util/flags/generateResult';
 
 const flagTypes = {
-  'Aikars': 'Aikar\'s Flags',
+  'none': 'none',
+  'aikars': 'Aikar\'s Flags',
   'benchmarkedG1GC': 'Benchmarked (G1GC)',
   'benchmarkedZGC': 'Benchmarked (ZGC)',
   'benchmarkedShenandoah': 'Benchmarked (Shenandoah)',
@@ -151,13 +153,19 @@ export default component$(() => {
 
   const store = useStore({
     step: 1,
-    environment: '',
-    software: '',
-    gui: false,
-    variables: false,
-    autorestarts: false,
-    filename: '',
-    flags: 'aikars',
+    parsed: {
+      operatingSystem: '',
+      serverType: '',
+      gui: false,
+      variables: false,
+      autoRestart: false,
+      extraFlags: [],
+      fileName: '',
+      flags: 'aikars',
+      withResult: true,
+      withFlags: false,
+      memory: 0,
+    },
   }, { deep: true });
 
   return (
@@ -175,22 +183,22 @@ export default component$(() => {
               <button class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 1;
               }}>
-                {environmentOptions.find(option => option.environment === store.environment)?.tabIcon
+                {environmentOptions.find(option => option.environment === store.parsed.operatingSystem)?.tabIcon
                   ?? <CubeOutline class="w-5 h-5" />}
                 {t('flags.environment.label@@Environment')}
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.environment == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.operatingSystem == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 2;
               }}>
-                {softwareOptions.find(option => option.software === store.software)?.tabIcon
+                {softwareOptions.find(option => option.software === store.parsed.serverType)?.tabIcon
                   ?? <TerminalOutline class="w-5 h-5" />}
                 {t('flags.software.label@@Software')}
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.software == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.serverType == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 3;
               }}>
                 <CodeOutline class="w-5 h-5" />
@@ -198,7 +206,7 @@ export default component$(() => {
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.software == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.serverType == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 4;
               }}>
                 <CheckmarkCircleOutline class="w-5 h-5" />
@@ -231,7 +239,7 @@ export default component$(() => {
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {environmentOptions.map((option, index) => (
                   <Card color={option.color} onClick$={() => {
-                    store.environment = option.environment;
+                    store.parsed.operatingSystem = option.environment;
                     store.step = 2;
                   }} key={index}>
                     <CardHeader>
@@ -257,7 +265,7 @@ export default component$(() => {
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {softwareOptions.map((option, index) => (
                   <Card color={option.color} onClick$={() => {
-                    store.software = option.software;
+                    store.parsed.serverType = option.software;
                     store.step = 3;
                   }} key={index}>
                     <CardHeader>
@@ -303,30 +311,27 @@ export default component$(() => {
                 </div>
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
-                <TextInput id="input" value={store.filename} placeholder="server.jar" onInput$={(event: any) => { store.filename = event.target!.value; }}>
+                <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; }}>
                   <CardHeader>
                     {t('flags.fileName.label@@File Name')}
                   </CardHeader>
                   {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                 </TextInput>
-                <SelectInput id="preset" label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.flags = event.target!.value; }} >
-                  <option value={'none'}>
-                    None
-                  </option>
+                <SelectInput id="preset" value={store.parsed.flags} label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.parsed.flags = event.target!.value; }} >
                   {Object.keys(flagTypes).map((flag: string) => (
                     <option key={flag} value={flag}>
                       {flagTypes[flag as keyof typeof flagTypes] }
                     </option>
                   ))}
                 </SelectInput>
-                <input type="range" class="w-full" min="1" max="32" step="1" />
+                <input type="range" class="w-full" min="1" max="32" step="1" onChange$={(event: any) => { store.parsed.memory = event.target!.value; }} />
               </div>
             </div>
           }
           {
             store.step == 4 &&
               <div>
-                <OutputField extraClass={'h-60'} id="Output">
+                <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
                   <h1 class="font-bold text-xl sm:text-3xl mb-2">
                     {t('flags.script.label@@Script')}
                   </h1>

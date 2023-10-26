@@ -1,4 +1,3 @@
-import type { z, ZodType } from 'zod';
 import { extraFlags, flags } from '~/data/flags';
 import { serverType } from '~/data/environment/serverType';
 import { operatingSystem } from '~/data/environment/operatingSystem';
@@ -8,7 +7,21 @@ interface GenerateResult {
     'flags'?: string[]
 }
 
-export function generateResult(schema: ZodType, parsed: z.infer<typeof schema>): GenerateResult {
+interface schema {
+  operatingSystem: string,
+  serverType: string,
+  gui: boolean,
+  variables: boolean,
+  autoRestart: boolean,
+  extraFlags: string[],
+  fileName: string,
+  flags: string,
+  withResult: boolean,
+  withFlags: boolean,
+  memory: number,
+}
+
+export function generateResult(parsed: schema): GenerateResult {
   const selectedFlags = flags[parsed.flags];
   let generatedFlags: string[] = selectedFlags.generate(parsed);
 
