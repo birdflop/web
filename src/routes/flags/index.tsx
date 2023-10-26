@@ -45,7 +45,7 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">
       <Speak assets={['flags']}>
-        <div class="my-10 min-h-[60px]">
+        <div class="w-full my-10 min-h-[60px]">
           <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
             {t('flags.title@@Flags generator')}
           </h1>
@@ -348,7 +348,7 @@ export default component$(() => {
                   </CardHeader>
                   {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                 </TextInput>
-                <SelectInput id="preset" label={it('flags.flags.label.colorPreset@@Color Preset', ctx)} onChange$={(event: any) => { store.flags = event.target!.value; }} >
+                <SelectInput id="preset" label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.flags = event.target!.value; }} >
                   <option value={'none'}>
                     None
                   </option>
@@ -364,7 +364,6 @@ export default component$(() => {
           }
           {
             store.step == 4 &&
-            <div class="flex flex-wrap gap-3 justify-center fill-current">
               <div>
                 <OutputField extraClass={'h-60'} id="Output">
                   <h1 class="font-bold text-xl sm:text-3xl mb-2">
@@ -375,7 +374,6 @@ export default component$(() => {
                   </span>
                 </OutputField>
               </div>
-            </div>
           }
         </div>
       </Speak>
