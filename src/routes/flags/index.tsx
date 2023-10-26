@@ -31,6 +31,124 @@ export default component$(() => {
   const t = useTranslate();
   const ctx = useSpeakContext();
 
+  const environmentOptions = [
+    {
+      color: 'yellow',
+      environment: 'linux',
+      tabIcon: <LogoTux class="w-5 h-5" />,
+      cardIcon: <LogoTux class="w-10 h-10" />,
+      label: t('flags.environments.linux.label@@Linux'),
+      description: t('flags.environments.linux.description@@The most common operating system used for servers'),
+    },
+    {
+      color: 'blue',
+      environment: 'windows',
+      tabIcon: <LogoWindows class="w-5 h-5" />,
+      cardIcon: <LogoWindows class="w-10 h-10" />,
+      label: t('flags.environments.windows.label@@Windows'),
+      description: t('flags.environments.windows.description@@The most common operating system used for home desktops'),
+    },
+    {
+      color: 'gray',
+      environment: 'macos',
+      tabIcon: <LogoApple class="w-5 h-5" />,
+      cardIcon: <LogoApple class="w-10 h-10" />,
+      label: t('flags.environments.macos.label@@macOS'),
+      description: t('flags.environments.macos.description@@Apple\'s operating system'),
+    },
+    {
+      color: 'orange',
+      environment: 'pterodactyl',
+      tabIcon: <Pterodactyl extraClass="w-5 h-5" />,
+      cardIcon: <Pterodactyl extraClass="w-10 h-10" />,
+      label: t('flags.environments.pterodactyl.label@@Pterodactyl'),
+      description: t('flags.environments.pterodactyl.description@@Web-based server management platform used by most hosts'),
+    },
+    {
+      color: 'red',
+      environment: 'command',
+      tabIcon: <CafeOutline class="w-5 h-5" />,
+      cardIcon: <CafeOutline class="w-10 h-10" />,
+      label: t('flags.environments.command.label@@Command'),
+      description: t('flags.environments.command.description@@Only the Java command required to start the server'),
+    },
+  ];
+
+  const softwareOptions = [
+    {
+      color: 'gray',
+      software: 'paper',
+      tabIcon: <Paper extraClass="w-5 h-5" />,
+      cardIcon: <Paper extraClass="w-10 h-10" />,
+      label: t('flags.serverType.paper.label@@Paper'),
+      description: t('flags.serverType.paper.description@@Bukkit-based plugin loader'),
+    },
+    {
+      color: 'purple',
+      software: 'purpur',
+      tabIcon: <Purpur extraClass="w-5 h-5" />,
+      cardIcon: <Purpur extraClass="w-10 h-10" />,
+      label: t('flags.serverType.purpur.label@@Purpur'),
+      description: t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more'),
+    },
+    {
+      color: 'red',
+      software: 'forge',
+      tabIcon: <Forge extraClass="w-5 h-5" />,
+      cardIcon: <Forge extraClass="w-10 h-10" />,
+      label: t('flags.serverType.forge.label@@Forge'),
+      description: t('flags.serverType.forge.description@@Mod loader'),
+    },
+    {
+      color: 'orange',
+      software: 'fabric',
+      tabIcon: <Fabric extraClass="w-5 h-5" />,
+      cardIcon: <Fabric extraClass="w-10 h-10" />,
+      label: t('flags.serverType.fabric.label@@Fabric'),
+      description: t('flags.serverType.fabric.description@@Better mod loader'),
+    },
+    {
+      color: 'yellow',
+      software: 'velocity',
+      tabIcon: <Velocity extraClass="w-5 h-5" />,
+      cardIcon: <Velocity extraClass="w-10 h-10" />,
+      label: t('flags.serverType.velocity.label@@Velocity'),
+      description: t('flags.serverType.velocity.description@@Proxy with plugin loader'),
+    },
+    {
+      color: 'blue',
+      software: 'waterfall',
+      tabIcon: <Waterfall extraClass="w-5 h-5" />,
+      cardIcon: <Waterfall extraClass="w-10 h-10" />,
+      label: t('flags.serverType.waterfall.label@@Waterfall'),
+      description: t('flags.serverType.waterfall.description@@Deprecated proxy'),
+    },
+  ];
+
+  const configOptions = [
+    {
+      color: 'gray',
+      id: 'gui',
+      cardIcon: <TerminalOutline class="w-10 h-10" />,
+      label: t('flags.gui.label@@Use GUI'),
+      description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
+    },
+    {
+      color: 'gray',
+      id: 'variables',
+      cardIcon: <CodeWorkingOutline class="w-10 h-10" />,
+      label: t('flags.variables.label@@Use Variables'),
+      description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
+    },
+    {
+      color: 'gray',
+      id: 'autorestarts',
+      cardIcon: <RefreshCircleOutline class="w-10 h-10" />,
+      label: t('flags.autoRestart.label@@Auto-restart'),
+      description: t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.'),
+    },
+  ];
+
   const store = useStore({
     step: 1,
     environment: '',
@@ -54,34 +172,25 @@ export default component$(() => {
           </h2>
           <div class="flex">
             <div class="flex-1">
-              <button class="flex gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 1;
               }}>
-                {store.environment == '' && <CubeOutline class="w-5 h-5" />}
-                {store.environment == 'linux' && <LogoTux class="w-5 h-5" />}
-                {store.environment == 'windows' && <LogoWindows class="w-5 h-5" />}
-                {store.environment == 'macos' && <LogoApple class="w-5 h-5" />}
-                {store.environment == 'pterodactyl' && <Pterodactyl extraClass="w-5 h-5" />}
-                {store.environment == 'command' && <CafeOutline class="w-5 h-5" />}
+                {environmentOptions.find(option => option.environment === store.environment)?.tabIcon
+                  ?? <CubeOutline class="w-5 h-5" />}
                 {t('flags.environment.label@@Environment')}
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.environment == ''} class="flex gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.environment == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 2;
               }}>
-                {store.software == '' && <TerminalOutline class="w-5 h-5" />}
-                {store.software == 'paper' && <Paper extraClass="w-5 h-5" />}
-                {store.software == 'purpur' && <Purpur extraClass="w-5 h-5" />}
-                {store.software == 'forge' && <Forge extraClass="w-5 h-5" />}
-                {store.software == 'fabric' && <Fabric extraClass="w-5 h-5" />}
-                {store.software == 'velocity' && <Velocity extraClass="w-5 h-5" />}
-                {store.software == 'waterfall' && <Waterfall extraClass="w-5 h-5" />}
+                {softwareOptions.find(option => option.software === store.software)?.tabIcon
+                  ?? <TerminalOutline class="w-5 h-5" />}
                 {t('flags.software.label@@Software')}
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.software == ''} class="flex gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.software == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 3;
               }}>
                 <CodeOutline class="w-5 h-5" />
@@ -89,7 +198,7 @@ export default component$(() => {
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.software == ''} class="flex gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.software == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 4;
               }}>
                 <CheckmarkCircleOutline class="w-5 h-5" />
@@ -120,76 +229,22 @@ export default component$(() => {
                 {t('flags.enviroments.description@@The operating system that the server runs on.')}
               </h2>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
-                <Card color="yellow" onClick$={() => {
-                  store.environment = 'linux';
-                  store.step = 2;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <LogoTux class="w-10 h-10" />
-                      {t('flags.enviroment.linux.label@@Linux')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.environments.linux.description@@The most common operating system used for servers')}
-                  </p>
-                </Card>
-                <Card color="blue" onClick$={() => {
-                  store.environment = 'windows';
-                  store.step = 2;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <LogoWindows class="w-10 h-10" />
-                      {t('flags.environments.windows.label@@Windows')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.environments.windows.description@@The most common operating system used for home desktops')}
-                  </p>
-                </Card>
-                <Card color="gray" onClick$={() => {
-                  store.environment = 'macos';
-                  store.step = 2;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <LogoApple class="w-10 h-10" />
-                      {t('flags.environments.macos.label@@macOS')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.environments.macos.description@@Apple\'s operating system')}
-                  </p>
-                </Card>
-                <Card color="orange" onClick$={() => {
-                  store.environment = 'pterodactyl';
-                  store.step = 2;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Pterodactyl extraClass="w-10 w-10" />
-                      {t('flags.environments.pterodactyl.label@@Pterodactyl')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.environments.pterodactyl.description@@Web-based server management platform used by most hosts')}
-                  </p>
-                </Card>
-                <Card color="red" onClick$={() => {
-                  store.environment = 'command';
-                  store.step = 2;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <CafeOutline class="w-10 h-10" />
-                      {t('flags.environments.command.label@@Command')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.environments.command.description@@Only the java command required to start the server')}
-                  </p>
-                </Card>
+                {environmentOptions.map((option, index) => (
+                  <Card color={option.color} onClick$={() => {
+                    store.environment = option.environment;
+                    store.step = 2;
+                  }} key={index}>
+                    <CardHeader>
+                      <div class="flex flex-col items-center w-full gap-6 py-5">
+                        {option.cardIcon}
+                        {option.label}
+                      </div>
+                    </CardHeader>
+                    <p class="min-w-[16rem] text-center">
+                      {option.description}
+                    </p>
+                  </Card>
+                ))}
               </div>
             </div>
           }
@@ -200,90 +255,22 @@ export default component$(() => {
                 {t('flags.software.description@@The software in which your Minecraft server will run on.')}
               </h2>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
-                <Card color="gray" onClick$={() => {
-                  store.software = 'paper';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Paper extraClass="w-10 h-10" />
-                      {t('flags.serverType.paper.label@@Paper')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.paper.description@@Bukkit-based plugin loader')}
-                  </p>
-                </Card>
-                <Card color="purple" onClick$={() => {
-                  store.software = 'purpur';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Purpur extraClass="w-10 h-10" />
-                      {t('flags.serverType.purpur.label@@Purpur')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more')}
-                  </p>
-                </Card>
-                <Card color="red" onClick$={() => {
-                  store.software = 'forge';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Forge extraClass="w-10 h-10" />
-                      {t('flags.serverType.forge.label@@Forge')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.forge.description@@Mod loader')}
-                  </p>
-                </Card>
-                <Card color="orange" onClick$={() => {
-                  store.software = 'fabric';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Fabric extraClass="w-10 h-10" />
-                      {t('flags.serverType.fabric.label@@Fabric')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.fabric.description@@Better mod loader')}
-                  </p>
-                </Card>
-                <Card color="yellow" onClick$={() => {
-                  store.software = 'velocity';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Velocity extraClass="w-10 h-10" />
-                      {t('flags.serverType.velocity.label@@Velocity')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.velocity.description@@Proxy with plugin loader')}
-                  </p>
-                </Card>
-                <Card color="blue" onClick$={() => {
-                  store.software = 'waterfall';
-                  store.step = 3;
-                }}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      <Waterfall extraClass="w-10 h-10" />
-                      {t('flags.serverType.waterfall.label@@Waterfall')}
-                    </div>
-                  </CardHeader>
-                  <p class="min-w-[16rem] text-center">
-                    {t('flags.serverType.waterfall.description@@Deprecated proxy')}
-                  </p>
-                </Card>
+                {softwareOptions.map((option, index) => (
+                  <Card color={option.color} onClick$={() => {
+                    store.software = option.software;
+                    store.step = 3;
+                  }} key={index}>
+                    <CardHeader>
+                      <div class="flex flex-col items-center w-full gap-6 py-5">
+                        {option.cardIcon}
+                        {option.label}
+                      </div>
+                    </CardHeader>
+                    <p class="min-w-[16rem] text-center">
+                      {option.description}
+                    </p>
+                  </Card>
+                ))}
               </div>
             </div>
           }
@@ -295,50 +282,24 @@ export default component$(() => {
               </h2>
               <div>
                 <div class="flex flex-wrap gap-3 justify-center fill-current">
-                  <Card color="gray">
-                    <div>
+                  {configOptions.map((option, index) => (
+                    <Card color={option.color} key={index}>
                       <CardHeader>
                         <div class="flex flex-col items-center w-full gap-6 py-5">
-                          <TerminalOutline class="w-10 h-10" />
-                          {t('flags.gui.label@@Use GUI')}
+                          {option.cardIcon}
+                          {option.label}
                         </div>
                       </CardHeader>
                       <p class="min-w-[16rem] text-center mb-10">
-                        {t('flags.gui.description@@Whether to display the built-in server management GUI.')}
+                        {option.description}
                       </p>
                       <div class="absolute bottom-5 w-full -mx-8">
-                        <Toggle checked={store.gui} nolabel center />
+                        <Toggle checked={store[option.id as keyof typeof store]} nolabel center onClick$={(event: any) => {
+                          (store as any)[option.id] = event.target!.checked;
+                        }} />
                       </div>
-                    </div>
-                  </Card>
-                  <Card color="gray">
-                    <CardHeader>
-                      <div class="flex flex-col items-center w-full gap-6 py-5">
-                        <CodeWorkingOutline class="w-10 h-10" />
-                        {t('flags.variables.label@@Use Variables')}
-                      </div>
-                    </CardHeader>
-                    <p class="min-w-[16rem] text-center mb-10">
-                      {t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.')}
-                    </p>
-                    <div class="absolute bottom-5 w-full -mx-8">
-                      <Toggle checked={store.variables} nolabel center />
-                    </div>
-                  </Card>
-                  <Card color="gray">
-                    <CardHeader>
-                      <div class="flex flex-col items-center w-full gap-6 py-5">
-                        <RefreshCircleOutline class="w-10 h-10" />
-                        {t('flags.autoRestart.label@@Auto-restart')}
-                      </div>
-                    </CardHeader>
-                    <p class="min-w-[16rem] text-center mb-10">
-                      {t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.')}
-                    </p>
-                    <div class="absolute bottom-5 w-full -mx-8">
-                      <Toggle checked={store.autorestarts} nolabel center />
-                    </div>
-                  </Card>
+                    </Card>
+                  ))}
                 </div>
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
