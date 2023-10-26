@@ -180,37 +180,45 @@ export default component$(() => {
           </h2>
           <div class="flex">
             <div class="flex-1">
-              <button class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 1;
               }}>
                 {environmentOptions.find(option => option.environment === store.parsed.operatingSystem)?.tabIcon
                   ?? <CubeOutline class="w-5 h-5" />}
-                {t('flags.environment.label@@Environment')}
+                <span class="hidden sm:flex">
+                  {t('flags.environment.label@@Environment')}
+                </span>
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.operatingSystem == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.operatingSystem == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 2;
               }}>
                 {softwareOptions.find(option => option.software === store.parsed.serverType)?.tabIcon
                   ?? <TerminalOutline class="w-5 h-5" />}
-                {t('flags.software.label@@Software')}
+                <span class="hidden sm:flex">
+                  {t('flags.software.label@@Software')}
+                </span>
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.serverType == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 3;
               }}>
                 <CodeOutline class="w-5 h-5" />
-                {t('flags.config.label@@Configuration')}
+                <span class="hidden sm:flex">
+                  {t('flags.config.label@@Configuration')}
+                </span>
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.serverType == ''} class="flex items-center gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 4;
               }}>
                 <CheckmarkCircleOutline class="w-5 h-5" />
-                {t('flags.result@@Result')}
+                <span class="hidden sm:flex">
+                  {t('flags.result.label@@Result')}
+                </span>
               </button>
             </div>
           </div>
@@ -233,6 +241,9 @@ export default component$(() => {
           {
             store.step == 1 &&
             <div>
+              <h1 class="flex sm:hidden text-xl font-bold">
+                {t('flags.environment.label@@Environment')}
+              </h1>
               <h2 class="text-gray-300 text-base sm:text-xl mb-6">
                 {t('flags.enviroments.description@@The operating system that the server runs on.')}
               </h2>
@@ -259,6 +270,9 @@ export default component$(() => {
           {
             store.step == 2 &&
             <div>
+              <h1 class="flex sm:hidden text-xl font-bold">
+                {t('flags.software.label@@Software')}
+              </h1>
               <h2 class="text-gray-300 text-base sm:text-xl mb-6">
                 {t('flags.software.description@@The software in which your Minecraft server will run on.')}
               </h2>
@@ -285,6 +299,9 @@ export default component$(() => {
           {
             store.step == 3 &&
             <div>
+              <h1 class="flex sm:hidden text-xl font-bold">
+                {t('flags.config.label@@Configuration')}
+              </h1>
               <h2 class="text-gray-300 text-base sm:text-xl mb-6">
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </h2>
@@ -331,6 +348,9 @@ export default component$(() => {
           {
             store.step == 4 &&
               <div>
+                <h1 class="flex sm:hidden text-xl font-bold">
+                  {t('flags.result.label@@Result')}
+                </h1>
                 <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
                   <h1 class="font-bold text-xl sm:text-3xl mb-2">
                     {t('flags.script.label@@Script')}

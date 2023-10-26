@@ -48,10 +48,10 @@ export default component$(({ tauriVersion }: any) => {
               {t('nav.paperTimings@@Paper Timings')}
             </NavButton>
           </Dropdown>
-          <NavButton href="/flags">
+          <NavButton href="/flags" extraClass="hidden md:flex gap-3">
             {t('nav.flags@@Flags')}
           </NavButton>
-          <Dropdown name={it('nav.more@@More', ctx)} extraClass="hidden sm:flex gap-3">
+          <Dropdown name={it('nav.more@@More', ctx)} extraClass="hidden md:flex gap-3">
             <NavButton href="/animtexture">
               {t('nav.animatedTextures@@Animated Textures')}
             </NavButton>
@@ -133,7 +133,7 @@ export default component$(({ tauriVersion }: any) => {
             const classList = document.getElementById('mobile-menu')?.classList;
             if (classList?.contains('hidden')) classList.replace('hidden', 'flex');
             else classList?.replace('flex', 'hidden');
-          }} class="transition ease-in-out hover:bg-gray-900 hover:text-white p-2 rounded-lg text-3xl sm:hidden">
+          }} class="transition ease-in-out hover:bg-gray-900 hover:text-white p-2 rounded-lg text-3xl md:hidden">
             <Menu width="24" />
           </button>
           { tauriVersion && <>
