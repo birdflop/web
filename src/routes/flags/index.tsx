@@ -1,8 +1,9 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
+import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, EllipseOutline, MenuOutline, ArrowForward } from 'qwik-ionicons';
 
 import { useTranslate, Speak, inlineTranslate as it, useSpeakContext } from 'qwik-speak';
+import { Button } from '~/components/elements/Button';
 import Card, { CardHeader } from '~/components/elements/Card';
 import OutputField from '~/components/elements/OutputField';
 import SelectInput from '~/components/elements/SelectInput';
@@ -191,7 +192,7 @@ export default component$(() => {
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.operatingSystem == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.operatingSystem == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 2;
               }}>
                 {softwareOptions.find(option => option.software === store.parsed.serverType)?.tabIcon
@@ -202,7 +203,7 @@ export default component$(() => {
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 3;
               }}>
                 <CodeOutline class="w-5 h-5" />
@@ -212,7 +213,7 @@ export default component$(() => {
               </button>
             </div>
             <div class="flex-1">
-              <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
+              <button disabled={store.parsed.fileName == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 4;
               }}>
                 <CheckmarkCircleOutline class="w-5 h-5" />
@@ -234,9 +235,9 @@ export default component$(() => {
           }}
           style={{
             background: store.step == 1 ? 'linear-gradient(to right, rgb(185 28 28), rgb(185 28 28))'
-              : store.step == 2 ? 'linear-gradient(to right, rgb(185 28 28), rgb(194 65 12))'
-                : store.step == 3 ? 'linear-gradient(to right, rgb(185 28 28), rgb(194 65 12), rgb(161 98 7))'
-                  : store.step == 4 ? 'linear-gradient(to right, rgb(185 28 28), rgb(194 65 12), rgb(161 98 7), rgb(21 128 61))' : '',
+              : store.step == 2 ? 'linear-gradient(to right, rgb(185 28 28), rgb(161 98 7))'
+                : store.step == 3 ? 'linear-gradient(to right, rgb(185 28 28), rgb(161 98 7), rgb(21 128 61))'
+                  : store.step == 4 ? 'linear-gradient(to right, rgb(185 28 28), rgb(161 98 7), rgb(21 128 61), rgb(29 78 216))' : '',
           }} />
           {
             store.step == 1 &&
@@ -302,10 +303,34 @@ export default component$(() => {
               <h1 class="flex sm:hidden text-xl font-bold">
                 {t('flags.config.label@@Configuration')}
               </h1>
-              <h2 class="text-gray-300 text-base sm:text-xl mb-6">
-                {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
-              </h2>
+              <div class="flex items-center mb-6">
+                <h2 class="flex-1 text-gray-300 text-base sm:text-xl">
+                  {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
+                </h2>
+                <Button small color="primary" disabled={store.parsed.fileName == ''} onClick$={() => {
+                  store.step = 4;
+                }}>
+                  {t('flags.result@@Result')}
+                  <ArrowForward class="w-5 h-5" />
+                </Button>
+              </div>
               <div>
+                <div class="flex flex-wrap gap-3 justify-center fill-current">
+                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; }}>
+                    <CardHeader>
+                      {t('flags.fileName.label@@File Name')}
+                    </CardHeader>
+                    {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+                  </TextInput>
+                  <SelectInput id="preset" value={store.parsed.flags} label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.parsed.flags = event.target!.value; }} >
+                    {Object.keys(flagTypes).map((flag: string) => (
+                      <option key={flag} value={flag}>
+                        {flagTypes[flag as keyof typeof flagTypes] }
+                      </option>
+                    ))}
+                  </SelectInput>
+                  <input type="range" class="w-full" min="1" max="32" step="1" onChange$={(event: any) => { store.parsed.memory = event.target!.value; }} />
+                </div>
                 <div class="flex flex-wrap gap-3 justify-center fill-current">
                   {configOptions.map((option, index) => (
                     <Card color={option.color} key={index}>
@@ -326,22 +351,6 @@ export default component$(() => {
                     </Card>
                   ))}
                 </div>
-              </div>
-              <div class="flex flex-wrap gap-3 justify-center fill-current">
-                <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; }}>
-                  <CardHeader>
-                    {t('flags.fileName.label@@File Name')}
-                  </CardHeader>
-                  {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
-                </TextInput>
-                <SelectInput id="preset" value={store.parsed.flags} label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.parsed.flags = event.target!.value; }} >
-                  {Object.keys(flagTypes).map((flag: string) => (
-                    <option key={flag} value={flag}>
-                      {flagTypes[flag as keyof typeof flagTypes] }
-                    </option>
-                  ))}
-                </SelectInput>
-                <input type="range" class="w-full" min="1" max="32" step="1" onChange$={(event: any) => { store.parsed.memory = event.target!.value; }} />
               </div>
             </div>
           }
