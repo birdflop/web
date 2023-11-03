@@ -86,6 +86,22 @@ export default component$(() => {
     alerts: [],
   }, { deep: true });
 
+  const handleSwap = $(
+    function handleSwap(currentIndex: number, newIndex: number) {
+      const colorsLength = store.colors.length;
+      if (newIndex < 0) {
+        newIndex = colorsLength - 1;
+      } else if (newIndex >= colorsLength) {
+        newIndex = 0;
+      }
+
+      const temp = store.colors[currentIndex];
+      store.colors[currentIndex] = store.colors[newIndex];
+      store.colors[newIndex] = temp;
+      setCookie(JSON.stringify(store));
+    },
+  );
+
   useVisibleTask$(async () => {
     const userstore = await getCookie(JSON.stringify(store));
     const parsedUserStore = JSON.parse(userstore);
@@ -172,9 +188,35 @@ export default component$(() => {
               <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
                 {store.colors.map((color: string, i: number) => {
                   return (
-                    <ColorInput key={`color${i + 1}`} id={`color${i + 1}`} value={color} onInput$={(color: string) => { store.colors[i] = color; setCookie(JSON.stringify(store)); }}>
-                      {t('color.hexColor@@Hex Color')} {i + 1}
-                    </ColorInput>
+                    <div key={`color${i + 1}`}>
+                      <ColorInput
+                        key={`color${i + 1}`}
+                        id={`color${i + 1}`}
+                        value={color}
+                        onInput$={(newColor: string) => {
+                          store.colors[i] = newColor;
+                          setCookie(JSON.stringify(store));
+                        }}
+                      >
+                        <button
+                          onClick$={() => {
+                            handleSwap(i, i - 1);
+                          }}
+                          class={'pe-2'}
+                        >
+                        ↑
+                        </button>
+                        <button
+                          onClick$={() => {
+                            handleSwap(i, i + 1);
+                          }}
+                          class={'pe-4'}
+                        >
+                        ↓
+                        </button>
+                        {t('color.hexColor@@Hex Color')} {i + 1}
+                      </ColorInput>
+                    </div>
                   );
                 })}
               </div>
