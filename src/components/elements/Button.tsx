@@ -14,13 +14,13 @@ export const Button = component$(({ color, small, big, massive, bold, extraClass
   const colorClasses = color ? classes[color as keyof typeof classes] : classes.secondary;
   return (
     <button {...props} class={{
-      'relative flex items-center gap-3 transition ease-in-out border text-gray-50': true,
+      'relative flex items-center transition ease-in-out border text-gray-50 disabled:opacity-50': true,
       [colorClasses]: true,
-      'text-sm px-2 py-1 rounded-md': small,
-      'text-base px-6 py-3 rounded-lg': big,
-      'text-base px-8 py-4 rounded-xl': massive,
+      'text-sm px-2 py-1 rounded-md gap-2': small,
+      'text-base px-6 py-3 rounded-lg gap-3': big,
+      'text-base px-8 py-4 rounded-xl gap-4': massive,
       'font-bold': bold,
-      'text-base px-4 py-2 rounded-md': !small && !big && !massive,
+      'text-base px-4 py-2 rounded-md gap-3': !small && !big && !massive,
       [extraClass]: !!extraClass,
     }}>
       <Slot />
