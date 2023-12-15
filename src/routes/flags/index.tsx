@@ -1,7 +1,6 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, EllipseOutline, MenuOutline, ArrowForward } from 'qwik-ionicons';
-
+import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
 import { useTranslate, Speak, inlineTranslate as it, useSpeakContext } from 'qwik-speak';
 import { Button } from '~/components/elements/Button';
 import Card, { CardHeader } from '~/components/elements/Card';
@@ -29,6 +28,43 @@ const flagTypes = {
   'etils': 'Etil\'s Flags',
   'proxy': 'Proxy',
 };
+
+export const setCookie = $(function (store: any) {
+  const json = JSON.parse(store);
+  delete json.alerts;
+  const cookie: { [key: string]: string; } = {};
+  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+    const pairsplit = pair.split(/\s*=\s*/);
+    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+  });
+  Object.keys(json).forEach(key => {
+    const existingCookie = cookie[key];
+    if (existingCookie === json[key]) return;
+    if (key == 'parsed') {
+      document.cookie = `${key}=${encodeURIComponent(JSON.stringify(json[key]))}; path=/`;
+    } else {
+      document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
+    }
+    console.log(json);
+  });
+});
+
+export const getCookie = $(function (store: any) {
+  const json = JSON.parse(store);
+  delete json.alerts;
+  const cookie: { [key: string]: string; } = {};
+  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+    const pairsplit = pair.split(/\s*=\s*/);
+    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+  });
+  Object.keys(json).forEach(key => {
+    if (!cookie[key]) return;
+    let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
+    if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
+    json[key] = existingCookie;
+  });
+  return JSON.stringify(json);
+});
 
 export default component$(() => {
   const t = useTranslate();
@@ -152,7 +188,7 @@ export default component$(() => {
     },
   ];
 
-  const store = useStore({
+  const store: any = useStore({
     step: 1,
     parsed: {
       operatingSystem: '',
@@ -169,6 +205,22 @@ export default component$(() => {
     },
   }, { deep: true });
 
+  useVisibleTask$(async () => {
+    const userstore = await getCookie(JSON.stringify(store));
+    const parsedUserStore = JSON.parse(userstore);
+    parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
+    for (const key of Object.keys(parsedUserStore)) {
+      const value = parsedUserStore[key];
+      store[key] = value === 'true' ? true : value === 'false' ? false : value;
+      if (key === 'parsed') {
+        for (const key2 of Object.keys(parsedUserStore.parsed)) {
+          const value2 = parsedUserStore.parsed[key2];
+          store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
+        }
+      }
+    }
+  });
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">
       <Speak assets={['flags']}>
@@ -183,6 +235,7 @@ export default component$(() => {
             <div class="flex-1">
               <button class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
                 store.step = 1;
+                setCookie(JSON.stringify(store));
               }}>
                 {environmentOptions.find(option => option.environment === store.parsed.operatingSystem)?.tabIcon
                   ?? <CubeOutline class="w-5 h-5" />}
@@ -194,6 +247,7 @@ export default component$(() => {
             <div class="flex-1">
               <button disabled={store.parsed.operatingSystem == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 2;
+                setCookie(JSON.stringify(store));
               }}>
                 {softwareOptions.find(option => option.software === store.parsed.serverType)?.tabIcon
                   ?? <TerminalOutline class="w-5 h-5" />}
@@ -205,6 +259,7 @@ export default component$(() => {
             <div class="flex-1">
               <button disabled={store.parsed.serverType == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 3;
+                setCookie(JSON.stringify(store));
               }}>
                 <CodeOutline class="w-5 h-5" />
                 <span class="hidden sm:flex">
@@ -215,6 +270,7 @@ export default component$(() => {
             <div class="flex-1">
               <button disabled={store.parsed.fileName == ''} class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full disabled:opacity-50" onClick$={() => {
                 store.step = 4;
+                setCookie(JSON.stringify(store));
               }}>
                 <CheckmarkCircleOutline class="w-5 h-5" />
                 <span class="hidden sm:flex">
@@ -253,6 +309,7 @@ export default component$(() => {
                   <Card color={option.color} onClick$={() => {
                     store.parsed.operatingSystem = option.environment;
                     store.step = 2;
+                    setCookie(JSON.stringify(store));
                   }} key={index}>
                     <CardHeader>
                       <div class="flex flex-col items-center w-full gap-6 py-5">
@@ -282,6 +339,7 @@ export default component$(() => {
                   <Card color={option.color} onClick$={() => {
                     store.parsed.serverType = option.software;
                     store.step = 3;
+                    setCookie(JSON.stringify(store));
                   }} key={index}>
                     <CardHeader>
                       <div class="flex flex-col items-center w-full gap-6 py-5">
@@ -309,6 +367,7 @@ export default component$(() => {
                 </h2>
                 <Button small color="primary" disabled={store.parsed.fileName == ''} onClick$={() => {
                   store.step = 4;
+                  setCookie(JSON.stringify(store));
                 }}>
                   {t('flags.result@@Result')}
                   <ArrowForward class="w-5 h-5" />
@@ -316,20 +375,20 @@ export default component$(() => {
               </div>
               <div>
                 <div class="flex flex-wrap gap-3 justify-center fill-current">
-                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; }}>
+                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     <CardHeader>
                       {t('flags.fileName.label@@File Name')}
                     </CardHeader>
                     {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                   </TextInput>
-                  <SelectInput id="preset" value={store.parsed.flags} label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.parsed.flags = event.target!.value; }} >
+                  <SelectInput id="preset" value={store.parsed.flags} label={it('flags.flags.label@@Flags', ctx)} onChange$={(event: any) => { store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store)); }} >
                     {Object.keys(flagTypes).map((flag: string) => (
                       <option key={flag} value={flag}>
-                        {flagTypes[flag as keyof typeof flagTypes] }
+                        {flagTypes[flag as keyof typeof flagTypes]}
                       </option>
                     ))}
                   </SelectInput>
-                  <input type="range" class="w-full" min="1" max="32" step="1" onChange$={(event: any) => { store.parsed.memory = event.target!.value; }} />
+                  <input type="range" class="w-full" min="1" max="32" step="1" value="4" onChange$={(event: any) => { store.parsed.memory = event.target!.value; setCookie(JSON.stringify(store)); }} />
                 </div>
                 <div class="flex flex-wrap gap-3 justify-center fill-current">
                   {configOptions.map((option, index) => (
@@ -344,8 +403,9 @@ export default component$(() => {
                         {option.description}
                       </p>
                       <div class="absolute bottom-5 w-full -mx-8">
-                        <Toggle checked={store[option.id as keyof typeof store]} nolabel center onClick$={(event: any) => {
-                          (store as any)[option.id] = event.target!.checked;
+                        <Toggle checked={store.parsed[option.id as keyof typeof store]} nolabel center onClick$={(event: any) => {
+                          (store.parsed as any)[option.id] = event.target!.checked;
+                          setCookie(JSON.stringify(store));
                         }} />
                       </div>
                     </Card>
@@ -356,19 +416,19 @@ export default component$(() => {
           }
           {
             store.step == 4 &&
-              <div>
-                <h1 class="flex sm:hidden text-xl font-bold">
-                  {t('flags.result.label@@Result')}
+            <div>
+              <h1 class="flex sm:hidden text-xl font-bold">
+                {t('flags.result.label@@Result')}
+              </h1>
+              <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
+                <h1 class="font-bold text-xl sm:text-3xl mb-2">
+                  {t('flags.script.label@@Script')}
                 </h1>
-                <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
-                  <h1 class="font-bold text-xl sm:text-3xl mb-2">
-                    {t('flags.script.label@@Script')}
-                  </h1>
-                  <span class="text-sm sm:text-base pb-4">
-                    {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
-                  </span>
-                </OutputField>
-              </div>
+                <span class="text-sm sm:text-base pb-4">
+                  {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
+                </span>
+              </OutputField>
+            </div>
           }
         </div>
       </Speak>
