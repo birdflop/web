@@ -125,35 +125,39 @@ export function AnimationOutput(store: any) {
 }
 
 export function generateOutput(text: string = 'SimplyMC', colors: string[] = ['#00FFE0', '#EB00FF'], format: string = '&#$1$2$3$4$5$6$f$c', formatchar: string = '&', prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
-  let newColors = colors?.map((color: string) => convertToRGB(color));
-  if (colors.length < 2) newColors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
+  if (format != 'MiniMessage') {
+    let newColors = colors?.map((color: string) => convertToRGB(color));
+    if (colors.length < 2) newColors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
-  let output = prefix;
+    let output = prefix;
 
-  const gradient = new Gradient(newColors!, text.replace(/ /g, '').length);
+    const gradient = new Gradient(newColors!, text.replace(/ /g, '').length);
 
-  for (let i = 0; i < text.length; i++) {
-    const char = text.charAt(i);
-    if (char == ' ') {
-      output += char;
-      continue;
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charAt(i);
+      if (char == ' ') {
+        output += char;
+        continue;
+      }
+
+      const hex = convertToHex(gradient.next());
+      let hexOutput = format;
+      for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+      let formatCodes = '';
+      if (format.includes('$f')) {
+        if (bold) formatCodes += formatchar + 'l';
+        if (italic) formatCodes += formatchar + 'o';
+        if (underline) formatCodes += formatchar + 'n';
+        if (strikethrough) formatCodes += formatchar + 'm';
+      }
+
+      hexOutput = hexOutput.replace('$f', formatCodes);
+      hexOutput = hexOutput.replace('$c', char);
+      output += hexOutput;
     }
 
-    const hex = convertToHex(gradient.next());
-    let hexOutput = format;
-    for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-    let formatCodes = '';
-    if (format.includes('$f')) {
-      if (bold) formatCodes += formatchar + 'l';
-      if (italic) formatCodes += formatchar + 'o';
-      if (underline) formatCodes += formatchar + 'n';
-      if (strikethrough) formatCodes += formatchar + 'm';
-    }
-
-    hexOutput = hexOutput.replace('$f', formatCodes);
-    hexOutput = hexOutput.replace('$c', char);
-    output += hexOutput;
+    return output;
+  } else {
+    return `<gradient${colors.join(':')}>${text}`;
   }
-
-  return output;
 }

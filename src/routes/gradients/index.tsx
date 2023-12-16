@@ -23,6 +23,7 @@ const formats = [
   '&x&$1&$2&$3&$4&$5&$6$f$c',
   '§x§$1§$2§$3§$4§$5§$6$f$c',
   '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+  'MiniMessage',
 ];
 
 const presets = {
