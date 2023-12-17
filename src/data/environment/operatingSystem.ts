@@ -55,6 +55,7 @@ interface GenerateNixResult {
 type NixScript = Generate<AvailableConfig | 'existingFlags', GenerateNixResult>; // todo: dedupe
 
 const nixScript: NixScript = (config) => {
+  console.log(config);
   const base = [
     '#!/usr/bin/env bash',
     '',

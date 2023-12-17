@@ -181,7 +181,7 @@ export default component$(() => {
     },
     {
       color: 'gray',
-      id: 'autorestarts',
+      id: 'autoRestart',
       cardIcon: <RefreshCircleOutline class="w-10 h-10" />,
       label: t('flags.autoRestart.label@@Auto-restart'),
       description: t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.'),
