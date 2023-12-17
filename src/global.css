@@ -69,11 +69,17 @@ main {
 * {
   scroll-behavior: smooth;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
+
 *::-webkit-scrollbar {
   appearance: none;
   -webkit-appearance: none;
   width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background-color: #00000000;
+  border-radius: 3px;
 }
 *::-webkit-scrollbar-thumb {
   background-color: #ffffff20;
@@ -91,13 +97,13 @@ main {
 }
 
 ::view-transition-old(root) {
-  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-bottom;
+  animation: 210ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-bottom;
 }
 
 ::view-transition-new(root) {
-  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
-    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-top;
+  animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both fade-in,
+    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-top;
 }
 
 
@@ -120,6 +126,28 @@ main {
     scale: 0.95;
   }
 }
+
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(-100px);
+  animation: fadeInAnimation ease-in-out 800ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
 
 .Scp {
   display: flex;

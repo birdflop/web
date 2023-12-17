@@ -1,14 +1,15 @@
-import { component$, useVisibleTask$, useStore } from '@builder.io/qwik';
+import { component$, useTask$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import yaml from 'yaml';
 import TextInput from '~/components/elements/TextInput';
 import {
-  useTranslate,
-  Speak,
+  inlineTranslate,
+  useSpeak,
 } from 'qwik-speak';
 
 export default component$(() => {
-  const t = useTranslate();
+  useSpeak({ assets: ['animpreview'] });
+  const t = inlineTranslate();
 
   const store: any = useStore({
     text: 'SimplyMC',
@@ -34,7 +35,7 @@ export default component$(() => {
     - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`,
   }, { deep: true });
 
-  useVisibleTask$(() => {
+  useTask$(() => {
     let speed = store.speed;
 
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
@@ -50,7 +51,7 @@ export default component$(() => {
     }
   });
 
-  useVisibleTask$(({ track }) => {
+  useTask$(({ track }) => {
     track(() => store.yaml);
     let json = yaml.parse(store.yaml);
     json = json[Object.keys(json)[0]];
@@ -60,38 +61,36 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
-      <Speak assets={['animpreview']}>
-        <div class="my-10 min-h-[60px] w-full">
-          <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-            {t('animpreview.title@@Animation Previewer')}
-          </h1>
-          <h2 class="text-gray-50 text-base sm:text-xl mb-12">
-            {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
-          </h2>
+      <div class="my-10 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
+          {t('animpreview.title@@Animation Previewer')}
+        </h1>
+        <h2 class="text-gray-50 text-base sm:text-xl mb-12">
+          {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
+        </h2>
 
-          <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
-            {t('animpreview.yamlInput@@YAML Input')}
-          </TextInput>
+        <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+          {t('animpreview.yamlInput@@YAML Input')}
+        </TextInput>
 
-          <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
-            {(() => {
-              if (!store.frames[store.frame]) return '';
-              const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
-              const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
-              return spans.map((string: string, i: number) => {
-                let result: any = string.match(pattern);
-                result = result.filter((obj: string) => { return obj; });
-                return (
-                  <span key={`char${i}`} style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
-                    {result[result.length - 1]}
-                  </span>
-                );
-              });
-            })()}
-          </h1>
+        <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
+          {(() => {
+            if (!store.frames[store.frame]) return '';
+            const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
+            const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
+            return spans.map((string: string, i: number) => {
+              let result: any = string.match(pattern);
+              result = result.filter((obj: string) => { return obj; });
+              return (
+                <span key={`char${i}`} style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
+                  {result[result.length - 1]}
+                </span>
+              );
+            });
+          })()}
+        </h1>
 
-        </div>
-      </Speak>
+      </div>
     </section>
   );
 });

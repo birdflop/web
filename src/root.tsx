@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
 import { RouterHead } from './components/Head';
-import { QwikSpeakProvider } from 'qwik-speak';
+import { useQwikSpeak } from 'qwik-speak';
 
 import './global.css';
 import { config } from '~/speak-config';
@@ -14,20 +14,22 @@ export default component$(() => {
    *
    * Dont remove the `<head>` and `<body>` elements.
    */
+  /**
+   * Init Qwik Speak
+   */
+  useQwikSpeak({ config, translationFn });
 
   return (
-    <QwikSpeakProvider config={config} translationFn={translationFn}>
-      <QwikCityProvider>
-        <head>
-          <meta charSet="utf-8" />
-          <link rel="manifest" href="/manifest.webmanifest" />
-          <RouterHead />
-        </head>
-        <body class="text-gray-300">
-          <RouterOutlet />
-          <ServiceWorkerRegister />
-        </body>
-      </QwikCityProvider>
-    </QwikSpeakProvider>
+    <QwikCityProvider>
+      <head>
+        <meta charSet="utf-8" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <RouterHead />
+      </head>
+      <body class="text-gray-300">
+        <RouterOutlet />
+        <ServiceWorkerRegister />
+      </body>
+    </QwikCityProvider>
   );
 });

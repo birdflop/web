@@ -35,7 +35,7 @@ export default component$(() => {
       const y = document.getElementsByTagName('script')[0];
       y.parentNode!.insertBefore(t, y);
     }
-  }, { strategy: 'document-idle' });
+  });
 
   return <>
     <Nav tauriVersion={tauriVersion.value} />
