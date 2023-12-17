@@ -1,4 +1,4 @@
-import { component$, useTask$, useStore, $ } from '@builder.io/qwik';
+import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -16,6 +16,7 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { getCookie } from '~/components/util/SharedUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -58,25 +59,6 @@ export const setCookie = $(function (store: any) {
   });
 });
 
-export const getCookie = $(function (store: any) {
-  const json = JSON.parse(store);
-  delete json.alerts;
-  delete json.frames;
-  delete json.frame;
-  const cookie: { [key: string]: string; } = {};
-  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-    const pairsplit = pair.split(/\s*=\s*/);
-    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-  });
-  Object.keys(json).forEach(key => {
-    if (!cookie[key]) return;
-    let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
-    if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
-    json[key] = existingCookie;
-  });
-  return JSON.stringify(json);
-});
-
 export default component$(() => {
   useSpeak({ assets: ['animpreview', 'color'] });
   const t = inlineTranslate();
@@ -117,7 +99,7 @@ export default component$(() => {
     },
   );
 
-  useTask$(() => {
+  useVisibleTask$(() => {
     getCookie(JSON.stringify(store)).then((userstore: any) => {
       const parsedUserStore = JSON.parse(userstore);
       for (const key of Object.keys(parsedUserStore)) {
