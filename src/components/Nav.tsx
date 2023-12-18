@@ -16,6 +16,7 @@ import { version } from '~/../package.json';
 import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
+// @ts-ignore
 import { Window } from '@tauri-apps/api/window';
 import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
 

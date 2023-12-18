@@ -4,6 +4,8 @@ import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
+
+// @ts-ignore
 import { getVersion } from '@tauri-apps/api/app';
 
 export default component$(() => {

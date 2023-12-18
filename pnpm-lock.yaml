@@ -18,10 +18,10 @@ devDependencies:
     specifier: ^0.33.1
     version: 0.33.1
   '@tauri-apps/api':
-    specifier: next
+    specifier: 2.0.0-alpha.12
     version: 2.0.0-alpha.12
   '@tauri-apps/cli':
-    specifier: next
+    specifier: 2.0.0-alpha.18
     version: 2.0.0-alpha.18
   '@tauri-apps/plugin-notification':
     specifier: github:tauri-apps/tauri-plugin-notification#v2
