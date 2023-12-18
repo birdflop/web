@@ -446,7 +446,9 @@ export default component$(() => {
                 {t('flags.script.label@@Script')}
               </h1>
               <span class="text-sm sm:text-base pb-4">
-                {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
+                {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', {
+                  fileName: store.parsed.fileName,
+                })}
               </span>
             </OutputField>
           </div>
