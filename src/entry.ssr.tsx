@@ -12,6 +12,7 @@
  */
 import { isDev } from '@builder.io/qwik/build';
 import type { RenderOptions } from '@builder.io/qwik/server';
+import { config } from './speak-config';
 import { renderToStream, type RenderToStreamOptions } from '@builder.io/qwik/server';
 import { manifest } from '@qwik-client-manifest';
 import Root from './root';
@@ -36,7 +37,7 @@ export default function (opts: RenderToStreamOptions) {
     base: extractBase,
     // Use container attributes to set attributes on the html tag.
     containerAttributes: {
-      lang: 'en-us',
+      lang: opts.serverData?.locale || config.defaultLocale.lang,
       ...opts.containerAttributes,
     },
   });
