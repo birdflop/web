@@ -11,6 +11,9 @@
 <a href="https://github.com/LuminescentDev/SimplyMC/stargazers"> <img src="https://img.shields.io/github/stars/LuminescentDev/SimplyMC?style=flat"></a>
 <a href="https://github.com/LuminescentDev/SimplyMC/network/members"> <img src="https://img.shields.io/github/forks/LuminescentDev/SimplyMC?style=flat"></a>
 <a href="https://www.codefactor.io/repository/github/LuminescentDev/SimplyMC/overview/v3"> <img src="https://www.codefactor.io/repository/github/LuminescentDev/SimplyMC/badge/v3"></a>
+<a title="Crowdin" target="_blank" href="https://crowdin.com/project/simplymc"><img src="https://badges.crowdin.net/simplymc/localized.svg"></a>
+
+
 
 <h2>Contributing</h2>
 If you would like to contribute please make sure your code works as intended and formatted properly.
