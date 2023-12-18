@@ -45,6 +45,20 @@ export default component$(({ tauriVersion }: any) => {
             {t('nav.paperTimings@@Paper Timings')}
           </NavButton>
         </Dropdown>
+        <Dropdown name={t('nav.more@@More')} extraClass={{ 'hidden sm:flex': true }}>
+          <NavButton href="/animtexture">
+            {t('nav.animatedTextures@@Animated Textures')}
+          </NavButton>
+          <NavButton href="/ramcalc">
+            {t('nav.ramCalculator@@RAM Calculator')}
+          </NavButton>
+          <NavButton href="/colorstrip">
+            {t('nav.colorCodeStripper@@Color Code Stripper')}
+          </NavButton>
+          <NavButton href="/presettools">
+            {t('nav.presetTools@@Preset Tools')}
+          </NavButton>
+        </Dropdown>
         <NavButton href="/flags" extraClass={{ 'hidden sm:flex': true }}>
           {t('nav.flags@@Flags')}
         </NavButton>
@@ -131,7 +145,7 @@ export default component$(({ tauriVersion }: any) => {
           {t('nav.animatedTextures@@Animated Textures')}
         </NavButton>
         <NavButton store={store} href="/ramcalc">
-          {t('nav.ramCalculator@@RAM Caolculator')}
+          {t('nav.ramCalculator@@RAM Calculator')}
         </NavButton>
         <NavButton store={store} href="/colorstrip">
           {t('nav.colorCodeStripper@@Color Code Stripper')}

@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, useOn, useStore, useVisibleTask$, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -20,7 +20,7 @@ export default component$(() => {
     cumulative: false,
   }, { deep: true });
 
-  useTask$(() => {
+  useVisibleTask$(() => {
     if (document.getElementsByName('gifframes')[0]) return;
     const script = document.createElement('script');
     script.src = '/scripts/gif-frames.js';
@@ -28,7 +28,34 @@ export default component$(() => {
     script.setAttribute('name', 'gifframes');
     document.head.appendChild(script);
   });
+  useOn(
+    'change',
+    $((event) => {
+      const { files } = event.target as HTMLInputElement;
+      if (!files) return;
+      Array.from(files).forEach(file => {
+        const f = new FileReader();
+        f.readAsDataURL(file);
+        f.onloadend = async (e) => {
+          const b64 = e!.target!.result;
+          const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
+          if (type == 'image/gif') {
+            // @ts-ignore
+            const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
+            gifframes.forEach((frame: any) => {
+              const contentStream = frame.getImage();
+              const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
+              const b64frame = `data:image/png;base64,${imageData}`;
 
+              store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
+            });
+            return;
+          }
+          store.frames.push({ img: b64, delay: 20 });
+        };
+      });
+    }),
+  );
   return (
     <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
       <div class="my-10 min-h-[60px] w-full">
@@ -40,32 +67,7 @@ export default component$(() => {
         </h2>
 
         <label for="fileInput">Select Frame(s) or a GIF</label><br />
-        <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" onChange$={
-          (event) => {
-            if (!event.target?.files) return;
-            Array.from(event.target.files).forEach(file => {
-              const f = new FileReader();
-              f.readAsDataURL(file);
-              f.onloadend = async (e) => {
-                const b64 = e!.target!.result;
-                const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
-                if (type == 'image/gif') {
-                  // @ts-ignore
-                  const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
-                  gifframes.forEach((frame: any) => {
-                    const contentStream = frame.getImage();
-                    const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
-                    const b64frame = `data:image/png;base64,${imageData}`;
-
-                    store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
-                  });
-                  return;
-                }
-                store.frames.push({ img: b64, delay: 20 });
-              };
-            });
-          }
-        } />
+        <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none"/>
 
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
           {store.frames.map((frame, i) => (
