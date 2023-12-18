@@ -10,8 +10,8 @@ import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 import Toggle from '~/components/elements/Toggle';
 import Pterodactyl from '~/components/icons/Pterodactyl';
-import Fabric from '~/components/icons/fabric';
-import Forge from '~/components/icons/forge';
+// import Fabric from '~/components/icons/fabric';
+// import Forge from '~/components/icons/forge';
 import Paper from '~/components/icons/paper';
 import Purpur from '~/components/icons/purpur';
 import Velocity from '~/components/icons/velocity';
@@ -116,22 +116,22 @@ export default component$(() => {
       label: t('flags.serverType.purpur.label@@Purpur'),
       description: t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more'),
     },
-    {
-      color: 'red',
-      software: 'forge',
-      tabIcon: <Forge extraClass="w-5 h-5" />,
-      cardIcon: <Forge extraClass="w-10 h-10" />,
-      label: t('flags.serverType.forge.label@@Forge'),
-      description: t('flags.serverType.forge.description@@Mod loader'),
-    },
-    {
-      color: 'orange',
-      software: 'fabric',
-      tabIcon: <Fabric extraClass="w-5 h-5" />,
-      cardIcon: <Fabric extraClass="w-10 h-10" />,
-      label: t('flags.serverType.fabric.label@@Fabric'),
-      description: t('flags.serverType.fabric.description@@Better mod loader'),
-    },
+    // {
+    //   color: 'red',
+    //   software: 'forge',
+    //   tabIcon: <Forge extraClass="w-5 h-5" />,
+    //   cardIcon: <Forge extraClass="w-10 h-10" />,
+    //   label: t('flags.serverType.forge.label@@Forge'),
+    //   description: t('flags.serverType.forge.description@@Mod loader'),
+    // },
+    // {
+    //   color: 'orange',
+    //   software: 'fabric',
+    //   tabIcon: <Fabric extraClass="w-5 h-5" />,
+    //   cardIcon: <Fabric extraClass="w-10 h-10" />,
+    //   label: t('flags.serverType.fabric.label@@Fabric'),
+    //   description: t('flags.serverType.fabric.description@@Better mod loader'),
+    // },
     {
       color: 'yellow',
       software: 'velocity',
