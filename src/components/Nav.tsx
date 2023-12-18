@@ -26,7 +26,7 @@ export default component$(({ tauriVersion }: any) => {
 
   return (
     <Nav>
-      <MainNav tauriVersion={tauriVersion}>
+      <MainNav tauriVersion={tauriVersion} store={store}>
         <Dropdown name={t('nav.gradients@@Gradients')} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
@@ -38,7 +38,7 @@ export default component$(({ tauriVersion }: any) => {
             {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
           </NavButton>
         </Dropdown>
-        <Dropdown name={t('nav.analysis@@Analysis')} extraClass={{ 'hidden sm:flex': true }}>
+        <Dropdown name={t('nav.analysis@@Analysis')} extraClass={{ 'hidden xl:flex': true }}>
           <NavButton href="/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
@@ -46,6 +46,9 @@ export default component$(({ tauriVersion }: any) => {
             {t('nav.paperTimings@@Paper Timings')}
           </NavButton>
         </Dropdown>
+        <NavButton href="/flags" extraClass={{ 'hidden md:flex': true }}>
+          {t('nav.flags@@Flags')}
+        </NavButton>
         <Dropdown name={t('nav.more@@More')} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/animtexture">
             {t('nav.animatedTextures@@Animated Textures')}
@@ -60,13 +63,10 @@ export default component$(({ tauriVersion }: any) => {
             {t('nav.presetTools@@Preset Tools')}
           </NavButton>
         </Dropdown>
-        <NavButton href="/flags" extraClass={{ 'hidden sm:flex': true }}>
-          {t('nav.flags@@Flags')}
-        </NavButton>
-        <NavButton href="/privacy" extraClass={{ 'hidden sm:flex': true }}>
+        <NavButton href="/privacy" extraClass={{ 'hidden xl:flex': true }}>
           {t('nav.privacyPolicy@@Privacy Policy')}
         </NavButton>
-        <button onClick$={async () => {
+        <NavButton type="div" onClick$={async () => {
           if (tauriVersion) {
             const perm = await isPermissionGranted();
             if (!perm) await requestPermission();
@@ -80,47 +80,47 @@ export default component$(({ tauriVersion }: any) => {
               console.error(e);
             }
           }
-        }} class="group transition ease-in-out hover:bg-violet-900/20 hover:text-white px-4 py-2 rounded-lg items-center hidden sm:flex">
+        }} extraClass={{ 'hidden lg:flex': true }}>
           v{version} {tauriVersion && `(${tauriVersion})`}
-        </button>
-        <LangPicker />
-        <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden sm:flex': true }}>
+        </NavButton>
+        <LangPicker tauriVersion={tauriVersion} />
+        <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden lg:flex': true }}>
           <LogoGithub width="24" class="fill-green-100" />
         </NavButton>
-        <NavButton type="external" icon href="https://discord.simplymc.art" title="Discord" extraClass={{ 'hidden sm:flex': true }}>
+        <NavButton type="external" icon href="https://discord.simplymc.art" title="Discord" extraClass={{ 'hidden lg:flex': true }}>
           <LogoDiscord width="24" class="fill-indigo-200" />
         </NavButton>
-        <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass={{ 'hidden sm:flex': true }}>
+        <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass={{ 'hidden lg:flex': true }}>
           <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
         </NavButton>
-        <NavButton type="external" icon href="https://luminescent.dev" title="Luminescent" extraClass={{ 'hidden sm:flex': true }}>
+        <NavButton type="external" icon href="https://luminescent.dev" title="Luminescent" extraClass={{ 'hidden lg:flex': true }}>
           <div style={{ filter: 'drop-shadow(0 0 0 #DD6CFF)' }}>
             <div style={{ filter: 'drop-shadow(0 0 1rem #CB6CE6)' }}>
               <Luminescent width={24} />
             </div>
           </div>
         </NavButton>
-        <button id="mobile-menu-button" type="button" title="Menu" onClick$={() => {
-          store.mobilemenu = !store.mobilemenu;
-        }} class="transition ease-in-out hover:bg-violet-900/20 hover:text-white px-4 py-2 rounded-lg text-3xl sm:hidden">
-          <Menu width="24" class="fill-current" />
-        </button>
+        {!tauriVersion &&
+          <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
+            <Menu width="24" class="fill-current" />
+          </NavButton>
+        }
         {tauriVersion && <>
-          <button title="Minimize" class="transition ease-in-out hover:bg-violet-900/20 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
+          <NavButton type="div" icon title="Minimize" onClick$={() => {
             Window.getzCurrent().minimize();
           }}>
             <RemoveOutline width="24" />
-          </button>
-          <button title="Maximize" class="transition ease-in-out hover:bg-violet-900/20 hover:text-white p-2 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
+          </NavButton>
+          <NavButton type="div" icon title="Maximize" onClick$={() => {
             Window.getCurrent().toggleMaximize();
           }}>
             <SquareOutline width="20" />
-          </button>
-          <button title="Close" class="transition ease-in-out hover:bg-violet-900/20 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
+          </NavButton>
+          <NavButton type="div" icon title="Close" onClick$={() => {
             Window.getCurrent().close();
           }}>
             <CloseOutline width="24" />
-          </button>
+          </NavButton>
         </>}
       </MainNav>
       <MobileNav store={store}>
@@ -191,8 +191,8 @@ export const Brand = component$(() => {
   const location = useLocation();
   return (
     <div class="flex items-center justify-start">
-      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-violet-900/20 hover:text-white drop-shadow-2xl px-3 py-3 rounded-lg text-lg flex tracking-wider items-center">
-        <Logo class="w-32" />
+      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-violet-900/20 hover:text-white drop-shadow-2xl px-3 pb-2 pt-3 rounded-lg text-lg flex tracking-wider items-center">
+        <Logo class="w-24" />
         <div class={{
           'transition-all': true,
           '-ml-7 opacity-0': !location.isNavigating,
@@ -204,15 +204,24 @@ export const Brand = component$(() => {
   );
 });
 
-export const MainNav = component$(({ tauriVersion }: any) => {
+export const MainNav = component$(({ tauriVersion, store }: any) => {
   return (
-    <div class="bg-violet-900/20 px-4 lg:px-6 py-1">
+    <div class={{
+      'bg-violet-900/20 py-1': true,
+      'px-4 lg:px-6': !tauriVersion,
+      'px-2': tauriVersion,
+    }} data-tauri-drag-region>
       <div class={{
-        'mx-auto relative flex h-10 items-center justify-between': true,
-        'max-w-7xl h-16': !tauriVersion,
+        'mx-auto relative flex items-center justify-between': true,
+        'max-w-7xl': !tauriVersion,
       }}>
+        {tauriVersion &&
+          <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
+            <Menu width="24" class="fill-current" />
+          </NavButton>
+        }
         <Brand />
-        <div class="flex flex-1 items-center justify-end">
+        <div class="flex flex-1 items-center justify-end" data-tauri-drag-region>
           <div class="flex gap-1 text-gray-300 whitespace-nowrap">
             <Slot />
           </div>
@@ -236,7 +245,7 @@ export const MobileNav = component$(({ store }: any) => {
 
 export const NavButton = component$(({ href, title, icon, type, extraClass, style, store, onClick$ }: any) => {
   const _class = {
-    'group transition ease-in-out hover:bg-violet-900/20 hover:text-white py-3 rounded-lg items-center': true,
+    'group transition ease-in-out hover:bg-violet-900/20 hover:text-white py-3 rounded-lg items-center cursor-pointer': true,
     'text-3xl px-3': icon,
     'px-4 flex gap-3': !icon,
     ...extraClass,
@@ -280,7 +289,7 @@ export const Dropdown = component$(({ name, extraClass }: any) => {
   );
 });
 
-export const LangPicker = component$(() => {
+export const LangPicker = component$(({ tauriVersion }: any) => {
   const config = useSpeakConfig();
 
   const changeLocale$ = $(async (newLocale: SpeakLocale) => {
@@ -293,12 +302,16 @@ export const LangPicker = component$(() => {
       <div class="p-3">
         <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
       </div>
-      <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-5 text-base">
+      <div class={{
+        'absolute top-8 z-10 hidden group-hover:flex pt-5 text-base': true,
+        '-right-20': tauriVersion,
+        'right-0': !tauriVersion,
+      }}>
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           {config.supportedLocales.map(value => (
-            <div key={value.lang} onClick$={async () => await changeLocale$(value)} class="transition ease-in-out hover:bg-gray-900 hover:text-white px-4 py-2 rounded-lg flex items-center">
+            <NavButton type="div" key={value.lang} onClick$={async () => await changeLocale$(value)}>
               {languages[value.lang as keyof typeof languages]}
-            </div>
+            </NavButton>
           ))}
         </div>
       </div>
