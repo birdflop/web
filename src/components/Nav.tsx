@@ -16,7 +16,7 @@ import { version } from '~/../package.json';
 import Luminescent from './icons/Luminescent';
 import LoadingIcon from './icons/LoadingIcon';
 
-import { Window } from '@tauri-apps/plugin-window';
+import { Window } from '@tauri-apps/api/window';
 import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
 
 export default component$(({ tauriVersion }: any) => {
@@ -25,7 +25,7 @@ export default component$(({ tauriVersion }: any) => {
 
   return (
     <Nav>
-      <MainNav>
+      <MainNav tauriVersion={tauriVersion}>
         <Dropdown name={t('nav.gradients@@Gradients')} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
@@ -106,7 +106,7 @@ export default component$(({ tauriVersion }: any) => {
         </button>
         {tauriVersion && <>
           <button title="Minimize" class="transition ease-in-out hover:bg-violet-900/20 hover:text-white p-1 rounded-lg text-3xl hidden sm:flex items-center" onClick$={() => {
-            Window.getCurrent().minimize();
+            Window.getzCurrent().minimize();
           }}>
             <RemoveOutline width="24" />
           </button>
@@ -203,10 +203,13 @@ export const Brand = component$(() => {
   );
 });
 
-export const MainNav = component$(() => {
+export const MainNav = component$(({ tauriVersion }: any) => {
   return (
     <div class="bg-violet-900/20 px-4 lg:px-6 py-1">
-      <div class="mx-auto max-w-7xl relative flex h-16 items-center justify-between">
+      <div class={{
+        'mx-auto relative flex h-10 items-center justify-between': true,
+        'max-w-7xl h-16': !tauriVersion,
+      }}>
         <Brand />
         <div class="flex flex-1 items-center justify-end">
           <div class="flex gap-1 text-gray-300 whitespace-nowrap">

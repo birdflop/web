@@ -4,7 +4,7 @@ import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
-import { getVersion } from '@tauri-apps/plugin-app';
+import { getVersion } from '@tauri-apps/api/app';
 
 export default component$(() => {
   const store = useStore({
