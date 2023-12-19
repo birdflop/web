@@ -1,6 +1,7 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useVisibleTask$, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
+import { isServer } from '@builder.io/qwik/build';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak, useSpeakContext } from 'qwik-speak';
 import { Button } from '~/components/elements/Button';
@@ -107,6 +108,11 @@ export default component$(() => {
       cardIcon: <Paper extraClass="w-10 h-10" />,
       label: t('flags.serverType.paper.label@@Paper'),
       description: t('flags.serverType.paper.description@@Bukkit-based plugin loader'),
+      memory: {
+        minimum: 1,
+        default: 4,
+        maximum: 16,
+      },
     },
     {
       color: 'purple',
@@ -115,6 +121,11 @@ export default component$(() => {
       cardIcon: <Purpur extraClass="w-10 h-10" />,
       label: t('flags.serverType.purpur.label@@Purpur'),
       description: t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more'),
+      memory: {
+        minimum: 1,
+        default: 4,
+        maximum: 16,
+      },
     },
     // {
     //   color: 'red',
@@ -123,6 +134,11 @@ export default component$(() => {
     //   cardIcon: <Forge extraClass="w-10 h-10" />,
     //   label: t('flags.serverType.forge.label@@Forge'),
     //   description: t('flags.serverType.forge.description@@Mod loader'),
+    //   memory: {
+    //     minimum: 2,
+    //     default: 10,
+    //     maximum: 24,
+    //   },
     // },
     // {
     //   color: 'orange',
@@ -131,6 +147,11 @@ export default component$(() => {
     //   cardIcon: <Fabric extraClass="w-10 h-10" />,
     //   label: t('flags.serverType.fabric.label@@Fabric'),
     //   description: t('flags.serverType.fabric.description@@Better mod loader'),
+    //   memory: {
+    //     minimum: 2,
+    //     default: 8,
+    //     maximum: 24,
+    //   },
     // },
     {
       color: 'yellow',
@@ -139,6 +160,11 @@ export default component$(() => {
       cardIcon: <Velocity extraClass="w-10 h-10" />,
       label: t('flags.serverType.velocity.label@@Velocity'),
       description: t('flags.serverType.velocity.description@@Proxy with plugin loader'),
+      memory: {
+        minimum: 0.5,
+        default: 1,
+        maximum: 4,
+      },
     },
     {
       color: 'blue',
@@ -147,6 +173,11 @@ export default component$(() => {
       cardIcon: <Waterfall extraClass="w-10 h-10" />,
       label: t('flags.serverType.waterfall.label@@Waterfall'),
       description: t('flags.serverType.waterfall.description@@Deprecated proxy'),
+      memory: {
+        minimum: 0.5,
+        default: 2,
+        maximum: 4,
+      },
     },
   ];
 
@@ -186,12 +217,22 @@ export default component$(() => {
     withResult: true,
     withFlags: false,
     memory: 0,
+    hasSetMemory: false,
+  };
+
+  const defaultMemory = {
+    minimum: 0,
+    maximum: 32,
   };
 
   const store: any = useStore({
     step: 1,
     parsed: defaultParsed,
   }, { deep: true });
+
+  const renderStore: any = useStore({
+    memory: defaultMemory,
+  });
 
   useVisibleTask$(async () => {
     const userstore = await getCookie(JSON.stringify(store));
@@ -208,6 +249,26 @@ export default component$(() => {
           store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
         }
       }
+    }
+  });
+
+  useTask$(async ({ track }) => {
+    const serverType = track(() => store.parsed.serverType);
+
+    let selectedSoftware = undefined;
+    if (serverType) {
+      selectedSoftware = softwareOptions.find(entry => entry.software === serverType);
+    }
+
+    renderStore.memory.minimum = selectedSoftware?.memory.minimum ?? defaultMemory.minimum;
+    renderStore.memory.maximum = selectedSoftware?.memory.maximum ?? defaultMemory.maximum;
+
+    if (
+      !store.parsed.hasSetMemory ||
+      store.parsed.memory > renderStore.memory.maximum ||
+      store.parsed.memory < renderStore.memory.minimum
+    ) {
+      store.parsed.memory = selectedSoftware?.memory.default ?? defaultParsed.memory;
     }
   });
 
@@ -405,7 +466,7 @@ export default component$(() => {
                 </CardHeader>
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
                 <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
-                  <div class="h-2 bg-luminescent-800 group-hover:bg-luminescent-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
+                  <div class="h-2 bg-luminescent-800 group-hover:bg-luminescent-700 rounded-lg" style={{ width: `${store.parsed.memory / renderStore.memory.maximum * 100}%` }} />
                   <div class="absolute w-full top-1 flex justify-between">
                     <span class="text-left">|</span>
                     <span class="text-center">|</span>
@@ -413,14 +474,15 @@ export default component$(() => {
                     <span class="text-center">|</span>
                     <span class="text-right">|</span>
                   </div>
-                  <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${store.parsed.memory / 32 * 100}% - 48px)` }}>
+                  <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${store.parsed.memory / renderStore.memory.maximum * 100}% - 48px)` }}>
                     <div class="w-4 h-4 bg-luminescent-700 group-hover:bg-luminescent-600 rounded-full" />
                     <div class="opacity-0 group-hover:opacity-100 w-24 py-2 bg-gray-800 rounded-lg flex justify-center transition-all z-50">
                       {store.parsed.memory} GB
                     </div>
                   </div>
-                  <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={store.parsed.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(event: any) => {
+                  <input id="labels-range-input" type="range" min={renderStore.memory.minimum} max={renderStore.memory.maximum} step="0.5" value={store.parsed.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(event: any) => {
                     store.parsed.memory = event.target!.value;
+                    store.parsed.hasSetMemory = true;
                     setCookie(JSON.stringify(store));
                   }} />
                 </div>
