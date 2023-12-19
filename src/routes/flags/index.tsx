@@ -1,7 +1,7 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
+import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward, CopyOutline, DownloadOutline, CheckmarkOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak, useSpeakContext } from 'qwik-speak';
 import { Button } from '~/components/elements/Button';
 import Card, { CardHeader } from '~/components/elements/Card';
@@ -191,6 +191,14 @@ export default component$(() => {
     },
   }, { deep: true });
 
+  const renderStore: any = useStore({
+    result: '',
+    success: {
+      copy: false,
+      download: false,
+    },
+  });
+
   useVisibleTask$(async () => {
     const userstore = await getCookie(JSON.stringify(store));
     const parsedUserStore = JSON.parse(userstore);
@@ -207,6 +215,23 @@ export default component$(() => {
         }
       }
     }
+  });
+
+  useTask$(({ track }) => {
+    const parsed = track(() => store.parsed);
+
+    let result = undefined;
+    try {
+      result = generateResult(parsed);
+    } catch (error) {
+      // ignored for now
+    }
+
+    if (!result?.script) {
+      return;
+    }
+
+    renderStore.result = result.script;
   });
 
   return (
@@ -352,7 +377,7 @@ export default component$(() => {
               <h2 class="flex-1 text-gray-300 text-base sm:text-xl">
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </h2>
-              <Button small color="primary" disabled={store.parsed.fileName == ''} onClick$={() => {
+              <Button small color="primary" disabled={!renderStore.result} onClick$={() => {
                 store.step = 4;
                 setCookie(JSON.stringify(store));
               }}>
@@ -441,7 +466,7 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
+            <OutputField extraClass={'h-60'} id="Output" value={renderStore.result}>
               <h1 class="font-bold text-xl sm:text-3xl mb-2">
                 {t('flags.script.label@@Script')}
               </h1>
@@ -449,6 +474,24 @@ export default component$(() => {
                 {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
               </span>
             </OutputField>
+            <div class="flex w-full gap-2 flex-wrap md:flex-nowrap">
+              <Button color="primary" extraClass="grow w-1/2" onClick$={async () => {
+                await navigator.clipboard.writeText(renderStore.result);
+
+                renderStore.success.copy = true;
+              }}>
+                {!renderStore.success.copy ? <CopyOutline class="w-5 h-5" /> : <CheckmarkOutline class="w-5 h-5" />}
+                {t('flags.result.copy@@Copy')}
+              </Button>
+              <Button color="primary" extraClass="grow w-1/2" onClick$={() => {
+                // TODO: Create a binary file, ZIP it for macos
+
+                renderStore.success.download = true;
+              }}>
+                {!renderStore.success.download ? <DownloadOutline class="w-5 h-5" /> : <CheckmarkOutline class="w-5 h-5" />}
+                {t('flags.result.download@@Download')}
+              </Button>
+            </div>
           </div>
         }
       </div>
