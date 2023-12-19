@@ -4,6 +4,7 @@ export const languages = {
   'en-US': 'English',
   'es-ES': 'Español',
   'nl-NL': 'Nederlands',
+  'pl-PL': 'Polski',
   'pt-PT': 'Português',
   'ru-RU': 'Русский',
 };
