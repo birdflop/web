@@ -26,6 +26,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: MinecraftRus;
+  src: url(/fonts/MinecraftRus.ttf);
+  font-display: swap;
+}
+
 @layer utilities {
   .animation-delay-5 { animation-delay: -5s; }
   .animation-delay-10 { animation-delay: -10s; }
@@ -33,7 +39,7 @@
 
 html {
   background-color: hsl(270deg, 22%, 5%);
-  font-family: MinecraftRegular;
+  font-family: MinecraftRegular, MinecraftRus;
 }
 
 main {
@@ -43,15 +49,19 @@ main {
 }
 
 .font-bold {
-  font-family: MinecraftBold;
+  font-family: MinecraftBold, MinecraftRus;
+  font-weight: bold;
 }
 
 .font-italic {
-  font-family: MinecraftItalic;
+  font-family: MinecraftItalic, MinecraftRus;
+  font-style: italic;
 }
 
 .font-bold-italic {
-  font-family: MinecraftBoldItalic;
+  font-family: MinecraftBoldItalic, MinecraftRus;
+  font-style: italic;
+  font-weight: bold;
 }
 
 .font-underline {
