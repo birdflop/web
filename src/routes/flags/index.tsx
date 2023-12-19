@@ -174,21 +174,23 @@ export default component$(() => {
     },
   ];
 
+  const defaultParsed = {
+    operatingSystem: '',
+    serverType: '',
+    gui: false,
+    variables: false,
+    autoRestart: false,
+    extraFlags: [],
+    fileName: '',
+    flags: 'aikars',
+    withResult: true,
+    withFlags: false,
+    memory: 0,
+  };
+
   const store: any = useStore({
     step: 1,
-    parsed: {
-      operatingSystem: '',
-      serverType: '',
-      gui: false,
-      variables: false,
-      autoRestart: false,
-      extraFlags: [],
-      fileName: '',
-      flags: 'aikars',
-      withResult: true,
-      withFlags: false,
-      memory: 0,
-    },
+    parsed: defaultParsed,
   }, { deep: true });
 
   useVisibleTask$(async () => {
@@ -212,12 +214,21 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">
       <div class="w-full my-10 min-h-[60px]">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('flags.title@@Flags Generator')}
-        </h1>
-        <h2 class="text-gray-50 text-base sm:text-xl mb-6">
-          {t('flags.subtitle@@A simple script generator to start your Minecraft servers with optimal flags.')}
-        </h2>
+        <div class="flex justify-between flex-wrap md:flex-nowrap">
+          <div>
+            <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
+              {t('flags.title@@Flags Generator')}
+            </h1>
+            <h2 class="text-gray-50 text-base sm:text-xl mb-6">
+              {t('flags.subtitle@@A simple script generator to start your Minecraft servers with optimal flags.')}
+            </h2>
+          </div>
+          <button class="w-full lg:w-auto" onClick$={() => {
+            store.step = 1;
+            store.parsed = defaultParsed;
+            setCookie(JSON.stringify(store));
+          }}>{t('flags.startOver@@Start over?')}</button>
+        </div>
         <div class="flex">
           <div class="flex-1">
             <button class="flex items-center justify-center sm:justify-normal gap-3 fill-current py-2 px-3 hover:bg-gray-800 transition-all w-full" onClick$={() => {
