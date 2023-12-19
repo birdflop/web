@@ -181,7 +181,7 @@ export default component$(() => {
     variables: false,
     autoRestart: false,
     extraFlags: [],
-    fileName: '',
+    fileName: 'server.jar',
     flags: 'aikars',
     withResult: true,
     withFlags: false,
@@ -377,7 +377,10 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.fileName.label@@File Name')}
                   </CardHeader>
-                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <TextInput id="input" value={store.parsed.fileName} defaultValue={defaultParsed.fileName} onInput$={(event: any) => {
+                    store.parsed.fileName = event.target!.value;
+                    setCookie(JSON.stringify(store));
+                  }}>
                     {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                   </TextInput>
                 </div>
