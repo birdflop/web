@@ -1,0 +1,7 @@
+{
+    "ramcalculator": {
+        "title": "RAM Calculator",
+        "subtitle": "This will help calculate how much RAM to use for Aikar's Flags.",
+        "ramAmount": "RAM Amount"
+    }
+}
