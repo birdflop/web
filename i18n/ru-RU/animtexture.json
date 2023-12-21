@@ -1,0 +1,11 @@
+{
+    "animtexture": {
+        "title": "Animated Textures",
+        "subtitle": "Easily merge textures for resource pack animations",
+        "textureName": "Texture Name",
+        "cumulative": "Cumulative (Turn this on if gif frames are broken)",
+        "generate": "Generate",
+        "downloadPNG": "Download PNG",
+        "downloadMCMETA": "Download MCMETA"
+    }
+}

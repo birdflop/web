@@ -1,0 +1,11 @@
+{
+    "animtab": {
+        "title": "Animated TAB",
+        "subtitle": "TAB plugin gradient animation creator",
+        "animationName": "Animation Name",
+        "speed": "Speed",
+        "outputFormat": "Output Format",
+        "outputType": "Output Type",
+        "length": "Gradient Length"
+    }
+}
