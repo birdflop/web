@@ -38,7 +38,7 @@ export default component$(() => {
             else {
               store.error = '';
               const code = link.replace('https://spark.lucko.me/', '');
-              store.redirect = `/SparkProfile/${code}`;
+              store.redirect = `/sparkprofile/${code}`;
             }
           }
         }>
