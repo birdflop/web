@@ -1,7 +1,7 @@
 {
     "animpreview": {
         "title": "Animación Previsualizadora",
-        "subtitle": "Previsualiza las animaciones de TAB sin la necesidad de ponerlas en el juego",
+        "subtitle": "Preview TAB Animations without the need to put them in-game",
         "yamlInput": "Entrada YAML"
     }
 }

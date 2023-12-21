@@ -1,0 +1,8 @@
+{
+    "presettools": {
+        "title": "Preset Updater",
+        "subtitle": "This will update older preset versions to the newest version.",
+        "input": "Preset Input",
+        "output": "Output"
+    }
+}
