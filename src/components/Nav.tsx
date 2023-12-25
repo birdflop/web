@@ -107,7 +107,7 @@ export default component$(({ tauriVersion }: any) => {
         }
         {tauriVersion && <>
           <NavButton type="div" icon title="Minimize" onClick$={() => {
-            Window.getzCurrent().minimize();
+            Window.getCurrent().minimize();
           }}>
             <RemoveOutline width="24" />
           </NavButton>
