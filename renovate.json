@@ -4,5 +4,5 @@
     "config:base"
   ],
   "groupName": "All",
-  "ignoreDeps": ["node"]
+  "baseBranches": ["dev"]
 }
