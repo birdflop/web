@@ -1,7 +1,7 @@
 {
   "name": "simplymc",
   "version": "6.2.0",
-  "description": "The official website for the minecraft multitool simplymc.art",
+  "description": "A Minecraft multitool for you",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LuminescentDev/SimplyMC.git"
