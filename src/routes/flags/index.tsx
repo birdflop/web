@@ -366,7 +366,12 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.fileName.label@@File Name')}
                   </CardHeader>
-                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onInput$={(event: any) => { store.parsed.fileName = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onChange$={(event: any) => {
+                    if (event.target!.value.replace(/ /g, '') == '') return;
+                    if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
+                    store.parsed.fileName = event.target!.value;
+                    setCookie(JSON.stringify(store));
+                  }}>
                     {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
                   </TextInput>
                 </div>
