@@ -166,15 +166,19 @@ export default component$(() => {
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
             <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
               (event: any) => {
+                if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
-            }>
+            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {Object.keys(presets).map((preset: any) => (
                 <option key={preset} value={preset}>
                   {preset}
                 </option>
               ))}
+              <option value={'custom'}>
+                {t('color.custom@@Custom')}
+              </option>
             </SelectInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
               onChange$={(event: any) => {
@@ -261,7 +265,7 @@ export default component$(() => {
                       .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
                       .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
                       .replace('$c', '')
-                      : 'Custom'}
+                      : t('color.custom@@Custom')}
                   </option>
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
