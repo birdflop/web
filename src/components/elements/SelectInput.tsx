@@ -18,7 +18,7 @@ export const RawSelectInput = component$(({ transparent, extraClass, ...props }:
     <select {...props} class={{
       'transition ease-in-out text-lg border border-gray-700 bg-gray-800 text-gray-50 hover:bg-gray-700 focus:bg-gray-700 rounded-md px-2 py-3': true,
       'border-0 bg-transparent': transparent,
-      [extraClass]: !!extraClass,
+      ...extraClass,
     }}>
       <Slot />
     </select>

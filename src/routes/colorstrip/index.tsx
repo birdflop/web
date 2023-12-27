@@ -26,7 +26,7 @@ export default component$(() => {
           {t('colorstrip.subtitle@@Strips all color / format codes from text')}
         </h2>
 
-        <TextInput extraClass="mb-3" id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
+        <TextInput extraClass={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 

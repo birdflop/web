@@ -33,7 +33,7 @@ export default component$(() => {
         <div class="mt-3">
           <OutputField id="Output" value={
             JSON.stringify(loadPreset(store.preset), null, 2)
-          } extraClass="h-96">
+          } extraClass={{ 'h-96': true }}>
             {t('presettools.output@@Output')}
           </OutputField>
         </div>

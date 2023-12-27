@@ -67,15 +67,11 @@ main {
   font-weight: bold;
 }
 
-.font-underline {
-  text-decoration-line: underline;
-}
-
-.font-strikethrough {
+.strikethrough {
   text-decoration-line: line-through;
 }
 
-.font-underline-strikethrough {
+.underline-strikethrough {
   text-decoration-line: underline line-through;
 }
 

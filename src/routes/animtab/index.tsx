@@ -161,7 +161,12 @@ export default component$(() => {
           </span>
         </OutputField>
 
-        <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+        <h1 class={{
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px]': true,
+          'font-bold': store.bold,
+          'font-italic': store.italic,
+          'font-bold-italic': store.bold && store.italic,
+        }}>
           {(() => {
             const text = store.text != '' ? store.text : 'SimplyMC';
 
@@ -170,7 +175,11 @@ export default component$(() => {
             if (!colors) return;
 
             return text.split('').map((char: string, i: number) => (
-              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
+                'underline': store.underline,
+                'strikethrough': store.strikethrough,
+                'underline-strikethrough': store.underline && store.strikethrough,
+              }}>
                 {char}
               </span>
             ));
@@ -294,7 +303,7 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <NumberInput id="speed" input value={store.speed} extraClass="w-full" step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
+                <NumberInput id="speed" input value={store.speed} extraClass={{ 'w-full': true }} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 

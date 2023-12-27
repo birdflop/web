@@ -115,7 +115,12 @@ export default component$(() => {
           </span>
         </OutputField>
 
-        <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+        <h1 class={{
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px]': true,
+          'font-bold': store.bold,
+          'font-italic': store.italic,
+          'font-bold-italic': store.bold && store.italic,
+        }}>
           {(() => {
             const text = store.text ? store.text : 'SimplyMC';
 
@@ -128,7 +133,11 @@ export default component$(() => {
             return text.split('').map((char: string, i: number) => {
               if (char != ' ') hex = convertToHex(gradient.next());
               return (
-                <span key={`char${i}`} style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+                <span key={`char${i}`} style={`color: #${hex};`} class={{
+                  'underline': store.underline,
+                  'strikethrough': store.strikethrough,
+                  'underline-strikethrough': store.underline && store.strikethrough,
+                }}>
                   {char}
                 </span>
               );

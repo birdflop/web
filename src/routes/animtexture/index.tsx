@@ -78,7 +78,7 @@ export default component$(() => {
           ))}
         </div>
 
-        <TextInput id="textureName" extraClass="mb-3" value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
+        <TextInput id="textureName" extraClass={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
           {t('animtexture.textureName@@Texture Name')}
         </TextInput>
 
@@ -86,7 +86,7 @@ export default component$(() => {
           {t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}
         </Toggle>
 
-        <Button extraClass="my-6" onClick$={
+        <Button extraClass={{ 'my-6': true }} onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
             canvas.classList.add('sm:flex');
@@ -138,7 +138,7 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <ExternalButton id="pngd" extraClass="mr-2" href='/'>
+          <ExternalButton id="pngd" extraClass={{ 'mr-2': true }} href='/'>
             {t('animtexture.downloadPNG@@Download PNG')}
           </ExternalButton>
           <ExternalButton id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
