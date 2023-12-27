@@ -131,7 +131,7 @@ export default component$(() => {
       if (key == 'colors') track(() => store.colors.length);
       else track(() => store[key]);
     });
-    const { frames } = getAnimFrames(store);
+    const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'SimplyMC' });
     if (store.type == 1) {
       store.frames = frames.reverse();
     }
@@ -165,7 +165,7 @@ export default component$(() => {
 
         <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
           {(() => {
-            const text = store.text ? store.text : 'SimplyMC';
+            const text = store.text != '' ? store.text : 'SimplyMC';
 
             if (!store.frames[0]) return;
             const colors = store.frames[store.frame];
@@ -207,12 +207,20 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput"
-              onIncrement$={() => {
-                if (store.colors.length < store.text.length) {
-                  store.colors.push(getRandomColor());
-                  setCookie(JSON.stringify(store));
+            <NumberInput input min={2} value={store.colors.length} id="colorsinput"
+              onChange$={(event: any) => {
+                if (event.target!.value < 2) event.target!.value = 2;
+                const newColors = [];
+                for (let i = 0; i < event.target!.value; i++) {
+                  if (store.colors[i]) newColors.push(store.colors[i]);
+                  else newColors.push(getRandomColor());
                 }
+                store.colors = newColors;
+                setCookie(JSON.stringify(store));
+              }}
+              onIncrement$={() => {
+                store.colors.push(getRandomColor());
+                setCookie(JSON.stringify(store));
               }}
               onDecrement$={() => {
                 if (store.colors.length > 2) {
@@ -221,16 +229,19 @@ export default component$(() => {
                 }
               }}
             >
-              {t('color.colorAmount@@Color Amount')} - {store.colors.length}
+              {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <NumberInput id="length" step={1} min={1} onIncrement$={() => {
-              store.length++;
-              setCookie(JSON.stringify(store));
-            }} onDecrement$={() => {
-              if (store.length > 1) store.length--;
-              setCookie(JSON.stringify(store));
-            }}>
-              {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length}
+              onIncrement$={() => {
+                store.length++;
+                setCookie(JSON.stringify(store));
+              }}
+              onDecrement$={() => {
+                if (store.length > 1) store.length--;
+                setCookie(JSON.stringify(store));
+              }}
+            >
+              {t('animtab.length@@Gradient Length')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {

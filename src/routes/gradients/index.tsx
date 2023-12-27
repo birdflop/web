@@ -166,7 +166,18 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput"
+            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
+              onChange$={(event: any) => {
+                if (event.target!.value > store.text.length) event.target!.value = store.text.length;
+                if (event.target!.value < 2) event.target!.value = 2;
+                const newColors = [];
+                for (let i = 0; i < event.target!.value; i++) {
+                  if (store.colors[i]) newColors.push(store.colors[i]);
+                  else newColors.push(getRandomColor());
+                }
+                store.colors = newColors;
+                setCookie(JSON.stringify(store));
+              }}
               onIncrement$={() => {
                 if (store.colors.length < store.text.length) {
                   store.colors.push(getRandomColor());
@@ -180,7 +191,7 @@ export default component$(() => {
                 }
               }}
             >
-              {t('color.colorAmount@@Color Amount')} - {store.colors.length}
+              {t('color.colorAmount@@Color Amount')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
