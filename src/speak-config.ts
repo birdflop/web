@@ -21,8 +21,7 @@ export const config: SpeakConfig = {
     'colorstrip',
     'privacypolicy',
     'presettools',
-    'ramcalculator',
-    'app',
     'flags',
+    'app',
   ],
 };
