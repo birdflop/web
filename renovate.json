@@ -4,11 +4,5 @@
     "config:base"
   ],
   "groupName": "All",
-  "baseBranches": ["dev"],
-  "packageRules": [
-    {
-      "matchPackagePatterns": ["*"],
-      "automerge": true
-    }
-  ]
+  "baseBranches": ["dev"]
 }

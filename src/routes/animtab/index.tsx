@@ -13,7 +13,7 @@ import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
-import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
+import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
@@ -205,19 +205,37 @@ export default component$(() => {
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-4 gap-2">
-          <div class="sm:pr-4 hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <NumberInput id="colorsinput"
+              onIncrement$={() => {
+                if (store.colors.length < store.text.length) {
+                  store.colors.push(getRandomColor());
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+              onDecrement$={() => {
+                if (store.colors.length > 2) {
+                  store.colors.pop();
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+            >
               {t('color.colorAmount@@Color Amount')} - {store.colors.length}
             </NumberInput>
-            <NumberInput id="length" step={1} min={1} onIncrement$={() => { store.length++; setCookie(JSON.stringify(store)); }} onDecrement$={() => { if (store.length > 1) store.length--; setCookie(JSON.stringify(store)); }}>
+            <NumberInput id="length" step={1} min={1} onIncrement$={() => {
+              store.length++;
+              setCookie(JSON.stringify(store));
+            }} onDecrement$={() => {
+              if (store.length > 1) store.length--;
+              setCookie(JSON.stringify(store));
+            }}>
               {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
-                return (
+                return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
-                    key={`color${i + 1}`}
                     id={`color${i + 1}`}
                     value={color}
                     onInput$={(newColor: string) => {
@@ -225,30 +243,23 @@ export default component$(() => {
                       setCookie(JSON.stringify(store));
                     }}
                   >
-                    <button
-                      onClick$={() => {
-                        handleSwap(i, i - 1);
-                      }}
-                      class={'pe-2'}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      onClick$={() => {
-                        handleSwap(i, i + 1);
-                      }}
-                      class={'pe-4'}
-                    >
-                      ↓
-                    </button>
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
-                );
+                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
+                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
+                      <ChevronUp width="20" />
+                    </button>
+                    <div class="bg-gray-700 w-px" />
+                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
+                      <ChevronDown width="20" />
+                    </button>
+                  </div>
+                </div>;
               })}
             </div>
           </div>
-          <div class="sm:col-span-3">
-            <div class="flex sm:flex flex-col gap-3" id="inputs">
+          <div class="md:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-3" id="inputs">
               <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.animationName@@Animation Name')}
               </TextInput>
@@ -257,7 +268,7 @@ export default component$(() => {
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <div class="grid sm:grid-cols-2 sm:gap-2">
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
                 <NumberInput id="speed" input value={store.speed} extraClass="w-full" step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>

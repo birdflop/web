@@ -1,6 +1,6 @@
 {
   "name": "simplymc",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "The official website for the minecraft multitool simplymc.art",
   "repository": {
     "type": "git",
@@ -47,9 +47,9 @@
     "qwik-ionicons": "^1.0.5",
     "qwik-speak": "^0.19.0",
     "simple-color-picker": "^1.0.5",
-    "tailwindcss": "^3.3.7",
+    "tailwindcss": "^3.4.0",
     "typescript": "5.3.3",
-    "undici": "^6.0.1",
+    "undici": "^6.2.1",
     "vite": "5.0.10",
     "vite-tsconfig-paths": "4.2.2",
     "wrangler": "latest",

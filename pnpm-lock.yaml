@@ -7,7 +7,7 @@ settings:
 devDependencies:
   '@builder.io/qwik':
     specifier: 1.3.1
-    version: 1.3.1(@types/node@20.10.5)(undici@6.0.1)
+    version: 1.3.1(@types/node@20.10.5)(undici@6.2.1)
   '@builder.io/qwik-city':
     specifier: 1.3.1
     version: 1.3.1(@types/node@20.10.5)
@@ -66,14 +66,14 @@ devDependencies:
     specifier: ^1.0.5
     version: 1.0.5
   tailwindcss:
-    specifier: ^3.3.7
-    version: 3.3.7
+    specifier: ^3.4.0
+    version: 3.4.0
   typescript:
     specifier: 5.3.3
     version: 5.3.3
   undici:
-    specifier: ^6.0.1
-    version: 6.0.1
+    specifier: ^6.2.1
+    version: 6.2.1
   vite:
     specifier: 5.0.10
     version: 5.0.10(@types/node@20.10.5)
@@ -127,7 +127,7 @@ packages:
       - terser
     dev: true
 
-  /@builder.io/qwik@1.3.1(@types/node@20.10.5)(undici@6.0.1):
+  /@builder.io/qwik@1.3.1(@types/node@20.10.5)(undici@6.2.1):
     resolution: {integrity: sha512-XbA/pzLVZJ7HXLApyk1jRVYTwZdHEq3vGcnOi/ZS7GKGvkEWKCRMWIV+5dVJKjBS0jxtYcj07w52HmkPbQiVMw==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
@@ -135,7 +135,7 @@ packages:
       undici: ^5.14.0
     dependencies:
       csstype: 3.1.3
-      undici: 6.0.1
+      undici: 6.2.1
       vite: 5.0.10(@types/node@20.10.5)
     transitivePeerDependencies:
       - '@types/node'
@@ -3549,7 +3549,7 @@ packages:
     peerDependencies:
       '@builder.io/qwik': '>=1.3.1'
     dependencies:
-      '@builder.io/qwik': 1.3.1(@types/node@20.10.5)(undici@6.0.1)
+      '@builder.io/qwik': 1.3.1(@types/node@20.10.5)(undici@6.2.1)
     dev: true
 
   /read-cache@1.0.0:
@@ -3942,8 +3942,8 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /tailwindcss@3.3.7:
-    resolution: {integrity: sha512-pjgQxDZPvyS/nG3ZYkyCvsbONJl7GdOejfm24iMt2ElYQQw8Jc4p0m8RdMp7mznPD0kUhfzwV3zAwa80qI0zmQ==}
+  /tailwindcss@3.4.0:
+    resolution: {integrity: sha512-VigzymniH77knD1dryXbyxR+ePHihHociZbXnLZHUyzf2MMs2ZVqlUrZ3FvpXP8pno9JzmILt1sZPD19M3IxtA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -4111,8 +4111,8 @@ packages:
       '@fastify/busboy': 2.1.0
     dev: true
 
-  /undici@6.0.1:
-    resolution: {integrity: sha512-eZFYQLeS9BiXpsU0cuFhCwfeda2MnC48EVmmOz/eCjsTgmyTdaHdVsPSC/kwC2GtW2e0uH0HIPbadf3/bRWSxw==}
+  /undici@6.2.1:
+    resolution: {integrity: sha512-7Wa9thEM6/LMnnKtxJHlc8SrTlDmxqJecgz1iy8KlsN0/iskQXOQCuPkrZLXbElPaSw5slFFyKIKXyJ3UtbApw==}
     engines: {node: '>=18.0'}
     dependencies:
       '@fastify/busboy': 2.1.0

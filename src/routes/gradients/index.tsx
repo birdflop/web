@@ -13,7 +13,7 @@ import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/co
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
 
-import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
+import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
@@ -164,54 +164,57 @@ export default component$(() => {
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-4 gap-2">
-          <div class="sm:pr-4 hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <NumberInput id="colorsinput"
+              onIncrement$={() => {
+                if (store.colors.length < store.text.length) {
+                  store.colors.push(getRandomColor());
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+              onDecrement$={() => {
+                if (store.colors.length > 2) {
+                  store.colors.pop();
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+            >
               {t('color.colorAmount@@Color Amount')} - {store.colors.length}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
-                return (
-                  <div key={`color${i + 1}`}>
-                    <ColorInput
-                      key={`color${i + 1}`}
-                      id={`color${i + 1}`}
-                      value={color}
-                      onInput$={(newColor: string) => {
-                        store.colors[i] = newColor;
-                        setCookie(JSON.stringify(store));
-                      }}
-                    >
-                      <button
-                        onClick$={() => {
-                          handleSwap(i, i - 1);
-                        }}
-                        class={'pe-2'}
-                      >
-                        ↑
-                      </button>
-                      <button
-                        onClick$={() => {
-                          handleSwap(i, i + 1);
-                        }}
-                        class={'pe-4'}
-                      >
-                        ↓
-                      </button>
-                      {t('color.hexColor@@Hex Color')} {i + 1}
-                    </ColorInput>
+                return <div key={`color${i + 1}`} class="flex items-end">
+                  <ColorInput
+                    id={`color${i + 1}`}
+                    value={color}
+                    onInput$={(newColor: string) => {
+                      store.colors[i] = newColor;
+                      setCookie(JSON.stringify(store));
+                    }}
+                  >
+                    {t('color.hexColor@@Hex Color')} {i + 1}
+                  </ColorInput>
+                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
+                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
+                      <ChevronUp width="20" />
+                    </button>
+                    <div class="bg-gray-700 w-px" />
+                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
+                      <ChevronDown width="20" />
+                    </button>
                   </div>
-                );
+                </div>;
               })}
             </div>
           </div>
-          <div class="sm:col-span-3">
-            <div class="flex sm:flex flex-col gap-3" id="inputs">
+          <div class="md:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-3" id="inputs">
               <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <div class="grid sm:grid-cols-2 sm:gap-2">
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
                 <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') return store.customFormat = true;
