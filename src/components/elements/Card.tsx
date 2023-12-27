@@ -68,7 +68,7 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
             }}></div>
             <div class={{
               'absolute left-0 right-0 mx-auto bottom-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
-              'animation-delay-5': true,
+              '-animation-delay-5': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
               'animate-blob2': blob === 2,
@@ -87,7 +87,7 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
             }}></div>
             <div class={{
               'absolute left-0 right-0 mx-auto bottom-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
-              'animation-delay-10': true,
+              '-animation-delay-10': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
               'animate-blob2': blob === 2,

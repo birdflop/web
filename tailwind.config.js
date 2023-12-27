@@ -85,6 +85,9 @@ module.exports = {
   theme: {
     extend: {
       colors: { gray, luminescent },
+      fontFamily: {
+        'sans': ['MinecraftRegular', 'MinecraftRus'],
+      },
       animation: {
         blob: 'blob 15s infinite',
         blob1: 'blob1 15s infinite',
