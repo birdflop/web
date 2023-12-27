@@ -58,7 +58,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const store: any = useStore({
-    colors: [],
+    colors: presets.SimplyMC,
     text: 'SimplyMC',
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
@@ -92,10 +92,8 @@ export default component$(() => {
     const parsedUserStore = JSON.parse(userstore);
     for (const key of Object.keys(parsedUserStore)) {
       const value = parsedUserStore[key];
-      if (key == 'colors') store[key] = value;
       store[key] = value === 'true' ? true : value === 'false' ? false : value;
     }
-    if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
   });
 
   return (
@@ -166,6 +164,18 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+              (event: any) => {
+                store.colors = presets[event.target!.value as keyof typeof presets];
+                setCookie(JSON.stringify(store));
+              }
+            }>
+              {Object.keys(presets).map((preset: any) => (
+                <option key={preset} value={preset}>
+                  {preset}
+                </option>
+              ))}
+            </SelectInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
               onChange$={(event: any) => {
                 if (event.target!.value > store.text.length) event.target!.value = store.text.length;
@@ -226,21 +236,32 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
+                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
-                    if (event.target!.value == 'custom') return store.customFormat = true;
-                    store.customFormat = false;
-                    store.format = event.target!.value;
+                    if (event.target!.value == 'custom') {
+                      store.customFormat = true;
+                    }
+                    else {
+                      store.customFormat = false;
+                      store.format = event.target!.value;
+                    }
                     setCookie(JSON.stringify(store));
                   }
                 }>
                   {formats.map((format: any) => (
                     <option key={format} value={format}>
-                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                      {format
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                        .replace('$c', '')}
                     </option>
                   ))}
                   <option value={'custom'}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                    {store.customFormat ? store.format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', '')
+                      : 'Custom'}
                   </option>
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
@@ -270,22 +291,6 @@ export default component$(() => {
               <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
-
-              <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
-                (event: any) => {
-                  store.colors = [];
-                  setTimeout(() => {
-                    store.colors = presets[event.target!.value as keyof typeof presets];
-                    setCookie(JSON.stringify(store));
-                  }, 1);
-                }
-              }>
-                {Object.keys(presets).map((preset: any) => (
-                  <option key={preset} value={preset}>
-                    {preset}
-                  </option>
-                ))}
-              </SelectInput>
 
               <label>
                 {t('color.presets@@Presets')}
@@ -342,14 +347,14 @@ export default component$(() => {
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.bold@@Bold')} - {store.formatchar + 'l'}
               </Toggle>
-              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
+              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
               </Toggle>
               <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.underline@@Underline')} - {store.formatchar + 'n'}
               </Toggle>
-              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
+              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
               </Toggle>
             </div>
           </div>
