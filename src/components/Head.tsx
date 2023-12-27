@@ -13,6 +13,7 @@ export const RouterHead = component$(() => {
       <title>{`SimplyMC: ${head.title}`}</title>
       <meta content={`SimplyMC: ${head.title}`} property="og:title"/>
       <meta content="#881645" name="theme-color"/>
+      <meta content="/icon-512x512.png" property="og:image" />
 
       <link rel="preload" as="font" href="/fonts/MinecraftRegular.otf" crossOrigin="anonymous" />
       <link rel="preload" as="font" href="/fonts/MinecraftBold.otf" crossOrigin="anonymous" />
