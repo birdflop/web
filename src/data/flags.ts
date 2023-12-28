@@ -176,10 +176,9 @@ export const flags: Flags = {
     'generate': () => {
       return [
         ...baseBenchmarked,
-        '-XX:+UseShenandoahGC',
-        '-XX:ShenandoahGCMode=iu',
-        '-XX:ShenandoahGuaranteedGCInterval=1000000',
+        '-XX:+UseZGC',
         '-XX:AllocatePrefetchStyle=1',
+        '-XX:-ZProactive',
       ];
     },
   },
