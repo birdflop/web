@@ -21,7 +21,7 @@ export const Button = component$(({ color, small, big, massive, bold, extraClass
       'text-base px-8 py-4 rounded-xl gap-4': massive,
       'font-bold': bold,
       'text-base px-4 py-2 rounded-md gap-3': !small && !big && !massive,
-      [extraClass]: !!extraClass,
+      ...extraClass,
     }}>
       <Slot />
     </button>
@@ -39,7 +39,7 @@ export const SPAButton = component$(({ color, small, big, massive, bold, extraCl
       'text-base px-8 py-4 rounded-xl': massive,
       'font-bold': bold,
       'text-base px-4 py-2 rounded-md': !small && !big && !massive,
-      [extraClass]: !!extraClass,
+      ...extraClass,
     }}>
       <Slot />
     </Link>
@@ -57,7 +57,7 @@ export const ExternalButton = component$(({ color, small, big, massive, bold, ex
       'text-base px-8 py-4 rounded-xl': massive,
       'font-bold': bold,
       'text-base px-4 py-2 rounded-md': !small && !big && !massive,
-      [extraClass]: !!extraClass,
+      ...extraClass,
     }}>
       <Slot />
     </a>

@@ -13,7 +13,7 @@ import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
-import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
+import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
@@ -64,7 +64,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const store: any = useStore({
-    colors: [],
+    colors: presets.SimplyMC,
     name: 'logo',
     text: 'SimplyMC',
     type: 1,
@@ -104,10 +104,8 @@ export default component$(() => {
       const parsedUserStore = JSON.parse(userstore);
       for (const key of Object.keys(parsedUserStore)) {
         const value = parsedUserStore[key];
-        if (key == 'colors') store[key] = value;
         store[key] = value === 'true' ? true : value === 'false' ? false : value;
       }
-      if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
     });
 
     let speed = store.speed;
@@ -131,7 +129,7 @@ export default component$(() => {
       if (key == 'colors') track(() => store.colors.length);
       else track(() => store[key]);
     });
-    const { frames } = getAnimFrames(store);
+    const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'SimplyMC' });
     if (store.type == 1) {
       store.frames = frames.reverse();
     }
@@ -163,16 +161,25 @@ export default component$(() => {
           </span>
         </OutputField>
 
-        <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+        <h1 class={{
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px]': true,
+          'font-bold': store.bold,
+          'font-italic': store.italic,
+          'font-bold-italic': store.bold && store.italic,
+        }}>
           {(() => {
-            const text = store.text ? store.text : 'SimplyMC';
+            const text = store.text != '' ? store.text : 'SimplyMC';
 
             if (!store.frames[0]) return;
             const colors = store.frames[store.frame];
             if (!colors) return;
 
             return text.split('').map((char: string, i: number) => (
-              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
+                'underline': store.underline,
+                'strikethrough': store.strikethrough,
+                'underline-strikethrough': store.underline && store.strikethrough,
+              }}>
                 {char}
               </span>
             ));
@@ -205,19 +212,64 @@ export default component$(() => {
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-4 gap-2">
-          <div class="sm:pr-4 hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) { store.colors.pop(); setCookie(JSON.stringify(store)); } }}>
-              {t('color.colorAmount@@Color Amount')} - {store.colors.length}
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+              (event: any) => {
+                if (event.target!.value == 'custom') return;
+                store.colors = presets[event.target!.value as keyof typeof presets];
+                setCookie(JSON.stringify(store));
+              }
+            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {Object.keys(presets).map((preset: any) => (
+                <option key={preset} value={preset}>
+                  {preset}
+                </option>
+              ))}
+              <option value={'custom'}>
+                {t('color.custom@@Custom')}
+              </option>
+            </SelectInput>
+            <NumberInput input min={2} value={store.colors.length} id="colorsinput"
+              onChange$={(event: any) => {
+                if (event.target!.value < 2) event.target!.value = 2;
+                const newColors = [];
+                for (let i = 0; i < event.target!.value; i++) {
+                  if (store.colors[i]) newColors.push(store.colors[i]);
+                  else newColors.push(getRandomColor());
+                }
+                store.colors = newColors;
+                setCookie(JSON.stringify(store));
+              }}
+              onIncrement$={() => {
+                store.colors.push(getRandomColor());
+                setCookie(JSON.stringify(store));
+              }}
+              onDecrement$={() => {
+                if (store.colors.length > 2) {
+                  store.colors.pop();
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+            >
+              {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <NumberInput id="length" step={1} min={1} onIncrement$={() => { store.length++; setCookie(JSON.stringify(store)); }} onDecrement$={() => { if (store.length > 1) store.length--; setCookie(JSON.stringify(store)); }}>
-              {t('animtab.length@@Gradient Length')} - {store.length * store.text.length}
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length}
+              onIncrement$={() => {
+                store.length++;
+                setCookie(JSON.stringify(store));
+              }}
+              onDecrement$={() => {
+                if (store.length > 1) store.length--;
+                setCookie(JSON.stringify(store));
+              }}
+            >
+              {t('animtab.length@@Gradient Length')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
-                return (
+                return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
-                    key={`color${i + 1}`}
                     id={`color${i + 1}`}
                     value={color}
                     onInput$={(newColor: string) => {
@@ -225,30 +277,23 @@ export default component$(() => {
                       setCookie(JSON.stringify(store));
                     }}
                   >
-                    <button
-                      onClick$={() => {
-                        handleSwap(i, i - 1);
-                      }}
-                      class={'pe-2'}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      onClick$={() => {
-                        handleSwap(i, i + 1);
-                      }}
-                      class={'pe-4'}
-                    >
-                      ↓
-                    </button>
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
-                );
+                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
+                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
+                      <ChevronUp width="20" />
+                    </button>
+                    <div class="bg-gray-700 w-px" />
+                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
+                      <ChevronDown width="20" />
+                    </button>
+                  </div>
+                </div>;
               })}
             </div>
           </div>
-          <div class="sm:col-span-3">
-            <div class="flex sm:flex flex-col gap-3" id="inputs">
+          <div class="md:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-3" id="inputs">
               <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.animationName@@Animation Name')}
               </TextInput>
@@ -257,8 +302,8 @@ export default component$(() => {
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <div class="grid sm:grid-cols-2 sm:gap-2">
-                <NumberInput id="speed" input value={store.speed} extraClass="w-full" step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <NumberInput id="speed" input value={store.speed} extraClass={{ 'w-full': true }} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 
@@ -270,7 +315,7 @@ export default component$(() => {
                   ))}
                 </SelectInput>
 
-                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
+                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -284,11 +329,18 @@ export default component$(() => {
                 }>
                   {formats.map((format: any) => (
                     <option key={format} value={format}>
-                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                      {format
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                        .replace('$c', '')}
                     </option>
                   ))}
                   <option value={'custom'}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                    {store.customFormat ? store.format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', '')
+                      : t('color.custom@@Custom')}
                   </option>
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
@@ -314,22 +366,6 @@ export default component$(() => {
                   </div>
                 </>
               }
-
-              <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
-                (event: any) => {
-                  store.colors = [];
-                  setTimeout(() => {
-                    store.colors = presets[event.target!.value as keyof typeof presets];
-                    setCookie(JSON.stringify(store));
-                  }, 1);
-                }
-              }>
-                {Object.keys(presets).map((preset: any) => (
-                  <option key={preset} value={preset}>
-                    {preset}
-                  </option>
-                ))}
-              </SelectInput>
 
               <TextInput big id="formatInput" value={store.outputFormat} placeholder="SimplyMC" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.outputFormat@@Output Format')}
@@ -390,14 +426,14 @@ export default component$(() => {
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.bold@@Bold')} - {store.formatchar + 'l'}
               </Toggle>
-              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
+              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
               </Toggle>
               <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.underline@@Underline')} - {store.formatchar + 'n'}
               </Toggle>
-              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
+              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
               </Toggle>
             </div>
           </div>

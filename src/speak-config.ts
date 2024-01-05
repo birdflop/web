@@ -1,13 +1,17 @@
 import type { SpeakConfig } from 'qwik-speak';
+export const languages = {
+  'da-DK': 'Dansk',
+  'en-US': 'English',
+  'es-ES': 'Español',
+  'nl-NL': 'Nederlands',
+  'pl-PL': 'Polski',
+  'pt-PT': 'Português',
+  'ru-RU': 'Русский',
+};
 
 export const config: SpeakConfig = {
   defaultLocale: { lang: 'en-US' },
-  supportedLocales: [
-    { lang: 'en-US' },
-    { lang: 'es-ES' },
-    { lang: 'nl-NL' },
-    { lang: 'pt-PT' },
-  ],
+  supportedLocales: Object.keys(languages).map((lang) => ({ lang })),
   assets: [
     'home',
     'gradient',
@@ -17,15 +21,7 @@ export const config: SpeakConfig = {
     'colorstrip',
     'privacypolicy',
     'presettools',
-    'ramcalculator',
-    'app',
     'flags',
+    'app',
   ],
-};
-
-export const languages = {
-  'en-US': 'English (US)',
-  'es-ES': 'Español (Spanish - ES)',
-  'nl-NL': 'Nederlands (Dutch - NL)',
-  'pt-PT': 'Português (Portuguese - PT)',
 };

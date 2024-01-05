@@ -22,8 +22,8 @@ export default component$(() => {
       <div class="text-center justify-center">
         <div id="noise" class="flex relative justify-center align-center mb-10">
           <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-pink-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl"></div>
-          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-luminescent-600 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl animation-delay-5"></div>
-          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-violet-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl animation-delay-10"></div>
+          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-luminescent-600 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl -animation-delay-5"></div>
+          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-violet-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl -animation-delay-10"></div>
           <div class="z-10 fade-in">
             <Icon class="w-[300px]" />
           </div>

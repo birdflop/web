@@ -7,7 +7,7 @@ settings:
 devDependencies:
   '@builder.io/qwik':
     specifier: 1.3.1
-    version: 1.3.1(@types/node@20.10.5)(undici@6.0.1)
+    version: 1.3.1(@types/node@20.10.5)(undici@6.2.1)
   '@builder.io/qwik-city':
     specifier: 1.3.1
     version: 1.3.1(@types/node@20.10.5)
@@ -21,11 +21,11 @@ devDependencies:
     specifier: ^0.33.1
     version: 0.33.1
   '@tauri-apps/api':
-    specifier: 2.0.0-alpha.12
-    version: 2.0.0-alpha.12
+    specifier: 2.0.0-alpha.13
+    version: 2.0.0-alpha.13
   '@tauri-apps/cli':
-    specifier: 2.0.0-alpha.18
-    version: 2.0.0-alpha.18
+    specifier: 2.0.0-alpha.20
+    version: 2.0.0-alpha.20
   '@tauri-apps/plugin-notification':
     specifier: github:tauri-apps/tauri-plugin-notification#v2
     version: github.com/tauri-apps/tauri-plugin-notification/166a10deb52f56bf2a2aa4b97daf9fa8d9355326
@@ -33,17 +33,17 @@ devDependencies:
     specifier: github:tauri-apps/tauri-plugin-window-state#v2
     version: github.com/tauri-apps/tauri-plugin-window-state/449102e4c203cf7e79ddfaa96ff864aa2e91e9ff
   '@types/eslint':
-    specifier: 8.44.9
-    version: 8.44.9
+    specifier: 8.56.0
+    version: 8.56.0
   '@types/node':
     specifier: latest
     version: 20.10.5
   '@typescript-eslint/eslint-plugin':
-    specifier: 6.15.0
-    version: 6.15.0(@typescript-eslint/parser@6.15.0)(eslint@8.56.0)(typescript@5.3.3)
+    specifier: 6.16.0
+    version: 6.16.0(@typescript-eslint/parser@6.16.0)(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: 6.15.0
-    version: 6.15.0(eslint@8.56.0)(typescript@5.3.3)
+    specifier: 6.16.0
+    version: 6.16.0(eslint@8.56.0)(typescript@5.3.3)
   autoprefixer:
     specifier: 10.4.16
     version: 10.4.16(postcss@8.4.32)
@@ -60,20 +60,20 @@ devDependencies:
     specifier: ^1.0.5
     version: 1.0.5
   qwik-speak:
-    specifier: ^0.18.0
-    version: 0.18.0(@builder.io/qwik@1.3.1)
+    specifier: ^0.19.0
+    version: 0.19.0(@builder.io/qwik@1.3.1)
   simple-color-picker:
     specifier: ^1.0.5
     version: 1.0.5
   tailwindcss:
-    specifier: ^3.3.7
-    version: 3.3.7
+    specifier: ^3.4.0
+    version: 3.4.0
   typescript:
     specifier: 5.3.3
     version: 5.3.3
   undici:
-    specifier: ^6.0.1
-    version: 6.0.1
+    specifier: ^6.2.1
+    version: 6.2.1
   vite:
     specifier: 5.0.10
     version: 5.0.10(@types/node@20.10.5)
@@ -127,7 +127,7 @@ packages:
       - terser
     dev: true
 
-  /@builder.io/qwik@1.3.1(@types/node@20.10.5)(undici@6.0.1):
+  /@builder.io/qwik@1.3.1(@types/node@20.10.5)(undici@6.2.1):
     resolution: {integrity: sha512-XbA/pzLVZJ7HXLApyk1jRVYTwZdHEq3vGcnOi/ZS7GKGvkEWKCRMWIV+5dVJKjBS0jxtYcj07w52HmkPbQiVMw==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
@@ -135,7 +135,7 @@ packages:
       undici: ^5.14.0
     dependencies:
       csstype: 3.1.3
-      undici: 6.0.1
+      undici: 6.2.1
       vite: 5.0.10(@types/node@20.10.5)
     transitivePeerDependencies:
       - '@types/node'
@@ -1079,8 +1079,13 @@ packages:
     engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: true
 
-  /@tauri-apps/cli-darwin-arm64@2.0.0-alpha.18:
-    resolution: {integrity: sha512-FBfbfSupOYG9BXmoGi1uRoMspqm5F0BdQbfgEuTkAnTl8cxUQnzOnoEc+qkd5+QqNCPssO89nsvijDLJmyK3AQ==}
+  /@tauri-apps/api@2.0.0-alpha.13:
+    resolution: {integrity: sha512-sGgCkFahF3OZAHoGN5Ozt9WK7wJlbVZSgWpPQKNag4nSOX1+Py6VDRTEWriiJHDiV+gg31CWHnNXRy6TFoZmdA==}
+    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: true
+
+  /@tauri-apps/cli-darwin-arm64@2.0.0-alpha.20:
+    resolution: {integrity: sha512-L+6OYTjKA42U7XXLQDxoUb43hcKSU8mJ4T3PMCuE08jtv4p6MNfcJQ9FwBCYV6XqYmqE1s5AEBGxR4wBk7bbXQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
@@ -1088,8 +1093,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-darwin-x64@2.0.0-alpha.18:
-    resolution: {integrity: sha512-RaKTqHQsqwAZub02WFp53Zhrh5B01hJgCyMlfwB3YnYTxOKi7ZEGraZg6ZZpnioUw6S6vc20IHS2NNjLjYv7XQ==}
+  /@tauri-apps/cli-darwin-x64@2.0.0-alpha.20:
+    resolution: {integrity: sha512-KnSuiZPnQi9rIbcBRUGyPBEjVpxZ4IcumUVbG2A+BhKMN/sZ4/w+xBhlRhG5V4gvp512LU20zGb3zMmePmOGlQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
@@ -1097,8 +1102,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-linux-arm-gnueabihf@2.0.0-alpha.18:
-    resolution: {integrity: sha512-UJuhHcRtVHSVcLrOV9uWN3nqKI9iEEPZWD7FRgHwPyNWuhqMmgNEzZKoCHyCL30Hu8bUO7zPu3QuNmrT5odcWw==}
+  /@tauri-apps/cli-linux-arm-gnueabihf@2.0.0-alpha.20:
+    resolution: {integrity: sha512-wfneLGGgd7unwMtNs4izkbyhbP+mswsep6aF11RWsGKasq3c6ZFcjFl1/E6/B5WspfjdlVW1/FfVGU6kMwZQwA==}
     engines: {node: '>= 10'}
     cpu: [arm]
     os: [linux]
@@ -1106,8 +1111,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-linux-arm64-gnu@2.0.0-alpha.18:
-    resolution: {integrity: sha512-tFh+pKoLvxcIFq9POE2pBdXzzyjOakhDEX3LmClHtdm3Il8QDcXXfin1rdORgDTgpjnYHJRke4mZAjpVumhsFA==}
+  /@tauri-apps/cli-linux-arm64-gnu@2.0.0-alpha.20:
+    resolution: {integrity: sha512-QL+jKiJqCAf65iDkbylxvTKnM3hS3Dq9QCUoguJ5lfLTtztjJzXgCqTeo7yA1AOQjGPQ656p206HrBjO4Ppkog==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1115,8 +1120,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-linux-arm64-musl@2.0.0-alpha.18:
-    resolution: {integrity: sha512-j9UuPVtvQ1O6xMAp4zaDvmrZpy2ANOltXmz1jD4pINpcFFzyfyZjQFCAhGNn5zu5JKut0jii+wQnMikBoTXkSg==}
+  /@tauri-apps/cli-linux-arm64-musl@2.0.0-alpha.20:
+    resolution: {integrity: sha512-nVknro6J4e+82wkhVaNqc9eEA1SLXR0JQQ9lVcjZWauR7lU6gurRchSQ1xFaCfHW2ZwDgQE7RzdrCZGh3QJmog==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
@@ -1124,8 +1129,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-linux-x64-gnu@2.0.0-alpha.18:
-    resolution: {integrity: sha512-HKxvXH8SGI8mrwdlRS9q9iQpTvJecyNN8O/Ie1FKwRPAfaGy6zNNFTbiNji15PilTL5bS3KrOzjZcHaQHLY9AA==}
+  /@tauri-apps/cli-linux-x64-gnu@2.0.0-alpha.20:
+    resolution: {integrity: sha512-x6bCiOIvjnwcrHEabkXzFFRicPmdPNDCTtn02eX4vFnEWbmkssDM40NjqcWnTIR8z1F289FoPuPVA4WiEc0g9Q==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1133,8 +1138,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-linux-x64-musl@2.0.0-alpha.18:
-    resolution: {integrity: sha512-gHjjsItqCiVXLNwXkv5GRmd+FmuNkbP2aM4hoYjhVtSKZpJzioxJl0CZTdZ8CHzuCjQ7M+FKHd9z3t15QQUMZw==}
+  /@tauri-apps/cli-linux-x64-musl@2.0.0-alpha.20:
+    resolution: {integrity: sha512-trA5N9r/RA6uaRrCzzd4Q/kHMehpfhzUruTnsu/bHXf2cnMOhGmnstPzLHlPRudyMELqCngrykR0l4Pp33XHvg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
@@ -1142,8 +1147,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-win32-arm64-msvc@2.0.0-alpha.18:
-    resolution: {integrity: sha512-ULzuaPlqFKkjviqafDdmYC+1ysja5cbLsP5P+pJw/cdwf/s/k6+xEYgcICqNMVgiynLhpRXWj0/ypN1t4xdBNQ==}
+  /@tauri-apps/cli-win32-arm64-msvc@2.0.0-alpha.20:
+    resolution: {integrity: sha512-ib99wuC4WEVS/aZ10YT+IdBOM/zeDRQV01wPd4WT0djNW4nv0b0TmhsZ9BaD9cL/GQD5YPWfwx/EGoHKB1rj9g==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
@@ -1151,8 +1156,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-win32-ia32-msvc@2.0.0-alpha.18:
-    resolution: {integrity: sha512-mdt7JDZuZ4qFBlF1VBRRsLtabF/muy/ftFnDvUSNPTalLhX2rN6Tnu/N7qxeknlhChbVXL3mUTHRguhT2AfxtA==}
+  /@tauri-apps/cli-win32-ia32-msvc@2.0.0-alpha.20:
+    resolution: {integrity: sha512-xiJygmAIbqWl6BRA9LDOWwMg8BnH5KFQbcVaftGtuc+1K5ujViO18hEB4+3i76lNR/xTjq8AX3njxT7yKT0mVA==}
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
@@ -1160,8 +1165,8 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli-win32-x64-msvc@2.0.0-alpha.18:
-    resolution: {integrity: sha512-quIImUuN2bbUMX0WZKbeqpSlKT949e2AZJ93p/NaFd0op5EdFV6Z42Y5YpLb3PTodOen1J3wWCGKdLDc+sgcuA==}
+  /@tauri-apps/cli-win32-x64-msvc@2.0.0-alpha.20:
+    resolution: {integrity: sha512-4mN+rCPhPfv1Yjq3elpxaZnp5OY4BHrrlwKzOgLJty2crMy3UAP1s2uXwNZl/86HfHkIkR8RGaR8KR8ioFdmZg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -1169,21 +1174,21 @@ packages:
     dev: true
     optional: true
 
-  /@tauri-apps/cli@2.0.0-alpha.18:
-    resolution: {integrity: sha512-M6KynJjEVyJuuBbt6EaiGiyKh/v8CF3pzCYzpjTy/rG6YXsZTnqRCOQqdWCB0KyHeDsPSODmoaDGyFq+MoZfig==}
+  /@tauri-apps/cli@2.0.0-alpha.20:
+    resolution: {integrity: sha512-TNoaRunh2a9Id57EOWSSEziTszBdxyWUtHq9qw3olgY+i/fF3s0Kxwy2c7TM4kON1KnBSvzF+FEGRInNJNvbXw==}
     engines: {node: '>= 10'}
     hasBin: true
     optionalDependencies:
-      '@tauri-apps/cli-darwin-arm64': 2.0.0-alpha.18
-      '@tauri-apps/cli-darwin-x64': 2.0.0-alpha.18
-      '@tauri-apps/cli-linux-arm-gnueabihf': 2.0.0-alpha.18
-      '@tauri-apps/cli-linux-arm64-gnu': 2.0.0-alpha.18
-      '@tauri-apps/cli-linux-arm64-musl': 2.0.0-alpha.18
-      '@tauri-apps/cli-linux-x64-gnu': 2.0.0-alpha.18
-      '@tauri-apps/cli-linux-x64-musl': 2.0.0-alpha.18
-      '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-alpha.18
-      '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-alpha.18
-      '@tauri-apps/cli-win32-x64-msvc': 2.0.0-alpha.18
+      '@tauri-apps/cli-darwin-arm64': 2.0.0-alpha.20
+      '@tauri-apps/cli-darwin-x64': 2.0.0-alpha.20
+      '@tauri-apps/cli-linux-arm-gnueabihf': 2.0.0-alpha.20
+      '@tauri-apps/cli-linux-arm64-gnu': 2.0.0-alpha.20
+      '@tauri-apps/cli-linux-arm64-musl': 2.0.0-alpha.20
+      '@tauri-apps/cli-linux-x64-gnu': 2.0.0-alpha.20
+      '@tauri-apps/cli-linux-x64-musl': 2.0.0-alpha.20
+      '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-alpha.20
+      '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-alpha.20
+      '@tauri-apps/cli-win32-x64-msvc': 2.0.0-alpha.20
     dev: true
 
   /@trysound/sax@0.2.0:
@@ -1203,8 +1208,8 @@ packages:
       '@types/ms': 0.7.34
     dev: true
 
-  /@types/eslint@8.44.9:
-    resolution: {integrity: sha512-6yBxcvwnnYoYT1Uk2d+jvIfsuP4mb2EdIxFnrPABj5a/838qe5bGkNLFOiipX4ULQ7XVQvTxOh7jO+BTAiqsEw==}
+  /@types/eslint@8.56.0:
+    resolution: {integrity: sha512-FlsN0p4FhuYRjIxpbdXovvHQhtlG05O1GG/RNWvdAxTboR438IOTwmrY/vLA+Xfgg06BTkP045M3vpFwTMv1dg==}
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
@@ -1272,8 +1277,8 @@ packages:
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
     dev: true
 
-  /@typescript-eslint/eslint-plugin@6.15.0(@typescript-eslint/parser@6.15.0)(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-j5qoikQqPccq9QoBAupOP+CBu8BaJ8BLjaXSioDISeTZkVO3ig7oSIKh3H+rEpee7xCXtWwSB4KIL5l6hWZzpg==}
+  /@typescript-eslint/eslint-plugin@6.16.0(@typescript-eslint/parser@6.16.0)(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-O5f7Kv5o4dLWQtPX4ywPPa+v9G+1q1x8mz0Kr0pXUtKsevo+gIJHLkGc8RxaZWtP8RrhwhSNIWThnW42K9/0rQ==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       '@typescript-eslint/parser': ^6.0.0 || ^6.0.0-alpha
@@ -1284,11 +1289,11 @@ packages:
         optional: true
     dependencies:
       '@eslint-community/regexpp': 4.10.0
-      '@typescript-eslint/parser': 6.15.0(eslint@8.56.0)(typescript@5.3.3)
-      '@typescript-eslint/scope-manager': 6.15.0
-      '@typescript-eslint/type-utils': 6.15.0(eslint@8.56.0)(typescript@5.3.3)
-      '@typescript-eslint/utils': 6.15.0(eslint@8.56.0)(typescript@5.3.3)
-      '@typescript-eslint/visitor-keys': 6.15.0
+      '@typescript-eslint/parser': 6.16.0(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/scope-manager': 6.16.0
+      '@typescript-eslint/type-utils': 6.16.0(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/utils': 6.16.0(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/visitor-keys': 6.16.0
       debug: 4.3.4
       eslint: 8.56.0
       graphemer: 1.4.0
@@ -1301,8 +1306,8 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/parser@6.15.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-MkgKNnsjC6QwcMdlNAel24jjkEO/0hQaMDLqP4S9zq5HBAUJNQB6y+3DwLjX7b3l2b37eNAxMPLwb3/kh8VKdA==}
+  /@typescript-eslint/parser@6.16.0(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-H2GM3eUo12HpKZU9njig3DF5zJ58ja6ahj1GoHEHOgQvYxzoFJJEvC1MQ7T2l9Ha+69ZSOn7RTxOdpC/y3ikMw==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
@@ -1311,10 +1316,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/scope-manager': 6.15.0
-      '@typescript-eslint/types': 6.15.0
-      '@typescript-eslint/typescript-estree': 6.15.0(typescript@5.3.3)
-      '@typescript-eslint/visitor-keys': 6.15.0
+      '@typescript-eslint/scope-manager': 6.16.0
+      '@typescript-eslint/types': 6.16.0
+      '@typescript-eslint/typescript-estree': 6.16.0(typescript@5.3.3)
+      '@typescript-eslint/visitor-keys': 6.16.0
       debug: 4.3.4
       eslint: 8.56.0
       typescript: 5.3.3
@@ -1322,16 +1327,16 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/scope-manager@6.15.0:
-    resolution: {integrity: sha512-+BdvxYBltqrmgCNu4Li+fGDIkW9n//NrruzG9X1vBzaNK+ExVXPoGB71kneaVw/Jp+4rH/vaMAGC6JfMbHstVg==}
+  /@typescript-eslint/scope-manager@6.16.0:
+    resolution: {integrity: sha512-0N7Y9DSPdaBQ3sqSCwlrm9zJwkpOuc6HYm7LpzLAPqBL7dmzAUimr4M29dMkOP/tEwvOCC/Cxo//yOfJD3HUiw==}
     engines: {node: ^16.0.0 || >=18.0.0}
     dependencies:
-      '@typescript-eslint/types': 6.15.0
-      '@typescript-eslint/visitor-keys': 6.15.0
+      '@typescript-eslint/types': 6.16.0
+      '@typescript-eslint/visitor-keys': 6.16.0
     dev: true
 
-  /@typescript-eslint/type-utils@6.15.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-CnmHKTfX6450Bo49hPg2OkIm/D/TVYV7jO1MCfPYGwf6x3GO0VU8YMO5AYMn+u3X05lRRxA4fWCz87GFQV6yVQ==}
+  /@typescript-eslint/type-utils@6.16.0(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-ThmrEOcARmOnoyQfYkHw/DX2SEYBalVECmoldVuH6qagKROp/jMnfXpAU/pAIWub9c4YTxga+XwgAkoA0pxfmg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
@@ -1340,8 +1345,8 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/typescript-estree': 6.15.0(typescript@5.3.3)
-      '@typescript-eslint/utils': 6.15.0(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/typescript-estree': 6.16.0(typescript@5.3.3)
+      '@typescript-eslint/utils': 6.16.0(eslint@8.56.0)(typescript@5.3.3)
       debug: 4.3.4
       eslint: 8.56.0
       ts-api-utils: 1.0.3(typescript@5.3.3)
@@ -1350,13 +1355,13 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/types@6.15.0:
-    resolution: {integrity: sha512-yXjbt//E4T/ee8Ia1b5mGlbNj9fB9lJP4jqLbZualwpP2BCQ5is6BcWwxpIsY4XKAhmdv3hrW92GdtJbatC6dQ==}
+  /@typescript-eslint/types@6.16.0:
+    resolution: {integrity: sha512-hvDFpLEvTJoHutVl87+MG/c5C8I6LOgEx05zExTSJDEVU7hhR3jhV8M5zuggbdFCw98+HhZWPHZeKS97kS3JoQ==}
     engines: {node: ^16.0.0 || >=18.0.0}
     dev: true
 
-  /@typescript-eslint/typescript-estree@6.15.0(typescript@5.3.3):
-    resolution: {integrity: sha512-7mVZJN7Hd15OmGuWrp2T9UvqR2Ecg+1j/Bp1jXUEY2GZKV6FXlOIoqVDmLpBiEiq3katvj/2n2mR0SDwtloCew==}
+  /@typescript-eslint/typescript-estree@6.16.0(typescript@5.3.3):
+    resolution: {integrity: sha512-VTWZuixh/vr7nih6CfrdpmFNLEnoVBF1skfjdyGnNwXOH1SLeHItGdZDHhhAIzd3ACazyY2Fg76zuzOVTaknGA==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       typescript: '*'
@@ -1364,11 +1369,12 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/types': 6.15.0
-      '@typescript-eslint/visitor-keys': 6.15.0
+      '@typescript-eslint/types': 6.16.0
+      '@typescript-eslint/visitor-keys': 6.16.0
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
+      minimatch: 9.0.3
       semver: 7.5.4
       ts-api-utils: 1.0.3(typescript@5.3.3)
       typescript: 5.3.3
@@ -1376,8 +1382,8 @@ packages:
       - supports-color
     dev: true
 
-  /@typescript-eslint/utils@6.15.0(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-eF82p0Wrrlt8fQSRL0bGXzK5nWPRV2dYQZdajcfzOD9+cQz9O7ugifrJxclB+xVOvWvagXfqS4Es7vpLP4augw==}
+  /@typescript-eslint/utils@6.16.0(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-T83QPKrBm6n//q9mv7oiSvy/Xq/7Hyw9SzSEhMHJwznEmQayfBM87+oAlkNAMEO7/MjIwKyOHgBJbxB0s7gx2A==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
@@ -1385,9 +1391,9 @@ packages:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.56.0)
       '@types/json-schema': 7.0.15
       '@types/semver': 7.5.6
-      '@typescript-eslint/scope-manager': 6.15.0
-      '@typescript-eslint/types': 6.15.0
-      '@typescript-eslint/typescript-estree': 6.15.0(typescript@5.3.3)
+      '@typescript-eslint/scope-manager': 6.16.0
+      '@typescript-eslint/types': 6.16.0
+      '@typescript-eslint/typescript-estree': 6.16.0(typescript@5.3.3)
       eslint: 8.56.0
       semver: 7.5.4
     transitivePeerDependencies:
@@ -1395,11 +1401,11 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/visitor-keys@6.15.0:
-    resolution: {integrity: sha512-1zvtdC1a9h5Tb5jU9x3ADNXO9yjP8rXlaoChu0DQX40vf5ACVpYIVIZhIMZ6d5sDXH7vq4dsZBT1fEGj8D2n2w==}
+  /@typescript-eslint/visitor-keys@6.16.0:
+    resolution: {integrity: sha512-QSFQLruk7fhs91a/Ep/LqRdbJCZ1Rq03rqBdKT5Ky17Sz8zRLUksqIe9DW0pKtg/Z35/ztbLQ6qpOCN6rOC11A==}
     engines: {node: ^16.0.0 || >=18.0.0}
     dependencies:
-      '@typescript-eslint/types': 6.15.0
+      '@typescript-eslint/types': 6.16.0
       eslint-visitor-keys: 3.4.3
     dev: true
 
@@ -1571,6 +1577,12 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+    dev: true
+
+  /brace-expansion@2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+    dependencies:
+      balanced-match: 1.0.2
     dev: true
 
   /braces@3.0.2:
@@ -3224,6 +3236,13 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
+  /minimatch@9.0.3:
+    resolution: {integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
+
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -3523,14 +3542,14 @@ packages:
     engines: {node: '>=15.0.0'}
     dev: true
 
-  /qwik-speak@0.18.0(@builder.io/qwik@1.3.1):
-    resolution: {integrity: sha512-LmCT6+iE3v3oIGSq9bycZHpmNawiDeMdR001YPc9SDkUMv/ENHNcQAHXP1atgNYJD8R3pOpxqOb2G+ZjWoTwfg==}
+  /qwik-speak@0.19.0(@builder.io/qwik@1.3.1):
+    resolution: {integrity: sha512-4esB9m0bCcXQ+qbnnWqL3HksGmgGuS8nKVfu+PCQ3fWZ60f7WxNyjwrH+vJvUfCaDRWhadFwHvn7Tp8K+8jieQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
-      '@builder.io/qwik': '>=1.2.18'
+      '@builder.io/qwik': '>=1.3.1'
     dependencies:
-      '@builder.io/qwik': 1.3.1(@types/node@20.10.5)(undici@6.0.1)
+      '@builder.io/qwik': 1.3.1(@types/node@20.10.5)(undici@6.2.1)
     dev: true
 
   /read-cache@1.0.0:
@@ -3923,8 +3942,8 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /tailwindcss@3.3.7:
-    resolution: {integrity: sha512-pjgQxDZPvyS/nG3ZYkyCvsbONJl7GdOejfm24iMt2ElYQQw8Jc4p0m8RdMp7mznPD0kUhfzwV3zAwa80qI0zmQ==}
+  /tailwindcss@3.4.0:
+    resolution: {integrity: sha512-VigzymniH77knD1dryXbyxR+ePHihHociZbXnLZHUyzf2MMs2ZVqlUrZ3FvpXP8pno9JzmILt1sZPD19M3IxtA==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -4092,8 +4111,8 @@ packages:
       '@fastify/busboy': 2.1.0
     dev: true
 
-  /undici@6.0.1:
-    resolution: {integrity: sha512-eZFYQLeS9BiXpsU0cuFhCwfeda2MnC48EVmmOz/eCjsTgmyTdaHdVsPSC/kwC2GtW2e0uH0HIPbadf3/bRWSxw==}
+  /undici@6.2.1:
+    resolution: {integrity: sha512-7Wa9thEM6/LMnnKtxJHlc8SrTlDmxqJecgz1iy8KlsN0/iskQXOQCuPkrZLXbElPaSw5slFFyKIKXyJ3UtbApw==}
     engines: {node: '>=18.0'}
     dependencies:
       '@fastify/busboy': 2.1.0

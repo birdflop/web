@@ -53,9 +53,6 @@ export default component$(({ tauriVersion }: any) => {
           <NavButton href="/animtexture">
             {t('nav.animatedTextures@@Animated Textures')}
           </NavButton>
-          <NavButton href="/ramcalc">
-            {t('nav.ramCalculator@@RAM Calculator')}
-          </NavButton>
           <NavButton href="/colorstrip">
             {t('nav.colorCodeStripper@@Color Code Stripper')}
           </NavButton>
@@ -107,7 +104,7 @@ export default component$(({ tauriVersion }: any) => {
         }
         {tauriVersion && <>
           <NavButton type="div" icon title="Minimize" onClick$={() => {
-            Window.getzCurrent().minimize();
+            Window.getCurrent().minimize();
           }}>
             <RemoveOutline width="24" />
           </NavButton>
@@ -144,9 +141,6 @@ export default component$(({ tauriVersion }: any) => {
         </NavButton>
         <NavButton store={store} href="/animtexture">
           {t('nav.animatedTextures@@Animated Textures')}
-        </NavButton>
-        <NavButton store={store} href="/ramcalc">
-          {t('nav.ramCalculator@@RAM Calculator')}
         </NavButton>
         <NavButton store={store} href="/colorstrip">
           {t('nav.colorCodeStripper@@Color Code Stripper')}

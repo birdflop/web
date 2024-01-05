@@ -1,0 +1,8 @@
+{
+    "gradient": {
+        "title": "Hex Gradient",
+        "subtitle": "Hex color gradient creator",
+        "prefix": "Prefix (Usually used for commands)",
+        "prefixPlaceholder": "example: '/nick '"
+    }
+}

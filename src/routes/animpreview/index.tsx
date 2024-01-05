@@ -82,7 +82,14 @@ export default component$(() => {
               let result: any = string.match(pattern);
               result = result.filter((obj: string) => { return obj; });
               return (
-                <span key={`char${i}`} style={{ color: result[1] }} class={`font${result.includes('&n') ? '-underline' : ''}${result.includes('&m') ? '-strikethrough' : ''} font${result.includes('&l') ? '-bold' : ''}${result.includes('&o') ? '-italic' : ''}`} >
+                <span key={`char${i}`} style={{ color: result[1] }} class={{
+                  'underline': result.includes('&n'),
+                  'strikethrough': result.includes('&m'),
+                  'underline-strikethrough': result.includes('&n') && result.includes('&m'),
+                  'font-bold': result.includes('&l'),
+                  'font-italic': result.includes('&o'),
+                  'font-bold-italic': result.includes('&l') && result.includes('&o'),
+                }}>
                   {result[result.length - 1]}
                 </span>
               );

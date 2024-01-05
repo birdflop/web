@@ -38,7 +38,7 @@ export default component$(() => {
             else {
               store.error = '';
               const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
-              store.redirect = `/PaperTimings/${code}`;
+              store.redirect = `/papertimings/${code}`;
             }
           }
         }>

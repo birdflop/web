@@ -13,7 +13,7 @@ import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/co
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
 
-import { ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
+import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
@@ -58,7 +58,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const store: any = useStore({
-    colors: [],
+    colors: presets.SimplyMC,
     text: 'SimplyMC',
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
@@ -92,10 +92,8 @@ export default component$(() => {
     const parsedUserStore = JSON.parse(userstore);
     for (const key of Object.keys(parsedUserStore)) {
       const value = parsedUserStore[key];
-      if (key == 'colors') store[key] = value;
       store[key] = value === 'true' ? true : value === 'false' ? false : value;
     }
-    if (store.colors.length == 0) store.colors = ['#00FFE0', '#EB00FF'];
   });
 
   return (
@@ -117,7 +115,12 @@ export default component$(() => {
           </span>
         </OutputField>
 
-        <h1 class={`text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font${store.bold ? '-bold' : ''}${store.italic ? '-italic' : ''}`}>
+        <h1 class={{
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px]': true,
+          'font-bold': store.bold,
+          'font-italic': store.italic,
+          'font-bold-italic': store.bold && store.italic,
+        }}>
           {(() => {
             const text = store.text ? store.text : 'SimplyMC';
 
@@ -130,7 +133,11 @@ export default component$(() => {
             return text.split('').map((char: string, i: number) => {
               if (char != ' ') hex = convertToHex(gradient.next());
               return (
-                <span key={`char${i}`} style={`color: #${hex};`} class={`font${store.underline ? '-underline' : ''}${store.strikethrough ? '-strikethrough' : ''}`}>
+                <span key={`char${i}`} style={`color: #${hex};`} class={{
+                  'underline': store.underline,
+                  'strikethrough': store.strikethrough,
+                  'underline-strikethrough': store.underline && store.strikethrough,
+                }}>
                   {char}
                 </span>
               );
@@ -164,69 +171,110 @@ export default component$(() => {
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-4 gap-2">
-          <div class="sm:pr-4 hidden sm:flex flex-col gap-3 relative" id="colors">
-            <NumberInput id="colorsinput" onIncrement$={() => { if (store.colors.length < store.text.length) { store.colors.push(getRandomColor()); setCookie(JSON.stringify(store)); } }} onDecrement$={() => { if (store.colors.length > 2) store.colors.pop(); setCookie(JSON.stringify(store)); }}>
-              {t('color.colorAmount@@Color Amount')} - {store.colors.length}
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+              (event: any) => {
+                if (event.target!.value == 'custom') return;
+                store.colors = presets[event.target!.value as keyof typeof presets];
+                setCookie(JSON.stringify(store));
+              }
+            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {Object.keys(presets).map((preset: any) => (
+                <option key={preset} value={preset}>
+                  {preset}
+                </option>
+              ))}
+              <option value={'custom'}>
+                {t('color.custom@@Custom')}
+              </option>
+            </SelectInput>
+            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
+              onChange$={(event: any) => {
+                if (event.target!.value > store.text.length) event.target!.value = store.text.length;
+                if (event.target!.value < 2) event.target!.value = 2;
+                const newColors = [];
+                for (let i = 0; i < event.target!.value; i++) {
+                  if (store.colors[i]) newColors.push(store.colors[i]);
+                  else newColors.push(getRandomColor());
+                }
+                store.colors = newColors;
+                setCookie(JSON.stringify(store));
+              }}
+              onIncrement$={() => {
+                if (store.colors.length < store.text.length) {
+                  store.colors.push(getRandomColor());
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+              onDecrement$={() => {
+                if (store.colors.length > 2) {
+                  store.colors.pop();
+                  setCookie(JSON.stringify(store));
+                }
+              }}
+            >
+              {t('color.colorAmount@@Color Amount')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
-                return (
-                  <div key={`color${i + 1}`}>
-                    <ColorInput
-                      key={`color${i + 1}`}
-                      id={`color${i + 1}`}
-                      value={color}
-                      onInput$={(newColor: string) => {
-                        store.colors[i] = newColor;
-                        setCookie(JSON.stringify(store));
-                      }}
-                    >
-                      <button
-                        onClick$={() => {
-                          handleSwap(i, i - 1);
-                        }}
-                        class={'pe-2'}
-                      >
-                        ↑
-                      </button>
-                      <button
-                        onClick$={() => {
-                          handleSwap(i, i + 1);
-                        }}
-                        class={'pe-4'}
-                      >
-                        ↓
-                      </button>
-                      {t('color.hexColor@@Hex Color')} {i + 1}
-                    </ColorInput>
+                return <div key={`color${i + 1}`} class="flex items-end">
+                  <ColorInput
+                    id={`color${i + 1}`}
+                    value={color}
+                    onInput$={(newColor: string) => {
+                      store.colors[i] = newColor;
+                      setCookie(JSON.stringify(store));
+                    }}
+                  >
+                    {t('color.hexColor@@Hex Color')} {i + 1}
+                  </ColorInput>
+                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
+                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
+                      <ChevronUp width="20" />
+                    </button>
+                    <div class="bg-gray-700 w-px" />
+                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
+                      <ChevronDown width="20" />
+                    </button>
                   </div>
-                );
+                </div>;
               })}
             </div>
           </div>
-          <div class="sm:col-span-3">
-            <div class="flex sm:flex flex-col gap-3" id="inputs">
+          <div class="md:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-3" id="inputs">
               <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <div class="grid sm:grid-cols-2 sm:gap-2">
-                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.format} onChange$={
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
-                    if (event.target!.value == 'custom') return store.customFormat = true;
-                    store.customFormat = false;
-                    store.format = event.target!.value;
+                    if (event.target!.value == 'custom') {
+                      store.customFormat = true;
+                    }
+                    else {
+                      store.customFormat = false;
+                      store.format = event.target!.value;
+                    }
                     setCookie(JSON.stringify(store));
                   }
                 }>
                   {formats.map((format: any) => (
                     <option key={format} value={format}>
-                      {format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '')}
+                      {format
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                        .replace('$c', '')}
                     </option>
                   ))}
                   <option value={'custom'}>
-                    {store.customFormat ? store.format.replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b').replace('$f', '').replace('$c', '') : 'Custom'}
+                    {store.customFormat ? store.format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', '')
+                      : t('color.custom@@Custom')}
                   </option>
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
@@ -256,22 +304,6 @@ export default component$(() => {
               <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
-
-              <SelectInput id="preset" label={t('color.colorPreset@@Color Preset')} onChange$={
-                (event: any) => {
-                  store.colors = [];
-                  setTimeout(() => {
-                    store.colors = presets[event.target!.value as keyof typeof presets];
-                    setCookie(JSON.stringify(store));
-                  }, 1);
-                }
-              }>
-                {Object.keys(presets).map((preset: any) => (
-                  <option key={preset} value={preset}>
-                    {preset}
-                  </option>
-                ))}
-              </SelectInput>
 
               <label>
                 {t('color.presets@@Presets')}
@@ -328,14 +360,14 @@ export default component$(() => {
               <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.bold@@Bold')} - {store.formatchar + 'l'}
               </Toggle>
-              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
+              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
               </Toggle>
               <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
                 {t('color.underline@@Underline')} - {store.formatchar + 'n'}
               </Toggle>
-              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
+              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
+                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
               </Toggle>
             </div>
           </div>

@@ -26,43 +26,52 @@
   font-display: swap;
 }
 
-@layer utilities {
-  .animation-delay-5 { animation-delay: -5s; }
-  .animation-delay-10 { animation-delay: -10s; }
+@font-face {
+  font-family: MinecraftRus;
+  src: url(/fonts/MinecraftRus.ttf);
+  font-display: swap;
 }
+
+.-animation-delay-5 { animation-delay: -5s; }
+.-animation-delay-10 { animation-delay: -10s; }
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
 
 html {
   background-color: hsl(270deg, 22%, 5%);
-  font-family: MinecraftRegular;
 }
 
 main {
   overflow: auto;
-  height: calc(100lvh - 68px);
-  margin-top: 68px;
+  height: calc(100lvh - 56px);
+  margin-top: 56px;
 }
 
 .font-bold {
-  font-family: MinecraftBold;
+  font-family: MinecraftBold, MinecraftRus;
+  font-weight: bold;
 }
 
 .font-italic {
-  font-family: MinecraftItalic;
+  font-family: MinecraftItalic, MinecraftRus;
+  font-style: italic;
 }
 
 .font-bold-italic {
-  font-family: MinecraftBoldItalic;
+  font-family: MinecraftBoldItalic, MinecraftRus;
+  font-style: italic;
+  font-weight: bold;
 }
 
-.font-underline {
-  text-decoration-line: underline;
-}
-
-.font-strikethrough {
+.strikethrough {
   text-decoration-line: line-through;
 }
 
-.font-underline-strikethrough {
+.underline-strikethrough {
   text-decoration-line: underline line-through;
 }
 
@@ -127,7 +136,6 @@ main {
   }
 }
 
-
 .fade-in {
   opacity: 0;
   transform: translateY(-100px);
@@ -142,12 +150,6 @@ main {
     transform: translateY(0);
   }
 }
-
-.animation-delay-100 { animation-delay: 100ms; }
-.animation-delay-200 { animation-delay: 200ms; }
-.animation-delay-300 { animation-delay: 300ms; }
-.animation-delay-400 { animation-delay: 400ms; }
-.animation-delay-500 { animation-delay: 500ms; }
 
 .Scp {
   display: flex;

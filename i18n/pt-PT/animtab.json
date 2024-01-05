@@ -4,8 +4,8 @@
         "subtitle": "Plugin TAB para criar animações com gradientes",
         "animationName": "Nome da Animação",
         "speed": "Velocidade",
-        "outputFormat": "Formato de Output",
-        "outputType": "Tipo de Output",
-        "length": "Comprimento do gradiente"
+        "outputFormat": "Formato de saída",
+        "outputType": "Tipo de saída",
+        "length": "Comprimento do Gradiente"
     }
 }

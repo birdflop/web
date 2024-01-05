@@ -1,13 +1,17 @@
 import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { useLocation, type DocumentHead } from '@builder.io/qwik-city';
 
 export default component$(() => {
+  const location = useLocation();
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
       <h1 class="font-bold text-red-400 text-4xl mb-12">
         404: Page not found
         <p class="font-italic text-gray-400 text-xl">
           Whoops! You've hit a dead-end. <a href="/" class="text-blue-300/50 underline">Go back home</a>
+        </p>
+        <p class="font-italic text-gray-400 text-xl">
+          Did you mean to visit <a href={location.url.pathname.toLowerCase()} class="text-blue-300/50 underline">{location.url.pathname.toLowerCase()}</a>?
         </p>
       </h1>
     </section>
