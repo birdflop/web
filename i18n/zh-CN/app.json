@@ -10,7 +10,7 @@
         "misc": "其他",
         "animatedTextures": "动画纹理",
         "flags": "标志",
-        "colorCodeStripper": "颜色代码剥离器",
+        "colorCodeStripper": "颜色代码去除器",
         "presetTools": "预设工具",
         "privacyPolicy": "隐私政策"
     }
