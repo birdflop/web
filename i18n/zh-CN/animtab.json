@@ -1,0 +1,11 @@
+{
+    "animtab": {
+        "title": "动画TAB",
+        "subtitle": "TAB插件渐变动画创建器",
+        "animationName": "动画名称",
+        "speed": "速度",
+        "outputFormat": "输出格式",
+        "outputType": "输出类型",
+        "length": "渐变长度"
+    }
+}

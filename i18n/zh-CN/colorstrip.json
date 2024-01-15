@@ -1,0 +1,9 @@
+{
+    "colorstrip": {
+        "title": "颜色代码去除器",
+        "subtitle": "从文本中去除所有颜色/格式代码",
+        "inputText": "输入文本",
+        "output": "输出",
+        "colorCodeType": "颜色代码类型"
+    }
+}

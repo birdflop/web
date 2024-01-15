@@ -1,0 +1,145 @@
+{
+  "flags": {
+    "title": "标志生成器",
+    "subtitle": "一个简单的脚本生成器，用于以最佳标志启动Minecraft服务器。",
+    "software": {
+      "label": "软件",
+      "description": "您的Minecraft服务器将在其上运行的软件。"
+    },
+    "config": {
+      "label": "配置",
+      "description": "可以添加和修改启动脚本的各种设置。"
+    },
+    "result": "结果",
+    "environments": {
+      "label": "操作系统",
+      "description": "服务器运行的操作系统。",
+      "linux": {
+        "label": "Linux",
+        "description": "用于服务器的最常见操作系统"
+      },
+      "windows": {
+        "label": "Windows",
+        "description": "用于家庭桌面的最常见操作系统"
+      },
+      "macos": {
+        "label": "macOS",
+        "description": "苹果的操作系统"
+      },
+      "pterodactyl": {
+        "label": "Pterodactyl",
+        "description": "大多数主机使用的基于Web的服务器管理平台"
+      },
+      "command": {
+        "label": "命令",
+        "description": "仅启动服务器所需的java命令"
+      }
+    },
+    "serverType": {
+      "paper": {
+        "label": "Paper",
+        "description": "基于Bukkit的插件加载器"
+      },
+      "purpur": {
+        "label": "Purpur",
+        "description": "基于Bukkit的插件加载器，但更多功能"
+      },
+      "velocity": {
+        "label": "Velocity",
+        "description": "带有插件加载器的代理"
+      },
+      "forge": {
+        "label": "Forge",
+        "description": "模组加载器"
+      },
+      "fabric": {
+        "label": "Fabric",
+        "description": "更好的模组加载器"
+      },
+      "waterfall": {
+        "label": "Waterfall",
+        "description": "已弃用的代理"
+      }
+    },
+    "gui": {
+      "label": "使用GUI",
+      "description": "是否显示内置的服务器管理GUI。"
+    },
+    "autoRestart": {
+      "label": "自动重启",
+      "description": "是否在停止后自动重新启动。"
+    },
+    "variables": {
+      "label": "使用变量",
+      "description": "是否在脚本中使用环境变量来定义内存、文件名和其他常常更改的元素。"
+    },
+    "fileName": {
+      "label": "文件名",
+      "description": "将用于启动服务器的文件的名称。"
+    },
+    "script": {
+      "label": "脚本",
+      "description": "生成的脚本，可用于启动服务器。将此文件放在与{{fileName}}相同的位置，然后执行它！"
+    },
+    "flags": {
+      "label": "标志",
+      "description": "通常优化服务器性能的启动参数集合。",
+      "none": {
+        "label": "无",
+        "description": "用于您的服务器的空白板。"
+      },
+      "aikars": {
+        "label": "Aikar的标志",
+        "description": "用于提高服务器性能的经典可靠标志。"
+      },
+      "benchmarkedG1GC": {
+        "label": "基准测试（G1GC）",
+        "description": "由基准测试支持的性能标志。使用G1GC，类似于Aikar的标志。"
+      },
+      "benchmarkedZGC": {
+        "label": "基准测试（ZGC）",
+        "description": "由基准测试支持的性能标志。使用ZGC，在不同系统之间可能不太可靠。"
+      },
+      "benchmarkedShenandoah": {
+        "label": "基准测试（Shenandoah）",
+        "description": "由基准测试支持的性能标志。使用Shenandoah，类似于hilltty的标志。"
+      },
+      "hillttys": {
+        "label": "hilltty的标志",
+        "description": "基于Shenandoah GC的实验性能标志。可能需要额外的设置。"
+      },
+      "obyduxs": {
+        "label": "Obydux的标志",
+        "description": "基于Etil的标志和基准测试（G1GC）的实验性能标志，仅限于Linux用户。可能需要额外的设置。"
+      },
+      "etils": {
+        "label": "Etil的标志",
+        "description": "基于Aikar的标志的实验性和存档性能标志，仅限于Linux用户。"
+      },
+      "proxy": {
+        "label": "代理",
+        "description": "大多数代理服务器软件的通用性能标志。"
+      }
+    },
+    "extraFlags": {
+      "label": "额外标志",
+      "description": "可能改善性能或更改功能的附加标志。",
+      "vectors": {
+        "label": "现代矢量",
+        "description": "启用SIMD操作，以优化Pufferfish及其分支上的地图项目渲染。"
+      },
+      "benchmarkedGraalVM": {
+        "label": "基准测试（GraalVM）",
+        "description": "基准测试（G1GC）的额外性能标志，仅限于GraalVM用户。"
+      }
+    },
+    "memory": {
+      "label": "内存",
+      "description": "分配给服务器的内存（RAM）量。",
+      "warning": {
+        "low": "建议增加分配给服务器的内存量。",
+        "high": "建议减少分配给服务器的内存量。"
+      }
+    }
+  }
+}
