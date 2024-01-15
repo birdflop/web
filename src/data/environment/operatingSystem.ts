@@ -216,7 +216,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
 
       if (config.variables) {
         fileName = '{{SERVER_JARFILE}}';
-        memory = '(({{SERVER_MEMORY}}*85/100))';
+        memory = '$(({{SERVER_MEMORY}}*85/100))';
       }
 
       const flags = [
