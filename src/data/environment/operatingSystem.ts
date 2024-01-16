@@ -178,7 +178,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       };
     },
   },
-  'macOS': {
+  'macos': {
     'icon': 'IconBrandApple',
     'file': {
       'name': 'Command Script',
