@@ -178,7 +178,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       };
     },
   },
-  'macOS': {
+  'macos': {
     'icon': 'IconBrandApple',
     'file': {
       'name': 'Command Script',
@@ -216,7 +216,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
 
       if (config.variables) {
         fileName = '{{SERVER_JARFILE}}';
-        memory = '(({{SERVER_MEMORY}}*85/100))';
+        memory = '$(({{SERVER_MEMORY}}*85/100))';
       }
 
       const flags = [
