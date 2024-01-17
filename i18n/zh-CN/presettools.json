@@ -1,0 +1,8 @@
+{
+    "presettools": {
+        "title": "预设更新工具",
+        "subtitle": "这将把旧版本的预设更新到最新版本。",
+        "input": "预设输入",
+        "output": "输出"
+    }
+}

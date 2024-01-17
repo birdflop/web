@@ -1,0 +1,17 @@
+{
+    "nav": {
+        "gradients": "渐变",
+        "hexGradient": "十六进制渐变",
+        "animatedTAB": "TAB动画",
+        "tabAnimationPreviewer": "TAB动画预览器",
+        "analysis": "分析",
+        "sparkProfile": "Spark Profile",
+        "paperTimings": "Paper Timings",
+        "misc": "其他",
+        "animatedTextures": "动画纹理",
+        "flags": "标志",
+        "colorCodeStripper": "颜色代码去除器",
+        "presetTools": "预设工具",
+        "privacyPolicy": "隐私政策"
+    }
+}

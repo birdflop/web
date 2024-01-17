@@ -1,0 +1,12 @@
+{
+    "privacypolicy": {
+        "title": "<span class=\"text-purple-500\">SimplyMC</span>隐私政策",
+        "1": "我们对SimplyMC的访问者的隐私非常重视。",
+        "2": "在SimplyMC，我们意识到您的个人信息的隐私很重要。在您使用和访问SimplyMC时，我们收集和接收的个人信息类型以及我们如何保护您的信息的信息在这里。我们绝不将您的个人信息出售给第三方。",
+        "3": "Cookies（Cookie）",
+        "4": "我们使用Cookie存储信息，例如您在访问我们网站时的个人偏好。这可能包括仅在您访问中显示一次弹出窗口，或登录到我们的某些功能（如论坛）的能力。",
+        "5": "遥测数据",
+        "6": "为了改善我们的服务，我们使用<a href=\"https://clarity.microsoft.com/\" class=\"text-blue-400\">Microsoft Clarity</a>工具收集匿名的遥测数据。这些数据用于改善我们的服务，并且不会出售给第三方。要选择退出，请<a href=\"/Privacy/optout\" class=\"text-blue-400\">点击这里</a>。",
+        "optedout": "您已选择在接下来的30天内不收集遥测数据。"
+    }
+}
