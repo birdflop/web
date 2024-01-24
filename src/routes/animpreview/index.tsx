@@ -86,9 +86,9 @@ export default component$(() => {
                   'underline': result.includes('&n'),
                   'strikethrough': result.includes('&m'),
                   'underline-strikethrough': result.includes('&n') && result.includes('&m'),
-                  'font-bold': result.includes('&l'),
-                  'font-italic': result.includes('&o'),
-                  'font-bold-italic': result.includes('&l') && result.includes('&o'),
+                  'font-mc-bold': result.includes('&l'),
+                  'font-mc-italic': result.includes('&o'),
+                  'font-mc-bold-italic': result.includes('&l') && result.includes('&o'),
                 }}>
                   {result[result.length - 1]}
                 </span>

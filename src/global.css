@@ -42,7 +42,7 @@
 .animation-delay-500 { animation-delay: 500ms; }
 
 html {
-  background-color: hsl(270deg, 22%, 5%);
+  background-color: rgb(9, 11, 13);
 }
 
 main {
@@ -51,17 +51,22 @@ main {
   margin-top: 56px;
 }
 
-.font-bold {
+.font-mc {
+  font-family: MinecraftRegular, MinecraftRus;
+  font-weight: bold;
+}
+
+.font-mc-bold {
   font-family: MinecraftBold, MinecraftRus;
   font-weight: bold;
 }
 
-.font-italic {
+.font-mc-italic {
   font-family: MinecraftItalic, MinecraftRus;
   font-style: italic;
 }
 
-.font-bold-italic {
+.font-mc-bold-italic {
   font-family: MinecraftBoldItalic, MinecraftRus;
   font-style: italic;
   font-weight: bold;

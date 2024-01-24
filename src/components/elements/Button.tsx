@@ -2,7 +2,7 @@ import { component$, Slot } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
 const classes = {
-  primary: 'bg-luminescent-600/90 border-luminescent-500 hover:bg-luminescent-500 focus:bg-luminescent-500',
+  primary: 'bg-blue-600/90 border-blue-500 hover:bg-blue-500 focus:bg-blue-500',
   secondary: 'bg-gray-800/90 border-gray-700 hover:bg-gray-700 focus:bg-gray-700',
   danger: 'bg-red-700/90 border-red-600 hover:bg-red-600 focus:bg-red-600',
   success: 'bg-green-700/90 border-green-600 hover:bg-green-600 focus:bg-green-600',

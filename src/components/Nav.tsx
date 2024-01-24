@@ -13,12 +13,13 @@ import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { languages } from '~/speak-config';
 import { version } from '~/../package.json';
 
-import Luminescent from './icons/Luminescent';
+import Luminescent from './icons/Birdflop';
 import LoadingIcon from './icons/LoadingIcon';
 
 // @ts-ignore
 import { Window } from '@tauri-apps/api/window';
 import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
+import Birdflop from './icons/Birdflop';
 
 export default component$(({ tauriVersion }: any) => {
   const t = inlineTranslate();
@@ -90,13 +91,6 @@ export default component$(({ tauriVersion }: any) => {
         <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass={{ 'hidden lg:flex': true }}>
           <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
         </NavButton>
-        <NavButton type="external" icon href="https://luminescent.dev" title="Luminescent" extraClass={{ 'hidden lg:flex': true }}>
-          <div style={{ filter: 'drop-shadow(0 0 0 #DD6CFF)' }}>
-            <div style={{ filter: 'drop-shadow(0 0 1rem #CB6CE6)' }}>
-              <Luminescent width={24} />
-            </div>
-          </div>
-        </NavButton>
         {!tauriVersion &&
           <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
             <Menu width="24" class="fill-current" />
@@ -158,13 +152,6 @@ export default component$(({ tauriVersion }: any) => {
           <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi">
             <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
           </NavButton>
-          <NavButton type="external" icon href="https://luminescent.dev" title="Luminescent">
-            <div style={{ filter: 'drop-shadow(0 0 0 #DD6CFF)' }}>
-              <div style={{ filter: 'drop-shadow(0 0 1rem #CB6CE6)' }}>
-                <Luminescent width={24} />
-              </div>
-            </div>
-          </NavButton>
         </div>
       </MobileNav>
     </Nav>
@@ -185,8 +172,9 @@ export const Brand = component$(() => {
   const location = useLocation();
   return (
     <div class="flex items-center justify-start">
-      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-violet-900/20 hover:text-white drop-shadow-2xl px-3 pb-2 pt-3 rounded-lg text-lg flex tracking-wider items-center">
-        <Logo class="w-24" />
+      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
+        <Birdflop width={32} />
+        <span class="ml-3 font-mc">Birdflop</span>
         <div class={{
           'transition-all': true,
           '-ml-7 opacity-0': !location.isNavigating,
@@ -201,7 +189,7 @@ export const Brand = component$(() => {
 export const MainNav = component$(({ tauriVersion, store }: any) => {
   return (
     <div class={{
-      'bg-violet-900/20 py-1': true,
+      'bg-blue-700/20 py-2': true,
       'px-4 lg:px-6': !tauriVersion,
       'px-2': tauriVersion,
     }} data-tauri-drag-region>
@@ -228,7 +216,7 @@ export const MainNav = component$(({ tauriVersion, store }: any) => {
 export const MobileNav = component$(({ store }: any) => {
   return (
     <div id="mobile-menu" class={{
-      'gap-2 px-3 flex flex-col sm:hidden transition-all duration-300 bg-violet-900/20 ': true,
+      'gap-2 px-3 flex flex-col sm:hidden transition-all duration-300 bg-blue-700/20 ': true,
       'opacity-100 max-h-screen pt-2 pb-8': store.mobilemenu,
       'opacity-0 max-h-0 py-0 pointer-events-none': !store.mobilemenu,
     }}>
@@ -239,7 +227,7 @@ export const MobileNav = component$(({ store }: any) => {
 
 export const NavButton = component$(({ href, title, icon, type, extraClass, style, store, onClick$ }: any) => {
   const _class = {
-    'group transition ease-in-out hover:bg-violet-900/20 hover:text-white py-3 rounded-lg items-center cursor-pointer': true,
+    'group transition ease-in-out hover:bg-blue-700/20 hover:text-white py-3 rounded-lg items-center cursor-pointer': true,
     'text-3xl px-3': icon,
     'px-4 flex gap-3': !icon,
     ...extraClass,
@@ -267,7 +255,7 @@ export const NavButton = component$(({ href, title, icon, type, extraClass, styl
 export const Dropdown = component$(({ name, extraClass }: any) => {
   return (
     <div class={{
-      'cursor-pointer transition ease-in-out gap-3 hover:bg-violet-900/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
+      'cursor-pointer transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
       ...extraClass,
     }}>
       <div class="px-4 py-2 flex gap-2 items-center">
@@ -292,7 +280,7 @@ export const LangPicker = component$(({ tauriVersion }: any) => {
   });
 
   return (
-    <div class="cursor-pointer transition ease-in-out flex hover:bg-violet-900/20 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
+    <div class="cursor-pointer transition ease-in-out flex hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
       <div class="p-3">
         <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
       </div>

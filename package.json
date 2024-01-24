@@ -1,7 +1,7 @@
 {
-  "name": "simplymc",
-  "version": "6.3.0",
-  "description": "A Minecraft multitool for you",
+  "name": "birdflop",
+  "version": "7.0.0",
+  "description": "The only 501(c)(3) nonprofit Minecraft server host and multitool.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LuminescentDev/SimplyMC.git"

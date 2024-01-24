@@ -396,7 +396,7 @@ export default component$(() => {
                 </CardHeader>
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
                 <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
-                  <div class="h-2 bg-luminescent-800 group-hover:bg-luminescent-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
+                  <div class="h-2 bg-blue-800 group-hover:bg-blue-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
                   <div class="absolute w-full top-1 flex justify-between">
                     <span class="text-left">|</span>
                     <span class="text-center">|</span>
@@ -405,7 +405,7 @@ export default component$(() => {
                     <span class="text-right">|</span>
                   </div>
                   <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${store.parsed.memory / 32 * 100}% - 48px)` }}>
-                    <div class="w-4 h-4 bg-luminescent-700 group-hover:bg-luminescent-600 rounded-full" />
+                    <div class="w-4 h-4 bg-blue-700 group-hover:bg-blue-600 rounded-full" />
                     <div class="opacity-0 group-hover:opacity-100 w-24 py-2 bg-gray-800 rounded-lg flex justify-center transition-all z-50">
                       {store.parsed.memory} GB
                     </div>

@@ -1,33 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-const gray = {
-  50: 'hsl(270deg, 2%, 95%)',
-  100: 'hsl(270deg, 4%, 85%)',
-  200: 'hsl(270deg, 6%, 75%)',
-  300: 'hsl(270deg, 8%, 65%)',
-  400: 'hsl(270deg, 10%, 55%)',
-  500: 'hsl(270deg, 12%, 45%)',
-  600: 'hsl(270deg, 14%, 32%)',
-  700: 'hsl(270deg, 16%, 21%)',
-  800: 'hsl(270deg, 18%, 12%)',
-  850: 'hsl(270deg, 20%, 8%)',
-  900: 'hsl(270deg, 22%, 5%)',
-};
-
-const luminescent = {
-  50: 'hsl(286deg, 65%, 97%)',
-  100: 'hsl(286deg, 60%, 95%)',
-  200: 'hsl(286deg, 55%, 90%)',
-  300: 'hsl(286deg, 50%, 82%)',
-  400: 'hsl(286deg, 45%, 75%)',
-  500: 'hsl(286deg, 40%, 60%)',
-  600: 'hsl(286deg, 35%, 51%)',
-  700: 'hsl(286deg, 30%, 42%)',
-  800: 'hsl(286deg, 25%, 35%)',
-  900: 'hsl(286deg, 20%, 30%)',
-  950: 'hsl(286deg, 15%, 17%)',
-};
-
 function getBlobKeyFrame() {
   const translateXPercentages = [80, 40, 0, -40, -80];
   const translateYPercentages = [0, -25, -50, -75, -100];
@@ -84,10 +56,6 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      colors: { gray, luminescent },
-      fontFamily: {
-        'sans': ['MinecraftRegular', 'MinecraftRus'],
-      },
       animation: {
         blob: 'blob 15s infinite',
         blob1: 'blob1 15s infinite',
