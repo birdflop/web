@@ -1,8 +1,8 @@
 {
     "presettools": {
-        "title": "Preset Updater",
-        "subtitle": "This will update older preset versions to the newest version.",
-        "input": "Preset Input",
-        "output": "Output"
+        "title": "Обновление пресета",
+        "subtitle": "Это обновит старые пресеты до последней версии.",
+        "input": "Ваш текст",
+        "output": "Результат"
     }
 }

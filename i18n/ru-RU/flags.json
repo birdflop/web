@@ -1,144 +1,144 @@
 {
   "flags": {
-    "title": "Flags Generator",
-    "subtitle": "A simple script generator to start your Minecraft servers with optimal flags.",
+    "title": "Генератор кода запуска сервера",
+    "subtitle": "Простой генератор скриптов для запуска серверов Minecraft с оптимальными флагами.",
     "software": {
-      "label": "Software",
-      "description": "The software in which your Minecraft server will run on."
+      "label": "Программное обеспечение",
+      "description": "Программное обеспечение, на котором будет работать ваш сервер Minecraft."
     },
     "config": {
-      "label": "Config",
-      "description": "The various additions and modifications that can be made to your start script."
+      "label": "Конфигурация",
+      "description": "Различные дополнения и модификации, которые могут быть сделаны к вашему стартовому скрипту."
     },
-    "result": "Result",
+    "result": "Результат",
     "environments": {
-      "label": "Operating System",
-      "description": "The operating system that the server runs on.",
+      "label": "Операционная система",
+      "description": "Операционная система, на которой работает сервер.",
       "linux": {
         "label": "Linux",
-        "description": "The most common operating system used for servers"
+        "description": "Наиболее распространенная операционная система, используемая для серверов"
       },
       "windows": {
         "label": "Windows",
-        "description": "The most common operating system used for home desktops"
+        "description": "Наиболее распространенная операционная система, используемая для домашних компьютеров"
       },
       "macos": {
         "label": "macOS",
-        "description": "Apple's operating system"
+        "description": "Операционная система Apple"
       },
       "pterodactyl": {
         "label": "Pterodactyl",
-        "description": "Web-based server management platform used by most hosts"
+        "description": "Веб-серверная платформа, используемая большинством хостов"
       },
       "command": {
-        "label": "Command",
-        "description": "Only the java command required to start the server"
+        "label": "Команда",
+        "description": "Требуется только команда java для запуска сервера"
       }
     },
     "serverType": {
       "paper": {
         "label": "Paper",
-        "description": "Bukkit-based plugin loader"
+        "description": "Bukkit"
       },
       "purpur": {
         "label": "Purpur",
-        "description": "Bukkit-based plugin loader but more"
+        "description": "Загрузчик плагинов на основе Bukkit"
       },
       "velocity": {
         "label": "Velocity",
-        "description": "Proxy with plugin loader"
+        "description": "Прокси с загрузкой плагинов"
       },
       "forge": {
         "label": "Forge",
-        "description": "Mod loader"
+        "description": "Загрузчик модов"
       },
       "fabric": {
         "label": "Fabric",
-        "description": "Better mod loader"
+        "description": "Лучший загрузчик модов"
       },
       "waterfall": {
         "label": "Waterfall",
-        "description": "Deprecated Proxy"
+        "description": "Устаревший прокси"
       }
     },
     "gui": {
-      "label": "Use GUI",
-      "description": "Whether to display the built-in server management GUI."
+      "label": "Использовать GUI",
+      "description": "Отображать встроенный интерфейс управления сервером."
     },
     "autoRestart": {
-      "label": "Auto-restart",
-      "description": "Whether to automatically restart after it is stopped."
+      "label": "Автоперезапуск",
+      "description": "Следует ли автоматически перезапустить после того, как он будет остановлен."
     },
     "variables": {
-      "label": "Use Variables",
-      "description": "Whether to use environment variables within the script to define memory, file name, and other commonly changed elements."
+      "label": "Использовать переменные",
+      "description": "Использовать ли переменные окружения в скрипте для определения памяти, имени файла и других обычно измененных элементов."
     },
     "fileName": {
-      "label": "File Name",
-      "description": "The name of the file that will be used to start your server."
+      "label": "Имя файла",
+      "description": "Имя файла, который будет использоваться для запуска вашего сервера."
     },
     "script": {
-      "label": "Script",
-      "description": "The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!"
+      "label": "Скрипт",
+      "description": "Скрипт, который может быть использован для запуска вашего сервера. Поместите этот файл в том же месте, что и {{fileName}}, а затем выполните его!"
     },
     "flags": {
-      "label": "Flags",
-      "description": "The collection of start arguments that typically optimize the server's performance.",
+      "label": "Стартер",
+      "description": "Шаблоны аргументов запуска, которые обычно оптимизируют производительность сервера.",
       "none": {
-        "label": "None",
-        "description": "A blank slate for your server."
+        "label": "Отсутствует",
+        "description": "Пустой шаблон для вашего сервера."
       },
       "aikars": {
         "label": "Aikar's Flags",
-        "description": "The classic and reliable flags for boosting your server's performance."
+        "description": "Классические и надежные флаги для увеличения производительности вашего сервера."
       },
       "benchmarkedG1GC": {
         "label": "Benchmarked (G1GC)",
-        "description": "Performance flags backed by benchmarks. Uses G1GC, similar to Aikar's flags."
+        "description": "Значения производительности, поддерживаемые бенчмарками. Использует G1GC, аналогично флагам Aikar."
       },
       "benchmarkedZGC": {
         "label": "Benchmarked (ZGC)",
-        "description": "Performance flags backed by benchmarks. Uses ZGC, which is quite unreliable between different systems."
+        "description": "Флаги производительности, подтвержденные benchmarks. Использует ZGC, который весьма ненадежен в разных системах."
       },
       "benchmarkedShenandoah": {
         "label": "Benchmarked (Shenandoah)",
-        "description": "Performance flags backed by benchmarks. Uses Shenandoah, similar to hilltty's flags."
+        "description": "Значения производительности, поддерживаемые бенчмарками. Использует G1GC, аналогично флагам Aikar."
       },
       "hillttys": {
         "label": "hilltty's Flags",
-        "description": "Experimental performance flags based on Shenandoah GC. May require additional setup."
+        "description": "Экспериментальные флаги производительности, основанные на GC Shenandoah. Может потребоваться дополнительная настройка."
       },
       "obyduxs": {
         "label": "Obydux's Flags",
-        "description": "Experimental performance flags based on Etil's Flags and Benchmarked (G1GC), exclusive to Linux users. May require additional setup."
+        "description": "Экспериментальные флаги производительности, основанные на флагах Etil's и Benchmarked (G1GC), предназначенные исключительно для пользователей Linux. Может потребоваться дополнительная настройка."
       },
       "etils": {
         "label": "Etil's Flags",
-        "description": "Experimental and archived performance flags based on Aikar's Flags, exclusive to Linux users."
+        "description": "Экспериментальные и архивные флаги производительности на основе флагов Aikar'а только для пользователей Linux."
       },
       "proxy": {
-        "label": "Proxy",
-        "description": "Generic performance flags for most proxy server software."
+        "label": "Прокси-сервер",
+        "description": "Общие флаги производительности для большинства программ прокси-сервера."
       }
     },
     "extraFlags": {
       "label": "Extra Flags",
-      "description": "Additional flags that may improve performance or change functionality.",
+      "description": "Дополнительные флаги, которые могут улучшить производительность или изменить функциональность.",
       "vectors": {
         "label": "Modern Vectors",
-        "description": "Enables SIMD operations to optimize map item rendering on Pufferfish and its forks."
+        "description": "Включает SIMD операции для оптимизации отображения карты на Pufferfish и ее форки."
       },
       "benchmarkedGraalVM": {
         "label": "Benchmarked (GraalVM)",
-        "description": "Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users."
+        "description": "Дополнительные флаги производительности для Benchmarked (G1GC) эксклюзивно для пользователей GraalVM."
       }
     },
     "memory": {
-      "label": "Memory",
-      "description": "The amount of memory (RAM) to allocate to your server.",
+      "label": "Память",
+      "description": "Размер памяти (ОЗУ) для выделения на ваш сервер.",
       "warning": {
-        "low": "It's recommended to increase the amount of memory allocated to the server.",
-        "high": "It's recommended to decrease the amount of memory allocated to the server."
+        "low": "Рекомендуется увеличить объем памяти, выделенной на сервер.",
+        "high": "Рекомендуется уменьшить количество памяти, выделенной серверу."
       }
     }
   }
