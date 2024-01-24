@@ -1,0 +1,11 @@
+{
+    "animtexture": {
+        "title": "애니메이션 텍스처",
+        "subtitle": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
+        "textureName": "텍스처 이름",
+        "cumulative": "누적 (GIF 프레임이 깨진 경우 이 기능을 켜세요)",
+        "generate": "생성",
+        "downloadPNG": "PNG 다운로드",
+        "downloadMCMETA": "MCMETA 다운로드"
+    }
+}

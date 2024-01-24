@@ -1,0 +1,27 @@
+{
+    "color": {
+        "output": "출력",
+        "outputSubtitle": "채팅에 입력한 내용입니다. 클릭하여 복사할 수 있습니다.",
+        "colorAmount": "색상 양",
+        "hexColor": "헥스 색상",
+        "inputText": "입력 텍스트",
+        "presets": "프리셋",
+        "exportedPreset": "프리셋을 성공적으로 클립보드에 내보냈습니다!",
+        "importedPreset": "프리셋을 성공적으로 가져왔습니다!",
+        "invalidPreset": "잘못된 프리셋!\n이전 프리셋인 경우 <a class=\"text-blue-500\" href=\"/PresetTools\">프리셋 도구</a> 페이지를 사용하여 업데이트하십시오. 그렇지 않으면 <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">개발자들에게</a> 보고해주세요.",
+        "export": "내보내기",
+        "import": "가져오기 (여기에 붙여넣기)",
+        "bold": "굵게",
+        "strikethrough": "취소선",
+        "underline": "밑줄",
+        "italic": "이탤릭체",
+        "customFormat": "사용자 정의 형식",
+        "custom": "사용자 정의",
+        "placeholders": "자리표시자:",
+        "formatting": "서식",
+        "character": "문자",
+        "formatCharacter": "서식 문자",
+        "colorPreset": "색상 프리셋",
+        "colorFormat": "색상 형식"
+    }
+}

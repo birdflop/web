@@ -1,0 +1,17 @@
+{
+    "nav": {
+        "gradients": "그라데이션",
+        "hexGradient": "헥스 코드 그라데이션",
+        "animatedTAB": "애니메이션 TAB",
+        "tabAnimationPreviewer": "TAB 애니메이션 미리보기",
+        "analysis": "분석",
+        "sparkProfile": "Spark Profile",
+        "paperTimings": "Paper Timings",
+        "misc": "기타",
+        "animatedTextures": "애니메이션 텍스처",
+        "flags": "플래그",
+        "colorCodeStripper": "색상 코드 제거기",
+        "presetTools": "프리셋 도구",
+        "privacyPolicy": "개인정보 처리방침"
+    }
+}
