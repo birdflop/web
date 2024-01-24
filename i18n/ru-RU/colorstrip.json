@@ -1,9 +1,9 @@
 {
     "colorstrip": {
-        "title": "Color Code Stripper",
-        "subtitle": "Strips all color / format codes from text",
-        "inputText": "Input Text",
-        "output": "Output",
-        "colorCodeType": "Color Code Type"
+        "title": "Декомпилятор цветового кода",
+        "subtitle": "Показывает все коды цвета / формата из текста",
+        "inputText": "Ваш текст",
+        "output": "Результат",
+        "colorCodeType": "Тип цветового кода"
     }
 }
