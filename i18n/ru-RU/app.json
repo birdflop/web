@@ -1,7 +1,7 @@
 {
     "nav": {
         "gradients": "Градиенты",
-        "hexGradient": "HEX Градиент",
+        "hexGradient": "Градиент",
         "animatedTAB": "Анимация TAB",
         "tabAnimationPreviewer": "Предпросмотр анимации TAB",
         "analysis": "Анализ",
@@ -12,6 +12,6 @@
         "flags": "Стартер",
         "colorCodeStripper": "Декомпилятор цветового кода",
         "presetTools": "Обновление пресетов",
-        "privacyPolicy": "Политика конфиденциальности"
+        "privacyPolicy": "Политика"
     }
 }
