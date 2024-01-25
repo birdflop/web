@@ -28,6 +28,17 @@ export default component$(({ tauriVersion }: any) => {
   return (
     <Nav>
       <MainNav tauriVersion={tauriVersion} store={store}>
+        <Dropdown name='Hosting' extraClass={{ 'hidden sm:flex': true }}>
+          <NavButton type="external" href="https://panel.birdflop.com/">
+            Panel
+          </NavButton>
+          <NavButton type="external" href="https://client.birdflop.com/">
+            Billing
+          </NavButton>
+          <NavButton type="external" href="https://www.birdflop.com/node-stats/">
+            Node Stats
+          </NavButton>
+        </Dropdown>
         <Dropdown name={t('nav.gradients@@Gradients')} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
@@ -115,6 +126,15 @@ export default component$(({ tauriVersion }: any) => {
         </>}
       </MainNav>
       <MobileNav store={store}>
+        <NavButton type="external" href="https://panel.birdflop.com/">
+          Panel
+        </NavButton>
+        <NavButton type="external" href="https://client.birdflop.com/">
+          Billing
+        </NavButton>
+        <NavButton type="external" href="https://www.birdflop.com/node-stats/">
+          Node Stats
+        </NavButton>
         <NavButton store={store} href="/gradients">
           {t('nav.hexGradient@@Hex Gradients')}
         </NavButton>

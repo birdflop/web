@@ -42,15 +42,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'A Minecraft Multitool',
+  title: 'Minecraft Hosting & Resources',
   meta: [
     {
       name: 'description',
-      content: 'A Minecraft multitool for you',
+      content: 'Minecraft Hosting & Resources',
     },
     {
       name: 'og:description',
-      content: 'A Minecraft multitool for you',
+      content: 'Minecraft Hosting & Resources',
     },
     {
       name: 'og:image',
