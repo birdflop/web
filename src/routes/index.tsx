@@ -1,4 +1,4 @@
-import { component$, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { CashOutline, ServerOutline } from 'qwik-ionicons';
@@ -8,16 +8,13 @@ import background from '~/images/background.png';
 
 export default component$(() => {
 
-  useOnDocument(
-    'load',
-    $(async () => {
-      initiateTyper();
-    }),
-  );
+  useVisibleTask$(async () => {
+    initiateTyper();
+  });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
-      <picture class="fixed top-0 overflow-hidden" style={{ height: '100lvh', width: '100lvw' }}>
+      <picture class="fixed top-0 overflow-hidden -z-10" style={{ height: '100lvh', width: '100lvw' }}>
         <img
           width={1920}
           height={1080}
@@ -28,9 +25,6 @@ export default component$(() => {
       </picture>
       <div class="text-center justify-center">
         <div id="noise" class="flex relative justify-center align-center">
-          {/* <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-indigo-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl"></div>
-          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-blue-500 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl -animation-delay-5"></div>
-          <div class="absolute w-32 h-32 sm:w-48 sm:h-48 bottom-0 bg-violet-700 rounded-full opacity-10 animate-blob ease-in-out filter blur-xl -animation-delay-10"></div> */}
           <div class="mt-10 space-y-3 min-h-[60px]">
             <h1 class="text-gray-100 text-6xl font-bold mb-6 fade-in animation-delay-100">
               Birdflop Hosting

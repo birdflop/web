@@ -4,6 +4,7 @@ import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
+import Footer from '~/components/Footer';
 
 export default component$(() => {
   const store = useStore({
@@ -57,6 +58,7 @@ export default component$(() => {
         </div>
       }
     </main>
+    <Footer />
   </>;
 });
 
