@@ -7,6 +7,34 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
       <div class="my-10 min-h-[60px] text-2xl">
         <Box
+          title="Gradient tools"
+          description="Tools to help you create gradient things in minecraft."
+          listItems={[
+            'Hex Gradient: Hex color gradient creator',
+            'Animated TAB: TAB plugin gradient animation creator',
+            'Animation Previewer: Preview TAB Animations without the need to put them in-game',
+          ]}
+          links={[
+            { url: '/resources/gradients', text: 'Hex Gradient' },
+            { url: '/resources/animtab', text: 'Animated TAB' },
+            { url: '/resources/animpreview', text: 'Preset Tools' },
+          ]}
+        />
+        <Box
+          title="Server tools"
+          description="Tools to help configure and setup minecraft servers."
+          listItems={[
+            'Spark Profile Analysis: Analyze Spark Profiles and get possible optimizations',
+            'Paper Timings Analysis: Analyze Paper Timings Reports and get possible optimizations',
+            'Flags Generator: A simple script generator to start your Minecraft servers with optimal flags',
+          ]}
+          links={[
+            { url: '/resources/sparkprofile', text: 'Spark Profile' },
+            { url: '/resources/papertimings', text: 'Paper Timings' },
+            { url: '/resources/flags', text: 'Flags' },
+          ]}
+        />
+        <Box
           title="Miscellaneous tools"
           description="These are just tools to help with random miscellaneous things."
           listItems={[
@@ -15,9 +43,9 @@ export default component$(() => {
             'Preset Tools: This will update older preset versions to the newest version',
           ]}
           links={[
-            { url: '/animtexture', text: 'Animated Textures' },
-            { url: '/colorstrip', text: 'Color Code Stripper' },
-            { url: '/presettools', text: 'Preset Tools' },
+            { url: '/resources/animtexture', text: 'Animated Textures' },
+            { url: '/resources/colorstrip', text: 'Color Code Stripper' },
+            { url: '/resources/presettools', text: 'Preset Tools' },
           ]}
         />
         <Box

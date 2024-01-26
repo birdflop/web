@@ -44,12 +44,6 @@ export default component$(() => {
           <NavButton href="/resources/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
-          <NavButton href="/resources/papertimings">
-            {t('nav.paperTimings@@Paper Timings')}
-          </NavButton>
-          <NavButton href="/resources/flags" extraClass={{ 'hidden md:flex': true }}>
-            {t('nav.flags@@Flags')}
-          </NavButton>
           <NavButton href="/resources">
             More Resources
           </NavButton>
