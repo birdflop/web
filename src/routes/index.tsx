@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { CashOutline, ServerOutline } from 'qwik-ionicons';
@@ -8,9 +8,12 @@ import background from '~/images/background.png';
 
 export default component$(() => {
 
-  useVisibleTask$(() => {
-    initiateTyper();
-  });
+  useOnDocument(
+    'load',
+    $(async () => {
+      initiateTyper();
+    }),
+  );
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
