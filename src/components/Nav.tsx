@@ -35,7 +35,7 @@ export default component$(({ tauriVersion }: any) => {
           <NavButton type="external" href="https://client.birdflop.com/">
             Billing
           </NavButton>
-          <NavButton type="external" href="https://www.birdflop.com/node-stats/">
+          <NavButton href="/node-stats">
             Node Stats
           </NavButton>
         </Dropdown>
