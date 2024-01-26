@@ -20,18 +20,6 @@ devDependencies:
   '@img/sharp-win32-x64':
     specifier: ^0.33.2
     version: 0.33.2
-  '@tauri-apps/api':
-    specifier: 2.0.0-alpha.13
-    version: 2.0.0-alpha.13
-  '@tauri-apps/cli':
-    specifier: 2.0.0-alpha.20
-    version: 2.0.0-alpha.20
-  '@tauri-apps/plugin-notification':
-    specifier: github:tauri-apps/tauri-plugin-notification#v2
-    version: github.com/tauri-apps/tauri-plugin-notification/166a10deb52f56bf2a2aa4b97daf9fa8d9355326
-  '@tauri-apps/plugin-window-state':
-    specifier: github:tauri-apps/tauri-plugin-window-state#v2
-    version: github.com/tauri-apps/tauri-plugin-window-state/449102e4c203cf7e79ddfaa96ff864aa2e91e9ff
   '@types/eslint':
     specifier: 8.56.2
     version: 8.56.2
@@ -1119,123 +1107,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@tauri-apps/api@2.0.0-alpha.12:
-    resolution: {integrity: sha512-acpNZQxFgHMHC5qV/IUg4IL/xmypzfxHB4ECkwb58fT48H4zBmklNd5TC0k7BvLUBoSmmgHc4InbYwQai392Yw==}
-    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
-    dev: true
-
-  /@tauri-apps/api@2.0.0-alpha.13:
-    resolution: {integrity: sha512-sGgCkFahF3OZAHoGN5Ozt9WK7wJlbVZSgWpPQKNag4nSOX1+Py6VDRTEWriiJHDiV+gg31CWHnNXRy6TFoZmdA==}
-    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
-    dev: true
-
-  /@tauri-apps/cli-darwin-arm64@2.0.0-alpha.20:
-    resolution: {integrity: sha512-L+6OYTjKA42U7XXLQDxoUb43hcKSU8mJ4T3PMCuE08jtv4p6MNfcJQ9FwBCYV6XqYmqE1s5AEBGxR4wBk7bbXQ==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-darwin-x64@2.0.0-alpha.20:
-    resolution: {integrity: sha512-KnSuiZPnQi9rIbcBRUGyPBEjVpxZ4IcumUVbG2A+BhKMN/sZ4/w+xBhlRhG5V4gvp512LU20zGb3zMmePmOGlQ==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-linux-arm-gnueabihf@2.0.0-alpha.20:
-    resolution: {integrity: sha512-wfneLGGgd7unwMtNs4izkbyhbP+mswsep6aF11RWsGKasq3c6ZFcjFl1/E6/B5WspfjdlVW1/FfVGU6kMwZQwA==}
-    engines: {node: '>= 10'}
-    cpu: [arm]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-linux-arm64-gnu@2.0.0-alpha.20:
-    resolution: {integrity: sha512-QL+jKiJqCAf65iDkbylxvTKnM3hS3Dq9QCUoguJ5lfLTtztjJzXgCqTeo7yA1AOQjGPQ656p206HrBjO4Ppkog==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-linux-arm64-musl@2.0.0-alpha.20:
-    resolution: {integrity: sha512-nVknro6J4e+82wkhVaNqc9eEA1SLXR0JQQ9lVcjZWauR7lU6gurRchSQ1xFaCfHW2ZwDgQE7RzdrCZGh3QJmog==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-linux-x64-gnu@2.0.0-alpha.20:
-    resolution: {integrity: sha512-x6bCiOIvjnwcrHEabkXzFFRicPmdPNDCTtn02eX4vFnEWbmkssDM40NjqcWnTIR8z1F289FoPuPVA4WiEc0g9Q==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-linux-x64-musl@2.0.0-alpha.20:
-    resolution: {integrity: sha512-trA5N9r/RA6uaRrCzzd4Q/kHMehpfhzUruTnsu/bHXf2cnMOhGmnstPzLHlPRudyMELqCngrykR0l4Pp33XHvg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-win32-arm64-msvc@2.0.0-alpha.20:
-    resolution: {integrity: sha512-ib99wuC4WEVS/aZ10YT+IdBOM/zeDRQV01wPd4WT0djNW4nv0b0TmhsZ9BaD9cL/GQD5YPWfwx/EGoHKB1rj9g==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-win32-ia32-msvc@2.0.0-alpha.20:
-    resolution: {integrity: sha512-xiJygmAIbqWl6BRA9LDOWwMg8BnH5KFQbcVaftGtuc+1K5ujViO18hEB4+3i76lNR/xTjq8AX3njxT7yKT0mVA==}
-    engines: {node: '>= 10'}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli-win32-x64-msvc@2.0.0-alpha.20:
-    resolution: {integrity: sha512-4mN+rCPhPfv1Yjq3elpxaZnp5OY4BHrrlwKzOgLJty2crMy3UAP1s2uXwNZl/86HfHkIkR8RGaR8KR8ioFdmZg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /@tauri-apps/cli@2.0.0-alpha.20:
-    resolution: {integrity: sha512-TNoaRunh2a9Id57EOWSSEziTszBdxyWUtHq9qw3olgY+i/fF3s0Kxwy2c7TM4kON1KnBSvzF+FEGRInNJNvbXw==}
-    engines: {node: '>= 10'}
-    hasBin: true
-    optionalDependencies:
-      '@tauri-apps/cli-darwin-arm64': 2.0.0-alpha.20
-      '@tauri-apps/cli-darwin-x64': 2.0.0-alpha.20
-      '@tauri-apps/cli-linux-arm-gnueabihf': 2.0.0-alpha.20
-      '@tauri-apps/cli-linux-arm64-gnu': 2.0.0-alpha.20
-      '@tauri-apps/cli-linux-arm64-musl': 2.0.0-alpha.20
-      '@tauri-apps/cli-linux-x64-gnu': 2.0.0-alpha.20
-      '@tauri-apps/cli-linux-x64-musl': 2.0.0-alpha.20
-      '@tauri-apps/cli-win32-arm64-msvc': 2.0.0-alpha.20
-      '@tauri-apps/cli-win32-ia32-msvc': 2.0.0-alpha.20
-      '@tauri-apps/cli-win32-x64-msvc': 2.0.0-alpha.20
-    dev: true
 
   /@trysound/sax@0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -4476,20 +4347,4 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
-    dev: true
-
-  github.com/tauri-apps/tauri-plugin-notification/166a10deb52f56bf2a2aa4b97daf9fa8d9355326:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-notification/tar.gz/166a10deb52f56bf2a2aa4b97daf9fa8d9355326}
-    name: '@tauri-apps/plugin-notification'
-    version: 2.0.0-alpha.4
-    dependencies:
-      '@tauri-apps/api': 2.0.0-alpha.12
-    dev: true
-
-  github.com/tauri-apps/tauri-plugin-window-state/449102e4c203cf7e79ddfaa96ff864aa2e91e9ff:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-window-state/tar.gz/449102e4c203cf7e79ddfaa96ff864aa2e91e9ff}
-    name: '@tauri-apps/plugin-window-state'
-    version: 2.0.0-alpha.4
-    dependencies:
-      '@tauri-apps/api': 2.0.0-alpha.12
     dev: true

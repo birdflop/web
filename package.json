@@ -17,14 +17,12 @@
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/cloudflare-pages/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
-    "build.tauri": "vite build && vite build -c adapters/static/vite.config.ts",
     "deploy": "wrangler pages dev ./dist",
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview",
     "start": "vite --mode ssr --host",
     "start.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --forcenode --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "qwik": "qwik",
-    "tauri": "tauri"
+    "qwik": "qwik"
   },
   "devDependencies": {
     "@builder.io/qwik": "1.4.0",
@@ -32,10 +30,6 @@
     "@img/sharp-darwin-x64": "^0.33.2",
     "@img/sharp-linux-x64": "^0.33.2",
     "@img/sharp-win32-x64": "^0.33.2",
-    "@tauri-apps/api": "2.0.0-alpha.13",
-    "@tauri-apps/cli": "2.0.0-alpha.20",
-    "@tauri-apps/plugin-notification": "github:tauri-apps/tauri-plugin-notification#v2",
-    "@tauri-apps/plugin-window-state": "github:tauri-apps/tauri-plugin-window-state#v2",
     "@types/eslint": "8.56.2",
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "6.19.1",

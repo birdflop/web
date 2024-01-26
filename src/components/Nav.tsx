@@ -3,31 +3,23 @@
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline, CloseOutline, SquareOutline, RemoveOutline } from 'qwik-ionicons';
-
-import Logo from '~/images/logo.png?jsx';
+import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
-import { version } from '~/../package.json';
-
-import Luminescent from './icons/Birdflop';
 import LoadingIcon from './icons/LoadingIcon';
 
-// @ts-ignore
-import { Window } from '@tauri-apps/api/window';
-import { sendNotification, isPermissionGranted, requestPermission } from '@tauri-apps/plugin-notification';
 import Birdflop from './icons/Birdflop';
 
-export default component$(({ tauriVersion }: any) => {
+export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
 
   return (
     <Nav>
-      <MainNav tauriVersion={tauriVersion} store={store}>
+      <MainNav>
         <Dropdown name='Hosting' extraClass={{ 'hidden sm:flex': true }}>
           <NavButton type="external" href="https://panel.birdflop.com/">
             Panel
@@ -75,24 +67,7 @@ export default component$(({ tauriVersion }: any) => {
         <NavButton href="/privacy" extraClass={{ 'hidden xl:flex': true }}>
           {t('nav.privacyPolicy@@Privacy Policy')}
         </NavButton>
-        <NavButton type="div" onClick$={async () => {
-          if (tauriVersion) {
-            const perm = await isPermissionGranted();
-            if (!perm) await requestPermission();
-            try {
-              sendNotification({
-                title: 'SimplyMC',
-                body: 'Hello Tauri!',
-              });
-            }
-            catch (e) {
-              console.error(e);
-            }
-          }
-        }} extraClass={{ 'hidden lg:flex': true }}>
-          v{version} {tauriVersion && `(${tauriVersion})`}
-        </NavButton>
-        <LangPicker tauriVersion={tauriVersion} />
+        <LangPicker />
         <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden lg:flex': true }}>
           <LogoGithub width="24" class="fill-green-100" />
         </NavButton>
@@ -102,28 +77,9 @@ export default component$(({ tauriVersion }: any) => {
         <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass={{ 'hidden lg:flex': true }}>
           <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
         </NavButton>
-        {!tauriVersion &&
-          <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
-            <Menu width="24" class="fill-current" />
-          </NavButton>
-        }
-        {tauriVersion && <>
-          <NavButton type="div" icon title="Minimize" onClick$={() => {
-            Window.getCurrent().minimize();
-          }}>
-            <RemoveOutline width="24" />
-          </NavButton>
-          <NavButton type="div" icon title="Maximize" onClick$={() => {
-            Window.getCurrent().toggleMaximize();
-          }}>
-            <SquareOutline width="20" />
-          </NavButton>
-          <NavButton type="div" icon title="Close" onClick$={() => {
-            Window.getCurrent().close();
-          }}>
-            <CloseOutline width="24" />
-          </NavButton>
-        </>}
+        <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
+          <Menu width="24" class="fill-current" />
+        </NavButton>
       </MainNav>
       <MobileNav store={store}>
         <NavButton type="external" href="https://panel.birdflop.com/">
@@ -206,24 +162,12 @@ export const Brand = component$(() => {
   );
 });
 
-export const MainNav = component$(({ tauriVersion, store }: any) => {
+export const MainNav = component$(() => {
   return (
-    <div class={{
-      'bg-blue-700/20 py-2': true,
-      'px-4 lg:px-6': !tauriVersion,
-      'px-2': tauriVersion,
-    }} data-tauri-drag-region>
-      <div class={{
-        'mx-auto relative flex items-center justify-between': true,
-        'max-w-7xl': !tauriVersion,
-      }}>
-        {tauriVersion &&
-          <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
-            <Menu width="24" class="fill-current" />
-          </NavButton>
-        }
+    <div class={'bg-blue-700/20 py-2'}>
+      <div class={'mx-auto relative flex items-center justify-between max-w-7xl'}>
         <Brand />
-        <div class="flex flex-1 items-center justify-end" data-tauri-drag-region>
+        <div class="flex flex-1 items-center justify-end">
           <div class="flex gap-1 text-gray-300 whitespace-nowrap">
             <Slot />
           </div>
@@ -291,7 +235,7 @@ export const Dropdown = component$(({ name, extraClass }: any) => {
   );
 });
 
-export const LangPicker = component$(({ tauriVersion }: any) => {
+export const LangPicker = component$(() => {
   const config = useSpeakConfig();
 
   const changeLocale$ = $(async (newLocale: SpeakLocale) => {
@@ -304,11 +248,7 @@ export const LangPicker = component$(({ tauriVersion }: any) => {
       <div class="p-3">
         <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
       </div>
-      <div class={{
-        'absolute top-8 z-10 hidden group-hover:flex pt-5 text-base': true,
-        '-right-20': tauriVersion,
-        'right-0': !tauriVersion,
-      }}>
+      <div class={'absolute top-8 z-10 hidden group-hover:flex pt-5 text-base right-0'}>
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           {config.supportedLocales.map(value => (
             <NavButton type="div" key={value.lang} onClick$={async () => await changeLocale$(value)}>
