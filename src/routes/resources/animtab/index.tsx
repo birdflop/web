@@ -1,4 +1,4 @@
-import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useTask$, useStore, $, useOnDocument } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -99,29 +99,32 @@ export default component$(() => {
     },
   );
 
-  useVisibleTask$(() => {
-    getCookie(JSON.stringify(store)).then((userstore: any) => {
-      const parsedUserStore = JSON.parse(userstore);
-      for (const key of Object.keys(parsedUserStore)) {
-        const value = parsedUserStore[key];
-        store[key] = value === 'true' ? true : value === 'false' ? false : value;
+  useOnDocument(
+    'load',
+    $(async () => {
+      getCookie(JSON.stringify(store)).then((userstore: any) => {
+        const parsedUserStore = JSON.parse(userstore);
+        for (const key of Object.keys(parsedUserStore)) {
+          const value = parsedUserStore[key];
+          store[key] = value === 'true' ? true : value === 'false' ? false : value;
+        }
+      });
+
+      let speed = store.speed;
+
+      let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+
+      function setFrame() {
+        if (!store.frames[0]) return;
+        if (speed != store.speed) {
+          clearInterval(frameInterval);
+          speed = store.speed;
+          frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+        }
+        store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
       }
-    });
-
-    let speed = store.speed;
-
-    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
-
-    function setFrame() {
-      if (!store.frames[0]) return;
-      if (speed != store.speed) {
-        clearInterval(frameInterval);
-        speed = store.speed;
-        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
-      }
-      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
-    }
-  });
+    }),
+  );
 
   useTask$(({ track }) => {
     Object.keys(store).forEach((key: any) => {

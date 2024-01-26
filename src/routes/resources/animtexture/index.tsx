@@ -1,4 +1,4 @@
-import { component$, useOn, useStore, useVisibleTask$, $ } from '@builder.io/qwik';
+import { component$, useOn, useStore, $, useOnDocument } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -20,14 +20,17 @@ export default component$(() => {
     cumulative: false,
   }, { deep: true });
 
-  useVisibleTask$(() => {
-    if (document.getElementsByName('gifframes')[0]) return;
-    const script = document.createElement('script');
-    script.src = '/scripts/gif-frames.js';
-    script.defer = true;
-    script.setAttribute('name', 'gifframes');
-    document.head.appendChild(script);
-  });
+  useOnDocument(
+    'load',
+    $(async () => {
+      if (document.getElementsByName('gifframes')[0]) return;
+      const script = document.createElement('script');
+      script.src = '/scripts/gif-frames.js';
+      script.defer = true;
+      script.setAttribute('name', 'gifframes');
+      document.head.appendChild(script);
+    }),
+  );
   useOn(
     'change',
     $((event) => {
@@ -67,7 +70,7 @@ export default component$(() => {
         </h2>
 
         <label for="fileInput">Select Frame(s) or a GIF</label><br />
-        <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none"/>
+        <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" />
 
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
           {store.frames.map((frame, i) => (

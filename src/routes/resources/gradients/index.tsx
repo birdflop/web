@@ -1,4 +1,4 @@
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useOnDocument } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -87,14 +87,17 @@ export default component$(() => {
     },
   );
 
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-    }
-  });
+  useOnDocument(
+    'load',
+    $(async () => {
+      const userstore = await getCookie(JSON.stringify(store));
+      const parsedUserStore = JSON.parse(userstore);
+      for (const key of Object.keys(parsedUserStore)) {
+        const value = parsedUserStore[key];
+        store[key] = value === 'true' ? true : value === 'false' ? false : value;
+      }
+    }),
+  );
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">

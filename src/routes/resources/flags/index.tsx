@@ -1,5 +1,5 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useOnDocument } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak, useSpeakContext } from 'qwik-speak';
@@ -191,23 +191,26 @@ export default component$(() => {
     },
   }, { deep: true });
 
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    if (typeof parsedUserStore.parsed === 'string') {
-      parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
-    }
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      if (key === 'parsed') {
-        for (const key2 of Object.keys(parsedUserStore.parsed)) {
-          const value2 = parsedUserStore.parsed[key2];
-          store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
+  useOnDocument(
+    'load',
+    $(async () => {
+      const userstore = await getCookie(JSON.stringify(store));
+      const parsedUserStore = JSON.parse(userstore);
+      if (typeof parsedUserStore.parsed === 'string') {
+        parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
+      }
+      for (const key of Object.keys(parsedUserStore)) {
+        const value = parsedUserStore[key];
+        store[key] = value === 'true' ? true : value === 'false' ? false : value;
+        if (key === 'parsed') {
+          for (const key2 of Object.keys(parsedUserStore.parsed)) {
+            const value2 = parsedUserStore.parsed[key2];
+            store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
+          }
         }
       }
-    }
-  });
+    }),
+  );
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">

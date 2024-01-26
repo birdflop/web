@@ -40,7 +40,7 @@ export default component$(() => {
               <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="mr-4 flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-sky-700/80 hover:bg-sky-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 mt-10 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
                 <ServerOutline width="30" class="text-3xl" /> Hosting
               </a>
-              <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-pink-700/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 mt-10 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+              <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-pink-900/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 mt-10 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
                 <CashOutline width="30" class="text-3xl" /> Donate Today
               </a>
             </div>
