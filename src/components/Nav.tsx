@@ -31,31 +31,29 @@ export default component$(() => {
             Node Stats
           </NavButton>
         </Dropdown>
-        <Dropdown name={t('nav.gradients@@Gradients')} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/gradients">
+        <Dropdown name="Resources" extraClass={{ 'hidden sm:flex': true }}>
+          <NavButton href="/resources/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
-          <NavButton href="/animtab">
+          <NavButton href="/resources/animtab">
             {t('nav.animatedTAB@@Animated TAB')}
           </NavButton>
-          <NavButton href="/animpreview">
+          <NavButton href="/resources/animpreview">
             {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
           </NavButton>
-        </Dropdown>
-        <Dropdown name={t('nav.server-tools@@Server Tools')} extraClass={{ 'hidden xl:flex': true }}>
-          <NavButton href="/sparkprofile">
+          <NavButton href="/resources/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
-          <NavButton href="/papertimings">
+          <NavButton href="/resources/papertimings">
             {t('nav.paperTimings@@Paper Timings')}
           </NavButton>
-          <NavButton href="/flags" extraClass={{ 'hidden md:flex': true }}>
+          <NavButton href="/resources/flags" extraClass={{ 'hidden md:flex': true }}>
             {t('nav.flags@@Flags')}
           </NavButton>
+          <NavButton href="/resources">
+            More Resources
+          </NavButton>
         </Dropdown>
-        <NavButton href="/resources">
-          More Resources
-        </NavButton>
         <NavButton href="/privacy" extraClass={{ 'hidden xl:flex': true }}>
           {t('nav.privacyPolicy@@Privacy Policy')}
         </NavButton>
@@ -83,22 +81,22 @@ export default component$(() => {
         <NavButton type="external" href="https://www.birdflop.com/node-stats/">
           Node Stats
         </NavButton>
-        <NavButton store={store} href="/gradients">
+        <NavButton store={store} href="/resources/gradients">
           {t('nav.hexGradient@@Hex Gradients')}
         </NavButton>
-        <NavButton store={store} href="/animtab">
+        <NavButton store={store} href="/resources/animtab">
           {t('nav.animatedTAB@@Animated TAB')}
         </NavButton>
-        <NavButton store={store} href="/animpreview">
+        <NavButton store={store} href="/resources/animpreview">
           {t('nav.tabAnimationPreview@@TAB Animation Previewer')}
         </NavButton>
-        <NavButton store={store} href="/sparkprofile">
+        <NavButton store={store} href="/resources/sparkprofile">
           {t('nav.sparkProfile@@Spark Profile')}
         </NavButton>
-        <NavButton store={store} href="/papertimings">
+        <NavButton store={store} href="/resources/papertimings">
           {t('nav.paperTimings@@Paper Timings')}
         </NavButton>
-        <NavButton store={store} href="/flags">
+        <NavButton store={store} href="/resources/flags">
           {t('nav.flags@@Flags')}
         </NavButton>
         <NavButton href="/resources">
