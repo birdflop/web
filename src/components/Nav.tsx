@@ -42,28 +42,20 @@ export default component$(() => {
             {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
           </NavButton>
         </Dropdown>
-        <Dropdown name={t('nav.analysis@@Analysis')} extraClass={{ 'hidden xl:flex': true }}>
+        <Dropdown name={t('nav.server-tools@@Server Tools')} extraClass={{ 'hidden xl:flex': true }}>
           <NavButton href="/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
           <NavButton href="/papertimings">
             {t('nav.paperTimings@@Paper Timings')}
           </NavButton>
+          <NavButton href="/flags" extraClass={{ 'hidden md:flex': true }}>
+            {t('nav.flags@@Flags')}
+          </NavButton>
         </Dropdown>
-        <NavButton href="/flags" extraClass={{ 'hidden md:flex': true }}>
-          {t('nav.flags@@Flags')}
+        <NavButton href="/resources">
+          More Resources
         </NavButton>
-        <Dropdown name={t('nav.more@@More')} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/animtexture">
-            {t('nav.animatedTextures@@Animated Textures')}
-          </NavButton>
-          <NavButton href="/colorstrip">
-            {t('nav.colorCodeStripper@@Color Code Stripper')}
-          </NavButton>
-          <NavButton href="/presettools">
-            {t('nav.presetTools@@Preset Tools')}
-          </NavButton>
-        </Dropdown>
         <NavButton href="/privacy" extraClass={{ 'hidden xl:flex': true }}>
           {t('nav.privacyPolicy@@Privacy Policy')}
         </NavButton>
@@ -109,11 +101,8 @@ export default component$(() => {
         <NavButton store={store} href="/flags">
           {t('nav.flags@@Flags')}
         </NavButton>
-        <NavButton store={store} href="/animtexture">
-          {t('nav.animatedTextures@@Animated Textures')}
-        </NavButton>
-        <NavButton store={store} href="/colorstrip">
-          {t('nav.colorCodeStripper@@Color Code Stripper')}
+        <NavButton href="/resources">
+          More Resources
         </NavButton>
         <NavButton store={store} href="/privacy">
           {t('nav.privacyPolicy@@Privacy Policy')}

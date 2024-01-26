@@ -34,16 +34,8 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Color Code Stripper',
+  title: 'Node Stats',
   meta: [
-    {
-      name: 'description',
-      content: 'Strips all color / format codes from text.',
-    },
-    {
-      name: 'og:description',
-      content: 'Strips all color / format codes from text.',
-    },
     {
       name: 'og:image',
       content: 'https://simplymc.art/images/icon.png',
