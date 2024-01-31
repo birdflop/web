@@ -31,6 +31,17 @@ export default component$(() => {
             Node Stats
           </NavButton>
         </Dropdown>
+        <Dropdown name='Server List' extraClass={{ 'hidden sm:flex': true }}>
+          <NavButton href="/serverlist">
+            Latest
+          </NavButton>
+          <NavButton type="external" href="https://client.birdflop.com/">
+            Popular
+          </NavButton>
+          <NavButton href="/node-stats">
+            Random
+          </NavButton>
+        </Dropdown>
         <Dropdown name="Resources" extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/resources/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
