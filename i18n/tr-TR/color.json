@@ -1,0 +1,27 @@
+{
+    "color": {
+        "output": "Output",
+        "outputSubtitle": "This is what you put in the chat. Click on it to copy.",
+        "colorAmount": "Color Amount",
+        "hexColor": "Hex Color",
+        "inputText": "Input Text",
+        "presets": "Presets",
+        "exportedPreset": "Successfully exported preset to clipboard!",
+        "importedPreset": "Successfully imported preset!",
+        "invalidPreset": "INVALID PRESET!\nIf this is an old preset, please update it using the <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">Developers</a>.",
+        "export": "Export",
+        "import": "Import (Paste here)",
+        "bold": "Bold",
+        "strikethrough": "Strikethrough",
+        "underline": "Underline",
+        "italic": "Italic",
+        "customFormat": "Custom Format",
+        "custom": "Custom",
+        "placeholders": "Placeholders:",
+        "formatting": "Formatting",
+        "character": "Character",
+        "formatCharacter": "Format Character",
+        "colorPreset": "Color Preset",
+        "colorFormat": "Color Format"
+    }
+}
