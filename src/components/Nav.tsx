@@ -16,7 +16,6 @@ import Birdflop from './icons/Birdflop';
 export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
-
   return (
     <Nav>
       <MainNav>

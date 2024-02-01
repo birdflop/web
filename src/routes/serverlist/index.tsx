@@ -1,57 +1,66 @@
 import { component$, useStore } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$, type DocumentHead, server$ } from '@builder.io/qwik-city';
+import { PrismaClient } from '@prisma/client';
+import { Button } from '~/components/elements/Button';
 
-const servers = [
-  {
-    name: 'Aether SMP',
-    ip: 'play.aethersmp.com',
-    version: '1.20.4',
-    players: 0,
-    maxPlayers: 100,
-    onlineStatus: 'Offline',
-    banner: 'https://minecraft-mp.com/images/banners/banner-328089-1704831881.png',
-    icon: 'https://minecraft-mp.com/images/favicon/328089.png?ts=1706602288',
-    tags: ['Discord', 'Economy', 'Events', 'Jobs', 'Land Claim', 'Ranks', 'SMP', 'Spigot', 'Survival'],
-  },
-  {
-    name: 'AcornMC',
-    ip: 'play.acornmc.org',
-    version: '1.20.4',
-    players: 69,
-    maxPlayers: 100,
-    onlineStatus: 'Online',
-    banner: 'https://minecraft-mp.com/images/banners/banner-174434-1686514033.png',
-    icon: 'https://minecraft-mp.com/images/favicon/174434.png?ts=1706612778',
-    tags: ['Bukkit', 'BungeeCord', 'Economy', 'Land Claim', 'PvE', 'Ranks', 'Spitgot', 'Survival', 'Vanilla'],
-  },
-  {
-    name: 'Piglin',
-    ip: 'play.piglin.org',
-    version: '1.20.4',
-    players: 10,
-    maxPlayers: 100,
-    onlineStatus: 'Online',
-    banner: 'https://minecraft-mp.com/images/banners/banner-253785-1686357389.png',
-    icon: 'https://minecraft-mp.com/images/favicon/253785.png?ts=1706619950',
-    tags: ['Casual', 'Discord', 'Economy', 'Land Claim', 'PvE', 'Survival'],
-  },
-];
+const prisma = new PrismaClient();
+
+export const useGetServers = routeLoader$(async () => {
+  const servers = await prisma.server.findMany();
+  return servers;
+});
+
+// const servers = [
+//   {
+//     name: 'Aether SMP',
+//     ip: 'play.aethersmp.com',
+//     version: '1.20.4',
+//     players: 0,
+//     maxPlayers: 100,
+//     onlineStatus: 'Offline',
+//     banner: 'https://minecraft-mp.com/images/banners/banner-328089-1704831881.png',
+//     icon: 'https://minecraft-mp.com/images/favicon/328089.png?ts=1706602288',
+//     tags: ['Discord', 'Economy', 'Events', 'Jobs', 'Land Claim', 'Ranks', 'SMP', 'Spigot', 'Survival'],
+//   },
+//   {
+//     name: 'AcornMC',
+//     ip: 'play.acornmc.org',
+//     version: '1.20.4',
+//     players: 69,
+//     maxPlayers: 100,
+//     onlineStatus: 'Online',
+//     banner: 'https://minecraft-mp.com/images/banners/banner-174434-1686514033.png',
+//     icon: 'https://minecraft-mp.com/images/favicon/174434.png?ts=1706612778',
+//     tags: ['Bukkit', 'BungeeCord', 'Economy', 'Land Claim', 'PvE', 'Ranks', 'Spitgot', 'Survival', 'Vanilla'],
+//   },
+//   {
+//     name: 'Piglin',
+//     ip: 'play.piglin.org',
+//     version: '1.20.4',
+//     players: 10,
+//     maxPlayers: 100,
+//     onlineStatus: 'Online',
+//     banner: 'https://minecraft-mp.com/images/banners/banner-253785-1686357389.png',
+//     icon: 'https://minecraft-mp.com/images/favicon/253785.png?ts=1706619950',
+//     tags: ['Casual', 'Discord', 'Economy', 'Land Claim', 'PvE', 'Survival'],
+//   },
+// ];
 
 export default component$(() => {
+  const servers = useGetServers();
+  // const store: any = useStore({
+  //   sortType: 'players',
+  //   alerts: [],
+  // }, { deep: true });
 
-  const store: any = useStore({
-    sortType: 'players',
-    alerts: [],
-  }, { deep: true });
-
-  const sortedServers = servers.sort((a, b) => {
-    if (store.sortType === 'players') {
-      return b.players - a.players;
-    } else if (store.sortType === 'name') {
-      return a.name.localeCompare(b.name);
-    }
-    return 0;
-  });
+  // const sortedServers = servers.value.sort((a, b) => {
+  //   if (store.sortType === 'players') {
+  //     return b.players - a.players;
+  //   } else if (store.sortType === 'name') {
+  //     return a.name.localeCompare(b.name);
+  //   }
+  //   return 0;
+  // });
 
   return (
     <section class="flex mx-auto max-w-7xl justify-center min-h-[calc(100vh-68px)] flex-wrap">
@@ -61,20 +70,14 @@ export default component$(() => {
           <div class="w-1/5">
             <label for="sortVersion" class="block text-sm font-medium text-white">Sort by version</label>
             <select id="sortVersion" name="sortVersion" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {/* Add your options here */}
-            </select>
-            <label for="sortPlayers" class="block text-sm font-medium text-white">Sort by players</label>
-            <select id="sortPlayers" name="sortPlayers" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {/* Add your options here */}
-            </select>
-            <label for="sortTags" class="block text-sm font-medium text-white">Sort by tags</label>
-            <select id="sortTags" name="sortTags" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-              {/* Add your options here */}
+              <option value="all">All</option>
+              <option value="1.20.4">1.20.4</option>
+              <option value="1.20.3">1.20.3</option>
             </select>
           </div>
           <div class="w-3/4">
             {
-              sortedServers.map((server, index) => (
+              servers.value.map((server: any, index: string | number | null | undefined) => (
                 <Server key={index} server={server} index={index} />
               ))
             }
@@ -107,7 +110,7 @@ const Server = component$(({ ...props }: any) => {
         </div>
       </div>
       <div class="flex-1 flex flex-wrap">
-        {server.tags.slice(0, 5).map((tag: string, i: number) => (
+        {JSON.parse(server.tags).slice(0, 5).map((tag: string, i: number) => (
           i < 4 ?
             <span key={i} class="inline-block bg-gray-500 rounded-full px-2 py-1 text-xs font-semibold text-white mr-2 mb-2">{tag}</span>
             :
@@ -121,7 +124,7 @@ const Server = component$(({ ...props }: any) => {
         </div>
         <div class="flex-1 flex items-start justify-start flex-col">
           <p class="text-sm">Status:</p>
-          <p class={`text-lg font-bold ${server.onlineStatus.toLowerCase() === 'online' ? 'text-green-500' : 'text-red-500'}`}>
+          <p class={`text-lg font-bold ${'Online'.toLowerCase() === 'online' ? 'text-green-500' : 'text-red-500'}`}>
             {server.onlineStatus}
           </p>
         </div>
