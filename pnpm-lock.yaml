@@ -5,9 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@auth/core':
+    specifier: ^0.13.0
+    version: 0.13.0
   '@builder.io/qwik':
     specifier: 1.4.0
     version: 1.4.0(@types/node@20.10.5)(undici@6.4.0)
+  '@builder.io/qwik-auth':
+    specifier: 0.1.1
+    version: 0.1.1(@auth/core@0.13.0)
   '@builder.io/qwik-city':
     specifier: 1.4.0
     version: 1.4.0(@types/node@20.10.5)
@@ -20,6 +26,9 @@ devDependencies:
   '@img/sharp-win32-x64':
     specifier: ^0.33.2
     version: 0.33.2
+  '@prisma/client':
+    specifier: 5.3.1
+    version: 5.3.1(prisma@5.9.0)
   '@types/eslint':
     specifier: 8.56.2
     version: 8.56.2
@@ -44,6 +53,9 @@ devDependencies:
   postcss:
     specifier: ^8.4.33
     version: 8.4.33
+  prisma:
+    specifier: ^5.3.1
+    version: 5.9.0
   qwik-ionicons:
     specifier: ^1.0.5
     version: 1.0.5
@@ -88,6 +100,31 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+    dev: true
+
+  /@auth/core@0.13.0:
+    resolution: {integrity: sha512-StjrzUenaKfMr68kmvhiqfY0xvxRvg8wllmem9JAULpPAAAt3uwRUDXICWOP/PfWB4OZ2wQT7rgfm0n42b+Mjg==}
+    peerDependencies:
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
+    dependencies:
+      '@panva/hkdf': 1.1.1
+      cookie: 0.5.0
+      jose: 4.15.4
+      oauth4webapi: 2.8.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: true
+
+  /@builder.io/qwik-auth@0.1.1(@auth/core@0.13.0):
+    resolution: {integrity: sha512-PM5gJwqKM3KKYqYZhwxlMe/XvaCB2Jczv+MMh8z82Z7tK9uWJ7qG3OEdVF6tNeCOolzmL7tWHypBT2+Was5/4Q==}
+    engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
+    peerDependencies:
+      '@auth/core': ^0.13.0
+    dependencies:
+      '@auth/core': 0.13.0
     dev: true
 
   /@builder.io/qwik-city@1.4.0(@types/node@20.10.5):
@@ -988,6 +1025,60 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+    dev: true
+
+  /@panva/hkdf@1.1.1:
+    resolution: {integrity: sha512-dhPeilub1NuIG0X5Kvhh9lH4iW3ZsHlnzwgwbOlgwQ2wG1IqFzsgHqmKPk3WzsdWAeaxKJxgM0+W433RmN45GA==}
+    dev: true
+
+  /@prisma/client@5.3.1(prisma@5.9.0):
+    resolution: {integrity: sha512-ArOKjHwdFZIe1cGU56oIfy7wRuTn0FfZjGuU/AjgEBOQh+4rDkB6nF+AGHP8KaVpkBIiHGPQh3IpwQ3xDMdO0Q==}
+    engines: {node: '>=16.13'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59
+      prisma: 5.9.0
+    dev: true
+
+  /@prisma/debug@5.9.0:
+    resolution: {integrity: sha512-3Uhj5YSPqaIfzJQ6JQzCNBXeBTy0x803fGIoo2tvP/KIEd+o4o49JxCQtKtP8aeef5iNh5Nn9Z25wDrdLjS80A==}
+    dev: true
+
+  /@prisma/engines-version@5.3.1-2.61e140623197a131c2a6189271ffee05a7aa9a59:
+    resolution: {integrity: sha512-y5qbUi3ql2Xg7XraqcXEdMHh0MocBfnBzDn5GbV1xk23S3Mq8MGs+VjacTNiBh3dtEdUERCrUUG7Z3QaJ+h79w==}
+    dev: true
+
+  /@prisma/engines-version@5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64:
+    resolution: {integrity: sha512-HFl7275yF0FWbdcNvcSRbbu9JCBSLMcurYwvWc8WGDnpu7APxQo2ONtZrUggU3WxLxUJ2uBX+0GOFIcJeVeOOQ==}
+    dev: true
+
+  /@prisma/engines@5.9.0:
+    resolution: {integrity: sha512-BH1fpXbMH09TwfZH5FVMJwRp6afEhKzqwebbCLdaEkJDuhxA//iwbILLqGFtGTgZbdBNUOThIK+UC3++5kWMTg==}
+    requiresBuild: true
+    dependencies:
+      '@prisma/debug': 5.9.0
+      '@prisma/engines-version': 5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64
+      '@prisma/fetch-engine': 5.9.0
+      '@prisma/get-platform': 5.9.0
+    dev: true
+
+  /@prisma/fetch-engine@5.9.0:
+    resolution: {integrity: sha512-NL8Vm8Vl2d6NOSkkPGN5TTTz4s6cyCleXOzqtOFWzfKFJ4wtN2Shu7llOT+ykf6nDzh1lCN2JHUt1S6FGFZGig==}
+    dependencies:
+      '@prisma/debug': 5.9.0
+      '@prisma/engines-version': 5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64
+      '@prisma/get-platform': 5.9.0
+    dev: true
+
+  /@prisma/get-platform@5.9.0:
+    resolution: {integrity: sha512-8CatX+E6eZxcOjJZe5hF8EXxdb5GsQTA/u7pdmUJSxGLacW9K3r5vDdgV8s22PubObQQ6979/rkCMItbCrG4Yg==}
+    dependencies:
+      '@prisma/debug': 5.9.0
     dev: true
 
   /@rollup/pluginutils@5.1.0:
@@ -2619,6 +2710,10 @@ packages:
     hasBin: true
     dev: true
 
+  /jose@4.15.4:
+    resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+    dev: true
+
   /js-yaml@4.1.0:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
@@ -3217,6 +3312,10 @@ packages:
       boolbase: 1.0.0
     dev: true
 
+  /oauth4webapi@2.8.1:
+    resolution: {integrity: sha512-Jm1Z6eUumtevQWxMllSw+4diHOcFyxuc3KAXoyh4fbpHndbXRbviyrLoCn8htEdHYZM/MIOVbeWjDk86BxVF+A==}
+    dev: true
+
   /object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
@@ -3432,13 +3531,39 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /preact-render-to-string@5.2.3(preact@10.11.3):
+    resolution: {integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA==}
+    peerDependencies:
+      preact: '>=10'
+    dependencies:
+      preact: 10.11.3
+      pretty-format: 3.8.0
+    dev: true
+
+  /preact@10.11.3:
+    resolution: {integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==}
+    dev: true
+
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
     dev: true
 
+  /pretty-format@3.8.0:
+    resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+    dev: true
+
   /printable-characters@1.0.42:
     resolution: {integrity: sha512-dKp+C4iXWK4vVYZmYSd0KBH5F/h1HoZRsbJ82AVKRO3PEo8L4lBS/vLwhVtpwwuYcoIsVY+1JYKR268yn480uQ==}
+    dev: true
+
+  /prisma@5.9.0:
+    resolution: {integrity: sha512-0UcOofjNuAnd227JMaPqZvP01dsUXw9EXB9iC8fyoZtfv7zkQ0ozxyjY1g+vcjFPOnNLICMnLHx+lM5BJZYqOQ==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.9.0
     dev: true
 
   /property-information@6.4.0:
