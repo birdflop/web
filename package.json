@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@auth/core": "^0.13.0",
+    "@auth/prisma-adapter": "^1.2.0",
     "@builder.io/qwik": "1.4.0",
     "@builder.io/qwik-auth": "0.1.1",
     "@builder.io/qwik-city": "1.4.0",
@@ -38,6 +39,7 @@
     "@types/node": "latest",
     "@typescript-eslint/eslint-plugin": "6.19.1",
     "@typescript-eslint/parser": "6.19.1",
+    "@modular-forms/qwik": "^0.23.1",
     "autoprefixer": "10.4.17",
     "eslint": "8.56.0",
     "eslint-plugin-qwik": "1.4.0",
@@ -55,7 +57,5 @@
     "yaml": "^2.3.4",
     "zod": "^3.22.4"
   },
-  "dependencies": {
-    "@auth/prisma-adapter": "^1.2.0"
-  }
+  "dependencies": {}
 }

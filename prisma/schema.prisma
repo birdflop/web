@@ -23,8 +23,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -60,6 +59,7 @@ model Server {
   id           String   @id @default(cuid())
   name         String
   description  String
+  website      String?
   tags         String
   banner       String
   version      String
@@ -67,9 +67,9 @@ model Server {
   port         Int?     @default(25565)
   votifierIp   String
   votifierPort Int?     @default(8192)
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
   votes        Int?     @default(0)
   createdAt    DateTime @default(now())
   totalVotes   Int?     @default(0)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

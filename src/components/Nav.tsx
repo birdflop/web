@@ -12,10 +12,12 @@ import { languages } from '~/speak-config';
 import LoadingIcon from './icons/LoadingIcon';
 
 import Birdflop from './icons/Birdflop';
+import { useAuthSession } from '~/routes/plugin@auth';
 
 export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
+  const session = useAuthSession();
   return (
     <Nav>
       <MainNav>
@@ -32,14 +34,27 @@ export default component$(() => {
         </Dropdown>
         <Dropdown name='Server List' extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/serverlist">
-            Latest
+            Servers
           </NavButton>
-          <NavButton type="external" href="https://client.birdflop.com/">
-            Popular
-          </NavButton>
-          <NavButton href="/node-stats">
-            Random
-          </NavButton>
+          {session.value?.user &&
+            <>
+              <NavButton href="/serverlist/new">
+                Add Server
+              </NavButton>
+              <NavButton href="/serverlist/mine">
+                My Servers
+              </NavButton>
+              <NavButton href="/api/auth/signout">
+                Logout
+              </NavButton>
+            </>
+          }
+          {
+            !session.value?.user &&
+            <NavButton href="/api/auth/signin">
+              Login
+            </NavButton>
+          }
         </Dropdown>
         <Dropdown name="Resources" extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/resources/gradients">
