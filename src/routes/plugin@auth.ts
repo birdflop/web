@@ -12,11 +12,11 @@ export const { onRequest, useAuthSession, useAuthSignin, useAuthSignout } =
   serverAuth$(({ env }) => ({
     secret: env.get('AUTH_SECRET'),
     trustHost: true,
-    pages: {
-      signIn: '/auth/signin',
-      error: '/auth/signin',
-      signOut: '/auth/signout',
-    },
+    // pages: {
+    //   signIn: '/auth/signin',
+    //   error: '/auth/signin',
+    //   signOut: '/auth/signout',
+    // },
     adapter: PrismaAdapter(prisma),
     providers: [
       Discord({
