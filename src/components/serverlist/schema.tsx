@@ -10,5 +10,5 @@ export const serverSchema = z.object({
   votifierPort: z.number().min(1, 'Votifier Port must be at least 1').max(65535, 'Votifier Port must be at most 65535').optional(),
   website: z.string().max(100, 'Website must be at most 100 characters').optional(),
   version: z.string().max(100, 'Version must be at most 100 characters'),
-  tags: z.string().array(),
+  tags: z.string().array().optional(),
 });

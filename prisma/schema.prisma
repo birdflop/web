@@ -60,12 +60,12 @@ model Server {
   name         String
   description  String
   website      String?
-  tags         String
-  banner       String
+  tags         String?
+  banner       String?
   version      String
   ip           String
   port         Int?     @default(25565)
-  votifierIp   String
+  votifierIp   String?  @default("")
   votifierPort Int?     @default(8192)
   userId       String
   votes        Int?     @default(0)

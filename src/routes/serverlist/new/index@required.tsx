@@ -3,13 +3,17 @@ import { component$, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { formAction$, getValue, useForm, zodForm$ } from '@modular-forms/qwik';
+import { PrismaClient } from '@prisma/client';
 import type { input } from 'zod';
 import { Button } from '~/components/elements/Button';
 import TextInput from '~/components/elements/TextInput';
 import Toggle from '~/components/elements/Toggle';
 import { serverSchema } from '~/components/serverlist/schema';
+import { useAuthSession } from '~/routes/plugin@auth';
 
 type ServerForm = input<typeof serverSchema>;
+
+const prisma = new PrismaClient();
 
 export const useFormLoader = routeLoader$<InitialValues<ServerForm>>(() => ({
   name: 'Server Name',
@@ -26,6 +30,21 @@ export const useFormLoader = routeLoader$<InitialValues<ServerForm>>(() => ({
 
 export const useFormAction = formAction$<ServerForm>((values) => {
   console.log('Form Submitted:', values);
+  if (!auth.value?.user) throw new Error('Not logged in');
+  prisma.server.create({
+    data: {
+      name: values.name,
+      description: values.description,
+      ip: values.ip,
+      port: values.port,
+      votifierIp: values.votifierIp,
+      votifierPort: values.votifierPort,
+      website: values.website,
+      version: values.version,
+      tags: JSON.stringify(values.tags),
+      user: auth.value.user,
+    },
+  });
 }, zodForm$(serverSchema));
 
 export default component$(() => {
@@ -42,83 +61,80 @@ export default component$(() => {
 
   return (
     <Form class="flex items-center justify-center mx-auto max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mb-16 mt-5" onSubmit$={handleSubmit}>
-      <div class="font-bold text-white text-3xl sm:text-4xl mb-6 items-center justify-center drop-shadow-xl">
-        <div class="bg-black/50 border-black/30 border-2 p-8 rounded-xl text-lg font-normal">
-          <h1 class="text-center mb-3"></h1>
-          <Field name="name">
-            {(field, props) => (
-              <div>
-                <TextInput {...props} type="text" value={field.value} >Server Name</TextInput>
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="description">
-            {(field, props) => (
-              <TextInput big {...props} value={field.value} >Server Description</TextInput>
-            )}
-          </Field>
-          <Field name="ip">
-            {(field, props) => (
-              <div>
-                <TextInput {...props} type="text" value={field.value} >Server IP</TextInput>
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="port" type='number'>
-            {(field, props) => (
-              <div>
-                <TextInput {...props} type="number" value={field.value} >Server Port (if you arent using one leave as 25565) </TextInput>
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="votifier" type='boolean'>
-            {(field, props) => (
-              <div>
-                <Toggle {...props} value={field.value} >Enable Votifier</Toggle>
-              </div>
-            )}
-          </Field>
-          {getValue(serverForm, 'votifier') && (
-            <>
-              <Field name="votifierIp">
-                {(field, props) => (
-                  <div>
-                    <TextInput {...props} type="text" value={field.value} >Votifier IP</TextInput>
-                    {field.error && <div>{field.error}</div>}
-                  </div>
-                )}
-              </Field>
-              <Field name="votifierPort" type='number'>
-                {(field, props) => (
-                  <div>
-                    <TextInput {...props} type="number" value={field.value} >Votifier Port</TextInput>
-                    {field.error && <div>{field.error}</div>}
-                  </div>
-                )}
-              </Field>
-            </>
+      <div class="bg-black/50 border-black/30 border-2 p-8 rounded-xl text-lg font-normal">
+        <Field name="name">
+          {(field, props) => (
+            <div class="mb-4">
+              <TextInput {...props} type="text" value={field.value} >Server Name</TextInput>
+              {field.error && <div>{field.error}</div>}
+            </div>
           )}
-          <Field name="website">
-            {(field, props) => (
-              <div>
-                <TextInput {...props} type="text" value={field.value} >Server Website</TextInput>
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Field name="version">
-            {(field, props) => (
-              <div>
-                <TextInput {...props} type="text" value={field.value} >Server Version</TextInput>
-                {field.error && <div>{field.error}</div>}
-              </div>
-            )}
-          </Field>
-          <Button type="submit" class="mt-4">Submit</Button>
-        </div>
+        </Field>
+        <Field name="description">
+          {(field, props) => (
+            <TextInput big {...props} value={field.value} >Server Description</TextInput>
+          )}
+        </Field>
+        <Field name="ip">
+          {(field, props) => (
+            <div class="mb-4">
+              <TextInput {...props} type="text" value={field.value} >Server IP</TextInput>
+              {field.error && <div>{field.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Field name="port" type='number'>
+          {(field, props) => (
+            <div class="mb-4">
+              <TextInput {...props} type="number" value={field.value} >Server Port (if you arent using one leave as 25565) </TextInput>
+              {field.error && <div>{field.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Field name="votifier" type='boolean'>
+          {(field, props) => (
+            <div class="mb-4">
+              <Toggle {...props} value={field.value} >Enable Votifier</Toggle>
+            </div>
+          )}
+        </Field>
+        {getValue(serverForm, 'votifier') && (
+          <>
+            <Field name="votifierIp">
+              {(field, props) => (
+                <div class="mb-4">
+                  <TextInput {...props} type="text" value={field.value} >Votifier IP</TextInput>
+                  {field.error && <div>{field.error}</div>}
+                </div>
+              )}
+            </Field>
+            <Field name="votifierPort" type='number'>
+              {(field, props) => (
+                <div class="mb-4">
+                  <TextInput {...props} type="number" value={field.value} >Votifier Port</TextInput>
+                  {field.error && <div>{field.error}</div>}
+                </div>
+              )}
+            </Field>
+          </>
+        )}
+        <Field name="website">
+          {(field, props) => (
+            <div class="mb-4">
+              <TextInput {...props} type="text" value={field.value} >Server Website</TextInput>
+              {field.error && <div>{field.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Field name="version">
+          {(field, props) => (
+            <div class="mb-4">
+              <TextInput {...props} type="text" value={field.value} >Server Version</TextInput>
+              {field.error && <div>{field.error}</div>}
+            </div>
+          )}
+        </Field>
+        <Button type="submit" class="mt-4">Submit</Button>
       </div>
     </Form>
   );
