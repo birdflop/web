@@ -15,15 +15,15 @@
       "label": "운영 체제",
       "description": "서버가 실행되는 운영 체제입니다.",
       "linux": {
-        "label": "Linux",
+        "label": "리녹스",
         "description": "서버에 가장 일반적으로 사용되는 운영 체제"
       },
       "windows": {
-        "label": "Windows",
+        "label": "윈도우",
         "description": "가정용 데스크탑에서 가장 일반적으로 사용되는 운영 체제"
       },
       "macos": {
-        "label": "macOS",
+        "label": "맥OS",
         "description": "애플의 운영 체제"
       },
       "pterodactyl": {
@@ -37,11 +37,11 @@
     },
     "serverType": {
       "paper": {
-        "label": "Paper",
+        "label": "페이퍼",
         "description": "Bukkit 기반 플러그인 로더"
       },
       "purpur": {
-        "label": "Purpur",
+        "label": "퍼퍼",
         "description": "Bukkit 기반 플러그인 로더이지만 더 많은 기능 제공"
       },
       "velocity": {
@@ -49,15 +49,15 @@
         "description": "플러그인 로더가 포함된 프록시"
       },
       "forge": {
-        "label": "Forge",
+        "label": "포지",
         "description": "모드 로더"
       },
       "fabric": {
-        "label": "Fabric",
+        "label": "패브릭",
         "description": "더 나은 모드 로더"
       },
       "waterfall": {
-        "label": "Waterfall",
+        "label": "워터폴",
         "description": "지원 종료한 프록시"
       }
     },
