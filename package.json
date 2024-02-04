@@ -27,8 +27,8 @@
     "tauri": "tauri"
   },
   "devDependencies": {
-    "@builder.io/qwik": "1.4.0",
-    "@builder.io/qwik-city": "1.4.0",
+    "@builder.io/qwik": "1.4.3",
+    "@builder.io/qwik-city": "1.4.3",
     "@img/sharp-darwin-x64": "^0.33.2",
     "@img/sharp-linux-x64": "^0.33.2",
     "@img/sharp-win32-x64": "^0.33.2",
@@ -42,10 +42,10 @@
     "@typescript-eslint/parser": "6.19.1",
     "autoprefixer": "10.4.17",
     "eslint": "8.56.0",
-    "eslint-plugin-qwik": "1.4.0",
+    "eslint-plugin-qwik": "1.4.3",
     "postcss": "^8.4.33",
     "qwik-ionicons": "^1.0.5",
-    "qwik-speak": "^0.19.0",
+    "qwik-speak": "^0.21.0",
     "simple-color-picker": "^1.0.5",
     "tailwindcss": "^3.4.1",
     "typescript": "5.3.3",
