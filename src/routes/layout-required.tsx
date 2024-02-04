@@ -1,40 +1,39 @@
-import { component$, Slot, useOnDocument, useStore, $ } from '@builder.io/qwik';
+import { component$, Slot, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
 import Footer from '~/components/Footer';
-import { Session } from '@auth/core/types';
+import type { Session } from '@auth/core/types';
 
 export default component$(() => {
   const store = useStore({
     cookies: 'true',
     telemetry: 'false',
   });
-  useOnDocument(
-    'load',
-    $(async () => {
-      // convert cookies to json
-      const cookieJSON: any = document.cookie.split(';').reduce((res, c) => {
-        const [key, val] = c.trim().split('=').map(decodeURIComponent);
-        return Object.assign(res, { [key]: val });
-      }, {});
-      if (!cookieJSON['cookies']) store.cookies = 'false';
-      if (!cookieJSON['telemetry']) store.telemetry = 'true';
 
-      if (store.telemetry != 'false') {
-        (window as any).clarity = (window as any).clarity || function (...args: any) {
-          ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
-        };
-        const t = document.createElement('script');
-        t.async = true;
-        t.src = 'https://www.clarity.ms/tag/hf0q6m860a';
-        const y = document.getElementsByTagName('script')[0];
-        y.parentNode!.insertBefore(t, y);
-      }
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    // convert cookies to json
+    const cookieJSON: any = document.cookie.split(';').reduce((res, c) => {
+      const [key, val] = c.trim().split('=').map(decodeURIComponent);
+      return Object.assign(res, { [key]: val });
+    }, {});
+    if (!cookieJSON['cookies']) store.cookies = 'false';
+    if (!cookieJSON['telemetry']) store.telemetry = 'true';
+
+    if (store.telemetry != 'false' && !window.location.host.includes('localhost')) {
+      (window as any).clarity = (window as any).clarity || function (...args: any) {
+        ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
+      };
+      const t = document.createElement('script');
+      t.async = true;
+      t.src = 'https://www.clarity.ms/tag/hf0q6m860a';
+      const y = document.getElementsByTagName('script')[0];
+      y.parentNode!.insertBefore(t, y);
+    }
+  });
 
   return <>
     <Nav />

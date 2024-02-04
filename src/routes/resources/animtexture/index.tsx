@@ -1,4 +1,4 @@
-import { component$, useOn, useStore, $, useOnDocument } from '@builder.io/qwik';
+import { component$, useOn, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
@@ -20,17 +20,16 @@ export default component$(() => {
     cumulative: false,
   }, { deep: true });
 
-  useOnDocument(
-    'load',
-    $(async () => {
-      if (document.getElementsByName('gifframes')[0]) return;
-      const script = document.createElement('script');
-      script.src = '/scripts/gif-frames.js';
-      script.defer = true;
-      script.setAttribute('name', 'gifframes');
-      document.head.appendChild(script);
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    if (document.getElementsByName('gifframes')[0]) return;
+    const script = document.createElement('script');
+    script.src = '/scripts/gif-frames.js';
+    script.defer = true;
+    script.setAttribute('name', 'gifframes');
+    document.head.appendChild(script);
+  });
+
   useOn(
     'change',
     $((event) => {

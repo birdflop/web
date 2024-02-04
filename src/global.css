@@ -32,22 +32,12 @@
   font-display: swap;
 }
 
-.-animation-delay-5 { animation-delay: -5s; }
-.-animation-delay-10 { animation-delay: -10s; }
-
-.animation-delay-100 { animation-delay: 100ms; }
-.animation-delay-200 { animation-delay: 200ms; }
-.animation-delay-300 { animation-delay: 300ms; }
-.animation-delay-400 { animation-delay: 400ms; }
-.animation-delay-500 { animation-delay: 500ms; }
-
 html {
   background-color: rgb(9, 11, 13);
 }
 
 main {
-  overflow: auto;
-  height: calc(100lvh - 56px);
+  min-height: calc(100lvh - 56px);
   margin-top: 56px;
 }
 
@@ -165,3 +155,12 @@ main {
   border: hsl(0, 27%, 76%);
   border-width: 1px;
 }
+
+.-animation-delay-5 { animation-delay: -5s; }
+.-animation-delay-10 { animation-delay: -10s; }
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }

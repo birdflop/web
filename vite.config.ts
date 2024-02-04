@@ -17,6 +17,11 @@ export default defineConfig(() => {
                 assetsPath: 'i18n'
             }),
         ],
+        dev: {
+            headers: {
+                'Cache-Control': 'public, max-age=0',
+            },
+        },
         preview: {
             headers: {
                 "Cache-Control": "public, max-age=600",
