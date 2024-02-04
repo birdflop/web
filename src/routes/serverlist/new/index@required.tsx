@@ -2,7 +2,7 @@ import type { QRL } from '@builder.io/qwik';
 import { component$, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
-import { formAction$, getValue, useForm, zodForm$ } from '@modular-forms/qwik';
+import { getValue, useForm, zodForm$ } from '@modular-forms/qwik';
 import { PrismaClient } from '@prisma/client';
 import type { input } from 'zod';
 import { Button } from '~/components/elements/Button';
@@ -28,34 +28,14 @@ export const useFormLoader = routeLoader$<InitialValues<ServerForm>>(() => ({
   tags: [],
 }));
 
-export const useFormAction = formAction$<ServerForm>((values) => {
-  console.log('Form Submitted:', values);
-  if (!auth.value?.user) throw new Error('Not logged in');
-  prisma.server.create({
-    data: {
-      name: values.name,
-      description: values.description,
-      ip: values.ip,
-      port: values.port,
-      votifierIp: values.votifierIp,
-      votifierPort: values.votifierPort,
-      website: values.website,
-      version: values.version,
-      tags: JSON.stringify(values.tags),
-      user: auth.value.user,
-    },
-  });
-}, zodForm$(serverSchema));
-
 export default component$(() => {
 
   const [serverForm, { Form, Field }] = useForm<ServerForm>({
     loader: useFormLoader(),
-    action: useFormAction(),
     validate: zodForm$(serverSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<ServerForm>> = $((values, event) => {
+  const handleSubmit: QRL<SubmitHandler<ServerForm>> = $(async (values, event) => {
     console.log('Form Submitted:', values);
   });
 

@@ -5,7 +5,7 @@ import { config } from '~/speak-config';
 import Nav from '../components/Nav';
 import { Button } from '~/components/elements/Button';
 import Footer from '~/components/Footer';
-import { Session } from '@auth/core/types';
+import type { Session } from '@auth/core/types';
 
 export default component$(() => {
   const store = useStore({
