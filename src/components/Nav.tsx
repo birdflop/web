@@ -3,7 +3,7 @@
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, GlobeOutline, ChevronDown, Menu, CafeOutline } from 'qwik-ionicons';
+import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
@@ -44,14 +44,14 @@ export default component$(() => {
               <NavButton href="/serverlist/mine">
                 My Servers
               </NavButton>
-              <NavButton href="/api/auth/signout">
+              <NavButton type="external" href="/api/auth/signout">
                 Logout
               </NavButton>
             </>
           }
           {
             !session.value?.user &&
-            <NavButton href="/api/auth/signin">
+            <NavButton type="external" href="/api/auth/signin">
               Login
             </NavButton>
           }
@@ -63,31 +63,20 @@ export default component$(() => {
           <NavButton href="/resources/animtab">
             {t('nav.animatedTAB@@Animated TAB')}
           </NavButton>
-          <NavButton href="/resources/animpreview">
-            {t('nav.tabAnimationPreviewer@@TAB Animation Previewer')}
-          </NavButton>
           <NavButton href="/resources/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
+          <NavButton href="/resources/sparkprofile">
+            {t('nav.flags@@Flags')}
+          </NavButton>
           <NavButton href="/resources">
-            More Resources
+            {t('nav.more@@More Resources')}
           </NavButton>
         </Dropdown>
-        <NavButton href="/privacy" extraClass={{ 'hidden xl:flex': true }}>
-          {t('nav.privacyPolicy@@Privacy Policy')}
-        </NavButton>
         <LangPicker />
-        <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden lg:flex': true }}>
-          <LogoGithub width="24" class="fill-green-100" />
-        </NavButton>
-        <NavButton type="external" icon href="https://discord.simplymc.art" title="Discord" extraClass={{ 'hidden lg:flex': true }}>
-          <LogoDiscord width="24" class="fill-indigo-200" />
-        </NavButton>
-        <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi" extraClass={{ 'hidden lg:flex': true }}>
-          <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
-        </NavButton>
-        <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden': true }}>
-          <Menu width="24" class="fill-current" />
+        <SocialButtons />
+        <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden fill-current hover:fill-white': true }}>
+          <Menu width="24" />
         </NavButton>
       </MainNav>
       <MobileNav store={store}>
@@ -121,19 +110,8 @@ export default component$(() => {
         <NavButton href="/resources">
           More Resources
         </NavButton>
-        <NavButton store={store} href="/privacy">
-          {t('nav.privacyPolicy@@Privacy Policy')}
-        </NavButton>
         <div class="flex justify-evenly">
-          <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub">
-            <LogoGithub width="24" class="fill-green-100" />
-          </NavButton>
-          <NavButton type="external" icon href="https://discord.simplymc.art" title="Discord">
-            <LogoDiscord width="24" class="fill-indigo-200" />
-          </NavButton>
-          <NavButton type="external" icon href="https://ko-fi.com/akiradev" title="Ko-fi">
-            <CafeOutline width="24" class="fill-pink-200 text-pink-200" />
-          </NavButton>
+          <SocialButtons />
         </div>
       </MobileNav>
     </Nav>
@@ -265,4 +243,18 @@ export const LangPicker = component$(() => {
       </div>
     </div>
   );
+});
+
+export const SocialButtons = component$(() => {
+  return <>
+    <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+      <LogoGithub width="24" />
+    </NavButton>
+    <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+      <LogoDiscord width="24" />
+    </NavButton>
+    <NavButton type="external" icon href="https://twitter.com/birdflop" title="Discord" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+      <LogoTwitter width="24" />
+    </NavButton>
+  </>;
 });

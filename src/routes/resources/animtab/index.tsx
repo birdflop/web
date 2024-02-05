@@ -163,10 +163,10 @@ export default component$(() => {
         </OutputField>
 
         <h1 class={{
-          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px]': true,
-          'font-bold': store.bold,
-          'font-italic': store.italic,
-          'font-bold-italic': store.bold && store.italic,
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
+          'font-mc-bold': store.bold,
+          'font-mc-italic': store.italic,
+          'font-mc-bold-italic': store.bold && store.italic,
         }}>
           {(() => {
             const text = store.text != '' ? store.text : 'SimplyMC';

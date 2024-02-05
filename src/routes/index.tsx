@@ -1,4 +1,4 @@
-import { component$, $, useOnDocument, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, $, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { CashOutline, ServerOutline } from 'qwik-ionicons';
@@ -14,7 +14,7 @@ export default component$(() => {
     initiateTyper();
   });
 
-  useOnDocument('scroll', $(() => {
+  useOnWindow('scroll', $(() => {
     console.log('scroll');
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
@@ -32,8 +32,8 @@ export default component$(() => {
           alt="Birdflop Hosting"
         />
       </picture>
-      <div class="text-center justify-center flex relative align-center">
-        <div class="flex flex-col gap-6">
+      <div class="text-center justify-center flex relative align-center w-full">
+        <div class="flex flex-col gap-6 w-full">
           <div class="flex relative justify-center align-center fade-in animation-delay-100 mb-8 drop-shadow-2xl">
             <Birdflop width={200} />
           </div>

@@ -1,17 +1,12 @@
 import { component$ } from '@builder.io/qwik';
-import { LogoDiscord, LogoTwitter } from 'qwik-ionicons';
+import { SocialButtons } from './Nav';
 
 export default component$(() => {
 
   return (
     <footer class="relative flex flex-col gap-6 items-center justify-center w-full h-24 z-10 bg-gray-950 py-24">
       <div class="flex mt-2">
-        <a href="https://discord.com/invite/nmgtX5z">
-          <LogoDiscord width="30" class="fill-indigo-200" />
-        </a>
-        <a href="https://twitter.com/birdflop">
-          <LogoTwitter width="30" class="fill-indigo-200 ml-2" />
-        </a>
+        <SocialButtons />
       </div>
       <span class="text-lg text-gray-300 max-w-6xl text-center ,t">
         Copyright © 2024 Birdflop. All rights reserved. Birdflop is a registered 501(c)(3) nonprofit organization (EIN: 93-2401009).<br/>
