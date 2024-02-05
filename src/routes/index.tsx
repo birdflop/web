@@ -44,16 +44,16 @@ export default component$(() => {
             The only 501(c)(3) nonprofit server host dedicated to <span
               class="typer"
               id="main"
-              data-words={'minecraft hosting,public resources,communities,you'}
-              data-colors="#54DAF4,#54B1DF,#5487CB,#545EB6,#545EB6,#5487CB,#54B1DF,#54DAF4"
-              data-delay="30"
-              data-deleteDelay="1000"
+              data-words={'minecraft hosting,public resources,communities,you.'}
+              data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
+              data-delay="50"
+              data-deleteDelay="1500"
             >
             </span>
             <span class="cursor" data-owner="main" data-cursor-display="|"></span>
           </h2>
           <div class="flex gap-4 justify-center fade-in animation-delay-400 mt-8">
-            <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-sky-700/80 hover:bg-sky-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+            <a href="https://client.birdflop.com/order/forms/" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-sky-700/80 hover:bg-sky-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
               <ServerOutline width="30" class="text-3xl" /> Hosting
             </a>
             <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-pink-900/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
@@ -63,41 +63,35 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-7xl">
+    <section class="flex mx-auto pt-16 px-16 sitems-center justify-center bg-gray-800">
+      <div class="justify-center flex relative align-center max-w-4xl">
         <div class="flex flex-col gap-4">
-          <h2 class="text-gray-100 text-6xl font-bold mb-4">
+          <h2 class="text-gray-100 text-5xl font-bold mb-4 text-center">
             Our Nonprofit Mission
           </h2>
-          <p class="text-gray-300 text-2xl">
-            Birdflop's mission is "to promote and encourage interest in technology and computer science, generally but not exclusively through affordable and accessible virtual server hosting."
-          </p>
-          <p class="text-gray-300 text-2xl">
+          <p class="text-gray-200 text-lg">
             At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity. Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
           </p>
-          <p class="text-gray-300 text-2xl">
+          <p class="text-gray-200 text-lg">
             Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our Resources page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a charitable donation, tax-deductible in the United States.
           </p>
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-7xl">
+    <section class="flex mx-auto pt-16 px-16 items-center justify-center bg-gray-800">
+      <div class="justify-center flex relative align-center max-w-4xl">
         <div class="flex flex-col gap-8">
-          <h2 class="text-gray-100 text-6xl font-bold mb-4">
+          <h2 class="text-gray-100 text-5xl font-bold mb-4 text-center">
             Where do my payments go?
           </h2>
           <div class="grid sm:grid-cols-2">
             <div></div>
             <div class="flex flex-col gap-8">
-              <p class="text-gray-300 text-2xl">
+              <p class="text-gray-300 text-lg">
                 Birdflop is a 501(c)(3) nonprofit organization with no paid employees or directors. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
               </p>
-              <p class="text-gray-300 text-2xl">
+              <p class="text-gray-300 text-lg">
                 Your payments get you the best possible rate while contributing to the development of our free public resources. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the Node Stats page.
-              </p>
-              <p class="text-gray-300 text-2xl">
-                If you'd like to further our mission of promoting interest in technology, please consider making a charitable donation, tax-deductible in the United States. You may indicate how you would like us to spend your charitable contribution.
               </p>
             </div>
           </div>
