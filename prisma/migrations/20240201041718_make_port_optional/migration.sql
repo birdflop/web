@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `Server` MODIFY `port` INTEGER NULL DEFAULT 25565;

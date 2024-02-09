@@ -1,6 +1,0 @@
-{
-  "reject": [
-    "@auth/core",
-    "@auth/prisma-adapter"
-  ]
-}

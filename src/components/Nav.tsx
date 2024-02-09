@@ -12,12 +12,10 @@ import { languages } from '~/speak-config';
 import LoadingIcon from './icons/LoadingIcon';
 
 import Birdflop from './icons/Birdflop';
-import { useAuthSession } from '~/routes/plugin@auth';
 
 export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
-  const session = useAuthSession();
   const location = useLocation();
 
   return (
@@ -33,30 +31,6 @@ export default component$(() => {
           <NavButton href="/node-stats">
             Node Stats
           </NavButton>
-        </Dropdown>
-        <Dropdown name='Server List' Icon={ListOutline} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/serverlist">
-            Servers
-          </NavButton>
-          {session.value?.user &&
-            <>
-              <NavButton href="/serverlist/new">
-                Add Server
-              </NavButton>
-              <NavButton href="/serverlist/mine">
-                My Servers
-              </NavButton>
-              <NavButton type="external" href="/api/auth/signout">
-                Logout
-              </NavButton>
-            </>
-          }
-          {
-            !session.value?.user &&
-            <NavButton type="external" href="/api/auth/signin">
-              Login
-            </NavButton>
-          }
         </Dropdown>
         <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/resources/gradients">
