@@ -3,7 +3,8 @@ import { component$, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { getValue, useForm, zodForm$ } from '@modular-forms/qwik';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
+
 import type { input } from 'zod';
 import { Button } from '~/components/elements/Button';
 import TextInput from '~/components/elements/TextInput';

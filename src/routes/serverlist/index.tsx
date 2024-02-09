@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import Server from '~/components/serverlist/Server';
 
 const prisma = new PrismaClient();
