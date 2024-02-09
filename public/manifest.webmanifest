@@ -1,11 +1,11 @@
 {
     "theme_color" : "#0D0D0D",
     "background_color" : "#0D0D0D",
-    "name": "SimplyMC",
-    "short_name": "SimplyMC",
+    "name": "Birdflop",
+    "short_name": "Birdflop",
     "start_url": ".",
     "display": "standalone",
-    "description": "A Minecraft multitool for you",
+    "description": "The only 501(c)(3) nonprofit Minecraft server host.",
     "icons": [
         {
             "src": "/icon-192x192.png",

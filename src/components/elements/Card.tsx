@@ -26,11 +26,11 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
       'hover:bg-blue-400/10': color === 'blue' && button,
       'hover:bg-yellow-400/10': color === 'yellow' && button,
       'hover:bg-green-400/10': color === 'green' && button,
-      'hover:bg-gray-400/10': color === 'gray' && button,
+      'hover:bg-gray-400/10': (color === 'gray' || !color) && button,
       'hover:shadow-lg cursor-pointer': button,
       'bg-gray-800 border-gray-700': !color && !darker,
       'bg-gray-800/50': color,
-      'bg-gray-850 border-gray-800': !!darker,
+      'bg-gray-900 border-gray-700': !!darker,
       ...extraClass,
     }} onClick$={onClick$}>
       <div class={{
@@ -111,12 +111,19 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
   );
 });
 
-export const CardHeader = component$(({ loading, id }: any) => {
+export const CardHeader = component$(({ id, loading, subheader }: any) => {
   return (
     <h1 class="flex font-bold text-gray-100 text-2xl">
       <span id={id} class="block h-32 -mt-32" />
-      <div class="flex flex-1 items-center gap-3 whitespace-nowrap">
-        <Slot />
+      <div class="flex flex-1">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-3">
+            <Slot />
+          </div>
+          {subheader &&
+            <p class="text-base text-gray-500 font-normal">{subheader}</p>
+          }
+        </div>
       </div>
       { loading !== undefined &&
         <div class={{

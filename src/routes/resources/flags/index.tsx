@@ -10,12 +10,12 @@ import SelectInput from '~/components/elements/SelectInput';
 import TextInput from '~/components/elements/TextInput';
 import Toggle from '~/components/elements/Toggle';
 import Pterodactyl from '~/components/icons/Pterodactyl';
-// import Fabric from '~/components/icons/fabric';
-// import Forge from '~/components/icons/forge';
-import Paper from '~/components/icons/paper';
-import Purpur from '~/components/icons/purpur';
-import Velocity from '~/components/icons/velocity';
-import Waterfall from '~/components/icons/waterfall';
+// import Fabric from '~/components/icons/Fabric';
+// import Forge from '~/components/icons/Forge';
+import Paper from '~/components/icons/Paper';
+import Purpur from '~/components/icons/Purpur';
+import Velocity from '~/components/icons/Velocity';
+import Waterfall from '~/components/icons/Waterfall';
 import { getCookie } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 

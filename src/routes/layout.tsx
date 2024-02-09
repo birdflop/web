@@ -9,7 +9,6 @@ import Footer from '~/components/Footer';
 export default component$(() => {
   const store = useStore({
     cookies: 'true',
-    telemetry: 'false',
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -20,18 +19,6 @@ export default component$(() => {
       return Object.assign(res, { [key]: val });
     }, {});
     if (!cookieJSON['cookies']) store.cookies = 'false';
-    if (!cookieJSON['telemetry']) store.telemetry = 'true';
-
-    if (store.telemetry != 'false' && !window.location.host.includes('localhost')) {
-      (window as any).clarity = (window as any).clarity || function (...args: any) {
-        ((window as any).clarity.q = (window as any).clarity.q || []).push(args);
-      };
-      const t = document.createElement('script');
-      t.async = true;
-      t.src = 'https://www.clarity.ms/tag/hf0q6m860a';
-      const y = document.getElementsByTagName('script')[0];
-      y.parentNode!.insertBefore(t, y);
-    }
   });
 
   return <>

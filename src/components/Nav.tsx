@@ -3,7 +3,7 @@
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu } from 'qwik-ionicons';
+import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, ListOutline, CubeOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
@@ -18,10 +18,12 @@ export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
   const session = useAuthSession();
+  const location = useLocation();
+
   return (
     <Nav>
       <MainNav>
-        <Dropdown name='Hosting' extraClass={{ 'hidden sm:flex': true }}>
+        <Dropdown name='Hosting' Icon={ServerOutline} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton type="external" href="https://panel.birdflop.com/">
             Panel
           </NavButton>
@@ -32,7 +34,7 @@ export default component$(() => {
             Node Stats
           </NavButton>
         </Dropdown>
-        <Dropdown name='Server List' extraClass={{ 'hidden sm:flex': true }}>
+        <Dropdown name='Server List' Icon={ListOutline} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/serverlist">
             Servers
           </NavButton>
@@ -56,7 +58,7 @@ export default component$(() => {
             </NavButton>
           }
         </Dropdown>
-        <Dropdown name="Resources" extraClass={{ 'hidden sm:flex': true }}>
+        <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
           <NavButton href="/resources/gradients">
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
@@ -66,14 +68,14 @@ export default component$(() => {
           <NavButton href="/resources/sparkprofile">
             {t('nav.sparkProfile@@Spark Profile')}
           </NavButton>
-          <NavButton href="/resources/sparkprofile">
+          <NavButton href="/resources/flags">
             {t('nav.flags@@Flags')}
           </NavButton>
           <NavButton href="/resources">
             {t('nav.more@@More Resources')}
           </NavButton>
         </Dropdown>
-        <LangPicker />
+        <LangPicker extraClass={{ 'hidden': !location.url.pathname.includes('resources') }} />
         <SocialButtons />
         <NavButton type="div" icon title="Menu" onClick$={() => { store.mobilemenu = !store.mobilemenu; }} extraClass={{ 'flex sm:hidden fill-current hover:fill-white': true }}>
           <Menu width="24" />
@@ -149,7 +151,7 @@ export const Brand = component$(() => {
 export const MainNav = component$(() => {
   return (
     <div class={'bg-blue-700/20 py-2'}>
-      <div class={'mx-auto relative flex items-center justify-between max-w-7xl'}>
+      <div class={'mx-auto relative flex items-center justify-between max-w-7xl px-2'}>
         <Brand />
         <div class="flex flex-1 items-center justify-end">
           <div class="flex gap-1 text-gray-300 whitespace-nowrap">
@@ -200,15 +202,16 @@ export const NavButton = component$(({ href, title, icon, type, extraClass, styl
   </>;
 });
 
-export const Dropdown = component$(({ name, extraClass }: any) => {
+export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
   return (
     <div class={{
       'cursor-pointer transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
       ...extraClass,
     }}>
-      <div class="px-4 py-2 flex gap-2 items-center">
+      <div class="px-4 py-2 flex gap-2.5 items-center">
+        {Icon && <Icon width="24" />}
         {name}
-        <ChevronDown width="24" class="transform group-hover:-rotate-180 transition ease-in-out text-2xl" />
+        <ChevronDown width="16" class="transform group-hover:-rotate-180 transition ease-in-out" />
       </div>
       <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-5 text-base">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
@@ -219,7 +222,7 @@ export const Dropdown = component$(({ name, extraClass }: any) => {
   );
 });
 
-export const LangPicker = component$(() => {
+export const LangPicker = component$(({ extraClass }: any) => {
   const config = useSpeakConfig();
 
   const changeLocale$ = $(async (newLocale: SpeakLocale) => {
@@ -228,7 +231,10 @@ export const LangPicker = component$(() => {
   });
 
   return (
-    <div class="cursor-pointer transition ease-in-out flex hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4">
+    <div class={{
+      'cursor-pointer transition ease-in-out flex hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4': true,
+      ...extraClass,
+    }}>
       <div class="p-3">
         <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
       </div>
@@ -247,13 +253,13 @@ export const LangPicker = component$(() => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+    <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoGithub width="24" />
     </NavButton>
-    <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+    <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoDiscord width="24" />
     </NavButton>
-    <NavButton type="external" icon href="https://twitter.com/birdflop" title="Discord" extraClass={{ 'hidden lg:flex fill-current hover:fill-white': true }}>
+    <NavButton type="external" icon href="https://twitter.com/birdflop" title="Twitter" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoTwitter width="24" />
     </NavButton>
   </>;

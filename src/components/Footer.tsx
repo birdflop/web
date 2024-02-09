@@ -4,7 +4,7 @@ import { SocialButtons } from './Nav';
 export default component$(() => {
 
   return (
-    <footer class="relative flex flex-col gap-6 items-center justify-center w-full h-24 z-10 bg-gray-950 py-24">
+    <footer class="relative flex flex-col gap-6 items-center justify-center w-full h-24 z-10 bg-gray-950/40 py-24">
       <div class="flex mt-2">
         <SocialButtons />
       </div>
