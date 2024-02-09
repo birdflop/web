@@ -98,12 +98,12 @@ export default component$(() => {
 
 const Box = ({ title, description, listItems, links }: any) => (
   <div class="p-10 bg-blue-500 shadow-md rounded-md mb-10">
-    <h1 class="text-5xl text-white font-bold mb-2">{title}</h1>
-    <p class="text-white mb-4">{description}</p>
+    <h1 class="text-4xl text-white font-bold mb-2">{title}</h1>
+    <p class="text-white mb-4 text-md">{description}</p>
     {listItems.length > 0 && (
       <>
         <br />
-        <ul class="list-disc list-inside text-white mb-4">
+        <ul class="list-disc list-inside text-white text-md mb-4">
           {listItems.map((item: string, i: number) => <li key={i}>{item}</li>)}
         </ul>
       </>
