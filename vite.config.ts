@@ -29,6 +29,9 @@ export default defineConfig(() => {
         },
         optimizeDeps: {
             include: ["@auth/core"]
-        }
+        },
+        ssr: {
+            external: ['@prisma/client/edge'],
+        },
     };
 });
