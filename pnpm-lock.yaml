@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@auth/core':
-    specifier: ^0.13.0
-    version: 0.13.0
+    specifier: 0.21.0
+    version: 0.21.0
   '@auth/prisma-adapter':
     specifier: 1.2.0
     version: 1.2.0(@prisma/client@5.9.1)
@@ -16,7 +16,7 @@ devDependencies:
     version: 1.4.4(@types/node@20.11.17)(undici@6.6.2)
   '@builder.io/qwik-auth':
     specifier: 0.1.3
-    version: 0.1.3(@auth/core@0.13.0)
+    version: 0.1.3(@auth/core@0.21.0)
   '@builder.io/qwik-city':
     specifier: 1.4.4
     version: 1.4.4(@types/node@20.11.17)
@@ -105,8 +105,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@auth/core@0.13.0:
-    resolution: {integrity: sha512-StjrzUenaKfMr68kmvhiqfY0xvxRvg8wllmem9JAULpPAAAt3uwRUDXICWOP/PfWB4OZ2wQT7rgfm0n42b+Mjg==}
+  /@auth/core@0.21.0:
+    resolution: {integrity: sha512-jUWYs8gjy2GvtP9dd/4S9KcwZ660Cm/IkybiAq96/2Ooku9SKk5SUG+UTEwkyLuaQ38ZgfwggfpDOgzsXEcufA==}
     peerDependencies:
       nodemailer: ^6.8.0
     peerDependenciesMeta:
@@ -114,8 +114,9 @@ packages:
         optional: true
     dependencies:
       '@panva/hkdf': 1.1.1
-      cookie: 0.5.0
-      jose: 4.15.4
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
+      jose: 5.2.1
       oauth4webapi: 2.9.0
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
@@ -149,13 +150,13 @@ packages:
       - nodemailer
     dev: true
 
-  /@builder.io/qwik-auth@0.1.3(@auth/core@0.13.0):
+  /@builder.io/qwik-auth@0.1.3(@auth/core@0.21.0):
     resolution: {integrity: sha512-plj4kHkHpT5sPe9bUYoMFKZlV5XDkWL4D/56TMzRCNC1Vse6NHwVl/78jT7wbeIe+CAtsNbsuDv8TQj9p3iZUg==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       '@auth/core': ^0.13.0
     dependencies:
-      '@auth/core': 0.13.0
+      '@auth/core': 0.21.0
     dev: true
 
   /@builder.io/qwik-city@1.4.4(@types/node@20.11.17):
@@ -2726,10 +2727,6 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
-    dev: true
-
-  /jose@4.15.4:
-    resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
     dev: true
 
   /jose@5.2.1:

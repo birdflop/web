@@ -29,7 +29,7 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@auth/core": "^0.13.0",
+    "@auth/core": "0.21.0",
     "@auth/prisma-adapter": "1.2.0",
     "@builder.io/qwik": "1.4.4",
     "@builder.io/qwik-auth": "0.1.3",
