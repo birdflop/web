@@ -9,14 +9,14 @@ devDependencies:
     specifier: ^0.13.0
     version: 0.13.0
   '@auth/prisma-adapter':
-    specifier: 1.3.3
-    version: 1.3.3(@prisma/client@5.9.1)
+    specifier: 1.2.0
+    version: 1.2.0(@prisma/client@5.9.1)
   '@builder.io/qwik':
     specifier: 1.4.4
     version: 1.4.4(@types/node@20.11.17)(undici@6.6.2)
   '@builder.io/qwik-auth':
-    specifier: 0.1.1
-    version: 0.1.1(@auth/core@0.13.0)
+    specifier: 0.1.3
+    version: 0.1.3(@auth/core@0.13.0)
   '@builder.io/qwik-city':
     specifier: 1.4.4
     version: 1.4.4(@types/node@20.11.17)
@@ -26,6 +26,9 @@ devDependencies:
   '@prisma/client':
     specifier: ^5.9.1
     version: 5.9.1(prisma@5.9.1)
+  '@prisma/extension-accelerate':
+    specifier: ^0.6.3
+    version: 0.6.3(@prisma/client@5.9.1)
   '@types/eslint':
     specifier: 8.56.2
     version: 8.56.2
@@ -118,17 +121,11 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: true
 
-  /@auth/core@0.26.3:
-    resolution: {integrity: sha512-Ka6rMjWMdiQCvLW/CnYZxj4Rq2bhQ/ZtU32NLxmtyAaixGb0mRXQ9MxJUBZA7GHovbghdzu55p2Cb54qNlVFzw==}
+  /@auth/core@0.25.0:
+    resolution: {integrity: sha512-UxENsD+WNlY1NOFsr3Ygc7F1Ypbia8VCd9NU8cbAhSJ0Z8dtyZ0xmssRo1G3ZW50QnW0AaAMuYzY5oumnPMQzA==}
     peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.1
       nodemailer: ^6.8.0
     peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
       nodemailer:
         optional: true
     dependencies:
@@ -141,21 +138,19 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: true
 
-  /@auth/prisma-adapter@1.3.3(@prisma/client@5.9.1):
-    resolution: {integrity: sha512-KVR4a6ekgVzaX2i62XgWbKThOFOhB22bEVsITbMrA9kDZM4dHOZ9QOBbzpXP/e6hSUxTdO97zy1LZ8pASR1Ybw==}
+  /@auth/prisma-adapter@1.2.0(@prisma/client@5.9.1):
+    resolution: {integrity: sha512-yn1ZHX/a57x8hhU+rwi+GL1IHx8k92Fhqk5w9R5toAtO9PxAr9xD+sNjD0OgrAMrO7GttKyW/mac6t8G0NYDEg==}
     peerDependencies:
       '@prisma/client': '>=2.26.0 || >=3 || >=4 || >=5'
     dependencies:
-      '@auth/core': 0.26.3
+      '@auth/core': 0.25.0
       '@prisma/client': 5.9.1(prisma@5.9.1)
     transitivePeerDependencies:
-      - '@simplewebauthn/browser'
-      - '@simplewebauthn/server'
       - nodemailer
     dev: true
 
-  /@builder.io/qwik-auth@0.1.1(@auth/core@0.13.0):
-    resolution: {integrity: sha512-PM5gJwqKM3KKYqYZhwxlMe/XvaCB2Jczv+MMh8z82Z7tK9uWJ7qG3OEdVF6tNeCOolzmL7tWHypBT2+Was5/4Q==}
+  /@builder.io/qwik-auth@0.1.3(@auth/core@0.13.0):
+    resolution: {integrity: sha512-plj4kHkHpT5sPe9bUYoMFKZlV5XDkWL4D/56TMzRCNC1Vse6NHwVl/78jT7wbeIe+CAtsNbsuDv8TQj9p3iZUg==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       '@auth/core': ^0.13.0
@@ -1067,6 +1062,15 @@ packages:
       '@prisma/engines-version': 5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64
       '@prisma/fetch-engine': 5.9.1
       '@prisma/get-platform': 5.9.1
+    dev: true
+
+  /@prisma/extension-accelerate@0.6.3(@prisma/client@5.9.1):
+    resolution: {integrity: sha512-KnIfqbwCNMP3t1jgw76IVCE4HspRmWxagR0L4wJS+/74BgkRHrt/9ic8ONo7dir4AGGoHyg/Ej8yN+uGXNrXeg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@prisma/client': '>=4.16.1'
+    dependencies:
+      '@prisma/client': 5.9.1(prisma@5.9.1)
     dev: true
 
   /@prisma/fetch-engine@5.9.1:

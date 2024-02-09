@@ -2,7 +2,7 @@ import { serverAuth$ } from '@builder.io/qwik-auth';
 import Discord from '@auth/core/providers/discord';
 import Google from '@auth/core/providers/google';
 import type { Provider } from '@auth/core/providers';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
 const prisma = new PrismaClient();
