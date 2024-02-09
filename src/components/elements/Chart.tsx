@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 export default component$(() => {
   const myChart  = useSignal<HTMLCanvasElement>();
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (myChart?.value) {
       Chart.register(...registerables);

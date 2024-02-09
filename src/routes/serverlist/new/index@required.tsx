@@ -3,18 +3,18 @@ import { component$, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { getValue, useForm, zodForm$ } from '@modular-forms/qwik';
-import { PrismaClient } from '@prisma/client/edge';
+//import { PrismaClient } from '@prisma/client/edge';
 
 import type { input } from 'zod';
 import { Button } from '~/components/elements/Button';
 import TextInput from '~/components/elements/TextInput';
 import Toggle from '~/components/elements/Toggle';
 import { serverSchema } from '~/components/serverlist/schema';
-import { useAuthSession } from '~/routes/plugin@auth';
+//import { useAuthSession } from '~/routes/plugin@auth';
 
 type ServerForm = input<typeof serverSchema>;
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 export const useFormLoader = routeLoader$<InitialValues<ServerForm>>(() => ({
   name: 'Server Name',
@@ -36,7 +36,7 @@ export default component$(() => {
     validate: zodForm$(serverSchema),
   });
 
-  const handleSubmit: QRL<SubmitHandler<ServerForm>> = $(async (values, event) => {
+  const handleSubmit: QRL<SubmitHandler<ServerForm>> = $(async (values) => {
     console.log('Form Submitted:', values);
   });
 
