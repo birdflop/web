@@ -3,8 +3,8 @@ import { routeAction$, zod$, z, Form } from '@builder.io/qwik-city';
 import { PrismaClient } from '@prisma/client/edge';
 
 export const useCreateUser = routeAction$(
-  async (data) => {
-    const prisma = new PrismaClient();
+  async (data, { env }) => {
+    const prisma = new PrismaClient({ datasources: { db: { url: env.get('DATABASE_URL') } } });
     const user = await prisma.user.create({
       data,
     });

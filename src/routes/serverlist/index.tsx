@@ -3,9 +3,8 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { PrismaClient } from '@prisma/client/edge';
 import Server from '~/components/serverlist/Server';
 
-const prisma = new PrismaClient();
-
-export const useGetServers = routeLoader$(async () => {
+export const useGetServers = routeLoader$(async ({ env }) => {
+  const prisma = new PrismaClient({ datasources: { db: { url: env.get('DATABASE_URL') } } });
   const servers = await prisma.server.findMany();
   return servers;
 });

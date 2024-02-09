@@ -14,8 +14,6 @@ import { serverSchema } from '~/components/serverlist/schema';
 
 type ServerForm = input<typeof serverSchema>;
 
-//const prisma = new PrismaClient();
-
 export const useFormLoader = routeLoader$<InitialValues<ServerForm>>(() => ({
   name: 'Server Name',
   description: '',
