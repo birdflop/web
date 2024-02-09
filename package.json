@@ -27,8 +27,8 @@
     "tauri": "tauri"
   },
   "devDependencies": {
-    "@builder.io/qwik": "1.4.3",
-    "@builder.io/qwik-city": "1.4.3",
+    "@builder.io/qwik": "1.4.4",
+    "@builder.io/qwik-city": "1.4.4",
     "@img/sharp-darwin-x64": "^0.33.2",
     "@img/sharp-linux-x64": "^0.33.2",
     "@img/sharp-win32-x64": "^0.33.2",
@@ -42,7 +42,7 @@
     "@typescript-eslint/parser": "6.20.0",
     "autoprefixer": "10.4.17",
     "eslint": "8.56.0",
-    "eslint-plugin-qwik": "1.4.3",
+    "eslint-plugin-qwik": "1.4.4",
     "postcss": "^8.4.33",
     "qwik-ionicons": "^1.0.5",
     "qwik-speak": "^0.21.0",
@@ -50,7 +50,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "5.3.3",
     "undici": "^6.4.0",
-    "vite": "5.0.12",
+    "vite": "5.1.1",
     "vite-tsconfig-paths": "4.3.1",
     "wrangler": "latest",
     "yaml": "^2.3.4",
