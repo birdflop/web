@@ -11,8 +11,8 @@ export default component$(() => {
         <p>Our privacy policy applies to information we collect when you use or access our website, application, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective immediately after we post the revised privacy policy (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.</p>
         <h1 class="text-2xl font-bold">Collection of Information</h1>
         <h2 class="text-xl font-bold">Information You Provide to Us</h2>
-        <p class="pl-5">Wecollect information you provide directly to us. For example, we collect information when you participate in any interactive features of our services, fill out a form, request customer support, provide any contact or identifying information or otherwise communicate with us. The types of information we may collect include your name, email address, postal address, and other contact or identifying information you choose to provide.</p>
-        <h2 class="text-xl font-bold"> Information We Collect Automatically When You Use the Services</h2>
+        <p class="pl-5">We collect information you provide directly to us. For example, we collect information when you participate in any interactive features of our services, fill out a form, request customer support, provide any contact or identifying information or otherwise communicate with us. The types of information we may collect include your name, email address, postal address, and other contact or identifying information you choose to provide.</p>
+        <h2 class="text-xl font-bold">Information We Collect Automatically When You Use the Services</h2>
         <p class="pl-5">When you access or use our services, we automatically collect information about you, potentially including:</p>
         <ul class="pl-10 list-disc list-inside">
           <li>Log Information: We may log information about your use of our services, including the type of browser you use, access times, pages viewed, your IP address and the page you visited before navigating to our services.</li>
@@ -20,7 +20,7 @@ export default component$(() => {
         </ul>
         <p class="pl-5">For more details about how we collect information, including details about cookies and how to disable them, please see "Your Information Choices" below.</p>
         <h1 class="text-xl font-bold">Information We Collect From Other Sources</h1>
-        <p class="pl-5"> In order to provide you with access to the Service, or to provide you with better service in general, we may combine information obtained from other sources (for example, a third-party service whose application you have authorized or used to sign in) and combine that with information we collect through our services.</p>
+        <p class="pl-5">In order to provide you with access to the Service, or to provide you with better service in general, we may combine information obtained from other sources (for example, a third-party service whose application you have authorized or used to sign in) and combine that with information we collect through our services.</p>
         <h1 class="text-xl font-bold">Use of Information</h1>
         <p class="pl-5">We use information about you for various purposes, including to:</p>
         <ul class="pl-10 list-disc list-inside">
@@ -49,12 +49,12 @@ export default component$(() => {
         <h1 class="text-2xl font-bold">Your Information Choices</h1>
         <p class="pl-5">You may opt out of any data collection unrelated to necessary functioning. Necessary functioning data collection includes server access logs. You can opt out of telemetry data collection by [clicking here].</p>
         <h1 class="text-2xl font-bold">Cookies</h1>
-        <p class="pl-5"> Most web browsers are set to accept cookies by default. If you prefer, you can usually choose to set your browser to remove or reject browser cookies. Please note that if you choose to remove or reject cookies, this could affect the availability and functionality of our services.</p>
+        <p class="pl-5">Most web browsers are set to accept cookies by default. If you prefer, you can usually choose to set your browser to remove or reject browser cookies. Please note that if you choose to remove or reject cookies, this could affect the availability and functionality of our services.</p>
         <h1 class="text-2xl font-bold">Your California Privacy Rights</h1>
-        <p class="pl-5"> [CERTAIN TYPES OF SERVICES THAT DELIVER DIRECT MARKETING TO USERS AND INTERACT WITH CALIFORNIA RESIDENTS MAY BE SUBJECT TO TERMS IN THIS SECTION. CONSULT WITH LEGAL COUNSEL REGARDING YOUR PRIVACY OBLIGATIONS UNDER CALIFORNIA LAW.]</p>
-        <p class="pl-5"> California law permits residents of California to request certain details about how their information is shared with third parties for direct marketing purposes. If you are a California resident and would like to make such a request, please contact us at <a href="mailto:ca-privacy@birdflop.com">ca-privacy@birdflop.com</a>. However, please note that under the law, Services such as ours that permit California residents to opt in to, or opt out of, this type of sharing are not required to provide such information upon receiving a request, but rather may respond by notifying the user of his or her right to prevent the disclosure. We do not share your data with third parties for direct marketing purposes by default.</p>
+        <p class="pl-5">[CERTAIN TYPES OF SERVICES THAT DELIVER DIRECT MARKETING TO USERS AND INTERACT WITH CALIFORNIA RESIDENTS MAY BE SUBJECT TO TERMS IN THIS SECTION. CONSULT WITH LEGAL COUNSEL REGARDING YOUR PRIVACY OBLIGATIONS UNDER CALIFORNIA LAW.]</p>
+        <p class="pl-5">California law permits residents of California to request certain details about how their information is shared with third parties for direct marketing purposes. If you are a California resident and would like to make such a request, please contact us at <a href="mailto:ca-privacy@birdflop.com">ca-privacy@birdflop.com</a>. However, please note that under the law, Services such as ours that permit California residents to opt in to, or opt out of, this type of sharing are not required to provide such information upon receiving a request, but rather may respond by notifying the user of his or her right to prevent the disclosure. We do not share your data with third parties for direct marketing purposes by default.</p>
         <h1 class="text-2xl font-bold">Contact Us</h1>
-        <p class="pl-5"> If you have any questions about this privacy policy, please contact us at: <a href="mailto:privacy@birdflop.com">privacy@birdflop.com</a></p>
+        <p class="pl-5">If you have any questions about this privacy policy, please contact us at: <a href="mailto:privacy@birdflop.com">privacy@birdflop.com</a></p>
       </div>
     </section>
   );
