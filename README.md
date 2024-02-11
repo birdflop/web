@@ -1,4 +1,3 @@
-<img width="400" src="src/images/logo.png" alt="Birdflop">
 <a href="https://www.birdflop.cpm/">birdflop</a> is a Minecraft multitool for developers, server owners and players.
 <br><br>
 💖 Consider donating if we helped you:<br><br>

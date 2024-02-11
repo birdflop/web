@@ -126,7 +126,7 @@ export default component$(() => {
           <div class="grid md:grid-cols-2 gap-4">
             <Card darker>
               <p>
-                Last quarter, clients paid $1.88/GB RAM after reimbursements.
+              Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
               </p>
               <CardHeader subheader="Capped at $2/GB RAM">
                 EU Premium
@@ -177,7 +177,7 @@ export default component$(() => {
             </Card>
             <Card darker>
               <p>
-                Last quarter, clients paid $1.95/GB RAM after reimbursements.
+              Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
               </p>
               <CardHeader subheader="Capped at $3/GB RAM">
                 US Premium
