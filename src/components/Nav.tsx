@@ -3,7 +3,7 @@
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
-import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, ListOutline, CubeOutline } from 'qwik-ionicons';
+import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
@@ -110,7 +110,7 @@ export const Brand = component$(() => {
     <div class="flex items-center justify-start">
       <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
         <Birdflop width={32} />
-        <span class="ml-3 font-mc">Birdflop</span>
+        <span class="ml-3 font-bold">Birdflop</span>
         <div class={{
           'transition-all': true,
           '-ml-7 opacity-0': !location.isNavigating,
@@ -227,7 +227,7 @@ export const LangPicker = component$(({ extraClass }: any) => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <NavButton type="external" icon href="https://github.com/LuminescentDev/SimplyMC" title="GitHub" extraClass={{ 'flex fill-current hover:fill-white': true }}>
+    <NavButton type="external" icon href="https://github.com/birdflop/website" title="GitHub" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoGithub width="24" />
     </NavButton>
     <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'flex fill-current hover:fill-white': true }}>

@@ -299,12 +299,10 @@ export default component$(() => {
                   store.step = 2;
                   setCookie(JSON.stringify(store));
                 }} key={index}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      {option.cardIcon}
-                      {option.label}
-                    </div>
-                  </CardHeader>
+                  <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                    {option.cardIcon}
+                    {option.label}
+                  </div>
                   <p class="min-w-[16rem] text-center">
                     {option.description}
                   </p>
@@ -329,12 +327,10 @@ export default component$(() => {
                   store.step = 3;
                   setCookie(JSON.stringify(store));
                 }} key={index}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      {option.cardIcon}
-                      {option.label}
-                    </div>
-                  </CardHeader>
+                  <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                    {option.cardIcon}
+                    {option.label}
+                  </div>
                   <p class="min-w-[16rem] text-center">
                     {option.description}
                   </p>
@@ -353,7 +349,7 @@ export default component$(() => {
               <h2 class="flex-1 text-gray-300 text-base sm:text-xl">
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </h2>
-              <Button small color="primary" disabled={store.parsed.fileName == ''} onClick$={() => {
+              <Button small color="blue" disabled={store.parsed.fileName == ''} onClick$={() => {
                 store.step = 4;
                 setCookie(JSON.stringify(store));
               }}>
@@ -420,12 +416,10 @@ export default component$(() => {
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
                   <Card color={option.color} key={index}>
-                    <CardHeader>
-                      <div class="flex flex-col items-center w-full gap-6 py-5">
-                        {option.cardIcon}
-                        {option.label}
-                      </div>
-                    </CardHeader>
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                      {option.cardIcon}
+                      {option.label}
+                    </div>
                     <p class="min-w-[16rem] text-center mb-10">
                       {option.description}
                     </p>

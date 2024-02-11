@@ -32,7 +32,7 @@ export default component$(() => {
           </span>
           <div class="flex items-center gap-2">
             <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/privacy">Privacy Policy</a>
-            <Button color="primary" onClick$={async () => {
+            <Button color="blue" onClick$={async () => {
               document.cookie = 'cookies=true; path=/';
               document.getElementById('cookieprompt')!.remove();
             }}>

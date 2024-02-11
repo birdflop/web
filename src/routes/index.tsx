@@ -8,6 +8,7 @@ import Birdflop from '~/components/icons/Birdflop';
 import { initiateTyper } from '~/components/util/Typer';
 
 import background from '~/components/images/background.png';
+import { ExternalButton, SPAButton } from '~/components/elements/Button';
 
 export default component$(() => {
 
@@ -60,17 +61,17 @@ export default component$(() => {
           </h2>
           <div class="flex flex-col gap-2 mt-8 fade-in animation-delay-400">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <a href="https://client.birdflop.com/order/forms/" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-sky-700/80 hover:bg-sky-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
-                <ServerOutline width="30" class="text-3xl" /> Hosting
-              </a>
-              <Link href="/resources" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-purple-700/80 hover:bg-purple-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+              <ExternalButton href="https://client.birdflop.com/order/forms/" color="blue" massive>
+                <ServerOutline width="30" class="text-3xl" />Hosting
+              </ExternalButton>
+              <SPAButton href="/resources" color="purple" massive>
                 <CubeOutline width="30" class="text-3xl" /> Resources
-              </Link>
+              </SPAButton>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="flex transition ease-in-out rounded-xl shadow-lg backdrop-blur-lg bg-pink-900/80 hover:bg-pink-700 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center">
+              <ExternalButton href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" color="pink" massive>
                 <CashOutline width="30" class="text-3xl" /> Donate Today
-              </a>
+              </ExternalButton>
             </div>
           </div>
         </div>
@@ -168,10 +169,10 @@ export default component$(() => {
                   Starting at $8/mo (~$7.52 after reimbursements)
                 </li>
               </ul>
-              <div>
-                <a href="https://client.birdflop.com/order/main/index/eu-premium/" class="flex transition ease-in-out rounded-lg shadow-lg backdrop-blur-lg bg-blue-500/80 hover:bg-blue-500 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center mt-5">
+              <div class="pt-4">
+                <ExternalButton href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </a>
+                </ExternalButton>
               </div>
             </Card>
             <Card darker>
@@ -219,10 +220,10 @@ export default component$(() => {
                   Starting at $12/mo (~$7.80 after reimbursements)
                 </li>
               </ul>
-              <div>
-                <a href="https://client.birdflop.com/order/main/index/us-premium/" class="flex transition ease-in-out rounded-lg shadow-lg backdrop-blur-lg bg-blue-500/80 hover:bg-blue-500 px-6 py-3 text-pink-100 md:py-4 md:px-8 text-sm md:text-lg whitespace-nowrap gap-5 items-center mt-5">
+              <div class="pt-4">
+                <ExternalButton href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </a>
+                </ExternalButton>
               </div>
             </Card>
           </div>
@@ -347,7 +348,7 @@ export default component$(() => {
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
-            <Card darker link="https://www.trustpilot.com/review/birdflop.com">
+            <Card darker href="https://www.trustpilot.com/review/birdflop.com">
               <CardHeader>
                 <StarOutline width="36" /> Trustpilot
               </CardHeader>
