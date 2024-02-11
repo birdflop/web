@@ -227,7 +227,7 @@ export const LangPicker = component$(({ extraClass }: any) => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <NavButton type="external" icon href="https://github.com/birdflop/website" title="GitHub" extraClass={{ 'flex fill-current hover:fill-white': true }}>
+    <NavButton type="external" icon href="https://github.com/birdflop/web" title="GitHub" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoGithub width="24" />
     </NavButton>
     <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'flex fill-current hover:fill-white': true }}>
