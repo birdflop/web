@@ -4,7 +4,7 @@
   "description": "The only 501(c)(3) nonprofit Minecraft server host.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LuminescentDev/SimplyMC.git"
+    "url": "git+https://github.com/birdflop/web.git"
   },
   "engines": {
     "node": ">=15.0.0"

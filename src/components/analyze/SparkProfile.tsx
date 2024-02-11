@@ -59,7 +59,7 @@ export default component$(() => {
 
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
-          <span class="text-gray-300">https://simplymc.art/SparkProfile/[code]</span><br/>
+          <span class="text-gray-300">https://birdflop.com/resources/sparkprofile/[code]</span><br/>
           Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400">botflop</a>
         </p>
       </div>

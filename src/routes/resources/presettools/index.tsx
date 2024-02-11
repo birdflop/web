@@ -47,15 +47,15 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Random Tools for simplymc presets.',
+      content: 'Random Tools for birdflop presets.',
     },
     {
       name: 'og:description',
-      content: 'Random Tools for simplymc presets.',
+      content: 'Random Tools for birdflop presets.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'https://birdflop.com/images/icon.png',
     },
   ],
 };

@@ -28,6 +28,7 @@ const formats = [
 ];
 
 const presets = {
+  'birdflop': ['#084CFB', '#ADF3FD'],
   'SimplyMC': ['#00FFE0', '#EB00FF'],
   'Rainbow': ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'],
   'Skyline': ['#1488CC', '#2B32B2'],
@@ -58,8 +59,8 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const store: any = useStore({
-    colors: presets.SimplyMC,
-    text: 'SimplyMC',
+    colors: presets.birdflop,
+    text: 'birdflop',
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
@@ -123,7 +124,7 @@ export default component$(() => {
           'font-mc-bold-italic': store.bold && store.italic,
         }}>
           {(() => {
-            const text = store.text ? store.text : 'SimplyMC';
+            const text = store.text ? store.text : 'birdflop';
 
             let colors = store.colors.map((color: string) => convertToRGB(color));
             if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
@@ -245,7 +246,7 @@ export default component$(() => {
           </div>
           <div class="md:col-span-2 lg:col-span-3">
             <div class="flex flex-col gap-3" id="inputs">
-              <TextInput id="input" value={store.text} placeholder="SimplyMC" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
@@ -332,7 +333,7 @@ export default component$(() => {
                     const alert = {
                       class: 'text-red-500',
                       translate: 'color.invalidPreset',
-                      text: 'INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.simplymc.art/">Developers</a>.',
+                      text: 'INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
                     };
                     store.alerts.push(alert);
                     return setTimeout(() => {
@@ -392,7 +393,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'https://birdflop.com/images/icon.png',
     },
   ],
 };

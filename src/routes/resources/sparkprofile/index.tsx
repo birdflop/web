@@ -29,7 +29,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'https://birdflop.com/images/icon.png',
     },
   ],
 };

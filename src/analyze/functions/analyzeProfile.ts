@@ -21,7 +21,7 @@ export default async function analyzeProfile(id: string) {
     sampler = await response_raw.json();
   }
   catch (err) {
-    return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this spark profile. Please use an alternative spark profile.' }];
+    return [{ name: '❌ Processing Error', value: 'birdflop cannot process this spark profile. Please use an alternative spark profile.' }];
   }
 
   const platform = sampler.metadata.platform.name;
@@ -70,7 +70,7 @@ export default async function analyzeProfile(id: string) {
     return [
       {
         name: '❌ Processing Error',
-        value: `SimplyMC is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
+        value: `birdflop is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
       },
     ];
   }

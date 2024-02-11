@@ -42,7 +42,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'https://birdflop.com/images/icon.png',
     },
   ],
 };

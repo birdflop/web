@@ -12,7 +12,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const store: any = useStore({
-    text: 'SimplyMC',
+    text: 'birdflop',
     speed: 50,
     frames: [],
     frame: 1,
@@ -115,7 +115,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'https://birdflop.com/images/icon.png',
     },
   ],
 };

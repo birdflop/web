@@ -8,7 +8,7 @@
         "presets": "Presets",
         "exportedPreset": "Successfully exported preset to clipboard!",
         "importedPreset": "Successfully imported preset!",
-        "invalidPreset": "INVALID PRESET!\nIf this is an old preset, please update it using the <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">Developers</a>.",
+        "invalidPreset": "INVALID PRESET!\nIf this is an old preset, please update it using the <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-500\" href=\"https://discord.gg/9vUZ9MREVz\">Developers</a>.",
         "export": "Export",
         "import": "Import (Paste here)",
         "bold": "Bold",
