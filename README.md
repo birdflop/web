@@ -21,3 +21,11 @@ If you would like to contribute please make sure your code works as intended and
 If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
 <br><br>
 <a href="https://github.com/birdflop/web/graphs/contributors"><img src="https://contrib.rocks/image?repo=birdflop/web"></a>
+# Birdflop Website
+The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hosting and resources.
+
+### Contributing
+All contributions are welcome. Birdflop is a community-project aiming to support its community.
+
+### Licensing
+This project is dual-licensed. For open-source usage, it is available under the AGPL-3.0 license (OSS_LICENSE.md). Additional closed-source use, both commercial and non-commercial, is permitted under the details outlined in CSS_LICENSE.md. Licensing is required to re-use the RGBirdflop / RGB Birdflop gradient creator code.

@@ -1,5 +1,5 @@
-import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { type DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput, { RawTextInput } from '~/components/elements/TextInput';
@@ -8,10 +8,10 @@ import SelectInput from '~/components/elements/SelectInput';
 import NumberInput from '~/components/elements/NumberInput';
 import { Button } from '~/components/elements/Button';
 
+import { Gradient } from '~/components/util/HexUtils';
+import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/components/util/RGBUtils';
 import { presetVersion } from '~/components/util/PresetUtils';
 import OutputField from '~/components/elements/OutputField';
-import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
-import { AnimationOutput } from '~/components/util/RGBUtils';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
@@ -20,7 +20,11 @@ import { getCookie } from '~/components/util/SharedUtils';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
+  '<#$1$2$3$4$5$6>$f$c',
   '&x&$1&$2&$3&$4&$5&$6$f$c',
+  '§x§$1§$2§$3§$4§$5§$6$f$c',
+  '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+  'MiniMessage',
 ];
 
 const presets = {
@@ -35,19 +39,9 @@ const presets = {
   'Firewatch': ['#CB2D3E', '#EF473A'],
 };
 
-const types = [
-  { name: 'Normal (Left -> Right)', value: 1 },
-  { name: 'Reversed (Right -> Left)', value: 2 },
-  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
-  { name: 'Full Text Cycle', value: 4 },
-];
-
 export const setCookie = $(function (store: any) {
   const json = JSON.parse(store);
   delete json.alerts;
-  delete json.frames;
-  delete json.frame;
-
   const cookie: { [key: string]: string; } = {};
   document.cookie.split(/\s*;\s*/).forEach(function (pair) {
     const pairsplit = pair.split(/\s*=\s*/);
@@ -61,27 +55,21 @@ export const setCookie = $(function (store: any) {
 });
 
 export default component$(() => {
-  useSpeak({ assets: ['animpreview', 'color'] });
+  useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
 
   const store: any = useStore({
     colors: presets.birdflop,
-    name: 'logo',
     text: 'birdflop',
-    type: 1,
-    speed: 50,
     format: '&#$1$2$3$4$5$6$f$c',
     formatchar: '&',
     customFormat: false,
-    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
+    prefix: '',
     bold: false,
     italic: false,
     underline: false,
     strikethrough: false,
     alerts: [],
-    frames: [],
-    frame: 0,
-    length: 1,
   }, { deep: true });
 
   const handleSwap = $(
@@ -102,45 +90,11 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    getCookie(JSON.stringify(store)).then((userstore: any) => {
-      const parsedUserStore = JSON.parse(userstore);
-      for (const key of Object.keys(parsedUserStore)) {
-        const value = parsedUserStore[key];
-        store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      }
-    });
-
-    let speed = store.speed;
-
-    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
-
-    function setFrame() {
-      if (!store.frames[0]) return;
-      if (speed != store.speed) {
-        clearInterval(frameInterval);
-        speed = store.speed;
-        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
-      }
-      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
-    }
-  });
-
-  useTask$(({ track }) => {
-    Object.keys(store).forEach((key: any) => {
-      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
-      if (key == 'colors') track(() => store.colors.length);
-      else track(() => store[key]);
-    });
-    const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
-    if (store.type == 1) {
-      store.frames = frames.reverse();
-    }
-    else if (store.type == 3) {
-      const frames2 = frames.slice();
-      store.frames = frames.reverse().concat(frames2);
-    }
-    else {
-      store.frames = frames;
+    const userstore = await getCookie(JSON.stringify(store));
+    const parsedUserStore = JSON.parse(userstore);
+    for (const key of Object.keys(parsedUserStore)) {
+      const value = parsedUserStore[key];
+      store[key] = value === 'true' ? true : value === 'false' ? false : value;
     }
   });
 
@@ -148,13 +102,13 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animtab.title@@Animated TAB')}
+          {t('gradient.title@@Hex Gradient')}
         </h1>
         <h2 class="text-gray-50 text-base sm:text-xl mb-12">
-          {t('animtab.subtitle@@TAB plugin gradient animation creator')}
+          {t('gradient.subtitle@@Hex color gradient creator')}
         </h2>
 
-        <OutputField value={AnimationOutput(store)}>
+        <OutputField id="Output" charlimit={256} value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
@@ -170,21 +124,26 @@ export default component$(() => {
           'font-mc-bold-italic': store.bold && store.italic,
         }}>
           {(() => {
-            const text = store.text != '' ? store.text : 'birdflop';
+            const text = store.text ? store.text : 'birdflop';
 
-            if (!store.frames[0]) return;
-            const colors = store.frames[store.frame];
-            if (!colors) return;
+            let colors = store.colors.map((color: string) => convertToRGB(color));
+            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
-            return text.split('').map((char: string, i: number) => (
-              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
-                'underline': store.underline,
-                'strikethrough': store.strikethrough,
-                'underline-strikethrough': store.underline && store.strikethrough,
-              }}>
-                {char}
-              </span>
-            ));
+            const gradient = new Gradient(colors, text.replace(/ /g, '').length);
+
+            let hex = '';
+            return text.split('').map((char: string, i: number) => {
+              if (char != ' ') hex = convertToHex(gradient.next());
+              return (
+                <span key={`char${i}`} style={`color: #${hex};`} class={{
+                  'underline': store.underline,
+                  'strikethrough': store.strikethrough,
+                  'underline-strikethrough': store.underline && store.strikethrough,
+                }}>
+                  {char}
+                </span>
+              );
+            });
           })()}
         </h1>
 
@@ -206,7 +165,7 @@ export default component$(() => {
             </Button>
             <Button aria-label="Formatting" onClick$={() => {
               document.getElementById('colors')!.classList.add('hidden');
-              document.getElementById('inputs')!.classList.add('hidden');
+              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
               document.getElementById('formatting')!.classList.remove('hidden');
             }}>
               <Text width="24" class="fill-white" />
@@ -232,8 +191,9 @@ export default component$(() => {
                 {t('color.custom@@Custom')}
               </option>
             </SelectInput>
-            <NumberInput input min={2} value={store.colors.length} id="colorsinput"
+            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
               onChange$={(event: any) => {
+                if (event.target!.value > store.text.length) event.target!.value = store.text.length;
                 if (event.target!.value < 2) event.target!.value = 2;
                 const newColors = [];
                 for (let i = 0; i < event.target!.value; i++) {
@@ -244,8 +204,10 @@ export default component$(() => {
                 setCookie(JSON.stringify(store));
               }}
               onIncrement$={() => {
-                store.colors.push(getRandomColor());
-                setCookie(JSON.stringify(store));
+                if (store.colors.length < store.text.length) {
+                  store.colors.push(getRandomColor());
+                  setCookie(JSON.stringify(store));
+                }
               }}
               onDecrement$={() => {
                 if (store.colors.length > 2) {
@@ -255,18 +217,6 @@ export default component$(() => {
               }}
             >
               {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
-            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length}
-              onIncrement$={() => {
-                store.length++;
-                setCookie(JSON.stringify(store));
-              }}
-              onDecrement$={() => {
-                if (store.length > 1) store.length--;
-                setCookie(JSON.stringify(store));
-              }}
-            >
-              {t('animtab.length@@Gradient Length')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
               {store.colors.map((color: string, i: number) => {
@@ -296,27 +246,11 @@ export default component$(() => {
           </div>
           <div class="md:col-span-2 lg:col-span-3">
             <div class="flex flex-col gap-3" id="inputs">
-              <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.animationName@@Animation Name')}
-              </TextInput>
-
-              <TextInput id="textinput" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <NumberInput id="speed" input value={store.speed} extraClass={{ 'w-full': true }} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
-                  {t('animtab.speed@@Speed')}
-                </NumberInput>
-
-                <SelectInput id="type" label={t('animtab.outputType@@Output Type')} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  {types.map((type: any) => (
-                    <option key={type.name} value={type.value}>
-                      {type.name}
-                    </option>
-                  ))}
-                </SelectInput>
-
                 <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
@@ -369,16 +303,16 @@ export default component$(() => {
                 </>
               }
 
-              <TextInput big id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                {t('animtab.outputFormat@@Output Format')}
+              <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
 
               <label>
                 {t('color.presets@@Presets')}
               </label>
               <div class="flex gap-2 my-2">
-                <Button onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
+                <Button id="export" onClick$={() => {
+                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
                   const alert = {
                     class: 'text-green-500',
                     translate: 'color.exportedPreset',
@@ -391,7 +325,7 @@ export default component$(() => {
                 }}>
                   {t('color.export@@Export')}
                 </Button>
-                <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={(event: any) => {
+                <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
                     json = JSON.parse(event.target!.value);
@@ -399,7 +333,7 @@ export default component$(() => {
                     const alert = {
                       class: 'text-red-500',
                       translate: 'color.invalidPreset',
-                      text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
+                      text: 'INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
                     };
                     store.alerts.push(alert);
                     return setTimeout(() => {
@@ -440,25 +374,26 @@ export default component$(() => {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Animated TAB',
+  title: 'Hex Gradients',
   meta: [
     {
       name: 'description',
-      content: 'TAB plugin gradient animation creator',
+      content: 'Hex color gradient creator',
     },
     {
       name: 'og:description',
-      content: 'TAB plugin gradient animation creator',
+      content: 'Hex color gradient creator',
     },
     {
       name: 'og:image',
-      content: 'images/icon.png',
+      content: '/images/icon.png',
     },
   ],
 };

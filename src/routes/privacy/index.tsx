@@ -61,7 +61,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Terma of use',
+  title: 'Terms of use',
   meta: [
     {
       name: 'description',
@@ -73,7 +73,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://birdflop.com/images/icon.png',
+      content: 'images/icon.png',
     },
   ],
 };

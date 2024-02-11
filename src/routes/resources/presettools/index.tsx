@@ -55,7 +55,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://birdflop.com/images/icon.png',
+      content: 'images/icon.png',
     },
   ],
 };

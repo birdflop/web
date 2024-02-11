@@ -18,18 +18,21 @@ export default component$(() => {
         Node Stats
       </h1>
       <div class="flex gap-3 justify-center">
-        <a href="https://status.birdflop.com/" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
+        <a href="https://status.birdflop.com/" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border-2 px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
           Overview
         </a>
-        <a href="https://netdata.birdflop.com/panel" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
+        <a href="https://netdata.birdflop.com/panel" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border-2 px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
           Web Services
         </a>
       </div>
       <div class="flex gap-3 justify-center">
-        <a href="https://netdata.birdflop.com/crabwings" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
+        <a href="https://netdata.birdflop.com/crabwings" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-sky-600 border-sky-600 border-2 px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
           Crabwings (NYC)
         </a>
-        <a href="http://impeyes.birdflop.com:19999/" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-blue-600 border-sky-600 border px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
+        <a href="http://impeyes.birdflop.com:19999/" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-blue-600 border-sky-600 border-2 px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
+          Impeyes (EU)
+        </a>
+        <a href="http://goosegills.birdflop.com:19999/" class="flex transition duration-200 rounded-xl bg-blue-600/80 hover:bg-blue-600 border-sky-600 border-2 px-6 py-3 font-bold text-sky-100 md:py-4 md:px-8 md:text-lg whitespace-nowrap justify-center">
           Impeyes (EU)
         </a>
       </div>
@@ -42,7 +45,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'og:image',
-      content: 'https://birdflop.com/images/icon.png',
+      content: 'images/icon.png',
     },
   ],
 };
