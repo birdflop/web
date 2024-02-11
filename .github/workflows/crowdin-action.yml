@@ -4,6 +4,9 @@ on:
     branches:
       - dev
 
+permissions:
+  contents: write
+
 jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
