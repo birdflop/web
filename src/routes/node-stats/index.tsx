@@ -45,7 +45,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'og:image',
-      content: 'images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };
