@@ -1,19 +1,32 @@
 import { component$ } from '@builder.io/qwik';
-import { useLocation, type DocumentHead } from '@builder.io/qwik-city';
+import { type DocumentHead } from '@builder.io/qwik-city';
+import BirdflopConfused from '~/components/icons/BirdflopConfused';
+import background from '~/components/images/background.png';
 
 export default component$(() => {
-  const location = useLocation();
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
-      <h1 class="font-bold text-red-400 text-4xl mb-12">
-        404: Page not found
+    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]" >
+      <picture class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] bg-red-500/40" id="bg">
+        <img
+          width={1920}
+          height={1080}
+          src={background}
+          class="object-cover object-center h-full w-full opacity-55 grayscale blur-xl"
+          alt="Background"
+        />
+      </picture>
+      <div class="font-bold text-red-400 text-4xl mb-12">
+        <div class="hidden sm:flex">
+          <BirdflopConfused width={200} />
+        </div>
+        <div class="sm:hidden">
+          <BirdflopConfused width={100} />
+        </div>
+        <h1 class="mt-12">404: Page not found</h1>
         <p class="font-italic text-gray-400 text-xl">
           Whoops! You've hit a dead-end. <a href="/" class="text-blue-300/50 underline">Go back home</a>
         </p>
-        <p class="font-italic text-gray-400 text-xl">
-          Did you mean to visit <a href={location.url.pathname.toLowerCase()} class="text-blue-300/50 underline">{location.url.pathname.toLowerCase()}</a>?
-        </p>
-      </h1>
+      </div>
     </section>
   );
 });
@@ -31,7 +44,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: 'images/icon.png',
     },
   ],
 };

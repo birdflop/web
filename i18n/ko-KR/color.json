@@ -8,7 +8,7 @@
         "presets": "프리셋",
         "exportedPreset": "프리셋을 성공적으로 클립보드에 내보냈습니다!",
         "importedPreset": "프리셋을 성공적으로 가져왔습니다!",
-        "invalidPreset": "잘못된 프리셋!\n이전 프리셋인 경우 <a class=\"text-blue-500\" href=\"/PresetTools\">프리셋 도구</a> 페이지를 사용하여 업데이트하십시오. 그렇지 않으면 <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">개발자들에게</a> 보고해주세요.",
+        "invalidPreset": "잘못된 프리셋!\n이전 프리셋인 경우 <a class=\"text-blue-500\" href=\"/PresetTools\">프리셋 도구</a> 페이지를 사용하여 업데이트하십시오. 그렇지 않으면 <a class=\"text-blue-500\" href=\"https://discord.gg/9vUZ9MREVz\">개발자들에게</a> 보고해주세요.",
         "export": "내보내기",
         "import": "가져오기 (여기에 붙여넣기)",
         "bold": "굵게",

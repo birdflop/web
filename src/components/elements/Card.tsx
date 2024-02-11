@@ -3,10 +3,10 @@ import { Slot, component$ } from '@builder.io/qwik';
 import LoadingIcon from '../icons/LoadingIcon';
 import { Link } from '@builder.io/qwik-city';
 
-export default component$(({ color, darker, link, onClick$, extraClass, row }: any) => {
+export default component$(({ color, darker, href, onClick$, extraClass, row }: any) => {
   const blob = Math.round(Math.random() * 6);
 
-  const button = onClick$ || link;
+  const button = onClick$ || href;
 
   return (
     <div class={{
@@ -26,30 +26,32 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
       'hover:bg-blue-400/10': color === 'blue' && button,
       'hover:bg-yellow-400/10': color === 'yellow' && button,
       'hover:bg-green-400/10': color === 'green' && button,
-      'hover:bg-gray-400/10': color === 'gray' && button,
+      'hover:bg-gray-400/10': (color === 'gray' || !color) && button,
       'hover:shadow-lg cursor-pointer': button,
       'bg-gray-800 border-gray-700': !color && !darker,
       'bg-gray-800/50': color,
-      'bg-gray-850 border-gray-800': !!darker,
+      'bg-gray-900 border-gray-700': !!darker,
       ...extraClass,
     }} onClick$={onClick$}>
       <div class={{
         'p-8': true,
       }}>
-        {link && (
-          <Link href={link} class="absolute inset-0 z-10" />
+        {href && (
+          <Link href={href} class="absolute inset-0 z-20" />
         )}
-        <div class={{
-          'flex gap-4': true,
-          'flex-col': !row,
-          'flex-row items-center': row,
-        }}>
-          <Slot />
+        <div class="relative z-10">
+          <div class={{
+            'flex gap-4': true,
+            'flex-col': !row,
+            'flex-row items-center': row,
+          }}>
+            <Slot />
+          </div>
         </div>
         {color && (
-          <div class="rounded-xl absolute -z-10 top-0 left-0 w-full h-full transition-all">
+          <div class="absolute -z-10 inset-0 w-full h-full transition-all overflow-clip" style={{ containerType: 'size' }}>
             <div class={{
-              'absolute left-0 right-0 mx-auto bottom-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
               'animate-blob2': blob === 2,
@@ -67,7 +69,7 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
               'bg-gray-400': color === 'gray',
             }}></div>
             <div class={{
-              'absolute left-0 right-0 mx-auto bottom-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
               '-animation-delay-5': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
@@ -86,7 +88,7 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
               'bg-gray-500': color === 'gray',
             }}></div>
             <div class={{
-              'absolute left-0 right-0 mx-auto bottom-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
               '-animation-delay-10': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
@@ -111,12 +113,19 @@ export default component$(({ color, darker, link, onClick$, extraClass, row }: a
   );
 });
 
-export const CardHeader = component$(({ loading, id }: any) => {
+export const CardHeader = component$(({ id, loading, subheader }: any) => {
   return (
     <h1 class="flex font-bold text-gray-100 text-2xl">
       <span id={id} class="block h-32 -mt-32" />
-      <div class="flex flex-1 items-center gap-3 whitespace-nowrap">
-        <Slot />
+      <div class="flex flex-1">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-3">
+            <Slot />
+          </div>
+          {subheader &&
+            <p class="text-base text-gray-500 font-normal">{subheader}</p>
+          }
+        </div>
       </div>
       { loading !== undefined &&
         <div class={{

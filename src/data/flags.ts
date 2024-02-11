@@ -247,7 +247,7 @@ export const flags: Flags = {
         '-XX:+AlwaysActAsServerClassMachine',
         '-XX:+UseTransparentHugePages',
         '-XX:LargePageSizeInBytes=2M',
-        '-XX:+UseLargePages',  
+        '-XX:+UseLargePages',
         '-XX:+EagerJVMCI',
         '-Dgraal.TuneInlinerExploration=1',
         '-Dgraal.LoopRotation=true',

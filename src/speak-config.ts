@@ -15,13 +15,11 @@ export const config: SpeakConfig = {
   defaultLocale: { lang: 'en-US' },
   supportedLocales: Object.keys(languages).map((lang) => ({ lang })),
   assets: [
-    'home',
     'gradient',
     'animpreview',
     'animtab',
     'animtexture',
     'colorstrip',
-    'privacypolicy',
     'presettools',
     'flags',
     'app',

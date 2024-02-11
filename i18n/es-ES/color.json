@@ -8,7 +8,7 @@
         "presets": "Predefinidos",
         "exportedPreset": "Exportado predefinido exitosamente a portapapeles!",
         "importedPreset": "¡Importado con éxito!",
-        "invalidPreset": "PREAJUSTE NO VÁLIDO!\nSi este es un preajuste antiguo, actualícelo utilizando la página de <a class=\"text-blue-500\" href=\"/PresetTools\">herramientas de preajuste</a>, si no, informe a los <a class=\"text-blue-500\" href=\"https://discord.simplymc.art/\">desarrolladores</a>.",
+        "invalidPreset": "PREAJUSTE NO VÁLIDO!\nSi este es un preajuste antiguo, actualícelo utilizando la página de <a class=\"text-blue-500\" href=\"/PresetTools\">herramientas de preajuste</a>, si no, informe a los <a class=\"text-blue-500\" href=\"https://discord.gg/9vUZ9MREVz\">desarrolladores</a>.",
         "export": "Exportar",
         "import": "Importar (Pegar aquí)",
         "bold": "Negrita",

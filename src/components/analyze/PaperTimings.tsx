@@ -38,7 +38,7 @@ export default component$(() => {
             else {
               store.error = '';
               const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
-              store.redirect = `/papertimings/${code}`;
+              store.redirect = `/resources/papertimings/${code}`;
             }
           }
         }>
@@ -59,7 +59,7 @@ export default component$(() => {
 
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
-          <span class="text-gray-300">https://simplymc.art/PaperTimings/[code]</span><br/>
+          <span class="text-gray-300">https://birdflop.com/resources/papertimings/[code]</span><br/>
           Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400">botflop</a>
         </p>
       </div>
