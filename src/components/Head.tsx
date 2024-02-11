@@ -21,7 +21,7 @@ export const RouterHead = component$(() => {
       <link rel="preload" as="font" href="/fonts/MinecraftBoldItalic.otf" crossOrigin="anonymous" />
 
       <link rel="canonical" href={loc.url.href} />
-      <link rel="icon" type="image/png" href="/branding/apple-icon.png" />
+      <link rel="icon" type="image/png" href="/branding/icon.svg" />
       <link rel="apple-touch-icon" href="/branding/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 

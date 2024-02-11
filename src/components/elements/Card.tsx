@@ -51,7 +51,7 @@ export default component$(({ color, darker, href, onClick$, extraClass, row }: a
         {color && (
           <div class="absolute -z-10 inset-0 w-full h-full transition-all overflow-clip" style={{ containerType: 'size' }}>
             <div class={{
-              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-[30cqw] h-[30cqw] rounded-full opacity-20 ease-in-out blur-xl': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
               'animate-blob2': blob === 2,
@@ -69,7 +69,7 @@ export default component$(({ color, darker, href, onClick$, extraClass, row }: a
               'bg-gray-400': color === 'gray',
             }}></div>
             <div class={{
-              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-[30cqw] h-[30cqw] rounded-full opacity-20 ease-in-out blur-xl': true,
               '-animation-delay-5': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
@@ -88,7 +88,7 @@ export default component$(({ color, darker, href, onClick$, extraClass, row }: a
               'bg-gray-500': color === 'gray',
             }}></div>
             <div class={{
-              'absolute top-0 w-32 h-32 rounded-full opacity-20 ease-in-out filter blur-xl': true,
+              'absolute top-0 w-[30cqw] h-[30cqw] rounded-full opacity-20 ease-in-out blur-xl': true,
               '-animation-delay-10': true,
               'animate-blob': blob === 0,
               'animate-blob1': blob === 1,
