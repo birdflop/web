@@ -65,7 +65,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

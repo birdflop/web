@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 function getBlobKeyFrame() {
-  const translateXPercentages = [0, 18, 35, 52, 70];
+  const translateXPercentages = [0, 19, 38, 57, 76];
   const translateYPercentages = [0, 12, 25, 38, 50];
   const scaleValues = [0.8, 1, 1.2, 1.4];
 

@@ -13,7 +13,7 @@ export const RouterHead = component$(() => {
       <title>{`Birdflop: ${head.title}`}</title>
       <meta content={`Birdflop: ${head.title}`} property="og:title"/>
       <meta content="#54a5da" name="theme-color"/>
-      <meta content="/icon-512x512.png" property="og:image" />
+      <meta content="/branding/icon.png" property="og:image" />
 
       <link rel="preload" as="font" href="/fonts/MinecraftRegular.otf" crossOrigin="anonymous" />
       <link rel="preload" as="font" href="/fonts/MinecraftBold.otf" crossOrigin="anonymous" />
@@ -21,8 +21,8 @@ export const RouterHead = component$(() => {
       <link rel="preload" as="font" href="/fonts/MinecraftBoldItalic.otf" crossOrigin="anonymous" />
 
       <link rel="canonical" href={loc.url.href} />
-      <link rel="icon" type="image/png" href="/apple-icon.png" />
-      <link rel="apple-touch-icon" href="/apple-icon.png" />
+      <link rel="icon" type="image/png" href="/branding/icon.svg" />
+      <link rel="apple-touch-icon" href="/branding/apple-icon.png" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
       {head.meta.map((m, i) => (

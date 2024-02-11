@@ -7,7 +7,7 @@ import Chart from '~/components/elements/Chart';
 import Birdflop from '~/components/icons/Birdflop';
 import { initiateTyper } from '~/components/util/Typer';
 
-import background from '~/components/images/background.png';
+import Background from '~/components/images/background.png?jsx';
 import { ExternalButton, SPAButton } from '~/components/elements/Button';
 
 export default component$(() => {
@@ -25,15 +25,7 @@ export default component$(() => {
 
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100dvh-56px)]">
-      <picture class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw]" id="bg">
-        <img
-          width={1920}
-          height={1080}
-          src={background}
-          class="object-cover object-center h-full w-full opacity-55"
-          alt="Background"
-        />
-      </picture>
+      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" />
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <div class="flex relative justify-center align-center fade-in animation-delay-100 mb-8 drop-shadow-2xl">
@@ -389,7 +381,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };
