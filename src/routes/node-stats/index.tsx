@@ -20,17 +20,17 @@ export default component$(() => {
         </ExternalButton>
       </div>
       <div class="flex gap-3 justify-center">
-        <Card href="/resources/animtexture" color="red">
+        <Card href="https://crabwings.birdflop.com/" color="red">
           <CardHeader subheader="US">
             Crabwings
           </CardHeader>
         </Card>
-        <Card href="/resources/colorstrip" color="orange">
+        <Card href="http://impeyes.birdflop.com:19999/" color="orange">
           <CardHeader subheader="EU">
             Impeyes
           </CardHeader>
         </Card>
-        <Card href="/resources/presettools" color="yellow">
+        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow">
           <CardHeader subheader="EU">
             Jellyfishjaws
           </CardHeader>
