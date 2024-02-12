@@ -20,7 +20,7 @@ export default component$(() => {
         </ExternalButton>
       </div>
       <div class="flex gap-3 justify-center">
-        <Card href="https://crabwings.birdflop.com/" color="red">
+        <Card href="https://netdata.birdflop.com/crabwings" color="red">
           <CardHeader subheader="US">
             Crabwings
           </CardHeader>
