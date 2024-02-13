@@ -1,4 +1,4 @@
-import { toPrefixAsNeeded, type SpeakConfig } from 'qwik-speak';
+import { type SpeakConfig } from 'qwik-speak';
 import { rewriteRoutes } from './speak-routes';
 export const languages = {
   'da-DK': 'Dansk',
@@ -13,7 +13,7 @@ export const languages = {
 };
 
 export const config: SpeakConfig = {
-  rewriteRoutes: toPrefixAsNeeded(rewriteRoutes),
+  rewriteRoutes,
   defaultLocale: { lang: 'en-US' },
   supportedLocales: Object.keys(languages).map((lang) => ({ lang })),
   assets: [
