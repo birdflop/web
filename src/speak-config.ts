@@ -1,4 +1,5 @@
-import type { SpeakConfig } from 'qwik-speak';
+import { toPrefixAsNeeded, type SpeakConfig } from 'qwik-speak';
+import { rewriteRoutes } from './speak-routes';
 export const languages = {
   'da-DK': 'Dansk',
   'en-US': 'English',
@@ -12,6 +13,7 @@ export const languages = {
 };
 
 export const config: SpeakConfig = {
+  rewriteRoutes: toPrefixAsNeeded(rewriteRoutes),
   defaultLocale: { lang: 'en-US' },
   supportedLocales: Object.keys(languages).map((lang) => ({ lang })),
   assets: [
@@ -22,6 +24,6 @@ export const config: SpeakConfig = {
     'colorstrip',
     'presettools',
     'flags',
-    'app',
+    'nav',
   ],
 };

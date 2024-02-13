@@ -1,8 +1,8 @@
 {
-    "gradient": {
-        "title": "十六进制渐变",
-        "subtitle": "创建十六进制颜色渐变",
-        "prefix": "前缀（通常用于命令）",
-        "prefixPlaceholder": "示例：'/nick '"
-    }
+  "gradient": {
+    "prefix": "前缀（通常用于命令）",
+    "prefixPlaceholder": "示例：'/nick '",
+    "subtitle": "创建十六进制颜色渐变",
+    "title": "十六进制渐变"
+  }
 }

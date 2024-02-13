@@ -1,14 +1,12 @@
 // LuminescentDev Navbar Component Dec 11
 
-import { component$, $, Slot, useStore } from '@builder.io/qwik';
+import { component$, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 
 import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
 
-import type { SpeakLocale } from 'qwik-speak';
-import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
+import { inlineTranslate, localizePath, translatePath, useDisplayName, useSpeakConfig } from 'qwik-speak';
 
-import { languages } from '~/speak-config';
 import LoadingIcon from './icons/LoadingIcon';
 
 import Birdflop from './icons/Birdflop';
@@ -17,7 +15,8 @@ export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
   const location = useLocation();
-
+  const getPath = translatePath();
+  const [gradients, animtab] = getPath(['/resources/gradients', '/resources/animtab']);
   return (
     <Nav>
       <MainNav>
@@ -33,10 +32,10 @@ export default component$(() => {
           </NavButton>
         </Dropdown>
         <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/resources/gradients">
+          <NavButton href={gradients}>
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
-          <NavButton href="/resources/animtab">
+          <NavButton href={animtab}>
             {t('nav.animatedTAB@@Animated TAB')}
           </NavButton>
           <NavButton href="/resources/sparkprofile">
@@ -196,13 +195,33 @@ export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
   );
 });
 
+// export const ChangeLocale = component$(() => {
+
+//   return (
+//     <>
+//       <h2>{t('app.changeLocale@@Change locale')}</h2>
+//       {config.supportedLocales.map(value => (
+//         <a key={value.lang} class={{ active: value.lang == locale.lang }} href={getPath(pathname, value.lang)}>
+//           {dn(value.lang, { type: 'language' })}
+//         </a>
+//       ))}
+//     </>
+//   );
+// });
+
 export const LangPicker = component$(({ extraClass }: any) => {
   const config = useSpeakConfig();
 
-  const changeLocale$ = $(async (newLocale: SpeakLocale) => {
-    document.cookie = `locale=${JSON.stringify(newLocale)};max-age=86400;path=/`;
-    location.reload();
-  });
+  const pathname = useLocation().url.pathname;
+
+  const dn = useDisplayName();
+
+  const getPath = localizePath();
+
+  // const changeLocale$ = $(async (newLocale: SpeakLocale) => {
+  //   document.cookie = `locale=${JSON.stringify(newLocale)};max-age=86400;path=/`;
+  //   location.reload();
+  // });
 
   return (
     <div class={{
@@ -215,8 +234,8 @@ export const LangPicker = component$(({ extraClass }: any) => {
       <div class={'absolute top-8 z-10 hidden group-hover:flex pt-5 text-base right-0'}>
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           {config.supportedLocales.map(value => (
-            <NavButton type="div" key={value.lang} onClick$={async () => await changeLocale$(value)}>
-              {languages[value.lang as keyof typeof languages]}
+            <NavButton key={value.lang} href={getPath(pathname, value.lang)}>
+              {dn(value.lang, { type: 'language' })}
             </NavButton>
           ))}
         </div>

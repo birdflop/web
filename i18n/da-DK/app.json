@@ -1,17 +1,5 @@
 {
-    "nav": {
-        "gradients": "Gradients",
-        "hexGradient": "Hex Gradient",
-        "animatedTAB": "Animated TAB",
-        "tabAnimationPreviewer": "TAB Animation Previewer",
-        "analysis": "Analysis",
-        "sparkProfile": "Spark Profile",
-        "paperTimings": "Paper Timings",
-        "misc": "Misc",
-        "animatedTextures": "Animated Textures",
-        "flags": "Flags",
-        "colorCodeStripper": "Color Code Stripper",
-        "presetTools": "Preset Tools",
-        "privacyPolicy": "Privacy Policy"
-    }
+  "app": {
+    "changeLocale": "Change locale"
+  }
 }

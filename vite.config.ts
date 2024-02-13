@@ -4,11 +4,15 @@ import { qwikCity } from "@builder.io/qwik-city/vite";
 import { qwikSpeakInline } from 'qwik-speak/inline';
 import tsconfigPaths from "vite-tsconfig-paths";
 import { languages } from "./src/speak-config";
-
+import { rewriteRoutes } from "./src/speak-routes";
 export default defineConfig(() => {
     return {
         plugins: [
-            qwikCity(),
+            qwikCity(
+                {
+                    rewriteRoutes,
+                }
+            ),
             qwikVite(),
             tsconfigPaths(),
             qwikSpeakInline({
