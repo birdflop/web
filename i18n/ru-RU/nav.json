@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "analysis": "Анализ",
+    "animatedTAB": "Анимация TAB",
+    "animatedTextures": "Анимация текстур",
+    "colorCodeStripper": "Декомпилятор цветового кода",
+    "flags": "Стартер",
+    "gradients": "Градиенты",
+    "hexGradient": "Градиент",
+    "misc": "Разное",
+    "more": "More Resources",
+    "paperTimings": "Paper Timings",
+    "presetTools": "Обновление пресетов",
+    "privacyPolicy": "Политика",
+    "sparkProfile": "Spark профиль",
+    "tabAnimationPreview": "TAB Animation Previewer",
+    "tabAnimationPreviewer": "Предпросмотр анимации TAB"
+  }
+}
