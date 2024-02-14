@@ -4,7 +4,6 @@ import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
 import Card, { CardHeader } from '~/components/elements/Card';
 import Chart from '~/components/elements/Chart';
-import Birdflop from '~/components/icons/Birdflop';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
@@ -28,14 +27,6 @@ export default component$(() => {
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" />
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
-          <div class="flex relative justify-center align-center fade-in animation-delay-100 mb-8 drop-shadow-2xl">
-            <div class="hidden sm:flex">
-              <Birdflop width={200} />
-            </div>
-            <div class="sm:hidden">
-              <Birdflop width={100} />
-            </div>
-          </div>
           <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold fade-in animation-delay-200">
             Birdflop Hosting
           </h1>

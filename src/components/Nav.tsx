@@ -33,7 +33,7 @@ export default component$(() => {
           </NavButton>
         </Dropdown>
         <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/resources/gradients">
+          <NavButton href="/resources/rgb">
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
           <NavButton href="/resources/animtab">
@@ -62,10 +62,10 @@ export default component$(() => {
         <NavButton type="external" href="https://client.birdflop.com/">
           Billing
         </NavButton>
-        <NavButton type="external" href="https://www.birdflop.com/node-stats/">
+        <NavButton href="/node-stats">
           Node Stats
         </NavButton>
-        <NavButton store={store} href="/resources/gradients">
+        <NavButton store={store} href="/resources/rgb">
           {t('nav.hexGradient@@Hex Gradients')}
         </NavButton>
         <NavButton store={store} href="/resources/animtab">
