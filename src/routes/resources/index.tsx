@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
-import { ExternalButton } from '~/components/elements/Button';
+import { ButtonExternal } from '~/components/elements/Button';
 import Card, { CardHeader } from '~/components/elements/Card';
 
 export default component$(() => {
@@ -83,14 +83,14 @@ export default component$(() => {
             Botflop
           </CardHeader>
           <div class="flex gap-2">
-            <ExternalButton href="https://github.com/birdflop/botflop" big>
+            <ButtonExternal href="https://github.com/birdflop/botflop" big>
               <LogoGithub width="24" />
               Learn More
-            </ExternalButton>
-            <ExternalButton href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonExternal>
+            <ButtonExternal href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
               <LogoDiscord width="24" />
               Invite
-            </ExternalButton>
+            </ButtonExternal>
           </div>
         </Card>
         <Card darker>
@@ -124,9 +124,9 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ExternalButton href="https://bin.birdflop.com/" big>
+            <ButtonExternal href="https://bin.birdflop.com/" big>
               Try it
-            </ExternalButton>
+            </ButtonExternal>
           </div>
         </Card>
         <Card darker>
@@ -160,12 +160,12 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ExternalButton href="https://github.com/birdflop/botflop" big>
+            <ButtonExternal href="https://github.com/birdflop/botflop" big>
               Learn More
-            </ExternalButton>
-            <ExternalButton href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonExternal>
+            <ButtonExternal href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
               Invite
-            </ExternalButton>
+            </ButtonExternal>
           </div>
         </Card>
       </div>

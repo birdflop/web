@@ -7,7 +7,7 @@ import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
-import { ExternalButton, SPAButton } from '~/components/elements/Button';
+import { ButtonExternal, ButtonSPA } from '~/components/elements/Button';
 
 export default component$(() => {
 
@@ -44,17 +44,17 @@ export default component$(() => {
           </h2>
           <div class="flex flex-col gap-2 mt-8 fade-in animation-delay-400">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <ExternalButton href="https://client.birdflop.com/order/forms/" color="blue" massive>
+              <ButtonExternal href="https://client.birdflop.com/order/forms/" color="blue" massive>
                 <ServerOutline width="30" class="text-3xl" />Hosting
-              </ExternalButton>
-              <SPAButton href="/resources" color="purple" massive>
+              </ButtonExternal>
+              <ButtonSPA href="/resources" color="purple" massive>
                 <CubeOutline width="30" class="text-3xl" /> Resources
-              </SPAButton>
+              </ButtonSPA>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <ExternalButton href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" color="pink" massive>
+              <ButtonExternal href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" color="pink" massive>
                 <CashOutline width="30" class="text-3xl" /> Donate Today
-              </ExternalButton>
+              </ButtonExternal>
             </div>
           </div>
         </div>
@@ -153,9 +153,9 @@ export default component$(() => {
                 </li>
               </ul>
               <div class="pt-4">
-                <ExternalButton href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
+                <ButtonExternal href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ExternalButton>
+                </ButtonExternal>
               </div>
             </Card>
             <Card darker>
@@ -204,9 +204,9 @@ export default component$(() => {
                 </li>
               </ul>
               <div class="pt-4">
-                <ExternalButton href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
+                <ButtonExternal href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ExternalButton>
+                </ButtonExternal>
               </div>
             </Card>
           </div>

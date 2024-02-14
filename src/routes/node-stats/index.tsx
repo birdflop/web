@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ExternalButton } from '~/components/elements/Button';
+import { ButtonExternal } from '~/components/elements/Button';
 import Card, { CardHeader } from '~/components/elements/Card';
 import Background from '~/components/images/background.png?jsx';
 
@@ -12,12 +12,12 @@ export default component$(() => {
         Node Stats
       </h1>
       <div class="flex gap-3 justify-center">
-        <ExternalButton href="https://status.birdflop.com/" big>
+        <ButtonExternal href="https://status.birdflop.com/" big>
           Overview
-        </ExternalButton>
-        <ExternalButton href="https://netdata.birdflop.com/panel" big>
+        </ButtonExternal>
+        <ButtonExternal href="https://netdata.birdflop.com/panel" big>
           Web Services
-        </ExternalButton>
+        </ButtonExternal>
       </div>
       <div class="flex gap-3 justify-center">
         <Card href="https://netdata.birdflop.com/crabwings" color="red">

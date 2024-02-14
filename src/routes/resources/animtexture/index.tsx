@@ -3,7 +3,7 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 
 import Toggle from '~/components/elements/Toggle';
 import TextInput from '~/components/elements/TextInput';
-import { Button, ExternalButton } from '~/components/elements/Button';
+import { Button, ButtonExternal } from '~/components/elements/Button';
 
 import {
   inlineTranslate,
@@ -88,7 +88,7 @@ export default component$(() => {
           {t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}
         </Toggle>
 
-        <Button extraClass={{ 'my-6': true }} onClick$={
+        <Button class={{ 'my-6': true }} onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
             canvas.classList.add('sm:flex');
@@ -140,12 +140,12 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <ExternalButton id="pngd" extraClass={{ 'mr-2': true }} href='/'>
+          <ButtonExternal id="pngd" class={{ 'mr-2': true }} href='/'>
             {t('animtexture.downloadPNG@@Download PNG')}
-          </ExternalButton>
-          <ExternalButton id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+          </ButtonExternal>
+          <ButtonExternal id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
             {t('animtexture.downloadMCMETA@@Download MCMETA')}
-          </ExternalButton>
+          </ButtonExternal>
         </div>
 
       </div>
