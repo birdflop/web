@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@builder.io/partytown':
+    specifier: ^0.8.1
+    version: 0.8.2
   '@builder.io/qwik':
     specifier: 1.4.5
     version: 1.4.5(@types/node@20.11.17)(undici@6.6.2)
@@ -85,6 +88,12 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+    dev: true
+
+  /@builder.io/partytown@0.8.2:
+    resolution: {integrity: sha512-WKGE+SO0qUGirW8J+xOWkHeCkfFEoPPvHnFkcdMl+MY3kDbAcTwjZCzjg27JCvoD0h8fH47FR7DSIss0/S5lyg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
     dev: true
 
   /@builder.io/qwik-city@1.4.5(@types/node@20.11.17):

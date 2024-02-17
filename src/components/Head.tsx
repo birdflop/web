@@ -11,8 +11,8 @@ export const RouterHead = component$(() => {
   return (
     <>
       <title>{`Birdflop: ${head.title}`}</title>
-      <meta content={`Birdflop: ${head.title}`} property="og:title"/>
-      <meta content="#54a5da" name="theme-color"/>
+      <meta content={`Birdflop: ${head.title}`} property="og:title" />
+      <meta content="#54a5da" name="theme-color" />
       <meta content="/branding/icon.png" property="og:image" />
 
       <link rel="preload" as="font" href="/fonts/MinecraftRegular.otf" crossOrigin="anonymous" />
