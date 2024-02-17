@@ -44,7 +44,7 @@ export default component$(() => {
           </h2>
           <div class="flex flex-col gap-2 mt-8 fade-in animation-delay-400">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <ExternalButton href="https://client.birdflop.com/order/forms/" color="blue" massive>
+              <ExternalButton href="#plans" color="blue" massive>
                 <ServerOutline width="30" class="text-3xl" />Hosting
               </ExternalButton>
               <SPAButton href="/resources" color="purple" massive>
@@ -100,7 +100,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800" id="plans">
       <div class="justify-center flex relative align-center max-w-5xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
