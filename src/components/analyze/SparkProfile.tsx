@@ -1,7 +1,7 @@
 import { component$, useStore, Slot } from '@builder.io/qwik';
 
 import TextInput from '~/components/elements/TextInput';
-import { SPAButton } from '~/components/elements/Button';
+import { ButtonSPA } from '~/components/elements/Button';
 
 export default component$(() => {
   const store = useStore({
@@ -52,9 +52,9 @@ export default component$(() => {
           'flex mt-3': true,
           'hidden': !store.redirect,
         }}>
-          <SPAButton href={store.redirect}>
+          <ButtonSPA href={store.redirect}>
             Submit
-          </SPAButton>
+          </ButtonSPA>
         </div>
 
         <p class="text-white my-12">

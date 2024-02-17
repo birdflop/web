@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
-import { SPAButton } from '~/components/elements/Button';
+import { ButtonSPA } from '~/components/elements/Button';
 import BirdflopConfused from '~/components/icons/BirdflopConfused';
 import Background from '~/components/images/background.png?jsx';
 
@@ -20,9 +20,9 @@ export default component$(() => {
           Whoops! You've hit a dead-end.
         </p>
         <div class="flex mt-4">
-          <SPAButton href="/" big color="blue">
+          <ButtonSPA href="/" big color="blue">
             Go back home
-          </SPAButton>
+          </ButtonSPA>
         </div>
       </div>
     </section>
