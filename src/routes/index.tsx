@@ -115,7 +115,7 @@ export default component$(() => {
               </p>
               <CardHeader>
                 EU Premium
-                <span q:slot='subheader'>
+                <span q:slot='subheader' class="text-sm text-gray-400">
                   Capped at $2/GB RAM
                 </span>
               </CardHeader>
@@ -169,7 +169,7 @@ export default component$(() => {
               </p>
               <CardHeader>
                 US Premium
-                <span q:slot='subheader'>
+                <span q:slot='subheader' class="text-sm text-gray-400">
                   Capped at $3/GB RAM
                 </span>
               </CardHeader>

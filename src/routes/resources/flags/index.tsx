@@ -140,21 +140,18 @@ export default component$(() => {
 
   const configOptions = [
     {
-      color: 'gray',
       id: 'gui',
       cardIcon: <TerminalOutline class="w-10 h-10" />,
       label: t('flags.gui.label@@Use GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
     },
     {
-      color: 'gray',
       id: 'variables',
       cardIcon: <CodeWorkingOutline class="w-10 h-10" />,
       label: t('flags.variables.label@@Use Variables'),
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
     },
     {
-      color: 'gray',
       id: 'autoRestart',
       cardIcon: <RefreshCircleOutline class="w-10 h-10" />,
       label: t('flags.autoRestart.label@@Auto-restart'),
@@ -406,7 +403,7 @@ export default component$(() => {
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
-                  <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs key={index}>
+                  <Card color="darkgray" key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                       {option.cardIcon}
                       {option.label}
