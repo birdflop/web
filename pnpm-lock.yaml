@@ -15,8 +15,8 @@ devDependencies:
     specifier: 1.4.5
     version: 1.4.5(@types/node@20.11.17)
   '@luminescent/ui':
-    specifier: ^0.4.1
-    version: 0.4.1
+    specifier: ^0.4.2
+    version: 0.4.2
   '@modular-forms/qwik':
     specifier: ^0.23.1
     version: 0.23.1(@builder.io/qwik-city@1.4.5)(@builder.io/qwik@1.4.5)
@@ -53,9 +53,6 @@ devDependencies:
   qwik-speak:
     specifier: ^0.21.0
     version: 0.21.0(@builder.io/qwik@1.4.5)
-  simple-color-picker:
-    specifier: ^1.0.5
-    version: 1.0.5
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
@@ -936,8 +933,8 @@ packages:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: true
 
-  /@luminescent/ui@0.4.1:
-    resolution: {integrity: sha512-LB/N289UBsL26VSJFPlLU/m4MmBOI+Ms4EPvbLhvMmakFzYIGU7VcDGGR0vtHbcef9/4ZTuQY707KUzHk9Fbjw==}
+  /@luminescent/ui@0.4.2:
+    resolution: {integrity: sha512-ojw3DDWjmualoi24XrPcKJiHfQUD4X7K2UuzlimrOzfkL/40MWO6Rk9Fj/jjBYjqKXjoqYNBnPEmemou/o+Tmw==}
     engines: {node: '>=15.0.0'}
     dev: true
 
@@ -1159,10 +1156,6 @@ packages:
     resolution: {integrity: sha512-McWspRw8xx8J9HurkVBfYj0xKoE25tOFlHGdx4MJ5xORQrMGZNqJhVQWaIbm6Oyla5kYOXtDiopzKRJzEOkwJw==}
     dependencies:
       '@types/unist': 2.0.10
-    dev: true
-
-  /@types/insert-css@2.0.3:
-    resolution: {integrity: sha512-QgdWn3Mi9D1qqjCKy4PeC+tCasItQYOTk/S9icmHi8dgPx43aotI3cvyHsDaTN18uyYQ1kq/EIdJI0Dzsnm1Kg==}
     dev: true
 
   /@types/json-schema@7.0.15:
@@ -2493,10 +2486,6 @@ packages:
     resolution: {integrity: sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==}
     dev: true
 
-  /insert-css@2.0.0:
-    resolution: {integrity: sha512-xGq5ISgcUP5cvGkS2MMFLtPDBtrtQPSFfC6gA6U8wHKqfjTIMZLZNxOItQnoSjdOzlXOLU/yD32RKC4SvjNbtA==}
-    dev: true
-
   /internal-slot@1.0.7:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
     engines: {node: '>= 0.4'}
@@ -3811,13 +3800,6 @@ packages:
   /signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
-    dev: true
-
-  /simple-color-picker@1.0.5:
-    resolution: {integrity: sha512-MUsSVfO/51zTrBA6nsmX5ABe/FXmhd6N+hie6EAWb6Ph4eydtQNRZ9hyb/HmLaG403YB/JAtpry70AaCd8AwBw==}
-    dependencies:
-      '@types/insert-css': 2.0.3
-      insert-css: 2.0.0
     dev: true
 
   /simple-swizzle@0.2.2:
