@@ -2,16 +2,14 @@
 
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import { LoadingIcon, LogoBirdflop, LogoDiscord } from '@luminescent/ui';
 
-import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
+import { LogoGithub, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
-import LoadingIcon from './icons/LoadingIcon';
-
-import Birdflop from './icons/Birdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -109,7 +107,7 @@ export const Brand = component$(() => {
   return (
     <div class="flex items-center justify-start">
       <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
-        <Birdflop width={32} />
+        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']}/>
         <span class="ml-3 font-bold">Birdflop</span>
         <div class={{
           'transition-all': true,
@@ -232,9 +230,6 @@ export const SocialButtons = component$(() => {
     </NavButton>
     <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoDiscord width="24" />
-    </NavButton>
-    <NavButton type="external" icon href="https://twitter.com/birdflop" title="Twitter" extraClass={{ 'flex fill-current hover:fill-white': true }}>
-      <LogoTwitter width="24" />
     </NavButton>
   </>;
 });

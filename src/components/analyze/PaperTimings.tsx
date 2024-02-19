@@ -1,7 +1,6 @@
 import { component$, useStore, Slot } from '@builder.io/qwik';
-
-import TextInput from '~/components/elements/TextInput';
-import { ButtonSPA } from '~/components/elements/Button';
+import { Link } from '@builder.io/qwik-city';
+import { Button, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   const store = useStore({
@@ -52,9 +51,11 @@ export default component$(() => {
           'flex mt-3': true,
           'hidden': !store.redirect,
         }}>
-          <ButtonSPA href={store.redirect}>
-            Submit
-          </ButtonSPA>
+          <Link href={store.redirect}>
+            <Button color="blue">
+              Submit
+            </Button>
+          </Link>
         </div>
 
         <p class="text-white my-12">

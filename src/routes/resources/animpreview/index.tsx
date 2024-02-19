@@ -1,11 +1,11 @@
 import { component$, useTask$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import yaml from 'yaml';
-import TextInput from '~/components/elements/TextInput';
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import { TextAreaInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });
@@ -69,9 +69,9 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+        <TextAreaInput id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
           {t('animpreview.yamlInput@@YAML Input')}
-        </TextInput>
+        </TextAreaInput>
 
         <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {

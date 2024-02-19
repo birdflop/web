@@ -1,22 +1,15 @@
 import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
 
-import Toggle from '~/components/elements/Toggle';
-import TextInput, { RawTextInput } from '~/components/elements/TextInput';
-import ColorInput from '~/components/elements/ColorInput';
-import SelectInput from '~/components/elements/SelectInput';
-import NumberInput from '~/components/elements/NumberInput';
-import { Button } from '~/components/elements/Button';
-
 import { Gradient } from '~/components/util/HexUtils';
 import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/components/util/RGBUtils';
 import { presetVersion } from '~/components/util/PresetUtils';
-import OutputField from '~/components/elements/OutputField';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
+import { Button, ColorInput, NumberInput, OutputField, SelectInput, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -108,7 +101,8 @@ export default component$(() => {
           {t('gradient.subtitle@@Hex color gradient creator')}
         </h2>
 
-        <OutputField id="Output" charlimit={256} value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
+        {/* charlimit={256} */}
+        <OutputField id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
@@ -175,13 +169,14 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+            <SelectInput id="color-preset" onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
             } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              <span q:slot='label'>{t('color.colorPreset@@Color Preset')}</span>
               {Object.keys(presets).map((preset: any) => (
                 <option key={preset} value={preset}>
                   {preset}
@@ -228,6 +223,8 @@ export default component$(() => {
                       store.colors[i] = newColor;
                       setCookie(JSON.stringify(store));
                     }}
+                    class={{ 'w-full': true }}
+                    presetColors={store.colors}
                   >
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
@@ -251,7 +248,7 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
+                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -263,6 +260,7 @@ export default component$(() => {
                     setCookie(JSON.stringify(store));
                   }
                 }>
+                  <span q:slot='label'>{t('color.colorFormat@@Color Format')}</span>
                   {formats.map((format: any) => (
                     <option key={format} value={format}>
                       {format
@@ -286,7 +284,7 @@ export default component$(() => {
 
               {
                 store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     {t('color.customFormat@@Custom Format')}
                   </TextInput>
                   <div class="pb-4">
@@ -325,7 +323,7 @@ export default component$(() => {
                 }}>
                   {t('color.export@@Export')}
                 </Button>
-                <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+                <TextInputRaw name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
                     json = JSON.parse(event.target!.value);

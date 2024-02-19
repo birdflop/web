@@ -1,8 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
+import { ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
-import { ButtonExternal } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
 
 export default component$(() => {
 
@@ -12,90 +11,132 @@ export default component$(() => {
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
-        <Card darker>
-          <CardHeader subheader="Tools to help you create gradient text in minecraft.">
+        <Card color="darkgray">
+          <CardHeader>
             Gradient Tools
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              Tools to help you create gradient text in minecraft.
+            </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/gradients" color="red">
-              <CardHeader subheader="Hex color gradient creator">
+            <Card href="/resources/gradients" color="red" blobs hoverable>
+              <CardHeader>
                 Hex Gradient
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Hex color gradient creator
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animtab" color="blue">
-              <CardHeader subheader="TAB plugin gradient animation creator">
+            <Card href="/resources/animtab" color="blue" blobs hoverable>
+              <CardHeader>
                 Animated TAB
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  TAB plugin gradient animation creator
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animpreview" color="green">
-              <CardHeader subheader="Preview TAB Animations without the need to put them in-game">
+            <Card href="/resources/animpreview" color="green" blobs hoverable>
+              <CardHeader>
                 TAB Animation Previewer
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Preview TAB Animations without the need to put them in-game
+                </span>
               </CardHeader>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Tools to help configure and setup minecraft servers.">
+        <Card color="darkgray">
+          <CardHeader>
             Server tools
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              Tools to help configure and setup minecraft servers.
+            </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/sparkprofile" color="yellow">
-              <CardHeader subheader="Analyze Spark Profiles and get possible optimizations">
+            <Card href="/resources/sparkprofile" color="yellow" blobs hoverable>
+              <CardHeader>
                 Spark Profile
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Analyze Spark Profiles and get possible optimizations
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/papertimings" color="pink">
-              <CardHeader subheader="Analyze Paper Timings Reports and get possible optimizations">
+            <Card href="/resources/papertimings" color="pink" blobs hoverable>
+              <CardHeader>
                 Paper Timings
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Analyze Paper Timings Reports and get possible optimizations
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/flags" color="orange">
-              <CardHeader subheader="A simple script generator to start your Minecraft servers with optimal flags">
+            <Card href="/resources/flags" color="orange" blobs hoverable>
+              <CardHeader>
                 Flags
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  A simple script generator to start your Minecraft servers with optimal flags
+                </span>
               </CardHeader>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Miscellaneous tools to help with random miscellaneous things.">
+        <Card color="darkgray">
+          <CardHeader>
             Miscellaneous tools
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              Miscellaneous tools to help with random miscellaneous things.
+            </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/animtexture" color="purple">
-              <CardHeader subheader="Easily merge textures for resource pack animations">
+            <Card href="/resources/animtexture" color="purple" blobs hoverable>
+              <CardHeader>
                 Animated Textures
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Easily merge textures for resource pack animations
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/colorstrip" color="gray">
-              <CardHeader subheader="Strips all color / format codes from text">
+            <Card href="/resources/colorstrip" color="gray" blobs hoverable>
+              <CardHeader>
                 Color Code Stripper
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  Strips all color / format codes from text
+                </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/presettools" color="red">
-              <CardHeader subheader="This will update older preset versions to the newest version">
+            <Card href="/resources/presettools" color="red" blobs hoverable>
+              <CardHeader>
                 Preset Tools
+                <span q:slot='subheader' class="text-xs text-gray-300">
+                  This will update older preset versions to the newest version
+                </span>
               </CardHeader>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Botflop is a Discord bot that watches chat to chime in and provide suggestions.">
+        <Card color="darkgray">
+          <CardHeader>
             Botflop
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              Botflop is a Discord bot that watches chat to chime in and provide suggestions.
+            </span>
           </CardHeader>
           <div class="flex gap-2">
-            <ButtonExternal href="https://github.com/birdflop/botflop" big>
+            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               <LogoGithub width="24" />
               Learn More
-            </ButtonExternal>
-            <ButtonExternal href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonAnchor>
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
               <LogoDiscord width="24" />
               Invite
-            </ButtonExternal>
+            </ButtonAnchor>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Binflop is Birdflop's spinoff of the original hastebin.com.">
+        <Card color="darkgray">
+          <CardHeader>
             Binflop
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              Binflop is Birdflop's spinoff of the original hastebin.com.
+            </span>
           </CardHeader>
           <h2>
             Binflop improves upon Hastebin through the following methods:
@@ -124,14 +165,17 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ButtonExternal href="https://bin.birdflop.com/" big>
+            <ButtonAnchor href="https://bin.birdflop.com/" size="lg">
               Try it
-            </ButtonExternal>
+            </ButtonAnchor>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="BirdTickets is a Discord ticket bot which provides premium features without a premium cost.">
+        <Card color="darkgray">
+          <CardHeader>
             BirdTickets
+            <span q:slot='subheader' class="text-xs text-gray-300">
+              BirdTickets is a Discord ticket bot which provides premium features without a premium cost.
+            </span>
           </CardHeader>
           <ul class="list-disc ml-5 space-y-2">
             <li>
@@ -160,12 +204,12 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ButtonExternal href="https://github.com/birdflop/botflop" big>
+            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               Learn More
-            </ButtonExternal>
-            <ButtonExternal href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonAnchor>
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
               Invite
-            </ButtonExternal>
+            </ButtonAnchor>
           </div>
         </Card>
       </div>

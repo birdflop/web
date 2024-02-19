@@ -2,22 +2,11 @@
 import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
-import { inlineTranslate, useSpeak, useSpeakContext } from 'qwik-speak';
-import { Button } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
-import OutputField from '~/components/elements/OutputField';
-import SelectInput from '~/components/elements/SelectInput';
-import TextInput from '~/components/elements/TextInput';
-import Toggle from '~/components/elements/Toggle';
-import Pterodactyl from '~/components/icons/Pterodactyl';
-// import Fabric from '~/components/icons/Fabric';
-// import Forge from '~/components/icons/Forge';
-import Paper from '~/components/icons/Paper';
-import Purpur from '~/components/icons/Purpur';
-import Velocity from '~/components/icons/Velocity';
-import Waterfall from '~/components/icons/Waterfall';
+import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
+import type { cardColorClasses } from '@luminescent/ui';
+import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, OutputField, SelectInput, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -54,7 +43,6 @@ export const setCookie = $(function (store: any) {
 export default component$(() => {
   useSpeak({ assets: ['flags'] });
   const t = inlineTranslate();
-  const ctx = useSpeakContext();
 
   const environmentOptions = [
     {
@@ -84,8 +72,8 @@ export default component$(() => {
     {
       color: 'orange',
       environment: 'pterodactyl',
-      tabIcon: <Pterodactyl extraClass="w-5 h-5" />,
-      cardIcon: <Pterodactyl extraClass="w-10 h-10" />,
+      tabIcon: <LogoPterodactyl class="w-5 h-5" />,
+      cardIcon: <LogoPterodactyl class="w-10 h-10" />,
       label: t('flags.environments.pterodactyl.label@@Pterodactyl'),
       description: t('flags.environments.pterodactyl.description@@Web-based server management platform used by most hosts'),
     },
@@ -103,48 +91,48 @@ export default component$(() => {
     {
       color: 'gray',
       software: 'paper',
-      tabIcon: <Paper extraClass="w-5 h-5" />,
-      cardIcon: <Paper extraClass="w-10 h-10" />,
+      tabIcon: <LogoPaper class="w-5 h-5" />,
+      cardIcon: <LogoPaper class="w-10 h-10" />,
       label: t('flags.serverType.paper.label@@Paper'),
       description: t('flags.serverType.paper.description@@Bukkit-based plugin loader'),
     },
     {
       color: 'purple',
       software: 'purpur',
-      tabIcon: <Purpur extraClass="w-5 h-5" />,
-      cardIcon: <Purpur extraClass="w-10 h-10" />,
+      tabIcon: <LogoPurpur class="w-5 h-5" />,
+      cardIcon: <LogoPurpur class="w-10 h-10" />,
       label: t('flags.serverType.purpur.label@@Purpur'),
       description: t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more'),
     },
     // {
     //   color: 'red',
     //   software: 'forge',
-    //   tabIcon: <Forge extraClass="w-5 h-5" />,
-    //   cardIcon: <Forge extraClass="w-10 h-10" />,
+    //   tabIcon: <LogoForge class="w-5 h-5" />,
+    //   cardIcon: <LogoForge class="w-10 h-10" />,
     //   label: t('flags.serverType.forge.label@@Forge'),
     //   description: t('flags.serverType.forge.description@@Mod loader'),
     // },
     // {
     //   color: 'orange',
     //   software: 'fabric',
-    //   tabIcon: <Fabric extraClass="w-5 h-5" />,
-    //   cardIcon: <Fabric extraClass="w-10 h-10" />,
+    //   tabIcon: <LogoFabric class="w-5 h-5" />,
+    //   cardIcon: <LogoFabric class="w-10 h-10" />,
     //   label: t('flags.serverType.fabric.label@@Fabric'),
     //   description: t('flags.serverType.fabric.description@@Better mod loader'),
     // },
     {
       color: 'yellow',
       software: 'velocity',
-      tabIcon: <Velocity extraClass="w-5 h-5" />,
-      cardIcon: <Velocity extraClass="w-10 h-10" />,
+      tabIcon: <LogoVelocity class="w-5 h-5" />,
+      cardIcon: <LogoVelocity class="w-10 h-10" />,
       label: t('flags.serverType.velocity.label@@Velocity'),
       description: t('flags.serverType.velocity.description@@Proxy with plugin loader'),
     },
     {
       color: 'blue',
       software: 'waterfall',
-      tabIcon: <Waterfall extraClass="w-5 h-5" />,
-      cardIcon: <Waterfall extraClass="w-10 h-10" />,
+      tabIcon: <LogoWaterfall class="w-5 h-5" />,
+      cardIcon: <LogoWaterfall class="w-10 h-10" />,
       label: t('flags.serverType.waterfall.label@@Waterfall'),
       description: t('flags.serverType.waterfall.description@@Deprecated proxy'),
     },
@@ -294,7 +282,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
-                <Card color={option.color} onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
@@ -322,7 +310,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
-                <Card color={option.color} onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
@@ -349,7 +337,7 @@ export default component$(() => {
               <h2 class="flex-1 text-gray-300 text-base sm:text-xl">
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </h2>
-              <Button small color="blue" disabled={store.parsed.fileName == ''} onClick$={() => {
+              <Button size='sm' color="blue" disabled={store.parsed.fileName == ''} onClick$={() => {
                 store.step = 4;
                 setCookie(JSON.stringify(store));
               }}>
@@ -376,9 +364,12 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.flags.label@@Flags')}
                   </CardHeader>
-                  <SelectInput id="preset" value={store.parsed.flags} label={t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance', ctx)} onChange$={(event: any) => {
+                  <SelectInput id="preset" value={store.parsed.flags} onChange$={(event: any) => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
                   }} >
+                    <span q:slot='label'>
+                      {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
+                    </span>
                     {Object.keys(flagTypes).map((flag: string) => (
                       <option key={flag} value={flag}>
                         {flagTypes[flag as keyof typeof flagTypes]}
@@ -415,7 +406,7 @@ export default component$(() => {
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
-                  <Card color={option.color} key={index}>
+                  <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                       {option.cardIcon}
                       {option.label}
@@ -424,7 +415,7 @@ export default component$(() => {
                       {option.description}
                     </p>
                     <div class="absolute bottom-5 w-full -mx-8">
-                      <Toggle checked={store.parsed[option.id as keyof typeof store]} nolabel center onClick$={(event: any) => {
+                      <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
                         setCookie(JSON.stringify(store));
                       }} />
@@ -441,7 +432,7 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
+            <OutputField class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
               <h1 class="font-bold text-xl sm:text-3xl mb-2">
                 {t('flags.script.label@@Script')}
               </h1>

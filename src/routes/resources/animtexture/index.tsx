@@ -1,14 +1,11 @@
 import { component$, useOn, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import Toggle from '~/components/elements/Toggle';
-import TextInput from '~/components/elements/TextInput';
-import { Button, ButtonExternal } from '~/components/elements/Button';
-
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animtexture'] });
@@ -80,7 +77,7 @@ export default component$(() => {
           ))}
         </div>
 
-        <TextInput id="textureName" extraClass={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
+        <TextInput id="textureName" class={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
           {t('animtexture.textureName@@Texture Name')}
         </TextInput>
 
@@ -140,12 +137,12 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <ButtonExternal id="pngd" class={{ 'mr-2': true }} href='/'>
+          <ButtonAnchor id="pngd" class={{ 'mr-2': true }} href='/'>
             {t('animtexture.downloadPNG@@Download PNG')}
-          </ButtonExternal>
-          <ButtonExternal id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+          </ButtonAnchor>
+          <ButtonAnchor id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
             {t('animtexture.downloadMCMETA@@Download MCMETA')}
-          </ButtonExternal>
+          </ButtonAnchor>
         </div>
 
       </div>

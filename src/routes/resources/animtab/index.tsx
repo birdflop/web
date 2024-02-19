@@ -1,15 +1,7 @@
 import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import Toggle from '~/components/elements/Toggle';
-import TextInput, { RawTextInput } from '~/components/elements/TextInput';
-import ColorInput from '~/components/elements/ColorInput';
-import SelectInput from '~/components/elements/SelectInput';
-import NumberInput from '~/components/elements/NumberInput';
-import { Button } from '~/components/elements/Button';
-
 import { presetVersion } from '~/components/util/PresetUtils';
-import OutputField from '~/components/elements/OutputField';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 import { AnimationOutput } from '~/components/util/RGBUtils';
 
@@ -17,6 +9,7 @@ import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
+import { Button, ColorInput, NumberInput, OutputField, SelectInput, TextAreaInput, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -154,7 +147,7 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <OutputField value={AnimationOutput(store)}>
+        <OutputField id="anim-tab-output" value={AnimationOutput(store)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
@@ -216,13 +209,14 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" label={t('color.colorPreset@@Color Preset')} onChange$={
+            <SelectInput id="color-preset" onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
             } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              <span q:slot='label'>{t('color.colorPreset@@Color Preset')}</span>
               {Object.keys(presets).map((preset: any) => (
                 <option key={preset} value={preset}>
                   {preset}
@@ -278,6 +272,8 @@ export default component$(() => {
                       store.colors[i] = newColor;
                       setCookie(JSON.stringify(store));
                     }}
+                    class={{ 'w-full': true }}
+                    presetColors={store.colors}
                   >
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
@@ -305,11 +301,14 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <NumberInput id="speed" input value={store.speed} extraClass={{ 'w-full': true }} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
+                <NumberInput id="speed" input value={store.speed} class={{ 'w-full': true }} step={50} min={50} onInput$={(event: any) => { store.speed = Number(event.target!.value); setCookie(JSON.stringify(store)); }} onIncrement$={() => { store.speed = Number(store.speed) + 50; setCookie(JSON.stringify(store)); }} onDecrement$={() => { store.speed = Number(store.speed) - 50; setCookie(JSON.stringify(store)); }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 
-                <SelectInput id="type" label={t('animtab.outputType@@Output Type')} value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                <SelectInput id="type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <span q:slot="label">
+                    {t('animtab.outputType@@Output Type')}
+                  </span>
                   {types.map((type: any) => (
                     <option key={type.name} value={type.value}>
                       {type.name}
@@ -317,7 +316,7 @@ export default component$(() => {
                   ))}
                 </SelectInput>
 
-                <SelectInput id="format" label={t('color.colorFormat@@Color Format')} value={store.customFormat ? 'custom' : store.format} onChange$={
+                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -329,6 +328,9 @@ export default component$(() => {
                     setCookie(JSON.stringify(store));
                   }
                 }>
+                  <span q:slot="label">
+                    {t('color.colorFormat@@Color Format')}
+                  </span>
                   {formats.map((format: any) => (
                     <option key={format} value={format}>
                       {format
@@ -352,7 +354,7 @@ export default component$(() => {
 
               {
                 store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }} class="w-full text-lg bg-gray-700 text-white focus:bg-gray-600 rounded-lg p-2 mt-2 mb-4">
+                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }}>
                     {t('color.customFormat@@Custom Format')}
                   </TextInput>
                   <div class="pb-4">
@@ -369,9 +371,9 @@ export default component$(() => {
                 </>
               }
 
-              <TextInput big id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextAreaInput id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.outputFormat@@Output Format')}
-              </TextInput>
+              </TextAreaInput>
 
               <label>
                 {t('color.presets@@Presets')}
@@ -391,7 +393,7 @@ export default component$(() => {
                 }}>
                   {t('color.export@@Export')}
                 </Button>
-                <RawTextInput name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={(event: any) => {
+                <TextInputRaw name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={(event: any) => {
                   let json: any;
                   try {
                     json = JSON.parse(event.target!.value);

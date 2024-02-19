@@ -1,11 +1,8 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import OutputField from '~/components/elements/OutputField';
-import SelectInput from '~/components/elements/SelectInput';
-import TextInput from '~/components/elements/TextInput';
-
 import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { OutputField, SelectInput, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['colorstrip'] });
@@ -26,11 +23,12 @@ export default component$(() => {
           {t('colorstrip.subtitle@@Strips all color / format codes from text')}
         </h2>
 
-        <TextInput extraClass={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
+        <TextInput class={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <SelectInput id="gradienttype" label={t('colorstrip.colorCodeType@@Color Code Type')} onChange$={(event: any) => { store.type = event.target!.value; }}>
+        <SelectInput id="gradienttype" onChange$={(event: any) => { store.type = event.target!.value; }}>
+          <span q:slot='label'>{t('colorstrip.colorCodeType@@Color Code Type')}</span>
           <option value={0}>{'&#rrggbb'}</option>
           <option value={1}>{'<&#rrggbb>'}</option>
           <option value={2}>{'&x&r&r&g&g&b&b'}</option>
@@ -38,7 +36,7 @@ export default component$(() => {
         </SelectInput>
 
         <div class="mt-3">
-          <OutputField value={
+          <OutputField id="colorstrip-output" value={
             store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
               store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
                 store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :

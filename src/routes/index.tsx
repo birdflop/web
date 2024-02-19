@@ -2,12 +2,11 @@ import { component$, $, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
-import Card, { CardHeader } from '~/components/elements/Card';
 import Chart from '~/components/elements/Chart';
+import { Anchor, Button, ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
-import { ButtonExternal, ButtonSPA } from '~/components/elements/Button';
 
 export default component$(() => {
 
@@ -44,17 +43,19 @@ export default component$(() => {
           </h2>
           <div class="flex flex-col gap-2 mt-8 fade-in animation-delay-400">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <ButtonExternal href="#plans" color="blue" massive>
+              <ButtonAnchor href="#plans" color="blue" size="xl">
                 <ServerOutline width="30" class="text-3xl" />Hosting
-              </ButtonExternal>
-              <ButtonSPA href="/resources" color="purple" massive>
-                <CubeOutline width="30" class="text-3xl" /> Resources
-              </ButtonSPA>
+              </ButtonAnchor>
+              <Link href="/resources">
+                <Button color="purple" size="xl">
+                  <CubeOutline width="30" class="text-3xl" /> Resources
+                </Button>
+              </Link>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <ButtonExternal href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" color="pink" massive>
+              <ButtonAnchor href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" color="pink" size="xl">
                 <CashOutline width="30" class="text-3xl" /> Donate Today
-              </ButtonExternal>
+              </ButtonAnchor>
             </div>
           </div>
         </div>
@@ -82,7 +83,7 @@ export default component$(() => {
             Where do my payments go?
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
-            <div class="">
+            <div>
               <Chart />
               <p class="text-gray-400 text-center py-2 text-xs sm:text-base">
                 Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2023. Some numbers may be approximations.
@@ -100,19 +101,23 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800" id="plans">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
       <div class="justify-center flex relative align-center max-w-5xl px-10">
         <div class="flex flex-col gap-4">
+          <Anchor id="plans" />
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
-            <Card darker>
+            <Card color="darkergray">
               <p>
-              Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
+                Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
               </p>
-              <CardHeader subheader="Capped at $2/GB RAM">
+              <CardHeader>
                 EU Premium
+                <span q:slot='subheader'>
+                  Capped at $2/GB RAM
+                </span>
               </CardHeader>
               <ul class="list-disc ml-5 space-y-2">
                 <li>
@@ -153,17 +158,20 @@ export default component$(() => {
                 </li>
               </ul>
               <div class="pt-4">
-                <ButtonExternal href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
+                <ButtonAnchor href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonExternal>
+                </ButtonAnchor>
               </div>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <p>
-              Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
+                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
               </p>
-              <CardHeader subheader="Capped at $3/GB RAM">
+              <CardHeader>
                 US Premium
+                <span q:slot='subheader'>
+                  Capped at $3/GB RAM
+                </span>
               </CardHeader>
               <ul class="list-disc ml-5 space-y-2">
                 <li>
@@ -204,9 +212,9 @@ export default component$(() => {
                 </li>
               </ul>
               <div class="pt-4">
-                <ButtonExternal href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
+                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonExternal>
+                </ButtonAnchor>
               </div>
             </Card>
           </div>
@@ -220,7 +228,7 @@ export default component$(() => {
             Features
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <RocketOutline width="36" /> Sheer Performance
               </CardHeader>
@@ -228,7 +236,7 @@ export default component$(() => {
                 We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <ColorPaletteOutline width="36" /> Fully Configurable
               </CardHeader>
@@ -236,7 +244,7 @@ export default component$(() => {
                 You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <EyeOutline width="36" /> Transparent
               </CardHeader>
@@ -244,7 +252,7 @@ export default component$(() => {
                 We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <GlobeOutline width="36" /> Price Matching
               </CardHeader>
@@ -252,7 +260,7 @@ export default component$(() => {
                 We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <HeartOutline width="36" /> Instant Support
               </CardHeader>
@@ -260,7 +268,7 @@ export default component$(() => {
                 You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <CashOutline width="36" /> Nonprofit
               </CardHeader>
@@ -291,7 +299,7 @@ export default component$(() => {
             Testimonials
           </h2>
           <div class="grid md:grid-cols-3 gap-4">
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <PersonOutline width="36" /> Mikkel Hansen
               </CardHeader>
@@ -299,7 +307,7 @@ export default component$(() => {
                 I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <PersonOutline width="36" /> Wizzy SMP
               </CardHeader>
@@ -307,7 +315,7 @@ export default component$(() => {
                 Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <PersonOutline width="36" /> Beau
               </CardHeader>
@@ -315,7 +323,7 @@ export default component$(() => {
                 I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <PersonOutline width="36" /> Jmaster
               </CardHeader>
@@ -323,7 +331,7 @@ export default component$(() => {
                 Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
               </p>
             </Card>
-            <Card darker>
+            <Card color="darkergray">
               <CardHeader>
                 <PersonOutline width="36" /> Oliver Flynn
               </CardHeader>
@@ -331,7 +339,7 @@ export default component$(() => {
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
-            <Card darker href="https://www.trustpilot.com/review/birdflop.com">
+            <Card color="darkergray" hoverable href="https://www.trustpilot.com/review/birdflop.com">
               <CardHeader>
                 <StarOutline width="36" /> Trustpilot
               </CardHeader>

@@ -1,7 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ButtonExternal } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
+import { ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
 import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
@@ -12,27 +11,30 @@ export default component$(() => {
         Node Stats
       </h1>
       <div class="flex gap-3 justify-center">
-        <ButtonExternal href="https://status.birdflop.com/" big>
+        <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
           Overview
-        </ButtonExternal>
-        <ButtonExternal href="https://netdata.birdflop.com/panel" big>
+        </ButtonAnchor>
+        <ButtonAnchor href="https://netdata.birdflop.com/panel" size="lg" color="blue">
           Web Services
-        </ButtonExternal>
+        </ButtonAnchor>
       </div>
       <div class="flex gap-3 justify-center">
-        <Card href="https://netdata.birdflop.com/crabwings" color="red">
-          <CardHeader subheader="US">
+        <Card href="https://netdata.birdflop.com/crabwings" color="red" hoverable blobs>
+          <CardHeader>
             Crabwings
+            <span q:slot='subheader' class="text-xs text-gray-300">US</span>
           </CardHeader>
         </Card>
-        <Card href="http://impeyes.birdflop.com:19999/" color="orange">
-          <CardHeader subheader="EU">
+        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hoverable blobs>
+          <CardHeader>
             Impeyes
+            <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
           </CardHeader>
         </Card>
-        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow">
-          <CardHeader subheader="EU">
+        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hoverable blobs>
+          <CardHeader>
             Jellyfishjaws
+            <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
           </CardHeader>
         </Card>
       </div>

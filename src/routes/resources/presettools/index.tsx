@@ -1,13 +1,12 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { loadPreset } from '~/components/util/PresetUtils';
-import TextInput from '~/components/elements/TextInput';
-import OutputField from '~/components/elements/OutputField';
 
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import { OutputField, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['presettools'] });
@@ -33,7 +32,7 @@ export default component$(() => {
         <div class="mt-3">
           <OutputField id="Output" value={
             JSON.stringify(loadPreset(store.preset), null, 2)
-          } extraClass={{ 'h-96': true }}>
+          } class={{ 'h-96': true }}>
             {t('presettools.output@@Output')}
           </OutputField>
         </div>

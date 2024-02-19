@@ -3,8 +3,8 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
-import { Button } from '~/components/elements/Button';
 import Footer from '~/components/Footer';
+import { Button } from '@luminescent/ui';
 
 export default component$(() => {
   const store = useStore({
