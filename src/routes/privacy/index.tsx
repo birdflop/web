@@ -7,7 +7,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center  min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 space-y-3 min-h-[60px]">
         <h1 class="text-4xl font-bold">BIRDFLOP PRIVACY POLICY</h1>
-        <p>Last Revised: January 26, 2024</p>
+        <p>Last Revised: February 20, 2024</p>
         <p>Our privacy policy applies to information we collect when you use or access our website, application, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective immediately after we post the revised privacy policy (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.</p>
         <h1 class="text-2xl font-bold">Collection of Information</h1>
         <h2 class="text-xl font-bold">Information You Provide to Us</h2>

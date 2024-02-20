@@ -7,7 +7,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 space-y-3 min-h-[60px]">
         <p class="font-bold text-4xl">BIRDFLOP TERMS OF SERVICE</p>
-        <p>Last Updated: January 26, 2024</p>
+        <p>Last Updated: February 20, 2024</p>
         <p>These terms of service ("Terms") apply to your access and use of Birdflop (the "Service"). Please read them carefully.</p>
         <h1 class="font-bold text-2xl">Accepting these Terms</h1>
         <p class="pl-5">If you access or use the Service, it means you agree to be bound by all of the terms below. So, before you use the Service, please read all of the terms. If you don't agree to all of the terms below, please do not use the Service. Also, if a term does not make sense to you, please let us know by e-mailing <a href="mailto:terms@birdflop.com">terms@birdflop.com</a></p>
