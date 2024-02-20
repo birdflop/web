@@ -351,7 +351,7 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.flags.label@@Flags')}
                   </CardHeader>
-                  <SelectInput id="preset" onChange$={(event: any) => {
+                  <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
                   }} values={Object.keys(flagTypes).map((flag: string) => ({
                     name: flagTypes[flag as keyof typeof flagTypes],
