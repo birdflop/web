@@ -187,8 +187,8 @@ export default component$(() => {
             </SelectInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
-                if (event.target!.value > store.text.length) event.target!.value = store.text.length;
-                if (event.target!.value < 2) event.target!.value = 2;
+                if (event.target!.value < 2) return;
+                if (event.target!.value > store.text.length) return event.target!.value = store.text.length;
                 const newColors = [];
                 for (let i = 0; i < event.target!.value; i++) {
                   if (store.colors[i]) newColors.push(store.colors[i]);
@@ -198,16 +198,12 @@ export default component$(() => {
                 setCookie(JSON.stringify(store));
               }}
               onIncrement$={() => {
-                if (store.colors.length < store.text.length) {
-                  store.colors.push(getRandomColor());
-                  setCookie(JSON.stringify(store));
-                }
+                store.colors.push(getRandomColor());
+                setCookie(JSON.stringify(store));
               }}
               onDecrement$={() => {
-                if (store.colors.length > 2) {
-                  store.colors.pop();
-                  setCookie(JSON.stringify(store));
-                }
+                store.colors.pop();
+                setCookie(JSON.stringify(store));
               }}
             >
               {t('color.colorAmount@@Color Amount')}
