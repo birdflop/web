@@ -27,7 +27,7 @@ export default component$(() => {
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold fade-in animation-delay-200">
-            Birdflop Hosting
+            Birdflop
           </h1>
           <h2 class="text-gray-300 text-lg sm:text-2xl fade-in animation-delay-300">
             The only 501(c)(3) nonprofit server host dedicated to <span
