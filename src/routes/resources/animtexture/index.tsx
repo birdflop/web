@@ -152,15 +152,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Animated Textures',
+  title: 'Minecraft Animated Textures Creator by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF',
+      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF',
+      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

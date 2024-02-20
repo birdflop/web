@@ -152,7 +152,7 @@ export default component$(() => {
             {t('color.output@@Output')}
           </h1>
           <span class="text-sm sm:text-base pb-4">
-            {t('color.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
           </span>
         </OutputField>
 

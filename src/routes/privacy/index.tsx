@@ -61,15 +61,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Terms of use',
+  title: 'Birdflop: Privacy Policy',
   meta: [
     {
       name: 'description',
-      content: 'View our terms of use',
+      content: 'View our privacy policy',
     },
     {
       name: 'og:description',
-      content: 'View our terms of use',
+      content: 'View our privacy policy',
     },
     {
       name: 'og:image',

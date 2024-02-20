@@ -107,7 +107,7 @@ export default component$(() => {
             {t('color.output@@Output')}
           </h1>
           <span class="text-sm sm:text-base pb-4">
-            {t('color.outputSubtitle@@This is what you put in the chat. Click on it to copy.')}
+            {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
           </span>
         </OutputField>
 
@@ -381,19 +381,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Hex Gradients',
+  title: 'RGB Birdflop - Minecraft RGB Gradient Creator',
   meta: [
     {
       name: 'description',
-      content: 'Hex color gradient creator',
+      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Hex color gradient creator',
+      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
-      content: '/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

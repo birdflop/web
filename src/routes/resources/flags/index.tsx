@@ -448,15 +448,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Flags generator',
+  title: 'Minecraft Flags Generator by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

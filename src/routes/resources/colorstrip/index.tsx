@@ -51,15 +51,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Color Code Stripper',
+  title: 'Minecraft Color Code Stripper by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

@@ -43,8 +43,16 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Node Stats',
+  title: 'Birdflop Node Stats',
   meta: [
+    {
+      name: 'description',
+      content: 'Birdflop Node Stats',
+    },
+    {
+      name: 'og:description',
+      content: 'Birdflop Node Stats',
+    },
     {
       name: 'og:image',
       content: '/branding/icon.png',
