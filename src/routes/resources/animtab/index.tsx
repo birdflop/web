@@ -1,5 +1,5 @@
 import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { presetVersion } from '~/components/util/PresetUtils';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
@@ -8,7 +8,7 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookie } from '~/components/util/SharedUtils';
+import { getCookies } from '~/components/util/SharedUtils';
 import { Button, ColorInput, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
@@ -53,28 +53,42 @@ export const setCookie = $(function (store: any) {
   });
 });
 
+const defaults = {
+  colors: presets.birdflop,
+  name: 'logo',
+  text: 'birdflop',
+  type: 1,
+  speed: 50,
+  format: '&#$1$2$3$4$5$6$f$c',
+  formatchar: '&',
+  customFormat: false,
+  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
+  bold: false,
+  italic: false,
+  underline: false,
+  strikethrough: false,
+  length: 1,
+};
+
+export const useCookies = routeLoader$(async ({ cookie }) => {
+  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+});
+
 export default component$(() => {
   useSpeak({ assets: ['animpreview', 'color'] });
   const t = inlineTranslate();
 
-  const store: any = useStore({
-    colors: presets.birdflop,
-    name: 'logo',
-    text: 'birdflop',
-    type: 1,
-    speed: 50,
-    format: '&#$1$2$3$4$5$6$f$c',
-    formatchar: '&',
-    customFormat: false,
-    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    alerts: [],
-    frames: [],
+  const cookies = useCookies().value;
+  const store = useStore({
+    ...defaults,
+    ...cookies,
+    alerts: [] as {
+      class: string,
+      translate: string,
+      text: string,
+    }[],
+    frames: [] as (string | null)[][],
     frame: 0,
-    length: 1,
   }, { deep: true });
 
   const handleSwap = $(
@@ -95,14 +109,6 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    getCookie(JSON.stringify(store)).then((userstore: any) => {
-      const parsedUserStore = JSON.parse(userstore);
-      for (const key of Object.keys(parsedUserStore)) {
-        const value = parsedUserStore[key];
-        store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      }
-    });
-
     let speed = store.speed;
 
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
@@ -122,7 +128,7 @@ export default component$(() => {
     Object.keys(store).forEach((key: any) => {
       if (key == 'frames' || key == 'frame' || key == 'alerts') return;
       if (key == 'colors') track(() => store.colors.length);
-      else track(() => store[key]);
+      else track(() => store[key as keyof typeof store]);
     });
     const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
     if (store.type == 1) {
@@ -221,7 +227,7 @@ export default component$(() => {
             ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
             </SelectInput>
-            <NumberInput input min={2} value={store.colors.length} id="colorsinput"
+            <NumberInput input min={2} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value < 2) event.target!.value = 2;
                 const newColors = [];
@@ -245,7 +251,7 @@ export default component$(() => {
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length}
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
               onIncrement$={() => {
                 store.length++;
                 setCookie(JSON.stringify(store));
@@ -397,8 +403,9 @@ export default component$(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach((key: any) => {
-                    store[key] = json[key];
+                  Object.keys(json).forEach((key: any ) => {
+                    if ((store)[key as keyof typeof store] === undefined) return;
+                    (store as any)[key] = json[key];
                   });
                   const alert = {
                     class: 'text-green-500',

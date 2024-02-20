@@ -36,7 +36,6 @@ export const setCookie = $(function (store: any) {
     } else {
       document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
     }
-    console.log(json);
   });
 });
 
