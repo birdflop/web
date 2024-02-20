@@ -36,11 +36,6 @@ html {
   background-color: rgb(17 24 39);
 }
 
-main {
-  min-height: calc(100lvh - 56px);
-  margin-top: 56px;
-}
-
 .font-mc {
   font-family: MinecraftRegular, MinecraftRus;
 }
@@ -81,7 +76,7 @@ nav {
 }
 
 /* MAIN TRANSITION */
-#main {
+body {
   view-transition-name: root;
 }
 
