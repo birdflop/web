@@ -243,10 +243,8 @@ export default component$(() => {
                 setCookie(JSON.stringify(store));
               }}
               onDecrement$={() => {
-                if (store.colors.length > 2) {
-                  store.colors.pop();
-                  setCookie(JSON.stringify(store));
-                }
+                store.colors.pop();
+                setCookie(JSON.stringify(store));
               }}
             >
               {t('color.colorAmount@@Color Amount')}
@@ -403,7 +401,7 @@ export default component$(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach((key: any ) => {
+                  Object.keys(json).forEach((key: any) => {
                     if ((store)[key as keyof typeof store] === undefined) return;
                     (store as any)[key] = json[key];
                   });
