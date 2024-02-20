@@ -14,7 +14,8 @@ export const getCookies = $(function (cookie: Cookie, names: string[]) {
       : value === 'false' ? false
         : key == 'colors' ? value.split(',')
           : !isNaN(Number(value)) ? Number(value)
-            : value;
+            : value.startsWith('{') ? JSON.parse(value)
+              : value;
   }
   return parsedCookies;
 });

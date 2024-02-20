@@ -1,9 +1,9 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, $ } from '@builder.io/qwik';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookie } from '~/components/util/SharedUtils';
+import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import type { cardColorClasses } from '@luminescent/ui';
 import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
@@ -37,6 +37,27 @@ export const setCookie = $(function (store: any) {
       document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
     }
   });
+});
+
+const defaults = {
+  step: 1,
+  parsed: {
+    operatingSystem: '',
+    serverType: '',
+    gui: false,
+    variables: false,
+    autoRestart: false,
+    extraFlags: [],
+    fileName: '',
+    flags: 'aikars',
+    withResult: true,
+    withFlags: false,
+    memory: 0,
+  },
+};
+
+export const useCookies = routeLoader$(async ({ cookie }) => {
+  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
 });
 
 export default component$(() => {
@@ -158,41 +179,11 @@ export default component$(() => {
     },
   ];
 
+  const cookies = useCookies().value;
   const store: any = useStore({
-    step: 1,
-    parsed: {
-      operatingSystem: '',
-      serverType: '',
-      gui: false,
-      variables: false,
-      autoRestart: false,
-      extraFlags: [],
-      fileName: '',
-      flags: 'aikars',
-      withResult: true,
-      withFlags: false,
-      memory: 0,
-    },
+    ...defaults,
+    ...cookies,
   }, { deep: true });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    if (typeof parsedUserStore.parsed === 'string') {
-      parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
-    }
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      if (key === 'parsed') {
-        for (const key2 of Object.keys(parsedUserStore.parsed)) {
-          const value2 = parsedUserStore.parsed[key2];
-          store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
-        }
-      }
-    }
-  });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100svh)] pt-[72px]">
@@ -364,7 +355,7 @@ export default component$(() => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
                   }} values={Object.keys(flagTypes).map((flag: string) => ({
                     name: flagTypes[flag as keyof typeof flagTypes],
-                    value: flag
+                    value: flag,
                   }))} value={store.parsed.flags}>
                     {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
                   </SelectInput>
