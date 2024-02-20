@@ -5,7 +5,7 @@ import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { TextAreaInput } from '@luminescent/ui';
+import { TextArea } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });
@@ -69,9 +69,9 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <TextAreaInput id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+        <TextArea id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
           {t('animpreview.yamlInput@@YAML Input')}
-        </TextAreaInput>
+        </TextArea>
 
         <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {

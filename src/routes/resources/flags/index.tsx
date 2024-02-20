@@ -6,7 +6,7 @@ import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, OutputField, SelectInput, TextInput, Toggle } from '@luminescent/ui';
+import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -282,7 +282,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
@@ -310,7 +310,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
@@ -364,17 +364,13 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.flags.label@@Flags')}
                   </CardHeader>
-                  <SelectInput id="preset" value={store.parsed.flags} onChange$={(event: any) => {
+                  <SelectInput id="preset" onChange$={(event: any) => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                  }} >
-                    <span q:slot='label'>
-                      {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
-                    </span>
-                    {Object.keys(flagTypes).map((flag: string) => (
-                      <option key={flag} value={flag}>
-                        {flagTypes[flag as keyof typeof flagTypes]}
-                      </option>
-                    ))}
+                  }} values={Object.keys(flagTypes).map((flag: string) => ({
+                    name: flagTypes[flag as keyof typeof flagTypes],
+                    value: flag
+                  }))} value={store.parsed.flags}>
+                    {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
                   </SelectInput>
                 </div>
               </div>
@@ -406,7 +402,7 @@ export default component$(() => {
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
-                  <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs key={index}>
+                  <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                       {option.cardIcon}
                       {option.label}
@@ -432,14 +428,14 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
+            <TextArea output class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
               <h1 class="font-bold text-xl sm:text-3xl mb-2">
                 {t('flags.script.label@@Script')}
               </h1>
               <span class="text-sm sm:text-base pb-4">
                 {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
               </span>
-            </OutputField>
+            </TextArea>
           </div>
         }
       </div>

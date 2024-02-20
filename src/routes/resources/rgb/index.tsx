@@ -9,7 +9,7 @@ import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
-import { Button, ColorInput, NumberInput, OutputField, SelectInput, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { Button, ColorInput, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -102,14 +102,14 @@ export default component$(() => {
         </h2>
 
         {/* charlimit={256} */}
-        <OutputField id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
           <span class="text-sm sm:text-base pb-4">
             {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
           </span>
-        </OutputField>
+        </TextArea>
 
         <h1 class={{
           'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
@@ -175,16 +175,11 @@ export default component$(() => {
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
-            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
-              <span q:slot='label'>{t('color.colorPreset@@Color Preset')}</span>
-              {Object.keys(presets).map((preset: any) => (
-                <option key={preset} value={preset}>
-                  {preset}
-                </option>
-              ))}
-              <option value={'custom'}>
-                {t('color.custom@@Custom')}
-              </option>
+            } values={[
+              ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
+              { name: t('color.custom@@Custom'), value: 'custom' },
+            ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {t('color.colorPreset@@Color Preset')}
             </SelectInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
               onChange$={(event: any) => {
@@ -259,23 +254,24 @@ export default component$(() => {
                     }
                     setCookie(JSON.stringify(store));
                   }
-                }>
-                  <span q:slot='label'>{t('color.colorFormat@@Color Format')}</span>
-                  {formats.map((format: any) => (
-                    <option key={format} value={format}>
-                      {format
-                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
-                        .replace('$c', '')}
-                    </option>
-                  ))}
-                  <option value={'custom'}>
-                    {store.customFormat ? store.format
+                } values={[
+                  ...formats.map(format => ({
+                    name: format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', ''),
+                    value: format,
+                  })),
+                  {
+                    name: store.customFormat ? store.format
                       .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
                       .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
                       .replace('$c', '')
-                      : t('color.custom@@Custom')}
-                  </option>
+                      : t('color.custom@@Custom'),
+                    value: 'custom',
+                  },
+                ]}>
+                  {t('color.colorFormat@@Color Format')}
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('color.formatCharacter@@Format Character')}

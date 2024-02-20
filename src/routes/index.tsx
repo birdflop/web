@@ -339,7 +339,7 @@ export default component$(() => {
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
-            <Card color="darkergray" hoverable href="https://www.trustpilot.com/review/birdflop.com">
+            <Card color="darkergray" hover="clickable" href="https://www.trustpilot.com/review/birdflop.com">
               <CardHeader>
                 <StarOutline width="36" /> Trustpilot
               </CardHeader>
