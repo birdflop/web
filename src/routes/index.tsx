@@ -339,7 +339,7 @@ export default component$(() => {
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
-            <Card color="darkergray" hoverable href="https://www.trustpilot.com/review/birdflop.com">
+            <Card color="darkergray" hover="clickable" href="https://www.trustpilot.com/review/birdflop.com">
               <CardHeader>
                 <StarOutline width="36" /> Trustpilot
               </CardHeader>
@@ -368,15 +368,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Minecraft Hosting & Resources',
+  title: 'Birdflop - Minecraft Hosting & Resources',
   meta: [
     {
       name: 'description',
-      content: 'Minecraft Hosting & Resources',
+      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.88/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Minecraft Hosting & Resources',
+      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.88/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

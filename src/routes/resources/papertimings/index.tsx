@@ -16,15 +16,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Analyze Timings',
+  title: 'Automatic Minecraft Timings Analyzer by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
+      content: 'Analyze your Paper Timings to get optimization recommendations. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
+      content: 'Analyze your Paper Timings to get optimization recommendations. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

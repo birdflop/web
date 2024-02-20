@@ -1,7 +1,7 @@
 {
     "gradient": {
-        "title": "Hex Gradient",
-        "subtitle": "Hex color gradient creator",
+        "title": "RGBirdflop",
+        "subtitle": "Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "prefix": "Prefix (Usually used for commands)",
         "prefixPlaceholder": "example: '/nick '"
     }

@@ -6,7 +6,7 @@ import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { OutputField, TextInput } from '@luminescent/ui';
+import { TextArea, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['presettools'] });
@@ -30,11 +30,11 @@ export default component$(() => {
         </TextInput>
 
         <div class="mt-3">
-          <OutputField id="Output" value={
+          <TextArea output id="Output" value={
             JSON.stringify(loadPreset(store.preset), null, 2)
           } class={{ 'h-96': true }}>
             {t('presettools.output@@Output')}
-          </OutputField>
+          </TextArea>
         </div>
       </div>
     </section>

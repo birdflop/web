@@ -2,7 +2,7 @@ import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { OutputField, SelectInput, TextInput } from '@luminescent/ui';
+import { SelectInput, TextArea, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['colorstrip'] });
@@ -27,23 +27,25 @@ export default component$(() => {
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <SelectInput id="gradienttype" onChange$={(event: any) => { store.type = event.target!.value; }}>
-          <span q:slot='label'>{t('colorstrip.colorCodeType@@Color Code Type')}</span>
-          <option value={0}>{'&#rrggbb'}</option>
-          <option value={1}>{'<&#rrggbb>'}</option>
-          <option value={2}>{'&x&r&r&g&g&b&b'}</option>
-          <option value={3}>{'§x§r§r§g§g§b§b'}</option>
+        <SelectInput id="gradienttype" onChange$={(event: any) => { store.type = event.target!.value; }}
+          values={[
+            { value: 0, name: '&#rrggbb' },
+            { value: 1, name: '<#rrggbb>' },
+            { value: 2, name: '&x&r&r&g&g&b&b' },
+            { value: 3, name: '§x§r§r§g§g§b§b' },
+          ]}>
+          {t('colorstrip.colorCodeType@@Color Code Type')}
         </SelectInput>
 
         <div class="mt-3">
-          <OutputField id="colorstrip-output" value={
+          <TextArea output id="colorstrip-output" value={
             store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
               store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
                 store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
                   store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
           }>
             {t('colorstrip.output@@Output')}
-          </OutputField>
+          </TextArea>
         </div>
       </div>
     </section>
@@ -51,15 +53,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Color Code Stripper',
+  title: 'Minecraft Color Code Stripper by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

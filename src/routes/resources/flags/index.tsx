@@ -6,7 +6,7 @@ import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookie } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, OutputField, SelectInput, TextInput, Toggle } from '@luminescent/ui';
+import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -279,7 +279,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
@@ -307,7 +307,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
@@ -361,17 +361,13 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.flags.label@@Flags')}
                   </CardHeader>
-                  <SelectInput id="preset" value={store.parsed.flags} onChange$={(event: any) => {
+                  <SelectInput id="preset" onChange$={(event: any) => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                  }} >
-                    <span q:slot='label'>
-                      {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
-                    </span>
-                    {Object.keys(flagTypes).map((flag: string) => (
-                      <option key={flag} value={flag}>
-                        {flagTypes[flag as keyof typeof flagTypes]}
-                      </option>
-                    ))}
+                  }} values={Object.keys(flagTypes).map((flag: string) => ({
+                    name: flagTypes[flag as keyof typeof flagTypes],
+                    value: flag
+                  }))} value={store.parsed.flags}>
+                    {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
                   </SelectInput>
                 </div>
               </div>
@@ -429,14 +425,14 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
+            <TextArea output class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
               <h1 class="font-bold text-xl sm:text-3xl mb-2">
                 {t('flags.script.label@@Script')}
               </h1>
               <span class="text-sm sm:text-base pb-4">
                 {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
               </span>
-            </OutputField>
+            </TextArea>
           </div>
         }
       </div>
@@ -445,15 +441,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Flags generator',
+  title: 'Minecraft Flags Generator by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

@@ -5,7 +5,7 @@ import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { TextAreaInput } from '@luminescent/ui';
+import { TextArea } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });
@@ -69,9 +69,9 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <TextAreaInput id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+        <TextArea id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
           {t('animpreview.yamlInput@@YAML Input')}
-        </TextAreaInput>
+        </TextArea>
 
         <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {
@@ -103,15 +103,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'TAB Animation Previewer',
+  title: 'TAB Animation Previewer by Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Preview TAB Animations without the need to put them ingame',
+      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them ingame',
+      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

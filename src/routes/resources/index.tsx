@@ -19,15 +19,15 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/gradients" color="red" blobs hoverable>
+            <Card href="/resources/rgb" color="red" blobs hover="clickable">
               <CardHeader>
-                Hex Gradient
+                RGBirdflop
                 <span q:slot='subheader' class="text-xs text-gray-300">
-                  Hex color gradient creator
+                  RGB gradient creator
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animtab" color="blue" blobs hoverable>
+            <Card href="/resources/animtab" color="blue" blobs hover="clickable">
               <CardHeader>
                 Animated TAB
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -35,7 +35,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animpreview" color="green" blobs hoverable>
+            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
               <CardHeader>
                 TAB Animation Previewer
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -53,7 +53,7 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/sparkprofile" color="yellow" blobs hoverable>
+            <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
               <CardHeader>
                 Spark Profile
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -61,7 +61,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/papertimings" color="pink" blobs hoverable>
+            <Card href="/resources/papertimings" color="pink" blobs hover="clickable">
               <CardHeader>
                 Paper Timings
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -69,7 +69,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/flags" color="orange" blobs hoverable>
+            <Card href="/resources/flags" color="orange" blobs hover="clickable">
               <CardHeader>
                 Flags
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -87,7 +87,7 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/animtexture" color="purple" blobs hoverable>
+            <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
               <CardHeader>
                 Animated Textures
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -95,7 +95,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/colorstrip" color="gray" blobs hoverable>
+            <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
               <CardHeader>
                 Color Code Stripper
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -103,7 +103,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/presettools" color="red" blobs hoverable>
+            <Card href="/resources/presettools" color="red" blobs hover="clickable">
               <CardHeader>
                 Preset Tools
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -120,6 +120,9 @@ export default component$(() => {
               Botflop is a Discord bot that watches chat to chime in and provide suggestions.
             </span>
           </CardHeader>
+          <div class="text-lg">
+            Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
+          </div>
           <div class="flex gap-2">
             <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               <LogoGithub width="24" />
@@ -138,32 +141,32 @@ export default component$(() => {
               Binflop is Birdflop's spinoff of the original hastebin.com.
             </span>
           </CardHeader>
-          <h2>
+          <div class="text-lg">
             Binflop improves upon Hastebin through the following methods:
-          </h2>
-          <ul class="list-disc ml-5 space-y-2">
-            <li>
-              Ctrl + A, Ctrl + C no longer copies button text nor line numbers.
-            </li>
-            <li>
-              Line numbering is correct across all browsers, all zoom settings, and all uploaded files.
-            </li>
-            <li>
-              Colors are more vibrant and visible.
-            </li>
-            <li>
-              Functions box no longer conceals part of the first line.
-            </li>
-            <li>
-              Added a "Hide IPs" button to hide all public IPs.
-            </li>
-            <li>
-              Links retain their content permanently.
-            </li>
-            <li>
-              Expanded REST API.
-            </li>
-          </ul>
+            <ul class="list-disc ml-5 space-y-1">
+              <li>
+                Ctrl + A, Ctrl + C no longer copies button text nor line numbers.
+              </li>
+              <li>
+                Line numbering is correct across all browsers, all zoom settings, and all uploaded files.
+              </li>
+              <li>
+                Colors are more vibrant and visible.
+              </li>
+              <li>
+                Functions box no longer conceals part of the first line.
+              </li>
+              <li>
+                Added a "Hide IPs" button to hide all public IPs.
+              </li>
+              <li>
+                Links retain their content permanently.
+              </li>
+              <li>
+                Expanded REST API.
+              </li>
+            </ul>
+          </div>
           <div class="flex gap-2">
             <ButtonAnchor href="https://bin.birdflop.com/" size="lg">
               Try it
@@ -177,7 +180,7 @@ export default component$(() => {
               BirdTickets is a Discord ticket bot which provides premium features without a premium cost.
             </span>
           </CardHeader>
-          <ul class="list-disc ml-5 space-y-2">
+          <ul class="list-disc ml-5 space-y-1 text-lg">
             <li>
               Create tickets through commands and/or reactions.
             </li>
@@ -218,7 +221,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Resources',
+  title: 'Resources - Free Minecraft Resources by Birdflop',
   meta: [
     {
       name: 'description',

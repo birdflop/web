@@ -19,19 +19,19 @@ export default component$(() => {
         </ButtonAnchor>
       </div>
       <div class="flex gap-3 justify-center">
-        <Card href="https://netdata.birdflop.com/crabwings" color="red" hoverable blobs>
+        <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
           <CardHeader>
             Crabwings
             <span q:slot='subheader' class="text-xs text-gray-300">US</span>
           </CardHeader>
         </Card>
-        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hoverable blobs>
+        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
           <CardHeader>
             Impeyes
             <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
           </CardHeader>
         </Card>
-        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hoverable blobs>
+        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
           <CardHeader>
             Jellyfishjaws
             <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
@@ -43,8 +43,16 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Node Stats',
+  title: 'Birdflop Node Stats',
   meta: [
+    {
+      name: 'description',
+      content: 'Birdflop Node Stats',
+    },
+    {
+      name: 'og:description',
+      content: 'Birdflop Node Stats',
+    },
     {
       name: 'og:image',
       content: '/branding/icon.png',

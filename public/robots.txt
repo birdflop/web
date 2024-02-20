@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /acornmc/
+Disallow: /terms/
+Disallow: https://rgb.birdlfop.com
