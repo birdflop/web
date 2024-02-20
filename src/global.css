@@ -75,27 +75,13 @@ main {
   -webkit-tap-highlight-color: transparent;
 }
 
-*::-webkit-scrollbar {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 8px;
-}
-*::-webkit-scrollbar-track {
-  background-color: #1E2837;
-  border-radius: 3px;
-}
-*::-webkit-scrollbar-thumb {
-  background-color: #ffffff20;
-  border-radius: 2px;
-}
-
 /* NAVBAR TRANSITION */
 nav {
   view-transition-name: nav;
 }
 
 /* MAIN TRANSITION */
-main {
+#main {
   view-transition-name: root;
 }
 
