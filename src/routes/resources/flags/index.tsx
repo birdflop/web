@@ -1,12 +1,12 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, $ } from '@builder.io/qwik';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookie } from '~/components/util/SharedUtils';
+import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, OutputField, SelectInput, TextInput, Toggle } from '@luminescent/ui';
+import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -36,8 +36,28 @@ export const setCookie = $(function (store: any) {
     } else {
       document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
     }
-    console.log(json);
   });
+});
+
+const defaults = {
+  step: 1,
+  parsed: {
+    operatingSystem: '',
+    serverType: '',
+    gui: false,
+    variables: false,
+    autoRestart: false,
+    extraFlags: [],
+    fileName: '',
+    flags: 'aikars',
+    withResult: true,
+    withFlags: false,
+    memory: 0,
+  },
+};
+
+export const useCookies = routeLoader$(async ({ cookie }) => {
+  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
 });
 
 export default component$(() => {
@@ -140,21 +160,18 @@ export default component$(() => {
 
   const configOptions = [
     {
-      color: 'gray',
       id: 'gui',
       cardIcon: <TerminalOutline class="w-10 h-10" />,
       label: t('flags.gui.label@@Use GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
     },
     {
-      color: 'gray',
       id: 'variables',
       cardIcon: <CodeWorkingOutline class="w-10 h-10" />,
       label: t('flags.variables.label@@Use Variables'),
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
     },
     {
-      color: 'gray',
       id: 'autoRestart',
       cardIcon: <RefreshCircleOutline class="w-10 h-10" />,
       label: t('flags.autoRestart.label@@Auto-restart'),
@@ -162,44 +179,14 @@ export default component$(() => {
     },
   ];
 
+  const cookies = useCookies().value;
   const store: any = useStore({
-    step: 1,
-    parsed: {
-      operatingSystem: '',
-      serverType: '',
-      gui: false,
-      variables: false,
-      autoRestart: false,
-      extraFlags: [],
-      fileName: '',
-      flags: 'aikars',
-      withResult: true,
-      withFlags: false,
-      memory: 0,
-    },
+    ...defaults,
+    ...cookies,
   }, { deep: true });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    if (typeof parsedUserStore.parsed === 'string') {
-      parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
-    }
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      if (key === 'parsed') {
-        for (const key2 of Object.keys(parsedUserStore.parsed)) {
-          const value2 = parsedUserStore.parsed[key2];
-          store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
-        }
-      }
-    }
-  });
-
   return (
-    <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100svh)] pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('flags.title@@Flags Generator')}
@@ -282,7 +269,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
@@ -310,7 +297,7 @@ export default component$(() => {
             </h2>
             <div class="flex flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
-                <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
@@ -364,17 +351,13 @@ export default component$(() => {
                   <CardHeader>
                     {t('flags.flags.label@@Flags')}
                   </CardHeader>
-                  <SelectInput id="preset" value={store.parsed.flags} onChange$={(event: any) => {
+                  <SelectInput id="preset" onChange$={(event: any) => {
                     store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                  }} >
-                    <span q:slot='label'>
-                      {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
-                    </span>
-                    {Object.keys(flagTypes).map((flag: string) => (
-                      <option key={flag} value={flag}>
-                        {flagTypes[flag as keyof typeof flagTypes]}
-                      </option>
-                    ))}
+                  }} values={Object.keys(flagTypes).map((flag: string) => ({
+                    name: flagTypes[flag as keyof typeof flagTypes],
+                    value: flag,
+                  }))} value={store.parsed.flags}>
+                    {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
                   </SelectInput>
                 </div>
               </div>
@@ -406,7 +389,7 @@ export default component$(() => {
               </div>
               <div class="flex flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
-                  <Card color={option.color as keyof typeof cardColorClasses} hoverable blobs key={index}>
+                  <Card color="darkgray" key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                       {option.cardIcon}
                       {option.label}
@@ -432,14 +415,14 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
+            <TextArea output class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
               <h1 class="font-bold text-xl sm:text-3xl mb-2">
                 {t('flags.script.label@@Script')}
               </h1>
               <span class="text-sm sm:text-base pb-4">
                 {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
               </span>
-            </OutputField>
+            </TextArea>
           </div>
         }
       </div>

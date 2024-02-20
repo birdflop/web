@@ -1,5 +1,5 @@
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, $ } from '@builder.io/qwik';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { convertToRGB, convertToHex, getRandomColor, generateOutput } from '~/components/util/RGBUtils';
@@ -8,8 +8,8 @@ import { presetVersion } from '~/components/util/PresetUtils';
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookie } from '~/components/util/SharedUtils';
-import { Button, ColorInput, NumberInput, OutputField, SelectInput, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { getCookies } from '~/components/util/SharedUtils';
+import { Button, ColorInput, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -47,22 +47,36 @@ export const setCookie = $(function (store: any) {
   });
 });
 
+const defaults = {
+  colors: presets.birdflop,
+  text: 'birdflop',
+  format: '&#$1$2$3$4$5$6$f$c',
+  formatchar: '&',
+  customFormat: false,
+  prefix: '',
+  bold: false,
+  italic: false,
+  underline: false,
+  strikethrough: false,
+};
+
+export const useCookies = routeLoader$(async ({ cookie }) => {
+  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+});
+
 export default component$(() => {
   useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
 
-  const store: any = useStore({
-    colors: presets.birdflop,
-    text: 'birdflop',
-    format: '&#$1$2$3$4$5$6$f$c',
-    formatchar: '&',
-    customFormat: false,
-    prefix: '',
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    alerts: [],
+  const cookies = useCookies().value;
+  const store = useStore({
+    ...defaults,
+    ...cookies,
+    alerts: [] as {
+      class: string,
+      translate: string,
+      text: string,
+    }[],
   }, { deep: true });
 
   const handleSwap = $(
@@ -81,18 +95,8 @@ export default component$(() => {
     },
   );
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-    }
-  });
-
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('gradient.title@@Hex Gradient')}
@@ -102,14 +106,14 @@ export default component$(() => {
         </h2>
 
         {/* charlimit={256} */}
-        <OutputField id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
           <span class="text-sm sm:text-base pb-4">
             {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
           </span>
-        </OutputField>
+        </TextArea>
 
         <h1 class={{
           'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
@@ -175,18 +179,13 @@ export default component$(() => {
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
-            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
-              <span q:slot='label'>{t('color.colorPreset@@Color Preset')}</span>
-              {Object.keys(presets).map((preset: any) => (
-                <option key={preset} value={preset}>
-                  {preset}
-                </option>
-              ))}
-              <option value={'custom'}>
-                {t('color.custom@@Custom')}
-              </option>
+            } values={[
+              ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
+              { name: t('color.custom@@Custom'), value: 'custom' },
+            ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {t('color.colorPreset@@Color Preset')}
             </SelectInput>
-            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput"
+            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value > store.text.length) event.target!.value = store.text.length;
                 if (event.target!.value < 2) event.target!.value = 2;
@@ -259,23 +258,24 @@ export default component$(() => {
                     }
                     setCookie(JSON.stringify(store));
                   }
-                }>
-                  <span q:slot='label'>{t('color.colorFormat@@Color Format')}</span>
-                  {formats.map((format: any) => (
-                    <option key={format} value={format}>
-                      {format
-                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
-                        .replace('$c', '')}
-                    </option>
-                  ))}
-                  <option value={'custom'}>
-                    {store.customFormat ? store.format
+                } values={[
+                  ...formats.map(format => ({
+                    name: format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', ''),
+                    value: format,
+                  })),
+                  {
+                    name: store.customFormat ? store.format
                       .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
                       .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
                       .replace('$c', '')
-                      : t('color.custom@@Custom')}
-                  </option>
+                      : t('color.custom@@Custom'),
+                    value: 'custom',
+                  },
+                ]}>
+                  {t('color.colorFormat@@Color Format')}
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('color.formatCharacter@@Format Character')}
@@ -338,8 +338,9 @@ export default component$(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach((key: any) => {
-                    store[key] = json[key];
+                  Object.keys(json).forEach(key => {
+                    if ((store as any)[key] === undefined) return;
+                    (store as any)[key] = json[key];
                   });
                   const alert = {
                     class: 'text-green-500',

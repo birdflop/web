@@ -5,7 +5,7 @@ import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh-100px)]">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-xl" id="bg" />
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
         Node Stats
@@ -19,19 +19,19 @@ export default component$(() => {
         </ButtonAnchor>
       </div>
       <div class="flex gap-3 justify-center">
-        <Card href="https://netdata.birdflop.com/crabwings" color="red" hoverable blobs>
+        <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
           <CardHeader>
             Crabwings
             <span q:slot='subheader' class="text-xs text-gray-300">US</span>
           </CardHeader>
         </Card>
-        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hoverable blobs>
+        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
           <CardHeader>
             Impeyes
             <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
           </CardHeader>
         </Card>
-        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hoverable blobs>
+        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
           <CardHeader>
             Jellyfishjaws
             <span q:slot='subheader' class="text-xs text-gray-300">EU</span>

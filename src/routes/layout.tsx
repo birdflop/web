@@ -23,25 +23,23 @@ export default component$(() => {
 
   return <>
     <Nav />
-    <main>
-      <Slot />
-      {store.cookies != 'true' &&
-        <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
-          <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
-            We use cookies to automatically save and load your preferences.
-          </span>
-          <div class="flex items-center gap-2">
-            <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/privacy">Privacy Policy</a>
-            <Button color="blue" onClick$={async () => {
-              document.cookie = 'cookies=true; path=/';
-              document.getElementById('cookieprompt')!.remove();
-            }}>
-              Okay
-            </Button>
-          </div>
+    <Slot />
+    {store.cookies != 'true' &&
+      <div id="cookieprompt" class="fixed flex flex-col bottom-4 right-4 bg-gray-800 rounded-lg shadow-md p-6" style="cursor: auto;">
+        <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
+          We use cookies to automatically save and load your preferences.
+        </span>
+        <div class="flex items-center gap-2">
+          <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/privacy">Privacy Policy</a>
+          <Button color="blue" onClick$={async () => {
+            document.cookie = 'cookies=true; path=/';
+            document.getElementById('cookieprompt')!.remove();
+          }}>
+            Okay
+          </Button>
         </div>
-      }
-    </main>
+      </div>
+    }
     <Footer />
   </>;
 });

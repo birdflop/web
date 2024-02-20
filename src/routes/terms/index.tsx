@@ -4,7 +4,7 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 export default component$(() => {
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 space-y-3 min-h-[60px]">
         <p class="font-bold text-4xl">BIRDFLOP TERMS OF SERVICE</p>
         <p>Last Updated: January 26, 2024</p>

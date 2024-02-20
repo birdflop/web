@@ -1,5 +1,5 @@
 import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { presetVersion } from '~/components/util/PresetUtils';
 import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
@@ -8,8 +8,8 @@ import { AnimationOutput } from '~/components/util/RGBUtils';
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookie } from '~/components/util/SharedUtils';
-import { Button, ColorInput, NumberInput, OutputField, SelectInput, TextAreaInput, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { getCookies } from '~/components/util/SharedUtils';
+import { Button, ColorInput, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -53,28 +53,42 @@ export const setCookie = $(function (store: any) {
   });
 });
 
+const defaults = {
+  colors: presets.birdflop,
+  name: 'logo',
+  text: 'birdflop',
+  type: 1,
+  speed: 50,
+  format: '&#$1$2$3$4$5$6$f$c',
+  formatchar: '&',
+  customFormat: false,
+  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
+  bold: false,
+  italic: false,
+  underline: false,
+  strikethrough: false,
+  length: 1,
+};
+
+export const useCookies = routeLoader$(async ({ cookie }) => {
+  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+});
+
 export default component$(() => {
   useSpeak({ assets: ['animpreview', 'color'] });
   const t = inlineTranslate();
 
-  const store: any = useStore({
-    colors: presets.birdflop,
-    name: 'logo',
-    text: 'birdflop',
-    type: 1,
-    speed: 50,
-    format: '&#$1$2$3$4$5$6$f$c',
-    formatchar: '&',
-    customFormat: false,
-    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    alerts: [],
-    frames: [],
+  const cookies = useCookies().value;
+  const store = useStore({
+    ...defaults,
+    ...cookies,
+    alerts: [] as {
+      class: string,
+      translate: string,
+      text: string,
+    }[],
+    frames: [] as (string | null)[][],
     frame: 0,
-    length: 1,
   }, { deep: true });
 
   const handleSwap = $(
@@ -95,14 +109,6 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    getCookie(JSON.stringify(store)).then((userstore: any) => {
-      const parsedUserStore = JSON.parse(userstore);
-      for (const key of Object.keys(parsedUserStore)) {
-        const value = parsedUserStore[key];
-        store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      }
-    });
-
     let speed = store.speed;
 
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
@@ -122,7 +128,7 @@ export default component$(() => {
     Object.keys(store).forEach((key: any) => {
       if (key == 'frames' || key == 'frame' || key == 'alerts') return;
       if (key == 'colors') track(() => store.colors.length);
-      else track(() => store[key]);
+      else track(() => store[key as keyof typeof store]);
     });
     const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
     if (store.type == 1) {
@@ -138,7 +144,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtab.title@@Animated TAB')}
@@ -147,14 +153,14 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <OutputField id="anim-tab-output" value={AnimationOutput(store)}>
+        <TextArea output id="anim-tab-output" value={AnimationOutput(store)}>
           <h1 class="font-bold text-xl sm:text-3xl mb-2">
             {t('color.output@@Output')}
           </h1>
           <span class="text-sm sm:text-base pb-4">
             {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
           </span>
-        </OutputField>
+        </TextArea>
 
         <h1 class={{
           'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
@@ -215,18 +221,13 @@ export default component$(() => {
                 store.colors = presets[event.target!.value as keyof typeof presets];
                 setCookie(JSON.stringify(store));
               }
-            } value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
-              <span q:slot='label'>{t('color.colorPreset@@Color Preset')}</span>
-              {Object.keys(presets).map((preset: any) => (
-                <option key={preset} value={preset}>
-                  {preset}
-                </option>
-              ))}
-              <option value={'custom'}>
-                {t('color.custom@@Custom')}
-              </option>
+            } values={[
+              ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
+              { name: t('color.custom@@Custom'), value: 'custom' },
+            ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {t('color.colorPreset@@Color Preset')}
             </SelectInput>
-            <NumberInput input min={2} value={store.colors.length} id="colorsinput"
+            <NumberInput input min={2} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value < 2) event.target!.value = 2;
                 const newColors = [];
@@ -250,7 +251,7 @@ export default component$(() => {
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length}
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
               onIncrement$={() => {
                 store.length++;
                 setCookie(JSON.stringify(store));
@@ -305,15 +306,10 @@ export default component$(() => {
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 
-                <SelectInput id="type" value={store.type} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}>
-                  <span q:slot="label">
-                    {t('animtab.outputType@@Output Type')}
-                  </span>
-                  {types.map((type: any) => (
-                    <option key={type.name} value={type.value}>
-                      {type.name}
-                    </option>
-                  ))}
+                <SelectInput id="type" onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}
+                  values={types.map((type: any) => ({ name: type.name, value: type.value }))}
+                  value={store.type}>
+                  {t('animtab.outputType@@Output Type')}
                 </SelectInput>
 
                 <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} onChange$={
@@ -327,25 +323,24 @@ export default component$(() => {
                     }
                     setCookie(JSON.stringify(store));
                   }
-                }>
-                  <span q:slot="label">
-                    {t('color.colorFormat@@Color Format')}
-                  </span>
-                  {formats.map((format: any) => (
-                    <option key={format} value={format}>
-                      {format
-                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                        .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
-                        .replace('$c', '')}
-                    </option>
-                  ))}
-                  <option value={'custom'}>
-                    {store.customFormat ? store.format
+                } values={[
+                  ...formats.map(format => ({
+                    name: format
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
+                      .replace('$c', ''),
+                    value: format,
+                  })),
+                  {
+                    name: store.customFormat ? store.format
                       .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
                       .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
                       .replace('$c', '')
-                      : t('color.custom@@Custom')}
-                  </option>
+                      : t('color.custom@@Custom'),
+                    value: 'custom',
+                  },
+                ]}>
+                  {t('color.colorFormat@@Color Format')}
                 </SelectInput>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('color.formatCharacter@@Format Character')}
@@ -371,9 +366,9 @@ export default component$(() => {
                 </>
               }
 
-              <TextAreaInput id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; setCookie(JSON.stringify(store)); }}>
                 {t('animtab.outputFormat@@Output Format')}
-              </TextAreaInput>
+              </TextArea>
 
               <label>
                 {t('color.presets@@Presets')}
@@ -408,8 +403,9 @@ export default component$(() => {
                       store.alerts.splice(store.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach((key: any) => {
-                    store[key] = json[key];
+                  Object.keys(json).forEach((key: any ) => {
+                    if ((store)[key as keyof typeof store] === undefined) return;
+                    (store as any)[key] = json[key];
                   });
                   const alert = {
                     class: 'text-green-500',

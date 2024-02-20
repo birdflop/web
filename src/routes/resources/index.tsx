@@ -6,8 +6,8 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 sm:items-center justify-center min-h-[calc(100svh-100px)]">
-      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 sm:items-center justify-center min-h-[calc(100svh-68px)]">
+      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
@@ -19,7 +19,7 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/rgb" color="red" blobs hoverable>
+            <Card href="/resources/rgb" color="red" blobs hover="clickable">
               <CardHeader>
                 RGBirdflop
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -27,7 +27,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animtab" color="blue" blobs hoverable>
+            <Card href="/resources/animtab" color="blue" blobs hover="clickable">
               <CardHeader>
                 Animated TAB
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -35,7 +35,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/animpreview" color="green" blobs hoverable>
+            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
               <CardHeader>
                 TAB Animation Previewer
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -53,7 +53,7 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/sparkprofile" color="yellow" blobs hoverable>
+            <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
               <CardHeader>
                 Spark Profile
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -61,7 +61,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/papertimings" color="pink" blobs hoverable>
+            <Card href="/resources/papertimings" color="pink" blobs hover="clickable">
               <CardHeader>
                 Paper Timings
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -69,7 +69,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/flags" color="orange" blobs hoverable>
+            <Card href="/resources/flags" color="orange" blobs hover="clickable">
               <CardHeader>
                 Flags
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -87,7 +87,7 @@ export default component$(() => {
             </span>
           </CardHeader>
           <div class="flex flex-warp gap-4">
-            <Card href="/resources/animtexture" color="purple" blobs hoverable>
+            <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
               <CardHeader>
                 Animated Textures
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -95,7 +95,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/colorstrip" color="gray" blobs hoverable>
+            <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
               <CardHeader>
                 Color Code Stripper
                 <span q:slot='subheader' class="text-xs text-gray-300">
@@ -103,7 +103,7 @@ export default component$(() => {
                 </span>
               </CardHeader>
             </Card>
-            <Card href="/resources/presettools" color="red" blobs hoverable>
+            <Card href="/resources/presettools" color="red" blobs hover="clickable">
               <CardHeader>
                 Preset Tools
                 <span q:slot='subheader' class="text-xs text-gray-300">

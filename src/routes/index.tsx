@@ -22,7 +22,7 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100dvh-56px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" />
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
@@ -61,7 +61,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
       <div class="justify-center flex relative align-center max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
@@ -115,7 +115,7 @@ export default component$(() => {
               </p>
               <CardHeader>
                 EU Premium
-                <span q:slot='subheader'>
+                <span q:slot='subheader' class="text-sm text-gray-400">
                   Capped at $2/GB RAM
                 </span>
               </CardHeader>
@@ -169,7 +169,7 @@ export default component$(() => {
               </p>
               <CardHeader>
                 US Premium
-                <span q:slot='subheader'>
+                <span q:slot='subheader' class="text-sm text-gray-400">
                   Capped at $3/GB RAM
                 </span>
               </CardHeader>
@@ -339,7 +339,7 @@ export default component$(() => {
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
-            <Card color="darkergray" hoverable href="https://www.trustpilot.com/review/birdflop.com">
+            <Card color="darkergray" hover="clickable" href="https://www.trustpilot.com/review/birdflop.com">
               <CardHeader>
                 <StarOutline width="36" /> Trustpilot
               </CardHeader>
