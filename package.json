@@ -30,7 +30,7 @@
     "@builder.io/partytown": "^0.9.2",
     "@builder.io/qwik": "1.4.5",
     "@builder.io/qwik-city": "1.4.5",
-    "@luminescent/ui": "^0.7.3",
+    "@luminescent/ui": "^0.7.5",
     "@modular-forms/qwik": "^0.23.1",
     "@types/eslint": "8.56.2",
     "@types/node": "latest",
