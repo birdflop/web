@@ -14,6 +14,7 @@ import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInp
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
   '<#$1$2$3$4$5$6>$f$c',
+  '<##$1$2$3$4$5$6>$f$c',
   '&x&$1&$2&$3&$4&$5&$6$f$c',
   '§x§$1§$2§$3§$4§$5§$6$f$c',
   '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
