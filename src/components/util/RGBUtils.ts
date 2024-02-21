@@ -158,6 +158,6 @@ export function generateOutput(text: string = 'birdflop', colors: string[] = ['#
 
     return output;
   } else {
-    return `<gradient${colors.join(':')}>${text}`;
+    return `<gradient:${colors.join(':')}>${text}`;
   }
 }
