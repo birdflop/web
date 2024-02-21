@@ -27,7 +27,7 @@ export default component$(() => {
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <SelectInput id="gradienttype" onChange$={(event: any) => { store.type = event.target!.value; }}
+        <SelectInput id="gradienttype" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
           values={[
             { value: 0, name: '&#rrggbb' },
             { value: 1, name: '<#rrggbb>' },

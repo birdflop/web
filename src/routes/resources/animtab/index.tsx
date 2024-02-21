@@ -215,7 +215,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" onChange$={
+            <SelectInput id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
@@ -304,13 +304,13 @@ export default component$(() => {
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 
-                <SelectInput id="type" onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}
+                <SelectInput id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}
                   values={types.map((type: any) => ({ name: type.name, value: type.value }))}
                   value={store.type}>
                   {t('animtab.outputType@@Output Type')}
                 </SelectInput>
 
-                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} onChange$={
+                <SelectInput id="format" class={{ 'w-full': true }} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;

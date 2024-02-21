@@ -30,7 +30,7 @@ export default component$(() => {
             Birdflop
           </h1>
           <h2 class="text-gray-300 text-lg sm:text-2xl fade-in animation-delay-300">
-            The only 501(c)(3) nonprofit server host dedicated to <span
+            The only 501(c)(3) nonprofit server host — dedicated to <span
               class="typer"
               id="main"
               data-words={'minecraft hosting,public resources,communities,you'}

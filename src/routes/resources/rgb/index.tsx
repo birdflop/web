@@ -173,7 +173,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" onChange$={
+            <SelectInput id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
@@ -243,7 +243,7 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} onChange$={
+                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} class={{ 'w-full': true }} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;

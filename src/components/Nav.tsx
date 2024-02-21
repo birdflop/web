@@ -106,14 +106,14 @@ export const Brand = component$(() => {
   const location = useLocation();
   return (
     <div class="flex items-center justify-start">
-      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
+      <Link href="/" class="transition ease-in-out text-gray-100 hover:bg-blue-700/20 hover:text-white drop-shadow-xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
         <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']}/>
         <span class="ml-3 font-bold">Birdflop</span>
         <div class={{
-          'transition-all': true,
-          '-ml-7 opacity-0': !location.isNavigating,
+          'transition-all pl-2': true,
+          '-ml-6 opacity-0': !location.isNavigating,
         }}>
-          <LoadingIcon />
+          <LoadingIcon width={16} speed="0.4s" />
         </div>
       </Link>
     </div>
