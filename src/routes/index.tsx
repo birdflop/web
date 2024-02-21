@@ -33,7 +33,7 @@ export default component$(() => {
             The only 501(c)(3) nonprofit server host dedicated to <span
               class="typer"
               id="main"
-              data-words={'minecraft hosting,public resources,communities,you.'}
+              data-words={'minecraft hosting,public resources,communities,you'}
               data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
               data-delay="50"
               data-deleteDelay="1500"
