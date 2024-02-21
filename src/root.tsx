@@ -6,6 +6,7 @@ import { useQwikSpeak } from 'qwik-speak';
 import './global.css';
 import { config } from '~/speak-config';
 import { translationFn } from '~/speak-functions';
+import { QwikPartytown } from './components/partytown/partytown';
 
 export default component$(() => {
   /**
@@ -24,6 +25,12 @@ export default component$(() => {
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
+        <QwikPartytown forward={['dataLayer.push']} />
+        <script
+          async
+          type="text/partytown"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-11483620641"
+        />
         <RouterHead />
       </head>
       <body class="text-gray-300">

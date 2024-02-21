@@ -2,16 +2,14 @@
 
 import { component$, $, Slot, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import { LoadingIcon, LogoBirdflop, LogoDiscord } from '@luminescent/ui';
 
-import { LogoDiscord, LogoGithub, LogoTwitter, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
+import { LogoGithub, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
-import LoadingIcon from './icons/LoadingIcon';
-
-import Birdflop from './icons/Birdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -33,7 +31,7 @@ export default component$(() => {
           </NavButton>
         </Dropdown>
         <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/resources/gradients">
+          <NavButton href="/resources/rgb">
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
           <NavButton href="/resources/animtab">
@@ -62,10 +60,10 @@ export default component$(() => {
         <NavButton type="external" href="https://client.birdflop.com/">
           Billing
         </NavButton>
-        <NavButton type="external" href="https://www.birdflop.com/node-stats/">
+        <NavButton href="/node-stats">
           Node Stats
         </NavButton>
-        <NavButton store={store} href="/resources/gradients">
+        <NavButton store={store} href="/resources/rgb">
           {t('nav.hexGradient@@Hex Gradients')}
         </NavButton>
         <NavButton store={store} href="/resources/animtab">
@@ -108,14 +106,14 @@ export const Brand = component$(() => {
   const location = useLocation();
   return (
     <div class="flex items-center justify-start">
-      <Link href="/" class="transition ease-in-out text-gray-300 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
-        <Birdflop width={32} />
+      <Link href="/" class="transition ease-in-out text-gray-100 hover:bg-blue-700/20 hover:text-white drop-shadow-xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
+        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']}/>
         <span class="ml-3 font-bold">Birdflop</span>
         <div class={{
-          'transition-all': true,
-          '-ml-7 opacity-0': !location.isNavigating,
+          'transition-all pl-2': true,
+          '-ml-6 opacity-0': !location.isNavigating,
         }}>
-          <LoadingIcon />
+          <LoadingIcon width={16} speed="0.4s" />
         </div>
       </Link>
     </div>
@@ -179,7 +177,7 @@ export const NavButton = component$(({ href, title, icon, type, extraClass, styl
 export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
   return (
     <div class={{
-      'cursor-pointer transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
+      'transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
       ...extraClass,
     }}>
       <div class="px-4 py-2 flex gap-2.5 items-center">
@@ -187,7 +185,7 @@ export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
         {name}
         <ChevronDown width="16" class="transform group-hover:-rotate-180 transition ease-in-out" />
       </div>
-      <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-5 text-base">
+      <div class="absolute top-8 z-10 hidden group-hover:flex pt-8 text-base">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           <Slot />
         </div>
@@ -232,9 +230,6 @@ export const SocialButtons = component$(() => {
     </NavButton>
     <NavButton type="external" icon href="https://discord.gg/nmgtX5z" title="Discord" extraClass={{ 'flex fill-current hover:fill-white': true }}>
       <LogoDiscord width="24" />
-    </NavButton>
-    <NavButton type="external" icon href="https://twitter.com/birdflop" title="Twitter" extraClass={{ 'flex fill-current hover:fill-white': true }}>
-      <LogoTwitter width="24" />
     </NavButton>
   </>;
 });

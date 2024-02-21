@@ -1,39 +1,38 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ExternalButton } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
+import { ButtonAnchor, Card, Header } from '@luminescent/ui';
 import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh-100px)]">
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-xl" id="bg" />
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+      <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-lg" id="bg" alt="background" />
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
         Node Stats
       </h1>
-      <div class="flex gap-3 justify-center">
-        <ExternalButton href="https://status.birdflop.com/" big>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
           Overview
-        </ExternalButton>
-        <ExternalButton href="https://netdata.birdflop.com/panel" big>
+        </ButtonAnchor>
+        <ButtonAnchor href="https://netdata.birdflop.com/panel" size="lg" color="blue">
           Web Services
-        </ExternalButton>
+        </ButtonAnchor>
       </div>
-      <div class="flex gap-3 justify-center">
-        <Card href="https://netdata.birdflop.com/crabwings" color="red">
-          <CardHeader subheader="US">
+      <div class="flex flex-wrap gap-3 justify-center">
+        <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
+          <Header subheader="US">
             Crabwings
-          </CardHeader>
+          </Header>
         </Card>
-        <Card href="http://impeyes.birdflop.com:19999/" color="orange">
-          <CardHeader subheader="EU">
+        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
+          <Header subheader="EU">
             Impeyes
-          </CardHeader>
+          </Header>
         </Card>
-        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow">
-          <CardHeader subheader="EU">
+        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
+          <Header subheader="EU">
             Jellyfishjaws
-          </CardHeader>
+          </Header>
         </Card>
       </div>
     </section>
@@ -41,8 +40,16 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Node Stats',
+  title: 'Birdflop Node Stats',
   meta: [
+    {
+      name: 'description',
+      content: 'Birdflop Node Stats',
+    },
+    {
+      name: 'og:description',
+      content: 'Birdflop Node Stats',
+    },
     {
       name: 'og:image',
       content: '/branding/icon.png',

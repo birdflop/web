@@ -1,139 +1,141 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
+import { ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
-import { ExternalButton } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
 
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 sm:items-center justify-center min-h-[calc(100svh-100px)]">
-      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center justify-center min-h-[calc(100svh-68px)]">
+      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
-        <Card darker>
-          <CardHeader subheader="Tools to help you create gradient text in minecraft.">
+        <Card color="darkgray">
+          <Header subheader="Tools to help you create gradient text in Minecraft.">
             Gradient Tools
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
-            <Card href="/resources/gradients" color="red">
-              <CardHeader subheader="Hex color gradient creator">
-                Hex Gradient
-              </CardHeader>
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
+            <Card href="/resources/rgb" color="red" blobs hover="clickable">
+              <Header subheader="RGB gradient creator">
+                RGBirdflop
+              </Header>
             </Card>
-            <Card href="/resources/animtab" color="blue">
-              <CardHeader subheader="TAB plugin gradient animation creator">
+            <Card href="/resources/animtab" color="blue" blobs hover="clickable">
+              <Header subheader="TAB plugin gradient animation creator">
                 Animated TAB
-              </CardHeader>
+              </Header>
             </Card>
-            <Card href="/resources/animpreview" color="green">
-              <CardHeader subheader="Preview TAB Animations without the need to put them in-game">
+            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
+              <Header subheader="Preview TAB Animations without the need to put them in-game">
                 TAB Animation Previewer
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Tools to help configure and setup minecraft servers.">
+        <Card color="darkgray">
+          <Header subheader="Tools to help configure and setup minecraft servers.">
             Server tools
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
-            <Card href="/resources/sparkprofile" color="yellow">
-              <CardHeader subheader="Analyze Spark Profiles and get possible optimizations">
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
+            <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
+              <Header subheader="Analyze Spark Profiles and get possible optimizations">
                 Spark Profile
-              </CardHeader>
+              </Header>
             </Card>
-            <Card href="/resources/papertimings" color="pink">
-              <CardHeader subheader="Analyze Paper Timings Reports and get possible optimizations">
+            <Card href="/resources/papertimings" color="pink" blobs hover="clickable">
+              <Header subheader="Analyze Paper Timings Reports and get possible optimizations">
                 Paper Timings
-              </CardHeader>
+              </Header>
             </Card>
-            <Card href="/resources/flags" color="orange">
-              <CardHeader subheader="A simple script generator to start your Minecraft servers with optimal flags">
+            <Card href="/resources/flags" color="orange" blobs hover="clickable">
+              <Header subheader="A simple script generator to start your Minecraft servers with optimal flags">
                 Flags
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Miscellaneous tools to help with random miscellaneous things.">
+        <Card color="darkgray">
+          <Header subheader="Miscellaneous tools to help with random miscellaneous things.">
             Miscellaneous tools
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
-            <Card href="/resources/animtexture" color="purple">
-              <CardHeader subheader="Easily merge textures for resource pack animations">
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
+            <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
+              <Header subheader="Easily merge textures for resource pack animations">
                 Animated Textures
-              </CardHeader>
+              </Header>
             </Card>
-            <Card href="/resources/colorstrip" color="gray">
-              <CardHeader subheader="Strips all color / format codes from text">
+            <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
+              <Header subheader="Strips all color / format codes from text">
                 Color Code Stripper
-              </CardHeader>
+              </Header>
             </Card>
-            <Card href="/resources/presettools" color="red">
-              <CardHeader subheader="This will update older preset versions to the newest version">
+            <Card href="/resources/presettools" color="red" blobs hover="clickable">
+              <Header subheader="Update older preset versions to the newest version">
                 Preset Tools
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Botflop is a Discord bot that watches chat to chime in and provide suggestions.">
+        <Card color="darkgray">
+          <Header subheader="Botflop is a Discord bot that watches chat to chime in and provide suggestions.">
             Botflop
-          </CardHeader>
+          </Header>
+          <div class="text-lg">
+            Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
+          </div>
           <div class="flex gap-2">
-            <ExternalButton href="https://github.com/birdflop/botflop" big>
+            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               <LogoGithub width="24" />
               Learn More
-            </ExternalButton>
-            <ExternalButton href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonAnchor>
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
               <LogoDiscord width="24" />
               Invite
-            </ExternalButton>
+            </ButtonAnchor>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="Binflop is Birdflop's spinoff of the original hastebin.com.">
+        <Card color="darkgray">
+          <Header subheader="Binflop is Birdflop's spinoff of the original hastebin.com.">
             Binflop
-          </CardHeader>
-          <h2>
+          </Header>
+          <div class="text-lg">
             Binflop improves upon Hastebin through the following methods:
-          </h2>
-          <ul class="list-disc ml-5 space-y-2">
-            <li>
-              Ctrl + A, Ctrl + C no longer copies button text nor line numbers.
-            </li>
-            <li>
-              Line numbering is correct across all browsers, all zoom settings, and all uploaded files.
-            </li>
-            <li>
-              Colors are more vibrant and visible.
-            </li>
-            <li>
-              Functions box no longer conceals part of the first line.
-            </li>
-            <li>
-              Added a "Hide IPs" button to hide all public IPs.
-            </li>
-            <li>
-              Links retain their content permanently.
-            </li>
-            <li>
-              Expanded REST API.
-            </li>
-          </ul>
+            <ul class="list-disc ml-5 space-y-1">
+              <li>
+                Ctrl + A, Ctrl + C no longer copies button text nor line numbers.
+              </li>
+              <li>
+                Line numbering is correct across all browsers, all zoom settings, and all uploaded files.
+              </li>
+              <li>
+                Colors are more vibrant and visible.
+              </li>
+              <li>
+                Functions box no longer conceals part of the first line.
+              </li>
+              <li>
+                Added a "Hide IPs" button to hide all public IPs.
+              </li>
+              <li>
+                Links retain their content permanently.
+              </li>
+              <li>
+                Expanded REST API.
+              </li>
+            </ul>
+          </div>
           <div class="flex gap-2">
-            <ExternalButton href="https://bin.birdflop.com/" big>
+            <ButtonAnchor href="https://bin.birdflop.com/" size="lg">
               Try it
-            </ExternalButton>
+            </ButtonAnchor>
           </div>
         </Card>
-        <Card darker>
-          <CardHeader subheader="BirdTickets is a Discord ticket bot which provides premium features without a premium cost.">
+        <Card color="darkgray">
+          <Header subheader="BirdTickets is a Discord ticket bot which provides premium features without a premium cost.">
             BirdTickets
-          </CardHeader>
-          <ul class="list-disc ml-5 space-y-2">
+          </Header>
+          <ul class="list-disc ml-5 space-y-1 text-lg">
             <li>
               Create tickets through commands and/or reactions.
             </li>
@@ -160,12 +162,12 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ExternalButton href="https://github.com/birdflop/botflop" big>
+            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               Learn More
-            </ExternalButton>
-            <ExternalButton href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" big>
+            </ButtonAnchor>
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
               Invite
-            </ExternalButton>
+            </ButtonAnchor>
           </div>
         </Card>
       </div>
@@ -174,7 +176,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Resources',
+  title: 'Resources - Free Minecraft Resources by Birdflop',
   meta: [
     {
       name: 'description',

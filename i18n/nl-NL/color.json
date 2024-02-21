@@ -8,7 +8,7 @@
         "presets": "Vooraf ingesteld",
         "exportedPreset": "Succesvol gekopieed!",
         "importedPreset": "Succesvol de vooraf ingestelde instellingen geupload",
-        "invalidPreset": "Ongeldige preset!\nAls dit een oude preset is, update deze dan met de <a class=\"text-blue-500\" href=\"/PresetTools\">Preset Tools</a> pagina, Zo niet, rapporteer dit dan bij de <a class=\"text-blue-500\" href=\"https://discord.gg/9vUZ9MREVz\">Ontwikkelaars</a>.",
+        "invalidPreset": "Ongeldige preset!\nAls dit een oude preset is, update deze dan met de <a class=\"text-blue-400\" href=\"/PresetTools\">Preset Tools</a> pagina, Zo niet, rapporteer dit dan bij de <a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">Ontwikkelaars</a>.",
         "export": "Exporteren",
         "import": "Importeren (Hier plakken)",
         "bold": "Dik",

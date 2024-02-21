@@ -1,13 +1,12 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { loadPreset } from '~/components/util/PresetUtils';
-import TextInput from '~/components/elements/TextInput';
-import OutputField from '~/components/elements/OutputField';
 
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import { TextArea, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['presettools'] });
@@ -18,7 +17,7 @@ export default component$(() => {
   }, { deep: true });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('presettools.title@@Preset Updater')}
@@ -31,11 +30,11 @@ export default component$(() => {
         </TextInput>
 
         <div class="mt-3">
-          <OutputField id="Output" value={
+          <TextArea output id="Output" value={
             JSON.stringify(loadPreset(store.preset), null, 2)
-          } extraClass={{ 'h-96': true }}>
+          } class={{ 'h-96': true }}>
             {t('presettools.output@@Output')}
-          </OutputField>
+          </TextArea>
         </div>
       </div>
     </section>

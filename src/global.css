@@ -36,11 +36,6 @@ html {
   background-color: rgb(17 24 39);
 }
 
-main {
-  min-height: calc(100lvh - 56px);
-  margin-top: 56px;
-}
-
 .font-mc {
   font-family: MinecraftRegular, MinecraftRus;
 }
@@ -75,40 +70,6 @@ main {
   -webkit-tap-highlight-color: transparent;
 }
 
-*::-webkit-scrollbar {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 8px;
-}
-*::-webkit-scrollbar-track {
-  background-color: #1E2837;
-  border-radius: 3px;
-}
-*::-webkit-scrollbar-thumb {
-  background-color: #ffffff20;
-  border-radius: 2px;
-}
-
-/* NAVBAR TRANSITION */
-nav {
-  view-transition-name: nav;
-}
-
-/* MAIN TRANSITION */
-main {
-  view-transition-name: root;
-}
-
-::view-transition-old(root) {
-  animation: 210ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
-    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-bottom;
-}
-
-::view-transition-new(root) {
-  animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both fade-in,
-    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-top;
-}
-
 
 @keyframes fade-in {
   from { opacity: 0; }
@@ -129,37 +90,3 @@ main {
     scale: 0.95;
   }
 }
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(-100px);
-  animation: fadeInAnimation ease-in-out 800ms;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes fadeInAnimation {
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.Scp {
-  display: flex;
-  height: 170px !important;
-  width: 170px !important;
-  padding: 10px !important;
-  border-radius: 0.375rem;
-  border: hsl(0, 27%, 76%);
-  border-width: 1px;
-}
-
-.-animation-delay-5 { animation-delay: -5s; }
-.-animation-delay-10 { animation-delay: -10s; }
-
-.animation-delay-100 { animation-delay: 100ms; }
-.animation-delay-200 { animation-delay: 200ms; }
-.animation-delay-300 { animation-delay: 300ms; }
-.animation-delay-400 { animation-delay: 400ms; }
-.animation-delay-500 { animation-delay: 500ms; }

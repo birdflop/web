@@ -1,14 +1,11 @@
 import { component$, useOn, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import Toggle from '~/components/elements/Toggle';
-import TextInput from '~/components/elements/TextInput';
-import { Button, ExternalButton } from '~/components/elements/Button';
-
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animtexture'] });
@@ -59,7 +56,7 @@ export default component$(() => {
     }),
   );
   return (
-    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtexture.title@@Animated Textures')}
@@ -80,15 +77,15 @@ export default component$(() => {
           ))}
         </div>
 
-        <TextInput id="textureName" extraClass={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
+        <TextInput id="textureName" class={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
           {t('animtexture.textureName@@Texture Name')}
         </TextInput>
 
-        <Toggle id="Cumulative" checked={store.cumulative} onChange$={(event: any) => { store.cumulative = event.target.checked; }}>
-          {t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}
-        </Toggle>
+        <Toggle id="Cumulative" checked={store.cumulative}
+          onChange$={(event: any) => { store.cumulative = event.target.checked; }}
+          label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}/>
 
-        <Button extraClass={{ 'my-6': true }} onClick$={
+        <Button class={{ 'my-6': true }} onClick$={
           () => {
             const canvas: any = document.getElementById('c')!;
             canvas.classList.add('sm:flex');
@@ -140,12 +137,12 @@ export default component$(() => {
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <ExternalButton id="pngd" extraClass={{ 'mr-2': true }} href='/'>
+          <ButtonAnchor id="pngd" class={{ 'mr-2': true }} href='/'>
             {t('animtexture.downloadPNG@@Download PNG')}
-          </ExternalButton>
-          <ExternalButton id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+          </ButtonAnchor>
+          <ButtonAnchor id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
             {t('animtexture.downloadMCMETA@@Download MCMETA')}
-          </ExternalButton>
+          </ButtonAnchor>
         </div>
 
       </div>
@@ -155,15 +152,15 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Animated Textures',
+  title: 'Minecraft Animated Textures Creator - Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF',
+      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF',
+      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
