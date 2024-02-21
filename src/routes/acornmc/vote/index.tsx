@@ -31,15 +31,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Birdflop Node Stats',
+      content: 'Vote for AcornMC!',
     },
     {
       name: 'og:description',
-      content: 'Birdflop Node Stats',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
+      content: 'Vote for AcornMC!',
     },
   ],
 };
