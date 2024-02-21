@@ -1,3 +1,3 @@
 export const onGet: any = async ({ redirect }: any) => {
-  throw redirect(302, 'https://birdflop.com/');
+  throw redirect(301, 'https://birdflop.com/');
 };
