@@ -3,7 +3,7 @@ import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
-import { Anchor, Button, ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
+import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
@@ -113,12 +113,9 @@ export default component$(() => {
               <p>
                 Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
               </p>
-              <CardHeader>
+              <Header subheader="Capped at $2/GB RAM">
                 EU Premium
-                <span q:slot='subheader' class="text-sm text-gray-400">
-                  Capped at $2/GB RAM
-                </span>
-              </CardHeader>
+              </Header>
               <ul class="list-disc ml-5 space-y-2">
                 <li>
                   Falkenstein, Germany
@@ -167,12 +164,9 @@ export default component$(() => {
               <p>
                 Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
               </p>
-              <CardHeader>
+              <Header subheader="Capped at $3/GB RAM">
                 US Premium
-                <span q:slot='subheader' class="text-sm text-gray-400">
-                  Capped at $3/GB RAM
-                </span>
-              </CardHeader>
+              </Header>
               <ul class="list-disc ml-5 space-y-2">
                 <li>
                   New York City, USA
@@ -229,49 +223,49 @@ export default component$(() => {
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <RocketOutline width="36" /> Sheer Performance
-              </CardHeader>
+              </Header>
               <p>
                 We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <ColorPaletteOutline width="36" /> Fully Configurable
-              </CardHeader>
+              </Header>
               <p>
                 You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <EyeOutline width="36" /> Transparent
-              </CardHeader>
+              </Header>
               <p>
                 We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <GlobeOutline width="36" /> Price Matching
-              </CardHeader>
+              </Header>
               <p>
                 We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <HeartOutline width="36" /> Instant Support
-              </CardHeader>
+              </Header>
               <p>
                 You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <CashOutline width="36" /> Nonprofit
-              </CardHeader>
+              </Header>
               <p>
                 Our nonprofit status helps us keep our services affordable and accessible. Clients receive periodic reimbursements for excess profit.
               </p>
@@ -300,49 +294,49 @@ export default component$(() => {
           </h2>
           <div class="grid md:grid-cols-3 gap-4">
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <PersonOutline width="36" /> Mikkel Hansen
-              </CardHeader>
+              </Header>
               <p>
                 I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <PersonOutline width="36" /> Wizzy SMP
-              </CardHeader>
+              </Header>
               <p>
                 Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <PersonOutline width="36" /> Beau
-              </CardHeader>
+              </Header>
               <p>
                 I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <PersonOutline width="36" /> Jmaster
-              </CardHeader>
+              </Header>
               <p>
                 Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
               </p>
             </Card>
             <Card color="darkergray">
-              <CardHeader>
+              <Header>
                 <PersonOutline width="36" /> Oliver Flynn
-              </CardHeader>
+              </Header>
               <p>
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
             <Card color="darkergray" hover="clickable" href="https://www.trustpilot.com/review/birdflop.com">
-              <CardHeader>
+              <Header>
                 <StarOutline width="36" /> Trustpilot
-              </CardHeader>
+              </Header>
               <p>
                 Check out our Trustpilot page for more testimonials.
               </p>

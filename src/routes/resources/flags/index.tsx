@@ -6,7 +6,7 @@ import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, CardHeader, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -267,7 +267,7 @@ export default component$(() => {
             <h2 class="text-gray-300 text-base sm:text-xl mb-6">
               {t('flags.enviroments.description@@The operating system that the server runs on.')}
             </h2>
-            <div class="flex flex-wrap gap-3 justify-center fill-current">
+            <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
                 <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
@@ -295,7 +295,7 @@ export default component$(() => {
             <h2 class="text-gray-300 text-base sm:text-xl mb-6">
               {t('flags.software.description@@The software in which your Minecraft server will run on.')}
             </h2>
-            <div class="flex flex-wrap gap-3 justify-center fill-current">
+            <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
                 <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
@@ -333,39 +333,32 @@ export default component$(() => {
               </Button>
             </div>
             <div>
-              <div class="grid sm:grid-cols-2 gap-4 items-end justify-between mb-6 fill-current">
-                <div>
-                  <CardHeader>
+              <div class="flex [&>*]:flex-1 flex-wrap gap-4 items-end justify-between mb-6 fill-current">
+                <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onChange$={(event: any) => {
+                  if (event.target!.value.replace(/ /g, '') == '') return;
+                  if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
+                  store.parsed.fileName = event.target!.value;
+                  setCookie(JSON.stringify(store));
+                }}>
+                  <Header subheader={t('flags.fileName.description@@The name of the file that will be used to start your server.')}>
                     {t('flags.fileName.label@@File Name')}
-                  </CardHeader>
-                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onChange$={(event: any) => {
-                    if (event.target!.value.replace(/ /g, '') == '') return;
-                    if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
-                    store.parsed.fileName = event.target!.value;
-                    setCookie(JSON.stringify(store));
-                  }}>
-                    {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
-                  </TextInput>
-                </div>
-                <div>
-                  <CardHeader>
+                  </Header>
+                </TextInput>
+                <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
+                  store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
+                }} values={Object.keys(flagTypes).map((flag: string) => ({
+                  name: flagTypes[flag as keyof typeof flagTypes],
+                  value: flag,
+                }))} value={store.parsed.flags}>
+                  <Header subheader={t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}>
                     {t('flags.flags.label@@Flags')}
-                  </CardHeader>
-                  <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
-                    store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                  }} values={Object.keys(flagTypes).map((flag: string) => ({
-                    name: flagTypes[flag as keyof typeof flagTypes],
-                    value: flag,
-                  }))} value={store.parsed.flags}>
-                    {t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
-                  </SelectInput>
-                </div>
+                  </Header>
+                </SelectInput>
               </div>
-              <div class="relative w-full mb-8">
-                <CardHeader>
+              <div class="relative w-full mb-8 flex flex-col gap-2">
+                <Header subheader={t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}>
                   {t('flags.memory.label@@RAM (GB)')}
-                </CardHeader>
-                {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+                </Header>
                 <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
                   <div class="h-2 bg-blue-800 group-hover:bg-blue-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
                   <div class="absolute w-full top-1 flex justify-between">
@@ -387,17 +380,17 @@ export default component$(() => {
                   }} />
                 </div>
               </div>
-              <div class="flex flex-wrap gap-3 justify-center fill-current">
+              <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
                 {configOptions.map((option, index) => (
                   <Card color="darkgray" key={index}>
-                    <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-4">
                       {option.cardIcon}
                       {option.label}
                     </div>
-                    <p class="min-w-[16rem] text-center mb-10">
+                    <p class="min-w-[16rem] text-center mb-16">
                       {option.description}
                     </p>
-                    <div class="absolute bottom-5 w-full -mx-8">
+                    <div class="absolute bottom-8 w-full -mx-8">
                       <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
                         setCookie(JSON.stringify(store));
@@ -415,13 +408,10 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <TextArea output class={{ 'h-60': true }} id="Output" value={generateResult(store.parsed).script}>
-              <h1 class="font-bold text-xl sm:text-3xl mb-2">
+            <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={generateResult(store.parsed).script}>
+              <Header subheader={t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}>
                 {t('flags.script.label@@Script')}
-              </h1>
-              <span class="text-sm sm:text-base pb-4">
-                {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
-              </span>
+              </Header>
             </TextArea>
           </div>
         }

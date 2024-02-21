@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
+import { ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 
 export default component$(() => {
@@ -12,114 +12,75 @@ export default component$(() => {
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="Tools to help you create gradient text in Minecraft.">
             Gradient Tools
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              Tools to help you create gradient text in minecraft.
-            </span>
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-warp gap-4">
             <Card href="/resources/rgb" color="red" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="RGB gradient creator">
                 RGBirdflop
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  RGB gradient creator
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/animtab" color="blue" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="TAB plugin gradient animation creator">
                 Animated TAB
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  TAB plugin gradient animation creator
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/animpreview" color="green" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Preview TAB Animations without the need to put them in-game">
                 TAB Animation Previewer
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  Preview TAB Animations without the need to put them in-game
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="Tools to help configure and setup minecraft servers.">
             Server tools
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              Tools to help configure and setup minecraft servers.
-            </span>
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-warp gap-4">
             <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Analyze Spark Profiles and get possible optimizations">
                 Spark Profile
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  Analyze Spark Profiles and get possible optimizations
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/papertimings" color="pink" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Analyze Paper Timings Reports and get possible optimizations">
                 Paper Timings
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  Analyze Paper Timings Reports and get possible optimizations
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/flags" color="orange" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="A simple script generator to start your Minecraft servers with optimal flags">
                 Flags
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  A simple script generator to start your Minecraft servers with optimal flags
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="Miscellaneous tools to help with random miscellaneous things.">
             Miscellaneous tools
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              Miscellaneous tools to help with random miscellaneous things.
-            </span>
-          </CardHeader>
-          <div class="flex flex-warp gap-4">
+          </Header>
+          <div class="flex [&>*]:flex-1 flex-warp gap-4">
             <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Easily merge textures for resource pack animations">
                 Animated Textures
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  Easily merge textures for resource pack animations
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Strips all color / format codes from text">
                 Color Code Stripper
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  Strips all color / format codes from text
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
             <Card href="/resources/presettools" color="red" blobs hover="clickable">
-              <CardHeader>
+              <Header subheader="Update older preset versions to the newest version">
                 Preset Tools
-                <span q:slot='subheader' class="text-xs text-gray-300">
-                  This will update older preset versions to the newest version
-                </span>
-              </CardHeader>
+              </Header>
             </Card>
           </div>
         </Card>
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="Botflop is a Discord bot that watches chat to chime in and provide suggestions.">
             Botflop
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              Botflop is a Discord bot that watches chat to chime in and provide suggestions.
-            </span>
-          </CardHeader>
+          </Header>
           <div class="text-lg">
             Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </div>
@@ -135,12 +96,9 @@ export default component$(() => {
           </div>
         </Card>
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="Binflop is Birdflop's spinoff of the original hastebin.com.">
             Binflop
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              Binflop is Birdflop's spinoff of the original hastebin.com.
-            </span>
-          </CardHeader>
+          </Header>
           <div class="text-lg">
             Binflop improves upon Hastebin through the following methods:
             <ul class="list-disc ml-5 space-y-1">
@@ -174,12 +132,9 @@ export default component$(() => {
           </div>
         </Card>
         <Card color="darkgray">
-          <CardHeader>
+          <Header subheader="BirdTickets is a Discord ticket bot which provides premium features without a premium cost.">
             BirdTickets
-            <span q:slot='subheader' class="text-xs text-gray-300">
-              BirdTickets is a Discord ticket bot which provides premium features without a premium cost.
-            </span>
-          </CardHeader>
+          </Header>
           <ul class="list-disc ml-5 space-y-1 text-lg">
             <li>
               Create tickets through commands and/or reactions.
