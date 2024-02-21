@@ -16,7 +16,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Automatic Minecraft Timings Analyzer by Birdflop',
+  title: 'Automatic Minecraft Timings Analyzer - Birdflop',
   meta: [
     {
       name: 'description',

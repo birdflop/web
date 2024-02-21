@@ -9,14 +9,14 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           Paper Timings Analysis
         </h1>
         <h2 class="text-gray-50 text-base sm:text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br/>
-          See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400">this guide</a> for detailed information on the functionality of each setting.
+          See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
         </h2>
 
         <Slot />
@@ -61,7 +61,7 @@ export default component$(() => {
         <p class="text-white my-12">
           You can also copy the code into a link<br/>
           <span class="text-gray-300">https://birdflop.com/resources/papertimings/[code]</span><br/>
-          Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400">botflop</a>
+          Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400 hover:underline">botflop</a>
         </p>
       </div>
     </section>

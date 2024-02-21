@@ -9,7 +9,7 @@ import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
-import { Button, ColorInput, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -144,7 +144,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtab.title@@Animated TAB')}
@@ -154,12 +154,9 @@ export default component$(() => {
         </h2>
 
         <TextArea output id="anim-tab-output" value={AnimationOutput(store)}>
-          <h1 class="font-bold text-xl sm:text-3xl mb-2">
+          <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
-          </h1>
-          <span class="text-sm sm:text-base pb-4">
-            {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
-          </span>
+          </Header>
         </TextArea>
 
         <h1 class={{
@@ -371,7 +368,7 @@ export default component$(() => {
               <label>
                 {t('color.presets@@Presets')}
               </label>
-              <div class="flex gap-2 my-2">
+              <div class="flex gap-2">
                 <Button onClick$={() => {
                   navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
                   const alert = {
@@ -394,7 +391,7 @@ export default component$(() => {
                     const alert = {
                       class: 'text-red-500',
                       translate: 'color.invalidPreset',
-                      text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-500" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-500" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
+                      text: 'INVALID PRESET!\nIf this is a old preset, please update it using the <a class="text-blue-400 hover:underline" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
                     };
                     store.alerts.push(alert);
                     return setTimeout(() => {
@@ -421,18 +418,18 @@ export default component$(() => {
               ))}
             </div>
             <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
-              <Toggle id="bold" checked={store.bold} onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.bold@@Bold')} - {store.formatchar + 'l'}
-              </Toggle>
-              <Toggle id="italic" checked={store.italic} onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.italic@@Italic')} - {store.formatchar + 'o'}
-              </Toggle>
-              <Toggle id="underline" checked={store.underline} onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.underline@@Underline')} - {store.formatchar + 'n'}
-              </Toggle>
-              <Toggle id="strikethrough" checked={store.strikethrough} onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}>
-                {t('color.strikethrough@@Strikethrough')} - {store.formatchar + 'm'}
-              </Toggle>
+              <Toggle id="bold" checked={store.bold}
+                onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
+              <Toggle id="italic" checked={store.italic}
+                onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                label={`${t('color.italic@@Italic')} - ${store.formatchar}o`} />
+              <Toggle id="underline" checked={store.underline}
+                onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                label={`${t('color.underline@@Underline')} - ${store.formatchar}n`} />
+              <Toggle id="strikethrough" checked={store.strikethrough}
+                onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                label={`${t('color.strikethrough@@Strikethrough')} - ${store.formatchar + 'm'}`} />
             </div>
           </div>
         </div>

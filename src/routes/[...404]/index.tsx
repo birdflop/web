@@ -5,8 +5,8 @@ import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]" >
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 grayscale blur-xl" id="bg" />
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100lvh-68px)]" >
+      <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 grayscale blur-lg" id="bg" alt="background" />
       <div class="text-red-400 text-4xl">
         <div class="hidden sm:flex">
           <LogoBirdflop confused width={200} fillGradient={['#54daf4', '#545eb6']} />

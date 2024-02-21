@@ -1,16 +1,16 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card, CardHeader } from '@luminescent/ui';
+import { ButtonAnchor, Card, Header } from '@luminescent/ui';
 import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-xl" id="bg" />
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+      <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-lg" id="bg" alt="background" />
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
         Node Stats
       </h1>
-      <div class="flex gap-3 justify-center">
+      <div class="flex flex-wrap gap-3 justify-center">
         <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
           Overview
         </ButtonAnchor>
@@ -18,24 +18,21 @@ export default component$(() => {
           Web Services
         </ButtonAnchor>
       </div>
-      <div class="flex gap-3 justify-center">
+      <div class="flex flex-wrap gap-3 justify-center">
         <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
-          <CardHeader>
+          <Header subheader="US">
             Crabwings
-            <span q:slot='subheader' class="text-xs text-gray-300">US</span>
-          </CardHeader>
+          </Header>
         </Card>
         <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
-          <CardHeader>
+          <Header subheader="EU">
             Impeyes
-            <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
-          </CardHeader>
+          </Header>
         </Card>
         <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
-          <CardHeader>
+          <Header subheader="EU">
             Jellyfishjaws
-            <span q:slot='subheader' class="text-xs text-gray-300">EU</span>
-          </CardHeader>
+          </Header>
         </Card>
       </div>
     </section>
