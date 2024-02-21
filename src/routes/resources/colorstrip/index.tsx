@@ -53,7 +53,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Minecraft Color Code Stripper by Birdflop',
+  title: 'Minecraft Color Code Stripper - Birdflop',
   meta: [
     {
       name: 'description',

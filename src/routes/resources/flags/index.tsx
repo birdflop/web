@@ -431,7 +431,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Minecraft Flags Generator by Birdflop',
+  title: 'Minecraft Flags Generator - Birdflop',
   meta: [
     {
       name: 'description',

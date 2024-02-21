@@ -17,7 +17,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Automatic Minecraft Spark Profile Analyzer by Birdflop',
+  title: 'Automatic Minecraft Spark Profile Analyzer - Birdflop',
   meta: [
     {
       name: 'description',

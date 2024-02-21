@@ -103,7 +103,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'TAB Animation Previewer by Birdflop',
+  title: 'TAB Animation Previewer - Birdflop',
   meta: [
     {
       name: 'description',

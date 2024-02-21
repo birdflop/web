@@ -152,7 +152,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Minecraft Animated Textures Creator by Birdflop',
+  title: 'Minecraft Animated Textures Creator - Birdflop',
   meta: [
     {
       name: 'description',
