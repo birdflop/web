@@ -69,24 +69,3 @@ html {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-
-
-@keyframes fade-in {
-  from { opacity: 0; }
-}
-
-@keyframes fade-out {
-  to { opacity: 0; }
-}
-@keyframes slide-from-top {
-  from {
-    transform: translateY(30px);
-    scale: 0.95;
-  }
-}
-@keyframes slide-to-bottom {
-  to {
-    transform: translateY(-30px);
-    scale: 0.95;
-  }
-}
