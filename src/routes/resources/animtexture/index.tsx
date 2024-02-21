@@ -81,9 +81,9 @@ export default component$(() => {
           {t('animtexture.textureName@@Texture Name')}
         </TextInput>
 
-        <Toggle id="Cumulative" checked={store.cumulative} onChange$={(event: any) => { store.cumulative = event.target.checked; }}>
-          {t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}
-        </Toggle>
+        <Toggle id="Cumulative" checked={store.cumulative}
+          onChange$={(event: any) => { store.cumulative = event.target.checked; }}
+          label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}/>
 
         <Button class={{ 'my-6': true }} onClick$={
           () => {

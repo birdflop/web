@@ -23,7 +23,7 @@ export default component$(() => {
 
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" />
+      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold fade-in animation-delay-200">
@@ -36,8 +36,7 @@ export default component$(() => {
               data-words={'minecraft hosting,public resources,communities,you'}
               data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
               data-delay="50"
-              data-deleteDelay="1500"
-            >
+              data-deleteDelay="1500">
             </span>
             <span class="cursor" data-owner="main" data-cursor-display="|"></span>
           </h2>
@@ -47,7 +46,7 @@ export default component$(() => {
                 <ServerOutline width="30" class="text-3xl" />Hosting
               </ButtonAnchor>
               <Link href="/resources">
-                <Button color="purple" size="xl">
+                <Button color="purple" size="xl" class={{ 'w-full': true }}>
                   <CubeOutline width="30" class="text-3xl" /> Resources
                 </Button>
               </Link>
@@ -232,7 +231,7 @@ export default component$(() => {
             </Card>
             <Card color="darkergray">
               <Header>
-                <ColorPaletteOutline width="36" /> Fully Configurable
+                <ColorPaletteOutline width="36" class="fill-current" /> Fully Configurable
               </Header>
               <p>
                 You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.

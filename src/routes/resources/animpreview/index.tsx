@@ -60,7 +60,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animpreview.title@@Animation Previewer')}
@@ -69,7 +69,7 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <TextArea id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+        <TextArea id="Animaton" class={{ 'h-96': true }} value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
           {t('animpreview.yamlInput@@YAML Input')}
         </TextArea>
 

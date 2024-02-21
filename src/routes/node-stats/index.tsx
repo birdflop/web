@@ -5,8 +5,8 @@ import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100svh)] pt-[72px]">
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-xl" id="bg" />
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+      <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-lg" id="bg" alt="background" />
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
         Node Stats
       </h1>

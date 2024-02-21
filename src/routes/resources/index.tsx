@@ -6,7 +6,7 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 sm:items-center justify-center min-h-[calc(100svh-68px)]">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center justify-center min-h-[calc(100svh-68px)]">
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
         Resources
       </h1>
@@ -15,7 +15,7 @@ export default component$(() => {
           <Header subheader="Tools to help you create gradient text in Minecraft.">
             Gradient Tools
           </Header>
-          <div class="flex [&>*]:flex-1 flex-warp gap-4">
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <Card href="/resources/rgb" color="red" blobs hover="clickable">
               <Header subheader="RGB gradient creator">
                 RGBirdflop
@@ -37,7 +37,7 @@ export default component$(() => {
           <Header subheader="Tools to help configure and setup minecraft servers.">
             Server tools
           </Header>
-          <div class="flex [&>*]:flex-1 flex-warp gap-4">
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
               <Header subheader="Analyze Spark Profiles and get possible optimizations">
                 Spark Profile
@@ -59,7 +59,7 @@ export default component$(() => {
           <Header subheader="Miscellaneous tools to help with random miscellaneous things.">
             Miscellaneous tools
           </Header>
-          <div class="flex [&>*]:flex-1 flex-warp gap-4">
+          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
               <Header subheader="Easily merge textures for resource pack animations">
                 Animated Textures

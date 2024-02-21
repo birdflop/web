@@ -177,7 +177,7 @@ export const NavButton = component$(({ href, title, icon, type, extraClass, styl
 export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
   return (
     <div class={{
-      'cursor-pointer transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
+      'transition ease-in-out gap-3 hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg items-center': true,
       ...extraClass,
     }}>
       <div class="px-4 py-2 flex gap-2.5 items-center">
@@ -185,7 +185,7 @@ export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
         {name}
         <ChevronDown width="16" class="transform group-hover:-rotate-180 transition ease-in-out" />
       </div>
-      <div class="absolute top-8 left-0 z-10 hidden group-hover:flex pt-5 text-base">
+      <div class="absolute top-8 z-10 hidden group-hover:flex pt-8 text-base">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           <Slot />
         </div>
