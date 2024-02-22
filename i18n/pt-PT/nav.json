@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "analysis": "Analise",
+    "animatedTAB": "TAB Animado",
+    "animatedTextures": "Texturas animadas",
+    "colorCodeStripper": "Divisor de códigos de cor",
+    "flags": "Flags",
+    "gradients": "Gradientes",
+    "hexGradient": "Hexadecimal Gradiente",
+    "misc": "Misc",
+    "more": "More Resources",
+    "paperTimings": "Timings do Paper",
+    "presetTools": "Ferramentas de preset",
+    "privacyPolicy": "Politica de privacidade",
+    "sparkProfile": "Perfil spark",
+    "tabAnimationPreview": "TAB Animation Previewer",
+    "tabAnimationPreviewer": "Visualizador da animação do TAB"
+  }
+}
