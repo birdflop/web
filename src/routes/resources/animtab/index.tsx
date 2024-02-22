@@ -414,11 +414,11 @@ export default component$(() => {
                 <Button id="createurl" onClick$={() => {
                   const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                   const url = new URL(base_url);
-                  const params = JSON.stringify({ ...store, alerts: undefined, frames: undefined, frame: undefined });
+                  const params = { ...store, alerts: undefined, frames: undefined, frame: undefined };
                   Object.entries(params).forEach(([key, value]) => {
                     url.searchParams.set(key, String(value));
                   });
-                  window.location.href = url.href;
+                  window.history.pushState({}, '', url.href);
                   const alert = {
                     class: 'text-green-500',
                     translate: 'color.exportedPresetUrl',

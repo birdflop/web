@@ -10,7 +10,6 @@ export const getCookies = $(function (cookie: Cookie, names: string[], urlParams
 
   names.forEach(name => {
     const paramValue = urlParams.get(name);
-    console.log('paramValue', paramValue, name);
     if (paramValue) cookiesObj[name] = paramValue;
   });
 
