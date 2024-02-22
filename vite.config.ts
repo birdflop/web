@@ -1,15 +1,16 @@
-import { defineConfig } from "vite";
-import { qwikVite } from "@builder.io/qwik/optimizer";
+import { partytownVite } from "@builder.io/partytown/utils";
 import { qwikCity } from "@builder.io/qwik-city/vite";
+import { qwikVite } from "@builder.io/qwik/optimizer";
+import { join } from "path";
 import { qwikSpeakInline } from "qwik-speak/inline";
+import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { languages } from "./src/speak-config";
-import { partytownVite } from "@builder.io/partytown/utils";
-import { join } from "path";
+import { rewriteRoutes } from "./src/speak-routes";
 export default defineConfig(() => {
     return {
         plugins: [
-            qwikCity(),
+            qwikCity({ rewriteRoutes }),
             qwikVite(),
             tsconfigPaths(),
             qwikSpeakInline({
