@@ -13,6 +13,7 @@ export default defineConfig(() => {
             qwikVite(),
             tsconfigPaths(),
             qwikSpeakInline({
+                basePath: './',
                 supportedLangs: Object.keys(languages),
                 defaultLang: "en-US",
                 assetsPath: "i18n"
