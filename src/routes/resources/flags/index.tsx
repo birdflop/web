@@ -164,6 +164,7 @@ export default component$(() => {
       cardIcon: <TerminalOutline class="w-10 h-10" />,
       label: t('flags.gui.label@@Use GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
+      disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     {
       id: 'variables',
@@ -273,6 +274,11 @@ export default component$(() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
                   <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                     {option.cardIcon}
@@ -301,6 +307,11 @@ export default component$(() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
                   <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                     {option.cardIcon}
@@ -391,7 +402,7 @@ export default component$(() => {
                       {option.description}
                     </p>
                     <div class="absolute bottom-8 w-full -mx-8">
-                      <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
+                      <Toggle checked={store.parsed[option.id as keyof typeof store]} disabled={option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
                         setCookie(JSON.stringify(store));
                       }} />
