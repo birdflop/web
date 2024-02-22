@@ -447,7 +447,6 @@ export default component$(() => {
                         } else {
                           store.parsed.extraFlags.splice(store.parsed.extraFlags.indexOf(option.id), 1);
                         }
-                        console.log(store.parsed);
                         setCookie(JSON.stringify(store));
                       }} />
                     </div>
