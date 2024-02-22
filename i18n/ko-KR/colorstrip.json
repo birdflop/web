@@ -1,9 +1,9 @@
 {
-    "colorstrip": {
-        "title": "색상 코드 제거기",
-        "subtitle": "텍스트에서 모든 색상/형식 코드를 제거합니다",
-        "inputText": "입력 텍스트",
-        "output": "출력",
-        "colorCodeType": "색상 코드 유형"
-    }
+  "colorstrip": {
+    "colorCodeType": "색상 코드 유형",
+    "inputText": "입력 텍스트",
+    "output": "출력",
+    "subtitle": "텍스트에서 모든 색상/형식 코드를 제거합니다",
+    "title": "색상 코드 제거기"
+  }
 }

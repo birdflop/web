@@ -1,10 +1,7 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import OutputField from '~/components/elements/OutputField';
-import SelectInput from '~/components/elements/SelectInput';
-import TextInput from '~/components/elements/TextInput';
-
+import { SelectInput, TextArea, TextInput } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 
 export default component$(() => {
@@ -17,7 +14,7 @@ export default component$(() => {
   }, { deep: true });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('colorstrip.title@@Color Code Stripper')}
@@ -26,26 +23,29 @@ export default component$(() => {
           {t('colorstrip.subtitle@@Strips all color / format codes from text')}
         </h2>
 
-        <TextInput extraClass={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
+        <TextInput class={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <SelectInput id="gradienttype" label={t('colorstrip.colorCodeType@@Color Code Type')} onChange$={(event: any) => { store.type = event.target!.value; }}>
-          <option value={0}>{'&#rrggbb'}</option>
-          <option value={1}>{'<&#rrggbb>'}</option>
-          <option value={2}>{'&x&r&r&g&g&b&b'}</option>
-          <option value={3}>{'§x§r§r§g§g§b§b'}</option>
+        <SelectInput id="gradienttype" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+          values={[
+            { value: 0, name: '&#rrggbb' },
+            { value: 1, name: '<#rrggbb>' },
+            { value: 2, name: '&x&r&r&g&g&b&b' },
+            { value: 3, name: '§x§r§r§g§g§b§b' },
+          ]}>
+          {t('colorstrip.colorCodeType@@Color Code Type')}
         </SelectInput>
 
         <div class="mt-3">
-          <OutputField value={
+          <TextArea output id="colorstrip-output" value={
             store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
               store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
                 store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
                   store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
           }>
             {t('colorstrip.output@@Output')}
-          </OutputField>
+          </TextArea>
         </div>
       </div>
     </section>
@@ -53,19 +53,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Color Code Stripper',
+  title: 'Minecraft Color Code Stripper - Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Strips all color / format codes from text.',
+      content: 'Strips all color / format codes from text. Developed by Birdflop, a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

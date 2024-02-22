@@ -1,9 +1,9 @@
 {
-    "colorstrip": {
-        "title": "Divisor do código de cores",
-        "subtitle": "Separa todas as cores / formata códigos de texto",
-        "inputText": "Texto de input",
-        "output": "Output",
-        "colorCodeType": "Tipo de código de cor"
-    }
+  "colorstrip": {
+    "colorCodeType": "Tipo de código de cor",
+    "inputText": "Texto de input",
+    "output": "Output",
+    "subtitle": "Separa todas as cores / formata códigos de texto",
+    "title": "Divisor do código de cores"
+  }
 }

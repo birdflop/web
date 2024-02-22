@@ -103,7 +103,7 @@ export function loadPreset(p: string) {
     version: 2,
     colors: [],
     name: 'logo',
-    text: 'SimplyMC',
+    text: 'birdflop',
     type: 1,
     speed: 50,
     format: '&#$1$2$3$4$5$6$f$c',
@@ -123,7 +123,7 @@ export function loadPreset(p: string) {
     try {
       preset = JSON.parse(p);
       version = preset.version;
-    } catch (error){
+    } catch (error) {
       return 'Invalid Preset';
     }
   }

@@ -1,14 +1,14 @@
 import createField from './createField';
 import evalField from './evalField';
 
-import servers from '~/analyze/configs/servers';
+import config_bukkit from '~/analyze/configs/bukkit';
 import plugins_paper from '~/analyze/configs/plugins/paper';
 import plugins_purpur from '~/analyze/configs/plugins/purpur';
-import config_server_properties from '~/analyze/configs/server.properties';
-import config_bukkit from '~/analyze/configs/bukkit';
-import config_spigot from '~/analyze/configs/spigot';
 import config_paper from '~/analyze/configs/profile/paper';
 import config_purpur from '~/analyze/configs/purpur';
+import config_server_properties from '~/analyze/configs/server.properties';
+import servers from '~/analyze/configs/servers';
+import config_spigot from '~/analyze/configs/spigot';
 
 export default async function analyzeProfile(id: string) {
   const url_raw = `https://spark.lucko.me/${id}?raw=1`;
@@ -21,7 +21,7 @@ export default async function analyzeProfile(id: string) {
     sampler = await response_raw.json();
   }
   catch (err) {
-    return [{ name: '❌ Processing Error', value: 'SimplyMC cannot process this spark profile. Please use an alternative spark profile.' }];
+    return [{ name: '❌ Processing Error', value: 'birdflop cannot process this spark profile. Please use an alternative spark profile.' }];
   }
 
   const platform = sampler.metadata.platform.name;
@@ -70,7 +70,7 @@ export default async function analyzeProfile(id: string) {
     return [
       {
         name: '❌ Processing Error',
-        value: `SimplyMC is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
+        value: `birdflop is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
       },
     ];
   }

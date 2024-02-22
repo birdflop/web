@@ -37,7 +37,7 @@ export function getAnimFrames(store: any) {
   let colors = store.colors.map((color: string) => convertToRGB(color));
   if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
-  const text = store.text ?? 'SimplyMC';
+  const text = store.text ?? 'birdflop';
   let loopAmount;
   switch (Number(store.type)) {
   default:
@@ -124,7 +124,7 @@ export function AnimationOutput(store: any) {
   return FinalOutput;
 }
 
-export function generateOutput(text: string = 'SimplyMC', colors: string[] = ['#00FFE0', '#EB00FF'], format: string = '&#$1$2$3$4$5$6$f$c', formatchar: string = '&', prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
+export function generateOutput(text: string = 'birdflop', colors: string[] = ['#00FFE0', '#EB00FF'], format: string = '&#$1$2$3$4$5$6$f$c', formatchar: string = '&', prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
   if (format != 'MiniMessage') {
     let newColors = colors?.map((color: string) => convertToRGB(color));
     if (colors.length < 2) newColors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
@@ -158,6 +158,6 @@ export function generateOutput(text: string = 'SimplyMC', colors: string[] = ['#
 
     return output;
   } else {
-    return `<gradient${colors.join(':')}>${text}`;
+    return `<gradient:${colors.join(':')}>${text}`;
   }
 }

@@ -23,7 +23,7 @@ import Root from './root';
  * Make sure the locale is among the 'supportedLocales'
  */
 export function extractBase({ serverData }: RenderOptions): string {
-  if (!isDev && serverData?.locale && config.supportedLocales.includes(serverData.locale)) {
+  if (!isDev && serverData?.locale && config.supportedLocales.find((locale) => locale.lang === serverData?.locale)) {
     return '/build/' + serverData.locale;
   } else {
     return '/build';

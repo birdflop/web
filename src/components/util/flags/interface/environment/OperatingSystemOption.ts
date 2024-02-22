@@ -1,6 +1,6 @@
 import type { EnvironmentOption } from '~/components/util/flags/interface/environment/EnvironmentOption';
-import type { AvailableConfig } from '~/data/config';
 import type { GenerateOperatingSystem } from '~/components/util/flags/interface/generate/GenerateOperatingSystem';
+import type { AvailableConfig } from '~/data/config';
 
 interface File {
     'name'?: string,

@@ -7,8 +7,8 @@ export default component$(() => {
   return (
     <PaperTimings>
       <p class="text-white my-12">
-        1. Do /timings report<br/>
-        <span class="text-gray-300">May not be present in Purpur 1.19 and up</span><br/>
+        1. Do /timings report<br />
+        <span class="text-gray-300">May not be present in Purpur 1.19 and up</span><br />
         2. Follow the instructions given if you weren't shown a link
       </p>
     </PaperTimings>
@@ -16,19 +16,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Analyze Timings',
+  title: 'Automatic Minecraft Timings Analyzer - Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
+      content: 'Analyze your Paper Timings to get optimization recommendations. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
+      content: 'Analyze your Paper Timings to get optimization recommendations. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

@@ -1,18 +1,18 @@
-import { component$, useTask$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import yaml from 'yaml';
-import TextInput from '~/components/elements/TextInput';
+import { TextArea } from '@luminescent/ui';
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
+import yaml from 'yaml';
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });
   const t = inlineTranslate();
 
   const store: any = useStore({
-    text: 'SimplyMC',
+    text: 'birdflop',
     speed: 50,
     frames: [],
     frame: 1,
@@ -60,7 +60,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 sm:items-center justify-center min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animpreview.title@@Animation Previewer')}
@@ -69,9 +69,9 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <TextInput big id="Animaton" value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+        <TextArea id="Animaton" class={{ 'h-96': true }} value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
           {t('animpreview.yamlInput@@YAML Input')}
-        </TextInput>
+        </TextArea>
 
         <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {
@@ -103,19 +103,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'TAB Animation Previewer',
+  title: 'TAB Animation Previewer - Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'Preview TAB Animations without the need to put them ingame',
+      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them ingame',
+      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

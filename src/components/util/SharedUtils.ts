@@ -1,20 +1,27 @@
 import { $ } from '@builder.io/qwik';
+import type { Cookie } from '@builder.io/qwik-city';
 
-export const getCookie = $(function (store: any) {
-  const json = JSON.parse(store);
-  delete json.alerts;
-  delete json.frames;
-  delete json.frame;
-  const cookie: { [key: string]: string; } = {};
-  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-    const pairsplit = pair.split(/\s*=\s*/);
-    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+export const getCookies = $(function (cookie: Cookie, names: string[], urlParams: URLSearchParams) {
+  const cookiesObj: { [key: string]: string; } = {};
+  names.forEach(name => {
+    const cookieValue = cookie.get(name)?.value;
+    if (cookieValue) cookiesObj[name] = cookieValue;
   });
-  Object.keys(json).forEach(key => {
-    if (!cookie[key]) return;
-    let existingCookie: string | string[] = decodeURIComponent(cookie[key]);
-    if (key == 'colors' && existingCookie) existingCookie = existingCookie.split(',');
-    json[key] = existingCookie;
+
+  names.forEach(name => {
+    const paramValue = urlParams.get(name);
+    if (paramValue) cookiesObj[name] = paramValue;
   });
-  return JSON.stringify(json);
+
+  const parsedCookiesAndParams: any = {};
+  for (const key of Object.keys(cookiesObj)) {
+    const value = cookiesObj[key];
+    parsedCookiesAndParams[key] = value === 'true' ? true
+      : value === 'false' ? false
+        : key == 'colors' ? value.split(',')
+          : !isNaN(Number(value)) ? Number(value)
+            : value.startsWith('{') ? JSON.parse(value)
+              : value;
+  }
+  return parsedCookiesAndParams;
 });

@@ -59,7 +59,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

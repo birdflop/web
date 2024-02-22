@@ -1,8 +1,8 @@
 {
-    "gradient": {
-        "title": "Degradado Hex",
-        "subtitle": "Creador de degradados de color hex",
-        "prefix": "Prefijo (generalmente usado para comandos)",
-        "prefixPlaceholder": "ejemplo: '/nick '"
-    }
+  "gradient": {
+    "prefix": "Prefijo (generalmente usado para comandos)",
+    "prefixPlaceholder": "ejemplo: '/nick '",
+    "subtitle": "Creador de degradados de color hex",
+    "title": "Degradado Hex"
+  }
 }

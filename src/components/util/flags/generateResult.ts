@@ -1,10 +1,10 @@
-import { extraFlags, flags } from '~/data/flags';
-import { serverType } from '~/data/environment/serverType';
 import { operatingSystem } from '~/data/environment/operatingSystem';
+import { serverType } from '~/data/environment/serverType';
+import { extraFlags, flags } from '~/data/flags';
 
 interface GenerateResult {
-    'script'?: string,
-    'flags'?: string[]
+  'script'?: string,
+  'flags'?: string[]
 }
 
 interface schema {
@@ -25,8 +25,16 @@ export function generateResult(parsed: schema): GenerateResult {
   const selectedFlags = flags[parsed.flags];
   let generatedFlags: string[] = selectedFlags.generate(parsed);
 
+  const selectedServerType = serverType[parsed.serverType];
+
+  generatedFlags = selectedServerType.generate?.({
+    ...parsed,
+    'existingFlags': generatedFlags,
+  }) ?? generatedFlags;
+
   if (parsed.extraFlags) {
     for (const currentFlags of parsed.extraFlags) {
+      if (!extraFlags[currentFlags].supports.includes(parsed.flags) || !selectedServerType.extraFlags?.includes(currentFlags)) continue;
       const selectedFlags = extraFlags[currentFlags];
 
       generatedFlags = selectedFlags.generate({
@@ -35,13 +43,6 @@ export function generateResult(parsed: schema): GenerateResult {
       }) ?? generatedFlags;
     }
   }
-
-  const selectedServerType = serverType[parsed.serverType];
-
-  generatedFlags = selectedServerType.generate?.({
-    ...parsed,
-    'existingFlags': generatedFlags,
-  }) ?? generatedFlags;
 
   const selectedOperatingSystem = operatingSystem[parsed.operatingSystem];
   const result = selectedOperatingSystem.generate({

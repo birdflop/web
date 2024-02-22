@@ -1,23 +1,14 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
-import { inlineTranslate, useSpeak, useSpeakContext } from 'qwik-speak';
-import { Button } from '~/components/elements/Button';
-import Card, { CardHeader } from '~/components/elements/Card';
-import OutputField from '~/components/elements/OutputField';
-import SelectInput from '~/components/elements/SelectInput';
-import TextInput from '~/components/elements/TextInput';
-import Toggle from '~/components/elements/Toggle';
-import Pterodactyl from '~/components/icons/Pterodactyl';
-// import Fabric from '~/components/icons/Fabric';
-// import Forge from '~/components/icons/Forge';
-import Paper from '~/components/icons/Paper';
-import Purpur from '~/components/icons/Purpur';
-import Velocity from '~/components/icons/Velocity';
-import Waterfall from '~/components/icons/Waterfall';
-import { getCookie } from '~/components/util/SharedUtils';
+import { $, component$, useStore } from '@builder.io/qwik';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import type { cardColorClasses } from '@luminescent/ui';
+import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { ArrowForward, CafeOutline, CheckmarkCircleOutline, CodeOutline, CodeWorkingOutline, CubeOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
+import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
+import { extraFlags as extFlags } from '~/data/flags';
+import { serverType as srvType } from '~/data/environment/serverType';
 
 const flagTypes = {
   'none': 'none',
@@ -47,14 +38,33 @@ export const setCookie = $(function (store: any) {
     } else {
       document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
     }
-    console.log(json);
   });
+});
+
+const defaults = {
+  step: 1,
+  parsed: {
+    operatingSystem: '',
+    serverType: '',
+    gui: false,
+    variables: false,
+    autoRestart: false,
+    extraFlags: [],
+    fileName: '',
+    flags: 'aikars',
+    withResult: true,
+    withFlags: false,
+    memory: 0,
+  },
+};
+
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
 });
 
 export default component$(() => {
   useSpeak({ assets: ['flags'] });
   const t = inlineTranslate();
-  const ctx = useSpeakContext();
 
   const environmentOptions = [
     {
@@ -84,8 +94,8 @@ export default component$(() => {
     {
       color: 'orange',
       environment: 'pterodactyl',
-      tabIcon: <Pterodactyl extraClass="w-5 h-5" />,
-      cardIcon: <Pterodactyl extraClass="w-10 h-10" />,
+      tabIcon: <LogoPterodactyl class="w-5 h-5" />,
+      cardIcon: <LogoPterodactyl class="w-10 h-10" />,
       label: t('flags.environments.pterodactyl.label@@Pterodactyl'),
       description: t('flags.environments.pterodactyl.description@@Web-based server management platform used by most hosts'),
     },
@@ -103,48 +113,48 @@ export default component$(() => {
     {
       color: 'gray',
       software: 'paper',
-      tabIcon: <Paper extraClass="w-5 h-5" />,
-      cardIcon: <Paper extraClass="w-10 h-10" />,
+      tabIcon: <LogoPaper class="w-5 h-5" />,
+      cardIcon: <LogoPaper class="w-10 h-10" />,
       label: t('flags.serverType.paper.label@@Paper'),
       description: t('flags.serverType.paper.description@@Bukkit-based plugin loader'),
     },
     {
       color: 'purple',
       software: 'purpur',
-      tabIcon: <Purpur extraClass="w-5 h-5" />,
-      cardIcon: <Purpur extraClass="w-10 h-10" />,
+      tabIcon: <LogoPurpur class="w-5 h-5" />,
+      cardIcon: <LogoPurpur class="w-10 h-10" />,
       label: t('flags.serverType.purpur.label@@Purpur'),
       description: t('flags.serverType.purpur.description@@Bukkit-based plugin loader but more'),
     },
     // {
     //   color: 'red',
     //   software: 'forge',
-    //   tabIcon: <Forge extraClass="w-5 h-5" />,
-    //   cardIcon: <Forge extraClass="w-10 h-10" />,
+    //   tabIcon: <LogoForge class="w-5 h-5" />,
+    //   cardIcon: <LogoForge class="w-10 h-10" />,
     //   label: t('flags.serverType.forge.label@@Forge'),
     //   description: t('flags.serverType.forge.description@@Mod loader'),
     // },
     // {
     //   color: 'orange',
     //   software: 'fabric',
-    //   tabIcon: <Fabric extraClass="w-5 h-5" />,
-    //   cardIcon: <Fabric extraClass="w-10 h-10" />,
+    //   tabIcon: <LogoFabric class="w-5 h-5" />,
+    //   cardIcon: <LogoFabric class="w-10 h-10" />,
     //   label: t('flags.serverType.fabric.label@@Fabric'),
     //   description: t('flags.serverType.fabric.description@@Better mod loader'),
     // },
     {
       color: 'yellow',
       software: 'velocity',
-      tabIcon: <Velocity extraClass="w-5 h-5" />,
-      cardIcon: <Velocity extraClass="w-10 h-10" />,
+      tabIcon: <LogoVelocity class="w-5 h-5" />,
+      cardIcon: <LogoVelocity class="w-10 h-10" />,
       label: t('flags.serverType.velocity.label@@Velocity'),
       description: t('flags.serverType.velocity.description@@Proxy with plugin loader'),
     },
     {
       color: 'blue',
       software: 'waterfall',
-      tabIcon: <Waterfall extraClass="w-5 h-5" />,
-      cardIcon: <Waterfall extraClass="w-10 h-10" />,
+      tabIcon: <LogoWaterfall class="w-5 h-5" />,
+      cardIcon: <LogoWaterfall class="w-10 h-10" />,
       label: t('flags.serverType.waterfall.label@@Waterfall'),
       description: t('flags.serverType.waterfall.description@@Deprecated proxy'),
     },
@@ -152,21 +162,19 @@ export default component$(() => {
 
   const configOptions = [
     {
-      color: 'gray',
       id: 'gui',
       cardIcon: <TerminalOutline class="w-10 h-10" />,
       label: t('flags.gui.label@@Use GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
+      disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     {
-      color: 'gray',
       id: 'variables',
       cardIcon: <CodeWorkingOutline class="w-10 h-10" />,
       label: t('flags.variables.label@@Use Variables'),
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
     },
     {
-      color: 'gray',
       id: 'autoRestart',
       cardIcon: <RefreshCircleOutline class="w-10 h-10" />,
       label: t('flags.autoRestart.label@@Auto-restart'),
@@ -174,44 +182,28 @@ export default component$(() => {
     },
   ];
 
-  const store: any = useStore({
-    step: 1,
-    parsed: {
-      operatingSystem: '',
-      serverType: '',
-      gui: false,
-      variables: false,
-      autoRestart: false,
-      extraFlags: [],
-      fileName: '',
-      flags: 'aikars',
-      withResult: true,
-      withFlags: false,
-      memory: 0,
+  const extraFlagsOptions = [
+    {
+      id: 'vectors',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.vectors.label@@Modern Vectors'),
+      description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
     },
+    {
+      id: 'benchmarkedGraalVM',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)'),
+      description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
+    },
+  ];
+  const cookies = useCookies().value;
+  const store: any = useStore({
+    ...defaults,
+    ...cookies,
   }, { deep: true });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const userstore = await getCookie(JSON.stringify(store));
-    const parsedUserStore = JSON.parse(userstore);
-    if (typeof parsedUserStore.parsed === 'string') {
-      parsedUserStore.parsed = JSON.parse(parsedUserStore.parsed);
-    }
-    for (const key of Object.keys(parsedUserStore)) {
-      const value = parsedUserStore[key];
-      store[key] = value === 'true' ? true : value === 'false' ? false : value;
-      if (key === 'parsed') {
-        for (const key2 of Object.keys(parsedUserStore.parsed)) {
-          const value2 = parsedUserStore.parsed[key2];
-          store.parsed[key2] = value2 === 'true' ? true : value2 === 'false' ? false : value2;
-        }
-      }
-    }
-  });
-
   return (
-    <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100lvh-68px)]">
+    <section class="flex mx-auto max-w-7xl px-6 min-h-[calc(100svh)] pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('flags.title@@Flags Generator')}
@@ -292,19 +284,22 @@ export default component$(() => {
             <h2 class="text-gray-300 text-base sm:text-xl mb-6">
               {t('flags.enviroments.description@@The operating system that the server runs on.')}
             </h2>
-            <div class="flex flex-wrap gap-3 justify-center fill-current">
+            <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
               {environmentOptions.map((option, index) => (
-                <Card color={option.color} onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      {option.cardIcon}
-                      {option.label}
-                    </div>
-                  </CardHeader>
+                  <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                    {option.cardIcon}
+                    {option.label}
+                  </div>
                   <p class="min-w-[16rem] text-center">
                     {option.description}
                   </p>
@@ -322,19 +317,22 @@ export default component$(() => {
             <h2 class="text-gray-300 text-base sm:text-xl mb-6">
               {t('flags.software.description@@The software in which your Minecraft server will run on.')}
             </h2>
-            <div class="flex flex-wrap gap-3 justify-center fill-current">
+            <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
               {softwareOptions.map((option, index) => (
-                <Card color={option.color} onClick$={() => {
+                <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
-                  <CardHeader>
-                    <div class="flex flex-col items-center w-full gap-6 py-5">
-                      {option.cardIcon}
-                      {option.label}
-                    </div>
-                  </CardHeader>
+                  <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
+                    {option.cardIcon}
+                    {option.label}
+                  </div>
                   <p class="min-w-[16rem] text-center">
                     {option.description}
                   </p>
@@ -353,7 +351,7 @@ export default component$(() => {
               <h2 class="flex-1 text-gray-300 text-base sm:text-xl">
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </h2>
-              <Button small color="primary" disabled={store.parsed.fileName == ''} onClick$={() => {
+              <Button size='sm' color="blue" disabled={store.parsed.fileName == ''} onClick$={() => {
                 store.step = 4;
                 setCookie(JSON.stringify(store));
               }}>
@@ -362,40 +360,32 @@ export default component$(() => {
               </Button>
             </div>
             <div>
-              <div class="grid sm:grid-cols-2 gap-4 items-end justify-between mb-6 fill-current">
-                <div>
-                  <CardHeader>
+              <div class="flex [&>*]:flex-1 flex-wrap gap-4 items-end justify-between mb-6 fill-current">
+                <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onChange$={(event: any) => {
+                  if (event.target!.value.replace(/ /g, '') == '') return;
+                  if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
+                  store.parsed.fileName = event.target!.value;
+                  setCookie(JSON.stringify(store));
+                }}>
+                  <Header subheader={t('flags.fileName.description@@The name of the file that will be used to start your server.')}>
                     {t('flags.fileName.label@@File Name')}
-                  </CardHeader>
-                  <TextInput id="input" value={store.parsed.fileName} placeholder="server.jar" onChange$={(event: any) => {
-                    if (event.target!.value.replace(/ /g, '') == '') return;
-                    if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
-                    store.parsed.fileName = event.target!.value;
-                    setCookie(JSON.stringify(store));
-                  }}>
-                    {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
-                  </TextInput>
-                </div>
-                <div>
-                  <CardHeader>
+                  </Header>
+                </TextInput>
+                <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
+                  store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
+                }} values={Object.keys(flagTypes).map((flag: string) => ({
+                  name: flagTypes[flag as keyof typeof flagTypes],
+                  value: flag,
+                }))} value={store.parsed.flags}>
+                  <Header subheader={t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}>
                     {t('flags.flags.label@@Flags')}
-                  </CardHeader>
-                  <SelectInput id="preset" value={store.parsed.flags} label={t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance', ctx)} onChange$={(event: any) => {
-                    store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                  }} >
-                    {Object.keys(flagTypes).map((flag: string) => (
-                      <option key={flag} value={flag}>
-                        {flagTypes[flag as keyof typeof flagTypes]}
-                      </option>
-                    ))}
-                  </SelectInput>
-                </div>
+                  </Header>
+                </SelectInput>
               </div>
-              <div class="relative w-full mb-8">
-                <CardHeader>
+              <div class="relative w-full mb-8 flex flex-col gap-2">
+                <Header subheader={t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}>
                   {t('flags.memory.label@@RAM (GB)')}
-                </CardHeader>
-                {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+                </Header>
                 <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
                   <div class="h-2 bg-blue-800 group-hover:bg-blue-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
                   <div class="absolute w-full top-1 flex justify-between">
@@ -417,21 +407,46 @@ export default component$(() => {
                   }} />
                 </div>
               </div>
-              <div class="flex flex-wrap gap-3 justify-center fill-current">
-                {configOptions.map((option, index) => (
-                  <Card color={option.color} key={index}>
-                    <CardHeader>
-                      <div class="flex flex-col items-center w-full gap-6 py-5">
-                        {option.cardIcon}
-                        {option.label}
-                      </div>
-                    </CardHeader>
-                    <p class="min-w-[16rem] text-center mb-10">
+              <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
+                {configOptions.filter((option) => {
+                  return !option.disable?.includes(store.parsed['operatingSystem']) && !option.disable?.includes(store.parsed['serverType']);
+                }).map((option, index) => (
+                  <Card color="darkgray" key={index}>
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-4">
+                      {option.cardIcon}
+                      {option.label}
+                    </div>
+                    <p class="min-w-[16rem] text-center mb-16">
                       {option.description}
                     </p>
-                    <div class="absolute bottom-5 w-full -mx-8">
-                      <Toggle checked={store.parsed[option.id as keyof typeof store]} nolabel center onClick$={(event: any) => {
+                    <div class="absolute bottom-8 w-full -mx-8">
+                      <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
+                        setCookie(JSON.stringify(store));
+                      }} />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <div class="pt-5 flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
+                {extraFlagsOptions.filter((option) => {
+                  return extFlags[option.id].supports.includes(store.parsed.flags) && srvType[store.parsed.serverType].extraFlags?.includes(option.id);
+                }).map((option, index) => (
+                  <Card color="darkgray" key={index}>
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-4">
+                      {option.cardIcon}
+                      {option.label}
+                    </div>
+                    <p class="min-w-[16rem] text-center mb-16">
+                      {option.description}
+                    </p>
+                    <div class="absolute bottom-8 w-full -mx-8">
+                      <Toggle checked={store.parsed.extraFlags.includes(option.id)} center onClick$={(event: any) => {
+                        if (event.target!.checked) {
+                          store.parsed.extraFlags.push(option.id);
+                        } else {
+                          store.parsed.extraFlags.splice(store.parsed.extraFlags.indexOf(option.id), 1);
+                        }
                         setCookie(JSON.stringify(store));
                       }} />
                     </div>
@@ -447,14 +462,11 @@ export default component$(() => {
             <h1 class="flex sm:hidden text-xl font-bold">
               {t('flags.result.label@@Result')}
             </h1>
-            <OutputField extraClass={'h-60'} id="Output" value={generateResult(store.parsed).script}>
-              <h1 class="font-bold text-xl sm:text-3xl mb-2">
+            <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={generateResult(store.parsed).script}>
+              <Header subheader={t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}>
                 {t('flags.script.label@@Script')}
-              </h1>
-              <span class="text-sm sm:text-base pb-4">
-                {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!')}
-              </span>
-            </OutputField>
+              </Header>
+            </TextArea>
           </div>
         }
       </div>
@@ -463,19 +475,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Flags generator',
+  title: 'Minecraft Flags Generator - Birdflop',
   meta: [
     {
       name: 'description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'A simple script generator to start your Minecraft servers with optimal flags.',
+      content: 'A simple script generator to start your Minecraft servers with optimal flags. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',
-      content: 'https://simplymc.art/images/icon.png',
+      content: '/branding/icon.png',
     },
   ],
 };

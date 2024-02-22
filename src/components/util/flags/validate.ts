@@ -1,14 +1,14 @@
 import type { ZodType } from 'zod';
-import type { AvailableConfig } from '~/data/config';
-import type { AvailableOperatingSystem } from '~/data/environment/operatingSystem';
-import type { AvailableServerType } from '~/data/environment/serverType';
 import { z } from 'zod';
+import type { AvailableConfig } from '~/data/config';
 import { config } from '~/data/config';
+import type { AvailableOperatingSystem } from '~/data/environment/operatingSystem';
 import { defaultOperatingSystem, operatingSystem } from '~/data/environment/operatingSystem';
+import type { AvailableServerType } from '~/data/environment/serverType';
 import { defaultServerType, serverType } from '~/data/environment/serverType';
 
 type GenerateConfigSchema = {
-    [key in AvailableConfig]: ZodType
+  [key in AvailableConfig]: ZodType
 }
 
 const operatingSystemKeys = Object.keys(operatingSystem);
