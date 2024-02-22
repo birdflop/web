@@ -1,9 +1,9 @@
-import { component$, $, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
+import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
-import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';

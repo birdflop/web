@@ -1,10 +1,10 @@
 // LuminescentDev Navbar Component Dec 11
 
-import { component$, $, Slot, useStore } from '@builder.io/qwik';
+import { $, Slot, component$, useStore } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { LoadingIcon, LogoBirdflop, LogoDiscord } from '@luminescent/ui';
 
-import { LogoGithub, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline } from 'qwik-ionicons';
+import { ChevronDown, CubeOutline, GlobeOutline, LogoGithub, Menu, ServerOutline } from 'qwik-ionicons';
 
 import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
@@ -107,7 +107,7 @@ export const Brand = component$(() => {
   return (
     <div class="flex items-center justify-start">
       <Link href="/" class="transition ease-in-out text-gray-100 hover:bg-blue-700/20 hover:text-white drop-shadow-xl px-3 pb-3 pt-3 rounded-lg text-lg flex tracking-wider items-center">
-        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']}/>
+        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
         <span class="ml-3 font-bold">Birdflop</span>
         <div class={{
           'transition-all pl-2': true,

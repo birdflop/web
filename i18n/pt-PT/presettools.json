@@ -1,8 +1,8 @@
 {
-    "presettools": {
-        "title": "Atualizador de Presets",
-        "subtitle": "Isto atualiza presets antigas para as mais recentes",
-        "input": "Input da Preset",
-        "output": "Output"
-    }
+  "presettools": {
+    "input": "Input da Preset",
+    "output": "Output",
+    "subtitle": "Isto atualiza presets antigas para as mais recentes",
+    "title": "Atualizador de Presets"
+  }
 }

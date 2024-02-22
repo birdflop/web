@@ -1,14 +1,14 @@
 import createField from './createField';
 import evalField from './evalField';
 
-import servers from '~/analyze/configs/servers';
+import config_bukkit from '~/analyze/configs/bukkit';
 import plugins_paper from '~/analyze/configs/plugins/paper';
 import plugins_purpur from '~/analyze/configs/plugins/purpur';
-import config_server_properties from '~/analyze/configs/server.properties';
-import config_bukkit from '~/analyze/configs/bukkit';
-import config_spigot from '~/analyze/configs/spigot';
 import config_paper from '~/analyze/configs/profile/paper';
 import config_purpur from '~/analyze/configs/purpur';
+import config_server_properties from '~/analyze/configs/server.properties';
+import servers from '~/analyze/configs/servers';
+import config_spigot from '~/analyze/configs/spigot';
 
 export default async function analyzeProfile(id: string) {
   const url_raw = `https://spark.lucko.me/${id}?raw=1`;

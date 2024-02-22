@@ -23,7 +23,8 @@
     "preview": "qwik build preview && vite preview",
     "start": "vite --mode ssr --host",
     "start.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --forcenode --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "qwik-speak-extract": "qwik-speak-extract --supportedLangs=da-DK,en-US,es-ES,ko-KR,nl-NL,pl-PL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n"
   },
   "devDependencies": {
     "@anuragroy/tailwindcss-animate": "^1.0.6",

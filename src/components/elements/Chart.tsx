@@ -2,7 +2,7 @@ import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Chart, registerables } from 'chart.js';
 
 export default component$(() => {
-  const myChart  = useSignal<HTMLCanvasElement>();
+  const myChart = useSignal<HTMLCanvasElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -94,7 +94,7 @@ export default component$(() => {
               cornerRadius: 10,
               padding: 10,
               callbacks: {
-                label: function(context) {
+                label: function (context) {
                   const label = ' ' + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(context.parsed);
                   return label;
                 },

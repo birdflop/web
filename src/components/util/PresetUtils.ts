@@ -123,7 +123,7 @@ export function loadPreset(p: string) {
     try {
       preset = JSON.parse(p);
       version = preset.version;
-    } catch (error){
+    } catch (error) {
       return 'Invalid Preset';
     }
   }

@@ -1,7 +1,7 @@
 {
-    "animpreview": {
-        "title": "Предпросмотр анимации",
-        "subtitle": "Предварительный просмотр TAB-анимации",
-        "yamlInput": "Ввод YAML"
-    }
+  "animpreview": {
+    "subtitle": "Предварительный просмотр TAB-анимации",
+    "title": "Предпросмотр анимации",
+    "yamlInput": "Ввод YAML"
+  }
 }

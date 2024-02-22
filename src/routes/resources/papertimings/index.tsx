@@ -7,8 +7,8 @@ export default component$(() => {
   return (
     <PaperTimings>
       <p class="text-white my-12">
-        1. Do /timings report<br/>
-        <span class="text-gray-300">May not be present in Purpur 1.19 and up</span><br/>
+        1. Do /timings report<br />
+        <span class="text-gray-300">May not be present in Purpur 1.19 and up</span><br />
         2. Follow the instructions given if you weren't shown a link
       </p>
     </PaperTimings>

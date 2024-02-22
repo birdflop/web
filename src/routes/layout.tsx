@@ -1,8 +1,8 @@
 import { component$, Slot, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import Nav from '../components/Nav';
-import Footer from '~/components/Footer';
 import { Button } from '@luminescent/ui';
+import Footer from '~/components/Footer';
+import Nav from '../components/Nav';
 
 export default component$(() => {
   const store = useStore({

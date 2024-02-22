@@ -6,10 +6,10 @@ import type { AvailableExtraFlags, AvailableFlags } from '~/data/flags';
 export type AvailableServerType = keyof typeof serverType;
 
 interface SharedFlags<T = AvailableFlags> {
-    [key: string]: T[]
+  [key: string]: T[]
 }
 
-const sharedConfig: AvailableConfig[]  = [
+const sharedConfig: AvailableConfig[] = [
   'fileName',
   'flags',
   'memory',

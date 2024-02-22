@@ -1,15 +1,14 @@
-import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { presetVersion } from '~/components/util/PresetUtils';
-import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
-import { AnimationOutput } from '~/components/util/RGBUtils';
+import { AnimationOutput, getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
+import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
-import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -70,8 +69,8 @@ const defaults = {
   length: 1,
 };
 
-export const useCookies = routeLoader$(async ({ cookie }) => {
-  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
 });
 
 export default component$(() => {
@@ -412,6 +411,26 @@ export default component$(() => {
                     store.alerts.splice(store.alerts.indexOf(alert), 1);
                   }, 2000);
                 }} />
+                <Button id="createurl" onClick$={() => {
+                  const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                  const url = new URL(base_url);
+                  const params = JSON.stringify({ ...store, alerts: undefined, frames: undefined, frame: undefined });
+                  Object.entries(params).forEach(([key, value]) => {
+                    url.searchParams.set(key, String(value));
+                  });
+                  window.location.href = url.href;
+                  const alert = {
+                    class: 'text-green-500',
+                    translate: 'color.exportedPresetUrl',
+                    text: 'Successfully exported preset to url!',
+                  };
+                  store.alerts.push(alert);
+                  setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 2000);
+                }}>
+                  {t('color.url@@Export As URL')}
+                </Button>
               </div>
               {store.alerts.map((alert: any, i: number) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />

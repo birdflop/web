@@ -1,12 +1,12 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $ } from '@builder.io/qwik';
+import { $, component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
+import type { cardColorClasses } from '@luminescent/ui';
+import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { ArrowForward, CafeOutline, CheckmarkCircleOutline, CodeOutline, CodeWorkingOutline, CubeOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
-import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
 
 const flagTypes = {
   'none': 'none',
@@ -56,8 +56,8 @@ const defaults = {
   },
 };
 
-export const useCookies = routeLoader$(async ({ cookie }) => {
-  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
 });
 
 export default component$(() => {

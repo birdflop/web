@@ -1,10 +1,10 @@
-import { extraFlags, flags } from '~/data/flags';
-import { serverType } from '~/data/environment/serverType';
 import { operatingSystem } from '~/data/environment/operatingSystem';
+import { serverType } from '~/data/environment/serverType';
+import { extraFlags, flags } from '~/data/flags';
 
 interface GenerateResult {
-    'script'?: string,
-    'flags'?: string[]
+  'script'?: string,
+  'flags'?: string[]
 }
 
 interface schema {
