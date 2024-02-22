@@ -8,14 +8,12 @@ import { LogoGithub, GlobeOutline, ChevronDown, Menu, ServerOutline, CubeOutline
 
 import { inlineTranslate, localizePath, translatePath, useDisplayName, useSpeakConfig } from 'qwik-speak';
 
-import { languages } from '~/speak-config';
-
 export default component$(() => {
   const t = inlineTranslate();
   const store = useStore({ mobilemenu: false });
   const location = useLocation();
   const getPath = translatePath();
-  const [gradients, animtab] = getPath(['/resources/gradients', '/resources/animtab']);
+  const [gradients, animtab] = getPath(['/resources/rgb', '/resources/animtab']);
   return (
     <Nav>
       <MainNav>
@@ -31,7 +29,7 @@ export default component$(() => {
           </NavButton>
         </Dropdown>
         <Dropdown name="Resources" Icon={CubeOutline} extraClass={{ 'hidden sm:flex': true }}>
-          <NavButton href="/resources/rgb">
+          <NavButton href={gradients}>
             {t('nav.hexGradient@@Hex Gradients')}
           </NavButton>
           <NavButton href={animtab}>
