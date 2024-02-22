@@ -7,6 +7,8 @@ import { ArrowForward, CafeOutline, CheckmarkCircleOutline, CodeOutline, CodeWor
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
+import { extraFlags as extFlags } from '~/data/flags';
+import { serverType as srvType } from '~/data/environment/serverType';
 
 const flagTypes = {
   'none': 'none',
@@ -427,7 +429,9 @@ export default component$(() => {
                 ))}
               </div>
               <div class="pt-5 flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
-                {extraFlagsOptions.map((option, index) => (
+                {extraFlagsOptions.filter((option) => {
+                  return extFlags[option.id].supports.includes(store.parsed.flags) && srvType[store.parsed.serverType].extraFlags?.includes(option.id);
+                }).map((option, index) => (
                   <Card color="darkgray" key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-4">
                       {option.cardIcon}
