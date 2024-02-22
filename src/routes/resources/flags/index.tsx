@@ -180,6 +180,20 @@ export default component$(() => {
     },
   ];
 
+  const extraFlagsOptions = [
+    {
+      id: 'vectors',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.vectors.label@@Modern Vectors'),
+      description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
+    },
+    {
+      id: 'benchmarkedGraalVM',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)'),
+      description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
+    },
+  ];
   const cookies = useCookies().value;
   const store: any = useStore({
     ...defaults,
@@ -392,7 +406,9 @@ export default component$(() => {
                 </div>
               </div>
               <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
-                {configOptions.map((option, index) => (
+                {configOptions.filter((option) => {
+                  return !option.disable?.includes(store.parsed['operatingSystem']) && !option.disable?.includes(store.parsed['serverType']);
+                }).map((option, index) => (
                   <Card color="darkgray" key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-4">
                       {option.cardIcon}
@@ -402,8 +418,32 @@ export default component$(() => {
                       {option.description}
                     </p>
                     <div class="absolute bottom-8 w-full -mx-8">
-                      <Toggle checked={store.parsed[option.id as keyof typeof store]} disabled={option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])} center onClick$={(event: any) => {
+                      <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
+                        setCookie(JSON.stringify(store));
+                      }} />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <div class="pt-5 flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
+                {extraFlagsOptions.map((option, index) => (
+                  <Card color="darkgray" key={index}>
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-4">
+                      {option.cardIcon}
+                      {option.label}
+                    </div>
+                    <p class="min-w-[16rem] text-center mb-16">
+                      {option.description}
+                    </p>
+                    <div class="absolute bottom-8 w-full -mx-8">
+                      <Toggle checked={store.parsed.extraFlags.includes(option.id)} center onClick$={(event: any) => {
+                        if (event.target!.checked) {
+                          store.parsed.extraFlags.push(option.id);
+                        } else {
+                          store.parsed.extraFlags.splice(store.parsed.extraFlags.indexOf(option.id), 1);
+                        }
+                        console.log(store.parsed);
                         setCookie(JSON.stringify(store));
                       }} />
                     </div>

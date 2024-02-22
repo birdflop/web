@@ -23,5 +23,6 @@ export const getCookies = $(function (cookie: Cookie, names: string[], urlParams
             : value.startsWith('{') ? JSON.parse(value)
               : value;
   }
+  console.log(parsedCookiesAndParams);
   return parsedCookiesAndParams;
 });
