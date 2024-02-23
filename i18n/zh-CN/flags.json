@@ -9,10 +9,10 @@
       "label": "配置"
     },
     "enviroments": {
-      "description": "The operating system that the server runs on."
+      "description": "服务器运行的操作系统。"
     },
     "environment": {
-      "label": "Environment"
+      "label": "环境"
     },
     "environments": {
       "command": {
@@ -31,7 +31,7 @@
       },
       "pterodactyl": {
         "description": "大多数主机使用的基于Web的服务器管理平台",
-        "label": "Pterodactyl"
+        "label": "翼龙面板"
       },
       "windows": {
         "description": "用于家庭桌面的最常见操作系统",

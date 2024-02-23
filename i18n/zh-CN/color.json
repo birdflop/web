@@ -9,7 +9,7 @@
     "customFormat": "自定义格式",
     "export": "导出",
     "exportedPreset": "成功导出预设到剪贴板！",
-    "exportedPresetUrl": "Successfully exported preset to url!",
+    "exportedPresetUrl": "成功将预设导出至 url！",
     "formatCharacter": "格式字符",
     "formatting": "格式",
     "hexColor": "十六进制颜色",
@@ -24,6 +24,6 @@
     "presets": "预设",
     "strikethrough": "删除线",
     "underline": "下划线",
-    "url": "Export As URL"
+    "url": "导出为 URL"
   }
 }
