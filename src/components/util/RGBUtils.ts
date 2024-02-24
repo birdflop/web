@@ -158,6 +158,11 @@ export function generateOutput(text: string = 'birdflop', colors: string[] = ['#
 
     return output;
   } else {
-    return `<gradient:${colors.join(':')}>${text}`;
+    let formats = '';
+    if (bold) formats += '<bold>';
+    if (italic) formats += '<italic>';
+    if (underline) formats += '<underlined>';
+    if (strikethrough) formats += '<strikethrough>';
+    return `${formats}<gradient:${colors.join(':')}>${text}`;
   }
 }
