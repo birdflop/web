@@ -6,8 +6,8 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center justify-center min-h-[calc(100svh-68px)]">
-      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[100svh]">
+      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10 drop-shadow-lg">
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
@@ -85,13 +85,13 @@ export default component$(() => {
             Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </div>
           <div class="flex gap-2">
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg" color="blue">
+              <LogoDiscord width="24" />
+              Invite
+            </ButtonAnchor>
             <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
               <LogoGithub width="24" />
               Learn More
-            </ButtonAnchor>
-            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
-              <LogoDiscord width="24" />
-              Invite
             </ButtonAnchor>
           </div>
         </Card>
@@ -126,7 +126,7 @@ export default component$(() => {
             </ul>
           </div>
           <div class="flex gap-2">
-            <ButtonAnchor href="https://bin.birdflop.com/" size="lg">
+            <ButtonAnchor href="https://bin.birdflop.com/" size="lg" color="blue">
               Try it
             </ButtonAnchor>
           </div>
@@ -162,11 +162,13 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
-              Learn More
-            </ButtonAnchor>
-            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg">
+            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot" size="lg" color="blue">
+              <LogoDiscord width="24" />
               Invite
+            </ButtonAnchor>
+            <ButtonAnchor href="https://github.com/birdflop/birdtickets" size="lg">
+              <LogoGithub width="24" />
+              Learn More
             </ButtonAnchor>
           </div>
         </Card>

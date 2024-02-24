@@ -96,7 +96,7 @@
     },
     "gui": {
       "description": "Whether to display the built-in server management GUI.",
-      "label": "Use GUI"
+      "label": "No GUI"
     },
     "memory": {
       "description": "The amount of memory (RAM) to allocate to your server.",

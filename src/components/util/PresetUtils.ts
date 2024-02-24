@@ -27,6 +27,18 @@ function decompress(input: number, expectedValues: number) {
   return values;
 }
 
+export const presets = {
+  'birdflop': ['#084CFB', '#ADF3FD'],
+  'SimplyMC': ['#00FFE0', '#EB00FF'],
+  'Rainbow': ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'],
+  'Skyline': ['#1488CC', '#2B32B2'],
+  'Mango': ['#FFE259', '#FFA751'],
+  'Vice City': ['#3494E6', '#EC6EAD'],
+  'Dawn': ['#F3904F', '#3B4371'],
+  'Rose': ['#F4C4F3', '#FC67FA'],
+  'Firewatch': ['#CB2D3E', '#EF473A'],
+};
+
 const formats = {
   0: {
     outputPrefix: '',

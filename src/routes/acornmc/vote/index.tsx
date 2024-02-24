@@ -37,5 +37,9 @@ export const head: DocumentHead = {
       name: 'og:description',
       content: 'Vote for AcornMC!',
     },
+    {
+      name: 'og:image',
+      content: '/branding/acorn.png',
+    },
   ],
 };

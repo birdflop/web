@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import Server from '~/components/serverlist/Server';
 
 export const useGetServers = routeLoader$(async ({ env }) => {
@@ -26,7 +26,7 @@ export default component$(() => {
   // });
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center justify-center min-h-[calc(100svh-68px)]">
+    <section class="flex mx-auto max-w-7xl justify-center min-h-[calc(100vh-68px)] flex-wrap">
       <div class="my-10 space-y-3 min-h-[60px] w-full flex flex-col justify-center">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-12 w-full text-center">Server List</h1>
         <div class="flex space-x-4 w-full">
