@@ -201,7 +201,7 @@ export default component$(() => {
                   3-day Satisfaction Guarantee
                 </li>
                 <li>
-                  Free upgrade to US Premium+ after 3 months
+                  Free upgrade to US Premium+ after 6 months
                 </li>
                 <li>
                   Starting at $12/mo (~$7.80 after reimbursements)
