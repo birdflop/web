@@ -20,7 +20,7 @@ export default component$(() => {
       </div>
       <div class="flex flex-wrap gap-3 justify-center">
         <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
-          <Header subheader="US">
+          <Header subheader="US (NYC)">
             Crabwings
           </Header>
         </Card>
@@ -32,6 +32,11 @@ export default component$(() => {
         <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
           <Header subheader="EU">
             Jellyfishjaws
+          </Header>
+        </Card>
+        <Card href="http://koalaknees.birdflop.com/" color="green" hover="clickable" blobs>
+          <Header subheader="US (VA)">
+            KoalaKnees
           </Header>
         </Card>
       </div>
