@@ -88,6 +88,11 @@ export default component$(() => {
         newIndex = 0;
       }
 
+      const currentIndexInput = document.getElementById(`color${currentIndex + 1}`) as HTMLInputElement;
+      const newIndexInput = document.getElementById(`color${newIndex + 1}`) as HTMLInputElement;
+      if (currentIndexInput) currentIndexInput.dispatchEvent(new Event('input'));
+      if (newIndexInput) newIndexInput.dispatchEvent(new Event('input'));
+
       const temp = store.colors[currentIndex];
       store.colors[currentIndex] = store.colors[newIndex];
       store.colors[newIndex] = temp;
@@ -205,7 +210,7 @@ export default component$(() => {
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
+            <div class="flex flex-col gap-2 overflow-auto sm:h-[500px]">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
