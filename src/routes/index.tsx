@@ -107,12 +107,12 @@ export default component$(() => {
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
-          <div class="grid md:grid-cols-2 gap-4">
+          <div class="grid md:grid-cols-3 gap-4">
             <Card color="darkergray">
               <p>
                 Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
               </p>
-              <Header subheader="Capped at $2/GB RAM">
+              <Header subheader="4+ GB plans capped at $2/GB">
                 EU Premium
               </Header>
               <ul class="list-disc ml-5 space-y-2">
@@ -126,7 +126,7 @@ export default component$(() => {
                   Ryzen 9 5950X
                 </li>
                 <li>
-                  DDR4 ECC RAM
+                  4-20GB DDR4 ECC RAM
                 </li>
                 <li>
                   Unmetered* NVMe Storage
@@ -163,12 +163,12 @@ export default component$(() => {
               <p>
                 Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
               </p>
-              <Header subheader="Capped at $3/GB RAM">
+              <Header subheader="4-8 GB plans capped at $3/GB">
                 US Premium
               </Header>
               <ul class="list-disc ml-5 space-y-2">
                 <li>
-                  New York City, USA
+                  New York City, NY, USA
                 </li>
                 <li>
                   4 vCores
@@ -177,10 +177,10 @@ export default component$(() => {
                   Ryzen 9 3900XT
                 </li>
                 <li>
-                  DDR4 RAM
+                  4-8 GB DDR4 RAM
                 </li>
                 <li>
-                  Up to 200 GB NVMe Storage
+                  Up to 80 GB NVMe Storage
                 </li>
                 <li>
                   3 Off-site Backups
@@ -195,13 +195,67 @@ export default component$(() => {
                   Pterodactyl v1 Panel
                 </li>
                 <li>
+                  Dedicated IP on 8GB plans
+                </li>
+                <li>
+                  3-day Satisfaction Guarantee
+                </li>
+                <li>
+                  Free upgrade to US Premium+ after 3 months
+                </li>
+                <li>
+                  Starting at $12/mo (~$7.80 after reimbursements)
+                </li>
+              </ul>
+              <div class="pt-4">
+                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
+                  <CartOutline width="30" class="text-3xl" /> Order Now
+                </ButtonAnchor>
+              </div>
+            </Card>
+            <Card color="darkergray">
+              <p>
+                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
+              </p>
+              <Header subheader="12+ GB plans capped at $3/GB">
+                US Premium+
+              </Header>
+              <ul class="list-disc ml-5 space-y-2">
+                <li>
+                  Asburn, VA, USA
+                </li>
+                <li>
+                  6 vCores
+                </li>
+                <li>
+                  Ryzen 9 7950X
+                </li>
+                <li>
+                  12+ GB DDR5 RAM
+                </li>
+                <li>
+                  Unmetered* NVMe Storage
+                </li>
+                <li>
+                  3 Off-site Backups
+                </li>
+                <li>
+                  5 Tbps DDoS Protection
+                </li>
+                <li>
+                  1 Gbps uplink
+                </li>
+                <li>
+                  Pterodactyl v1 Panel
+                </li>
+                <li>
                   Dedicated IP on 8GB+ plans
                 </li>
                 <li>
                   3-day Satisfaction Guarantee
                 </li>
                 <li>
-                  Starting at $12/mo (~$7.80 after reimbursements)
+                  Starting at $36/mo (~$23.40 after reimbursements)
                 </li>
               </ul>
               <div class="pt-4">
