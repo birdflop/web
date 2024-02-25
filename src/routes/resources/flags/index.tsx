@@ -322,6 +322,9 @@ export default component$(() => {
                 <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
+                  if (!srvType[store.parsed.serverType].flags.includes(option.software)) {
+                    store.parsed.flags = srvType[store.parsed.serverType].flags[1];
+                  }
                   setCookie(JSON.stringify(store));
                   configOptions.forEach((option) => {
                     if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
@@ -373,7 +376,9 @@ export default component$(() => {
                 </TextInput>
                 <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
                   store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                }} values={Object.keys(flagTypes).map((flag: string) => ({
+                }} values={Object.keys(flagTypes).filter((option) => {
+                  return srvType[store.parsed.serverType].flags.includes(option);
+                }).map((flag: string) => ({
                   name: flagTypes[flag as keyof typeof flagTypes],
                   value: flag,
                 }))} value={store.parsed.flags}>
