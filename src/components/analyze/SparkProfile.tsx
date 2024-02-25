@@ -1,7 +1,6 @@
-import { component$, useStore, Slot } from '@builder.io/qwik';
-
+import { Slot, component$, useStore } from '@builder.io/qwik';
+import { Link } from '@builder.io/qwik-city';
 import { Button, TextInput } from '@luminescent/ui';
-import { Link } from 'qwik-ionicons';
 
 export default component$(() => {
   const store = useStore({
@@ -16,7 +15,7 @@ export default component$(() => {
           Spark Profile Analysis
         </h1>
         <h2 class="text-gray-50 text-base sm:text-xl">
-          These are not magic values. Many of these settings have real consequences on your server's mechanics.<br/>
+          These are not magic values. Many of these settings have real consequences on your server's mechanics.<br />
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
         </h2>
 
@@ -60,8 +59,8 @@ export default component$(() => {
         </div>
 
         <p class="text-white my-12">
-          You can also copy the code into a link<br/>
-          <span class="text-gray-300">https://birdflop.com/resources/sparkprofile/[code]</span><br/>
+          You can also copy the code into a link<br />
+          <span class="text-gray-300">https://birdflop.com/resources/sparkprofile/[code]</span><br />
           Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400 hover:underline">botflop</a>
         </p>
       </div>

@@ -221,19 +221,19 @@ export default function getConfig() {
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find( (plugin: Field) => plugin.name == 'PetBlocks' ) !== undefined;
+              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'PetBlocks') !== undefined;
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find( (plugin: Field) => plugin.name == 'BlockBalls' ) !== undefined;
+              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'BlockBalls') !== undefined;
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find( (plugin: Field) => plugin.name == 'ArmorStandTools' ) !== undefined;
+              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'ArmorStandTools') !== undefined;
             },
             vars: ['plugins'],
           },

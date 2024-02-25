@@ -1,11 +1,11 @@
 {
-    "animtexture": {
-        "title": "动画纹理",
-        "subtitle": "轻松合并材质以创建资源包动画",
-        "textureName": "材质名称",
-        "cumulative": "累积（如果 GIF 帧断裂，请打开此选项）",
-        "generate": "生成",
-        "downloadPNG": "下载 PNG",
-        "downloadMCMETA": "下载 MCMETA"
-    }
+  "animtexture": {
+    "cumulative": "累积（如果 GIF 帧断裂，请打开此选项）",
+    "downloadMCMETA": "下载 MCMETA",
+    "downloadPNG": "下载 PNG",
+    "generate": "生成",
+    "subtitle": "轻松合并材质以创建资源包动画",
+    "textureName": "材质名称",
+    "title": "动画纹理"
+  }
 }

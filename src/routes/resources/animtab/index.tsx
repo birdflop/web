@@ -1,15 +1,14 @@
-import { component$, useTask$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { presetVersion } from '~/components/util/PresetUtils';
-import { getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
-import { AnimationOutput } from '~/components/util/RGBUtils';
+import { AnimationOutput, getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
+import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
-import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -70,8 +69,8 @@ const defaults = {
   length: 1,
 };
 
-export const useCookies = routeLoader$(async ({ cookie }) => {
-  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
 });
 
 export default component$(() => {
@@ -144,12 +143,12 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtab.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-50 text-base sm:text-xl mb-12">
+        <h2 class="text-gray-50 text-base sm:text-xl mb-6">
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
@@ -274,12 +273,12 @@ export default component$(() => {
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
                   <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
-                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
-                      <ChevronUp width="20" />
+                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 active:bg-gray-600 py-1.5 px-2 rounded-l-md transition-all">
+                      <ChevronUp width="24" />
                     </button>
                     <div class="bg-gray-700 w-px" />
-                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
-                      <ChevronDown width="20" />
+                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 active:bg-gray-600 py-1.5 px-2 rounded-r-md transition-all">
+                      <ChevronDown width="24" />
                     </button>
                   </div>
                 </div>;
@@ -369,7 +368,7 @@ export default component$(() => {
                 {t('color.presets@@Presets')}
               </label>
               <div class="flex gap-2">
-                <Button onClick$={() => {
+                <Button id="export" size="sm" onClick$={() => {
                   navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined, frames: undefined, frame: undefined }));
                   const alert = {
                     class: 'text-green-500',
@@ -412,6 +411,26 @@ export default component$(() => {
                     store.alerts.splice(store.alerts.indexOf(alert), 1);
                   }, 2000);
                 }} />
+                <Button id="createurl" size="sm" onClick$={() => {
+                  const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                  const url = new URL(base_url);
+                  const params = { ...store, alerts: undefined, frames: undefined, frame: undefined };
+                  Object.entries(params).forEach(([key, value]) => {
+                    url.searchParams.set(key, String(value));
+                  });
+                  window.history.pushState({}, '', url.href);
+                  const alert = {
+                    class: 'text-green-500',
+                    translate: 'color.exportedPresetUrl',
+                    text: 'Successfully exported preset to url!',
+                  };
+                  store.alerts.push(alert);
+                  setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 2000);
+                }}>
+                  {t('color.url@@Export As URL')}
+                </Button>
               </div>
               {store.alerts.map((alert: any, i: number) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />

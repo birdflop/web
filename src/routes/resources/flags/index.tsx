@@ -1,12 +1,14 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { component$, useStore, $ } from '@builder.io/qwik';
+import { $, component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { CafeOutline, CodeWorkingOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline, CubeOutline, CodeOutline, CheckmarkCircleOutline, ArrowForward } from 'qwik-ionicons';
+import type { cardColorClasses } from '@luminescent/ui';
+import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { ArrowForward, CafeOutline, CheckmarkCircleOutline, CodeOutline, CodeWorkingOutline, CubeOutline, LogoApple, LogoTux, LogoWindows, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
-import type { cardColorClasses } from '@luminescent/ui';
-import { Button, Card, Header, LogoPaper, LogoPterodactyl, LogoPurpur, LogoVelocity, LogoWaterfall, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { extraFlags as extFlags } from '~/data/flags';
+import { serverType as srvType } from '~/data/environment/serverType';
 
 const flagTypes = {
   'none': 'none',
@@ -56,8 +58,8 @@ const defaults = {
   },
 };
 
-export const useCookies = routeLoader$(async ({ cookie }) => {
-  return await getCookies(cookie, Object.keys(defaults)) as typeof defaults;
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
 });
 
 export default component$(() => {
@@ -164,6 +166,7 @@ export default component$(() => {
       cardIcon: <TerminalOutline class="w-10 h-10" />,
       label: t('flags.gui.label@@Use GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
+      disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     {
       id: 'variables',
@@ -179,6 +182,20 @@ export default component$(() => {
     },
   ];
 
+  const extraFlagsOptions = [
+    {
+      id: 'vectors',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.vectors.label@@Modern Vectors'),
+      description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
+    },
+    {
+      id: 'benchmarkedGraalVM',
+      cardIcon: <CubeOutline class="w-10 h-10" />,
+      label: t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)'),
+      description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
+    },
+  ];
   const cookies = useCookies().value;
   const store: any = useStore({
     ...defaults,
@@ -273,6 +290,11 @@ export default component$(() => {
                   store.parsed.operatingSystem = option.environment;
                   store.step = 2;
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
                   <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                     {option.cardIcon}
@@ -300,7 +322,15 @@ export default component$(() => {
                 <Card color={option.color as keyof typeof cardColorClasses} hover="clickable" blobs onClick$={() => {
                   store.parsed.serverType = option.software;
                   store.step = 3;
+                  if (!srvType[store.parsed.serverType].flags.includes(option.software)) {
+                    store.parsed.flags = srvType[store.parsed.serverType].flags[1];
+                  }
                   setCookie(JSON.stringify(store));
+                  configOptions.forEach((option) => {
+                    if (option.disable?.includes(store.parsed['operatingSystem']) || option.disable?.includes(store.parsed['serverType'])) {
+                      store.parsed[option.id] = false;
+                    }
+                  });
                 }} key={index}>
                   <div class="flex flex-col items-center font-bold text-white w-full gap-6 py-5">
                     {option.cardIcon}
@@ -346,7 +376,9 @@ export default component$(() => {
                 </TextInput>
                 <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
                   store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
-                }} values={Object.keys(flagTypes).map((flag: string) => ({
+                }} values={Object.keys(flagTypes).filter((option) => {
+                  return srvType[store.parsed.serverType].flags.includes(option);
+                }).map((flag: string) => ({
                   name: flagTypes[flag as keyof typeof flagTypes],
                   value: flag,
                 }))} value={store.parsed.flags}>
@@ -381,7 +413,9 @@ export default component$(() => {
                 </div>
               </div>
               <div class="flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
-                {configOptions.map((option, index) => (
+                {configOptions.filter((option) => {
+                  return !option.disable?.includes(store.parsed['operatingSystem']) && !option.disable?.includes(store.parsed['serverType']);
+                }).map((option, index) => (
                   <Card color="darkgray" key={index}>
                     <div class="flex flex-col items-center font-bold text-white w-full gap-4">
                       {option.cardIcon}
@@ -393,6 +427,31 @@ export default component$(() => {
                     <div class="absolute bottom-8 w-full -mx-8">
                       <Toggle checked={store.parsed[option.id as keyof typeof store]} center onClick$={(event: any) => {
                         (store.parsed as any)[option.id] = event.target!.checked;
+                        setCookie(JSON.stringify(store));
+                      }} />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+              <div class="pt-5 flex [&>*]:flex-1 flex-wrap gap-3 justify-center fill-current">
+                {extraFlagsOptions.filter((option) => {
+                  return extFlags[option.id].supports.includes(store.parsed.flags) && srvType[store.parsed.serverType].extraFlags?.includes(option.id);
+                }).map((option, index) => (
+                  <Card color="darkgray" key={index}>
+                    <div class="flex flex-col items-center font-bold text-white w-full gap-4">
+                      {option.cardIcon}
+                      {option.label}
+                    </div>
+                    <p class="min-w-[16rem] text-center mb-16">
+                      {option.description}
+                    </p>
+                    <div class="absolute bottom-8 w-full -mx-8">
+                      <Toggle checked={store.parsed.extraFlags.includes(option.id)} center onClick$={(event: any) => {
+                        if (event.target!.checked) {
+                          store.parsed.extraFlags.push(option.id);
+                        } else {
+                          store.parsed.extraFlags.splice(store.parsed.extraFlags.indexOf(option.id), 1);
+                        }
                         setCookie(JSON.stringify(store));
                       }} />
                     </div>

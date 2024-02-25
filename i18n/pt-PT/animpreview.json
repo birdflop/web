@@ -1,7 +1,7 @@
 {
-    "animpreview": {
-        "title": "Pré-visualizador de animação",
-        "subtitle": "Visualize as animações do TAB sem a necessidade de colocá-las no jogo",
-        "yamlInput": "Entrada YAML"
-    }
+  "animpreview": {
+    "subtitle": "Visualize as animações do TAB sem a necessidade de colocá-las no jogo",
+    "title": "Pré-visualizador de animação",
+    "yamlInput": "Entrada YAML"
+  }
 }

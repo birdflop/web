@@ -1,7 +1,7 @@
 {
-    "animpreview": {
-        "title": "Animación Previsualizadora",
-        "subtitle": "Preview TAB Animations without the need to put them in-game",
-        "yamlInput": "Entrada YAML"
-    }
+  "animpreview": {
+    "subtitle": "Preview TAB Animations without the need to put them in-game",
+    "title": "Animación Previsualizadora",
+    "yamlInput": "Entrada YAML"
+  }
 }

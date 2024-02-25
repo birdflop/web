@@ -1,11 +1,11 @@
-import { component$, useOn, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useOn, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
+import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui';
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['animtexture'] });
@@ -83,7 +83,7 @@ export default component$(() => {
 
         <Toggle id="Cumulative" checked={store.cumulative}
           onChange$={(event: any) => { store.cumulative = event.target.checked; }}
-          label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')}/>
+          label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')} />
 
         <Button class={{ 'my-6': true }} onClick$={
           () => {

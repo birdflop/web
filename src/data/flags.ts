@@ -1,7 +1,7 @@
+import type { Generate } from '~/components/util/flags/interface/generate/Generate';
 import type { AvailableConfig } from '~/data/config';
 import type { AvailableOperatingSystem } from '~/data/environment/operatingSystem';
 import type { AvailableServerType } from '~/data/environment/serverType';
-import type { Generate } from '~/components/util/flags/interface/generate/Generate';
 
 // TODO: Some of these flags are exclusive to Linux
 // TODO: Split Pterodactyl and Command into their own option?
@@ -11,20 +11,20 @@ export type AvailableFlags = keyof typeof flags;
 export type AvailableExtraFlags = keyof typeof extraFlags;
 
 interface FlagOption {
-    'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType>
+  'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType>
 }
 
 interface FlagExtraOption extends FlagOption {
-    'supports': AvailableFlags[],
-    'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType | 'existingFlags'>
+  'supports': AvailableFlags[],
+  'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType | 'existingFlags'>
 }
 
 interface Flags {
-    [key: string]: FlagOption
+  [key: string]: FlagOption
 }
 
 interface ExtraFlags {
-    [key: string]: FlagExtraOption
+  [key: string]: FlagExtraOption
 }
 
 const baseAikar = [

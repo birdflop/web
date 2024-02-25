@@ -1,21 +1,21 @@
 import type { ZodType } from 'zod';
 import { z } from 'zod';
-import { extraFlags, flags } from '~/data/flags';
-import { defaultServerType, serverType } from '~/data/environment/serverType';
 import { defaultOperatingSystem } from '~/data/environment/operatingSystem';
+import { defaultServerType, serverType } from '~/data/environment/serverType';
+import { extraFlags, flags } from '~/data/flags';
 
 export type AvailableConfig = keyof typeof config;
 
 export interface Config {
-    [key: string]: {
-        'isAdvanced'?: boolean,
-        'type': ZodType,
-        'default'?: any
-    }
+  [key: string]: {
+    'isAdvanced'?: boolean,
+    'type': ZodType,
+    'default'?: any
+  }
 }
 
 type DefaultConfig = {
-    [key in AvailableConfig]: any
+  [key in AvailableConfig]: any
 }
 
 export const config: Config = {

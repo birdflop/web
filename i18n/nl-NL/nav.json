@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "analysis": "Analyseren",
+    "animatedTAB": "Geanimeerde TAB",
+    "animatedTextures": "Geanimeerde Texturen",
+    "colorCodeStripper": "Kleurcode Stripper",
+    "flags": "Flags",
+    "gradients": "Overlopen",
+    "hexGradient": "Hex Overloop",
+    "misc": "Overig",
+    "more": "More Resources",
+    "paperTimings": "Paper Timings",
+    "presetTools": "Vooraf Ingestelde Tools",
+    "privacyPolicy": "Privacy Beleid",
+    "sparkProfile": "Spark Profile",
+    "tabAnimationPreview": "TAB Animation Previewer",
+    "tabAnimationPreviewer": "TAB Animatie Voorbeeld"
+  }
+}

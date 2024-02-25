@@ -1,11 +1,11 @@
 {
-    "animtexture": {
-        "title": "Анимация текстур",
-        "subtitle": "Легко объединить текстуры для анимации ресурс пака",
-        "textureName": "Название текстуры",
-        "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
-        "generate": "Генерировать",
-        "downloadPNG": "Скачать PNG",
-        "downloadMCMETA": "Скачать MCMETA"
-    }
+  "animtexture": {
+    "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
+    "downloadMCMETA": "Скачать MCMETA",
+    "downloadPNG": "Скачать PNG",
+    "generate": "Генерировать",
+    "subtitle": "Легко объединить текстуры для анимации ресурс пака",
+    "textureName": "Название текстуры",
+    "title": "Анимация текстур"
+  }
 }

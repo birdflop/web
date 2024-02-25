@@ -1,9 +1,9 @@
-import { component$, $, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
+import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
-import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
@@ -26,10 +26,10 @@ export default component$(() => {
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
       <div class="text-center justify-center flex relative align-center w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
-          <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold fade-in animation-delay-200">
+          <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000">
             Birdflop
           </h1>
-          <h2 class="text-gray-300 text-lg sm:text-2xl fade-in animation-delay-300">
+          <h2 class="text-gray-300 text-lg sm:text-2xl animate-in fade-in slide-in-from-top-16 anim-duration-1000">
             The only 501(c)(3) nonprofit server host — dedicated to <span
               class="typer"
               id="main"
@@ -40,7 +40,7 @@ export default component$(() => {
             </span>
             <span class="cursor" data-owner="main" data-cursor-display="|"></span>
           </h2>
-          <div class="flex flex-col gap-2 mt-8 fade-in animation-delay-400">
+          <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
               <ButtonAnchor href="#plans" color="blue" size="xl">
                 <ServerOutline width="30" class="text-3xl" />Hosting

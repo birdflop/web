@@ -70,23 +70,23 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-
-@keyframes fade-in {
-  from { opacity: 0; }
+* {
+  scroll-behavior: smooth;
 }
-
-@keyframes fade-out {
-  to { opacity: 0; }
+*::-webkit-scrollbar {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
 }
-@keyframes slide-from-top {
-  from {
-    transform: translateY(30px);
-    scale: 0.95;
-  }
+*::-webkit-scrollbar-track {
+  background-color: transparent;
 }
-@keyframes slide-to-bottom {
-  to {
-    transform: translateY(-30px);
-    scale: 0.95;
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: #ffffff20;
+  border: 1px solid #ffffff20;
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-corner {
+  background-color: transparent;
 }

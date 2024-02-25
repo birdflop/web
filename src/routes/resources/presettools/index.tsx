@@ -2,11 +2,11 @@ import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { loadPreset } from '~/components/util/PresetUtils';
 
+import { TextArea, TextInput } from '@luminescent/ui';
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { TextArea, TextInput } from '@luminescent/ui';
 
 export default component$(() => {
   useSpeak({ assets: ['presettools'] });

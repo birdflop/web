@@ -1,11 +1,11 @@
 {
-    "animtab": {
-        "title": "애니메이션 TAB",
-        "subtitle": "TAB 플러그인 그라데이션 애니메이션 생성기",
-        "animationName": "애니메이션 이름",
-        "speed": "속도",
-        "outputFormat": "출력 형식",
-        "outputType": "출력 유형",
-        "length": "그라데이션 길이"
-    }
+  "animtab": {
+    "animationName": "애니메이션 이름",
+    "length": "그라데이션 길이",
+    "outputFormat": "출력 형식",
+    "outputType": "출력 유형",
+    "speed": "속도",
+    "subtitle": "TAB 플러그인 그라데이션 애니메이션 생성기",
+    "title": "애니메이션 TAB"
+  }
 }

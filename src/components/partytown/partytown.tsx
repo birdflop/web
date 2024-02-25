@@ -1,5 +1,6 @@
 import type {
-  PartytownConfig } from '@builder.io/partytown/integration';
+  PartytownConfig,
+} from '@builder.io/partytown/integration';
 import {
   partytownSnippet,
 } from '@builder.io/partytown/integration';
@@ -11,7 +12,7 @@ import {
  *
  * @public
  */
-export interface PartytownProps extends PartytownConfig {}
+export interface PartytownProps extends PartytownConfig { }
 
 /**
  * @public

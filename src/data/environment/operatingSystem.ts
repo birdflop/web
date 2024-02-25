@@ -1,6 +1,6 @@
 import type { EnvironmentOptions } from '~/components/util/flags/interface/environment/EnvironmentOptions';
-import type { AvailableConfig } from '~/data/config';
 import type { OperatingSystemOption } from '~/components/util/flags/interface/environment/OperatingSystemOption';
+import type { AvailableConfig } from '~/data/config';
 
 export type AvailableOperatingSystem = keyof typeof operatingSystem;
 
@@ -48,14 +48,13 @@ function getJava(config: Record<AvailableConfig | 'existingFlags', any>): string
 import type { Generate } from '~/components/util/flags/interface/generate/Generate';
 
 interface GenerateNixResult {
-    'script': string[],
-    'flags': string[]
+  'script': string[],
+  'flags': string[]
 }
 
 type NixScript = Generate<AvailableConfig | 'existingFlags', GenerateNixResult>; // todo: dedupe
 
 const nixScript: NixScript = (config) => {
-  console.log(config);
   const base = [
     '#!/usr/bin/env bash',
     '',

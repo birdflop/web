@@ -1,11 +1,11 @@
-import { component$, useTask$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import yaml from 'yaml';
+import { TextArea } from '@luminescent/ui';
 import {
   inlineTranslate,
   useSpeak,
 } from 'qwik-speak';
-import { TextArea } from '@luminescent/ui';
+import yaml from 'yaml';
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });

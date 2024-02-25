@@ -1,8 +1,8 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { SelectInput, TextArea, TextInput } from '@luminescent/ui';
+import { inlineTranslate, useSpeak } from 'qwik-speak';
 
 export default component$(() => {
   useSpeak({ assets: ['colorstrip'] });

@@ -1,7 +1,7 @@
 {
-    "animpreview": {
-        "title": "动画预览",
-        "subtitle": "在无需放入游戏中的情况下预览TAB动画",
-        "yamlInput": "YAML 输入"
-    }
+  "animpreview": {
+    "subtitle": "在无需放入游戏中的情况下预览TAB动画",
+    "title": "动画预览",
+    "yamlInput": "YAML 输入"
+  }
 }

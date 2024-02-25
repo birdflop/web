@@ -1,5 +1,5 @@
 declare interface typerElement extends Element {
-	dataset: {
+  dataset: {
     delim?: string;
     words?: string;
     delay?: string | number;
@@ -33,7 +33,7 @@ export function initiateTyper() {
     this.words = words.split(delim).filter((v) => v); // non empty words
     this.delay = element.dataset.delay || 200;
     this.loop = element.dataset.loop || 'true';
-    if (this.loop === 'false' ) { this.loop = 1; }
+    if (this.loop === 'false') { this.loop = 1; }
     this.deleteDelay = element.dataset.deletedelay || element.dataset.deleteDelay || 800;
 
     this.progress = { word: 0, char: 0, building: true, looped: 0 };
@@ -47,7 +47,7 @@ export function initiateTyper() {
     this.doTyping();
   }
 
-  Typer.prototype.doTyping = function(this: {
+  Typer.prototype.doTyping = function (this: {
     element: typerElement;
     progress: { word: number; char: number; building: boolean; looped: number };
     words: string[];
@@ -97,7 +97,7 @@ export function initiateTyper() {
       p.looped += 1;
     }
 
-    if (!p.building && this.loop <= p.looped){
+    if (!p.building && this.loop <= p.looped) {
       this.typing = false;
     }
 
@@ -106,7 +106,7 @@ export function initiateTyper() {
     }, atWordEnd ? this.deleteDelay : this.delay);
   };
 
-  const Cursor = function(this: {
+  const Cursor = function (this: {
     element: typerElement;
     cursorDisplay: string;
     on: boolean;
@@ -121,7 +121,7 @@ export function initiateTyper() {
     this.interval = setInterval(() => this.updateBlinkState(), 400);
   };
 
-  Cursor.prototype.updateBlinkState = function(this: {
+  Cursor.prototype.updateBlinkState = function (this: {
     element: typerElement;
     on: boolean;
   }) {

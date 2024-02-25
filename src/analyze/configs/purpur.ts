@@ -11,7 +11,7 @@ export default function getConfig() {
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find( (plugin: Field) => plugin.name == 'TCPShield' ) === undefined;
+              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'TCPShield') === undefined;
             },
             vars: ['plugins'],
           },
@@ -29,7 +29,7 @@ export default function getConfig() {
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find( (plugin: Field) => plugin.name == 'TCPShield' ) !== undefined;
+              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'TCPShield') !== undefined;
             },
             vars: ['plugins'],
           },
