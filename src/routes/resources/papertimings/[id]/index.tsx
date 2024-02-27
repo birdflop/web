@@ -1,10 +1,30 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$, server$ } from '@builder.io/qwik-city';
 
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 
+const collector = server$(function (link: string) {
+  const url = this.env.get('API_URL');
+  if (!url) return;
+  return fetch(url + '?timings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ link }),
+  }).catch(error => {
+    console.error('Fetch error:', error);
+    return Promise.reject(error);
+  });
+});
+
 export const useResults = routeLoader$(async ({ params }) => {
+  try {
+    await collector(params.id);
+  } catch (error) {
+    console.error('Collector error:', error);
+  }
   return await analyzeTimings(params.id);
 });
 
