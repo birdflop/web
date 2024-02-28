@@ -14,15 +14,9 @@ import config_pufferfish from '~/analyze/configs/timings/pufferfish';
 
 export default async function analyzeTimings(id: string) {
   const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
-  const url_raw = `https://timings.aikar.co/?id=${id}&raw=1`;
 
-  let request_raw: any;
   let request: any;
   try {
-    const response_raw = await fetch(url_raw, {
-      headers: { 'Accept': 'application/json' },
-    });
-    request_raw = await response_raw.json();
     const response_json = await fetch(timings_json, {
       headers: { 'Accept': 'application/json' },
     });
@@ -152,9 +146,9 @@ export default async function analyzeTimings(id: string) {
   const cpu = parseInt(request.timingsMaster.system.cpu);
   if (cpu <= 2) fields.push({ name: '❌ Threads', value: `You only have ${cpu} thread(s).`, buttons: [{ text: 'Find a better host', url: 'https://www.birdflop.com' }] });
 
-  const handlers = Object.keys(request_raw.idmap.handlers).map(i => { return request_raw.idmap.handlers[i]; });
+  const handlers = Object.keys(request.timingsMaster.idmap.handlerMap).map(i => { return request.timingsMaster.idmap.handlerMap[i]; });
   handlers.forEach(handler => {
-    let handler_name = handler[1];
+    let handler_name = handler.name;
     if (handler_name.startsWith('Command Function - ') && handler_name.endsWith(':tick')) {
       handler_name = handler_name.split('Command Function - ')[1].split(':tick')[0];
       fields.push({ name: `❌ ${handler_name}`, value: 'This datapack uses command functions which are laggy.' });
@@ -195,7 +189,7 @@ export default async function analyzeTimings(id: string) {
     }
   });
 
-  const worlds = request_raw.worlds ? Object.keys(request_raw.worlds).map(i => { return request_raw.worlds[i]; }) : [];
+  const worlds = request.timingsMaster.config['__________WORLDS__________'] ? Object.keys(request.timingsMaster.config['__________WORLDS__________']).map(i => { return request.timingsMaster.config['__________WORLDS__________'][i]; }) : [];
   let high_mec = false;
   worlds.forEach(world => {
     const max_entity_cramming = parseInt(world.gamerules.maxEntityCramming);
