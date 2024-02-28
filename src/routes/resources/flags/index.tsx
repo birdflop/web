@@ -42,13 +42,13 @@ export const setCookie = $(function (store: any) {
 
 const defaults = {
   parsed: {
-    operatingSystem: '',
-    serverType: '',
+    operatingSystem: 'linux',
+    serverType: 'paper',
     gui: false,
     variables: false,
     autoRestart: false,
     extraFlags: [],
-    fileName: '',
+    fileName: 'server.jar',
     flags: 'aikars',
     withResult: true,
     withFlags: false,
@@ -163,7 +163,7 @@ export default component$(() => {
   }, { deep: true });
 
   return (
-    <section class="flex mx-auto max-w-5xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('flags.title@@Flags Generator')}
@@ -197,16 +197,14 @@ export default component$(() => {
                 store.parsed.flags = srvType[store.parsed.serverType].flags[1];
               }
               setCookie(JSON.stringify(store));
-            }} values={softwareOptions.filter((option) => {
-              return srvType[store.parsed.serverType].flags.includes(option.value);
-            })} value={store.parsed.flags}>
+            }} values={softwareOptions} value={store.parsed.flags}>
               <Header subheader={t('flags.software.description@@The software in which your Minecraft server will run on.')}>
                 {t('flags.software.label@@Software')}
               </Header>
             </SelectInput>
             <div>
               <Header subheader={t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}>
-                {t('flags.memory.label@@RAM (GB)')}
+                {t('flags.memory.label@@Memory')}
               </Header>
               <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
                 <div class="h-2 bg-blue-800 group-hover:bg-blue-700 rounded-lg" style={{ width: `${store.parsed.memory / 32 * 100}%` }} />
@@ -243,7 +241,7 @@ export default component$(() => {
             </SelectInput>
             <div class="flex flex-col gap-2">
               <Header subheader={t('flags.config.description@@The various additions and modifications that can be made to your start script.')}>
-                {t('flags.config.label@@Configuration')}
+                {t('flags.config.label@@Config')}
               </Header>
               {configOptions.filter((option) => {
                 return !option.disable?.includes(store.parsed['operatingSystem']) && !option.disable?.includes(store.parsed['serverType']);

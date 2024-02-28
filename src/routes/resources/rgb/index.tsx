@@ -101,13 +101,13 @@ export default component$(() => {
   );
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('gradient.title@@Hex Gradient')}
+          {t('gradient.title@@RGBirdflop')}
         </h1>
         <h2 class="text-gray-50 text-base sm:text-xl mb-6">
-          {t('gradient.subtitle@@Hex color gradient creator')}
+          {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
 
         {/* charlimit={256} */}
@@ -391,7 +391,7 @@ export default component$(() => {
             </div>
           </div>
         </div>
-        <div class="text-sm">
+        <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </div>
       </div>
