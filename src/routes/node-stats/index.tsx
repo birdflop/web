@@ -36,7 +36,7 @@ export default component$(() => {
         </Card>
         <Card href="http://koalaknees.birdflop.com/" color="green" hover="clickable" blobs>
           <Header subheader="US (VA)">
-            KoalaKnees
+            Koalaknees
           </Header>
         </Card>
       </div>

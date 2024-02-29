@@ -1,10 +1,30 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$, server$ } from '@builder.io/qwik-city';
 
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
+const collector = server$(function (id: string) {
+  const url = this.env.get('API_URL');
+  if (!url) return;
+  return fetch(url + '/spark', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id }),
+  }).catch(error => {
+    console.error('Fetch error:', error);
+    return Promise.reject(error);
+  });
+});
+
 export const useResults = routeLoader$(async ({ params }) => {
+  try {
+    await collector(params.id);
+  } catch (error) {
+    console.error('Collector error:', error);
+  }
   return await analyzeProfile(params.id);
 });
 
