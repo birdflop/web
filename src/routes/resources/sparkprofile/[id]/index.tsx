@@ -4,15 +4,15 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
-const collector = server$(function (link: string) {
+const collector = server$(function (id: string) {
   const url = this.env.get('API_URL');
   if (!url) return;
-  return fetch(url + '?spark', {
+  return fetch(url + '/spark', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ link }),
+    body: JSON.stringify({ id }),
   }).catch(error => {
     console.error('Fetch error:', error);
     return Promise.reject(error);
