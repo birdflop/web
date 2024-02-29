@@ -58,6 +58,7 @@ export default component$(() => {
         <h1 class="font-bold text-2xl">Reimbursement Policy</h1>
         <p class="pl-5">As a nonprofit, we have made the decision to provide periodic reimbursments to clients based on excess profit from their plans. Reimbursments rates vary from period-to-period, and rates may range from 0% - 100%. Generally, reimbursements are announced and distrubuted quarterly. Clients receive reimbursements as a percentage of their external transactions from each quarter, categorized to the best of our ability into the US reimbursement rate, the EU reimbursement rate, or a combination of the two based on plans held by the client. Internal credits are not eligible for reimbursement.
           <br/>
+          <br/>
         A reimbursement rate will be announced within 15 days of the end of the reimbursement period, and all active clients will be reimbursed at this rate within 31 days of the end of the reimbursement period. Active clients are defined as users that have at least one active (i.e. not canceled nor suspended) service hosted on Birdflop at the time of reimbursement receipt. All reimbursements will be issued as credit to client accounts.</p>
         <h1 class="font-bold text-2xl">Hyperlinks and Third Party Content</h1>
         <p class="pl-5">You may create a hyperlink to the Service. But, you may not use, frame or utilize framing techniques to enclose any of our trademarks, logos or other proprietary information without our express written consent.</p>
