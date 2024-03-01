@@ -1,6 +1,7 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
+import { ButtonAnchor, Card } from '@luminescent/ui';
 
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 import { collector } from '~/analyze/functions/collector';
@@ -30,17 +31,19 @@ export default component$(() => {
           onResolved={(fields: Field[]) => <>
             {fields.map((field: Field, i: number) => {
               return (
-                <div key={`field${i}`} class="bg-gray-800 p-6 flex flex-col gap-4 rounded-lg whitespace-pre-line">
-                  <p class="text-white font-bold text-xl break-words">{field.name.replace(/\./g, '\n> ')}</p>
+                <Card key={`field${i}`}>
+                  <p class="text-white font-bold text-xl break-words">
+                    {field.name.replace(/\./g, '\n> ')}
+                  </p>
                   {field.value}
                   {field.buttons?.map((button: any, i2: number) => {
                     return (
-                      <a key={`button${i2}-${i}`} href={button.url} class="text-white bg-gray-600 hover:bg-gray-500 rounded-lg cursor-pointer px-4 py-2">
+                      <ButtonAnchor key={`button${i2}-${i}`} href={button.url}>
                         {button.text}
-                      </a>
+                      </ButtonAnchor>
                     );
                   })}
-                </div>
+                </Card>
               );
             })}
           </>}
