@@ -5,7 +5,7 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
 const collector = server$(function (id: string) {
-  const url = 'http://temp.birdflop.com:40095';
+  const url = 'http://api.profiler.birdflop.com:40001';
   if (!url) return;
   return fetch(url + '/spark', {
     method: 'POST',
@@ -18,12 +18,6 @@ const collector = server$(function (id: string) {
     return Promise.reject(error);
   });
 });
-
-// Qwik function to console.log API_URL environment variable
-export async function consoleLogAPI_URL() {
-  console.log('API_URL:', import.meta.env.API_URL);
-  return;
-}
 
 export const useResults = routeLoader$(async ({ params }) => {
   try {
