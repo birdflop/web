@@ -19,11 +19,10 @@ const collector = server$(function (id: string) {
   });
 });
 
-export async function onRequest() {
-  console.log(`API URL: ${process.env.API_URL}`);
-
-  return new Response('Hello, world!');
-}
+// Qwik function to console.log API_URL environment variable
+export const useEnv = server$(function () {
+  console.log('API_URL:', this.env.get('API_URL'));
+});
 
 export const useResults = routeLoader$(async ({ params }) => {
   try {
