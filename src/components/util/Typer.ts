@@ -15,6 +15,7 @@ declare interface typerElement extends Element {
 }
 
 export function initiateTyper() {
+  console.log('API_URL_3: ', process.env.API_URL);
   function Typer(this: {
     element: typerElement;
     words: string[];
