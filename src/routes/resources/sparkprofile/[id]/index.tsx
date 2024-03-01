@@ -5,7 +5,7 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
 const collector = server$(function (id: string) {
-  const url = process.env.API_URL;
+  const url = this.env.get('API_URL');
   if (!url) return;
   return fetch(url + '/spark', {
     method: 'POST',
@@ -18,6 +18,12 @@ const collector = server$(function (id: string) {
     return Promise.reject(error);
   });
 });
+
+export async function onRequest() {
+  console.log(`API URL: ${process.env.API_URL}`);
+
+  return new Response('Hello, world!');
+}
 
 export const useResults = routeLoader$(async ({ params }) => {
   try {
