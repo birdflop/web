@@ -6,11 +6,10 @@ import { ButtonAnchor, Card } from '@luminescent/ui';
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 import { collector } from '~/analyze/functions/collector';
 
-export const useResults = routeLoader$(async ({ params, env }) => {
-  const results = await analyzeTimings(params.id)
+export const useResults = routeLoader$(async ({ params }) => {
+  const results = await analyzeTimings(params.id);
   try {
-    const url = env.get('API_URL');
-    if (url) await collector(params.id, url, 'timings');
+    await collector(params.id, 'https://api.profiler.birdflop.com', 'timings');
   } catch (error) {
     console.error('Collector error:', error);
   }
