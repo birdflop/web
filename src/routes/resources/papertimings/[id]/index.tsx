@@ -7,7 +7,8 @@ import { collector } from '~/analyze/functions/collector';
 
 export const useResults = routeLoader$(async ({ params, env }) => {
   try {
-    await collector(params.id, env.get('API_URL'), 'timings');
+    const url = env.get('API_URL');
+    if (url) await collector(params.id, url, 'timings');
   } catch (error) {
     console.error('Collector error:', error);
   }
