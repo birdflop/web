@@ -5,9 +5,9 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 import { collector } from '~/analyze/functions/collector';
 
-export const useResults = routeLoader$(async ({ params, env }) => {
+export const useResults = routeLoader$(async ({ params }) => {
   try {
-    await collector(params.id, env.get('API_URL'), 'spark');
+    await collector(params.id, 'https://api.profiler.birdflop.com', 'spark');
   } catch (error) {
     console.error('Collector error:', error);
   }
