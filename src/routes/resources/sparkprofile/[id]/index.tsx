@@ -1,4 +1,4 @@
-import { component$, Resource } from '@builder.io/qwik';
+import { component$, Resource, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
@@ -6,11 +6,6 @@ import analyzeProfile from '~/analyze/functions/analyzeProfile';
 import { collector } from '~/analyze/functions/collector';
 
 export const useResults = routeLoader$(async ({ params }) => {
-  try {
-    await collector(params.id, 'https://api.profiler.birdflop.com', 'spark');
-  } catch (error) {
-    console.error('Collector error:', error);
-  }
   return await analyzeProfile(params.id);
 });
 
@@ -18,6 +13,14 @@ import SparkProfile from '~/components/analyze/SparkProfile';
 
 export default component$(() => {
   const results = useResults();
+
+  useTask$(async () => {
+    try {
+      await collector('testing', 'https://api.profiler.birdflop.com', 'spark');
+    } catch (error) {
+      console.error('Collector error:', error);
+    }
+  });
 
   return (
     <SparkProfile>
