@@ -1,28 +1,23 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$, server$ } from '@builder.io/qwik-city';
 
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
-const collector = async function (id: string) {
+const collector = server$(function (id: string) {
   const url = 'http://api.profiler.birdflop.com:40001';
-  try {
-    const response = await fetch(url + '/spark', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return await response.json();
-  } catch (error) {
+  if (!url) return;
+  return fetch(url + '/spark', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id }),
+  }).catch(error => {
     console.error('Fetch error:', error);
-    throw error;
-  }
-};
+    return Promise.reject(error);
+  });
+});
 
 export const useResults = routeLoader$(async ({ params }) => {
   try {
