@@ -5,10 +5,7 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
 const collector = server$(function (id: string) {
-  const url = this.env.get('API_URL');
-  console.log('API_URL:', url);
-  console.log('API_URL 2:', this.env.get('API_URL'));
-  console.log('API_URL_3: ', process.env.API_URL);
+  const url = process.env.API_URL;
   if (!url) return;
   return fetch(url + '/spark', {
     method: 'POST',
