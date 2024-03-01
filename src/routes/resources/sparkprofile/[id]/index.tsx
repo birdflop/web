@@ -5,7 +5,7 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import analyzeProfile from '~/analyze/functions/analyzeProfile';
 
 const collector = server$(function (id: string) {
-  const url = process.env.API_URL;
+  const url = 'http://api.profiler.birdflop.com:40001';
   if (!url) return;
   return fetch(url + '/spark', {
     method: 'POST',
