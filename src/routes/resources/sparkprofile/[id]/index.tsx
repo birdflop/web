@@ -20,10 +20,10 @@ const collector = server$(function (id: string) {
 });
 
 // Qwik function to console.log API_URL environment variable
-export const useEnv = server$(function () {
-  console.log('API_URL:', this.env.get('API_URL'));
+export async function consoleLogAPI_URL() {
+  console.log('API_URL:', import.meta.env.API_URL);
   return;
-});
+}
 
 export const useResults = routeLoader$(async ({ params }) => {
   try {
