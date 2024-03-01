@@ -7,13 +7,14 @@ import analyzeTimings from '~/analyze/functions/analyzeTimings';
 import { collector } from '~/analyze/functions/collector';
 
 export const useResults = routeLoader$(async ({ params, env }) => {
+  const results = await analyzeTimings(params.id)
   try {
     const url = env.get('API_URL');
     if (url) await collector(params.id, url, 'timings');
   } catch (error) {
     console.error('Collector error:', error);
   }
-  return await analyzeTimings(params.id);
+  return results;
 });
 
 import PaperTimings from '~/components/analyze/PaperTimings';

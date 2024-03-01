@@ -7,13 +7,14 @@ import analyzeProfile from '~/analyze/functions/analyzeProfile';
 import { collector } from '~/analyze/functions/collector';
 
 export const useResults = routeLoader$(async ({ params, env }) => {
+  const results = await analyzeProfile(params.id)
   try {
     const url = env.get('API_URL');
     if (url) await collector(params.id, url, 'timings');
   } catch (error) {
     console.error('Collector error:', error);
   }
-  return await analyzeProfile(params.id);
+  return results;
 });
 
 import SparkProfile from '~/components/analyze/SparkProfile';
