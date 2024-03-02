@@ -1,14 +1,16 @@
-import { $, component$, useOnWindow, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useOnWindow, useVisibleTask$, useStore } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
-import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline } from 'qwik-ionicons';
+import { Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
+
+  const missionContentVisible = useStore({ expanded: false });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -66,44 +68,32 @@ export default component$(() => {
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Our Nonprofit Mission
           </h2>
-          <p class="text-gray-200 sm:text-lg">
+          {!missionContentVisible.expanded && (
+            <p class="text-gray-200 sm:text-lg">
+            At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
+              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
+                Read more
+              </button>
+            </p>
+          )}
+          {missionContentVisible.expanded && (
+            <p class="text-gray-200 sm:text-lg">
             At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity. Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
-          </p>
-          <p class="text-gray-200 sm:text-lg">
-            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>, tax-deductible in the United States.
-          </p>
+              <br />
+              <br />
+            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>, tax-deductible in the United States.&nbsp;
+              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
+                Read less
+              </button>
+            </p>
+          )}
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
-        <div class="flex flex-col gap-4">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Where do my payments go?
-          </h2>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <Chart />
-              <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2023. Some numbers may be approximations.
-              </p>
-            </div>
-            <div class="flex flex-col gap-4">
-              <p class="text-gray-200 sm:text-lg">
-                Birdflop is a 501(c)(3) nonprofit organization with no paid employees or directors. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
-              </p>
-              <p class="text-gray-200 sm:text-lg">
-                Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+    <section id="plans" class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
       <div class="justify-center flex relative align-center max-w-5xl px-10">
         <div class="flex flex-col gap-4">
-          <Anchor id="plans" />
+          {/* <Anchor id="plans" /> */}
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
@@ -120,37 +110,10 @@ export default component$(() => {
                   Falkenstein, Germany
                 </li>
                 <li>
-                  4 vCores
-                </li>
-                <li>
-                  Ryzen 9 5950X
-                </li>
-                <li>
-                  4-20GB DDR4 ECC RAM
+                  Ryzen 9 5950X (6 vCores)
                 </li>
                 <li>
                   Unmetered* NVMe Storage
-                </li>
-                <li>
-                  3 Off-site Backups
-                </li>
-                <li>
-                  DDoS Protection
-                </li>
-                <li>
-                  1 Gbps uplink
-                </li>
-                <li>
-                  Pterodactyl v1 Panel
-                </li>
-                <li>
-                  Dedicated IP on 8GB+ plans
-                </li>
-                <li>
-                  3-day Satisfaction Guarantee
-                </li>
-                <li>
-                  Starting at $8/mo (~$7.52 after reimbursements)
                 </li>
               </ul>
               <div class="pt-4">
@@ -171,40 +134,13 @@ export default component$(() => {
                   New York City, NY, USA
                 </li>
                 <li>
-                  4 vCores
-                </li>
-                <li>
-                  Ryzen 9 3900XT
-                </li>
-                <li>
-                  4-8 GB DDR4 RAM
+                  Ryzen 9 3900XT (4 vCores)
                 </li>
                 <li>
                   Up to 80 GB NVMe Storage
                 </li>
                 <li>
-                  3 Off-site Backups
-                </li>
-                <li>
-                  DDoS Protection
-                </li>
-                <li>
-                  1 Gbps uplink
-                </li>
-                <li>
-                  Pterodactyl v1 Panel
-                </li>
-                <li>
-                  Dedicated IP on 8GB plans
-                </li>
-                <li>
-                  3-day Satisfaction Guarantee
-                </li>
-                <li>
                   Free upgrade to US Premium+ after 6 months
-                </li>
-                <li>
-                  Starting at $12/mo (~$7.80 after reimbursements)
                 </li>
               </ul>
               <div class="pt-4">
@@ -225,37 +161,10 @@ export default component$(() => {
                   Asburn, VA, USA
                 </li>
                 <li>
-                  6 vCores
-                </li>
-                <li>
-                  Ryzen 9 7950X
-                </li>
-                <li>
-                  12+ GB DDR5 RAM
+                  Ryzen 9 7950X (6 vCores)
                 </li>
                 <li>
                   Unmetered* NVMe Storage
-                </li>
-                <li>
-                  3 Off-site Backups
-                </li>
-                <li>
-                  5 Tbps DDoS Protection
-                </li>
-                <li>
-                  1 Gbps uplink
-                </li>
-                <li>
-                  Pterodactyl v1 Panel
-                </li>
-                <li>
-                  Dedicated IP on 8GB+ plans
-                </li>
-                <li>
-                  3-day Satisfaction Guarantee
-                </li>
-                <li>
-                  Starting at $36/mo (~$23.40 after reimbursements)
                 </li>
               </ul>
               <div class="pt-4">
@@ -265,6 +174,20 @@ export default component$(() => {
               </div>
             </Card>
           </div>
+        </div>
+      </div>
+    </section>
+    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
+      <div class="justify-center flex relative align-center max-w-4xl px-10">
+        <div class="flex flex-col gap-4">
+          <Card color="blue">
+            <Header>
+              <CheckmarkCircleOutline width="36" /> Benefits Galore
+            </Header>
+            <p class="text-gray-100">
+              All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
+            </p>
+          </Card>
         </div>
       </div>
     </section>
@@ -336,6 +259,31 @@ export default component$(() => {
           <p class="text-gray-200 sm:text-lg">
             As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 35% reimbursement and EU clients received a 6% reimbursement, effectively lowering prices to $1.95/GB RAM and $1.88/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
           </p>
+        </div>
+      </div>
+    </section>
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+      <div class="justify-center flex relative align-center max-w-4xl px-10">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
+            Where do my payments go?
+          </h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <Chart />
+              <p class="text-gray-400 text-center py-2 text-sm">
+                Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2023. Some numbers may be approximations.
+              </p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <p class="text-gray-200 sm:text-lg">
+                Birdflop is a 501(c)(3) nonprofit organization with no paid employees or directors. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
+              </p>
+              <p class="text-gray-200 sm:text-lg">
+                Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
