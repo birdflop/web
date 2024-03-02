@@ -44,10 +44,6 @@ const baseAikar = [
   '-XX:MaxTenuringThreshold=1',
   '-Dusing.aikars.flags=https://mcflags.emc.gs',
   '-Daikars.new.flags=true',
-  '-XX:G1NewSizePercent=30',
-  '-XX:G1MaxNewSizePercent=40',
-  '-XX:G1HeapRegionSize=8M',
-  '-XX:G1ReservePercent=20',
 ];
 
 const baseBenchmarked = [
