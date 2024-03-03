@@ -1,7 +1,7 @@
 /* eslint-disable qwik/valid-lexical-scope */
 import { $, component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Header, SelectInput, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { Header, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { CodeWorkingOutline, CubeOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
@@ -184,14 +184,14 @@ export default component$(() => {
                 {t('flags.fileName.label@@File Name')}
               </Header>
             </TextInput>
-            <SelectInput id="os" class={{ 'w-full': true }} onChange$={(event: any) => {
+            <Dropdown id="os" class={{ 'w-full': true }} onChange$={(event: any) => {
               store.parsed.operatingSystem = event.target!.value; setCookie(JSON.stringify(store));
             }} values={environmentOptions} value={store.parsed.flags}>
               <Header subheader={t('flags.enviroments.description@@The operating system that the server runs on.')}>
                 {t('flags.environment.label@@Environment')}
               </Header>
-            </SelectInput>
-            <SelectInput id="software" class={{ 'w-full': true }} onChange$={(event: any) => {
+            </Dropdown>
+            <Dropdown id="software" class={{ 'w-full': true }} onChange$={(event: any) => {
               store.parsed.serverType = event.target!.value;
               if (!srvType[store.parsed.serverType].flags.includes(event.target!.value)) {
                 store.parsed.flags = srvType[store.parsed.serverType].flags[1];
@@ -201,7 +201,7 @@ export default component$(() => {
               <Header subheader={t('flags.software.description@@The software in which your Minecraft server will run on.')}>
                 {t('flags.software.label@@Software')}
               </Header>
-            </SelectInput>
+            </Dropdown>
             <div>
               <Header subheader={t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}>
                 {t('flags.memory.label@@Memory')}
@@ -229,7 +229,7 @@ export default component$(() => {
             </div>
           </div>
           <div class="flex flex-col gap-4">
-            <SelectInput id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
+            <Dropdown id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
               store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
             }} values={Object.keys(flagTypes).map((flag: string) => ({
               name: flagTypes[flag as keyof typeof flagTypes],
@@ -238,7 +238,7 @@ export default component$(() => {
               <Header subheader={t('flags.flags.description@@The collection of start arguments that typically optimize the server\'s performance')}>
                 {t('flags.flags.label@@Flags')}
               </Header>
-            </SelectInput>
+            </Dropdown>
             <div class="flex flex-col gap-2">
               <Header subheader={t('flags.config.description@@The various additions and modifications that can be made to your start script.')}>
                 {t('flags.config.label@@Config')}

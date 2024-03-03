@@ -6,7 +6,7 @@ import { AnimationOutput, getAnimFrames, getRandomColor } from '~/components/uti
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 
@@ -211,7 +211,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" class={{ 'w-full': true }} onChange$={
+            <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
@@ -222,7 +222,7 @@ export default component$(() => {
               { name: t('color.custom@@Custom'), value: 'custom' },
             ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
-            </SelectInput>
+            </Dropdown>
             <NumberInput input min={2} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value < 2) event.target!.value = 2;
@@ -300,13 +300,13 @@ export default component$(() => {
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
 
-                <SelectInput id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}
+                <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; setCookie(JSON.stringify(store)); }}
                   values={types.map((type: any) => ({ name: type.name, value: type.value }))}
                   value={store.type}>
                   {t('animtab.outputType@@Output Type')}
-                </SelectInput>
+                </Dropdown>
 
-                <SelectInput id="format" class={{ 'w-full': true }} value={store.customFormat ? 'custom' : store.format} onChange$={
+                <Dropdown id="format" class={{ 'w-full': true }} value={store.customFormat ? 'custom' : store.format} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -335,7 +335,7 @@ export default component$(() => {
                   },
                 ]}>
                   {t('color.colorFormat@@Color Format')}
-                </SelectInput>
+                </Dropdown>
                 <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
                   {t('color.formatCharacter@@Format Character')}
                 </TextInput>
