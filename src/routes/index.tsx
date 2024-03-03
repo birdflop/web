@@ -68,25 +68,18 @@ export default component$(() => {
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Our Nonprofit Mission
           </h2>
-          {!missionContentVisible.expanded && (
-            <p class="text-gray-200 sm:text-lg">
+          <p class="text-gray-200 sm:text-lg">
             At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
-              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
-                Read more
-              </button>
-            </p>
-          )}
-          {missionContentVisible.expanded && (
-            <p class="text-gray-200 sm:text-lg">
-            At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity. Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
+            {missionContentVisible.expanded && <>
+              Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
               <br />
               <br />
-            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
-              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
-                Read less
-              </button>
-            </p>
-          )}
+              Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
+            </>}
+            <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
+              {missionContentVisible.expanded ? 'Read less' : 'Read more'}
+            </button>
+          </p>
         </div>
       </div>
     </section>
