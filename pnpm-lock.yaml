@@ -13,13 +13,13 @@ devDependencies:
     version: 0.10.0
   '@builder.io/qwik':
     specifier: 1.4.5
-    version: 1.4.5(@types/node@20.11.21)(undici@6.6.2)
+    version: 1.4.5(@types/node@20.11.24)(undici@6.7.0)
   '@builder.io/qwik-city':
     specifier: 1.4.5
-    version: 1.4.5(@types/node@20.11.21)
+    version: 1.4.5(@types/node@20.11.24)
   '@luminescent/ui':
-    specifier: 0.10.0-4
-    version: 0.10.0-4
+    specifier: 0.11.0
+    version: 0.11.0
   '@modular-forms/qwik':
     specifier: ^0.23.1
     version: 0.23.1(@builder.io/qwik-city@1.4.5)(@builder.io/qwik@1.4.5)
@@ -28,7 +28,7 @@ devDependencies:
     version: 8.56.5
   '@types/node':
     specifier: latest
-    version: 20.11.21
+    version: 20.11.24
   '@typescript-eslint/eslint-plugin':
     specifier: 7.1.0
     version: 7.1.0(@typescript-eslint/parser@7.1.0)(eslint@8.57.0)(typescript@5.3.3)
@@ -63,11 +63,11 @@ devDependencies:
     specifier: 5.3.3
     version: 5.3.3
   undici:
-    specifier: ^6.6.2
-    version: 6.6.2
+    specifier: ^6.7.0
+    version: 6.7.0
   vite:
     specifier: 5.1.4
-    version: 5.1.4(@types/node@20.11.21)
+    version: 5.1.4(@types/node@20.11.24)
   vite-tsconfig-paths:
     specifier: 4.3.1
     version: 4.3.1(typescript@5.3.3)(vite@5.1.4)
@@ -107,7 +107,7 @@ packages:
     hasBin: true
     dev: true
 
-  /@builder.io/qwik-city@1.4.5(@types/node@20.11.21):
+  /@builder.io/qwik-city@1.4.5(@types/node@20.11.24):
     resolution: {integrity: sha512-M9hr82u49Um8VdRDZGva66VB3E5yhXj5Q9cCe2URj/wDgLdKSbsGYER20ivp6GvkVwPy6MSr8krgzqolUUGB0Q==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     dependencies:
@@ -115,9 +115,9 @@ packages:
       '@types/mdx': 2.0.11
       source-map: 0.7.4
       svgo: 3.2.0
-      undici: 6.6.2
+      undici: 6.7.0
       vfile: 6.0.1
-      vite: 5.1.4(@types/node@20.11.21)
+      vite: 5.1.4(@types/node@20.11.24)
       vite-imagetools: 6.2.9
       zod: 3.22.4
     transitivePeerDependencies:
@@ -132,7 +132,7 @@ packages:
       - terser
     dev: true
 
-  /@builder.io/qwik@1.4.5(@types/node@20.11.21)(undici@6.6.2):
+  /@builder.io/qwik@1.4.5(@types/node@20.11.24)(undici@6.7.0):
     resolution: {integrity: sha512-Z9bm2SGEHCW8HPZyIdWwF4WIAi7/Az2VQFFqsaeu4/O3pBFGYO2qBD+A6EwdJZhyijz8rSWsp48/zR4Nagm1Uw==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
@@ -140,8 +140,8 @@ packages:
       undici: '*'
     dependencies:
       csstype: 3.1.3
-      undici: 6.6.2
-      vite: 5.1.4(@types/node@20.11.21)
+      undici: 6.7.0
+      vite: 5.1.4(@types/node@20.11.24)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -944,8 +944,8 @@ packages:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: true
 
-  /@luminescent/ui@0.10.0-4:
-    resolution: {integrity: sha512-d9ZSsalGbnpumWofOhV1xIJUq4V8aocRE2KA917pFefnJUdMwRjJh8gNsHVeP6vFlFEis/7/ygxvEc57kYo/Dw==}
+  /@luminescent/ui@0.11.0:
+    resolution: {integrity: sha512-3V0iVKo1QWQYqwAQbMK3Haalp8W8JpO4VZbnnssjr4uXN+kqpbiAxGPLKcrpXfTRRrHzSHqCaf/jIaCkqKeDKg==}
     engines: {node: '>=15.0.0'}
     dev: true
 
@@ -979,8 +979,8 @@ packages:
       '@builder.io/qwik': ^1.4.0
       '@builder.io/qwik-city': ^1.4.0
     dependencies:
-      '@builder.io/qwik': 1.4.5(@types/node@20.11.21)(undici@6.6.2)
-      '@builder.io/qwik-city': 1.4.5(@types/node@20.11.21)
+      '@builder.io/qwik': 1.4.5(@types/node@20.11.24)(undici@6.7.0)
+      '@builder.io/qwik-city': 1.4.5(@types/node@20.11.24)
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:
@@ -1190,11 +1190,11 @@ packages:
   /@types/node-forge@1.3.11:
     resolution: {integrity: sha512-FQx220y22OKNTqaByeBGqHWYz4cl94tpcxeFdvBo3wjG6XPBuZ0BNgNZRV5J5TFmmcsJ4IzsLkmGRiQbnYsBEQ==}
     dependencies:
-      '@types/node': 20.11.21
+      '@types/node': 20.11.24
     dev: true
 
-  /@types/node@20.11.21:
-    resolution: {integrity: sha512-/ySDLGscFPNasfqStUuWWPfL78jompfIoVzLJPVVAHBh6rpG68+pI2Gk+fNLeI8/f1yPYL4s46EleVIc20F1Ow==}
+  /@types/node@20.11.24:
+    resolution: {integrity: sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -3576,7 +3576,7 @@ packages:
     peerDependencies:
       '@builder.io/qwik': '>=1.4.3'
     dependencies:
-      '@builder.io/qwik': 1.4.5(@types/node@20.11.21)(undici@6.6.2)
+      '@builder.io/qwik': 1.4.5(@types/node@20.11.24)(undici@6.7.0)
     dev: true
 
   /read-cache@1.0.0:
@@ -4169,8 +4169,8 @@ packages:
       '@fastify/busboy': 2.1.0
     dev: true
 
-  /undici@6.6.2:
-    resolution: {integrity: sha512-vSqvUE5skSxQJ5sztTZ/CdeJb1Wq0Hf44hlYMciqHghvz+K88U0l7D6u1VsndoFgskDcnU+nG3gYmMzJVzd9Qg==}
+  /undici@6.7.0:
+    resolution: {integrity: sha512-IcWssIyDN1gk6Mcae44q04oRoWTKrW8OKz0effVK1xdWwAgMPnfpxhn9RXUSL5JlwSikO18R7Ibk7Nukz6kxWA==}
     engines: {node: '>=18.0'}
     dependencies:
       '@fastify/busboy': 2.1.0
@@ -4328,13 +4328,13 @@ packages:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 3.0.2(typescript@5.3.3)
-      vite: 5.1.4(@types/node@20.11.21)
+      vite: 5.1.4(@types/node@20.11.24)
     transitivePeerDependencies:
       - supports-color
       - typescript
     dev: true
 
-  /vite@5.1.4(@types/node@20.11.21):
+  /vite@5.1.4(@types/node@20.11.24):
     resolution: {integrity: sha512-n+MPqzq+d9nMVTKyewqw6kSt+R3CkvF9QAKY8obiQn8g1fwTscKxyfaYnC632HtBXAQGc1Yjomphwn1dtwGAHg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -4362,7 +4362,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.11.21
+      '@types/node': 20.11.24
       esbuild: 0.19.12
       postcss: 8.4.35
       rollup: 4.12.0
