@@ -18,6 +18,8 @@ export default component$(() => {
   });
 
   useOnWindow('scroll', $(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) return;
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
     bg.style.filter = `blur(${window.scrollY * 2 / 100}px)`;
@@ -167,13 +169,7 @@ export default component$(() => {
               </div>
             </Card>
           </div>
-        </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
-        <div class="flex flex-col gap-4">
-          <Card color="blue">
+          <Card color="blue" blobs>
             <Header>
               <CheckmarkCircleOutline width="36" /> Benefits Galore
             </Header>

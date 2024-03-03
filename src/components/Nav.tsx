@@ -1,27 +1,27 @@
-import { $, Slot, component$ } from '@builder.io/qwik';
+import { Slot, component$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
-import { Button, ButtonAnchor, LoadingIcon, LogoBirdflop, LogoDiscord, Nav } from '@luminescent/ui';
+import { Button, ButtonAnchor, LoadingIcon, LogoBirdflop, LogoDiscord, Nav, SelectInputRaw } from '@luminescent/ui';
 
 import { ChevronDown, CubeOutline, GlobeOutline, LogoGithub, ServerOutline } from 'qwik-ionicons';
 
-import type { SpeakLocale } from 'qwik-speak';
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
 import { languages } from '~/speak-config';
 
 export default component$(() => {
+  const config = useSpeakConfig();
   const t = inlineTranslate();
-  const location = useLocation();
+  const loc = useLocation();
 
   return (
-    <Nav fixed>
+    <Nav fixed floating>
       <Link q:slot="start" href="/">
         <Button color="transparent">
           <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
           <span class="font-bold -ml-1">Birdflop</span>
           <div class={{
             'transition-all': true,
-            '-ml-6 opacity-0': !location.isNavigating,
+            '-ml-6 opacity-0': !loc.isNavigating,
           }}>
             <LoadingIcon width={16} speed="0.4s" />
           </div>
@@ -68,7 +68,16 @@ export default component$(() => {
           </Button>
         </Link>
       </Dropdown>
-      <LangPicker q:slot='end' extraClass={{ 'hidden': !location.url.pathname.includes('resources') }} />
+      <SelectInputRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources') }} id="lang-picker" color="transparent" display={<GlobeOutline width="24" />} size="md" values={config.supportedLocales.map(value => (
+        {
+          name: languages[value.lang as keyof typeof languages],
+          value: value.lang,
+        }
+      ))} onChange$={(e, el) => {
+        document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
+        location.reload();
+      }}>
+      </SelectInputRaw>
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
@@ -131,35 +140,6 @@ export const Dropdown = component$(({ name, Icon, extraClass }: any) => {
       <div class="absolute top-8 z-10 hidden group-hover:flex pt-8 text-base">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
           <Slot />
-        </div>
-      </div>
-    </div>
-  );
-});
-
-export const LangPicker = component$(({ extraClass }: any) => {
-  const config = useSpeakConfig();
-
-  const changeLocale$ = $(async (newLocale: SpeakLocale) => {
-    document.cookie = `locale=${JSON.stringify(newLocale)};max-age=86400;path=/`;
-    location.reload();
-  });
-
-  return (
-    <div class={{
-      'cursor-pointer transition ease-in-out flex hover:bg-blue-700/20 hover:text-white drop-shadow-2xl group rounded-lg text-3xl items-center gap-4': true,
-      ...extraClass,
-    }}>
-      <div class="p-3">
-        <GlobeOutline width="24" class="transform group-hover:rotate-180 group-hover:text-white transition ease-in-out" />
-      </div>
-      <div class={'absolute top-8 z-10 hidden group-hover:flex pt-5 text-base right-0'}>
-        <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-4 flex flex-col gap-2 font-medium whitespace-nowrap overflow-y-auto max-h-[calc(100svh-128px)]">
-          {config.supportedLocales.map(value => (
-            <Button color="transparent" key={value.lang} onClick$={async () => await changeLocale$(value)}>
-              {languages[value.lang as keyof typeof languages]}
-            </Button>
-          ))}
         </div>
       </div>
     </div>
