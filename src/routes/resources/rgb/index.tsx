@@ -149,21 +149,21 @@ export default component$(() => {
 
         <div id="mobile-navbuttons" class="my-4 sm:hidden">
           <div class="flex gap-2">
-            <Button aria-label="Colors" onClick$={() => {
+            <Button square aria-label="Colors" onClick$={() => {
               document.getElementById('colors')!.classList.remove('hidden');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
               document.getElementById('formatting')!.classList.add('hidden');
             }}>
               <ColorFillOutline width="24" />
             </Button>
-            <Button aria-label="Inputs" onClick$={() => {
+            <Button square aria-label="Inputs" onClick$={() => {
               document.getElementById('colors')!.classList.add('hidden');
               document.getElementById('inputs')!.classList.replace('hidden', 'flex');
               document.getElementById('formatting')!.classList.add('hidden');
             }}>
               <SettingsOutline width="24" />
             </Button>
-            <Button aria-label="Formatting" onClick$={() => {
+            <Button square aria-label="Formatting" onClick$={() => {
               document.getElementById('colors')!.classList.add('hidden');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
               document.getElementById('formatting')!.classList.remove('hidden');
@@ -226,13 +226,13 @@ export default component$(() => {
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
                   <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
-                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 active:bg-gray-600 py-1.5 px-2 rounded-l-md transition-all">
-                      <ChevronUp width="24" />
-                    </button>
+                    <Button square onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
+                      <ChevronUp width="20" />
+                    </Button>
                     <div class="bg-gray-700 w-px" />
-                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 active:bg-gray-600 py-1.5 px-2 rounded-r-md transition-all">
-                      <ChevronDown width="24" />
-                    </button>
+                    <Button square onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
+                      <ChevronDown width="20" />
+                    </Button>
                   </div>
                 </div>;
               })}

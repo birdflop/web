@@ -9,8 +9,8 @@ devDependencies:
     specifier: ^1.0.6
     version: 1.0.6(tailwindcss@3.4.1)
   '@builder.io/partytown':
-    specifier: ^0.9.2
-    version: 0.9.2
+    specifier: ^0.10.0
+    version: 0.10.0
   '@builder.io/qwik':
     specifier: 1.4.5
     version: 1.4.5(@types/node@20.11.21)(undici@6.6.2)
@@ -18,8 +18,8 @@ devDependencies:
     specifier: 1.4.5
     version: 1.4.5(@types/node@20.11.21)
   '@luminescent/ui':
-    specifier: ^0.9.0
-    version: 0.9.0
+    specifier: 0.10.0-1
+    version: 0.10.0-1
   '@modular-forms/qwik':
     specifier: ^0.23.1
     version: 0.23.1(@builder.io/qwik-city@1.4.5)(@builder.io/qwik@1.4.5)
@@ -36,8 +36,8 @@ devDependencies:
     specifier: 7.1.0
     version: 7.1.0(eslint@8.57.0)(typescript@5.3.3)
   autoprefixer:
-    specifier: 10.4.17
-    version: 10.4.17(postcss@8.4.35)
+    specifier: 10.4.18
+    version: 10.4.18(postcss@8.4.35)
   chart.js:
     specifier: ^4.4.2
     version: 4.4.2
@@ -101,8 +101,8 @@ packages:
       tailwindcss: 3.4.1
     dev: true
 
-  /@builder.io/partytown@0.9.2:
-    resolution: {integrity: sha512-aoXFGyjquwlreLeKDdliXTXWIsnIKpM3moKo7hI++N8yHbH9idSoa/GpvsFxwcPO+FnA+IrhFs0LZGGjRZiQew==}
+  /@builder.io/partytown@0.10.0:
+    resolution: {integrity: sha512-OS/o9lAmK5rZZLkjFmghPNmp3P40uTF5yu2rFY3TVlnSie7CQhwrQ+5lycUkHqrDVyI4NOnOiA655Q1eGPE2pw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dev: true
@@ -944,8 +944,8 @@ packages:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: true
 
-  /@luminescent/ui@0.9.0:
-    resolution: {integrity: sha512-Dru3r4adLY4o167WjL+4VTAZeJaZIz9SulGAMwGV9q8ULUHkKjeN5NAzXjQ8EGo6B0obboMsrDoCFayNN/eSZw==}
+  /@luminescent/ui@0.10.0-1:
+    resolution: {integrity: sha512-DpHKBrblw70ZopKdNtBpkXoZQJZcHZMoELqCbCgRj6iA+o1cHo2/L4McZnhimrD7GYO7pfD+av1osEBRr7rF2Q==}
     engines: {node: '>=15.0.0'}
     dev: true
 
@@ -1476,8 +1476,8 @@ packages:
     hasBin: true
     dev: true
 
-  /autoprefixer@10.4.17(postcss@8.4.35):
-    resolution: {integrity: sha512-/cpVNRLSfhOtcGflT13P2794gVSgmPgTR+erw5ifnMLZb0UnSlkK4tquLmkd3BhA+nLo5tX8Cu0upUsGKvKbmg==}
+  /autoprefixer@10.4.18(postcss@8.4.35):
+    resolution: {integrity: sha512-1DKbDfsr6KUElM6wg+0zRNkB/Q7WcKYAaK+pzXn+Xqmszm/5Xa9coeNdtP88Vi+dPzZnMjhge8GIV49ZQkDa+g==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
