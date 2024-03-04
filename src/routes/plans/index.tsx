@@ -192,11 +192,11 @@ export default component$(() => {
               <Card color={store.plan == 8 ? 'red' : 'darkgray'} blobs={store.plan == 8} hover="clickable"
                 onClick$={() => store.plan = 8}>
                 <Header subheader="$4/mo - 2GB">
-                  US Proxy
+                  EU Proxy
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
-                    New York City, NY, USA
+                    Falkenstein, Germany
                   </li>
                   <li>
                     Ryzen 9 5950X (4 vCores)
