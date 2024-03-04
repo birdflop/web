@@ -1,7 +1,7 @@
 import { $, component$, useOnWindow, useVisibleTask$, useStore } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
@@ -28,7 +28,7 @@ export default component$(() => {
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
-      <div class="text-center justify-center flex relative align-center w-full">
+      <div class="text-center justify-center flex relative w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000">
             Birdflop
@@ -65,7 +65,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Our Nonprofit Mission
@@ -78,17 +78,17 @@ export default component$(() => {
               <br />
               Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
             </>}
-            <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
+            <button class="text-blue-400 hover:underline" onClick$={() => missionContentVisible.expanded = !missionContentVisible.expanded}>
               {missionContentVisible.expanded ? 'Read less' : 'Read more'}
             </button>
           </p>
         </div>
       </div>
     </section>
-    <section id="plans" class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+      <div class="justify-center flex relative max-w-5xl px-10">
         <div class="flex flex-col gap-4">
-          {/* <Anchor id="plans" /> */}
+          <Anchor id="plans" />
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
@@ -100,7 +100,7 @@ export default component$(() => {
               <Header subheader="4+ GB plans capped at $2/GB">
                 EU Premium
               </Header>
-              <ul class="list-disc ml-5 space-y-2">
+              <ul class="list-disc ml-5 space-y-2 h-full">
                 <li>
                   Falkenstein, Germany
                 </li>
@@ -111,11 +111,11 @@ export default component$(() => {
                   Unmetered* NVMe Storage
                 </li>
               </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
+              <Link href="/plans?plan=1" class="pt-4">
+                <Button color="blue" class={{ 'w-full': true }}>
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
+                </Button>
+              </Link>
             </Card>
             <Card color="darkergray">
               <p>
@@ -124,7 +124,7 @@ export default component$(() => {
               <Header subheader="4-8 GB plans capped at $3/GB">
                 US Premium
               </Header>
-              <ul class="list-disc ml-5 space-y-2">
+              <ul class="list-disc ml-5 space-y-2 h-full">
                 <li>
                   New York City, NY, USA
                 </li>
@@ -138,20 +138,21 @@ export default component$(() => {
                   Free upgrade to US Premium+ after 6 months
                 </li>
               </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
+              <p class="text-red-500">Out of stock</p>
+              <Button color="blue" class={{ 'w-full': true }} disabled>
+                <CartOutline width="30" class="text-3xl" /> Order Now
+              </Button>
             </Card>
-            <Card color="darkergray">
+            <Card color="green" blobs class={{
+              'z-[1]': true,
+            }}>
               <p>
                 Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
               </p>
               <Header subheader="12+ GB plans capped at $3/GB">
                 US Premium+
               </Header>
-              <ul class="list-disc ml-5 space-y-2">
+              <ul class="list-disc ml-5 space-y-2 h-full">
                 <li>
                   Asburn, VA, USA
                 </li>
@@ -162,14 +163,16 @@ export default component$(() => {
                   Unmetered* NVMe Storage
                 </li>
               </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
+              <Link href="/plans?plan=3" class="pt-4">
+                <Button color="green" class={{ 'w-full': true }}>
                   <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
+                </Button>
+              </Link>
             </Card>
           </div>
-          <Card color="blue" blobs>
+          <Card color="blue" blobs class={{
+            'z-[1] max-w-xl mx-auto': true,
+          }}>
             <Header>
               <CheckmarkCircleOutline width="36" /> Benefits Galore
             </Header>
@@ -181,7 +184,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Features
@@ -240,7 +243,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             How do reimbursements work?
@@ -252,7 +255,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Where do my payments go?
@@ -277,7 +280,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Testimonials
@@ -287,7 +290,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Mikkel Hansen
               </Header>
-              <p>
+              <p class="h-full">
                 I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
               </p>
             </Card>
@@ -295,7 +298,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Wizzy SMP
               </Header>
-              <p>
+              <p class="h-full">
                 Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
               </p>
             </Card>
@@ -303,7 +306,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Beau
               </Header>
-              <p>
+              <p class="h-full">
                 I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
               </p>
             </Card>
@@ -311,7 +314,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Jmaster
               </Header>
-              <p>
+              <p class="h-full">
                 Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
               </p>
             </Card>
@@ -319,7 +322,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Oliver Flynn
               </Header>
-              <p>
+              <p class="h-full">
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
@@ -327,7 +330,7 @@ export default component$(() => {
               <Header>
                 <StarOutline width="36" /> Trustpilot
               </Header>
-              <p>
+              <p class="h-full">
                 Check out our Trustpilot page for more testimonials.
               </p>
             </Card>
@@ -336,7 +339,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Want More Info?

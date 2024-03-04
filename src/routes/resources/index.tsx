@@ -6,7 +6,7 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[calc(100svh-68px)]">
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[100svh]">
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
         Resources
       </h1>

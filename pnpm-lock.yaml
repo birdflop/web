@@ -18,8 +18,8 @@ devDependencies:
     specifier: 1.4.5
     version: 1.4.5(@types/node@20.11.24)
   '@luminescent/ui':
-    specifier: 0.12.3
-    version: 0.12.3
+    specifier: 0.12.4
+    version: 0.12.4
   '@modular-forms/qwik':
     specifier: ^0.23.1
     version: 0.23.1(@builder.io/qwik-city@1.4.5)(@builder.io/qwik@1.4.5)
@@ -73,7 +73,7 @@ devDependencies:
     version: 4.3.1(typescript@5.3.3)(vite@5.1.4)
   wrangler:
     specifier: latest
-    version: 3.30.1
+    version: 3.30.0
   yaml:
     specifier: ^2.4.0
     version: 2.4.0
@@ -944,8 +944,8 @@ packages:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: true
 
-  /@luminescent/ui@0.12.3:
-    resolution: {integrity: sha512-E47FHaQmqXU2vFuirmCAh4KP8waVRo0CEbaBNzB1k3scl8EhAawxInn+ZO1tkp3L34rA2Ciiapxkq/UTX2hTJQ==}
+  /@luminescent/ui@0.12.4:
+    resolution: {integrity: sha512-wxDM/AdJa8v3BzCo8nrkRkFQEkoYOCDhNAXy5bLtPLDPkm+ZlptsznqPYWiay11T9Kk4Io7P7mMttaZMSp62ig==}
     engines: {node: '>=15.0.0'}
     dev: true
 
@@ -4412,8 +4412,8 @@ packages:
       '@cloudflare/workerd-windows-64': 1.20240223.1
     dev: true
 
-  /wrangler@3.30.1:
-    resolution: {integrity: sha512-cT6Ezx8h2v5QiI0HWhnHVy32ng4omdMVdhaMQLuMnyMIHmyDoRg7pmrbhtZfj0663gExLdVtE4ucK//yncVTwg==}
+  /wrangler@3.30.0:
+    resolution: {integrity: sha512-td7tDjdONT8Dz7GJE9+98cR9aZJyxShToXXIfaJrAa6sxJCLJqsLOgqKIal6Z6neNqQCvk5e9ThBWyhiAjABXg==}
     engines: {node: '>=16.17.0'}
     hasBin: true
     peerDependencies:
