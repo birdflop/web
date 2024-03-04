@@ -186,7 +186,7 @@ export default component$(() => {
             </TextInput>
             <Dropdown id="os" class={{ 'w-full': true }} onChange$={(event: any) => {
               store.parsed.operatingSystem = event.target!.value; setCookie(JSON.stringify(store));
-            }} values={environmentOptions} value={store.parsed.flags}>
+            }} values={environmentOptions} value={store.parsed.operatingSystem}>
               <Header subheader={t('flags.enviroments.description@@The operating system that the server runs on.')}>
                 {t('flags.environment.label@@Environment')}
               </Header>

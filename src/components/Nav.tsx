@@ -28,7 +28,7 @@ export default component$(() => {
         </Button>
       </Link>
 
-      <DropdownRaw id="nav-hosting" q:slot='end' size="md" color="transparent"
+      <DropdownRaw id="nav-hosting" q:slot='end' size="md" color="transparent" hover
         display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}
         class={{ 'hidden sm:flex': true }}>
         <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://panel.birdflop.com/">
@@ -43,7 +43,7 @@ export default component$(() => {
           </Button>
         </Link>
       </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='end' size="md" color="transparent"
+      <DropdownRaw id="nav-resources" q:slot='end' size="md" color="transparent" hover
         display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}
         class={{ 'hidden sm:flex': true }}>
         <Link q:slot="extra-buttons" href="/resources/rgb">

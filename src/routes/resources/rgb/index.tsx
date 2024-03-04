@@ -7,7 +7,7 @@ import { convertToHex, convertToRGB, generateOutput, getRandomColor } from '~/co
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies } from '~/components/util/SharedUtils';
 
@@ -150,23 +150,23 @@ export default component$(() => {
         <div id="mobile-navbuttons" class="my-4 sm:hidden">
           <div class="flex gap-2">
             <Button square aria-label="Colors" onClick$={() => {
-              document.getElementById('colors')!.classList.remove('hidden');
+              document.getElementById('colors')!.classList.replace('hidden', 'flex');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.add('hidden');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <ColorFillOutline width="24" />
             </Button>
             <Button square aria-label="Inputs" onClick$={() => {
-              document.getElementById('colors')!.classList.add('hidden');
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('hidden', 'flex');
-              document.getElementById('formatting')!.classList.add('hidden');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <SettingsOutline width="24" />
             </Button>
             <Button square aria-label="Formatting" onClick$={() => {
-              document.getElementById('colors')!.classList.add('hidden');
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.remove('hidden');
+              document.getElementById('formatting')!.classList.replace('hidden', 'flex');
             }}>
               <Text width="24" class="fill-white" />
             </Button>
@@ -303,25 +303,8 @@ export default component$(() => {
                 {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
 
-              <label>
-                {t('color.presets@@Presets')}
-              </label>
-              <div class="flex gap-2">
-                <Button id="export" size="sm" onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    translate: 'color.exportedPreset',
-                    text: 'Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.export@@Export')}
-                </Button>
-                <TextInputRaw name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+              <div class="flex flex-col sm:flex-row sm:items-end gap-2">
+                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
                     json = JSON.parse(event.target!.value);
@@ -349,7 +332,23 @@ export default component$(() => {
                   setTimeout(() => {
                     store.alerts.splice(store.alerts.indexOf(alert), 1);
                   }, 2000);
-                }} />
+                }}>
+                  {t('color.presets@@Presets')}
+                </TextInput>
+                <Button id="export" size="sm" onClick$={() => {
+                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
+                  const alert = {
+                    class: 'text-green-500',
+                    translate: 'color.exportedPreset',
+                    text: 'Successfully exported preset to clipboard!',
+                  };
+                  store.alerts.push(alert);
+                  setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 2000);
+                }}>
+                  {t('color.export@@Export')}
+                </Button>
                 <Button id="createurl" size="sm" onClick$={() => {
                   const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                   const url = new URL(base_url);
@@ -375,7 +374,7 @@ export default component$(() => {
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
               ))}
             </div>
-            <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
+            <div class="sm:mt-6 mb-4 hidden sm:flex flex-col gap-4" id="formatting">
               <Toggle id="bold" checked={store.bold}
                 onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}
                 label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
