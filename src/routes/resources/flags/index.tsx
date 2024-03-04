@@ -118,7 +118,7 @@ export default component$(() => {
     {
       id: 'gui',
       label: <>
-        <TerminalOutline class="w-6 h-6"/> {t('flags.gui.label@@Use GUI')}
+        <TerminalOutline class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
       </>,
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
       disable: ['pterodactyl', 'velocity', 'waterfall'],
