@@ -18,8 +18,8 @@ devDependencies:
     specifier: 1.5.1
     version: 1.5.1(@types/node@20.11.24)
   '@luminescent/ui':
-    specifier: 0.12.5
-    version: 0.12.5
+    specifier: 0.12.9
+    version: 0.12.9
   '@modular-forms/qwik':
     specifier: ^0.23.1
     version: 0.23.1(@builder.io/qwik-city@1.5.1)(@builder.io/qwik@1.5.1)
@@ -944,8 +944,8 @@ packages:
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
     dev: true
 
-  /@luminescent/ui@0.12.5:
-    resolution: {integrity: sha512-YukV6cSZyYAKGXNYrzmJ4pl2P4HwN9CsylRv5QjEwJv6BkmdyNlfIfvBBbfLZbIYB2j3p9Htl+fByG1aceISzQ==}
+  /@luminescent/ui@0.12.9:
+    resolution: {integrity: sha512-K5r/RJKhZSPopjFXgq5dtvA/SroWkGHJ3y/ThzmXEVsK2nTyj3KzIVJHysn82ehv8lkXDNdkBFYtVz0e8zOGCg==}
     engines: {node: '>=15.0.0'}
     dev: true
 
