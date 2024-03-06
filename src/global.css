@@ -69,10 +69,6 @@ html {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
-
-* {
-  scroll-behavior: smooth;
-}
 *::-webkit-scrollbar {
   appearance: none;
   -webkit-appearance: none;
