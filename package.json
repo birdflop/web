@@ -1,6 +1,6 @@
 {
   "name": "birdflop",
-  "version": "7.0.0",
+  "version": "8.2.0",
   "homepage": "https://www.birdflop.com",
   "description": "The only 501(c)(3) nonprofit Minecraft server host.",
   "repository": {
@@ -46,7 +46,7 @@
     "qwik-speak": "^0.21.0",
     "tailwindcss": "^3.4.1",
     "typescript": "5.4.2",
-    "undici": "^6.7.0",
+    "undici": "^6.7.1",
     "vite": "5.1.5",
     "vite-tsconfig-paths": "4.3.1",
     "wrangler": "latest",

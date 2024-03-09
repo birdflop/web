@@ -7,7 +7,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[100svh]">
-      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10">
+      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10 drop-shadow-lg">
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">

@@ -7,6 +7,7 @@ import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
+import { plans } from './plans';
 
 export default component$(() => {
 
@@ -30,7 +31,7 @@ export default component$(() => {
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
       <div class="text-center justify-center flex relative w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
-          <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000">
+          <h1 class="text-white text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000 drop-shadow-lg">
             Birdflop
           </h1>
           <h2 class="text-gray-300 text-lg sm:text-2xl animate-in fade-in slide-in-from-top-16 anim-duration-1000">
@@ -93,82 +94,30 @@ export default component$(() => {
             Plans
           </h2>
           <div class="grid md:grid-cols-3 gap-4">
-            <Card color="darkergray">
-              <p>
-                Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="4+ GB plans capped at $2/GB">
-                EU Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  Falkenstein, Germany
-                </li>
-                <li>
-                  Ryzen 9 5950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-              <Link href="/plans?plan=1" class="pt-4">
-                <Button color="blue" class={{ 'w-full': true }}>
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </Button>
-              </Link>
-            </Card>
-            <Card color="darkergray">
-              <p>
-                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="4-8 GB plans capped at $3/GB">
-                US Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  New York City, NY, USA
-                </li>
-                <li>
-                  Ryzen 9 3900XT (4 vCores)
-                </li>
-                <li>
-                  Up to 80 GB NVMe Storage
-                </li>
-                <li>
-                  Free upgrade to US Premium+ after 6 months
-                </li>
-              </ul>
-              <p class="text-red-500">Out of stock</p>
-              <Button color="blue" class={{ 'w-full': true }} disabled>
-                <CartOutline width="30" class="text-3xl" /> Order Now
-              </Button>
-            </Card>
-            <Card color="green" blobs class={{
-              'z-[1]': true,
-            }}>
-              <p>
-                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="12+ GB plans capped at $3/GB">
-                US Premium+
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  Asburn, VA, USA
-                </li>
-                <li>
-                  Ryzen 9 7950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-              <Link href="/plans?plan=3" class="pt-4">
-                <Button color="green" class={{ 'w-full': true }}>
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </Button>
-              </Link>
-            </Card>
+            {Object.keys(plans).map((planName) => {
+              const plan = plans[planName as keyof typeof plans];
+              const ramOptions = Object.keys(plan.ramAndId);
+              return <Card key={planName} color="darkergray" hover>
+                <p>
+                  Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+                </p>
+                <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
+                  {planName}
+                </Header>
+                <ul class="list-disc ml-5 flex flex-col gap-2 h-full">
+                  {plan.features.map((feature) => {
+                    return <li key={feature}>
+                      {feature}
+                    </li>;
+                  })}
+                </ul>
+                <Link href={`/plans?plan=${planName}`} class="pt-4">
+                  <Button color="blue" class={{ 'w-full': true }}>
+                    <CartOutline width="30" class="text-3xl" /> Order Now
+                  </Button>
+                </Link>
+              </Card>;
+            })}
           </div>
           <Card color="blue" blobs class={{
             'z-[1] max-w-xl mx-auto': true,

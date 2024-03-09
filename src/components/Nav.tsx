@@ -34,6 +34,11 @@ export default component$(() => {
         <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://panel.birdflop.com/">
           Panel
         </ButtonAnchor>
+        <Link q:slot="extra-buttons" href="/plans">
+          <Button color="transparent" class={{ 'w-full': true }}>
+            Plans
+          </Button>
+        </Link>
         <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://client.birdflop.com/">
           Billing
         </ButtonAnchor>
@@ -91,6 +96,11 @@ export default component$(() => {
         <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://panel.birdflop.com/">
           Panel
         </ButtonAnchor>
+        <Link q:slot="extra-buttons" href="/plans">
+          <Button color="transparent" class={{ 'w-full': true }}>
+            Plans
+          </Button>
+        </Link>
         <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://client.birdflop.com/">
           Billing
         </ButtonAnchor>

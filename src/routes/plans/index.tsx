@@ -1,14 +1,15 @@
 import { component$, useStore } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline } from 'qwik-ionicons';
 
-const plans = {
-  EUPremium: {
+export const plans = {
+  'EU Premium': {
     id: 'eu-premium',
     groupId: 9,
     $PerGB: 2,
+    $PerGBReimbursed: 1.88,
     ramAndId: {
       4: 8,
       6: 9,
@@ -17,42 +18,68 @@ const plans = {
       16: 12,
       20: 13,
     },
+    features: [
+      'Falkenstein, Germany',
+      'Ryzen 9 5950X (6 vCores)',
+      'Unmetered* NVMe Storage',
+    ],
+    outOfStock: false,
   },
-  USPremium: {
+  'US Premium': {
     id: 'us-premium',
     groupId: 7,
     $PerGB: 3,
+    $PerGBReimbursed: 1.95,
     ramAndId: {
       4: 1,
       6: 2,
       8: 3,
     },
+    features: [
+      'New York City, NY, USA',
+      'Ryzen 9 3900XT (4 vCores)',
+      'Up to 80 GB NVMe Storage',
+      'Free upgrade to US Premium+ after 6 months',
+    ],
+    outOfStock: true,
   },
-  USPremiumPlus: {
+  'US Premium+': {
     id: 'us-premium',
     groupId: 7,
     $PerGB: 3,
+    $PerGBReimbursed: 1.95,
     ramAndId: {
       12: 4,
       16: 5,
       20: 6,
     },
+    features: [
+      'Ashburn, VA, USA',
+      'Ryzen 9 7950X (6 vCores)',
+      'Unmetered* NVMe Storage',
+    ],
+    outOfStock: false,
   },
 };
 
+export const useParams = routeLoader$(async ({ query }) => {
+  return query;
+});
+
 export default component$(() => {
+  const params = useParams().value;
   const store = useStore({
-    plan: undefined as number | string | undefined,
+    plan: params.get('plan') ?? undefined as number | string | undefined,
     showMiscPlans: false,
     gb: 0,
   });
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-[100svh]">
-      <div class="justify-center flex relative max-w-5xl px-10 py-10">
+      <div class="justify-center flex relative max-w-5xl px-10 py-24">
         <div class="flex flex-col gap-8">
-          <h1 class="flex gap-6 items-center justify-center text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            <CartOutline width="72" /> Order your new server
+          <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold mb-4 text-center drop-shadow-lg">
+            <CartOutline width="64" /> Order your new server
           </h1>
           <Header subheader="This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.">
             Pick your plan
@@ -61,70 +88,37 @@ export default component$(() => {
             </button>
           </Header>
           <div class="grid md:grid-cols-3 gap-4">
-            <Card color={store.plan == 'EUPremium' ? 'blue' : 'darkgray'} blobs={store.plan == 'EUPremium'} hover="clickable"
-              onClick$={() => store.plan = 'EUPremium'}>
-              <Header subheader="4+ GB plans capped at $2/GB">
-                EU Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  Falkenstein, Germany
-                </li>
-                <li>
-                  Ryzen 9 5950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-            </Card>
-            <Card color={store.plan == 'USPremium' ? 'blue' : 'darkgray'} blobs={store.plan == 'USPremium'} hover>
-              <Header subheader="4-8 GB plans capped at $3/GB">
-                US Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  New York City, NY, USA
-                </li>
-                <li>
-                  Ryzen 9 3900XT (4 vCores)
-                </li>
-                <li>
-                  Up to 80 GB NVMe Storage
-                </li>
-                <li>
-                  Free upgrade to US Premium+ after 6 months
-                </li>
-              </ul>
-              <p class="text-red-500">Out of stock</p>
-            </Card>
-            <Card color={store.plan == 'USPremiumPlus' ? 'green' : 'darkgray'} blobs={store.plan == 'USPremiumPlus'} hover="clickable"
-              onClick$={() => store.plan = 'USPremiumPlus'}>
-              <Header subheader="12+ GB plans capped at $3/GB">
-                US Premium+
-              </Header>
-              <ul class="list-disc ml-5 space-y-2 h-full">
-                <li>
-                  Asburn, VA, USA
-                </li>
-                <li>
-                  Ryzen 9 7950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-            </Card>
+            {Object.keys(plans).map((planName) => {
+              const plan = plans[planName as keyof typeof plans];
+              const ramOptions = Object.keys(plan.ramAndId);
+              return <Card key={planName} color={store.plan == planName ? 'blue' : 'darkgray'} blobs={store.plan == planName} hover="clickable"
+                onClick$={() => { store.plan = planName; store.gb = 0; }}
+                href="#ram">
+                <p>
+                  Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+                </p>
+                <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
+                  {planName}
+                </Header>
+                <ul class="list-disc ml-5 flex flex-col gap-2 h-full">
+                  {plan.features.map((feature) => {
+                    return <li key={feature}>
+                      {feature}
+                    </li>;
+                  })}
+                </ul>
+              </Card>;
+            })}
           </div>
           {store.showMiscPlans && <>
             <Header subheader="Here lies dragons! You most likely will not recieve support for these plans. Only proceed if you know what you're doing!">
               Misc Plans
             </Header>
             <div class="grid md:grid-cols-3 gap-4">
-              <Card color={store.plan == 4 ? 'red' : 'darkgray'} blobs={store.plan == 4} hover="clickable"
-                onClick$={() => store.plan = 4}>
+              <Card color={store.plan == 4 ? 'red' : 'darkgray'} hover="clickable"
+                href="https://client.birdflop.com/order/main/packages/discord/?group_id=12">
                 <Header subheader="$3/mo - 1GB">
-                  Discord Bot Hosting
+                  Discord Bot Hosting*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
@@ -138,10 +132,10 @@ export default component$(() => {
                   </li>
                 </ul>
               </Card>
-              <Card color={store.plan == 5 ? 'red' : 'darkgray'} blobs={store.plan == 5} hover="clickable"
-                onClick$={() => store.plan = 5}>
+              <Card color={store.plan == 5 ? 'red' : 'darkgray'} hover="clickable"
+                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15">
                 <Header subheader="$6/mo - 2GB">
-                  US Dev/Hub
+                  US Dev/Hub*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
@@ -155,10 +149,10 @@ export default component$(() => {
                   </li>
                 </ul>
               </Card>
-              <Card color={store.plan == 6 ? 'red' : 'darkgray'} blobs={store.plan == 6} hover="clickable"
-                onClick$={() => store.plan = 6}>
+              <Card color={store.plan == 6 ? 'red' : 'darkgray'} hover="clickable"
+                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7">
                 <Header subheader="$6/mo - 2GB">
-                  US Proxy
+                  US Proxy*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
@@ -172,10 +166,10 @@ export default component$(() => {
                   </li>
                 </ul>
               </Card>
-              <Card color={store.plan == 7 ? 'red' : 'darkgray'} blobs={store.plan == 7} hover="clickable"
-                onClick$={() => store.plan = 7}>
+              <Card color={store.plan == 7 ? 'red' : 'darkgray'} hover="clickable"
+                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16">
                 <Header subheader="$4/mo - 2GB">
-                  EU Dev/Hub
+                  EU Dev/Hub*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
@@ -189,10 +183,10 @@ export default component$(() => {
                   </li>
                 </ul>
               </Card>
-              <Card color={store.plan == 8 ? 'red' : 'darkgray'} blobs={store.plan == 8} hover="clickable"
-                onClick$={() => store.plan = 8}>
+              <Card color={store.plan == 8 ? 'red' : 'darkgray'} hover="clickable"
+                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14">
                 <Header subheader="$4/mo - 2GB">
-                  EU Proxy
+                  EU Proxy*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
@@ -209,7 +203,8 @@ export default component$(() => {
             </div>
           </>}
 
-          {isNaN(Number(store.plan)) && <>
+          {store.plan && isNaN(Number(store.plan)) && <>
+            <Anchor id="ram" />
             <Header subheader="This will be the amount of RAM in your new server.">
               Configure your RAM amount
             </Header>
@@ -220,9 +215,9 @@ export default component$(() => {
                 </Header>
               </Card>}
               {plans[store.plan as keyof typeof plans] && Object.keys(plans[store.plan as keyof typeof plans].ramAndId).map((gb) => {
-                return <Card key={`${store.plan}-${gb}`} color={store.gb == Number(gb) ? 'blue' : 'darkgray'} blobs={store.gb == Number(gb)} hover="clickable"
+                return <Card key={`${store.plan}-${gb}`} color={store.gb == Number(gb) ? 'green' : 'darkgray'} blobs={store.gb == Number(gb)} hover="clickable"
                   onClick$={() => store.gb = Number(gb)}>
-                  <Header subheader={`$${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo`}>
+                  <Header subheader={`$${(Number(gb) * plans[store.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements\nCapped at $${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo`}>
                     {gb} GB
                   </Header>
                 </Card>;
@@ -230,10 +225,20 @@ export default component$(() => {
             </div>
           </>}
 
-          <ButtonAnchor href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&billing_cycle=monthly`}
-            size="lg" color="blue">
-            Order
-          </ButtonAnchor>
+          {!!store.gb && <div class="flex items-center gap-2">
+            <div class="flex-1 flex flex-col gap-2">
+              <Header>
+                Order Summary
+              </Header>
+              <p>{store.plan} {store.gb} GB</p>
+              <p>Capped at ${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo</p>
+              <p>${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
+            </div>
+            <ButtonAnchor href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&billing_cycle=monthly`}
+              size="xl" color="blue">
+              <CartOutline width={36}/> Add to cart
+            </ButtonAnchor>
+          </div>}
         </div>
       </div>
     </section>
@@ -241,7 +246,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Birdflop - Minecraft Hosting & Resources',
+  title: 'Order your new server',
   meta: [
     {
       name: 'description',
