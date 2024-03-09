@@ -232,8 +232,8 @@ export default component$(() => {
             </div>
           </>}
 
-          {!!store.gb && <div class="flex items-center gap-2 mt-6">
-            <CubeOutline width={72} class="mx-5" />
+          {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6">
+            <CubeOutline width={72} class="sm:mx-5" />
             <div class="flex-1 flex flex-col gap-2">
               <Header>
                 Order Summary
