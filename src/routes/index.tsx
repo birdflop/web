@@ -2,7 +2,7 @@ import { $, component$, useOnWindow, useVisibleTask$, useStore } from '@builder.
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
-import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
+import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline, AlertCircleOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
@@ -111,11 +111,17 @@ export default component$(() => {
                     </li>;
                   })}
                 </ul>
-                <Link href={`/plans?plan=${planName}`} class="pt-4">
-                  <Button color="blue" class={{ 'w-full': true }}>
-                    <CartOutline width="30" class="text-3xl" /> Order Now
+                {plan.outOfStock ?
+                  <Button color="red" class={{ 'w-full': true }} disabled>
+                    <AlertCircleOutline width="30" class="text-3xl" /> Out of stock
                   </Button>
-                </Link>
+                  :
+                  <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="pt-4">
+                    <Button color="blue" class={{ 'w-full': true }}>
+                      <CartOutline width="30" class="text-3xl" /> Order Now
+                    </Button>
+                  </Link>
+                }
               </Card>;
             })}
           </div>

@@ -2,7 +2,7 @@ import { component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
-import { CartOutline } from 'qwik-ionicons';
+import { CartOutline, CubeOutline } from 'qwik-ionicons';
 
 export const plans = {
   'EU Premium': {
@@ -91,8 +91,12 @@ export default component$(() => {
             {Object.keys(plans).map((planName) => {
               const plan = plans[planName as keyof typeof plans];
               const ramOptions = Object.keys(plan.ramAndId);
-              return <Card key={planName} color={store.plan == planName ? 'blue' : 'darkgray'} blobs={store.plan == planName} hover="clickable"
-                onClick$={() => { store.plan = planName; store.gb = 0; }}
+              return <Card key={planName} color={store.plan == planName ? 'blue' : 'darkgray'} blobs={store.plan == planName}
+                hover={!plan.outOfStock ? 'clickable' : false}
+                class={{
+                  'opacity-50': plan.outOfStock,
+                }}
+                onClick$={() => { if (!plan.outOfStock) store.plan = planName; store.gb = 0; }}
                 href="#ram">
                 <p>
                   Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
@@ -107,6 +111,9 @@ export default component$(() => {
                     </li>;
                   })}
                 </ul>
+                {plan.outOfStock && <p class="text-red-500">
+                  Out of stock
+                </p>}
               </Card>;
             })}
           </div>
@@ -225,7 +232,8 @@ export default component$(() => {
             </div>
           </>}
 
-          {!!store.gb && <div class="flex items-center gap-2">
+          {!!store.gb && <div class="flex items-center gap-2 mt-6">
+            <CubeOutline width={72} class="mx-5" />
             <div class="flex-1 flex flex-col gap-2">
               <Header>
                 Order Summary
