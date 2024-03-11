@@ -76,9 +76,9 @@ export default component$(() => {
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-[100svh]">
-      <div class="justify-center flex relative max-w-5xl px-10 py-24">
+      <div class="justify-center flex relative py-10 sm:py-24">
         <div class="flex flex-col gap-8">
-          <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold mb-4 text-center drop-shadow-lg">
+          <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold sm:mb-4 text-center drop-shadow-lg">
             <CartOutline width="64" /> Order your new server
           </h1>
           <Header subheader="This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.">
@@ -215,7 +215,7 @@ export default component$(() => {
             <Header subheader="This will be the amount of RAM in your new server.">
               Configure your RAM amount
             </Header>
-            <div class="grid md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
               {!plans[store.plan as keyof typeof plans] && <Card color="darkgray">
                 <Header subheader="Please select a plan first.">
                   RAM

@@ -87,7 +87,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
           <Anchor id="plans" />
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
@@ -139,7 +139,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Features
@@ -235,7 +235,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Testimonials
