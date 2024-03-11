@@ -90,21 +90,21 @@ export default component$(() => {
     frame: 0,
   }, { deep: true });
 
-  const handleSwap = $(
-    function handleSwap(currentIndex: number, newIndex: number) {
-      const colorsLength = store.colors.length;
-      if (newIndex < 0) {
-        newIndex = colorsLength - 1;
-      } else if (newIndex >= colorsLength) {
-        newIndex = 0;
-      }
+  const handleSwap = $((currentIndex: number, newIndex: number) => {
+    // check if the index is out of bounds
+    const colorsLength = store.colors.length;
+    if (newIndex < 0) {
+      newIndex = colorsLength - 1;
+    } else if (newIndex >= colorsLength) {
+      newIndex = 0;
+    }
 
-      const temp = store.colors[currentIndex];
-      store.colors[currentIndex] = store.colors[newIndex];
-      store.colors[newIndex] = temp;
-      setCookie(JSON.stringify(store));
-    },
-  );
+    const currentColor = `${store.colors[currentIndex]}`;
+    store.colors[currentIndex] = store.colors[newIndex];
+    store.colors[newIndex] = currentColor;
+
+    setCookie(JSON.stringify(store));
+  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {

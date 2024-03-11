@@ -79,26 +79,21 @@ export default component$(() => {
     }[],
   }, { deep: true });
 
-  const handleSwap = $(
-    function handleSwap(currentIndex: number, newIndex: number) {
-      const colorsLength = store.colors.length;
-      if (newIndex < 0) {
-        newIndex = colorsLength - 1;
-      } else if (newIndex >= colorsLength) {
-        newIndex = 0;
-      }
+  const handleSwap = $((currentIndex: number, newIndex: number) => {
+    // check if the index is out of bounds
+    const colorsLength = store.colors.length;
+    if (newIndex < 0) {
+      newIndex = colorsLength - 1;
+    } else if (newIndex >= colorsLength) {
+      newIndex = 0;
+    }
 
-      const currentIndexInput = document.getElementById(`color${currentIndex + 1}`) as HTMLInputElement;
-      const newIndexInput = document.getElementById(`color${newIndex + 1}`) as HTMLInputElement;
-      if (currentIndexInput) currentIndexInput.dispatchEvent(new Event('input'));
-      if (newIndexInput) newIndexInput.dispatchEvent(new Event('input'));
+    const currentColor = `${store.colors[currentIndex]}`;
+    store.colors[currentIndex] = store.colors[newIndex];
+    store.colors[newIndex] = currentColor;
 
-      const temp = store.colors[currentIndex];
-      store.colors[currentIndex] = store.colors[newIndex];
-      store.colors[newIndex] = temp;
-      setCookie(JSON.stringify(store));
-    },
-  );
+    setCookie(JSON.stringify(store));
+  });
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
