@@ -1,13 +1,14 @@
 /* eslint-disable qwik/valid-lexical-scope */
-import { $, component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Header, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { CodeWorkingOutline, CubeOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies } from '~/components/util/SharedUtils';
+import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import { extraFlags as extFlags } from '~/data/flags';
 import { serverType as srvType } from '~/data/environment/serverType';
+import { isBrowser } from '@builder.io/qwik/build';
 
 const flagTypes = {
   'none': 'none',
@@ -20,25 +21,6 @@ const flagTypes = {
   'etils': 'Etil\'s Flags',
   'proxy': 'Proxy',
 };
-
-export const setCookie = $(function (store: any) {
-  const json = JSON.parse(store);
-  delete json.alerts;
-  const cookie: { [key: string]: string; } = {};
-  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-    const pairsplit = pair.split(/\s*=\s*/);
-    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-  });
-  Object.keys(json).forEach(key => {
-    const existingCookie = cookie[key];
-    if (existingCookie === json[key]) return;
-    if (key == 'parsed') {
-      document.cookie = `${key}=${encodeURIComponent(JSON.stringify(json[key]))}; path=/`;
-    } else {
-      document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
-    }
-  });
-});
 
 const defaults = {
   parsed: {
@@ -162,6 +144,13 @@ export default component$(() => {
     ...cookies,
   }, { deep: true });
 
+  useTask$(({ track }) => {
+    isBrowser && setCookies({ parsed: JSON.stringify(store.parsed) });
+    Object.keys(store.parsed).forEach((key: any) => {
+      track(() => store.parsed[key as keyof typeof store.parsed]);
+    });
+  });
+
   return (
     <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
@@ -178,14 +167,13 @@ export default component$(() => {
               if (event.target!.value.replace(/ /g, '') == '') return;
               if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
               store.parsed.fileName = event.target!.value;
-              setCookie(JSON.stringify(store));
             }}>
               <Header subheader={t('flags.fileName.description@@The name of the file that will be used to start your server.')}>
                 {t('flags.fileName.label@@File Name')}
               </Header>
             </TextInput>
             <Dropdown id="os" class={{ 'w-full': true }} onChange$={(event: any) => {
-              store.parsed.operatingSystem = event.target!.value; setCookie(JSON.stringify(store));
+              store.parsed.operatingSystem = event.target!.value;
             }} values={environmentOptions} value={store.parsed.operatingSystem}>
               <Header subheader={t('flags.enviroments.description@@The operating system that the server runs on.')}>
                 {t('flags.environment.label@@Environment')}
@@ -196,7 +184,6 @@ export default component$(() => {
               if (!srvType[store.parsed.serverType].flags.includes(event.target!.value)) {
                 store.parsed.flags = srvType[store.parsed.serverType].flags[1];
               }
-              setCookie(JSON.stringify(store));
             }} values={softwareOptions} value={store.parsed.flags}>
               <Header subheader={t('flags.software.description@@The software in which your Minecraft server will run on.')}>
                 {t('flags.software.label@@Software')}
@@ -223,14 +210,13 @@ export default component$(() => {
                 </div>
                 <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={store.parsed.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(event: any) => {
                   store.parsed.memory = event.target!.value;
-                  setCookie(JSON.stringify(store));
                 }} />
               </div>
             </div>
           </div>
           <div class="flex flex-col gap-4">
             <Dropdown id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
-              store.parsed.flags = event.target!.value; setCookie(JSON.stringify(store));
+              store.parsed.flags = event.target!.value;
             }} values={Object.keys(flagTypes).map((flag: string) => ({
               name: flagTypes[flag as keyof typeof flagTypes],
               value: flag,
@@ -248,7 +234,6 @@ export default component$(() => {
               }).map((option) => <>
                 <Toggle key={option.id} label={option.label} checked={store.parsed[option.id as keyof typeof store]} onClick$={(event: any) => {
                   (store.parsed as any)[option.id] = event.target!.checked;
-                  setCookie(JSON.stringify(store));
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
               </>)}
@@ -261,7 +246,6 @@ export default component$(() => {
                   } else {
                     store.parsed.extraFlags.splice(store.parsed.extraFlags.indexOf(option.id), 1);
                   }
-                  setCookie(JSON.stringify(store));
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
               </>)}
