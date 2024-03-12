@@ -37,7 +37,9 @@ export const setCookies = function (json: { [key: string]: any; }) {
   Object.keys(json).forEach(key => {
     const existingCookie = cookie[key];
     if (excludedKeys.includes(key)) return;
-    if (existingCookie === json[key]) return;
-    document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
+    const encodedValue = encodeURIComponent(json[key]);
+    if (existingCookie === encodedValue) return;
+    console.debug('cookie', key, encodedValue);
+    document.cookie = `${key}=${encodedValue}; path=/`;
   });
 };
