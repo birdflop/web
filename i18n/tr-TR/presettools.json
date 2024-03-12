@@ -1,8 +1,8 @@
 {
   "presettools": {
-    "input": "Preset Input",
-    "output": "Output",
-    "subtitle": "This will update older preset versions to the newest version.",
-    "title": "Preset Updater"
+    "input": "Önceden Ayarlanmış Giriş",
+    "output": "Çıktı",
+    "subtitle": "Bu, eski ön ayar sürümlerini en yeni sürüme güncelleyecektir.",
+    "title": "Ön Ayar Güncelleyici"
   }
 }
