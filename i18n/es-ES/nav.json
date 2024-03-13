@@ -1,19 +1,17 @@
 {
   "nav": {
-    "analysis": "Análisis",
-    "animatedTAB": "TAB animado",
-    "animatedTextures": "Texturas animadas",
+    "animatedTAB": "Animated TAB",
+    "animatedTextures": "Animated Textures",
     "colorCodeStripper": "Color Code Stripper",
     "flags": "Flags",
-    "gradients": "Degradados",
-    "hexGradient": "Degradado Hex",
-    "misc": "Miscelánea",
+    "hexGradient": "RGBirdflop",
     "more": "More Resources",
-    "paperTimings": "Paper Tiempo",
-    "presetTools": "Herramientas de preajuste",
-    "privacyPolicy": "Política de privacidad",
-    "sparkProfile": "Perfil Spark",
+    "paperTimings": "Paper Timings",
+    "presetTools": "Preset Tools",
+    "privacyPolicy": "Privacy Policy",
+    "sparkProfile": "Spark Profile",
     "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "TAB Animación Previewer"
+    "tabAnimationPreviewer": "TAB Animation Previewer",
+    "termsofService": "Terms of Service"
   }
 }

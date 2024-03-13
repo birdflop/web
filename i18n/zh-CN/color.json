@@ -9,21 +9,21 @@
     "customFormat": "自定义格式",
     "export": "导出",
     "exportedPreset": "成功导出预设到剪贴板！",
-    "exportedPresetUrl": "成功将预设导出至 url！",
+    "exportedPresetUrl": "已成功将预设导出到URL！",
     "formatCharacter": "格式字符",
     "formatting": "格式",
     "hexColor": "十六进制颜色",
     "import": "导入（粘贴到这里）",
     "importedPreset": "成功导入预设！",
     "inputText": "输入文本",
-    "invalidPreset": "无效的预设！\n如果这是一个旧的预设，请使用<a class=\"text-blue-400\" href=\"/PresetTools\">预设工具</a>页面更新它，如果不是，请报告给<a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">开发者</a>。",
+    "invalidPreset": "无效的预设!\n如果这是旧预设，请使用<a class=\"text-blue-400\" href=\"/PresetTools\">预设工具</a>页面更新它，如果不是请向<a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">开发人员</a>报告。",
     "italic": "斜体",
     "output": "输出",
-    "outputSubtitle": "这是你在聊天中输入的内容。点击它以复制。",
-    "placeholders": "占位符:",
+    "outputSubtitle": "粘贴这段文字来制作RGB文本！",
+    "placeholders": "占位符：",
     "presets": "预设",
     "strikethrough": "删除线",
     "underline": "下划线",
-    "url": "导出为 URL"
+    "url": "导出为URL"
   }
 }
