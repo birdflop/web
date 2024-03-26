@@ -219,7 +219,7 @@ export default component$(() => {
             >
               {t('animtab.length@@Gradient Length')}
             </NumberInput>
-            <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
+            <div class="flex flex-col gap-2 overflow-auto sm:h-[500px]">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
