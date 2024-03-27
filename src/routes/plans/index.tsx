@@ -9,7 +9,7 @@ export const plans = {
     id: 'eu-premium',
     groupId: 9,
     $PerGB: 2,
-    $PerGBReimbursed: 1.88,
+    $PerGBReimbursed: 1.58,
     ramAndId: {
       4: 8,
       6: 9,
@@ -99,7 +99,7 @@ export default component$(() => {
                 onClick$={() => { if (!plan.outOfStock) store.plan = planName; store.gb = 0; }}
                 href="#ram">
                 <p>
-                  Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+                  Last quarter, clients paid <strong>~${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
                 </p>
                 <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
                   {planName}
@@ -224,7 +224,7 @@ export default component$(() => {
               {plans[store.plan as keyof typeof plans] && Object.keys(plans[store.plan as keyof typeof plans].ramAndId).map((gb) => {
                 return <Card key={`${store.plan}-${gb}`} color={store.gb == Number(gb) ? 'green' : 'darkgray'} blobs={store.gb == Number(gb)} hover="clickable"
                   onClick$={() => store.gb = Number(gb)}>
-                  <Header subheader={`$${(Number(gb) * plans[store.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements\nCapped at $${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo`}>
+                  <Header subheader={`~$${(Number(gb) * plans[store.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo.`}>
                     {gb} GB
                   </Header>
                 </Card>;
@@ -239,7 +239,7 @@ export default component$(() => {
                 Order Summary
               </Header>
               <p>{store.plan} {store.gb} GB</p>
-              <p>Capped at ${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo</p>
+              <p>Capped at ~${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo.</p>
               <p>${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
             </div>
             <ButtonAnchor href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&billing_cycle=monthly`}
