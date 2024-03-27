@@ -1,0 +1,29 @@
+{
+  "color": {
+    "bold": "Bold",
+    "character": "Character",
+    "colorAmount": "Color Amount",
+    "colorFormat": "Color Format",
+    "colorPreset": "Color Preset",
+    "custom": "Custom",
+    "customFormat": "Custom Format",
+    "export": "Export",
+    "exportedPreset": "Successfully exported preset to clipboard!",
+    "exportedPresetUrl": "Successfully exported preset to url!",
+    "formatCharacter": "Format Character",
+    "formatting": "Formatting",
+    "hexColor": "Hex Color",
+    "import": "Import (Paste here)",
+    "importedPreset": "Successfully imported preset!",
+    "inputText": "Input Text",
+    "invalidPreset": "INVALID PRESET!\nIf this is an old preset, please update it using the <a class=\"text-blue-400\" href=\"/PresetTools\">Preset Tools</a> page, If not please report to the <a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">Developers</a>.",
+    "italic": "Italic",
+    "output": "Output",
+    "outputSubtitle": "Copy-paste this for RGB text!",
+    "placeholders": "Placeholders:",
+    "presets": "Presets",
+    "strikethrough": "Strikethrough",
+    "underline": "Underline",
+    "url": "Export As URL"
+  }
+}

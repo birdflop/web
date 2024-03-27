@@ -9,21 +9,21 @@
     "customFormat": "Другой формат",
     "export": "Экспорт",
     "exportedPreset": "Пресет успешно экспортирован в буфер обмена!",
-    "exportedPresetUrl": "Successfully exported preset to url!",
+    "exportedPresetUrl": "Пресет успешно экспортирован в буфер обмена!",
     "formatCharacter": "Символ формата",
     "formatting": "Форматирование",
-    "hexColor": "HEX цвет",
+    "hexColor": "Цвет",
     "import": "Импорт (Вставь текст сюда)",
     "importedPreset": "Настройки успешно импортированы!",
     "inputText": "Ваш текст",
     "invalidPreset": "НЕИЗВЕСТНЫЙ ПРЕСЕТ!\nЕсли это старый пресет, пожалуйста, обновите его, используя <a class=\"text-blue-400\" href=\"/PresetTools\">Preset Tools</a> страницу, Если нет, пожалуйста, сообщите <a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">Разработчикам</a>.",
     "italic": "Наклонный",
     "output": "Вывод",
-    "outputSubtitle": "Ваш результат. Нажмите на него, чтобы скопировать.",
+    "outputSubtitle": "Скопируйте и вставьте это для RGB-текста!",
     "placeholders": "Заполнители:",
     "presets": "Пресеты",
     "strikethrough": "Зачёркнутый",
     "underline": "Подчёркнутый",
-    "url": "Export As URL"
+    "url": "Экспорт в URL"
   }
 }
