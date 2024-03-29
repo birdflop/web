@@ -1,7 +1,7 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { SelectInput, TextArea, TextInput } from '@luminescent/ui';
+import { Dropdown, TextArea, TextInput } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 
 export default component$(() => {
@@ -27,7 +27,7 @@ export default component$(() => {
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <SelectInput id="gradienttype" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+        <Dropdown id="gradienttype" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
           values={[
             { value: 0, name: '&#rrggbb' },
             { value: 1, name: '<#rrggbb>' },
@@ -35,7 +35,7 @@ export default component$(() => {
             { value: 3, name: '§x§r§r§g§g§b§b' },
           ]}>
           {t('colorstrip.colorCodeType@@Color Code Type')}
-        </SelectInput>
+        </Dropdown>
 
         <div class="mt-3">
           <TextArea output id="colorstrip-output" value={

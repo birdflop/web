@@ -12,7 +12,7 @@ export default function evalField(fields: Field[], option: any[], option_name: s
         if (add_to_field && !expression.bool(dict_of_vars)) add_to_field = false;
       }
       catch (err) {
-        console.log(err);
+        console.error(err);
         add_to_field = false;
       }
     });

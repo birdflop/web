@@ -1,12 +1,13 @@
 import { $, component$, useOnWindow, useVisibleTask$, useStore } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
-import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline } from 'qwik-ionicons';
+import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline, AlertCircleOutline } from 'qwik-ionicons';
 import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
+import { plans } from './plans';
 
 export default component$(() => {
 
@@ -18,6 +19,8 @@ export default component$(() => {
   });
 
   useOnWindow('scroll', $(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) return;
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
     bg.style.filter = `blur(${window.scrollY * 2 / 100}px)`;
@@ -26,9 +29,9 @@ export default component$(() => {
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
       <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
-      <div class="text-center justify-center flex relative align-center w-full">
+      <div class="text-center justify-center flex relative w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
-          <h1 class="text-gray-100 text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000">
+          <h1 class="text-white text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000 drop-shadow-lg">
             Birdflop
           </h1>
           <h2 class="text-gray-300 text-lg sm:text-2xl animate-in fade-in slide-in-from-top-16 anim-duration-1000">
@@ -63,124 +66,68 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Our Nonprofit Mission
           </h2>
-          {!missionContentVisible.expanded && (
-            <p class="text-gray-200 sm:text-lg">
+          <p class="text-gray-200 sm:text-lg">
             At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
-              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
-                Read more
-              </button>
-            </p>
-          )}
-          {missionContentVisible.expanded && (
-            <p class="text-gray-200 sm:text-lg">
-            At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity. Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
+            {missionContentVisible.expanded && <>
+              Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
               <br />
               <br />
-            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
-              <button class="text-blue-400 hover:underline" onClick$={$(() => missionContentVisible.expanded = !missionContentVisible.expanded)}>
-                Read less
-              </button>
-            </p>
-          )}
+              Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
+            </>}
+            <button class="text-blue-400 hover:underline" onClick$={() => missionContentVisible.expanded = !missionContentVisible.expanded}>
+              {missionContentVisible.expanded ? 'Read less' : 'Read more'}
+            </button>
+          </p>
         </div>
       </div>
     </section>
-    <section id="plans" class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
-          {/* <Anchor id="plans" /> */}
+          <Anchor id="plans" />
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
           <div class="grid md:grid-cols-3 gap-4">
-            <Card color="darkergray">
-              <p>
-                Last quarter, clients paid <strong>$1.58/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="4+ GB plans capped at $2/GB">
-                EU Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2">
-                <li>
-                  Falkenstein, Germany
-                </li>
-                <li>
-                  Ryzen 9 5950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/eu-premium/" color="blue">
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
-            </Card>
-            <Card color="darkergray">
-              <p>
-                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="4-8 GB plans capped at $3/GB">
-                US Premium
-              </Header>
-              <ul class="list-disc ml-5 space-y-2">
-                <li>
-                  New York City, NY, USA
-                </li>
-                <li>
-                  Ryzen 9 3900XT (4 vCores)
-                </li>
-                <li>
-                  Up to 80 GB NVMe Storage
-                </li>
-                <li>
-                  Free upgrade to US Premium+ after 6 months
-                </li>
-              </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
-            </Card>
-            <Card color="darkergray">
-              <p>
-                Last quarter, clients paid <strong>$1.95/GB RAM</strong> after reimbursements.
-              </p>
-              <Header subheader="12+ GB plans capped at $3/GB">
-                US Premium+
-              </Header>
-              <ul class="list-disc ml-5 space-y-2">
-                <li>
-                  Asburn, VA, USA
-                </li>
-                <li>
-                  Ryzen 9 7950X (6 vCores)
-                </li>
-                <li>
-                  Unmetered* NVMe Storage
-                </li>
-              </ul>
-              <div class="pt-4">
-                <ButtonAnchor href="https://client.birdflop.com/order/main/index/us-premium/" color="blue">
-                  <CartOutline width="30" class="text-3xl" /> Order Now
-                </ButtonAnchor>
-              </div>
-            </Card>
+            {Object.keys(plans).map((planName) => {
+              const plan = plans[planName as keyof typeof plans];
+              const ramOptions = Object.keys(plan.ramAndId);
+              return <Card key={planName} color="darkergray" hover>
+                <p>
+                  Last quarter, clients paid <strong>~${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+                </p>
+                <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
+                  {planName}
+                </Header>
+                <ul class="list-disc ml-5 flex flex-col gap-2 h-full">
+                  {plan.features.map((feature) => {
+                    return <li key={feature}>
+                      {feature}
+                    </li>;
+                  })}
+                </ul>
+                {plan.outOfStock ?
+                  <Button color="red" class={{ 'w-full': true }} disabled>
+                    <AlertCircleOutline width="30" class="text-3xl" /> Out of stock
+                  </Button>
+                  :
+                  <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="pt-4">
+                    <Button color="blue" class={{ 'w-full': true }}>
+                      <CartOutline width="30" class="text-3xl" /> Order Now
+                    </Button>
+                  </Link>
+                }
+              </Card>;
+            })}
           </div>
-        </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
-        <div class="flex flex-col gap-4">
-          <Card color="blue">
+          <Card color="blue" blobs class={{
+            'z-[1] max-w-xl mx-auto': true,
+          }}>
             <Header>
               <CheckmarkCircleOutline width="36" /> Benefits Galore
             </Header>
@@ -192,7 +139,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Features
@@ -251,7 +198,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             How do reimbursements work?
@@ -263,7 +210,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Where do my payments go?
@@ -288,7 +235,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-5xl px-10">
+      <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Testimonials
@@ -298,7 +245,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Mikkel Hansen
               </Header>
-              <p>
+              <p class="h-full">
                 I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
               </p>
             </Card>
@@ -306,7 +253,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Wizzy SMP
               </Header>
-              <p>
+              <p class="h-full">
                 Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
               </p>
             </Card>
@@ -314,7 +261,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Beau
               </Header>
-              <p>
+              <p class="h-full">
                 I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
               </p>
             </Card>
@@ -322,7 +269,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Jmaster
               </Header>
-              <p>
+              <p class="h-full">
                 Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
               </p>
             </Card>
@@ -330,7 +277,7 @@ export default component$(() => {
               <Header>
                 <PersonOutline width="36" /> Oliver Flynn
               </Header>
-              <p>
+              <p class="h-full">
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
               </p>
             </Card>
@@ -338,7 +285,7 @@ export default component$(() => {
               <Header>
                 <StarOutline width="36" /> Trustpilot
               </Header>
-              <p>
+              <p class="h-full">
                 Check out our Trustpilot page for more testimonials.
               </p>
             </Card>
@@ -347,7 +294,7 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
-      <div class="justify-center flex relative align-center max-w-4xl px-10">
+      <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Want More Info?

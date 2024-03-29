@@ -58,7 +58,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Birdflop: Privacy Policy',
+  title: 'Privacy Policy',
   meta: [
     {
       name: 'description',
