@@ -100,7 +100,7 @@ export default component$(() => {
           <div class="grid md:grid-cols-3 gap-4">
             <Card color="darkergray">
               <p>
-                Last quarter, clients paid <strong>$1.88/GB RAM</strong> after reimbursements.
+                Last quarter, clients paid <strong>$1.58/GB RAM</strong> after reimbursements.
               </p>
               <Header subheader="4+ GB plans capped at $2/GB">
                 EU Premium
@@ -257,7 +257,7 @@ export default component$(() => {
             How do reimbursements work?
           </h2>
           <p class="text-gray-200 sm:text-lg">
-            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 35% reimbursement and EU clients received a 6% reimbursement, effectively lowering prices to $1.95/GB RAM and $1.88/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
+            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 35% reimbursement and EU clients received a 21% reimbursement, effectively lowering prices to $1.95/GB RAM and $1.58/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
           </p>
         </div>
       </div>
@@ -272,7 +272,7 @@ export default component$(() => {
             <div>
               <Chart />
               <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2023. Some numbers may be approximations.
+                Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes node acquisition and depreciation.
               </p>
             </div>
             <div class="flex flex-col gap-4">
