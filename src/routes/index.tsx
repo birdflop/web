@@ -125,7 +125,7 @@ export default component$(() => {
               </Card>;
             })}
           </div>
-          <Card color="blue" blobs class={{
+          <Card color="blue" class={{
             'z-[1] max-w-xl mx-auto': true,
           }}>
             <Header>
