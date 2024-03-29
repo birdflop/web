@@ -14,7 +14,7 @@ export default component$(() => {
   const loc = useLocation();
 
   return (
-    <Nav fixed floating>
+    <Nav fixed>
       <Link q:slot="start" href="/">
         <Button color="transparent">
           <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
