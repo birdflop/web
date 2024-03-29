@@ -41,7 +41,7 @@ export const plans = {
       'Up to 80 GB NVMe Storage',
       'Free upgrade to US Premium+ after 6 months',
     ],
-    outOfStock: true,
+    outOfStock: false,
   },
   'US Premium+': {
     id: 'us-premium',
