@@ -1,42 +1,56 @@
 import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { type DocumentHead } from '@builder.io/qwik-city';
+
 import { ButtonAnchor, Card, Header } from '@luminescent/ui';
-import Background from '~/components/images/background.png?jsx';
+import { StatsChartOutline } from 'qwik-ionicons';
 
 export default component$(() => {
-  return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
-      <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-45 blur-lg" id="bg" alt="background" />
-      <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-        Node Stats
-      </h1>
-      <div class="flex flex-wrap gap-3 justify-center">
-        <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
-          Overview
-        </ButtonAnchor>
-        <ButtonAnchor href="https://netdata.birdflop.com/panel" size="lg" color="blue">
-          Web Services
-        </ButtonAnchor>
-      </div>
-      <div class="flex flex-wrap gap-3 justify-center">
-        <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
-          <Header subheader="US">
-            Crabwings
-          </Header>
-        </Card>
-        <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
-          <Header subheader="EU">
-            Impeyes
-          </Header>
-        </Card>
-        <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
-          <Header subheader="EU">
-            Jellyfishjaws
-          </Header>
-        </Card>
+
+  return <>
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-[100svh]">
+      <div class="justify-center flex relative max-w-5xl px-10 py-24">
+        <div class="flex flex-col gap-8">
+          <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold mb-4 text-center drop-shadow-lg">
+            <StatsChartOutline width="64" /> Node Stats
+          </h1>
+          <div class="flex flex-wrap gap-3 justify-center">
+            <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
+              Overview
+            </ButtonAnchor>
+            <ButtonAnchor href="https://netdata.birdflop.com/panel" size="lg" color="blue">
+              Web Services
+            </ButtonAnchor>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
+              <Header subheader="New York City, NY, USA">
+                Crabwings
+              </Header>
+              crabwings.birdflop.com
+            </Card>
+            <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
+              <Header subheader="Falkenstein, Germany (EU)">
+                Impeyes
+              </Header>
+              impeyes.birdflop.com
+            </Card>
+            <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
+              <Header subheader="Falkenstein, Germany (EU)">
+                Jellyfishjaws
+              </Header>
+              jellyfishjaws.birdflop.com
+            </Card>
+            <Card href="http://koalaknees.birdflop.com/" color="green" hover="clickable" blobs>
+              <Header subheader="Ashburn, VA, USA">
+                Koalaknees
+              </Header>
+              koalaknees.birdflop.com
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
-  );
+  </>;
 });
 
 export const head: DocumentHead = {
@@ -44,11 +58,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Birdflop Node Stats',
+      content: 'Check the status of Birdflop\'s nodes.',
     },
     {
       name: 'og:description',
-      content: 'Birdflop Node Stats',
+      content: 'Check the status of Birdflop\'s nodes.',
     },
     {
       name: 'og:image',

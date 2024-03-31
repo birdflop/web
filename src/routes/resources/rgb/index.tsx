@@ -1,15 +1,16 @@
-import { $, component$, useStore } from '@builder.io/qwik';
+import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
-import { presetVersion } from '~/components/util/PresetUtils';
+import { presetVersion, presets } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getRandomColor } from '~/components/util/RGBUtils';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { Button, ColorInput, Header, NumberInput, SelectInput, TextArea, TextInput, TextInputRaw, Toggle } from '@luminescent/ui';
+import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies } from '~/components/util/SharedUtils';
+import { getCookies, setCookies } from '~/components/util/SharedUtils';
+import { isBrowser } from '@builder.io/qwik/build';
 
 const formats = [
   '&#$1$2$3$4$5$6$f$c',
@@ -20,33 +21,6 @@ const formats = [
   '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
   'MiniMessage',
 ];
-
-const presets = {
-  'birdflop': ['#084CFB', '#ADF3FD'],
-  'SimplyMC': ['#00FFE0', '#EB00FF'],
-  'Rainbow': ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'],
-  'Skyline': ['#1488CC', '#2B32B2'],
-  'Mango': ['#FFE259', '#FFA751'],
-  'Vice City': ['#3494E6', '#EC6EAD'],
-  'Dawn': ['#F3904F', '#3B4371'],
-  'Rose': ['#F4C4F3', '#FC67FA'],
-  'Firewatch': ['#CB2D3E', '#EF473A'],
-};
-
-export const setCookie = $(function (store: any) {
-  const json = JSON.parse(store);
-  delete json.alerts;
-  const cookie: { [key: string]: string; } = {};
-  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-    const pairsplit = pair.split(/\s*=\s*/);
-    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-  });
-  Object.keys(json).forEach(key => {
-    const existingCookie = cookie[key];
-    if (existingCookie === json[key]) return;
-    document.cookie = `${key}=${encodeURIComponent(json[key])}; path=/`;
-  });
-});
 
 const defaults = {
   colors: presets.birdflop,
@@ -74,39 +48,44 @@ export default component$(() => {
     ...cookies,
     alerts: [] as {
       class: string,
-      translate: string,
       text: string,
     }[],
   }, { deep: true });
 
-  const handleSwap = $(
-    function handleSwap(currentIndex: number, newIndex: number) {
-      const colorsLength = store.colors.length;
-      if (newIndex < 0) {
-        newIndex = colorsLength - 1;
-      } else if (newIndex >= colorsLength) {
-        newIndex = 0;
-      }
+  const handleSwap = $((currentIndex: number, newIndex: number) => {
+    // check if the index is out of bounds
+    const colorsLength = store.colors.length;
+    if (newIndex < 0) {
+      newIndex = colorsLength - 1;
+    } else if (newIndex >= colorsLength) {
+      newIndex = 0;
+    }
 
-      const temp = store.colors[currentIndex];
-      store.colors[currentIndex] = store.colors[newIndex];
-      store.colors[newIndex] = temp;
-      setCookie(JSON.stringify(store));
-    },
-  );
+    const currentColor = `${store.colors[currentIndex]}`;
+    store.colors[currentIndex] = store.colors[newIndex];
+    store.colors[newIndex] = currentColor;
+  });
+
+  useTask$(({ track }) => {
+    isBrowser && setCookies(store);
+    Object.keys(store).forEach((key: any) => {
+      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
+      else track(() => store[key as keyof typeof store]);
+    });
+  });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-[calc(100svh)] pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('gradient.title@@Hex Gradient')}
+          {t('gradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 text-base sm:text-xl mb-12">
-          {t('gradient.subtitle@@Hex color gradient creator')}
+        <h2 class="text-gray-50 text-base sm:text-xl mb-6">
+          {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
 
         {/* charlimit={256} */}
-        <TextArea output id="Output" value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="Output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.formatchar, store.prefix, store.bold, store.italic, store.underline, store.strikethrough)}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -144,24 +123,24 @@ export default component$(() => {
 
         <div id="mobile-navbuttons" class="my-4 sm:hidden">
           <div class="flex gap-2">
-            <Button aria-label="Colors" onClick$={() => {
-              document.getElementById('colors')!.classList.remove('hidden');
+            <Button square aria-label="Colors" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('hidden', 'flex');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.add('hidden');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <ColorFillOutline width="24" />
             </Button>
-            <Button aria-label="Inputs" onClick$={() => {
-              document.getElementById('colors')!.classList.add('hidden');
+            <Button square aria-label="Inputs" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('hidden', 'flex');
-              document.getElementById('formatting')!.classList.add('hidden');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <SettingsOutline width="24" />
             </Button>
-            <Button aria-label="Formatting" onClick$={() => {
-              document.getElementById('colors')!.classList.add('hidden');
+            <Button square aria-label="Formatting" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.remove('hidden');
+              document.getElementById('formatting')!.classList.replace('hidden', 'flex');
             }}>
               <Text width="24" class="fill-white" />
             </Button>
@@ -170,18 +149,17 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <SelectInput id="color-preset" class={{ 'w-full': true }} onChange$={
+            <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
                 store.colors = presets[event.target!.value as keyof typeof presets];
-                setCookie(JSON.stringify(store));
               }
             } values={[
               ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
               { name: t('color.custom@@Custom'), value: 'custom' },
             ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
-            </SelectInput>
+            </Dropdown>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value < 2) return;
@@ -192,20 +170,17 @@ export default component$(() => {
                   else newColors.push(getRandomColor());
                 }
                 store.colors = newColors;
-                setCookie(JSON.stringify(store));
               }}
               onIncrement$={() => {
                 store.colors.push(getRandomColor());
-                setCookie(JSON.stringify(store));
               }}
               onDecrement$={() => {
                 store.colors.pop();
-                setCookie(JSON.stringify(store));
               }}
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <div class="flex flex-col gap-2 overflow-auto sm:max-h-[500px]">
+            <div class="flex flex-col gap-2 overflow-auto sm:h-[500px]">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
@@ -213,7 +188,6 @@ export default component$(() => {
                     value={color}
                     onInput$={(newColor: string) => {
                       store.colors[i] = newColor;
-                      setCookie(JSON.stringify(store));
                     }}
                     class={{ 'w-full': true }}
                     presetColors={store.colors}
@@ -221,13 +195,13 @@ export default component$(() => {
                     {t('color.hexColor@@Hex Color')} {i + 1}
                   </ColorInput>
                   <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
-                    <button onClick$={() => handleSwap(i, i - 1)} class="hover:bg-gray-700 px-2 py-3 rounded-l-md transition-all">
+                    <Button square onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
                       <ChevronUp width="20" />
-                    </button>
+                    </Button>
                     <div class="bg-gray-700 w-px" />
-                    <button onClick$={() => handleSwap(i, i + 1)} class="hover:bg-gray-700 px-2 py-3 rounded-r-md transition-all">
+                    <Button square onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
                       <ChevronDown width="20" />
-                    </button>
+                    </Button>
                   </div>
                 </div>;
               })}
@@ -235,12 +209,12 @@ export default component$(() => {
           </div>
           <div class="md:col-span-2 lg:col-span-3">
             <div class="flex flex-col gap-3" id="inputs">
-              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <SelectInput id="format" value={store.customFormat ? 'custom' : store.format} class={{ 'w-full': true }} onChange$={
+                <Dropdown id="format" value={store.customFormat ? 'custom' : store.format} class={{ 'w-full': true }} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -249,7 +223,6 @@ export default component$(() => {
                       store.customFormat = false;
                       store.format = event.target!.value;
                     }
-                    setCookie(JSON.stringify(store));
                   }
                 } values={[
                   ...formats.map(format => ({
@@ -269,15 +242,15 @@ export default component$(() => {
                   },
                 ]}>
                   {t('color.colorFormat@@Color Format')}
-                </SelectInput>
-                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                </Dropdown>
+                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
                   {t('color.formatCharacter@@Format Character')}
                 </TextInput>
               </div>
 
               {
                 store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; setCookie(JSON.stringify(store)); }}>
+                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; }}>
                     {t('color.customFormat@@Custom Format')}
                   </TextInput>
                   <div class="pb-4">
@@ -294,37 +267,19 @@ export default component$(() => {
                 </>
               }
 
-              <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; setCookie(JSON.stringify(store)); }}>
+              <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; }}>
                 {t('gradient.prefix@@Prefix (Usually used for commands)')}
               </TextInput>
 
-              <label>
-                {t('color.presets@@Presets')}
-              </label>
-              <div class="flex gap-2">
-                <Button id="export" onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    translate: 'color.exportedPreset',
-                    text: 'Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.export@@Export')}
-                </Button>
-                <TextInputRaw name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+              <div class="flex flex-col sm:flex-row sm:items-end gap-2">
+                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
                     json = JSON.parse(event.target!.value);
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',
-                      translate: 'color.invalidPreset',
-                      text: 'INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-400 hover:underline" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
+                      text: 'color.invalidPreset@@INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-400 hover:underline" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
                     };
                     store.alerts.push(alert);
                     return setTimeout(() => {
@@ -337,15 +292,29 @@ export default component$(() => {
                   });
                   const alert = {
                     class: 'text-green-500',
-                    translate: 'color.importedPreset',
-                    text: 'Successfully imported preset!',
+                    text: 'color.importedPreset@@Successfully imported preset!',
                   };
                   store.alerts.push(alert);
                   setTimeout(() => {
                     store.alerts.splice(store.alerts.indexOf(alert), 1);
                   }, 2000);
-                }} />
-                <Button id="createurl" onClick$={() => {
+                }}>
+                  {t('color.presets@@Presets')}
+                </TextInput>
+                <Button id="export" size="sm" onClick$={() => {
+                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
+                  const alert = {
+                    class: 'text-green-500',
+                    text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                  };
+                  store.alerts.push(alert);
+                  setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 2000);
+                }}>
+                  {t('color.export@@Export')}
+                </Button>
+                <Button id="createurl" size="sm" onClick$={() => {
                   const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                   const url = new URL(base_url);
                   const params = { ...store, alerts: undefined };
@@ -355,8 +324,7 @@ export default component$(() => {
                   window.history.pushState({}, '', url.href);
                   const alert = {
                     class: 'text-green-500',
-                    translate: 'color.exportedPresetUrl',
-                    text: 'Successfully exported preset to url!',
+                    text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
                   };
                   store.alerts.push(alert);
                   setTimeout(() => {
@@ -367,26 +335,26 @@ export default component$(() => {
                 </Button>
               </div>
               {store.alerts.map((alert: any, i: number) => (
-                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(`${alert.translate}@@${alert.text}`)} />
+                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
               ))}
             </div>
-            <div class="sm:mt-6 mb-4 space-y-4 hidden sm:block" id="formatting">
+            <div class="sm:mt-6 mb-4 hidden sm:flex flex-col gap-4" id="formatting">
               <Toggle id="bold" checked={store.bold}
-                onChange$={(event: any) => { store.bold = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                onChange$={(event: any) => { store.bold = event.target!.checked; }}
                 label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
               <Toggle id="italic" checked={store.italic}
-                onChange$={(event: any) => { store.italic = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                onChange$={(event: any) => { store.italic = event.target!.checked; }}
                 label={`${t('color.italic@@Italic')} - ${store.formatchar}o`} />
               <Toggle id="underline" checked={store.underline}
-                onChange$={(event: any) => { store.underline = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                onChange$={(event: any) => { store.underline = event.target!.checked; }}
                 label={`${t('color.underline@@Underline')} - ${store.formatchar}n`} />
               <Toggle id="strikethrough" checked={store.strikethrough}
-                onChange$={(event: any) => { store.strikethrough = event.target!.checked; setCookie(JSON.stringify(store)); }}
+                onChange$={(event: any) => { store.strikethrough = event.target!.checked; }}
                 label={`${t('color.strikethrough@@Strikethrough')} - ${store.formatchar + 'm'}`} />
             </div>
           </div>
         </div>
-        <div class="text-sm">
+        <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </div>
       </div>
