@@ -1,14 +1,12 @@
 import type { QRL } from '@builder.io/qwik';
 import { component$, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { Button, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import type { InitialValues, SubmitHandler } from '@modular-forms/qwik';
 import { getValue, useForm, zodForm$ } from '@modular-forms/qwik';
 //import { PrismaClient } from '@prisma/client/edge';
 
 import type { input } from 'zod';
-import { Button } from '~/components/elements/Button';
-import TextInput from '~/components/elements/TextInput';
-import Toggle from '~/components/elements/Toggle';
 import { serverSchema } from '~/components/serverlist/schema';
 //import { useAuthSession } from '~/routes/plugin@auth';
 
@@ -44,20 +42,20 @@ export default component$(() => {
         <Field name="name">
           {(field, props) => (
             <div class="mb-4">
-              <TextInput {...props} type="text" value={field.value} >Server Name</TextInput>
+              <TextInput id="servername" {...props} value={field.value} >Server Name</TextInput>
               {field.error && <div>{field.error}</div>}
             </div>
           )}
         </Field>
         <Field name="description">
           {(field, props) => (
-            <TextInput big {...props} value={field.value} >Server Description</TextInput>
+            <TextArea id="serverdescription" output {...props} value={field.value} >Server Description</TextArea>
           )}
         </Field>
         <Field name="ip">
           {(field, props) => (
             <div class="mb-4">
-              <TextInput {...props} type="text" value={field.value} >Server IP</TextInput>
+              <TextInput id="serverip" {...props} value={field.value} >Server IP</TextInput>
               {field.error && <div>{field.error}</div>}
             </div>
           )}
@@ -65,7 +63,7 @@ export default component$(() => {
         <Field name="port" type='number'>
           {(field, props) => (
             <div class="mb-4">
-              <TextInput {...props} type="number" value={field.value} >Server Port (if you arent using one leave as 25565) </TextInput>
+              <TextInput id="serverport" {...props} value={field.value} >Server Port (if you arent using one leave as 25565) </TextInput>
               {field.error && <div>{field.error}</div>}
             </div>
           )}
@@ -73,7 +71,7 @@ export default component$(() => {
         <Field name="votifier" type='boolean'>
           {(field, props) => (
             <div class="mb-4">
-              <Toggle {...props} value={field.value} >Enable Votifier</Toggle>
+              <Toggle {...props} checked={field.value} >Enable Votifier</Toggle>
             </div>
           )}
         </Field>
@@ -82,7 +80,7 @@ export default component$(() => {
             <Field name="votifierIp">
               {(field, props) => (
                 <div class="mb-4">
-                  <TextInput {...props} type="text" value={field.value} >Votifier IP</TextInput>
+                  <TextInput id="votifierip" {...props} value={field.value} >Votifier IP</TextInput>
                   {field.error && <div>{field.error}</div>}
                 </div>
               )}
@@ -90,7 +88,7 @@ export default component$(() => {
             <Field name="votifierPort" type='number'>
               {(field, props) => (
                 <div class="mb-4">
-                  <TextInput {...props} type="number" value={field.value} >Votifier Port</TextInput>
+                  <TextInput id="votifierport" {...props} value={field.value} >Votifier Port</TextInput>
                   {field.error && <div>{field.error}</div>}
                 </div>
               )}
@@ -100,7 +98,7 @@ export default component$(() => {
         <Field name="website">
           {(field, props) => (
             <div class="mb-4">
-              <TextInput {...props} type="text" value={field.value} >Server Website</TextInput>
+              <TextInput id='serverwebsite' {...props} value={field.value} >Server Website</TextInput>
               {field.error && <div>{field.error}</div>}
             </div>
           )}
@@ -108,12 +106,12 @@ export default component$(() => {
         <Field name="version">
           {(field, props) => (
             <div class="mb-4">
-              <TextInput {...props} type="text" value={field.value} >Server Version</TextInput>
+              <TextInput id="serverversion" {...props} value={field.value} >Server Version</TextInput>
               {field.error && <div>{field.error}</div>}
             </div>
           )}
         </Field>
-        <Button type="submit" class="mt-4">Submit</Button>
+        <Button type="submit" class={{"mt-4": true}}>Submit</Button>
       </div>
     </Form>
   );

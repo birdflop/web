@@ -3,9 +3,9 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { config } from '~/speak-config';
 
 import Nav from '../components/Nav';
-import { Button } from '~/components/elements/Button';
 import Footer from '~/components/Footer';
 import type { Session } from '@auth/core/types';
+import { Button } from '@luminescent/ui';
 
 export default component$(() => {
   const store = useStore({
@@ -35,7 +35,7 @@ export default component$(() => {
           </span>
           <div class="flex items-center gap-2">
             <a class="flex-1 text-xs text-gray-400 hover:text-gray-200 whitespace-nowrap mr-5" href="/privacy">Privacy Policy</a>
-            <Button color="primary" onClick$={async () => {
+            <Button color="blue" onClick$={async () => {
               document.cookie = 'cookies=true; path=/';
               document.getElementById('cookieprompt')!.remove();
             }}>
