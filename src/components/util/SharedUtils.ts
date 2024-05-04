@@ -19,7 +19,7 @@ export const getCookies = (cookie: Cookie, names: string[], urlParams: URLSearch
       : value === 'false' ? false
         : key == 'colors' ? value.split(',')
           : !isNaN(Number(value)) ? Number(value)
-            : value.startsWith('{') ? JSON.parse(value)
+            : (value.startsWith('{') && key !== 'format') ? JSON.parse(value)
               : value;
   }
   return parsedCookiesAndParams;
