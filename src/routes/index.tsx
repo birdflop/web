@@ -132,7 +132,7 @@ export default component$(() => {
               <CheckmarkCircleOutline width="36" /> Benefits Galore
             </Header>
             <p class="text-gray-100">
-              All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
+              All plans come with a one-click modpack installer, DDoS protection, 3 off-site backups, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
             </p>
           </Card>
         </div>
