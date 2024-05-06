@@ -24,20 +24,23 @@ export default component$(() => {
     <Slot />
     {store.cookies != 'true' &&
       <div class={{
-        'fixed bottom-4 right-4 backdrop-blur-xl z-[1000] animate-in fade-in slide-in-from-bottom-8 anim-duration-1000': true,
+        'fixed bottom-0 sm:bottom-4 w-[100vw] sm:right-4 backdrop-blur-xl z-[1000] animate-in fade-in slide-in-from-bottom-8 anim-duration-1000': true,
       }}>
         <Card id="cookieprompt">
-          <Header>
+          <Header subheader="We use cookies to automatically save and load your preferences.">
             Cookies
           </Header>
-          <span class="text-gray-200 text-md mb-3 max-w-[17rem]">
-            We use cookies to automatically save and load your preferences.
-          </span>
-          <div class="flex items-center justify-end gap-2">
+          <div class="flex flex-wrap items-center justify-end gap-2">
+            <Button transparent onClick$={async () => {
+              document.cookie = 'optout=true; path=/';
+              document.getElementById('cookieprompt')!.remove();
+            }}>
+              Turn off cookies
+            </Button>
             <ButtonAnchor href="/privacy" transparent>
               Privacy Policy
             </ButtonAnchor>
-            <Button color="blue" onClick$={async () => {
+            <Button color="gray" onClick$={async () => {
               document.cookie = 'cookies=true; path=/';
               document.getElementById('cookieprompt')!.remove();
             }}>
