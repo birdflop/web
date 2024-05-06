@@ -24,7 +24,7 @@ export default component$(() => {
     <Slot />
     {store.cookies != 'true' &&
       <div class={{
-        'fixed bottom-0 sm:bottom-4 w-[100vw] sm:right-4 backdrop-blur-xl z-[1000] animate-in fade-in slide-in-from-bottom-8 anim-duration-1000': true,
+        'fixed bottom-0 sm:bottom-4 w-[100vw] sm:w-auto sm:right-4 backdrop-blur-xl z-[1000] animate-in fade-in slide-in-from-bottom-8 anim-duration-1000': true,
       }}>
         <Card id="cookieprompt">
           <Header subheader="We use cookies to automatically save and load your preferences.">
