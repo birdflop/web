@@ -34,7 +34,7 @@ export default component$(() => {
             We use cookies to automatically save and load your preferences.
           </span>
           <div class="flex items-center justify-end gap-2">
-            <ButtonAnchor href="/privacy" color="transparent">
+            <ButtonAnchor href="/privacy" transparent>
               Privacy Policy
             </ButtonAnchor>
             <Button color="blue" onClick$={async () => {

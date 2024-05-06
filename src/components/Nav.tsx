@@ -16,7 +16,7 @@ export default component$(() => {
   return (
     <Nav fixed>
       <Link q:slot="start" href="/">
-        <Button color="transparent">
+        <Button transparent>
           <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
           <span class="font-bold -ml-1">Birdflop</span>
           <div class={{
@@ -28,56 +28,56 @@ export default component$(() => {
         </Button>
       </Link>
 
-      <DropdownRaw id="nav-hosting" q:slot='end' size="md" color="transparent" hover
+      <DropdownRaw id="nav-hosting" q:slot='end' size="md" transparent hover
         display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}
         class={{ 'hidden sm:flex': true }}>
-        <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://panel.birdflop.com/">
+        <ButtonAnchor q:slot="extra-buttons" transparent href="https://panel.birdflop.com/">
           Panel
         </ButtonAnchor>
         <Link q:slot="extra-buttons" href="/plans">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             Plans
           </Button>
         </Link>
-        <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://client.birdflop.com/">
+        <ButtonAnchor q:slot="extra-buttons" transparent href="https://client.birdflop.com/">
           Billing
         </ButtonAnchor>
         <Link q:slot="extra-buttons" href="/node-stats">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             Node Stats
           </Button>
         </Link>
       </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='end' size="md" color="transparent" hover
+      <DropdownRaw id="nav-resources" q:slot='end' size="md" transparent hover
         display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}
         class={{ 'hidden sm:flex': true }}>
         <Link q:slot="extra-buttons" href="/resources/rgb">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.hexGradient@@RGBirdflop')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/animtab">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.animatedTAB@@Animated TAB')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/sparkprofile">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.sparkProfile@@Spark Profile')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/flags">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.flags@@Flags')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.more@@More Resources')}
           </Button>
         </Link>
       </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources') }} id="lang-picker" color="transparent" display={<GlobeOutline width="24" />} size="md" values={config.supportedLocales.map(value => (
+      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources') }} id="lang-picker" transparent display={<GlobeOutline width="24" />} size="md" values={config.supportedLocales.map(value => (
         {
           name: languages[value.lang as keyof typeof languages],
           value: value.lang,
@@ -91,49 +91,49 @@ export default component$(() => {
         <SocialButtons />
       </div>
 
-      <DropdownRaw id="nav-hosting" q:slot='mobile' size="md" color="transparent"
+      <DropdownRaw id="nav-hosting" q:slot='mobile' size="md" transparent
         display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}>
-        <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://panel.birdflop.com/">
+        <ButtonAnchor q:slot="extra-buttons" transparent href="https://panel.birdflop.com/">
           Panel
         </ButtonAnchor>
         <Link q:slot="extra-buttons" href="/plans">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             Plans
           </Button>
         </Link>
-        <ButtonAnchor q:slot="extra-buttons" color="transparent" href="https://client.birdflop.com/">
+        <ButtonAnchor q:slot="extra-buttons" transparent href="https://client.birdflop.com/">
           Billing
         </ButtonAnchor>
         <Link q:slot="extra-buttons" href="/node-stats">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             Node Stats
           </Button>
         </Link>
       </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='mobile' size="md" color="transparent"
+      <DropdownRaw id="nav-resources" q:slot='mobile' size="md" transparent
         display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}>
         <Link q:slot="extra-buttons" href="/resources/rgb">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.hexGradient@@RGBirdflop')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/animtab">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.animatedTAB@@Animated TAB')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/sparkprofile">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.sparkProfile@@Spark Profile')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources/flags">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.flags@@Flags')}
           </Button>
         </Link>
         <Link q:slot="extra-buttons" href="/resources">
-          <Button color="transparent" class={{ 'w-full': true }}>
+          <Button transparent class={{ 'w-full': true }}>
             {t('nav.more@@More Resources')}
           </Button>
         </Link>
@@ -148,10 +148,10 @@ export default component$(() => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <ButtonAnchor color="transparent" square href="https://github.com/birdflop/web" title="GitHub">
+    <ButtonAnchor transparent square href="https://github.com/birdflop/web" title="GitHub">
       <LogoGithub width="24" />
     </ButtonAnchor>
-    <ButtonAnchor color="transparent" square href="https://discord.gg/nmgtX5z" title="Discord">
+    <ButtonAnchor transparent square href="https://discord.gg/nmgtX5z" title="Discord">
       <LogoDiscord width="24" />
     </ButtonAnchor>
   </>;
