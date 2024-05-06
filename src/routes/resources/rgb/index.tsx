@@ -253,16 +253,16 @@ export default component$(() => {
                   <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; }}>
                     {t('color.customFormat@@Custom Format')}
                   </TextInput>
-                  <div class="pb-4">
+                  <div class="pb-4 font-mono">
                     <p>{t('color.placeholders@@Placeholders:')}</p>
-                    <p>$1 - (R)RGGBB</p>
-                    <p>$2 - R(R)GGBB</p>
-                    <p>$3 - RR(G)GBB</p>
-                    <p>$4 - RRG(G)BB</p>
-                    <p>$5 - RRGG(B)B</p>
-                    <p>$6 - RRGGB(B)</p>
-                    <p>$f - {t('color.formatting@@Formatting')}</p>
-                    <p>$c - {t('color.character@@Character')}</p>
+                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                    <p>$f = {t('color.formatting@@Formatting')}</p>
+                    <p>$c = {t('color.character@@Character')}</p>
                   </div>
                 </>
               }
