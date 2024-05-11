@@ -179,6 +179,10 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+              <ColorFillOutline width="32" />
+              {t('color.colors@@Colors')}
+            </h1>
             <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
@@ -190,6 +194,16 @@ export default component$(() => {
             ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
             </Dropdown>
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
+              onIncrement$={() => {
+                store.length++;
+              }}
+              onDecrement$={() => {
+                if (store.length > 1) store.length--;
+              }}
+            >
+              {t('animtab.length@@Gradient Length')}
+            </NumberInput>
             <NumberInput input min={2} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(event: any) => {
                 if (event.target!.value < 2) event.target!.value = 2;
@@ -208,16 +222,6 @@ export default component$(() => {
               }}
             >
               {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
-            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
-              onIncrement$={() => {
-                store.length++;
-              }}
-              onDecrement$={() => {
-                if (store.length > 1) store.length--;
-              }}
-            >
-              {t('animtab.length@@Gradient Length')}
             </NumberInput>
             <div class="flex flex-col gap-2 overflow-auto sm:h-[500px]">
               {store.colors.map((color: string, i: number) => {
@@ -246,17 +250,20 @@ export default component$(() => {
               })}
             </div>
           </div>
-          <div class="md:col-span-2 lg:col-span-3">
-            <div class="flex flex-col gap-3" id="inputs">
-              <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; }}>
-                {t('animtab.animationName@@Animation Name')}
-              </TextInput>
-
-              <TextInput id="textinput" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
+          <div class="md:col-span-2 lg:col-span-3 sm:grid grid-cols-3 gap-4">
+            <div class="flex flex-col gap-3 col-span-2" id="inputs">
+              <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+                <SettingsOutline width="32" />
+                {t('color.inputs@@Inputs')}
+              </h1>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; }}>
+                  {t('animtab.animationName@@Animation Name')}
+                </TextInput>
                 <NumberInput id="speed" input value={store.speed} class={{ 'w-full': true }} step={50} min={50}
                   onInput$={(event: any) => {
                     store.speed = Number(event.target!.value);
@@ -269,14 +276,8 @@ export default component$(() => {
                   }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
-
-                <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
-                  values={types.map((type: any) => ({ name: type.name, value: type.value }))}
-                  value={store.type}>
-                  {t('animtab.outputType@@Output Type')}
-                </Dropdown>
-
-                <Dropdown id="format" class={{ 'w-full': true }} value={store.customFormat ? 'custom' : store.format} onChange$={
+ 
+                <Dropdown id="format" value={store.customFormat ? 'custom' : store.format} class={{ 'w-full': true }} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -305,9 +306,11 @@ export default component$(() => {
                 ]}>
                   {t('color.colorFormat@@Color Format')}
                 </Dropdown>
-                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
-                  {t('color.formatCharacter@@Format Character')}
-                </TextInput>
+                <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+                  values={types.map((type: any) => ({ name: type.name, value: type.value }))}
+                  value={store.type}>
+                  {t('animtab.outputType@@Output Type')}
+                </Dropdown>
               </div>
 
               {
@@ -329,11 +332,7 @@ export default component$(() => {
                 </>
               }
 
-              <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
-                {t('animtab.outputFormat@@Output Format')}
-              </TextArea>
-
-              <div class="flex flex-col sm:flex-row sm:items-end gap-2">
+              <div class="flex flex-col gap-2">
                 <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
@@ -363,44 +362,53 @@ export default component$(() => {
                 }}>
                   {t('color.presets@@Presets')}
                 </TextInput>
-                <Button id="export" size="sm" onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.export@@Export')}
-                </Button>
-                <Button id="createurl" size="sm" onClick$={() => {
-                  const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-                  const url = new URL(base_url);
-                  const params = { ...store, alerts: undefined };
-                  Object.entries(params).forEach(([key, value]) => {
-                    url.searchParams.set(key, String(value));
-                  });
-                  window.history.pushState({}, '', url.href);
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.url@@Export As URL')}
-                </Button>
+                <div class="flex gap-2">
+                  <Button id="export" size="sm" onClick$={() => {
+                    navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.export@@Export')}
+                  </Button>
+                  <Button id="createurl" size="sm" onClick$={() => {
+                    const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                    const url = new URL(base_url);
+                    const params = { ...store, alerts: undefined };
+                    Object.entries(params).forEach(([key, value]) => {
+                      url.searchParams.set(key, String(value));
+                    });
+                    window.history.pushState({}, '', url.href);
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.url@@Export As URL')}
+                  </Button>
+                </div>
               </div>
               {store.alerts.map((alert: any, i: number) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
               ))}
             </div>
-            <div class="sm:mt-6 mb-4 hidden sm:flex flex-col gap-4" id="formatting">
+            <div class="mb-4 hidden sm:flex flex-col gap-3" id="formatting">
+              <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
+                <Text width="32" />
+                {t('color.colors@@Formatting')}
+              </h1>
+              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
+                {t('color.formatCharacter@@Format Character')}
+              </TextInput>
               <Toggle id="bold" checked={store.bold}
                 onChange$={(event: any) => { store.bold = event.target!.checked; }}
                 label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
@@ -413,6 +421,10 @@ export default component$(() => {
               <Toggle id="strikethrough" checked={store.strikethrough}
                 onChange$={(event: any) => { store.strikethrough = event.target!.checked; }}
                 label={`${t('color.strikethrough@@Strikethrough')} - ${store.formatchar + 'm'}`} />
+
+              <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
+                {t('animtab.outputFormat@@Output Format')}
+              </TextArea>
             </div>
           </div>
         </div>
