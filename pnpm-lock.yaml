@@ -15,17 +15,17 @@ importers:
         specifier: ^0.10.2
         version: 0.10.2
       '@builder.io/qwik':
-        specifier: 1.5.3
-        version: 1.5.3(@types/node@20.12.5)(undici@6.15.0)
+        specifier: 1.5.4
+        version: 1.5.4(@types/node@20.12.5)(undici@6.16.1)
       '@builder.io/qwik-city':
-        specifier: 1.5.3
-        version: 1.5.3(@types/node@20.12.5)(rollup@4.14.0)
+        specifier: 1.5.4
+        version: 1.5.4(@types/node@20.12.5)(rollup@4.14.0)
       '@luminescent/ui':
-        specifier: 0.16.0
-        version: 0.16.0
+        specifier: 0.16.5
+        version: 0.16.5
       '@modular-forms/qwik':
         specifier: ^0.24.0
-        version: 0.24.0(@builder.io/qwik-city@1.5.3(@types/node@20.12.5)(rollup@4.14.0))(@builder.io/qwik@1.5.3(@types/node@20.12.5)(undici@6.15.0))
+        version: 0.24.0(@builder.io/qwik-city@1.5.4(@types/node@20.12.5)(rollup@4.14.0))(@builder.io/qwik@1.5.4(@types/node@20.12.5)(undici@6.16.1))
       '@types/eslint':
         specifier: 8.56.10
         version: 8.56.10
@@ -48,8 +48,8 @@ importers:
         specifier: 8.57.0
         version: 8.57.0
       eslint-plugin-qwik:
-        specifier: 1.5.3
-        version: 1.5.3(eslint@8.57.0)
+        specifier: 1.5.4
+        version: 1.5.4(eslint@8.57.0)
       postcss:
         specifier: ^8.4.38
         version: 8.4.38
@@ -58,7 +58,7 @@ importers:
         version: 1.0.5
       qwik-speak:
         specifier: ^0.22.0
-        version: 0.22.0(@builder.io/qwik@1.5.3(@types/node@20.12.5)(undici@6.15.0))
+        version: 0.22.0(@builder.io/qwik@1.5.4(@types/node@20.12.5)(undici@6.16.1))
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
@@ -66,8 +66,8 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       undici:
-        specifier: ^6.15.0
-        version: 6.15.0
+        specifier: ^6.16.1
+        version: 6.16.1
       vite:
         specifier: 5.2.11
         version: 5.2.11(@types/node@20.12.5)
@@ -81,8 +81,8 @@ importers:
         specifier: ^2.4.2
         version: 2.4.2
       zod:
-        specifier: ^3.23.6
-        version: 3.23.6
+        specifier: ^3.23.8
+        version: 3.23.8
 
 packages:
 
@@ -104,12 +104,12 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@builder.io/qwik-city@1.5.3':
-    resolution: {integrity: sha512-FuGG+JhguQRywJlGWTUFOOsnS9/40jReGm4EwWMpogqJdakmg0bwi9KZJgIk4JBLLz016hxX/WmKM/vjLFpiow==}
+  '@builder.io/qwik-city@1.5.4':
+    resolution: {integrity: sha512-8zmEkVv2eBtLUGdntf3Ryd5GcvHvuMt1PiSu6wTpqYwUmZwWMfSqNsxuEE6+bndTcOKVAZNwvdvjQfcGE0peOQ==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
 
-  '@builder.io/qwik@1.5.3':
-    resolution: {integrity: sha512-X42mnWN2gWbTVqcT5X44+twqZyHOnMEL/MbJZGGJ5wmLkhNdDr4afHUKfhTuMVLXtKBinPjzC1pFYOeAhLEn9w==}
+  '@builder.io/qwik@1.5.4':
+    resolution: {integrity: sha512-Ws/yHHbTkDE7wRMpYesrZzQ/RhAL/I55pvSfjTZxnARycWTaZNFDBeqM9iNv7/1mBjoA5lL0EUSxo2iQHRrM9A==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     hasBin: true
     peerDependencies:
@@ -609,8 +609,8 @@ packages:
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
 
-  '@luminescent/ui@0.16.0':
-    resolution: {integrity: sha512-5kdyeXkj48/yYYmVSb4bj7WKx6ZtLVyQZ5yNCb059fSv6m3omdAEt/yP8+5EchyYSFgmh87BK+f8Zkel2SKZVQ==}
+  '@luminescent/ui@0.16.5':
+    resolution: {integrity: sha512-5TS+9uRW6yK8kw60m8xHpgmChwoMMldcylBFGooa4r0NdCZnE3PAjlW1A6PocbZTTZhdVkuXpSXj3W//jz8T+A==}
     engines: {node: '>=15.0.0'}
 
   '@mdx-js/mdx@3.0.1':
@@ -1182,8 +1182,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-plugin-qwik@1.5.3:
-    resolution: {integrity: sha512-NRpTZiXPVvpHn04tTR1j6REKz+/W5ytsBwsUJ0K8JxQAn6Yh3goclfV5c1fSMvHENCunXFkn+MpsIFHOn9PO7g==}
+  eslint-plugin-qwik@1.5.4:
+    resolution: {integrity: sha512-NSkCCsommqEsahliCn4eorPeE9C/keFU1cbZynGPHR1Bk+bQlYDxKLszU/5qPmWIpCwfJdo4ly9Rd8Ca/fuunA==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       eslint: ^8.57.0
@@ -2233,8 +2233,8 @@ packages:
     resolution: {integrity: sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==}
     engines: {node: '>=14.0'}
 
-  undici@6.15.0:
-    resolution: {integrity: sha512-VviMt2tlMg1BvQ0FKXxrz1eJuyrcISrL2sPfBf7ZskX/FCEc/7LeThQaoygsMJpNqrATWQIsRVx+1Dpe4jaYuQ==}
+  undici@6.16.1:
+    resolution: {integrity: sha512-NeNiTT7ixpeiL1qOIU/xTVpHpVP0svmI6PwoCKaMGaI5AsHOaRdwqU/f7Fi9eyU4u03nd5U/BC8wmRMnS9nqoA==}
     engines: {node: '>=18.17'}
 
   unified@11.0.4:
@@ -2387,8 +2387,8 @@ packages:
   youch@3.3.3:
     resolution: {integrity: sha512-qSFXUk3UZBLfggAW3dJKg0BMblG5biqSF8M34E06o5CSsZtH92u9Hqmj2RzGiHDi64fhe83+4tENFP2DB6t6ZA==}
 
-  zod@3.23.6:
-    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -2405,17 +2405,17 @@ snapshots:
 
   '@builder.io/partytown@0.10.2': {}
 
-  '@builder.io/qwik-city@1.5.3(@types/node@20.12.5)(rollup@4.14.0)':
+  '@builder.io/qwik-city@1.5.4(@types/node@20.12.5)(rollup@4.14.0)':
     dependencies:
       '@mdx-js/mdx': 3.0.1
       '@types/mdx': 2.0.13
       source-map: 0.7.4
       svgo: 3.2.0
-      undici: 6.15.0
+      undici: 6.16.1
       vfile: 6.0.1
       vite: 5.2.11(@types/node@20.12.5)
       vite-imagetools: 6.2.9(rollup@4.14.0)
-      zod: 3.23.6
+      zod: 3.23.8
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -2427,10 +2427,10 @@ snapshots:
       - supports-color
       - terser
 
-  '@builder.io/qwik@1.5.3(@types/node@20.12.5)(undici@6.15.0)':
+  '@builder.io/qwik@1.5.4(@types/node@20.12.5)(undici@6.16.1)':
     dependencies:
       csstype: 3.1.3
-      undici: 6.15.0
+      undici: 6.16.1
       vite: 5.2.11(@types/node@20.12.5)
     transitivePeerDependencies:
       - '@types/node'
@@ -2759,7 +2759,7 @@ snapshots:
 
   '@kurkle/color@0.3.2': {}
 
-  '@luminescent/ui@0.16.0': {}
+  '@luminescent/ui@0.16.5': {}
 
   '@mdx-js/mdx@3.0.1':
     dependencies:
@@ -2789,10 +2789,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@modular-forms/qwik@0.24.0(@builder.io/qwik-city@1.5.3(@types/node@20.12.5)(rollup@4.14.0))(@builder.io/qwik@1.5.3(@types/node@20.12.5)(undici@6.15.0))':
+  '@modular-forms/qwik@0.24.0(@builder.io/qwik-city@1.5.4(@types/node@20.12.5)(rollup@4.14.0))(@builder.io/qwik@1.5.4(@types/node@20.12.5)(undici@6.16.1))':
     dependencies:
-      '@builder.io/qwik': 1.5.3(@types/node@20.12.5)(undici@6.15.0)
-      '@builder.io/qwik-city': 1.5.3(@types/node@20.12.5)(rollup@4.14.0)
+      '@builder.io/qwik': 1.5.4(@types/node@20.12.5)(undici@6.16.1)
+      '@builder.io/qwik-city': 1.5.4(@types/node@20.12.5)(rollup@4.14.0)
       decode-formdata: 0.7.2
 
   '@nodelib/fs.scandir@2.1.5':
@@ -3428,7 +3428,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-plugin-qwik@1.5.3(eslint@8.57.0):
+  eslint-plugin-qwik@1.5.4(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
       jsx-ast-utils: 3.3.5
@@ -4254,7 +4254,7 @@ snapshots:
       workerd: 1.20240320.1
       ws: 8.16.0
       youch: 3.3.3
-      zod: 3.23.6
+      zod: 3.23.8
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4439,9 +4439,9 @@ snapshots:
 
   qwik-ionicons@1.0.5: {}
 
-  qwik-speak@0.22.0(@builder.io/qwik@1.5.3(@types/node@20.12.5)(undici@6.15.0)):
+  qwik-speak@0.22.0(@builder.io/qwik@1.5.4(@types/node@20.12.5)(undici@6.16.1)):
     dependencies:
-      '@builder.io/qwik': 1.5.3(@types/node@20.12.5)(undici@6.15.0)
+      '@builder.io/qwik': 1.5.4(@types/node@20.12.5)(undici@6.16.1)
 
   read-cache@1.0.0:
     dependencies:
@@ -4828,7 +4828,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 2.1.1
 
-  undici@6.15.0: {}
+  undici@6.16.1: {}
 
   unified@11.0.4:
     dependencies:
@@ -5003,6 +5003,6 @@ snapshots:
       mustache: 4.2.0
       stacktracey: 2.1.8
 
-  zod@3.23.6: {}
+  zod@3.23.8: {}
 
   zwitch@2.0.4: {}
