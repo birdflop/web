@@ -61,9 +61,11 @@ export default component$(() => {
       newIndex = 0;
     }
 
-    const currentColor = `${store.colors[currentIndex]}`;
-    store.colors[currentIndex] = store.colors[newIndex];
-    store.colors[newIndex] = currentColor;
+    const newColors = [...store.colors];
+    const currentColor = `${newColors[currentIndex]}`;
+    newColors[currentIndex] = newColors[newIndex];
+    newColors[newIndex] = currentColor;
+    store.colors = newColors;
   });
 
   useTask$(({ track }) => {
@@ -176,22 +178,27 @@ export default component$(() => {
                 store.colors = newColors;
               }}
               onIncrement$={() => {
-                store.colors.push(getRandomColor());
+                const newColors = [...store.colors, getRandomColor()];
+                store.colors = newColors;
               }}
               onDecrement$={() => {
-                store.colors.pop();
+                const newColors = [...store.colors];
+                newColors.pop();
+                store.colors = newColors;
               }}
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <div class="flex flex-col gap-2 sm:overflow-auto sm:h-[500px]">
+            <div class="flex flex-col gap-2">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
                     id={`color${i + 1}`}
                     value={color}
                     onInput$={(newColor: string) => {
-                      store.colors[i] = newColor;
+                      const newColors = [...store.colors];
+                      newColors[i] = newColor;
+                      store.colors = newColors;
                     }}
                     class={{ 'w-full': true }}
                     presetColors={store.colors}
