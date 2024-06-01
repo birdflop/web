@@ -33,7 +33,7 @@ export default component$(() => {
         />
         <script
           async
-          type='text/partytown'
+          type='text/javascript'
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947"
           crossOrigin='anonymous' />
         <RouterHead />
