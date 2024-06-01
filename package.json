@@ -46,7 +46,7 @@
     "qwik-speak": "^0.23.0",
     "tailwindcss": "^3.4.3",
     "typescript": "5.4.5",
-    "undici": "^6.18.1",
+    "undici": "^6.18.2",
     "vite": "5.2.11",
     "vite-tsconfig-paths": "4.3.2",
     "wrangler": "latest",
