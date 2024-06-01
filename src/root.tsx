@@ -21,7 +21,8 @@ export default component$(() => {
   useQwikSpeak({ config, translationFn });
 
   useOnDocument('load', $(() => {
-    if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+    let platform = navigator.userAgentData.platform || navigator.platform || 'unknown';
+    if (platform.toUpperCase().indexOf('MAC') >= 0) {
       document.querySelectorAll('.scale-for-mac').forEach(function(element) {
         element.classList.add('macos-zoom-fix');
       });
