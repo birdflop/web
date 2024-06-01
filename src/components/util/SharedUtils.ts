@@ -34,6 +34,7 @@ export const setCookies = function (json: { [key: string]: any; }) {
     const pairsplit = pair.split(/\s*=\s*/);
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
+  if (cookie.optout === 'true') return;
   Object.keys(json).forEach(key => {
     const existingCookie = cookie[key];
     if (excludedKeys.includes(key)) return;

@@ -61,9 +61,11 @@ export default component$(() => {
       newIndex = 0;
     }
 
-    const currentColor = `${store.colors[currentIndex]}`;
-    store.colors[currentIndex] = store.colors[newIndex];
-    store.colors[newIndex] = currentColor;
+    const newColors = [...store.colors];
+    const currentColor = `${newColors[currentIndex]}`;
+    newColors[currentIndex] = newColors[newIndex];
+    newColors[newIndex] = currentColor;
+    store.colors = newColors;
   });
 
   useTask$(({ track }) => {
@@ -149,6 +151,10 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
+            <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+              <ColorFillOutline width="32" />
+              {t('color.colors@@Colors')}
+            </h1>
             <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
                 if (event.target!.value == 'custom') return;
@@ -172,22 +178,27 @@ export default component$(() => {
                 store.colors = newColors;
               }}
               onIncrement$={() => {
-                store.colors.push(getRandomColor());
+                const newColors = [...store.colors, getRandomColor()];
+                store.colors = newColors;
               }}
               onDecrement$={() => {
-                store.colors.pop();
+                const newColors = [...store.colors];
+                newColors.pop();
+                store.colors = newColors;
               }}
             >
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
-            <div class="flex flex-col gap-2 overflow-auto sm:h-[500px]">
+            <div class="flex flex-col gap-2">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
                   <ColorInput
                     id={`color${i + 1}`}
                     value={color}
                     onInput$={(newColor: string) => {
-                      store.colors[i] = newColor;
+                      const newColors = [...store.colors];
+                      newColors[i] = newColor;
+                      store.colors = newColors;
                     }}
                     class={{ 'w-full': true }}
                     presetColors={store.colors}
@@ -207,8 +218,12 @@ export default component$(() => {
               })}
             </div>
           </div>
-          <div class="md:col-span-2 lg:col-span-3">
-            <div class="flex flex-col gap-3" id="inputs">
+          <div class="md:col-span-2 lg:col-span-3 sm:grid grid-cols-3 gap-4">
+            <div class="flex flex-col gap-3 col-span-2" id="inputs">
+              <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+                <SettingsOutline width="32" />
+                {t('color.inputs@@Inputs')}
+              </h1>
               <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
@@ -243,8 +258,8 @@ export default component$(() => {
                 ]}>
                   {t('color.colorFormat@@Color Format')}
                 </Dropdown>
-                <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
-                  {t('color.formatCharacter@@Format Character')}
+                <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; }}>
+                  {t('gradient.prefix@@Prefix (Usually used for commands)')}
                 </TextInput>
               </div>
 
@@ -253,25 +268,21 @@ export default component$(() => {
                   <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; }}>
                     {t('color.customFormat@@Custom Format')}
                   </TextInput>
-                  <div class="pb-4">
+                  <div class="pb-4 font-mono">
                     <p>{t('color.placeholders@@Placeholders:')}</p>
-                    <p>$1 - (R)RGGBB</p>
-                    <p>$2 - R(R)GGBB</p>
-                    <p>$3 - RR(G)GBB</p>
-                    <p>$4 - RRG(G)BB</p>
-                    <p>$5 - RRGG(B)B</p>
-                    <p>$6 - RRGGB(B)</p>
-                    <p>$f - {t('color.formatting@@Formatting')}</p>
-                    <p>$c - {t('color.character@@Character')}</p>
+                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                    <p>$f = {t('color.formatting@@Formatting')}</p>
+                    <p>$c = {t('color.character@@Character')}</p>
                   </div>
                 </>
               }
 
-              <TextInput id="prefix" value={store.prefix} placeholder={t('gradient.prefixPlaceholder@@example: \'/nick \'')} onInput$={(event: any) => { store.prefix = event.target!.value; }}>
-                {t('gradient.prefix@@Prefix (Usually used for commands)')}
-              </TextInput>
-
-              <div class="flex flex-col sm:flex-row sm:items-end gap-2">
+              <div class="flex flex-col gap-2">
                 <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
@@ -301,44 +312,53 @@ export default component$(() => {
                 }}>
                   {t('color.presets@@Presets')}
                 </TextInput>
-                <Button id="export" size="sm" onClick$={() => {
-                  navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.export@@Export')}
-                </Button>
-                <Button id="createurl" size="sm" onClick$={() => {
-                  const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-                  const url = new URL(base_url);
-                  const params = { ...store, alerts: undefined };
-                  Object.entries(params).forEach(([key, value]) => {
-                    url.searchParams.set(key, String(value));
-                  });
-                  window.history.pushState({}, '', url.href);
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
-                  };
-                  store.alerts.push(alert);
-                  setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.url@@Export As URL')}
-                </Button>
+                <div class="flex gap-2">
+                  <Button id="export" size="sm" onClick$={() => {
+                    navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.export@@Export')}
+                  </Button>
+                  <Button id="createurl" size="sm" onClick$={() => {
+                    const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                    const url = new URL(base_url);
+                    const params = { ...store, alerts: undefined };
+                    Object.entries(params).forEach(([key, value]) => {
+                      url.searchParams.set(key, String(value));
+                    });
+                    window.history.pushState({}, '', url.href);
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.url@@Export As URL')}
+                  </Button>
+                </div>
               </div>
               {store.alerts.map((alert: any, i: number) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
               ))}
             </div>
-            <div class="sm:mt-6 mb-4 hidden sm:flex flex-col gap-4" id="formatting">
+            <div class="mb-4 hidden sm:flex flex-col gap-3" id="formatting">
+              <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
+                <Text width="32" />
+                {t('color.colors@@Formatting')}
+              </h1>
+              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
+                {t('color.formatCharacter@@Format Character')}
+              </TextInput>
               <Toggle id="bold" checked={store.bold}
                 onChange$={(event: any) => { store.bold = event.target!.checked; }}
                 label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
