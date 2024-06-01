@@ -31,6 +31,11 @@ export default component$(() => {
           type="text/partytown"
           src="https://www.googletagmanager.com/gtag/js?id=AW-11483620641"
         />
+        <script
+          async
+          type='text/partytown'
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947"
+          crossOrigin='anonymous' />
         <RouterHead />
       </head>
       <body class="text-gray-300">
