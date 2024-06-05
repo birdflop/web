@@ -26,11 +26,6 @@ export default component$(() => {
                 Animated TAB
               </Header>
             </Card>
-            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
-              <Header subheader="Preview TAB Animations without the need to put them in-game">
-                TAB Animation Previewer
-              </Header>
-            </Card>
           </div>
         </Card>
         <Card color="darkgray">
@@ -65,14 +60,14 @@ export default component$(() => {
                 Animated Textures
               </Header>
             </Card>
+            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
+              <Header subheader="Preview TAB Animations without the need to put them in-game">
+                TAB Animation Previewer
+              </Header>
+            </Card>
             <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
               <Header subheader="Strips all color / format codes from text">
                 Color Code Stripper
-              </Header>
-            </Card>
-            <Card href="/resources/presettools" color="red" blobs hover="clickable">
-              <Header subheader="Update older preset versions to the newest version">
-                Preset Tools
               </Header>
             </Card>
           </div>

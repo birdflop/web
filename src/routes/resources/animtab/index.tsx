@@ -1,7 +1,7 @@
 import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { presetVersion, presets } from '~/components/util/PresetUtils';
+import { defaults, loadPreset, presets, types, v3formats } from '~/components/util/PresetUtils';
 import { AnimationOutput, getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 
 import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
@@ -11,37 +11,30 @@ import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-const formats = [
-  '&#$1$2$3$4$5$6$f$c',
-  '&x&$1&$2&$3&$4&$5&$6$f$c',
-];
+const animTABDefaults = {
+  version: defaults.version,
+  colors: defaults.colors,
+  name: defaults.name,
+  text: defaults.text,
+  type: defaults.type,
+  speed: defaults.speed,
+  length: defaults.length,
+  prefixsuffix: defaults.prefixsuffix,
+  trimspaces: defaults.trimspaces,
+  bold: defaults.bold,
+  italic: defaults.italic,
+  underline: defaults.underline,
+  strikethrough: defaults.strikethrough,
+};
 
-const types = [
-  { name: 'Normal (Left -> Right)', value: 1 },
-  { name: 'Reversed (Right -> Left)', value: 2 },
-  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
-  { name: 'Full Text Cycle', value: 4 },
-];
-
-const defaults = {
-  colors: presets.birdflop,
-  name: 'logo',
-  text: 'birdflop',
-  type: 1,
-  speed: 50,
-  format: '&#$1$2$3$4$5$6$f$c',
-  formatchar: '&',
-  customFormat: false,
-  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
-  bold: false,
-  italic: false,
-  underline: false,
-  strikethrough: false,
-  length: 1,
+const unsupportedDefaults = {
+  format: defaults.format,
+  customFormat: defaults.customFormat,
+  outputFormat: defaults.outputFormat,
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, Object.keys(defaults), url.searchParams) as typeof defaults;
+  return await getCookies(cookie, Object.keys(animTABDefaults), url.searchParams) as typeof animTABDefaults;
 });
 
 export default component$(() => {
@@ -50,7 +43,8 @@ export default component$(() => {
 
   const cookies = useCookies().value;
   const store = useStore({
-    ...defaults,
+    ...animTABDefaults,
+    ...unsupportedDefaults,
     ...cookies,
     alerts: [] as {
       class: string,
@@ -113,7 +107,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px] scale-for-mac">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtab.title@@Animated TAB')}
@@ -147,7 +141,7 @@ export default component$(() => {
                 'strikethrough': store.strikethrough,
                 'underline-strikethrough': store.underline && store.strikethrough,
               }}>
-                {char}
+                {char == ' ' ? '\u00A0' : char}
               </span>
             ));
           })()}
@@ -283,58 +277,92 @@ export default component$(() => {
                   }}>
                   {t('animtab.speed@@Speed')}
                 </NumberInput>
- 
-                <Dropdown id="format" value={store.customFormat ? 'custom' : store.format} class={{ 'w-full': true }} onChange$={
-                  (event: any) => {
-                    if (event.target!.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = event.target!.value;
-                    }
-                  }
-                } values={[
-                  ...formats.map(format => ({
-                    name: format
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
-                      .replace('$c', ''),
-                    value: format,
-                  })),
-                  {
-                    name: store.customFormat ? store.format
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.formatchar + 'l' : ''}${store.italic ? store.formatchar + 'o' : ''}${store.underline ? store.formatchar + 'n' : ''}${store.strikethrough ? store.formatchar + 'm' : ''}`)
-                      .replace('$c', '')
-                      : t('color.custom@@Custom'),
-                    value: 'custom',
-                  },
-                ]}>
-                  {t('color.colorFormat@@Color Format')}
-                </Dropdown>
+
                 <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
                   values={types.map((type: any) => ({ name: type.name, value: type.value }))}
                   value={store.type}>
                   {t('animtab.outputType@@Output Type')}
                 </Dropdown>
+                <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
+                  Prefix/Suffix
+                </TextInput>
               </div>
 
               {
                 store.customFormat && <>
-                  <TextInput id="customformat" value={store.format} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format = event.target!.value; }}>
-                    {t('color.customFormat@@Custom Format')}
-                  </TextInput>
-                  <div class="pb-4 font-mono">
-                    <p>{t('color.placeholders@@Placeholders:')}</p>
-                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                    <p>$f = {t('color.formatting@@Formatting')}</p>
-                    <p>$c = {t('color.character@@Character')}</p>
+                  <Dropdown id="format" value={store.customFormat ? 'custom' : store.format.color} class={{ 'w-full': true }} onChange$={
+                    (event: any) => {
+                      if (event.target!.value == 'custom') {
+                        store.customFormat = true;
+                      }
+                      else {
+                        store.customFormat = false;
+                        store.format = JSON.parse(event.target!.value);
+                      }
+                    }
+                  } values={[
+                    ...v3formats.map(format => ({
+                      name: format.color
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                        .replace('$c', ''),
+                      value: JSON.stringify(format),
+                    })),
+                    {
+                      name: store.customFormat ? store.format.color
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                        .replace('$c', '')
+                        : t('color.custom@@Custom'),
+                      value: 'custom',
+                    },
+                  ]}>
+                    {t('color.colorFormat@@Color Format')}
+                  </Dropdown>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format.color = event.target!.value; }}>
+                        {t('color.customFormat@@Custom Format')}
+                      </TextInput>
+                      <div class="py-3 font-mono">
+                        <p>{t('color.placeholders@@Placeholders:')}</p>
+                        <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                        <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                        <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                        <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                        <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                        <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                        {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                        <p>$c = {t('color.character@@Character')}</p>
+                      </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                      {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
+                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(event: any) => { store.format.char = event.target!.value; }}>
+                          {t('color.format.character@@Format Character')}
+                        </TextInput>
+                      }
+                      {!store.format.char &&
+                        <>
+                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(event: any) => { store.format.bold = event.target!.value; }}>
+                            Bold
+                          </TextInput>
+                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(event: any) => { store.format.italic = event.target!.value; }}>
+                            Italic
+                          </TextInput>
+                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(event: any) => { store.format.underline = event.target!.value; }}>
+                            Underline
+                          </TextInput>
+                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(event: any) => { store.format.strikethrough = event.target!.value; }}>
+                            Strikethrough
+                          </TextInput>
+                          <div class="py-3 font-mono">
+                            <p>{t('color.placeholders@@Placeholders:')}</p>
+                            <p>$t = Output Text</p>
+                          </div>
+                        </>
+                      }
+                    </div>
                   </div>
                 </>
               }
@@ -343,11 +371,19 @@ export default component$(() => {
                 <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
                   let json: any;
                   try {
-                    json = JSON.parse(event.target!.value);
+                    const preset = await loadPreset(event.target!.value);
+                    event.target!.value = JSON.stringify(preset);
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    if (!store.customFormat) {
+                      delete preset.customFormat;
+                      delete preset.format;
+                      delete preset.outputFormat;
+                    }
+                    json = { ...animTABDefaults, ...preset };
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',
-                      text: 'color.invalidPreset@@INVALID PRESET!\nIf this is an old preset, please update it using the <a class="text-blue-400 hover:underline" href="/PresetTools">Preset Tools</a> page, If not please report to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a>.',
+                      text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
                     };
                     store.alerts.push(alert);
                     return setTimeout(() => {
@@ -371,7 +407,19 @@ export default component$(() => {
                 </TextInput>
                 <div class="flex gap-2">
                   <Button id="export" size="sm" onClick$={() => {
-                    navigator.clipboard.writeText(JSON.stringify({ version: presetVersion, ...store, alerts: undefined }));
+                    const preset: any = { ...store };
+                    delete preset.alerts;
+                    delete preset.frames;
+                    delete preset.frame;
+                    if (!store.customFormat) {
+                      delete preset.customFormat;
+                      delete preset.format;
+                      delete preset.outputFormat;
+                    }
+                    Object.keys(preset).forEach(key => {
+                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) delete preset[key];
+                    });
+                    navigator.clipboard.writeText(JSON.stringify(preset));
                     const alert = {
                       class: 'text-green-500',
                       text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
@@ -386,8 +434,21 @@ export default component$(() => {
                   <Button id="createurl" size="sm" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                     const url = new URL(base_url);
-                    const params = { ...store, alerts: undefined };
+                    const params: any = { ...store };
+                    delete params.alerts;
+                    delete params.frames;
+                    delete params.frame;
+                    if (!store.customFormat) {
+                      delete params.customFormat;
+                      delete params.format;
+                      delete params.outputFormat;
+                    }
                     Object.entries(params).forEach(([key, value]) => {
+                      if (key == 'format' || key == 'colors') {
+                        value = JSON.stringify(value);
+                        if (value === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) return;
+                      }
+                      else if (value === animTABDefaults[key as keyof typeof animTABDefaults]) return;
                       url.searchParams.set(key, String(value));
                     });
                     window.history.pushState({}, '', url.href);
@@ -403,6 +464,12 @@ export default component$(() => {
                     {t('color.url@@Export As URL')}
                   </Button>
                 </div>
+                <Toggle id="trimspaces" checked={store.trimspaces}
+                  onChange$={(event: any) => { store.trimspaces = event.target!.checked; }}
+                  label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+                <Toggle id="advanced" checked={store.customFormat}
+                  onChange$={(event: any) => { store.customFormat = event.target!.checked; }}
+                  label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
               </div>
               {store.alerts.map((alert: any, i: number) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
@@ -413,27 +480,29 @@ export default component$(() => {
                 <Text width="32" />
                 {t('color.colors@@Formatting')}
               </h1>
-              <TextInput id="formatchar" value={store.formatchar} placeholder="&" onInput$={(event: any) => { store.formatchar = event.target!.value; }}>
-                {t('color.formatCharacter@@Format Character')}
-              </TextInput>
               <Toggle id="bold" checked={store.bold}
                 onChange$={(event: any) => { store.bold = event.target!.checked; }}
-                label={`${t('color.bold@@Bold')} - ${store.formatchar}l`} />
+                label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
               <Toggle id="italic" checked={store.italic}
                 onChange$={(event: any) => { store.italic = event.target!.checked; }}
-                label={`${t('color.italic@@Italic')} - ${store.formatchar}o`} />
+                label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
               <Toggle id="underline" checked={store.underline}
                 onChange$={(event: any) => { store.underline = event.target!.checked; }}
-                label={`${t('color.underline@@Underline')} - ${store.formatchar}n`} />
+                label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
               <Toggle id="strikethrough" checked={store.strikethrough}
                 onChange$={(event: any) => { store.strikethrough = event.target!.checked; }}
-                label={`${t('color.strikethrough@@Strikethrough')} - ${store.formatchar + 'm'}`} />
+                label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
 
-              <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
-                {t('animtab.outputFormat@@Output Format')}
-              </TextArea>
+              {store.customFormat &&
+                <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
+                  {t('animtab.outputFormat@@Output Format')}
+                </TextArea>
+              }
             </div>
           </div>
+        </div>
+        <div class="text-sm mt-8">
+          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </div>
       </div>
     </section>
