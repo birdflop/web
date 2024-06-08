@@ -2,7 +2,7 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { generateOutput } from '~/components/util/RGBUtils';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
-  const { text, colors, format, prefix = '', bold = 'false', italic = 'false', underline = 'false', strikethrough = 'false', silent = 'false' } = Object.fromEntries(query);
+  const { text, colors, format = '&#$1$2$3$4$5$6$f$c', prefix = '', bold = 'false', italic = 'false', underline = 'false', strikethrough = 'false', silent = 'false' } = Object.fromEntries(query);
 
   const options = silent ? {} : {
     options: {
