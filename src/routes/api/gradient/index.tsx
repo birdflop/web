@@ -3,8 +3,7 @@ import { generateOutput } from '~/components/util/RGBUtils';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
   const { text, colors, format = '&#$1$2$3$4$5$6$f$c', prefix = '', bold = 'false', italic = 'false', underline = 'false', strikethrough = 'false', silent = 'false' } = Object.fromEntries(query);
-
-  const options = silent ? {} : {
+  const options = (silent === 'true') ? {} : {
     options: {
       text: {
         url: 'text=exampleText',
@@ -44,7 +43,6 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       },
     },
   };
-
   throw json(200, {
     output: generateOutput(text, colors?.split(','), { color: format, char: '&' }, `${prefix}$t`, true, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
     ...options,
