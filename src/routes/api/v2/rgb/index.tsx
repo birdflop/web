@@ -3,7 +3,7 @@ import { v3formats } from '~/components/util/PresetUtils';
 import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
-export const onGet: RequestHandler = async ({ json, parseBody }) => {
+export const onPost: RequestHandler = async ({ json, parseBody }) => {
   const body = await parseBody() as any;
   const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough, silent } = body ?? {};
 
