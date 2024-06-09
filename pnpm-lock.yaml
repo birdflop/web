@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@anuragroy/tailwindcss-animate':
         specifier: ^1.0.6
-        version: 1.0.6(tailwindcss@3.4.3)
+        version: 1.0.6(tailwindcss@3.4.4)
       '@builder.io/partytown':
         specifier: ^0.10.2
         version: 0.10.2
@@ -24,8 +24,8 @@ importers:
         specifier: 0.16.6
         version: 0.16.6
       '@modular-forms/qwik':
-        specifier: ^0.24.0
-        version: 0.24.0(@builder.io/qwik-city@1.5.5(@types/node@20.13.0)(rollup@4.18.0))(@builder.io/qwik@1.5.5(@types/node@20.13.0)(undici@6.18.2))
+        specifier: ^0.25.0
+        version: 0.25.0(@builder.io/qwik-city@1.5.5(@types/node@20.13.0)(rollup@4.18.0))(@builder.io/qwik@1.5.5(@types/node@20.13.0)(undici@6.18.2))
       '@types/eslint':
         specifier: 8.56.10
         version: 8.56.10
@@ -60,8 +60,8 @@ importers:
         specifier: ^0.23.0
         version: 0.23.0(@builder.io/qwik@1.5.5(@types/node@20.13.0)(undici@6.18.2))
       tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.3
+        specifier: ^3.4.4
+        version: 3.4.4
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -69,17 +69,17 @@ importers:
         specifier: ^6.18.2
         version: 6.18.2
       vite:
-        specifier: 5.2.12
-        version: 5.2.12(@types/node@20.13.0)
+        specifier: 5.2.13
+        version: 5.2.13(@types/node@20.13.0)
       vite-tsconfig-paths:
         specifier: 4.3.2
-        version: 4.3.2(typescript@5.4.5)(vite@5.2.12(@types/node@20.13.0))
+        version: 4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@20.13.0))
       wrangler:
         specifier: latest
         version: 3.58.0
       yaml:
-        specifier: ^2.4.3
-        version: 2.4.3
+        specifier: ^2.4.5
+        version: 2.4.5
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -613,8 +613,8 @@ packages:
   '@mdx-js/mdx@3.0.1':
     resolution: {integrity: sha512-eIQ4QTrOWyL3LWEe/bu6Taqzq2HQvHcyTMaOrI95P2/LmJE7AsfPfgJGuFLPVqBUE1BC1rik3VIhU+s9u72arA==}
 
-  '@modular-forms/qwik@0.24.0':
-    resolution: {integrity: sha512-mF+cOw2lmiEjCf7odYW65d1gxp5ozqAbDfX5Z6yAt0wE7wsRHBZgi0YoXAh63vRCEcR5UMG/9kdTXj3KCjxhug==}
+  '@modular-forms/qwik@0.25.0':
+    resolution: {integrity: sha512-HtAnJp00w3D9guxv8UoNUifrLNbqwSSNFJ1aEaRz/CHUhrjwIfwsbsdw4gsPBgM638AAN85QFO6CecX1Ju9V2g==}
     peerDependencies:
       '@builder.io/qwik': ^1.4.0
       '@builder.io/qwik-city': ^1.4.0
@@ -2162,8 +2162,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tailwindcss@3.4.3:
-    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
+  tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -2288,6 +2288,9 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  valibot@0.31.1:
+    resolution: {integrity: sha512-2YYIhPrnVSz/gfT2/iXVTrSj92HwchCt9Cga/6hX4B26iCz9zkIsGTS0HjDYTZfTi1Un0X6aRvhBi1cfqs/i0Q==}
+
   vfile-message@4.0.2:
     resolution: {integrity: sha512-jRDZ1IMLttGj41KcZvlrYAaI3CfqpLpfpf+Mfig13viT6NKvRzWZ+lXz0Y5D60w6uJIBAOGq9mSHf0gktF0duw==}
 
@@ -2306,8 +2309,8 @@ packages:
       vite:
         optional: true
 
-  vite@5.2.12:
-    resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
+  vite@5.2.13:
+    resolution: {integrity: sha512-SSq1noJfY9pR3I1TUENL3rQYDQCFqgD+lM6fTRAM8Nv6Lsg5hDLaXkjETVeBt+7vZBCMoibD+6IWnT2mJ+Zb/A==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -2391,8 +2394,8 @@ packages:
   xxhash-wasm@1.0.2:
     resolution: {integrity: sha512-ibF0Or+FivM9lNrg+HGJfVX8WJqgo+kCLDc4vx6xMeTce7Aj+DLttKbxxRR/gNLSAelRc1omAPlJ77N/Jem07A==}
 
-  yaml@2.4.3:
-    resolution: {integrity: sha512-sntgmxj8o7DE7g/Qi60cqpLBA3HG3STcDA0kO+WfB05jEKhZMbY7umNm2rBpQvsmZ16/lPXCJGW2672dgOUkrg==}
+  yaml@2.4.5:
+    resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
     engines: {node: '>= 14'}
     hasBin: true
 
@@ -2413,9 +2416,9 @@ snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
 
-  '@anuragroy/tailwindcss-animate@1.0.6(tailwindcss@3.4.3)':
+  '@anuragroy/tailwindcss-animate@1.0.6(tailwindcss@3.4.4)':
     dependencies:
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
 
   '@builder.io/partytown@0.10.2': {}
 
@@ -2427,7 +2430,7 @@ snapshots:
       svgo: 3.3.2
       undici: 6.18.2
       vfile: 6.0.1
-      vite: 5.2.12(@types/node@20.13.0)
+      vite: 5.2.13(@types/node@20.13.0)
       vite-imagetools: 6.2.9(rollup@4.18.0)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -2445,7 +2448,7 @@ snapshots:
     dependencies:
       csstype: 3.1.3
       undici: 6.18.2
-      vite: 5.2.12(@types/node@20.13.0)
+      vite: 5.2.13(@types/node@20.13.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -2803,11 +2806,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@modular-forms/qwik@0.24.0(@builder.io/qwik-city@1.5.5(@types/node@20.13.0)(rollup@4.18.0))(@builder.io/qwik@1.5.5(@types/node@20.13.0)(undici@6.18.2))':
+  '@modular-forms/qwik@0.25.0(@builder.io/qwik-city@1.5.5(@types/node@20.13.0)(rollup@4.18.0))(@builder.io/qwik@1.5.5(@types/node@20.13.0)(undici@6.18.2))':
     dependencies:
       '@builder.io/qwik': 1.5.5(@types/node@20.13.0)(undici@6.18.2)
       '@builder.io/qwik-city': 1.5.5(@types/node@20.13.0)(rollup@4.18.0)
       decode-formdata: 0.7.5
+      valibot: 0.31.1
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -4440,7 +4444,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.4.38):
     dependencies:
       lilconfig: 3.1.1
-      yaml: 2.4.3
+      yaml: 2.4.5
     optionalDependencies:
       postcss: 8.4.38
 
@@ -4753,7 +4757,7 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.0.1
 
-  tailwindcss@3.4.3:
+  tailwindcss@3.4.4:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -4919,6 +4923,8 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
+  valibot@0.31.1: {}
+
   vfile-message@4.0.2:
     dependencies:
       '@types/unist': 3.0.2
@@ -4937,18 +4943,18 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-tsconfig-paths@4.3.2(typescript@5.4.5)(vite@5.2.12(@types/node@20.13.0)):
+  vite-tsconfig-paths@4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@20.13.0)):
     dependencies:
       debug: 4.3.5
       globrex: 0.1.2
       tsconfck: 3.1.0(typescript@5.4.5)
     optionalDependencies:
-      vite: 5.2.12(@types/node@20.13.0)
+      vite: 5.2.13(@types/node@20.13.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.2.12(@types/node@20.13.0):
+  vite@5.2.13(@types/node@20.13.0):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
@@ -5028,7 +5034,7 @@ snapshots:
 
   xxhash-wasm@1.0.2: {}
 
-  yaml@2.4.3: {}
+  yaml@2.4.5: {}
 
   yocto-queue@0.1.0: {}
 
