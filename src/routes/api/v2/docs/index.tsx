@@ -12,7 +12,7 @@ export const useEndpoints = routeLoader$(async ({ url }) => {
   for (const path of paths) {
     const endpointData = await fetch(url.origin + path);
     const endpointJson = await endpointData.json();
-    json.endpoints[path] = { ...json.endpoints[path], options: endpointJson.options };
+    json.endpoints[path] = { methods: json.endpoints[path], options: endpointJson.options };
   }
   return json;
 });
@@ -42,13 +42,15 @@ export default component$(() => {
         </h2>
         <div>
           {Object.keys(endpoints).map((path) => <div key={path}>
-            <h3 class="flex gap-4 items-center text-gray-100 text-lg sm:text-2xl font-bold mb-1 drop-shadow-lg">
-              {endpoints[path].type} {path}
+            <h3 class="flex gap-4 items-center text-gray-100 text-lg sm:text-2xl font-bold mb-2 drop-shadow-lg">
+              {path}
             </h3>
-            <h4 class="flex gap-4 items-center text-gray-400 sm:text-lg mb-2 drop-shadow-lg">
-              {endpoints[path].description}
-            </h4>
-            <h4 class="flex gap-4 items-center text-gray-400 sm:text-lg mb-2 drop-shadow-lg">
+            {Object.entries(endpoints[path].methods).map(([method, description]: any) =>
+              <p key={method} class="flex gap-4 items-center text-gray-400 sm:text-lg drop-shadow-lg">
+                {method}: {description}
+              </p>,
+            )}
+            <h4 class="flex gap-4 items-center text-gray-400 sm:text-lg my-2 drop-shadow-lg">
               Options
             </h4>
             <Card>

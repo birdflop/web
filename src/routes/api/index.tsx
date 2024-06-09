@@ -4,12 +4,10 @@ export const onGet: RequestHandler = async ({ json }) => {
   throw json(200, {
     endpoints: {
       '/api/v2': {
-        type: 'GET',
-        description: 'View the v2 API endpoints.',
+        GET: 'View the v2 API endpoints.',
       },
       '/api/gradient': {
-        type: 'GET',
-        description: 'Generate a gradient.',
+        GET: 'Generate a gradient.',
         WARNING: '/api/gradient is deprecated. Please use /api/v2/rgb instead.',
       },
     },

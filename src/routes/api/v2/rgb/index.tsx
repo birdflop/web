@@ -3,11 +3,42 @@ import { v3formats } from '~/components/util/PresetUtils';
 import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
-export const onPost: RequestHandler = async ({ json, parseBody }) => {
-  const body = await parseBody() as any;
-  const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough, silent } = body ?? {};
+export const onGet: RequestHandler = async ({ json, query }) => {
+  try {
+    const queryjson: any = Object.fromEntries(query);
 
-  const options = silent ? {} : {
+    const keys = Object.keys(queryjson);
+    for (const key of keys) {
+      if (key == 'colors') queryjson.colors = queryjson.colors.split(',');
+      else if (queryjson[key] == 'true') queryjson[key] = true;
+      else if (queryjson[key] == 'false') queryjson[key] = false;
+      else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
+    }
+
+    const output = await getOutput(queryjson);
+    throw json(200, output);
+  }
+  catch (e: any) {
+    console.error(e);
+    throw json(400, { error: e.message });
+  }
+};
+
+export const onPost: RequestHandler = async ({ json, parseBody }) => {
+  try {
+    const body = await parseBody();
+    const output = await getOutput(body);
+
+    throw json(200, output);
+  }
+  catch (e: any) {
+    console.error(e);
+    throw json(400, { error: e.message });
+  }
+};
+
+async function getOutput(body: any) {
+  const options = body?.silent ? {} : {
     input: {
       ...rgbDefaults,
       ...body,
@@ -73,8 +104,10 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
     format = v3formats.find(f => f.color == format.color) ?? { ...format, char: '&' };
   }
 
-  throw json(200, {
-    output: generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough),
+  const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
+  const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough);
+  return {
+    output,
     ...options,
-  });
-};
+  };
+}

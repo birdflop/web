@@ -4,8 +4,8 @@ export const onGet: RequestHandler = async ({ json }) => {
   throw json(200, {
     endpoints: {
       '/api/v2/rgb': {
-        type: 'POST',
-        description: 'Generate a gradient.',
+        POST: 'Generate a gradient.',
+        GET: 'Equivalent to POST, but with query parameters.',
       },
     },
   });
