@@ -6,7 +6,7 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[100svh]">
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10 drop-shadow-lg">
         Resources
       </h1>
@@ -19,6 +19,11 @@ export default component$(() => {
             <Card href="/resources/rgb" color="red" blobs hover="clickable">
               <Header subheader="RGB gradient creator">
                 RGBirdflop
+              </Header>
+            </Card>
+            <Card href="/api/v2/docs" color="lime" blobs hover="clickable">
+              <Header subheader="Documentation for the RGBirdflop API">
+                API Docs
               </Header>
             </Card>
             <Card href="/resources/animtab" color="blue" blobs hover="clickable">

@@ -290,7 +290,7 @@ export default component$(() => {
 
               {
                 store.customFormat && <>
-                  <Dropdown id="format" value={store.customFormat ? 'custom' : store.format.color} class={{ 'w-full': true }} onChange$={
+                  <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
                     (event: any) => {
                       if (event.target!.value == 'custom') {
                         store.customFormat = true;
@@ -443,8 +443,12 @@ export default component$(() => {
                       delete params.format;
                       delete params.outputFormat;
                     }
-                    Object.entries(params).forEach(([key, value]) => {
-                      if (key == 'format' || key == 'colors') {
+                    Object.entries(params).forEach(([key, value]: any) => {
+                      if (key == 'colors') {
+                        value = value.join(',');
+                        if (value === animTABDefaults.colors.join(',')) return;
+                      }
+                      if (key == 'format') {
                         value = JSON.stringify(value);
                         if (value === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) return;
                       }

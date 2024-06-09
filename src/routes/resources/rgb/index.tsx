@@ -12,7 +12,7 @@ import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-const rgbDefaults = {
+export const rgbDefaults = {
   version: defaults.version,
   colors: defaults.colors,
   text: defaults.text,
@@ -73,9 +73,12 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('gradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 text-base sm:text-xl mb-6">
-          {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
+        <h2 class="text-gray-50 text-base sm:text-xl">
+          {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
+        <h3 class="text-gray-400 text-sm sm:text-lg mb-6">
+          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
+        </h3>
 
         {/* charlimit={256} */}
         <TextArea output id="Output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
@@ -221,7 +224,7 @@ export default component$(() => {
               </TextInput>
 
               <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <Dropdown id="format" value={store.customFormat ? 'custom' : store.format.color} class={{ 'w-full': true }} onChange$={
+                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
                   (event: any) => {
                     if (event.target!.value == 'custom') {
                       store.customFormat = true;
@@ -362,8 +365,12 @@ export default component$(() => {
                     const url = new URL(base_url);
                     const params: any = { ...store };
                     delete params.alerts;
-                    Object.entries(params).forEach(([key, value]) => {
-                      if (key == 'format' || key == 'colors') {
+                    Object.entries(params).forEach(([key, value]: any) => {
+                      if (key == 'colors') {
+                        value = value.join(',');
+                        if (value === rgbDefaults.colors.join(',')) return;
+                      }
+                      if (key == 'format') {
                         value = JSON.stringify(value);
                         if (value === JSON.stringify(rgbDefaults[key as keyof typeof rgbDefaults])) return;
                       }
