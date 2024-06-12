@@ -10,20 +10,28 @@ export function hex(c: number) {
   return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
 }
 
-export function convertToHex(rgb: number[]) {
-  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+export function convertToHex(RGBAcolor: number[]) {
+  return hex(RGBAcolor[0]) + hex(RGBAcolor[1]) + hex(RGBAcolor[2]);
 }
 
 export function trim(s: string) {
   return (s.charAt(0) == '#') ? s.substring(1, 7) : s;
 }
 
-export function convertToRGB(hex: string) {
+export function convertToRGB(hexcolor: string) {
   const color = [];
-  color[0] = parseInt((trim(hex)).substring(0, 2), 16);
-  color[1] = parseInt((trim(hex)).substring(2, 4), 16);
-  color[2] = parseInt((trim(hex)).substring(4, 6), 16);
+  color[0] = parseInt((trim(hexcolor)).substring(0, 2), 16);
+  color[1] = parseInt((trim(hexcolor)).substring(2, 4), 16);
+  color[2] = parseInt((trim(hexcolor)).substring(4, 6), 16);
   return color;
+}
+
+export function getBrightness(RGBAcolor: number[]) {
+  return Math.sqrt(
+    (RGBAcolor[0] * RGBAcolor[0] * 0.299) +
+    (RGBAcolor[1] * RGBAcolor[1] * 0.587) +
+    (RGBAcolor[2] * RGBAcolor[2] * 0.114),
+  );
 }
 
 export function getRandomColor() {

@@ -3,11 +3,11 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, presets, v3formats } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, generateOutput, getRandomColor } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
 
-import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
+import { Add, ChevronDown, ChevronUp, ColorFillOutline, Remove, SettingsOutline, Text, Trash, TrashBinOutline, TrashOutline } from 'qwik-ionicons';
 
-import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
+import { Button, ColorPicker, Header, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -37,6 +37,7 @@ export default component$(() => {
   const store = useStore({
     ...rgbDefaults,
     ...cookies,
+    opened: -1,
     alerts: [] as {
       class: string,
       text: string,
@@ -144,11 +145,52 @@ export default component$(() => {
           </div>
         </div>
 
+        <div class="flex gap-2 my-4 items-center">
+          <Button square disabled={store.colors.length < 3} transparent aria-label="Remove Color" onClick$={() => {
+            const newColors = [...store.colors];
+            newColors.pop();
+            store.colors = newColors;
+          }}>
+            <Remove width="24" />
+          </Button>
+          <div class="w-full h-3 rounded-full flex justify-between items-center" style={`background: linear-gradient(to right, ${store.colors.join(', ')});`}>
+            {store.colors.map((color: string, i: number) => <div class="relative mt-1" key={i}>
+              <button key={`color${i + 1}`} class={{
+                'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
+                'border-white': getBrightness(convertToRGB(color)) < 126,
+                'border-black': getBrightness(convertToRGB(color)) > 126,
+              }} style={`background: ${color};`} onFocus$={() => store.opened = i} onBlur$={() => store.opened = -1} />
+              <ColorPicker
+                id={`color${i + 1}`}
+                value={color}
+                class={{
+                  'motion-safe:transition-all absolute top-full mt-2 left-0 gap-1 z-[1000]': true,
+                  'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                }}
+                onInput$={(newColor: string) => {
+                  const newColors = [...store.colors];
+                  newColors[i] = newColor;
+                  store.colors = newColors;
+                }}
+                horizontal
+              >
+                {t('color.hexColor@@Hex Color')} {i + 1}
+              </ColorPicker>
+            </div>,
+            )}
+          </div>
+          <Button square disabled={store.colors.length > store.text.length} transparent aria-label="Add Color" onClick$={() => {
+            const newColors = [...store.colors, getRandomColor()];
+            store.colors = newColors;
+          }}>
+            <Add width="24" class="fill-white" />
+          </Button>
+        </div>
+
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
-              <ColorFillOutline width="32" />
-              {t('color.colors@@Colors')}
+            <h1>
+              idk where to put these buttons yet
             </h1>
             <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
               (event: any) => {
@@ -161,53 +203,28 @@ export default component$(() => {
             ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
             </Dropdown>
-            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
-              onChange$={(event: any) => {
-                if (event.target!.value < 2) return;
-                if (event.target!.value > store.text.length) return event.target!.value = store.text.length;
-                const newColors = [];
-                for (let i = 0; i < event.target!.value; i++) {
-                  if (store.colors[i]) newColors.push(store.colors[i]);
-                  else newColors.push(getRandomColor());
-                }
-                store.colors = newColors;
-              }}
-              onIncrement$={() => {
-                const newColors = [...store.colors, getRandomColor()];
-                store.colors = newColors;
-              }}
-              onDecrement$={() => {
-                const newColors = [...store.colors];
-                newColors.pop();
-                store.colors = newColors;
-              }}
-            >
-              {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
             <div class="flex flex-col gap-2">
               {store.colors.map((color: string, i: number) => {
                 return <div key={`color${i + 1}`} class="flex items-end">
-                  <ColorInput
-                    id={`color${i + 1}`}
-                    value={color}
-                    onInput$={(newColor: string) => {
+                  <div class="flex rounded-md gap-2 p-1 w-full items-center" style={{
+                    background: color,
+                    color: getBrightness(convertToRGB(color)) > 126 ? 'black' : 'white',
+                  }}>
+                    <Button square size='sm' color="red" onClick$={() => {
                       const newColors = [...store.colors];
-                      newColors[i] = newColor;
+                      newColors.splice(i, 1);
                       store.colors = newColors;
-                    }}
-                    class={{ 'w-full': true }}
-                    presetColors={store.colors}
-                  >
-                    {t('color.hexColor@@Hex Color')} {i + 1}
-                  </ColorInput>
-                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
-                    <Button square onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
+                    }
+                    }>
+                      <TrashOutline width="20" />
+                    </Button>
+                    <Button square size='sm' onClick$={() => handleSwap(i, i - 1)}>
                       <ChevronUp width="20" />
                     </Button>
-                    <div class="bg-gray-700 w-px" />
-                    <Button square onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
+                    <Button square size='sm' onClick$={() => handleSwap(i, i + 1)}>
                       <ChevronDown width="20" />
                     </Button>
+                    {color}
                   </div>
                 </div>;
               })}
