@@ -165,39 +165,41 @@ export default component$(() => {
                   store.opened = i;
                 }}
               />
-              <ColorPicker
-                id={`color${i + 1}`}
-                value={color}
-                class={{
-                  'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
-                  'opacity-0 scale-95 pointer-events-none': store.opened != i,
-                  'left-0': i < store.colors.length / 2,
-                  'right-0': i >= store.colors.length / 2,
-                }}
-                onInput$={(newColor: string) => {
-                  const newColors = [...store.colors];
-                  newColors[i] = newColor;
-                  store.colors = newColors;
-                }}
-                horizontal
-              />
-              {store.colors.length > 2 &&
-                <Button
+              <div onMouseDown$={(e) => e.stopPropagation()}>
+                <ColorPicker
+                  id={`color${i + 1}`}
+                  value={color}
                   class={{
                     'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
                     'opacity-0 scale-95 pointer-events-none': store.opened != i,
                     'left-0': i < store.colors.length / 2,
                     'right-0': i >= store.colors.length / 2,
                   }}
-                  square size='sm' color="red" onClick$={() => {
+                  onInput$={(newColor: string) => {
                     const newColors = [...store.colors];
-                    newColors.splice(i, 1);
+                    newColors[i] = newColor;
                     store.colors = newColors;
-                  }
-                  }>
-                  <TrashOutline width="20" />
-                </Button>
-              }
+                  }}
+                  horizontal
+                />
+                {store.colors.length > 2 &&
+                  <Button
+                    class={{
+                      'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
+                      'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                      'left-0': i < store.colors.length / 2,
+                      'right-0': i >= store.colors.length / 2,
+                    }}
+                    square size='sm' color="red" onClick$={() => {
+                      const newColors = [...store.colors];
+                      newColors.splice(i, 1);
+                      store.colors = newColors;
+                    }
+                    }>
+                    <TrashOutline width="20" />
+                  </Button>
+                }
+              </div>
             </div>,
             )}
           </div>
