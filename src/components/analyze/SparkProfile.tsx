@@ -9,7 +9,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           Spark Profile Analysis

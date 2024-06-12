@@ -1,4 +1,13 @@
-export const presetVersion = 2;
+export const presetVersion = 3;
+
+export interface format {
+  color: string;
+  char?: string;
+  bold?: string;
+  italic?: string;
+  underline?: string;
+  strikethrough?: string;
+}
 
 declare interface preset {
   version: number;
@@ -7,24 +16,16 @@ declare interface preset {
   text: string;
   type: number;
   speed: number;
-  format: string;
-  formatchar: string;
+  length: number;
+  format: format;
   customFormat: boolean;
-  prefix: string;
+  prefixsuffix: string;
   outputFormat: string;
+  trimspaces: boolean;
   bold: boolean;
   italic: boolean;
   underline: boolean;
   strikethrough: boolean;
-}
-
-function decompress(input: number, expectedValues: number) {
-  const values = [];
-  for (let i = 0; i < expectedValues; i++) {
-    const value = !!((input >> i) & 1);
-    values.push(value);
-  }
-  return values;
 }
 
 export const presets = {
@@ -39,7 +40,75 @@ export const presets = {
   'Firewatch': ['#CB2D3E', '#EF473A'],
 };
 
-const formats = {
+export const v3formats = [
+  {
+    color: '&#$1$2$3$4$5$6$f$c',
+    char: '&',
+  },
+  {
+    color: '<#$1$2$3$4$5$6>$f$c',
+    char: '&',
+  },
+  {
+    color: '&x&$1&$2&$3&$4&$5&$6$f$c',
+    char: '&',
+  },
+  {
+    color: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    char: '§',
+  },
+  {
+    color: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
+    bold: '[BOLD]$t[/BOLD]',
+    italic: '[ITALIC]$t[/ITALIC]',
+    underline: '[UNDERLINE]$t[/UNDERLINE]',
+    strikethrough: '[STRIKETHROUGH]$t[/STRIKETHROUGH]',
+  },
+  {
+    color: 'MiniMessage',
+    bold: '<bold>$t</bold>',
+    italic: '<italic>$t</italic>',
+    underline: '<underline>$t</underline>',
+    strikethrough: '<strikethrough>$t</strikethrough>',
+  },
+];
+
+export const types = [
+  { name: 'Normal (Left -> Right)', value: 1 },
+  { name: 'Reversed (Right -> Left)', value: 2 },
+  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
+  { name: 'Full Text Cycle', value: 4 },
+];
+
+export const defaults: preset = {
+  version: 3,
+  colors: presets.birdflop,
+  name: 'logo',
+  text: 'birdflop',
+  type: 1,
+  speed: 50,
+  length: 1,
+  format: v3formats[0],
+  prefixsuffix: '',
+  customFormat: false,
+  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
+  trimspaces: true,
+  bold: false,
+  italic: false,
+  underline: false,
+  strikethrough: false,
+};
+
+function decompress(input: number, expectedValues: number) {
+  const values = [];
+  for (let i = 0; i < expectedValues; i++) {
+    const value = !!((input >> i) & 1);
+    values.push(value);
+  }
+  return values;
+}
+
+const v1formats = {
   0: {
     outputPrefix: '',
     template: '&#$1$2$3$4$5$6$f$c',
@@ -111,33 +180,13 @@ export function fromBinary(encoded: string): string {
 export function loadPreset(p: string) {
   let version: number;
   let preset: any;
-  const newPreset: preset = {
-    version: 2,
-    colors: [],
-    name: 'logo',
-    text: 'birdflop',
-    type: 1,
-    speed: 50,
-    format: '&#$1$2$3$4$5$6$f$c',
-    formatchar: '&',
-    prefix: '',
-    customFormat: false,
-    outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output%',
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-  };
+  const newPreset = { ...defaults };
   if (fromBinary(p) !== '') {
     preset = JSON.parse(fromBinary(p));
     version = preset.version;
   } else {
-    try {
-      preset = JSON.parse(p);
-      version = preset.version;
-    } catch (error) {
-      return 'Invalid Preset';
-    }
+    preset = JSON.parse(p);
+    version = preset.version;
   }
   if (version === presetVersion) {
     return preset;
@@ -149,15 +198,41 @@ export function loadPreset(p: string) {
     newPreset.text = preset.text;
     newPreset.speed = preset.speed;
     newPreset.type = Number(preset.type) + 1;
-    newPreset.format = formats[preset['output-format'] as keyof typeof formats].template;
-    newPreset.formatchar = formats[preset['output-format'] as keyof typeof formats].formatChar;
+    newPreset.format = v3formats.find((f) => f.color === v1formats[preset['output-format'] as keyof typeof v1formats].template) || {
+      color: v1formats[preset['output-format'] as keyof typeof v1formats].template,
+      char: v1formats[preset['output-format'] as keyof typeof v1formats].formatChar,
+    };
     newPreset.customFormat = preset['custom-format'] !== '';
-    newPreset.prefix = formats[preset['output-format'] as keyof typeof formats].outputPrefix;
+    newPreset.prefixsuffix = v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix ? `${v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix}$t` : '';
     const formatting = decompress(preset.formats, 4);
     newPreset.bold = formatting[0];
     newPreset.italic = formatting[1];
     newPreset.underline = formatting[2];
     newPreset.strikethrough = formatting[3];
-    return newPreset;
   }
+  if (version === 2) {
+    newPreset.version = presetVersion;
+    newPreset.colors = preset.colors;
+    newPreset.name = preset.name;
+    newPreset.text = preset.text;
+    newPreset.speed = preset.speed;
+    newPreset.type = preset.type;
+    newPreset.format = v3formats.find((f) => f.color === preset.format) || {
+      color: preset.format,
+      char: preset.formatchar,
+    };
+    newPreset.customFormat = preset.customFormat;
+    newPreset.prefixsuffix = preset.prefix ? `${preset.prefix}$t` : '';
+    newPreset.bold = preset.bold;
+    newPreset.italic = preset.italic;
+    newPreset.underline = preset.underline;
+    newPreset.strikethrough = preset.strikethrough;
+  }
+
+  Object.keys(newPreset).forEach((key) => {
+    if (newPreset[key as keyof preset] === defaults[key as keyof preset] && key !== 'version') {
+      delete newPreset[key as keyof preset];
+    }
+  });
+  return newPreset;
 }

@@ -86,3 +86,7 @@ html {
 *::-webkit-scrollbar-corner {
   background-color: transparent;
 }
+.macos-zoom-fix {
+  transform: scale(0.75);
+  transform-origin: top;
+}

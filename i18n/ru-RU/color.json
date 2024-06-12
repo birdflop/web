@@ -16,7 +16,7 @@
     "import": "Импорт (Вставь текст сюда)",
     "importedPreset": "Настройки успешно импортированы!",
     "inputText": "Ваш текст",
-    "invalidPreset": "НЕИЗВЕСТНЫЙ ПРЕСЕТ!\nЕсли это старый пресет, пожалуйста, обновите его, используя <a class=\"text-blue-400\" href=\"/PresetTools\">Preset Tools</a> страницу, Если нет, пожалуйста, сообщите <a class=\"text-blue-400\" href=\"https://discord.gg/9vUZ9MREVz\">Разработчикам</a>.",
+    "invalidPreset": "INVALID PRESET! Please report this to the <a class=\"text-blue-400 hover:underline\" href=\"https://discord.gg/9vUZ9MREVz\">Developers</a> with the preset you tried to import.",
     "italic": "Наклонный",
     "output": "Вывод",
     "outputSubtitle": "Ваш результат. Нажмите на него, чтобы скопировать.",

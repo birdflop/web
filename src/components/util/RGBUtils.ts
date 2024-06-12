@@ -1,4 +1,6 @@
 import { AnimatedGradient, Gradient } from './HexUtils';
+import type { format } from './PresetUtils';
+import { defaults } from './PresetUtils';
 
 export function hex(c: number) {
   const s = '0123456789ABCDEF';
@@ -48,7 +50,7 @@ export function getAnimFrames(store: any) {
     break;
   }
 
-  const OutPutArray = [];
+  const OutputArray = [];
   const frames = [];
   for (let n = 0; n < loopAmount; n++) {
     const clrs = [];
@@ -58,22 +60,23 @@ export function getAnimFrames(store: any) {
     if (store.type == 4) {
       const hex = convertToHex(gradient.next());
       clrs.push(hex);
-      let hexOutput = store.format;
+      let hexOutput = store.format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
       let formatCodes = '';
-      if (store.format.includes('$f')) {
-        if (store.bold) formatCodes += store.formatchar + 'l';
-        if (store.italic) formatCodes += store.formatchar + 'o';
-        if (store.underline) formatCodes += store.formatchar + 'n';
-        if (store.strikethrough) formatCodes += store.formatchar + 'm';
+      if (store.format.color.includes('$f')) {
+        if (store.bold) formatCodes += store.format.char + 'l';
+        if (store.italic) formatCodes += store.format.char + 'o';
+        if (store.underline) formatCodes += store.format.char + 'n';
+        if (store.strikethrough) formatCodes += store.format.char + 'm';
       }
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', text);
-      OutPutArray.push(`  - "${hexOutput}"`);
+      if (store.prefixsuffix) hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
+      OutputArray.push(hexOutput);
     } else {
       for (let i = 0; i < text.length; i++) {
         const char = text.charAt(i);
-        if (char == ' ') {
+        if (store.trimspaces && char == ' ') {
           output += char;
           clrs.push(null);
           continue;
@@ -81,88 +84,108 @@ export function getAnimFrames(store: any) {
 
         const hex = convertToHex(gradient.next());
         clrs.push(hex);
-        let hexOutput = store.format;
+        let hexOutput = store.format.color;
         for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
         let formatCodes = '';
-        if (store.format.includes('$f')) {
-          if (store.bold) formatCodes += store.formatchar + 'l';
-          if (store.italic) formatCodes += store.formatchar + 'o';
-          if (store.underline) formatCodes += store.formatchar + 'n';
-          if (store.strikethrough) formatCodes += store.formatchar + 'm';
+        if (store.format.color.includes('$f')) {
+          if (store.bold) formatCodes += store.format.char + 'l';
+          if (store.italic) formatCodes += store.format.char + 'o';
+          if (store.underline) formatCodes += store.format.char + 'n';
+          if (store.strikethrough) formatCodes += store.format.char + 'm';
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
         hexOutput = hexOutput.replace('$c', char);
         output += hexOutput;
       }
-      OutPutArray.push(`  - "${output}"`);
+      if (store.prefixsuffix) output = store.prefixsuffix.replace(/\$t/g, output);
+      OutputArray.push(output);
     }
     frames.push(clrs);
   }
 
-  return { OutPutArray, frames };
+  return { OutputArray, frames };
 }
 
 export function AnimationOutput(store: any) {
   let FinalOutput = '';
 
   const AnimFrames = getAnimFrames(store);
-  let { OutPutArray } = AnimFrames;
+  let { OutputArray } = AnimFrames;
 
   const format = store.outputFormat;
   FinalOutput = format.replace('%name%', store.name);
   FinalOutput = FinalOutput.replace('%speed%', store.speed);
   if (store.type == 1) {
-    OutPutArray.reverse();
+    OutputArray.reverse();
   }
   else if (store.type == 3) {
-    const OutPutArray2 = OutPutArray.slice();
-    OutPutArray = OutPutArray.reverse().concat(OutPutArray2);
+    const OutputArray2 = OutputArray.slice();
+    OutputArray = OutputArray.reverse().concat(OutputArray2);
   }
 
-  FinalOutput = FinalOutput.replace('%output%', OutPutArray.join('\n'));
+  const outputFormat = FinalOutput.match(/%output:{(.*\$t.*)}%/);
+  if (outputFormat) {
+    OutputArray = OutputArray.map((output: string) => outputFormat[1].replace('$t', output));
+  }
+  FinalOutput = FinalOutput.replace(/%output:{.*\$t.*}%/, OutputArray.join('\n'));
   return FinalOutput;
 }
 
-export function generateOutput(text: string = 'birdflop', colors: string[] = ['#00FFE0', '#EB00FF'], format: string = '&#$1$2$3$4$5$6$f$c', formatchar: string = '&', prefix?: string, bold?: boolean, italic?: boolean, underline?: boolean, strikethrough?: boolean) {
-  if (format != 'MiniMessage') {
-    let newColors = colors?.map((color: string) => convertToRGB(color));
-    if (colors.length < 2) newColors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
+export function generateOutput(
+  text: string = defaults.text,
+  colors: string[] = defaults.colors,
+  format: format = defaults.format,
+  prefixsuffix?: string,
+  trimspaces?: boolean,
+  bold?: boolean,
+  italic?: boolean,
+  underline?: boolean,
+  strikethrough?: boolean,
+) {
+  let output = '';
 
-    let output = prefix;
+  if (format.color == 'MiniMessage') {
+    output += `<gradient:${colors.join(':')}>${text}</gradient>`;
+  }
 
-    const gradient = new Gradient(newColors!, text.replace(/ /g, '').length);
+  const newColors = colors?.map((color: string) => convertToRGB(color));
+  while (newColors.length < 2) newColors.push(convertToRGB(getRandomColor()));
 
+  const gradient = new Gradient(newColors, text.length);
+
+  if (format.color != 'MiniMessage') {
     for (let i = 0; i < text.length; i++) {
       const char = text.charAt(i);
-      if (char == ' ') {
+      if (trimspaces && char == ' ') {
         output += char;
+        gradient.next();
         continue;
       }
 
       const hex = convertToHex(gradient.next());
-      let hexOutput = format;
+      let hexOutput = format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
       let formatCodes = '';
-      if (format.includes('$f')) {
-        if (bold) formatCodes += formatchar + 'l';
-        if (italic) formatCodes += formatchar + 'o';
-        if (underline) formatCodes += formatchar + 'n';
-        if (strikethrough) formatCodes += formatchar + 'm';
+      if (format.color.includes('$f')) {
+        if (format.char) {
+          if (bold) formatCodes += format.char + 'l';
+          if (italic) formatCodes += format.char + 'o';
+          if (underline) formatCodes += format.char + 'n';
+          if (strikethrough) formatCodes += format.char + 'm';
+        }
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', char);
       output += hexOutput;
     }
-
-    return output;
-  } else {
-    let formats = '';
-    if (bold) formats += '<bold>';
-    if (italic) formats += '<italic>';
-    if (underline) formats += '<underlined>';
-    if (strikethrough) formats += '<strikethrough>';
-    return `${formats}<gradient:${colors.join(':')}>${text}`;
   }
+
+  if (format.bold && bold) output = format.bold.replace('$t', output);
+  if (format.italic && italic) output = format.italic.replace('$t', output);
+  if (format.underline && underline) output = format.underline.replace('$t', output);
+  if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
+  if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
+  return output;
 }

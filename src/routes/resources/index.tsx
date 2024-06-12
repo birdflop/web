@@ -6,7 +6,7 @@ import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 export default component$(() => {
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-[100svh]">
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10 drop-shadow-lg">
         Resources
       </h1>
@@ -21,14 +21,14 @@ export default component$(() => {
                 RGBirdflop
               </Header>
             </Card>
+            <Card href="/api/v2/docs" color="lime" blobs hover="clickable">
+              <Header subheader="Documentation for the RGBirdflop API">
+                API Docs
+              </Header>
+            </Card>
             <Card href="/resources/animtab" color="blue" blobs hover="clickable">
               <Header subheader="TAB plugin gradient animation creator">
                 Animated TAB
-              </Header>
-            </Card>
-            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
-              <Header subheader="Preview TAB Animations without the need to put them in-game">
-                TAB Animation Previewer
               </Header>
             </Card>
           </div>
@@ -65,14 +65,14 @@ export default component$(() => {
                 Animated Textures
               </Header>
             </Card>
+            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
+              <Header subheader="Preview TAB Animations without the need to put them in-game">
+                TAB Animation Previewer
+              </Header>
+            </Card>
             <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
               <Header subheader="Strips all color / format codes from text">
                 Color Code Stripper
-              </Header>
-            </Card>
-            <Card href="/resources/presettools" color="red" blobs hover="clickable">
-              <Header subheader="Update older preset versions to the newest version">
-                Preset Tools
               </Header>
             </Card>
           </div>

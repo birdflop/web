@@ -27,8 +27,8 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-[calc(100svh)] pt-[72px]">
-      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-[100lvh] w-[100lvw] object-cover object-center opacity-55" id="bg" alt="background" />
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
+      <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-lvh w-lvw object-cover object-center opacity-55" id="bg" alt="background" />
       <div class="text-center justify-center flex relative w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <h1 class="text-white text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000 drop-shadow-lg">

@@ -7,7 +7,7 @@ import { StatsChartOutline } from 'qwik-ionicons';
 export default component$(() => {
 
   return <>
-    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-[100svh]">
+    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">
       <div class="justify-center flex relative max-w-5xl px-10 py-24">
         <div class="flex flex-col gap-8">
           <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold mb-4 text-center drop-shadow-lg">

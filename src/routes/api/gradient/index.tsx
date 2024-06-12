@@ -2,9 +2,8 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { generateOutput } from '~/components/util/RGBUtils';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
-  const { text, colors, format, formatchar, prefix = '', bold = 'false', italic = 'false', underline = 'false', strikethrough = 'false', silent = 'false' } = Object.fromEntries(query);
-
-  const options = silent ? {} : {
+  const { text, colors, format = '&#$1$2$3$4$5$6$f$c', formatchar = '&', prefix = '', bold = 'false', italic = 'false', underline = 'false', strikethrough = 'false', silent = 'false' } = Object.fromEntries(query);
+  const options = (silent === 'true') ? {} : {
     options: {
       text: {
         url: 'text=exampleText',
@@ -48,9 +47,9 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       },
     },
   };
-
   throw json(200, {
-    output: generateOutput(text, colors?.split(','), format, formatchar, prefix, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
+    WARNING: 'This endpoint is deprecated. Please use /api/v2/rgb instead.',
+    output: generateOutput(text, colors?.split(','), { color: format, char: formatchar }, `${prefix}$t`, true, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
     ...options,
   });
 };
