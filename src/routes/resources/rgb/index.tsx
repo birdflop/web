@@ -155,17 +155,32 @@ export default component$(() => {
           </Button>
           <div class="w-full h-3 rounded-full flex justify-between items-center" style={`background: linear-gradient(to right, ${store.colors.join(', ')});`}>
             {store.colors.map((color: string, i: number) => <div class="relative mt-1" key={i}>
-              <button key={`color${i + 1}`} class={{
-                'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
-                'border-white': getBrightness(convertToRGB(color)) < 126,
-                'border-black': getBrightness(convertToRGB(color)) > 126,
-              }} style={`background: ${color};`} onFocus$={() => store.opened = i} onBlur$={() => store.opened = -1} />
+              <button key={`color${i + 1}`} id={`color${i + 1}`}
+                class={{
+                  'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
+                  'border-white': getBrightness(convertToRGB(color)) < 126,
+                  'border-black': getBrightness(convertToRGB(color)) > 126,
+                }}
+                style={`background: ${color};`}
+                onFocus$={() => {
+                  const abortController = new AbortController();
+                  document.addEventListener('click', (e) => {
+                    if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-picker`)) {
+                      if (store.opened == i) store.opened = -1;
+                      abortController.abort();
+                    }
+                  }, { signal: abortController.signal });
+                  store.opened = i;
+                }}
+              />
               <ColorPicker
                 id={`color${i + 1}`}
                 value={color}
                 class={{
-                  'motion-safe:transition-all absolute top-full mt-2 left-0 gap-1 z-[1000]': true,
+                  'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
                   'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                  'left-0': i + 1 < Math.round(store.colors.length / 2),
+                  'right-0': i + 1 >= Math.round(store.colors.length / 2),
                 }}
                 onInput$={(newColor: string) => {
                   const newColors = [...store.colors];
@@ -173,9 +188,7 @@ export default component$(() => {
                   store.colors = newColors;
                 }}
                 horizontal
-              >
-                {t('color.hexColor@@Hex Color')} {i + 1}
-              </ColorPicker>
+              />
             </div>,
             )}
           </div>
