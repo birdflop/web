@@ -208,8 +208,8 @@ export default component$(() => {
                 class={{
                   'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
                   'opacity-0 scale-95 pointer-events-none': store.opened != i,
-                  'left-0': i + 1 < Math.round(store.colors.length / 2),
-                  'right-0': i + 1 >= Math.round(store.colors.length / 2),
+                  'left-0': i < store.colors.length / 2,
+                  'right-0': i >= store.colors.length / 2,
                 }}
                 onInput$={(newColor: string) => {
                   const newColors = [...store.colors];
