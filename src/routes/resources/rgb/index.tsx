@@ -5,7 +5,7 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, presets, v3formats } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
 
-import { Add, ChevronDown, ChevronUp, ColorFillOutline, Remove, SettingsOutline, Text, Trash, TrashBinOutline, TrashOutline } from 'qwik-ionicons';
+import { Add, ChevronDown, ChevronUp, ColorFillOutline, Remove, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
 import { Button, ColorPicker, Header, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
