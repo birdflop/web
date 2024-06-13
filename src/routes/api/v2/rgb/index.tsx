@@ -3,10 +3,15 @@ import { v3formats } from '~/components/util/PresetUtils';
 import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
+const v2rgbDefaults = {
+  rgbDefaults,
+  colors: rgbDefaults.colors.map(color => color.hex),
+};
+
 export const onGet: RequestHandler = async ({ json, query }) => {
+  let output = {};
   try {
     const queryjson: any = Object.fromEntries(query);
-
     const keys = Object.keys(queryjson);
     for (const key of keys) {
       if (key == 'colors') {
@@ -22,17 +27,17 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       else if (queryjson[key] == 'false') queryjson[key] = false;
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
     }
-
-    const output = await getOutput(queryjson);
-    throw json(200, output);
+    output = await getOutput(queryjson);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+  throw json(200, output);
 };
 
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
+  let output = {};
   try {
     const body = await parseBody() as any;
     if (body?.colors) body.colors = body.colors.map((color: string, index: number) => {
@@ -41,14 +46,14 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
         pos: index / body.colors.length,
       };
     });
-    const output = await getOutput(body);
-
-    throw json(200, output);
+    output = await getOutput(body);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+
+  throw json(200, output);
 };
 
 async function getOutput(body: any) {
@@ -64,9 +69,9 @@ async function getOutput(body: any) {
         default: rgbDefaults.text,
       },
       colors: {
-        type: 'array of hex colors',
+        type: 'array of (string)',
         description: 'The colors to use for the gradient. Must be in hex format.',
-        default: rgbDefaults.colors,
+        default: v2rgbDefaults.colors,
       },
       format: {
         type: 'format object - see data models in docs',

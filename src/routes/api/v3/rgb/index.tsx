@@ -4,6 +4,7 @@ import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
+  let output = {};
   try {
     const queryjson: any = Object.fromEntries(query);
 
@@ -15,26 +16,27 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
     }
 
-    const output = await getOutput(queryjson);
-    throw json(200, output);
+    output = await getOutput(queryjson);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+  throw json(200, output);
 };
 
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
+  let output = {};
   try {
     const body = await parseBody();
-    const output = await getOutput(body);
-
-    throw json(200, output);
+    output = await getOutput(body);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+
+  throw json(200, output);
 };
 
 async function getOutput(body: any) {
@@ -50,7 +52,7 @@ async function getOutput(body: any) {
         default: rgbDefaults.text,
       },
       colors: {
-        type: 'array of Color object - see data models in docs',
+        type: 'array of (Color object) - see data models in docs',
         description: 'The colors to use for the gradient.',
         default: rgbDefaults.colors,
       },
