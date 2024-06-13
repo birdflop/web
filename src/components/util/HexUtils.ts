@@ -52,7 +52,8 @@ export class Gradient {
     }
     else {
       const gradient = this.gradients.find(g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep);
-      color = gradient?.colorAt(adjustedStep);
+      if (!gradient) return this.colors[0].rgb;
+      color = gradient.colorAt(adjustedStep);
     }
 
     this.step++;

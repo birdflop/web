@@ -7,7 +7,7 @@ import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomCol
 
 import { Add, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, ColorPicker, Header, Dropdown, TextArea, TextInput, Toggle, NumberInputRaw } from '@luminescent/ui';
+import { Button, ColorPicker, Header, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -38,6 +38,15 @@ export default component$(() => {
   const store = useStore({
     ...rgbDefaults,
     ...cookies,
+  }, { deep: true });
+
+  const tempstore: {
+    opened: number,
+    alerts: {
+      class: string,
+      text: string,
+    }[],
+  } = useStore({
     opened: -1,
     alerts: [] as {
       class: string,
@@ -51,7 +60,6 @@ export default component$(() => {
       if (key == 'frames' || key == 'frame' || key == 'alerts') return;
       else track(() => store[key as keyof typeof store]);
     });
-    if (JSON.stringify(store.colors) != JSON.stringify(sortColors(store.colors))) store.colors = sortColors(store.colors);
   });
 
   return (
@@ -67,7 +75,7 @@ export default component$(() => {
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
 
-        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, sortColors(store.colors), store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -141,7 +149,7 @@ export default component$(() => {
             }}>
               <Add width="19" />
             </div>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={i}
+            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={color.pos}
               onMouseDown$={() => {
                 const abortController = new AbortController();
                 const colormap = document.getElementById('colormap')!;
@@ -151,7 +159,9 @@ export default component$(() => {
                   if (pos < 0) pos = 0;
                   if (pos > 100) pos = 100;
                   if (store.colors.find(c => c.pos == pos)) return;
-                  color.pos = pos;
+                  const newColors = [...store.colors];
+                  newColors[i].pos = pos;
+                  store.colors = newColors;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
                   abortController.abort();
@@ -171,17 +181,17 @@ export default component$(() => {
                   const abortController = new AbortController();
                   document.addEventListener('click', (e) => {
                     if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
-                      if (store.opened == i) store.opened = -1;
+                      if (tempstore.opened == i) tempstore.opened = -1;
                       abortController.abort();
                     }
                   }, { signal: abortController.signal });
-                  store.opened = i;
+                  tempstore.opened = i;
                 }}
               />
               <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>
                 <div class={{
                   'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
-                  'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                  'opacity-0 scale-95 pointer-events-none': tempstore.opened != i,
                   'left-0 items-start': color.pos < 50,
                   'right-0 items-end': color.pos >= 50,
                 }}>
@@ -195,24 +205,8 @@ export default component$(() => {
                         <TrashOutline width="20" />
                       </Button>
                     }
-                    <div class="flex w-48">
-                      <NumberInputRaw class={{ 'w-full': true }} input id={`color${i + 1}-pos`} value={Number(color.pos.toFixed(2))} min={0} max={100}
-                        onInput$={(e, el) => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos = Number(el.value);
-                          store.colors = newColors;
-                        }}
-                        onDecrement$={() => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos -= 1;
-                          store.colors = newColors;
-                        }}
-                        onIncrement$={() => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos += 1;
-                          store.colors = newColors;
-                        }}
-                      />
+                    <div class="flex bg-gray-800 border border-gray-700 rounded-lg py-1 px-2 text-sm items-center">
+                      {store.colors[i].pos}%
                     </div>
                   </div>
                   <ColorPicker
@@ -338,9 +332,9 @@ export default component$(() => {
                       class: 'text-red-500',
                       text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     return setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
                   Object.keys(json).forEach(key => {
@@ -351,9 +345,9 @@ export default component$(() => {
                     class: 'text-green-500',
                     text: 'color.importedPreset@@Successfully imported preset!',
                   };
-                  store.alerts.push(alert);
+                  tempstore.alerts.push(alert);
                   setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                   }, 2000);
                 }}>
                   {t('color.presets@@Presets')}
@@ -370,9 +364,9 @@ export default component$(() => {
                       class: 'text-green-500',
                       text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
                     {t('color.export@@Export')}
@@ -380,8 +374,7 @@ export default component$(() => {
                   <Button id="createurl" size="sm" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                     const url = new URL(base_url);
-                    const params: any = { ...store };
-                    delete params.alerts;
+                    const params = { ...store };
                     Object.entries(params).forEach(([key, value]: any) => {
                       if (key == 'colors') {
                         value = value.join(',');
@@ -399,9 +392,9 @@ export default component$(() => {
                       class: 'text-green-500',
                       text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
                     {t('color.url@@Export As URL')}
@@ -426,7 +419,7 @@ export default component$(() => {
             <Toggle id="trimspaces" checked={store.trimspaces}
               onChange$={(event: any) => { store.trimspaces = event.target!.checked; }}
               label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            {store.alerts.map((alert: any, i: number) => (
+            {tempstore.alerts.map((alert: any, i: number) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}
           </div>

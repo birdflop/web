@@ -1,5 +1,6 @@
 import { AnimatedGradient, Gradient } from './HexUtils';
 import { defaults } from './PresetUtils';
+import { sortColors } from './SharedUtils';
 
 export function hex(c: number) {
   const s = '0123456789ABCDEF';
@@ -154,7 +155,7 @@ export function generateOutput(
     output += `<gradient:${colors.join(':')}>${text}</gradient>`;
   }
 
-  const newColors = colors?.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+  const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
   if (newColors.length < 2) return 'Error: Not enough colors.';
 
   const gradient = new Gradient(newColors, text.length);

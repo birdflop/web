@@ -6,7 +6,7 @@ import { AnimationOutput, convertToRGB, getAnimFrames, getBrightness, getRandomC
 
 import { Add, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker, NumberInputRaw } from '@luminescent/ui';
+import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -46,12 +46,20 @@ export default component$(() => {
     ...animTABDefaults,
     ...unsupportedDefaults,
     ...cookies,
-    opened: -1,
-    alerts: [] as {
+  }, { deep: true });
+
+  const tempstore: {
+    opened: number,
+    alerts: {
       class: string,
       text: string,
     }[],
-    frames: [] as (string | null)[][],
+    frames: (string | null)[][],
+    frame: number,
+  } = useStore({
+    opened: -1,
+    alerts: [],
+    frames: [],
     frame: 0,
   }, { deep: true });
 
@@ -62,13 +70,13 @@ export default component$(() => {
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
 
     function setFrame() {
-      if (!store.frames[0]) return;
+      if (!tempstore.frames[0]) return;
       if (speed != store.speed) {
         clearInterval(frameInterval);
         speed = store.speed;
         frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
       }
-      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
+      tempstore.frame = tempstore.frame + 1 >= tempstore.frames.length ? 0 : tempstore.frame + 1;
     }
   });
 
@@ -80,14 +88,14 @@ export default component$(() => {
     });
     const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
     if (store.type == 1) {
-      store.frames = frames.reverse();
+      tempstore.frames = frames.reverse();
     }
     else if (store.type == 3) {
       const frames2 = frames.slice();
-      store.frames = frames.reverse().concat(frames2);
+      tempstore.frames = frames.reverse().concat(frames2);
     }
     else {
-      store.frames = frames;
+      tempstore.frames = frames;
     }
   });
 
@@ -116,8 +124,8 @@ export default component$(() => {
           {(() => {
             const text = store.text != '' ? store.text : 'birdflop';
 
-            if (!store.frames[0]) return;
-            const colors = store.frames[store.frame];
+            if (!tempstore.frames[0]) return;
+            const colors = tempstore.frames[tempstore.frame];
             if (!colors) return;
 
             return text.split('').map((char: string, i: number) => (
@@ -204,17 +212,17 @@ export default component$(() => {
                   const abortController = new AbortController();
                   document.addEventListener('click', (e) => {
                     if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
-                      if (store.opened == i) store.opened = -1;
+                      if (tempstore.opened == i) tempstore.opened = -1;
                       abortController.abort();
                     }
                   }, { signal: abortController.signal });
-                  store.opened = i;
+                  tempstore.opened = i;
                 }}
               />
               <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>
                 <div class={{
                   'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
-                  'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                  'opacity-0 scale-95 pointer-events-none': tempstore.opened != i,
                   'left-0 items-start': color.pos < 50,
                   'right-0 items-end': color.pos >= 50,
                 }}>
@@ -228,24 +236,8 @@ export default component$(() => {
                         <TrashOutline width="20" />
                       </Button>
                     }
-                    <div class="flex w-48">
-                      <NumberInputRaw class={{ 'w-full': true }} input id={`color${i + 1}-pos`} value={Number(color.pos.toFixed(2))} min={0} max={100}
-                        onInput$={(e, el) => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos = Number(el.value);
-                          store.colors = newColors;
-                        }}
-                        onDecrement$={() => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos -= 1;
-                          store.colors = newColors;
-                        }}
-                        onIncrement$={() => {
-                          const newColors = [...store.colors];
-                          newColors[i].pos += 1;
-                          store.colors = newColors;
-                        }}
-                      />
+                    <div class="flex bg-gray-800 border border-gray-700 rounded-lg py-1 px-2 text-sm items-center">
+                      {store.colors[i].pos}%
                     </div>
                   </div>
                   <ColorPicker
@@ -318,17 +310,17 @@ export default component$(() => {
                   let json: any;
                   try {
                     const preset = await loadPreset(event.target!.value);
-                      event.target!.value = JSON.stringify(preset);
-                      navigator.clipboard.writeText(JSON.stringify(preset));
-                      json = { ...animTABDefaults, ...preset };
+                    event.target!.value = JSON.stringify(preset);
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    json = { ...animTABDefaults, ...preset };
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',
                       text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     return setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
                   Object.keys(json).forEach(key => {
@@ -339,9 +331,9 @@ export default component$(() => {
                     class: 'text-green-500',
                     text: 'color.importedPreset@@Successfully imported preset!',
                   };
-                  store.alerts.push(alert);
+                  tempstore.alerts.push(alert);
                   setTimeout(() => {
-                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                   }, 2000);
                 }}>
                   {t('color.presets@@Presets')}
@@ -349,7 +341,11 @@ export default component$(() => {
                 <div class="flex gap-2">
                   <Button id="export" size="sm" onClick$={() => {
                     const preset: any = { ...store };
-                    delete preset.alerts;
+                    if (!store.customFormat) {
+                      delete preset.customFormat;
+                      delete preset.format;
+                      delete preset.outputFormat;
+                    }
                     Object.keys(preset).forEach(key => {
                       if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) delete preset[key];
                     });
@@ -358,9 +354,9 @@ export default component$(() => {
                       class: 'text-green-500',
                       text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
                     {t('color.export@@Export')}
@@ -369,7 +365,11 @@ export default component$(() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                     const url = new URL(base_url);
                     const params: any = { ...store };
-                    delete params.alerts;
+                    if (!store.customFormat) {
+                      delete params.customFormat;
+                      delete params.format;
+                      delete params.outputFormat;
+                    }
                     Object.entries(params).forEach(([key, value]: any) => {
                       if (key == 'colors') {
                         value = value.join(',');
@@ -387,9 +387,9 @@ export default component$(() => {
                       class: 'text-green-500',
                       text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
                     };
-                    store.alerts.push(alert);
+                    tempstore.alerts.push(alert);
                     setTimeout(() => {
-                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
                     {t('color.url@@Export As URL')}
@@ -417,7 +417,7 @@ export default component$(() => {
             <Toggle id="advanced" checked={store.customFormat}
               onChange$={(event: any) => { store.customFormat = event.target!.checked; }}
               label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
-            {store.alerts.map((alert: any, i: number) => (
+            {tempstore.alerts.map((alert: any, i: number) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}
             {
