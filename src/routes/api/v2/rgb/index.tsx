@@ -43,7 +43,7 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
     if (body?.colors) body.colors = body.colors.map((color: string, index: number) => {
       return {
         hex: color,
-        pos: index / body.colors.length,
+        pos: index / body.colors.length * 100,
       };
     });
     output = await getOutput(body);

@@ -1,7 +1,7 @@
 import type { Cookie } from '@builder.io/qwik-city';
 import { defaults } from './PresetUtils';
 
-export const getCookies = (cookie: Cookie, names: string[], urlParams: URLSearchParams) => {
+export function getCookies(cookie: Cookie, names: string[], urlParams: URLSearchParams) {
   const cookiesObj: { [key: string]: string; } = {};
   names.forEach(name => {
     const cookieValue = cookie.get(name)?.value;
@@ -11,6 +11,9 @@ export const getCookies = (cookie: Cookie, names: string[], urlParams: URLSearch
   if (!cookiesObj.version) {
     delete cookiesObj.format;
     delete cookiesObj.outputFormat;
+  }
+  if (cookiesObj.version == '3') {
+    delete cookiesObj.colors;
   }
 
   names.forEach(name => {
@@ -23,16 +26,16 @@ export const getCookies = (cookie: Cookie, names: string[], urlParams: URLSearch
     const value = cookiesObj[key];
     parsedCookiesAndParams[key] = value === 'true' ? true
       : value === 'false' ? false
-        : key == 'colors' ? value.split(',')
-          : !isNaN(Number(value)) ? Number(value)
-            : (value.startsWith('{') && (key == 'parsed' || key == 'format')) ? JSON.parse(value)
+        : !isNaN(Number(value)) ? Number(value)
+          : (value.startsWith('{') && (key == 'parsed' || key == 'format')) ? JSON.parse(value)
+            : (key == 'colors') ? JSON.parse(value)
               : value;
   }
-  return parsedCookiesAndParams;
-};
 
-export const setCookies = function (json: { [key: string]: any; }) {
-  const excludedKeys = ['alerts', 'frames', 'frame'];
+  return parsedCookiesAndParams;
+}
+
+export function setCookies(json: { [key: string]: any; }) {
   console.debug('setCookies', json);
 
   const cookie: { [key: string]: string; } = {};
@@ -43,9 +46,9 @@ export const setCookies = function (json: { [key: string]: any; }) {
   if (cookie.optout === 'true') return;
   Object.keys(json).forEach(key => {
     let value = json[key];
-    if (key == 'format') {
+    if (key == 'format' || key == 'parsed' || key == 'colors') {
       value = JSON.stringify(value);
-      if (value === JSON.stringify(defaults[key])) {
+      if (key != 'parsed' && value === JSON.stringify(defaults[key])) {
         document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
         return;
       }
@@ -57,13 +60,12 @@ export const setCookies = function (json: { [key: string]: any; }) {
       }
     }
     const existingCookie = cookie[key];
-    if (excludedKeys.includes(key)) return;
     const encodedValue = encodeURIComponent(value);
     if (existingCookie === encodedValue) return;
     console.debug('cookie', key, encodedValue);
     document.cookie = `${key}=${encodedValue}; path=/`;
   });
-};
+}
 
 export function sortColors(colors: { hex: string, pos: number }[]) {
   return [...colors].sort((a, b) => a.pos - b.pos);

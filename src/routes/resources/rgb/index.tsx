@@ -324,9 +324,9 @@ export default component$(() => {
                   let json: any;
                   try {
                     const preset = await loadPreset(event.target!.value);
-                      event.target!.value = JSON.stringify(preset);
-                      navigator.clipboard.writeText(JSON.stringify(preset));
-                      json = { ...rgbDefaults, ...preset };
+                    event.target!.value = JSON.stringify(preset);
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    json = { ...rgbDefaults, ...preset };
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',

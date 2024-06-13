@@ -1,5 +1,3 @@
-export const presetVersion = 3;
-
 export interface format {
   color: string;
   char?: string;
@@ -212,7 +210,7 @@ export function fromBinary(encoded: string) {
 export function loadPreset(p: string) {
   let version: number;
   let preset: any;
-  const newPreset = { ...defaults };
+  let newPreset = defaults;
   if (fromBinary(p) !== '') {
     preset = JSON.parse(fromBinary(p));
     version = preset.version;
@@ -220,12 +218,12 @@ export function loadPreset(p: string) {
     preset = JSON.parse(p);
     version = preset.version;
   }
-  if (version === presetVersion) {
+  if (version === defaults.version) {
     return preset;
   }
   if (version === 1) {
-    newPreset.version = presetVersion;
-    newPreset.colors = preset.colors;
+    newPreset.version = defaults.version;
+    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: i / preset.colors.length * 100 }));
     newPreset.name = preset.name;
     newPreset.text = preset.text;
     newPreset.speed = preset.speed;
@@ -243,8 +241,8 @@ export function loadPreset(p: string) {
     newPreset.strikethrough = formatting[3];
   }
   if (version === 2) {
-    newPreset.version = presetVersion;
-    newPreset.colors = preset.colors;
+    newPreset.version = defaults.version;
+    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: i / preset.colors.length * 100 }));
     newPreset.name = preset.name;
     newPreset.text = preset.text;
     newPreset.speed = preset.speed;
@@ -259,6 +257,12 @@ export function loadPreset(p: string) {
     newPreset.italic = preset.italic;
     newPreset.underline = preset.underline;
     newPreset.strikethrough = preset.strikethrough;
+  }
+  if (version === 3) {
+    newPreset = {
+      ...newPreset,
+      colors: preset.colors ? preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })) : newPreset.colors,
+    };
   }
 
   Object.keys(newPreset).forEach((key) => {

@@ -179,7 +179,7 @@ export default component$(() => {
             }}>
               <Add width="19" />
             </div>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={i}
+            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={color.pos}
               onMouseDown$={() => {
                 const abortController = new AbortController();
                 const colormap = document.getElementById('colormap')!;
@@ -192,7 +192,7 @@ export default component$(() => {
                   if (store.colors.find(c => c.pos == pos)) return;
                   const newColors = [...store.colors];
                   newColors[i].pos = pos;
-                  store.colors = sortColors(newColors);
+                  store.colors = newColors;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
                   abortController.abort();
