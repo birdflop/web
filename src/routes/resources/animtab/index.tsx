@@ -138,7 +138,8 @@ export default component$(() => {
             onMouseDown$={(e, el) => {
               if (e.target != el) return;
               const rect = el.getBoundingClientRect();
-              const pos = Math.round((e.clientX - rect.left) / rect.width * store.text.length) / store.text.length * 100;
+              const length = store.text.length * store.length;
+              const pos = Math.round((e.clientX - rect.left) / rect.width * length) / length * 100;
               if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
               newColors.push({ hex: getRandomColor(), pos });
@@ -152,7 +153,8 @@ export default component$(() => {
                   addbutton.classList.add('opacity-0');
                   return;
                 }
-                const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * store.text.length) / store.text.length * 100;
+                const length = store.text.length * store.length;
+                const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * length) / length * 100;
                 if (store.colors.find(c => c.pos == pos)) return;
                 addbutton.classList.remove('opacity-0');
                 addbutton.style.left = `${pos}%`;
@@ -175,11 +177,14 @@ export default component$(() => {
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
-                  let pos = Math.round((((e.clientX - rect.left) / rect.width) * store.text.length)) / store.text.length * 100;
+                  const length = store.text.length * store.length;
+                  let pos = Math.round((((e.clientX - rect.left) / rect.width) * length)) / length * 100;
                   if (pos < 0) pos = 0;
                   if (pos > 100) pos = 100;
                   if (store.colors.find(c => c.pos == pos)) return;
-                  color.pos = pos;
+                  const newColors = [...store.colors];
+                  newColors[i].pos = pos;
+                  store.colors = sortColors(newColors);
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
                   abortController.abort();

@@ -8,14 +8,12 @@ export class Gradient {
   gradients: TwoStopGradient[];
   steps: number;
   step: number;
-  gradient: number;
 
   constructor(colors: Gradient['colors'], numSteps: number) {
     this.colors = colors;
     this.gradients = [];
     this.steps = numSteps - 1;
     this.step = 0;
-    this.gradient = 0;
     if (colors[0].pos !== 0) colors.unshift({ rgb: colors[0].rgb, pos: 0 });
     if (colors[colors.length - 1].pos !== 100) colors.push({ rgb: colors[colors.length - 1].rgb, pos: 100 });
 
@@ -53,12 +51,8 @@ export class Gradient {
       color = this.gradients[0].colorAt(adjustedStep);
     }
     else {
-      const gradient = this.gradients[this.gradient];
+      const gradient = this.gradients.find(g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep);
       color = gradient?.colorAt(adjustedStep);
-      if (adjustedStep >= gradient.upperRange) {
-        this.gradient++;
-        if (this.gradient > this.gradients.length) this.gradient = 0;
-      }
     }
 
     this.step++;
