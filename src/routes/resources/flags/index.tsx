@@ -217,7 +217,7 @@ export default component$(() => {
           <div class="flex flex-col gap-4">
             <Dropdown id="preset" class={{ 'w-full': true }} onChange$={(event: any) => {
               store.parsed.flags = event.target!.value;
-            }} values={Object.keys(flagTypes).map((flag: string) => ({
+            }} values={Object.keys(flagTypes).map(flag => ({
               name: flagTypes[flag as keyof typeof flagTypes],
               value: flag,
             }))} value={store.parsed.flags}>

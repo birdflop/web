@@ -1,5 +1,4 @@
 import { AnimatedGradient, Gradient } from './HexUtils';
-import type { format } from './PresetUtils';
 import { defaults } from './PresetUtils';
 
 export function hex(c: number) {
@@ -43,8 +42,8 @@ export function getRandomColor() {
   return color;
 }
 
-export function getAnimFrames(store: any) {
-  let colors = store.colors.map((color: string) => convertToRGB(color));
+export function getAnimFrames(store: typeof defaults) {
+  let colors = store.colors.map(color => convertToRGB(color.hex));
   if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
   const text = store.text ?? 'birdflop';
@@ -115,7 +114,7 @@ export function getAnimFrames(store: any) {
   return { OutputArray, frames };
 }
 
-export function AnimationOutput(store: any) {
+export function AnimationOutput(store: typeof defaults) {
   let FinalOutput = '';
 
   const AnimFrames = getAnimFrames(store);
@@ -123,7 +122,7 @@ export function AnimationOutput(store: any) {
 
   const format = store.outputFormat;
   FinalOutput = format.replace('%name%', store.name);
-  FinalOutput = FinalOutput.replace('%speed%', store.speed);
+  FinalOutput = FinalOutput.replace('%speed%', `${store.speed}`);
   if (store.type == 1) {
     OutputArray.reverse();
   }
@@ -133,17 +132,15 @@ export function AnimationOutput(store: any) {
   }
 
   const outputFormat = FinalOutput.match(/%output:{(.*\$t.*)}%/);
-  if (outputFormat) {
-    OutputArray = OutputArray.map((output: string) => outputFormat[1].replace('$t', output));
-  }
+  if (outputFormat) OutputArray = OutputArray.map(output => outputFormat[1].replace('$t', output));
   FinalOutput = FinalOutput.replace(/%output:{.*\$t.*}%/, OutputArray.join('\n'));
   return FinalOutput;
 }
 
 export function generateOutput(
-  text: string = defaults.text,
-  colors: string[] = defaults.colors,
-  format: format = defaults.format,
+  text = defaults.text,
+  colors = defaults.colors,
+  format = defaults.format,
   prefixsuffix?: string,
   trimspaces?: boolean,
   bold?: boolean,
@@ -157,7 +154,7 @@ export function generateOutput(
     output += `<gradient:${colors.join(':')}>${text}</gradient>`;
   }
 
-  const newColors = colors?.map((color: string) => convertToRGB(color));
+  const newColors = colors?.map(color => convertToRGB(color.hex));
   while (newColors.length < 2) newColors.push(convertToRGB(getRandomColor()));
 
   const gradient = new Gradient(newColors, text.length);

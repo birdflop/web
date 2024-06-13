@@ -11,7 +11,7 @@ export interface format {
 
 declare interface preset {
   version: number;
-  colors: string[];
+  colors: { hex: string; pos: number }[];
   name: string;
   text: string;
   type: number;
@@ -29,15 +29,47 @@ declare interface preset {
 }
 
 export const presets = {
-  'birdflop': ['#084CFB', '#ADF3FD'],
-  'SimplyMC': ['#00FFE0', '#EB00FF'],
-  'Rainbow': ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'],
-  'Skyline': ['#1488CC', '#2B32B2'],
-  'Mango': ['#FFE259', '#FFA751'],
-  'Vice City': ['#3494E6', '#EC6EAD'],
-  'Dawn': ['#F3904F', '#3B4371'],
-  'Rose': ['#F4C4F3', '#FC67FA'],
-  'Firewatch': ['#CB2D3E', '#EF473A'],
+  'birdflop': [
+    { hex: '#084CFB', pos: 0 },
+    { hex: '#ADF3FD', pos: 100 },
+  ],
+  'SimplyMC': [
+    { hex: '#00FFE0', pos: 0 },
+    { hex: '#EB00FF', pos: 100 },
+  ],
+  'Rainbow': [
+    { hex: '#FF0000', pos: 0 },
+    { hex: '#FF7F00', pos: 16.66 },
+    { hex: '#FFFF00', pos: 33.33 },
+    { hex: '#00FF00', pos: 50 },
+    { hex: '#0000FF', pos: 66.66 },
+    { hex: '#4B0082', pos: 83.33 },
+    { hex: '#9400D3', pos: 100 },
+  ],
+  'Skyline': [
+    { hex: '#1488CC', pos: 0 },
+    { hex: '#2B32B2', pos: 100 },
+  ],
+  'Mango': [
+    { hex: '#FFE259', pos: 0 },
+    { hex: '#FFA751', pos: 100 },
+  ],
+  'Vice City': [
+    { hex: '#3494E6', pos: 0 },
+    { hex: '#EC6EAD', pos: 100 },
+  ],
+  'Dawn': [
+    { hex: '#F3904F', pos: 0 },
+    { hex: '#3B4371', pos: 100 },
+  ],
+  'Rose': [
+    { hex: '#F4C4F3', pos: 0 },
+    { hex: '#FC67FA', pos: 100 },
+  ],
+  'Firewatch': [
+    { hex: '#CB2D3E', pos: 0 },
+    { hex: '#EF473A', pos: 100 },
+  ],
 };
 
 export const v3formats = [
@@ -81,7 +113,7 @@ export const types = [
 ];
 
 export const defaults: preset = {
-  version: 3,
+  version: 4,
   colors: presets.birdflop,
   name: 'logo',
   text: 'birdflop',
@@ -163,8 +195,8 @@ const v1formats = {
   },
 };
 
-export function fromBinary(encoded: string): string {
-  let binary: string;
+export function fromBinary(encoded: string) {
+  let binary;
   try {
     binary = atob(encoded);
   } catch (error) {

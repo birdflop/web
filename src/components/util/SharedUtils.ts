@@ -64,3 +64,7 @@ export const setCookies = function (json: { [key: string]: any; }) {
     document.cookie = `${key}=${encodedValue}; path=/`;
   });
 };
+
+export function sortColors(colors: { hex: string, pos: number }[]) {
+  return [...colors].sort((a, b) => a.pos - b.pos);
+}

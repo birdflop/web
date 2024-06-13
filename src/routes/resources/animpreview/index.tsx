@@ -79,8 +79,7 @@ export default component$(() => {
             const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
             const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
             return spans.map((string: string, i: number) => {
-              let result: any = string.match(pattern);
-              result = result.filter((obj: string) => { return obj; });
+              const result: any = string.match(pattern);
               return (
                 <span key={`char${i}`} style={{ color: result[1] }} class={{
                   'underline': result.includes('&n'),
