@@ -1,14 +1,14 @@
-import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, loadPreset, presets, types, v3formats } from '~/components/util/PresetUtils';
 import { AnimationOutput, convertToRGB, getAnimFrames, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
 
-import { Add, Remove, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
+import { Add, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker } from '@luminescent/ui';
+import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker, NumberInputRaw } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
+import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 const animTABDefaults = {
@@ -54,22 +54,6 @@ export default component$(() => {
     frames: [] as (string | null)[][],
     frame: 0,
   }, { deep: true });
-
-  const handleSwap = $((currentIndex: number, newIndex: number) => {
-    // check if the index is out of bounds
-    const colorsLength = store.colors.length;
-    if (newIndex < 0) {
-      newIndex = colorsLength - 1;
-    } else if (newIndex >= colorsLength) {
-      newIndex = 0;
-    }
-
-    const newColors = [...store.colors];
-    const currentColor = `${newColors[currentIndex].hex}`;
-    newColors[currentIndex].hex = newColors[newIndex].hex;
-    newColors[newIndex].hex = currentColor;
-    store.colors = newColors;
-  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -149,33 +133,58 @@ export default component$(() => {
         </h1>
 
         <div class="flex gap-2 my-4 items-center">
-          <Button square disabled={store.colors.length < 3} transparent aria-label="Remove Color" onClick$={() => {
-            const newColors = [...store.colors];
-            newColors.pop();
-            store.colors = newColors;
-          }}>
-            <Remove width="24" />
-          </Button>
-          <div class="w-full h-3 rounded-full items-center relative" id="colormap" style={`background: linear-gradient(to right, ${store.colors.map(c => c.hex).join(', ')});`}>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={i} onMouseDown$={() => {
+          <div class="w-full h-3 rounded-full items-center relative" id="colormap"
+            style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
+            onClick$={(e, el) => {
+              if (e.target != el) return;
+              const rect = el.getBoundingClientRect();
+              const pos = (e.clientX - rect.left) / rect.width * 100;
+              const newColors = [...store.colors];
+              newColors.push({ hex: getRandomColor(), pos });
+              store.colors = newColors;
+            }}
+            onMouseEnter$={(e, el) => {
               const abortController = new AbortController();
-              const colormap = document.getElementById('colormap')!;
-              document.addEventListener('mousemove', (e) => {
-                const rect = colormap.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const width = rect.width;
-                const index = Math.round((store.colors.length - 1) * (x / width));
-                if (index != i) {
-                  handleSwap(i, index);
-                  abortController.abort();
+              el.addEventListener('mousemove', e => {
+                const addbutton = document.getElementById('add-button')!;
+                if (e.target != el) {
+                  addbutton.classList.add('opacity-0');
+                  return;
                 }
+                addbutton.classList.remove('opacity-0');
+                addbutton.style.left = `${(e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * 100}%`;
               }, { signal: abortController.signal });
-              document.addEventListener('mouseup', () => {
+              el.addEventListener('mouseleave', () => {
+                const addbutton = document.getElementById('add-button')!;
+                addbutton.classList.add('opacity-0');
                 abortController.abort();
               }, { signal: abortController.signal });
-            }} style={{
-              left: `${(100 / (store.colors.length - 1)) * i}%`,
+            }}
+          >
+            <div id="add-button" class={{
+              'absolute -mt-1 -ml-3 transition-opacity w-5 h-5 rounded-full shadow-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
             }}>
+              <Add width="19" />
+            </div>
+            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={i}
+              onMouseDown$={() => {
+                const abortController = new AbortController();
+                const colormap = document.getElementById('colormap')!;
+                const rect = colormap.getBoundingClientRect();
+                document.addEventListener('mousemove', e => {
+                  const newColors = [...store.colors];
+                  newColors[i].pos = (e.clientX - rect.left) / rect.width * 100;
+                  if (newColors[i].pos < 0) newColors[i].pos = 0;
+                  if (newColors[i].pos > 100) newColors[i].pos = 100;
+                  store.colors = newColors;
+                }, { signal: abortController.signal });
+                document.addEventListener('mouseup', () => {
+                  abortController.abort();
+                }, { signal: abortController.signal });
+              }} style={{
+                left: `${color.pos}%`,
+              }}
+            >
               <button key={`color${i + 1}`} id={`color${i + 1}`}
                 class={{
                   'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
@@ -183,10 +192,10 @@ export default component$(() => {
                   'border-black': getBrightness(convertToRGB(color.hex)) > 126,
                 }}
                 style={`background: ${color.hex};`}
-                onFocus$={() => {
+                onClick$={() => {
                   const abortController = new AbortController();
                   document.addEventListener('click', (e) => {
-                    if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-picker`)) {
+                    if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
                       if (store.opened == i) store.opened = -1;
                       abortController.abort();
                     }
@@ -194,50 +203,58 @@ export default component$(() => {
                   store.opened = i;
                 }}
               />
-              <div onMouseDown$={(e) => e.stopPropagation()}>
-                <ColorPicker
-                  id={`color${i + 1}`}
-                  value={color.hex}
-                  class={{
-                    'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
-                    'opacity-0 scale-95 pointer-events-none': store.opened != i,
-                    'left-0': i < store.colors.length / 2,
-                    'right-0': i >= store.colors.length / 2,
-                  }}
-                  onInput$={newColor => {
-                    const newColors = [...store.colors];
-                    newColors[i].hex = newColor;
-                    store.colors = newColors;
-                  }}
-                  horizontal
-                />
-                {store.colors.length > 2 &&
-                  <Button
-                    class={{
-                      'motion-safe:transition-all absolute top-full mt-2 gap-1 z-[1000]': true,
-                      'opacity-0 scale-95 pointer-events-none': store.opened != i,
-                      'left-0': i < store.colors.length / 2,
-                      'right-0': i >= store.colors.length / 2,
-                    }}
-                    square size='sm' color="red" onClick$={() => {
-                      const newColors = [...store.colors];
-                      newColors.splice(i, 1);
-                      store.colors = newColors;
+              <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>
+                <div class={{
+                  'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
+                  'opacity-0 scale-95 pointer-events-none': store.opened != i,
+                  'left-0 items-start': color.pos < 50,
+                  'right-0 items-end': color.pos >= 50,
+                }}>
+                  <div class="flex gap-2">
+                    {store.colors.length > 2 &&
+                      <Button class={{ 'backdrop-blur-md': true }} square size='sm' color="red" onClick$={() => {
+                        const newColors = [...store.colors];
+                        newColors.splice(i, 1);
+                        store.colors = newColors;
+                      }}>
+                        <TrashOutline width="20" />
+                      </Button>
                     }
-                    }>
-                    <TrashOutline width="20" />
-                  </Button>
-                }
+                    <div class="flex w-48">
+                      <NumberInputRaw class={{ 'w-full': true }} input id={`color${i + 1}-pos`} value={Number(color.pos.toFixed(2))} min={0} max={100}
+                        onInput$={(e, el) => {
+                          const newColors = [...store.colors];
+                          newColors[i].pos = Number(el.value);
+                          store.colors = newColors;
+                        }}
+                        onDecrement$={() => {
+                          const newColors = [...store.colors];
+                          newColors[i].pos -= 1;
+                          store.colors = newColors;
+                        }}
+                        onIncrement$={() => {
+                          const newColors = [...store.colors];
+                          newColors[i].pos += 1;
+                          store.colors = newColors;
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <ColorPicker
+                    id={`color${i + 1}`}
+                    value={color.hex}
+                    onInput$={newColor => {
+                      const newColors = [...store.colors];
+                      newColors[i].hex = newColor;
+                      store.colors = newColors;
+                    }}
+                    horizontal
+                  />
+                </div>
               </div>
             </div>,
             )}
           </div>
-          <Button square disabled={store.colors.length > store.text.length} transparent aria-label="Add Color" onClick$={() => {
-            const newColors = [...store.colors, { hex: getRandomColor(), pos: Math.floor(Math.random() * 100) }];
-            store.colors = newColors;
-          }}>
-            <Add width="24" class="fill-white" />
-          </Button>
         </div>
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -275,9 +292,16 @@ export default component$(() => {
                 }}>
                 {t('animtab.speed@@Speed')}
               </NumberInput>
-              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
-                Prefix/Suffix
-              </TextInput>
+              <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
+                onIncrement$={() => {
+                  store.length++;
+                }}
+                onDecrement$={() => {
+                  if (store.length > 1) store.length--;
+                }}
+              >
+                {t('animtab.length@@Gradient Length')}
+              </NumberInput>
             </div>
 
             <div class="grid md:grid-cols-3 gap-2">
@@ -375,8 +399,8 @@ export default component$(() => {
               ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
                 {t('color.colorPreset@@Color Preset')}
               </Dropdown>
-              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
-                  Prefix/Suffix
+              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
+                Prefix/Suffix
               </TextInput>
             </div>
             <Toggle id="trimspaces" checked={store.trimspaces}

@@ -82,8 +82,8 @@ export default component$(() => {
           {(() => {
             const text = store.text ? store.text : 'birdflop';
 
-            let colors = store.colors.map((color) => convertToRGB(color.hex));
-            if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
+            const colors = store.colors.map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            if (colors.length < 2) return text;
 
             const gradient = new Gradient(colors, text.length);
 

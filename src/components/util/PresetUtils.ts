@@ -98,10 +98,10 @@ export const v3formats = [
   },
   {
     color: 'MiniMessage',
-    bold: '<bold>$t</bold>',
-    italic: '<italic>$t</italic>',
-    underline: '<underline>$t</underline>',
-    strikethrough: '<strikethrough>$t</strikethrough>',
+    bold: '<b>$t</b>',
+    italic: '<i>$t</i>',
+    underline: '<u>$t</u>',
+    strikethrough: '<s>$t</s>',
   },
 ];
 
