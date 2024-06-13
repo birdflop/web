@@ -47,9 +47,15 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       },
     },
   };
+
   throw json(200, {
-    WARNING: 'This endpoint is deprecated. Please use /api/v2/rgb instead.',
-    output: generateOutput(text, colors?.split(','), { color: format, char: formatchar }, `${prefix}$t`, true, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
+    WARNING: 'This endpoint is deprecated. Please use /api/v3/rgb instead.',
+    output: generateOutput(text, colors?.split(',').map((color: string, index: number) => {
+      return {
+        hex: color,
+        pos: index / colors.length,
+      };
+    }), { color: format, char: formatchar }, `${prefix}$t`, true, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
     ...options,
   });
 };

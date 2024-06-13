@@ -9,15 +9,7 @@ export const onGet: RequestHandler = async ({ json, query }) => {
 
     const keys = Object.keys(queryjson);
     for (const key of keys) {
-      if (key == 'colors') {
-        queryjson.colors = queryjson.colors.split(',');
-        queryjson.colors = queryjson.colors.map((color: string, index: number) => {
-          return {
-            hex: color,
-            pos: index / queryjson.colors.length,
-          };
-        });
-      }
+      if (key == 'colors') queryjson.colors = queryjson.colors.split(',');
       else if (queryjson[key] == 'true') queryjson[key] = true;
       else if (queryjson[key] == 'false') queryjson[key] = false;
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
@@ -34,13 +26,7 @@ export const onGet: RequestHandler = async ({ json, query }) => {
 
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
   try {
-    const body = await parseBody() as any;
-    if (body?.colors) body.colors = body.colors.map((color: string, index: number) => {
-      return {
-        hex: color,
-        pos: index / body.colors.length,
-      };
-    });
+    const body = await parseBody();
     const output = await getOutput(body);
 
     throw json(200, output);
@@ -64,12 +50,12 @@ async function getOutput(body: any) {
         default: rgbDefaults.text,
       },
       colors: {
-        type: 'array of hex colors',
-        description: 'The colors to use for the gradient. Must be in hex format.',
+        type: 'array of Color object - see data models in docs',
+        description: 'The colors to use for the gradient.',
         default: rgbDefaults.colors,
       },
       format: {
-        type: 'format object - see data models in docs',
+        type: 'Format object - see data models in docs',
         description: 'The format to use for the color and format codes. For MiniMessage, { color: "MiniMessage" } can be used.',
         default: rgbDefaults.format,
       },
@@ -121,7 +107,6 @@ async function getOutput(body: any) {
   const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
   const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough);
   return {
-    WARNING: 'This endpoint is deprecated. Please use /api/v3/rgb instead.',
     output,
     ...options,
   };
