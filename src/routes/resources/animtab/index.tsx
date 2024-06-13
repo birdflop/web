@@ -135,13 +135,14 @@ export default component$(() => {
         <div class="flex gap-2 my-4 items-center">
           <div class="w-full h-3 rounded-full items-center relative" id="colormap"
             style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-            onClick$={(e, el) => {
+            onMouseDown$={(e, el) => {
               if (e.target != el) return;
               const rect = el.getBoundingClientRect();
-              const pos = (e.clientX - rect.left) / rect.width * 100;
+              const pos = Math.round((e.clientX - rect.left) / rect.width * store.text.length) / store.text.length * 100;
+              if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
               newColors.push({ hex: getRandomColor(), pos });
-              store.colors = newColors;
+              store.colors = sortColors(newColors);
             }}
             onMouseEnter$={(e, el) => {
               const abortController = new AbortController();
@@ -151,8 +152,10 @@ export default component$(() => {
                   addbutton.classList.add('opacity-0');
                   return;
                 }
+                const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * store.text.length) / store.text.length * 100;
+                if (store.colors.find(c => c.pos == pos)) return;
                 addbutton.classList.remove('opacity-0');
-                addbutton.style.left = `${(e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * 100}%`;
+                addbutton.style.left = `${pos}%`;
               }, { signal: abortController.signal });
               el.addEventListener('mouseleave', () => {
                 const addbutton = document.getElementById('add-button')!;
@@ -172,11 +175,11 @@ export default component$(() => {
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
-                  const newColors = [...store.colors];
-                  newColors[i].pos = (e.clientX - rect.left) / rect.width * 100;
-                  if (newColors[i].pos < 0) newColors[i].pos = 0;
-                  if (newColors[i].pos > 100) newColors[i].pos = 100;
-                  store.colors = newColors;
+                  let pos = Math.round((((e.clientX - rect.left) / rect.width) * store.text.length)) / store.text.length * 100;
+                  if (pos < 0) pos = 0;
+                  if (pos > 100) pos = 100;
+                  if (store.colors.find(c => c.pos == pos)) return;
+                  color.pos = pos;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
                   abortController.abort();

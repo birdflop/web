@@ -67,7 +67,7 @@ export default component$(() => {
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
 
-        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, sortColors(store.colors), store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -82,7 +82,7 @@ export default component$(() => {
           {(() => {
             const text = store.text ? store.text : 'birdflop';
 
-            const colors = store.colors.map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
             if (colors.length < 2) return text;
 
             const gradient = new Gradient(colors, text.length);
@@ -107,10 +107,11 @@ export default component$(() => {
         <div class="flex gap-2 my-4 items-center">
           <div class="w-full h-3 rounded-full items-center relative" id="colormap"
             style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-            onClick$={(e, el) => {
+            onMouseDown$={(e, el) => {
               if (e.target != el) return;
               const rect = el.getBoundingClientRect();
-              const pos = (e.clientX - rect.left) / rect.width * 100;
+              const pos = Math.round((e.clientX - rect.left) / rect.width * store.text.length) / store.text.length * 100;
+              if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
               newColors.push({ hex: getRandomColor(), pos });
               store.colors = newColors;
@@ -123,8 +124,10 @@ export default component$(() => {
                   addbutton.classList.add('opacity-0');
                   return;
                 }
+                const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * store.text.length) / store.text.length * 100;
+                if (store.colors.find(c => c.pos == pos)) return;
                 addbutton.classList.remove('opacity-0');
-                addbutton.style.left = `${(e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * 100}%`;
+                addbutton.style.left = `${pos}%`;
               }, { signal: abortController.signal });
               el.addEventListener('mouseleave', () => {
                 const addbutton = document.getElementById('add-button')!;
@@ -144,9 +147,11 @@ export default component$(() => {
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
-                  color.pos = (e.clientX - rect.left) / rect.width * 100;
-                  if (color.pos < 0) color.pos = 0;
-                  if (color.pos > 100) color.pos = 100;
+                  let pos = Math.round((((e.clientX - rect.left) / rect.width) * store.text.length)) / store.text.length * 100;
+                  if (pos < 0) pos = 0;
+                  if (pos > 100) pos = 100;
+                  if (store.colors.find(c => c.pos == pos)) return;
+                  color.pos = pos;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
                   abortController.abort();

@@ -53,10 +53,8 @@ export class Gradient {
       color = this.gradients[0].colorAt(adjustedStep);
     }
     else {
-      const segment = this.gradients[this.gradient].upperRange - this.gradients[this.gradient].lowerRange;
-      const index = Math.min(Math.floor(adjustedStep / segment), this.gradients.length - 1);
-      const gradient = this.gradients[index];
-      color = gradient.colorAt(adjustedStep);
+      const gradient = this.gradients[this.gradient];
+      color = gradient?.colorAt(adjustedStep);
       if (adjustedStep >= gradient.upperRange) {
         this.gradient++;
         if (this.gradient > this.gradients.length) this.gradient = 0;
