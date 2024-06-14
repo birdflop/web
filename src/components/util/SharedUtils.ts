@@ -3,7 +3,9 @@ import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
 import { defaults, loadPreset } from './PresetUtils';
 
-export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchParams) {
+type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
+
+export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchParams) {
   let json = JSON.parse(cookie.get(preset)?.value || '{}');
 
   // migrate
@@ -38,7 +40,7 @@ export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchP
   return json;
 }
 
-export function setCookies(name: 'rgb' | 'animtab' | 'parsed', json: { [key: string]: any; }) {
+export function setCookies(name: names, json: { [key: string]: any; }) {
   console.debug('cookie', name, JSON.stringify(json));
 
   const cookie: { [key: string]: string; } = {};

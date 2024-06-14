@@ -292,18 +292,18 @@ export const flags: Flags = {
 };
 
 export const extraFlags: ExtraFlags = {
-  'vectors': {
-    'supports': ['aikars'],
-    'generate': ({ existingFlags }) => {
+  vectors: {
+    supports: ['aikars'],
+    generate: ({ existingFlags }) => {
       return [
         ...existingFlags,
         '--add-modules=jdk.incubator.vector',
       ];
     },
   },
-  'benchmarkedGraalVM': {
-    'supports': ['benchmarkedG1GC'],
-    'generate': ({ existingFlags }) => {
+  benchmarkedGraalVM: {
+    supports: ['benchmarkedG1GC'],
+    generate: ({ existingFlags }) => {
       return [
         ...existingFlags,
         '-XX:+UnlockExperimentalVMOptions',

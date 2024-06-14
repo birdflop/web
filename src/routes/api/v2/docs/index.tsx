@@ -42,7 +42,7 @@ export default component$(() => {
             <h3 class="flex gap-4 items-center text-gray-100 text-lg sm:text-2xl font-bold mb-2 drop-shadow-lg">
               {path}
             </h3>
-            {Object.entries(endpoints[path].methods).map(([method, description]: any) =>
+            {(Object.entries(endpoints[path].methods) as [string, string][]).map(([method, description]) =>
               <p key={method} class="flex gap-4 items-center text-gray-400 sm:text-lg drop-shadow-lg">
                 {method}: {description}
               </p>,

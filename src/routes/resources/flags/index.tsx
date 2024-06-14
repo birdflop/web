@@ -28,7 +28,7 @@ const defaults = {
   gui: false,
   variables: false,
   autoRestart: false,
-  extraFlags: [] as Array<keyof typeof extFlags>,
+  extraFlags: [] as string[],
   fileName: 'server.jar',
   flags: 'aikars' as keyof typeof flagTypes,
   withResult: true,
@@ -158,24 +158,24 @@ export default component$(() => {
 
         <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6 fill-current">
           <div class="flex flex-col gap-4">
-            <TextInput id="input" value={store.fileName} placeholder="server.jar" onChange$={(event: any) => {
-              if (event.target!.value.replace(/ /g, '') == '') return;
-              if (!event.target!.value.endsWith('.jar')) { event.target!.value += '.jar'; }
-              store.fileName = event.target!.value;
+            <TextInput id="input" value={store.fileName} placeholder="server.jar" onChange$={(e, el) => {
+              if (el.value.replace(/ /g, '') == '') return;
+              if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
+              store.fileName = el.value;
             }}>
               <span class="font-bold">{t('flags.fileName.label@@File Name')}</span><br/>
               {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
             </TextInput>
             <div class="flex gap-2">
-              <Dropdown id="os" class={{ 'w-full': true }} onChange$={(event: any) => {
-                store.operatingSystem = event.target!.value;
+              <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
+                store.operatingSystem = el.value;
               }} values={environmentOptions} value={store.operatingSystem}>
                 <span class="font-bold">{t('flags.environment.label@@Environment')}</span><br/>
                 {t('flags.enviroments.description@@The operating system that the server runs on.')}
               </Dropdown>
-              <Dropdown id="software" class={{ 'w-full': true }} onChange$={(event: any) => {
-                store.serverType = event.target!.value;
-                if (!srvType[store.serverType].flags.includes(event.target!.value)) {
+              <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
+                store.serverType = el.value;
+                if (!srvType[store.serverType].flags.includes(el.value)) {
                   store.flags = srvType[store.serverType].flags[1] as keyof typeof flagTypes;
                 }
               }} values={softwareOptions} value={store.flags}>
@@ -201,16 +201,16 @@ export default component$(() => {
                     {store.memory} GB
                   </div>
                 </div>
-                <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={store.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(event: any) => {
-                  store.memory = event.target!.value;
+                <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={store.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(e, el) => {
+                  store.memory = Number(el.value);
                 }} />
               </div>
             </div>
           </div>
           <div class="flex flex-col gap-4">
             <div class="flex items-end gap-2">
-              <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(event: any) => {
-                store.flags = event.target!.value;
+              <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
+                store.flags = el.value as keyof typeof flagTypes;
               }} values={Object.keys(flagTypes).map(flag => ({
                 name: flagTypes[flag as keyof typeof flagTypes],
                 value: flag,
@@ -218,8 +218,8 @@ export default component$(() => {
                 <span class="font-bold">{t('flags.flags.label@@Flags')}</span><br/>
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
               </Dropdown>
-              <DropdownRaw id="flagshelp" onChange$={(event: any) => {
-                store.flags = event.target!.value;
+              <DropdownRaw id="flagshelp" onChange$={(e, el) => {
+                store.flags = el.value as keyof typeof flagTypes;
               }} display={<><HelpOutline width={24}/></>}>
                 <ButtonAnchor q:slot='extra-buttons' transparent href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                   Aikar's Flags
@@ -243,16 +243,16 @@ export default component$(() => {
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(store.operatingSystem) && !option.disable?.includes(store.serverType);
               }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={store[id]} onClick$={(event: any) => {
-                  store[id] = event.target!.checked;
+                <Toggle key={id} label={option.label} checked={store[id]} onClick$={(e, el) => {
+                  store[id] = el.checked;
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
               </>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(store.flags) && srvType[store.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={store.extraFlags.includes(id)} onClick$={(event: any) => {
-                  if (event.target!.checked) {
+                <Toggle key={id} label={option.label} checked={store.extraFlags.includes(id)} onClick$={(e, el) => {
+                  if (el.checked) {
                     store.extraFlags.push(id);
                   } else {
                     store.extraFlags.splice(store.extraFlags.indexOf(id), 1);
@@ -265,7 +265,7 @@ export default component$(() => {
         </div>
 
         {/* charlimit={256} */}
-        <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={((p: any) => generateResult(p).script)(store)}>
+        <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={generateResult(store).script}>
           <Header subheader={t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: store.fileName })}>
             {t('flags.script.label@@Script')}
           </Header>
