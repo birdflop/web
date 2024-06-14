@@ -86,8 +86,8 @@ export default async function analyzeTimings(id: string) {
   const flags = request.timingsMaster.system.flags;
   const jvm_version = request.timingsMaster.system.jvmversion;
   if (flags.includes('-XX:+UseZGC') && flags.includes('-Xmx')) {
-    const flaglist: string[] = flags.split(' ');
-    flaglist.forEach((flag) => {
+    const flaglist = flags.split(' ');
+    flaglist.forEach((flag: string) => {
       if (flag.startsWith('-Xmx')) {
         let max_mem = flag.split('-Xmx')[1].toLowerCase();
         max_mem = max_mem.replace('g', '000');
@@ -102,8 +102,8 @@ export default async function analyzeTimings(id: string) {
     if (!flags.includes('-XX:+UseG1GC') && jvm_version.startsWith('1.8.')) fields.push({ name: '❌ Aikar\'s Flags', value: 'You must use G1GC when using Aikar\'s flags.' });
     if (flags.includes('-Xmx')) {
       let max_mem = 0;
-      const flaglist: string[] = flags.split(' ');
-      flaglist.forEach((flag) => {
+      const flaglist = flags.split(' ');
+      flaglist.forEach((flag: string) => {
         if (flag.startsWith('-Xmx')) {
           flag = flag.split('-Xmx')[1].toLowerCase();
           flag = flag.replace('g', '000');
@@ -124,7 +124,7 @@ export default async function analyzeTimings(id: string) {
       if (1000 * max_online_players / max_mem > 6 && max_mem < 10000) fields.push({ name: '❌ Low Memory', value: 'You should be using more RAM with this many players.' });
       if (flags.includes('-Xms')) {
         let min_mem = 0;
-        flaglist.forEach((flag) => {
+        flaglist.forEach((flag: string) => {
           if (flag.startsWith('-Xms')) {
             flag = flag.split('-Xms')[1].toLowerCase();
             flag = flag.replace('g', '000');

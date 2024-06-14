@@ -1,44 +1,20 @@
-import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { isBrowser } from '@builder.io/qwik/build';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import type { DocumentHead } from '@builder.io/qwik-city';
 import { TextArea } from '@luminescent/ui';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import {
+  inlineTranslate,
+  useSpeak,
+} from 'qwik-speak';
 import yaml from 'yaml';
-
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animpreview', url.searchParams);
-});
-
-const minecraftColors = {
-  '&0': '#000000',
-  '&1': '#0000AA',
-  '&2': '#00AA00',
-  '&3': '#00AAAA',
-  '&4': '#AA0000',
-  '&5': '#AA00AA',
-  '&6': '#FFAA00',
-  '&7': '#AAAAAA',
-  '&8': '#555555',
-  '&9': '#5555FF',
-  '&a': '#55FF55',
-  '&b': '#55FFFF',
-  '&c': '#FF5555',
-  '&d': '#FF55FF',
-  '&e': '#FFFF55',
-  '&f': '#FFFFFF',
-};
 
 export default component$(() => {
   useSpeak({ assets: ['animpreview'] });
   const t = inlineTranslate();
 
-  const cookies = useCookies().value;
-
-  const store = useStore({
+  const store: any = useStore({
     text: 'birdflop',
     speed: 50,
-    frames: [] as string[],
+    frames: [],
     frame: 1,
     yaml: `logo:
     change-interval: 50
@@ -57,34 +33,27 @@ export default component$(() => {
     - "&#43B6E9&lS&#6592ED&li&#866DF2&lm&#A849F6&lp&#C924FB&ll&#EB00FF&ly&#C924FB&lM&#A849F6&lC"
     - "&#22DBE4&lS&#43B6E9&li&#6592ED&lm&#866DF2&lp&#A849F6&ll&#C924FB&ly&#EB00FF&lM&#C924FB&lC"
     - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`,
-    ...cookies,
   }, { deep: true });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    let lastTime = performance.now();
-    function setFrame(currentTime: number) {
-      const deltaTime = (currentTime - lastTime);
-      if (store.frames[0] && deltaTime > store.speed) {
-        store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
-        lastTime = currentTime;
+  useTask$(() => {
+    let speed = store.speed;
+
+    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+
+    function setFrame() {
+      if (!store.frames[0]) return;
+      if (speed != store.speed) {
+        clearInterval(frameInterval);
+        speed = store.speed;
+        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
       }
-      requestAnimationFrame(setFrame);
+      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
     }
-    setFrame(performance.now());
   });
 
   useTask$(({ track }) => {
     track(() => store.yaml);
-    isBrowser && setCookies('animpreview', { yaml: store.yaml });
-    let json;
-    try {
-      json = yaml.parse(store.yaml);
-    }
-    catch (e) {
-      console.error(e);
-    }
-    if (!json) return;
+    let json = yaml.parse(store.yaml);
     json = json[Object.keys(json)[0]];
     store.speed = json['change-interval'] ?? 50;
     store.frames = json['texts'] ?? [];
@@ -100,43 +69,34 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <p class="bg-gray-800 border border-gray-700 p-4 rounded-lg text-gray-50 font-mono">
-          {store.frames[store.frame]}
-        </p>
+        <TextArea id="Animaton" class={{ 'h-96': true }} value={store.yaml} onInput$={(event: any) => { store.yaml = event.target!.value; }}>
+          {t('animpreview.yamlInput@@YAML Input')}
+        </TextArea>
 
-        <h1 class={'font-mc text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
+        <h1 class={'text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {
             if (!store.frames[store.frame]) return '';
-            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
+            const pattern = /&(#[0-9A-Fa-f]{6})?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])?(&[0-9A-Fa-fk-or])([^&]*)/;
             const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
-            let color = '#ffffff';
-            return spans?.map((string: string, i: number) => {
-              const result = string.match(pattern);
-              if (!result) return '';
-              console.log(result);
-              color = result[2] ? `#${result[2]}` : color;
-              Object.keys(minecraftColors).forEach(key => {
-                if (result[3]?.includes(key)) color = minecraftColors[key as keyof typeof minecraftColors];
-              });
+            return spans.map((string: string, i: number) => {
+              let result: any = string.match(pattern);
+              result = result.filter((obj: string) => { return obj; });
               return (
-                <span key={`char${i}`} style={{ color: color }} class={{
-                  'underline': result[3]?.includes('&n'),
-                  'strikethrough': result[3]?.includes('&m'),
-                  'underline-strikethrough': result[3]?.includes('&n') && result[3]?.includes('&m'),
-                  'font-mc-bold': result[3]?.includes('&l'),
-                  'font-mc-italic': result[3]?.includes('&o'),
-                  'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
+                <span key={`char${i}`} style={{ color: result[1] }} class={{
+                  'underline': result.includes('&n'),
+                  'strikethrough': result.includes('&m'),
+                  'underline-strikethrough': result.includes('&n') && result.includes('&m'),
+                  'font-mc-bold': result.includes('&l'),
+                  'font-mc-italic': result.includes('&o'),
+                  'font-mc-bold-italic': result.includes('&l') && result.includes('&o'),
                 }}>
-                  {result[result.length - 1].replace(/ /g, '\u00A0')}
+                  {result[result.length - 1]}
                 </span>
               );
             });
           })()}
         </h1>
 
-        <TextArea id="Animaton" class={{ 'h-96 font-mono': true }} value={store.yaml} onInput$={(e, el) => { store.yaml = el.value; }}>
-          {t('animpreview.yamlInput@@YAML Input')}
-        </TextArea>
       </div>
     </section>
   );

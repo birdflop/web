@@ -21,24 +21,26 @@ export default component$(() => {
 
         <Slot />
 
-        <TextInput id="link" onInput$={(e, el) => {
-          const link = el.value;
-          store.redirect = '';
-          if (link.startsWith('https://timin') || link.startsWith('https://www.spigotmc.org/go/timings?url=')) {
-            store.error = '⚠️ This is a Timings Report. Use the Timings Report Analysis for this type of report.';
+        <TextInput id="link" onInput$={
+          (event: any) => {
+            const link = event.target!.value;
+            store.redirect = '';
+            if (link.startsWith('https://timin') || link.startsWith('https://www.spigotmc.org/go/timings?url=')) {
+              store.error = '⚠️ This is a Timings Report. Use the Timings Report Analysis for this type of report.';
+            }
+            else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
+              store.error = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
+            }
+            else if (!link.startsWith('https://spark.lucko.me/')) {
+              store.error = '❌ This is an Invalid Spark Profile Link.';
+            }
+            else {
+              store.error = '';
+              const code = link.replace('https://spark.lucko.me/', '');
+              store.redirect = `/resources/sparkprofile/${code}`;
+            }
           }
-          else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
-            store.error = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
-          }
-          else if (!link.startsWith('https://spark.lucko.me/')) {
-            store.error = '❌ This is an Invalid Spark Profile Link.';
-          }
-          else {
-            store.error = '';
-            const code = link.replace('https://spark.lucko.me/', '');
-            store.redirect = `/resources/sparkprofile/${code}`;
-          }
-        }}>
+        }>
           Paste the spark profile link here
         </TextInput>
         <p class={{

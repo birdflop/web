@@ -26,6 +26,9 @@ export default component$(() => {
         <h1 class="flex gap-4 items-center text-gray-100 text-2xl sm:text-4xl font-bold my-12 drop-shadow-lg">
           <DocumentOutline width="64" /> RGBirdflop API Docs
         </h1>
+        <p class="text-red-500 mb-6">
+          The /api/gradient endpoint is deprecated and will be removed in the future in favor of this new API. Please update your code to use the new API.
+        </p>
         <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mb-3 drop-shadow-lg">
           Get Started
         </h2>
@@ -42,7 +45,7 @@ export default component$(() => {
             <h3 class="flex gap-4 items-center text-gray-100 text-lg sm:text-2xl font-bold mb-2 drop-shadow-lg">
               {path}
             </h3>
-            {(Object.entries(endpoints[path].methods) as [string, string][]).map(([method, description]) =>
+            {Object.entries(endpoints[path].methods).map(([method, description]: any) =>
               <p key={method} class="flex gap-4 items-center text-gray-400 sm:text-lg drop-shadow-lg">
                 {method}: {description}
               </p>,
@@ -67,7 +70,7 @@ export default component$(() => {
         </h2>
         <Card>
           <Header id="formatobject" anchor>
-            Format
+            Format Object
           </Header>
           <div>
             <p class="font-bold text-white">color</p>
@@ -105,25 +108,6 @@ export default component$(() => {
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text strikethrough. $t is where the output text will go. If $t is not included, the output will not show.</p>
             <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
-          </div>
-        </Card>
-        <Card>
-          <Header id="color" anchor>
-            Color
-          </Header>
-          <div>
-            <p class="font-bold text-white">hex</p>
-            <p class="text-red-500">required</p>
-            <p>type: string</p>
-            <p class="text-gray-400">The color in hex format.</p>
-            <p class="text-gray-500">example: "#00ffe0"</p>
-          </div>
-          <div>
-            <p class="font-bold text-white">pos</p>
-            <p class="text-red-500">required</p>
-            <p>type: number</p>
-            <p class="text-gray-400">The position of the color in the gradient as a percentage</p>
-            <p class="text-gray-500">example: 50</p>
           </div>
         </Card>
       </div>

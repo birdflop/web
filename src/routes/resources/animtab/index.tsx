@@ -1,109 +1,114 @@
-import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, loadPreset, presets, types, v3formats } from '~/components/util/PresetUtils';
-import { AnimationOutput, convertToRGB, getAnimFrames, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
+import { AnimationOutput, getAnimFrames, getRandomColor } from '~/components/util/RGBUtils';
 
-import { Add, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
+import { ChevronDown, ChevronUp, ColorFillOutline, SettingsOutline, Text } from 'qwik-ionicons';
 
-import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker } from '@luminescent/ui';
+import { Button, ColorInput, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
+import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { rgbDefaults } from '../rgb';
 
-export const animTABDefaults = {
+const animTABDefaults = {
+  version: defaults.version,
+  colors: defaults.colors,
   name: defaults.name,
+  text: defaults.text,
   type: defaults.type,
   speed: defaults.speed,
   length: defaults.length,
+  prefixsuffix: defaults.prefixsuffix,
+  trimspaces: defaults.trimspaces,
+  bold: defaults.bold,
+  italic: defaults.italic,
+  underline: defaults.underline,
+  strikethrough: defaults.strikethrough,
+};
+
+const unsupportedDefaults = {
+  format: defaults.format,
+  customFormat: defaults.customFormat,
   outputFormat: defaults.outputFormat,
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  const animtabCookies = await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
-  const rgbCookies = await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
-  if (!rgbCookies.customFormat) {
-    delete rgbCookies.format;
-    delete animtabCookies.outputFormat;
-  }
-  return {
-    animtab: animtabCookies,
-    rgb: rgbCookies,
-  };
+  return await getCookies(cookie, Object.keys(animTABDefaults), url.searchParams) as typeof animTABDefaults;
 });
 
 export default component$(() => {
-  useSpeak({ assets: ['animtab', 'color'] });
+  useSpeak({ assets: ['animpreview', 'color'] });
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
   const store = useStore({
-    ...rgbDefaults,
-    ...cookies.rgb,
-  }, { deep: true });
-
-  const animtabstore = useStore({
     ...animTABDefaults,
-    ...cookies.animtab,
-  }, { deep: true });
-
-  const tempstore: {
-    opened: number,
-    alerts: {
+    ...unsupportedDefaults,
+    ...cookies,
+    alerts: [] as {
       class: string,
       text: string,
     }[],
-    frames: (string | null)[][],
-    frame: number,
-  } = useStore({
-    opened: -1,
-    alerts: [],
-    frames: [],
+    frames: [] as (string | null)[][],
     frame: 0,
   }, { deep: true });
 
+  const handleSwap = $((currentIndex: number, newIndex: number) => {
+    // check if the index is out of bounds
+    const colorsLength = store.colors.length;
+    if (newIndex < 0) {
+      newIndex = colorsLength - 1;
+    } else if (newIndex >= colorsLength) {
+      newIndex = 0;
+    }
+
+    const newColors = [...store.colors];
+    const currentColor = `${newColors[currentIndex]}`;
+    newColors[currentIndex] = newColors[newIndex];
+    newColors[newIndex] = currentColor;
+    store.colors = newColors;
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    let lastTime = performance.now();
-    function setFrame(currentTime: number) {
-      const deltaTime = (currentTime - lastTime);
-      if (tempstore.frames[0] && deltaTime > animtabstore.speed) {
-        tempstore.frame = tempstore.frame + 1 >= tempstore.frames.length ? 0 : tempstore.frame + 1;
-        lastTime = currentTime;
+    let speed = store.speed;
+
+    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+
+    function setFrame() {
+      if (!store.frames[0]) return;
+      if (speed != store.speed) {
+        clearInterval(frameInterval);
+        speed = store.speed;
+        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
       }
-      requestAnimationFrame(setFrame);
+      store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
     }
-    setFrame(performance.now());
   });
 
   useTask$(({ track }) => {
-    if (isBrowser) {
-      setCookies('rgb', store);
-      setCookies('animtab', { version: store.version, ...animtabstore });
-    }
-    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
-      track(() => store[key]);
+    isBrowser && setCookies(store);
+    Object.keys(store).forEach((key: any) => {
+      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
+      else track(() => store[key as keyof typeof store]);
     });
-    (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach((key) => {
-      track(() => animtabstore[key]);
-    });
-    const { frames } = getAnimFrames({ ...store, ...animtabstore, text: store.text != '' ? store.text : 'birdflop' });
-    if (animtabstore.type == 1) {
-      tempstore.frames = frames.reverse();
+    const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
+    if (store.type == 1) {
+      store.frames = frames.reverse();
     }
-    else if (animtabstore.type == 3) {
+    else if (store.type == 3) {
       const frames2 = frames.slice();
-      tempstore.frames = frames.reverse().concat(frames2);
+      store.frames = frames.reverse().concat(frames2);
     }
     else {
-      tempstore.frames = frames;
+      store.frames = frames;
     }
   });
 
   return (
-    <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
-      <div class="my-10 w-full">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
+      <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('animtab.title@@Animated TAB')}
         </h1>
@@ -111,7 +116,7 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <TextArea class={{ 'font-mono text-sm text-nowrap': true }} output id="output" value={AnimationOutput({ ...store, ...animtabstore })}>
+        <TextArea output id="anim-tab-output" value={AnimationOutput(store)}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -126,8 +131,8 @@ export default component$(() => {
           {(() => {
             const text = store.text != '' ? store.text : 'birdflop';
 
-            if (!tempstore.frames[0]) return;
-            const colors = tempstore.frames[tempstore.frame];
+            if (!store.frames[0]) return;
+            const colors = store.frames[store.frame];
             if (!colors) return;
 
             return text.split('').map((char: string, i: number) => (
@@ -142,349 +147,213 @@ export default component$(() => {
           })()}
         </h1>
 
-        <div class="flex gap-2 my-4 items-center">
-          <div class="w-full h-3 rounded-full items-center relative left-0" id="colormap"
-            style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-            onMouseDown$={(e, el) => {
-              if (e.target != el) return;
-              const rect = el.getBoundingClientRect();
-              const length = store.text.length * animtabstore.length;
-              const pos = Math.round((e.clientX - rect.left) / rect.width * length) / length * 100;
-              if (store.colors.find(c => c.pos == pos)) return;
-              const newColors = [...store.colors];
-              newColors.push({ hex: getRandomColor(), pos });
-              store.colors = sortColors(newColors);
-            }}
-            onMouseEnter$={(e, el) => {
-              const abortController = new AbortController();
-              el.addEventListener('mousemove', e => {
-                const addbutton = document.getElementById('add-button')!;
-                if (e.target != el) {
-                  addbutton.classList.add('opacity-0');
-                  return;
-                }
-                const length = store.text.length * animtabstore.length;
-                const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * length) / length * 100;
-                if (store.colors.find(c => c.pos == pos)) return;
-                addbutton.classList.remove('opacity-0');
-                addbutton.style.left = `${pos}%`;
-              }, { signal: abortController.signal });
-              el.addEventListener('mouseleave', () => {
-                const addbutton = document.getElementById('add-button')!;
-                addbutton.classList.add('opacity-0');
-                abortController.abort();
-              }, { signal: abortController.signal });
-            }}
-          >
-            <div id="add-button" class={{
-              'absolute -mt-1 -ml-3 transition-all w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
+        <div id="mobile-navbuttons" class="my-4 sm:hidden">
+          <div class="flex gap-2">
+            <Button square aria-label="Colors" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('hidden', 'flex');
+              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
-              <Add width="19" />
-            </div>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3 transition-all" key={color.hex}
-              onMouseDown$={(e, el) => {
-                const abortController = new AbortController();
-                const colormap = document.getElementById('colormap')!;
-                const rect = colormap.getBoundingClientRect();
-                document.addEventListener('mousemove', e => {
-                  el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
-                  el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
-                  const length = store.text.length * animtabstore.length;
-                  let pos = Math.round((((e.clientX - rect.left) / rect.width) * length)) / length * 100;
-                  if (pos < 0) pos = 0;
-                  if (pos > 100) pos = 100;
-                  if (store.colors.find(c => c.pos == pos)) return;
-                  const newColors = [...store.colors];
-                  newColors[i].pos = pos;
-                  store.colors = newColors;
-                }, { signal: abortController.signal });
-                document.addEventListener('mouseup', () => {
-                  el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
-                  el.style.filter = '';
-                  abortController.abort();
-                }, { signal: abortController.signal });
-              }} style={{
-                left: `${color.pos}%`,
-              }}
-            >
-              <button key={`color${i + 1}`} id={`color${i + 1}`}
-                class={{
-                  'transition-transform w-5 h-5 hover:scale-125 rounded-md shadow-md border': true,
-                  'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                  'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                }}
-                style={`background: ${color.hex};`}
-                onClick$={() => {
-                  if (tempstore.opened == i) return tempstore.opened = -1;
-                  else tempstore.opened = i;
-                  const abortController = new AbortController();
-                  document.addEventListener('click', (e) => {
-                    if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
-                      if (tempstore.opened == i) tempstore.opened = -1;
-                      abortController.abort();
-                    }
-                  }, { signal: abortController.signal });
-                }}
-              />
-              <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>
-                <div class={{
-                  'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
-                  'opacity-0 scale-95 pointer-events-none': tempstore.opened != i,
-                  'left-0 items-start': color.pos < 50,
-                  'right-0 items-end': color.pos >= 50,
-                }}>
-                  <div class="flex gap-2">
-                    {store.colors.length > 2 &&
-                      <Button class={{ 'backdrop-blur-md': true }} square size='sm' color="red" onClick$={() => {
-                        const newColors = [...store.colors];
-                        newColors.splice(i, 1);
-                        store.colors = newColors;
-                      }}>
-                        <TrashOutline width="20" />
-                      </Button>
-                    }
-                    <div class="flex bg-gray-800 border border-gray-700 rounded-lg py-1 px-2 text-sm items-center">
-                      {store.colors[i].pos}%
-                    </div>
-                  </div>
-                  <ColorPicker
-                    id={`color${i + 1}`}
-                    value={color.hex}
-                    onInput$={newColor => {
-                      const newColors = [...store.colors];
-                      newColors[i].hex = newColor;
-                      store.colors = newColors;
-                    }}
-                    horizontal
-                  />
-                </div>
-              </div>
-            </div>,
-            )}
+              <ColorFillOutline width="24" />
+            </Button>
+            <Button square aria-label="Inputs" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
+              document.getElementById('inputs')!.classList.replace('hidden', 'flex');
+              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
+            }}>
+              <SettingsOutline width="24" />
+            </Button>
+            <Button square aria-label="Formatting" onClick$={() => {
+              document.getElementById('colors')!.classList.replace('flex', 'hidden');
+              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
+              document.getElementById('formatting')!.classList.replace('hidden', 'flex');
+            }}>
+              <Text width="24" class="fill-white" />
+            </Button>
           </div>
         </div>
 
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <div class="flex flex-col gap-3 md:col-span-2" id="inputs">
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
             <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
-              <SettingsOutline width="32" />
-              {t('color.inputs@@Inputs')}
+              <ColorFillOutline width="32" />
+              {t('color.colors@@Colors')}
             </h1>
-
-            <div class="flex flex-col md:grid grid-cols-2 gap-2">
-              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}>
+            <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
+              (event: any) => {
+                if (event.target!.value == 'custom') return;
+                store.colors = presets[event.target!.value as keyof typeof presets];
+              }
+            } values={[
+              ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
+              { name: t('color.custom@@Custom'), value: 'custom' },
+            ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              {t('color.colorPreset@@Color Preset')}
+            </Dropdown>
+            <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
+              onIncrement$={() => {
+                store.length++;
+              }}
+              onDecrement$={() => {
+                if (store.length > 1) store.length--;
+              }}
+            >
+              {t('animtab.length@@Gradient Length')}
+            </NumberInput>
+            <NumberInput input min={2} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
+              onChange$={(event: any) => {
+                if (event.target!.value < 2) event.target!.value = 2;
+                const newColors = [];
+                for (let i = 0; i < event.target!.value; i++) {
+                  if (store.colors[i]) newColors.push(store.colors[i]);
+                  else newColors.push(getRandomColor());
+                }
+                store.colors = newColors;
+              }}
+              onIncrement$={() => {
+                const newColors = [...store.colors, getRandomColor()];
+                store.colors = newColors;
+              }}
+              onDecrement$={() => {
+                const newColors = [...store.colors];
+                newColors.pop();
+                store.colors = newColors;
+              }}
+            >
+              {t('color.colorAmount@@Color Amount')}
+            </NumberInput>
+            <div class="flex flex-col gap-2">
+              {store.colors.map((color: string, i: number) => {
+                return <div key={`color${i + 1}`} class="flex items-end">
+                  <ColorInput
+                    id={`color${i + 1}`}
+                    value={color}
+                    onInput$={(newColor: string) => {
+                      const newColors = [...store.colors];
+                      newColors[i] = newColor;
+                      store.colors = newColors;
+                    }}
+                    class={{ 'w-full': true }}
+                    presetColors={store.colors}
+                  >
+                    {t('color.hexColor@@Hex Color')} {i + 1}
+                  </ColorInput>
+                  <div class="bg-gray-800 flex ml-2 rounded-md border border-gray-700">
+                    <Button square onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
+                      <ChevronUp width="20" />
+                    </Button>
+                    <div class="bg-gray-700 w-px" />
+                    <Button square onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
+                      <ChevronDown width="20" />
+                    </Button>
+                  </div>
+                </div>;
+              })}
+            </div>
+          </div>
+          <div class="md:col-span-2 lg:col-span-3 sm:grid grid-cols-3 gap-4">
+            <div class="flex flex-col gap-3 col-span-2" id="inputs">
+              <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+                <SettingsOutline width="32" />
+                {t('color.inputs@@Inputs')}
+              </h1>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabstore.type = Number(el.value); }}
-                values={types}
-                value={animtabstore.type}>
-                {t('animtab.outputType@@Output Type')}
-              </Dropdown>
-            </div>
-
-            <div class="flex flex-col md:grid grid-cols-3 gap-2">
-              <TextInput id="nameinput" value={animtabstore.name} placeholder="name" onInput$={(e, el) => { animtabstore.name = el.value; }}>
-                {t('animtab.animationName@@Animation Name')}
-              </TextInput>
-              <NumberInput id="speed" input value={animtabstore.speed} class={{ 'w-full': true }} step={50} min={50}
-                onInput$={(event, el) => {
-                  animtabstore.speed = Number(el.value);
-                }}
-                onIncrement$={() => {
-                  animtabstore.speed = Number(animtabstore.speed) + 50;
-                }}
-                onDecrement$={() => {
-                  animtabstore.speed = Number(animtabstore.speed) - 50;
-                }}>
-                {t('animtab.speed@@Speed')}
-              </NumberInput>
-              <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
-                onIncrement$={() => {
-                  animtabstore.length++;
-                }}
-                onDecrement$={() => {
-                  if (animtabstore.length > 1) animtabstore.length--;
-                }}
-              >
-                {t('animtab.length@@Gradient Length')}
-              </NumberInput>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-2">
-              <div class="flex flex-col gap-2">
-                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
-                  let json: Partial<typeof defaults> = {};
-                  try {
-                    const preset = loadPreset(el.value);
-                    el.value = JSON.stringify(preset);
-                    navigator.clipboard.writeText(JSON.stringify(preset));
-                    json = {
-                      ...preset,
-                    };
-                  } catch (error) {
-                    const alert = {
-                      class: 'text-red-500',
-                      text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
-                    };
-                    tempstore.alerts.push(alert);
-                    return setTimeout(() => {
-                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
-                    }, 5000);
-                  }
-                  (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
-                    if (store[key] === undefined) return;
-                    (store as any)[key] = json[key] ?? defaults[key];
-                  });
-                  (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach(key => {
-                    if (animtabstore[key] === undefined) return;
-                    (animtabstore as any)[key] = json[key] ?? defaults[key];
-                  });
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.importedPreset@@Successfully imported preset!',
-                  };
-                  tempstore.alerts.push(alert);
-                  setTimeout(() => {
-                    tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.presets@@Presets')}
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; }}>
+                  {t('animtab.animationName@@Animation Name')}
                 </TextInput>
-                <div class="flex gap-2">
-                  <Button id="export" size="sm" onClick$={() => {
-                    const preset: Partial<typeof defaults> = { ...store, ...animtabstore };
-                    (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
-                    });
-                    navigator.clipboard.writeText(JSON.stringify(preset));
-                    const alert = {
-                      class: 'text-green-500',
-                      text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
-                    };
-                    tempstore.alerts.push(alert);
-                    setTimeout(() => {
-                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
-                    }, 2000);
+                <NumberInput id="speed" input value={store.speed} class={{ 'w-full': true }} step={50} min={50}
+                  onInput$={(event: any) => {
+                    store.speed = Number(event.target!.value);
+                  }}
+                  onIncrement$={() => {
+                    store.speed = Number(store.speed) + 50;
+                  }}
+                  onDecrement$={() => {
+                    store.speed = Number(store.speed) - 50;
                   }}>
-                    {t('color.export@@Export')}
-                  </Button>
-                  <Button id="createurl" size="sm" onClick$={() => {
-                    const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-                    const url = new URL(base_url);
-                    const params: Partial<typeof defaults> = { ...store, ...animtabstore };
-                    (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-                      if (key == 'format' || key == 'colors') {
-                        value = JSON.stringify(value);
-                        if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
-                      }
-                      if (value === defaults[key as keyof typeof defaults]) return;
-                      url.searchParams.set(key, String(value));
-                    });
-                    window.history.pushState({}, '', url.href);
-                    const alert = {
-                      class: 'text-green-500',
-                      text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
-                    };
-                    tempstore.alerts.push(alert);
-                    setTimeout(() => {
-                      tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
-                    }, 2000);
-                  }}>
-                    {t('color.url@@Export As URL')}
-                  </Button>
-                </div>
-              </div>
-              <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
-                (event, el) => {
-                  if (el.value == 'custom') return;
-                  store.colors = presets[el.value as keyof typeof presets];
-                }
-              } values={[
-                ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
-                { name: t('color.custom@@Custom'), value: 'custom' },
-              ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
-                {t('color.colorPreset@@Color Preset')}
-              </Dropdown>
-              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
-                Prefix/Suffix
-              </TextInput>
-            </div>
-            <Toggle id="trimspaces" checked={store.trimspaces}
-              onChange$={(e, el) => { store.trimspaces = el.checked; }}
-              label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            <Toggle id="advanced" checked={store.customFormat}
-              onChange$={(e, el) => { store.customFormat = el.checked; }}
-              label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
-            {tempstore.alerts.map((alert, i) => (
-              <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-            ))}
-            {
-              store.customFormat && <>
-                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                  (e, el) => {
-                    if (el.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = JSON.parse(el.value);
-                    }
-                  }
-                } values={[
-                  ...v3formats.map(format => ({
-                    name: format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', ''),
-                    value: JSON.stringify(format),
-                  })),
-                  {
-                    name: store.customFormat ? store.format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', '')
-                      : t('color.custom@@Custom'),
-                    value: 'custom',
-                  },
-                ]}>
-                  {t('color.colorFormat@@Color Format')}
+                  {t('animtab.speed@@Speed')}
+                </NumberInput>
+
+                <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+                  values={types.map((type: any) => ({ name: type.name, value: type.value }))}
+                  value={store.type}>
+                  {t('animtab.outputType@@Output Type')}
                 </Dropdown>
-                <div class="grid grid-cols-2 gap-2">
-                  <div>
-                    <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}>
-                      {t('color.customFormat@@Custom Format')}
-                    </TextInput>
-                    <div class="py-3 font-mono">
-                      <p>{t('color.placeholders@@Placeholders:')}</p>
-                      <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                      <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                      <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                      <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                      <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                      <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                      {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-                      <p>$c = {t('color.character@@Character')}</p>
+                <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
+                  Prefix/Suffix
+                </TextInput>
+              </div>
+
+              {
+                store.customFormat && <>
+                  <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
+                    (event: any) => {
+                      if (event.target!.value == 'custom') {
+                        store.customFormat = true;
+                      }
+                      else {
+                        store.customFormat = false;
+                        store.format = JSON.parse(event.target!.value);
+                      }
+                    }
+                  } values={[
+                    ...v3formats.map(format => ({
+                      name: format.color
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                        .replace('$c', ''),
+                      value: JSON.stringify(format),
+                    })),
+                    {
+                      name: store.customFormat ? store.format.color
+                        .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                        .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                        .replace('$c', '')
+                        : t('color.custom@@Custom'),
+                      value: 'custom',
+                    },
+                  ]}>
+                    {t('color.colorFormat@@Color Format')}
+                  </Dropdown>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format.color = event.target!.value; }}>
+                        {t('color.customFormat@@Custom Format')}
+                      </TextInput>
+                      <div class="py-3 font-mono">
+                        <p>{t('color.placeholders@@Placeholders:')}</p>
+                        <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                        <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                        <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                        <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                        <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                        <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                        {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                        <p>$c = {t('color.character@@Character')}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div class="flex flex-col gap-2">
-                    {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
-                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}>
+                    <div class="flex flex-col gap-2">
+                      {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
+                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(event: any) => { store.format.char = event.target!.value; }}>
                           {t('color.format.character@@Format Character')}
                         </TextInput>
-                    }
-                    {!store.format.char &&
+                      }
+                      {!store.format.char &&
                         <>
-                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}>
+                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(event: any) => { store.format.bold = event.target!.value; }}>
                             Bold
                           </TextInput>
-                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}>
+                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(event: any) => { store.format.italic = event.target!.value; }}>
                             Italic
                           </TextInput>
-                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}>
+                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(event: any) => { store.format.underline = event.target!.value; }}>
                             Underline
                           </TextInput>
-                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}>
+                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(event: any) => { store.format.strikethrough = event.target!.value; }}>
                             Strikethrough
                           </TextInput>
                           <div class="py-3 font-mono">
@@ -492,36 +361,148 @@ export default component$(() => {
                             <p>$t = Output Text</p>
                           </div>
                         </>
-                    }
+                      }
+                    </div>
                   </div>
+                </>
+              }
+
+              <div class="flex flex-col gap-2">
+                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+                  let json: any;
+                  try {
+                    const preset = await loadPreset(event.target!.value);
+                    event.target!.value = JSON.stringify(preset);
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    if (!store.customFormat) {
+                      delete preset.customFormat;
+                      delete preset.format;
+                      delete preset.outputFormat;
+                    }
+                    json = { ...animTABDefaults, ...preset };
+                  } catch (error) {
+                    const alert = {
+                      class: 'text-red-500',
+                      text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
+                    };
+                    store.alerts.push(alert);
+                    return setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 5000);
+                  }
+                  Object.keys(json).forEach(key => {
+                    if ((store as any)[key] === undefined) return;
+                    (store as any)[key] = json[key];
+                  });
+                  const alert = {
+                    class: 'text-green-500',
+                    text: 'color.importedPreset@@Successfully imported preset!',
+                  };
+                  store.alerts.push(alert);
+                  setTimeout(() => {
+                    store.alerts.splice(store.alerts.indexOf(alert), 1);
+                  }, 2000);
+                }}>
+                  {t('color.presets@@Presets')}
+                </TextInput>
+                <div class="flex gap-2">
+                  <Button id="export" size="sm" onClick$={() => {
+                    const preset: any = { ...store };
+                    delete preset.alerts;
+                    delete preset.frames;
+                    delete preset.frame;
+                    if (!store.customFormat) {
+                      delete preset.customFormat;
+                      delete preset.format;
+                      delete preset.outputFormat;
+                    }
+                    Object.keys(preset).forEach(key => {
+                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) delete preset[key];
+                    });
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.export@@Export')}
+                  </Button>
+                  <Button id="createurl" size="sm" onClick$={() => {
+                    const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                    const url = new URL(base_url);
+                    const params: any = { ...store };
+                    delete params.alerts;
+                    delete params.frames;
+                    delete params.frame;
+                    if (!store.customFormat) {
+                      delete params.customFormat;
+                      delete params.format;
+                      delete params.outputFormat;
+                    }
+                    Object.entries(params).forEach(([key, value]: any) => {
+                      if (key == 'colors') {
+                        value = value.join(',');
+                        if (value === animTABDefaults.colors.join(',')) return;
+                      }
+                      if (key == 'format') {
+                        value = JSON.stringify(value);
+                        if (value === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) return;
+                      }
+                      else if (value === animTABDefaults[key as keyof typeof animTABDefaults]) return;
+                      url.searchParams.set(key, String(value));
+                    });
+                    window.history.pushState({}, '', url.href);
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
+                    };
+                    store.alerts.push(alert);
+                    setTimeout(() => {
+                      store.alerts.splice(store.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.url@@Export As URL')}
+                  </Button>
                 </div>
-              </>
-            }
-          </div>
+                <Toggle id="trimspaces" checked={store.trimspaces}
+                  onChange$={(event: any) => { store.trimspaces = event.target!.checked; }}
+                  label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+                <Toggle id="advanced" checked={store.customFormat}
+                  onChange$={(event: any) => { store.customFormat = event.target!.checked; }}
+                  label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
+              </div>
+              {store.alerts.map((alert: any, i: number) => (
+                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
+              ))}
+            </div>
+            <div class="mb-4 hidden sm:flex flex-col gap-3" id="formatting">
+              <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
+                <Text width="32" />
+                {t('color.colors@@Formatting')}
+              </h1>
+              <Toggle id="bold" checked={store.bold}
+                onChange$={(event: any) => { store.bold = event.target!.checked; }}
+                label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
+              <Toggle id="italic" checked={store.italic}
+                onChange$={(event: any) => { store.italic = event.target!.checked; }}
+                label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
+              <Toggle id="underline" checked={store.underline}
+                onChange$={(event: any) => { store.underline = event.target!.checked; }}
+                label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
+              <Toggle id="strikethrough" checked={store.strikethrough}
+                onChange$={(event: any) => { store.strikethrough = event.target!.checked; }}
+                label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
 
-          <div class="mb-4 hidden sm:flex flex-col gap-3" id="formatting">
-            <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
-              <Text width="32" />
-              {t('color.colors@@Formatting')}
-            </h1>
-            <Toggle id="bold" checked={store.bold}
-              onChange$={(e, el) => { store.bold = el.checked; }}
-              label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
-            <Toggle id="italic" checked={store.italic}
-              onChange$={(e, el) => { store.italic = el.checked; }}
-              label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
-            <Toggle id="underline" checked={store.underline}
-              onChange$={(e, el) => { store.underline = el.checked; }}
-              label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
-            <Toggle id="strikethrough" checked={store.strikethrough}
-              onChange$={(e, el) => { store.strikethrough = el.checked; }}
-              label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
-
-            {store.customFormat &&
-              <TextArea id="formatInput" class={{ 'font-mono': true }} value={animtabstore.outputFormat} placeholder="birdflop" onInput$={(e, el) => { animtabstore.outputFormat = el.value; }}>
-                {t('animtab.outputFormat@@Output Format')}
-              </TextArea>
-            }
+              {store.customFormat &&
+                <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
+                  {t('animtab.outputFormat@@Output Format')}
+                </TextArea>
+              }
+            </div>
           </div>
         </div>
         <div class="text-sm mt-8">

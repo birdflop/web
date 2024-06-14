@@ -1,6 +1,6 @@
 import { AnimatedGradient, Gradient } from './HexUtils';
+import type { format } from './PresetUtils';
 import { defaults } from './PresetUtils';
-import { sortColors } from './SharedUtils';
 
 export function hex(c: number) {
   const s = '0123456789ABCDEF';
@@ -10,28 +10,20 @@ export function hex(c: number) {
   return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
 }
 
-export function convertToHex(RGBAcolor: number[]) {
-  return hex(RGBAcolor[0]) + hex(RGBAcolor[1]) + hex(RGBAcolor[2]);
+export function convertToHex(rgb: number[]) {
+  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
 }
 
 export function trim(s: string) {
   return (s.charAt(0) == '#') ? s.substring(1, 7) : s;
 }
 
-export function convertToRGB(hexcolor: string) {
+export function convertToRGB(hex: string) {
   const color = [];
-  color[0] = parseInt((trim(hexcolor)).substring(0, 2), 16);
-  color[1] = parseInt((trim(hexcolor)).substring(2, 4), 16);
-  color[2] = parseInt((trim(hexcolor)).substring(4, 6), 16);
+  color[0] = parseInt((trim(hex)).substring(0, 2), 16);
+  color[1] = parseInt((trim(hex)).substring(2, 4), 16);
+  color[2] = parseInt((trim(hex)).substring(4, 6), 16);
   return color;
-}
-
-export function getBrightness(RGBAcolor: number[]) {
-  return Math.sqrt(
-    (RGBAcolor[0] * RGBAcolor[0] * 0.299) +
-    (RGBAcolor[1] * RGBAcolor[1] * 0.587) +
-    (RGBAcolor[2] * RGBAcolor[2] * 0.114),
-  );
 }
 
 export function getRandomColor() {
@@ -43,9 +35,9 @@ export function getRandomColor() {
   return color;
 }
 
-export function getAnimFrames(store: typeof defaults) {
-  const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-  if (colors.length < 2) return { OutputArray: [], frames: [] };
+export function getAnimFrames(store: any) {
+  let colors = store.colors.map((color: string) => convertToRGB(color));
+  if (colors.length < 2) colors = [convertToRGB('#00FFE0'), convertToRGB('#EB00FF')];
 
   const text = store.text ?? 'birdflop';
   let loopAmount;
@@ -115,7 +107,7 @@ export function getAnimFrames(store: typeof defaults) {
   return { OutputArray, frames };
 }
 
-export function AnimationOutput(store: typeof defaults) {
+export function AnimationOutput(store: any) {
   let FinalOutput = '';
 
   const AnimFrames = getAnimFrames(store);
@@ -123,7 +115,7 @@ export function AnimationOutput(store: typeof defaults) {
 
   const format = store.outputFormat;
   FinalOutput = format.replace('%name%', store.name);
-  FinalOutput = FinalOutput.replace('%speed%', `${store.speed}`);
+  FinalOutput = FinalOutput.replace('%speed%', store.speed);
   if (store.type == 1) {
     OutputArray.reverse();
   }
@@ -133,15 +125,17 @@ export function AnimationOutput(store: typeof defaults) {
   }
 
   const outputFormat = FinalOutput.match(/%output:{(.*\$t.*)}%/);
-  if (outputFormat) OutputArray = OutputArray.map(output => outputFormat[1].replace('$t', output));
+  if (outputFormat) {
+    OutputArray = OutputArray.map((output: string) => outputFormat[1].replace('$t', output));
+  }
   FinalOutput = FinalOutput.replace(/%output:{.*\$t.*}%/, OutputArray.join('\n'));
   return FinalOutput;
 }
 
 export function generateOutput(
-  text = defaults.text,
-  colors = defaults.colors,
-  format = defaults.format,
+  text: string = defaults.text,
+  colors: string[] = defaults.colors,
+  format: format = defaults.format,
   prefixsuffix?: string,
   trimspaces?: boolean,
   bold?: boolean,
@@ -152,29 +146,11 @@ export function generateOutput(
   let output = '';
 
   if (format.color == 'MiniMessage') {
-    colors = sortColors(colors);
-    if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
-    if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
-    for (let i = 0; i < colors.length - 1; i++) {
-      let currentColor = colors[i];
-      let nextColor = colors[i + 1];
-      if (currentColor.pos > nextColor.pos) {
-        const newColor = currentColor;
-        currentColor = nextColor;
-        nextColor = newColor;
-      }
-
-      const numSteps = text.length;
-      const lowerRange = Math.round(colors[i].pos / 100 * numSteps);
-      const upperRange = Math.round(colors[i + 1].pos / 100 * numSteps);
-      if (lowerRange === upperRange) continue;
-      output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
-    }
-    return output;
+    output += `<gradient:${colors.join(':')}>${text}</gradient>`;
   }
 
-  const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-  if (newColors.length < 2) return 'Error: Not enough colors.';
+  const newColors = colors?.map((color: string) => convertToRGB(color));
+  while (newColors.length < 2) newColors.push(convertToRGB(getRandomColor()));
 
   const gradient = new Gradient(newColors, text.length);
 
