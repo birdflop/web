@@ -27,7 +27,7 @@ export const rgbDefaults = {
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, Object.keys(rgbDefaults), url.searchParams);
+  return await getCookies(cookie, 'rgb', url.searchParams);
 });
 
 export default component$(() => {
@@ -55,10 +55,9 @@ export default component$(() => {
   }, { deep: true });
 
   useTask$(({ track }) => {
-    isBrowser && setCookies(store);
-    Object.keys(store).forEach((key: any) => {
-      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
-      else track(() => store[key as keyof typeof store]);
+    isBrowser && setCookies('rgb', store);
+    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
+      track(() => store[key]);
     });
   });
 
@@ -321,12 +320,14 @@ export default component$(() => {
             <div class="grid md:grid-cols-3 gap-2">
               <div class="flex flex-col gap-2">
                 <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
-                  let json: any;
+                  let json: Partial<typeof defaults> = {};
                   try {
-                    const preset = await loadPreset(event.target!.value);
+                    const preset = loadPreset(event.target!.value);
                     event.target!.value = JSON.stringify(preset);
                     navigator.clipboard.writeText(JSON.stringify(preset));
-                    json = { ...rgbDefaults, ...preset };
+                    json = {
+                      ...preset,
+                    };
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',
@@ -337,9 +338,9 @@ export default component$(() => {
                       tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach(key => {
-                    if ((store as any)[key] === undefined) return;
-                    (store as any)[key] = json[key];
+                  (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                    if (store[key] === undefined) return;
+                    (store as any)[key] = json[key] ?? defaults[key];
                   });
                   const alert = {
                     class: 'text-green-500',
@@ -354,10 +355,9 @@ export default component$(() => {
                 </TextInput>
                 <div class="flex gap-2">
                   <Button id="export" size="sm" onClick$={() => {
-                    const preset: any = { ...store };
-                    delete preset.alerts;
-                    Object.keys(preset).forEach(key => {
-                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(rgbDefaults[key as keyof typeof rgbDefaults])) delete preset[key];
+                    const preset: Partial<typeof defaults> = { ...store };
+                    (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
                     });
                     navigator.clipboard.writeText(JSON.stringify(preset));
                     const alert = {
@@ -374,17 +374,13 @@ export default component$(() => {
                   <Button id="createurl" size="sm" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                     const url = new URL(base_url);
-                    const params = { ...store };
-                    Object.entries(params).forEach(([key, value]: any) => {
-                      if (key == 'colors') {
-                        value = value.join(',');
-                        if (value === rgbDefaults.colors.join(',')) return;
-                      }
-                      if (key == 'format') {
+                    const params: Partial<typeof defaults> = { ...store };
+                    (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+                      if (key == 'format' || key == 'colors') {
                         value = JSON.stringify(value);
-                        if (value === JSON.stringify(rgbDefaults[key as keyof typeof rgbDefaults])) return;
+                        if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
                       }
-                      else if (value === rgbDefaults[key as keyof typeof rgbDefaults]) return;
+                      if (value === defaults[key as keyof typeof defaults]) return;
                       url.searchParams.set(key, String(value));
                     });
                     window.history.pushState({}, '', url.href);
@@ -402,9 +398,9 @@ export default component$(() => {
                 </div>
               </div>
               <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
-                (event: any) => {
-                  if (event.target!.value == 'custom') return;
-                  store.colors = presets[event.target!.value as keyof typeof presets];
+                (event, el) => {
+                  if (el.value == 'custom') return;
+                  store.colors = presets[el.value as keyof typeof presets];
                 }
               } values={[
                 ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),

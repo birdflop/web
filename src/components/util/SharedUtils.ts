@@ -1,42 +1,44 @@
 import type { Cookie } from '@builder.io/qwik-city';
+import { rgbDefaults } from '~/routes/resources/rgb';
+import { animTABDefaults } from '~/routes/resources/animtab';
 import { defaults } from './PresetUtils';
 
-export function getCookies(cookie: Cookie, names: string[], urlParams: URLSearchParams) {
-  const cookiesObj: { [key: string]: string; } = {};
-  names.forEach(name => {
-    const cookieValue = cookie.get(name)?.value;
-    if (cookieValue) cookiesObj[name] = cookieValue;
-  });
+export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchParams) {
+  const json = JSON.parse(cookie.get(preset)?.value || '{}');
 
-  if (!cookiesObj.version) {
-    delete cookiesObj.format;
-    delete cookiesObj.outputFormat;
+  // migrate
+  let migrated = false;
+  if (preset == 'rgb' || preset == 'animtab') {
+    const names = preset == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
+    if (preset == 'animtab') names.push('version');
+    names.forEach(name => {
+      let cookieValue = cookie.get(name)?.value;
+      const paramValue = urlParams.get(name);
+      if (paramValue) cookieValue = paramValue;
+      if (!cookieValue) return;
+      console.log('Migrating', name);
+      try {
+        if (name == 'colors') json[name] = cookieValue.split(',');
+        else if (name == 'format' ) json[name] = JSON.parse(cookieValue);
+        else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
+        else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);
+        else json[name] = cookieValue;
+      }
+      catch (e) {
+        console.error(e);
+      }
+      console.log('Deleting', name);
+      cookie.delete(name, { path: '/' });
+      migrated = true;
+    });
   }
-  if (cookiesObj.version == '3') {
-    delete cookiesObj.colors;
-  }
 
-  names.forEach(name => {
-    const paramValue = urlParams.get(name);
-    if (paramValue) cookiesObj[name] = paramValue;
-  });
-
-  const parsedCookiesAndParams: any = {};
-  for (const key of Object.keys(cookiesObj)) {
-    const value = cookiesObj[key];
-    parsedCookiesAndParams[key] = value === 'true' ? true
-      : value === 'false' ? false
-        : !isNaN(Number(value)) ? Number(value)
-          : (value.startsWith('{') && (key == 'parsed' || key == 'format')) ? JSON.parse(value)
-            : (key == 'colors') ? JSON.parse(value)
-              : value;
-  }
-
-  return parsedCookiesAndParams;
+  if (migrated) cookie.set(preset, JSON.stringify(json), { path: '/' });
+  return json;
 }
 
-export function setCookies(json: { [key: string]: any; }) {
-  console.debug('setCookies', json);
+export function setCookies(name: 'rgb' | 'animtab' | 'parsed', json: { [key: string]: any; }) {
+  console.debug('cookie', name, JSON.stringify(json));
 
   const cookie: { [key: string]: string; } = {};
   document.cookie.split(/\s*;\s*/).forEach(function (pair) {
@@ -44,27 +46,17 @@ export function setCookies(json: { [key: string]: any; }) {
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
   if (cookie.optout === 'true') return;
-  Object.keys(json).forEach(key => {
-    let value = json[key];
-    if (key == 'format' || key == 'parsed' || key == 'colors') {
-      value = JSON.stringify(value);
-      if (key != 'parsed' && value === JSON.stringify(defaults[key])) {
-        document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-        return;
-      }
-    }
-    else if (key != 'version') {
-      if (value === defaults[key as keyof typeof defaults]) {
-        document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-        return;
-      }
-    }
-    const existingCookie = cookie[key];
-    const encodedValue = encodeURIComponent(value);
-    if (existingCookie === encodedValue) return;
-    console.debug('cookie', key, encodedValue);
-    document.cookie = `${key}=${encodedValue}; path=/`;
+
+  const cookieValue = { ...json };
+  Object.keys(cookieValue).forEach(key => {
+    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete cookieValue[key];
   });
+
+  const existingCookie = cookie[name];
+  const encodedValue = JSON.stringify(cookieValue);
+  if (existingCookie === encodedValue) return;
+  console.debug('cookie processed', name, encodedValue);
+  document.cookie = `${name}=${encodedValue}; path=/`;
 }
 
 export function sortColors(colors: { hex: string, pos: number }[]) {

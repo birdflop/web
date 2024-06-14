@@ -10,31 +10,21 @@ import { Button, Header, NumberInput, Dropdown, TextArea, TextInput, Toggle, Col
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
+import { rgbDefaults } from '../rgb';
 
-const animTABDefaults = {
-  version: defaults.version,
-  colors: defaults.colors,
+export const animTABDefaults = {
   name: defaults.name,
-  text: defaults.text,
   type: defaults.type,
   speed: defaults.speed,
   length: defaults.length,
-  prefixsuffix: defaults.prefixsuffix,
-  trimspaces: defaults.trimspaces,
-  bold: defaults.bold,
-  italic: defaults.italic,
-  underline: defaults.underline,
-  strikethrough: defaults.strikethrough,
-};
-
-const unsupportedDefaults = {
-  format: defaults.format,
-  customFormat: defaults.customFormat,
   outputFormat: defaults.outputFormat,
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, Object.keys(animTABDefaults), url.searchParams) as typeof animTABDefaults;
+  return {
+    animtab: await getCookies(cookie, 'animtab', url.searchParams) as typeof animTABDefaults,
+    rgb: await getCookies(cookie, 'rgb', url.searchParams) as typeof rgbDefaults,
+  };
 });
 
 export default component$(() => {
@@ -43,9 +33,13 @@ export default component$(() => {
 
   const cookies = useCookies().value;
   const store = useStore({
+    ...rgbDefaults,
+    ...cookies.rgb,
+  }, { deep: true });
+
+  const animtabstore = useStore({
     ...animTABDefaults,
-    ...unsupportedDefaults,
-    ...cookies,
+    ...cookies.animtab,
   }, { deep: true });
 
   const tempstore: {
@@ -65,15 +59,15 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    let speed = store.speed;
+    let speed = animtabstore.speed;
 
     let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
 
     function setFrame() {
       if (!tempstore.frames[0]) return;
-      if (speed != store.speed) {
+      if (speed != animtabstore.speed) {
         clearInterval(frameInterval);
-        speed = store.speed;
+        speed = animtabstore.speed;
         frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
       }
       tempstore.frame = tempstore.frame + 1 >= tempstore.frames.length ? 0 : tempstore.frame + 1;
@@ -81,16 +75,21 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    isBrowser && setCookies(store);
-    Object.keys(store).forEach((key: any) => {
-      if (key == 'frames' || key == 'frame' || key == 'alerts') return;
-      else track(() => store[key as keyof typeof store]);
+    if (isBrowser) {
+      setCookies('rgb', store);
+      setCookies('animtab', { version: store.version, ...animtabstore });
+    }
+    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
+      track(() => store[key]);
     });
-    const { frames } = getAnimFrames({ ...store, text: store.text != '' ? store.text : 'birdflop' });
-    if (store.type == 1) {
+    (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach((key) => {
+      track(() => animtabstore[key]);
+    });
+    const { frames } = getAnimFrames({ ...store, ...animtabstore, text: store.text != '' ? store.text : 'birdflop' });
+    if (animtabstore.type == 1) {
       tempstore.frames = frames.reverse();
     }
-    else if (store.type == 3) {
+    else if (animtabstore.type == 3) {
       const frames2 = frames.slice();
       tempstore.frames = frames.reverse().concat(frames2);
     }
@@ -109,7 +108,7 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <TextArea output id="output" value={AnimationOutput(store)}>
+        <TextArea output id="output" value={AnimationOutput({ ...store, ...animtabstore })}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -146,7 +145,7 @@ export default component$(() => {
             onMouseDown$={(e, el) => {
               if (e.target != el) return;
               const rect = el.getBoundingClientRect();
-              const length = store.text.length * store.length;
+              const length = store.text.length * animtabstore.length;
               const pos = Math.round((e.clientX - rect.left) / rect.width * length) / length * 100;
               if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
@@ -161,7 +160,7 @@ export default component$(() => {
                   addbutton.classList.add('opacity-0');
                   return;
                 }
-                const length = store.text.length * store.length;
+                const length = store.text.length * animtabstore.length;
                 const pos = Math.round((e.clientX - el.getBoundingClientRect().left) / el.getBoundingClientRect().width * length) / length * 100;
                 if (store.colors.find(c => c.pos == pos)) return;
                 addbutton.classList.remove('opacity-0');
@@ -185,7 +184,7 @@ export default component$(() => {
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
-                  const length = store.text.length * store.length;
+                  const length = store.text.length * animtabstore.length;
                   let pos = Math.round((((e.clientX - rect.left) / rect.width) * length)) / length * 100;
                   if (pos < 0) pos = 0;
                   if (pos > 100) pos = 100;
@@ -269,35 +268,35 @@ export default component$(() => {
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { animtabstore.type = event.target!.value; }}
                 values={types.map((type: any) => ({ name: type.name, value: type.value }))}
-                value={store.type}>
+                value={animtabstore.type}>
                 {t('animtab.outputType@@Output Type')}
               </Dropdown>
             </div>
 
             <div class="flex flex-col md:grid grid-cols-3 gap-2">
-              <TextInput id="nameinput" value={store.name} placeholder="name" onInput$={(event: any) => { store.name = event.target!.value; }}>
+              <TextInput id="nameinput" value={animtabstore.name} placeholder="name" onInput$={(event: any) => { animtabstore.name = event.target!.value; }}>
                 {t('animtab.animationName@@Animation Name')}
               </TextInput>
-              <NumberInput id="speed" input value={store.speed} class={{ 'w-full': true }} step={50} min={50}
-                onInput$={(event: any) => {
-                  store.speed = Number(event.target!.value);
+              <NumberInput id="speed" input value={animtabstore.speed} class={{ 'w-full': true }} step={50} min={50}
+                onInput$={(event, el) => {
+                  animtabstore.speed = Number(el.value);
                 }}
                 onIncrement$={() => {
-                  store.speed = Number(store.speed) + 50;
+                  animtabstore.speed = Number(animtabstore.speed) + 50;
                 }}
                 onDecrement$={() => {
-                  store.speed = Number(store.speed) - 50;
+                  animtabstore.speed = Number(animtabstore.speed) - 50;
                 }}>
                 {t('animtab.speed@@Speed')}
               </NumberInput>
-              <NumberInput id="length" input disabled value={store.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
+              <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
                 onIncrement$={() => {
-                  store.length++;
+                  animtabstore.length++;
                 }}
                 onDecrement$={() => {
-                  if (store.length > 1) store.length--;
+                  if (animtabstore.length > 1) animtabstore.length--;
                 }}
               >
                 {t('animtab.length@@Gradient Length')}
@@ -307,12 +306,14 @@ export default component$(() => {
             <div class="grid md:grid-cols-3 gap-2">
               <div class="flex flex-col gap-2">
                 <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
-                  let json: any;
+                  let json: Partial<typeof defaults> = {};
                   try {
-                    const preset = await loadPreset(event.target!.value);
+                    const preset = loadPreset(event.target!.value);
                     event.target!.value = JSON.stringify(preset);
                     navigator.clipboard.writeText(JSON.stringify(preset));
-                    json = { ...animTABDefaults, ...preset };
+                    json = {
+                      ...preset,
+                    };
                   } catch (error) {
                     const alert = {
                       class: 'text-red-500',
@@ -323,9 +324,13 @@ export default component$(() => {
                       tempstore.alerts.splice(tempstore.alerts.indexOf(alert), 1);
                     }, 5000);
                   }
-                  Object.keys(json).forEach(key => {
-                    if ((store as any)[key] === undefined) return;
-                    (store as any)[key] = json[key];
+                  (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                    if (store[key] === undefined) return;
+                    (store as any)[key] = json[key] ?? defaults[key];
+                  });
+                  (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach(key => {
+                    if (animtabstore[key] === undefined) return;
+                    (animtabstore as any)[key] = json[key] ?? defaults[key];
                   });
                   const alert = {
                     class: 'text-green-500',
@@ -340,14 +345,9 @@ export default component$(() => {
                 </TextInput>
                 <div class="flex gap-2">
                   <Button id="export" size="sm" onClick$={() => {
-                    const preset: any = { ...store };
-                    if (!store.customFormat) {
-                      delete preset.customFormat;
-                      delete preset.format;
-                      delete preset.outputFormat;
-                    }
-                    Object.keys(preset).forEach(key => {
-                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) delete preset[key];
+                    const preset: Partial<typeof defaults> = { ...store, ...animtabstore };
+                    (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
                     });
                     navigator.clipboard.writeText(JSON.stringify(preset));
                     const alert = {
@@ -364,22 +364,13 @@ export default component$(() => {
                   <Button id="createurl" size="sm" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                     const url = new URL(base_url);
-                    const params: any = { ...store };
-                    if (!store.customFormat) {
-                      delete params.customFormat;
-                      delete params.format;
-                      delete params.outputFormat;
-                    }
-                    Object.entries(params).forEach(([key, value]: any) => {
-                      if (key == 'colors') {
-                        value = value.join(',');
-                        if (value === animTABDefaults.colors.join(',')) return;
-                      }
-                      if (key == 'format') {
+                    const params: Partial<typeof defaults> = { ...store, ...animtabstore };
+                    (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+                      if (key == 'format' || key == 'colors') {
                         value = JSON.stringify(value);
-                        if (value === JSON.stringify(animTABDefaults[key as keyof typeof animTABDefaults])) return;
+                        if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
                       }
-                      else if (value === animTABDefaults[key as keyof typeof animTABDefaults]) return;
+                      if (value === defaults[key as keyof typeof defaults]) return;
                       url.searchParams.set(key, String(value));
                     });
                     window.history.pushState({}, '', url.href);
@@ -397,9 +388,9 @@ export default component$(() => {
                 </div>
               </div>
               <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
-                (event: any) => {
-                  if (event.target!.value == 'custom') return;
-                  store.colors = presets[event.target!.value as keyof typeof presets];
+                (event, el) => {
+                  if (el.value == 'custom') return;
+                  store.colors = presets[el.value as keyof typeof presets];
                 }
               } values={[
                 ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
@@ -519,7 +510,7 @@ export default component$(() => {
               label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
 
             {store.customFormat &&
-              <TextArea id="formatInput" value={store.outputFormat} placeholder="birdflop" onInput$={(event: any) => { store.outputFormat = event.target!.value; }}>
+              <TextArea id="formatInput" value={animtabstore.outputFormat} placeholder="birdflop" onInput$={(event: any) => { animtabstore.outputFormat = event.target!.value; }}>
                 {t('animtab.outputFormat@@Output Format')}
               </TextArea>
             }

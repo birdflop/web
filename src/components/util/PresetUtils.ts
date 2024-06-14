@@ -7,25 +7,6 @@ export interface format {
   strikethrough?: string;
 }
 
-declare interface preset {
-  version: number;
-  colors: { hex: string; pos: number }[];
-  name: string;
-  text: string;
-  type: number;
-  speed: number;
-  length: number;
-  format: format;
-  customFormat: boolean;
-  prefixsuffix: string;
-  outputFormat: string;
-  trimspaces: boolean;
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  strikethrough: boolean;
-}
-
 export const presets = {
   'birdflop': [
     { hex: '#084CFB', pos: 0 },
@@ -110,7 +91,7 @@ export const types = [
   { name: 'Full Text Cycle', value: 4 },
 ];
 
-export const defaults: preset = {
+export const defaults = {
   version: 4,
   colors: presets.birdflop,
   name: 'logo',
@@ -118,7 +99,7 @@ export const defaults: preset = {
   type: 1,
   speed: 50,
   length: 1,
-  format: v3formats[0],
+  format: v3formats[0] as format,
   prefixsuffix: '',
   customFormat: false,
   outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
@@ -207,7 +188,7 @@ export function fromBinary(encoded: string) {
   return String.fromCharCode(...new Uint16Array(bytes.buffer));
 }
 
-export function loadPreset(p: string) {
+export function loadPreset(p: string): Partial<typeof defaults> {
   let version: number;
   let preset: any;
   let newPreset = defaults;
@@ -265,10 +246,11 @@ export function loadPreset(p: string) {
     };
   }
 
-  Object.keys(newPreset).forEach((key) => {
-    if (newPreset[key as keyof preset] === defaults[key as keyof preset] && key !== 'version') {
-      delete newPreset[key as keyof preset];
+  (Object.keys(newPreset) as Array<keyof typeof newPreset>).forEach((key) => {
+    if (newPreset[key] === defaults[key] && key !== 'version') {
+      delete newPreset[key];
     }
   });
-  return newPreset;
+
+  return newPreset as Partial<typeof defaults>;
 }
