@@ -18,6 +18,7 @@ export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchP
       if (!cookieValue) return;
       console.log('Migrating', name);
       try {
+        if (name == 'version') json[name] = defaults.version;
         if (name == 'colors') json[name] = cookieValue.split(',');
         else if (name == 'format' ) json[name] = JSON.parse(cookieValue);
         else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
