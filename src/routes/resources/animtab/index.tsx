@@ -65,19 +65,16 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    let speed = animtabstore.speed;
-
-    let frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
-
-    function setFrame() {
-      if (!tempstore.frames[0]) return;
-      if (speed != animtabstore.speed) {
-        clearInterval(frameInterval);
-        speed = animtabstore.speed;
-        frameInterval = setInterval(() => setFrame(), Math.ceil(speed / 50) * 50);
+    let lastTime = performance.now();
+    function setFrame(currentTime: number) {
+      const deltaTime = (currentTime - lastTime);
+      if (tempstore.frames[0] && deltaTime > animtabstore.speed) {
+        tempstore.frame = tempstore.frame + 1 >= tempstore.frames.length ? 0 : tempstore.frame + 1;
+        lastTime = currentTime;
       }
-      tempstore.frame = tempstore.frame + 1 >= tempstore.frames.length ? 0 : tempstore.frame + 1;
+      requestAnimationFrame(setFrame);
     }
+    setFrame(performance.now());
   });
 
   useTask$(({ track }) => {
@@ -156,7 +153,7 @@ export default component$(() => {
               if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
               newColors.push({ hex: getRandomColor(), pos });
-              store.colors = newColors;
+              store.colors = sortColors(newColors);
             }}
             onMouseEnter$={(e, el) => {
               const abortController = new AbortController();
