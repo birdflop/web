@@ -9,10 +9,6 @@ export const onGet: RequestHandler = async ({ json }) => {
       },
       '/api/v2': {
         GET: 'View the v2 API endpoints.',
-        WARNING: '/api/v2 is deprecated. Please use /api/v3 instead.',
-      },
-      '/api/v3': {
-        GET: 'View the v3 API endpoints.',
       },
     },
   });

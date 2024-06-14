@@ -21,8 +21,8 @@ importers:
         specifier: 1.5.7
         version: 1.5.7(@types/node@20.13.0)(rollup@4.18.0)
       '@luminescent/ui':
-        specifier: 0.18.1
-        version: 0.18.1
+        specifier: 0.18.2
+        version: 0.18.2
       '@modular-forms/qwik':
         specifier: ^0.25.0
         version: 0.25.0(@builder.io/qwik-city@1.5.7(@types/node@20.13.0)(rollup@4.18.0))(@builder.io/qwik@1.5.7(@types/node@20.13.0)(undici@6.18.2))
@@ -606,8 +606,8 @@ packages:
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
 
-  '@luminescent/ui@0.18.1':
-    resolution: {integrity: sha512-DqdaCQ7uuc/AfimNnmqjBnlV2+d8l6WQJXKZ5wafIQTSeXGX1fxESDP76W+A0NOURhkh3FuwIcoHOM4c4eT+Zw==}
+  '@luminescent/ui@0.18.2':
+    resolution: {integrity: sha512-hMt7dRJyTbLdaMTNinn/bV338jHIn7Y2D7gjigKxolzkcPFVk2dyvMQYsQC7OsaXLuGgx6l1zWW0oP/i0j1CGQ==}
     engines: {node: '>=15.0.0'}
 
   '@mdx-js/mdx@3.0.1':
@@ -2776,7 +2776,7 @@ snapshots:
 
   '@kurkle/color@0.3.2': {}
 
-  '@luminescent/ui@0.18.1': {}
+  '@luminescent/ui@0.18.2': {}
 
   '@mdx-js/mdx@3.0.1':
     dependencies:

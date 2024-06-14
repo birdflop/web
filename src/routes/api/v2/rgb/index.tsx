@@ -3,30 +3,19 @@ import { v3formats } from '~/components/util/PresetUtils';
 import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
-const v2rgbDefaults = {
-  rgbDefaults,
-  colors: rgbDefaults.colors.map(color => color.hex),
-};
-
 export const onGet: RequestHandler = async ({ json, query }) => {
   let output = {};
   try {
     const queryjson: any = Object.fromEntries(query);
+
     const keys = Object.keys(queryjson);
     for (const key of keys) {
-      if (key == 'colors') {
-        queryjson.colors = queryjson.colors.split(',');
-        queryjson.colors = queryjson.colors.map((color: string, index: number) => {
-          return {
-            hex: color,
-            pos: index / queryjson.colors.length,
-          };
-        });
-      }
+      if (key == 'colors') queryjson.colors = queryjson.colors.split(',');
       else if (queryjson[key] == 'true') queryjson[key] = true;
       else if (queryjson[key] == 'false') queryjson[key] = false;
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
     }
+
     output = await getOutput(queryjson);
   }
   catch (e: any) {
@@ -39,13 +28,7 @@ export const onGet: RequestHandler = async ({ json, query }) => {
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
   let output = {};
   try {
-    const body = await parseBody() as any;
-    if (body?.colors) body.colors = body.colors.map((color: string, index: number) => {
-      return {
-        hex: color,
-        pos: index / body.colors.length * 100,
-      };
-    });
+    const body = await parseBody();
     output = await getOutput(body);
   }
   catch (e: any) {
@@ -69,12 +52,12 @@ async function getOutput(body: any) {
         default: rgbDefaults.text,
       },
       colors: {
-        type: 'array of (string)',
+        type: 'array of (Color object - see data models in docs) or array of (string)',
         description: 'The colors to use for the gradient. Must be in hex format.',
-        default: v2rgbDefaults.colors,
+        default: rgbDefaults.colors,
       },
       format: {
-        type: 'format object - see data models in docs',
+        type: 'Format object - see data models in docs',
         description: 'The format to use for the color and format codes. For MiniMessage, { color: "MiniMessage" } can be used.',
         default: rgbDefaults.format,
       },
@@ -116,17 +99,23 @@ async function getOutput(body: any) {
     },
   };
 
-  // in case stupid
-  // mostly just so people can just send { color: "MiniMessage" }
+  /* in case stupid */
+
+  // make { color: "MiniMessage" } a valid format
   let format = body?.format;
   if (format && !format.char && (!format.bold || !format.italic || !format.underline || !format.strikethrough)) {
     format = v3formats.find(f => f.color == format.color) ?? { ...format, char: '&' };
   }
 
-  const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
+  // make string[] a valid color array
+  let colors = body?.colors;
+  if (colors && colors.length && typeof colors[0] == 'string') {
+    if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
+  }
+
+  const { text, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
   const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough);
   return {
-    WARNING: 'This endpoint is deprecated. Please use /api/v3/rgb instead.',
     output,
     ...options,
   };

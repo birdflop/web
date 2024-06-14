@@ -223,7 +223,7 @@ export function loadPreset(p: string) {
   }
   if (version === 1) {
     newPreset.version = defaults.version;
-    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: i / preset.colors.length * 100 }));
+    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
     newPreset.name = preset.name;
     newPreset.text = preset.text;
     newPreset.speed = preset.speed;
@@ -242,7 +242,7 @@ export function loadPreset(p: string) {
   }
   if (version === 2) {
     newPreset.version = defaults.version;
-    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: i / preset.colors.length * 100 }));
+    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
     newPreset.name = preset.name;
     newPreset.text = preset.text;
     newPreset.speed = preset.speed;
