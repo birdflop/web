@@ -41,7 +41,7 @@ export const plans = {
       'Up to 80 GB NVMe Storage',
       'Free upgrade to US Premium+ after 6 months',
     ],
-    outOfStock: false,
+    outOfStock: true,
   },
   'US Premium+': {
     id: 'us-premium',
@@ -58,7 +58,7 @@ export const plans = {
       'Ryzen 9 7950X (6 vCores)',
       'Unmetered* NVMe Storage',
     ],
-    outOfStock: false,
+    outOfStock: true,
   },
 };
 

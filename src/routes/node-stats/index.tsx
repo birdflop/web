@@ -40,7 +40,7 @@ export default component$(() => {
               </Header>
               jellyfishjaws.birdflop.com
             </Card>
-            <Card href="http://koalaknees.birdflop.com/" color="green" hover="clickable" blobs>
+            <Card href="http://koalaknees.birdflop.com:19999/" color="green" hover="clickable" blobs>
               <Header subheader="Ashburn, VA, USA">
                 Koalaknees
               </Header>
