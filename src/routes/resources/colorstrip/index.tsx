@@ -23,11 +23,11 @@ export default component$(() => {
           {t('colorstrip.subtitle@@Strips all color / format codes from text')}
         </h2>
 
-        <TextInput class={{ 'mb-3': true }} id="input" onInput$={(event: any) => { store.input = event.target!.value; }}>
+        <TextInput class={{ 'mb-3': true }} id="input" onInput$={(e, el) => { store.input = el.value; }}>
           {t('colorstrip.inputText@@Input Text')}
         </TextInput>
 
-        <Dropdown id="gradienttype" class={{ 'w-full': true }} onChange$={(event: any) => { store.type = event.target!.value; }}
+        <Dropdown id="gradienttype" class={{ 'w-full': true }} onChange$={(e, el) => { store.type = Number(el.value); }}
           values={[
             { value: 0, name: '&#rrggbb' },
             { value: 1, name: '<#rrggbb>' },

@@ -111,7 +111,7 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <TextArea output id="output" value={AnimationOutput({ ...store, ...animtabstore })}>
+        <TextArea class={{ 'font-mono text-sm text-nowrap': true }} output id="output" value={AnimationOutput({ ...store, ...animtabstore })}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
@@ -272,11 +272,11 @@ export default component$(() => {
             </h1>
 
             <div class="flex flex-col md:grid grid-cols-2 gap-2">
-              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(event: any) => { store.text = event.target!.value; }}>
+              <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}>
                 {t('color.inputText@@Input Text')}
               </TextInput>
 
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(event: any) => { animtabstore.type = event.target!.value; }}
+              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabstore.type = Number(el.value); }}
                 values={types.map((type: any) => ({ name: type.name, value: type.value }))}
                 value={animtabstore.type}>
                 {t('animtab.outputType@@Output Type')}
@@ -284,7 +284,7 @@ export default component$(() => {
             </div>
 
             <div class="flex flex-col md:grid grid-cols-3 gap-2">
-              <TextInput id="nameinput" value={animtabstore.name} placeholder="name" onInput$={(event: any) => { animtabstore.name = event.target!.value; }}>
+              <TextInput id="nameinput" value={animtabstore.name} placeholder="name" onInput$={(e, el) => { animtabstore.name = el.value; }}>
                 {t('animtab.animationName@@Animation Name')}
               </TextInput>
               <NumberInput id="speed" input value={animtabstore.speed} class={{ 'w-full': true }} step={50} min={50}
@@ -313,11 +313,11 @@ export default component$(() => {
 
             <div class="grid md:grid-cols-3 gap-2">
               <div class="flex flex-col gap-2">
-                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (event: any) => {
+                <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
                   let json: Partial<typeof defaults> = {};
                   try {
-                    const preset = loadPreset(event.target!.value);
-                    event.target!.value = JSON.stringify(preset);
+                    const preset = loadPreset(el.value);
+                    el.value = JSON.stringify(preset);
                     navigator.clipboard.writeText(JSON.stringify(preset));
                     json = {
                       ...preset,
@@ -406,15 +406,15 @@ export default component$(() => {
               ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
                 {t('color.colorPreset@@Color Preset')}
               </Dropdown>
-              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(event: any) => { store.prefixsuffix = event.target!.value; }}>
+              <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
                 Prefix/Suffix
               </TextInput>
             </div>
             <Toggle id="trimspaces" checked={store.trimspaces}
-              onChange$={(event: any) => { store.trimspaces = event.target!.checked; }}
+              onChange$={(e, el) => { store.trimspaces = el.checked; }}
               label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
             <Toggle id="advanced" checked={store.customFormat}
-              onChange$={(event: any) => { store.customFormat = event.target!.checked; }}
+              onChange$={(e, el) => { store.customFormat = el.checked; }}
               label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
             {tempstore.alerts.map((alert: any, i: number) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
@@ -422,13 +422,13 @@ export default component$(() => {
             {
               store.customFormat && <>
                 <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                  (event: any) => {
-                    if (event.target!.value == 'custom') {
+                  (e, el) => {
+                    if (el.value == 'custom') {
                       store.customFormat = true;
                     }
                     else {
                       store.customFormat = false;
-                      store.format = JSON.parse(event.target!.value);
+                      store.format = JSON.parse(el.value);
                     }
                   }
                 } values={[
@@ -452,7 +452,7 @@ export default component$(() => {
                 </Dropdown>
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(event: any) => { store.format.color = event.target!.value; }}>
+                    <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}>
                       {t('color.customFormat@@Custom Format')}
                     </TextInput>
                     <div class="py-3 font-mono">
@@ -469,22 +469,22 @@ export default component$(() => {
                   </div>
                   <div class="flex flex-col gap-2">
                     {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
-                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(event: any) => { store.format.char = event.target!.value; }}>
+                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}>
                           {t('color.format.character@@Format Character')}
                         </TextInput>
                     }
                     {!store.format.char &&
                         <>
-                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(event: any) => { store.format.bold = event.target!.value; }}>
+                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}>
                             Bold
                           </TextInput>
-                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(event: any) => { store.format.italic = event.target!.value; }}>
+                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}>
                             Italic
                           </TextInput>
-                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(event: any) => { store.format.underline = event.target!.value; }}>
+                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}>
                             Underline
                           </TextInput>
-                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(event: any) => { store.format.strikethrough = event.target!.value; }}>
+                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}>
                             Strikethrough
                           </TextInput>
                           <div class="py-3 font-mono">
@@ -505,20 +505,20 @@ export default component$(() => {
               {t('color.colors@@Formatting')}
             </h1>
             <Toggle id="bold" checked={store.bold}
-              onChange$={(event: any) => { store.bold = event.target!.checked; }}
+              onChange$={(e, el) => { store.bold = el.checked; }}
               label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
             <Toggle id="italic" checked={store.italic}
-              onChange$={(event: any) => { store.italic = event.target!.checked; }}
+              onChange$={(e, el) => { store.italic = el.checked; }}
               label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
             <Toggle id="underline" checked={store.underline}
-              onChange$={(event: any) => { store.underline = event.target!.checked; }}
+              onChange$={(e, el) => { store.underline = el.checked; }}
               label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
             <Toggle id="strikethrough" checked={store.strikethrough}
-              onChange$={(event: any) => { store.strikethrough = event.target!.checked; }}
+              onChange$={(e, el) => { store.strikethrough = el.checked; }}
               label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
 
             {store.customFormat &&
-              <TextArea id="formatInput" value={animtabstore.outputFormat} placeholder="birdflop" onInput$={(event: any) => { animtabstore.outputFormat = event.target!.value; }}>
+              <TextArea id="formatInput" class={{ 'font-mono': true }} value={animtabstore.outputFormat} placeholder="birdflop" onInput$={(e, el) => { animtabstore.outputFormat = el.value; }}>
                 {t('animtab.outputFormat@@Output Format')}
               </TextArea>
             }

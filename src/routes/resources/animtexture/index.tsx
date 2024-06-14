@@ -72,12 +72,12 @@ export default component$(() => {
           {store.frames.map((frame, i) => (
             <div key={`frame${i}`} class="w-24 rounded-lg border-gray-700 border-2">
               <img width={96} height={96} class="rounded-t-md" src={frame.img} />
-              <input type="number" value={frame.delay} onInput$={(event: any) => { store.frames[i].delay = event.target!.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md" />
+              <input type="number" value={frame.delay} onInput$={(e, el) => { store.frames[i].delay = el.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md" />
             </div>
           ))}
         </div>
 
-        <TextInput id="textureName" class={{ 'mb-3': true }} value={store.textureName} onInput$={(event: any) => { store.textureName = event.target!.value; }}>
+        <TextInput id="textureName" class={{ 'mb-3': true }} value={store.textureName} onInput$={(e, el) => { store.textureName = el.value; }}>
           {t('animtexture.textureName@@Texture Name')}
         </TextInput>
 
