@@ -21,9 +21,15 @@ export const animTABDefaults = {
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  const animtabCookies = await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+  const rgbCookies = await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+  if (!rgbCookies.customFormat) {
+    delete rgbCookies.format;
+    delete animtabCookies.outputFormat;
+  }
   return {
-    animtab: await getCookies(cookie, 'animtab', url.searchParams) as typeof animTABDefaults,
-    rgb: await getCookies(cookie, 'rgb', url.searchParams) as typeof rgbDefaults,
+    animtab: animtabCookies,
+    rgb: rgbCookies,
   };
 });
 
@@ -140,7 +146,7 @@ export default component$(() => {
         </h1>
 
         <div class="flex gap-2 my-4 items-center">
-          <div class="w-full h-3 rounded-full items-center relative" id="colormap"
+          <div class="w-full h-3 rounded-full items-center relative left-0" id="colormap"
             style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
             onMouseDown$={(e, el) => {
               if (e.target != el) return;
@@ -150,7 +156,7 @@ export default component$(() => {
               if (store.colors.find(c => c.pos == pos)) return;
               const newColors = [...store.colors];
               newColors.push({ hex: getRandomColor(), pos });
-              store.colors = sortColors(newColors);
+              store.colors = newColors;
             }}
             onMouseEnter$={(e, el) => {
               const abortController = new AbortController();
@@ -174,16 +180,18 @@ export default component$(() => {
             }}
           >
             <div id="add-button" class={{
-              'absolute -mt-1 -ml-3 transition-opacity w-5 h-5 rounded-full shadow-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
+              'absolute -mt-1 -ml-3 transition-all w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
             }}>
               <Add width="19" />
             </div>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={color.pos}
-              onMouseDown$={() => {
+            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3 transition-all" key={color.hex}
+              onMouseDown$={(e, el) => {
                 const abortController = new AbortController();
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
+                  el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
+                  el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
                   const length = store.text.length * animtabstore.length;
                   let pos = Math.round((((e.clientX - rect.left) / rect.width) * length)) / length * 100;
                   if (pos < 0) pos = 0;
@@ -194,6 +202,8 @@ export default component$(() => {
                   store.colors = newColors;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
+                  el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
+                  el.style.filter = '';
                   abortController.abort();
                 }, { signal: abortController.signal });
               }} style={{
@@ -202,12 +212,14 @@ export default component$(() => {
             >
               <button key={`color${i + 1}`} id={`color${i + 1}`}
                 class={{
-                  'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
-                  'border-white': getBrightness(convertToRGB(color.hex)) < 126,
-                  'border-black': getBrightness(convertToRGB(color.hex)) > 126,
+                  'transition-transform w-5 h-5 hover:scale-125 rounded-md shadow-md border': true,
+                  'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                  'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
                 }}
                 style={`background: ${color.hex};`}
                 onClick$={() => {
+                  if (tempstore.opened == i) return tempstore.opened = -1;
+                  else tempstore.opened = i;
                   const abortController = new AbortController();
                   document.addEventListener('click', (e) => {
                     if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
@@ -215,7 +227,6 @@ export default component$(() => {
                       abortController.abort();
                     }
                   }, { signal: abortController.signal });
-                  tempstore.opened = i;
                 }}
               />
               <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>

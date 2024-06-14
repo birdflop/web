@@ -144,16 +144,18 @@ export default component$(() => {
             }}
           >
             <div id="add-button" class={{
-              'absolute -mt-1 -ml-3 transition-opacity w-5 h-5 rounded-full shadow-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
+              'absolute -mt-1 -ml-3 transition-all w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
             }}>
               <Add width="19" />
             </div>
-            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={color.pos}
-              onMouseDown$={() => {
+            {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3 transition-all" key={i}
+              onMouseDown$={(e, el) => {
                 const abortController = new AbortController();
                 const colormap = document.getElementById('colormap')!;
                 const rect = colormap.getBoundingClientRect();
                 document.addEventListener('mousemove', e => {
+                  el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
+                  el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
                   let pos = Math.round((((e.clientX - rect.left) / rect.width) * store.text.length)) / store.text.length * 100;
                   if (pos < 0) pos = 0;
                   if (pos > 100) pos = 100;
@@ -163,6 +165,8 @@ export default component$(() => {
                   store.colors = newColors;
                 }, { signal: abortController.signal });
                 document.addEventListener('mouseup', () => {
+                  el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
+                  el.style.filter = '';
                   abortController.abort();
                 }, { signal: abortController.signal });
               }} style={{
@@ -171,12 +175,14 @@ export default component$(() => {
             >
               <button key={`color${i + 1}`} id={`color${i + 1}`}
                 class={{
-                  'transition-transform w-5 h-5 hover:scale-125 rounded-full shadow-md border': true,
-                  'border-white': getBrightness(convertToRGB(color.hex)) < 126,
-                  'border-black': getBrightness(convertToRGB(color.hex)) > 126,
+                  'transition-transform w-5 h-5 hover:scale-125 rounded-md shadow-md border': true,
+                  'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                  'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
                 }}
                 style={`background: ${color.hex};`}
                 onClick$={() => {
+                  if (tempstore.opened == i) return tempstore.opened = -1;
+                  else tempstore.opened = i;
                   const abortController = new AbortController();
                   document.addEventListener('click', (e) => {
                     if (e.target instanceof HTMLElement && !e.target.closest(`#color${i + 1}`) && !e.target.closest(`#color${i + 1}-popup`)) {
@@ -184,7 +190,6 @@ export default component$(() => {
                       abortController.abort();
                     }
                   }, { signal: abortController.signal });
-                  tempstore.opened = i;
                 }}
               />
               <div id={`color${i + 1}-popup`} onMouseDown$={(e) => e.stopPropagation()}>
