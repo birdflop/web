@@ -76,16 +76,23 @@ export const v3formats = [
     char: '&',
   },
   {
-    color: '<#$1$2$3$4$5$6>$f$c',
-    char: '&',
+    color: 'MiniMessage',
+    bold: '<b>$t</b>',
+    italic: '<i>$t</i>',
+    underline: '<u>$t</u>',
+    strikethrough: '<s>$t</s>',
+  },
+  {
+    color: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    char: '§',
   },
   {
     color: '&x&$1&$2&$3&$4&$5&$6$f$c',
     char: '&',
   },
   {
-    color: '§x§$1§$2§$3§$4§$5§$6$f$c',
-    char: '§',
+    color: '<#$1$2$3$4$5$6>$f$c',
+    char: '&',
   },
   {
     color: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
@@ -93,13 +100,6 @@ export const v3formats = [
     italic: '[ITALIC]$t[/ITALIC]',
     underline: '[UNDERLINE]$t[/UNDERLINE]',
     strikethrough: '[STRIKETHROUGH]$t[/STRIKETHROUGH]',
-  },
-  {
-    color: 'MiniMessage',
-    bold: '<b>$t</b>',
-    italic: '<i>$t</i>',
-    underline: '<u>$t</u>',
-    strikethrough: '<s>$t</s>',
   },
 ];
 
