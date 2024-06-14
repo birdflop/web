@@ -1,10 +1,10 @@
 import type { Cookie } from '@builder.io/qwik-city';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
-import { defaults } from './PresetUtils';
+import { defaults, loadPreset } from './PresetUtils';
 
 export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchParams) {
-  const json = JSON.parse(cookie.get(preset)?.value || '{}');
+  let json = JSON.parse(cookie.get(preset)?.value || '{}');
 
   // migrate
   let migrated = false;
@@ -18,7 +18,6 @@ export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchP
       if (!cookieValue) return;
       console.log('Migrating', name);
       try {
-        if (name == 'version') json[name] = defaults.version;
         if (name == 'colors') json[name] = cookieValue.split(',');
         else if (name == 'format' ) json[name] = JSON.parse(cookieValue);
         else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
@@ -32,6 +31,7 @@ export function getCookies(cookie: Cookie, preset: string, urlParams: URLSearchP
       cookie.delete(name, { path: '/' });
       migrated = true;
     });
+    json = loadPreset(JSON.stringify(json));
   }
 
   if (migrated) cookie.set(preset, JSON.stringify(json), { path: '/' });
