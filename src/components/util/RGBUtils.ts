@@ -152,7 +152,25 @@ export function generateOutput(
   let output = '';
 
   if (format.color == 'MiniMessage') {
-    output += `<gradient:${colors.join(':')}>${text}</gradient>`;
+    colors = sortColors(colors);
+    if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
+    if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
+    for (let i = 0; i < colors.length - 1; i++) {
+      let currentColor = colors[i];
+      let nextColor = colors[i + 1];
+      if (currentColor.pos > nextColor.pos) {
+        const newColor = currentColor;
+        currentColor = nextColor;
+        nextColor = newColor;
+      }
+
+      const numSteps = text.length;
+      const lowerRange = Math.round(colors[i].pos / 100 * numSteps);
+      const upperRange = Math.round(colors[i + 1].pos / 100 * numSteps);
+      if (lowerRange === upperRange) continue;
+      output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+    }
+    return output;
   }
 
   const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
