@@ -410,7 +410,7 @@ export default component$(() => {
               } values={[
                 ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
                 { name: t('color.custom@@Custom'), value: 'custom' },
-              ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
                 {t('color.colorPreset@@Color Preset')}
               </Dropdown>
               <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
@@ -420,7 +420,7 @@ export default component$(() => {
             <Toggle id="trimspaces" checked={store.trimspaces}
               onChange$={(e, el) => { store.trimspaces = el.checked; }}
               label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            {tempstore.alerts.map((alert: any, i: number) => (
+            {tempstore.alerts.map((alert, i) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}
           </div>

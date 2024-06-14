@@ -27,34 +27,31 @@ export default component$(() => {
     document.head.appendChild(script);
   });
 
-  useOn(
-    'change',
-    $((event) => {
-      const { files } = event.target as HTMLInputElement;
-      if (!files) return;
-      Array.from(files).forEach(file => {
-        const f = new FileReader();
-        f.readAsDataURL(file);
-        f.onloadend = async (e) => {
-          const b64 = e!.target!.result;
-          const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
-          if (type == 'image/gif') {
-            // @ts-ignore
-            const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
-            gifframes.forEach((frame: any) => {
-              const contentStream = frame.getImage();
-              const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
-              const b64frame = `data:image/png;base64,${imageData}`;
+  useOn('change', $((e, el) => {
+    const { files } = el as HTMLInputElement;
+    if (!files) return;
+    Array.from(files).forEach(file => {
+      const f = new FileReader();
+      f.readAsDataURL(file);
+      f.onloadend = async (e) => {
+        const b64 = e!.target!.result;
+        const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
+        if (type == 'image/gif') {
+          // @ts-ignore
+          const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
+          gifframes.forEach((frame: any) => {
+            const contentStream = frame.getImage();
+            const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
+            const b64frame = `data:image/png;base64,${imageData}`;
 
-              store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
-            });
-            return;
-          }
-          store.frames.push({ img: b64, delay: 20 });
-        };
-      });
-    }),
-  );
+            store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
+          });
+          return;
+        }
+        store.frames.push({ img: b64, delay: 20 });
+      };
+    });
+  }));
   return (
     <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
@@ -82,56 +79,54 @@ export default component$(() => {
         </TextInput>
 
         <Toggle id="Cumulative" checked={store.cumulative}
-          onChange$={(event: any) => { store.cumulative = event.target.checked; }}
+          onChange$={(e, el) => { store.cumulative = el.checked; }}
           label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')} />
 
-        <Button class={{ 'my-6': true }} onClick$={
-          () => {
-            const canvas: any = document.getElementById('c')!;
-            canvas.classList.add('sm:flex');
-            const imglist: any = document.getElementById('imgs')!;
-            const ctx = canvas.getContext('2d');
-            const imgs = imglist.getElementsByTagName('IMG');
-            let max = 0;
-            for (let i = 0; i != imgs.length; i++) {
-              if (imgs[i].naturalWidth > max) max = imgs[i].naturalWidth;
-            }
-            canvas.width = max;
-            canvas.height = max * imgs.length;
-            ctx.imageSmoothingEnabled = false;
-            for (let i = 0; i != imgs.length; i++) {
-              ctx.drawImage(imgs[i], 0, i * max);
-              ctx.drawImage(imgs[i], 0, max * i, max, max);
-            }
-            const b64 = canvas.toDataURL();
-            const pngd: any = document.getElementById('pngd')!;
-            const mcmeta: any = document.getElementById('mcmeta')!;
-            pngd.href = b64;
-            pngd.download = store.textureName + '.png';
-            mcmeta.download = store.textureName + '.png.mcmeta';
-
-            const start = '{"animation":{"frames": [';
-            const frameBase = '{"index": ';
-            const frameMid = ', "time": ';
-            const frameEnd = '},';
-            let res = start;
-            for (let i = 0; i != store.frames.length; i++) {
-              let tmp = frameBase;
-              tmp += i;
-              tmp += frameMid;
-              tmp += store.frames[i].delay;
-              tmp += frameEnd;
-              res += tmp;
-            }
-            res = res.substring(0, res.length - 1);
-            res += ']}}';
-
-            mcmeta.href = 'data:text/plain;charset=utf-8,' + res;
-
-            const links = document.getElementById('links')!;
-            links.className = 'inline';
+        <Button class={{ 'my-6': true }} onClick$={() => {
+          const canvas = document.getElementById('c') as HTMLCanvasElement;
+          canvas.classList.add('sm:flex');
+          const imglist = document.getElementById('imgs') as HTMLDivElement;
+          const ctx = canvas.getContext('2d')!;
+          const imgs = imglist.getElementsByTagName('IMG') as HTMLCollectionOf<HTMLImageElement>;
+          let max = 0;
+          for (let i = 0; i != imgs.length; i++) {
+            if (imgs[i].naturalWidth > max) max = imgs[i].naturalWidth;
           }
-        }>
+          canvas.width = max;
+          canvas.height = max * imgs.length;
+          ctx.imageSmoothingEnabled = false;
+          for (let i = 0; i != imgs.length; i++) {
+            ctx.drawImage(imgs[i], 0, i * max);
+            ctx.drawImage(imgs[i], 0, max * i, max, max);
+          }
+          const b64 = canvas.toDataURL();
+          const pngd = document.getElementById('pngd') as HTMLAnchorElement;
+          const mcmeta = document.getElementById('mcmeta') as HTMLAnchorElement;
+          pngd.href = b64;
+          pngd.download = store.textureName + '.png';
+          mcmeta.download = store.textureName + '.png.mcmeta';
+
+          const start = '{"animation":{"frames": [';
+          const frameBase = '{"index": ';
+          const frameMid = ', "time": ';
+          const frameEnd = '},';
+          let res = start;
+          for (let i = 0; i != store.frames.length; i++) {
+            let tmp = frameBase;
+            tmp += i;
+            tmp += frameMid;
+            tmp += store.frames[i].delay;
+            tmp += frameEnd;
+            res += tmp;
+          }
+          res = res.substring(0, res.length - 1);
+          res += ']}}';
+
+          mcmeta.href = 'data:text/plain;charset=utf-8,' + res;
+
+          const links = document.getElementById('links')!;
+          links.className = 'inline';
+        }}>
           {t('animtexture.generate@@Generate')}
         </Button>
 

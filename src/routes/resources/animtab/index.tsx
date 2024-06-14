@@ -277,7 +277,7 @@ export default component$(() => {
               </TextInput>
 
               <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabstore.type = Number(el.value); }}
-                values={types.map((type: any) => ({ name: type.name, value: type.value }))}
+                values={types}
                 value={animtabstore.type}>
                 {t('animtab.outputType@@Output Type')}
               </Dropdown>
@@ -403,7 +403,7 @@ export default component$(() => {
               } values={[
                 ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
                 { name: t('color.custom@@Custom'), value: 'custom' },
-              ]} value={Object.keys(presets).find((preset: any) => presets[preset as keyof typeof presets].toString() == store.colors.toString()) ?? 'custom'}>
+              ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
                 {t('color.colorPreset@@Color Preset')}
               </Dropdown>
               <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'welcome to $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
@@ -416,7 +416,7 @@ export default component$(() => {
             <Toggle id="advanced" checked={store.customFormat}
               onChange$={(e, el) => { store.customFormat = el.checked; }}
               label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-sm">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
-            {tempstore.alerts.map((alert: any, i: number) => (
+            {tempstore.alerts.map((alert, i) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}
             {
