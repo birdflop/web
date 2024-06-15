@@ -4,6 +4,7 @@ import { generateOutput } from '~/components/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
+  let output = {};
   try {
     const queryjson: any = Object.fromEntries(query);
 
@@ -15,26 +16,27 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
     }
 
-    const output = await getOutput(queryjson);
-    throw json(200, output);
+    output = await getOutput(queryjson);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+  throw json(200, output);
 };
 
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
+  let output = {};
   try {
     const body = await parseBody();
-    const output = await getOutput(body);
-
-    throw json(200, output);
+    output = await getOutput(body);
   }
   catch (e: any) {
     console.error(e);
     throw json(400, { error: e.message });
   }
+
+  throw json(200, output);
 };
 
 async function getOutput(body: any) {
@@ -50,12 +52,12 @@ async function getOutput(body: any) {
         default: rgbDefaults.text,
       },
       colors: {
-        type: 'array of hex colors',
+        type: 'array of (Color object - see data models in docs) or array of (string)',
         description: 'The colors to use for the gradient. Must be in hex format.',
         default: rgbDefaults.colors,
       },
       format: {
-        type: 'format object - see data models in docs',
+        type: 'Format object - see data models in docs',
         description: 'The format to use for the color and format codes. For MiniMessage, { color: "MiniMessage" } can be used.',
         default: rgbDefaults.format,
       },
@@ -97,14 +99,21 @@ async function getOutput(body: any) {
     },
   };
 
-  // in case stupid
-  // mostly just so people can just send { color: "MiniMessage" }
+  /* in case stupid */
+
+  // make { color: "MiniMessage" } a valid format
   let format = body?.format;
   if (format && !format.char && (!format.bold || !format.italic || !format.underline || !format.strikethrough)) {
     format = v3formats.find(f => f.color == format.color) ?? { ...format, char: '&' };
   }
 
-  const { text, colors, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
+  // make string[] a valid color array
+  let colors = body?.colors;
+  if (colors && colors.length && typeof colors[0] == 'string') {
+    if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
+  }
+
+  const { text, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
   const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough);
   return {
     output,

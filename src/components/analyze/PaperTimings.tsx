@@ -21,26 +21,24 @@ export default component$(() => {
 
         <Slot />
 
-        <TextInput id="link" onInput$={
-          (event: any) => {
-            const link = event.target!.value;
-            store.redirect = '';
-            if (link.startsWith('https://spark.lucko.me')) {
-              store.error = '⚠️ This is a Spark Profile. Use the Spark Profile Analysis for this type of report.';
-            }
-            else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
-              store.error = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
-            }
-            else if (!link.startsWith('https://timin') || !link.includes('?id=')) {
-              store.error = '❌ This is an Invalid Timings Link.';
-            }
-            else {
-              store.error = '';
-              const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
-              store.redirect = `/resources/papertimings/${code}`;
-            }
+        <TextInput id="link" onInput$={(e, el) => {
+          const link = el.value;
+          store.redirect = '';
+          if (link.startsWith('https://spark.lucko.me')) {
+            store.error = '⚠️ This is a Spark Profile. Use the Spark Profile Analysis for this type of report.';
           }
-        }>
+          else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
+            store.error = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
+          }
+          else if (!link.startsWith('https://timin') || !link.includes('?id=')) {
+            store.error = '❌ This is an Invalid Timings Link.';
+          }
+          else {
+            store.error = '';
+            const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
+            store.redirect = `/resources/papertimings/${code}`;
+          }
+        }}>
           Paste the timings report link here
         </TextInput>
         <p class={{
