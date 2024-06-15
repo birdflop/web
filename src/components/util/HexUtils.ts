@@ -26,8 +26,8 @@ export class Gradient {
         nextColor = newColor;
       }
 
-      const lowerRange = Math.round(colors[i].pos / 100 * numSteps);
-      const upperRange = Math.round(colors[i + 1].pos / 100 * numSteps);
+      const lowerRange = Math.round(colors[i].pos / 100 * this.steps);
+      const upperRange = Math.round(colors[i + 1].pos / 100 * this.steps);
       if (lowerRange === upperRange) continue;
 
       this.gradients.push(
