@@ -351,7 +351,10 @@ export default component$(() => {
               onDecrement$={() => {
                 const newColors = store.colors.slice(0);
                 newColors.pop();
-                store.colors = newColors;
+                store.colors = newColors.map((color, i) => ({
+                  hex: color.hex,
+                  pos: (100 / (newColors.length - 1)) * i,
+                }));
               }}
             >
               {t('color.colorAmount@@Color Amount')}
