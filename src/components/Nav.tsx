@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { Button, ButtonAnchor, LoadingIcon, LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui';
 
-import { CubeOutline, GlobeOutline, LogoGithub, ServerOutline } from 'qwik-ionicons';
+import { CubeOutline, GlobeOutline, LogoGithub, ServerOutline, People } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
@@ -148,6 +148,9 @@ export default component$(() => {
 
 export const SocialButtons = component$(() => {
   return <>
+    <ButtonAnchor transparent square href="/staff/" title="Our Staff">
+      <People width="29" />
+    </ButtonAnchor>
     <ButtonAnchor transparent square href="https://github.com/birdflop/web" title="GitHub">
       <LogoGithub width="24" />
     </ButtonAnchor>
