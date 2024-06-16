@@ -56,7 +56,7 @@ export default component$(() => {
             {t('nav.hexGradient@@RGBirdflop')}
           </Button>
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/jars">
+        <Link q:slot="extra-buttons" href="/resources/jars/">
           <Button transparent class={{ 'w-full': true }}>
             {t('nav.jarflop@@Jarflop')}
           </Button>
