@@ -126,8 +126,10 @@ export default component$(() => {
     const selectedJar = state.selectedJar as any;
     return (
       <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 p-4">
-        <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full">
-          <button onClick$={closeModal} class="absolute top-2 right-2 text-gray-400 hover:text-gray-200"><CloseOutline width="30" style={{ color: 'white' }} /></button>
+        <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-in-out scale-100">
+          <button onClick$={closeModal} class="absolute top-2 right-2 text-gray-400 hover:text-gray-200 transform transition-transform duration-300 ease-in-out hover:scale-110">
+            <CloseOutline width="30" style={{ color: 'white' }} />
+          </button>
           <div class="flex items-center mb-4">
             <img src={selectedJar.logo} alt={`${selectedJar.name} logo`} class="w-12 h-12 mr-4" height="1" width="1"/>
             <h2 class="text-2xl font-bold">{selectedJar.name}</h2>
