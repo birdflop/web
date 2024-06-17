@@ -112,7 +112,7 @@ export default component$(() => {
                   })}
                 </ul>
                 {plan.outOfStock ?
-                  <Button color="red" class={{ 'w-full': true }} disabled>
+                  <Button color="red" class={{ 'w-full': true }} onClick$={() => {window.open("https://discord.gg/nmgtX5z", "_blank")}}>
                     <AlertCircleOutline width="30" class="text-3xl" /> Out of stock
                   </Button>
                   :

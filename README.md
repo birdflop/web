@@ -7,7 +7,7 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 <a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=flat"></a>
 <a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=flat"></a>
 <a href="hthttps://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=flat"></a>
-<a href="https://www.codefactor.io/repository/github/bwmp/web"><img src="https://www.codefactor.io/repository/github/bwmp/web/badge" alt="CodeFactor" /></a>
+<a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge" alt="CodeFactor" /></a>
 <a title="Crowdin" target="_blank" href="https://crowdin.com/project/simplymc"><img src="https://badges.crowdin.net/simplymc/localized.svg"></a>
 
 <h2>Contributing</h2>

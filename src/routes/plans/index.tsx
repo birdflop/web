@@ -97,7 +97,7 @@ export default component$(() => {
                   'opacity-50': plan.outOfStock,
                 }}
                 onClick$={() => { if (!plan.outOfStock) store.plan = planName; store.gb = 0; }}
-                href="#ram">
+                href={plan.outOfStock ? 'https://discord.gg/nmgtX5z' : '#ram'}>
                 <p>
                   Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
                 </p>
