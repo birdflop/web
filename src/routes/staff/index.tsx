@@ -25,7 +25,7 @@ export const staffList = [
   },
   {
     name: 'Oli/AkiraDev',
-    bio: 'Developer of Birdflop Resources. I work on things like botflot, The panel, This Websites, and more! I can help you with client support and most other birdflop related things.',
+    bio: 'Developer of Birdflop Resources. I work on things like botflop, The panel, This Websites, and more! I can help you with client support and most other birdflop related things.',
     portfolio: 'https://bwmp.dev/',
     avatar: 'https://images-ext-1.discordapp.net/external/xrRx9dDuWdeESSCxOG10Psf3S7yEUBdXW89gNjuqA_Y/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/798738506859282482/b0cf17e71f1c00a0c7a0c7225bdbc759.webp?format=webp',
   },
@@ -51,15 +51,15 @@ export const staffList = [
 
 export default component$(() => {
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
       <Background class="fixed min-h-screen w-full bottom-0 overflow-hidden -z-10 object-cover object-center opacity-50" id="bg" alt="background" />
       <div class="w-full my-10 min-h-[60px] scale-for-mac">
         <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold text-center drop-shadow-lg mb-6">
           <PeopleOutline width="64" style={{ color: 'white' }} /> Meet The Team
         </h1>
-        <div id="staff-grid" class="grid grid-cols-3 sm:grid-cols-1 md:grid-cols-2 gap-6 justify-items-center">
+        <div id="staff-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-items-center">
           {staffList.map((staff, i) => (
-            <Card key={i} hover="clickable" blobs="darkgray" href={staff.portfolio} row color="zinc" class={{ 'flex flex-row gap-2 items-start': true }}>
+            <Card key={i} hover="clickable" blobs="darkgray" href={staff.portfolio} row color="zinc" class={{ 'flex flex-row items-start gap-4 max-w-full': true }}>
               <img src={staff.avatar} width='64' height='64' alt={staff.name} class="rounded-full object-cover" />
               <Header subheader={staff.bio}>{staff.name}</Header>
             </Card>
