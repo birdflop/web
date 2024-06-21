@@ -1,5 +1,5 @@
-import { component$, useStore, $ } from '@builder.io/qwik';
-import { Card, Header, TextInput, ButtonAnchor } from '@luminescent/ui';
+import { component$, useStore, $, useSignal } from '@builder.io/qwik';
+import { Card, Header, TextInput, ButtonAnchor, Button } from '@luminescent/ui';
 import { CloseOutline } from 'qwik-ionicons';
 
 const fetchLatestPurpurVersion = $(async () => {
@@ -82,6 +82,8 @@ export default component$(() => {
     jar.name.toLowerCase().includes(store.searchTerm.toLowerCase()),
   );
 
+  const modalRef = useSignal<HTMLDialogElement>();
+
   return (
     <div class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="w-full max-w-2xl flex flex-col items-center space-y-4 p-4">
@@ -103,8 +105,9 @@ export default component$(() => {
               filteredJars.map((jar, index) => (
                 <Card key={index} hover="clickable" onClick$={async () => {
                   try {
-                    store.downloadLink = await getDownloadLink(jar.name);
                     store.selectedJar = jar;
+                    modalRef.value?.showModal();
+                    store.downloadLink = await getDownloadLink(jar.name);
                   }
                   catch (error) {
                     console.error('Error fetching download link:', error);
@@ -126,24 +129,19 @@ export default component$(() => {
           </div>
         </div>
       </div>
-      {store.selectedJar !== null &&
-        <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 p-4">
-          <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-in-out scale-100">
-            <button onClick$={() => store.selectedJar = null} class="absolute top-2 right-2 text-gray-400 hover:text-gray-200 transform transition-transform duration-300 ease-in-out hover:scale-110">
-              <CloseOutline width="30" style={{ color: 'white' }} />
-            </button>
-            <div class="flex items-center mb-4">
-              <img src={store.selectedJar.logo} alt={`${store.selectedJar.name} logo`} class="w-12 h-12 mr-4" height="1" width="1"/>
-              <h2 class="text-2xl font-bold">{store.selectedJar.name}</h2>
-            </div>
-            <p class="mb-4">{store.selectedJar.longDescription}</p>
-            <ButtonAnchor href={store.downloadLink} onClick$={async () => {
-            }}>
-              Download Latest Version
-            </ButtonAnchor>
-          </div>
+      <dialog ref={modalRef} class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-in-out scale-100">
+        <div class="flex items-center mb-4">
+          <img src={store.selectedJar?.logo} alt={`${store.selectedJar?.name} logo`} class="w-12 h-12 mr-4" height="1" width="1"/>
+          <h2 class="text-2xl font-bold flex-1">{store.selectedJar?.name}</h2>
+          <Button square onClick$={() => modalRef.value?.close()}>
+            <CloseOutline width="24" style={{ color: 'white' }} />
+          </Button>
         </div>
-      }
+        <p class="mb-4">{store.selectedJar?.longDescription}</p>
+        <ButtonAnchor href={store.downloadLink}>
+          Download Latest Version
+        </ButtonAnchor>
+      </dialog>
     </div>
   );
 });
