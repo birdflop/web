@@ -44,7 +44,7 @@ export const staffList = [
   {
     name: 'Ninevolt',
     bio: 'Avid Minecraft Player. My passion is to help others and provide people with the Minecraft experience I was not given growing up. Open for new friends!',
-    portfolio: 'https://azrian0.github.io/Portfolio/',
+    portfolio: 'https://azrian.xyz/',
     avatar: 'https://images-ext-1.discordapp.net/external/quhoTVdSO2j1WTCYot80PfO62U-eOxXnpgC_nZFH6hU/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/306917480432140301/3628068f5ac9fff6afe9f48f8fc1892b.webp?format=webp',
   },
 ];
