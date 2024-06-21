@@ -1,16 +1,16 @@
-import { component$, useStore, $, useSignal } from '@builder.io/qwik';
+import { component$, useStore, useSignal } from '@builder.io/qwik';
 import { Card, Header, TextInput, ButtonAnchor, Button } from '@luminescent/ui';
 import { CloseOutline } from 'qwik-ionicons';
 
-const fetchLatestPurpurVersion = $(async () => {
+async function fetchLatestPurpurVersion() {
   const response = await fetch('https://api.purpurmc.org/v2/purpur');
   const data = await response.json();
   const versions = data.versions;
   const latestVersion = versions[versions.length - 1];
   return `https://api.purpurmc.org/v2/purpur/${latestVersion}/latest/download`;
-});
+}
 
-const fetchLatestPaperVersion = $(async () => {
+async function fetchLatestPaperVersion() {
   const response = await fetch('https://papermc.io/api/v2/projects/paper');
   const data = await response.json();
   const versions = data.versions;
@@ -22,16 +22,16 @@ const fetchLatestPaperVersion = $(async () => {
   const downloadData = await downloadResponse.json();
   const downloadName = downloadData.downloads.application.name;
   return `https://papermc.io/api/v2/projects/paper/versions/${latestVersion}/builds/${latestBuild}/downloads/${downloadName}`;
-});
+}
 
-const fetchLatestPufferfishVersion = $(async () => {
+async function fetchLatestPufferfishVersion() {
   const response = await fetch('https://ci.pufferfish.host/job/Pufferfish-1.20/api/json?tree=builds[number,status,timestamp,id,result,changeSet[items[comment,commitId]],artifacts[*]]');
   const data = await response.json();
   const latestBuild = data.builds[0];
   const latestBuildNumber = latestBuild.number;
   const artifact = latestBuild.artifacts.find((a: any) => a.fileName.endsWith('.jar'));
   return `https://ci.pufferfish.host/job/Pufferfish-1.20/${latestBuildNumber}/artifact/${artifact.relativePath}`;
-});
+}
 
 function getDownloadLink(jarName: string) {
   switch (jarName) {
