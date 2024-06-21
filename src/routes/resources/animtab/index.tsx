@@ -201,7 +201,7 @@ export default component$(() => {
           }}>
             <Add width="19" />
           </div>
-          {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={i}
+          {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
             onMouseDown$={(e, el) => {
               const abortController = new AbortController();
               const colormap = document.getElementById('colormap')!;
@@ -386,7 +386,7 @@ export default component$(() => {
               </Button>
             </div>
             <div class="flex flex-col gap-2">
-              {store.colors.map((color, i) => <div key={i} class="flex relative gap-2">
+              {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
                 <div class="bg-gray-800 flex flex-col rounded-md border border-gray-700">
                   <Button size="sm" square transparent onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
                     <ChevronUp width="20" />
