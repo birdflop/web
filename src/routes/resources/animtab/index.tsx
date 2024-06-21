@@ -403,6 +403,11 @@ export default component$(() => {
                   }}
                   style={`background: ${color.hex};`}
                   value={color.hex}
+                  onInput$={(e, el) => {
+                    const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                    picker.dataset.value = el.value;
+                    picker.dispatchEvent(new Event('input'));
+                  }}
                   onMouseUp$={() => {
                     const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
                     picker.dataset.value = color.hex;
