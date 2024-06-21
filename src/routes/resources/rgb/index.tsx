@@ -109,15 +109,15 @@ export default component$(() => {
           'font-mc-bold-italic': store.bold && store.italic,
         }}>
           {(() => {
-            const text = store.text ? store.text : 'birdflop';
+            if (!store.text) return '\u00A0';
 
             const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-            if (colors.length < 2) return text;
+            if (colors.length < 2) return store.text;
 
-            const gradient = new Gradient(colors, text.length);
+            const gradient = new Gradient(colors, store.text.length);
 
             let hex = '';
-            return text.split('').map((char: string, i: number) => {
+            return store.text.split('').map((char: string, i: number) => {
               if (store.trimspaces && char == ' ') gradient.next();
               else hex = convertToHex(gradient.next());
               return (
