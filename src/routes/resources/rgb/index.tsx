@@ -542,7 +542,7 @@ export default component$(() => {
               </TextInput>
               <div class="flex gap-2">
                 <Button id="export" size="sm" onClick$={() => {
-                  const preset: Partial<typeof defaults> = structuredClone(store);
+                  const preset: Partial<typeof defaults> = { ...store };
                   (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
                     if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
                   });
@@ -561,7 +561,7 @@ export default component$(() => {
                 <Button id="createurl" size="sm" onClick$={() => {
                   const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                   const url = new URL(base_url);
-                  const params: Partial<typeof defaults> = structuredClone(store);
+                  const params: Partial<typeof defaults> = { ...store };
                   (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
                     if (key == 'format' || key == 'colors') {
                       value = JSON.stringify(value);
