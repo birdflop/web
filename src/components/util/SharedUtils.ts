@@ -5,13 +5,18 @@ import { defaults, loadPreset } from './PresetUtils';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
+function deepclone(obj: any) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchParams) {
   let json = JSON.parse(cookie.get(preset)?.value || '{}');
-
+  const newrgbDefaults = deepclone(rgbDefaults);
+  const newanimTABDefaults = deepclone(animTABDefaults);
   // migrate
   let migrated = false;
   if (preset == 'rgb' || preset == 'animtab') {
-    const names = preset == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
+    const names = preset == 'rgb' ? Object.keys(newrgbDefaults) : Object.keys(newanimTABDefaults);
     if (preset == 'animtab') names.push('version');
     names.forEach(name => {
       let cookieValue = cookie.get(name)?.value;
@@ -35,7 +40,6 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
     });
     json = loadPreset(JSON.stringify(json));
   }
-
   if (migrated) cookie.set(preset, JSON.stringify(json), { path: '/' });
   return json;
 }
@@ -51,8 +55,9 @@ export function setCookies(name: names, json: { [key: string]: any; }) {
   if (cookie.optout === 'true') return;
 
   const cookieValue = { ...json };
+  const test = deepclone(defaults);
   Object.keys(cookieValue).forEach(key => {
-    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete cookieValue[key];
+    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(test[key as keyof typeof defaults])) delete cookieValue[key];
   });
 
   const existingCookie = cookie[name];

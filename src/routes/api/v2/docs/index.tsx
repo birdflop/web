@@ -19,7 +19,6 @@ export const useEndpoints = routeLoader$(async ({ url }) => {
 
 export default component$(() => {
   const { endpoints } = useEndpoints().value;
-
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 min-h-svh">
       <div>
@@ -107,6 +106,7 @@ export default component$(() => {
             <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
           </div>
         </Card>
+        <br/>
         <Card>
           <Header id="color" anchor>
             Color
