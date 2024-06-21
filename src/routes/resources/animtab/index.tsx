@@ -146,13 +146,12 @@ export default component$(() => {
           'font-mc-bold-italic': store.bold && store.italic,
         }}>
           {(() => {
-            const text = store.text != '' ? store.text : 'birdflop';
+            if (!store.text || !tmpstore.frames[0]) return '\u00A0';
 
-            if (!tmpstore.frames[0]) return;
             const colors = tmpstore.frames[tmpstore.frame];
-            if (!colors) return;
+            if (!colors) return '\u00A0';
 
-            return text.split('').map((char: string, i: number) => (
+            return store.text.split('').map((char: string, i: number) => (
               <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
                 'underline': store.underline,
                 'strikethrough': store.strikethrough,
