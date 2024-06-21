@@ -138,7 +138,7 @@ export default component$(() => {
           onMouseDown$={(e, el) => {
             if (e.target != el) return;
             const rect = el.getBoundingClientRect();
-            const pos = (((e.clientX - rect.left) / rect.width) * store.text.length) / store.text.length * 100;
+            const pos = ((e.clientX - rect.left) / rect.width) * 100;
             if (store.colors.find(c => c.pos == pos)) return;
             const newColors = store.colors.slice(0);
             newColors.push({ hex: getRandomColor(), pos });
@@ -153,7 +153,7 @@ export default component$(() => {
                 return;
               }
               const rect = el.getBoundingClientRect();
-              const pos = (((e.clientX - rect.left) / rect.width) * store.text.length) / store.text.length * 100;
+              const pos = ((e.clientX - rect.left) / rect.width) * 100;
               if (store.colors.find(c => c.pos == pos)) return;
               addbutton.classList.remove('opacity-0');
               addbutton.style.left = `${pos}%`;
@@ -179,7 +179,7 @@ export default component$(() => {
                 tmpstore.opened.id = -1;
                 el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
                 el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
-                let pos = (((e.clientX - rect.left) / rect.width) * store.text.length) / store.text.length * 100;
+                let pos = ((e.clientX - rect.left) / rect.width) * 100;
                 if (pos < 0) pos = 0;
                 if (pos > 100) pos = 100;
                 if (store.colors.find(c => c.pos == pos)) return;
