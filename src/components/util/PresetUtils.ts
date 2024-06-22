@@ -191,7 +191,7 @@ export function fromBinary(encoded: string) {
 export function loadPreset(p: string): Partial<typeof defaults> {
   let version: number;
   let preset: any;
-  let newPreset = defaults;
+  let newPreset = { ...defaults };
   if (fromBinary(p) !== '') {
     preset = JSON.parse(fromBinary(p));
     version = preset.version;
