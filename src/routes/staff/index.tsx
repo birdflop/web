@@ -52,7 +52,7 @@ export const staffList = [
 export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
-      <Background class="fixed min-h-screen w-full bottom-0 overflow-hidden -z-10 object-cover object-center opacity-50" id="bg" alt="background" />
+      <Background class="fixed bottom-0 -z-10 h-lvh w-lvw object-cover object-center opacity-55" id="bg" alt="background" />
       <div class="w-full my-10 min-h-[60px] scale-for-mac">
         <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold text-center drop-shadow-lg mb-6">
           <PeopleOutline width="64" style={{ color: 'white' }} /> Meet The Team

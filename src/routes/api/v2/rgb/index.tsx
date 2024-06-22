@@ -15,7 +15,6 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       else if (queryjson[key] == 'false') queryjson[key] = false;
       else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
     }
-
     output = await getOutput(queryjson);
   }
   catch (e: any) {

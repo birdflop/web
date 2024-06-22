@@ -141,7 +141,7 @@ export default component$(() => {
         </div>
 
       </div>
-      <canvas id="c" class="w-24 max-h-screen ml-48 hidden"></canvas>
+      <canvas id="c" class="w-24 max-h-svh ml-48 hidden"></canvas>
     </section>
   );
 });

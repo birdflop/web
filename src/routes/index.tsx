@@ -112,9 +112,9 @@ export default component$(() => {
                   })}
                 </ul>
                 {plan.outOfStock ?
-                  <Button color="red" class={{ 'w-full': true }} onClick$={() => {window.open("https://discord.gg/nmgtX5z", "_blank")}}>
+                  <ButtonAnchor href="https://discord.gg/nmgtX5z" target='_blank' color="red" class={{ 'w-full': true }}>
                     <AlertCircleOutline width="30" class="text-3xl" /> Out of stock
-                  </Button>
+                  </ButtonAnchor>
                   :
                   <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="pt-4">
                     <Button color="blue" class={{ 'w-full': true }}>
