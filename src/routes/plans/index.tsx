@@ -20,7 +20,8 @@ export const plans = {
     },
     features: [
       'Falkenstein, Germany',
-      'Ryzen 9 5950X (6 vCores)',
+      'Ryzen 9 5950X',
+      '6 Logical Cores',
       'Unmetered* NVMe Storage',
     ],
     outOfStock: false,
@@ -37,7 +38,8 @@ export const plans = {
     },
     features: [
       'New York City, NY, USA',
-      'Ryzen 9 3900XT (4 vCores)',
+      'Ryzen 9 3900XT',
+      '4 Logical Cores',
       'Up to 80 GB NVMe Storage',
       'Free upgrade to US Premium+ after 6 months',
     ],
@@ -54,11 +56,12 @@ export const plans = {
       20: 6,
     },
     features: [
-      'Ashburn, VA, USA',
-      'Ryzen 9 7950X (6 vCores)',
+      'US East (NYC / Ashburn VA)',
+      'Ryzen 9 7900X/7950X',
+      '6 Logical Cores',
       'Unmetered* NVMe Storage',
     ],
-    outOfStock: true,
+    outOfStock: false,
   },
 };
 

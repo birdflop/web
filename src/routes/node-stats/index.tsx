@@ -46,6 +46,12 @@ export default component$(() => {
               </Header>
               koalaknees.birdflop.com
             </Card>
+            <Card href="http://monkeymouth.birdflop.com:19999/" color="pink" hover="clickable" blobs>
+              <Header subheader="New York City, NY, USA">
+                Monkeymouth
+              </Header>
+              monkeymouth.birdflop.com
+            </Card>
           </div>
         </div>
       </div>

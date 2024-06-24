@@ -2,12 +2,11 @@ import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { PeopleOutline } from 'qwik-ionicons';
 import { Card, Header } from '@luminescent/ui';
-import Background from '~/components/images/staff-bg.png?jsx';
 
 export const staffList = [
   {
     name: 'Purpur',
-    bio: 'I own Birdflop, a 501(c)(3) nonprofit offering accessible server hosting and public resources!',
+    bio: 'Executive & technical director. Handles Birdflop\'s longterm vision and infrastructure',
     portfolio: 'https://github.com/kakduman',
     avatar: 'https://images-ext-1.discordapp.net/external/kth4aDLOuouTeuppDhbPjil0v2UiS_6zHu8OlgNXUXM/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/223585930093658122/ab42ed9463cf10fcfd10af490754ffd1.webp?format=webp',
   },
@@ -52,8 +51,7 @@ export const staffList = [
 export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
-      <Background class="fixed bottom-0 -z-10 h-lvh w-lvw object-cover object-center opacity-55" id="bg" alt="background" />
-      <div class="w-full my-10 min-h-[60px] scale-for-mac">
+      <div class="w-full my-10 min-h-[60px]">
         <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold text-center drop-shadow-lg mb-6">
           <PeopleOutline width="64" style={{ color: 'white' }} /> Meet The Team
         </h1>
