@@ -53,7 +53,7 @@ export const onGet: RequestHandler = async ({ json, query }) => {
     output: generateOutput(text, colors?.split(',').map((color: string, i: number) => ({
       hex: color,
       pos: (100 / (colors.length - 1)) * i,
-    })), { color: format, char: formatchar }, `${prefix}$t`, true, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
+    })), { color: format, char: formatchar }, `${prefix}$t`, true, 1, bold == 'true', italic == 'true', underline == 'true', strikethrough == 'true'),
     ...options,
   });
 };
