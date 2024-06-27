@@ -5,9 +5,9 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, presets, v3formats } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, DiceOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, CopyOutline, DiceOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Header, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker } from '@luminescent/ui';
+import { Button, Header, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker, ButtonAnchor } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -286,17 +286,6 @@ export default component$(() => {
               <ColorFillOutline width="32" />
               {t('color.colors@@Colors')}
             </h1>
-            <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
-              (event, el) => {
-                if (el.value == 'custom') return;
-                store.colors = presets[el.value as keyof typeof presets];
-              }
-            } values={[
-              ...Object.keys(presets).map(preset => ({ name: preset, value: preset })),
-              { name: t('color.custom@@Custom'), value: 'custom' },
-            ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
-              {t('color.colorPreset@@Color Preset')}
-            </Dropdown>
             {store.format.color != 'MiniMessage' &&
               <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full': true }}
                 onIncrement$={() => {
@@ -466,11 +455,8 @@ export default component$(() => {
               <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
                   Prefix/Suffix
               </TextInput>
-            </div>
-
-            {
-              store.customFormat && <>
-                <div class="grid grid-cols-2 gap-2">
+              {
+                store.customFormat && <>
                   <div>
                     <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}>
                       {t('color.customFormat@@Custom Format')}
@@ -514,97 +500,163 @@ export default component$(() => {
                         </>
                     }
                   </div>
-                </div>
-              </>
-            }
-
-            <div class="flex flex-col gap-2">
-              <TextInput id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
-                let json: Partial<typeof defaults> = {};
-                try {
-                  const preset = loadPreset(el.value);
-                  el.value = JSON.stringify(preset);
-                  navigator.clipboard.writeText(JSON.stringify(preset));
-                  json = {
-                    ...preset,
-                  };
-                } catch (error) {
-                  const alert = {
-                    class: 'text-red-500',
-                    text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
-                  };
-                  tmpstore.alerts.push(alert);
-                  return setTimeout(() => {
-                    tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                  }, 5000);
-                }
-                (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
-                  if (store[key] === undefined) return;
-                  (store as any)[key] = json[key] ?? defaults[key];
-                });
-                const alert = {
-                  class: 'text-green-500',
-                  text: 'color.importedPreset@@Successfully imported preset!',
-                };
-                tmpstore.alerts.push(alert);
-                setTimeout(() => {
-                  tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                }, 2000);
-              }}>
-                {t('color.presets@@Presets')}
-              </TextInput>
-              <div class="flex gap-2">
-                <Button id="export" size="sm" onClick$={() => {
-                  const preset: Partial<typeof defaults> = { ...store };
-                  (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-                    if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
-                  });
-                  navigator.clipboard.writeText(JSON.stringify(preset));
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
-                  };
-                  tmpstore.alerts.push(alert);
-                  setTimeout(() => {
-                    tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.export@@Export')}
-                </Button>
-                <Button id="createurl" size="sm" onClick$={() => {
-                  const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-                  const url = new URL(base_url);
-                  const params: Partial<typeof defaults> = { ...store };
-                  (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-                    if (key == 'format' || key == 'colors') {
-                      value = JSON.stringify(value);
-                      if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
-                    }
-                    if (value === defaults[key as keyof typeof defaults]) return;
-                    url.searchParams.set(key, String(value));
-                  });
-                  window.history.pushState({}, '', url.href);
-                  const alert = {
-                    class: 'text-green-500',
-                    text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
-                  };
-                  tmpstore.alerts.push(alert);
-                  setTimeout(() => {
-                    tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                  }, 2000);
-                }}>
-                  {t('color.url@@Export As URL')}
-                </Button>
-              </div>
+                </>
+              }
             </div>
-            {store.format.color != 'MiniMessage' &&
-              <Toggle id="trimspaces" checked={store.trimspaces}
-                onChange$={(e, el) => { store.trimspaces = el.checked; }}
-                label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            }
-            {tmpstore.alerts.map((alert, i) => (
-              <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-            ))}
+
+            <div class="flex flex-col gap-4 mt-6">
+              <h1 class="flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
+                <SaveOutline width="32" />
+                {t('color.presets@@Presets')}
+              </h1>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="flex flex-col gap-2">
+                  <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
+                    (event, el) => {
+                      let json: Partial<typeof defaults> = {};
+                      try {
+                        const preset = loadPreset(el.value);
+                        navigator.clipboard.writeText(JSON.stringify(preset));
+                        json = {
+                          ...preset,
+                        };
+                      } catch (error) {
+                        const alert = {
+                          class: 'text-red-500',
+                          text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
+                        };
+                        tmpstore.alerts.push(alert);
+                        return setTimeout(() => {
+                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                        }, 5000);
+                      }
+                      (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                        if (store[key] === undefined) return;
+                        (store as any)[key] = json[key] ?? defaults[key];
+                      });
+                      const alert = {
+                        class: 'text-green-500',
+                        text: 'color.importedPreset@@Successfully imported preset!',
+                      };
+                      tmpstore.alerts.push(alert);
+                      setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                      }, 2000);
+                    }
+                  } values={[
+                    { name: 'No presets', value: JSON.stringify({}) },
+                  ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString())}>
+                    {t('color.savedPresets@@Saved Presets')}
+                  </Dropdown>
+                  <div class="grid grid-cols-2 gap-2">
+                    <ButtonAnchor size="sm" href="presets">
+                      <GlobeOutline width="20" /> Browse
+                    </ButtonAnchor>
+                    <Button id="save" size="sm" onClick$={() => {
+                      const preset: Partial<typeof defaults> = { ...store };
+                      (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                        if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+                      });
+                      navigator.clipboard.writeText(JSON.stringify(preset));
+                      const alert = {
+                        class: 'text-green-500',
+                        text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                      };
+                      tmpstore.alerts.push(alert);
+                      setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                      }, 2000);
+                    }}>
+                      <SaveOutline width="20" /> {t('color.save@@Save')}
+                    </Button>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                  <TextInput id="import" name="import" placeholder="Paste here" onInput$={async (e, el) => {
+                    let json: Partial<typeof defaults> = {};
+                    try {
+                      const preset = loadPreset(el.value);
+                      el.value = JSON.stringify(preset);
+                      navigator.clipboard.writeText(JSON.stringify(preset));
+                      json = {
+                        ...preset,
+                      };
+                    } catch (error) {
+                      const alert = {
+                        class: 'text-red-500',
+                        text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
+                      };
+                      tmpstore.alerts.push(alert);
+                      return setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                      }, 5000);
+                    }
+                    (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                      if (store[key] === undefined) return;
+                      (store as any)[key] = json[key] ?? defaults[key];
+                    });
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.importedPreset@@Successfully imported preset!',
+                    };
+                    tmpstore.alerts.push(alert);
+                    setTimeout(() => {
+                      tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    {t('color.import@@Import')}
+                  </TextInput>
+                  <div class="flex gap-2">
+                    <Button id="export" size="sm" onClick$={() => {
+                      const preset: Partial<typeof defaults> = { ...store };
+                      (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                        if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+                      });
+                      navigator.clipboard.writeText(JSON.stringify(preset));
+                      const alert = {
+                        class: 'text-green-500',
+                        text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                      };
+                      tmpstore.alerts.push(alert);
+                      setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                      }, 2000);
+                    }}>
+                      <CopyOutline width="20" /> {t('color.export@@Export')}
+                    </Button>
+                    <Button id="createurl" size="sm" onClick$={() => {
+                      const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                      const url = new URL(base_url);
+                      const params: Partial<typeof defaults> = { ...store };
+                      (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+                        if (key == 'format' || key == 'colors') {
+                          value = JSON.stringify(value);
+                          if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
+                        }
+                        if (value === defaults[key as keyof typeof defaults]) return;
+                        url.searchParams.set(key, String(value));
+                      });
+                      window.history.pushState({}, '', url.href);
+                      const alert = {
+                        class: 'text-green-500',
+                        text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
+                      };
+                      tmpstore.alerts.push(alert);
+                      setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                      }, 2000);
+                    }}>
+                      <LinkOutline width="20" /> {t('color.url@@Export As URL')}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-4 gap-2">
+              </div>
+              {tmpstore.alerts.map((alert, i) => (
+                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
+              ))}
+            </div>
           </div>
           <div class="mb-4 flex flex-col gap-3" id="formatting">
             <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
@@ -623,6 +675,11 @@ export default component$(() => {
             <Toggle id="strikethrough" checked={store.strikethrough}
               onChange$={(e, el) => { store.strikethrough = el.checked; }}
               label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
+            {store.format.color != 'MiniMessage' &&
+              <Toggle id="trimspaces" checked={store.trimspaces}
+                onChange$={(e, el) => { store.trimspaces = el.checked; }}
+                label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+            }
           </div>
         </div>
         <div class="text-sm mt-8">

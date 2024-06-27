@@ -36,7 +36,7 @@ export default component$(() => {
   const cookies = useCookies().value;
 
   const store = useStore({
-    text: 'birdflop',
+    text: 'Birdflop',
     speed: 50,
     frames: [] as string[],
     frame: 1,
