@@ -70,6 +70,11 @@ async function getOutput(body: any) {
         description: 'Whether or not to trim color codes from spaces. Turn this off if you\'re using empty underlines or strikethroughs.',
         default: rgbDefaults.trimspaces,
       },
+      colorlength: {
+        type: 'number',
+        description: 'The amount of characters for one color step.',
+        default: rgbDefaults.colorlength,
+      },
       bold: {
         type: 'boolean',
         description: 'Whether or not to bold the text.',
@@ -112,8 +117,8 @@ async function getOutput(body: any) {
     if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
   }
 
-  const { text, prefixsuffix, trimspaces, bold, italic, underline, strikethrough } = body ?? {};
-  const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, bold, italic, underline, strikethrough);
+  const { text, prefixsuffix, trimspaces, colorlength, bold, italic, underline, strikethrough } = body ?? {};
+  const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, colorlength, bold, italic, underline, strikethrough);
   return {
     output,
     ...options,

@@ -140,7 +140,7 @@ export default component$(() => {
         </TextArea>
 
         <h1 class={{
-          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl font-mc tracking-tight': true,
           'font-mc-bold': store.bold,
           'font-mc-italic': store.italic,
           'font-mc-bold-italic': store.bold && store.italic,
@@ -151,13 +151,14 @@ export default component$(() => {
             const colors = tmpstore.frames[tmpstore.frame];
             if (!colors) return '\u00A0';
 
-            return store.text.split('').map((char: string, i: number) => (
+            const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+            return segments.map((segment, i) => (
               <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
                 'underline': store.underline,
                 'strikethrough': store.strikethrough,
                 'underline-strikethrough': store.underline && store.strikethrough,
               }}>
-                {char == ' ' ? '\u00A0' : char}
+                {segment[0].replace(/ /g, '\u00A0')}
               </span>
             ));
           })()}
@@ -326,6 +327,26 @@ export default component$(() => {
             ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
             </Dropdown>
+            <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
+              onIncrement$={() => {
+                animtabstore.length++;
+              }}
+              onDecrement$={() => {
+                animtabstore.length--;
+              }}
+            >
+              {t('animtab.length@@Gradient Length')}
+            </NumberInput>
+            <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full': true }}
+              onIncrement$={() => {
+                store.colorlength++;
+              }}
+              onDecrement$={() => {
+                store.colorlength--;
+              }}
+            >
+              {t('color.colorLength@@Color Length')}
+            </NumberInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(e, el) => {
                 let colorAmount = Number(el.value);
@@ -357,16 +378,6 @@ export default component$(() => {
               }}
             >
               {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
-            <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full': true }}
-              onIncrement$={() => {
-                animtabstore.length++;
-              }}
-              onDecrement$={() => {
-                if (animtabstore.length > 1) animtabstore.length--;
-              }}
-            >
-              {t('animtab.length@@Gradient Length')}
             </NumberInput>
             <div class="flex gap-2">
               <Button size='sm' square onClick$={() => {

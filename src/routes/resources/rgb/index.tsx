@@ -15,6 +15,7 @@ import { isBrowser } from '@builder.io/qwik/build';
 export const rgbDefaults = {
   version: defaults.version,
   colors: defaults.colors,
+  colorlength: defaults.colorlength,
   text: defaults.text,
   format: defaults.format,
   customFormat: defaults.customFormat,
@@ -96,14 +97,14 @@ export default component$(() => {
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
 
-        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}>
           <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
             {t('color.output@@Output')}
           </Header>
         </TextArea>
 
         <h1 class={{
-          'text-4xl sm:text-6xl my-6 break-all max-w-7xl -space-x-[1px] font-mc': true,
+          'text-4xl sm:text-6xl my-6 break-all max-w-7xl font-mc tracking-tight': true,
           'font-mc-bold': store.bold,
           'font-mc-italic': store.italic,
           'font-mc-bold-italic': store.bold && store.italic,
@@ -114,19 +115,19 @@ export default component$(() => {
             const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
             if (colors.length < 2) return store.text;
 
-            const gradient = new Gradient(colors, store.text.length);
+            const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
 
             let hex = '';
-            return store.text.split('').map((char: string, i: number) => {
-              if (store.trimspaces && char == ' ') gradient.next();
-              else hex = convertToHex(gradient.next());
+            const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+            return segments.map((segment, i) => {
+              hex = convertToHex(gradient.next());
               return (
-                <span key={`char${i}`} style={`color: #${hex};`} class={{
+                <span key={`segment-${i}`} style={`color: #${hex};`} class={{
                   'underline': store.underline,
                   'strikethrough': store.strikethrough,
                   'underline-strikethrough': store.underline && store.strikethrough,
                 }}>
-                  {char == ' ' ? '\u00A0' : char}
+                  {segment[0].replace(/ /g, '\u00A0')}
                 </span>
               );
             });
@@ -296,6 +297,18 @@ export default component$(() => {
             ]} value={(Object.keys(presets) as Array<keyof typeof presets>).find((preset) => presets[preset].toString() == store.colors.toString()) ?? 'custom'}>
               {t('color.colorPreset@@Color Preset')}
             </Dropdown>
+            {store.format.color != 'MiniMessage' &&
+              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full': true }}
+                onIncrement$={() => {
+                  store.colorlength++;
+                }}
+                onDecrement$={() => {
+                  store.colorlength--;
+                }}
+              >
+                {t('color.colorLength@@Color Length')}
+              </NumberInput>
+            }
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(e, el) => {
                 let colorAmount = Number(el.value);
@@ -584,9 +597,11 @@ export default component$(() => {
                 </Button>
               </div>
             </div>
-            <Toggle id="trimspaces" checked={store.trimspaces}
-              onChange$={(e, el) => { store.trimspaces = el.checked; }}
-              label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+            {store.format.color != 'MiniMessage' &&
+              <Toggle id="trimspaces" checked={store.trimspaces}
+                onChange$={(e, el) => { store.trimspaces = el.checked; }}
+                label={<p class="flex flex-col"><span>Trim color codes from spaces</span><span class="text-sm">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+            }
             {tmpstore.alerts.map((alert, i) => (
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}

@@ -94,6 +94,7 @@ export const types = [
 export const defaults = {
   version: 4,
   colors: presets.birdflop,
+  colorlength: 1,
   name: 'logo',
   text: 'birdflop',
   type: 1,

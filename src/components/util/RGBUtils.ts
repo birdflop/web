@@ -49,12 +49,13 @@ export function getAnimFrames(store: typeof defaults) {
 
   const text = store.text ?? 'birdflop';
   let loopAmount;
+  const length = text.length * store.length / store.colorlength;
   switch (Number(store.type)) {
   default:
-    loopAmount = text.length * store.length * 2 - 2;
+    loopAmount = length * 2 - 2;
     break;
   case 3:
-    loopAmount = text.length * store.length;
+    loopAmount = length;
     break;
   }
 
@@ -62,7 +63,7 @@ export function getAnimFrames(store: typeof defaults) {
   const frames = [];
   for (let n = 0; n < loopAmount; n++) {
     const clrs = [];
-    const gradient = new AnimatedGradient(colors, text.length * store.length, n);
+    const gradient = new AnimatedGradient(colors, length, n);
     let output = '';
     gradient.next();
     if (store.type == 4) {
@@ -82,10 +83,10 @@ export function getAnimFrames(store: typeof defaults) {
       if (store.prefixsuffix) hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
       OutputArray.push(hexOutput);
     } else {
-      for (let i = 0; i < text.length; i++) {
-        const char = text.charAt(i);
-        if (store.trimspaces && char == ' ') {
-          output += char;
+      const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+      for (const segment of segments) {
+        if (store.trimspaces && segment[0].match(/^\s+$/)) {
+          output += segment;
           clrs.push(null);
           continue;
         }
@@ -103,7 +104,7 @@ export function getAnimFrames(store: typeof defaults) {
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
-        hexOutput = hexOutput.replace('$c', char);
+        hexOutput = hexOutput.replace('$c', segment[0]);
         output += hexOutput;
       }
       if (store.prefixsuffix) output = store.prefixsuffix.replace(/\$t/g, output);
@@ -144,6 +145,7 @@ export function generateOutput(
   format = defaults.format,
   prefixsuffix?: string,
   trimspaces?: boolean,
+  colorlength?: number,
   bold?: boolean,
   italic?: boolean,
   underline?: boolean,
@@ -170,19 +172,18 @@ export function generateOutput(
       if (lowerRange === upperRange) continue;
       output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
     }
-    return output;
   }
 
-  const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-  if (newColors.length < 2) return 'Error: Not enough colors.';
-
-  const gradient = new Gradient(newColors, text.length);
-
   if (format.color != 'MiniMessage') {
-    for (let i = 0; i < text.length; i++) {
-      const char = text.charAt(i);
-      if (trimspaces && char == ' ') {
-        output += char;
+    const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+    if (newColors.length < 2) return 'Error: Not enough colors.';
+
+    const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
+
+    const segments = [...text.matchAll(new RegExp(`.{1,${colorlength}}`, 'g'))];
+    for (const segment of segments) {
+      if (trimspaces && segment[0].match(/^\s+$/)) {
+        output += segment[0];
         gradient.next();
         continue;
       }
@@ -201,7 +202,7 @@ export function generateOutput(
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
-      hexOutput = hexOutput.replace('$c', char);
+      hexOutput = hexOutput.replace('$c', segment[0]);
       output += hexOutput;
     }
   }
