@@ -190,61 +190,48 @@ export function fromBinary(encoded: string) {
 }
 
 export function loadPreset(p: string): Partial<typeof defaults> {
-  let version: number;
   let preset: any;
   let newPreset = { ...defaults };
   if (fromBinary(p) !== '') {
-    preset = JSON.parse(fromBinary(p));
-    version = preset.version;
-  } else {
-    preset = JSON.parse(p);
-    version = preset.version;
-  }
-  if (version === defaults.version) {
-    return preset;
-  }
-  if (version === 1) {
-    newPreset.version = defaults.version;
-    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
-    newPreset.name = preset.name;
-    newPreset.text = preset.text;
-    newPreset.speed = preset.speed;
-    newPreset.type = Number(preset.type) + 1;
-    newPreset.format = v3formats.find((f) => f.color === v1formats[preset['output-format'] as keyof typeof v1formats].template) || {
-      color: v1formats[preset['output-format'] as keyof typeof v1formats].template,
-      char: v1formats[preset['output-format'] as keyof typeof v1formats].formatChar,
-    };
-    newPreset.customFormat = preset['custom-format'] !== '';
-    newPreset.prefixsuffix = v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix ? `${v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix}$t` : '';
     const formatting = decompress(preset.formats, 4);
-    newPreset.bold = formatting[0];
-    newPreset.italic = formatting[1];
-    newPreset.underline = formatting[2];
-    newPreset.strikethrough = formatting[3];
-  }
-  if (version === 2) {
-    newPreset.version = defaults.version;
-    newPreset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
-    newPreset.name = preset.name;
-    newPreset.text = preset.text;
-    newPreset.speed = preset.speed;
-    newPreset.type = preset.type;
-    newPreset.format = v3formats.find((f) => f.color === preset.format) || {
-      color: preset.format,
-      char: preset.formatchar,
+    preset = JSON.parse(fromBinary(p));
+    const { name, text, speed } = preset;
+    newPreset = {
+      ...newPreset, name, text, speed,
+      colors: preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })),
+      type: Number(preset.type) + 1,
+      format: v3formats.find((f) => f.color === v1formats[preset['output-format'] as keyof typeof v1formats].template) || {
+        color: v1formats[preset['output-format'] as keyof typeof v1formats].template,
+        char: v1formats[preset['output-format'] as keyof typeof v1formats].formatChar,
+      },
+      customFormat: preset['custom-format'] !== '',
+      prefixsuffix: v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix ? `${v1formats[preset['output-format'] as keyof typeof v1formats].outputPrefix}$t` : '',
+      bold: formatting[0],
+      italic: formatting[1],
+      underline: formatting[2],
+      strikethrough: formatting[3],
     };
-    newPreset.customFormat = preset.customFormat;
-    newPreset.prefixsuffix = preset.prefix ? `${preset.prefix}$t` : '';
-    newPreset.bold = preset.bold;
-    newPreset.italic = preset.italic;
-    newPreset.underline = preset.underline;
-    newPreset.strikethrough = preset.strikethrough;
   }
-  if (version === 3) {
+  else preset = JSON.parse(p);
+  if (preset.version === defaults.version) return preset;
+  else if (preset.version === 2) {
+    const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough } = preset;
+    newPreset = { ...newPreset, name, text, speed, type, customFormat, bold, italic, underline, strikethrough,
+      colors: preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })),
+      format: v3formats.find((f) => f.color === preset.format) || {
+        color: preset.format,
+        char: preset.formatchar,
+      },
+      prefixsuffix: preset.prefix ? `${preset.prefix}$t` : '',
+    };
+  }
+  else if (preset.version === 3) {
     newPreset = {
       ...newPreset,
+      ...preset,
       colors: preset.colors ? preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })) : newPreset.colors,
     };
+    newPreset.version = defaults.version;
   }
 
   (Object.keys(newPreset) as Array<keyof typeof newPreset>).forEach((key) => {
