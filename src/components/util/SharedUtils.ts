@@ -12,15 +12,17 @@ function deepclone(obj: any) {
 export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchParams) {
   let json = deepclone(defaults);
   try {
-    json = JSON.parse(cookie.get(preset)?.value || '{}');
+    const cookieVal = cookie.get(preset)?.value;
+    if (cookieVal) json = JSON.parse(cookieVal);
   } catch (e) {
     console.error(e);
   }
-  const newrgbDefaults = deepclone(rgbDefaults);
-  const newanimTABDefaults = deepclone(animTABDefaults);
+
   // migrate
   let migrated = false;
   if (preset == 'rgb' || preset == 'animtab') {
+    const newrgbDefaults = deepclone(rgbDefaults);
+    const newanimTABDefaults = deepclone(animTABDefaults);
     const names = preset == 'rgb' ? Object.keys(newrgbDefaults) : Object.keys(newanimTABDefaults);
     if (preset == 'animtab') names.push('version');
     names.forEach(name => {
@@ -46,6 +48,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
     json = loadPreset(JSON.stringify(json));
   }
   if (migrated) cookie.set(preset, JSON.stringify(json), { path: '/' });
+
   return json;
 }
 
