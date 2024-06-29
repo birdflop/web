@@ -10,7 +10,12 @@ function deepclone(obj: any) {
 }
 
 export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchParams) {
-  let json = JSON.parse(cookie.get(preset)?.value || '{}');
+  let json = deepclone(defaults);
+  try {
+    json = JSON.parse(cookie.get(preset)?.value || '{}');
+  } catch (e) {
+    console.error(e);
+  }
   const newrgbDefaults = deepclone(rgbDefaults);
   const newanimTABDefaults = deepclone(animTABDefaults);
   // migrate
@@ -26,7 +31,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
       console.log('Migrating', name);
       try {
         if (name == 'colors') json[name] = cookieValue.split(',');
-        else if (name == 'format' ) json[name] = JSON.parse(cookieValue);
+        else if (name == 'format') json[name] = JSON.parse(cookieValue);
         else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
         else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);
         else json[name] = cookieValue;
