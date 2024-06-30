@@ -76,6 +76,10 @@ export const v3formats = [
     char: '&',
   },
   {
+    color: '<##$1$2$3$4$5$6>$f$c',
+    char: '&',
+  },
+  {
     color: '[COLOR=#$1$2$3$4$5$6]$c[/COLOR]',
     bold: '[BOLD]$t[/BOLD]',
     italic: '[ITALIC]$t[/ITALIC]',
