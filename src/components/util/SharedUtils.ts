@@ -18,6 +18,18 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
     console.error(e);
   }
 
+  const params = Object.fromEntries([...urlParams.entries()]) as any;
+  Object.keys(params).forEach(key => {
+    try {
+      if (key == 'format' || key == 'colors') params[key] = JSON.parse(params[key]);
+      else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
+      else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
+    } catch (e) {
+      console.error(e);
+    }
+  });
+  json = { ...json, ...params };
+
   // migrate
   let migrated = false;
   if (preset == 'rgb' || preset == 'animtab') {
@@ -26,9 +38,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
     const names = preset == 'rgb' ? Object.keys(newrgbDefaults) : Object.keys(newanimTABDefaults);
     if (preset == 'animtab') names.push('version');
     names.forEach(name => {
-      let cookieValue = cookie.get(name)?.value;
-      const paramValue = urlParams.get(name);
-      if (paramValue) cookieValue = paramValue;
+      const cookieValue = cookie.get(name)?.value;
       if (!cookieValue) return;
       console.log('Migrating', name);
       try {
