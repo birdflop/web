@@ -23,12 +23,12 @@ export default component$(() => {
   );
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
-      <div class="my-10 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          RGBirdflop Presets
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
+          {t('gradient.title@@RGBirdflop')} Presets
         </h1>
-        <h2 class="text-gray-400 text-sm sm:text-lg mb-6">
+        <h2 class="text-gray-50 my-1">
           Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop.
         </h2>
 
@@ -37,7 +37,7 @@ export default component$(() => {
             id="search-input"
             placeholder="Search for a preset"
             class={{
-              'mb-1': true,
+              'my-2': true,
             }}
             value={store.searchTerm}
             onInput$={(e, el) => store.searchTerm = el.value}

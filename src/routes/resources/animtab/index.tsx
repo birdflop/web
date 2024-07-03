@@ -129,7 +129,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('animtab.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-50 text-base mt-1 mb-9">
+        <h2 class="text-gray-50 mt-1 mb-9">
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 

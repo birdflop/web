@@ -90,7 +90,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('gradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 text-base my-1">
+        <h2 class="text-gray-50 my-1">
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
         <h3 class="text-gray-400 text-sm mb-3">

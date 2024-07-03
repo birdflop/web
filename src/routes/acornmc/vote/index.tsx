@@ -18,7 +18,7 @@ export default component$(() => {
       <h1 class="font-bold text-gray-50 text-4xl sm:text-6xl mb-4">
         AcornMC Vote
       </h1>
-      <h2 class="text-gray-400 text-base sm:text-2xl flex gap-2 items-center">
+      <h2 class="text-gray-400 sm:text-2xl flex gap-2 items-center">
         Opening Links
         <LoadingIcon width={24} class={{ 'ml-2': true }} />
       </h2>
