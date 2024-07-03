@@ -61,7 +61,7 @@ export const plans = {
       '6 Logical Cores',
       'Unmetered* NVMe Storage',
     ],
-    outOfStock: false,
+    outOfStock: true,
   },
 };
 
