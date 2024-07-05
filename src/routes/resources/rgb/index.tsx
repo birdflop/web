@@ -7,7 +7,7 @@ import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomCol
 
 import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, DiceOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Header, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker } from '@luminescent/ui';
+import { Button, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker } from '@luminescent/ui';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -85,26 +85,25 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
-      <div class="my-10 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('gradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 text-base sm:text-xl">
+        <h2 class="text-gray-50 text-base my-1">
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
-        <h3 class="text-gray-400 text-sm sm:text-lg mb-6">
+        <h3 class="text-gray-400 text-sm mb-3">
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
 
         <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}>
-          <Header subheader={t('color.outputSubtitle@@Copy-paste this for RGB text!')}>
-            {t('color.output@@Output')}
-          </Header>
+          <span class="font-bold mr-2 text-gray-100">{t('color.output@@Output')}</span>
+          <span class="text-gray-500">- {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
         </TextArea>
 
         <h1 class={{
-          'text-4xl sm:text-6xl my-6 break-all max-w-7xl font-mc tracking-tight': true,
+          'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
           'font-mc-bold': store.bold,
           'font-mc-italic': store.italic,
           'font-mc-bold-italic': store.bold && store.italic,
@@ -134,7 +133,7 @@ export default component$(() => {
           })()}
         </h1>
 
-        <div class="w-full h-3 my-6 rounded-full items-center relative" id="colormap"
+        <div class="w-full h-3 my-5 rounded-full items-center relative" id="colormap"
           style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
           onMouseDown$={(e, el) => {
             if (e.target != el) return;
@@ -254,7 +253,7 @@ export default component$(() => {
           )}
         </div>
 
-        <div id="mobile-navbuttons" class="my-4 sm:hidden">
+        <div id="mobile-navbuttons" class="my-3 sm:hidden">
           <div class="flex gap-2">
             <Button square aria-label="Colors" onClick$={() => {
               document.getElementById('colors')!.classList.replace('hidden', 'flex');
@@ -281,9 +280,9 @@ export default component$(() => {
         </div>
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-4">
-          <div class="hidden sm:flex flex-col gap-3 relative" id="colors">
-            <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
-              <ColorFillOutline width="32" />
+          <div class="hidden sm:flex flex-col gap-2 relative" id="colors">
+            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-2 items-center justify-center">
+              <ColorFillOutline width="30" />
               {t('color.colors@@Colors')}
             </h1>
             <Dropdown id="color-preset" class={{ 'w-full': true }} onChange$={
@@ -424,9 +423,9 @@ export default component$(() => {
               )}
             </div>
           </div>
-          <div class="flex flex-col gap-3 md:col-span-2" id="inputs">
-            <h1 class="hidden sm:flex text-2xl font-bold text-gray-50 gap-4 items-center justify-center">
-              <SettingsOutline width="32" />
+          <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
+            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-3 items-center justify-center">
+              <SettingsOutline width="30" />
               {t('color.inputs@@Inputs')}
             </h1>
 
@@ -606,9 +605,9 @@ export default component$(() => {
               <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
             ))}
           </div>
-          <div class="mb-4 flex flex-col gap-3" id="formatting">
-            <h1 class="hidden sm:flex text-2xl font-bold fill-current text-gray-50 gap-4 items-center justify-center">
-              <Text width="32" />
+          <div class="mb-4 flex flex-col gap-2" id="formatting">
+            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center">
+              <Text width="30" />
               {t('color.colors@@Formatting')}
             </h1>
             <Toggle id="bold" checked={store.bold}
