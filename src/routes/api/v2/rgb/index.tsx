@@ -10,10 +10,9 @@ export const onGet: RequestHandler = async ({ json, query }) => {
 
     const keys = Object.keys(queryjson);
     for (const key of keys) {
-      if (key == 'colors') queryjson.colors = queryjson.colors.split(',');
-      else if (queryjson[key] == 'true') queryjson[key] = true;
-      else if (queryjson[key] == 'false') queryjson[key] = false;
-      else if (queryjson[key].startsWith('{') && queryjson[key].endsWith('}')) queryjson[key] = JSON.parse(queryjson[key]);
+      if (key == 'format' || key == 'colors') queryjson[key] = JSON.parse(queryjson[key]);
+      else if (queryjson[key] === 'true' || queryjson[key] === 'false') queryjson[key] = queryjson[key] === 'true';
+      else if (!isNaN(Number(queryjson[key]))) queryjson[key] = Number(queryjson[key]);
     }
     output = await getOutput(queryjson);
   }
