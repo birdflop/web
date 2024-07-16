@@ -265,7 +265,7 @@ export default component$(() => {
         </div>
 
         {/* charlimit={256} */}
-        <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={generateResult(store).script}>
+        <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={((p: any) => generateResult(p).script)(store)}>
           <Header subheader={t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: store.fileName })}>
             {t('flags.script.label@@Script')}
           </Header>
