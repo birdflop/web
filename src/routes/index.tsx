@@ -219,7 +219,7 @@ export default component$(() => {
             <div>
               <Chart />
               <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes node acquisition and depreciation.
+                Plot shows revenue (inner ring) and expenditures (outer ring) for Q2 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes node acquisition and depreciation.
               </p>
             </div>
             <div class="flex flex-col gap-4">
