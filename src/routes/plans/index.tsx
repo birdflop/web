@@ -37,8 +37,8 @@ export const plans = {
       8: 3,
     },
     features: [
-      'New York City, NY, USA',
-      'Ryzen 9 3900XT',
+      'US East (NYC / Ashburn VA)',
+      'Ryzen 9 3900XT or Better',
       '4 Logical Cores',
       'Up to 80 GB NVMe Storage',
       'Free upgrade to US Premium+ after 6 months',
@@ -149,10 +149,10 @@ export default component$(() => {
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
-                    New York City, NY, USA
+                    US East (NYC / Ashburn VA)
                   </li>
                   <li>
-                    Ryzen 9 3900XT (1 vCore)
+                    Ryzen 9 3900XT or Better (1 vCore)
                   </li>
                   <li>
                     10GB NVMe Storage
@@ -166,10 +166,10 @@ export default component$(() => {
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
-                    New York City, NY, USA
+                    US East (NYC / Ashburn VA)
                   </li>
                   <li>
-                    Ryzen 9 3900XT (4 vCores)
+                    Ryzen 9 3900XT or Better (4 vCores)
                   </li>
                   <li>
                     20GB NVMe Storage

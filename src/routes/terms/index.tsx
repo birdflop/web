@@ -45,7 +45,7 @@ export default component$(() => {
         <p class="pl-5">The Service makes its content available to you with the additional restrictions that it follows our Fair Use Policy, applicable to all services offered. We expressly prohibit:</p>
         <ul class="pl-10 list-disc list-inside">
           <li>Causing excessive load on the server through means not common for a Minecraft server.</li>
-          <li>Using Bungee Hosting in a manner inconsistent with hosting BungeeCord, Waterfall, Velocity, or similar Minecraft proxy software.</li>
+          <li>Using Proxy Hosting in a manner inconsistent with hosting BungeeCord, Waterfall, Velocity, or similar Minecraft proxy software.</li>
           <li>Storing unnecessarily large files, including those both unrelated to Minecraft and related to Minecraft.</li>
         </ul>
         <p class="pl-5">In many cases, we may provide clients with an “unmetered storage” policy. “Unmetered storage” applies solely to volumes that may be reasonably expected for Minecraft servers. Clients with unmetered storage may request expanded storage at any time, and these decisions will be made solely at our discretion. Reasonable requests will be approved.</p>
