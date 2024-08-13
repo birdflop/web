@@ -36,6 +36,10 @@ export const RouterHead = component$(() => {
       {head.styles.map((s, i) => (
         <style {...s.props} key={i} dangerouslySetInnerHTML={s.style} />
       ))}
+
+      {head.scripts.map((s, i) => (
+        <script {...s.props} key={i} dangerouslySetInnerHTML={s.script} />
+      ))}
     </>
   );
 });

@@ -72,4 +72,14 @@ export const head: DocumentHead = {
       content: '/branding/icon.png',
     },
   ],
+  scripts: [
+    {
+      props: {
+        async: true,
+        type: 'text/javascript',
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
+        crossOrigin: 'anonymous',
+      },
+    },
+  ],
 };
