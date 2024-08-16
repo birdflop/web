@@ -357,70 +357,87 @@ export default component$(() => {
               </Button>
             </div>
             <div class="flex flex-col gap-2">
-              {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
-                <div class="bg-gray-800 flex flex-col rounded-md border border-gray-700">
-                  <Button size="sm" square transparent onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
-                    <ChevronUp width="20" />
-                  </Button>
-                  <Button size="sm" square transparent onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
-                    <ChevronDown width="20" />
-                  </Button>
-                </div>
-                <TextInput key={`colorlist-color-${i + 1}`} id={`colorlist-color-${i + 1}`}
-                  class={{
-                    'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                    'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                    'w-full': true,
-                  }}
-                  style={`background: ${color.hex};`}
-                  value={color.hex}
-                  onInput$={(e, el) => {
-                    const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                    picker.dataset.value = el.value;
-                    picker.dispatchEvent(new Event('input'));
-                  }}
-                  onMouseUp$={() => {
-                    const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                    picker.dataset.value = color.hex;
-                    picker.dispatchEvent(new Event('input'));
-                    if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
-                    else tmpstore.opened = { id: i, type: 1 };
-                    const abortController = new AbortController();
-                    document.addEventListener('click', (e) => {
-                      if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
-                        tmpstore.opened.id = -1;
-                        abortController.abort();
-                      }
-                    }, { signal: abortController.signal });
-                  }}
-                >
-                  {t('color.hexColor@@Hex Color')} {i + 1}
-                </TextInput>
-                <Button class={{ 'backdrop-blur-md': true }} square size="sm" disabled={store.colors.length <= 2} color="red" onClick$={() => {
-                  const newColors = store.colors.slice(0);
-                  newColors.splice(i, 1);
-                  store.colors = newColors;
-                }}>
-                  <TrashOutline width="20" />
-                </Button>
-                <div
-                  id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-                    'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
-                    'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 1,
-                  }}>
-                  <ColorPicker
-                    id={`colorlist-color-${i + 1}-picker`}
-                    value={color.hex}
-                    onInput$={newColor => {
-                      const newColors = store.colors.slice(0);
-                      newColors[i].hex = newColor;
-                      store.colors = sortColors(newColors);
+              {store.colors.map((color, i) => (
+                <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
+                  <div class="bg-gray-800 flex flex-col rounded-md border border-gray-700">
+                    <Button size="sm" square transparent onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
+                      <ChevronUp width="20" />
+                    </Button>
+                    <Button size="sm" square transparent onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
+                      <ChevronDown width="20" />
+                    </Button>
+                  </div>
+                  <TextInput
+                    key={`colorlist-color-${i + 1}`}
+                    id={`colorlist-color-${i + 1}`}
+                    class={{
+                      'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                      'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                      'w-full': true,
                     }}
-                    showInput={false}
-                  />
+                    style={`background: ${color.hex};`}
+                    value={color.hex}
+                    onInput$={(e, el) => {
+                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                      picker.dataset.value = el.value;
+                      picker.dispatchEvent(new Event('input'));
+                    }}
+                    onMouseUp$={() => {
+                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                      picker.dataset.value = color.hex;
+                      picker.dispatchEvent(new Event('input'));
+                      if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
+                      else tmpstore.opened = { id: i, type: 1 };
+                      const abortController = new AbortController();
+                      document.addEventListener('click', (e) => {
+                        if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
+                          tmpstore.opened.id = -1;
+                          abortController.abort();
+                        }
+                      }, { signal: abortController.signal });
+                    }}
+                  >
+                    {t('color.hexColor@@Hex Color')} {i + 1}
+                  </TextInput>
+                  <Button
+                    class={{ 'backdrop-blur-md': true }}
+                    square
+                    size="sm"
+                    disabled={store.colors.length <= 2}
+                    color="red"
+                    onClick$={() => {
+                      const newColors = store.colors.slice(0);
+                      newColors.splice(i, 1);
+                      store.colors = newColors;
+                    }}
+                  >
+                    <TrashOutline width="20" />
+                  </Button>
+                  <div
+                    id={`colorlist-color-${i + 1}-popup`}
+                    stoppropagation:mousedown
+                    class={{
+                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+                      'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 1,
+                    }}
+                  >
+                    <ColorPicker
+                      id={`colorlist-color-${i + 1}-picker`}
+                      value={color.hex}
+                      onInput$={newColor => {
+                        const newColors = store.colors.slice(0);
+                        newColors[i].hex = newColor;
+                        store.colors = sortColors(newColors);
+
+                        // Manually update the corresponding TextInput value
+                        const textInput = document.getElementById(`colorlist-color-${i + 1}`) as HTMLInputElement;
+                        textInput.value = newColor;
+                      }}
+                      showInput={false}
+                    />
+                  </div>
                 </div>
-              </div>,
-              )}
+              ))}
             </div>
           </div>
           <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
