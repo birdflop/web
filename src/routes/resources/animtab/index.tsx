@@ -404,7 +404,7 @@ export default component$(() => {
                     <ChevronDown width="20" />
                   </Button>
                 </div>
-                <TextInput key={`colorlist-color-${i + 1}`} id={`colorlist-color-${i + 1}`}
+                <TextInput key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
                   class={{
                     'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
                     'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,

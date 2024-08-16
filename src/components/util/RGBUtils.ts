@@ -44,7 +44,6 @@ export function getRandomColor() {
 }
 
 export function getAnimFrames(store: typeof defaults) {
-  console.log(store.colors.map(color => (color.hex)).join(', '));
   const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
   if (colors.length < 2) return { OutputArray: [], frames: [] };
 

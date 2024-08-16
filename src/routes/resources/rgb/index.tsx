@@ -342,7 +342,7 @@ export default component$(() => {
             </NumberInput>
             <div class="flex gap-2">
               <Button size='sm' square onClick$={() => {
-                const newColors = store.colors.slice(0).map(color => ({ hex: getRandomColor(), pos: color.pos }));
+                const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
                 <DiceOutline width={24} />
@@ -366,7 +366,7 @@ export default component$(() => {
                     <ChevronDown width="20" />
                   </Button>
                 </div>
-                <TextInput key={`colorlist-color-${i + 1}`} id={`colorlist-color-${i + 1}`}
+                <TextInput key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
                   class={{
                     'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
                     'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
@@ -463,7 +463,7 @@ export default component$(() => {
                 {t('color.colorFormat@@Color Format')}
               </Dropdown>
               <TextInput id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}>
-                  Prefix/Suffix
+                Prefix/Suffix
               </TextInput>
             </div>
 
@@ -488,29 +488,29 @@ export default component$(() => {
                   </div>
                   <div class="flex flex-col gap-2">
                     {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
-                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}>
-                          {t('color.format.character@@Format Character')}
-                        </TextInput>
+                      <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}>
+                        {t('color.format.character@@Format Character')}
+                      </TextInput>
                     }
                     {!store.format.char &&
-                        <>
-                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}>
-                            Bold
-                          </TextInput>
-                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}>
-                            Italic
-                          </TextInput>
-                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}>
-                            Underline
-                          </TextInput>
-                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}>
-                            Strikethrough
-                          </TextInput>
-                          <div class="py-3 font-mono">
-                            <p>{t('color.placeholders@@Placeholders:')}</p>
-                            <p>$t = Output Text</p>
-                          </div>
-                        </>
+                      <>
+                        <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}>
+                          Bold
+                        </TextInput>
+                        <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}>
+                          Italic
+                        </TextInput>
+                        <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}>
+                          Underline
+                        </TextInput>
+                        <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}>
+                          Strikethrough
+                        </TextInput>
+                        <div class="py-3 font-mono">
+                          <p>{t('color.placeholders@@Placeholders:')}</p>
+                          <p>$t = Output Text</p>
+                        </div>
+                      </>
                     }
                   </div>
                 </div>
