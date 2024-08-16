@@ -380,7 +380,7 @@ export default component$(() => {
             </NumberInput>
             <div class="flex gap-2">
               <Button size='sm' square onClick$={() => {
-                const newColors = store.colors.slice(0).map(color => ({ hex: getRandomColor(), pos: color.pos }));
+                const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
                 <DiceOutline width={20} />
