@@ -419,7 +419,8 @@ export default component$(() => {
                     showInput={false}
                   />
                 </div>
-              ))}
+              </div>,
+              )}
             </div>
           </div>
           <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
