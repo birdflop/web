@@ -1,7 +1,12 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
+
+  useTask$(() => {
+    unloadGoogleAds();
+  });
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">

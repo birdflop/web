@@ -1,8 +1,9 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline, CubeOutline } from 'qwik-ionicons';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const plans = {
   'EU Premium': {
@@ -75,6 +76,10 @@ export default component$(() => {
     plan: params.get('plan') ?? undefined as number | string | undefined,
     showMiscPlans: false,
     gb: 0,
+  });
+
+  useTask$(() => {
+    unloadGoogleAds();
   });
 
   return <>

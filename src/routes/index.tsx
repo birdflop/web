@@ -1,4 +1,4 @@
-import { $, component$, useOnWindow, useVisibleTask$, useStore } from '@builder.io/qwik';
+import { $, component$, useOnWindow, useVisibleTask$, useStore, useTask$ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
@@ -8,6 +8,7 @@ import { initiateTyper } from '~/components/util/Typer';
 
 import Background from '~/components/images/background.png?jsx';
 import { plans } from './plans';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
 
@@ -25,6 +26,11 @@ export default component$(() => {
     bg.style.bottom = `${window.scrollY / 2}px`;
     bg.style.filter = `blur(${window.scrollY * 2 / 100}px)`;
   }));
+
+  // Call unloadGoogleAds when the component is mounted
+  useTask$(() => {
+    unloadGoogleAds();
+  });
 
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
