@@ -1,8 +1,9 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { Button, LogoBirdflop } from '@luminescent/ui';
 import Background from '~/components/images/background.png?jsx';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const onGet: RequestHandler = async ({ json, request }) => {
   // check if contenttype is json
@@ -14,6 +15,14 @@ export const onGet: RequestHandler = async ({ json, request }) => {
 };
 
 export default component$(() => {
+  // Keeping below unloading in case we mess up navbar in future
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-lvh w-lvw object-cover object-center opacity-45 grayscale blur-lg" id="bg" alt="background" />

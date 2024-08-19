@@ -1,8 +1,9 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { CartOutline, CubeOutline } from 'qwik-ionicons';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const plans = {
   'EU Premium': {
@@ -76,6 +77,13 @@ export default component$(() => {
     showMiscPlans: false,
     gb: 0,
   });
+
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">

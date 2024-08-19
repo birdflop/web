@@ -19,6 +19,7 @@ export const useEndpoints = routeLoader$(async ({ url }) => {
 
 export default component$(() => {
   const { endpoints } = useEndpoints().value;
+
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 min-h-svh">
       <div>
