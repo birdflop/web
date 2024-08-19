@@ -8,7 +8,7 @@ import { unloadGoogleAds } from '~/components/util/GoogleAds';
 export default component$(() => {
 
   useOnDocument(
-    'DOMContentLoaded',
+    'load',
     $(() => {
       unloadGoogleAds();
     }),

@@ -79,7 +79,7 @@ export default component$(() => {
   });
 
   useOnDocument(
-    'DOMContentLoaded',
+    'load',
     $(() => {
       unloadGoogleAds();
     }),

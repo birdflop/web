@@ -17,7 +17,7 @@ export const onGet: RequestHandler = async ({ json, request }) => {
 export default component$(() => {
   // Keeping below unloading in case we mess up navbar in future
   useOnDocument(
-    'DOMContentLoaded',
+    'load',
     $(() => {
       unloadGoogleAds();
     }),
