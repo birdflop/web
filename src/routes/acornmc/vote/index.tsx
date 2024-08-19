@@ -1,18 +1,9 @@
-import { component$, useVisibleTask$, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { LoadingIcon } from '@luminescent/ui';
 import Background from '~/components/images/background.png?jsx';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
-
-  useOnDocument(
-    'DOMContentLoaded',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
-
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     window.open('https://bit.ly/acornmc1');
