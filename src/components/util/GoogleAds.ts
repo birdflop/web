@@ -1,5 +1,5 @@
 // src/utils/GoogleAds.ts
-let adsbygoogle: any;
+declare let adsbygoogle: any;
 
 export function unloadGoogleAds() {
   const ads = document.querySelectorAll('.adsbygoogle');
