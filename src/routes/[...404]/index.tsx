@@ -1,4 +1,4 @@
-import { component$, useTask$ } from '@builder.io/qwik';
+import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { Button, LogoBirdflop } from '@luminescent/ui';
@@ -16,9 +16,12 @@ export const onGet: RequestHandler = async ({ json, request }) => {
 
 export default component$(() => {
   // Call unloadGoogleAds when the component is mounted
-  useTask$(() => {
-    unloadGoogleAds();
-  });
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >

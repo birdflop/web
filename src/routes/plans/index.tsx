@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
@@ -78,9 +78,12 @@ export default component$(() => {
     gb: 0,
   });
 
-  useTask$(() => {
-    unloadGoogleAds();
-  });
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">

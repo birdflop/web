@@ -1,4 +1,4 @@
-import { component$, useTask$ } from '@builder.io/qwik';
+import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { ButtonAnchor, Card, Header } from '@luminescent/ui';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
@@ -6,9 +6,12 @@ import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
 
-  useTask$(() => {
-    unloadGoogleAds();
-  });
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">

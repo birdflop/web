@@ -1,4 +1,4 @@
-import { component$, useTask$ } from '@builder.io/qwik';
+import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Card, Header } from '@luminescent/ui';
 
@@ -21,9 +21,12 @@ export const useEndpoints = routeLoader$(async ({ url }) => {
 export default component$(() => {
   const { endpoints } = useEndpoints().value;
 
-  useTask$(() => {
-    unloadGoogleAds();
-  });
+  useOnDocument(
+    'DOMContentLoaded',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 min-h-svh">
