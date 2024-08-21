@@ -1,6 +1,6 @@
 import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { ButtonAnchor, Card, Header } from '@luminescent/ui-qwik';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 

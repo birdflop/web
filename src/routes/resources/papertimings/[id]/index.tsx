@@ -1,7 +1,7 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card } from '@luminescent/ui';
+import { ButtonAnchor, Card } from '@luminescent/ui-qwik';
 
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 import { collector } from '~/analyze/functions/collector';

@@ -1,7 +1,7 @@
 import { $, component$, useOn, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui';
+import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui-qwik';
 import {
   inlineTranslate,
   useSpeak,

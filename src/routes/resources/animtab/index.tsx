@@ -6,7 +6,7 @@ import { AnimationOutput, convertToRGB, getAnimFrames, getBrightness, getRandomC
 
 import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, DiceOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker } from '@luminescent/ui';
+import { Button, NumberInput, Dropdown, TextArea, TextInput, Toggle, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';

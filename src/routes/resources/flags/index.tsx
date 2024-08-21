@@ -1,7 +1,7 @@
 /* eslint-disable qwik/valid-lexical-scope */
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Header, Dropdown, TextArea, TextInput, Toggle, DropdownRaw, ButtonAnchor } from '@luminescent/ui';
+import { Header, Dropdown, TextArea, TextInput, Toggle, DropdownRaw, ButtonAnchor } from '@luminescent/ui-qwik';
 import { CodeWorkingOutline, CubeOutline, HelpOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';

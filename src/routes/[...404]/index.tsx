@@ -1,7 +1,7 @@
 import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
-import { Button, LogoBirdflop } from '@luminescent/ui';
+import { Button, LogoBirdflop } from '@luminescent/ui-qwik';
 import Background from '~/components/images/background.png?jsx';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 

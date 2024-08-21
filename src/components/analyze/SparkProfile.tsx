@@ -1,6 +1,6 @@
 import { Slot, component$, useStore } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { Button, TextInput } from '@luminescent/ui';
+import { Button, TextInput } from '@luminescent/ui-qwik';
 
 export default component$(() => {
   const store = useStore({

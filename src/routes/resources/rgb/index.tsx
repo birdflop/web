@@ -7,7 +7,7 @@ import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomCol
 
 import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, DiceOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker } from '@luminescent/ui';
+import { Button, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';

@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Card, Header } from '@luminescent/ui';
+import { Card, Header } from '@luminescent/ui-qwik';
 
 import { DocumentOutline } from 'qwik-ionicons';
 import { defaults, v3formats } from '~/components/util/PresetUtils';

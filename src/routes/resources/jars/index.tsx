@@ -1,5 +1,5 @@
 import { component$, useStore, useSignal } from '@builder.io/qwik';
-import { Card, Header, TextInput, ButtonAnchor, Button } from '@luminescent/ui';
+import { Card, Header, TextInput, ButtonAnchor, Button } from '@luminescent/ui-qwik';
 import { CloseOutline } from 'qwik-ionicons';
 
 async function fetchLatestPurpurVersion() {

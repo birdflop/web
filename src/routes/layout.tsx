@@ -1,6 +1,6 @@
 import { component$, Slot, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import { Button, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Button, ButtonAnchor, Card, Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 

@@ -1,7 +1,7 @@
 import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui-qwik';
 import { CartOutline, CubeOutline } from 'qwik-ionicons';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 

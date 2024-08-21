@@ -1,7 +1,7 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { Dropdown, TextArea, TextInput } from '@luminescent/ui';
+import { Dropdown, TextArea, TextInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 
 export default component$(() => {
