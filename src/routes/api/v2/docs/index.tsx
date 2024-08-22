@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Card, Header } from '@luminescent/ui-qwik';
+import { Header } from '@luminescent/ui-qwik';
 
 import { DocumentOutline } from 'qwik-ionicons';
 import { defaults, v3formats } from '~/components/util/PresetUtils';
@@ -50,7 +50,7 @@ export default component$(() => {
             <h4 class="flex gap-4 items-center text-gray-400 sm:text-lg my-2 drop-shadow-lg">
               Options
             </h4>
-            <Card>
+            <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
               {Object.keys(endpoints[path].options).map(option => {
                 return <div key={option}>
                   <p class="font-bold text-white">{option}</p>
@@ -59,13 +59,13 @@ export default component$(() => {
                   <p class="text-gray-500">default: {JSON.stringify(endpoints[path].options[option].default, null, 1)}</p>
                 </div>;
               })}
-            </Card>
+            </div>
           </div>)}
         </div>
         <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mt-12 mb-6 drop-shadow-lg">
           Data Models
         </h2>
-        <Card>
+        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
           <Header id="formatobject" anchor>
             Format
           </Header>
@@ -106,9 +106,9 @@ export default component$(() => {
             <p class="text-gray-400">The code to use for making the text strikethrough. $t is where the output text will go. If $t is not included, the output will not show.</p>
             <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
           </div>
-        </Card>
+        </div>
         <br/>
-        <Card>
+        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
           <Header id="color" anchor>
             Color
           </Header>
@@ -126,7 +126,7 @@ export default component$(() => {
             <p class="text-gray-400">The position of the color in the gradient as a percentage</p>
             <p class="text-gray-500">example: 50</p>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   </>;

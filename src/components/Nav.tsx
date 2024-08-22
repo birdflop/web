@@ -14,7 +14,7 @@ export default component$(() => {
   const loc = useLocation();
 
   return (
-    <Nav fixed colorClass="lum-bg-gray-800/40">
+    <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent">
         <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
         <span class="font-bold -ml-1">Birdflop</span>

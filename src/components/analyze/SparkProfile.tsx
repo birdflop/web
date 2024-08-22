@@ -1,6 +1,5 @@
 import { Slot, component$, useStore } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { Button, TextInput } from '@luminescent/ui-qwik';
 
 export default component$(() => {
   const store = useStore({
@@ -21,7 +20,8 @@ export default component$(() => {
 
         <Slot />
 
-        <TextInput id="link" onInput$={(e, el) => {
+        <label for="link">Paste the spark profile link here</label>
+        <input class="lum-input mt-1 w-full" id="link" onInput$={(e, el) => {
           const link = el.value;
           store.redirect = '';
           if (link.startsWith('https://timin') || link.startsWith('https://www.spigotmc.org/go/timings?url=')) {
@@ -38,9 +38,8 @@ export default component$(() => {
             const code = link.replace('https://spark.lucko.me/', '');
             store.redirect = `/resources/sparkprofile/${code}`;
           }
-        }}>
-          Paste the spark profile link here
-        </TextInput>
+        }}/>
+
         <p class={{
           'text-red-400 mt-3': true,
           'hidden': !store.error,
@@ -49,10 +48,8 @@ export default component$(() => {
           'flex mt-3': true,
           'hidden': !store.redirect,
         }}>
-          <Link href={store.redirect}>
-            <Button color="blue">
-              Submit
-            </Button>
+          <Link href={store.redirect} class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600">
+            Submit
           </Link>
         </div>
 

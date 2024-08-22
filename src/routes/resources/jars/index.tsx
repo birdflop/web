@@ -129,7 +129,7 @@ export default component$(() => {
           </div>
         </div>
       </div>
-      <dialog ref={modalRef} class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-in-out scale-100">
+      <dialog ref={modalRef} class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out scale-100">
         <div class="flex items-center mb-4">
           <img src={store.selectedJar?.logo} alt={`${store.selectedJar?.name} logo`} class="w-12 h-12 mr-4" height="1" width="1"/>
           <h2 class="text-2xl font-bold flex-1">{store.selectedJar?.name}</h2>

@@ -1,7 +1,8 @@
 import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
-import { Button, LogoBirdflop } from '@luminescent/ui-qwik';
+import { LogoBirdflop } from '@luminescent/ui-qwik';
+import { HomeOutline } from 'qwik-ionicons';
 import Background from '~/components/images/background.png?jsx';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
@@ -33,10 +34,8 @@ export default component$(() => {
           Whoops! You've hit a dead-end.
         </p>
         <div class="flex mt-4">
-          <Link href="/">
-            <Button size="lg" color="blue">
-              Go back home
-            </Button>
+          <Link href="/" class="lum-btn lum-pad-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
+            <HomeOutline width={24} /> Go back home
           </Link>
         </div>
       </div>

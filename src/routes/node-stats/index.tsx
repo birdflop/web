@@ -1,7 +1,7 @@
 import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
 
-import { ButtonAnchor, Card, Header } from '@luminescent/ui-qwik';
+import { Blobs, Header } from '@luminescent/ui-qwik';
 import { StatsChartOutline } from 'qwik-ionicons';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
@@ -22,44 +22,49 @@ export default component$(() => {
             <StatsChartOutline width="64" /> Node Stats
           </h1>
           <div class="flex flex-wrap gap-3 justify-center">
-            <ButtonAnchor href="https://status.birdflop.com/" size="lg" color="blue">
+            <a class="lum-btn lum-pad-lg lum-bg-blue-600/70 hover:lum-bg-blue-600 text-lg" href="https://status.birdflop.com/">
               Overview
-            </ButtonAnchor>
-            <ButtonAnchor href="https://netdata.birdflop.com/panel" size="lg" color="blue">
+            </a>
+            <a class="lum-btn lum-pad-lg lum-bg-blue-600/70 hover:lum-bg-blue-600 text-lg" href="https://netdata.birdflop.com/panel">
               Web Services
-            </ButtonAnchor>
+            </a>
           </div>
-          <div class="grid sm:grid-cols-2 gap-3">
-            <Card href="https://netdata.birdflop.com/crabwings" color="red" hover="clickable" blobs>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://netdata.birdflop.com/crabwings">
               <Header subheader="New York City, NY, USA">
                 Crabwings
               </Header>
               crabwings.birdflop.com
-            </Card>
-            <Card href="http://impeyes.birdflop.com:19999/" color="orange" hover="clickable" blobs>
+              <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="http://impeyes.birdflop.com:19999/">
               <Header subheader="Falkenstein, Germany (EU)">
                 Impeyes
               </Header>
               impeyes.birdflop.com
-            </Card>
-            <Card href="http://jellyfishjaws.birdflop.com:19999/" color="yellow" hover="clickable" blobs>
+              <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="http://jellyfishjaws.birdflop.com:19999/">
               <Header subheader="Falkenstein, Germany (EU)">
                 Jellyfishjaws
               </Header>
               jellyfishjaws.birdflop.com
-            </Card>
-            <Card href="http://koalaknees.birdflop.com:19999/" color="green" hover="clickable" blobs>
+              <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="http://koalaknees.birdflop.com:19999/">
               <Header subheader="Ashburn, VA, USA">
                 Koalaknees
               </Header>
               koalaknees.birdflop.com
-            </Card>
-            <Card href="http://monkeymouth.birdflop.com:19999/" color="pink" hover="clickable" blobs>
+              <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="http://monkeymouth.birdflop.com:19999/">
               <Header subheader="New York City, NY, USA">
                 Monkeymouth
               </Header>
               monkeymouth.birdflop.com
-            </Card>
+              <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
           </div>
         </div>
       </div>
