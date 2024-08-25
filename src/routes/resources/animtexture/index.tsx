@@ -1,7 +1,7 @@
 import { $, component$, useOn, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { Button, ButtonAnchor, TextInput, Toggle } from '@luminescent/ui-qwik';
+import { Toggle } from '@luminescent/ui-qwik';
 import {
   inlineTranslate,
   useSpeak,
@@ -62,8 +62,10 @@ export default component$(() => {
           {t('animtexture.subtitle@@Easily merge textures for resource pack animations')}
         </h2>
 
-        <label for="fileInput">Select Frame(s) or a GIF</label><br />
-        <input id="fileInput" type="file" multiple accept="image/*" class="text-white text-xl file:bg-gray-600 file:hover:bg-gray-500 file:rounded-lg file:cursor-pointer file:px-4 file:py-2 file:mr-4 mt-2 text-transparent file:text-white file:text-lg file:border-none" />
+        <div class="flex flex-col gap-2">
+          <label for="fileInput">Select Frame(s) or a GIF</label>
+          <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn rounded-lg file:cursor-pointer flex" />
+        </div>
 
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
           {store.frames.map((frame, i) => (
@@ -74,15 +76,14 @@ export default component$(() => {
           ))}
         </div>
 
-        <TextInput id="textureName" class={{ 'mb-3': true }} value={store.textureName} onInput$={(e, el) => { store.textureName = el.value; }}>
-          {t('animtexture.textureName@@Texture Name')}
-        </TextInput>
+        <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label><br />
+        <input id="textureName" class={{ 'lum-input mb-3 mt-2': true }} value={store.textureName} onInput$={(e, el) => { store.textureName = el.value; }}/>
 
         <Toggle id="Cumulative" checked={store.cumulative}
           onChange$={(e, el) => { store.cumulative = el.checked; }}
           label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')} />
 
-        <Button class={{ 'my-6': true }} onClick$={() => {
+        <button class={{ 'lum-btn my-6': true }} onClick$={() => {
           const canvas = document.getElementById('c') as HTMLCanvasElement;
           canvas.classList.add('sm:flex');
           const imglist = document.getElementById('imgs') as HTMLDivElement;
@@ -128,16 +129,18 @@ export default component$(() => {
           links.className = 'inline';
         }}>
           {t('animtexture.generate@@Generate')}
-        </Button>
+        </button>
 
         <div id="links" class="hidden">
           <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <ButtonAnchor id="pngd" class={{ 'mr-2': true }} href='/'>
-            {t('animtexture.downloadPNG@@Download PNG')}
-          </ButtonAnchor>
-          <ButtonAnchor id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
-            {t('animtexture.downloadMCMETA@@Download MCMETA')}
-          </ButtonAnchor>
+          <div class="flex gap-2">
+            <a class="lum-btn" id="pngd" href='/'>
+              {t('animtexture.downloadPNG@@Download PNG')}
+            </a>
+            <a class="lum-btn" id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+              {t('animtexture.downloadMCMETA@@Download MCMETA')}
+            </a>
+          </div>
         </div>
 
       </div>

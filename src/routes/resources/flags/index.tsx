@@ -1,7 +1,7 @@
 /* eslint-disable qwik/valid-lexical-scope */
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Header, Dropdown, TextArea, TextInput, Toggle, DropdownRaw, ButtonAnchor } from '@luminescent/ui-qwik';
+import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
 import { CodeWorkingOutline, CubeOutline, HelpOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
@@ -140,7 +140,7 @@ export default component$(() => {
   }, { deep: true });
 
   useTask$(({ track }) => {
-    isBrowser && setCookies('parsed', store);
+    if (isBrowser) setCookies('parsed', store);
     (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
       track(() => store[key]);
     });
@@ -158,14 +158,17 @@ export default component$(() => {
 
         <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6 fill-current">
           <div class="flex flex-col gap-4">
-            <TextInput id="input" value={store.fileName} placeholder="server.jar" onChange$={(e, el) => {
-              if (el.value.replace(/ /g, '') == '') return;
-              if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
-              store.fileName = el.value;
-            }}>
-              <span class="font-bold">{t('flags.fileName.label@@File Name')}</span><br/>
-              {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
-            </TextInput>
+            <div class="flex flex-col gap-1">
+              <label for="input">
+                <span class="font-bold">{t('flags.fileName.label@@File Name')}</span><br/>
+                {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+              </label>
+              <input class="lum-input" id="input" value={store.fileName} placeholder="server.jar" onChange$={(e, el) => {
+                if (el.value.replace(/ /g, '') == '') return;
+                if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
+                store.fileName = el.value;
+              }}/>
+            </div>
             <div class="flex gap-2">
               <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
                 store.operatingSystem = el.value;
@@ -186,8 +189,8 @@ export default component$(() => {
             <div>
               <span class="font-bold">{t('memory.label@@Memory')}</span><br/>
               {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
-              <div class="group relative w-full h-2 bg-gray-800 hover:bg-gray-700 select-none rounded-lg my-2">
-                <div class="h-2 bg-blue-800 group-hover:bg-blue-700 rounded-lg" style={{ width: `${store.memory / 32 * 100}%` }} />
+              <div class="group relative w-full h-2 lum-bg-gray-800 hover:lum-bg-gray-700 select-none rounded-lg my-2">
+                <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lg" style={{ width: `${store.memory / 32 * 100}%` }} />
                 <div class="absolute w-full top-1 flex justify-between">
                   <span class="text-left">|</span>
                   <span class="text-center">|</span>
@@ -196,7 +199,7 @@ export default component$(() => {
                   <span class="text-right">|</span>
                 </div>
                 <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${store.memory / 32 * 100}% - 48px)` }}>
-                  <div class="w-4 h-4 bg-blue-700 group-hover:bg-blue-600 rounded-full" />
+                  <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
                   <div class="opacity-0 group-hover:opacity-100 w-24 py-2 bg-gray-800 rounded-lg flex justify-center transition-all z-50">
                     {store.memory} GB
                   </div>
@@ -221,18 +224,18 @@ export default component$(() => {
               <DropdownRaw id="flagshelp" onChange$={(e, el) => {
                 store.flags = el.value as keyof typeof flagTypes;
               }} display={<><HelpOutline width={24}/></>}>
-                <ButtonAnchor q:slot='extra-buttons' transparent href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
+                <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                   Aikar's Flags
-                </ButtonAnchor>
-                <ButtonAnchor q:slot='extra-buttons' transparent href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
+                </a>
+                <a class="lum-btn lum-bg-transparent" href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
                   Benchmarked Flags
-                </ButtonAnchor>
-                <ButtonAnchor q:slot='extra-buttons' transparent href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
+                </a>
+                <a class="lum-btn lum-bg-transparent" href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
                   hilltty's Flags
-                </ButtonAnchor>
-                <ButtonAnchor q:slot='extra-buttons' transparent href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
+                </a>
+                <a class="lum-btn lum-bg-transparent" href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
                   Obydux's Flags
-                </ButtonAnchor>
+                </a>
               </DropdownRaw>
             </div>
             <div class="flex flex-col gap-2">
@@ -265,11 +268,11 @@ export default component$(() => {
         </div>
 
         {/* charlimit={256} */}
-        <TextArea output class={{ 'h-96 mt-2': true }} id="Output" value={((p: any) => generateResult(p).script)(store)}>
-          <Header subheader={t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: store.fileName })}>
-            {t('flags.script.label@@Script')}
-          </Header>
-        </TextArea>
+        <label for="Output" class="text-gray-50">
+          <span class="font-bold">{t('flags.script.label@@Script')}</span><br/>
+          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: store.fileName })}
+        </label>
+        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full': true }} id="Output" value={((p: any) => generateResult(p).script)(store)}/>
       </div>
     </section>
   );

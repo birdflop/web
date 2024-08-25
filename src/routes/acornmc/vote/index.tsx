@@ -1,6 +1,5 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { LoadingIcon } from '@luminescent/ui-qwik';
 import Background from '~/components/images/background.png?jsx';
 
 export default component$(() => {
@@ -20,7 +19,7 @@ export default component$(() => {
       </h1>
       <h2 class="text-gray-400 text-base sm:text-2xl flex gap-2 items-center">
         Opening Links
-        <LoadingIcon width={24} class={{ 'ml-2': true }} />
+        <div class={{ 'lum-loading ml-2 w-6 h-6': true }} />
       </h2>
     </section>
   );
