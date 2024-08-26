@@ -36,7 +36,7 @@ export default component$(() => {
           <input
             class="lum-input w-full my-2"
             id="search-input"
-            placeholder="Search for a version..."
+            placeholder="Search for a preset..."
             value={store.searchTerm}
             onInput$={(e, el) => store.searchTerm = el.value}
           />

@@ -584,7 +584,7 @@ export default component$(() => {
                 </div>
               </>
             }
-                        <div class="flex flex-col gap-2 mt-4">
+            <div class="flex flex-col gap-2 mt-4">
               <h1 class="hidden sm:flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center justify-center">
                 <SaveOutline width="26" />
                 {t('color.presets@@Presets')}
@@ -600,14 +600,19 @@ export default component$(() => {
                         json = {
                           ...preset,
                         };
-                      } catch (error) {
+                      } catch (err) {
                         const alert = {
                           class: 'text-red-500',
                           text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
                         };
-                        tmpstore.alerts.push(alert);
+                        const errtext = {
+                          class: 'text-red-300',
+                          text: `${err}`,
+                        };
+                        tmpstore.alerts.push(alert, errtext);
                         return setTimeout(() => {
                           tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
                         }, 5000);
                       }
                       (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
