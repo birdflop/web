@@ -1,8 +1,9 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Anchor, ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Anchor, Blobs, Header } from '@luminescent/ui-qwik';
 import { CartOutline, CubeOutline } from 'qwik-ionicons';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const plans = {
   'EU Premium': {
@@ -37,13 +38,13 @@ export const plans = {
       8: 3,
     },
     features: [
-      'New York City, NY, USA',
-      'Ryzen 9 3900XT',
+      'US East (NYC / Ashburn VA)',
+      'Ryzen 9 3900XT or Better',
       '4 Logical Cores',
       'Up to 80 GB NVMe Storage',
       'Free upgrade to US Premium+ after 6 months',
     ],
-    outOfStock: true,
+    outOfStock: false,
   },
   'US Premium+': {
     id: 'us-premium',
@@ -75,7 +76,16 @@ export default component$(() => {
     plan: params.get('plan') ?? undefined as number | string | undefined,
     showMiscPlans: false,
     gb: 0,
+    name: 'My server',
+    desc: '',
   });
+
+  useOnDocument(
+    'load',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">
@@ -94,13 +104,21 @@ export default component$(() => {
             {Object.keys(plans).map((planName) => {
               const plan = plans[planName as keyof typeof plans];
               const ramOptions = Object.keys(plan.ramAndId);
-              return <Card key={planName} color={store.plan == planName ? 'blue' : 'darkgray'} blobs={store.plan == planName}
-                hover={!plan.outOfStock ? 'clickable' : false}
+              return <button
                 class={{
+                  'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                   'opacity-50': plan.outOfStock,
+                  'lum-bg-gray-800 hover:lum-bg-gray-800/70': store.plan != planName,
+                  'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': store.plan == planName,
                 }}
-                onClick$={() => { if (!plan.outOfStock) store.plan = planName; store.gb = 0; }}
-                href={plan.outOfStock ? 'https://discord.gg/nmgtX5z' : '#ram'}>
+                key={planName}
+                onClick$={() => {
+                  if (plan.outOfStock) return window.open('https://discord.gg/nmgtX5z', '_blank')?.focus();
+                  store.plan = planName;
+                  store.gb = 0;
+                  const anchor = document.getElementById('ram');
+                  if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
+                }}>
                 <p>
                   Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
                 </p>
@@ -117,7 +135,10 @@ export default component$(() => {
                 {plan.outOfStock && <p class="text-red-500">
                   Out of stock
                 </p>}
-              </Card>;
+                {store.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
+                  transform: 'translateZ(-10px)',
+                }}/>}
+              </button>;
             })}
           </div>
           {store.showMiscPlans && <>
@@ -125,8 +146,8 @@ export default component$(() => {
               Misc Plans
             </Header>
             <div class="grid md:grid-cols-3 gap-4">
-              <Card color={store.plan == 4 ? 'red' : 'darkgray'} hover="clickable"
-                href="https://client.birdflop.com/order/main/packages/discord/?group_id=12">
+              <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
+                href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target='_blank'>
                 <Header subheader="$3/mo - 1GB">
                   Discord Bot Hosting*
                 </Header>
@@ -141,43 +162,43 @@ export default component$(() => {
                     10GB NVMe Storage
                   </li>
                 </ul>
-              </Card>
-              <Card color={store.plan == 5 ? 'red' : 'darkgray'} hover="clickable"
-                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15">
+              </a>
+              <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
+                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target='_blank'>
                 <Header subheader="$6/mo - 2GB">
                   US Dev/Hub*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
-                    New York City, NY, USA
+                    US East (NYC / Ashburn VA)
                   </li>
                   <li>
-                    Ryzen 9 3900XT (1 vCore)
+                    Ryzen 9 3900XT or Better (1 vCore)
                   </li>
                   <li>
                     10GB NVMe Storage
                   </li>
                 </ul>
-              </Card>
-              <Card color={store.plan == 6 ? 'red' : 'darkgray'} hover="clickable"
-                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7">
+              </a>
+              <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
+                href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target='_blank'>
                 <Header subheader="$6/mo - 2GB">
                   US Proxy*
                 </Header>
                 <ul class="list-disc ml-5 space-y-2 h-full">
                   <li>
-                    New York City, NY, USA
+                    US East (NYC / Ashburn VA)
                   </li>
                   <li>
-                    Ryzen 9 3900XT (4 vCores)
+                    Ryzen 9 3900XT or Better (4 vCores)
                   </li>
                   <li>
                     20GB NVMe Storage
                   </li>
                 </ul>
-              </Card>
-              <Card color={store.plan == 7 ? 'red' : 'darkgray'} hover="clickable"
-                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16">
+              </a>
+              <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
+                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target='_blank'>
                 <Header subheader="$4/mo - 2GB">
                   EU Dev/Hub*
                 </Header>
@@ -192,9 +213,9 @@ export default component$(() => {
                     20GB NVMe Storage
                   </li>
                 </ul>
-              </Card>
-              <Card color={store.plan == 8 ? 'red' : 'darkgray'} hover="clickable"
-                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14">
+              </a>
+              <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
+                href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target='_blank'>
                 <Header subheader="$4/mo - 2GB">
                   EU Proxy*
                 </Header>
@@ -209,35 +230,43 @@ export default component$(() => {
                     Unmetered* NVMe Storage
                   </li>
                 </ul>
-              </Card>
+              </a>
             </div>
           </>}
 
+          <Anchor id="ram" />
           {store.plan && isNaN(Number(store.plan)) && <>
-            <Anchor id="ram" />
             <Header subheader="This will be the amount of RAM in your new server.">
               Configure your RAM amount
             </Header>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {!plans[store.plan as keyof typeof plans] && <Card color="darkgray">
-                <Header subheader="Please select a plan first.">
-                  RAM
-                </Header>
-              </Card>}
               {plans[store.plan as keyof typeof plans] && Object.keys(plans[store.plan as keyof typeof plans].ramAndId).map((gb) => {
-                return <Card key={`${store.plan}-${gb}`} color={store.gb == Number(gb) ? 'green' : 'darkgray'} blobs={store.gb == Number(gb)} hover="clickable"
-                  onClick$={() => store.gb = Number(gb)}>
+                return <button key={`${store.plan}-${gb}`}
+                  onClick$={() => {
+                    store.gb = Number(gb);
+                    const anchor = document.getElementById('summary');
+                    if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  class={{
+                    'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
+                    'lum-bg-gray-800 hover:lum-bg-gray-800/70': store.gb != Number(gb),
+                    'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': store.gb == Number(gb),
+                  }}>
                   <Header subheader={`~$${(Number(gb) * plans[store.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo.`}>
                     {gb} GB
                   </Header>
-                </Card>;
+                  {store.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
+                    transform: 'translateZ(-10px)',
+                  }}/>}
+                </button>;
               })}
             </div>
           </>}
 
+          <Anchor id="summary" />
           {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6">
-            <CubeOutline width={72} class="sm:mx-5" />
-            <div class="flex-1 flex flex-col gap-2">
+            <CubeOutline width={72} class="sm:mx-5 flex" />
+            <div class="flex flex-1 flex-col gap-2">
               <Header>
                 Order Summary
               </Header>
@@ -245,10 +274,18 @@ export default component$(() => {
               <p>Capped at ${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo.</p>
               <p>~${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
             </div>
-            <ButtonAnchor href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&billing_cycle=monthly`}
-              size="xl" color="blue">
-              <CartOutline width={36}/> Add to cart
-            </ButtonAnchor>
+            <div class="flex flex-1 flex-col gap-2">
+              <label for="server_name" class="lum-label">Server Name</label>
+              <input id="server_name" class="lum-input" onChange$={(e, el) => store.name = el.value} />
+              <label for="server_description" class="lum-label">Server Description (optional)</label>
+              <input id="server_description" class="lum-input" onChange$={(e, el) => store.desc = el.value} />
+            </div>
+            <div class="flex flex-1 gap-4 justify-end">
+              <a class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
+                href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&server_name=${store.name}&server_description=${store.desc}&billing_cycle=monthly`}>
+                <CartOutline width={36}/> Add to cart
+              </a>
+            </div>
           </div>}
         </div>
       </div>

@@ -7,7 +7,7 @@ import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomCol
 
 import { Add, BarChartOutline, ChevronDown, ChevronUp, ColorFillOutline, CopyOutline, DiceOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, Text, TrashOutline } from 'qwik-ionicons';
 
-import { Button, Dropdown, TextArea, TextInput, Toggle, NumberInput, ColorPicker, ButtonAnchor } from '@luminescent/ui';
+import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -78,7 +78,7 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    isBrowser && setCookies('rgb', store);
+    if (isBrowser) setCookies('rgb', store);
     (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
       track(() => store[key]);
     });
@@ -97,10 +97,11 @@ export default component$(() => {
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
 
-        <TextArea output id="output" class={{ 'font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}>
+        <label for="output">
           <span class="font-bold mr-2 text-gray-100">{t('color.output@@Output')}</span>
           <span class="text-gray-500">- {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
-        </TextArea>
+        </label>
+        <textarea id="output" class={{ 'lum-input h-32 w-full font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}/>
 
         <h1 class={{
           'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
@@ -229,13 +230,13 @@ export default component$(() => {
                 'right-0 items-end': color.pos >= 50,
               }}>
                 {store.colors.length > 2 &&
-                  <Button class={{ 'backdrop-blur-md': true }} square size='sm' color="red" onClick$={() => {
+                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
                     const newColors = store.colors.slice(0);
                     newColors.splice(i, 1);
                     store.colors = sortColors(newColors);
                   }}>
                     <TrashOutline width="20" />
-                  </Button>
+                  </button>
                 }
                 <ColorPicker
                   id={`colormap-color-${i + 1}-picker`}
@@ -255,27 +256,27 @@ export default component$(() => {
 
         <div id="mobile-navbuttons" class="my-3 sm:hidden">
           <div class="flex gap-2">
-            <Button square aria-label="Colors" onClick$={() => {
+            <button class="lum-btn lum-pad-equal-md" aria-label="Colors" onClick$={() => {
               document.getElementById('colors')!.classList.replace('hidden', 'flex');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
               document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <ColorFillOutline width="24" />
-            </Button>
-            <Button square aria-label="Inputs" onClick$={() => {
+            </button>
+            <button class="lum-btn lum-pad-equal-md" aria-label="Inputs" onClick$={() => {
               document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('hidden', 'flex');
               document.getElementById('formatting')!.classList.replace('flex', 'hidden');
             }}>
               <SettingsOutline width="24" />
-            </Button>
-            <Button square aria-label="Formatting" onClick$={() => {
+            </button>
+            <button class="lum-btn lum-pad-equal-md" aria-label="Formatting" onClick$={() => {
               document.getElementById('colors')!.classList.replace('flex', 'hidden');
               document.getElementById('inputs')!.classList.replace('flex', 'hidden');
               document.getElementById('formatting')!.classList.replace('hidden', 'flex');
             }}>
               <Text width="24" class="fill-white" />
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -286,7 +287,7 @@ export default component$(() => {
               {t('color.colors@@Colors')}
             </h1>
             {store.format.color != 'MiniMessage' &&
-              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full': true }}
+              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
                 onIncrement$={() => {
                   store.colorlength++;
                 }}
@@ -294,7 +295,7 @@ export default component$(() => {
                   store.colorlength--;
                 }}
               >
-                {t('color.colorLength@@Color Length')}
+                {t('color.colorLength@@Characters per color')}
               </NumberInput>
             }
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
@@ -330,68 +331,69 @@ export default component$(() => {
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
             <div class="flex gap-2">
-              <Button size='sm' square onClick$={() => {
-                const newColors = store.colors.slice(0).map(color => ({ hex: getRandomColor(), pos: color.pos }));
+              <button class="lum-btn lum-pad-equal-xs" onClick$={() => {
+                const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
                 <DiceOutline width={24} />
-              </Button>
-              <Button size='sm' disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} class={{
-                'w-full': true,
-              }} onClick$={() => {
+              </button>
+              <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
                 const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
                 store.colors = newColors;
               }}>
                 <BarChartOutline width={24} /> Disperse
-              </Button>
+              </button>
             </div>
             <div class="flex flex-col gap-2">
               {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
-                <div class="bg-gray-800 flex flex-col rounded-md border border-gray-700">
-                  <Button size="sm" square transparent onClick$={() => handleSwap(i, i - 1)} class={{ 'border-0': true }}>
-                    <ChevronUp width="20" />
-                  </Button>
-                  <Button size="sm" square transparent onClick$={() => handleSwap(i, i + 1)} class={{ 'border-0': true }}>
-                    <ChevronDown width="20" />
-                  </Button>
+                <div class="flex flex-col rounded-md">
+                  <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
+                    <ChevronUp width={24} />
+                  </button>
+                  <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
+                    <ChevronDown width={24} />
+                  </button>
                 </div>
-                <TextInput key={`colorlist-color-${i + 1}`} id={`colorlist-color-${i + 1}`}
-                  class={{
-                    'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                    'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                    'w-full': true,
-                  }}
-                  style={`background: ${color.hex};`}
-                  value={color.hex}
-                  onInput$={(e, el) => {
-                    const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                    picker.dataset.value = el.value;
-                    picker.dispatchEvent(new Event('input'));
-                  }}
-                  onMouseUp$={() => {
-                    const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                    picker.dataset.value = color.hex;
-                    picker.dispatchEvent(new Event('input'));
-                    if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
-                    else tmpstore.opened = { id: i, type: 1 };
-                    const abortController = new AbortController();
-                    document.addEventListener('click', (e) => {
-                      if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
-                        tmpstore.opened.id = -1;
-                        abortController.abort();
-                      }
-                    }, { signal: abortController.signal });
-                  }}
-                >
-                  {t('color.hexColor@@Hex Color')} {i + 1}
-                </TextInput>
-                <Button class={{ 'backdrop-blur-md': true }} square size="sm" disabled={store.colors.length <= 2} color="red" onClick$={() => {
-                  const newColors = store.colors.slice(0);
-                  newColors.splice(i, 1);
-                  store.colors = newColors;
-                }}>
-                  <TrashOutline width="20" />
-                </Button>
+                <div class="flex flex-col justify-end gap-1">
+                  <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
+                  <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
+                    class={{
+                      'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                      'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                      'lum-input w-full lum-pad-xs hover:': true,
+                    }}
+                    style={`background: ${color.hex};`}
+                    value={color.hex}
+                    onInput$={(e, el) => {
+                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                      picker.dataset.value = el.value;
+                      picker.dispatchEvent(new Event('input'));
+                    }}
+                    onMouseUp$={() => {
+                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                      picker.dataset.value = color.hex;
+                      picker.dispatchEvent(new Event('input'));
+                      if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
+                      else tmpstore.opened = { id: i, type: 1 };
+                      const abortController = new AbortController();
+                      document.addEventListener('click', (e) => {
+                        if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
+                          tmpstore.opened.id = -1;
+                          abortController.abort();
+                        }
+                      }, { signal: abortController.signal });
+                    }}
+                  />
+                </div>
+                <div class="flex flex-col justify-end">
+                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
+                    const newColors = store.colors.slice(0);
+                    newColors.splice(i, 1);
+                    store.colors = newColors;
+                  }}>
+                    <TrashOutline width="20" />
+                  </button>
+                </div>
                 <div
                   id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
                     'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
@@ -418,9 +420,13 @@ export default component$(() => {
               {t('color.inputs@@Inputs')}
             </h1>
 
-            <TextInput id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}>
-              {t('color.inputText@@Input Text')}
-            </TextInput>
+            <div class="flex flex-col gap-1">
+              <label for="input">
+                {t('color.inputText@@Input Text')}
+              </label>
+              <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
+            </div>
+
             <div class="flex flex-col md:grid grid-cols-2 gap-2">
               <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
                 (e, el) => {
@@ -457,9 +463,10 @@ export default component$(() => {
               {
                 store.customFormat && <>
                   <div>
-                    <TextInput id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}>
+                    <label for="customformat">
                       {t('color.customFormat@@Custom Format')}
-                    </TextInput>
+                    </label>
+                    <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
                     <div class="py-3 font-mono">
                       <p>{t('color.placeholders@@Placeholders:')}</p>
                       <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
@@ -473,30 +480,35 @@ export default component$(() => {
                     </div>
                   </div>
                   <div class="flex flex-col gap-2">
-                    {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) &&
-                        <TextInput id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}>
-                          {t('color.format.character@@Format Character')}
-                        </TextInput>
-                    }
+                    {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
+                      <label for="format-char">
+                        {t('color.format.character@@Format Character')}
+                      </label>
+                      <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
+                    </>}
                     {!store.format.char &&
-                        <>
-                          <TextInput id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}>
-                            Bold
-                          </TextInput>
-                          <TextInput id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}>
-                            Italic
-                          </TextInput>
-                          <TextInput id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}>
-                            Underline
-                          </TextInput>
-                          <TextInput id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}>
-                            Strikethrough
-                          </TextInput>
-                          <div class="py-3 font-mono">
-                            <p>{t('color.placeholders@@Placeholders:')}</p>
-                            <p>$t = Output Text</p>
-                          </div>
-                        </>
+                      <>
+                        <label for="format-bold">
+                          {t('color.format.bold@@Bold')}
+                        </label>
+                        <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
+                        <label for="format-italic">
+                          {t('color.format.italic@@Italic')}
+                        </label>
+                        <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
+                        <label for="format-underline">
+                          {t('color.format.underline@@Underline')}
+                        </label>
+                        <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
+                        <label for="format-strikethrough">
+                          {t('color.format.strikethrough@@Strikethrough')}
+                        </label>
+                        <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
+                        <div class="py-3 font-mono">
+                          <p>{t('color.placeholders@@Placeholders:')}</p>
+                          <p>$t = Output Text</p>
+                        </div>
+                      </>
                     }
                   </div>
                 </>
@@ -703,6 +715,16 @@ export const head: DocumentHead = {
     {
       name: 'og:image',
       content: '/branding/icon.png',
+    },
+  ],
+  scripts: [
+    {
+      props: {
+        async: true,
+        type: 'text/javascript',
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
+        crossOrigin: 'anonymous',
+      },
     },
   ],
 };

@@ -1,9 +1,17 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card, Header } from '@luminescent/ui';
+import { Blobs, Header } from '@luminescent/ui-qwik';
 import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
+
+  useOnDocument(
+    'load',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">
@@ -11,73 +19,82 @@ export default component$(() => {
         Resources
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
-        <Card color="darkgray">
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="Tools to help you create gradient text in Minecraft.">
             Gradient Tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Card href="/resources/rgb" color="red" blobs hover="clickable">
+            <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
               <Header subheader="RGB gradient creator">
                 RGBirdflop
               </Header>
-            </Card>
-            <Card href="/api/v2/docs" color="lime" blobs hover="clickable">
+              <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/api/v2/docs">
               <Header subheader="Documentation for the RGBirdflop API">
                 API Docs
               </Header>
-            </Card>
-            <Card href="/resources/animtab" color="blue" blobs hover="clickable">
+              <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
               <Header subheader="TAB plugin gradient animation creator">
                 Animated TAB
               </Header>
-            </Card>
+              <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
           </div>
-        </Card>
-        <Card color="darkgray">
+        </div>
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="Tools to help configure and setup minecraft servers.">
             Server tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Card href="/resources/sparkprofile" color="yellow" blobs hover="clickable">
+            <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
               <Header subheader="Analyze Spark Profiles and get possible optimizations">
                 Spark Profile
               </Header>
-            </Card>
-            <Card href="/resources/papertimings" color="pink" blobs hover="clickable">
+              <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
               <Header subheader="Analyze Paper Timings Reports and get possible optimizations">
                 Paper Timings
               </Header>
-            </Card>
-            <Card href="/resources/flags" color="orange" blobs hover="clickable">
+              <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
               <Header subheader="A simple script generator to start your Minecraft servers with optimal flags">
                 Flags
               </Header>
-            </Card>
+              <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
           </div>
-        </Card>
-        <Card color="darkgray">
+        </div>
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="Miscellaneous tools to help with random miscellaneous things.">
             Miscellaneous tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Card href="/resources/animtexture" color="purple" blobs hover="clickable">
+            <a class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
               <Header subheader="Easily merge textures for resource pack animations">
                 Animated Textures
               </Header>
-            </Card>
-            <Card href="/resources/animpreview" color="green" blobs hover="clickable">
+              <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
               <Header subheader="Preview TAB Animations without the need to put them in-game">
                 TAB Animation Previewer
               </Header>
-            </Card>
-            <Card href="/resources/colorstrip" color="gray" blobs hover="clickable">
+              <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
+            <a class="lum-card lum-bg-gray-800/30 hover:lum-bg-gray-800/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/colorstrip">
               <Header subheader="Strips all color / format codes from text">
                 Color Code Stripper
               </Header>
-            </Card>
+              <Blobs color='gray' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </a>
           </div>
-        </Card>
-        <Card color="darkgray">
+        </div>
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="Botflop is a Discord bot that watches chat to chime in and provide suggestions.">
             Botflop
           </Header>
@@ -85,17 +102,19 @@ export default component$(() => {
             Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </div>
           <div class="flex gap-2">
-            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot" size="lg" color="blue">
+            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
+              href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
               <LogoDiscord width="24" />
               Invite
-            </ButtonAnchor>
-            <ButtonAnchor href="https://github.com/birdflop/botflop" size="lg">
+            </a>
+            <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
+              href="https://github.com/birdflop/botflop">
               <LogoGithub width="24" />
               Learn More
-            </ButtonAnchor>
+            </a>
           </div>
-        </Card>
-        <Card color="darkgray">
+        </div>
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="Binflop is Birdflop's spinoff of the original hastebin.com.">
             Binflop
           </Header>
@@ -126,12 +145,13 @@ export default component$(() => {
             </ul>
           </div>
           <div class="flex gap-2">
-            <ButtonAnchor href="https://bin.birdflop.com/" size="lg" color="blue">
+            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4"
+              href="https://bin.birdflop.com/">
               Try it
-            </ButtonAnchor>
+            </a>
           </div>
-        </Card>
-        <Card color="darkgray">
+        </div>
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
           <Header subheader="BirdTickets is a Discord ticket bot which provides premium features without a premium cost.">
             BirdTickets
           </Header>
@@ -162,16 +182,18 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <ButtonAnchor href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot" size="lg" color="blue">
+            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
+              href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
               <LogoDiscord width="24" />
               Invite
-            </ButtonAnchor>
-            <ButtonAnchor href="https://github.com/birdflop/birdtickets" size="lg">
+            </a>
+            <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
+              href="https://github.com/birdflop/birdtickets">
               <LogoGithub width="24" />
               Learn More
-            </ButtonAnchor>
+            </a>
           </div>
-        </Card>
+        </div>
       </div>
     </section>
   );

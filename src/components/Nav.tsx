@@ -1,8 +1,8 @@
 import { component$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
-import { Button, ButtonAnchor, LoadingIcon, LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui';
+import { LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui-qwik';
 
-import { CubeOutline, GlobeOutline, LogoGithub, ServerOutline, People } from 'qwik-ionicons';
+import { CubeOutline, GlobeOutline, LogoGithub, ServerOutline } from 'qwik-ionicons';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 
@@ -14,130 +14,101 @@ export default component$(() => {
   const loc = useLocation();
 
   return (
-    <Nav fixed>
-      <Link q:slot="start" href="/">
-        <Button transparent>
-          <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
-          <span class="font-bold -ml-1">Birdflop</span>
-          <div class={{
-            'transition-all': true,
-            '-ml-6 opacity-0': !loc.isNavigating,
-          }}>
-            <LoadingIcon width={16} speed="0.4s" />
-          </div>
-        </Button>
+    <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
+      <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent">
+        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
+        <span class="font-bold -ml-1">Birdflop</span>
+        <div class={{
+          'transition-all': true,
+          '-ml-6 opacity-0': !loc.isNavigating,
+        }}>
+          <div class="lum-loading w-4 h-4" />
+        </div>
       </Link>
 
-      <DropdownRaw id="nav-hosting" q:slot='end' size="md" transparent hover
+      <DropdownRaw id="nav-hosting" q:slot='end' hover
         display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}
-        class={{ 'hidden sm:flex': true }}>
-        <ButtonAnchor q:slot="extra-buttons" transparent href="https://panel.birdflop.com/">
+        class={{ 'lum-bg-transparent hidden sm:flex': true }}>
+        <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
           Panel
-        </ButtonAnchor>
-        <Link q:slot="extra-buttons" href="/plans">
-          <Button transparent class={{ 'w-full': true }}>
-            Plans
-          </Button>
+        </a>
+        <Link q:slot="extra-buttons" href="/plans" class="lum-btn lum-bg-transparent">
+          Plans
         </Link>
-        <ButtonAnchor q:slot="extra-buttons" transparent href="https://client.birdflop.com/">
+        <a q:slot="extra-buttons" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent">
           Billing
-        </ButtonAnchor>
-        <Link q:slot="extra-buttons" href="/node-stats">
-          <Button transparent class={{ 'w-full': true }}>
-            Node Stats
-          </Button>
+        </a>
+        <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent">
+          Node Stats
         </Link>
       </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='end' size="md" transparent hover
+      <DropdownRaw id="nav-resources" q:slot='end' hover
         display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}
-        class={{ 'hidden sm:flex': true }}>
-        <Link q:slot="extra-buttons" href="/resources/rgb">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.hexGradient@@RGBirdflop')}
-          </Button>
+        class={{ 'lum-bg-transparent hidden sm:flex': true }}>
+        <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
+          {t('nav.hexGradient@@RGBirdflop')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/animtab">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.animatedTAB@@Animated TAB')}
-          </Button>
+        <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent">
+          {t('nav.animatedTAB@@Animated TAB')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/sparkprofile">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.sparkProfile@@Spark Profile')}
-          </Button>
+        <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
+          {t('nav.sparkProfile@@Spark Profile')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/flags">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.flags@@Flags')}
-          </Button>
+        <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent">
+          {t('nav.flags@@Flags')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.more@@More Resources')}
-          </Button>
+        <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
+          {t('nav.more@@More Resources')}
         </Link>
       </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources') }} id="lang-picker" transparent display={<GlobeOutline width="24" />} size="md" values={config.supportedLocales.map(value => (
-        {
-          name: languages[value.lang as keyof typeof languages],
-          value: value.lang,
-        }
-      ))} onChange$={(e, el) => {
-        document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
-        location.reload();
-      }}>
+      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent lum-pad-equal-xs': true }} id="lang-picker"
+        display={<GlobeOutline width="24" />} values={config.supportedLocales.map(value => (
+          {
+            name: languages[value.lang as keyof typeof languages],
+            value: value.lang,
+          }
+        ))} onChange$={(e, el) => {
+          document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
+          location.reload();
+        }}>
       </DropdownRaw>
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
 
-      <DropdownRaw id="nav-hosting" q:slot='mobile' size="md" transparent
-        display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}>
-        <ButtonAnchor q:slot="extra-buttons" transparent href="https://panel.birdflop.com/">
-          Panel
-        </ButtonAnchor>
-        <Link q:slot="extra-buttons" href="/plans">
-          <Button transparent class={{ 'w-full': true }}>
-            Plans
-          </Button>
-        </Link>
-        <ButtonAnchor q:slot="extra-buttons" transparent href="https://client.birdflop.com/">
-          Billing
-        </ButtonAnchor>
-        <Link q:slot="extra-buttons" href="/node-stats">
-          <Button transparent class={{ 'w-full': true }}>
-            Node Stats
-          </Button>
-        </Link>
-      </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='mobile' size="md" transparent
-        display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}>
-        <Link q:slot="extra-buttons" href="/resources/rgb">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.hexGradient@@RGBirdflop')}
-          </Button>
-        </Link>
-        <Link q:slot="extra-buttons" href="/resources/animtab">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.animatedTAB@@Animated TAB')}
-          </Button>
-        </Link>
-        <Link q:slot="extra-buttons" href="/resources/sparkprofile">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.sparkProfile@@Spark Profile')}
-          </Button>
-        </Link>
-        <Link q:slot="extra-buttons" href="/resources/flags">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.flags@@Flags')}
-          </Button>
-        </Link>
-        <Link q:slot="extra-buttons" href="/resources">
-          <Button transparent class={{ 'w-full': true }}>
-            {t('nav.more@@More Resources')}
-          </Button>
-        </Link>
-      </DropdownRaw>
+      <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
+        <CubeOutline width={24} />Hosting
+      </h3>
+      <a q:slot="mobile" href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent">
+        Panel
+      </a>
+      <Link q:slot="mobile" href="/plans" class="lum-btn lum-bg-transparent">
+        Plans
+      </Link>
+      <a q:slot="mobile" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent">
+        Billing
+      </a>
+      <Link q:slot="mobile" href="/node-stats" class="lum-btn lum-bg-transparent">
+        Node Stats
+      </Link>
+      <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
+        <CubeOutline width={24} />Resources
+      </h3>
+      <Link q:slot="mobile" href="/resources/rgb" class="lum-btn lum-bg-transparent">
+        {t('nav.hexGradient@@RGBirdflop')}
+      </Link>
+      <Link q:slot="mobile" href="/resources/animtab" class="lum-btn lum-bg-transparent">
+        {t('nav.animatedTAB@@Animated TAB')}
+      </Link>
+      <Link q:slot="mobile" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
+        {t('nav.sparkProfile@@Spark Profile')}
+      </Link>
+      <Link q:slot="mobile" href="/resources/flags" class="lum-btn lum-bg-transparent">
+        {t('nav.flags@@Flags')}
+      </Link>
+      <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
+        {t('nav.more@@More Resources')}
+      </Link>
       <div q:slot='mobile' class="flex justify-evenly">
         <SocialButtons />
       </div>
@@ -148,14 +119,11 @@ export default component$(() => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <ButtonAnchor transparent square href="/staff/" title="Our Staff">
-      <People width="29" />
-    </ButtonAnchor>
-    <ButtonAnchor transparent square href="https://github.com/birdflop/web" title="GitHub">
+    <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
       <LogoGithub width="24" />
-    </ButtonAnchor>
-    <ButtonAnchor transparent square href="https://discord.gg/nmgtX5z" title="Discord">
+    </a>
+    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
       <LogoDiscord width="24" />
-    </ButtonAnchor>
+    </a>
   </>;
 });

@@ -13,7 +13,13 @@ export function getCookies(cookie: Cookie, preset: names, urlParams: URLSearchPa
   let json = deepclone(defaults);
   try {
     const cookieVal = cookie.get(preset)?.value;
-    if (cookieVal) json = JSON.parse(cookieVal);
+    if (cookieVal) {
+      json = JSON.parse(cookieVal);
+    } else if (preset == 'rgb' || preset == 'animtab') {
+      json = preset == 'rgb' ? deepclone(rgbDefaults) : deepclone(animTABDefaults);
+    } else {
+      json = {};
+    }
   } catch (e) {
     console.error(e);
   }

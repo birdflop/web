@@ -1,6 +1,6 @@
 import { component$, useStore, useSignal } from '@builder.io/qwik';
-import { Card, Header, TextInput, ButtonAnchor, Button } from '@luminescent/ui';
-import { CloseOutline } from 'qwik-ionicons';
+import { Header } from '@luminescent/ui-qwik';
+import { CloseOutline, DownloadOutline } from 'qwik-ionicons';
 
 async function fetchLatestPurpurVersion() {
   const response = await fetch('https://api.purpurmc.org/v2/purpur');
@@ -89,7 +89,8 @@ export default component$(() => {
       <div class="w-full max-w-2xl flex flex-col items-center space-y-4 p-4">
         <h1 class="text-3xl font-bold mb-4 text-center">Jarflop - The Minecraft Server Jar Hub!</h1>
         <div class="w-full mb-6">
-          <TextInput
+          <input
+            class="lum-input w-full"
             id="search-input"
             placeholder="Search for a version..."
             value={store.searchTerm}
@@ -103,7 +104,7 @@ export default component$(() => {
           >
             {filteredJars.length > 0 ? (
               filteredJars.map((jar, index) => (
-                <Card key={index} hover="clickable" onClick$={async () => {
+                <button class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out" key={index} onClick$={async () => {
                   try {
                     store.selectedJar = jar;
                     modalRef.value?.showModal();
@@ -121,7 +122,7 @@ export default component$(() => {
                       </Header>
                     </div>
                   </div>
-                </Card>
+                </button>
               ))
             ) : (
               <p class="text-center text-gray-400">No results found. If you are wanting a new server jar added please contact us!</p>
@@ -129,18 +130,18 @@ export default component$(() => {
           </div>
         </div>
       </div>
-      <dialog ref={modalRef} class="bg-gray-800 text-white p-6 rounded-lg shadow-lg relative max-w-lg w-full transform transition-transform duration-300 ease-in-out scale-100">
+      <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
         <div class="flex items-center mb-4">
           <img src={store.selectedJar?.logo} alt={`${store.selectedJar?.name} logo`} class="w-12 h-12 mr-4" height="1" width="1"/>
           <h2 class="text-2xl font-bold flex-1">{store.selectedJar?.name}</h2>
-          <Button square onClick$={() => modalRef.value?.close()}>
+          <button class="lum-btn lum-bg-transparent " onClick$={() => modalRef.value?.close()}>
             <CloseOutline width="24" style={{ color: 'white' }} />
-          </Button>
+          </button>
         </div>
         <p class="mb-4">{store.selectedJar?.longDescription}</p>
-        <ButtonAnchor href={store.downloadLink}>
-          Download Latest Version
-        </ButtonAnchor>
+        <a class="lum-btn" href={store.downloadLink}>
+          <DownloadOutline width="24"/> Download Latest Version
+        </a>
       </dialog>
     </div>
   );

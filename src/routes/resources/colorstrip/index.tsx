@@ -1,7 +1,7 @@
 import { component$, useStore } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { Dropdown, TextArea, TextInput } from '@luminescent/ui';
+import { Dropdown } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 
 export default component$(() => {
@@ -23,9 +23,8 @@ export default component$(() => {
           {t('colorstrip.subtitle@@Strips all color / format codes from text')}
         </h2>
 
-        <TextInput class={{ 'mb-3': true }} id="input" onInput$={(e, el) => { store.input = el.value; }}>
-          {t('colorstrip.inputText@@Input Text')}
-        </TextInput>
+        <label for="input">{t('colorstrip.inputText@@Input Text')}</label>
+        <input class="lum-input mt-1 mb-3 w-full font-mono" id="input" onInput$={(e, el) => { store.input = el.value; }}/>
 
         <Dropdown id="gradienttype" class={{ 'w-full': true }} onChange$={(e, el) => { store.type = Number(el.value); }}
           values={[
@@ -38,14 +37,16 @@ export default component$(() => {
         </Dropdown>
 
         <div class="mt-3">
-          <TextArea output id="colorstrip-output" value={
-            store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
-              store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
-                store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
-                  store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
-          }>
-            {t('colorstrip.output@@Output')}
-          </TextArea>
+          <label for="colorstrip-output">{t('colorstrip.output@@Output')}</label>
+          <textarea id="colorstrip-output"
+            class={{ 'lum-input h-96 font-mono mt-1 w-full': true }}
+            value={
+              store.type == 0 ? store.input.replace(/&#([A-Fa-f0-9]){6}/g, '') :
+                store.type == 1 ? store.input.replace(/<#([A-Fa-f0-9]){6}>/g, '') :
+                  store.type == 2 ? store.input.replace(/&x&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])&([A-Fa-f0-9])/g, '') :
+                    store.input.replace(/§x§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])§([A-Fa-f0-9])/g, '')
+            }
+          />
         </div>
       </div>
     </section>

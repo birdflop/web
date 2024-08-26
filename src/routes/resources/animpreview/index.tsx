@@ -1,7 +1,6 @@
 import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
-import { TextArea } from '@luminescent/ui';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import yaml from 'yaml';
@@ -76,7 +75,7 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     track(() => store.yaml);
-    isBrowser && setCookies('animpreview', { yaml: store.yaml });
+    if (isBrowser) setCookies('animpreview', { yaml: store.yaml });
     let json;
     try {
       json = yaml.parse(store.yaml);
@@ -100,7 +99,7 @@ export default component$(() => {
           {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
         </h2>
 
-        <p class="bg-gray-800 border border-gray-700 p-4 rounded-lg text-gray-50 font-mono">
+        <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
           {store.frames[store.frame]}
         </p>
 
@@ -134,9 +133,16 @@ export default component$(() => {
           })()}
         </h1>
 
-        <TextArea id="Animaton" class={{ 'h-96 font-mono': true }} value={store.yaml} onInput$={(e, el) => { store.yaml = el.value; }}>
-          {t('animpreview.yamlInput@@YAML Input')}
-        </TextArea>
+        <div class="flex flex-col gap-1">
+          <label for="animation">
+            {t('animpreview.yamlInput@@YAML Input')}
+          </label>
+          <textarea id="animation"
+            class={{ 'lum-input h-96 font-mono': true }}
+            value={store.yaml}
+            onInput$={(e, el) => { store.yaml = el.value; }}
+          />
+        </div>
       </div>
     </section>
   );

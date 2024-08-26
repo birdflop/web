@@ -1,7 +1,6 @@
 import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { ButtonAnchor, Card } from '@luminescent/ui';
 
 import analyzeTimings from '~/analyze/functions/analyzeTimings';
 import { collector } from '~/analyze/functions/collector';
@@ -31,19 +30,19 @@ export default component$(() => {
           onResolved={(fields: Field[]) => <>
             {fields.map((field: Field, i: number) => {
               return (
-                <Card key={`field${i}`}>
+                <div class="lum-card" key={`field${i}`}>
                   <p class="text-white font-bold text-xl break-words">
                     {field.name.replace(/\./g, '\n> ')}
                   </p>
                   {field.value}
                   {field.buttons?.map((button: any, i2: number) => {
                     return (
-                      <ButtonAnchor key={`button${i2}-${i}`} href={button.url}>
+                      <a class="lum-btn" key={`button${i2}-${i}`} href={button.url}>
                         {button.text}
-                      </ButtonAnchor>
+                      </a>
                     );
                   })}
-                </Card>
+                </div>
               );
             })}
           </>}
@@ -70,6 +69,16 @@ export const head: DocumentHead = {
     {
       name: 'og:image',
       content: '/branding/icon.png',
+    },
+  ],
+  scripts: [
+    {
+      props: {
+        async: true,
+        type: 'text/javascript',
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
+        crossOrigin: 'anonymous',
+      },
     },
   ],
 };

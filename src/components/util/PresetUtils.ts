@@ -217,6 +217,9 @@ export function loadPreset(p: string): Partial<typeof defaults> {
     };
   }
   else preset = JSON.parse(p);
+  if (preset.colors && preset.colors.length && typeof preset.colors[0] == 'string') {
+    if (typeof preset.colors[0] == 'string') preset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
+  }
   if (preset.version === defaults.version) return preset;
   else if (preset.version === 2) {
     const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough } = preset;

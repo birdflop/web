@@ -14,7 +14,7 @@ export default component$(() => {
           labels: [
             'EU Hosting Expenses',
             'US Hosting Expenses',
-            'Web Infrastructure',
+            'Infrastructure',
             'Platform Development',
             // 'Loan Payments',
             'Client Reimbursements',
@@ -33,7 +33,7 @@ export default component$(() => {
               // 'rgba(255, 160, 0, 0.2)', // loan payments
               'rgba(255, 200, 0, 0.2)', // client reimbursements
               'rgba(0, 200, 0, 0.2)',
-              'rgba(0, 210, 100, 0.2)',
+              'rgba(0, 200, 120, 0.2)',
               // 'rgba(0, 210, 100, 0.2)',
               // 'rgba(0, 215, 150, 0.2)',
             ],
@@ -44,13 +44,13 @@ export default component$(() => {
               'rgba(255, 150, 0, 1)', //
               // 'rgba(255, 160, 0, 1)', // loan payments
               'rgba(255, 200, 0, 1)', // client reimbursements
-              'rgba(0, 200, 0, 1)',
-              'rgba(0, 205, 50, 1)',
+              'rgba(0, 200, 0, 1)', // hosting revenue
+              'rgba(0, 200, 120, 1)', // charitable donations
               // 'rgba(0, 210, 100, 1)',
               // 'rgba(0, 215, 150, 1)',
             ],
             borderWidth: 1,
-            data: [585.00, 3001.53, 82.62, 29.66, 500.00, null, null],
+            data: [600.00, 651.53, 183.59, 7.00, 1419.55, null, null],
           },
           {
             // Inner Ring (REVENUE)
@@ -62,7 +62,7 @@ export default component$(() => {
               // 'rgba(255, 160, 0, 0.2)',
               'rgba(255, 200, 0, 0.2)',
               'rgba(0, 200, 0, 0.2)',
-              'rgba(0, 210, 100, 0.2)',
+              'rgba(0, 200, 120, 0.2)',
               // 'rgba(0, 210, 100, 0.2)',
               // 'rgba(0, 215, 150, 0.2)',
             ],
@@ -74,12 +74,12 @@ export default component$(() => {
               // 'rgba(255, 160, 0, 1)',
               'rgba(255, 200, 0, 1)',
               'rgba(0, 200, 0, 1)', // hosting revenue
-              'rgba(0, 210, 100, 1)', // charitable donations
+              'rgba(0, 200, 120, 1)', // charitable donations
               // 'rgba(0, 210, 100, 1)', // licensing fees
               // 'rgba(0, 215, 150, 1)', // loans received
             ],
             borderWidth: 1,
-            data: [null, null, null, null, null, 2478.27, 74.23],
+            data: [null, null, null, null, null, 2864.26, 55.54],
           }],
         },
         options: {

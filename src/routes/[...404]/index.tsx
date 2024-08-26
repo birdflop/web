@@ -1,8 +1,10 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
-import { Button, LogoBirdflop } from '@luminescent/ui';
+import { LogoBirdflop } from '@luminescent/ui-qwik';
+import { HomeOutline } from 'qwik-ionicons';
 import Background from '~/components/images/background.png?jsx';
+import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const onGet: RequestHandler = async ({ json, request }) => {
   // check if contenttype is json
@@ -14,6 +16,14 @@ export const onGet: RequestHandler = async ({ json, request }) => {
 };
 
 export default component$(() => {
+  // Keeping below unloading in case we mess up navbar in future
+  useOnDocument(
+    'load',
+    $(() => {
+      unloadGoogleAds();
+    }),
+  );
+
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <Background class="fixed inset-0 scale-110 overflow-hidden -z-10 h-lvh w-lvw object-cover object-center opacity-45 grayscale blur-lg" id="bg" alt="background" />
@@ -24,10 +34,8 @@ export default component$(() => {
           Whoops! You've hit a dead-end.
         </p>
         <div class="flex mt-4">
-          <Link href="/">
-            <Button size="lg" color="blue">
-              Go back home
-            </Button>
+          <Link href="/" class="lum-btn lum-pad-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
+            <HomeOutline width={24} /> Go back home
           </Link>
         </div>
       </div>

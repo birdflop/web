@@ -180,7 +180,7 @@ export function generateOutput(
 
     const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
 
-    const segments = [...text.matchAll(new RegExp(`.{1,${colorlength}}`, 'g'))];
+    const segments = [...text.matchAll(new RegExp(`.{1,${colorlength ?? 1}}`, 'g'))];
     for (const segment of segments) {
       if (trimspaces && segment[0].match(/^\s+$/)) {
         output += segment[0];
