@@ -12,7 +12,7 @@ import {
  *
  * @public
  */
-export interface PartytownProps extends PartytownConfig { }
+export type PartytownProps = PartytownConfig;
 
 /**
  * @public

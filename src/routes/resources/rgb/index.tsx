@@ -101,7 +101,7 @@ export default component$(() => {
           <span class="font-bold mr-2 text-gray-100">{t('color.output@@Output')}</span>
           <span class="text-gray-500">- {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
         </label>
-        <textarea id="output" class={{ 'lum-input h-32 w-full font-mc': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}/>
+        <textarea id="output" class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}/>
 
         <h1 class={{
           'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
