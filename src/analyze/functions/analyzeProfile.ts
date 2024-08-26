@@ -21,7 +21,7 @@ export default async function analyzeProfile(id: string) {
     sampler = await response_raw.json();
   }
   catch (err) {
-    return [{ name: '❌ Processing Error', value: 'birdflop cannot process this spark profile. Please use an alternative spark profile.' }];
+    return [{ name: '❌ Processing Error', value: `Birdflop cannot process this spark profile. Please use an alternative spark profile. ${err}` }];
   }
 
   const platform = sampler.metadata.platform.name;

@@ -183,7 +183,8 @@ export function fromBinary(encoded: string) {
   let binary;
   try {
     binary = atob(encoded);
-  } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (err) {
     return '';
   }
   const bytes = new Uint8Array(binary.length);

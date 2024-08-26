@@ -23,7 +23,7 @@ export default async function analyzeTimings(id: string) {
     request = await response_json.json();
   }
   catch (err) {
-    return [{ name: '❌ Processing Error', value: 'birdflop cannot process this spark profile. Please use an alternative spark profile.' }];
+    return [{ name: '❌ Processing Error', value: `birdflop cannot process this spark profile. Please use an alternative spark profile. ${err}` }];
   }
 
   let version = request.timingsMaster.version;
