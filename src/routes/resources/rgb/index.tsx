@@ -230,7 +230,7 @@ export default component$(() => {
                 'right-0 items-end': color.pos >= 50,
               }}>
                 {store.colors.length > 2 &&
-                  <button class="lum-btn lum-pad-equal-md" size='sm' color="red" onClick$={() => {
+                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
                     const newColors = store.colors.slice(0);
                     newColors.splice(i, 1);
                     store.colors = sortColors(newColors);
@@ -298,7 +298,7 @@ export default component$(() => {
               {t('color.colorPreset@@Color Preset')}
             </Dropdown>
             {store.format.color != 'MiniMessage' &&
-              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full': true }}
+              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
                 onIncrement$={() => {
                   store.colorlength++;
                 }}
@@ -306,7 +306,7 @@ export default component$(() => {
                   store.colorlength--;
                 }}
               >
-                {t('color.colorLength@@Color Length')}
+                {t('color.colorLength@@Characters per color')}
               </NumberInput>
             }
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
@@ -342,13 +342,13 @@ export default component$(() => {
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
             <div class="flex gap-2">
-              <button class="lum-btn" size='sm' square onClick$={() => {
+              <button class="lum-btn lum-pad-equal-xs" onClick$={() => {
                 const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
                 <DiceOutline width={24} />
               </button>
-              <button class="lum-btn w-full" size='sm' disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
+              <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
                 const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
                 store.colors = newColors;
               }}>
@@ -357,21 +357,21 @@ export default component$(() => {
             </div>
             <div class="flex flex-col gap-2">
               {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
-                <div class="bg-gray-800 flex flex-col rounded-md border border-gray-700">
-                  <button class="lum-btn lum-pad-equal-md border-0" size="sm" transparent onClick$={() => handleSwap(i, i - 1)}>
-                    <ChevronUp width="20" />
+                <div class="flex flex-col rounded-md">
+                  <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
+                    <ChevronUp width={24} />
                   </button>
-                  <button class="lum-btn lum-pad-equal-md border-0" size="sm" transparent onClick$={() => handleSwap(i, i + 1)}>
-                    <ChevronDown width="20" />
+                  <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
+                    <ChevronDown width={24} />
                   </button>
                 </div>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col justify-end gap-1">
                   <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
                   <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
                     class={{
                       'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
                       'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                      'lum-input w-full': true,
+                      'lum-input w-full lum-pad-xs hover:': true,
                     }}
                     style={`background: ${color.hex};`}
                     value={color.hex}
@@ -396,13 +396,15 @@ export default component$(() => {
                     }}
                   />
                 </div>
-                <button class="lum-btn" square size="sm" disabled={store.colors.length <= 2} color="red" onClick$={() => {
-                  const newColors = store.colors.slice(0);
-                  newColors.splice(i, 1);
-                  store.colors = newColors;
-                }}>
-                  <TrashOutline width="20" />
-                </button>
+                <div class="flex flex-col justify-end">
+                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
+                    const newColors = store.colors.slice(0);
+                    newColors.splice(i, 1);
+                    store.colors = newColors;
+                  }}>
+                    <TrashOutline width="20" />
+                  </button>
+                </div>
                 <div
                   id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
                     'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
@@ -429,10 +431,12 @@ export default component$(() => {
               {t('color.inputs@@Inputs')}
             </h1>
 
-            <label for="input">
-              {t('color.inputText@@Input Text')}
-            </label>
-            <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
+            <div class="flex flex-col gap-1">
+              <label for="input">
+                {t('color.inputText@@Input Text')}
+              </label>
+              <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
+            </div>
 
             <div class="flex flex-col md:grid grid-cols-2 gap-2">
               <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
@@ -464,7 +468,7 @@ export default component$(() => {
               ]}>
                 {t('color.colorFormat@@Color Format')}
               </Dropdown>
-              <div class="flex flex-col gap-2">
+              <div class="flex flex-col gap-1">
                 <label for="prefixsuffix">
                   {t('color.prefixsuffix@@Prefix/Suffix')}
                 </label>
@@ -498,8 +502,7 @@ export default component$(() => {
                         {t('color.format.character@@Format Character')}
                       </label>
                       <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
-                    </>
-                    }
+                    </>}
                     {!store.format.char &&
                       <>
                         <label for="format-bold">
@@ -542,14 +545,19 @@ export default component$(() => {
                   json = {
                     ...preset,
                   };
-                } catch (error) {
+                } catch (err) {
                   const alert = {
                     class: 'text-red-500',
                     text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
                   };
-                  tmpstore.alerts.push(alert);
+                  const errtext = {
+                    class: 'text-red-300',
+                    text: `${err}`,
+                  };
+                  tmpstore.alerts.push(alert, errtext);
                   return setTimeout(() => {
                     tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
                   }, 5000);
                 }
                 (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
@@ -566,7 +574,7 @@ export default component$(() => {
                 }, 2000);
               }}/>
               <div class="flex gap-2">
-                <button class="lum-btn lum-pad-sm" id="export" size="sm" onClick$={() => {
+                <button class="lum-btn lum-pad-sm" id="export" onClick$={() => {
                   const preset: Partial<typeof defaults> = { ...store };
                   (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
                     if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
@@ -583,7 +591,7 @@ export default component$(() => {
                 }}>
                   {t('color.export@@Export')}
                 </button>
-                <button class="lum-btn lum-pad-sm" id="createurl" size="sm" onClick$={() => {
+                <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
                   const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
                   const url = new URL(base_url);
                   const params: Partial<typeof defaults> = { ...store };

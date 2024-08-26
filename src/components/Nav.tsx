@@ -61,7 +61,7 @@ export default component$(() => {
           {t('nav.more@@More Resources')}
         </Link>
       </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent': true }} id="lang-picker"
+      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent lum-pad-equal-xs': true }} id="lang-picker"
         display={<GlobeOutline width="24" />} values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
