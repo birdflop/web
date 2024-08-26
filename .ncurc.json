@@ -1,0 +1,6 @@
+{
+  "reject": [
+    "eslint",
+    "@types/eslint"
+  ]
+}
