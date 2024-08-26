@@ -1,6 +1,6 @@
 import { component$, useStore } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
-import { Button, ButtonAnchor, Card, DropdownRaw, TextInput } from '@luminescent/ui';
+import { DropdownRaw } from '@luminescent/ui-qwik';
 import { CopyOutline, CubeOutline, SaveOutline } from 'qwik-ionicons';
 import { inlineTranslate } from 'qwik-speak';
 import { Gradient } from '~/components/util/HexUtils';
@@ -33,17 +33,15 @@ export default component$(() => {
         </h2>
 
         <div class="flex flex-col gap-2">
-          <TextInput
+          <input
+            class="lum-input w-full my-2"
             id="search-input"
-            placeholder="Search for a preset"
-            class={{
-              'my-2': true,
-            }}
+            placeholder="Search for a version..."
             value={store.searchTerm}
             onInput$={(e, el) => store.searchTerm = el.value}
           />
           {filteredPresets.map((preset, i) => (
-            <Card key={`preset-${i}`}>
+            <div class="lum-card lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
               <div class="flex gap-4 items-center">
                 <img src="/branding/icon.png" alt="Birdflop" class="w-16 h-16 rounded-full" />
                 <div class="flex flex-col gap-2">
@@ -74,29 +72,29 @@ export default component$(() => {
                 </div>
               </div>
               <div class="flex gap-2 mt-4">
-                <Button>
+                <button class="lum-btn">
                   <SaveOutline width={24} /> Save
-                </Button>
-                <Button>
+                </button>
+                <button class="lum-btn">
                   <CopyOutline width={24} /> Copy
-                </Button>
-                <DropdownRaw id={`use-${i}`} hover size="md"
+                </button>
+                <DropdownRaw id={`use-${i}`} hover
                   display={<div class="flex items-center gap-3"><CubeOutline width={24} />Use</div>}
                   class={{ 'hidden sm:flex': true }}>
-                  <ButtonAnchor href="/resources/rgb" q:slot='extra-buttons' transparent class={{ 'w-full': true }}>
+                  <a class="lum-btn w-full lum-bg-transparent" href="/resources/rgb" q:slot='extra-buttons'>
                     {t('nav.hexGradient@@RGBirdflop')}
-                  </ButtonAnchor>
-                  <ButtonAnchor href="/resources/animtab" q:slot='extra-buttons' transparent class={{ 'w-full': true }}>
+                  </a>
+                  <a class="lum-btn w-full lum-bg-transparent" href="/resources/animtab" q:slot='extra-buttons'>
                     {t('nav.animatedTAB@@Animated TAB')}
-                  </ButtonAnchor>
+                  </a>
                 </DropdownRaw>
               </div>
-            </Card>
+            </div>
           ))}
           {filteredPresets.length === 0 && (
-            <Card>
+            <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-gray-400">No results found. Stay tuned for a way to submit your own presets!</p>
-            </Card>
+            </div>
           )}
         </div>
 
