@@ -369,8 +369,8 @@ export default component$(() => {
                   <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
                   <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
                     class={{
-                      'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                      'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                      'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                      'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
                       'lum-input w-full lum-pad-xs hover:': true,
                     }}
                     style={`background: ${color.hex};`}

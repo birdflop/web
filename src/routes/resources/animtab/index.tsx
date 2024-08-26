@@ -345,7 +345,7 @@ export default component$(() => {
                 store.colorlength--;
               }}
             >
-              {t('color.colorLength@@Color Length')}
+              {t('color.colorLength@@Characters per color')}
             </NumberInput>
             <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
               onChange$={(e, el) => {
@@ -407,8 +407,8 @@ export default component$(() => {
                   <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
                   <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
                     class={{
-                      'text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                      'text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                      'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                      'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
                       'lum-input w-full lum-pad-xs hover:': true,
                     }}
                     style={`background: ${color.hex};`}
