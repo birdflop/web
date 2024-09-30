@@ -83,9 +83,15 @@ export function getAnimFrames(store: typeof defaults) {
       if (store.prefixsuffix) hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
       OutputArray.push(hexOutput);
     } else {
-      const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+      const textArray = Array.from(store.text);
+      const segments = [];
+      let index = 0;
+      while (index < textArray.length) {
+        segments.push(textArray.slice(index, index + store.colorlength).join(''));
+        index += store.colorlength;
+      }
       for (const segment of segments) {
-        if (store.trimspaces && segment[0].match(/^\s+$/)) {
+        if (store.trimspaces && segment.match(/^\s+$/)) {
           output += segment;
           clrs.push(null);
           continue;
@@ -104,7 +110,7 @@ export function getAnimFrames(store: typeof defaults) {
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
-        hexOutput = hexOutput.replace('$c', segment[0]);
+        hexOutput = hexOutput.replace('$c', segment);
         output += hexOutput;
       }
       if (store.prefixsuffix) output = store.prefixsuffix.replace(/\$t/g, output);
@@ -180,9 +186,19 @@ export function generateOutput(
 
     const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
 
-    const segments = [...text.matchAll(new RegExp(`.{1,${colorlength ?? 1}}`, 'g'))];
+    const segments = [];
+    let index = 0;
+
+    // Break text into segments without splitting multi-byte characters like emojis
+    while (index < text.length) {
+      const segment = Array.from(text).slice(index, index + (colorlength ?? 1)).join('');
+      segments.push([segment]);
+      index += colorlength ?? 1;
+    }
+
     for (const segment of segments) {
-      if (trimspaces && segment[0].match(/^\s+$/)) {
+      // Skip formatting only pure space segments, but not segments with emojis or non-space characters
+      if (trimspaces && segment[0].trim() === '') {
         output += segment[0];
         gradient.next();
         continue;
@@ -191,6 +207,7 @@ export function generateOutput(
       const hex = convertToHex(gradient.next());
       let hexOutput = format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+
       let formatCodes = '';
       if (format.color.includes('$f')) {
         if (format.char) {
@@ -205,12 +222,12 @@ export function generateOutput(
       hexOutput = hexOutput.replace('$c', segment[0]);
       output += hexOutput;
     }
-  }
 
-  if (format.bold && bold) output = format.bold.replace('$t', output);
-  if (format.italic && italic) output = format.italic.replace('$t', output);
-  if (format.underline && underline) output = format.underline.replace('$t', output);
-  if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
-  if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
-  return output;
+    if (format.bold && bold) output = format.bold.replace('$t', output);
+    if (format.italic && italic) output = format.italic.replace('$t', output);
+    if (format.underline && underline) output = format.underline.replace('$t', output);
+    if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
+    if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
+    return output;
+  }
 }
