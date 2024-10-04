@@ -17,7 +17,7 @@ export default component$(() => {
             'Infrastructure',
             'Platform Development',
             // 'Loan Payments',
-            'Client Reimbursements',
+            // 'Client Reimbursements',
             'Hosting Revenue',
             'Ad Revenue',
             // 'Licensing Fees',
