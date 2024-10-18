@@ -47,7 +47,7 @@ export function getAnimFrames(store: typeof defaults) {
   const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
   if (colors.length < 2) return { OutputArray: [], frames: [] };
 
-  const text = store.text ?? 'birdflop';
+  const text = store.text ?? 'Birdflop';
   let loopAmount;
   const length = text.length * store.length / store.colorlength;
   switch (Number(store.type)) {

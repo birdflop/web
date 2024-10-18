@@ -8,7 +8,7 @@ export interface format {
 }
 
 export const presets = {
-  'birdflop': [
+  'Birdflop': [
     { hex: '#084CFB', pos: 0 },
     { hex: '#ADF3FD', pos: 100 },
   ],
@@ -97,10 +97,10 @@ export const types = [
 
 export const defaults = {
   version: 4,
-  colors: presets.birdflop,
+  colors: presets.Birdflop,
   colorlength: 1,
   name: 'logo',
-  text: 'birdflop',
+  text: 'Birdflop',
   type: 1,
   speed: 50,
   length: 1,
