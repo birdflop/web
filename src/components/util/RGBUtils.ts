@@ -178,6 +178,7 @@ export function generateOutput(
       if (lowerRange === upperRange) continue;
       output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
     }
+    console.log(output, '181');
   }
 
   if (format.color != 'MiniMessage') {
@@ -222,12 +223,11 @@ export function generateOutput(
       hexOutput = hexOutput.replace('$c', segment[0]);
       output += hexOutput;
     }
-
-    if (format.bold && bold) output = format.bold.replace('$t', output);
-    if (format.italic && italic) output = format.italic.replace('$t', output);
-    if (format.underline && underline) output = format.underline.replace('$t', output);
-    if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
-    if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
-    return output;
   }
+  if (format.bold && bold) output = format.bold.replace('$t', output);
+  if (format.italic && italic) output = format.italic.replace('$t', output);
+  if (format.underline && underline) output = format.underline.replace('$t', output);
+  if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
+  if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
+  return output;
 }
