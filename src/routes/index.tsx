@@ -206,7 +206,7 @@ export default component$(() => {
             How do reimbursements work?
           </h2>
           <p class="text-gray-200 sm:text-lg">
-            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 35% reimbursement and EU clients received a 21% reimbursement, effectively lowering prices to $1.95/GB RAM and $1.58/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
+            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 37% reimbursement and EU clients received a 27% reimbursement, effectively lowering prices to $1.89/GB RAM and $1.46/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
           </p>
         </div>
       </div>
@@ -221,12 +221,12 @@ export default component$(() => {
             <div>
               <Chart />
               <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q2 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes node acquisition and depreciation.
+                Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
               </p>
             </div>
             <div class="flex flex-col gap-4">
               <p class="text-gray-200 sm:text-lg">
-                Birdflop is a 501(c)(3) nonprofit organization with no paid employees or directors. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
+                Birdflop is a 501(c)(3) nonprofit organization. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
               </p>
               <p class="text-gray-200 sm:text-lg">
                 Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
@@ -322,11 +322,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.58/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.58/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

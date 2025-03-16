@@ -6,6 +6,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { languages } from "./src/speak-config";
 import { partytownVite } from "@builder.io/partytown/utils";
 import { join } from "path";
+import tailwindcss from "@tailwindcss/vite";
 export default defineConfig(() => {
     return {
         plugins: [
@@ -18,17 +19,16 @@ export default defineConfig(() => {
                 defaultLang: "en-US",
                 assetsPath: "i18n"
             }),
-            partytownVite({ dest: join(__dirname, "dist", "~partytown") })
+            partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
+            tailwindcss(),
         ],
-        dev: {
-            headers: {
-                "Cache-Control": "public, max-age=0",
-            },
-        },
         preview: {
             headers: {
                 "Cache-Control": "public, max-age=600",
             },
-        }
+        },
+        ssr: {
+            external: ['@prisma/client/edge'],
+        },
     };
 });
