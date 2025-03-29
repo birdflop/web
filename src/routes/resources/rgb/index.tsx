@@ -104,10 +104,10 @@ export default component$(() => {
       const result = string.match(pattern);
       if (!result) return { hex: color, pos: 0 };
       color = result[1]
-              ? `#${result[1].replace(/&/g, '')}`
-            : result[2]
-              ? `#${result[2]}`
-            : result[0];
+        ? `#${result[1].replace(/&/g, '')}`
+        : result[2]
+          ? `#${result[2]}`
+          : result[0];
       return { hex: color, pos: (100 / (spans.length - 1)) * i };
     });
     const text = spans.map((string: string) => {
