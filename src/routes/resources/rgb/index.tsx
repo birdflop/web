@@ -106,7 +106,7 @@ export default component$(() => {
       color = result[2] ? `#${result[2]}` : color;
       return { hex: color, pos: (100 / (spans.length - 2)) * i };
     });
-    const text = spans.map((string: string, i: number) => {
+    const text = spans.map((string: string) => {
       const result = string.match(pattern);
       if (!result) return '';
       return result[5];
@@ -114,12 +114,12 @@ export default component$(() => {
     store.text = text ?? '';
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
-    console.log(significantPoints)
-    const newColors = significantPoints.map((color, i) => {
+    console.log(significantPoints);
+    const newColors = significantPoints.map((color) => {
       const pos = colors.find(c => c.hex == color)?.pos ?? 0;
       return { hex: color, pos };
     });
-    
+
     store.colors = newColors;
   });
 
@@ -208,39 +208,39 @@ export default component$(() => {
         </h1>
 
         <div class={{
-          "w-full h-3 my-5 rounded-full items-center relative": true,
-          "hidden": store.disperse,
+          'w-full h-3 my-5 rounded-full items-center relative': true,
+          'hidden': store.disperse,
         }} id="colormap"
-          style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-          onMouseDown$={(e, el) => {
-            if (e.target != el) return;
+        style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
+        onMouseDown$={(e, el) => {
+          if (e.target != el) return;
+          const rect = el.getBoundingClientRect();
+          const pos = ((e.clientX - rect.left) / rect.width) * 100;
+          if (store.colors.find(c => c.pos == pos)) return;
+          const newColors = store.colors.slice(0);
+          newColors.push({ hex: getRandomColor(), pos });
+          store.colors = sortColors(newColors);
+        }}
+        onMouseEnter$={(e, el) => {
+          const abortController = new AbortController();
+          el.addEventListener('mousemove', e => {
+            const addbutton = document.getElementById('add-button')!;
+            if (e.target != el) {
+              addbutton.classList.add('opacity-0');
+              return;
+            }
             const rect = el.getBoundingClientRect();
             const pos = ((e.clientX - rect.left) / rect.width) * 100;
             if (store.colors.find(c => c.pos == pos)) return;
-            const newColors = store.colors.slice(0);
-            newColors.push({ hex: getRandomColor(), pos });
-            store.colors = sortColors(newColors);
-          }}
-          onMouseEnter$={(e, el) => {
-            const abortController = new AbortController();
-            el.addEventListener('mousemove', e => {
-              const addbutton = document.getElementById('add-button')!;
-              if (e.target != el) {
-                addbutton.classList.add('opacity-0');
-                return;
-              }
-              const rect = el.getBoundingClientRect();
-              const pos = ((e.clientX - rect.left) / rect.width) * 100;
-              if (store.colors.find(c => c.pos == pos)) return;
-              addbutton.classList.remove('opacity-0');
-              addbutton.style.left = `${pos}%`;
-            }, { signal: abortController.signal });
-            el.addEventListener('mouseleave', () => {
-              const addbutton = document.getElementById('add-button')!;
-              addbutton.classList.add('opacity-0');
-              abortController.abort();
-            }, { signal: abortController.signal });
-          }}
+            addbutton.classList.remove('opacity-0');
+            addbutton.style.left = `${pos}%`;
+          }, { signal: abortController.signal });
+          el.addEventListener('mouseleave', () => {
+            const addbutton = document.getElementById('add-button')!;
+            addbutton.classList.add('opacity-0');
+            abortController.abort();
+          }, { signal: abortController.signal });
+        }}
         >
           <div id="add-button" class={{
             'absolute -mt-1 -ml-3 w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
@@ -408,8 +408,8 @@ export default component$(() => {
             </NumberInput>
             <div class="flex gap-2">
               <button class={{
-                "lum-btn lum-pad-equal-xs": true,
-                "w-full": store.disperse,
+                'lum-btn lum-pad-equal-xs': true,
+                'w-full': store.disperse,
               }} onClick$={() => {
                 const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
@@ -600,7 +600,8 @@ export default component$(() => {
 
             <div class="flex flex-col gap-2 mt-4">
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                tmpstore.sectionsOpened.indexOf('presets') == -1 ? tmpstore.sectionsOpened.push('presets') : tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
+                if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
+                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   <SaveOutline width="26" />
@@ -614,9 +615,9 @@ export default component$(() => {
                 </div>
               </button>
               <div class={{
-                "grid grid-cols-2 gap-2 transition-all duration-200": true,
-                "max-h-0 opacity-0 pointer-events-none": tmpstore.sectionsOpened.indexOf('presets') == -1,                
-                "max-h-[250px] opacity-100 pointer-events-auto": tmpstore.sectionsOpened.indexOf('presets') != -1,                
+                'grid grid-cols-2 gap-2 transition-all duration-200': true,
+                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('presets') == -1,
+                'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('presets') != -1,
               }}>
                 <div class="flex flex-col gap-2">
                   <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
@@ -833,7 +834,8 @@ export default component$(() => {
             </div>
             <div class="flex flex-col gap-2">
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                tmpstore.sectionsOpened.indexOf('decode') == -1 ? tmpstore.sectionsOpened.push('decode') : tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
+                if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
+                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   <SparklesOutline width="26" />
@@ -848,9 +850,9 @@ export default component$(() => {
                 </div>
               </button>
               <div class={{
-                "flex flex-col gap-2 transition-all duration-200": true,
-                "max-h-0 opacity-0 pointer-events-none": tmpstore.sectionsOpened.indexOf('decode') == -1,                
-                "max-h-[250px] opacity-100 pointer-events-auto": tmpstore.sectionsOpened.indexOf('decode') != -1,                
+                'flex flex-col gap-2 transition-all duration-200': true,
+                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
+                'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
               }}>
                 <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
                 <label for="decode">
@@ -858,28 +860,28 @@ export default component$(() => {
                   <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste an existing RGB text here to edit it')}</span>
                 </label>
                 <textarea id="decode" class={{
-                  'lum-input h-16 w-full font-mc whitespace-pre-wrap': true
+                  'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
                 }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-                  onInput$={(e, el) => {
-                    const threshold = document.getElementById('threshold') as HTMLInputElement
-                    decodeText(el.value, Number(threshold.value))
-                  }}
+                onInput$={(e, el) => {
+                  const threshold = document.getElementById('threshold') as HTMLInputElement;
+                  decodeText(el.value, Number(threshold.value));
+                }}
                 />
                 <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
                   onInput$={(e, el) => {
-                    tmpstore.threshold = Number(el.value)
-                    const importhex = document.getElementById('decode') as HTMLInputElement
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                    tmpstore.threshold = Number(el.value);
+                    const importhex = document.getElementById('decode') as HTMLInputElement;
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
                   }}
-                  onIncrement$={(e, el) => {
-                    tmpstore.threshold = tmpstore.threshold + 10
-                    const importhex = document.getElementById('decode') as HTMLInputElement
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                  onIncrement$={() => {
+                    tmpstore.threshold = tmpstore.threshold + 10;
+                    const importhex = document.getElementById('decode') as HTMLInputElement;
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
                   }}
-                  onDecrement$={(e, el) => {
-                    tmpstore.threshold = tmpstore.threshold - 10
-                    const importhex = document.getElementById('decode') as HTMLInputElement
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                  onDecrement$={() => {
+                    tmpstore.threshold = tmpstore.threshold - 10;
+                    const importhex = document.getElementById('decode') as HTMLInputElement;
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
                   }}
                 >
                   {t('color.threshold@@Threshold')}
@@ -887,7 +889,7 @@ export default component$(() => {
                 </NumberInput>
               </div>
             </div>
-            
+
           </div>
           <div class="mb-4 flex flex-col gap-2" id="formatting">
             <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center mb-7">

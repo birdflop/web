@@ -1,4 +1,3 @@
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 import { AnimatedGradient, Gradient } from './HexUtils';
 import { defaults } from './PresetUtils';
 import { sortColors } from './SharedUtils';
@@ -13,24 +12,25 @@ export function hex(c: number) {
 
 function hexToHSL(hex: string) {
   // Convert HEX to RGB
-  let r = parseInt(hex.substring(1, 3), 16) / 255;
-  let g = parseInt(hex.substring(3, 5), 16) / 255;
-  let b = parseInt(hex.substring(5, 7), 16) / 255;
+  const r = parseInt(hex.substring(1, 3), 16) / 255;
+  const g = parseInt(hex.substring(3, 5), 16) / 255;
+  const b = parseInt(hex.substring(5, 7), 16) / 255;
 
   // Find min and max values of RGB
-  let max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s, l = (max + min) / 2;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  let h = 0, s = (max + min) / 2;
 
   if (max === min) {
     h = s = 0; // Achromatic
   }
   else {
-    let d = max - min;
+    const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+    case g: h = (b - r) / d + 2; break;
+    case b: h = (r - g) / d + 4; break;
     }
     h /= 6;
   }
@@ -39,37 +39,37 @@ function hexToHSL(hex: string) {
 }
 
 export function getSignificantPoints(gradient: string[], threshold: number) {
-    // Convert all colors to HSL
-    const hslColors = gradient.map(hexToHSL);
+  // Convert all colors to HSL
+  const hslColors = gradient.map(hexToHSL);
 
-    // Calculate differences between consecutive colors
-    const differences = [];
-    for (let i = 1; i < hslColors.length; i++) {
-        let hDiff = Math.abs(hslColors[i].h - hslColors[i - 1].h);
-        let sDiff = Math.abs(hslColors[i].s - hslColors[i - 1].s);
-        let lDiff = Math.abs(hslColors[i].l - hslColors[i - 1].l);
+  // Calculate differences between consecutive colors
+  const differences = [];
+  for (let i = 1; i < hslColors.length; i++) {
+    const hDiff = Math.abs(hslColors[i].h - hslColors[i - 1].h);
+    const sDiff = Math.abs(hslColors[i].s - hslColors[i - 1].s);
+    const lDiff = Math.abs(hslColors[i].l - hslColors[i - 1].l);
 
-        // Weight hue, saturation, and lightness changes
-        differences.push({
-            index: i,
-            change: hDiff * 2 + sDiff + lDiff // Hue changes weighted more heavily
-        });
+    // Weight hue, saturation, and lightness changes
+    differences.push({
+      index: i,
+      change: hDiff * 2 + sDiff + lDiff, // Hue changes weighted more heavily
+    });
+  }
+
+  // Identify significant points based on notable changes
+  const significantPoints = [gradient[0]]; // Always include the first color
+
+  // Iterate over differences to capture significant transitions
+  for (let i = 1; i < differences.length; i++) {
+    console.log(differences[i - 1].change);
+    if (differences[i - 1].change > threshold) { // Dynamic threshold based on gradient characteristics
+      significantPoints.push(gradient[differences[i - 1].index]);
     }
+  }
 
-    // Identify significant points based on notable changes
-    const significantPoints = [gradient[0]]; // Always include the first color
+  significantPoints.push(gradient[gradient.length - 1]); // Always include the last color
 
-    // Iterate over differences to capture significant transitions
-    for (let i = 1; i < differences.length; i++) {
-        console.log(differences[i - 1].change);
-        if (differences[i - 1].change > threshold) { // Dynamic threshold based on gradient characteristics
-            significantPoints.push(gradient[differences[i - 1].index]);
-        }
-    }
-
-    significantPoints.push(gradient[gradient.length - 1]); // Always include the last color
-
-    return significantPoints;}
+  return significantPoints; }
 
 export function convertToHex(RGBAcolor: number[]) {
   return hex(RGBAcolor[0]) + hex(RGBAcolor[1]) + hex(RGBAcolor[2]);
