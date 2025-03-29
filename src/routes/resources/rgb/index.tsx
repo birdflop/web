@@ -108,10 +108,28 @@ export default component$(() => {
         </h3>
 
         <label for="output">
-          <span class="font-bold mr-2 text-gray-100">{t('color.output@@Output')}</span>
-          <span class="text-gray-500">- {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
+          <span class="font-bold text-gray-100">{t('color.output@@Output')}</span>
+          <span class="text-gray-500"> - {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
         </label>
-        <textarea id="output" class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap': true }} value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}/>
+        <textarea id="output" readOnly class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap mb-2': true }}
+          value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+          onClick$={(e, el) => {
+            let alert = {
+              class: 'text-green-500',
+              text: 'color.copied@@Copied to clipboard!',
+            };
+            navigator.clipboard.writeText('mc.luminescent.dev').catch(() => {
+              alert = {
+                class: 'text-red-500',
+                text: 'color.copied@@Failed to copy to clipboard!',
+              };
+            });
+            tmpstore.alerts.push(alert);
+            setTimeout(() => {
+              tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+            }, 2000);
+          }}
+        />
 
         <h1 class={{
           'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
@@ -664,6 +682,7 @@ export default component$(() => {
                   <div class="flex flex-col gap-1">
                     <label for="import">
                       {t('color.import@@Import')}
+                      <span class="text-gray-500"> - {t('color.importSubtitle@@Load a JSON preset')}</span>
                     </label>
                     <input class="lum-input" id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
                       let json: Partial<typeof defaults> = {};
@@ -746,6 +765,35 @@ export default component$(() => {
                       <LinkOutline width={24} /> {t('color.url@@Get URL')}
                     </button>
                   </div>
+                </div>
+                <div class="col-span-2 flex flex-col gap-1">
+                  <label for="importhex">
+                    <span>{t('color.decode@@Decode')}</span>
+                    <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste existing RGB text here to edit it')}</span>
+                    <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
+                  </label>
+                  <textarea id="importhex" class={{
+                    'lum-input h-16 w-full font-mc whitespace-pre-wrap': true
+                  }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+                    onChange$={(e, el) => {
+                      const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
+                      const spans = el.value.match(new RegExp(pattern, 'g'));
+                      let color = '#ffffff';
+                      const colors = spans?.map((string: string, i: number) => {
+                        const result = string.match(pattern);
+                        if (!result) return '';
+                        color = result[2] ? `#${result[2]}` : color;
+                        return { hex: color, pos: (100 / (spans.length - 1)) * i };
+                      });
+                      const text = spans?.map((string: string, i: number) => {
+                        const result = string.match(pattern);
+                        if (!result) return '';
+                        return result[5];
+                      }).join('');
+                      store.text = text ?? '';
+                      store.colors = colors as typeof store.colors;
+                    }}
+                  />
                 </div>
               </div>
               <div class="grid grid-cols-4 gap-2">
