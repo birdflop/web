@@ -5,7 +5,7 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, Text, TextOutline, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -336,7 +336,7 @@ export default component$(() => {
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="colors">
             <button class={{
-              "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
@@ -494,10 +494,10 @@ export default component$(() => {
           </div>
           <div class="flex flex-col gap-2 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="inputs">
             <button class={{
-                "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
-                'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
-                'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
-              }} onClick$={() => {
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
               if (tmpstore.sectionsOpened.indexOf('inputs') == -1) tmpstore.sectionsOpened.push('inputs');
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('inputs'), 1);
             }}>
@@ -901,7 +901,7 @@ export default component$(() => {
           </div>
           <div class="mb-4 flex flex-col gap-2" id="formatting">
             <button class={{
-              "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
