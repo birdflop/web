@@ -127,7 +127,7 @@ export function getAnimFrames(store: typeof defaults) {
     const gradient = new AnimatedGradient(colors, length, n);
     let output = '';
     gradient.next();
-    if (store.format.color == 'MiniMessage') {
+    if (store.format.color == 'MiniMessage' && store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i)) {
       const colors = sortColors(store.colors);
       if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
       if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
@@ -147,6 +147,10 @@ export function getAnimFrames(store: typeof defaults) {
         output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
       }
       OutputArray.push(output);
+    }
+    else if (store.format.color == 'MiniMessage') {
+      const colors = sortColors(store.colors);
+      OutputArray.push(`<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`);
     }
     else if (store.type == 4) {
       const hex = convertToHex(gradient.next());
@@ -241,7 +245,7 @@ export function generateOutput(
 ) {
   let output = '';
 
-  if (format.color == 'MiniMessage') {
+  if (format.color == 'MiniMessage' && colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i)) {
     colors = sortColors(colors);
     if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
     if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
@@ -261,6 +265,10 @@ export function generateOutput(
       output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
     }
     console.log(output, '181');
+  }
+  else if (format.color == 'MiniMessage') {
+    colors = sortColors(colors);
+    output = `<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`;
   }
 
   if (format.color != 'MiniMessage') {
