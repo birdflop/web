@@ -96,25 +96,28 @@ export default component$(() => {
   });
 
   const decodeText = $((rgbtext: string, threshold: number) => {
-    const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
+    const pattern = /(?:[&§]x((?:[&§][0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))([^§&#]*)/;
     const spans = rgbtext.match(new RegExp(pattern, 'g'));
     if (!spans) return;
     let color = '#ffffff';
     const colors = spans.map((string: string, i: number) => {
       const result = string.match(pattern);
       if (!result) return { hex: color, pos: 0 };
-      color = result[2] ? `#${result[2]}` : color;
-      return { hex: color, pos: (100 / (spans.length - 2)) * i };
+      color = result[1]
+              ? `#${result[1].replace(/&/g, '')}`
+            : result[2]
+              ? `#${result[2]}`
+            : result[0];
+      return { hex: color, pos: (100 / (spans.length - 1)) * i };
     });
     const text = spans.map((string: string) => {
       const result = string.match(pattern);
       if (!result) return '';
-      return result[5];
+      return result[result.length - 1];
     }).join('');
     store.text = text ?? '';
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
-    console.log(significantPoints);
     const newColors = significantPoints.map((color) => {
       const pos = colors.find(c => c.hex == color)?.pos ?? 0;
       return { hex: color, pos };
