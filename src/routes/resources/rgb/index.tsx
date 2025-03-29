@@ -118,7 +118,7 @@ export default component$(() => {
               class: 'text-green-500',
               text: 'color.copied@@Copied to clipboard!',
             };
-            navigator.clipboard.writeText('mc.luminescent.dev').catch(() => {
+            navigator.clipboard.writeText(el.value).catch(() => {
               alert = {
                 class: 'text-red-500',
                 text: 'color.copied@@Failed to copy to clipboard!',
