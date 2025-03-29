@@ -5,7 +5,7 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, Text, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, Text, TextOutline, TrashOutline } from 'qwik-ionicons';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -67,7 +67,7 @@ export default component$(() => {
       id: -1,
       type: 0,
     },
-    sectionsOpened: [],
+    sectionsOpened: ['inputs'],
     alerts: [] as {
       class: string,
       text: string,
@@ -333,275 +333,280 @@ export default component$(() => {
           )}
         </div>
 
-        <div id="mobile-navbuttons" class="my-3 sm:hidden">
-          <div class="flex gap-2">
-            <button class="lum-btn lum-pad-equal-md" aria-label="Colors" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('hidden', 'flex');
-              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
+          <div class="flex flex-col gap-2 relative" id="colors">
+            <button class={{
+              "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('colors') == -1) tmpstore.sectionsOpened.push('colors');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('colors'), 1);
             }}>
-              <ColorFillOutline width="24" />
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <ColorFillOutline width="26" />
+                {t('color.colors@@Colors')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('colors') != -1,
+              }}>
+                <ChevronDown width="20" />
+              </div>
             </button>
-            <button class="lum-btn lum-pad-equal-md" aria-label="Inputs" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('flex', 'hidden');
-              document.getElementById('inputs')!.classList.replace('hidden', 'flex');
-              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+              'h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('colors') == -1,
+              'opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('colors') != -1,
             }}>
-              <SettingsOutline width="24" />
-            </button>
-            <button class="lum-btn lum-pad-equal-md" aria-label="Formatting" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('flex', 'hidden');
-              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.replace('hidden', 'flex');
-            }}>
-              <Text width="24" class="fill-white" />
-            </button>
-          </div>
-        </div>
-
-        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-4">
-          <div class="hidden sm:flex flex-col gap-2 relative" id="colors">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-2 items-center justify-center">
-              <ColorFillOutline width="30" />
-              {t('color.colors@@Colors')}
-            </h1>
-            {store.format.color != 'MiniMessage' &&
-              <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
+              {store.format.color != 'MiniMessage' &&
+                <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
+                  onIncrement$={() => {
+                    store.colorlength++;
+                  }}
+                  onDecrement$={() => {
+                    store.colorlength--;
+                  }}
+                >
+                  {t('color.colorLength@@Characters per color')}
+                </NumberInput>
+              }
+              <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
+                onChange$={(e, el) => {
+                  let colorAmount = Number(el.value);
+                  if (colorAmount < 2) return;
+                  if (colorAmount > store.text.length) return colorAmount = store.text.length;
+                  const newColors = [];
+                  for (let i = 0; i < colorAmount; i++) {
+                    if (store.colors[i]) newColors.push(store.colors[i]);
+                    else newColors.push({ hex: getRandomColor(), pos: 100 });
+                  }
+                  store.colors = newColors;
+                }}
                 onIncrement$={() => {
-                  store.colorlength++;
+                  const newColors = [...store.colors, {
+                    hex: getRandomColor(),
+                  }];
+                  store.colors = newColors.map((color, i) => ({
+                    hex: color.hex,
+                    pos: (100 / (newColors.length - 1)) * i,
+                  }));
                 }}
                 onDecrement$={() => {
-                  store.colorlength--;
+                  const newColors = store.colors.slice(0);
+                  newColors.pop();
+                  store.colors = newColors.map((color, i) => ({
+                    hex: color.hex,
+                    pos: (100 / (newColors.length - 1)) * i,
+                  }));
                 }}
               >
-                {t('color.colorLength@@Characters per color')}
+                {t('color.colorAmount@@Color Amount')}
               </NumberInput>
-            }
-            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
-              onChange$={(e, el) => {
-                let colorAmount = Number(el.value);
-                if (colorAmount < 2) return;
-                if (colorAmount > store.text.length) return colorAmount = store.text.length;
-                const newColors = [];
-                for (let i = 0; i < colorAmount; i++) {
-                  if (store.colors[i]) newColors.push(store.colors[i]);
-                  else newColors.push({ hex: getRandomColor(), pos: 100 });
-                }
-                store.colors = newColors;
-              }}
-              onIncrement$={() => {
-                const newColors = [...store.colors, {
-                  hex: getRandomColor(),
-                }];
-                store.colors = newColors.map((color, i) => ({
-                  hex: color.hex,
-                  pos: (100 / (newColors.length - 1)) * i,
-                }));
-              }}
-              onDecrement$={() => {
-                const newColors = store.colors.slice(0);
-                newColors.pop();
-                store.colors = newColors.map((color, i) => ({
-                  hex: color.hex,
-                  pos: (100 / (newColors.length - 1)) * i,
-                }));
-              }}
-            >
-              {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
-            <div class="flex gap-2">
-              <button class={{
-                'lum-btn lum-pad-equal-xs': true,
-                'w-full': store.disperse,
-              }} onClick$={() => {
-                const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
-                store.colors = newColors;
-              }}>
-                <DiceOutline width={24} class="fill-current" /> {store.disperse && <span>Randomize</span>}
-              </button>
-              {!store.disperse &&
-                <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
-                  disperseColors();
+              <div class="flex gap-2">
+                <button class={{
+                  'lum-btn lum-pad-equal-xs': true,
+                  'w-full': store.disperse,
+                }} onClick$={() => {
+                  const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
+                  store.colors = newColors;
                 }}>
-                  <BarChartOutline width={24} /> Disperse
+                  <DiceOutline width={24} class="fill-current" /> {store.disperse && <span>Randomize</span>}
                 </button>
-              }
-            </div>
-            <div class="flex flex-col gap-2">
-              {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
-                <div class="flex flex-col rounded-md">
-                  <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
-                    <ChevronUp width={24} />
-                  </button>
-                  <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
-                    <ChevronDown width={24} />
-                  </button>
-                </div>
-                <div class="flex flex-col justify-end gap-1">
-                  <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
-                  <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
-                    class={{
-                      'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                      'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                      'lum-input w-full lum-pad-xs hover:': true,
-                    }}
-                    style={`background: ${color.hex};`}
-                    value={color.hex}
-                    onInput$={(e, el) => {
-                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                      picker.dataset.value = el.value;
-                      picker.dispatchEvent(new Event('input'));
-                    }}
-                    onMouseUp$={() => {
-                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                      picker.dataset.value = color.hex;
-                      picker.dispatchEvent(new Event('input'));
-                      if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
-                      else tmpstore.opened = { id: i, type: 1 };
-                      const abortController = new AbortController();
-                      document.addEventListener('click', (e) => {
-                        if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
-                          tmpstore.opened.id = -1;
-                          abortController.abort();
-                        }
-                      }, { signal: abortController.signal });
-                    }}
-                  />
-                </div>
-                <div class="flex flex-col justify-end">
-                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
-                    const newColors = store.colors.slice(0);
-                    newColors.splice(i, 1);
-                    store.colors = newColors;
+                {!store.disperse &&
+                  <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
+                    disperseColors();
                   }}>
-                    <TrashOutline width="20" />
+                    <BarChartOutline width={24} /> Disperse
                   </button>
-                </div>
-                <div
-                  id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-                    'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
-                    'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 1,
-                  }}>
-                  <ColorPicker
-                    id={`colorlist-color-${i + 1}-picker`}
-                    value={color.hex}
-                    onInput$={newColor => {
+                }
+              </div>
+              <div class="flex flex-col gap-2">
+                {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
+                  <div class="flex flex-col rounded-md">
+                    <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
+                      <ChevronUp width={24} />
+                    </button>
+                    <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
+                      <ChevronDown width={24} />
+                    </button>
+                  </div>
+                  <div class="flex flex-col justify-end gap-1">
+                    <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
+                    <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
+                      class={{
+                        'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
+                        'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                        'lum-input w-full lum-pad-xs hover:': true,
+                      }}
+                      style={`background: ${color.hex};`}
+                      value={color.hex}
+                      onInput$={(e, el) => {
+                        const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                        picker.dataset.value = el.value;
+                        picker.dispatchEvent(new Event('input'));
+                      }}
+                      onMouseUp$={() => {
+                        const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                        picker.dataset.value = color.hex;
+                        picker.dispatchEvent(new Event('input'));
+                        if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
+                        else tmpstore.opened = { id: i, type: 1 };
+                        const abortController = new AbortController();
+                        document.addEventListener('click', (e) => {
+                          if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
+                            tmpstore.opened.id = -1;
+                            abortController.abort();
+                          }
+                        }, { signal: abortController.signal });
+                      }}
+                    />
+                  </div>
+                  <div class="flex flex-col justify-end">
+                    <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
                       const newColors = store.colors.slice(0);
-                      newColors[i].hex = newColor;
-                      store.colors = sortColors(newColors);
-                    }}
-                    showInput={false}
-                  />
-                </div>
-              </div>,
-              )}
+                      newColors.splice(i, 1);
+                      store.colors = newColors;
+                    }}>
+                      <TrashOutline width="20" />
+                    </button>
+                  </div>
+                  <div
+                    id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
+                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+                      'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 1,
+                    }}>
+                    <ColorPicker
+                      id={`colorlist-color-${i + 1}-picker`}
+                      value={color.hex}
+                      onInput$={newColor => {
+                        const newColors = store.colors.slice(0);
+                        newColors[i].hex = newColor;
+                        store.colors = sortColors(newColors);
+                      }}
+                      showInput={false}
+                    />
+                  </div>
+                </div>,
+                )}
+              </div>
             </div>
           </div>
-          <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-3 items-center justify-center">
-              <SettingsOutline width="30" />
-              {t('color.inputs@@Inputs')}
-            </h1>
-
-            <div class="flex flex-col gap-1">
-              <label for="input">
-                {t('color.inputText@@Input Text')}
-              </label>
-              <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
-            </div>
-
-            <div class="flex flex-col md:grid grid-cols-2 gap-2">
-              <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                (e, el) => {
-                  if (el.value == 'custom') {
-                    store.customFormat = true;
-                  }
-                  else {
-                    store.customFormat = false;
-                    store.format = JSON.parse(el.value);
-                  }
-                }
-              } values={[
-                ...v3formats.map(format => ({
-                  name: format.color
-                    .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                    .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                    .replace('$c', ''),
-                  value: JSON.stringify(format),
-                })),
-                {
-                  name: store.customFormat ? store.format.color
-                    .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                    .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                    .replace('$c', '')
-                    : t('color.custom@@Custom'),
-                  value: 'custom',
-                },
-              ]}>
-                {t('color.colorFormat@@Color Format')}
-              </Dropdown>
-              <div class="flex flex-col gap-1">
-                <label for="prefixsuffix">
-                  {t('color.prefixsuffix@@Prefix/Suffix')}
-                </label>
-                <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
+          <div class="flex flex-col gap-2 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="inputs">
+            <button class={{
+                "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
+                'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+                'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+              }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('inputs') == -1) tmpstore.sectionsOpened.push('inputs');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('inputs'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <SettingsOutline width="26" />
+                {t('color.inputs@@Inputs')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('inputs') != -1,
+              }}>
+                <ChevronDown width="20" />
               </div>
-              {
-                store.customFormat && <>
-                  <div>
-                    <label for="customformat">
-                      {t('color.customFormat@@Custom Format')}
-                    </label>
-                    <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
-                    <div class="py-3 font-mono">
-                      <p>{t('color.placeholders@@Placeholders:')}</p>
-                      <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                      <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                      <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                      <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                      <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                      <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                      {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-                      <p>$c = {t('color.character@@Character')}</p>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-2">
-                    {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
-                      <label for="format-char">
-                        {t('color.format.character@@Format Character')}
-                      </label>
-                      <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
-                    </>}
-                    {!store.format.char &&
-                      <>
-                        <label for="format-bold">
-                          {t('color.format.bold@@Bold')}
-                        </label>
-                        <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
-                        <label for="format-italic">
-                          {t('color.format.italic@@Italic')}
-                        </label>
-                        <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
-                        <label for="format-underline">
-                          {t('color.format.underline@@Underline')}
-                        </label>
-                        <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
-                        <label for="format-strikethrough">
-                          {t('color.format.strikethrough@@Strikethrough')}
-                        </label>
-                        <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
-                        <div class="py-3 font-mono">
-                          <p>{t('color.placeholders@@Placeholders:')}</p>
-                          <p>$t = Output Text</p>
-                        </div>
-                      </>
+            </button>
+
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('inputs') == -1,
+              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('inputs') != -1,
+            }}>
+              <div class="flex flex-col gap-1">
+                <label for="input">
+                  {t('color.inputText@@Input Text')}
+                </label>
+                <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
+              </div>
+
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
+                  (e, el) => {
+                    if (el.value == 'custom') {
+                      store.customFormat = true;
                     }
-                  </div>
-                </>
-              }
+                    else {
+                      store.customFormat = false;
+                      store.format = JSON.parse(el.value);
+                    }
+                  }
+                } values={[
+                  ...v3formats.map(format => ({
+                    name: format.color
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                      .replace('$c', ''),
+                    value: JSON.stringify(format),
+                  })),
+                  {
+                    name: store.customFormat ? store.format.color
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                      .replace('$c', '')
+                      : t('color.custom@@Custom'),
+                    value: 'custom',
+                  },
+                ]}>
+                  {t('color.colorFormat@@Color Format')}
+                </Dropdown>
+                <div class="flex flex-col gap-1">
+                  <label for="prefixsuffix">
+                    {t('color.prefixsuffix@@Prefix/Suffix')}
+                  </label>
+                  <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
+                </div>
+              </div>
             </div>
 
-            <div class="flex flex-col gap-2 mt-4">
+            {
+              store.customFormat && <>
+                <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                  if (tmpstore.sectionsOpened.indexOf('customformat') == -1) tmpstore.sectionsOpened.push('customformat');
+                  else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('customformat'), 1);
+                }}>
+                  <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                    <TextOutline width="26" />
+                    {t('color.customFormat@@Custom Format')}
+                  </h1>
+                  <div class={{
+                    'transition-transform duration-200': true,
+                    'rotate-180': tmpstore.sectionsOpened.indexOf('customformat') != -1,
+                  }}>
+                    <ChevronDown width="20" />
+                  </div>
+                </button>
+
+                <div id="customformat" class={{
+                  'flex flex-col gap-2 transition-all duration-200': true,
+                  'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('customformat') == -1,
+                  'max-h-[300px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('customformat') != -1,
+                }}>
+                  <label for="customformat">
+                    {t('color.customFormat@@Custom Format')}
+                  </label>
+                  <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
+                  <div class="py-3 font-mono">
+                    <p>{t('color.placeholders@@Placeholders:')}</p>
+                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                    {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                    <p>$c = {t('color.character@@Character')}</p>
+                  </div>
+                </div>
+              </>
+            }
+
+            <div class="flex flex-col gap-2">
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
                 if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
                 else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
@@ -618,7 +623,7 @@ export default component$(() => {
                 </div>
               </button>
               <div class={{
-                'grid grid-cols-2 gap-2 transition-all duration-200': true,
+                'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
                 'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('presets') == -1,
                 'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('presets') != -1,
               }}>
@@ -853,9 +858,9 @@ export default component$(() => {
                 </div>
               </button>
               <div class={{
-                'flex flex-col gap-2 transition-all duration-200': true,
+                'flex flex-col gap-2 transition-all duration-300': true,
                 'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
-                'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
+                'max-h-[400px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
               }}>
                 <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
                 <label for="decode">
@@ -895,30 +900,85 @@ export default component$(() => {
 
           </div>
           <div class="mb-4 flex flex-col gap-2" id="formatting">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center mb-7">
-              <Text width="30" />
-              {t('color.colors@@Formatting')}
-            </h1>
-            <Toggle id="bold" checked={store.bold}
-              onChange$={(e, el) => { store.bold = el.checked; }}
-              label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
-            <Toggle id="italic" checked={store.italic}
-              onChange$={(e, el) => { store.italic = el.checked; }}
-              label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
-            <Toggle id="underline" checked={store.underline}
-              onChange$={(e, el) => { store.underline = el.checked; }}
-              label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
-            <Toggle id="strikethrough" checked={store.strikethrough}
-              onChange$={(e, el) => { store.strikethrough = el.checked; }}
-              label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
-            <Toggle id="disperse" checked={store.disperse}
-              onChange$={(e, el) => { store.disperse = el.checked; }}
-              label={<p class="flex flex-col"><span>Always disperse colors</span><span class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</span></p>} />
-            {store.format.color != 'MiniMessage' &&
-              <Toggle id="trimspaces" checked={store.trimspaces}
-                onChange$={(e, el) => { store.trimspaces = el.checked; }}
-                label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            }
+            <button class={{
+              "lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md": true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('formatting') == -1) tmpstore.sectionsOpened.push('formatting');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatting'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <TextOutline width="26" />
+                {t('color.formatting@@Formatting')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('formatting') != -1,
+              }}>
+                <ChevronDown width="20" />
+              </div>
+            </button>
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+              'h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatting') == -1,
+              'opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatting') != -1,
+            }}>
+              <Toggle id="bold" checked={store.bold}
+                onChange$={(e, el) => { store.bold = el.checked; }}
+                label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
+              <Toggle id="italic" checked={store.italic}
+                onChange$={(e, el) => { store.italic = el.checked; }}
+                label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
+              <Toggle id="underline" checked={store.underline}
+                onChange$={(e, el) => { store.underline = el.checked; }}
+                label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
+              <Toggle id="strikethrough" checked={store.strikethrough}
+                onChange$={(e, el) => { store.strikethrough = el.checked; }}
+                label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
+              <Toggle id="disperse" checked={store.disperse}
+                onChange$={(e, el) => { store.disperse = el.checked; }}
+                label={<p class="flex flex-col"><span>Always disperse colors</span><span class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</span></p>} />
+              {store.format.color != 'MiniMessage' &&
+                <Toggle id="trimspaces" checked={store.trimspaces}
+                  onChange$={(e, el) => { store.trimspaces = el.checked; }}
+                  label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+              }
+              {store.customFormat &&
+                <div class="flex flex-col gap-2">
+                  {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
+                    <label for="format-char">
+                      {t('color.format.character@@Format Character')}
+                    </label>
+                    <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
+                  </>}
+                  {!store.format.char &&
+                    <>
+                      <label for="format-bold">
+                        {t('color.format.bold@@Bold')}
+                      </label>
+                      <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
+                      <label for="format-italic">
+                        {t('color.format.italic@@Italic')}
+                      </label>
+                      <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
+                      <label for="format-underline">
+                        {t('color.format.underline@@Underline')}
+                      </label>
+                      <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
+                      <label for="format-strikethrough">
+                        {t('color.format.strikethrough@@Strikethrough')}
+                      </label>
+                      <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
+                      <div class="py-3 font-mono">
+                        <p>{t('color.placeholders@@Placeholders:')}</p>
+                        <p>$t = Output Text</p>
+                      </div>
+                    </>
+                  }
+                </div>
+              }
+            </div>
           </div>
         </div>
         <div class="text-sm mt-8">
