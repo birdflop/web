@@ -3,9 +3,9 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, Text, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, Text, TrashOutline } from 'qwik-ionicons';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -21,6 +21,7 @@ export const rgbDefaults = {
   customFormat: defaults.customFormat,
   prefixsuffix: defaults.prefixsuffix,
   trimspaces: defaults.trimspaces,
+  disperse: defaults.disperse,
   bold: defaults.bold,
   italic: defaults.italic,
   underline: defaults.underline,
@@ -50,19 +51,23 @@ export default component$(() => {
   });
 
   const tmpstore: {
+    threshold: number,
     opened: {
       id: number,
       type: number,
     },
+    sectionsOpened: string[],
     alerts: {
       class: string,
       text: string,
     }[],
   } = useStore({
+    threshold: 50,
     opened: {
       id: -1,
       type: 0,
     },
+    sectionsOpened: [],
     alerts: [] as {
       class: string,
       text: string,
@@ -85,10 +90,44 @@ export default component$(() => {
     store.colors = sortColors(newColors);
   });
 
+  const disperseColors = $(() => {
+    const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
+    store.colors = newColors;
+  });
+
+  const decodeText = $((rgbtext: string, threshold: number) => {
+    const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
+    const spans = rgbtext.match(new RegExp(pattern, 'g'));
+    if (!spans) return;
+    let color = '#ffffff';
+    const colors = spans.map((string: string, i: number) => {
+      const result = string.match(pattern);
+      if (!result) return { hex: color, pos: 0 };
+      color = result[2] ? `#${result[2]}` : color;
+      return { hex: color, pos: (100 / (spans.length - 2)) * i };
+    });
+    const text = spans.map((string: string, i: number) => {
+      const result = string.match(pattern);
+      if (!result) return '';
+      return result[5];
+    }).join('');
+    store.text = text ?? '';
+    const colorHexes = colors.map((color) => color.hex);
+    const significantPoints = getSignificantPoints(colorHexes, threshold);
+    console.log(significantPoints)
+    const newColors = significantPoints.map((color, i) => {
+      const pos = colors.find(c => c.hex == color)?.pos ?? 0;
+      return { hex: color, pos };
+    });
+    
+    store.colors = newColors;
+  });
+
   const modalRef = useSignal<HTMLDialogElement>();
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', store);
+    if (store.disperse) disperseColors();
     (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
       track(() => store[key]);
     });
@@ -168,7 +207,10 @@ export default component$(() => {
           })()}
         </h1>
 
-        <div class="w-full h-3 my-5 rounded-full items-center relative" id="colormap"
+        <div class={{
+          "w-full h-3 my-5 rounded-full items-center relative": true,
+          "hidden": store.disperse,
+        }} id="colormap"
           style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
           onMouseDown$={(e, el) => {
             if (e.target != el) return;
@@ -365,18 +407,22 @@ export default component$(() => {
               {t('color.colorAmount@@Color Amount')}
             </NumberInput>
             <div class="flex gap-2">
-              <button class="lum-btn lum-pad-equal-xs" onClick$={() => {
+              <button class={{
+                "lum-btn lum-pad-equal-xs": true,
+                "w-full": store.disperse,
+              }} onClick$={() => {
                 const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
-                <DiceOutline width={24} class="fill-current" />
+                <DiceOutline width={24} class="fill-current" /> {store.disperse && <span>Randomize</span>}
               </button>
-              <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
-                const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
-                store.colors = newColors;
-              }}>
-                <BarChartOutline width={24} /> Disperse
-              </button>
+              {!store.disperse &&
+                <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
+                  disperseColors();
+                }}>
+                  <BarChartOutline width={24} /> Disperse
+                </button>
+              }
             </div>
             <div class="flex flex-col gap-2">
               {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
@@ -553,11 +599,25 @@ export default component$(() => {
             </div>
 
             <div class="flex flex-col gap-2 mt-4">
-              <h1 class="hidden sm:flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center justify-center">
-                <SaveOutline width="26" />
-                {t('color.presets@@Presets')}
-              </h1>
-              <div class="grid grid-cols-2 gap-2">
+              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                tmpstore.sectionsOpened.indexOf('presets') == -1 ? tmpstore.sectionsOpened.push('presets') : tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
+              }}>
+                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                  <SaveOutline width="26" />
+                  {t('color.presets@@Presets')}
+                </h1>
+                <div class={{
+                  'transition-transform duration-200': true,
+                  'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
+                }}>
+                  <ChevronDown width="20" />
+                </div>
+              </button>
+              <div class={{
+                "grid grid-cols-2 gap-2 transition-all duration-200": true,
+                "max-h-0 opacity-0 pointer-events-none": tmpstore.sectionsOpened.indexOf('presets') == -1,                
+                "max-h-[250px] opacity-100 pointer-events-auto": tmpstore.sectionsOpened.indexOf('presets') != -1,                
+              }}>
                 <div class="flex flex-col gap-2">
                   <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
                     (event, el) => {
@@ -766,42 +826,68 @@ export default component$(() => {
                     </button>
                   </div>
                 </div>
-                <div class="col-span-2 flex flex-col gap-1">
-                  <label for="importhex">
-                    <span>{t('color.decode@@Decode')}</span>
-                    <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste existing RGB text here to edit it')}</span>
-                    <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
-                  </label>
-                  <textarea id="importhex" class={{
-                    'lum-input h-16 w-full font-mc whitespace-pre-wrap': true
-                  }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-                    onChange$={(e, el) => {
-                      const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-                      const spans = el.value.match(new RegExp(pattern, 'g'));
-                      let color = '#ffffff';
-                      const colors = spans?.map((string: string, i: number) => {
-                        const result = string.match(pattern);
-                        if (!result) return '';
-                        color = result[2] ? `#${result[2]}` : color;
-                        return { hex: color, pos: (100 / (spans.length - 1)) * i };
-                      });
-                      const text = spans?.map((string: string, i: number) => {
-                        const result = string.match(pattern);
-                        if (!result) return '';
-                        return result[5];
-                      }).join('');
-                      store.text = text ?? '';
-                      store.colors = colors as typeof store.colors;
-                    }}
-                  />
-                </div>
-              </div>
-              <div class="grid grid-cols-4 gap-2">
               </div>
               {tmpstore.alerts.map((alert, i) => (
                 <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
               ))}
             </div>
+            <div class="flex flex-col gap-2">
+              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                tmpstore.sectionsOpened.indexOf('decode') == -1 ? tmpstore.sectionsOpened.push('decode') : tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
+              }}>
+                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                  <SparklesOutline width="26" />
+                  {t('color.decode@@Decode')}
+                  <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
+                </h1>
+                <div class={{
+                  'transition-transform duration-200': true,
+                  'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
+                }}>
+                  <ChevronDown width="20" />
+                </div>
+              </button>
+              <div class={{
+                "flex flex-col gap-2 transition-all duration-200": true,
+                "max-h-0 opacity-0 pointer-events-none": tmpstore.sectionsOpened.indexOf('decode') == -1,                
+                "max-h-[250px] opacity-100 pointer-events-auto": tmpstore.sectionsOpened.indexOf('decode') != -1,                
+              }}>
+                <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
+                <label for="decode">
+                  <span>{t('color.decode@@Decode')}</span>
+                  <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste an existing RGB text here to edit it')}</span>
+                </label>
+                <textarea id="decode" class={{
+                  'lum-input h-16 w-full font-mc whitespace-pre-wrap': true
+                }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+                  onInput$={(e, el) => {
+                    const threshold = document.getElementById('threshold') as HTMLInputElement
+                    decodeText(el.value, Number(threshold.value))
+                  }}
+                />
+                <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
+                  onInput$={(e, el) => {
+                    tmpstore.threshold = Number(el.value)
+                    const importhex = document.getElementById('decode') as HTMLInputElement
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                  }}
+                  onIncrement$={(e, el) => {
+                    tmpstore.threshold = tmpstore.threshold + 10
+                    const importhex = document.getElementById('decode') as HTMLInputElement
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                  }}
+                  onDecrement$={(e, el) => {
+                    tmpstore.threshold = tmpstore.threshold - 10
+                    const importhex = document.getElementById('decode') as HTMLInputElement
+                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold)
+                  }}
+                >
+                  {t('color.threshold@@Threshold')}
+                  <span class="text-gray-500"> - {t('color.thresholdSubtitle@@Try changing this around if you\'re getting too many colors')}</span>
+                </NumberInput>
+              </div>
+            </div>
+            
           </div>
           <div class="mb-4 flex flex-col gap-2" id="formatting">
             <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center mb-7">
@@ -820,6 +906,9 @@ export default component$(() => {
             <Toggle id="strikethrough" checked={store.strikethrough}
               onChange$={(e, el) => { store.strikethrough = el.checked; }}
               label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
+            <Toggle id="disperse" checked={store.disperse}
+              onChange$={(e, el) => { store.disperse = el.checked; }}
+              label={<p class="flex flex-col"><span>Always disperse colors</span><span class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</span></p>} />
             {store.format.color != 'MiniMessage' &&
               <Toggle id="trimspaces" checked={store.trimspaces}
                 onChange$={(e, el) => { store.trimspaces = el.checked; }}

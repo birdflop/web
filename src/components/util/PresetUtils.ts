@@ -158,6 +158,7 @@ export const defaults = {
   customFormat: false,
   outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
   trimspaces: true,
+  disperse: false,
   bold: false,
   italic: false,
   underline: false,
