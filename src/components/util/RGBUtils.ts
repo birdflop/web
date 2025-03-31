@@ -69,7 +69,8 @@ export function getSignificantPoints(gradient: string[], threshold: number) {
 
   significantPoints.push(gradient[gradient.length - 1]); // Always include the last color
 
-  return significantPoints; }
+  return significantPoints;
+}
 
 export function convertToHex(RGBAcolor: number[]) {
   return hex(RGBAcolor[0]) + hex(RGBAcolor[1]) + hex(RGBAcolor[2]);
@@ -106,57 +107,117 @@ export function getRandomColor() {
 
 export function getAnimFrames(store: typeof defaults) {
   if (store.colors.length < 2) return { OutputArray: [], frames: [] };
-  const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
 
+  const frames = generateAnimationFrames(store);
+
+  const OutputArray = formatFrames(frames, store);
+
+  return { OutputArray, frames: frames.colorFrames };
+}
+
+function generateAnimationFrames(store: typeof defaults) {
+  const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
   const text = store.text ?? 'Birdflop';
+
   let loopAmount;
   const length = text.length * store.length / store.colorlength;
   switch (Number(store.type)) {
-  default:
-    loopAmount = length * 2 - 2;
-    break;
   case 3:
     loopAmount = length;
     break;
+  default:
+    loopAmount = length * 2 - 2;
+    break;
   }
 
-  const OutputArray = [];
-  const frames = [];
+  const colorFrames = [];
+  const textFrames = [];
+
   for (let n = 0; n < loopAmount; n++) {
-    const clrs = [];
+    const frameColors = [];
     const gradient = new AnimatedGradient(colors, length, n);
-    let output = '';
-    gradient.next();
-    if (store.format.color == 'MiniMessage' && store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i)) {
-      const colors = sortColors(store.colors);
-      if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
-      if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
-      for (let i = 0; i < colors.length - 1; i++) {
-        let currentColor = colors[i];
-        let nextColor = colors[i + 1];
-        if (currentColor.pos > nextColor.pos) {
-          const newColor = currentColor;
-          currentColor = nextColor;
-          nextColor = newColor;
+
+    if (store.type === 4) {
+      const hex = convertToHex(gradient.next());
+      frameColors.push(hex);
+      textFrames.push({ type: 'solid', text, colors: [hex] });
+    } else {
+      const textArray = Array.from(text);
+      const segments = [];
+      let index = 0;
+
+      while (index < textArray.length) {
+        segments.push(textArray.slice(index, index + store.colorlength).join(''));
+        index += store.colorlength;
+      }
+
+      const segmentColors = [];
+
+      for (const segment of segments) {
+        if (store.trimspaces && segment.match(/^\s+$/)) {
+          segmentColors.push(null);
+          continue;
         }
 
-        const numSteps = text.length;
-        const lowerRange = Math.round(colors[i].pos / 100 * numSteps);
-        const upperRange = Math.round(colors[i + 1].pos / 100 * numSteps);
-        if (lowerRange === upperRange) continue;
-        output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+        const hex = convertToHex(gradient.next());
+        segmentColors.push(hex);
+        frameColors.push(hex);
       }
-      OutputArray.push(output);
+
+      textFrames.push({ type: 'segments', segments, colors: segmentColors });
     }
-    else if (store.format.color == 'MiniMessage') {
-      const colors = sortColors(store.colors);
-      OutputArray.push(`<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`);
-    }
-    else if (store.type == 4) {
-      const hex = convertToHex(gradient.next());
-      clrs.push(hex);
+
+    colorFrames.push(frameColors);
+  }
+
+  return { colorFrames, textFrames };
+}
+
+function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, store: typeof defaults) {
+  const { textFrames } = frames;
+  const OutputArray = [];
+  const text = store.text ?? 'Birdflop';
+
+  for (let n = 0; n < textFrames.length; n++) {
+    const frame = textFrames[n];
+    let output = '';
+
+    if (store.format.color === 'MiniMessage') {
+      if (frame.type === 'solid') {
+
+        const hex = frame.colors[0];
+        output = `<color:#${hex}>${text}</color>`;
+      } else if (frame.type === 'segments') {
+        if (store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i)) {
+          output = formatMiniMessageCustomPositions(store, n);
+        } else {
+          const animatedColors = [];
+
+          for (let i = 0; i < store.colors.length; i++) {
+            const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const length = text.length * store.length / store.colorlength;
+
+            const offset = (n + i * (length / store.colors.length)) % length;
+            const shiftedGradient = new AnimatedGradient(colors, length, offset);
+            const color = convertToHex(shiftedGradient.next());
+            animatedColors.push('#' + color);
+          }
+
+          if (animatedColors.length < 2) {
+            animatedColors.push('#' + animatedColors[0]);
+          }
+
+          output = `<gradient:${animatedColors.join(':')}>${text}</gradient>`;
+        }
+      }
+    } else if (frame.type === 'solid') {
       let hexOutput = store.format.color;
-      for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+      const hex = frame.colors[0];
+
+      for (let i = 1; i <= 6; i++) {
+        hexOutput = hexOutput.replace(`$${i}`, hex.charAt(i - 1));
+      }
+
       let formatCodes = '';
       if (store.format.color.includes('$f')) {
         if (store.bold) formatCodes += store.format.char + 'l';
@@ -164,29 +225,30 @@ export function getAnimFrames(store: typeof defaults) {
         if (store.underline) formatCodes += store.format.char + 'n';
         if (store.strikethrough) formatCodes += store.format.char + 'm';
       }
+
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', text);
-      if (store.prefixsuffix) hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
-      OutputArray.push(hexOutput);
-    } else {
-      const textArray = Array.from(store.text);
-      const segments = [];
-      let index = 0;
-      while (index < textArray.length) {
-        segments.push(textArray.slice(index, index + store.colorlength).join(''));
-        index += store.colorlength;
+
+      if (store.prefixsuffix) {
+        hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
       }
-      for (const segment of segments) {
-        if (store.trimspaces && segment.match(/^\s+$/)) {
+
+      output = hexOutput;
+    } else if (frame.type === 'segments') {
+      for (let i = 0; i < frame.segments.length; i++) {
+        const segment = frame.segments[i];
+        const hex = frame.colors[i];
+
+        if (hex === null) {
           output += segment;
-          clrs.push(null);
           continue;
         }
 
-        const hex = convertToHex(gradient.next());
-        clrs.push(hex);
         let hexOutput = store.format.color;
-        for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
+        for (let j = 1; j <= 6; j++) {
+          hexOutput = hexOutput.replace(`$${j}`, hex.charAt(j - 1));
+        }
+
         let formatCodes = '';
         if (store.format.color.includes('$f')) {
           if (store.bold) formatCodes += store.format.char + 'l';
@@ -199,13 +261,57 @@ export function getAnimFrames(store: typeof defaults) {
         hexOutput = hexOutput.replace('$c', segment);
         output += hexOutput;
       }
-      if (store.prefixsuffix) output = store.prefixsuffix.replace(/\$t/g, output);
-      OutputArray.push(output);
+
+      if (store.prefixsuffix) {
+        output = store.prefixsuffix.replace(/\$t/g, output);
+      }
     }
-    frames.push(clrs);
+
+    OutputArray.push(output);
   }
 
-  return { OutputArray, frames };
+  return OutputArray;
+}
+
+function formatMiniMessageCustomPositions(store: typeof defaults, frameIndex: number) {
+  const text = store.text ?? 'Birdflop';
+  const colors = sortColors(store.colors);
+  let output = '';
+
+  if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
+  if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
+
+  const animatedColors = colors.map((color, i) => {
+    const colorArray = store.colors.map(c => ({ rgb: convertToRGB(c.hex), pos: c.pos }));
+    const length = text.length * store.length / store.colorlength;
+    const offset = (frameIndex + i * (length / colors.length)) % length;
+    const shiftedGradient = new AnimatedGradient(colorArray, length, offset);
+    return {
+      hex: convertToHex(shiftedGradient.next()),
+      pos: color.pos,
+    };
+  });
+
+  for (let i = 0; i < animatedColors.length - 1; i++) {
+    let currentColor = animatedColors[i];
+    let nextColor = animatedColors[i + 1];
+
+    if (currentColor.pos > nextColor.pos) {
+      const newColor = currentColor;
+      currentColor = nextColor;
+      nextColor = newColor;
+    }
+
+    const numSteps = text.length;
+    const lowerRange = Math.round(currentColor.pos / 100 * numSteps);
+    const upperRange = Math.round(nextColor.pos / 100 * numSteps);
+
+    if (lowerRange === upperRange) continue;
+
+    output += `<gradient:#${currentColor.hex}:#${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+  }
+
+  return output;
 }
 
 export function AnimationOutput(store: typeof defaults) {

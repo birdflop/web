@@ -54,6 +54,10 @@ export default component$(() => {
     ...cookies.animtab,
   }, { deep: true });
 
+  const settingStore = useStore({
+    advanced: false,
+  });
+
   const tmpstore: {
     opened: {
       id: number,
@@ -506,7 +510,7 @@ export default component$(() => {
               </div>
             </div>
             {
-              store.customFormat && <>
+              settingStore.advanced && <>
                 <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
                   (e, el) => {
                     if (el.value == 'custom') {
@@ -837,11 +841,11 @@ export default component$(() => {
             <Toggle id="trimspaces" checked={store.trimspaces}
               onChange$={(e, el) => { store.trimspaces = el.checked; }}
               label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-            <Toggle id="advanced" checked={store.customFormat}
-              onChange$={(e, el) => { store.customFormat = el.checked; }}
+            <Toggle id="advanced" checked={settingStore.advanced}
+              onChange$={(e, el) => { settingStore.advanced = el.checked; }}
               label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-xs text-gray-400">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
 
-            {store.customFormat && <div class="flex flex-col gap-1">
+            {settingStore.advanced && <div class="flex flex-col gap-1">
               <label for="formatinput">
                 {t('animtab.outputFormat@@Output Format')}
               </label>

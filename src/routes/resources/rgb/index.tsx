@@ -5,7 +5,7 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, ClipboardOutline, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -148,31 +148,6 @@ export default component$(() => {
         <h3 class="text-gray-400 text-sm mb-3">
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </h3>
-
-        <label for="output">
-          <span class="font-bold text-gray-100">{t('color.output@@Output')}</span>
-          <span class="text-gray-500"> - {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
-        </label>
-        <textarea id="output" readOnly class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap mb-2': true }}
-          value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-          onClick$={(e, el) => {
-            let alert = {
-              class: 'text-green-500',
-              text: 'color.copied@@Copied to clipboard!',
-            };
-            navigator.clipboard.writeText(el.value).catch(() => {
-              alert = {
-                class: 'text-red-500',
-                text: 'color.copied@@Failed to copy to clipboard!',
-              };
-            });
-            tmpstore.alerts.push(alert);
-            setTimeout(() => {
-              tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-            }, 2000);
-          }}
-        />
-
         <h1 class={{
           'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
           'font-mc-bold': store.bold,
@@ -606,298 +581,342 @@ export default component$(() => {
               </>
             }
 
-            <div class="flex flex-col gap-2">
-              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
-                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
-              }}>
-                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                  <SaveOutline width="26" />
-                  {t('color.presets@@Presets')}
-                </h1>
-                <div class={{
-                  'transition-transform duration-200': true,
-                  'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
-                }}>
-                  <ChevronDown width="20" />
-                </div>
-              </button>
+            <button class={{
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('output') == -1) tmpstore.sectionsOpened.push('output');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('output'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <ClipboardOutline width="26" />
+                {t('color.output@@Output')}
+              </h1>
               <div class={{
-                'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
-                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('presets') == -1,
-                'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('presets') != -1,
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('output') != -1,
               }}>
-                <div class="flex flex-col gap-2">
-                  <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
-                    (event, el) => {
-                      let json: Partial<typeof defaults> = {};
-                      try {
-                        const preset = loadPreset(el.value);
-                        navigator.clipboard.writeText(JSON.stringify(preset));
-                        json = {
-                          ...preset,
-                        };
-                      } catch (err) {
-                        const alert = {
-                          class: 'text-red-500',
-                          text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
-                        };
-                        const errtext = {
-                          class: 'text-red-300',
-                          text: `${err}`,
-                        };
-                        tmpstore.alerts.push(alert, errtext);
-                        return setTimeout(() => {
-                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
-                        }, 5000);
-                      }
-                      (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
-                        if (store[key] === undefined) return;
-                        (store as any)[key] = json[key] ?? defaults[key];
-                      });
-                      const alert = {
-                        class: 'text-green-500',
-                        text: 'color.importedPreset@@Successfully imported preset!',
-                      };
-                      tmpstore.alerts.push(alert);
-                      setTimeout(() => {
-                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                      }, 2000);
-                    }
-                  } values={
-                    presetstore.savedPresets.map((preset) => ({
-                      name: <span class={{
-                        'break-all font-mc tracking-tight': true,
-                      }}>
-                        {(() => {
-                          const colors = sortColors(preset.colors ?? presetlist[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                          if (colors.length < 2) return preset.name;
-
-                          const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
-
-                          let hex = '';
-                          const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
-                          return segments.map((segment, i) => {
-                            hex = convertToHex(gradient.next());
-                            return (
-                              <span key={`segment-${i}`} style={`color: #${hex};`}>
-                                {segment[0].replace(/ /g, '\u00A0')}
-                              </span>
-                            );
-                          });
-                        })()}
-                      </span>,
-                      value: JSON.stringify(preset),
-                    }))
-                  } display={<span class="flex gap-3 flex-1">
-                    <DownloadOutline width="20" /> Load saved preset
-                  </span>}>
-                    {t('color.savedPresets@@Saved Presets')}
-                  </Dropdown>
-                  <div class="grid grid-cols-2 gap-2">
-                    <a class="lum-btn" href="presets">
-                      <GlobeOutline width="20" /> Browse
-                    </a>
-                    <button class="lum-btn" id="save" onClick$={() => {
-                      modalRef.value?.showModal();
-                    }}>
-                      <SaveOutline width="20" /> {t('color.save@@Save')}
-                    </button>
-                    <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
-                      <div class="flex flex-col gap-3">
-                        <h3 class="text-gray-50 text-xl font-semibold mb-4">
-                          {t('color.savePreset@@Save Preset')}
-                        </h3>
-
-                        <input class="lum-input" id="presetname" placeholder={t('color.presetName@@Preset Name')} />
-
-                        <div class="flex gap-2 justify-end">
-                          <button class="lum-btn" onClick$={() => {
-                            modalRef.value?.close();
-                          }}>
-                            <CloseOutline width="20" /> {t('color.cancel@@Cancel')}
-                          </button>
-                          <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={() => {
-                            const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
-                            const preset: Partial<typeof defaults> = {
-                              ...store,
-                              name: presetnameinput.value ?? 'Untitled',
-                            };
-                            (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-                              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
-                            });
-                            if (presetstore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
-                            presetstore.savedPresets.push(preset);
-                            if (isBrowser) setCookies('presets', presetstore);
-                            modalRef.value?.close();
-                            const alert = {
-                              class: 'text-green-500',
-                              text: 'color.savedPreset@@Successfully saved preset!',
-                            };
-                            tmpstore.alerts.push(alert);
-                            setTimeout(() => {
-                              tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                            }, 2000);
-                          }}>
-                            <SaveOutline width="20" /> {t('color.save@@Save')}
-                          </button>
-                        </div>
-                      </div>
-                    </dialog>
-                  </div>
-                </div>
-                <div class="flex flex-col gap-2">
-                  <div class="flex flex-col gap-1">
-                    <label for="import">
-                      {t('color.import@@Import')}
-                      <span class="text-gray-500"> - {t('color.importSubtitle@@Load a JSON preset')}</span>
-                    </label>
-                    <input class="lum-input" id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
-                      let json: Partial<typeof defaults> = {};
-                      try {
-                        const preset = loadPreset(el.value);
-                        el.value = JSON.stringify(preset);
-                        navigator.clipboard.writeText(JSON.stringify(preset));
-                        json = {
-                          ...preset,
-                        };
-                      } catch (err) {
-                        const alert = {
-                          class: 'text-red-500',
-                          text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
-                        };
-                        const errtext = {
-                          class: 'text-red-300',
-                          text: `${err}`,
-                        };
-                        tmpstore.alerts.push(alert, errtext);
-                        return setTimeout(() => {
-                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                          tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
-                        }, 5000);
-                      }
-                      (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
-                        if (store[key] === undefined) return;
-                        (store as any)[key] = json[key] ?? defaults[key];
-                      });
-                      const alert = {
-                        class: 'text-green-500',
-                        text: 'color.importedPreset@@Successfully imported preset!',
-                      };
-                      tmpstore.alerts.push(alert);
-                      setTimeout(() => {
-                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                      }, 2000);
-                    }}/>
-                  </div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <button class="lum-btn lum-pad-sm" id="export" onClick$={() => {
-                      const preset: Partial<typeof defaults> = { ...store };
-                      (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-                        if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
-                      });
-                      navigator.clipboard.writeText(JSON.stringify(preset));
-                      const alert = {
-                        class: 'text-green-500',
-                        text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
-                      };
-                      tmpstore.alerts.push(alert);
-                      setTimeout(() => {
-                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                      }, 2000);
-                    }}>
-                      <ShareOutline width={24} /> {t('color.export@@Export')}
-                    </button>
-                    <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
-                      const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-                      const url = new URL(base_url);
-                      const params: Partial<typeof defaults> = { ...store };
-                      (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-                        if (key == 'format' || key == 'colors') {
-                          value = JSON.stringify(value);
-                          if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
-                        }
-                        if (value === defaults[key as keyof typeof defaults]) return;
-                        url.searchParams.set(key, String(value));
-                      });
-                      window.history.pushState({}, '', url.href);
-                      const alert = {
-                        class: 'text-green-500',
-                        text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
-                      };
-                      tmpstore.alerts.push(alert);
-                      setTimeout(() => {
-                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
-                      }, 2000);
-                    }}>
-                      <LinkOutline width={24} /> {t('color.url@@Get URL')}
-                    </button>
-                  </div>
-                </div>
+                <ChevronDown width="20" />
               </div>
-              {tmpstore.alerts.map((alert, i) => (
-                <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-              ))}
-            </div>
-            <div class="flex flex-col gap-2">
-              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
-                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
-              }}>
-                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                  <SparklesOutline width="26" />
-                  {t('color.decode@@Decode')}
-                  <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
-                </h1>
-                <div class={{
-                  'transition-transform duration-200': true,
-                  'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
-                }}>
-                  <ChevronDown width="20" />
-                </div>
-              </button>
-              <div class={{
-                'flex flex-col gap-2 transition-all duration-300': true,
-                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
-                'max-h-[400px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
-              }}>
-                <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
-                <label for="decode">
-                  <span>{t('color.decode@@Decode')}</span>
-                  <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste an existing RGB text here to edit it')}</span>
-                </label>
-                <textarea id="decode" class={{
-                  'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-                }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-                onInput$={(e, el) => {
-                  const threshold = document.getElementById('threshold') as HTMLInputElement;
-                  decodeText(el.value, Number(threshold.value));
+            </button>
+
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('inputs') == -1,
+              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('inputs') != -1,
+            }}>
+              <label for="output" class="text-gray-500">
+                {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
+              </label>
+              <textarea id="output" readOnly class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap mb-2': true }}
+                value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+                onClick$={(e, el) => {
+                  let alert = {
+                    class: 'text-green-500',
+                    text: 'color.copied@@Copied to clipboard!',
+                  };
+                  navigator.clipboard.writeText(el.value).catch(() => {
+                    alert = {
+                      class: 'text-red-500',
+                      text: 'color.copied@@Failed to copy to clipboard!',
+                    };
+                  });
+                  tmpstore.alerts.push(alert);
+                  setTimeout(() => {
+                    tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                  }, 2000);
                 }}
-                />
-                <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
-                  onInput$={(e, el) => {
-                    tmpstore.threshold = Number(el.value);
-                    const importhex = document.getElementById('decode') as HTMLInputElement;
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                  }}
-                  onIncrement$={() => {
-                    tmpstore.threshold = tmpstore.threshold + 10;
-                    const importhex = document.getElementById('decode') as HTMLInputElement;
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                  }}
-                  onDecrement$={() => {
-                    tmpstore.threshold = tmpstore.threshold - 10;
-                    const importhex = document.getElementById('decode') as HTMLInputElement;
-                    if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                  }}
-                >
-                  {t('color.threshold@@Threshold')}
-                  <span class="text-gray-500"> - {t('color.thresholdSubtitle@@Try changing this around if you\'re getting too many colors')}</span>
-                </NumberInput>
-              </div>
+              />
             </div>
 
+            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <SaveOutline width="26" />
+                {t('color.presets@@Presets')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
+              }}>
+                <ChevronDown width="20" />
+              </div>
+            </button>
+            <div class={{
+              'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('presets') == -1,
+              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('presets') != -1,
+            }}>
+              <div class="flex flex-col gap-2">
+                <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
+                  (event, el) => {
+                    let json: Partial<typeof defaults> = {};
+                    try {
+                      const preset = loadPreset(el.value);
+                      navigator.clipboard.writeText(JSON.stringify(preset));
+                      json = {
+                        ...preset,
+                      };
+                    } catch (err) {
+                      const alert = {
+                        class: 'text-red-500',
+                        text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
+                      };
+                      const errtext = {
+                        class: 'text-red-300',
+                        text: `${err}`,
+                      };
+                      tmpstore.alerts.push(alert, errtext);
+                      return setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
+                      }, 5000);
+                    }
+                    (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                      if (store[key] === undefined) return;
+                      (store as any)[key] = json[key] ?? defaults[key];
+                    });
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.importedPreset@@Successfully imported preset!',
+                    };
+                    tmpstore.alerts.push(alert);
+                    setTimeout(() => {
+                      tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }
+                } values={
+                  presetstore.savedPresets.map((preset) => ({
+                    name: <span class={{
+                      'break-all font-mc tracking-tight': true,
+                    }}>
+                      {(() => {
+                        const colors = sortColors(preset.colors ?? presetlist[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                        if (colors.length < 2) return preset.name;
+
+                        const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
+
+                        let hex = '';
+                        const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
+                        return segments.map((segment, i) => {
+                          hex = convertToHex(gradient.next());
+                          return (
+                            <span key={`segment-${i}`} style={`color: #${hex};`}>
+                              {segment[0].replace(/ /g, '\u00A0')}
+                            </span>
+                          );
+                        });
+                      })()}
+                    </span>,
+                    value: JSON.stringify(preset),
+                  }))
+                } display={<span class="flex gap-3 flex-1">
+                  <DownloadOutline width="20" /> Load saved preset
+                </span>}>
+                  {t('color.savedPresets@@Saved Presets')}
+                </Dropdown>
+                <div class="grid grid-cols-2 gap-2">
+                  <a class="lum-btn" href="presets">
+                    <GlobeOutline width="20" /> Browse
+                  </a>
+                  <button class="lum-btn" id="save" onClick$={() => {
+                    modalRef.value?.showModal();
+                  }}>
+                    <SaveOutline width="20" /> {t('color.save@@Save')}
+                  </button>
+                  <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
+                    <div class="flex flex-col gap-3">
+                      <h3 class="text-gray-50 text-xl font-semibold mb-4">
+                        {t('color.savePreset@@Save Preset')}
+                      </h3>
+
+                      <input class="lum-input" id="presetname" placeholder={t('color.presetName@@Preset Name')} />
+
+                      <div class="flex gap-2 justify-end">
+                        <button class="lum-btn" onClick$={() => {
+                          modalRef.value?.close();
+                        }}>
+                          <CloseOutline width="20" /> {t('color.cancel@@Cancel')}
+                        </button>
+                        <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={() => {
+                          const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
+                          const preset: Partial<typeof defaults> = {
+                            ...store,
+                            name: presetnameinput.value ?? 'Untitled',
+                          };
+                          (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                            if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+                          });
+                          if (presetstore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
+                          presetstore.savedPresets.push(preset);
+                          if (isBrowser) setCookies('presets', presetstore);
+                          modalRef.value?.close();
+                          const alert = {
+                            class: 'text-green-500',
+                            text: 'color.savedPreset@@Successfully saved preset!',
+                          };
+                          tmpstore.alerts.push(alert);
+                          setTimeout(() => {
+                            tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                          }, 2000);
+                        }}>
+                          <SaveOutline width="20" /> {t('color.save@@Save')}
+                        </button>
+                      </div>
+                    </div>
+                  </dialog>
+                </div>
+              </div>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-1">
+                  <label for="import">
+                    {t('color.import@@Import')}
+                    <span class="text-gray-500"> - {t('color.importSubtitle@@Load a JSON preset')}</span>
+                  </label>
+                  <input class="lum-input" id="import" name="import" placeholder={t('color.import@@Import (Paste here)')} onInput$={async (e, el) => {
+                    let json: Partial<typeof defaults> = {};
+                    try {
+                      const preset = loadPreset(el.value);
+                      el.value = JSON.stringify(preset);
+                      navigator.clipboard.writeText(JSON.stringify(preset));
+                      json = {
+                        ...preset,
+                      };
+                    } catch (err) {
+                      const alert = {
+                        class: 'text-red-500',
+                        text: 'color.invalidPreset@@INVALID PRESET! Please report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.',
+                      };
+                      const errtext = {
+                        class: 'text-red-300',
+                        text: `${err}`,
+                      };
+                      tmpstore.alerts.push(alert, errtext);
+                      return setTimeout(() => {
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                        tmpstore.alerts.splice(tmpstore.alerts.indexOf(errtext), 1);
+                      }, 5000);
+                    }
+                    (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
+                      if (store[key] === undefined) return;
+                      (store as any)[key] = json[key] ?? defaults[key];
+                    });
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.importedPreset@@Successfully imported preset!',
+                    };
+                    tmpstore.alerts.push(alert);
+                    setTimeout(() => {
+                      tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}/>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <button class="lum-btn lum-pad-sm" id="export" onClick$={() => {
+                    const preset: Partial<typeof defaults> = { ...store };
+                    (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+                      if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+                    });
+                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPreset@@Successfully exported preset to clipboard!',
+                    };
+                    tmpstore.alerts.push(alert);
+                    setTimeout(() => {
+                      tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    <ShareOutline width={24} /> {t('color.export@@Export')}
+                  </button>
+                  <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
+                    const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+                    const url = new URL(base_url);
+                    const params: Partial<typeof defaults> = { ...store };
+                    (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+                      if (key == 'format' || key == 'colors') {
+                        value = JSON.stringify(value);
+                        if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
+                      }
+                      if (value === defaults[key as keyof typeof defaults]) return;
+                      url.searchParams.set(key, String(value));
+                    });
+                    window.history.pushState({}, '', url.href);
+                    const alert = {
+                      class: 'text-green-500',
+                      text: 'color.exportedPresetUrl@@Successfully exported preset to url!',
+                    };
+                    tmpstore.alerts.push(alert);
+                    setTimeout(() => {
+                      tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+                    }, 2000);
+                  }}>
+                    <LinkOutline width={24} /> {t('color.url@@Get URL')}
+                  </button>
+                </div>
+              </div>
+            </div>
+            {tmpstore.alerts.map((alert, i) => (
+              <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
+            ))}
+            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <SparklesOutline width="26" />
+                {t('color.decode@@Decode')}
+                <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
+              </h1>
+              <div class={{
+                'transition-transform duration-200': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
+              }}>
+                <ChevronDown width="20" />
+              </div>
+            </button>
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-300': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
+              'max-h-[400px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
+            }}>
+              <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
+              <label for="decode">
+                <span>{t('color.decode@@Decode')}</span>
+                <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste an existing RGB text here to edit it')}</span>
+              </label>
+              <textarea id="decode" class={{
+                'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
+              }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+              onInput$={(e, el) => {
+                const threshold = document.getElementById('threshold') as HTMLInputElement;
+                decodeText(el.value, Number(threshold.value));
+              }}
+              />
+              <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
+                onInput$={(e, el) => {
+                  tmpstore.threshold = Number(el.value);
+                  const importhex = document.getElementById('decode') as HTMLInputElement;
+                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
+                }}
+                onIncrement$={() => {
+                  tmpstore.threshold = tmpstore.threshold + 10;
+                  const importhex = document.getElementById('decode') as HTMLInputElement;
+                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
+                }}
+                onDecrement$={() => {
+                  tmpstore.threshold = tmpstore.threshold - 10;
+                  const importhex = document.getElementById('decode') as HTMLInputElement;
+                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
+                }}
+              >
+                {t('color.threshold@@Threshold')}
+                <span class="text-gray-500"> - {t('color.thresholdSubtitle@@Try changing this around if you\'re getting too many colors')}</span>
+              </NumberInput>
+            </div>
           </div>
           <div class="mb-4 flex flex-col gap-2" id="formatting">
             <button class={{
