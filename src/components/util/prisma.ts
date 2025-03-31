@@ -1,27 +1,19 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
-export function createPrismaClient(databaseUrl: string) {
-  if (!databaseUrl && process.env.NODE_ENV == 'production') {
-    throw new Error('DATABASE_URL is required to connect to the database');
-  } else {
-    databaseUrl = databaseUrl || process.env.DATABASE_URL!;
-  }
-
+function createPrismaClient(url: string) {
   return new PrismaClient({
-    datasources: {
-      db: {
-        url: databaseUrl,
-      },
-    },
+    datasources: { db: { url } },
   }).$extends(withAccelerate());
 }
 
 let prismaGlobal: ReturnType<typeof createPrismaClient> | undefined;
-if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
-  if (!prismaGlobal) {
-    prismaGlobal = createPrismaClient(process.env.DATABASE_URL!);
-  }
+export function getPrismaClient(databaseUrl: string) {
+  const url = databaseUrl || process.env.DATABASE_URL!;
+  if (!prismaGlobal) prismaGlobal = createPrismaClient(url);
+  return prismaGlobal;
 }
+
+if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production' && !prismaGlobal) getPrismaClient(process.env.DATABASE_URL!);
 
 export const prisma = prismaGlobal;

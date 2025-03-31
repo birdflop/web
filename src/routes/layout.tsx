@@ -3,12 +3,7 @@ import { component$, Slot, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const useEnvLoader = routeLoader$(async (requestEvent) => {
-  return {};
-});
+import { Link } from '@builder.io/qwik-city';
 
 export default component$(() => {
   const store = useStore({
@@ -49,7 +44,7 @@ export default component$(() => {
       }
     }
   });
-  useEnvLoader();
+
   return <>
     <Nav />
     <Slot />
