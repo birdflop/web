@@ -7,11 +7,11 @@ import { defaults, v3formats } from '~/components/util/PresetUtils';
 
 export const useEndpoints = routeLoader$(async ({ url }) => {
   const data = await fetch(url.origin + '/api/v2');
-  const json = await data.json();
+  const json = await data.json() as any;
   const paths = Object.keys(json.endpoints);
   for (const path of paths) {
     const endpointData = await fetch(url.origin + path);
-    const endpointJson = await endpointData.json();
+    const endpointJson = await endpointData.json() as any;
     json.endpoints[path] = { methods: json.endpoints[path], options: endpointJson.options };
   }
   return json;

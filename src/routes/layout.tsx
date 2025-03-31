@@ -25,7 +25,7 @@ export default component$(() => {
       try {
         // Fetch user's location information
         const response = await fetch('https://ipapi.co/json/');
-        const locationData = await response.json();
+        const locationData = await response.json() as any;
 
         // Check if user is from California or EU
         const isCaliforniaUser = locationData.region_code === 'CA' && locationData.country_code === 'US';
