@@ -1,9 +1,10 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
-// Create a function to get Prisma with the right environment
-export function getPrismaClient(env?: any) {
-  const databaseUrl = env?.DATABASE_URL || process.env.DATABASE_URL;
+export function createPrismaClient(databaseUrl: string) {
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is required to connect to the database');
+  }
 
   return new PrismaClient({
     datasources: {
@@ -14,8 +15,11 @@ export function getPrismaClient(env?: any) {
   }).$extends(withAccelerate());
 }
 
-// Singleton instance for non-Worker environments
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
-export const prisma = globalForPrisma.prisma || getPrismaClient();
+let prismaGlobal: ReturnType<typeof createPrismaClient> | undefined;
+if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
+  if (!prismaGlobal) {
+    prismaGlobal = createPrismaClient(process.env.DATABASE_URL!);
+  }
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+export const prisma = prismaGlobal;

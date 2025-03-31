@@ -1,12 +1,14 @@
 import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getPrismaClient } from '~/components/util/prisma';
+import { createPrismaClient } from '~/components/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
-import type { RequestEventBase } from '@builder.io/qwik-city';
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
-  (request?: RequestEventBase) => {
-    const env = request?.platform?.env;
+  (event) => {
+
+    const databaseUrl = event?.platform?.env?.DATABASE_URL;
+
+    const prisma = createPrismaClient(databaseUrl);
 
     return {
       providers: [Discord({
@@ -30,7 +32,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           };
         },
       })],
-      adapter: PrismaAdapter(getPrismaClient(env)),
+      adapter: PrismaAdapter(prisma),
     };
   },
 );
