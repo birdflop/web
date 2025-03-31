@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@anuragroy/tailwindcss-animate": "^1.0.6",
-    "@auth/prisma-adapter": "2.7.4",
+    "@auth/prisma-adapter": "2.8.0",
     "@auth/qwik": "0.6.0",
     "@builder.io/partytown": "^0.10.3",
     "@builder.io/qwik": "1.12.1",
