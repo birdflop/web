@@ -19,7 +19,6 @@ export default defineConfig(() => {
                 defaultLang: "en-US",
                 assetsPath: "i18n"
             }),
-            partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
             tailwindcss(),
         ],
         preview: {
