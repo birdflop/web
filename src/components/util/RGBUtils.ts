@@ -186,7 +186,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
       if (frame.type === 'solid') {
 
         const hex = frame.colors[0];
-        output = `<color:${hex}>${text}</color>`;
+        output = `<color:#${hex}>${text}</color>`;
       } else if (frame.type === 'segments') {
         if (store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i)) {
           output = formatMiniMessageCustomPositions(store, n);
@@ -200,11 +200,11 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
             const offset = (n + i * (length / store.colors.length)) % length;
             const shiftedGradient = new AnimatedGradient(colors, length, offset);
             const color = convertToHex(shiftedGradient.next());
-            animatedColors.push(color);
+            animatedColors.push('#' + color);
           }
 
           if (animatedColors.length < 2) {
-            animatedColors.push(animatedColors[0]);
+            animatedColors.push('#' + animatedColors[0]);
           }
 
           output = `<gradient:${animatedColors.join(':')}>${text}</gradient>`;
@@ -308,7 +308,7 @@ function formatMiniMessageCustomPositions(store: typeof defaults, frameIndex: nu
 
     if (lowerRange === upperRange) continue;
 
-    output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+    output += `<gradient:#${currentColor.hex}:#${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
   }
 
   return output;
