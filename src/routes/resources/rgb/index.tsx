@@ -1,11 +1,11 @@
-import { $, component$, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { $, component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, ClipboardOutline, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
+import { Add, BarChartOutline, ChevronDown, ChevronUp, ClipboardOutline, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TerminalOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -67,7 +67,7 @@ export default component$(() => {
       id: -1,
       type: 0,
     },
-    sectionsOpened: ['inputs'],
+    sectionsOpened: [],
     alerts: [] as {
       class: string,
       text: string,
@@ -136,57 +136,78 @@ export default component$(() => {
     });
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const input = document.getElementById('input') as HTMLTextAreaElement;
+    if (!input) return;
+    input.focus();
+    input.setSelectionRange(store.text.length, store.text.length);
+  });
+
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('gradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 my-1">
+        <h2 class="text-gray-50 mt-1 mb-5">
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
-        <h3 class="text-gray-400 text-sm mb-3">
-          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
-        </h3>
-        <h1 class={{
-          'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
+
+        <label for="input" class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+          <TerminalOutline width={26} />
+          {t('color.inputText@@Input Text')}
+          <span class="text-gray-400 text-sm font-normal">
+            {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
+          </span>
+        </label>
+        <div class={{
+          'relative': true,
+          'text-3xl md:text-4xl xl:text-5xl mt-2 mb-3 break-all font-mc tracking-tight': true,
           'font-mc-bold': store.bold,
           'font-mc-italic': store.italic,
           'font-mc-bold-italic': store.bold && store.italic,
         }}>
-          {(() => {
-            if (!store.text) return '\u00A0';
+          <h1 class="lum-bg-gray-800/50 rounded-lg lum-pad-md w-full h-full pointer-events-none whitespace-pre-wrap!">
+            {(() => {
+              if (!store.text) return '\u00A0';
 
-            const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-            if (colors.length < 2) return store.text;
+              const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+              if (colors.length < 2) return store.text;
 
-            const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
+              const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
 
-            let hex = '';
-            const segments = [];
-            let index = 0;
-            const textArray = Array.from(store.text);
-            while (index < textArray.length) {
-              segments.push(textArray.slice(index, index + store.colorlength).join(''));
-              index += store.colorlength;
-            }
-            return segments.map((segment, i) => {
-              hex = convertToHex(gradient.next());
-              return (
-                <span key={`segment-${i}`} style={`color: #${hex};`} class={{
-                  'underline': store.underline,
-                  'strikethrough': store.strikethrough,
-                  'underline-strikethrough': store.underline && store.strikethrough,
-                }}>
-                  {segment.replace(/ /g, '\u00A0')}
-                </span>
-              );
-            });
-          })()}
-        </h1>
+              let hex = '';
+              const segments = [];
+              let index = 0;
+              const textArray = Array.from(store.text);
+              while (index < textArray.length) {
+                segments.push(textArray.slice(index, index + store.colorlength).join(''));
+                index += store.colorlength;
+              }
+              return segments.map((segment, i) => {
+                hex = convertToHex(gradient.next());
+                return (
+                  <span key={`segment-${i}`} style={`color: #${hex};`} class={{
+                    'underline': store.underline,
+                    'strikethrough': store.strikethrough,
+                    'underline-strikethrough': store.underline && store.strikethrough,
+                  }}>
+                    {segment.replace(/ /g, '\u00A0')}
+                  </span>
+                );
+              });
+            })()}
+          </h1>
+          <textarea class="absolute top-0 lum-input lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
+            value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
+        </div>
+        {tmpstore.alerts.map((alert, i) => (
+          <p key={`alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
+        ))}
 
         <div class={{
-          'w-full h-3 my-5 rounded-full items-center relative': true,
+          'w-full h-2 mb-5 rounded-full items-center relative': true,
           'hidden': store.disperse,
         }} id="colormap"
         style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
@@ -221,7 +242,7 @@ export default component$(() => {
         }}
         >
           <div id="add-button" class={{
-            'absolute -mt-1 -ml-3 w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
+            'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
           }}>
             <Add width="19" />
           </div>
@@ -255,7 +276,7 @@ export default component$(() => {
           >
             <div key={`colormap-color-${i + 1}`} id={`colormap-color-${i + 1}`}
               class={{
-                'transition-transform w-5 h-5 hover:scale-125 rounded-md shadow-md border': true,
+                'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full shadow-md border': true,
                 'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
                 'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
               }}
@@ -467,120 +488,7 @@ export default component$(() => {
               </div>
             </div>
           </div>
-          <div class="flex flex-col gap-2 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="inputs">
-            <button class={{
-              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
-              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
-              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
-            }} onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('inputs') == -1) tmpstore.sectionsOpened.push('inputs');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('inputs'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SettingsOutline width="26" />
-                {t('color.inputs@@Inputs')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('inputs') != -1,
-              }}>
-                <ChevronDown width="20" />
-              </div>
-            </button>
-
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('inputs') == -1,
-              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('inputs') != -1,
-            }}>
-              <div class="flex flex-col gap-1">
-                <label for="input">
-                  {t('color.inputText@@Input Text')}
-                </label>
-                <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
-              </div>
-
-              <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                  (e, el) => {
-                    if (el.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = JSON.parse(el.value);
-                    }
-                  }
-                } values={[
-                  ...v3formats.map(format => ({
-                    name: format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', ''),
-                    value: JSON.stringify(format),
-                  })),
-                  {
-                    name: store.customFormat ? store.format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', '')
-                      : t('color.custom@@Custom'),
-                    value: 'custom',
-                  },
-                ]}>
-                  {t('color.colorFormat@@Color Format')}
-                </Dropdown>
-                <div class="flex flex-col gap-1">
-                  <label for="prefixsuffix">
-                    {t('color.prefixsuffix@@Prefix/Suffix')}
-                  </label>
-                  <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
-                </div>
-              </div>
-            </div>
-
-            {
-              store.customFormat && <>
-                <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                  if (tmpstore.sectionsOpened.indexOf('customformat') == -1) tmpstore.sectionsOpened.push('customformat');
-                  else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('customformat'), 1);
-                }}>
-                  <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                    <TextOutline width="26" />
-                    {t('color.customFormat@@Custom Format')}
-                  </h1>
-                  <div class={{
-                    'transition-transform duration-200': true,
-                    'rotate-180': tmpstore.sectionsOpened.indexOf('customformat') != -1,
-                  }}>
-                    <ChevronDown width="20" />
-                  </div>
-                </button>
-
-                <div id="customformat" class={{
-                  'flex flex-col gap-2 transition-all duration-200': true,
-                  'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('customformat') == -1,
-                  'max-h-[300px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('customformat') != -1,
-                }}>
-                  <label for="customformat">
-                    {t('color.customFormat@@Custom Format')}
-                  </label>
-                  <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
-                  <div class="py-3 font-mono">
-                    <p>{t('color.placeholders@@Placeholders:')}</p>
-                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                    {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-                    <p>$c = {t('color.character@@Character')}</p>
-                  </div>
-                </div>
-              </>
-            }
-
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="options">
             <button class={{
               'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
@@ -603,8 +511,8 @@ export default component$(() => {
 
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('inputs') == -1,
-              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('inputs') != -1,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('output') == -1,
+              'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('output') != -1,
             }}>
               <label for="output" class="text-gray-500">
                 {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
@@ -628,6 +536,104 @@ export default component$(() => {
                   }, 2000);
                 }}
               />
+            </div>
+
+            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('options') == -1) tmpstore.sectionsOpened.push('options');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('options'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <SettingsOutline width="26" />
+                {t('color.options@@Options')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('options') != -1,
+              }}>
+                <ChevronDown width="20" />
+              </div>
+            </button>
+
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('options') == -1,
+              'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('options') != -1,
+            }}>
+              <div class="flex flex-col md:grid grid-cols-2 gap-2">
+                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
+                  (e, el) => {
+                    if (el.value == 'custom') {
+                      store.customFormat = true;
+                    }
+                    else {
+                      store.customFormat = false;
+                      store.format = JSON.parse(el.value);
+                    }
+                  }
+                } values={[
+                  ...v3formats.map(format => ({
+                    name: format.color
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                      .replace('$c', ''),
+                    value: JSON.stringify(format),
+                  })),
+                  {
+                    name: store.customFormat ? `Custom: ${store.format.color
+                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                      .replace('$c', '')}`
+                      : t('color.custom@@Custom'),
+                    value: 'custom',
+                  },
+                ]}>
+                  {t('color.colorFormat@@Color Format')}
+                </Dropdown>
+                <div class="flex flex-col gap-1">
+                  <label for="prefixsuffix">
+                    {t('color.prefixsuffix@@Prefix/Suffix')}
+                  </label>
+                  <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <Toggle id="disperse" checked={store.disperse}
+                    onChange$={(e, el) => { store.disperse = el.checked; }}
+                    label={<p class="flex flex-col"><span>Always disperse colors</span></p>} />
+                  <p class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</p>
+                </div>
+                {store.format.color != 'MiniMessage' &&
+                  <div class="flex flex-col gap-1">
+                    <Toggle id="trimspaces" checked={store.trimspaces}
+                      onChange$={(e, el) => { store.trimspaces = el.checked; }}
+                      label={'Trim colors from spaces'} />
+                    <p class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</p>
+                  </div>
+                }
+              </div>
+
+              {
+                store.customFormat && <>
+                  <div id="customformat" class={{
+                    'flex flex-col gap-2': true,
+                  }}>
+                    <label for="customformat">
+                      {t('color.customFormat@@Custom Format')}
+                    </label>
+                    <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
+                    <div class="py-3 font-mono">
+                      <p>{t('color.placeholders@@Placeholders:')}</p>
+                      <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                      <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                      <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                      <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                      <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                      <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                      {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                      <p>$c = {t('color.character@@Character')}</p>
+                    </div>
+                  </div>
+                </>
+              }
             </div>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
@@ -859,9 +865,6 @@ export default component$(() => {
                 </div>
               </div>
             </div>
-            {tmpstore.alerts.map((alert, i) => (
-              <p key={`preset-alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-            ))}
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
@@ -955,16 +958,28 @@ export default component$(() => {
               <Toggle id="strikethrough" checked={store.strikethrough}
                 onChange$={(e, el) => { store.strikethrough = el.checked; }}
                 label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
-              <Toggle id="disperse" checked={store.disperse}
-                onChange$={(e, el) => { store.disperse = el.checked; }}
-                label={<p class="flex flex-col"><span>Always disperse colors</span><span class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</span></p>} />
-              {store.format.color != 'MiniMessage' &&
-                <Toggle id="trimspaces" checked={store.trimspaces}
-                  onChange$={(e, el) => { store.trimspaces = el.checked; }}
-                  label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
-              }
-              {store.customFormat &&
-                <div class="flex flex-col gap-2">
+              {store.customFormat && <>
+                <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                  if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
+                  else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
+                }}>
+                  <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                    <SettingsOutline width="26" />
+                    {t('color.formatoptions@@Format Options')}
+                  </h1>
+                  <div class={{
+                    'transition-transform duration-200': true,
+                    'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+                  }}>
+                    <ChevronDown width="20" />
+                  </div>
+                </button>
+
+                <div class={{
+                  'flex flex-col gap-2 transition-all duration-200': true,
+                  'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatoptions') == -1,
+                  'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+                }}>
                   {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
                     <label for="format-char">
                       {t('color.format.character@@Format Character')}
@@ -996,13 +1011,16 @@ export default component$(() => {
                     </>
                   }
                 </div>
-              }
+              </>}
             </div>
           </div>
         </div>
         <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </div>
+        <h3 class="text-gray-400 text-sm mb-3">
+          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
+        </h3>
       </div>
     </section>
   );
