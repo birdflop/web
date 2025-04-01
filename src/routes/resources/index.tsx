@@ -1,7 +1,7 @@
 import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { Blobs, Header } from '@luminescent/ui-qwik';
-import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
+import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
+import { GithubIcon } from 'lucide-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
@@ -104,12 +104,12 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-              <LogoDiscord width="24" />
+              <LogoDiscord width={24} />
               Invite
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/botflop">
-              <LogoGithub width="24" />
+              <GithubIcon size={24} />
               Learn More
             </a>
           </div>
@@ -184,12 +184,12 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
-              <LogoDiscord width="24" />
+              <LogoDiscord width={24} />
               Invite
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/birdtickets">
-              <LogoGithub width="24" />
+              <GithubIcon size={24} />
               Learn More
             </a>
           </div>

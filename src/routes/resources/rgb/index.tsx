@@ -5,12 +5,11 @@ import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, ClipboardOutline, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, SparklesOutline, TerminalOutline, TextOutline, TrashOutline } from 'qwik-ionicons';
-
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
+import { ChevronDownIcon, ChevronUpIcon, ClipboardIcon, DicesIcon, DownloadIcon, GlobeIcon, LinkIcon, MoreHorizontalIcon, PaletteIcon, PlusIcon, SaveIcon, SettingsIcon, ShareIcon, StarIcon, TerminalIcon, TrashIcon, TypeIcon, XIcon } from 'lucide-qwik';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -155,7 +154,7 @@ export default component$(() => {
         </h2>
 
         <label for="input" class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-          <TerminalOutline width={26} />
+          <TerminalIcon size={26} />
           {t('color.inputText@@Input Text')}
           <span class="text-gray-400 text-sm font-normal">
             {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
@@ -244,7 +243,7 @@ export default component$(() => {
           <div id="add-button" class={{
             'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
           }}>
-            <Add width="19" />
+            <PlusIcon size={19} />
           </div>
           {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
             onMouseDown$={(e, el) => {
@@ -310,7 +309,7 @@ export default component$(() => {
                     newColors.splice(i, 1);
                     store.colors = sortColors(newColors);
                   }}>
-                    <TrashOutline width="20" />
+                    <TrashIcon size={20} />
                   </button>
                 }
                 <ColorPicker
@@ -330,7 +329,7 @@ export default component$(() => {
         </div>
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
-          <div class="flex flex-col gap-2 relative" id="colors">
+          <div class="flex flex-col gap-2 relative" id="column1">
             <button class={{
               'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
@@ -340,21 +339,21 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('colors'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <ColorFillOutline width="26" />
+                <PaletteIcon size={26} />
                 {t('color.colors@@Colors')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('colors') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
               'h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('colors') == -1,
               'opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('colors') != -1,
-            }}>
+            }} id="colors">
               {store.format.color != 'MiniMessage' &&
                 <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
                   onIncrement$={() => {
@@ -407,13 +406,13 @@ export default component$(() => {
                   const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                   store.colors = newColors;
                 }}>
-                  <DiceOutline width={24} class="fill-current" /> {store.disperse && <span>Randomize</span>}
+                  <DicesIcon size={24} /> {store.disperse && <span>Randomize</span>}
                 </button>
                 {!store.disperse &&
                   <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
                     disperseColors();
                   }}>
-                    <BarChartOutline width={24} /> Disperse
+                    <MoreHorizontalIcon size={24} /> Disperse
                   </button>
                 }
               </div>
@@ -421,10 +420,10 @@ export default component$(() => {
                 {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
                   <div class="flex flex-col rounded-md">
                     <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
-                      <ChevronUp width={24} />
+                      <ChevronUpIcon size={24} />
                     </button>
                     <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
-                      <ChevronDown width={24} />
+                      <ChevronDownIcon size={24} />
                     </button>
                   </div>
                   <div class="flex flex-col justify-end gap-1">
@@ -464,7 +463,7 @@ export default component$(() => {
                       newColors.splice(i, 1);
                       store.colors = newColors;
                     }}>
-                      <TrashOutline width="20" />
+                      <TrashIcon size={20} />
                     </button>
                   </div>
                   <div
@@ -488,7 +487,7 @@ export default component$(() => {
               </div>
             </div>
           </div>
-          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="options">
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <button class={{
               'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
@@ -498,14 +497,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('output'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <ClipboardOutline width="26" />
+                <ClipboardIcon size={26} />
                 {t('color.output@@Output')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('output') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
 
@@ -513,11 +512,14 @@ export default component$(() => {
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
               'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('output') == -1,
               'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('output') != -1,
-            }}>
+            }} id="output">
               <label for="output" class="text-gray-500">
                 {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
               </label>
-              <textarea id="output" readOnly class={{ 'lum-input h-32 w-full font-mc whitespace-pre-wrap mb-2': true }}
+              <textarea id="output" readOnly
+                class={{
+                  'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
+                }}
                 value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
                 onClick$={(e, el) => {
                   let alert = {
@@ -543,14 +545,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('options'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SettingsOutline width="26" />
+                <SettingsIcon size={26} />
                 {t('color.options@@Options')}
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('options') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
 
@@ -641,21 +643,21 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SaveOutline width="26" />
+                <SaveIcon size={26} />
                 {t('color.presets@@Presets')}
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
             <div class={{
               'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
               'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('presets') == -1,
               'max-h-[250px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('presets') != -1,
-            }}>
+            }} id="presets">
               <div class="flex flex-col gap-2">
                 <Dropdown id="saved-presets" class={{ 'w-full': true }} onChange$={
                   (event, el) => {
@@ -720,18 +722,18 @@ export default component$(() => {
                     value: JSON.stringify(preset),
                   }))
                 } display={<span class="flex gap-3 flex-1">
-                  <DownloadOutline width="20" /> Load saved preset
+                  <DownloadIcon size={20} /> Load saved preset
                 </span>}>
                   {t('color.savedPresets@@Saved Presets')}
                 </Dropdown>
                 <div class="grid grid-cols-2 gap-2">
                   <a class="lum-btn" href="presets">
-                    <GlobeOutline width="20" /> Browse
+                    <GlobeIcon size={20} /> Browse
                   </a>
                   <button class="lum-btn" id="save" onClick$={() => {
                     modalRef.value?.showModal();
                   }}>
-                    <SaveOutline width="20" /> {t('color.save@@Save')}
+                    <SaveIcon size={20} /> {t('color.save@@Save')}
                   </button>
                   <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
                     <div class="flex flex-col gap-3">
@@ -745,7 +747,7 @@ export default component$(() => {
                         <button class="lum-btn" onClick$={() => {
                           modalRef.value?.close();
                         }}>
-                          <CloseOutline width="20" /> {t('color.cancel@@Cancel')}
+                          <XIcon size={20} /> {t('color.cancel@@Cancel')}
                         </button>
                         <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={() => {
                           const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
@@ -769,7 +771,7 @@ export default component$(() => {
                             tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                           }, 2000);
                         }}>
-                          <SaveOutline width="20" /> {t('color.save@@Save')}
+                          <SaveIcon size={20} /> {t('color.save@@Save')}
                         </button>
                       </div>
                     </div>
@@ -836,7 +838,7 @@ export default component$(() => {
                       tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
-                    <ShareOutline width={24} /> {t('color.export@@Export')}
+                    <ShareIcon size={24} /> {t('color.export@@Export')}
                   </button>
                   <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
@@ -860,7 +862,7 @@ export default component$(() => {
                       tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
-                    <LinkOutline width={24} /> {t('color.url@@Get URL')}
+                    <LinkIcon size={24} /> {t('color.url@@Get URL')}
                   </button>
                 </div>
               </div>
@@ -870,7 +872,7 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SparklesOutline width="26" />
+                <StarIcon size={26} />
                 {t('color.decode@@Decode')}
                 <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
               </h1>
@@ -878,14 +880,14 @@ export default component$(() => {
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
             <div class={{
               'flex flex-col gap-2 transition-all duration-300': true,
               'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
               'max-h-[400px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
-            }}>
+            }} id="decode">
               <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
               <label for="decode">
                 <span>{t('color.decode@@Decode')}</span>
@@ -921,7 +923,7 @@ export default component$(() => {
               </NumberInput>
             </div>
           </div>
-          <div class="mb-4 flex flex-col gap-2" id="formatting">
+          <div class="mb-4 flex flex-col gap-2" id="column3">
             <button class={{
               'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
@@ -931,21 +933,21 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatting'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <TextOutline width="26" />
+                <TypeIcon size={26} />
                 {t('color.formatting@@Formatting')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('formatting') != -1,
               }}>
-                <ChevronDown width="20" />
+                <ChevronDownIcon size={20} />
               </div>
             </button>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
               'h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatting') == -1,
               'opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatting') != -1,
-            }}>
+            }} id="formatting">
               <Toggle id="bold" checked={store.bold}
                 onChange$={(e, el) => { store.bold = el.checked; }}
                 label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
@@ -958,61 +960,62 @@ export default component$(() => {
               <Toggle id="strikethrough" checked={store.strikethrough}
                 onChange$={(e, el) => { store.strikethrough = el.checked; }}
                 label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
-              {store.customFormat && <>
-                <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                  if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
-                  else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
-                }}>
-                  <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                    <SettingsOutline width="26" />
-                    {t('color.formatoptions@@Format Options')}
-                  </h1>
-                  <div class={{
-                    'transition-transform duration-200': true,
-                    'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
-                  }}>
-                    <ChevronDown width="20" />
-                  </div>
-                </button>
-
-                <div class={{
-                  'flex flex-col gap-2 transition-all duration-200': true,
-                  'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatoptions') == -1,
-                  'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
-                }}>
-                  {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
-                    <label for="format-char">
-                      {t('color.format.character@@Format Character')}
-                    </label>
-                    <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
-                  </>}
-                  {!store.format.char &&
-                    <>
-                      <label for="format-bold">
-                        {t('color.format.bold@@Bold')}
-                      </label>
-                      <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
-                      <label for="format-italic">
-                        {t('color.format.italic@@Italic')}
-                      </label>
-                      <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
-                      <label for="format-underline">
-                        {t('color.format.underline@@Underline')}
-                      </label>
-                      <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
-                      <label for="format-strikethrough">
-                        {t('color.format.strikethrough@@Strikethrough')}
-                      </label>
-                      <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
-                      <div class="py-3 font-mono">
-                        <p>{t('color.placeholders@@Placeholders:')}</p>
-                        <p>$t = Output Text</p>
-                      </div>
-                    </>
-                  }
-                </div>
-              </>}
             </div>
+            {store.customFormat && <>
+              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
+                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
+              }}>
+                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                  <SettingsIcon size={26} />
+                  {t('color.formatoptions@@Format Options')}
+                </h1>
+                <div class={{
+                  'transition-transform duration-200': true,
+                  'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+                }}>
+                  <ChevronDownIcon size={20} />
+                </div>
+              </button>
+
+              <div class={{
+                'flex flex-col gap-2 transition-all duration-200': true,
+                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatoptions') == -1,
+                'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+              }} id="formatoptions">
+                {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
+                  <label for="format-char">
+                    {t('color.format.character@@Format Character')}
+                  </label>
+                  <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
+                </>}
+                {!store.format.char &&
+                  <>
+                    <label for="format-bold">
+                      {t('color.format.bold@@Bold')}
+                    </label>
+                    <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
+                    <label for="format-italic">
+                      {t('color.format.italic@@Italic')}
+                    </label>
+                    <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
+                    <label for="format-underline">
+                      {t('color.format.underline@@Underline')}
+                    </label>
+                    <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
+                    <label for="format-strikethrough">
+                      {t('color.format.strikethrough@@Strikethrough')}
+                    </label>
+                    <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
+                    <div class="py-3 font-mono">
+                      <p>{t('color.placeholders@@Placeholders:')}</p>
+                      <p>$t = Output Text</p>
+                    </div>
+                  </>
+                }
+              </div>
+            </>}
+
           </div>
         </div>
         <div class="text-sm mt-8">

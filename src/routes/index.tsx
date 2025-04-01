@@ -2,7 +2,7 @@ import { $, component$, useOnWindow, useVisibleTask$, useStore, useOnDocument } 
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Header } from '@luminescent/ui-qwik';
-import { CartOutline, CashOutline, ColorPaletteOutline, CubeOutline, EyeOutline, GlobeOutline, HeartOutline, PersonOutline, RocketOutline, ServerOutline, StarOutline, CheckmarkCircleOutline, AlertCircleOutline, LogoGoogle } from 'qwik-ionicons';
+import { ShoppingCartIcon, CoinsIcon, EyeIcon, Globe2Icon, HeartIcon, UserIcon, RocketIcon, ServerIcon, StarIcon, CheckCircleIcon, AlertCircleIcon, BoxIcon, SettingsIcon } from 'lucide-qwik';
 import Chart from '~/components/elements/Chart';
 import { initiateTyper } from '~/components/util/Typer';
 
@@ -56,15 +56,15 @@ export default component$(() => {
           <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
               <a href="#plans" class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
-                <ServerOutline width="30" class="text-3xl" />Hosting
+                <ServerIcon size={30} class="text-3xl" />Hosting
               </a>
               <Link href="/resources" class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-purple-700/80 hover:lum-bg-purple-600 gap-4">
-                <CubeOutline width="30" class="text-3xl" /> Resources
+                <BoxIcon size={30} class="text-3xl" /> Resources
               </Link>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
               <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-pink-700/80 hover:lum-bg-pink-600 gap-4">
-                <CashOutline width="30" class="text-3xl" /> Donate Today
+                <CoinsIcon size={30} class="text-3xl" /> Donate Today
               </a>
             </div>
           </div>
@@ -119,11 +119,11 @@ export default component$(() => {
                 </ul>
                 {plan.outOfStock ?
                   <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/60 hover:lum-bg-red-600 fill-current">
-                    <AlertCircleOutline width="30" class="text-3xl" /> Out of stock
+                    <AlertCircleIcon size={30} class="text-3xl" /> Out of stock
                   </a>
                   :
                   <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-500/50 hover:lum-bg-blue-500 mt-4">
-                    <CartOutline width="30" class="text-3xl" /> Order Now
+                    <ShoppingCartIcon size={30} class="text-3xl" /> Order Now
                   </Link>
                 }
               </div>;
@@ -131,7 +131,7 @@ export default component$(() => {
           </div>
           <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto">
             <Header>
-              <CheckmarkCircleOutline width="36" /> Benefits Galore
+              <CheckCircleIcon size={36} /> Benefits Galore
             </Header>
             <p class="text-gray-100">
               All plans come with a one-click modpack installer, DDoS protection, 3 off-site backups, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
@@ -149,7 +149,7 @@ export default component$(() => {
           <div class="grid md:grid-cols-2 gap-4">
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <RocketOutline width="36" /> Sheer Performance
+                <RocketIcon size={36} /> Sheer Performance
               </Header>
               <p>
                 We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
@@ -157,7 +157,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <ColorPaletteOutline width="36" class="fill-current" /> Fully Configurable
+                <SettingsIcon size={36} class="fill-current" /> Fully Configurable
               </Header>
               <p>
                 You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
@@ -165,7 +165,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <EyeOutline width="36" /> Transparent
+                <EyeIcon size={36} /> Transparent
               </Header>
               <p>
                 We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
@@ -173,7 +173,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <GlobeOutline width="36" /> Price Matching
+                <Globe2Icon size={36} /> Price Matching
               </Header>
               <p>
                 We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
@@ -181,7 +181,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <HeartOutline width="36" /> Instant Support
+                <HeartIcon size={36} /> Instant Support
               </Header>
               <p>
                 You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
@@ -189,7 +189,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <CashOutline width="36" /> Nonprofit
+                <CoinsIcon size={36} /> Nonprofit
               </Header>
               <p>
                 Our nonprofit status helps us keep our services affordable and accessible. Clients receive periodic reimbursements for excess profit.
@@ -245,7 +245,7 @@ export default component$(() => {
           <div class="grid md:grid-cols-3 gap-4">
             <a class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out" href="https://g.co/kgs/mUU1j1G">
               <Header>
-                <PersonOutline width="36" /> Mikkel Hansen
+                <UserIcon size={36} /> Mikkel Hansen
               </Header>
               <p class="h-full">
                 I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
@@ -253,7 +253,7 @@ export default component$(() => {
             </a>
             <a class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe">
               <Header>
-                <PersonOutline width="36" /> Wizzy SMP
+                <UserIcon size={36} /> Wizzy SMP
               </Header>
               <p class="h-full">
                 Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
@@ -261,7 +261,7 @@ export default component$(() => {
             </a>
             <a class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/60283aec679d97052cd70ca9">
               <Header>
-                <PersonOutline width="36" /> Beaunation
+                <UserIcon size={36} /> Beaunation
               </Header>
               <p class="h-full">
                 I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
@@ -269,7 +269,7 @@ export default component$(() => {
             </a>
             <a class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/602d901e679d97052cdb67d1">
               <Header>
-                <PersonOutline width="36" /> Jmaster
+                <UserIcon size={36} /> Jmaster
               </Header>
               <p class="h-full">
                 Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
@@ -277,7 +277,7 @@ export default component$(() => {
             </a>
             <a class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d">
               <Header>
-                <PersonOutline width="36" /> Oliver Flynn
+                <UserIcon size={36} /> Oliver Flynn
               </Header>
               <p class="h-full">
                 Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
@@ -285,16 +285,16 @@ export default component$(() => {
             </a>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <StarOutline width="36" /> More
+                <StarIcon size={36} /> More
               </Header>
               <p class="h-full">
                 Check out our Trustpilot or Google page for more testimonials.
               </p>
               <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-500/50 hover:lum-bg-blue-500">
-                <StarOutline width="24" /> Trustpilot
+                <StarIcon size={24} /> Trustpilot
               </a>
               <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-500/50 hover:lum-bg-blue-500 fill-current">
-                <LogoGoogle width="24" /> Google
+                Google
               </a>
             </div>
           </div>

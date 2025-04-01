@@ -4,6 +4,7 @@ import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 import { Link } from '@builder.io/qwik-city';
+import { CookieIcon } from 'lucide-qwik';
 
 export default component$(() => {
   const store = useStore({
@@ -48,32 +49,45 @@ export default component$(() => {
   return <>
     <Nav />
     <Slot />
-    {store.cookies != 'true' && store.shouldShowConsent &&
-      <div class={{
-        'fixed bottom-0 sm:bottom-4 w-svw sm:w-auto sm:right-4 backdrop-blur-xl z-[1000] animate-in fade-in slide-in-from-bottom-8 anim-duration-1000 lum-card lum-bg-gray-900/60': true,
+    <div class={{
+      'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col gap-2': true,
+    }} id="notifications">
+      { /* <div class={{
+        'backdrop-blur-xl lum-card lum-bg-gray-800/60 lum-pad-equal-2xl': true,
+        'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
       }} id="cookieprompt">
-        <Header subheader="We use cookies to automatically save and load your preferences.">
-          Cookies
+        <Header subheader="Example Descrption.">
+          <BellIcon /> Example Notification
         </Header>
-        <div class="flex flex-wrap items-center justify-end gap-2">
-          <button class="lum-btn lum-bg-transparent" onClick$={async () => {
-            document.cookie = 'optout=true; path=/';
-            document.getElementById('cookieprompt')!.remove();
-          }}>
-            Turn off cookies
-          </button>
-          <Link class="lum-btn lum-bg-transparent" href="/privacy">
-            Privacy Policy
-          </Link>
-          <button class="lum-btn" onClick$={async () => {
-            document.cookie = 'cookies=true; path=/';
-            document.getElementById('cookieprompt')!.remove();
-          }}>
-            Okay
-          </button>
+      </div> */ }
+      {store.cookies != 'true' && store.shouldShowConsent &&
+        <div class={{
+          'backdrop-blur-xl lum-card lum-bg-gray-800/60 lum-pad-equal-2xl': true,
+          'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+        }} id="cookieprompt">
+          <Header subheader="We use cookies to automatically save and load your preferences.">
+            <CookieIcon /> Cookies
+          </Header>
+          <div class="flex flex-wrap items-center justify-end gap-2">
+            <Link class="lum-btn lum-bg-transparent lum-pad-xs" href="/privacy">
+              Privacy Policy
+            </Link>
+            <button class="lum-btn lum-pad-xs" onClick$={async () => {
+              document.cookie = 'optout=true; path=/';
+              document.getElementById('cookieprompt')!.remove();
+            }}>
+              Turn off cookies
+            </button>
+            <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={async () => {
+              document.cookie = 'cookies=true; path=/';
+              document.getElementById('cookieprompt')!.remove();
+            }}>
+              Okay
+            </button>
+          </div>
         </div>
-      </div>
-    }
+      }
+    </div>
     <Footer />
   </>;
 });

@@ -2,13 +2,13 @@
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
-import { CodeWorkingOutline, CubeOutline, HelpOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import { extraFlags as extFlags } from '~/data/flags';
 import { serverType as srvType } from '~/data/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
+import { BoxIcon, CodeIcon, HelpCircleIcon, RefreshCwIcon, TerminalSquareIcon } from 'lucide-qwik';
 
 const flagTypes = {
   'none': 'none',
@@ -98,21 +98,21 @@ export default component$(() => {
   const configOptions = {
     gui: {
       label: <>
-        <TerminalOutline class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
+        <TerminalSquareIcon class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
       </>,
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
       disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     variables: {
       label: <>
-        <CodeWorkingOutline class="w-6 h-6" /> {t('flags.variables.label@@Use Variables')}
+        <CodeIcon class="w-6 h-6" /> {t('flags.variables.label@@Use Variables')}
       </>,
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
       disable: [] as string[],
     },
     autoRestart: {
       label: <>
-        <RefreshCircleOutline class="w-6 h-6" /> {t('flags.autoRestart.label@@Auto-restart')}
+        <RefreshCwIcon class="w-6 h-6" /> {t('flags.autoRestart.label@@Auto-restart')}
       </>,
       description: t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.'),
       disable: [] as string[],
@@ -122,19 +122,19 @@ export default component$(() => {
   const extraFlagsOptions = {
     vectors: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.vectors.label@@Modern Vectors')}
+        <BoxIcon class="w-6 h-6" /> {t('flags.extraFlags.vectors.label@@Modern Vectors')}
       </>,
       description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
     },
     benchmarkedGraalVM: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)')}
+        <BoxIcon class="w-6 h-6" /> {t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)')}
       </>,
       description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
     },
     meowiceGraalVM: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)')}
+        <BoxIcon class="w-6 h-6" /> {t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)')}
       </>,
       description: t('flags.extraFlags.meowiceGraalVM.description@@Additional performance flags for MeowIce\'s Flags exclusive to GraalVM users.'),
     },
@@ -230,7 +230,7 @@ export default component$(() => {
               </Dropdown>
               <DropdownRaw id="flagshelp" onChange$={(e, el) => {
                 store.flags = el.value as keyof typeof flagTypes;
-              }} display={<><HelpOutline width={24}/></>}>
+              }} display={<><HelpCircleIcon size={24}/></>}>
                 <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                   Aikar's Flags
                 </a>
