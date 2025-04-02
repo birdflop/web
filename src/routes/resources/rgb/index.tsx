@@ -9,7 +9,7 @@ import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { ChevronDownIcon, ChevronUpIcon, ClipboardIcon, DicesIcon, DownloadIcon, GlobeIcon, LinkIcon, MoreHorizontalIcon, PaletteIcon, PlusIcon, SaveIcon, SettingsIcon, ShareIcon, StarIcon, TerminalIcon, TrashIcon, TypeIcon, XIcon } from 'lucide-qwik';
+import { ChevronDown, ChevronUp, Clipboard, Dices, Download, Globe, Link, Ellipsis, Palette, Plus, Save, Settings, Share, Sparkles, Terminal, Trash, Type, X } from 'lucide-icons-qwik';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -154,7 +154,7 @@ export default component$(() => {
         </h2>
 
         <label for="input" class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-          <TerminalIcon size={26} />
+          <Terminal size={26} />
           {t('color.inputText@@Input Text')}
           <span class="text-gray-400 text-sm font-normal">
             {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
@@ -243,7 +243,7 @@ export default component$(() => {
           <div id="add-button" class={{
             'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
           }}>
-            <PlusIcon size={19} />
+            <Plus size={19} />
           </div>
           {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
             onMouseDown$={(e, el) => {
@@ -309,7 +309,7 @@ export default component$(() => {
                     newColors.splice(i, 1);
                     store.colors = sortColors(newColors);
                   }}>
-                    <TrashIcon size={20} />
+                    <Trash size={20} />
                   </button>
                 }
                 <ColorPicker
@@ -339,14 +339,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('colors'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <PaletteIcon size={26} />
+                <Palette size={26} />
                 {t('color.colors@@Colors')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('colors') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
@@ -406,13 +406,13 @@ export default component$(() => {
                   const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                   store.colors = newColors;
                 }}>
-                  <DicesIcon size={24} /> {store.disperse && <span>Randomize</span>}
+                  <Dices size={24} /> {store.disperse && <span>Randomize</span>}
                 </button>
                 {!store.disperse &&
                   <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
                     disperseColors();
                   }}>
-                    <MoreHorizontalIcon size={24} /> Disperse
+                    <Ellipsis size={24} /> Disperse
                   </button>
                 }
               </div>
@@ -420,10 +420,10 @@ export default component$(() => {
                 {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
                   <div class="flex flex-col rounded-md">
                     <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
-                      <ChevronUpIcon size={24} />
+                      <ChevronUp size={24} />
                     </button>
                     <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
-                      <ChevronDownIcon size={24} />
+                      <ChevronDown size={24} />
                     </button>
                   </div>
                   <div class="flex flex-col justify-end gap-1">
@@ -463,7 +463,7 @@ export default component$(() => {
                       newColors.splice(i, 1);
                       store.colors = newColors;
                     }}>
-                      <TrashIcon size={20} />
+                      <Trash size={20} />
                     </button>
                   </div>
                   <div
@@ -497,14 +497,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('output'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <ClipboardIcon size={26} />
+                <Clipboard size={26} />
                 {t('color.output@@Output')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('output') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
 
@@ -545,14 +545,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('options'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SettingsIcon size={26} />
+                <Settings size={26} />
                 {t('color.options@@Options')}
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('options') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
 
@@ -643,14 +643,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <SaveIcon size={26} />
+                <Save size={26} />
                 {t('color.presets@@Presets')}
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
@@ -722,18 +722,18 @@ export default component$(() => {
                     value: JSON.stringify(preset),
                   }))
                 } display={<span class="flex gap-3 flex-1">
-                  <DownloadIcon size={20} /> Load saved preset
+                  <Download size={20} /> Load saved preset
                 </span>}>
                   {t('color.savedPresets@@Saved Presets')}
                 </Dropdown>
                 <div class="grid grid-cols-2 gap-2">
                   <a class="lum-btn" href="presets">
-                    <GlobeIcon size={20} /> Browse
+                    <Globe size={20} /> Browse
                   </a>
                   <button class="lum-btn" id="save" onClick$={() => {
                     modalRef.value?.showModal();
                   }}>
-                    <SaveIcon size={20} /> {t('color.save@@Save')}
+                    <Save size={20} /> {t('color.save@@Save')}
                   </button>
                   <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
                     <div class="flex flex-col gap-3">
@@ -747,7 +747,7 @@ export default component$(() => {
                         <button class="lum-btn" onClick$={() => {
                           modalRef.value?.close();
                         }}>
-                          <XIcon size={20} /> {t('color.cancel@@Cancel')}
+                          <X size={20} /> {t('color.cancel@@Cancel')}
                         </button>
                         <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={() => {
                           const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
@@ -771,7 +771,7 @@ export default component$(() => {
                             tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                           }, 2000);
                         }}>
-                          <SaveIcon size={20} /> {t('color.save@@Save')}
+                          <Save size={20} /> {t('color.save@@Save')}
                         </button>
                       </div>
                     </div>
@@ -838,7 +838,7 @@ export default component$(() => {
                       tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
-                    <ShareIcon size={24} /> {t('color.export@@Export')}
+                    <Share size={24} /> {t('color.export@@Export')}
                   </button>
                   <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
                     const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
@@ -862,7 +862,7 @@ export default component$(() => {
                       tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                     }, 2000);
                   }}>
-                    <LinkIcon size={24} /> {t('color.url@@Get URL')}
+                    <Link size={24} /> {t('color.url@@Get URL')}
                   </button>
                 </div>
               </div>
@@ -872,7 +872,7 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <StarIcon size={26} />
+                <Sparkles size={26} />
                 {t('color.decode@@Decode')}
                 <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
               </h1>
@@ -880,7 +880,7 @@ export default component$(() => {
                 'transition-transform duration-200': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
@@ -933,14 +933,14 @@ export default component$(() => {
               else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatting'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <TypeIcon size={26} />
+                <Type size={26} />
                 {t('color.formatting@@Formatting')}
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
                 'rotate-180': tmpstore.sectionsOpened.indexOf('formatting') != -1,
               }}>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
@@ -967,14 +967,14 @@ export default component$(() => {
                 else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                  <SettingsIcon size={26} />
+                  <Settings size={26} />
                   {t('color.formatoptions@@Format Options')}
                 </h1>
                 <div class={{
                   'transition-transform duration-200': true,
                   'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
                 }}>
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </button>
 

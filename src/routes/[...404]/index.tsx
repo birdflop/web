@@ -2,7 +2,7 @@ import { component$, $, useOnDocument } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
-import { HomeIcon } from 'lucide-qwik';
+import { Home } from 'lucide-icons-qwik';
 import Background from '~/components/images/background.png?jsx';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
@@ -35,7 +35,7 @@ export default component$(() => {
         </p>
         <div class="flex mt-4">
           <Link href="/" class="lum-btn lum-pad-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
-            <HomeIcon size={36} /> Go back home
+            <Home size={36} /> Go back home
           </Link>
         </div>
       </div>

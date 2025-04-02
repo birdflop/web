@@ -68,9 +68,9 @@ importers:
       eslint-plugin-qwik:
         specifier: 1.12.1
         version: 1.12.1(eslint@8.57.1)(typescript@5.8.2)
-      lucide-qwik:
-        specifier: ^1.0.0
-        version: 1.0.0
+      lucide-icons-qwik:
+        specifier: ^0.487.0
+        version: 0.487.0
       prisma:
         specifier: 6.5.0
         version: 6.5.0(typescript@5.8.2)
@@ -1825,9 +1825,9 @@ packages:
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
 
-  lucide-qwik@1.0.0:
-    resolution: {integrity: sha512-AEcUfXOiXL4/MWf2kz/MPdjs2ydveetJ5szziFsb0kWhXQbJpXLg9xI9oOtuse0gxf0QiQswNhiAnm3Dv2PO6A==}
-    engines: {node: '>=15.0.0'}
+  lucide-icons-qwik@0.487.0:
+    resolution: {integrity: sha512-X1gjQXdxBovmeLZUGgqdDJBuq6FB+wp2BVfovlAQkXSxvGW2PM9S15OlfDo645KIHNidpDs8EdJd4ApsiIoJUQ==}
+    engines: {node: '>=16.8.0 <18.0.0 || >=18.11', npm: please-use-pnpm, pnpm: '>=8.6.12', yarn: please-use-pnpm}
 
   markdown-extensions@2.0.0:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
@@ -4281,7 +4281,7 @@ snapshots:
 
   longest-streak@3.1.0: {}
 
-  lucide-qwik@1.0.0: {}
+  lucide-icons-qwik@0.487.0: {}
 
   markdown-extensions@2.0.0: {}
 

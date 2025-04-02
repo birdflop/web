@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Header } from '@luminescent/ui-qwik';
-import { FileTextIcon } from 'lucide-qwik';
+import { BookText } from 'lucide-icons-qwik';
 
 import { defaults, v3formats } from '~/components/util/PresetUtils';
 
@@ -24,7 +24,7 @@ export default component$(() => {
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 min-h-svh">
       <div>
         <h1 class="flex gap-4 items-center text-gray-100 text-2xl sm:text-4xl font-bold my-12 drop-shadow-lg">
-          <FileTextIcon size={64} /> RGBirdflop API Docs
+          <BookText size={64} /> RGBirdflop API Documentation
         </h1>
         <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mb-3 drop-shadow-lg">
           Get Started

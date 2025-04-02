@@ -2,7 +2,7 @@ import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Blobs, Header } from '@luminescent/ui-qwik';
-import { BoxIcon, ShoppingCartIcon } from 'lucide-qwik';
+import { Package, ShoppingCart } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export const plans = {
@@ -92,7 +92,7 @@ export default component$(() => {
       <div class="justify-center flex relative py-10 sm:py-24">
         <div class="flex flex-col gap-8">
           <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold sm:mb-4 text-center drop-shadow-lg">
-            <ShoppingCartIcon size={64} /> Order your new server
+            <ShoppingCart size={64} /> Order your new server
           </h1>
           <Header subheader="This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.">
             Pick your plan
@@ -265,7 +265,7 @@ export default component$(() => {
 
           <Anchor id="summary" />
           {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6">
-            <BoxIcon size={72} class="sm:mx-5 flex" />
+            <Package size={72} class="sm:mx-5 flex" />
             <div class="flex flex-1 flex-col gap-2">
               <Header>
                 Order Summary
@@ -283,7 +283,7 @@ export default component$(() => {
             <div class="flex flex-1 gap-4 justify-end">
               <a class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
                 href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&server_name=${store.name}&server_description=${store.desc}&billing_cycle=monthly`}>
-                <ShoppingCartIcon size={36}/> Add to cart
+                <ShoppingCart size={36}/> Add to cart
               </a>
             </div>
           </div>}

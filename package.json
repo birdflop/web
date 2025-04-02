@@ -51,7 +51,7 @@
     "chart.js": "^4.4.8",
     "eslint": "^8.57.0",
     "eslint-plugin-qwik": "1.12.1",
-    "lucide-qwik": "^1.0.0",
+    "lucide-icons-qwik": "^0.487.0",
     "prisma": "6.5.0",
     "qwik-ionicons": "^1.0.5",
     "qwik-speak": "^0.23.0",

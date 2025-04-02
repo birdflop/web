@@ -2,7 +2,7 @@ import { component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
-import { BoxIcon, CopyIcon, SaveIcon, TrashIcon } from 'lucide-qwik';
+import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Gradient } from '~/components/util/HexUtils';
 import type { defaults } from '~/components/util/PresetUtils';
@@ -110,18 +110,18 @@ export default component$(() => {
                     if (isBrowser) setCookies('presets', { savedPresets: store.savedPresets });
                   }}>
                     {store.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
-                      <TrashIcon size={20} /> Remove
+                      <Trash size={20} /> Remove
                     </> : <>
-                      <SaveIcon size={20} /> Save
+                      <Save size={20} /> Save
                     </>}
                   </button>
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
                     navigator.clipboard.writeText(JSON.stringify(preset));
                   }}>
-                    <CopyIcon size={20} /> Copy
+                    <Copy size={20} /> Copy
                   </button>
                   <DropdownRaw id={`use-${i}`} hover
-                    display={<div class="flex items-center gap-3"><BoxIcon size={20} />Use</div>}
+                    display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
                     class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
                       {t('nav.hexGradient@@RGBirdflop')}
@@ -162,7 +162,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: '/branding/icon.png',
+      content: '/branding/.png',
     },
   ],
 };

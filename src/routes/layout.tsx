@@ -4,7 +4,7 @@ import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 import { Link } from '@builder.io/qwik-city';
-import { CookieIcon } from 'lucide-qwik';
+import { Cookie } from 'lucide-icons-qwik';
 
 export default component$(() => {
   const store = useStore({
@@ -66,7 +66,7 @@ export default component$(() => {
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} id="cookieprompt">
           <Header subheader="We use cookies to automatically save and load your preferences.">
-            <CookieIcon /> Cookies
+            <Cookie /> Cookies
           </Header>
           <div class="flex flex-wrap items-center justify-end gap-2">
             <Link class="lum-btn lum-bg-transparent lum-pad-xs" href="/privacy">

@@ -1,7 +1,7 @@
 import { component$, useOnDocument, $ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
-import { GithubIcon } from 'lucide-qwik';
+import { Github } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
@@ -109,7 +109,7 @@ export default component$(() => {
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/botflop">
-              <GithubIcon size={24} />
+              <Github size={24} />
               Learn More
             </a>
           </div>
@@ -189,7 +189,7 @@ export default component$(() => {
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/birdtickets">
-              <GithubIcon size={24} />
+              <Github size={24} />
               Learn More
             </a>
           </div>
