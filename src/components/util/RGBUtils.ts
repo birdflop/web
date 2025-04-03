@@ -108,6 +108,36 @@ export function getRandomColor() {
   return color;
 }
 
+export function disperseColors(colors: typeof defaults.colors) {
+  const newColors = colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (colors.length - 1)) * i }));
+  return newColors;
+}
+
+export function swapItems(array: any[], indexA: number, indexB: number) {
+  // check if the index is out of bounds
+  const arrLength = array.length;
+  if (indexB < 0) indexB = arrLength - 1;
+  else if (indexB >= arrLength) indexB = 0;
+
+  // create a new array to avoid mutating the original
+  const arr = [...array];
+
+  // swap the positions if the item has a pos property
+  if (arr[indexA].pos !== undefined && arr[indexB].pos !== undefined) {
+    const currentPos = Number(`${arr[indexA].pos}`);
+    arr[indexA].pos = arr[indexB].pos;
+    arr[indexB].pos = currentPos;
+  }
+  console.log(arr[indexA], arr[indexB]);
+
+  // swap the items in the array
+  const temp = arr[indexA];
+  arr[indexA] = arr[indexB];
+  arr[indexB] = temp;
+
+  return arr;
+}
+
 export function getAnimFrames(store: typeof defaults) {
   if (store.colors.length < 2) return { OutputArray: [], frames: [] };
 

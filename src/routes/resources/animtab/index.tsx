@@ -1,10 +1,10 @@
-import { $, component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, loadPreset, types, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, getAnimFrames, getBrightness, getRandomColor, hexToHSL } from '~/components/util/RGBUtils';
+import { AnimationOutput, convertToHex, convertToRGB, getAnimFrames, hexToHSL } from '~/components/util/RGBUtils';
 
-import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
+import { Dropdown, Toggle, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -12,6 +12,9 @@ import { rgbDefaults } from '../rgb';
 import { Gradient } from '~/components/util/HexUtils';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
+import ColorList from '~/components/rgb/ColorList';
+import { ChevronDown, Clipboard, Palette } from 'lucide-icons-qwik';
+import Output from '~/components/rgb/Output';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -59,10 +62,8 @@ export default component$(() => {
   });
 
   const tmpstore: {
-    opened: {
-      id: number,
-      type: number,
-    },
+    threshold: number,
+    sectionsOpened: string[],
     alerts: {
       class: string,
       text: string,
@@ -70,30 +71,15 @@ export default component$(() => {
     frames: (string | null)[][],
     frame: number,
   } = useStore({
-    opened: {
-      id: -1,
-      type: 0,
-    },
-    alerts: [],
+    threshold: 50,
+    sectionsOpened: [],
+    alerts: [] as {
+      class: string,
+      text: string,
+    }[],
     frames: [],
     frame: 0,
   }, { deep: true });
-
-  const handleSwap = $((currentIndex: number, newIndex: number) => {
-    // check if the index is out of bounds
-    const colorsLength = store.colors.length;
-    if (newIndex < 0) {
-      newIndex = colorsLength - 1;
-    } else if (newIndex >= colorsLength) {
-      newIndex = 0;
-    }
-
-    const newColors = [...store.colors];
-    const currentPos = Number(`${store.colors[currentIndex].pos}`);
-    newColors[currentIndex].pos = newColors[newIndex].pos;
-    newColors[newIndex].pos = currentPos;
-    store.colors = sortColors(newColors);
-  });
 
   const modalRef = useSignal<HTMLDialogElement>();
 
@@ -176,11 +162,27 @@ export default component$(() => {
 
         <ColorMap store={store} />
 
-        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-4">
-          <div class="hidden sm:flex flex-col gap-2 relative" id="colors">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-2 items-center justify-center">
-              {t('color.colors@@Colors')}
-            </h1>
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
+          <div class="flex flex-col gap-2 relative" id="column1">
+            <button class={{
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('colors') == -1) tmpstore.sectionsOpened.push('colors');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('colors'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <Palette size={26} />
+                {t('color.colors@@Colors')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('colors') != -1,
+              }}>
+                <ChevronDown size={20} />
+              </div>
+            </button>
             <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
               onIncrement$={() => {
                 animtabstore.length++;
@@ -191,144 +193,32 @@ export default component$(() => {
             >
               {t('animtab.length@@Gradient Length')}
             </NumberInput>
-            <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
-              onIncrement$={() => {
-                store.colorlength++;
-              }}
-              onDecrement$={() => {
-                store.colorlength--;
-              }}
-            >
-              {t('color.colorLength@@Characters per color')}
-            </NumberInput>
-            <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
-              onChange$={(e, el) => {
-                let colorAmount = Number(el.value);
-                if (colorAmount < 2) return;
-                if (colorAmount > store.text.length) return colorAmount = store.text.length;
-                const newColors = [];
-                for (let i = 0; i < colorAmount; i++) {
-                  if (store.colors[i]) newColors.push(store.colors[i]);
-                  else newColors.push({ hex: getRandomColor(), pos: 100 });
-                }
-                store.colors = newColors;
-              }}
-              onIncrement$={() => {
-                const newColors = [...store.colors, {
-                  hex: getRandomColor(),
-                }];
-                store.colors = newColors.map((color, i) => ({
-                  hex: color.hex,
-                  pos: (100 / (newColors.length - 1)) * i,
-                }));
-              }}
-              onDecrement$={() => {
-                const newColors = store.colors.slice(0);
-                newColors.pop();
-                store.colors = newColors.map((color, i) => ({
-                  hex: color.hex,
-                  pos: (100 / (newColors.length - 1)) * i,
-                }));
-              }}
-            >
-              {t('color.colorAmount@@Color Amount')}
-            </NumberInput>
-            <div class="flex gap-2">
-              <button class="lum-btn lum-pad-equal-xs" onClick$={() => {
-                const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
-                store.colors = newColors;
-              }}>
-                randomize
-              </button>
-              <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
-                const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
-                store.colors = newColors;
-              }}>
-                Disperse
-              </button>
-            </div>
-            <div class="flex flex-col gap-2">
-              {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
-                <div class="flex flex-col rounded-md">
-                  <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
-                    ^
-                  </button>
-                  <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
-                    v
-                  </button>
-                </div>
-                <div class="flex flex-col justify-end gap-1">
-                  <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
-                  <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
-                    class={{
-                      'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                      'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-                      'lum-input w-full lum-pad-xs hover:': true,
-                    }}
-                    style={`background: ${color.hex};`}
-                    value={color.hex}
-                    onInput$={(e, el) => {
-                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                      picker.dataset.value = el.value;
-                      picker.dispatchEvent(new Event('input'));
-                    }}
-                    onMouseUp$={() => {
-                      const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
-                      picker.dataset.value = color.hex;
-                      picker.dispatchEvent(new Event('input'));
-                      if (tmpstore.opened.id == i && tmpstore.opened.type == 1) return tmpstore.opened.id = -1;
-                      else tmpstore.opened = { id: i, type: 1 };
-                      const abortController = new AbortController();
-                      document.addEventListener('click', (e) => {
-                        if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
-                          tmpstore.opened.id = -1;
-                          abortController.abort();
-                        }
-                      }, { signal: abortController.signal });
-                    }}
-                  />
-                </div>
-                <div class="flex flex-col justify-end">
-                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
-                    const newColors = store.colors.slice(0);
-                    newColors.splice(i, 1);
-                    store.colors = newColors;
-                  }}>
-                    x
-                  </button>
-                </div>
-                <div
-                  id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-                    'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
-                    'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 1,
-                  }}>
-                  <ColorPicker
-                    id={`colorlist-color-${i + 1}-picker`}
-                    value={color.hex}
-                    onInput$={newColor => {
-                      const newColors = store.colors.slice(0);
-                      newColors[i].hex = newColor;
-                      store.colors = sortColors(newColors);
-                    }}
-                    showInput={false}
-                  />
-                </div>
-              </div>,
-              )}
-            </div>
+            <ColorList store={store} hidden={tmpstore.sectionsOpened.indexOf('colors') == -1} />
           </div>
 
-          <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-3 items-center justify-center">
-              {t('color.inputs@@Inputs')}
-            </h1>
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
+            <button class={{
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('output') == -1) tmpstore.sectionsOpened.push('output');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('output'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <Clipboard size={26} />
+                {t('color.output@@Output')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('output') != -1,
+              }}>
+                <ChevronDown size={20} />
+              </div>
+            </button>
 
-            <div class="flex flex-col gap-1">
-              <label for="input">
-                {t('color.inputText@@Input Text')}
-              </label>
-              <input class="lum-input" id="input" value={store.text} placeholder="birdflop" onInput$={(e, el) => { store.text = el.value; }}/>
-            </div>
+            <Output store={store} tmpstore={tmpstore} hidden={tmpstore.sectionsOpened.indexOf('output') == -1}
+              value={AnimationOutput({ ...store, ...animtabstore })} />
 
             <div class="flex flex-col md:grid grid-cols-2 gap-2">
               <div class="flex flex-col gap-1">
