@@ -74,9 +74,6 @@ importers:
       prisma:
         specifier: 6.5.0
         version: 6.5.0(typescript@5.8.2)
-      qwik-ionicons:
-        specifier: ^1.0.5
-        version: 1.0.5
       qwik-speak:
         specifier: ^0.23.0
         version: 0.23.0(@builder.io/qwik@1.12.1(vite@5.4.14(@types/node@22.13.14)(lightningcss@1.29.2)))
@@ -2116,10 +2113,6 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
-
-  qwik-ionicons@1.0.5:
-    resolution: {integrity: sha512-bXOS4NNNQqftIkRY3jvA755YA/H9WTYGGqTYpzam8QVkyduVOjvkIvUJE+3BapCxBdO3QEb9+9Nl0cDHUdYzRg==}
-    engines: {node: '>=15.0.0'}
 
   qwik-speak@0.23.0:
     resolution: {integrity: sha512-7bxNbXpDzWhqQ0H3nKCWnTdeo4tpjVFoc1XpzO9W1izo6GgvNIjyvK4u/qCF1d9yzyuMJCfibA7CSzhoxSbkaQ==}
@@ -4758,8 +4751,6 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
-
-  qwik-ionicons@1.0.5: {}
 
   qwik-speak@0.23.0(@builder.io/qwik@1.12.1(vite@5.4.14(@types/node@22.13.14)(lightningcss@1.29.2))):
     dependencies:

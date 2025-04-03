@@ -4,8 +4,6 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { defaults, loadPreset, types, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
 import { AnimationOutput, convertToHex, convertToRGB, getAnimFrames, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
 
-import { Add, BarChartOutline, ChevronDown, ChevronUp, CloseOutline, ColorFillOutline, DiceOutline, DownloadOutline, GlobeOutline, LinkOutline, SaveOutline, SettingsOutline, ShareOutline, Text, TrashOutline } from 'qwik-ionicons';
-
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
@@ -211,7 +209,7 @@ export default component$(() => {
           <div id="add-button" class={{
             'absolute -mt-1 -ml-3 w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
           }}>
-            <Add width="19" />
+            +
           </div>
           {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
             onMouseDown$={(e, el) => {
@@ -277,7 +275,7 @@ export default component$(() => {
                     newColors.splice(i, 1);
                     store.colors = sortColors(newColors);
                   }}>
-                    <TrashOutline width="20" />
+                    x
                   </button>
                 }
                 <ColorPicker
@@ -296,36 +294,9 @@ export default component$(() => {
           )}
         </div>
 
-        <div id="mobile-navbuttons" class="my-3 sm:hidden">
-          <div class="flex gap-2">
-            <button class="lum-btn lum-pad-equal-md" aria-label="Colors" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('hidden', 'flex');
-              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
-            }}>
-              <ColorFillOutline width="24" />
-            </button>
-            <button class="lum-btn lum-pad-equal-md" aria-label="Inputs" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('flex', 'hidden');
-              document.getElementById('inputs')!.classList.replace('hidden', 'flex');
-              document.getElementById('formatting')!.classList.replace('flex', 'hidden');
-            }}>
-              <SettingsOutline width="24" />
-            </button>
-            <button class="lum-btn lum-pad-equal-md" aria-label="Formatting" onClick$={() => {
-              document.getElementById('colors')!.classList.replace('flex', 'hidden');
-              document.getElementById('inputs')!.classList.replace('flex', 'hidden');
-              document.getElementById('formatting')!.classList.replace('hidden', 'flex');
-            }}>
-              <Text width="24" class="fill-white" />
-            </button>
-          </div>
-        </div>
-
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-2 relative" id="colors">
             <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-2 items-center justify-center">
-              <ColorFillOutline width="30" />
               {t('color.colors@@Colors')}
             </h1>
             <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
@@ -385,23 +356,23 @@ export default component$(() => {
                 const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
                 store.colors = newColors;
               }}>
-                <DiceOutline width={24} class="fill-current" />
+                randomize
               </button>
               <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
                 const newColors = store.colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (store.colors.length - 1)) * i }));
                 store.colors = newColors;
               }}>
-                <BarChartOutline width={24} /> Disperse
+                Disperse
               </button>
             </div>
             <div class="flex flex-col gap-2">
               {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
                 <div class="flex flex-col rounded-md">
                   <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => handleSwap(i, i - 1)}>
-                    <ChevronUp width={24} />
+                    ^
                   </button>
                   <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => handleSwap(i, i + 1)}>
-                    <ChevronDown width={24} />
+                    v
                   </button>
                 </div>
                 <div class="flex flex-col justify-end gap-1">
@@ -441,7 +412,7 @@ export default component$(() => {
                     newColors.splice(i, 1);
                     store.colors = newColors;
                   }}>
-                    <TrashOutline width="20" />
+                    x
                   </button>
                 </div>
                 <div
@@ -467,7 +438,6 @@ export default component$(() => {
 
           <div class="flex flex-col gap-2 md:col-span-2" id="inputs">
             <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold text-gray-50 gap-3 items-center justify-center">
-              <SettingsOutline width="30" />
               {t('color.inputs@@Inputs')}
             </h1>
 
@@ -595,7 +565,6 @@ export default component$(() => {
             }
             <div class="flex flex-col gap-2 mt-4">
               <h1 class="hidden sm:flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center justify-center">
-                <SaveOutline width="26" />
                 {t('color.presets@@Presets')}
               </h1>
               <div class="grid grid-cols-2 gap-2">
@@ -667,18 +636,18 @@ export default component$(() => {
                       value: JSON.stringify(preset),
                     }))
                   } display={<span class="flex gap-3 flex-1">
-                    <DownloadOutline width="20" /> Load saved preset
+                    Load saved preset
                   </span>}>
                     {t('color.savedPresets@@Saved Presets')}
                   </Dropdown>
                   <div class="grid grid-cols-2 gap-2">
                     <a class="lum-btn" href="/resources/rgb/presets">
-                      <GlobeOutline width="20" /> Browse
+                      Browse
                     </a>
                     <button class="lum-btn" id="save" onClick$={() => {
                       modalRef.value?.showModal();
                     }}>
-                      <SaveOutline width="20" /> {t('color.save@@Save')}
+                      {t('color.save@@Save')}
                     </button>
                     <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
                       <div class="flex flex-col gap-3">
@@ -692,7 +661,7 @@ export default component$(() => {
                           <button class="lum-btn" onClick$={() => {
                             modalRef.value?.close();
                           }}>
-                            <CloseOutline width="20" /> {t('color.cancel@@Cancel')}
+                            {t('color.cancel@@Cancel')}
                           </button>
                           <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={() => {
                             const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
@@ -717,7 +686,7 @@ export default component$(() => {
                               tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                             }, 2000);
                           }}>
-                            <SaveOutline width="20" /> {t('color.save@@Save')}
+                            {t('color.save@@Save')}
                           </button>
                         </div>
                       </div>
@@ -783,7 +752,7 @@ export default component$(() => {
                         tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                       }, 2000);
                     }}>
-                      <ShareOutline width={24} /> {t('color.export@@Export')}
+                      {t('color.export@@Export')}
                     </button>
                     <button class="lum-btn lum-pad-sm" id="createurl" onClick$={() => {
                       const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
@@ -807,7 +776,7 @@ export default component$(() => {
                         tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
                       }, 2000);
                     }}>
-                      <LinkOutline width={24} /> {t('color.url@@Get URL')}
+                      {t('color.url@@Get URL')}
                     </button>
                   </div>
                 </div>
@@ -822,7 +791,6 @@ export default component$(() => {
 
           <div class="flex flex-col gap-2" id="formatting">
             <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center mb-7">
-              <Text width="30" />
               {t('color.colors@@Formatting')}
             </h1>
             <Toggle id="bold" checked={store.bold}
