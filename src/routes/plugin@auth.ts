@@ -34,7 +34,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         }),
       ],
       adapter: prisma ? PrismaAdapter(prisma) : undefined,
-      trustHost: true,
+      // trustHost: true, // uncomment this if previewing on localhost
       secret: secret ?? Math.random().toString(36).slice(2),
     };
   },
