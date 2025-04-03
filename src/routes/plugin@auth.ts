@@ -6,6 +6,7 @@ import Discord from '@auth/qwik/providers/discord';
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
     const databaseUrl = event?.platform?.env?.DATABASE_URL;
+    const secret = event?.platform?.env?.AUTH_SECRET;
     const prisma = getPrismaClient(databaseUrl);
 
     return {
@@ -32,7 +33,9 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: PrismaAdapter(prisma),
+      adapter: prisma ? PrismaAdapter(prisma) : undefined,
+      trustHost: true,
+      secret: secret ?? Math.random().toString(36).slice(2),
     };
   },
 );
