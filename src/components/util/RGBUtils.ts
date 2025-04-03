@@ -10,21 +10,20 @@ export function hex(c: number) {
   return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
 }
 
-function hexToHSL(hex: string) {
-  // Convert HEX to RGB
-  const r = parseInt(hex.substring(1, 3), 16) / 255;
-  const g = parseInt(hex.substring(3, 5), 16) / 255;
-  const b = parseInt(hex.substring(5, 7), 16) / 255;
-
-  // Find min and max values of RGB
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  const l = (max + min) / 2;
-  let h = 0, s = (max + min) / 2;
-
+export function hexToHSL(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return { h: 100, s: 100, l: 100 };
+  const r = parseInt(result[1], 16) / 255;
+  const g = parseInt(result[2], 16) / 255;
+  const b = parseInt(result[3], 16) / 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h = 0;
+  let s,
+    l = (max + min) / 2;
   if (max === min) {
-    h = s = 0; // Achromatic
-  }
-  else {
+    h = s = 0; // achromatic
+  } else {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
     switch (max) {
@@ -35,7 +34,11 @@ function hexToHSL(hex: string) {
     h /= 6;
   }
 
-  return { h: h * 360, s: s * 100, l: l * 100 };
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
+
+  return { h, s, l };
 }
 
 export function getSignificantPoints(gradient: string[], threshold: number) {

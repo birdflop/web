@@ -3,13 +3,14 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { defaults, loadPreset, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, generateOutput, getBrightness, getRandomColor, getSignificantPoints, hexToHSL } from '~/components/util/RGBUtils';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 import { ChevronDown, ChevronUp, Clipboard, Dices, Download, Globe, Link, Ellipsis, Palette, Plus, Save, Settings, Share, Sparkles, Terminal, Trash, Type, X } from 'lucide-icons-qwik';
+import MCBackground from '~/components/images/MCBackground.png?jsx';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -25,6 +26,7 @@ export const rgbDefaults = {
   italic: defaults.italic,
   underline: defaults.underline,
   strikethrough: defaults.strikethrough,
+  previewStyle: defaults.previewStyle,
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
@@ -67,6 +69,7 @@ export default component$(() => {
       type: 0,
     },
     sectionsOpened: [],
+    previewStyle: 'default',
     alerts: [] as {
       class: string,
       text: string,
@@ -153,57 +156,123 @@ export default component$(() => {
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
 
-        <label for="input" class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-          <Terminal size={26} />
-          {t('color.inputText@@Input Text')}
-          <span class="text-gray-400 text-sm font-normal">
-            {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
-          </span>
+        <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 ">
+          <div class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
+            <Terminal size={26} />
+            {t('color.inputText@@Input Text')}
+            <span class="text-gray-400 text-sm font-normal">
+              {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
+            </span>
+          </div>
+          {store.previewStyle == 'chat' &&
+            <div class={{
+              'relative lum-bg-gray-800/50 rounded-lg': true,
+              'break-all font-mc': true,
+              'font-mc-bold': store.bold,
+              'font-mc-italic': store.italic,
+              'font-mc-bold-italic': store.bold && store.italic,
+            }}>
+              <MCBackground class="overflow-hidden rounded-md" id="bg" alt="background" />
+              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl max-h-64 break-words"
+                style={{ textShadow: '2px 2px 0 #373737' }}>
+                <p>{'<RGBirdflop> Type here!'}</p>
+                <p>{(() => {
+                  if (!store.text) return '\u00A0';
+
+                  const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                  if (colors.length < 2) return store.text;
+
+                  const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
+
+                  let hex = '';
+                  const segments = [];
+                  let index = 0;
+                  const textArray = Array.from(store.text);
+                  while (index < textArray.length) {
+                    segments.push(textArray.slice(index, index + store.colorlength).join(''));
+                    index += store.colorlength;
+                  }
+                  return segments.map((segment, i) => {
+                    const rgb = gradient.next();
+                    hex = convertToHex(rgb);
+                    const shadow = hexToHSL(hex);
+                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+                    shadow.l = Math.round(shadow.l * 0.2);
+                    return (
+                      <span key={`segment-${i}`} style={{
+                        color: `#${hex};`,
+                        textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                      }} class={{
+                        'underline': store.underline,
+                        'strikethrough': store.strikethrough,
+                        'underline-strikethrough': store.underline && store.strikethrough,
+                      }}>
+                        {segment.replace(/ /g, '\u00A0')}
+                      </span>
+                    );
+                  });
+                })()}
+                </p>
+                <textarea class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-pad-md resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
+                  value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
+              </div>
+              <p class="absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
+                style={{ textShadow: '2px 2px 0 #373737' }}>
+                {generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+              </p>
+            </div>
+          }
+          {store.previewStyle == 'default' &&
+            <div class={{
+              'relative w-full': true,
+              'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
+              'font-mc-bold': store.bold,
+              'font-mc-italic': store.italic,
+              'font-mc-bold-italic': store.bold && store.italic,
+            }}>
+              <p class="lum-bg-gray-800/50 rounded-lg lum-pad-md w-full h-full pointer-events-none whitespace-pre-wrap!">
+                {(() => {
+                  if (!store.text) return '\u00A0';
+
+                  const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                  if (colors.length < 2) return store.text;
+
+                  const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
+
+                  let hex = '';
+                  const segments = [];
+                  let index = 0;
+                  const textArray = Array.from(store.text);
+                  while (index < textArray.length) {
+                    segments.push(textArray.slice(index, index + store.colorlength).join(''));
+                    index += store.colorlength;
+                  }
+                  return segments.map((segment, i) => {
+                    const rgb = gradient.next();
+                    hex = convertToHex(rgb);
+                    const shadow = hexToHSL(hex);
+                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+                    shadow.l = Math.round(shadow.l * 0.2);
+                    return (
+                      <span key={`segment-${i}`} style={{
+                        color: `#${hex};`,
+                        textShadow: `4px 4px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                      }} class={{
+                        'underline': store.underline,
+                        'strikethrough': store.strikethrough,
+                        'underline-strikethrough': store.underline && store.strikethrough,
+                      }}>
+                        {segment.replace(/ /g, '\u00A0')}
+                      </span>
+                    );
+                  });
+                })()}
+              </p>
+              <textarea class="absolute top-0 lum-input lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
+                value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
+            </div>
+          }
         </label>
-        <div class={{
-          'relative': true,
-          'text-3xl md:text-4xl xl:text-5xl mt-2 mb-3 break-all font-mc tracking-tight': true,
-          'font-mc-bold': store.bold,
-          'font-mc-italic': store.italic,
-          'font-mc-bold-italic': store.bold && store.italic,
-        }}>
-          <h1 class="lum-bg-gray-800/50 rounded-lg lum-pad-md w-full h-full pointer-events-none whitespace-pre-wrap!">
-            {(() => {
-              if (!store.text) return '\u00A0';
-
-              const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-              if (colors.length < 2) return store.text;
-
-              const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
-
-              let hex = '';
-              const segments = [];
-              let index = 0;
-              const textArray = Array.from(store.text);
-              while (index < textArray.length) {
-                segments.push(textArray.slice(index, index + store.colorlength).join(''));
-                index += store.colorlength;
-              }
-              return segments.map((segment, i) => {
-                hex = convertToHex(gradient.next());
-                return (
-                  <span key={`segment-${i}`} style={`color: #${hex};`} class={{
-                    'underline': store.underline,
-                    'strikethrough': store.strikethrough,
-                    'underline-strikethrough': store.underline && store.strikethrough,
-                  }}>
-                    {segment.replace(/ /g, '\u00A0')}
-                  </span>
-                );
-              });
-            })()}
-          </h1>
-          <textarea class="absolute top-0 lum-input lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
-            value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
-        </div>
-        {tmpstore.alerts.map((alert, i) => (
-          <p key={`alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-        ))}
 
         <div class={{
           'w-full h-2 mb-5 rounded-full items-center relative': true,
@@ -538,6 +607,25 @@ export default component$(() => {
                   }, 2000);
                 }}
               />
+              {tmpstore.alerts.map((alert, i) => (
+                <p key={`alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
+              ))}
+              <Dropdown id="previewstyle" value={store.previewStyle} class={{ 'w-full': true }} onChange$={
+                (e, el) => {
+                  store.previewStyle = el.value;
+                }
+              } values={[
+                {
+                  name: t('color.previewstyle.default@@Default'),
+                  value: 'default',
+                },
+                {
+                  name: t('color.previewstyle.chat@@Minecraft Chat'),
+                  value: 'chat',
+                },
+              ]}>
+                {t('color.previewStyle@@Preview Style')}
+              </Dropdown>
             </div>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {

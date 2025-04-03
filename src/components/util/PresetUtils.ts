@@ -163,6 +163,7 @@ export const defaults = {
   italic: false,
   underline: false,
   strikethrough: false,
+  previewStyle: 'default',
 };
 
 function decompress(input: number, expectedValues: number) {
