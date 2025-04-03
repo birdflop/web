@@ -2,7 +2,7 @@ import { $, component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, loadPreset, types, v3formats, presets as presetlist } from '~/components/util/PresetUtils';
-import { AnimationOutput, convertToHex, convertToRGB, getAnimFrames, getBrightness, getRandomColor } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, getAnimFrames, getBrightness, getRandomColor, hexToHSL } from '~/components/util/RGBUtils';
 
 import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
@@ -10,6 +10,8 @@ import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtil
 import { isBrowser } from '@builder.io/qwik/build';
 import { rgbDefaults } from '../rgb';
 import { Gradient } from '~/components/util/HexUtils';
+import Input from '~/components/rgb/Input';
+import ColorMap from '~/components/rgb/ColorMap';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -139,22 +141,11 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('animtab.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-9">
+        <h2 class="text-gray-50 mt-1 mb-5">
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <label for="output">
-          <span class="font-bold mr-2 text-gray-100">{t('color.output@@Output')}</span>
-          <span class="text-gray-500">- {t('color.outputSubtitle@@Copy-paste this for RGB text!')}</span>
-        </label>
-        <textarea id="output" class={{ 'lum-input whitespace-pre h-32 w-full font-mono text-nowrap text-sm mt-1': true }} value={AnimationOutput({ ...store, ...animtabstore })}/>
-
-        <h1 class={{
-          'text-3xl md:text-4xl xl:text-5xl my-4 break-all font-mc tracking-tight': true,
-          'font-mc-bold': store.bold,
-          'font-mc-italic': store.italic,
-          'font-mc-bold-italic': store.bold && store.italic,
-        }}>
+        <Input store={store}>
           {(() => {
             if (!store.text || !tmpstore.frames[0]) return '\u00A0';
 
@@ -162,137 +153,28 @@ export default component$(() => {
             if (!colors) return '\u00A0';
 
             const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
-            return segments.map((segment, i) => (
-              <span key={`char${i}`} style={`color: #${colors[i] ?? colors[i - 1] ?? colors[0]};`} class={{
+            let i = 0;
+            return segments.map((segment) => {
+              i = store.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
+              const color = `#${colors[i] ?? colors[i - 1] ?? colors[0]}`;
+              const shadow = hexToHSL(color);
+              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+              shadow.l = Math.round(shadow.l * 0.2);
+              return <span key={`char${i}`} style={{
+                color,
+                textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+              }} class={{
                 'underline': store.underline,
                 'strikethrough': store.strikethrough,
                 'underline-strikethrough': store.underline && store.strikethrough,
               }}>
                 {segment[0].replace(/ /g, '\u00A0')}
-              </span>
-            ));
+              </span>;
+            });
           })()}
-        </h1>
+        </Input>
 
-        <div class="w-full h-3 my-5 rounded-full items-center relative" id="colormap"
-          style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-          onMouseDown$={(e, el) => {
-            if (e.target != el) return;
-            const rect = el.getBoundingClientRect();
-            const pos = ((e.clientX - rect.left) / rect.width) * 100;
-            if (store.colors.find(c => c.pos == pos)) return;
-            const newColors = store.colors.slice(0);
-            newColors.push({ hex: getRandomColor(), pos });
-            store.colors = sortColors(newColors);
-          }}
-          onMouseEnter$={(e, el) => {
-            const abortController = new AbortController();
-            el.addEventListener('mousemove', e => {
-              const addbutton = document.getElementById('add-button')!;
-              if (e.target != el) {
-                addbutton.classList.add('opacity-0');
-                return;
-              }
-              const rect = el.getBoundingClientRect();
-              const pos = ((e.clientX - rect.left) / rect.width) * 100;
-              if (store.colors.find(c => c.pos == pos)) return;
-              addbutton.classList.remove('opacity-0');
-              addbutton.style.left = `${pos}%`;
-            }, { signal: abortController.signal });
-            el.addEventListener('mouseleave', () => {
-              const addbutton = document.getElementById('add-button')!;
-              addbutton.classList.add('opacity-0');
-              abortController.abort();
-            }, { signal: abortController.signal });
-          }}
-        >
-          <div id="add-button" class={{
-            'absolute -mt-1 -ml-3 w-5 h-5 rounded-md border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
-          }}>
-            +
-          </div>
-          {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
-            onMouseDown$={(e, el) => {
-              const abortController = new AbortController();
-              const colormap = document.getElementById('colormap')!;
-              const rect = colormap.getBoundingClientRect();
-              document.addEventListener('mousemove', e => {
-                tmpstore.opened.id = -1;
-                el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
-                el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
-                let pos = ((e.clientX - rect.left) / rect.width) * 100;
-                if (pos < 0) pos = 0;
-                if (pos > 100) pos = 100;
-                if (store.colors.find(c => c.pos == pos)) return;
-                const newColors = store.colors.slice(0);
-                newColors[i].pos = pos;
-                store.colors = newColors;
-              }, { signal: abortController.signal });
-              document.addEventListener('mouseup', () => {
-                el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
-                el.style.filter = '';
-                abortController.abort();
-                store.colors = sortColors(store.colors);
-              }, { signal: abortController.signal });
-            }} style={{
-              left: `${color.pos}%`,
-            }}
-            preventdefault:mousedown
-          >
-            <div key={`colormap-color-${i + 1}`} id={`colormap-color-${i + 1}`}
-              class={{
-                'transition-transform w-5 h-5 hover:scale-125 rounded-md shadow-md border': true,
-                'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-              }}
-              style={`background: ${color.hex};`}
-              onMouseUp$={() => {
-                const picker = document.getElementById(`colormap-color-${i + 1}-picker`)!;
-                picker.dataset.value = color.hex;
-                picker.dispatchEvent(new Event('input'));
-                const opened = tmpstore.opened;
-                if (opened.id == i && opened.type == 0) return tmpstore.opened.id = -1;
-                else tmpstore.opened = { id: i, type: 0 };
-                const abortController = new AbortController();
-                document.addEventListener('click', (e) => {
-                  if (e.target instanceof HTMLElement && !e.target.closest(`#colormap-color-${i + 1}`) && !e.target.closest(`#colormap-color-${i + 1}-popup`)) {
-                    tmpstore.opened.id = -1;
-                    abortController.abort();
-                  }
-                }, { signal: abortController.signal });
-              }}
-            />
-            <div id={`colormap-color-${i + 1}-popup`} stoppropagation:mousedown class="hidden sm:flex">
-              <div class={{
-                'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
-                'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 0,
-                'left-0 items-start': color.pos < 50,
-                'right-0 items-end': color.pos >= 50,
-              }}>
-                {store.colors.length > 2 &&
-                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
-                    const newColors = store.colors.slice(0);
-                    newColors.splice(i, 1);
-                    store.colors = sortColors(newColors);
-                  }}>
-                    x
-                  </button>
-                }
-                <ColorPicker
-                  id={`colormap-color-${i + 1}-picker`}
-                  value={color.hex}
-                  onInput$={newColor => {
-                    const newColors = store.colors.slice(0);
-                    newColors[i].hex = newColor;
-                    store.colors = sortColors(newColors);
-                  }}
-                  horizontal
-                />
-              </div>
-            </div>
-          </div>,
-          )}
-        </div>
+        <ColorMap store={store} />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-4">
           <div class="hidden sm:flex flex-col gap-2 relative" id="colors">

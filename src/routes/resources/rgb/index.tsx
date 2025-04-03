@@ -9,8 +9,9 @@ import { Dropdown, Toggle, NumberInput, ColorPicker } from '@luminescent/ui-qwik
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { ChevronDown, ChevronUp, Clipboard, Dices, Download, Globe, Link, Ellipsis, Palette, Plus, Save, Settings, Share, Sparkles, Terminal, Trash, Type, X } from 'lucide-icons-qwik';
-import MCBackground from '~/components/images/MCBackground.png?jsx';
+import { ChevronDown, ChevronUp, Clipboard, Dices, Download, Globe, Link, Ellipsis, Palette, Save, Settings, Share, Sparkles, Trash, Type, X } from 'lucide-icons-qwik';
+import Input from '~/components/rgb/Input';
+import ColorMap from '~/components/rgb/ColorMap';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -156,246 +157,46 @@ export default component$(() => {
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
 
-        <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 ">
-          <div class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
-            <Terminal size={26} />
-            {t('color.inputText@@Input Text')}
-            <span class="text-gray-400 text-sm font-normal">
-              {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
-            </span>
-          </div>
-          {store.previewStyle == 'chat' &&
-            <div class={{
-              'relative lum-bg-gray-800/50 rounded-lg': true,
-              'break-all font-mc': true,
-              'font-mc-bold': store.bold,
-              'font-mc-italic': store.italic,
-              'font-mc-bold-italic': store.bold && store.italic,
-            }}>
-              <MCBackground class="overflow-hidden rounded-md" id="bg" alt="background" />
-              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl max-h-64 break-words"
-                style={{ textShadow: '2px 2px 0 #373737' }}>
-                <p>{'<RGBirdflop> Type here!'}</p>
-                <p>{(() => {
-                  if (!store.text) return '\u00A0';
+        <Input store={store}>
+          {(() => {
+            if (!store.text) return '\u00A0';
 
-                  const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                  if (colors.length < 2) return store.text;
+            const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            if (colors.length < 2) return store.text;
 
-                  const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
+            const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
 
-                  let hex = '';
-                  const segments = [];
-                  let index = 0;
-                  const textArray = Array.from(store.text);
-                  while (index < textArray.length) {
-                    segments.push(textArray.slice(index, index + store.colorlength).join(''));
-                    index += store.colorlength;
-                  }
-                  return segments.map((segment, i) => {
-                    const rgb = gradient.next();
-                    hex = convertToHex(rgb);
-                    const shadow = hexToHSL(hex);
-                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-                    shadow.l = Math.round(shadow.l * 0.2);
-                    return (
-                      <span key={`segment-${i}`} style={{
-                        color: `#${hex};`,
-                        textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
-                      }} class={{
-                        'underline': store.underline,
-                        'strikethrough': store.strikethrough,
-                        'underline-strikethrough': store.underline && store.strikethrough,
-                      }}>
-                        {segment.replace(/ /g, '\u00A0')}
-                      </span>
-                    );
-                  });
-                })()}
-                </p>
-                <textarea class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-pad-md resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
-                  value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
-              </div>
-              <p class="absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
-                style={{ textShadow: '2px 2px 0 #373737' }}>
-                {generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-              </p>
-            </div>
-          }
-          {store.previewStyle == 'default' &&
-            <div class={{
-              'relative w-full': true,
-              'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
-              'font-mc-bold': store.bold,
-              'font-mc-italic': store.italic,
-              'font-mc-bold-italic': store.bold && store.italic,
-            }}>
-              <p class="lum-bg-gray-800/50 rounded-lg lum-pad-md w-full h-full pointer-events-none whitespace-pre-wrap!">
-                {(() => {
-                  if (!store.text) return '\u00A0';
-
-                  const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                  if (colors.length < 2) return store.text;
-
-                  const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
-
-                  let hex = '';
-                  const segments = [];
-                  let index = 0;
-                  const textArray = Array.from(store.text);
-                  while (index < textArray.length) {
-                    segments.push(textArray.slice(index, index + store.colorlength).join(''));
-                    index += store.colorlength;
-                  }
-                  return segments.map((segment, i) => {
-                    const rgb = gradient.next();
-                    hex = convertToHex(rgb);
-                    const shadow = hexToHSL(hex);
-                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-                    shadow.l = Math.round(shadow.l * 0.2);
-                    return (
-                      <span key={`segment-${i}`} style={{
-                        color: `#${hex};`,
-                        textShadow: `4px 4px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
-                      }} class={{
-                        'underline': store.underline,
-                        'strikethrough': store.strikethrough,
-                        'underline-strikethrough': store.underline && store.strikethrough,
-                      }}>
-                        {segment.replace(/ /g, '\u00A0')}
-                      </span>
-                    );
-                  });
-                })()}
-              </p>
-              <textarea class="absolute top-0 lum-input lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
-                value={store.text} spellcheck={false} onInput$={(e, el) => { store.text = el.value; }}/>
-            </div>
-          }
-        </label>
-
-        <div class={{
-          'w-full h-2 mb-5 rounded-full items-center relative': true,
-          'hidden': store.disperse,
-        }} id="colormap"
-        style={`background: linear-gradient(to right, ${sortColors(store.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
-        onMouseDown$={(e, el) => {
-          if (e.target != el) return;
-          const rect = el.getBoundingClientRect();
-          const pos = ((e.clientX - rect.left) / rect.width) * 100;
-          if (store.colors.find(c => c.pos == pos)) return;
-          const newColors = store.colors.slice(0);
-          newColors.push({ hex: getRandomColor(), pos });
-          store.colors = sortColors(newColors);
-        }}
-        onMouseEnter$={(e, el) => {
-          const abortController = new AbortController();
-          el.addEventListener('mousemove', e => {
-            const addbutton = document.getElementById('add-button')!;
-            if (e.target != el) {
-              addbutton.classList.add('opacity-0');
-              return;
+            let hex = '';
+            const segments = [];
+            let index = 0;
+            const textArray = Array.from(store.text);
+            while (index < textArray.length) {
+              segments.push(textArray.slice(index, index + store.colorlength).join(''));
+              index += store.colorlength;
             }
-            const rect = el.getBoundingClientRect();
-            const pos = ((e.clientX - rect.left) / rect.width) * 100;
-            if (store.colors.find(c => c.pos == pos)) return;
-            addbutton.classList.remove('opacity-0');
-            addbutton.style.left = `${pos}%`;
-          }, { signal: abortController.signal });
-          el.addEventListener('mouseleave', () => {
-            const addbutton = document.getElementById('add-button')!;
-            addbutton.classList.add('opacity-0');
-            abortController.abort();
-          }, { signal: abortController.signal });
-        }}
-        >
-          <div id="add-button" class={{
-            'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
-          }}>
-            <Plus size={19} />
-          </div>
-          {store.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${store.colors.length}`}
-            onMouseDown$={(e, el) => {
-              const abortController = new AbortController();
-              const colormap = document.getElementById('colormap')!;
-              const rect = colormap.getBoundingClientRect();
-              document.addEventListener('mousemove', e => {
-                tmpstore.opened.id = -1;
-                el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
-                el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
-                let pos = ((e.clientX - rect.left) / rect.width) * 100;
-                if (pos < 0) pos = 0;
-                if (pos > 100) pos = 100;
-                if (store.colors.find(c => c.pos == pos)) return;
-                const newColors = store.colors.slice(0);
-                newColors[i].pos = pos;
-                store.colors = newColors;
-              }, { signal: abortController.signal });
-              document.addEventListener('mouseup', () => {
-                el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
-                el.style.filter = '';
-                abortController.abort();
-                store.colors = sortColors(store.colors);
-              }, { signal: abortController.signal });
-            }} style={{
-              left: `${color.pos}%`,
-            }}
-            preventdefault:mousedown
-          >
-            <div key={`colormap-color-${i + 1}`} id={`colormap-color-${i + 1}`}
-              class={{
-                'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full shadow-md border': true,
-                'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
-              }}
-              style={`background: ${color.hex};`}
-              onMouseUp$={() => {
-                const picker = document.getElementById(`colormap-color-${i + 1}-picker`)!;
-                picker.dataset.value = color.hex;
-                picker.dispatchEvent(new Event('input'));
-                const opened = tmpstore.opened;
-                if (opened.id == i && opened.type == 0) return tmpstore.opened.id = -1;
-                else tmpstore.opened = { id: i, type: 0 };
-                const abortController = new AbortController();
-                document.addEventListener('click', (e) => {
-                  if (e.target instanceof HTMLElement && !e.target.closest(`#colormap-color-${i + 1}`) && !e.target.closest(`#colormap-color-${i + 1}-popup`)) {
-                    tmpstore.opened.id = -1;
-                    abortController.abort();
-                  }
-                }, { signal: abortController.signal });
-              }}
-            />
-            <div id={`colormap-color-${i + 1}-popup`} stoppropagation:mousedown class="hidden sm:flex">
-              <div class={{
-                'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
-                'opacity-0 scale-95 pointer-events-none': tmpstore.opened.id != i || tmpstore.opened.type != 0,
-                'left-0 items-start': color.pos < 50,
-                'right-0 items-end': color.pos >= 50,
-              }}>
-                {store.colors.length > 2 &&
-                  <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
-                    const newColors = store.colors.slice(0);
-                    newColors.splice(i, 1);
-                    store.colors = sortColors(newColors);
-                  }}>
-                    <Trash size={20} />
-                  </button>
-                }
-                <ColorPicker
-                  id={`colormap-color-${i + 1}-picker`}
-                  value={color.hex}
-                  onInput$={newColor => {
-                    const newColors = store.colors.slice(0);
-                    newColors[i].hex = newColor;
-                    store.colors = sortColors(newColors);
-                  }}
-                  horizontal
-                />
-              </div>
-            </div>
-          </div>,
-          )}
-        </div>
+            return segments.map((segment, i) => {
+              const rgb = gradient.next();
+              hex = convertToHex(rgb);
+              const shadow = hexToHSL(hex);
+              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+              shadow.l = Math.round(shadow.l * 0.2);
+              return (
+                <span key={`segment-${i}`} style={{
+                  color: `#${hex};`,
+                  textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                }} class={{
+                  'underline': store.underline,
+                  'strikethrough': store.strikethrough,
+                  'underline-strikethrough': store.underline && store.strikethrough,
+                }}>
+                  {segment.replace(/ /g, '\u00A0')}
+                </span>
+              );
+            });
+          })()}
+        </Input>
+
+        <ColorMap store={store} />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
