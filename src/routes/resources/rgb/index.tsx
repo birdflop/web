@@ -1,11 +1,11 @@
-import { $, component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
 import { defaults, v3formats } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, getSignificantPoints, hexToHSL } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/components/util/RGBUtils';
 
-import { Dropdown, Toggle, NumberInput } from '@luminescent/ui-qwik';
+import { Dropdown, Toggle } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -15,6 +15,9 @@ import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
 import Output from '~/components/rgb/Output';
 import Presets from '~/components/rgb/Presets';
+import Decode from '~/components/rgb/Decode';
+import Formatting from '~/components/rgb/Formatting';
+import FormatOptions from '~/components/rgb/FormatOptions';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -70,37 +73,6 @@ export default component$(() => {
       text: string,
     }[],
   }, { deep: true });
-
-  const decodeText = $((rgbtext: string, threshold: number) => {
-    const pattern = /(?:[&§]x((?:[&§][0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))([^§&#]*)/;
-    const spans = rgbtext.match(new RegExp(pattern, 'g'));
-    if (!spans) return;
-    let color = '#ffffff';
-    const colors = spans.map((string: string, i: number) => {
-      const result = string.match(pattern);
-      if (!result) return { hex: color, pos: 0 };
-      color = result[1]
-        ? `#${result[1].replace(/&/g, '')}`
-        : result[2]
-          ? `#${result[2]}`
-          : result[0];
-      return { hex: color, pos: (100 / (spans.length - 1)) * i };
-    });
-    const text = spans.map((string: string) => {
-      const result = string.match(pattern);
-      if (!result) return '';
-      return result[result.length - 1];
-    }).join('');
-    store.text = text ?? '';
-    const colorHexes = colors.map((color) => color.hex);
-    const significantPoints = getSignificantPoints(colorHexes, threshold);
-    const newColors = significantPoints.map((color) => {
-      const pos = colors.find(c => c.hex == color)?.pos ?? 0;
-      return { hex: color, pos };
-    });
-
-    store.colors = newColors;
-  });
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', store);
@@ -348,45 +320,9 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-300': true,
-              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('decode') == -1,
-              'max-h-[400px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('decode') != -1,
-            }} id="decode">
-              <p class="text-gray-500">{t('color.decodeDisclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
-              <label for="decode">
-                <span>{t('color.decode@@Decode')}</span>
-                <span class="text-gray-500"> - {t('color.decodeSubtitle@@Copy-paste an existing RGB text here to edit it')}</span>
-              </label>
-              <textarea id="decode" class={{
-                'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-              }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
-              onInput$={(e, el) => {
-                const threshold = document.getElementById('threshold') as HTMLInputElement;
-                decodeText(el.value, Number(threshold.value));
-              }}
-              />
-              <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
-                onInput$={(e, el) => {
-                  tmpstore.threshold = Number(el.value);
-                  const importhex = document.getElementById('decode') as HTMLInputElement;
-                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                }}
-                onIncrement$={() => {
-                  tmpstore.threshold = tmpstore.threshold + 10;
-                  const importhex = document.getElementById('decode') as HTMLInputElement;
-                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                }}
-                onDecrement$={() => {
-                  tmpstore.threshold = tmpstore.threshold - 10;
-                  const importhex = document.getElementById('decode') as HTMLInputElement;
-                  if (importhex.value) decodeText(importhex.value, tmpstore.threshold);
-                }}
-              >
-                {t('color.threshold@@Threshold')}
-                <span class="text-gray-500"> - {t('color.thresholdSubtitle@@Try changing this around if you\'re getting too many colors')}</span>
-              </NumberInput>
-            </div>
+            <Decode store={store} tmpstore={tmpstore}
+              hidden={tmpstore.sectionsOpened.indexOf('decode') == -1} />
+
           </div>
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <button class={{
@@ -408,24 +344,8 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
-              'h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatting') == -1,
-              'opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatting') != -1,
-            }} id="formatting">
-              <Toggle id="bold" checked={store.bold}
-                onChange$={(e, el) => { store.bold = el.checked; }}
-                label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
-              <Toggle id="italic" checked={store.italic}
-                onChange$={(e, el) => { store.italic = el.checked; }}
-                label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
-              <Toggle id="underline" checked={store.underline}
-                onChange$={(e, el) => { store.underline = el.checked; }}
-                label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
-              <Toggle id="strikethrough" checked={store.strikethrough}
-                onChange$={(e, el) => { store.strikethrough = el.checked; }}
-                label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
-            </div>
+            <Formatting store={store} hidden={tmpstore.sectionsOpened.indexOf('formatting') == -1} />
+
             {store.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
                 if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
@@ -442,43 +362,7 @@ export default component$(() => {
                   <ChevronDown size={20} />
                 </div>
               </button>
-
-              <div class={{
-                'flex flex-col gap-2 transition-all duration-200': true,
-                'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('formatoptions') == -1,
-                'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
-              }} id="formatoptions">
-                {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <>
-                  <label for="format-char">
-                    {t('color.format.character@@Format Character')}
-                  </label>
-                  <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
-                </>}
-                {!store.format.char &&
-                  <>
-                    <label for="format-bold">
-                      {t('color.format.bold@@Bold')}
-                    </label>
-                    <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
-                    <label for="format-italic">
-                      {t('color.format.italic@@Italic')}
-                    </label>
-                    <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
-                    <label for="format-underline">
-                      {t('color.format.underline@@Underline')}
-                    </label>
-                    <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
-                    <label for="format-strikethrough">
-                      {t('color.format.strikethrough@@Strikethrough')}
-                    </label>
-                    <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
-                    <div class="py-3 font-mono">
-                      <p>{t('color.placeholders@@Placeholders:')}</p>
-                      <p>$t = Output Text</p>
-                    </div>
-                  </>
-                }
-              </div>
+              <FormatOptions store={store} hidden={tmpstore.sectionsOpened.indexOf('formatoptions') == -1} />
             </>}
 
           </div>

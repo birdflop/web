@@ -5,6 +5,7 @@ import { defaults, types, v3formats } from '~/components/util/PresetUtils';
 import { AnimationOutput, getAnimFrames, hexToHSL } from '~/components/util/RGBUtils';
 
 import { Dropdown, Toggle, NumberInput } from '@luminescent/ui-qwik';
+import { ChevronDown, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -12,9 +13,11 @@ import { rgbDefaults } from '../rgb';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
-import { ChevronDown, Clipboard, Palette, Save } from 'lucide-icons-qwik';
 import Output from '~/components/rgb/Output';
 import Presets from '~/components/rgb/Presets';
+import Decode from '~/components/rgb/Decode';
+import Formatting from '~/components/rgb/Formatting';
+import FormatOptions from '~/components/rgb/FormatOptions';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -219,6 +222,46 @@ export default component$(() => {
               value={AnimationOutput({ ...store, ...animtabstore })} />
 
             <div class="flex flex-col md:grid grid-cols-2 gap-2">
+              <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
+                (e, el) => {
+                  if (el.value == 'custom') {
+                    store.customFormat = true;
+                  }
+                  else {
+                    store.customFormat = false;
+                    store.format = JSON.parse(el.value);
+                  }
+                }
+              } values={[
+                ...v3formats.map(format => ({
+                  name: format.color
+                    .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                    .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                    .replace('$c', ''),
+                  value: JSON.stringify(format),
+                })),
+                {
+                  name: store.customFormat ? store.format.color
+                    .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+                    .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
+                    .replace('$c', '')
+                    : t('color.custom@@Custom'),
+                  value: 'custom',
+                },
+              ]}>
+                {t('color.colorFormat@@Color Format')}
+              </Dropdown>
+              <div class="flex flex-col gap-1">
+                <label for="prefixsuffix">
+                  {t('color.prefixsuffix@@Prefix/Suffix')}
+                </label>
+                <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
+              </div>
+
+              <Toggle id="trimspaces" checked={store.trimspaces}
+                onChange$={(e, el) => { store.trimspaces = el.checked; }}
+                label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+
               <div class="flex flex-col gap-1">
                 <label for="nameinput">
                   {t('animtab.animationName@@Animation Name')}
@@ -242,93 +285,24 @@ export default component$(() => {
                 value={animtabstore.type}>
                 {t('animtab.outputType@@Output Type')}
               </Dropdown>
-              <div class="flex flex-col gap-1">
-                <label for="prefixsuffix">
-                  {t('color.prefixsuffix@@Prefix/Suffix')}
-                </label>
-                <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
-              </div>
             </div>
             {
-              settingStore.advanced && <>
-                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                  (e, el) => {
-                    if (el.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = JSON.parse(el.value);
-                    }
-                  }
-                } values={[
-                  ...v3formats.map(format => ({
-                    name: format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', ''),
-                    value: JSON.stringify(format),
-                  })),
-                  {
-                    name: store.customFormat ? store.format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', '')
-                      : t('color.custom@@Custom'),
-                    value: 'custom',
-                  },
-                ]}>
-                  {t('color.colorFormat@@Color Format')}
-                </Dropdown>
-                <div class="grid grid-cols-2 gap-2">
-                  <div class="flex flex-col gap-1">
-                    <label for="customformat">
-                      {t('color.customFormat@@Custom Format')}
-                    </label>
-                    <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
-                    <div class="py-3 font-mono">
-                      <p>{t('color.placeholders@@Placeholders:')}</p>
-                      <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                      <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                      <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                      <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                      <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                      <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                      {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-                      <p>$c = {t('color.character@@Character')}</p>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-2">
-                    {(store.format.char != undefined && !store.format.bold && !store.format.italic && !store.format.underline && !store.format.strikethrough) && <div class="flex flex-col gap-1">
-                      <label for="format-char">
-                        {t('color.format.character@@Format Character')}
-                      </label>
-                      <input class="lum-input" id="format-char" value={store.format.char} placeholder="&" onInput$={(e, el) => { store.format.char = el.value; }}/>
-                    </div>}
-                    {!store.format.char &&
-                      <>
-                        <label for="format-bold">
-                          {t('color.format.bold@@Bold')}
-                        </label>
-                        <input class="lum-input" id="format-bold" value={store.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { store.format.bold = el.value; }}/>
-                        <label for="format-italic">
-                          {t('color.format.italic@@Italic')}
-                        </label>
-                        <input class="lum-input" id="format-italic" value={store.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { store.format.italic = el.value; }}/>
-                        <label for="format-underline">
-                          {t('color.format.underline@@Underline')}
-                        </label>
-                        <input class="lum-input" id="format-underline" value={store.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { store.format.underline = el.value; }}/>
-                        <label for="format-strikethrough">
-                          {t('color.format.strikethrough@@Strikethrough')}
-                        </label>
-                        <input class="lum-input" id="format-strikethrough" value={store.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { store.format.strikethrough = el.value; }}/>
-                        <div class="py-3 font-mono">
-                          <p>{t('color.placeholders@@Placeholders:')}</p>
-                          <p>$t = Output Text</p>
-                        </div>
-                      </>
-                    }
+              store.customFormat && <>
+                <div class="flex flex-col gap-1">
+                  <label for="customformat">
+                    {t('color.customFormat@@Custom Format')}
+                  </label>
+                  <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
+                  <div class="py-3 font-mono">
+                    <p>{t('color.placeholders@@Placeholders:')}</p>
+                    <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                    <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                    <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                    <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                    <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                    <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                    {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                    <p>$c = {t('color.character@@Character')}</p>
                   </div>
                 </div>
               </>
@@ -350,28 +324,68 @@ export default component$(() => {
             </button>
             <Presets store={store} presetstore={presetstore} tmpstore={tmpstore}
               hidden={tmpstore.sectionsOpened.indexOf('presets') == -1}/>
+
+            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <Sparkles size={26} />
+                {t('color.decode@@Decode')}
+                <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
+              </h1>
+              <div class={{
+                'transition-transform duration-200': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
+              }}>
+                <ChevronDown size={20} />
+              </div>
+            </button>
+            <Decode store={store} tmpstore={tmpstore}
+              hidden={tmpstore.sectionsOpened.indexOf('decode') == -1} />
+
           </div>
 
-          <div class="flex flex-col gap-2" id="formatting">
-            <h1 class="hidden sm:flex text-lg md:text-xl xl:text-2xl font-semibold fill-current text-gray-50 gap-3 items-center justify-center mb-7">
-              {t('color.colors@@Formatting')}
-            </h1>
-            <Toggle id="bold" checked={store.bold}
-              onChange$={(e, el) => { store.bold = el.checked; }}
-              label={`${t('color.bold@@Bold')} - ${store.format.char ? `${store.format.char}l` : store.format.bold?.replace('$t', '')}`} />
-            <Toggle id="italic" checked={store.italic}
-              onChange$={(e, el) => { store.italic = el.checked; }}
-              label={`${t('color.italic@@Italic')} - ${store.format.char ? `${store.format.char}o` : store.format.italic?.replace('$t', '')}`} />
-            <Toggle id="underline" checked={store.underline}
-              onChange$={(e, el) => { store.underline = el.checked; }}
-              label={`${t('color.underline@@Underline')} - ${store.format.char ? `${store.format.char}n` : store.format.underline?.replace('$t', '')}`} />
-            <Toggle id="strikethrough" checked={store.strikethrough}
-              onChange$={(e, el) => { store.strikethrough = el.checked; }}
-              label={`${t('color.strikethrough@@Strikethrough')} - ${store.format.char ? `${store.format.char}m` : store.format.strikethrough?.replace('$t', '')}`} />
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <button class={{
+              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
+              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
+              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
+            }} onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('formatting') == -1) tmpstore.sectionsOpened.push('formatting');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatting'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <Type size={26} />
+                {t('color.formatting@@Formatting')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200 sm:hidden': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('formatting') != -1,
+              }}>
+                <ChevronDown size={20} />
+              </div>
+            </button>
+            <Formatting store={store} hidden={tmpstore.sectionsOpened.indexOf('formatting') == -1} />
 
-            <Toggle id="trimspaces" checked={store.trimspaces}
-              onChange$={(e, el) => { store.trimspaces = el.checked; }}
-              label={<p class="flex flex-col"><span>Trim colors from spaces</span><span class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</span></p>} />
+            {store.customFormat && <>
+              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+                if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
+                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
+              }}>
+                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                  <Settings size={26} />
+                  {t('color.formatoptions@@Format Options')}
+                </h1>
+                <div class={{
+                  'transition-transform duration-200': true,
+                  'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+                }}>
+                  <ChevronDown size={20} />
+                </div>
+              </button>
+              <FormatOptions store={store} hidden={tmpstore.sectionsOpened.indexOf('formatoptions') == -1} />
+            </>}
             <Toggle id="advanced" checked={settingStore.advanced}
               onChange$={(e, el) => { settingStore.advanced = el.checked; }}
               label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-xs text-gray-400">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
