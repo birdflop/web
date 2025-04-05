@@ -4,8 +4,8 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { defaults, types } from '~/components/util/PresetUtils';
 import { AnimationOutput, getAnimFrames, hexToHSL } from '~/components/util/RGBUtils';
 
-import { Dropdown, Toggle, NumberInput } from '@luminescent/ui-qwik';
-import { ChevronDown, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Dropdown, NumberInput } from '@luminescent/ui-qwik';
+import { ChevronDown, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -60,10 +60,6 @@ export default component$(() => {
     ...animTABDefaults,
     ...cookies.animtab,
   }, { deep: true });
-
-  const settingStore = useStore({
-    advanced: false,
-  });
 
   const tmpstore: {
     threshold: number,
@@ -143,14 +139,15 @@ export default component$(() => {
             const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
             let i = 0;
             return segments.map((segment) => {
-              i = store.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
-              const color = `#${colors[i] ?? colors[i - 1] ?? colors[0]}`;
+              const color = `#${colors[i]}`;
               const shadow = hexToHSL(color);
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
+              const shadowLength = store.previewStyle == 'default' ? '4px 4px' : '2px 2px';
+              i = store.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
               return <span key={`char${i}`} style={{
                 color,
-                textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
               }} class={{
                 'underline': store.underline,
                 'strikethrough': store.strikethrough,
@@ -185,17 +182,14 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
-              onIncrement$={() => {
-                animtabstore.length++;
-              }}
-              onDecrement$={() => {
-                animtabstore.length--;
-              }}
-            >
-              {t('animtab.length@@Gradient Length')}
-            </NumberInput>
-            <ColorList store={store} hidden={tmpstore.sectionsOpened.indexOf('colors') == -1} />
+            <ColorList store={store} hidden={tmpstore.sectionsOpened.indexOf('colors') == -1}>
+              <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
+                onIncrement$={() => animtabstore.length++}
+                onDecrement$={() => animtabstore.length--}
+              >
+                {t('animtab.length@@Gradient Length')}
+              </NumberInput>
+            </ColorList>
           </div>
 
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
@@ -236,10 +230,8 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options store={store} hidden={tmpstore.sectionsOpened.indexOf('options') == -1}/>
-
-            <div class="flex flex-col md:grid grid-cols-2 gap-2">
-              <div class="flex flex-col gap-1">
+            <Options store={store} hidden={tmpstore.sectionsOpened.indexOf('options') == -1}>
+              <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
                   {t('animtab.animationName@@Animation Name')}
                 </label>
@@ -255,14 +247,14 @@ export default component$(() => {
                 onDecrement$={() => {
                   animtabstore.speed = Number(animtabstore.speed) - 50;
                 }}>
-                {t('animtab.speed@@Speed')}
+                {t('animtab.interval@@Animation Interval')} (ms)
               </NumberInput>
               <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabstore.type = Number(el.value); }}
                 values={types}
                 value={animtabstore.type}>
-                {t('animtab.outputType@@Output Type')}
+                {t('animtab.animationStyle@@Animation Style')}
               </Dropdown>
-            </div>
+            </Options>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
@@ -343,16 +335,35 @@ export default component$(() => {
               </button>
               <FormatOptions store={store} hidden={tmpstore.sectionsOpened.indexOf('formatoptions') == -1} />
             </>}
-            <Toggle id="advanced" checked={settingStore.advanced}
-              onChange$={(e, el) => { settingStore.advanced = el.checked; }}
-              label={<p class="flex flex-col"><span>Show advanced settings</span><span class="text-xs text-gray-400">These settings are hidden, only use them if you're trying to use this tool for a different plugin or know what you're doing.</span></p>} />
 
-            {settingStore.advanced && <div class="flex flex-col gap-1">
-              <label for="formatinput">
+            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
+              if (tmpstore.sectionsOpened.indexOf('outputformat') == -1) tmpstore.sectionsOpened.push('outputformat');
+              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('outputformat'), 1);
+            }}>
+              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+                <FileJson size={26} />
                 {t('animtab.outputFormat@@Output Format')}
+              </h1>
+              <div class={{
+                'transition-transform duration-200': true,
+                'rotate-180': tmpstore.sectionsOpened.indexOf('outputformat') != -1,
+              }}>
+                <ChevronDown size={20} />
+              </div>
+            </button>
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200': true,
+              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('outputformat') == -1,
+              'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('outputformat') != -1,
+            }}>
+              <label for="outputformat" class="text-gray-500">
+                Only use this if you're trying to use this tool for a different plugin or know what you're doing
               </label>
-              <textarea class="lum-input h-32 whitespace-pre" id="formatinput" value={animtabstore.outputFormat} placeholder="birdflop" onInput$={(e, el) => { animtabstore.outputFormat = el.value; }}/>
-            </div>}
+              <textarea class="lum-input h-32 whitespace-pre" id="outputformat"
+                value={animtabstore.outputFormat}
+                placeholder={animTABDefaults.outputFormat}
+                onInput$={(e, el) => { animtabstore.outputFormat = el.value; }}/>
+            </div>
           </div>
         </div>
         <div class="text-sm mt-8">

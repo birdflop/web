@@ -44,7 +44,7 @@ export default component$(() => {
         <div class={{
           'opacity-50': store.savedPresets.length === 0,
         }}>
-          <Toggle id="advanced" disabled={store.savedPresets.length === 0}
+          <Toggle id="showsavedpresets" disabled={store.savedPresets.length === 0}
             checked={store.showSaved && store.savedPresets.length > 0}
             onChange$={(e, el) => store.showSaved = el.checked}
             label={<p class="flex flex-col">

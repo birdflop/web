@@ -1,4 +1,4 @@
-import { component$, useSignal } from '@builder.io/qwik';
+import { component$, Slot, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import type { rgbDefaults } from '~/routes/resources/rgb';
@@ -20,6 +20,7 @@ export default component$(({ store, hidden }: {
       'h-0 opacity-0 pointer-events-none': hidden,
       'opacity-100 pointer-events-auto': !hidden,
     }} id="colors">
+      <Slot />
       {store.format.color != 'MiniMessage' &&
         <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
           onIncrement$={() => {

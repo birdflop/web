@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, Slot } from '@builder.io/qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import type { rgbDefaults } from '~/routes/resources/rgb';
 import { v3formats } from '../util/PresetUtils';
@@ -15,9 +15,10 @@ export default component$(({ store, hidden }: {
     <div class={{
       'flex flex-col gap-2 transition-all duration-200': true,
       'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-[500px] opacity-100 pointer-events-auto': !hidden,
+      'max-h-[1000px] opacity-100 pointer-events-auto': !hidden,
     }}>
       <div class="flex flex-col md:grid grid-cols-2 gap-2">
+        <Slot />
         <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
           (e, el) => {
             if (el.value == 'custom') {
@@ -53,6 +54,29 @@ export default component$(({ store, hidden }: {
           </label>
           <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
         </div>
+        {
+          store.customFormat && <>
+            <div id="customformat" class={{
+              'flex flex-col gap-2 col-span-2': true,
+            }}>
+              <label for="customformat">
+                {t('color.customFormat@@Custom Format')}
+              </label>
+              <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
+              <div class="font-mono text-sm">
+                <p>{t('color.placeholders@@Placeholders:')}</p>
+                <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
+                <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
+                <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
+                <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
+                <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
+                <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
+                {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
+                <p>$c = {t('color.character@@Character')}</p>
+              </div>
+            </div>
+          </>
+        }
         <div class="flex flex-col gap-1">
           <Toggle id="disperse" checked={store.disperse}
             onChange$={(e, el) => { store.disperse = el.checked; }}
@@ -68,30 +92,6 @@ export default component$(({ store, hidden }: {
           </div>
         }
       </div>
-
-      {
-        store.customFormat && <>
-          <div id="customformat" class={{
-            'flex flex-col gap-2': true,
-          }}>
-            <label for="customformat">
-              {t('color.customFormat@@Custom Format')}
-            </label>
-            <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
-            <div class="py-3 font-mono">
-              <p>{t('color.placeholders@@Placeholders:')}</p>
-              <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-              <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-              <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-              <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-              <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-              <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-              {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-              <p>$c = {t('color.character@@Character')}</p>
-            </div>
-          </div>
-        </>
-      }
     </div>
   );
 });

@@ -124,18 +124,16 @@ export default component$(() => {
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
               const shadowLength = store.previewStyle == 'default' ? '4px 4px' : '2px 2px';
-              return (
-                <span key={`segment-${i}`} style={{
-                  color: `#${hex};`,
-                  textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
-                }} class={{
-                  'underline': store.underline,
-                  'strikethrough': store.strikethrough,
-                  'underline-strikethrough': store.underline && store.strikethrough,
-                }}>
-                  {segment.replace(/ /g, '\u00A0')}
-                </span>
-              );
+              return <span key={`char${i}`} style={{
+                color: `#${hex};`,
+                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+              }} class={{
+                'underline': store.underline,
+                'strikethrough': store.strikethrough,
+                'underline-strikethrough': store.underline && store.strikethrough,
+              }}>
+                {segment.replace(/ /g, '\u00A0')}
+              </span>;
             });
           })()}
         </Input>
