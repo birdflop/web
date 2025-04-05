@@ -1,4 +1,4 @@
-import { component$, $, useOnDocument } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
 import { RouterHead } from './components/Head';
 import { useQwikSpeak } from 'qwik-speak';
@@ -19,15 +19,6 @@ export default component$(() => {
    * Init Qwik Speak
    */
   useQwikSpeak({ config, translationFn });
-
-  useOnDocument('load', $(() => {
-    const platform = navigator.platform || 'unknown';
-    if (platform.toUpperCase().indexOf('MAC') >= 0) {
-      document.querySelectorAll('.scale-for-mac').forEach(function(element) {
-        element.classList.add('macos-zoom-fix');
-      });
-    }
-  }));
 
   return (
     <QwikCityProvider>
