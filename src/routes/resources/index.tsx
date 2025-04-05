@@ -81,12 +81,6 @@ export default component$(() => {
               </Header>
               <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
-            <a class="lum-card lum-bg-gray-800/30 hover:lum-bg-gray-800/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/colorstrip">
-              <Header subheader="Strips all color / format codes from text">
-                Color Code Stripper
-              </Header>
-              <Blobs color='gray' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">

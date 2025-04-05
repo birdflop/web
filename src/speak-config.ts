@@ -19,7 +19,6 @@ export const config: SpeakConfig = {
     'animpreview',
     'animtab',
     'animtexture',
-    'colorstrip',
     'flags',
     'nav',
   ],

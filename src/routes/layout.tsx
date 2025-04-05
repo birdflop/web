@@ -1,5 +1,5 @@
-import type { JSXOutput, NoSerialize, Signal } from '@builder.io/qwik';
-import { component$, createContextId, noSerialize, Slot, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
+import { component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
@@ -18,9 +18,9 @@ type Notification = {
   bgColor?: string;
 } | rawNotification;
 
-export const NotificationContext = createContextId<Signal<Notification[]>>('notification-context');
+export const NotificationContext = createContextId<Notification[]>('notification-context');
 export default component$(() => {
-  const notifications = useSignal([] as Notification[]);
+  const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -72,20 +72,20 @@ export default component$(() => {
         <div class="flex flex-wrap items-center justify-end gap-2">
           <button class="lum-btn lum-pad-xs" onClick$={async () => {
             document.cookie = 'optout=true; path=/';
-            notifications.value = notifications.value.filter((n) => n?.id !== 'cookieprompt');
+            notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
             Turn off cookies
           </button>
           <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={async () => {
             document.cookie = 'cookies=true; path=/';
-            notifications.value = notifications.value.filter((n) => n?.id !== 'cookieprompt');
+            notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
             Okay
           </button>
         </div>
       </div>,
     });
-    notifications.value = [...notifications.value, cookiePrompt];
+    notifications.push(cookiePrompt);
   });
 
   return <>
@@ -94,7 +94,7 @@ export default component$(() => {
     <div class={{
       'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
     }} id="notifications">
-      {notifications.value.map((notification) => {
+      {notifications.map((notification) => {
         if (!notification) return null;
         if ('element' in notification) return notification.element;
         return <div class={{
