@@ -7,7 +7,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { Gradient } from '~/components/util/HexUtils';
 import type { defaults } from '~/components/util/PresetUtils';
 import { presets } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '~/components/util/RGBUtils';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
@@ -25,7 +25,7 @@ export default component$(() => {
     ...cookies,
   });
 
-  const filteredPresets = (presetStore.showSaved && presetStore.savedPresets.length > 0 ? presetStore.savedPresets : presets).filter((preset) =>
+  const filteredPresets: Partial<typeof defaults>[] = (presetStore.showSaved && presetStore.savedPresets.length > 0 ? presetStore.savedPresets : presets).filter((preset) =>
     (preset.name ?? 'Untitled').toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
 
@@ -81,20 +81,37 @@ export default component$(() => {
                       'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
                     }}>
                       {(() => {
-                        const colors = sortColors(preset.colors ?? presets[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                        if (colors.length < 2) return preset.name ?? 'Untitled';
+                        if (!preset.name) preset.name = 'Untitled';
 
-                        const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
+                        const colors = sortColors(preset.colors ?? presets[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                        if (colors.length < 2) return preset.name;
+
+                        const gradient = new Gradient(colors, Math.ceil(preset.name.length / (preset.colorlength || 1)));
 
                         let hex = '';
-                        const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
+                        const segments = [];
+                        let index = 0;
+                        const textArray = Array.from(preset.name);
+                        while (index < textArray.length) {
+                          segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
+                          index += preset.colorlength ?? 1;
+                        }
                         return segments.map((segment, i) => {
-                          hex = convertToHex(gradient.next());
-                          return (
-                            <span key={`segment-${i}`} style={`color: #${hex};`}>
-                              {segment[0].replace(/ /g, '\u00A0')}
-                            </span>
-                          );
+                          const rgb = gradient.next();
+                          hex = convertToHex(rgb);
+                          const shadow = hexToHSL(hex);
+                          if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+                          shadow.l = Math.round(shadow.l * 0.2);
+                          return <span key={`char${i}`} style={{
+                            color: `#${hex};`,
+                            textShadow: `3px 3px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                          }} class={{
+                            'underline': preset.underline,
+                            'strikethrough': preset.strikethrough,
+                            'underline-strikethrough': preset.underline && preset.strikethrough,
+                          }}>
+                            {segment.replace(/ /g, '\u00A0')}
+                          </span>;
                         });
                       })()}
                     </h3>

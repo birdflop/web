@@ -1,19 +1,18 @@
-import { $, component$, isBrowser, useContext, useSignal } from '@builder.io/qwik';
-import { Download, Globe, Link, Save, Share, X } from 'lucide-icons-qwik';
+import { $, component$, isBrowser, useContext } from '@builder.io/qwik';
+import { Download, Globe, Link, Save, Share } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { defaults, loadPreset, presets as presetlist } from '../util/PresetUtils';
 
 import { setCookies, sortColors } from '../util/SharedUtils';
 import { Gradient } from '../util/HexUtils';
-import { convertToHex, convertToRGB } from '../util/RGBUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '../util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { presetStoreContext, rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  const modalRef = useSignal<HTMLDialogElement>();
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
@@ -67,18 +66,37 @@ export default component$(({ hidden }: {
                 'break-all font-mc tracking-tight': true,
               }}>
                 {(() => {
+                  if (!preset.name) preset.name = 'Untitled';
+
                   const colors = sortColors(preset.colors ?? presetlist[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
                   if (colors.length < 2) return preset.name;
-                  const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
+
+                  const gradient = new Gradient(colors, Math.ceil(preset.name.length / (preset.colorlength || 1)));
+
                   let hex = '';
-                  const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
+                  const segments = [];
+                  let index = 0;
+                  const textArray = Array.from(preset.name);
+                  while (index < textArray.length) {
+                    segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
+                    index += preset.colorlength ?? 1;
+                  }
                   return segments.map((segment, i) => {
-                    hex = convertToHex(gradient.next());
-                    return (
-                      <span key={`segment-${i}`} style={`color: #${hex};`}>
-                        {segment[0].replace(/ /g, '\u00A0')}
-                      </span>
-                    );
+                    const rgb = gradient.next();
+                    hex = convertToHex(rgb);
+                    const shadow = hexToHSL(hex);
+                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+                    shadow.l = Math.round(shadow.l * 0.2);
+                    return <span key={`char${i}`} style={{
+                      color: `#${hex};`,
+                      textShadow: `1px 1px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                    }} class={{
+                      'underline': preset.underline,
+                      'strikethrough': preset.strikethrough,
+                      'underline-strikethrough': preset.underline && preset.strikethrough,
+                    }}>
+                      {segment.replace(/ /g, '\u00A0')}
+                    </span>;
                   });
                 })()}
               </span>,
@@ -93,54 +111,30 @@ export default component$(({ hidden }: {
           <a class="lum-btn" href="/resources/rgb/presets">
             <Globe size={20} /> Browse
           </a>
-          <button class="lum-btn" id="save" onClick$={() => {
-            modalRef.value?.showModal();
+          <button class="lum-btn" id="save" onClick$={async () => {
+            const preset: Partial<typeof defaults> = {
+              ...rgbStore,
+              name: rgbStore.text,
+            };
+            (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
+              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+            });
+            if (presetStore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
+            presetStore.savedPresets.push(preset);
+            if (isBrowser) setCookies('presets', presetStore);
+            const id = Math.random().toString(36).substring(2, 15);
+            notifications.push({
+              id,
+              title: await t$('color.savedPresetTitle@@Preset Saved!'),
+              description: await t$('color.savedPreset@@Successfully saved preset!'),
+              bgColor: 'lum-bg-green-900/50',
+            });
+            setTimeout(() => {
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+            }, 2000);
           }}>
             <Save size={20} /> {t('color.save@@Save')}
           </button>
-          <dialog ref={modalRef} class="lum-bg-gray-800/20 lum-pad-equal-2xl shadow-lg backdrop-blur-xl rounded-lg relative max-w-lg w-full transform transition-transform duration-300 ease-out">
-            <div class="flex flex-col gap-3">
-              <h3 class="text-gray-50 text-xl font-semibold mb-4">
-                {t('color.savePreset@@Save Preset')}
-              </h3>
-
-              <input class="lum-input" id="presetname" placeholder={t('color.presetName@@Preset Name')} />
-
-              <div class="flex gap-2 justify-end">
-                <button class="lum-btn" onClick$={() => {
-                  modalRef.value?.close();
-                }}>
-                  <X size={20} /> {t('color.cancel@@Cancel')}
-                </button>
-                <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={async () => {
-                  const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
-                  const preset: Partial<typeof defaults> = {
-                    ...rgbStore,
-                    name: presetnameinput.value ?? 'Untitled',
-                  };
-                  (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-                    if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
-                  });
-                  if (presetStore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
-                  presetStore.savedPresets.push(preset);
-                  if (isBrowser) setCookies('presets', presetStore);
-                  modalRef.value?.close();
-                  const id = Math.random().toString(36).substring(2, 15);
-                  notifications.push({
-                    id,
-                    title: await t$('color.savedPresetTitle@@Preset Saved!'),
-                    description: await t$('color.savedPreset@@Successfully saved preset!'),
-                    bgColor: 'lum-bg-green-900/50',
-                  });
-                  setTimeout(() => {
-                    notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-                  }, 2000);
-                }}>
-                  <Save size={20} /> {t('color.save@@Save')}
-                </button>
-              </div>
-            </div>
-          </dialog>
         </div>
       </div>
       <div class="flex flex-col gap-2">
