@@ -5,7 +5,7 @@ export default component$(() => {
 
   return (
     <footer class="relative flex flex-col gap-1 items-center justify-center text-center w-full z-10 bg-gray-950/30 border-t border-t-gray-700 p-6">
-      <div class="flex mb-2">
+      <div class="flex gap-1 mb-2">
         <SocialButtons />
       </div>
       <span class="text-sm text-gray-300 max-w-6xl text-center">

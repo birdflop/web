@@ -1,8 +1,20 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+function createPrismaClient(url: string) {
+  return new PrismaClient({
+    datasources: { db: { url } },
+  }).$extends(withAccelerate());
+}
 
-export const prisma = globalForPrisma.prisma || new PrismaClient().$extends(withAccelerate());
+let prismaGlobal: ReturnType<typeof createPrismaClient> | undefined;
+export function getPrismaClient(databaseUrl: string) {
+  const url = databaseUrl || process.env.DATABASE_URL!;
+  if (!url) return;
+  if (!prismaGlobal) prismaGlobal = createPrismaClient(url);
+  return prismaGlobal;
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production' && !prismaGlobal) getPrismaClient(process.env.DATABASE_URL!);
+
+export const prisma = prismaGlobal;

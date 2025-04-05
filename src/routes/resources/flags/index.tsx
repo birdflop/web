@@ -2,13 +2,13 @@
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
-import { CodeWorkingOutline, CubeOutline, HelpOutline, RefreshCircleOutline, TerminalOutline } from 'qwik-ionicons';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
 import { extraFlags as extFlags } from '~/data/flags';
 import { serverType as srvType } from '~/data/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
+import { Box, Code, CircleHelp, RefreshCw, SquareTerminal } from 'lucide-icons-qwik';
 
 const flagTypes = {
   'none': 'none',
@@ -98,21 +98,21 @@ export default component$(() => {
   const configOptions = {
     gui: {
       label: <>
-        <TerminalOutline class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
+        <SquareTerminal class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
       </>,
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
       disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     variables: {
       label: <>
-        <CodeWorkingOutline class="w-6 h-6" /> {t('flags.variables.label@@Use Variables')}
+        <Code class="w-6 h-6" /> {t('flags.variables.label@@Use Variables')}
       </>,
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
       disable: [] as string[],
     },
     autoRestart: {
       label: <>
-        <RefreshCircleOutline class="w-6 h-6" /> {t('flags.autoRestart.label@@Auto-restart')}
+        <RefreshCw class="w-6 h-6" /> {t('flags.autoRestart.label@@Auto-restart')}
       </>,
       description: t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.'),
       disable: [] as string[],
@@ -122,39 +122,39 @@ export default component$(() => {
   const extraFlagsOptions = {
     vectors: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.vectors.label@@Modern Vectors')}
+        <Box class="w-6 h-6" /> {t('flags.extraFlags.vectors.label@@Modern Vectors')}
       </>,
       description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
     },
     benchmarkedGraalVM: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)')}
+        <Box class="w-6 h-6" /> {t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)')}
       </>,
       description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
     },
     meowiceGraalVM: {
       label: <>
-        <CubeOutline class="w-6 h-6" /> {t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)')}
+        <Box class="w-6 h-6" /> {t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)')}
       </>,
       description: t('flags.extraFlags.meowiceGraalVM.description@@Additional performance flags for MeowIce\'s Flags exclusive to GraalVM users.'),
     },
   };
 
   const cookies = useCookies().value;
-  const store = useStore({
+  const flagsStore = useStore({
     ...defaults,
     ...cookies,
   }, { deep: true });
 
   useTask$(({ track }) => {
-    if (isBrowser) setCookies('parsed', store);
-    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
-      track(() => store[key]);
+    if (isBrowser) setCookies('parsed', flagsStore);
+    (Object.keys(flagsStore) as Array<keyof typeof flagsStore>).forEach((key) => {
+      track(() => flagsStore[key]);
     });
   });
 
   return (
-    <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-svh pt-[72px] scale-for-mac">
+    <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
           {t('flags.title@@Flags Generator')}
@@ -170,25 +170,25 @@ export default component$(() => {
                 <span class="font-bold">{t('flags.fileName.label@@File Name')}</span><br/>
                 {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
               </label>
-              <input class="lum-input" id="input" value={store.fileName} placeholder="server.jar" onChange$={(e, el) => {
+              <input class="lum-input" id="input" value={flagsStore.fileName} placeholder="server.jar" onChange$={(e, el) => {
                 if (el.value.replace(/ /g, '') == '') return;
                 if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
-                store.fileName = el.value;
+                flagsStore.fileName = el.value;
               }}/>
             </div>
             <div class="flex gap-2">
               <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
-                store.operatingSystem = el.value;
-              }} values={environmentOptions} value={store.operatingSystem}>
+                flagsStore.operatingSystem = el.value;
+              }} values={environmentOptions} value={flagsStore.operatingSystem}>
                 <span class="font-bold">{t('flags.environment.label@@Environment')}</span><br/>
                 {t('flags.enviroments.description@@The operating system that the server runs on.')}
               </Dropdown>
               <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
-                store.serverType = el.value;
-                if (!srvType[store.serverType].flags.includes(el.value)) {
-                  store.flags = srvType[store.serverType].flags[1] as keyof typeof flagTypes;
+                flagsStore.serverType = el.value;
+                if (!srvType[flagsStore.serverType].flags.includes(el.value)) {
+                  flagsStore.flags = srvType[flagsStore.serverType].flags[1] as keyof typeof flagTypes;
                 }
-              }} values={softwareOptions} value={store.flags}>
+              }} values={softwareOptions} value={flagsStore.flags}>
                 <span class="font-bold">{t('flags.software.label@@Software')}</span><br/>
                 {t('flags.software.description@@The software in which your Minecraft server will run on.')}
               </Dropdown>
@@ -197,7 +197,7 @@ export default component$(() => {
               <span class="font-bold">{t('memory.label@@Memory')}</span><br/>
               {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
               <div class="group relative w-full h-2 lum-bg-gray-800 hover:lum-bg-gray-700 select-none rounded-lg my-2">
-                <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lg" style={{ width: `${store.memory / 32 * 100}%` }} />
+                <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lg" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
                 <div class="absolute w-full top-1 flex justify-between">
                   <span class="text-left">|</span>
                   <span class="text-center">|</span>
@@ -205,14 +205,14 @@ export default component$(() => {
                   <span class="text-center">|</span>
                   <span class="text-right">|</span>
                 </div>
-                <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${store.memory / 32 * 100}% - 48px)` }}>
+                <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
                   <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
                   <div class="opacity-0 group-hover:opacity-100 w-24 py-2 bg-gray-800 rounded-lg flex justify-center transition-all z-50">
-                    {store.memory} GB
+                    {flagsStore.memory} GB
                   </div>
                 </div>
-                <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={store.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(e, el) => {
-                  store.memory = Number(el.value);
+                <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={flagsStore.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(e, el) => {
+                  flagsStore.memory = Number(el.value);
                 }} />
               </div>
             </div>
@@ -220,17 +220,17 @@ export default component$(() => {
           <div class="flex flex-col gap-4">
             <div class="flex items-end gap-2">
               <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
-                store.flags = el.value as keyof typeof flagTypes;
+                flagsStore.flags = el.value as keyof typeof flagTypes;
               }} values={Object.keys(flagTypes).map(flag => ({
                 name: flagTypes[flag as keyof typeof flagTypes],
                 value: flag,
-              }))} value={store.flags}>
+              }))} value={flagsStore.flags}>
                 <span class="font-bold">{t('flags.flags.label@@Flags')}</span><br/>
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
               </Dropdown>
               <DropdownRaw id="flagshelp" onChange$={(e, el) => {
-                store.flags = el.value as keyof typeof flagTypes;
-              }} display={<><HelpOutline width={24}/></>}>
+                flagsStore.flags = el.value as keyof typeof flagTypes;
+              }} display={<><CircleHelp size={24}/></>}>
                 <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                   Aikar's Flags
                 </a>
@@ -254,21 +254,21 @@ export default component$(() => {
                 {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
               </div>
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
-                return !option.disable?.includes(store.operatingSystem) && !option.disable?.includes(store.serverType);
+                return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
               }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={store[id]} onClick$={(e, el) => {
-                  store[id] = el.checked;
+                <Toggle key={id} label={option.label} checked={flagsStore[id]} onClick$={(e, el) => {
+                  flagsStore[id] = el.checked;
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
               </>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
-                return extFlags[id].supports.includes(store.flags) && srvType[store.serverType].extraFlags?.includes(id);
+                return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={store.extraFlags.includes(id)} onClick$={(e, el) => {
+                <Toggle key={id} label={option.label} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
                   if (el.checked) {
-                    store.extraFlags.push(id);
+                    flagsStore.extraFlags.push(id);
                   } else {
-                    store.extraFlags.splice(store.extraFlags.indexOf(id), 1);
+                    flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
                   }
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
@@ -280,9 +280,9 @@ export default component$(() => {
         {/* charlimit={256} */}
         <label for="Output" class="text-gray-50">
           <span class="font-bold">{t('flags.script.label@@Script')}</span><br/>
-          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: store.fileName })}
+          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
         </label>
-        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full': true }} id="Output" value={((p: any) => generateResult(p).script)(store)}/>
+        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full': true }} id="Output" value={((p: any) => generateResult(p).script)(flagsStore)}/>
       </div>
     </section>
   );

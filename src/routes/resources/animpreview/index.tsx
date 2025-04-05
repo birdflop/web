@@ -34,7 +34,7 @@ export default component$(() => {
 
   const cookies = useCookies().value;
 
-  const store = useStore({
+  const animprevStore = useStore({
     text: 'Birdflop',
     speed: 50,
     frames: [] as string[],
@@ -64,8 +64,8 @@ export default component$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
       const deltaTime = (currentTime - lastTime);
-      if (store.frames[0] && deltaTime > store.speed) {
-        store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
+      if (animprevStore.frames[0] && deltaTime > animprevStore.speed) {
+        animprevStore.frame = animprevStore.frame + 1 >= animprevStore.frames.length ? 0 : animprevStore.frame + 1;
         lastTime = currentTime;
       }
       requestAnimationFrame(setFrame);
@@ -74,19 +74,19 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    track(() => store.yaml);
-    if (isBrowser) setCookies('animpreview', { yaml: store.yaml });
+    track(() => animprevStore.yaml);
+    if (isBrowser) setCookies('animpreview', { yaml: animprevStore.yaml });
     let json;
     try {
-      json = yaml.parse(store.yaml);
+      json = yaml.parse(animprevStore.yaml);
     }
     catch (e) {
       console.error(e);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
-    store.speed = json['change-interval'] ?? 50;
-    store.frames = json['texts'] ?? [];
+    animprevStore.speed = json['change-interval'] ?? 50;
+    animprevStore.frames = json['texts'] ?? [];
   });
 
   return (
@@ -100,14 +100,14 @@ export default component$(() => {
         </h2>
 
         <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
-          {store.frames[store.frame]}
+          {animprevStore.frames[animprevStore.frame]}
         </p>
 
         <h1 class={'font-mc text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
           {(() => {
-            if (!store.frames[store.frame]) return '';
+            if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-            const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
+            const spans = animprevStore.frames[animprevStore.frame].match(new RegExp(pattern, 'g'));
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
               const result = string.match(pattern);
@@ -139,8 +139,8 @@ export default component$(() => {
           </label>
           <textarea id="animation"
             class={{ 'lum-input h-96 font-mono': true }}
-            value={store.yaml}
-            onInput$={(e, el) => { store.yaml = el.value; }}
+            value={animprevStore.yaml}
+            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
           />
         </div>
       </div>

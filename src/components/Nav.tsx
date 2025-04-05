@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui-qwik';
 
-import { CubeOutline, GlobeOutline, LogInOutline, LogoGithub, ServerOutline } from 'qwik-ionicons';
+import { Box, Globe, LogIn, Github, Server } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -31,7 +31,7 @@ export default component$(() => {
       </Link>
 
       <DropdownRaw id="nav-hosting" q:slot='end' hover
-        display={<div class="flex items-center gap-3"><ServerOutline width={24} />Hosting</div>}
+        display={<div class="flex items-center gap-3"><Server size={24} />Hosting</div>}
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
         <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
           Panel
@@ -47,7 +47,7 @@ export default component$(() => {
         </Link>
       </DropdownRaw>
       <DropdownRaw id="nav-resources" q:slot='end' hover
-        display={<div class="flex items-center gap-3"><CubeOutline width={24} />Resources</div>}
+        display={<div class="flex items-center gap-3"><Box size={24} />Resources</div>}
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
         <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
           {t('nav.hexGradient@@RGBirdflop')}
@@ -66,7 +66,7 @@ export default component$(() => {
         </Link>
       </DropdownRaw>
       <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent lum-pad-equal-xs': true }} id="lang-picker"
-        display={<GlobeOutline width="24" />} values={config.supportedLocales.map(value => (
+        display={<Globe size={24} />} values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
             value: value.lang,
@@ -95,13 +95,13 @@ export default component$(() => {
                 <img src={session.value.user.image} width={28} height={28} class="rounded-full" />
               </div>
             </>
-            : <LogInOutline width={28} />
+            : <LogIn size={28} />
           }
         </button>
       </Form>
 
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
-        <CubeOutline width={24} />Hosting
+        <Server size={24} />Hosting
       </h3>
       <a q:slot="mobile" href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent">
         Panel
@@ -116,7 +116,7 @@ export default component$(() => {
         Node Stats
       </Link>
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
-        <CubeOutline width={24} />Resources
+        <Box size={24} />Resources
       </h3>
       <Link q:slot="mobile" href="/resources/rgb" class="lum-btn lum-bg-transparent">
         {t('nav.hexGradient@@RGBirdflop')}
@@ -144,10 +144,10 @@ export default component$(() => {
 export const SocialButtons = component$(() => {
   return <>
     <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
-      <LogoGithub width="24" />
+      <Github size={24} />
     </a>
     <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
-      <LogoDiscord width="24" />
+      <LogoDiscord width={24} />
     </a>
   </>;
 });

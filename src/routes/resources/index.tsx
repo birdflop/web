@@ -1,17 +1,12 @@
-import { component$, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import { Blobs, Header } from '@luminescent/ui-qwik';
-import { LogoDiscord, LogoGithub } from 'qwik-ionicons';
+import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
+import { Github } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
-
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => unloadGoogleAds());
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">
@@ -86,12 +81,6 @@ export default component$(() => {
               </Header>
               <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
-            <a class="lum-card lum-bg-gray-800/30 hover:lum-bg-gray-800/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/colorstrip">
-              <Header subheader="Strips all color / format codes from text">
-                Color Code Stripper
-              </Header>
-              <Blobs color='gray' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
@@ -104,12 +93,12 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-              <LogoDiscord width="24" />
+              <LogoDiscord width={24} />
               Invite
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/botflop">
-              <LogoGithub width="24" />
+              <Github size={24} />
               Learn More
             </a>
           </div>
@@ -184,12 +173,12 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
-              <LogoDiscord width="24" />
+              <LogoDiscord width={24} />
               Invite
             </a>
             <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
               href="https://github.com/birdflop/birdtickets">
-              <LogoGithub width="24" />
+              <Github size={24} />
               Learn More
             </a>
           </div>

@@ -1,25 +1,20 @@
-import { component$, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
 
 import { Blobs, Header } from '@luminescent/ui-qwik';
-import { StatsChartOutline } from 'qwik-ionicons';
+import { Activity } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
-
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => unloadGoogleAds());
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center min-h-svh">
       <div class="justify-center flex relative max-w-6xl px-10 py-24">
         <div class="flex flex-col gap-8">
           <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold mb-4 text-center drop-shadow-lg">
-            <StatsChartOutline width="64" /> Node Stats
+            <Activity size={64} /> Node Stats
           </h1>
           <div class="flex flex-wrap gap-3 justify-center">
             <a class="lum-btn lum-pad-lg lum-bg-blue-600/70 hover:lum-bg-blue-600 text-lg" href="https://status.birdflop.com/">

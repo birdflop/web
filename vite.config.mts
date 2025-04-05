@@ -28,7 +28,10 @@ export default defineConfig(() => {
             },
         },
         ssr: {
-            external: ['@prisma/client/edge'],
+            external: [
+                '@prisma/client/edge',
+                '@auth/prisma-adapter',
+            ],
         },
     };
 });

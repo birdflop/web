@@ -2,12 +2,13 @@ import { component$, useStore } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
-import { CopyOutline, CubeOutline, SaveOutline, TrashBinOutline } from 'qwik-ionicons';
+import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Gradient } from '~/components/util/HexUtils';
-import type { defaults } from '~/components/util/PresetUtils';
+import type { publishedPreset } from '~/components/util/PresetUtils';
+import { defaults } from '~/components/util/PresetUtils';
 import { presets } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB } from '~/components/util/RGBUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '~/components/util/RGBUtils';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
@@ -18,15 +19,30 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
-  const store = useStore({
+  const presetStore = useStore({
     searchTerm: '',
     savedPresets: [] as Partial<typeof defaults>[],
     showSaved: false,
     ...cookies,
   });
 
-  const filteredPresets = (store.showSaved && store.savedPresets.length > 0 ? store.savedPresets : presets).filter((preset) =>
-    (preset.name ?? 'Untitled').toLowerCase().includes(store.searchTerm.toLowerCase()),
+  const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
+    name: preset.text ?? 'Untitled',
+    author: 'Personal',
+    preset,
+  }));
+
+  const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
+    index === self.findIndex((p) => {
+      if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
+
+      if (!p.name || p.name === 'Untitled') p.name = preset.name;
+      if (!p.author || p.author === 'Personal') p.author = preset.author;
+      return true;
+    }),
+  );
+  const filteredPresets = allPresets.filter((preset) =>
+    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
 
   return (
@@ -42,11 +58,11 @@ export default component$(() => {
           Here you can find and save, copy, or directly use presets for use on RGBirdflop. Stay tuned for a way to submit your own presets!
         </h2>
         <div class={{
-          'opacity-50': store.savedPresets.length === 0,
+          'opacity-50': presetStore.savedPresets.length === 0,
         }}>
-          <Toggle id="advanced" disabled={store.savedPresets.length === 0}
-            checked={store.showSaved && store.savedPresets.length > 0}
-            onChange$={(e, el) => store.showSaved = el.checked}
+          <Toggle id="showsavedpresets" disabled={presetStore.savedPresets.length === 0}
+            checked={presetStore.showSaved && presetStore.savedPresets.length > 0}
+            onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={<p class="flex flex-col">
               <span>
                 Show saved presets
@@ -61,14 +77,14 @@ export default component$(() => {
           class="lum-input w-full my-4"
           id="search-input"
           placeholder="Search for a preset..."
-          value={store.searchTerm}
-          onInput$={(e, el) => store.searchTerm = el.value}
+          value={presetStore.searchTerm}
+          onInput$={(e, el) => presetStore.searchTerm = el.value}
         />
 
         <div class="grid grid-cols-2 gap-2">
-          {filteredPresets.map((preset, i) => {
+          {filteredPresets.map((p, i) => {
             const searchParams = new URLSearchParams();
-            const params: Partial<typeof defaults> = { ...preset };
+            const params = { ...p.preset };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
               if (key == 'format' || key == 'colors') value = JSON.stringify(value);
               searchParams.set(key, String(value));
@@ -77,24 +93,45 @@ export default component$(() => {
               <div class="lum-card lum-pad-equal-4xl lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
                 <div class="flex gap-4 items-center">
                   <div class="flex flex-col gap-2">
+                    <p class="text-gray-400 text-sm">
+                      {p.author}
+                    </p>
                     <h3 class={{
                       'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
                     }}>
                       {(() => {
-                        const colors = sortColors(preset.colors ?? presets[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                        if (colors.length < 2) return preset.name ?? 'Untitled';
+                        const preset = p.preset;
+                        if (!p.name) p.name = 'Untitled';
 
-                        const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
+                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                        if (colors.length < 2) return preset.name;
+
+                        const gradient = new Gradient(colors, Math.ceil(p.name.length / (preset.colorlength || 1)));
 
                         let hex = '';
-                        const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
+                        const segments = [];
+                        let index = 0;
+                        const textArray = Array.from(p.name);
+                        while (index < textArray.length) {
+                          segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
+                          index += preset.colorlength ?? 1;
+                        }
                         return segments.map((segment, i) => {
-                          hex = convertToHex(gradient.next());
-                          return (
-                            <span key={`segment-${i}`} style={`color: #${hex};`}>
-                              {segment[0].replace(/ /g, '\u00A0')}
-                            </span>
-                          );
+                          const rgb = gradient.next();
+                          hex = convertToHex(rgb);
+                          const shadow = hexToHSL(hex);
+                          if (shadow.l > 50) shadow.s = shadow.s * 0.2;
+                          shadow.l = Math.round(shadow.l * 0.2);
+                          return <span key={`char${i}`} style={{
+                            color: `#${hex};`,
+                            textShadow: `3px 3px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                          }} class={{
+                            'underline': preset.underline,
+                            'strikethrough': preset.strikethrough,
+                            'underline-strikethrough': preset.underline && preset.strikethrough,
+                          }}>
+                            {segment.replace(/ /g, '\u00A0')}
+                          </span>;
                         });
                       })()}
                     </h3>
@@ -102,26 +139,26 @@ export default component$(() => {
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    const existingPreset = store.savedPresets.find((p) => {
-                      return JSON.stringify(p) === JSON.stringify(preset);
+                    const existingPreset = presetStore.savedPresets.find((savedPreset) => {
+                      return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
                     });
-                    if (existingPreset) store.savedPresets = store.savedPresets.filter((p) => p !== existingPreset);
-                    else store.savedPresets.push(preset);
-                    if (isBrowser) setCookies('presets', { savedPresets: store.savedPresets });
+                    if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
+                    else presetStore.savedPresets.push(p.preset);
+                    if (isBrowser) setCookies('presets', { savedPresets: presetStore.savedPresets });
                   }}>
-                    {store.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
-                      <TrashBinOutline width={20} /> Remove
+                    {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
+                      <Trash size={20} /> Remove
                     </> : <>
-                      <SaveOutline width={20} /> Save
+                      <Save size={20} /> Save
                     </>}
                   </button>
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
-                    <CopyOutline width={20} /> Copy
+                    <Copy size={20} /> Copy
                   </button>
                   <DropdownRaw id={`use-${i}`} hover
-                    display={<div class="flex items-center gap-3"><CubeOutline width={20} />Use</div>}
+                    display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
                     class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
                       {t('nav.hexGradient@@RGBirdflop')}
@@ -162,7 +199,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: '/branding/icon.png',
+      content: '/branding/.png',
     },
   ],
 };

@@ -1,9 +1,0 @@
-{
-  "colorstrip": {
-    "colorCodeType": "Color Code Type",
-    "inputText": "Input Text",
-    "output": "Output",
-    "subtitle": "Strips all color / format codes from text",
-    "title": "Color Code Stripper"
-  }
-}

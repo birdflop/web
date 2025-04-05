@@ -1,9 +1,0 @@
-{
-  "colorstrip": {
-    "colorCodeType": "Kleurcode Type:",
-    "inputText": "Tekst:",
-    "output": "Uitkomst",
-    "subtitle": "Stript alle kleuren/opmaak codes van een tekst.",
-    "title": "Kleurcode Stripper"
-  }
-}
