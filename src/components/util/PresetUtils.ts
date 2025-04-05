@@ -135,6 +135,9 @@ export const v3formats = [
     underline: '[UNDERLINE]$t[/UNDERLINE]',
     strikethrough: '[STRIKETHROUGH]$t[/STRIKETHROUGH]',
   },
+  {
+    color: 'Minecraft Formatting',
+  },
 ];
 
 export const types = [

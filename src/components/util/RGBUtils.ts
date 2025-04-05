@@ -403,14 +403,67 @@ export function generateOutput(
       if (lowerRange === upperRange) continue;
       output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
     }
-    console.log(output, '181');
   }
   else if (format.color == 'MiniMessage') {
     colors = sortColors(colors);
     output = `<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`;
   }
+  // Handle Minecraft Format JSON
+  else if (format.color == 'Minecraft Formatting') {
+    const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+    if (newColors.length < 2) return 'Error: Not enough colors.';
 
-  if (format.color != 'MiniMessage') {
+    const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
+
+    // Create the base JSON structure
+    const jsonOutput: any = {
+      text: '',
+      extra: [],
+    };
+
+    // Process each character
+    let index = 0;
+    while (index < text.length) {
+      // Handle multi-byte characters like emojis
+      const segment = Array.from(text).slice(index, index + (colorlength ?? 1)).join('');
+
+      // Skip formatting for pure space segments if trimspaces is true
+      if (trimspaces && segment.trim() === '') {
+        // Add a plain space to the output
+        jsonOutput.extra.push({
+          text: segment,
+          obfuscated: false,
+          italic: false,
+          underlined: false,
+          strikethrough: false,
+          bold: false,
+        });
+        gradient.next();
+      } else {
+        // Get the next color in the gradient
+        const rgb = gradient.next();
+        const hex = convertToHex(rgb);
+
+        // Add the character with its formatting
+        jsonOutput.extra.push({
+          text: segment,
+          obfuscated: false,
+          italic: italic,
+          underlined: underline,
+          strikethrough: strikethrough,
+          color: '#' + hex,
+          bold: bold,
+        });
+      }
+
+      index += colorlength || 1;
+    }
+
+    // Convert the JSON object to a string
+    output = JSON.stringify(jsonOutput);
+  }
+  // Handle other formats
+  else {
     const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 
@@ -453,10 +506,13 @@ export function generateOutput(
       output += hexOutput;
     }
   }
+
+  // Apply formatting to the entire output string
   if (format.bold && bold) output = format.bold.replace('$t', output);
   if (format.italic && italic) output = format.italic.replace('$t', output);
   if (format.underline && underline) output = format.underline.replace('$t', output);
   if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
   if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
+
   return output;
 }
