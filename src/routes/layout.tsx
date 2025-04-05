@@ -5,7 +5,7 @@ import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 import { Link } from '@builder.io/qwik-city';
-import { Bell, Cookie } from 'lucide-icons-qwik';
+import { Bell, Cookie, X } from 'lucide-icons-qwik';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -63,7 +63,7 @@ export default component$(() => {
       }}>
         <div>
           <Header subheader="We use cookies to automatically save and load your preferences.">
-            <Cookie /> Cookies
+            <Cookie size={26} /> Cookies
           </Header>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
             Privacy Policy
@@ -103,7 +103,10 @@ export default component$(() => {
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
           <Header subheader={notification.description}>
-            <Bell /> {notification.title}
+            <span class="flex gap-2 items-center flex-1"><Bell size={26} /> {notification.title}</span>
+            <button class="lum-btn lum-pad-equal-xs lum-bg-transparent cursor-pointer" onClick$={() => {
+              notifications.splice(notifications.findIndex((n) => n?.id === notification.id), 1);
+            }}><X size={16}/></button>
           </Header>
         </div>;
       })}
