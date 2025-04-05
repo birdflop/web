@@ -5,7 +5,8 @@ import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Gradient } from '~/components/util/HexUtils';
-import type { defaults } from '~/components/util/PresetUtils';
+import type { publishedPreset } from '~/components/util/PresetUtils';
+import { defaults } from '~/components/util/PresetUtils';
 import { presets } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/components/util/RGBUtils';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
@@ -25,8 +26,23 @@ export default component$(() => {
     ...cookies,
   });
 
-  const filteredPresets: Partial<typeof defaults>[] = (presetStore.showSaved && presetStore.savedPresets.length > 0 ? presetStore.savedPresets : presets).filter((preset) =>
-    (preset.name ?? 'Untitled').toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
+  const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
+    name: preset.text ?? 'Untitled',
+    author: 'Personal',
+    preset,
+  }));
+
+  const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
+    index === self.findIndex((p) => {
+      if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
+
+      if (!p.name || p.name === 'Untitled') p.name = preset.name;
+      if (!p.author || p.author === 'Personal') p.author = preset.author;
+      return true;
+    }),
+  );
+  const filteredPresets = allPresets.filter((preset) =>
+    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
 
   return (
@@ -66,9 +82,9 @@ export default component$(() => {
         />
 
         <div class="grid grid-cols-2 gap-2">
-          {filteredPresets.map((preset, i) => {
+          {filteredPresets.map((p, i) => {
             const searchParams = new URLSearchParams();
-            const params: Partial<typeof defaults> = { ...preset };
+            const params = { ...p.preset };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
               if (key == 'format' || key == 'colors') value = JSON.stringify(value);
               searchParams.set(key, String(value));
@@ -77,21 +93,25 @@ export default component$(() => {
               <div class="lum-card lum-pad-equal-4xl lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
                 <div class="flex gap-4 items-center">
                   <div class="flex flex-col gap-2">
+                    <p class="text-gray-400 text-sm">
+                      {p.author}
+                    </p>
                     <h3 class={{
                       'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
                     }}>
                       {(() => {
-                        if (!preset.name) preset.name = 'Untitled';
+                        const preset = p.preset;
+                        if (!p.name) p.name = 'Untitled';
 
-                        const colors = sortColors(preset.colors ?? presets[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
                         if (colors.length < 2) return preset.name;
 
-                        const gradient = new Gradient(colors, Math.ceil(preset.name.length / (preset.colorlength || 1)));
+                        const gradient = new Gradient(colors, Math.ceil(p.name.length / (preset.colorlength || 1)));
 
                         let hex = '';
                         const segments = [];
                         let index = 0;
-                        const textArray = Array.from(preset.name);
+                        const textArray = Array.from(p.name);
                         while (index < textArray.length) {
                           segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
                           index += preset.colorlength ?? 1;
@@ -119,21 +139,21 @@ export default component$(() => {
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    const existingPreset = presetStore.savedPresets.find((p) => {
-                      return JSON.stringify(p) === JSON.stringify(preset);
+                    const existingPreset = presetStore.savedPresets.find((savedPreset) => {
+                      return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
                     });
                     if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
-                    else presetStore.savedPresets.push(preset);
+                    else presetStore.savedPresets.push(p.preset);
                     if (isBrowser) setCookies('presets', { savedPresets: presetStore.savedPresets });
                   }}>
-                    {presetStore.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
+                    {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
                       <Trash size={20} /> Remove
                     </> : <>
                       <Save size={20} /> Save
                     </>}
                   </button>
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    navigator.clipboard.writeText(JSON.stringify(preset));
+                    navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
                     <Copy size={20} /> Copy
                   </button>

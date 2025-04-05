@@ -2,7 +2,7 @@ import { $, component$, isBrowser, useContext } from '@builder.io/qwik';
 import { Download, Globe, Link, Save, Share } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
-import { defaults, loadPreset, presets as presetlist } from '../util/PresetUtils';
+import { defaults, loadPreset } from '../util/PresetUtils';
 
 import { setCookies, sortColors } from '../util/SharedUtils';
 import { Gradient } from '../util/HexUtils';
@@ -68,7 +68,7 @@ export default component$(({ hidden }: {
                 {(() => {
                   if (!preset.name) preset.name = 'Untitled';
 
-                  const colors = sortColors(preset.colors ?? presetlist[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
                   if (colors.length < 2) return preset.name;
 
                   const gradient = new Gradient(colors, Math.ceil(preset.name.length / (preset.colorlength || 1)));
