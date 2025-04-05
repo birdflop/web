@@ -50,22 +50,23 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
-  const store = useStore({
+
+  const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
     ...cookies.rgb,
   }, { deep: true });
-  const presetstore = useStore({
+  const presetStore = useStore({
     ...cookies.presets,
   });
 
-  const opensections = useStore([] as string[]);
+  const openSections = useStore([] as string[]);
   const threshold = useSignal(50);
 
   useTask$(({ track }) => {
-    if (isBrowser) setCookies('rgb', store);
-    if (store.disperse) store.colors = disperseColors(store.colors);
-    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
-      track(() => store[key]);
+    if (isBrowser) setCookies('rgb', rgbStore);
+    if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
+    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
+      track(() => rgbStore[key]);
     });
   });
 
@@ -74,7 +75,7 @@ export default component$(() => {
     const input = document.getElementById('input') as HTMLTextAreaElement;
     if (!input) return;
     input.focus();
-    input.setSelectionRange(store.text.length, store.text.length);
+    input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
   });
 
   return (
@@ -87,22 +88,22 @@ export default component$(() => {
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
 
-        <Input store={store}>
+        <Input rgbStore={rgbStore}>
           {(() => {
-            if (!store.text) return '\u00A0';
+            if (!rgbStore.text) return '\u00A0';
 
-            const colors = sortColors(store.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-            if (colors.length < 2) return store.text;
+            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            if (colors.length < 2) return rgbStore.text;
 
-            const gradient = new Gradient(colors, Math.ceil(store.text.length / store.colorlength));
+            const gradient = new Gradient(colors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
 
             let hex = '';
             const segments = [];
             let index = 0;
-            const textArray = Array.from(store.text);
+            const textArray = Array.from(rgbStore.text);
             while (index < textArray.length) {
-              segments.push(textArray.slice(index, index + store.colorlength).join(''));
-              index += store.colorlength;
+              segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
+              index += rgbStore.colorlength;
             }
             return segments.map((segment, i) => {
               const rgb = gradient.next();
@@ -110,14 +111,14 @@ export default component$(() => {
               const shadow = hexToHSL(hex);
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
-              const shadowLength = store.previewStyle == 'default' ? '4px 4px' : '2px 2px';
+              const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
               return <span key={`char${i}`} style={{
                 color: `#${hex};`,
                 textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
               }} class={{
-                'underline': store.underline,
-                'strikethrough': store.strikethrough,
-                'underline-strikethrough': store.underline && store.strikethrough,
+                'underline': rgbStore.underline,
+                'strikethrough': rgbStore.strikethrough,
+                'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
               }}>
                 {segment.replace(/ /g, '\u00A0')}
               </span>;
@@ -125,7 +126,7 @@ export default component$(() => {
           })()}
         </Input>
 
-        <ColorMap store={store} />
+        <ColorMap rgbStore={rgbStore} />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
@@ -134,8 +135,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('colors') == -1) opensections.push('colors');
-              else opensections.splice(opensections.indexOf('colors'), 1);
+              if (openSections.indexOf('colors') == -1) openSections.push('colors');
+              else openSections.splice(openSections.indexOf('colors'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Palette size={26} />
@@ -143,12 +144,12 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('colors') != -1,
+                'rotate-180': openSections.indexOf('colors') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <ColorList store={store} hidden={opensections.indexOf('colors') == -1} />
+            <ColorList rgbStore={rgbStore} hidden={openSections.indexOf('colors') == -1} />
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <button class={{
@@ -156,8 +157,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('output') == -1) opensections.push('output');
-              else opensections.splice(opensections.indexOf('output'), 1);
+              if (openSections.indexOf('output') == -1) openSections.push('output');
+              else openSections.splice(openSections.indexOf('output'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Clipboard size={26} />
@@ -165,18 +166,18 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('output') != -1,
+                'rotate-180': openSections.indexOf('output') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
 
-            <Output store={store} hidden={opensections.indexOf('output') == -1}
-              value={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)} />
+            <Output rgbStore={rgbStore} hidden={openSections.indexOf('output') == -1}
+              value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('options') == -1) opensections.push('options');
-              else opensections.splice(opensections.indexOf('options'), 1);
+              if (openSections.indexOf('options') == -1) openSections.push('options');
+              else openSections.splice(openSections.indexOf('options'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Settings size={26} />
@@ -184,16 +185,16 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('options') != -1,
+                'rotate-180': openSections.indexOf('options') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options store={store} hidden={opensections.indexOf('options') == -1}/>
+            <Options rgbStore={rgbStore} hidden={openSections.indexOf('options') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('presets') == -1) opensections.push('presets');
-              else opensections.splice(opensections.indexOf('presets'), 1);
+              if (openSections.indexOf('presets') == -1) openSections.push('presets');
+              else openSections.splice(openSections.indexOf('presets'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Save size={26} />
@@ -201,17 +202,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('presets') != -1,
+                'rotate-180': openSections.indexOf('presets') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Presets store={store} presetstore={presetstore}
-              hidden={opensections.indexOf('presets') == -1}/>
+            <Presets rgbStore={rgbStore} presetStore={presetStore}
+              hidden={openSections.indexOf('presets') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('decode') == -1) opensections.push('decode');
-              else opensections.splice(opensections.indexOf('decode'), 1);
+              if (openSections.indexOf('decode') == -1) openSections.push('decode');
+              else openSections.splice(openSections.indexOf('decode'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Sparkles size={26} />
@@ -220,13 +221,13 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('decode') != -1,
+                'rotate-180': openSections.indexOf('decode') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Decode store={store} threshold={threshold}
-              hidden={opensections.indexOf('decode') == -1} />
+            <Decode rgbStore={rgbStore} threshold={threshold}
+              hidden={openSections.indexOf('decode') == -1} />
 
           </div>
           <div class="mb-4 flex flex-col gap-2" id="column3">
@@ -235,8 +236,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('formatting') == -1) opensections.push('formatting');
-              else opensections.splice(opensections.indexOf('formatting'), 1);
+              if (openSections.indexOf('formatting') == -1) openSections.push('formatting');
+              else openSections.splice(openSections.indexOf('formatting'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Type size={26} />
@@ -244,17 +245,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('formatting') != -1,
+                'rotate-180': openSections.indexOf('formatting') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Formatting store={store} hidden={opensections.indexOf('formatting') == -1} />
+            <Formatting rgbStore={rgbStore} hidden={openSections.indexOf('formatting') == -1} />
 
-            {store.customFormat && <>
+            {rgbStore.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (opensections.indexOf('formatoptions') == -1) opensections.push('formatoptions');
-                else opensections.splice(opensections.indexOf('formatoptions'), 1);
+                if (openSections.indexOf('formatoptions') == -1) openSections.push('formatoptions');
+                else openSections.splice(openSections.indexOf('formatoptions'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   <Settings size={26} />
@@ -262,12 +263,12 @@ export default component$(() => {
                 </h1>
                 <div class={{
                   'transition-transform duration-200': true,
-                  'rotate-180': opensections.indexOf('formatoptions') != -1,
+                  'rotate-180': openSections.indexOf('formatoptions') != -1,
                 }}>
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <FormatOptions store={store} hidden={opensections.indexOf('formatoptions') == -1} />
+              <FormatOptions rgbStore={rgbStore} hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
 
           </div>

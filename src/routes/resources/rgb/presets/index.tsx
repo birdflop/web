@@ -18,15 +18,15 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
-  const store = useStore({
+  const presetStore = useStore({
     searchTerm: '',
     savedPresets: [] as Partial<typeof defaults>[],
     showSaved: false,
     ...cookies,
   });
 
-  const filteredPresets = (store.showSaved && store.savedPresets.length > 0 ? store.savedPresets : presets).filter((preset) =>
-    (preset.name ?? 'Untitled').toLowerCase().includes(store.searchTerm.toLowerCase()),
+  const filteredPresets = (presetStore.showSaved && presetStore.savedPresets.length > 0 ? presetStore.savedPresets : presets).filter((preset) =>
+    (preset.name ?? 'Untitled').toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
 
   return (
@@ -42,11 +42,11 @@ export default component$(() => {
           Here you can find and save, copy, or directly use presets for use on RGBirdflop. Stay tuned for a way to submit your own presets!
         </h2>
         <div class={{
-          'opacity-50': store.savedPresets.length === 0,
+          'opacity-50': presetStore.savedPresets.length === 0,
         }}>
-          <Toggle id="showsavedpresets" disabled={store.savedPresets.length === 0}
-            checked={store.showSaved && store.savedPresets.length > 0}
-            onChange$={(e, el) => store.showSaved = el.checked}
+          <Toggle id="showsavedpresets" disabled={presetStore.savedPresets.length === 0}
+            checked={presetStore.showSaved && presetStore.savedPresets.length > 0}
+            onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={<p class="flex flex-col">
               <span>
                 Show saved presets
@@ -61,8 +61,8 @@ export default component$(() => {
           class="lum-input w-full my-4"
           id="search-input"
           placeholder="Search for a preset..."
-          value={store.searchTerm}
-          onInput$={(e, el) => store.searchTerm = el.value}
+          value={presetStore.searchTerm}
+          onInput$={(e, el) => presetStore.searchTerm = el.value}
         />
 
         <div class="grid grid-cols-2 gap-2">
@@ -102,14 +102,14 @@ export default component$(() => {
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
                   <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    const existingPreset = store.savedPresets.find((p) => {
+                    const existingPreset = presetStore.savedPresets.find((p) => {
                       return JSON.stringify(p) === JSON.stringify(preset);
                     });
-                    if (existingPreset) store.savedPresets = store.savedPresets.filter((p) => p !== existingPreset);
-                    else store.savedPresets.push(preset);
-                    if (isBrowser) setCookies('presets', { savedPresets: store.savedPresets });
+                    if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
+                    else presetStore.savedPresets.push(preset);
+                    if (isBrowser) setCookies('presets', { savedPresets: presetStore.savedPresets });
                   }}>
-                    {store.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
+                    {presetStore.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
                       <Trash size={20} /> Remove
                     </> : <>
                       <Save size={20} /> Save

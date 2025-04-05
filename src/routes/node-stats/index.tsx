@@ -1,4 +1,4 @@
-import { component$, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
 
 import { Blobs, Header } from '@luminescent/ui-qwik';
@@ -6,13 +6,8 @@ import { Activity } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
-
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => unloadGoogleAds());
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 items-center min-h-svh">

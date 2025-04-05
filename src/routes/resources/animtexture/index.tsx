@@ -11,7 +11,7 @@ export default component$(() => {
   useSpeak({ assets: ['animtexture'] });
   const t = inlineTranslate();
 
-  const store = useStore({
+  const animtextureStore = useStore({
     frames: [] as any[],
     textureName: '',
     cumulative: false,
@@ -38,17 +38,17 @@ export default component$(() => {
         const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
         if (type == 'image/gif') {
           // @ts-ignore
-          const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
+          const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: animtextureStore.cumulative });
           gifframes.forEach((frame: any) => {
             const contentStream = frame.getImage();
             const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
             const b64frame = `data:image/png;base64,${imageData}`;
 
-            store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
+            animtextureStore.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
           });
           return;
         }
-        store.frames.push({ img: b64, delay: 20 });
+        animtextureStore.frames.push({ img: b64, delay: 20 });
       };
     });
   }));
@@ -68,19 +68,19 @@ export default component$(() => {
         </div>
 
         <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
-          {store.frames.map((frame, i) => (
+          {animtextureStore.frames.map((frame, i) => (
             <div key={`frame${i}`} class="w-24 rounded-lg border-gray-700 border-2">
               <img width={96} height={96} class="rounded-t-md" src={frame.img} />
-              <input type="number" value={frame.delay} onInput$={(e, el) => { store.frames[i].delay = el.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md" />
+              <input type="number" value={frame.delay} onInput$={(e, el) => { animtextureStore.frames[i].delay = el.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md" />
             </div>
           ))}
         </div>
 
         <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label><br />
-        <input id="textureName" class={{ 'lum-input mb-3 mt-2': true }} value={store.textureName} onInput$={(e, el) => { store.textureName = el.value; }}/>
+        <input id="textureName" class={{ 'lum-input mb-3 mt-2': true }} value={animtextureStore.textureName} onInput$={(e, el) => { animtextureStore.textureName = el.value; }}/>
 
-        <Toggle id="Cumulative" checked={store.cumulative}
-          onChange$={(e, el) => { store.cumulative = el.checked; }}
+        <Toggle id="Cumulative" checked={animtextureStore.cumulative}
+          onChange$={(e, el) => { animtextureStore.cumulative = el.checked; }}
           label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')} />
 
         <button class={{ 'lum-btn my-6': true }} onClick$={() => {
@@ -104,19 +104,19 @@ export default component$(() => {
           const pngd = document.getElementById('pngd') as HTMLAnchorElement;
           const mcmeta = document.getElementById('mcmeta') as HTMLAnchorElement;
           pngd.href = b64;
-          pngd.download = store.textureName + '.png';
-          mcmeta.download = store.textureName + '.png.mcmeta';
+          pngd.download = animtextureStore.textureName + '.png';
+          mcmeta.download = animtextureStore.textureName + '.png.mcmeta';
 
           const start = '{"animation":{"frames": [';
           const frameBase = '{"index": ';
           const frameMid = ', "time": ';
           const frameEnd = '},';
           let res = start;
-          for (let i = 0; i != store.frames.length; i++) {
+          for (let i = 0; i != animtextureStore.frames.length; i++) {
             let tmp = frameBase;
             tmp += i;
             tmp += frameMid;
-            tmp += store.frames[i].delay;
+            tmp += animtextureStore.frames[i].delay;
             tmp += frameEnd;
             res += tmp;
           }

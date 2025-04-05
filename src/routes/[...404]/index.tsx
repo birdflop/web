@@ -1,4 +1,4 @@
-import { component$, $, useOnDocument } from '@builder.io/qwik';
+import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
@@ -17,12 +17,8 @@ export const onGet: RequestHandler = async ({ json, request }) => {
 
 export default component$(() => {
   // Keeping below unloading in case we mess up navbar in future
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => unloadGoogleAds());
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >

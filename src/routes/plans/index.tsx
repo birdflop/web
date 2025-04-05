@@ -1,4 +1,4 @@
-import { component$, useStore, useOnDocument, $ } from '@builder.io/qwik';
+import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Blobs, Header } from '@luminescent/ui-qwik';
@@ -71,6 +71,9 @@ export const useParams = routeLoader$(async ({ query }) => {
 });
 
 export default component$(() => {
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => unloadGoogleAds());
+
   const params = useParams().value;
   const store = useStore({
     plan: params.get('plan') ?? undefined as number | string | undefined,
@@ -79,13 +82,6 @@ export default component$(() => {
     name: 'My server',
     desc: '',
   });
-
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
 
   return <>
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">

@@ -46,17 +46,18 @@ export const useCookies = routeLoader$(async ({ cookie, url }) => {
 export default component$(() => {
   useSpeak({ assets: ['animtab', 'color'] });
   const t = inlineTranslate();
-
   const cookies = useCookies().value;
-  const store = useStore({
+
+  const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
     ...cookies.rgb,
   }, { deep: true });
-  const presetstore = useStore({
+
+  const presetStore = useStore({
     ...cookies.presets,
   });
 
-  const animtabstore = useStore({
+  const animtabStore = useStore({
     ...animTABDefaults,
     ...cookies.animtab,
   }, { deep: true });
@@ -65,7 +66,8 @@ export default component$(() => {
     list: [] as (string | null)[][],
     current: 0,
   }, { deep: true });
-  const opensections = useStore([] as string[]);
+
+  const openSections = useStore([] as string[]);
   const threshold = useSignal(50);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -73,7 +75,7 @@ export default component$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
       const deltaTime = (currentTime - lastTime);
-      if (frames.list[0] && deltaTime > animtabstore.speed) {
+      if (frames.list[0] && deltaTime > animtabStore.speed) {
         frames.current = frames.current + 1 >= frames.list.length ? 0 : frames.current + 1;
         lastTime = currentTime;
       }
@@ -84,20 +86,20 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     if (isBrowser) {
-      setCookies('rgb', store);
-      setCookies('animtab', { version: store.version, ...animtabstore });
+      setCookies('rgb', rgbStore);
+      setCookies('animtab', { version: rgbStore.version, ...animtabStore });
     }
-    (Object.keys(store) as Array<keyof typeof store>).forEach((key) => {
-      track(() => store[key]);
+    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
+      track(() => rgbStore[key]);
     });
-    (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach((key) => {
-      track(() => animtabstore[key]);
+    (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
+      track(() => animtabStore[key]);
     });
-    const { frames: newFrames } = getAnimFrames({ ...store, ...animtabstore, text: store.text != '' ? store.text : 'Birdflop' });
-    if (animtabstore.type == 1) {
+    const { frames: newFrames } = getAnimFrames({ ...rgbStore, ...animtabStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' });
+    if (animtabStore.type == 1) {
       frames.list = newFrames.reverse();
     }
-    else if (animtabstore.type == 3) {
+    else if (animtabStore.type == 3) {
       const frames2 = newFrames.slice();
       frames.list = newFrames.reverse().concat(frames2);
     }
@@ -116,29 +118,29 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <Input store={store}>
+        <Input rgbStore={rgbStore}>
           {(() => {
-            if (!store.text || !frames.list[0]) return '\u00A0';
+            if (!rgbStore.text || !frames.list[0]) return '\u00A0';
 
             const colors = frames.list[frames.current];
             if (!colors) return '\u00A0';
 
-            const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+            const segments = [...rgbStore.text.matchAll(new RegExp(`.{1,${rgbStore.colorlength}}`, 'g'))];
             let i = 0;
             return segments.map((segment) => {
               const color = `#${colors[i]}`;
               const shadow = hexToHSL(color);
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
-              const shadowLength = store.previewStyle == 'default' ? '4px 4px' : '2px 2px';
-              i = store.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
+              const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
+              i = rgbStore.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
               return <span key={`char${i}`} style={{
                 color,
                 textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
               }} class={{
-                'underline': store.underline,
-                'strikethrough': store.strikethrough,
-                'underline-strikethrough': store.underline && store.strikethrough,
+                'underline': rgbStore.underline,
+                'strikethrough': rgbStore.strikethrough,
+                'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
               }}>
                 {segment[0].replace(/ /g, '\u00A0')}
               </span>;
@@ -146,7 +148,7 @@ export default component$(() => {
           })()}
         </Input>
 
-        <ColorMap store={store} />
+        <ColorMap rgbStore={rgbStore} />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
@@ -155,8 +157,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('colors') == -1) opensections.push('colors');
-              else opensections.splice(opensections.indexOf('colors'), 1);
+              if (openSections.indexOf('colors') == -1) openSections.push('colors');
+              else openSections.splice(openSections.indexOf('colors'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Palette size={26} />
@@ -164,15 +166,15 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('colors') != -1,
+                'rotate-180': openSections.indexOf('colors') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <ColorList store={store} hidden={opensections.indexOf('colors') == -1}>
-              <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
-                onIncrement$={() => animtabstore.length++}
-                onDecrement$={() => animtabstore.length--}
+            <ColorList rgbStore={rgbStore} hidden={openSections.indexOf('colors') == -1}>
+              <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
+                onIncrement$={() => animtabStore.length++}
+                onDecrement$={() => animtabStore.length--}
               >
                 {t('animtab.length@@Gradient Length')}
               </NumberInput>
@@ -185,8 +187,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('output') == -1) opensections.push('output');
-              else opensections.splice(opensections.indexOf('output'), 1);
+              if (openSections.indexOf('output') == -1) openSections.push('output');
+              else openSections.splice(openSections.indexOf('output'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Clipboard size={26} />
@@ -194,17 +196,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('output') != -1,
+                'rotate-180': openSections.indexOf('output') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Output store={store} hidden={opensections.indexOf('output') == -1}
-              value={AnimationOutput({ ...store, ...animtabstore })} />
+            <Output rgbStore={rgbStore} hidden={openSections.indexOf('output') == -1}
+              value={AnimationOutput({ ...rgbStore, ...animtabStore })} />
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('options') == -1) opensections.push('options');
-              else opensections.splice(opensections.indexOf('options'), 1);
+              if (openSections.indexOf('options') == -1) openSections.push('options');
+              else openSections.splice(openSections.indexOf('options'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Settings size={26} />
@@ -212,40 +214,40 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('options') != -1,
+                'rotate-180': openSections.indexOf('options') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options store={store} hidden={opensections.indexOf('options') == -1}>
+            <Options rgbStore={rgbStore} hidden={openSections.indexOf('options') == -1}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
                   {t('animtab.animationName@@Animation Name')}
                 </label>
-                <input class="lum-input" id="nameinput" value={animtabstore.name} placeholder={'name'} onInput$={(e, el) => { animtabstore.name = el.value; }}/>
+                <input class="lum-input" id="nameinput" value={animtabStore.name} placeholder={'name'} onInput$={(e, el) => { animtabStore.name = el.value; }}/>
               </div>
-              <NumberInput id="speed" input value={animtabstore.speed} class={{ 'w-full': true }} step={50} min={50}
+              <NumberInput id="speed" input value={animtabStore.speed} class={{ 'w-full': true }} step={50} min={50}
                 onInput$={(event, el) => {
-                  animtabstore.speed = Number(el.value);
+                  animtabStore.speed = Number(el.value);
                 }}
                 onIncrement$={() => {
-                  animtabstore.speed = Number(animtabstore.speed) + 50;
+                  animtabStore.speed = Number(animtabStore.speed) + 50;
                 }}
                 onDecrement$={() => {
-                  animtabstore.speed = Number(animtabstore.speed) - 50;
+                  animtabStore.speed = Number(animtabStore.speed) - 50;
                 }}>
                 {t('animtab.interval@@Animation Interval')} (ms)
               </NumberInput>
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabstore.type = Number(el.value); }}
+              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
                 values={types}
-                value={animtabstore.type}>
+                value={animtabStore.type}>
                 {t('animtab.animationStyle@@Animation Style')}
               </Dropdown>
             </Options>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('presets') == -1) opensections.push('presets');
-              else opensections.splice(opensections.indexOf('presets'), 1);
+              if (openSections.indexOf('presets') == -1) openSections.push('presets');
+              else openSections.splice(openSections.indexOf('presets'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Save size={26} />
@@ -253,17 +255,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('presets') != -1,
+                'rotate-180': openSections.indexOf('presets') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Presets store={store} presetstore={presetstore}
-              hidden={opensections.indexOf('presets') == -1}/>
+            <Presets rgbStore={rgbStore} presetStore={presetStore}
+              hidden={openSections.indexOf('presets') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('decode') == -1) opensections.push('decode');
-              else opensections.splice(opensections.indexOf('decode'), 1);
+              if (openSections.indexOf('decode') == -1) openSections.push('decode');
+              else openSections.splice(openSections.indexOf('decode'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Sparkles size={26} />
@@ -272,13 +274,13 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('decode') != -1,
+                'rotate-180': openSections.indexOf('decode') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Decode store={store} threshold={threshold}
-              hidden={opensections.indexOf('decode') == -1} />
+            <Decode rgbStore={rgbStore} threshold={threshold}
+              hidden={openSections.indexOf('decode') == -1} />
 
           </div>
 
@@ -288,8 +290,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (opensections.indexOf('formatting') == -1) opensections.push('formatting');
-              else opensections.splice(opensections.indexOf('formatting'), 1);
+              if (openSections.indexOf('formatting') == -1) openSections.push('formatting');
+              else openSections.splice(openSections.indexOf('formatting'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Type size={26} />
@@ -297,17 +299,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': opensections.indexOf('formatting') != -1,
+                'rotate-180': openSections.indexOf('formatting') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Formatting store={store} hidden={opensections.indexOf('formatting') == -1} />
+            <Formatting rgbStore={rgbStore} hidden={openSections.indexOf('formatting') == -1} />
 
-            {store.customFormat && <>
+            {rgbStore.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (opensections.indexOf('formatoptions') == -1) opensections.push('formatoptions');
-                else opensections.splice(opensections.indexOf('formatoptions'), 1);
+                if (openSections.indexOf('formatoptions') == -1) openSections.push('formatoptions');
+                else openSections.splice(openSections.indexOf('formatoptions'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   <Settings size={26} />
@@ -315,17 +317,17 @@ export default component$(() => {
                 </h1>
                 <div class={{
                   'transition-transform duration-200': true,
-                  'rotate-180': opensections.indexOf('formatoptions') != -1,
+                  'rotate-180': openSections.indexOf('formatoptions') != -1,
                 }}>
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <FormatOptions store={store} hidden={opensections.indexOf('formatoptions') == -1} />
+              <FormatOptions rgbStore={rgbStore} hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (opensections.indexOf('outputformat') == -1) opensections.push('outputformat');
-              else opensections.splice(opensections.indexOf('outputformat'), 1);
+              if (openSections.indexOf('outputformat') == -1) openSections.push('outputformat');
+              else openSections.splice(openSections.indexOf('outputformat'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <FileJson size={26} />
@@ -333,23 +335,23 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': opensections.indexOf('outputformat') != -1,
+                'rotate-180': openSections.indexOf('outputformat') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': opensections.indexOf('outputformat') == -1,
-              'max-h-[500px] opacity-100 pointer-events-auto': opensections.indexOf('outputformat') != -1,
+              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('outputformat') == -1,
+              'max-h-[500px] opacity-100 pointer-events-auto': openSections.indexOf('outputformat') != -1,
             }}>
               <label for="outputformat" class="text-gray-500">
                 Only use this if you're trying to use this tool for a different plugin or know what you're doing
               </label>
               <textarea class="lum-input h-32 whitespace-pre" id="outputformat"
-                value={animtabstore.outputFormat}
+                value={animtabStore.outputFormat}
                 placeholder={animTABDefaults.outputFormat}
-                onInput$={(e, el) => { animtabstore.outputFormat = el.value; }}/>
+                onInput$={(e, el) => { animtabStore.outputFormat = el.value; }}/>
             </div>
           </div>
         </div>
