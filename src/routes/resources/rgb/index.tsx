@@ -2,10 +2,9 @@ import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwi
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
-import { defaults, v3formats } from '~/components/util/PresetUtils';
+import { defaults } from '~/components/util/PresetUtils';
 import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/components/util/RGBUtils';
 
-import { Dropdown, Toggle } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
@@ -18,6 +17,7 @@ import Presets from '~/components/rgb/Presets';
 import Decode from '~/components/rgb/Decode';
 import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
+import Options from '~/components/rgb/Options';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -123,10 +123,11 @@ export default component$(() => {
               const shadow = hexToHSL(hex);
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
+              const shadowLength = store.previewStyle == 'default' ? '4px 4px' : '2px 2px';
               return (
                 <span key={`segment-${i}`} style={{
                   color: `#${hex};`,
-                  textShadow: `2px 2px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                  textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
                 }} class={{
                   'underline': store.underline,
                   'strikethrough': store.strikethrough,
@@ -203,88 +204,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('options') == -1,
-              'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('options') != -1,
-            }}>
-              <div class="flex flex-col md:grid grid-cols-2 gap-2">
-                <Dropdown id="format" value={store.customFormat ? 'custom' : JSON.stringify(store.format)} class={{ 'w-full': true }} onChange$={
-                  (e, el) => {
-                    if (el.value == 'custom') {
-                      store.customFormat = true;
-                    }
-                    else {
-                      store.customFormat = false;
-                      store.format = JSON.parse(el.value);
-                    }
-                  }
-                } values={[
-                  ...v3formats.map(format => ({
-                    name: format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', ''),
-                    value: JSON.stringify(format),
-                  })),
-                  {
-                    name: store.customFormat ? `Custom: ${store.format.color
-                      .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-                      .replace('$f', `${store.bold ? store.format.char + 'l' : ''}${store.italic ? store.format.char + 'o' : ''}${store.underline ? store.format.char + 'n' : ''}${store.strikethrough ? store.format.char + 'm' : ''}`)
-                      .replace('$c', '')}`
-                      : t('color.custom@@Custom'),
-                    value: 'custom',
-                  },
-                ]}>
-                  {t('color.colorFormat@@Color Format')}
-                </Dropdown>
-                <div class="flex flex-col gap-1">
-                  <label for="prefixsuffix">
-                    {t('color.prefixsuffix@@Prefix/Suffix')}
-                  </label>
-                  <input class="lum-input" id="prefixsuffix" value={store.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { store.prefixsuffix = el.value; }}/>
-                </div>
-                <div class="flex flex-col gap-1">
-                  <Toggle id="disperse" checked={store.disperse}
-                    onChange$={(e, el) => { store.disperse = el.checked; }}
-                    label={<p class="flex flex-col"><span>Always disperse colors</span></p>} />
-                  <p class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</p>
-                </div>
-                {store.format.color != 'MiniMessage' &&
-                  <div class="flex flex-col gap-1">
-                    <Toggle id="trimspaces" checked={store.trimspaces}
-                      onChange$={(e, el) => { store.trimspaces = el.checked; }}
-                      label={'Trim colors from spaces'} />
-                    <p class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</p>
-                  </div>
-                }
-              </div>
-
-              {
-                store.customFormat && <>
-                  <div id="customformat" class={{
-                    'flex flex-col gap-2': true,
-                  }}>
-                    <label for="customformat">
-                      {t('color.customFormat@@Custom Format')}
-                    </label>
-                    <input class="lum-input" id="customformat" value={store.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { store.format.color = el.value; }}/>
-                    <div class="py-3 font-mono">
-                      <p>{t('color.placeholders@@Placeholders:')}</p>
-                      <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                      <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                      <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                      <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                      <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                      <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                      {store.format.char && <p>$f = {t('color.formatting@@Formatting')}</p>}
-                      <p>$c = {t('color.character@@Character')}</p>
-                    </div>
-                  </div>
-                </>
-              }
-            </div>
+            <Options store={store} hidden={tmpstore.sectionsOpened.indexOf('options') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
