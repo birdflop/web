@@ -136,8 +136,8 @@ export const v3formats = [
     strikethrough: '[STRIKETHROUGH]$t[/STRIKETHROUGH]',
   },
   {
-    color: "Minecraft Formatting",
-  }
+    color: 'Minecraft Formatting',
+  },
 ];
 
 export const types = [
