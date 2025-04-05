@@ -3,10 +3,17 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/components/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
 
+// This is a temporary secret, in case the env variable is not set
+const tempsecret = Math.random().toString(36).slice(2);
+
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
-    const databaseUrl = event?.platform?.env?.DATABASE_URL;
-    const secret = event?.platform?.env?.AUTH_SECRET;
+    const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
+    let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
+    if (!secret) {
+      console.error('AUTH_SECRET is not set, using a temporary secret');
+      secret = tempsecret;
+    }
     const prisma = getPrismaClient(databaseUrl);
 
     return {
@@ -35,7 +42,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       ],
       adapter: prisma ? PrismaAdapter(prisma) : undefined,
       // trustHost: true, // uncomment this if previewing on localhost
-      secret: secret ?? Math.random().toString(36).slice(2),
+      secret,
     };
   },
 );
