@@ -1,16 +1,27 @@
-import { component$, Slot, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import type { JSXOutput, NoSerialize, Signal } from '@builder.io/qwik';
+import { component$, createContextId, noSerialize, Slot, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 import { Link } from '@builder.io/qwik-city';
-import { Cookie } from 'lucide-icons-qwik';
+import { Bell, Cookie } from 'lucide-icons-qwik';
 
+type rawNotification = NoSerialize<{
+  id: string;
+  element: JSXOutput;
+}>
+type Notification = {
+  id: string;
+  title: string;
+  description?: string;
+  bgColor?: string;
+} | rawNotification;
+
+export const NotificationContext = createContextId<Signal<Notification[]>>('notification-context');
 export default component$(() => {
-  const store = useStore({
-    cookies: 'true',
-    shouldShowConsent: false,
-  });
+  const notifications = useSignal([] as Notification[]);
+  useContextProvider(NotificationContext, notifications);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -19,74 +30,83 @@ export default component$(() => {
       const [key, val] = c.trim().split('=').map(decodeURIComponent);
       return Object.assign(res, { [key]: val });
     }, {});
+    if (cookieJSON['cookies']) return;
 
-    if (!cookieJSON['cookies']) {
-      store.cookies = 'false';
+    let showConsent: boolean = false;
+    try {
+      // Fetch user's location information
+      const response = await fetch('https://ipapi.co/json/');
+      const locationData = await response.json() as any;
 
-      try {
-        // Fetch user's location information
-        const response = await fetch('https://ipapi.co/json/');
-        const locationData = await response.json() as any;
+      // Check if user is from California or EU
+      const isCaliforniaUser = locationData.region_code === 'CA' && locationData.country_code === 'US';
+      const isEUUser = [
+        'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+        'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
+        'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB',
+      ].includes(locationData.country_code);
 
-        // Check if user is from California or EU
-        const isCaliforniaUser = locationData.region_code === 'CA' && locationData.country_code === 'US';
-        const isEUUser = [
-          'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
-          'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
-          'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB',
-        ].includes(locationData.country_code);
-
-        // Only show consent popup for California or EU users
-        store.shouldShowConsent = isCaliforniaUser || isEUUser;
-      } catch (error) {
-        console.error('Error determining user location:', error);
-        // Fallback to showing consent for everyone if geolocation fails
-        store.shouldShowConsent = true;
-      }
+      // Only show consent popup for California or EU users
+      showConsent = isCaliforniaUser || isEUUser;
+    } catch (error) {
+      // Fallback to showing consent for everyone if geolocation fails
+      console.error('Error determining user location:', error);
+      showConsent = true;
     }
+
+    if (!showConsent) return;
+    const cookiePrompt = noSerialize({
+      id: 'cookieprompt',
+      element: <div class={{
+        'backdrop-blur-xl lum-card lum-bg-gray-800/60 lum-pad-equal-2xl': true,
+        'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+      }}>
+        <div>
+          <Header subheader="We use cookies to automatically save and load your preferences.">
+            <Cookie /> Cookies
+          </Header>
+          <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
+            Privacy Policy
+          </Link>
+        </div>
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <button class="lum-btn lum-pad-xs" onClick$={async () => {
+            document.cookie = 'optout=true; path=/';
+            notifications.value = notifications.value.filter((n) => n?.id !== 'cookieprompt');
+          }}>
+            Turn off cookies
+          </button>
+          <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={async () => {
+            document.cookie = 'cookies=true; path=/';
+            notifications.value = notifications.value.filter((n) => n?.id !== 'cookieprompt');
+          }}>
+            Okay
+          </button>
+        </div>
+      </div>,
+    });
+    notifications.value = [...notifications.value, cookiePrompt];
   });
 
   return <>
     <Nav />
     <Slot />
     <div class={{
-      'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col gap-2': true,
+      'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
     }} id="notifications">
-      { /* <div class={{
-        'backdrop-blur-xl lum-card lum-bg-gray-800/60 lum-pad-equal-2xl': true,
-        'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
-      }} id="cookieprompt">
-        <Header subheader="Example Descrption.">
-          <BellIcon /> Example Notification
-        </Header>
-      </div> */ }
-      {store.cookies != 'true' && store.shouldShowConsent &&
-        <div class={{
-          'backdrop-blur-xl lum-card lum-bg-gray-800/60 lum-pad-equal-2xl': true,
+      {notifications.value.map((notification) => {
+        if (!notification) return null;
+        if ('element' in notification) return notification.element;
+        return <div class={{
+          [notification.bgColor ?? 'lum-bg-gray-800/60']: true,
+          'backdrop-blur-xl lum-card lum-pad-equal-2xl rounded-none sm:rounded-lg break-words': true,
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
-        }} id="cookieprompt">
-          <Header subheader="We use cookies to automatically save and load your preferences.">
-            <Cookie /> Cookies
+        }} key={notification.id}>
+          <Header subheader={notification.description}>
+            <Bell /> {notification.title}
           </Header>
-          <div class="flex flex-wrap items-center justify-end gap-2">
-            <Link class="lum-btn lum-bg-transparent lum-pad-xs" href="/privacy">
-              Privacy Policy
-            </Link>
-            <button class="lum-btn lum-pad-xs" onClick$={async () => {
-              document.cookie = 'optout=true; path=/';
-              document.getElementById('cookieprompt')!.remove();
-            }}>
-              Turn off cookies
-            </button>
-            <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={async () => {
-              document.cookie = 'cookies=true; path=/';
-              document.getElementById('cookieprompt')!.remove();
-            }}>
-              Okay
-            </button>
-          </div>
-        </div>
-      }
+        </div>;
+      })}
     </div>
     <Footer />
   </>;

@@ -1,19 +1,13 @@
+import type { Signal } from '@builder.io/qwik';
 import { $, component$ } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import type { rgbDefaults } from '~/routes/resources/rgb';
 import { generateOutput, getSignificantPoints } from '../util/RGBUtils';
 
-export default component$(({ store, tmpstore, hidden }: {
+export default component$(({ store, threshold, hidden }: {
   store: typeof rgbDefaults;
-  tmpstore: {
-    threshold: number,
-    sectionsOpened: string[],
-    alerts: {
-      class: string,
-      text: string,
-    }[],
-  };
+  threshold: Signal<number>,
   hidden: boolean;
 }) => {
   useSpeak({ assets: ['color'] });
@@ -68,21 +62,21 @@ export default component$(({ store, tmpstore, hidden }: {
         decodeText(el.value, Number(threshold.value));
       }}
       />
-      <NumberInput input value={tmpstore.threshold} id="threshold" class={{ 'w-full': true }}
+      <NumberInput input value={threshold.value} id="threshold" class={{ 'w-full': true }}
         onInput$={(e, el) => {
-          tmpstore.threshold = Number(el.value);
+          threshold.value = Number(el.value);
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, tmpstore.threshold);
+          if (decode.value) decodeText(decode.value, threshold.value);
         }}
         onIncrement$={() => {
-          tmpstore.threshold = tmpstore.threshold + 10;
+          threshold.value = threshold.value + 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, tmpstore.threshold);
+          if (decode.value) decodeText(decode.value, threshold.value);
         }}
         onDecrement$={() => {
-          tmpstore.threshold = tmpstore.threshold - 10;
+          threshold.value = threshold.value - 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, tmpstore.threshold);
+          if (decode.value) decodeText(decode.value, threshold.value);
         }}
       >
         {t('color.threshold@@Threshold')}

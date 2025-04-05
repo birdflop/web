@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, types } from '~/components/util/PresetUtils';
@@ -61,33 +61,20 @@ export default component$(() => {
     ...cookies.animtab,
   }, { deep: true });
 
-  const tmpstore: {
-    threshold: number,
-    sectionsOpened: string[],
-    alerts: {
-      class: string,
-      text: string,
-    }[],
-    frames: (string | null)[][],
-    frame: number,
-  } = useStore({
-    threshold: 50,
-    sectionsOpened: [],
-    alerts: [] as {
-      class: string,
-      text: string,
-    }[],
-    frames: [],
-    frame: 0,
+  const frames = useStore({
+    list: [] as (string | null)[][],
+    current: 0,
   }, { deep: true });
+  const accordionsOpened = useSignal([] as string[]);
+  const threshold = useSignal(50);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
       const deltaTime = (currentTime - lastTime);
-      if (tmpstore.frames[0] && deltaTime > animtabstore.speed) {
-        tmpstore.frame = tmpstore.frame + 1 >= tmpstore.frames.length ? 0 : tmpstore.frame + 1;
+      if (frames.list[0] && deltaTime > animtabstore.speed) {
+        frames.current = frames.current + 1 >= frames.list.length ? 0 : frames.current + 1;
         lastTime = currentTime;
       }
       requestAnimationFrame(setFrame);
@@ -106,16 +93,16 @@ export default component$(() => {
     (Object.keys(animtabstore) as Array<keyof typeof animtabstore>).forEach((key) => {
       track(() => animtabstore[key]);
     });
-    const { frames } = getAnimFrames({ ...store, ...animtabstore, text: store.text != '' ? store.text : 'Birdflop' });
+    const { frames: newFrames } = getAnimFrames({ ...store, ...animtabstore, text: store.text != '' ? store.text : 'Birdflop' });
     if (animtabstore.type == 1) {
-      tmpstore.frames = frames.reverse();
+      frames.list = newFrames.reverse();
     }
     else if (animtabstore.type == 3) {
-      const frames2 = frames.slice();
-      tmpstore.frames = frames.reverse().concat(frames2);
+      const frames2 = newFrames.slice();
+      frames.list = newFrames.reverse().concat(frames2);
     }
     else {
-      tmpstore.frames = frames;
+      frames.list = newFrames;
     }
   });
 
@@ -131,9 +118,9 @@ export default component$(() => {
 
         <Input store={store}>
           {(() => {
-            if (!store.text || !tmpstore.frames[0]) return '\u00A0';
+            if (!store.text || !frames.list[0]) return '\u00A0';
 
-            const colors = tmpstore.frames[tmpstore.frame];
+            const colors = frames.list[frames.current];
             if (!colors) return '\u00A0';
 
             const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
@@ -168,8 +155,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('colors') == -1) tmpstore.sectionsOpened.push('colors');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('colors'), 1);
+              if (accordionsOpened.value.indexOf('colors') == -1) accordionsOpened.value.push('colors');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('colors'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Palette size={26} />
@@ -177,12 +164,12 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('colors') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('colors') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <ColorList store={store} hidden={tmpstore.sectionsOpened.indexOf('colors') == -1}>
+            <ColorList store={store} hidden={accordionsOpened.value.indexOf('colors') == -1}>
               <NumberInput id="length" input disabled value={animtabstore.length * store.text.length} min={store.text.length} class={{ 'w-full !opacity-100': true }}
                 onIncrement$={() => animtabstore.length++}
                 onDecrement$={() => animtabstore.length--}
@@ -198,8 +185,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('output') == -1) tmpstore.sectionsOpened.push('output');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('output'), 1);
+              if (accordionsOpened.value.indexOf('output') == -1) accordionsOpened.value.push('output');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('output'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Clipboard size={26} />
@@ -207,17 +194,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('output') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('output') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Output store={store} tmpstore={tmpstore} hidden={tmpstore.sectionsOpened.indexOf('output') == -1}
+            <Output store={store} hidden={accordionsOpened.value.indexOf('output') == -1}
               value={AnimationOutput({ ...store, ...animtabstore })} />
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('options') == -1) tmpstore.sectionsOpened.push('options');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('options'), 1);
+              if (accordionsOpened.value.indexOf('options') == -1) accordionsOpened.value.push('options');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('options'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Settings size={26} />
@@ -225,12 +212,12 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('options') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('options') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options store={store} hidden={tmpstore.sectionsOpened.indexOf('options') == -1}>
+            <Options store={store} hidden={accordionsOpened.value.indexOf('options') == -1}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
                   {t('animtab.animationName@@Animation Name')}
@@ -257,8 +244,8 @@ export default component$(() => {
             </Options>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('presets') == -1) tmpstore.sectionsOpened.push('presets');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('presets'), 1);
+              if (accordionsOpened.value.indexOf('presets') == -1) accordionsOpened.value.push('presets');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('presets'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Save size={26} />
@@ -266,17 +253,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('presets') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('presets') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Presets store={store} presetstore={presetstore} tmpstore={tmpstore}
-              hidden={tmpstore.sectionsOpened.indexOf('presets') == -1}/>
+            <Presets store={store} presetstore={presetstore}
+              hidden={accordionsOpened.value.indexOf('presets') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('decode') == -1) tmpstore.sectionsOpened.push('decode');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('decode'), 1);
+              if (accordionsOpened.value.indexOf('decode') == -1) accordionsOpened.value.push('decode');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('decode'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Sparkles size={26} />
@@ -285,13 +272,13 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('decode') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('decode') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Decode store={store} tmpstore={tmpstore}
-              hidden={tmpstore.sectionsOpened.indexOf('decode') == -1} />
+            <Decode store={store} threshold={threshold}
+              hidden={accordionsOpened.value.indexOf('decode') == -1} />
 
           </div>
 
@@ -301,8 +288,8 @@ export default component$(() => {
               'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
               'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
             }} onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('formatting') == -1) tmpstore.sectionsOpened.push('formatting');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatting'), 1);
+              if (accordionsOpened.value.indexOf('formatting') == -1) accordionsOpened.value.push('formatting');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('formatting'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <Type size={26} />
@@ -310,17 +297,17 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('formatting') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('formatting') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Formatting store={store} hidden={tmpstore.sectionsOpened.indexOf('formatting') == -1} />
+            <Formatting store={store} hidden={accordionsOpened.value.indexOf('formatting') == -1} />
 
             {store.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (tmpstore.sectionsOpened.indexOf('formatoptions') == -1) tmpstore.sectionsOpened.push('formatoptions');
-                else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('formatoptions'), 1);
+                if (accordionsOpened.value.indexOf('formatoptions') == -1) accordionsOpened.value.push('formatoptions');
+                else accordionsOpened.value.splice(accordionsOpened.value.indexOf('formatoptions'), 1);
               }}>
                 <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   <Settings size={26} />
@@ -328,17 +315,17 @@ export default component$(() => {
                 </h1>
                 <div class={{
                   'transition-transform duration-200': true,
-                  'rotate-180': tmpstore.sectionsOpened.indexOf('formatoptions') != -1,
+                  'rotate-180': accordionsOpened.value.indexOf('formatoptions') != -1,
                 }}>
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <FormatOptions store={store} hidden={tmpstore.sectionsOpened.indexOf('formatoptions') == -1} />
+              <FormatOptions store={store} hidden={accordionsOpened.value.indexOf('formatoptions') == -1} />
             </>}
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (tmpstore.sectionsOpened.indexOf('outputformat') == -1) tmpstore.sectionsOpened.push('outputformat');
-              else tmpstore.sectionsOpened.splice(tmpstore.sectionsOpened.indexOf('outputformat'), 1);
+              if (accordionsOpened.value.indexOf('outputformat') == -1) accordionsOpened.value.push('outputformat');
+              else accordionsOpened.value.splice(accordionsOpened.value.indexOf('outputformat'), 1);
             }}>
               <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 <FileJson size={26} />
@@ -346,15 +333,15 @@ export default component$(() => {
               </h1>
               <div class={{
                 'transition-transform duration-200': true,
-                'rotate-180': tmpstore.sectionsOpened.indexOf('outputformat') != -1,
+                'rotate-180': accordionsOpened.value.indexOf('outputformat') != -1,
               }}>
                 <ChevronDown size={20} />
               </div>
             </button>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': tmpstore.sectionsOpened.indexOf('outputformat') == -1,
-              'max-h-[500px] opacity-100 pointer-events-auto': tmpstore.sectionsOpened.indexOf('outputformat') != -1,
+              'max-h-0 opacity-0 pointer-events-none': accordionsOpened.value.indexOf('outputformat') == -1,
+              'max-h-[500px] opacity-100 pointer-events-auto': accordionsOpened.value.indexOf('outputformat') != -1,
             }}>
               <label for="outputformat" class="text-gray-500">
                 Only use this if you're trying to use this tool for a different plugin or know what you're doing

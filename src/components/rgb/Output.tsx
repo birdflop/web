@@ -1,23 +1,18 @@
-import { component$ } from '@builder.io/qwik';
+import { $, component$, useContext } from '@builder.io/qwik';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { NotificationContext } from '~/routes/layout';
 import type { rgbDefaults } from '~/routes/resources/rgb';
 
-export default component$(({ store, tmpstore, hidden, value }: {
+export default component$(({ store, hidden, value }: {
   store: typeof rgbDefaults;
-  tmpstore: {
-    threshold: number,
-    sectionsOpened: string[],
-    alerts: {
-      class: string,
-      text: string,
-    }[],
-  };
   hidden: boolean;
   value: string;
 }) => {
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
+  const t$ = $((string: string) => inlineTranslate()(string));
+  const notifications = useContext(NotificationContext);
 
   return (
     <div class={{
@@ -33,26 +28,25 @@ export default component$(({ store, tmpstore, hidden, value }: {
           'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
         }}
         value={value}
-        onClick$={() => {
-          let alert = {
-            class: 'text-green-500',
-            text: 'color.copied@@Copied to clipboard!',
+        onClick$={async () => {
+          const id = Math.random().toString(36).substring(2, 15);
+          const notification = {
+            id,
+            title: await t$('color.copied@@Copied to clipboard!'),
+            description: await t$('color.copiedDescription@@The RGB text has been copied to your clipboard successfully.'),
+            bgColor: 'lum-bg-green-900/50',
           };
-          navigator.clipboard.writeText(value).catch(() => {
-            alert = {
-              class: 'text-red-500',
-              text: 'color.copied@@Failed to copy to clipboard!',
-            };
+          navigator.clipboard.writeText(value).catch(async (err) => {
+            notification.title = await t$('color.copyFailed@@Failed to copy to clipboard!');
+            notification.description = err;
+            notification.bgColor = 'lum-bg-red-900/50';
           });
-          tmpstore.alerts.push(alert);
+          notifications.value = [...notifications.value, notification];
           setTimeout(() => {
-            tmpstore.alerts.splice(tmpstore.alerts.indexOf(alert), 1);
+            notifications.value = notifications.value.filter((n) => n?.id !== id);
           }, 2000);
         }}
       />
-      {tmpstore.alerts.map((alert, i) => (
-        <p key={`alert${i}`} class={alert.class} dangerouslySetInnerHTML={t(alert.text)} />
-      ))}
       <Dropdown id="previewstyle" value={store.previewStyle} class={{ 'w-full': true }} onChange$={
         (e, el) => {
           store.previewStyle = el.value;
