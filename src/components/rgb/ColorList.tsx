@@ -1,18 +1,18 @@
-import { component$, Slot, useSignal } from '@builder.io/qwik';
+import { component$, Slot, useContext, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import type { rgbDefaults } from '~/routes/resources/rgb';
 import { convertToRGB, disperseColors, getBrightness, getRandomColor, swapItems } from '../util/RGBUtils';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
 import { sortColors } from '../util/SharedUtils';
+import { rgbStoreContext } from '~/routes/resources/rgb';
 
-export default component$(({ store, hidden }: {
-  store: typeof rgbDefaults;
+export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const opened = useSignal(-1);
+  const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class={{
@@ -21,43 +21,43 @@ export default component$(({ store, hidden }: {
       'opacity-100 pointer-events-auto': !hidden,
     }} id="colors">
       <Slot />
-      {store.format.color != 'MiniMessage' &&
-        <NumberInput input disabled min={1} max={store.text.length / store.colors.length} value={store.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
+      {rgbStore.format.color != 'MiniMessage' &&
+        <NumberInput input disabled min={1} max={rgbStore.text.length / rgbStore.colors.length} value={rgbStore.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
           onIncrement$={() => {
-            store.colorlength++;
+            rgbStore.colorlength++;
           }}
           onDecrement$={() => {
-            store.colorlength--;
+            rgbStore.colorlength--;
           }}
         >
           {t('color.colorLength@@Characters per color')}
         </NumberInput>
       }
-      <NumberInput input min={2} max={store.text.length} value={store.colors.length} id="colorsinput" class={{ 'w-full': true }}
+      <NumberInput input min={2} max={rgbStore.text.length} value={rgbStore.colors.length} id="colorsinput" class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
           if (colorAmount < 2) return;
-          if (colorAmount > store.text.length) return colorAmount = store.text.length;
+          if (colorAmount > rgbStore.text.length) return colorAmount = rgbStore.text.length;
           const newColors = [];
           for (let i = 0; i < colorAmount; i++) {
-            if (store.colors[i]) newColors.push(store.colors[i]);
+            if (rgbStore.colors[i]) newColors.push(rgbStore.colors[i]);
             else newColors.push({ hex: getRandomColor(), pos: 100 });
           }
-          store.colors = newColors;
+          rgbStore.colors = newColors;
         }}
         onIncrement$={() => {
-          const newColors = [...store.colors, {
+          const newColors = [...rgbStore.colors, {
             hex: getRandomColor(),
           }];
-          store.colors = newColors.map((color, i) => ({
+          rgbStore.colors = newColors.map((color, i) => ({
             hex: color.hex,
             pos: (100 / (newColors.length - 1)) * i,
           }));
         }}
         onDecrement$={() => {
-          const newColors = store.colors.slice(0);
+          const newColors = rgbStore.colors.slice(0);
           newColors.pop();
-          store.colors = newColors.map((color, i) => ({
+          rgbStore.colors = newColors.map((color, i) => ({
             hex: color.hex,
             pos: (100 / (newColors.length - 1)) * i,
           }));
@@ -68,28 +68,28 @@ export default component$(({ store, hidden }: {
       <div class="flex gap-2">
         <button class={{
           'lum-btn lum-pad-equal-xs': true,
-          'w-full': store.disperse,
+          'w-full': rgbStore.disperse,
         }} onClick$={() => {
-          const newColors = store.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
-          store.colors = newColors;
+          const newColors = rgbStore.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
+          rgbStore.colors = newColors;
         }}>
-          <Dices size={24} /> {store.disperse && <span>Randomize</span>}
+          <Dices size={24} /> {rgbStore.disperse && <span>Randomize</span>}
         </button>
-        {!store.disperse &&
-          <button class="lum-btn lum-pad-xs w-full" disabled={store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i) ? false : true} onClick$={() => {
-            store.colors = disperseColors(store.colors);
+        {!rgbStore.disperse &&
+          <button class="lum-btn lum-pad-xs w-full" disabled={rgbStore.colors.find((color, i) => color.pos != (100 / (rgbStore.colors.length - 1)) * i) ? false : true} onClick$={() => {
+            rgbStore.colors = disperseColors(rgbStore.colors);
           }}>
             <Ellipsis size={24} /> Disperse
           </button>
         }
       </div>
       <div class="flex flex-col gap-2">
-        {store.colors.map((color, i) => <div key={`${i}/${store.colors.length}`} class="flex relative gap-2">
+        {rgbStore.colors.map((color, i) => <div key={`${i}/${rgbStore.colors.length}`} class="flex relative gap-2">
           <div class="flex flex-col rounded-md">
-            <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => store.colors = swapItems(store.colors, i, i - 1)}>
+            <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => rgbStore.colors = swapItems(rgbStore.colors, i, i - 1)}>
               <ChevronUp size={24} />
             </button>
-            <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => store.colors = swapItems(store.colors, i, i + 1)}>
+            <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => rgbStore.colors = swapItems(rgbStore.colors, i, i + 1)}>
               <ChevronDown size={24} />
             </button>
           </div>
@@ -125,10 +125,10 @@ export default component$(({ store, hidden }: {
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={store.colors.length <= 2} onClick$={() => {
-              const newColors = store.colors.slice(0);
+            <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={rgbStore.colors.length <= 2} onClick$={() => {
+              const newColors = rgbStore.colors.slice(0);
               newColors.splice(i, 1);
-              store.colors = newColors;
+              rgbStore.colors = newColors;
             }}>
               <Trash size={20} />
             </button>
@@ -142,9 +142,9 @@ export default component$(({ store, hidden }: {
               id={`colorlist-color-${i + 1}-picker`}
               value={color.hex}
               onInput$={newColor => {
-                const newColors = store.colors.slice(0);
+                const newColors = rgbStore.colors.slice(0);
                 newColors[i].hex = newColor;
-                store.colors = sortColors(newColors);
+                rgbStore.colors = sortColors(newColors);
               }}
               showInput={false}
             />

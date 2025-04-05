@@ -1,4 +1,4 @@
-import { component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/components/util/HexUtils';
@@ -45,6 +45,8 @@ export const useCookies = routeLoader$(async ({ cookie, url }) => {
   };
 });
 
+export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
+export const presetStoreContext = createContextId<{ savedPresets: Partial<typeof defaults>[] }>('presetstore-context');
 export default component$(() => {
   useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
@@ -55,9 +57,12 @@ export default component$(() => {
     ...structuredClone(rgbDefaults),
     ...cookies.rgb,
   }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
+
   const presetStore = useStore({
     ...cookies.presets,
   });
+  useContextProvider(presetStoreContext, presetStore);
 
   const openSections = useStore([] as string[]);
   const threshold = useSignal(50);
@@ -88,7 +93,7 @@ export default component$(() => {
           {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
         </h2>
 
-        <Input rgbStore={rgbStore}>
+        <Input>
           {(() => {
             if (!rgbStore.text) return '\u00A0';
 
@@ -126,7 +131,7 @@ export default component$(() => {
           })()}
         </Input>
 
-        <ColorMap rgbStore={rgbStore} />
+        <ColorMap />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
@@ -149,7 +154,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <ColorList rgbStore={rgbStore} hidden={openSections.indexOf('colors') == -1} />
+            <ColorList hidden={openSections.indexOf('colors') == -1} />
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <button class={{
@@ -172,7 +177,7 @@ export default component$(() => {
               </div>
             </button>
 
-            <Output rgbStore={rgbStore} hidden={openSections.indexOf('output') == -1}
+            <Output hidden={openSections.indexOf('output') == -1}
               value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
@@ -190,7 +195,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options rgbStore={rgbStore} hidden={openSections.indexOf('options') == -1}/>
+            <Options hidden={openSections.indexOf('options') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (openSections.indexOf('presets') == -1) openSections.push('presets');
@@ -207,8 +212,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Presets rgbStore={rgbStore} presetStore={presetStore}
-              hidden={openSections.indexOf('presets') == -1}/>
+            <Presets hidden={openSections.indexOf('presets') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (openSections.indexOf('decode') == -1) openSections.push('decode');
@@ -226,10 +230,10 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Decode rgbStore={rgbStore} threshold={threshold}
-              hidden={openSections.indexOf('decode') == -1} />
+            <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
 
           </div>
+
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <button class={{
               'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
@@ -250,7 +254,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Formatting rgbStore={rgbStore} hidden={openSections.indexOf('formatting') == -1} />
+            <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
@@ -268,7 +272,7 @@ export default component$(() => {
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <FormatOptions rgbStore={rgbStore} hidden={openSections.indexOf('formatoptions') == -1} />
+              <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
 
           </div>

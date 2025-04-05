@@ -1,4 +1,4 @@
-import { component$, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, types } from '~/components/util/PresetUtils';
@@ -9,7 +9,7 @@ import { ChevronDown, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Ty
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { rgbDefaults } from '../rgb';
+import { presetStoreContext, rgbDefaults, rgbStoreContext } from '../rgb';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -52,10 +52,12 @@ export default component$(() => {
     ...structuredClone(rgbDefaults),
     ...cookies.rgb,
   }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
 
   const presetStore = useStore({
     ...cookies.presets,
   });
+  useContextProvider(presetStoreContext, presetStore);
 
   const animtabStore = useStore({
     ...animTABDefaults,
@@ -118,7 +120,7 @@ export default component$(() => {
           {t('animtab.subtitle@@TAB plugin gradient animation creator')}
         </h2>
 
-        <Input rgbStore={rgbStore}>
+        <Input>
           {(() => {
             if (!rgbStore.text || !frames.list[0]) return '\u00A0';
 
@@ -148,7 +150,7 @@ export default component$(() => {
           })()}
         </Input>
 
-        <ColorMap rgbStore={rgbStore} />
+        <ColorMap />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
@@ -171,7 +173,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <ColorList rgbStore={rgbStore} hidden={openSections.indexOf('colors') == -1}>
+            <ColorList hidden={openSections.indexOf('colors') == -1}>
               <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
                 onIncrement$={() => animtabStore.length++}
                 onDecrement$={() => animtabStore.length--}
@@ -201,7 +203,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Output rgbStore={rgbStore} hidden={openSections.indexOf('output') == -1}
+            <Output hidden={openSections.indexOf('output') == -1}
               value={AnimationOutput({ ...rgbStore, ...animtabStore })} />
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
@@ -219,7 +221,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Options rgbStore={rgbStore} hidden={openSections.indexOf('options') == -1}>
+            <Options hidden={openSections.indexOf('options') == -1}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
                   {t('animtab.animationName@@Animation Name')}
@@ -260,8 +262,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Presets rgbStore={rgbStore} presetStore={presetStore}
-              hidden={openSections.indexOf('presets') == -1}/>
+            <Presets hidden={openSections.indexOf('presets') == -1}/>
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
               if (openSections.indexOf('decode') == -1) openSections.push('decode');
@@ -279,8 +280,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Decode rgbStore={rgbStore} threshold={threshold}
-              hidden={openSections.indexOf('decode') == -1} />
+            <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
 
           </div>
 
@@ -304,7 +304,7 @@ export default component$(() => {
                 <ChevronDown size={20} />
               </div>
             </button>
-            <Formatting rgbStore={rgbStore} hidden={openSections.indexOf('formatting') == -1} />
+            <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
               <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
@@ -322,7 +322,7 @@ export default component$(() => {
                   <ChevronDown size={20} />
                 </div>
               </button>
-              <FormatOptions rgbStore={rgbStore} hidden={openSections.indexOf('formatoptions') == -1} />
+              <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
 
             <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {

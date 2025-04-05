@@ -1,7 +1,6 @@
 import { $, component$, isBrowser, useContext, useSignal } from '@builder.io/qwik';
 import { Download, Globe, Link, Save, Share, X } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import type { rgbDefaults } from '~/routes/resources/rgb';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { defaults, loadPreset, presets as presetlist } from '../util/PresetUtils';
 
@@ -9,12 +8,9 @@ import { setCookies, sortColors } from '../util/SharedUtils';
 import { Gradient } from '../util/HexUtils';
 import { convertToHex, convertToRGB } from '../util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
+import { presetStoreContext, rgbStoreContext } from '~/routes/resources/rgb';
 
-export default component$(({ store, presetstore, hidden }: {
-  store: typeof rgbDefaults;
-  presetstore: {
-    savedPresets: Partial<typeof defaults>[];
-  };
+export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   const modalRef = useSignal<HTMLDialogElement>();
@@ -22,6 +18,8 @@ export default component$(({ store, presetstore, hidden }: {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
+  const rgbStore = useContext(rgbStoreContext);
+  const presetStore = useContext(presetStoreContext);
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -41,16 +39,16 @@ export default component$(({ store, presetstore, hidden }: {
       notification.title = await t$('color.invalidPreset@@Invalid Preset');
       notification.description = `Error: ${err}\nPlease report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.`;
       notification.bgColor = 'lum-bg-red-900/50';
-      notifications.value = [...notifications.value, notification];
+      notifications.push(notification);
     }
     if (!json) return;
-    (Object.keys(store) as Array<keyof typeof store>).forEach(key => {
-      if (store[key] === undefined) return;
-      (store as any)[key] = json[key] ?? defaults[key];
+    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach(key => {
+      if (rgbStore[key] === undefined) return;
+      (rgbStore as any)[key] = json[key] ?? defaults[key];
     });
-    notifications.value = [...notifications.value, notification];
+    notifications.push(notification);
     setTimeout(() => {
-      notifications.value = notifications.value.filter((n) => n?.id !== id);
+      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
     }, 2000);
   });
 
@@ -64,7 +62,7 @@ export default component$(({ store, presetstore, hidden }: {
         <Dropdown id="saved-presets" class={{ 'w-full': true }}
           onChange$={async (event, el) => loadPresetJSON(el.value)}
           values={
-            presetstore.savedPresets.map((preset) => ({
+            presetStore.savedPresets.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
               }}>
@@ -117,25 +115,25 @@ export default component$(({ store, presetstore, hidden }: {
                 <button class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="save" onClick$={async () => {
                   const presetnameinput = document.getElementById('presetname') as HTMLInputElement;
                   const preset: Partial<typeof defaults> = {
-                    ...store,
+                    ...rgbStore,
                     name: presetnameinput.value ?? 'Untitled',
                   };
                   (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
                     if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
                   });
-                  if (presetstore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
-                  presetstore.savedPresets.push(preset);
-                  if (isBrowser) setCookies('presets', presetstore);
+                  if (presetStore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
+                  presetStore.savedPresets.push(preset);
+                  if (isBrowser) setCookies('presets', presetStore);
                   modalRef.value?.close();
                   const id = Math.random().toString(36).substring(2, 15);
-                  notifications.value = [...notifications.value, {
+                  notifications.push({
                     id,
                     title: await t$('color.savedPresetTitle@@Preset Saved!'),
                     description: await t$('color.savedPreset@@Successfully saved preset!'),
                     bgColor: 'lum-bg-green-900/50',
-                  }];
+                  });
                   setTimeout(() => {
-                    notifications.value = notifications.value.filter((n) => n?.id !== id);
+                    notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
                   }, 2000);
                 }}>
                   <Save size={20} /> {t('color.save@@Save')}
@@ -156,7 +154,7 @@ export default component$(({ store, presetstore, hidden }: {
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button class="lum-btn lum-pad-sm" id="export" onClick$={async () => {
-            const preset: Partial<typeof defaults> = { ...store };
+            const preset: Partial<typeof defaults> = { ...rgbStore };
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
@@ -172,9 +170,9 @@ export default component$(({ store, presetstore, hidden }: {
               notification.description = err;
               notification.bgColor = 'lum-bg-red-900/50';
             });
-            notifications.value = [...notifications.value, notification];
+            notifications.push(notification);
             setTimeout(() => {
-              notifications.value = notifications.value.filter((n) => n?.id !== id);
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
             <Share size={24} /> {t('color.export@@Export')}
@@ -182,7 +180,7 @@ export default component$(({ store, presetstore, hidden }: {
           <button class="lum-btn lum-pad-sm" id="createurl" onClick$={async () => {
             const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
             const url = new URL(base_url);
-            const params: Partial<typeof defaults> = { ...store };
+            const params: Partial<typeof defaults> = { ...rgbStore };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
               if (key == 'format' || key == 'colors') {
                 value = JSON.stringify(value);
@@ -193,14 +191,14 @@ export default component$(({ store, presetstore, hidden }: {
             });
             window.history.pushState({}, '', url.href);
             const id = Math.random().toString(36).substring(2, 15);
-            notifications.value = [...notifications.value, {
+            notifications.push({
               id,
               title: await t$('color.exportedPresetUrlTitle@@URL Updated!'),
               description: await t$('color.exportedPresetUrl@@Successfully exported preset to url! Check the URL bar!'),
               bgColor: 'lum-bg-green-900/50',
-            }];
+            });
             setTimeout(() => {
-              notifications.value = notifications.value.filter((n) => n?.id !== id);
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
             <Link size={24} /> {t('color.url@@Get URL')}

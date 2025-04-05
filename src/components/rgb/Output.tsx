@@ -2,10 +2,9 @@ import { $, component$, useContext } from '@builder.io/qwik';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { NotificationContext } from '~/routes/layout';
-import type { rgbDefaults } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/routes/resources/rgb';
 
-export default component$(({ store, hidden, value }: {
-  store: typeof rgbDefaults;
+export default component$(({ hidden, value }: {
   hidden: boolean;
   value: string;
 }) => {
@@ -13,6 +12,7 @@ export default component$(({ store, hidden, value }: {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
+  const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class={{
@@ -41,15 +41,15 @@ export default component$(({ store, hidden, value }: {
             notification.description = err;
             notification.bgColor = 'lum-bg-red-900/50';
           });
-          notifications.value = [...notifications.value, notification];
+          notifications.push(notification);
           setTimeout(() => {
-            notifications.value = notifications.value.filter((n) => n?.id !== id);
+            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 2000);
         }}
       />
-      <Dropdown id="previewstyle" value={store.previewStyle} class={{ 'w-full': true }} onChange$={
+      <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
         (e, el) => {
-          store.previewStyle = el.value;
+          rgbStore.previewStyle = el.value;
         }
       } values={[
         {

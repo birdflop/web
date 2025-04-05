@@ -1,17 +1,17 @@
 import type { Signal } from '@builder.io/qwik';
-import { $, component$ } from '@builder.io/qwik';
+import { $, component$, useContext } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import type { rgbDefaults } from '~/routes/resources/rgb';
 import { generateOutput, getSignificantPoints } from '../util/RGBUtils';
+import { rgbStoreContext } from '~/routes/resources/rgb';
 
-export default component$(({ store, threshold, hidden }: {
-  store: typeof rgbDefaults;
+export default component$(({ threshold, hidden }: {
   threshold: Signal<number>,
   hidden: boolean;
 }) => {
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
+  const rgbStore = useContext(rgbStoreContext);
 
   const decodeText = $((rgbtext: string, threshold: number) => {
     const pattern = /(?:[&§]x((?:[&§][0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))([^§&#]*)/;
@@ -33,14 +33,14 @@ export default component$(({ store, threshold, hidden }: {
       if (!result) return '';
       return result[result.length - 1];
     }).join('');
-    store.text = text ?? '';
+    rgbStore.text = text ?? '';
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
     const newColors = significantPoints.map((color) => {
       const pos = colors.find(c => c.hex == color)?.pos ?? 0;
       return { hex: color, pos };
     });
-    store.colors = newColors;
+    rgbStore.colors = newColors;
   });
 
   return (
@@ -56,7 +56,7 @@ export default component$(({ store, threshold, hidden }: {
       </label>
       <textarea id="decode" class={{
         'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-      }} placeholder={generateOutput(store.text, store.colors, store.format, store.prefixsuffix, store.trimspaces, store.colorlength, store.bold, store.italic, store.underline, store.strikethrough)}
+      }} placeholder={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)}
       onInput$={(e, el) => {
         const threshold = document.getElementById('threshold') as HTMLInputElement;
         decodeText(el.value, Number(threshold.value));
