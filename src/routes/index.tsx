@@ -1,4 +1,4 @@
-import { $, component$, useOnWindow, useVisibleTask$, useStore, useOnDocument } from '@builder.io/qwik';
+import { $, component$, useOnWindow, useVisibleTask$, useSignal } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Header } from '@luminescent/ui-qwik';
@@ -11,12 +11,12 @@ import { plans } from './plans';
 import { unloadGoogleAds } from '~/components/util/GoogleAds';
 
 export default component$(() => {
-
-  const missionContentVisible = useStore({ expanded: false });
+  const missionExpanded = useSignal(false);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     initiateTyper();
+    unloadGoogleAds();
   });
 
   useOnWindow('scroll', $(() => {
@@ -26,13 +26,6 @@ export default component$(() => {
     bg.style.bottom = `${window.scrollY / 2}px`;
     bg.style.filter = `blur(${window.scrollY * 2 / 100}px)`;
   }));
-
-  useOnDocument(
-    'load',
-    $(() => {
-      unloadGoogleAds();
-    }),
-  );
 
   return <>
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
@@ -79,14 +72,14 @@ export default component$(() => {
           </h2>
           <p class="text-gray-200 sm:text-lg">
             At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
-            {missionContentVisible.expanded && <>
+            {missionExpanded.value && <>
               Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
               <br />
               <br />
               Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
             </>}
-            <button class="text-blue-400 hover:underline" onClick$={() => missionContentVisible.expanded = !missionContentVisible.expanded}>
-              {missionContentVisible.expanded ? 'Read less' : 'Read more'}
+            <button class="text-blue-400 hover:underline" onClick$={() => missionExpanded.value = !missionExpanded.value}>
+              {missionExpanded.value ? 'Read less' : 'Read more'}
             </button>
           </p>
         </div>
