@@ -5,6 +5,34 @@ import Backgrounds from '~/components/backgrounds';
 import { generateOutput } from '../util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
+const InputField = component$(({ class: className }: {
+  class?: string;
+}) => {
+  const rgbStore = useContext(rgbStoreContext);
+  return (
+    <div class={{
+      'relative text-2xl break-words': true,
+      [`${className}`]: className,
+    }}
+    style={{ textShadow: '2px 2px 0 #373737' }}>
+      <p class={{
+        'font-mc-bold': rgbStore.bold,
+        'font-mc-italic': rgbStore.italic,
+        'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+      }}>
+        <Slot />
+      </p>
+      <div class="absolute bottom-0 h-full flex flex-col">
+        <textarea class={{
+          'lum-input pl-0 pr-1.5 py-0 rounded-none lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50': true,
+          [`${className}`]: className,
+        }} value={rgbStore.text} spellcheck={false}
+        onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+      </div>
+    </div>
+  );
+});
+
 export default component$(() => {
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   useSpeak({ assets: ['color'] });
@@ -26,18 +54,38 @@ export default component$(() => {
           'break-all font-mc': true,
         }}>
           <Background class="overflow-hidden rounded-md" id="bg" alt="background" />
-          <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl max-h-64 break-words overflow-auto"
+          <div class="absolute flex flex-col justify-center items-center text-center top-5 w-full min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
+            style={{ textShadow: '2px 2px 0 #373737' }}>
+            <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 break-words overflow-auto"
+              style={{ textShadow: '2px 2px 0 #373737' }}>
+              <InputField class="text-center">
+                <Slot />
+              </InputField>
+              <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+                style={{ textShadow: '2px 2px 0 #373737' }}>
+                <img class="h-6" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                <p class="-my-0.5 flex-1">RGBirdflop</p>
+                <img class="h-6" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+              </div>
+              <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+                style={{ textShadow: '2px 2px 0 #373737' }}>
+                <img class="h-6" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                <InputField class="flex-1">
+                  <Slot />
+                </InputField>
+                <img class="h-6" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+              </div>
+              <InputField class="text-center">
+                <Slot />
+              </InputField>
+            </div>
+          </div>
+          <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
             <p>{'<RGBirdflop> Type here!'}</p>
-            <p class={{
-              'font-mc-bold': rgbStore.bold,
-              'font-mc-italic': rgbStore.italic,
-              'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-            }}>
+            <InputField>
               <Slot />
-            </p>
-            <textarea class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-pad-md resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
-              value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+            </InputField>
           </div>
           <p class="absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
