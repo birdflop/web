@@ -199,7 +199,7 @@ export default component$(() => {
             How do reimbursements work?
           </h2>
           <p class="text-gray-200 sm:text-lg">
-            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 37% reimbursement and EU clients received a 27% reimbursement, effectively lowering prices to $1.89/GB RAM and $1.46/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
+            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 28% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.44/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
           </p>
         </div>
       </div>
@@ -214,7 +214,7 @@ export default component$(() => {
             <div>
               <Chart />
               <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q4 2024. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
+                Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
               </p>
             </div>
             <div class="flex flex-col gap-4">
