@@ -93,9 +93,9 @@ export default component$(() => {
 
   return <>
     <Nav />
-    <Background class={{
-      'transition-all duration-1000 fixed top-0 overflow-hidden -z-10 w-full h-full object-cover brightness-50': true,
-      'blur-xl scale-110 opacity-25': loc.url.pathname != '/',
+    <Background id="bg" class={{
+      'fixed scale-120 bottom-0 overflow-hidden -z-10 w-full h-full object-cover brightness-50': true,
+      'blur-xl opacity-10': loc.url.pathname != '/',
     }}/>
     <Slot />
     <div class={{

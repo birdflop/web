@@ -1,9 +1,10 @@
-import Hero1 from './images/Hero1.png?jsx';
-import Hero2 from './images/Hero2.png?jsx';
-import Hero3 from './images/Hero3.png?jsx';
-import Hero4 from './images/Hero4.png?jsx';
-import Hero5 from './images/Hero5.png?jsx';
-import Hero6 from './images/Hero6.png?jsx';
+// @ts-nocheck
+import Hero1 from './images/Hero1.png?jsx&w=1280;1920;2560';
+import Hero2 from './images/Hero2.png?jsx&w=1280;1920;2560';
+import Hero3 from './images/Hero3.png?jsx&w=1280;1920;2560';
+import Hero4 from './images/Hero4.png?jsx&w=1280;1920;2560';
+import Hero5 from './images/Hero5.png?jsx&w=1280;1920;2560';
+import Hero6 from './images/Hero6.png?jsx&w=1280;1920;2560';
 
 export default [
   Hero1,

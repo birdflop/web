@@ -1,4 +1,4 @@
-import { $, component$, useOnWindow, useVisibleTask$, useSignal } from '@builder.io/qwik';
+import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Header } from '@luminescent/ui-qwik';
@@ -23,11 +23,11 @@ export default component$(() => {
     if (mediaQuery.matches) return;
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
-    bg.style.filter = `blur(${window.scrollY * 2 / 100}px)`;
+    bg.style.filter = `blur(${window.scrollY / 20}px) brightness(50%)`;
   }));
 
   return <>
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="text-center justify-center flex relative w-full">
         <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
           <h1 class="text-white text-3xl sm:text-6xl font-bold animate-in fade-in slide-in-from-top-8 anim-duration-1000 drop-shadow-lg">
@@ -62,7 +62,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800 border-t border-gray-700">
       <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
@@ -148,7 +148,7 @@ export default component$(() => {
             </div>
             <div class="lum-card hover:lum-bg-gray-900/50 transition duration-1000 hover:duration-75 ease-out">
               <Header>
-                <Settings size={36} class="fill-current" /> Fully Configurable
+                <Settings size={36} /> Fully Configurable
               </Header>
               <p>
                 You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
@@ -190,7 +190,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
       <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
@@ -292,7 +292,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 sitems-center justify-center bg-gray-800">
+    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-800">
       <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
