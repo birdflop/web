@@ -10,7 +10,7 @@ export const plans = {
     id: 'eu-premium',
     groupId: 9,
     $PerGB: 2,
-    $PerGBReimbursed: 1.46,
+    $PerGBReimbursed: 1.44,
     ramAndId: {
       4: 8,
       6: 9,
@@ -31,7 +31,7 @@ export const plans = {
     id: 'us-premium',
     groupId: 7,
     $PerGB: 3,
-    $PerGBReimbursed: 1.89,
+    $PerGBReimbursed: 1.99,
     ramAndId: {
       4: 1,
       6: 2,
@@ -50,7 +50,7 @@ export const plans = {
     id: 'us-premium',
     groupId: 7,
     $PerGB: 3,
-    $PerGBReimbursed: 1.89,
+    $PerGBReimbursed: 1.99,
     ramAndId: {
       12: 4,
       16: 5,
