@@ -99,7 +99,7 @@ export default component$(() => {
               const ramOptions = Object.keys(plan.ramAndId);
               return <div class="lum-card hover:lum-bg-gray-900/70 transition duration-1000 hover:duration-75 ease-out" key={planName}>
                 <p>
-                  Last quarter, clients paid <strong>~${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+                  Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
                 </p>
                 <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
                   {planName}
