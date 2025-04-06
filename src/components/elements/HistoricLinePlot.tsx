@@ -1,7 +1,7 @@
 // components/elements/HistoricLinePlot.tsx
 import { component$ } from '@builder.io/qwik';
 import Chart from '~/components/elements/Chart';
-import { historicPrices } from '~/data/historicPrices';
+import { historicPrices } from './historicPrices';
 
 export default component$(() => {
   const config = {
