@@ -1,14 +1,24 @@
+// components/elements/Chart.tsx
 import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Chart, registerables } from 'chart.js';
 
-export default component$(() => {
+export interface ChartProps {
+  config?: {
+    type: string;
+    data: any;
+    options?: any;
+  };
+}
+
+export default component$<ChartProps>((props) => {
   const myChart = useSignal<HTMLCanvasElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (myChart?.value) {
       Chart.register(...registerables);
-      new Chart(myChart.value, {
+      // Use the provided config if available, otherwise default to the existing donut chart config.
+      const chartConfig = props.config || {
         type: 'doughnut',
         data: {
           labels: [
@@ -16,12 +26,9 @@ export default component$(() => {
             'US Hosting Expenses',
             'Infrastructure',
             'Platform Development',
-            // 'Loan Payments',
             'Client Reimbursements',
             'Hosting Revenue',
             'Ad Revenue',
-            // 'Licensing Fees',
-            // 'Loans Received',
           ],
           datasets: [{
             // Outer Ring (EXPENDITURES)
@@ -104,15 +111,22 @@ export default component$(() => {
               cornerRadius: 10,
               padding: 10,
               callbacks: {
-                label: function (context) {
-                  const label = ' ' + new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(context.parsed);
+                label: function (context: { parsed: number | bigint; }) {
+                  const label = ' ' + new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(context.parsed);
                   return label;
                 },
               },
             },
           },
         },
-      });
+      };
+
+      new Chart(myChart.value, chartConfig);
     }
   });
 
