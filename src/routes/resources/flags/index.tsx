@@ -5,8 +5,8 @@ import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/components/util/SharedUtils';
 import { generateResult } from '~/components/util/flags/generateResult';
-import { extraFlags as extFlags } from '~/data/flags';
-import { serverType as srvType } from '~/data/environment/serverType';
+import { extraFlags as extFlags } from '~/components/flags/flags';
+import { serverType as srvType } from '~/components/flags/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal } from 'lucide-icons-qwik';
 

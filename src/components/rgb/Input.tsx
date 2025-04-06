@@ -1,11 +1,12 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import MCBackground from '~/components/images/MCBackground.png?jsx';
+import Backgrounds from '~/components/backgrounds';
 import { generateOutput } from '../util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(() => {
+  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
@@ -24,7 +25,7 @@ export default component$(() => {
           'relative lum-bg-gray-800/50 rounded-lg': true,
           'break-all font-mc': true,
         }}>
-          <MCBackground class="overflow-hidden rounded-md" id="bg" alt="background" />
+          <Background class="overflow-hidden rounded-md" id="bg" alt="background" />
           <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl max-h-64 break-words overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
             <p>{'<RGBirdflop> Type here!'}</p>

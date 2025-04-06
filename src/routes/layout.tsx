@@ -2,6 +2,7 @@ import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
+import Backgrounds from '~/components/backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '../components/Nav';
 import { Link } from '@builder.io/qwik-city';
@@ -20,6 +21,7 @@ type Notification = {
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export default component$(() => {
+  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
 
@@ -90,6 +92,7 @@ export default component$(() => {
 
   return <>
     <Nav />
+    <Background class="fixed bottom-0 scale-110 overflow-hidden -z-10 h-lvh w-lvw object-cover object-center opacity-40" id="bg" alt="background" />
     <Slot />
     <div class={{
       'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
