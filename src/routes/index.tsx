@@ -209,7 +209,7 @@ export default component$(() => {
       <div class="justify-center flex relative max-w-4xl px-10">
         <div class="flex flex-col gap-4">
           <p class="text-gray-200 sm:text-lg text-center">
-            Historical Reimbursement Rates
+            Historical Reimbursement Rates for US and EU Clients
           </p>
           <HistoricLinePlot />
         </div>
