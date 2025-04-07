@@ -8,7 +8,6 @@ import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import type { BirdflopSession } from '~/routes/plugin@auth';
 
 import { ChevronDown, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input from '~/components/rgb/Input';
@@ -38,52 +37,22 @@ export const rgbDefaults = {
   previewStyle: defaults.previewStyle,
 };
 
-export const useData = routeLoader$(async ({ cookie, url, sharedMap }) => {
-  // Get cookies
-  const rgbCookies = await getCookies(cookie, 'rgb', url.searchParams) as typeof rgbDefaults;
-  const presetCookies = await getCookies(cookie, 'presets') as { savedPresets: Partial<typeof defaults>[] };
-
-  // Get session and merge saved presets
-  const session = sharedMap.get('session') as BirdflopSession | undefined;
-  const savedPresets = [
-    ...presetCookies.savedPresets,
-    ...(session?.user?.savedPresets ?? []),
-  ];
-
-  // Remove duplicates
-  const uniquelySavedPresets = savedPresets.filter((preset, index) => {
-    const stringifiedPreset = JSON.stringify(preset);
-    return (
-      index === savedPresets.findIndex((otherPreset) => {
-        const stringifiedOtherPreset = JSON.stringify(otherPreset);
-        return stringifiedPreset === stringifiedOtherPreset;
-      })
-    );
-  });
-
-  // Return data
-  return {
-    rgb: rgbCookies,
-    savedPresets: uniquelySavedPresets,
-  };
+export const useCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, 'rgb', url.searchParams) as typeof rgbDefaults;
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
-export const presetStoreContext = createContextId<Partial<typeof defaults>[]>('presetstore-context');
 export default component$(() => {
   useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
 
-  const data = useData().value;
+  const cookies = useCookies().value;
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
-    ...data.rgb,
+    ...cookies,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
-
-  const presetStore = useStore(data.savedPresets);
-  useContextProvider(presetStoreContext, presetStore);
 
   const openSections = useStore([] as string[]);
   const threshold = useSignal(50);

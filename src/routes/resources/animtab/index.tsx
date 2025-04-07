@@ -9,7 +9,7 @@ import { ChevronDown, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Ty
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { presetStoreContext, rgbDefaults, rgbStoreContext, useData } from '../rgb';
+import { rgbDefaults, rgbStoreContext, useCookies } from '../rgb';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -30,23 +30,19 @@ export const animTABDefaults = {
 
 export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
   return await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
-
 });
 
 export default component$(() => {
   useSpeak({ assets: ['animtab', 'color'] });
   const t = inlineTranslate();
-  const data = useData().value;
+  const rgbCookies = useCookies().value;
   const animTABCookies = useAnimTABCookies();
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
-    ...data.rgb,
+    ...rgbCookies,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
-
-  const presetStore = useStore(data.savedPresets);
-  useContextProvider(presetStoreContext, presetStore);
 
   const animtabStore = useStore({
     ...animTABDefaults,

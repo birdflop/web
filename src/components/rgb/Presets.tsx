@@ -1,14 +1,14 @@
-import { $, component$, isBrowser, useContext } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useStore } from '@builder.io/qwik';
 import { Download, Globe, Save, Share, Link as LinkIcon } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { defaults, loadPreset } from '~/util/PresetUtils';
 
-import { setCookies, setUserData, sortColors } from '~/util/SharedUtils';
+import { setUserData, sortColors } from '~/util/SharedUtils';
 import { Gradient } from '~/util/HexUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
-import { presetStoreContext, rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link } from '@builder.io/qwik-city';
 
 export default component$(({ hidden }: {
@@ -19,7 +19,6 @@ export default component$(({ hidden }: {
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
-  const presetStore = useContext(presetStoreContext);
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -52,13 +51,41 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
+  const presetStore = useStore([] as Partial<typeof defaults>[]);
+
   return (
     <div class={{
       'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
       'max-h-0 opacity-0 pointer-events-none': hidden,
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2"
+        onClick$={async () => {
+          if (presetStore.length != 0) return;
+          let savedPresets = localStorage.getItem('savedPresets');
+          try {
+            if (!savedPresets) {
+              // presets possibly stored in cookies
+              const cookie: { [key: string]: string; } = {};
+              document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+                const pairsplit = pair.split(/\s*=\s*/);
+                cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+              });
+              if (!cookie['presets']) return;
+              const cookieSavedPresets = decodeURIComponent(cookie['presets']);
+              savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
+              if (!savedPresets) return;
+              // remove cookie
+              document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+              // save to localStorage
+              localStorage.setItem('savedPresets', cookieSavedPresets);
+            }
+            const parsed = JSON.parse(savedPresets);
+            presetStore.push(...parsed);
+          } catch (err) {
+            console.error('Error parsing saved presets', err);
+          }
+        }}>
         <Dropdown id="saved-presets" class={{ 'w-full': true }}
           onChange$={async (event, el) => loadPresetJSON(el.value)}
           values={
@@ -122,7 +149,7 @@ export default component$(({ hidden }: {
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
             }
-            if (isBrowser) setCookies('presets', { savedPresets: presetStore });
+            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore));
             setUserData({ savedPresets: presetStore });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({

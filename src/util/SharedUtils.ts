@@ -2,10 +2,10 @@ import { server$, type Cookie } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
-import { defaults, loadPreset, defaultPresets } from './PresetUtils';
+import { defaults, loadPreset } from './PresetUtils';
 import { getPrismaClient } from './prisma';
 
-type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'presets';
+type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
 function deepclone(obj: any) {
   return JSON.parse(JSON.stringify(obj));
@@ -19,8 +19,6 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
       json = JSON.parse(decodeURIComponent(cookieVal));  // Decode the cookie value
     } else if (preset == 'rgb' || preset == 'animtab') {
       json = preset == 'rgb' ? deepclone(rgbDefaults) : deepclone(animTABDefaults);
-    } else if (preset == 'presets') {
-      json = deepclone(defaultPresets);
     } else {
       json = {};
     }
