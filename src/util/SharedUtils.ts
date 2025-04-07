@@ -3,7 +3,7 @@ import type { BirdflopSession } from '~/routes/plugin@auth';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
 import { defaults, loadPreset, defaultPresets } from './PresetUtils';
-import { prisma } from './prisma';
+import { getPrismaClient } from './prisma';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'presets';
 
@@ -105,7 +105,8 @@ export const setUserData = server$(async function(data: {
   savedPresets?: Partial<typeof defaults>[];
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
-  if (!session || !prisma) return console.log('No session or prisma client');
+  const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
+  if (!session || !prisma) return console.log('No session or prisma client', session, prisma);
   const sessionData = await prisma.user.update({
     where: { id: session.user.id },
     data,
