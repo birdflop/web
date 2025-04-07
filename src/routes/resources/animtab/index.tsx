@@ -9,7 +9,7 @@ import { ChevronDown, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Ty
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { presetStoreContext, rgbDefaults, rgbStoreContext } from '../rgb';
+import { presetStoreContext, rgbDefaults, rgbStoreContext, useData } from '../rgb';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -28,40 +28,29 @@ export const animTABDefaults = {
   outputFormat: defaults.outputFormat,
 };
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  const animtabCookies = await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
-  const rgbCookies = await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
-  const presetCookies = await getCookies(cookie, 'presets') as { savedPresets: Partial<typeof defaults>[] };
-  if (!rgbCookies.customFormat) {
-    delete rgbCookies.format;
-    delete animtabCookies.outputFormat;
-  }
-  return {
-    animtab: animtabCookies,
-    rgb: rgbCookies,
-    presets: presetCookies,
-  };
+export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+
 });
 
 export default component$(() => {
   useSpeak({ assets: ['animtab', 'color'] });
   const t = inlineTranslate();
-  const cookies = useCookies().value;
+  const data = useData().value;
+  const animTABCookies = useAnimTABCookies();
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
-    ...cookies.rgb,
+    ...data.rgb,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const presetStore = useStore({
-    ...cookies.presets,
-  });
+  const presetStore = useStore(data.savedPresets);
   useContextProvider(presetStoreContext, presetStore);
 
   const animtabStore = useStore({
     ...animTABDefaults,
-    ...cookies.animtab,
+    ...animTABCookies,
   }, { deep: true });
 
   const frames = useStore({

@@ -1,7 +1,9 @@
-import type { Cookie } from '@builder.io/qwik-city';
+import { server$, type Cookie } from '@builder.io/qwik-city';
+import type { BirdflopSession } from '~/routes/plugin@auth';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
 import { defaults, loadPreset, defaultPresets } from './PresetUtils';
+import { prisma } from './prisma';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'presets';
 
@@ -98,6 +100,19 @@ export function setCookies(name: names, json: { [key: string]: any }) {
   console.debug('cookie processed', name, encodedValue);
   document.cookie = `${name}=${encodedValue}; path=/`;
 }
+
+export const setUserData = server$(async function(data: {
+  savedPresets?: Partial<typeof defaults>[];
+}) {
+  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+  if (!session || !prisma) return console.log('No session or prisma client');
+  const sessionData = await prisma.user.update({
+    where: { id: session.user.id },
+    data,
+  });
+  console.log(sessionData);
+  return sessionData;
+});
 
 export function sortColors(colors: { hex: string, pos: number }[]) {
   return [...colors].sort((a, b) => a.pos - b.pos);

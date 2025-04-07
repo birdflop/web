@@ -1,14 +1,15 @@
 import { $, component$, isBrowser, useContext } from '@builder.io/qwik';
-import { Download, Globe, Link, Save, Share } from 'lucide-icons-qwik';
+import { Download, Globe, Save, Share, Link as LinkIcon } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { defaults, loadPreset } from '~/util/PresetUtils';
 
-import { setCookies, sortColors } from '~/util/SharedUtils';
+import { setCookies, setUserData, sortColors } from '~/util/SharedUtils';
 import { Gradient } from '~/util/HexUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { presetStoreContext, rgbStoreContext } from '~/routes/resources/rgb';
+import { Link } from '@builder.io/qwik-city';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -61,22 +62,21 @@ export default component$(({ hidden }: {
         <Dropdown id="saved-presets" class={{ 'w-full': true }}
           onChange$={async (event, el) => loadPresetJSON(el.value)}
           values={
-            presetStore.savedPresets.map((preset) => ({
+            presetStore.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
               }}>
                 {(() => {
-                  if (!preset.name) preset.name = 'Untitled';
-
+                  if (!preset.text) preset.text = 'Birdflop';
                   const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                  if (colors.length < 2) return preset.name;
+                  if (colors.length < 2) return preset.text;
 
-                  const gradient = new Gradient(colors, Math.ceil(preset.name.length / (preset.colorlength || 1)));
+                  const gradient = new Gradient(colors, Math.ceil(preset.text.length / (preset.colorlength || 1)));
 
                   let hex = '';
                   const segments = [];
                   let index = 0;
-                  const textArray = Array.from(preset.name);
+                  const textArray = Array.from(preset.text);
                   while (index < textArray.length) {
                     segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
                     index += preset.colorlength ?? 1;
@@ -105,23 +105,25 @@ export default component$(({ hidden }: {
           } display={<span class="flex gap-3 flex-1">
             <Download size={20} /> Load saved preset
           </span>}>
+          <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
+            <Globe size={20} /> Browse
+          </Link>
           {t('color.savedPresets@@Saved Presets')}
         </Dropdown>
         <div class="grid grid-cols-2 gap-2">
-          <a class="lum-btn" href="/resources/rgb/presets">
+          <Link class="lum-btn" href="/resources/rgb/presets">
             <Globe size={20} /> Browse
-          </a>
+          </Link>
           <button class="lum-btn" id="save" onClick$={async () => {
-            const preset: Partial<typeof defaults> = {
-              ...rgbStore,
-              name: rgbStore.text,
-            };
+            const preset: Partial<typeof defaults> = { ...rgbStore };
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
-            if (presetStore.savedPresets.find(p => JSON.stringify(p) === JSON.stringify(preset))) return;
-            presetStore.savedPresets.push(preset);
-            if (isBrowser) setCookies('presets', presetStore);
+            if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
+              presetStore.push(preset);
+            }
+            if (isBrowser) setCookies('presets', { savedPresets: presetStore });
+            setUserData({ savedPresets: presetStore });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
@@ -195,7 +197,7 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <Link size={24} /> {t('color.url@@Get URL')}
+            <LinkIcon size={24} /> {t('color.url@@Get URL')}
           </button>
         </div>
       </div>

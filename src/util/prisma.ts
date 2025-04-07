@@ -8,7 +8,7 @@ function createPrismaClient(url: string) {
 }
 
 let prismaGlobal: ReturnType<typeof createPrismaClient> | undefined;
-export function getPrismaClient(databaseUrl: string) {
+export function getPrismaClient(databaseUrl?: string) {
   const url = databaseUrl || process.env.DATABASE_URL!;
   if (!url) return;
   if (!prismaGlobal) prismaGlobal = createPrismaClient(url);

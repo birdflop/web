@@ -1,3 +1,5 @@
+import type { User } from '@auth/qwik';
+import type { defaults } from '~/util/PresetUtils';
 import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
@@ -5,6 +7,15 @@ import Discord from '@auth/qwik/providers/discord';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
+
+export interface BirdflopSession {
+  user: BirdflopUser;
+  expires: Date & string;
+}
+
+export interface BirdflopUser extends User {
+  savedPresets?: Partial<typeof defaults>[];
+}
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
@@ -43,6 +54,15 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       adapter: prisma ? PrismaAdapter(prisma) : undefined,
       // trustHost: true, // uncomment this if previewing on localhost
       secret,
+      callbacks: {
+        async session({ session }) {
+          const { id, name, email, image, savedPresets } = session.user as BirdflopUser;
+          return {
+            expires: session.expires,
+            user: { id, name, email, image, savedPresets },
+          };
+        },
+      },
     };
   },
 );
