@@ -23,6 +23,7 @@ model User {
   name          String?
   username      String?         @unique
   email         String?         @unique
+  emailVerified DateTime?
   image         String?
   savedPresets  Json?
   accounts      Account[]
@@ -66,4 +67,12 @@ model Session {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
