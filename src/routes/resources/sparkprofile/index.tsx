@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import SparkProfile from '~/components/analyze/SparkProfile';
+import SparkProfile from '~/util/analyze/SparkProfile';
 
 export default component$(() => {
   return (

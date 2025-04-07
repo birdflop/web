@@ -1,8 +1,8 @@
 import type { ZodType } from 'zod';
 import { z } from 'zod';
-import { defaultOperatingSystem } from '~/components/flags/environment/operatingSystem';
-import { defaultServerType, serverType } from '~/components/flags/environment/serverType';
-import { extraFlags, flags } from '~/components/flags/flags';
+import { defaultOperatingSystem } from './environment/operatingSystem';
+import { defaultServerType, serverType } from './environment/serverType';
+import { extraFlags, flags } from './flags';
 
 export type AvailableConfig = keyof typeof config;
 

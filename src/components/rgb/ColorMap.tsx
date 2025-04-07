@@ -1,7 +1,7 @@
 import { component$, useContext, useSignal } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { convertToRGB, getBrightness, getRandomColor } from '../util/RGBUtils';
-import { sortColors } from '../util/SharedUtils';
+import { convertToRGB, getBrightness, getRandomColor } from '~/util/RGBUtils';
+import { sortColors } from '~/util/SharedUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
 

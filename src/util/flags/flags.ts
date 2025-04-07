@@ -1,7 +1,7 @@
-import type { Generate } from '~/components/util/flags/interface/generate/Generate';
-import type { AvailableConfig } from '~/components/flags/config';
-import type { AvailableOperatingSystem } from '~/components/flags/environment/operatingSystem';
-import type { AvailableServerType } from '~/components/flags/environment/serverType';
+import type { Generate } from '~/util/flags/interface/generate/Generate';
+import type { AvailableConfig } from './config';
+import type { AvailableOperatingSystem } from './environment/operatingSystem';
+import type { AvailableServerType } from './environment/serverType';
 
 // TODO: Some of these flags are exclusive to Linux
 // TODO: Split Pterodactyl and Command into their own option?

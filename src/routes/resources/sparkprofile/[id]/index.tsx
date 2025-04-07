@@ -2,8 +2,8 @@ import { component$, Resource } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import analyzeProfile from '~/components/analyze/functions/analyzeProfile';
-import { collector } from '~/components/analyze/functions/collector';
+import analyzeProfile from '~/util/analyze/functions/analyzeProfile';
+import { collector } from '~/util/analyze/functions/collector';
 
 export const useResults = routeLoader$(async ({ params }) => {
   const results = await analyzeProfile(params.id);
@@ -15,7 +15,7 @@ export const useResults = routeLoader$(async ({ params }) => {
   return results;
 });
 
-import SparkProfile from '~/components/analyze/SparkProfile';
+import SparkProfile from '~/util/analyze/SparkProfile';
 
 export default component$(() => {
   const results = useResults();

@@ -4,12 +4,12 @@ import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { Gradient } from '~/components/util/HexUtils';
-import type { publishedPreset } from '~/components/util/PresetUtils';
-import { defaults } from '~/components/util/PresetUtils';
-import { presets } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '~/components/util/RGBUtils';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
+import { Gradient } from '~/util/HexUtils';
+import type { publishedPreset } from '~/util/PresetUtils';
+import { defaults } from '~/util/PresetUtils';
+import { presets } from '~/util/PresetUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
+import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
   return await getCookies(cookie, 'presets', url.searchParams);

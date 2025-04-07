@@ -1,12 +1,12 @@
 import { component$, createContextId, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Gradient } from '~/components/util/HexUtils';
-import { defaults } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/components/util/RGBUtils';
+import { Gradient } from '~/util/HexUtils';
+import { defaults } from '~/util/PresetUtils';
+import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/util/RGBUtils';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
+import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 import { ChevronDown, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input from '~/components/rgb/Input';

@@ -1,16 +1,16 @@
 import createField from './createField';
 import evalField from './evalField';
 
-import config_bukkit from '~/components/analyze/configs/bukkit';
-import plugins_paper from '~/components/analyze/configs/plugins/paper';
-import plugins_purpur from '~/components/analyze/configs/plugins/purpur';
-import config_purpur from '~/components/analyze/configs/purpur';
-import config_server_properties from '~/components/analyze/configs/server.properties';
-import servers from '~/components/analyze/configs/servers';
-import config_spigot from '~/components/analyze/configs/spigot';
-import config_paper_27 from '~/components/analyze/configs/timings/paper-27';
-import config_paper_28 from '~/components/analyze/configs/timings/paper-28';
-import config_pufferfish from '~/components/analyze/configs/timings/pufferfish';
+import config_bukkit from '~/util/analyze/configs/bukkit';
+import plugins_paper from '~/util/analyze/configs/plugins/paper';
+import plugins_purpur from '~/util/analyze/configs/plugins/purpur';
+import config_purpur from '~/util/analyze/configs/purpur';
+import config_server_properties from '~/util/analyze/configs/server.properties';
+import servers from '~/util/analyze/configs/servers';
+import config_spigot from '~/util/analyze/configs/spigot';
+import config_paper_27 from '~/util/analyze/configs/timings/paper-27';
+import config_paper_28 from '~/util/analyze/configs/timings/paper-28';
+import config_pufferfish from '~/util/analyze/configs/timings/pufferfish';
 
 export default async function analyzeTimings(id: string) {
   const timings_json = `https://timings.aikar.co/data.php?id=${id}`;

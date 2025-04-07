@@ -3,12 +3,12 @@ import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Header } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
-import Chart from '~/components/elements/Chart';
-import { initiateTyper } from '~/components/util/Typer';
+import Chart from '~/components/home/Chart';
+import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
-import HistoricLinePlot from '~/components/elements/HistoricLinePlot';
+import { unloadGoogleAds } from '~/util/GoogleAds';
+import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);

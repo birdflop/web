@@ -1,4 +1,4 @@
-import type { AvailableConfig } from '~/components/flags/config';
+import type { AvailableConfig } from '~/util/flags/config';
 
 export interface EnvironmentOption {
     'icon': any, // todo: when tabler icons works with qwik

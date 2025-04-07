@@ -1,7 +1,7 @@
 import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/SharedUtils';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import yaml from 'yaml';
 

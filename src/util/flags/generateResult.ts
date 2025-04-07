@@ -1,6 +1,6 @@
-import { operatingSystem } from '~/components/flags/environment/operatingSystem';
-import { serverType } from '~/components/flags/environment/serverType';
-import { extraFlags, flags } from '~/components/flags/flags';
+import { operatingSystem } from './environment/operatingSystem';
+import { serverType } from './environment/serverType';
+import { extraFlags, flags } from './flags';
 
 interface GenerateResult {
   'script'?: string,

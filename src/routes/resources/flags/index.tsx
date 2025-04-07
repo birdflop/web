@@ -3,10 +3,10 @@ import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
-import { generateResult } from '~/components/util/flags/generateResult';
-import { extraFlags as extFlags } from '~/components/flags/flags';
-import { serverType as srvType } from '~/components/flags/environment/serverType';
+import { getCookies, setCookies } from '~/util/SharedUtils';
+import { generateResult } from '~/util/flags/generateResult';
+import { extraFlags as extFlags } from '~/util/flags/flags';
+import { serverType as srvType } from '~/util/flags/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal } from 'lucide-icons-qwik';
 

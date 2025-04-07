@@ -3,7 +3,7 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { Home } from 'lucide-icons-qwik';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
+import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const onGet: RequestHandler = async ({ json, request }) => {
   // check if contenttype is json

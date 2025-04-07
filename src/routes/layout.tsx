@@ -2,9 +2,9 @@ import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
-import Backgrounds from '~/components/backgrounds';
+import Backgrounds from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
-import Nav from '../components/Nav';
+import Nav from '~/components/Nav';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 

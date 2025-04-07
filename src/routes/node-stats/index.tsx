@@ -3,7 +3,7 @@ import { type DocumentHead } from '@builder.io/qwik-city';
 
 import { Blobs, Header } from '@luminescent/ui-qwik';
 import { Activity } from 'lucide-icons-qwik';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
+import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task

@@ -2,7 +2,7 @@ import type { Signal } from '@builder.io/qwik';
 import { $, component$, useContext } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { generateOutput, getSignificantPoints } from '../util/RGBUtils';
+import { generateOutput, getSignificantPoints } from '~/util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ threshold, hidden }: {

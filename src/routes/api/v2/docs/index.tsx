@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Header } from '@luminescent/ui-qwik';
 import { BookText } from 'lucide-icons-qwik';
 
-import { defaults, v3formats } from '~/components/util/PresetUtils';
+import { defaults, v3formats } from '~/util/PresetUtils';
 
 export const useEndpoints = routeLoader$(async ({ url }) => {
   const data = await fetch(url.origin + '/api/v2');

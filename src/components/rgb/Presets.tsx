@@ -2,11 +2,11 @@ import { $, component$, isBrowser, useContext } from '@builder.io/qwik';
 import { Download, Globe, Link, Save, Share } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
-import { defaults, loadPreset } from '../util/PresetUtils';
+import { defaults, loadPreset } from '~/util/PresetUtils';
 
-import { setCookies, sortColors } from '../util/SharedUtils';
-import { Gradient } from '../util/HexUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '../util/RGBUtils';
+import { setCookies, sortColors } from '~/util/SharedUtils';
+import { Gradient } from '~/util/HexUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { presetStoreContext, rgbStoreContext } from '~/routes/resources/rgb';
 

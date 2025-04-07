@@ -1,11 +1,11 @@
 import type { ZodType } from 'zod';
 import { z } from 'zod';
-import type { AvailableConfig } from '~/components/flags/config';
-import { config } from '~/components/flags/config';
-import type { AvailableOperatingSystem } from '~/components/flags/environment/operatingSystem';
-import { defaultOperatingSystem, operatingSystem } from '~/components/flags/environment/operatingSystem';
-import type { AvailableServerType } from '~/components/flags/environment/serverType';
-import { defaultServerType, serverType } from '~/components/flags/environment/serverType';
+import type { AvailableConfig } from './config';
+import { config } from './config';
+import type { AvailableOperatingSystem } from './environment/operatingSystem';
+import { defaultOperatingSystem, operatingSystem } from './environment/operatingSystem';
+import type { AvailableServerType } from './environment/serverType';
+import { defaultServerType, serverType } from './environment/serverType';
 
 type GenerateConfigSchema = {
   [key in AvailableConfig]: ZodType

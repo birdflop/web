@@ -1,13 +1,13 @@
 import { component$, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { defaults, types } from '~/components/util/PresetUtils';
-import { AnimationOutput, getAnimFrames, hexToHSL } from '~/components/util/RGBUtils';
+import { defaults, types } from '~/util/PresetUtils';
+import { AnimationOutput, getAnimFrames, hexToHSL } from '~/util/RGBUtils';
 
 import { Dropdown, NumberInput } from '@luminescent/ui-qwik';
 import { ChevronDown, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 import { presetStoreContext, rgbDefaults, rgbStoreContext } from '../rgb';
 import Input from '~/components/rgb/Input';

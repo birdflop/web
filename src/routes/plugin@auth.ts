@@ -1,6 +1,6 @@
 import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getPrismaClient } from '~/components/util/prisma';
+import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
 
 // This is a temporary secret, in case the env variable is not set

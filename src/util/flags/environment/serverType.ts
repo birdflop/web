@@ -1,7 +1,7 @@
-import type { EnvironmentOptions } from '~/components/util/flags/interface/environment/EnvironmentOptions';
-import type { ServerTypeOption } from '~/components/util/flags/interface/environment/ServerTypeOption';
-import type { AvailableConfig } from '~/components/flags/config';
-import type { AvailableExtraFlags, AvailableFlags } from '~/components/flags/flags';
+import type { EnvironmentOptions } from '~/util/flags/interface/environment/EnvironmentOptions';
+import type { ServerTypeOption } from '~/util/flags/interface/environment/ServerTypeOption';
+import type { AvailableConfig } from '~/util/flags/config';
+import type { AvailableExtraFlags, AvailableFlags } from '~/util/flags/flags';
 
 export type AvailableServerType = keyof typeof serverType;
 

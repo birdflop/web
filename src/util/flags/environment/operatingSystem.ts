@@ -1,6 +1,6 @@
-import type { EnvironmentOptions } from '~/components/util/flags/interface/environment/EnvironmentOptions';
-import type { OperatingSystemOption } from '~/components/util/flags/interface/environment/OperatingSystemOption';
-import type { AvailableConfig } from '~/components/flags/config';
+import type { EnvironmentOptions } from '~/util/flags/interface/environment/EnvironmentOptions';
+import type { OperatingSystemOption } from '~/util/flags/interface/environment/OperatingSystemOption';
+import type { AvailableConfig } from '~/util/flags/config';
 
 export type AvailableOperatingSystem = keyof typeof operatingSystem;
 
@@ -45,7 +45,7 @@ function getJava(config: Record<AvailableConfig | 'existingFlags', any>): string
   return base.join(' ');
 }
 
-import type { Generate } from '~/components/util/flags/interface/generate/Generate';
+import type { Generate } from '~/util/flags/interface/generate/Generate';
 
 interface GenerateNixResult {
   'script': string[],

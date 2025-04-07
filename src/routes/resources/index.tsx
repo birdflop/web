@@ -2,7 +2,7 @@ import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
 import { Github } from 'lucide-icons-qwik';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
+import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task

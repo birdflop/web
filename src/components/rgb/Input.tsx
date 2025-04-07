@@ -1,11 +1,12 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
-import Backgrounds from '~/components/backgrounds';
-import { generateOutput } from '../util/RGBUtils';
+import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
+import { generateOutput } from '~/util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(() => {
+  const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();

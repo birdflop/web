@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { v3formats } from '~/components/util/PresetUtils';
-import { generateOutput } from '~/components/util/RGBUtils';
+import { v3formats } from '~/util/PresetUtils';
+import { generateOutput } from '~/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
 export const onGet: RequestHandler = async ({ json, query }) => {

@@ -1,4 +1,4 @@
-// src/components/util/GoogleAds.ts
+// src/util/GoogleAds.ts
 export function unloadGoogleAds() {
   if (typeof document !== 'undefined') {
     const ads = document.querySelectorAll('.adsbygoogle');

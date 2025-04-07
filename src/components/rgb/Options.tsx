@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { v3formats } from '../util/PresetUtils';
+import { v3formats } from '~/util/PresetUtils';
 import { Dropdown, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: {
