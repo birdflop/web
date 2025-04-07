@@ -432,11 +432,6 @@ export function generateOutput(
         // Add a plain space to the output
         jsonOutput.extra.push({
           text: segment,
-          obfuscated: false,
-          italic: false,
-          underlined: false,
-          strikethrough: false,
-          bold: false,
         });
         gradient.next();
       } else {
@@ -445,15 +440,18 @@ export function generateOutput(
         const hex = convertToHex(rgb);
 
         // Add the character with its formatting
-        jsonOutput.extra.push({
+        const charFormatting: any = {
           text: segment,
-          obfuscated: false,
-          italic: italic,
-          underlined: underline,
-          strikethrough: strikethrough,
           color: '#' + hex,
-          bold: bold,
-        });
+        };
+
+        // Only include formatting properties if they're true
+        if (bold) charFormatting.bold = true;
+        if (italic) charFormatting.italic = true;
+        if (underline) charFormatting.underlined = true;
+        if (strikethrough) charFormatting.strikethrough = true;
+
+        jsonOutput.extra.push(charFormatting);
       }
 
       index += colorlength || 1;
