@@ -1,4 +1,4 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
+import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
@@ -11,6 +11,14 @@ export default component$(() => {
   useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const input = document.getElementById('input') as HTMLTextAreaElement;
+    if (!input) return;
+    input.focus();
+    input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
+  });
 
   return (
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 ">

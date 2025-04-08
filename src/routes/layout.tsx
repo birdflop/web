@@ -20,11 +20,14 @@ type Notification = {
 } | rawNotification;
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
+export const OpenSectionsContext = createContextId<string[]>('opensections-context');
 export default component$(() => {
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
+  const openSections = useStore([] as string[]);
+  useContextProvider(OpenSectionsContext, openSections);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
