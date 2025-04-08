@@ -1,13 +1,13 @@
 {
   "rgb": {
     "colors": {
-      "amount": "颜色数量",
-      "character": "字符",
+      "amount": "Color Amount",
+      "character": "Character",
       "charsPer": "Characters per color",
-      "color": "颜色",
-      "customFormat": "自定义格式",
+      "color": "Color",
+      "customFormat": "Custom Format",
       "disperse": "Disperse",
-      "format": "颜色格式",
+      "format": "Color Format",
       "title": "Colors"
     },
     "copied": "Copied to clipboard!",
@@ -22,35 +22,35 @@
       "title": "Decode"
     },
     "formatting": {
-      "bold": "粗体",
-      "character": "格式字符",
-      "italic": "斜体",
+      "bold": "Bold",
+      "character": "Format Character",
+      "italic": "Italic",
       "options": "Format Options",
-      "placeholders": "占位符",
-      "strikethrough": "删除线",
-      "title": "格式",
-      "underline": "下划线"
+      "placeholders": "Placeholders",
+      "strikethrough": "Strikethrough",
+      "title": "Formatting",
+      "underline": "Underline"
     },
-    "inputText": "输入文本",
+    "inputText": "Input Text",
     "inputTextSubtitle": "Type here to generate a gradient!",
     "options": "Options",
     "output": {
       "copied": "The RGB text has been copied to your clipboard successfully.",
       "description": "Copy-paste this for RGB text!",
-      "title": "输出"
+      "title": "Output"
     },
     "prefixsuffix": "Prefix/Suffix",
     "presets": {
       "copied": "Successfully copied preset to clipboard!",
       "copy": "Copy",
       "url": {
-        "get": "导出为 Url",
+        "get": "Get Url",
         "title": "URL Updated!",
         "description": "Successfully exported preset to url! (Check the URL bar)"
       },
-      "import": "导入",
+      "import": "Import",
       "imported": {
-        "title": "成功导入预设！",
+        "title": "Successfully imported preset!",
         "description": "The preset has been imported successfully."
       },
       "invalid": {
@@ -66,7 +66,7 @@
         "warning": "Please login to save presets permanently.",
         "presets": "Saved Presets"
       },
-      "title": "预设"
+      "title": "Presets"
     },
     "previewStyle": {
       "chat": "Minecraft Chat",

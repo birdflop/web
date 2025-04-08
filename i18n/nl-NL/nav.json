@@ -7,22 +7,22 @@
       "plans": "Plans",
       "title": "Hosting"
     },
-    "privacyPolicy": "Privacy Beleid",
+    "privacyPolicy": "Privacy Policy",
     "resources": {
       "animatedTAB": {
-        "description": "TAB plugin overloop animatie generator",
-        "title": "Genaimeerde TAB"
+        "description": "TAB plugin gradient animation creator",
+        "title": "Animated TAB"
       },
       "animatedTextures": {
-        "description": "Voeg gemakkelijk texture pack animaties samen",
-        "title": "Geanimeerde Texturen"
+        "description": "Easily merge textures for resource pack animations",
+        "title": "Animated Textures"
       },
       "flags": {
         "description": "A simple script generator to start your Minecraft servers with optimal flags",
         "title": "Flags Generator"
       },
       "hexGradient": {
-        "description": "Hex-kleur overloop maker, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "description": "Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
       },
       "hexGradientAPIDocs": {
@@ -40,7 +40,7 @@
       },
       "tabAnimationPreview": {
         "description": "Preview TAB Animations without the need to put them in-game",
-        "title": "TAB Animatie Vooreeld"
+        "title": "TAB Animation Preview"
       },
       "title": "Resources"
     },

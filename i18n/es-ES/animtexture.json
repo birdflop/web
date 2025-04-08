@@ -4,8 +4,6 @@
     "downloadMCMETA": "Descargar MCMETA",
     "downloadPNG": "Descargar PNG",
     "generate": "Generar",
-    "subtitle": "Fácilmente fusiona texturas para animaciones de paquetes de recursos",
-    "textureName": "Nombre de la textura",
-    "title": "Texturas animadas"
+    "textureName": "Nombre de la textura"
   }
 }

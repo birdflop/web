@@ -2,7 +2,7 @@
   "animtab": {
     "animation": {
       "interval": "Animation Interval",
-      "name": "Animatie Naam",
+      "name": "Animation Name",
       "style": "Animation Style"
     },
     "length": "Gradient lengte",

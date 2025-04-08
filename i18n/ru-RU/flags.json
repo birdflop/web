@@ -10,9 +10,9 @@
     },
     "description": "The collection of start arguments that typically optimize the server's performance",
     "environment": {
-      "command": "Команда",
-      "description": "Операционная система, на которой работает сервер.",
-      "label": "Операционная система",
+      "command": "Command",
+      "description": "The operating system that the server runs on.",
+      "label": "Операционная система (ОС)",
       "linux": "Linux",
       "macos": "macOS",
       "pterodactyl": "Pterodactyl",
@@ -41,14 +41,14 @@
       "benchmarked": "Benchmarked",
       "etils": "Etil's Flags",
       "hillttys": "hilltty's Flags",
-      "label": "Flags",
+      "label": "Стартер",
       "meowice": "MeowIce's Flags",
-      "none": "Отсутствует",
+      "none": "None",
       "obyduxs": "Obydux's Flags"
     },
     "gui": {
       "description": "Отображать встроенный интерфейс управления сервером.",
-      "label": "Использовать GUI"
+      "label": "Без GUI"
     },
     "memory": {
       "description": "Размер памяти (ОЗУ) для выделения на ваш сервер.",

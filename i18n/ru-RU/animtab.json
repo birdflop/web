@@ -2,11 +2,11 @@
   "animtab": {
     "animation": {
       "interval": "Animation Interval",
-      "name": "Название анимации",
+      "name": "Animation Name",
       "style": "Animation Style"
     },
     "length": "Длина градиента",
     "outputFormat": "Формат",
-    "yamlInput": "Ввод YAML"
+    "yamlInput": "YAML Input"
   }
 }

@@ -8,14 +8,15 @@
       "description": "시작 스크립트에 추가 및 수정할 수 있는 다양한 사항들입니다.",
       "label": "설정"
     },
+    "description": "The collection of start arguments that typically optimize the server's performance",
     "environment": {
-      "command": "명령",
-      "description": "서버가 실행되는 운영 체제입니다.",
+      "command": "Command",
+      "description": "The operating system that the server runs on.",
       "label": "Environment",
-      "linux": "리녹스",
-      "macos": "맥OS",
+      "linux": "Linux",
+      "macos": "macOS",
       "pterodactyl": "Pterodactyl",
-      "windows": "윈도우"
+      "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -36,18 +37,18 @@
       "label": "파일 이름"
     },
     "flags": {
-      "aikars": "Aikar 플래그",
-      "benchmarked": "벤치마크",
-      "etils": "Etil 플래그",
-      "hillttys": "hilltty 플래그",
+      "aikars": "Aikar's Flags",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Flags",
+      "hillttys": "hilltty's Flags",
       "label": "플래그",
       "meowice": "MeowIce's Flags",
-      "none": "없음",
-      "obyduxs": "Obydux 플래그"
+      "none": "None",
+      "obyduxs": "Obydux's Flags"
     },
     "gui": {
       "description": "내장된 서버 관리 GUI를 표시할지 여부",
-      "label": "GUI 사용"
+      "label": "No GUI"
     },
     "memory": {
       "description": "서버에 할당할 메모리 (RAM) 양",
@@ -58,12 +59,12 @@
       "label": "스크립트"
     },
     "serverType": {
-      "fabric": "패브릭",
-      "forge": "포지",
-      "paper": "페이퍼",
-      "purpur": "퍼퍼",
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
       "velocity": "Velocity",
-      "waterfall": "워터폴"
+      "waterfall": "Waterfall"
     },
     "software": {
       "description": "Minecraft 서버가 실행될 소프트웨어입니다.",

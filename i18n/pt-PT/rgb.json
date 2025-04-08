@@ -2,12 +2,12 @@
   "rgb": {
     "colors": {
       "amount": "Color Amount",
-      "character": "Caractér",
+      "character": "Character",
       "charsPer": "Characters per color",
-      "color": "Cor",
-      "customFormat": "Formato customizado",
+      "color": "Color",
+      "customFormat": "Custom Format",
       "disperse": "Disperse",
-      "format": "Formato de cor",
+      "format": "Color Format",
       "title": "Colors"
     },
     "copied": "Copied to clipboard!",
@@ -22,16 +22,16 @@
       "title": "Decode"
     },
     "formatting": {
-      "bold": "Negrito",
-      "character": "Formatar caractér",
-      "italic": "Italico",
+      "bold": "Bold",
+      "character": "Format Character",
+      "italic": "Italic",
       "options": "Format Options",
       "placeholders": "Placeholders",
-      "strikethrough": "Riscado",
-      "title": "Formatação",
-      "underline": "Sublinhado"
+      "strikethrough": "Strikethrough",
+      "title": "Formatting",
+      "underline": "Underline"
     },
-    "inputText": "Texto de Input",
+    "inputText": "Input Text",
     "inputTextSubtitle": "Type here to generate a gradient!",
     "options": "Options",
     "output": {
@@ -48,9 +48,9 @@
         "title": "URL Updated!",
         "description": "Successfully exported preset to url! (Check the URL bar)"
       },
-      "import": "Importar",
+      "import": "Import",
       "imported": {
-        "title": "Preset importada com sucesso!",
+        "title": "Successfully imported preset!",
         "description": "The preset has been imported successfully."
       },
       "invalid": {

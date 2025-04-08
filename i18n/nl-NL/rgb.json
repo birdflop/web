@@ -2,12 +2,12 @@
   "rgb": {
     "colors": {
       "amount": "Color Amount",
-      "character": "Letter",
+      "character": "Character",
       "charsPer": "Characters per color",
-      "color": "Kleur",
-      "customFormat": "Eigen Opmaak",
+      "color": "Color",
+      "customFormat": "Custom Format",
       "disperse": "Disperse",
-      "format": "Kleur Opmaak",
+      "format": "Color Format",
       "title": "Colors"
     },
     "copied": "Copied to clipboard!",
@@ -22,16 +22,16 @@
       "title": "Decode"
     },
     "formatting": {
-      "bold": "Dik",
-      "character": "Opmaak Letter",
-      "italic": "Schuingedrukt",
+      "bold": "Bold",
+      "character": "Format Character",
+      "italic": "Italic",
       "options": "Format Options",
-      "placeholders": "Plaatsvervangers",
-      "strikethrough": "Doorgestreept",
-      "title": "Opmaak",
-      "underline": "Understreept"
+      "placeholders": "Placeholders",
+      "strikethrough": "Strikethrough",
+      "title": "Formatting",
+      "underline": "Underline"
     },
-    "inputText": "Tekst",
+    "inputText": "Input Text",
     "inputTextSubtitle": "Type here to generate a gradient!",
     "options": "Options",
     "output": {
@@ -48,7 +48,7 @@
         "title": "URL Updated!",
         "description": "Successfully exported preset to url! (Check the URL bar)"
       },
-      "import": "Importeren",
+      "import": "Import",
       "imported": {
         "title": "Successfully imported preset!",
         "description": "The preset has been imported successfully."
@@ -66,7 +66,7 @@
         "warning": "Please login to save presets permanently.",
         "presets": "Saved Presets"
       },
-      "title": "Vooraf ingesteld"
+      "title": "Presets"
     },
     "previewStyle": {
       "chat": "Minecraft Chat",

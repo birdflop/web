@@ -5,8 +5,8 @@
       "name": "Animation Name",
       "style": "Animation Style"
     },
-    "length": "渐变长度",
-    "outputFormat": "输出格式",
+    "length": "Gradient Length",
+    "outputFormat": "Output Format",
     "yamlInput": "YAML Input"
   }
 }

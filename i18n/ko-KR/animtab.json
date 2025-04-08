@@ -2,11 +2,11 @@
   "animtab": {
     "animation": {
       "interval": "Animation Interval",
-      "name": "애니메이션 이름",
+      "name": "Animation Name",
       "style": "Animation Style"
     },
     "length": "그라데이션 길이",
     "outputFormat": "출력 형식",
-    "yamlInput": "YAML 입력"
+    "yamlInput": "YAML Input"
   }
 }

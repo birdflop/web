@@ -10,12 +10,12 @@
     },
     "description": "The collection of start arguments that typically optimize the server's performance",
     "environment": {
-      "command": "命令",
-      "description": "服务器运行的操作系统。",
-      "label": "操作系统",
+      "command": "Command",
+      "description": "The operating system that the server runs on.",
+      "label": "环境",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "翼龙面板",
+      "pterodactyl": "Pterodactyl",
       "windows": "Windows"
     },
     "extraFlags": {
@@ -37,18 +37,18 @@
       "label": "文件名"
     },
     "flags": {
-      "aikars": "Aikar的标志",
-      "benchmarked": "基准测试",
-      "etils": "Etil的标志",
-      "hillttys": "hilltty的标志",
+      "aikars": "Aikar's Flags",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Flags",
+      "hillttys": "hilltty's Flags",
       "label": "标志",
       "meowice": "MeowIce's Flags",
-      "none": "无",
-      "obyduxs": "Obydux的标志"
+      "none": "None",
+      "obyduxs": "Obydux's Flags"
     },
     "gui": {
       "description": "是否显示内置的服务器管理GUI。",
-      "label": "使用GUI"
+      "label": "禁用GUI"
     },
     "memory": {
       "description": "分配给服务器的内存（RAM）量。",

@@ -7,23 +7,23 @@
       "plans": "Plans",
       "title": "Hosting"
     },
-    "privacyPolicy": "개인정보 처리방침",
+    "privacyPolicy": "Privacy Policy",
     "resources": {
       "animatedTAB": {
-        "description": "TAB 플러그인 그라데이션 애니메이션 생성기",
-        "title": "애니메이션 TAB"
+        "description": "TAB plugin gradient animation creator",
+        "title": "Animated TAB"
       },
       "animatedTextures": {
-        "description": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
-        "title": "애니메이션 텍스처"
+        "description": "Easily merge textures for resource pack animations",
+        "title": "Animated Textures"
       },
       "flags": {
-        "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
-        "title": "플래그 생성기"
+        "description": "A simple script generator to start your Minecraft servers with optimal flags",
+        "title": "Flags Generator"
       },
       "hexGradient": {
-        "description": "헥스 코드 색상 그라데이션 생성기, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
-        "title": "헥스 코드 그라데이션"
+        "description": "Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "RGBirdflop"
       },
       "hexGradientAPIDocs": {
         "description": "Documentation for the RGBirdflop API",
@@ -39,8 +39,8 @@
         "title": "Spark Profile"
       },
       "tabAnimationPreview": {
-        "description": "게임에 넣지 않고 TAB 애니메이션을 미리보는 기능",
-        "title": "TAB 애니메이션 미리보기"
+        "description": "Preview TAB Animations without the need to put them in-game",
+        "title": "TAB Animation Preview"
       },
       "title": "Resources"
     },

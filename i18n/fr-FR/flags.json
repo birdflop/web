@@ -1,0 +1,78 @@
+{
+  "flags": {
+    "autoRestart": {
+      "description": "Whether to automatically restart after it is stopped.",
+      "label": "Auto-restart"
+    },
+    "config": {
+      "description": "The various additions and modifications that can be made to your start script.",
+      "label": "Config"
+    },
+    "description": "The collection of start arguments that typically optimize the server's performance",
+    "environment": {
+      "command": "Command",
+      "description": "The operating system that the server runs on.",
+      "label": "Environment",
+      "linux": "Linux",
+      "macos": "macOS",
+      "pterodactyl": "Pterodactyl",
+      "windows": "Windows"
+    },
+    "extraFlags": {
+      "benchmarkedGraalVM": {
+        "description": "Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.",
+        "label": "Benchmarked (GraalVM)"
+      },
+      "meowiceGraalVM": {
+        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
+        "label": "MeowIce's Flags (GraalVM)"
+      },
+      "vectors": {
+        "description": "Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.",
+        "label": "Modern Vectors"
+      }
+    },
+    "fileName": {
+      "description": "The name of the file that will be used to start your server.",
+      "label": "File Name"
+    },
+    "flags": {
+      "aikars": "Aikar's Flags",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Flags",
+      "hillttys": "hilltty's Flags",
+      "label": "Flags",
+      "meowice": "MeowIce's Flags",
+      "none": "None",
+      "obyduxs": "Obydux's Flags"
+    },
+    "gui": {
+      "description": "Whether to display the built-in server management GUI.",
+      "label": "No GUI"
+    },
+    "memory": {
+      "description": "The amount of memory (RAM) to allocate to your server.",
+      "label": "Memory"
+    },
+    "script": {
+      "description": "The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!",
+      "label": "Script"
+    },
+    "serverType": {
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
+      "velocity": "Velocity",
+      "waterfall": "Waterfall"
+    },
+    "software": {
+      "description": "The software in which your Minecraft server will run on.",
+      "label": "Software"
+    },
+    "variables": {
+      "description": "Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.",
+      "label": "Use Variables"
+    }
+  }
+}

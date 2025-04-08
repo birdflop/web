@@ -7,22 +7,22 @@
       "plans": "Plans",
       "title": "Hosting"
     },
-    "privacyPolicy": "Politica de privacidade",
+    "privacyPolicy": "Privacy Policy",
     "resources": {
       "animatedTAB": {
-        "description": "Plugin TAB para criar animações com gradientes",
-        "title": "TAB animado"
+        "description": "TAB plugin gradient animation creator",
+        "title": "Animated TAB"
       },
       "animatedTextures": {
-        "description": "Junta texturas animadas facilmente para animações de packs de recursos",
-        "title": "Texturas Animadas"
+        "description": "Easily merge textures for resource pack animations",
+        "title": "Animated Textures"
       },
       "flags": {
         "description": "A simple script generator to start your Minecraft servers with optimal flags",
         "title": "Flags Generator"
       },
       "hexGradient": {
-        "description": "Criador de cores em gradiente hexadecimal, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "description": "Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
       },
       "hexGradientAPIDocs": {
@@ -32,15 +32,15 @@
       "more": "More Resources",
       "paperTimings": {
         "description": "Analyze Paper Timings and get possible optimizations",
-        "title": "Timings do Paper"
+        "title": "Paper Timings"
       },
       "sparkProfile": {
         "description": "Analyze a Spark Profile and get possible optimizations",
-        "title": "Perfil spark"
+        "title": "Spark Profile"
       },
       "tabAnimationPreview": {
-        "description": "Visualize as animações do TAB sem a necessidade de colocá-las no jogo",
-        "title": "Visualizador da animação do TAB"
+        "description": "Preview TAB Animations without the need to put them in-game",
+        "title": "TAB Animation Preview"
       },
       "title": "Resources"
     },
