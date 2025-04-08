@@ -45,7 +45,7 @@ export default component$(({ hidden }: {
             value: 'custom',
           },
         ]}>
-          {t('rgb.colorFormat@@Color Format')}
+          {t('rgb.colors.format@@Color Format')}
         </Dropdown>
         <div class="flex flex-col gap-1">
           <label for="prefixsuffix">

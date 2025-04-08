@@ -147,7 +147,7 @@ export default component$(() => {
           <div class="flex flex-col gap-2 relative" id="column1">
             <Accordion sectionName="colors" alwaysOpen>
               <Palette size={26} />
-              {t('rgb.colors@@Colors')}
+              {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1}>
               <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
@@ -174,7 +174,7 @@ export default component$(() => {
             <Options hidden={openSections.indexOf('options') == -1}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
-                  {t('animtab.animationName@@Animation Name')}
+                  {t('animtab.animation.name@@Animation Name')}
                 </label>
                 <input class="lum-input" id="nameinput" value={animtabStore.name} placeholder={'name'} onInput$={(e, el) => { animtabStore.name = el.value; }}/>
               </div>
@@ -188,12 +188,12 @@ export default component$(() => {
                 onDecrement$={() => {
                   animtabStore.speed = Number(animtabStore.speed) - 50;
                 }}>
-                {t('animtab.interval@@Animation Interval')} (ms)
+                {t('animtab.animation.interval@@Animation Interval')} (ms)
               </NumberInput>
               <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
                 values={types}
                 value={animtabStore.type}>
-                {t('animtab.animationStyle@@Animation Style')}
+                {t('animtab.animation.style@@Animation Style')}
               </Dropdown>
             </Options>
 
@@ -205,7 +205,7 @@ export default component$(() => {
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
-              {t('rgb.decode@@Decode')}
+              {t('rgb.decode.title@@Decode')}
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>

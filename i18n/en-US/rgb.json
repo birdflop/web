@@ -1,16 +1,25 @@
 {
   "rgb": {
     "character": "Character",
-    "color": "Color",
-    "colorAmount": "Color Amount",
-    "colorFormat": "Color Format",
-    "colorLength": "Characters per color",
-    "colors": "Colors",
+    "colors": {
+      "amount": "Color Amount",
+      "charsPer": "Characters per color",
+      "color": "Color",
+      "disperse": "Disperse",
+      "format": "Color Format",
+      "title": "Colors"
+    },
     "custom": "Custom",
     "customFormat": "Custom Format",
-    "decode": "Decode",
-    "decodeDisclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
-    "decodeSubtitle": "Copy-paste an existing RGB text here to edit it",
+    "decode": {
+      "description": "Copy-paste an existing RGB text here to edit it",
+      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "threshold": {
+        "description": "Try changing this around if you're getting too many colors",
+        "title": "Threshold"
+      },
+      "title": "Decode"
+    },
     "export": "Export",
     "format": {
       "bold": "Bold",
@@ -31,15 +40,13 @@
     "placeholders": "Placeholders:",
     "prefixsuffix": "Prefix/Suffix",
     "presets": "Presets",
-    "previewStyle": "Preview Style",
-    "previewstyle": {
+    "previewStyle": {
       "chat": "Minecraft Chat",
-      "default": "Default"
+      "default": "Default",
+      "title": "Preview Style"
     },
     "save": "Save",
     "savedPresets": "Saved Presets",
-    "threshold": "Threshold",
-    "thresholdSubtitle": "Try changing this around if you're getting too many colors",
     "url": "Get URL"
   }
 }

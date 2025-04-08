@@ -119,7 +119,7 @@ export default component$(() => {
           <div class="flex flex-col gap-2 relative" id="column1">
             <Accordion sectionName="colors" alwaysOpen>
               <Palette size={26} />
-              {t('rgb.colors@@Colors')}
+              {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1} />
           </div>
@@ -145,7 +145,7 @@ export default component$(() => {
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
-              {t('rgb.decode@@Decode')}
+              {t('rgb.decode.title@@Decode')}
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>

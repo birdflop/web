@@ -29,7 +29,7 @@ export default component$(({ hidden }: {
             rgbStore.colorlength--;
           }}
         >
-          {t('rgb.colorLength@@Characters per color')}
+          {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       }
       <NumberInput input min={2} max={rgbStore.text.length} value={rgbStore.colors.length} id="colorsinput" class={{ 'w-full': true }}
@@ -62,7 +62,7 @@ export default component$(({ hidden }: {
           }));
         }}
       >
-        {t('rgb.colorAmount@@Color Amount')}
+        {t('rgb.colors.amount@@Color Amount')}
       </NumberInput>
       <div class="flex gap-2">
         <button class={{
@@ -78,7 +78,7 @@ export default component$(({ hidden }: {
           <button class="lum-btn lum-pad-xs w-full" disabled={rgbStore.colors.find((color, i) => color.pos != (100 / (rgbStore.colors.length - 1)) * i) ? false : true} onClick$={() => {
             rgbStore.colors = disperseColors(rgbStore.colors);
           }}>
-            <Ellipsis size={24} /> Disperse
+            <Ellipsis size={24} /> {t('rgb.colors.disperse@@Disperse')}
           </button>
         }
       </div>
@@ -93,7 +93,7 @@ export default component$(({ hidden }: {
             </button>
           </div>
           <div class="flex flex-col justify-end gap-1">
-            <label for={`colorlist-color-${i + 1}`}>{t('rgb.color@@Color')} {i + 1}</label>
+            <label for={`colorlist-color-${i + 1}`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
             <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,

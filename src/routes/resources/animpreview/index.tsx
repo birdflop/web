@@ -134,7 +134,7 @@ export default component$(() => {
 
         <div class="flex flex-col gap-1">
           <label for="animation">
-            {t('animtab.preview.yamlInput@@YAML Input')}
+            {t('animtab.yamlInput@@YAML Input')}
           </label>
           <textarea id="animation"
             class={{ 'lum-input h-96 font-mono': true }}
