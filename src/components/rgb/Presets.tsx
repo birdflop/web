@@ -10,6 +10,7 @@ import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import { useSession } from '~/routes/plugin@auth';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -20,6 +21,7 @@ export default component$(({ hidden }: {
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const loc = useLocation();
+  const session = useSession();
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -156,8 +158,9 @@ export default component$(({ hidden }: {
             notifications.push({
               id,
               title: await t$('color.savedPresetTitle@@Preset Saved!'),
-              description: await t$('color.savedPreset@@Successfully saved preset!'),
-              bgColor: 'lum-bg-green-900/50',
+              description: session.value ? await t$('color.savedPreset@@Successfully saved preset!')
+                : await t$('color.savedPresetWarn@@Please login to save presets permanently.'),
+              bgColor: session.value ? 'lum-bg-orange-900/50' : 'lum-bg-orange-900/50',
             });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
