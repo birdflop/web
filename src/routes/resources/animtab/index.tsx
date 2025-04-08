@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, types } from '~/util/PresetUtils';
 import { AnimationOutput, getAnimFrames, hexToHSL } from '~/util/RGBUtils';
-import { rgbDefaults, rgbStoreContext, useCookies } from '../rgb';
+import { rgbDefaults, rgbStoreContext } from '../rgb';
 
 import { inlineTranslate, useSpeak } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
@@ -31,6 +31,10 @@ export const animTABDefaults = {
   outputFormat: defaults.outputFormat,
 };
 
+export const useRGBCookies = routeLoader$(async ({ cookie, url }) => {
+  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+});
+
 export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
   return await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
 });
@@ -38,7 +42,7 @@ export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
 export default component$(() => {
   useSpeak({ assets: ['animtab', 'color'] });
   const t = inlineTranslate();
-  const rgbCookies = useCookies().value;
+  const rgbCookies = useRGBCookies().value;
   const animTABCookies = useAnimTABCookies();
 
   const rgbStore = useStore({
