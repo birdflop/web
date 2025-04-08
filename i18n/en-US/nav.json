@@ -1,15 +1,25 @@
 {
   "nav": {
-    "animatedTAB": "Animated TAB",
-    "animatedTextures": "Animated Textures",
-    "flags": "Flags",
-    "hexGradient": "RGBirdflop",
-    "more": "More Resources",
-    "paperTimings": "Paper Timings",
-    "privacyPolicy": "Privacy Policy",
-    "sparkProfile": "Spark Profile",
-    "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "TAB Animation Previewer",
-    "termsofService": "Terms of Service"
+    "hosting": {
+      "title": "Hosting",
+      "panel": "Panel",
+      "plans": "Plans",
+      "billing": "Billing",
+      "nodestats": "Node Stats"
+    },
+    "resources": {
+      "title": "Resources",
+      "hexGradient": "RGBirdflop",
+      "hexGradientAPIDocs": "RGBirdflop API Docs",
+      "animatedTAB": "Animated TAB",
+      "sparkProfile": "Spark Profile",
+      "paperTimings": "Paper Timings",
+      "flags": "Flags",
+      "animatedTextures": "Animated Textures",
+      "tabAnimationPreviewer": "TAB Animation Previewer",
+      "more": "More Resources",
+      "privacyPolicy": "Privacy Policy",
+      "termsofService": "Terms of Service"
+    }
   }
 }

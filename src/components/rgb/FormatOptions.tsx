@@ -1,11 +1,10 @@
 import { component$, useContext } from '@builder.io/qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
@@ -17,30 +16,30 @@ export default component$(({ hidden }: {
     }} id="formatoptions">
       {(rgbStore.format.char != undefined && !rgbStore.format.bold && !rgbStore.format.italic && !rgbStore.format.underline && !rgbStore.format.strikethrough) && <>
         <label for="format-char">
-          {t('color.format.character@@Format Character')}
+          {t('rgb.format.character@@Format Character')}
         </label>
         <input class="lum-input" id="format-char" value={rgbStore.format.char} placeholder="&" onInput$={(e, el) => { rgbStore.format.char = el.value; }}/>
       </>}
       {!rgbStore.format.char &&
         <>
           <label for="format-bold">
-            {t('color.format.bold@@Bold')}
+            {t('rgb.format.bold@@Bold')}
           </label>
           <input class="lum-input" id="format-bold" value={rgbStore.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { rgbStore.format.bold = el.value; }}/>
           <label for="format-italic">
-            {t('color.format.italic@@Italic')}
+            {t('rgb.format.italic@@Italic')}
           </label>
           <input class="lum-input" id="format-italic" value={rgbStore.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { rgbStore.format.italic = el.value; }}/>
           <label for="format-underline">
-            {t('color.format.underline@@Underline')}
+            {t('rgb.format.underline@@Underline')}
           </label>
           <input class="lum-input" id="format-underline" value={rgbStore.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { rgbStore.format.underline = el.value; }}/>
           <label for="format-strikethrough">
-            {t('color.format.strikethrough@@Strikethrough')}
+            {t('rgb.format.strikethrough@@Strikethrough')}
           </label>
           <input class="lum-input" id="format-strikethrough" value={rgbStore.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { rgbStore.format.strikethrough = el.value; }}/>
           <div class="py-3 font-mono">
-            <p>{t('color.placeholders@@Placeholders:')}</p>
+            <p>{t('rgb.placeholders@@Placeholders:')}</p>
             <p>$t = Output Text</p>
           </div>
         </>

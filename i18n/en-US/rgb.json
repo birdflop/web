@@ -1,5 +1,5 @@
 {
-  "color": {
+  "rgb": {
     "bold": "Bold",
     "character": "Character",
     "colorAmount": "Color Amount",
@@ -24,6 +24,7 @@
     "presets": "Presets",
     "strikethrough": "Strikethrough",
     "underline": "Underline",
-    "url": "Get URL"
+    "url": "Get URL",
+    "prefixsuffix": "Prefix/Suffix"
   }
 }

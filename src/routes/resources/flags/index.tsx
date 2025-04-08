@@ -2,7 +2,7 @@
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { generateResult } from '~/util/flags/generateResult';
 import { extraFlags as extFlags } from '~/util/flags/flags';
@@ -42,7 +42,6 @@ export const useCookies = routeLoader$(async ({ cookie, url }) => {
 });
 
 export default component$(() => {
-  useSpeak({ assets: ['flags'] });
   const t = inlineTranslate();
 
   const environmentOptions = [

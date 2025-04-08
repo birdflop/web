@@ -1,6 +1,6 @@
 import { $, component$, useContext } from '@builder.io/qwik';
 import { Dropdown } from '@luminescent/ui-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
@@ -8,7 +8,6 @@ export default component$(({ hidden, value }: {
   hidden: boolean;
   value: string;
 }) => {
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
@@ -21,7 +20,7 @@ export default component$(({ hidden, value }: {
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="output">
       <label for="output" class="text-gray-500">
-        {t('color.outputSubtitle@@Copy-paste this for RGB text!')}
+        {t('rgb.outputSubtitle@@Copy-paste this for RGB text!')}
       </label>
       <textarea id="output" readOnly
         class={{
@@ -32,12 +31,12 @@ export default component$(({ hidden, value }: {
           const id = Math.random().toString(36).substring(2, 15);
           const notification = {
             id,
-            title: await t$('color.copied@@Copied to clipboard!'),
-            description: await t$('color.copiedDescription@@The RGB text has been copied to your clipboard successfully.'),
+            title: await t$('rgb.copied@@Copied to clipboard!'),
+            description: await t$('rgb.copiedDescription@@The RGB text has been copied to your clipboard successfully.'),
             bgColor: 'lum-bg-green-900/50',
           };
           navigator.clipboard.writeText(value).catch(async (err) => {
-            notification.title = await t$('color.copyFailed@@Failed to copy to clipboard!');
+            notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
             notification.description = err;
             notification.bgColor = 'lum-bg-red-900/50';
           });
@@ -53,15 +52,15 @@ export default component$(({ hidden, value }: {
         }
       } values={[
         {
-          name: t('color.previewstyle.default@@Default'),
+          name: t('rgb.previewstyle.default@@Default'),
           value: 'default',
         },
         {
-          name: t('color.previewstyle.chat@@Minecraft Chat'),
+          name: t('rgb.previewstyle.chat@@Minecraft Chat'),
           value: 'chat',
         },
       ]}>
-        {t('color.previewStyle@@Preview Style')}
+        {t('rgb.previewStyle@@Preview Style')}
       </Dropdown>
     </div>
   );

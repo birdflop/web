@@ -2,13 +2,9 @@ import { $, component$, useOn, useStore, useVisibleTask$ } from '@builder.io/qwi
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { Toggle } from '@luminescent/ui-qwik';
-import {
-  inlineTranslate,
-  useSpeak,
-} from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
-  useSpeak({ assets: ['animtexture'] });
   const t = inlineTranslate();
 
   const animtextureStore = useStore({

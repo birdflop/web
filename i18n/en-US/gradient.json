@@ -1,7 +1,5 @@
 {
   "gradient": {
-    "prefix": "Prefix (Usually used for commands)",
-    "prefixPlaceholder": "example: '/nick '",
     "subtitle": "Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
     "title": "RGBirdflop"
   }

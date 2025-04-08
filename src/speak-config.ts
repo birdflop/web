@@ -16,7 +16,6 @@ export const config: SpeakConfig = {
   supportedLocales: Object.keys(languages).map((lang) => ({ lang })),
   assets: [
     'gradient',
-    'animpreview',
     'animtab',
     'animtexture',
     'flags',

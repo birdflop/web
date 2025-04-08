@@ -1,5 +1,5 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
-import { component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
 import Backgrounds from '~/components/Backgrounds';
@@ -7,6 +7,7 @@ import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
+import { inlineTranslate } from 'qwik-speak';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -22,6 +23,8 @@ type Notification = {
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const OpenSectionsContext = createContextId<string[]>('opensections-context');
 export default component$(() => {
+  const t$ = $((string: string) => inlineTranslate()(string));
+
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
@@ -72,7 +75,7 @@ export default component$(() => {
             <Cookie size={26} /> Cookies
           </Header>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
-            Privacy Policy
+            {t$('privacyPolicy@@Privacy Policy')}
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">

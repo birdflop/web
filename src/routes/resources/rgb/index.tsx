@@ -5,7 +5,7 @@ import { Gradient } from '~/util/HexUtils';
 import { defaults } from '~/util/PresetUtils';
 import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/util/RGBUtils';
 
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
@@ -45,7 +45,6 @@ export const useCookies = routeLoader$(async ({ cookie, url }) => {
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
 export default component$(() => {
-  useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
   const rgbCookies = useCookies().value;
 
@@ -120,33 +119,33 @@ export default component$(() => {
           <div class="flex flex-col gap-2 relative" id="column1">
             <Accordion sectionName="colors" alwaysOpen>
               <Palette size={26} />
-              {t('color.colors@@Colors')}
+              {t('rgb.colors@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1} />
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
-              {t('color.output@@Output')}
+              {t('rgb.output@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
               value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />
-              {t('color.options@@Options')}
+              {t('rgb.options@@Options')}
             </Accordion>
             <Options hidden={openSections.indexOf('options') == -1}/>
 
             <Accordion sectionName="presets">
               <Save size={26} />
-              {t('color.presets@@Presets')}
+              {t('rgb.presets@@Presets')}
             </Accordion>
             <Presets hidden={openSections.indexOf('presets') == -1}/>
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
-              {t('color.decode@@Decode')}
+              {t('rgb.decode@@Decode')}
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>
@@ -154,14 +153,14 @@ export default component$(() => {
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <Accordion sectionName="formatting" alwaysOpen>
               <Type size={26} />
-              {t('color.formatting@@Formatting')}
+              {t('rgb.formatting@@Formatting')}
             </Accordion>
             <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
-                {t('color.formatoptions@@Format Options')}
+                {t('rgb.formatoptions@@Format Options')}
               </Accordion>
               <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}

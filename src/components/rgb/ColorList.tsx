@@ -1,6 +1,6 @@
 import { component$, Slot, useContext, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { convertToRGB, disperseColors, getBrightness, getRandomColor, swapItems } from '~/util/RGBUtils';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
 import { sortColors } from '~/util/SharedUtils';
@@ -9,7 +9,6 @@ import { rgbStoreContext } from '~/routes/resources/rgb';
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const opened = useSignal(-1);
   const rgbStore = useContext(rgbStoreContext);
@@ -30,7 +29,7 @@ export default component$(({ hidden }: {
             rgbStore.colorlength--;
           }}
         >
-          {t('color.colorLength@@Characters per color')}
+          {t('rgb.colorLength@@Characters per color')}
         </NumberInput>
       }
       <NumberInput input min={2} max={rgbStore.text.length} value={rgbStore.colors.length} id="colorsinput" class={{ 'w-full': true }}
@@ -63,7 +62,7 @@ export default component$(({ hidden }: {
           }));
         }}
       >
-        {t('color.colorAmount@@Color Amount')}
+        {t('rgb.colorAmount@@Color Amount')}
       </NumberInput>
       <div class="flex gap-2">
         <button class={{
@@ -94,7 +93,7 @@ export default component$(({ hidden }: {
             </button>
           </div>
           <div class="flex flex-col justify-end gap-1">
-            <label for={`colorlist-color-${i + 1}`}>{t('color.color@@Color')} {i + 1}</label>
+            <label for={`colorlist-color-${i + 1}`}>{t('rgb.color@@Color')} {i + 1}</label>
             <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,

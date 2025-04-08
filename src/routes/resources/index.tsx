@@ -2,16 +2,19 @@ import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
 import { Github } from 'lucide-icons-qwik';
+import { inlineTranslate } from 'qwik-speak';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
+  const t = inlineTranslate();
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => unloadGoogleAds());
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center justify-center min-h-svh">
       <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-4 mt-10 drop-shadow-lg">
-        Resources
+        {t('nav.resources.title@@Resources')}
       </h1>
       <div class="min-h-[60px] text-2xl flex flex-col gap-4">
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
@@ -21,19 +24,19 @@ export default component$(() => {
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
               <Header subheader="RGB gradient creator">
-                RGBirdflop
+                {t('nav.resources.hexGradient@@RGBirdflop')}
               </Header>
               <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
             <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/api/v2/docs">
               <Header subheader="Documentation for the RGBirdflop API">
-                API Docs
+                {t('nav.resources.hexGradientAPIDocs@@RGBirdflop API Docs')}
               </Header>
               <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
             <a class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
               <Header subheader="TAB plugin gradient animation creator">
-                Animated TAB
+                {t('nav.resources.animatedTAB@@Animated TAB')}
               </Header>
               <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
@@ -46,19 +49,19 @@ export default component$(() => {
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
               <Header subheader="Analyze Spark Profiles and get possible optimizations">
-                Spark Profile
+                {t('nav.resources.sparkProfile@@Spark Profile')}
               </Header>
               <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
             <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
               <Header subheader="Analyze Paper Timings Reports and get possible optimizations">
-                Paper Timings
+                {t('nav.resources.papertimings@@Paper Timings')}
               </Header>
               <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
             <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
               <Header subheader="A simple script generator to start your Minecraft servers with optimal flags">
-                Flags
+                {t('nav.resources.flags@@Flags')}
               </Header>
               <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
@@ -71,13 +74,13 @@ export default component$(() => {
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
             <a class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
               <Header subheader="Easily merge textures for resource pack animations">
-                Animated Textures
+                {t('nav.resources.animatedTextures@@Animated Textures')}
               </Header>
               <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
             <a class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
               <Header subheader="Preview TAB Animations without the need to put them in-game">
-                TAB Animation Previewer
+                {t('nav.resources.TabAnimationPreviewer@@TAB Animation Previewer')}
               </Header>
               <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
             </a>
