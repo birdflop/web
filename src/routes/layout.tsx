@@ -75,7 +75,7 @@ export default component$(() => {
             <Cookie size={26} /> Cookies
           </Header>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
-            {t$('privacyPolicy@@Privacy Policy')}
+            {t$('nav.privacyPolicy@@Privacy Policy')}
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">

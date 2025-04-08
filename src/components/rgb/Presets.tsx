@@ -26,8 +26,8 @@ export default component$(({ hidden }: {
     const id = Math.random().toString(36).substring(2, 15);
     const notification = {
       id,
-      title: await t$('rgb.importedPreset@@Successfully imported preset!'),
-      description: await t$('rgb.importedPresetDescription@@The preset has been imported successfully.'),
+      title: await t$('rgb.presets.imported.title@@Successfully imported preset!'),
+      description: await t$('rgb.presets.imported.description@@The preset has been imported successfully.'),
       bgColor: 'lum-bg-green-900/50',
     };
     let json: Partial<typeof defaults> | undefined;
@@ -37,8 +37,8 @@ export default component$(({ hidden }: {
         ...preset,
       };
     } catch (err) {
-      notification.title = await t$('rgb.invalidPreset@@Invalid Preset');
-      notification.description = `Error: ${err}\nPlease report this to the <a class="text-blue-400 hover:underline" href="https://discord.gg/9vUZ9MREVz">Developers</a> with the preset you tried to import.`;
+      notification.title = await t$('rgb.presets.invalid.title@@Invalid Preset');
+      notification.description = `Error: ${err}\n${t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
       notification.bgColor = 'lum-bg-red-900/50';
       notifications.push(notification);
     }
@@ -137,7 +137,7 @@ export default component$(({ hidden }: {
           <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
             <Globe size={20} /> Browse
           </Link>
-          {t('rgb.presets.saved@@Saved Presets')}
+          {t('rgb.presets.saved.presets@@Saved Presets')}
         </Dropdown>
         <div class="grid grid-cols-2 gap-2">
           <Link class="lum-btn" href="/resources/rgb/presets">
@@ -156,9 +156,9 @@ export default component$(({ hidden }: {
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
-              title: await t$('rgb.presets.savedPresetTitle@@Preset Saved!'),
-              description: session.value ? await t$('rgb.presets.savedPreset@@Successfully saved preset!')
-                : await t$('rgb.presets.savedPresetWarn@@Please login to save presets permanently.'),
+              title: await t$('rgb.presets.saved.title@@Preset Saved!'),
+              description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
+                : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
               bgColor: session.value ? 'lum-bg-orange-900/50' : 'lum-bg-orange-900/50',
             });
             setTimeout(() => {
@@ -188,7 +188,7 @@ export default component$(({ hidden }: {
             const notification = {
               id,
               title: await t$('rgb.copied@@Copied to clipboard!'),
-              description: await t$('rgb.exportedPreset@@Successfully exported preset to clipboard!'),
+              description: await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'),
               bgColor: 'lum-bg-green-900/50',
             };
             navigator.clipboard.writeText(JSON.stringify(preset)).catch(async (err) => {
@@ -219,15 +219,15 @@ export default component$(({ hidden }: {
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
-              title: await t$('rgb.exportedPresetUrlTitle@@URL Updated!'),
-              description: await t$('rgb.exportedPresetUrl@@Successfully exported preset to url! Check the URL bar!'),
+              title: await t$('rgb.presets.url.title@@URL Updated!'),
+              description: await t$('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'),
               bgColor: 'lum-bg-green-900/50',
             });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <LinkIcon size={24} /> {t('rgb.presets.url@@Get URL')}
+            <LinkIcon size={24} /> {t('rgb.presets.url.get@@Get Url')}
           </button>
         </div>
       </div>

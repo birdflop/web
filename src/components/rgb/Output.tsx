@@ -32,7 +32,7 @@ export default component$(({ hidden, value }: {
           const notification = {
             id,
             title: await t$('rgb.copied@@Copied to clipboard!'),
-            description: await t$('rgb.copiedDescription@@The RGB text has been copied to your clipboard successfully.'),
+            description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
             bgColor: 'lum-bg-green-900/50',
           };
           navigator.clipboard.writeText(value).catch(async (err) => {
