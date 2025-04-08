@@ -9,7 +9,7 @@ import { Gradient } from '~/util/HexUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { Link } from '@builder.io/qwik-city';
+import { Link, useLocation } from '@builder.io/qwik-city';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -19,6 +19,7 @@ export default component$(({ hidden }: {
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
+  const loc = useLocation();
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -201,7 +202,7 @@ export default component$(({ hidden }: {
             <Share size={24} /> {t('color.export@@Export')}
           </button>
           <button class="lum-btn lum-pad-sm" id="createurl" onClick$={async () => {
-            const base_url = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+            const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
             const url = new URL(base_url);
             const params: Partial<typeof defaults> = { ...rgbStore };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {

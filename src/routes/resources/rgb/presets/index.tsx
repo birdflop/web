@@ -1,4 +1,4 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
@@ -10,32 +10,13 @@ import type { publishedPreset } from '~/util/PresetUtils';
 import { defaults } from '~/util/PresetUtils';
 import { presets } from '~/util/PresetUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
-import { getCookies, setCookies, setUserData, sortColors } from '~/util/SharedUtils';
+import { setUserData, sortColors } from '~/util/SharedUtils';
 
-export const useData = routeLoader$(async ({ cookie, url, sharedMap }) => {
-  // Get cookies
-  const presetCookies = await getCookies(cookie, 'presets', url.searchParams) as { savedPresets: Partial<typeof defaults>[] };
-
+export const useData = routeLoader$(async ({ sharedMap }) => {
   // Get session and merge saved presets
   const session = sharedMap.get('session') as BirdflopSession | undefined;
-  const savedPresets = [
-    ...presetCookies.savedPresets,
-    ...(session?.user?.savedPresets ?? []),
-  ];
-
-  // Remove duplicates
-  const uniquelySavedPresets = savedPresets.filter((preset, index) => {
-    const stringifiedPreset = JSON.stringify(preset);
-    return (
-      index === savedPresets.findIndex((otherPreset) => {
-        const stringifiedOtherPreset = JSON.stringify(otherPreset);
-        return stringifiedPreset === stringifiedOtherPreset;
-      })
-    );
-  });
-
   return {
-    savedPresets: uniquelySavedPresets,
+    savedPresets: session?.user?.savedPresets ?? [],
   };
 });
 
@@ -47,6 +28,34 @@ export default component$(() => {
     searchTerm: '',
     showSaved: false,
     ...data,
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    if (presetStore.savedPresets.length > 0) return;
+    let savedPresets = localStorage.getItem('savedPresets');
+    try {
+      if (!savedPresets) {
+        // presets possibly stored in cookies
+        const cookie: { [key: string]: string; } = {};
+        document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+          const pairsplit = pair.split(/\s*=\s*/);
+          cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+        });
+        if (!cookie['presets']) return;
+        const cookieSavedPresets = decodeURIComponent(cookie['presets']);
+        savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
+        if (!savedPresets) return;
+        // remove cookie
+        document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // save to localStorage
+        localStorage.setItem('savedPresets', cookieSavedPresets);
+      }
+      const parsed = JSON.parse(savedPresets);
+      presetStore.savedPresets.push(...parsed);
+    } catch (err) {
+      console.error('Error parsing saved presets', err);
+    }
   });
 
   const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
@@ -167,7 +176,7 @@ export default component$(() => {
                     });
                     if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
                     else presetStore.savedPresets.push(p.preset);
-                    if (isBrowser) setCookies('presets', { savedPresets: presetStore.savedPresets });
+                    if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore.savedPresets));
                     setUserData({ savedPresets: presetStore.savedPresets });
                   }}>
                     {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
