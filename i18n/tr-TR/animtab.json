@@ -1,0 +1,12 @@
+{
+  "animtab": {
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "Animation Name",
+      "style": "Animation Style"
+    },
+    "length": "Gradyant Uzunluğu",
+    "outputFormat": "Çıktı Formatı",
+    "yamlInput": "YAML Input"
+  }
+}

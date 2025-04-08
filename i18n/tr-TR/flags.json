@@ -1,0 +1,78 @@
+{
+  "flags": {
+    "autoRestart": {
+      "description": "Durdurulduktan sonra otomatik olarak yeniden başlatılıp başlatılmayacağı.",
+      "label": "Otomatik-Restart"
+    },
+    "config": {
+      "description": "Başlangıç betiğinizde yapılabilecek çeşitli eklemeler ve değişiklikler.",
+      "label": "Konfigürasyon"
+    },
+    "description": "The collection of start arguments that typically optimize the server's performance",
+    "environment": {
+      "command": "Command",
+      "description": "The operating system that the server runs on.",
+      "label": "Ortam",
+      "linux": "Linux",
+      "macos": "macOS",
+      "pterodactyl": "Pterodactyl",
+      "windows": "Windows"
+    },
+    "extraFlags": {
+      "benchmarkedGraalVM": {
+        "description": "GraalVM kullanıcılarına özel Benchmarked (G1GC) için ek performans bayrakları.",
+        "label": "Karşılaştırılmış (GraalVM)"
+      },
+      "meowiceGraalVM": {
+        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
+        "label": "MeowIce's Flags (GraalVM)"
+      },
+      "vectors": {
+        "description": "Pufferfish ve forklarında harita öğesi oluşturmayı optimize etmek için SIMD işlemlerini etkinleştirir.",
+        "label": "Modern Vektörler"
+      }
+    },
+    "fileName": {
+      "description": "Sunucunuzu başlatmak için kullanılacak dosyanın adı.",
+      "label": "Dosya Adı"
+    },
+    "flags": {
+      "aikars": "Aikar's Flags",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Flags",
+      "hillttys": "hilltty's Flags",
+      "label": "Bayraklar",
+      "meowice": "MeowIce's Flags",
+      "none": "None",
+      "obyduxs": "Obydux's Flags"
+    },
+    "gui": {
+      "description": "Yerleşik sunucu yönetimi GUI'sinin görüntülenip görüntülenmeyeceği.",
+      "label": "GUISiz"
+    },
+    "memory": {
+      "description": "Sunucunuza ayrılacak bellek (RAM) miktarı.",
+      "label": "Bellek"
+    },
+    "script": {
+      "description": "Sunucunuzu başlatmak için kullanılabilecek sonuç betiği. Bu dosyayı {{fileName}} ile aynı konuma yerleştirin, ardından çalıştırın!",
+      "label": "Komut Dosyası"
+    },
+    "serverType": {
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
+      "velocity": "Velocity",
+      "waterfall": "Waterfall"
+    },
+    "software": {
+      "description": "Minecraft sunucunuzun üzerinde çalışacağı yazılım.",
+      "label": "Yazılım"
+    },
+    "variables": {
+      "description": "Bellek, dosya adı ve yaygın olarak değiştirilen diğer öğeleri tanımlamak için kod içinde ortam değişkenlerinin kullanılıp kullanılmayacağı.",
+      "label": "Değişkenleri Kullanın"
+    }
+  }
+}
