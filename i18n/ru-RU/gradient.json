@@ -1,8 +1,0 @@
-{
-  "gradient": {
-    "prefix": "Префикс (обычно используется для команд)",
-    "prefixPlaceholder": "пример: '/nick '",
-    "subtitle": "Создатель HEX градиента",
-    "title": "Hex градиент"
-  }
-}

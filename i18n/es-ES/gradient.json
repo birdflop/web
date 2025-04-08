@@ -1,8 +1,0 @@
-{
-  "gradient": {
-    "prefix": "Prefijo (generalmente usado para comandos)",
-    "prefixPlaceholder": "ejemplo: '/nick '",
-    "subtitle": "Creador de degradados de color hex",
-    "title": "Degradado Hex"
-  }
-}

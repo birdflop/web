@@ -15,7 +15,7 @@ export const useResults = routeLoader$(async ({ params }) => {
   return results;
 });
 
-import PaperTimings from '~/util/analyze/PaperTimings';
+import PaperTimings from '~/components/analyze/PaperTimings';
 
 export default component$(() => {
   const results = useResults();

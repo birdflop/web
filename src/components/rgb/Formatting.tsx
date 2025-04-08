@@ -1,12 +1,11 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Toggle } from '@luminescent/ui-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
@@ -32,16 +31,16 @@ export default component$(({ hidden }: {
     }} id="formatting">
       <Toggle id="bold" checked={rgbStore.bold}
         onChange$={(e, el) => { rgbStore.bold = el.checked; }}
-        label={`${t('color.bold@@Bold')}${getFormatLabel('bold')}`} />
+        label={`${t('rgb.formatting.bold@@Bold')}${getFormatLabel('bold')}`} />
       <Toggle id="italic" checked={rgbStore.italic}
         onChange$={(e, el) => { rgbStore.italic = el.checked; }}
-        label={`${t('color.italic@@Italic')}${getFormatLabel('italic')}`} />
+        label={`${t('rgb.formatting.italic@@Italic')}${getFormatLabel('italic')}`} />
       <Toggle id="underline" checked={rgbStore.underline}
         onChange$={(e, el) => { rgbStore.underline = el.checked; }}
-        label={`${t('color.underline@@Underline')}${getFormatLabel('underline')}`} />
+        label={`${t('rgb.formatting.underline@@Underline')}${getFormatLabel('underline')}`} />
       <Toggle id="strikethrough" checked={rgbStore.strikethrough}
         onChange$={(e, el) => { rgbStore.strikethrough = el.checked; }}
-        label={`${t('color.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
+        label={`${t('rgb.formatting.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
     </div>
   );
 });

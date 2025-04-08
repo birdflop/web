@@ -5,7 +5,7 @@ import { defaults, types } from '~/util/PresetUtils';
 import { AnimationOutput, getAnimFrames, hexToHSL } from '~/util/RGBUtils';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
 
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
@@ -40,7 +40,6 @@ export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
 });
 
 export default component$(() => {
-  useSpeak({ assets: ['animtab', 'color'] });
   const t = inlineTranslate();
   const rgbCookies = useRGBCookies().value;
   const animTABCookies = useAnimTABCookies();
@@ -106,10 +105,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('animtab.title@@Animated TAB')}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>
         <h2 class="text-gray-50 mt-1 mb-5">
-          {t('animtab.subtitle@@TAB plugin gradient animation creator')}
+          {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
         </h2>
 
         <Input>
@@ -148,7 +147,7 @@ export default component$(() => {
           <div class="flex flex-col gap-2 relative" id="column1">
             <Accordion sectionName="colors" alwaysOpen>
               <Palette size={26} />
-              {t('color.colors@@Colors')}
+              {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1}>
               <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
@@ -163,19 +162,19 @@ export default component$(() => {
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
-              {t('color.output@@Output')}
+              {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
               value={AnimationOutput({ ...rgbStore, ...animtabStore })} />
 
             <Accordion sectionName="options">
               <Settings size={26} />
-              {t('color.options@@Options')}
+              {t('rgb.options@@Options')}
             </Accordion>
             <Options hidden={openSections.indexOf('options') == -1}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
-                  {t('animtab.animationName@@Animation Name')}
+                  {t('animtab.animation.name@@Animation Name')}
                 </label>
                 <input class="lum-input" id="nameinput" value={animtabStore.name} placeholder={'name'} onInput$={(e, el) => { animtabStore.name = el.value; }}/>
               </div>
@@ -189,24 +188,24 @@ export default component$(() => {
                 onDecrement$={() => {
                   animtabStore.speed = Number(animtabStore.speed) - 50;
                 }}>
-                {t('animtab.interval@@Animation Interval')} (ms)
+                {t('animtab.animation.interval@@Animation Interval')} (ms)
               </NumberInput>
               <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
                 values={types}
                 value={animtabStore.type}>
-                {t('animtab.animationStyle@@Animation Style')}
+                {t('animtab.animation.style@@Animation Style')}
               </Dropdown>
             </Options>
 
             <Accordion sectionName="presets">
               <Save size={26} />
-              {t('color.presets@@Presets')}
+              {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={openSections.indexOf('presets') == -1}/>
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
-              {t('color.decode@@Decode')}
+              {t('rgb.decode.title@@Decode')}
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>
@@ -214,14 +213,14 @@ export default component$(() => {
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <Accordion sectionName="formatting" alwaysOpen>
               <Type size={26} />
-              {t('color.formatting@@Formatting')}
+              {t('rgb.formatting.title@@Formatting')}
             </Accordion>
             <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
-                {t('color.formatoptions@@Format Options')}
+                {t('rgb.formatting.options@@Format Options')}
               </Accordion>
               <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}

@@ -48,7 +48,7 @@ export default component$(() => {
           <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
               <a href="#plans" class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
-                <Server size={30} class="text-3xl" />Hosting
+                <Server size={30} class="text-3xl" /> Hosting
               </a>
               <Link href="/resources" class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-purple-700/80 hover:lum-bg-purple-600 gap-4">
                 <Box size={30} class="text-3xl" /> Resources

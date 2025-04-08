@@ -81,7 +81,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('gradient.title@@RGBirdflop')} Presets
+          {t('nav.resources.hexGradient.title@@RGBirdflop')} Presets
         </h1>
         <h2 class="text-gray-50 mt-2">
           Welcome to the one-stop shop for presets!
@@ -194,10 +194,10 @@ export default component$(() => {
                     display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
                     class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.hexGradient@@RGBirdflop')}
+                      {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.animatedTAB@@Animated TAB')}
+                      {t('nav.resources.animatedTAB.title@@Animated TAB')}
                     </a>
                   </DropdownRaw>
                 </div>
