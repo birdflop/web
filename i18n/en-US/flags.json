@@ -18,23 +18,6 @@
       "pterodactyl": "Pterodactyl",
       "windows": "Windows"
     },
-    "environments": {
-      "command": {
-        "label": "Command"
-      },
-      "linux": {
-        "label": "Linux"
-      },
-      "macos": {
-        "label": "macOS"
-      },
-      "pterodactyl": {
-        "label": "Pterodactyl"
-      },
-      "windows": {
-        "label": "Windows"
-      }
-    },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.",
