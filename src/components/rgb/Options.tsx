@@ -37,11 +37,11 @@ export default component$(({ hidden }: {
             value: JSON.stringify(format),
           })),
           {
-            name: rgbStore.customFormat ? `Custom: ${rgbStore.format.color
+            name: rgbStore.customFormat ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.format.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
               .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}`)
               .replace('$c', '')}`
-              : t('rgb.custom@@Custom'),
+              : t('rgb.colors.customFormat@@Custom Format'),
             value: 'custom',
           },
         ]}>
@@ -59,19 +59,19 @@ export default component$(({ hidden }: {
               'flex flex-col gap-2 col-span-2': true,
             }}>
               <label for="customformat">
-                {t('rgb.customFormat@@Custom Format')}
+                {t('rgb.colors.customFormat@@Custom Format')}
               </label>
               <input class="lum-input" id="customformat" value={rgbStore.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.format.color = el.value; }}/>
               <div class="font-mono text-sm">
-                <p>{t('rgb.placeholders@@Placeholders:')}</p>
+                <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
                 <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
                 <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
                 <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
                 <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
                 <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
                 <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                {rgbStore.format.char && <p>$f = {t('rgb.formatting@@Formatting')}</p>}
-                <p>$c = {t('rgb.character@@Character')}</p>
+                {rgbStore.format.char && <p>$f = {t('rgb.formatting.title@@Formatting')}</p>}
+                <p>$c = {t('rgb.colors.character@@Character')}</p>
               </div>
             </div>
           </>

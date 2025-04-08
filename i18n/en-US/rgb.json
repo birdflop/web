@@ -1,16 +1,15 @@
 {
   "rgb": {
-    "character": "Character",
     "colors": {
       "amount": "Color Amount",
+      "character": "Character",
       "charsPer": "Characters per color",
       "color": "Color",
+      "customFormat": "Custom Format",
       "disperse": "Disperse",
       "format": "Color Format",
       "title": "Colors"
     },
-    "custom": "Custom",
-    "customFormat": "Custom Format",
     "decode": {
       "description": "Copy-paste an existing RGB text here to edit it",
       "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
@@ -20,33 +19,39 @@
       },
       "title": "Decode"
     },
-    "export": "Export",
-    "format": {
+    "formatting": {
       "bold": "Bold",
       "character": "Format Character",
       "italic": "Italic",
+      "options": "Format Options",
+      "placeholders": "Placeholders",
       "strikethrough": "Strikethrough",
+      "title": "Formatting",
       "underline": "Underline"
     },
-    "formatoptions": "Format Options",
-    "formatting": "Formatting",
-    "import": "Import (Paste here)",
-    "importSubtitle": "Load a JSON preset",
     "inputText": "Input Text",
     "inputTextSubtitle": "Type here to generate a gradient!",
     "options": "Options",
-    "output": "Output",
-    "outputSubtitle": "Copy-paste this for RGB text!",
-    "placeholders": "Placeholders:",
+    "output": {
+      "description": "Copy-paste this for RGB text!",
+      "title": "Output"
+    },
     "prefixsuffix": "Prefix/Suffix",
-    "presets": "Presets",
+    "presets": {
+      "copy": "Copy",
+      "getUrl": "Get Url",
+      "import": "Import",
+      "importSubtitle": "Load a JSON preset",
+      "pasteHere": "Paste here",
+      "save": "Save",
+      "saved": "Saved Presets",
+      "title": "Presets"
+    },
     "previewStyle": {
       "chat": "Minecraft Chat",
       "default": "Default",
       "title": "Preview Style"
     },
-    "save": "Save",
-    "savedPresets": "Saved Presets",
     "url": "Get URL"
   }
 }

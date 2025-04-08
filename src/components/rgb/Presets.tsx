@@ -1,5 +1,5 @@
 import { $, component$, isBrowser, useContext, useStore } from '@builder.io/qwik';
-import { Download, Globe, Save, Share, Link as LinkIcon } from 'lucide-icons-qwik';
+import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { defaults, loadPreset } from '~/util/PresetUtils';
@@ -137,7 +137,7 @@ export default component$(({ hidden }: {
           <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
             <Globe size={20} /> Browse
           </Link>
-          {t('rgb.savedPresets@@Saved Presets')}
+          {t('rgb.presets.saved@@Saved Presets')}
         </Dropdown>
         <div class="grid grid-cols-2 gap-2">
           <Link class="lum-btn" href="/resources/rgb/presets">
@@ -156,26 +156,26 @@ export default component$(({ hidden }: {
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
-              title: await t$('rgb.savedPresetTitle@@Preset Saved!'),
-              description: session.value ? await t$('rgb.savedPreset@@Successfully saved preset!')
-                : await t$('rgb.savedPresetWarn@@Please login to save presets permanently.'),
+              title: await t$('rgb.presets.savedPresetTitle@@Preset Saved!'),
+              description: session.value ? await t$('rgb.presets.savedPreset@@Successfully saved preset!')
+                : await t$('rgb.presets.savedPresetWarn@@Please login to save presets permanently.'),
               bgColor: session.value ? 'lum-bg-orange-900/50' : 'lum-bg-orange-900/50',
             });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <Save size={20} /> {t('rgb.save@@Save')}
+            <Save size={20} /> {t('rgb.presets.save@@Save')}
           </button>
         </div>
       </div>
       <div class="flex flex-col gap-2">
         <div class="flex flex-col gap-1">
           <label for="import">
-            {t('rgb.import@@Import')}
-            <span class="text-gray-500"> - {t('rgb.importSubtitle@@Load a JSON preset')}</span>
+            {t('rgb.presets.import@@Import')}
+            <span class="text-gray-500"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
           </label>
-          <input class="lum-input" id="import" name="import" placeholder={t('rgb.import@@Import (Paste here)')}
+          <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
             onInput$={async (e, el) => loadPresetJSON(el.value)}/>
         </div>
         <div class="grid grid-cols-2 gap-2">
@@ -201,7 +201,7 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <Share size={24} /> {t('rgb.export@@Export')}
+            <Copy size={24} /> {t('rgb.presets.copy@@Copy')}
           </button>
           <button class="lum-btn lum-pad-sm" id="createurl" onClick$={async () => {
             const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
@@ -227,7 +227,7 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <LinkIcon size={24} /> {t('rgb.url@@Get URL')}
+            <LinkIcon size={24} /> {t('rgb.presets.url@@Get URL')}
           </button>
         </div>
       </div>

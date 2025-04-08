@@ -16,30 +16,30 @@ export default component$(({ hidden }: {
     }} id="formatoptions">
       {(rgbStore.format.char != undefined && !rgbStore.format.bold && !rgbStore.format.italic && !rgbStore.format.underline && !rgbStore.format.strikethrough) && <>
         <label for="format-char">
-          {t('rgb.format.character@@Format Character')}
+          {t('rgb.formatting.character@@Format Character')}
         </label>
         <input class="lum-input" id="format-char" value={rgbStore.format.char} placeholder="&" onInput$={(e, el) => { rgbStore.format.char = el.value; }}/>
       </>}
       {!rgbStore.format.char &&
         <>
           <label for="format-bold">
-            {t('rgb.format.bold@@Bold')}
+            {t('rgb.formatting.bold@@Bold')}
           </label>
           <input class="lum-input" id="format-bold" value={rgbStore.format.bold} placeholder="<bold>$t</bold>" onInput$={(e, el) => { rgbStore.format.bold = el.value; }}/>
           <label for="format-italic">
-            {t('rgb.format.italic@@Italic')}
+            {t('rgb.formatting.italic@@Italic')}
           </label>
           <input class="lum-input" id="format-italic" value={rgbStore.format.italic} placeholder="<italic>$t</italic>" onInput$={(e, el) => { rgbStore.format.italic = el.value; }}/>
           <label for="format-underline">
-            {t('rgb.format.underline@@Underline')}
+            {t('rgb.formatting.underline@@Underline')}
           </label>
           <input class="lum-input" id="format-underline" value={rgbStore.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { rgbStore.format.underline = el.value; }}/>
           <label for="format-strikethrough">
-            {t('rgb.format.strikethrough@@Strikethrough')}
+            {t('rgb.formatting.strikethrough@@Strikethrough')}
           </label>
           <input class="lum-input" id="format-strikethrough" value={rgbStore.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { rgbStore.format.strikethrough = el.value; }}/>
           <div class="py-3 font-mono">
-            <p>{t('rgb.placeholders@@Placeholders:')}</p>
+            <p>{t('rgb.formatting.placeholders@@Placeholders')}</p>
             <p>$t = Output Text</p>
           </div>
         </>

@@ -126,7 +126,7 @@ export default component$(() => {
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
-              {t('rgb.output@@Output')}
+              {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
               value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
@@ -139,7 +139,7 @@ export default component$(() => {
 
             <Accordion sectionName="presets">
               <Save size={26} />
-              {t('rgb.presets@@Presets')}
+              {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={openSections.indexOf('presets') == -1}/>
 
@@ -153,14 +153,14 @@ export default component$(() => {
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <Accordion sectionName="formatting" alwaysOpen>
               <Type size={26} />
-              {t('rgb.formatting@@Formatting')}
+              {t('rgb.formatting.title@@Formatting')}
             </Accordion>
             <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
-                {t('rgb.formatoptions@@Format Options')}
+                {t('rgb.formatting.options@@Format Options')}
               </Accordion>
               <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
