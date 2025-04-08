@@ -70,8 +70,6 @@
       "description": "The software in which your Minecraft server will run on.",
       "label": "Software"
     },
-    "subtitle": "A simple script generator to start your Minecraft servers with optimal flags.",
-    "title": "Flags Generator",
     "variables": {
       "description": "Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.",
       "label": "Use Variables"

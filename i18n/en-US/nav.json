@@ -31,7 +31,7 @@
       },
       "more": "More Resources",
       "paperTimings": {
-        "description": "Analyze Paper Timings Reports and get possible optimizations",
+        "description": "Analyze Paper Timings and get possible optimizations",
         "title": "Paper Timings"
       },
       "sparkProfile": {

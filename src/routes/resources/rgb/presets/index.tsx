@@ -81,7 +81,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('gradient.title@@RGBirdflop')} Presets
+          {t('nav.resources.hexGradient.title@@RGBirdflop')} Presets
         </h1>
         <h2 class="text-gray-50 mt-2">
           Welcome to the one-stop shop for presets!
