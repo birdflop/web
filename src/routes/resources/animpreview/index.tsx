@@ -92,10 +92,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animtab.preview.title@@Animation Previewer')}
+          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
         <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animtab.preview.subtitle@@Preview TAB Animations without the need to put them in-game')}
+          {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </h2>
 
         <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">

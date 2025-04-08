@@ -176,10 +176,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="w-full my-10 min-h-[60px]">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('flags.title@@Flags Generator')}
+          {t('nav.resources.flags.title@@Flags Generator')}
         </h1>
         <h2 class="text-gray-50 sm:text-xl mb-6">
-          {t('flags.subtitle@@A simple script generator to start your Minecraft servers with optimal flags.')}
+          {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
         </h2>
 
         <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6 fill-current">

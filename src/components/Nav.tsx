@@ -51,16 +51,16 @@ export default component$(() => {
         display={<div class="flex items-center gap-3"><Box size={24} />{t('nav.resources.title@@Resources')}</div>}
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
         <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.hexGradient@@RGBirdflop')}
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.animatedTAB@@Animated TAB')}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.sparkProfile@@Spark Profile')}
+          {t('nav.resources.sparkProfile.title@@Spark Profile')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.flags@@Flags')}
+          {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
           {t('nav.resources.more@@More Resources')}
@@ -120,16 +120,16 @@ export default component$(() => {
         <Box size={24} /> {t('nav.resources.title@@Resources')}
       </h3>
       <Link q:slot="mobile" href="/resources/rgb" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.hexGradient@@RGBirdflop')}
+        {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </Link>
       <Link q:slot="mobile" href="/resources/animtab" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.animatedTAB@@Animated TAB')}
+        {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </Link>
       <Link q:slot="mobile" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.sparkProfile@@Spark Profile')}
+        {t('nav.resources.sparkProfile.title@@Spark Profile')}
       </Link>
       <Link q:slot="mobile" href="/resources/flags" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.flags@@Flags')}
+        {t('nav.resources.flags.title@@Flags Generator')}
       </Link>
       <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
         {t('nav.resources.more@@More Resources')}

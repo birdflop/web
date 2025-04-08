@@ -194,10 +194,10 @@ export default component$(() => {
                     display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
                     class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.hexGradient@@RGBirdflop')}
+                      {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.animatedTAB@@Animated TAB')}
+                      {t('nav.resources.animatedTAB.title@@Animated TAB')}
                     </a>
                   </DropdownRaw>
                 </div>

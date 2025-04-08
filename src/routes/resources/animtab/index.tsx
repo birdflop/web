@@ -105,10 +105,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('animtab.title@@Animated TAB')}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>
         <h2 class="text-gray-50 mt-1 mb-5">
-          {t('animtab.subtitle@@TAB plugin gradient animation creator')}
+          {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
         </h2>
 
         <Input>

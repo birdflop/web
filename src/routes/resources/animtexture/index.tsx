@@ -52,10 +52,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animtexture.title@@Animated Textures')}
+          {t('nav.resources.animatedTextures.title@@Animated Textures')}
         </h1>
         <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animtexture.subtitle@@Easily merge textures for resource pack animations')}
+          {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
         </h2>
 
         <div class="flex flex-col gap-2">
