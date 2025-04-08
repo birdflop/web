@@ -31,16 +31,16 @@ export default component$(({ hidden }: {
     }} id="formatting">
       <Toggle id="bold" checked={rgbStore.bold}
         onChange$={(e, el) => { rgbStore.bold = el.checked; }}
-        label={`${t('rgb.bold@@Bold')}${getFormatLabel('bold')}`} />
+        label={`${t('rgb.format.bold@@Bold')}${getFormatLabel('bold')}`} />
       <Toggle id="italic" checked={rgbStore.italic}
         onChange$={(e, el) => { rgbStore.italic = el.checked; }}
-        label={`${t('rgb.italic@@Italic')}${getFormatLabel('italic')}`} />
+        label={`${t('rgb.format.italic@@Italic')}${getFormatLabel('italic')}`} />
       <Toggle id="underline" checked={rgbStore.underline}
         onChange$={(e, el) => { rgbStore.underline = el.checked; }}
-        label={`${t('rgb.underline@@Underline')}${getFormatLabel('underline')}`} />
+        label={`${t('rgb.format.underline@@Underline')}${getFormatLabel('underline')}`} />
       <Toggle id="strikethrough" checked={rgbStore.strikethrough}
         onChange$={(e, el) => { rgbStore.strikethrough = el.checked; }}
-        label={`${t('rgb.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
+        label={`${t('rgb.format.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
     </div>
   );
 });

@@ -1,25 +1,27 @@
 {
   "nav": {
+    "animatedTAB": "Animated TAB",
+    "hexGradient": "RGBirdflop",
     "hosting": {
-      "title": "Hosting",
+      "billing": "Billing",
+      "nodeStats": "Node Stats",
       "panel": "Panel",
       "plans": "Plans",
-      "billing": "Billing",
-      "nodestats": "Node Stats"
+      "title": "Hosting"
     },
+    "privacyPolicy": "Privacy Policy",
     "resources": {
-      "title": "Resources",
+      "TabAnimationPreviewer": "TAB Animation Previewer",
+      "animatedTAB": "Animated TAB",
+      "animatedTextures": "Animated Textures",
+      "flags": "Flags",
       "hexGradient": "RGBirdflop",
       "hexGradientAPIDocs": "RGBirdflop API Docs",
-      "animatedTAB": "Animated TAB",
-      "sparkProfile": "Spark Profile",
-      "paperTimings": "Paper Timings",
-      "flags": "Flags",
-      "animatedTextures": "Animated Textures",
-      "tabAnimationPreviewer": "TAB Animation Previewer",
       "more": "More Resources",
-      "privacyPolicy": "Privacy Policy",
-      "termsofService": "Terms of Service"
-    }
+      "papertimings": "Paper Timings",
+      "sparkProfile": "Spark Profile",
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }

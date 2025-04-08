@@ -1,5 +1,6 @@
 import { operatingSystem } from './environment/operatingSystem';
 import { serverType } from './environment/serverType';
+import type { AvailableExtraFlags, AvailableFlags } from './flags';
 import { extraFlags, flags } from './flags';
 
 interface GenerateResult {
@@ -7,21 +8,21 @@ interface GenerateResult {
   'flags'?: string[]
 }
 
-interface schema {
+export interface flagsSchema {
   operatingSystem: string,
   serverType: string,
   gui: boolean,
   variables: boolean,
   autoRestart: boolean,
-  extraFlags: string[],
+  extraFlags: AvailableExtraFlags[],
   fileName: string,
-  flags: string,
+  flags: AvailableFlags,
   withResult: boolean,
   withFlags: boolean,
   memory: number,
 }
 
-export function generateResult(parsed: schema): GenerateResult {
+export function generateResult(parsed: flagsSchema): GenerateResult {
   const selectedFlags = flags[parsed.flags];
   let generatedFlags: string[] = selectedFlags.generate(parsed);
 

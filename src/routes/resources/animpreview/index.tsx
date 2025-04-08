@@ -95,7 +95,7 @@ export default component$(() => {
           {t('animtab.preview.title@@Animation Previewer')}
         </h1>
         <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animtab.preview.subtitle@@Preview TAB Animations without the need to put them ingame')}
+          {t('animtab.preview.subtitle@@Preview TAB Animations without the need to put them in-game')}
         </h2>
 
         <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
@@ -134,7 +134,7 @@ export default component$(() => {
 
         <div class="flex flex-col gap-1">
           <label for="animation">
-            {t('animpreview.yamlInput@@YAML Input')}
+            {t('animtab.preview.yamlInput@@YAML Input')}
           </label>
           <textarea id="animation"
             class={{ 'lum-input h-96 font-mono': true }}
@@ -152,11 +152,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

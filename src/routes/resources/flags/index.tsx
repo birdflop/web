@@ -4,92 +4,112 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
+import type { flagsSchema } from '~/util/flags/generateResult';
 import { generateResult } from '~/util/flags/generateResult';
+import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal } from 'lucide-icons-qwik';
 
-const flagTypes = {
-  'none': 'none',
-  'aikars': 'Aikar\'s Flags',
-  'meowice': 'MeowIce\'s Flags',
-  'benchmarkedG1GC': 'Benchmarked (G1GC)',
-  'benchmarkedZGC': 'Benchmarked (ZGC)',
-  'benchmarkedShenandoah': 'Benchmarked (Shenandoah)',
-  'hillttys': 'hilltty\'s Flags',
-  'obyduxs': 'Obydux\'s Flags',
-  'etils': 'Etil\'s Flags',
-  'proxy': 'Proxy',
-};
-
-const defaults = {
+const defaults: flagsSchema = {
   operatingSystem: 'linux',
   serverType: 'paper',
   gui: false,
   variables: false,
   autoRestart: false,
-  extraFlags: [] as string[],
+  extraFlags: [],
   fileName: 'server.jar',
-  flags: 'aikars' as keyof typeof flagTypes,
+  flags: 'aikars',
   withResult: true,
   withFlags: false,
   memory: 0,
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'parsed', url.searchParams) as typeof defaults;
+  return await getCookies(cookie, 'parsed', url.searchParams) as flagsSchema;
 });
 
 export default component$(() => {
   const t = inlineTranslate();
 
+  const flagOptions = [
+    {
+      name: t('flags.flags.none@@None'),
+      value: 'none',
+    },
+    {
+      name: t('flags.flags.aikars@@Aikar\'s Flags'),
+      value: 'aikars',
+    },
+    {
+      name: t('flags.flags.meowice@@MeowIce\'s Flags'),
+      value: 'meowice',
+    },
+    {
+      name: t('flags.flags.benchmarked@@Benchmarked'),
+      value: 'benchmarked',
+    },
+    {
+      name: t('flags.flags.hillttys@@hilltty\'s Flags'),
+      value: 'hillttys',
+    },
+    {
+      name: t('flags.flags.obyduxs@@Obydux\'s Flags'),
+      value: 'obyduxs',
+    },
+    {
+      name: t('flags.flags.etils@@Etil\'s Flags'),
+      value: 'etils',
+    },
+  ];
+
   const environmentOptions = [
     {
-      name: t('flags.environments.linux.label@@Linux'),
+      name: t('flags.environment.linux@@Linux'),
       value: 'linux',
     },
     {
-      name: t('flags.environments.windows.label@@Windows'),
+      name: t('flags.environment.windows@@Windows'),
       value: 'windows',
     },
     {
-      name: t('flags.environments.macos.label@@macOS'),
+      name: t('flags.environment.macos@@macOS'),
       value: 'macos',
     },
     {
-      name: t('flags.environments.pterodactyl.label@@Pterodactyl'),
+      name: t('flags.environment.pterodactyl@@Pterodactyl'),
       value: 'pterodactyl',
     },
     {
-      name: t('flags.environments.command.label@@Command'),
+      name: t('flags.environment.command@@Command'),
       value: 'command',
     },
   ];
 
   const softwareOptions = [
     {
-      name: t('flags.serverType.paper.label@@Paper'),
+      name: t('flags.serverType.paper@@Paper'),
       value: 'paper',
     },
     {
-      name: t('flags.serverType.purpur.label@@Purpur'),
+      name: t('flags.serverType.purpur@@Purpur'),
       value: 'purpur',
     },
     //{
-    //  name: t('flags.serverType.forge.label@@Forge'),
+    //  name: t('flags.serverType.forge@@Forge'),
     //  value: 'forge',
     //},
     //{
-    //  name: t('flags.serverType.fabric.label@@Fabric'),
+    //  name: t('flags.serverType.fabric@@Fabric'),
     //  value: 'fabric',
     //},
     {
-      name: t('flags.serverType.velocity.label@@Velocity'),
+      name: t('flags.serverType.velocity@@Velocity'),
       value: 'velocity',
     },
     {
-      name: t('flags.serverType.waterfall.label@@Waterfall'),
+      name: t('flags.serverType.waterfall@@Waterfall'),
       value: 'waterfall',
     },
   ];
@@ -180,20 +200,17 @@ export default component$(() => {
                 flagsStore.operatingSystem = el.value;
               }} values={environmentOptions} value={flagsStore.operatingSystem}>
                 <span class="font-bold">{t('flags.environment.label@@Environment')}</span><br/>
-                {t('flags.enviroments.description@@The operating system that the server runs on.')}
+                {t('flags.environment.description@@The operating system that the server runs on.')}
               </Dropdown>
               <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
                 flagsStore.serverType = el.value;
-                if (!srvType[flagsStore.serverType].flags.includes(el.value)) {
-                  flagsStore.flags = srvType[flagsStore.serverType].flags[1] as keyof typeof flagTypes;
-                }
-              }} values={softwareOptions} value={flagsStore.flags}>
+              }} values={softwareOptions} value={flagsStore.serverType}>
                 <span class="font-bold">{t('flags.software.label@@Software')}</span><br/>
                 {t('flags.software.description@@The software in which your Minecraft server will run on.')}
               </Dropdown>
             </div>
             <div>
-              <span class="font-bold">{t('memory.label@@Memory')}</span><br/>
+              <span class="font-bold">{t('flags.memory.label@@Memory')}</span><br/>
               {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
               <div class="group relative w-full h-2 lum-bg-gray-800 hover:lum-bg-gray-700 select-none rounded-lg my-2">
                 <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lg" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
@@ -219,31 +236,28 @@ export default component$(() => {
           <div class="flex flex-col gap-4">
             <div class="flex items-end gap-2">
               <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
-                flagsStore.flags = el.value as keyof typeof flagTypes;
-              }} values={Object.keys(flagTypes).map(flag => ({
-                name: flagTypes[flag as keyof typeof flagTypes],
-                value: flag,
-              }))} value={flagsStore.flags}>
+                flagsStore.flags = el.value as AvailableFlags;
+              }} values={flagOptions} value={flagsStore.flags}>
                 <span class="font-bold">{t('flags.flags.label@@Flags')}</span><br/>
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
               </Dropdown>
               <DropdownRaw id="flagshelp" onChange$={(e, el) => {
-                flagsStore.flags = el.value as keyof typeof flagTypes;
+                flagsStore.flags = el.value as AvailableFlags;
               }} display={<><CircleHelp size={24}/></>}>
                 <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
-                  Aikar's Flags
+                  {t('flags.flags.aikars@@Aikar\'s Flags')}
                 </a>
                 <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
-                  MeowIce's Flags
+                  {t('flags.flags.meowice@@MeowIce\'s Flags')}
                 </a>
                 <a class="lum-btn lum-bg-transparent" href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
-                  Benchmarked Flags
+                  {t('flags.flags.benchmarked@@Benchmarked')}
                 </a>
                 <a class="lum-btn lum-bg-transparent" href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
-                  hilltty's Flags
+                  {t('flags.flags.hillttys@@hilltty\'s Flags')}
                 </a>
                 <a class="lum-btn lum-bg-transparent" href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
-                  Obydux's Flags
+                  {t('flags.flags.obyduxs@@Obydux\'s Flags')}
                 </a>
               </DropdownRaw>
             </div>

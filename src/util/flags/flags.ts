@@ -19,14 +19,6 @@ interface FlagExtraOption extends FlagOption {
   'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType | 'existingFlags'>
 }
 
-interface Flags {
-  [key: string]: FlagOption
-}
-
-interface ExtraFlags {
-  [key: string]: FlagExtraOption
-}
-
 const baseAikar = [
   '-XX:+UseG1GC',
   '-XX:+ParallelRefProcEnabled',
@@ -124,9 +116,9 @@ const baseEtil = [
   '-Djava.security.egd=file:/dev/urandom',
 ];
 
-export const flags: Flags = {
-  'aikars': {
-    'generate': ({ memory }) => {
+export const flags = {
+  aikars: {
+    generate: ({ memory }) => {
       return [
         ...baseAikar,
         ...(memory < 12 ? [
@@ -142,9 +134,9 @@ export const flags: Flags = {
         ]),
       ];
     },
-  },
-  'meowice': {
-    'generate': () => {
+  } as FlagOption,
+  meowice: {
+    generate: () => {
       return [
         '-XX:+UseG1GC',
         '-XX:MaxGCPauseMillis=200',
@@ -219,9 +211,9 @@ export const flags: Flags = {
         '-XX:+SegmentedCodeCache',
       ];
     },
-  },
-  'benchmarkedG1GC': {
-    'generate': () => {
+  } as FlagOption,
+  benchmarkedG1GC: {
+    generate: () => {
       return [
         ...baseBenchmarked,
         '-XX:+UseG1GC',
@@ -244,9 +236,9 @@ export const flags: Flags = {
         '-XX:G1ConcRefinementServiceIntervalMillis=150',
       ];
     },
-  },
-  'benchmarkedZGC': {
-    'generate': () => {
+  } as FlagOption,
+  benchmarkedZGC: {
+    generate: () => {
       return [
         ...baseBenchmarked,
         '-XX:+UseZGC',
@@ -254,9 +246,9 @@ export const flags: Flags = {
         '-XX:-ZProactive',
       ];
     },
-  },
-  'benchmarkedShenandoah': {
-    'generate': () => {
+  } as FlagOption,
+  benchmarkedShenandoah: {
+    generate: () => {
       return [
         ...baseBenchmarked,
         '-XX:+UseShenandoahGC',
@@ -265,9 +257,9 @@ export const flags: Flags = {
         '-XX:AllocatePrefetchStyle=1',
       ];
     },
-  },
-  'hillttys': {
-    'generate': () => {
+  } as FlagOption,
+  hillttys: {
+    generate: () => {
       return [
         '-XX:+UseLargePages',
         '-XX:LargePageSizeInBytes=2M',
@@ -280,9 +272,9 @@ export const flags: Flags = {
         '-XX:+DisableExplicitGC',
       ];
     },
-  },
-  'obyduxs': {
-    'generate': () => {
+  } as FlagOption,
+  obyduxs: {
+    generate: () => {
       return [
         '-XX:+UseG1GC',
         '-XX:MaxGCPauseMillis=130',
@@ -327,9 +319,9 @@ export const flags: Flags = {
         '-Dgraal.CompilerConfiguration=enterprise',
       ];
     },
-  },
-  'etils': {
-    'generate': ({ memory }) => {
+  } as FlagOption,
+  etils: {
+    generate: ({ memory }) => {
       return [
         ...baseEtil,
         ...(memory < 12 ? [
@@ -347,9 +339,9 @@ export const flags: Flags = {
         ]),
       ];
     },
-  },
-  'proxy': {
-    'generate': () => {
+  } as FlagOption,
+  proxy: {
+    generate: () => {
       return [
         '-XX:+UseG1GC',
         '-XX:G1HeapRegionSize=4M',
@@ -359,15 +351,15 @@ export const flags: Flags = {
         '-XX:MaxInlineLevel=15',
       ];
     },
-  },
-  'none': {
-    'generate': () => {
+  } as FlagOption,
+  none: {
+    generate: () => {
       return [];
     },
-  },
+  } as FlagOption,
 };
 
-export const extraFlags: ExtraFlags = {
+export const extraFlags = {
   vectors: {
     supports: ['aikars', 'obyduxs', 'meowice'],
     generate: ({ existingFlags }) => {
@@ -376,7 +368,7 @@ export const extraFlags: ExtraFlags = {
         '--add-modules=jdk.incubator.vector',
       ];
     },
-  },
+  } as FlagExtraOption,
   benchmarkedGraalVM: {
     supports: ['benchmarkedG1GC'],
     generate: ({ existingFlags }) => {
@@ -403,7 +395,7 @@ export const extraFlags: ExtraFlags = {
         '-Dgraal.CompilerConfiguration=enterprise',
       ];
     },
-  },
+  } as FlagExtraOption,
   meowiceGraalVM: {
     supports: ['meowice'],
     generate: ({ existingFlags }) => {
@@ -428,5 +420,5 @@ export const extraFlags: ExtraFlags = {
         '-Dgraal.CompilerConfiguration=enterprise',
       ];
     },
-  },
+  } as FlagExtraOption,
 };
