@@ -1,17 +1,49 @@
 {
   "nav": {
-    "analysis": "Analise",
-    "animatedTAB": "TAB Animado",
-    "animatedTextures": "Texturas animadas",
-    "flags": "Flags",
-    "gradients": "Gradientes",
-    "hexGradient": "Hexadecimal Gradiente",
-    "misc": "Misc",
-    "more": "More Resources",
-    "paperTimings": "Timings do Paper",
+    "hosting": {
+      "billing": "Billing",
+      "nodeStats": "Node Stats",
+      "panel": "Panel",
+      "plans": "Plans",
+      "title": "Hosting"
+    },
     "privacyPolicy": "Politica de privacidade",
-    "sparkProfile": "Perfil spark",
-    "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "Visualizador da animação do TAB"
+    "resources": {
+      "animatedTAB": {
+        "description": "Plugin TAB para criar animações com gradientes",
+        "title": "TAB animado"
+      },
+      "animatedTextures": {
+        "description": "Junta texturas animadas facilmente para animações de packs de recursos",
+        "title": "Texturas Animadas"
+      },
+      "flags": {
+        "description": "A simple script generator to start your Minecraft servers with optimal flags",
+        "title": "Flags Generator"
+      },
+      "hexGradient": {
+        "description": "Criador de cores em gradiente hexadecimal, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Documentation for the RGBirdflop API",
+        "title": "RGBirdflop API Docs"
+      },
+      "more": "More Resources",
+      "paperTimings": {
+        "description": "Analyze Paper Timings and get possible optimizations",
+        "title": "Timings do Paper"
+      },
+      "sparkProfile": {
+        "description": "Analyze a Spark Profile and get possible optimizations",
+        "title": "Perfil spark"
+      },
+      "tabAnimationPreview": {
+        "description": "Visualize as animações do TAB sem a necessidade de colocá-las no jogo",
+        "title": "Visualizador da animação do TAB"
+      },
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }

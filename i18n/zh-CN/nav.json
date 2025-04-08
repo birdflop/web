@@ -1,17 +1,49 @@
 {
   "nav": {
-    "analysis": "分析",
-    "animatedTAB": "TAB动画",
-    "animatedTextures": "动画纹理",
-    "flags": "标志",
-    "gradients": "渐变",
-    "hexGradient": "十六进制渐变",
-    "misc": "其他",
-    "more": "更多资源",
-    "paperTimings": "Paper计时",
+    "hosting": {
+      "billing": "Billing",
+      "nodeStats": "Node Stats",
+      "panel": "Panel",
+      "plans": "Plans",
+      "title": "Hosting"
+    },
     "privacyPolicy": "隐私政策",
-    "sparkProfile": "Spark分析",
-    "tabAnimationPreview": "TAB动画预览器",
-    "tabAnimationPreviewer": "TAB动画预览器"
+    "resources": {
+      "animatedTAB": {
+        "description": "TAB插件渐变动画创建器",
+        "title": "动画TAB"
+      },
+      "animatedTextures": {
+        "description": "轻松合并材质以创建资源包动画",
+        "title": "动画纹理"
+      },
+      "flags": {
+        "description": "一个简单的脚本生成器，用于以最佳标志启动Minecraft服务器。",
+        "title": "标志生成器"
+      },
+      "hexGradient": {
+        "description": "创建十六进制颜色渐变, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Documentation for the RGBirdflop API",
+        "title": "RGBirdflop API Docs"
+      },
+      "more": "更多资源",
+      "paperTimings": {
+        "description": "Analyze Paper Timings and get possible optimizations",
+        "title": "Paper计时"
+      },
+      "sparkProfile": {
+        "description": "Analyze a Spark Profile and get possible optimizations",
+        "title": "Spark分析"
+      },
+      "tabAnimationPreview": {
+        "description": "在无需放入游戏中的情况下预览TAB动画",
+        "title": "TAB动画预览"
+      },
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }

@@ -1,17 +1,49 @@
 {
   "nav": {
-    "analysis": "Анализ",
-    "animatedTAB": "Анимация TAB",
-    "animatedTextures": "Анимация текстур",
-    "flags": "Стартер",
-    "gradients": "Градиенты",
-    "hexGradient": "Градиент",
-    "misc": "Разное",
-    "more": "More Resources",
-    "paperTimings": "Paper Timings",
+    "hosting": {
+      "billing": "Billing",
+      "nodeStats": "Node Stats",
+      "panel": "Panel",
+      "plans": "Plans",
+      "title": "Hosting"
+    },
     "privacyPolicy": "Политика",
-    "sparkProfile": "Spark профиль",
-    "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "Предпросмотр анимации TAB"
+    "resources": {
+      "animatedTAB": {
+        "description": "Создать анимацию для плагина TAB",
+        "title": "Анимация TAB"
+      },
+      "animatedTextures": {
+        "description": "Легко объединить текстуры для анимации ресурс пака",
+        "title": "Анимация текстур"
+      },
+      "flags": {
+        "description": "Простой генератор скриптов для запуска серверов Minecraft с оптимальными флагами.",
+        "title": "Генератор кода запуска сервера"
+      },
+      "hexGradient": {
+        "description": "Создатель HEX градиента, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Documentation for the RGBirdflop API",
+        "title": "RGBirdflop API Docs"
+      },
+      "more": "More Resources",
+      "paperTimings": {
+        "description": "Analyze Paper Timings and get possible optimizations",
+        "title": "Paper Timings"
+      },
+      "sparkProfile": {
+        "description": "Analyze a Spark Profile and get possible optimizations",
+        "title": "Spark профиль"
+      },
+      "tabAnimationPreview": {
+        "description": "Предварительный просмотр TAB-анимации",
+        "title": "Предпросмотр анимации TAB"
+      },
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }
