@@ -1,14 +1,15 @@
-import { component$, createContextId, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Gradient } from '~/components/util/HexUtils';
-import { defaults } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/components/util/RGBUtils';
+import { Gradient } from '~/util/HexUtils';
+import { defaults } from '~/util/PresetUtils';
+import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/util/RGBUtils';
 
-import { inlineTranslate, useSpeak } from 'qwik-speak';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
+import { inlineTranslate } from 'qwik-speak';
+import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
-import { ChevronDown, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+
+import { Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -18,6 +19,8 @@ import Decode from '~/components/rgb/Decode';
 import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
+import Accordion from '~/components/Accordion';
+import { OpenSectionsContext } from '~/routes/layout';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -37,34 +40,21 @@ export const rgbDefaults = {
 };
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  const rgbCookies = await getCookies(cookie, 'rgb', url.searchParams) as typeof rgbDefaults;
-  const presetCookies = await getCookies(cookie, 'presets') as { savedPresets: Partial<typeof defaults>[] };
-  return {
-    rgb: rgbCookies,
-    presets: presetCookies,
-  };
+  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
-export const presetStoreContext = createContextId<{ savedPresets: Partial<typeof defaults>[] }>('presetstore-context');
 export default component$(() => {
-  useSpeak({ assets: ['gradient', 'color'] });
   const t = inlineTranslate();
-
-  const cookies = useCookies().value;
+  const rgbCookies = useCookies().value;
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
-    ...cookies.rgb,
+    ...rgbCookies,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const presetStore = useStore({
-    ...cookies.presets,
-  });
-  useContextProvider(presetStoreContext, presetStore);
-
-  const openSections = useStore([] as string[]);
+  const openSections = useContext(OpenSectionsContext);
   const threshold = useSignal(50);
 
   useTask$(({ track }) => {
@@ -75,22 +65,14 @@ export default component$(() => {
     });
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    const input = document.getElementById('input') as HTMLTextAreaElement;
-    if (!input) return;
-    input.focus();
-    input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
-  });
-
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('gradient.title@@RGBirdflop')}
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </h1>
         <h2 class="text-gray-50 mt-1 mb-5">
-          {t('gradient.subtitle@@Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}<br />
+          {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
 
         <Input>
@@ -135,146 +117,53 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
           <div class="flex flex-col gap-2 relative" id="column1">
-            <button class={{
-              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
-              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
-              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
-            }} onClick$={() => {
-              if (openSections.indexOf('colors') == -1) openSections.push('colors');
-              else openSections.splice(openSections.indexOf('colors'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Palette size={26} />
-                {t('color.colors@@Colors')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': openSections.indexOf('colors') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
+            <Accordion sectionName="colors" alwaysOpen>
+              <Palette size={26} />
+              {t('rgb.colors.title@@Colors')}
+            </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1} />
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
-            <button class={{
-              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
-              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
-              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
-            }} onClick$={() => {
-              if (openSections.indexOf('output') == -1) openSections.push('output');
-              else openSections.splice(openSections.indexOf('output'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Clipboard size={26} />
-                {t('color.output@@Output')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': openSections.indexOf('output') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
-
+            <Accordion sectionName="output" alwaysOpen>
+              <Clipboard size={26} />
+              {t('rgb.output.title@@Output')}
+            </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
               value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
 
-            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (openSections.indexOf('options') == -1) openSections.push('options');
-              else openSections.splice(openSections.indexOf('options'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Settings size={26} />
-                {t('color.options@@Options')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200': true,
-                'rotate-180': openSections.indexOf('options') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
+            <Accordion sectionName="options">
+              <Settings size={26} />
+              {t('rgb.options@@Options')}
+            </Accordion>
             <Options hidden={openSections.indexOf('options') == -1}/>
 
-            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (openSections.indexOf('presets') == -1) openSections.push('presets');
-              else openSections.splice(openSections.indexOf('presets'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Save size={26} />
-                {t('color.presets@@Presets')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200': true,
-                'rotate-180': openSections.indexOf('presets') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
+            <Accordion sectionName="presets">
+              <Save size={26} />
+              {t('rgb.presets.title@@Presets')}
+            </Accordion>
             <Presets hidden={openSections.indexOf('presets') == -1}/>
 
-            <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-              if (openSections.indexOf('decode') == -1) openSections.push('decode');
-              else openSections.splice(openSections.indexOf('decode'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Sparkles size={26} />
-                {t('color.decode@@Decode')}
-                <span class="lum-bg-blue-950 rounded text-xs px-1 py-0.5 ml-1">BETA</span>
-              </h1>
-              <div class={{
-                'transition-transform duration-200': true,
-                'rotate-180': openSections.indexOf('decode') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
+            <Accordion sectionName="decode">
+              <Sparkles size={26} />
+              {t('rgb.decode.title@@Decode')}
+            </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
-
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
-            <button class={{
-              'lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md': true,
-              'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': true,
-              'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': true,
-            }} onClick$={() => {
-              if (openSections.indexOf('formatting') == -1) openSections.push('formatting');
-              else openSections.splice(openSections.indexOf('formatting'), 1);
-            }}>
-              <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Type size={26} />
-                {t('color.formatting@@Formatting')}
-              </h1>
-              <div class={{
-                'transition-transform duration-200 sm:hidden': true,
-                'rotate-180': openSections.indexOf('formatting') != -1,
-              }}>
-                <ChevronDown size={20} />
-              </div>
-            </button>
+            <Accordion sectionName="formatting" alwaysOpen>
+              <Type size={26} />
+              {t('rgb.formatting.title@@Formatting')}
+            </Accordion>
             <Formatting hidden={openSections.indexOf('formatting') == -1} />
 
             {rgbStore.customFormat && <>
-              <button class="lum-btn lum-bg-gray-800/30 rounded-md lum-pad-md" onClick$={() => {
-                if (openSections.indexOf('formatoptions') == -1) openSections.push('formatoptions');
-                else openSections.splice(openSections.indexOf('formatoptions'), 1);
-              }}>
-                <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                  <Settings size={26} />
-                  {t('color.formatoptions@@Format Options')}
-                </h1>
-                <div class={{
-                  'transition-transform duration-200': true,
-                  'rotate-180': openSections.indexOf('formatoptions') != -1,
-                }}>
-                  <ChevronDown size={20} />
-                </div>
-              </button>
+              <Accordion sectionName="formatoptions">
+                <Settings size={26} />
+                {t('rgb.formatting.options@@Format Options')}
+              </Accordion>
               <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
             </>}
-
           </div>
         </div>
         <div class="text-sm mt-8">

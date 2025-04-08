@@ -1,8 +1,8 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
+import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Terminal } from 'lucide-icons-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
-import Backgrounds from '~/components/backgrounds';
-import { generateOutput } from '../util/RGBUtils';
+import { inlineTranslate } from 'qwik-speak';
+import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
+import { generateOutput } from '~/util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 const InputField = component$(({ class: className }: {
@@ -34,18 +34,26 @@ const InputField = component$(({ class: className }: {
 });
 
 export default component$(() => {
+  const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const input = document.getElementById('input') as HTMLTextAreaElement;
+    if (!input) return;
+    input.focus();
+    input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
+  });
 
   return (
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 ">
       <div class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
         <Terminal size={26} />
-        {t('color.inputText@@Input Text')}
+        {t('rgb.inputText@@Input Text')}
         <span class="text-gray-400 text-sm font-normal">
-          {t('color.inputTextSubtitle@@Type here to generate a gradient!')}
+          {t('rgb.inputTextSubtitle@@Type here to generate a gradient!')}
         </span>
       </div>
       {rgbStore.previewStyle == 'chat' &&

@@ -1,11 +1,12 @@
 {
   "animtab": {
-    "animationName": "애니메이션 이름",
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "애니메이션 이름",
+      "style": "Animation Style"
+    },
     "length": "그라데이션 길이",
     "outputFormat": "출력 형식",
-    "outputType": "출력 유형",
-    "speed": "속도",
-    "subtitle": "TAB 플러그인 그라데이션 애니메이션 생성기",
-    "title": "애니메이션 TAB"
+    "yamlInput": "YAML 입력"
   }
 }

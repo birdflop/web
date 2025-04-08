@@ -4,8 +4,6 @@
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
     "generate": "Генерировать",
-    "subtitle": "Легко объединить текстуры для анимации ресурс пака",
-    "textureName": "Название текстуры",
-    "title": "Анимация текстур"
+    "textureName": "Название текстуры"
   }
 }

@@ -1,14 +1,27 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Toggle } from '@luminescent/ui-qwik';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  useSpeak({ assets: ['color'] });
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
+
+  const getFormatLabel = (formatType: 'bold' | 'italic' | 'underline' | 'strikethrough') => {
+    if (rgbStore.format.char) {
+      const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm' };
+      return ` - ${rgbStore.format.char}${formatMap[formatType]}`;
+    }
+
+    const formatValue = rgbStore.format[formatType];
+    if (formatValue) {
+      return ` - ${formatValue.replace('$t', '')}`;
+    }
+
+    return '';
+  };
 
   return (
     <div class={{
@@ -18,16 +31,16 @@ export default component$(({ hidden }: {
     }} id="formatting">
       <Toggle id="bold" checked={rgbStore.bold}
         onChange$={(e, el) => { rgbStore.bold = el.checked; }}
-        label={`${t('color.bold@@Bold')} - ${rgbStore.format.char ? `${rgbStore.format.char}l` : rgbStore.format.bold?.replace('$t', '')}`} />
+        label={`${t('rgb.formatting.bold@@Bold')}${getFormatLabel('bold')}`} />
       <Toggle id="italic" checked={rgbStore.italic}
         onChange$={(e, el) => { rgbStore.italic = el.checked; }}
-        label={`${t('color.italic@@Italic')} - ${rgbStore.format.char ? `${rgbStore.format.char}o` : rgbStore.format.italic?.replace('$t', '')}`} />
+        label={`${t('rgb.formatting.italic@@Italic')}${getFormatLabel('italic')}`} />
       <Toggle id="underline" checked={rgbStore.underline}
         onChange$={(e, el) => { rgbStore.underline = el.checked; }}
-        label={`${t('color.underline@@Underline')} - ${rgbStore.format.char ? `${rgbStore.format.char}n` : rgbStore.format.underline?.replace('$t', '')}`} />
+        label={`${t('rgb.formatting.underline@@Underline')}${getFormatLabel('underline')}`} />
       <Toggle id="strikethrough" checked={rgbStore.strikethrough}
         onChange$={(e, el) => { rgbStore.strikethrough = el.checked; }}
-        label={`${t('color.strikethrough@@Strikethrough')} - ${rgbStore.format.char ? `${rgbStore.format.char}m` : rgbStore.format.strikethrough?.replace('$t', '')}`} />
+        label={`${t('rgb.formatting.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
     </div>
   );
 });

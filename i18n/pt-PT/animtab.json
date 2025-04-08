@@ -1,11 +1,12 @@
 {
   "animtab": {
-    "animationName": "Nome da Animação",
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "Nome da Animação",
+      "style": "Animation Style"
+    },
     "length": "Comprimento do Gradiente",
     "outputFormat": "Formato de saída",
-    "outputType": "Tipo de saída",
-    "speed": "Velocidade",
-    "subtitle": "Plugin TAB para criar animações com gradientes",
-    "title": "TAB animado"
+    "yamlInput": "Entrada YAML"
   }
 }

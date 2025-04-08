@@ -1,0 +1,77 @@
+{
+  "rgb": {
+    "colors": {
+      "amount": "颜色数量",
+      "character": "字符",
+      "charsPer": "Characters per color",
+      "color": "颜色",
+      "customFormat": "自定义格式",
+      "disperse": "Disperse",
+      "format": "颜色格式",
+      "title": "Colors"
+    },
+    "copied": "Copied to clipboard!",
+    "copyFailed": "Failed to copy to clipboard!",
+    "decode": {
+      "description": "Copy-paste an existing RGB text here to edit it",
+      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "threshold": {
+        "description": "Try changing this around if you're getting too many colors",
+        "title": "Threshold"
+      },
+      "title": "Decode"
+    },
+    "formatting": {
+      "bold": "粗体",
+      "character": "格式字符",
+      "italic": "斜体",
+      "options": "Format Options",
+      "placeholders": "占位符",
+      "strikethrough": "删除线",
+      "title": "格式",
+      "underline": "下划线"
+    },
+    "inputText": "输入文本",
+    "inputTextSubtitle": "Type here to generate a gradient!",
+    "options": "Options",
+    "output": {
+      "copied": "The RGB text has been copied to your clipboard successfully.",
+      "description": "Copy-paste this for RGB text!",
+      "title": "输出"
+    },
+    "prefixsuffix": "Prefix/Suffix",
+    "presets": {
+      "copied": "Successfully copied preset to clipboard!",
+      "copy": "Copy",
+      "url": {
+        "get": "导出为 Url",
+        "title": "URL Updated!",
+        "description": "Successfully exported preset to url! (Check the URL bar)"
+      },
+      "import": "导入",
+      "imported": {
+        "title": "成功导入预设！",
+        "description": "The preset has been imported successfully."
+      },
+      "invalid": {
+        "title": "Invalid Preset",
+        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import."
+      },
+      "importSubtitle": "Load a JSON preset",
+      "pasteHere": "Paste here",
+      "save": "Save",
+      "saved": {
+        "title": "Preset Saved!",
+        "description": "The preset has been saved successfully.",
+        "warning": "Please login to save presets permanently.",
+        "presets": "Saved Presets"
+      },
+      "title": "预设"
+    },
+    "previewStyle": {
+      "chat": "Minecraft Chat",
+      "default": "Default",
+      "title": "Preview Style"
+    }
+  }
+}

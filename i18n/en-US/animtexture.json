@@ -4,8 +4,6 @@
     "downloadMCMETA": "Download MCMETA",
     "downloadPNG": "Download PNG",
     "generate": "Generate",
-    "subtitle": "Easily merge textures for resource pack animations",
-    "textureName": "Texture Name",
-    "title": "Animated Textures"
+    "textureName": "Texture Name"
   }
 }

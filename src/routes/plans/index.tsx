@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Anchor, Blobs, Header } from '@luminescent/ui-qwik';
 import { Package, ShoppingCart } from 'lucide-icons-qwik';
-import { unloadGoogleAds } from '~/components/util/GoogleAds';
+import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const plans = {
   'EU Premium': {

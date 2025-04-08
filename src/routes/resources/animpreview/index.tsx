@@ -1,8 +1,8 @@
 import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { getCookies, setCookies } from '~/util/SharedUtils';
+import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 
 export const useCookies = routeLoader$(async ({ cookie, url }) => {
@@ -29,7 +29,6 @@ const minecraftColors = {
 };
 
 export default component$(() => {
-  useSpeak({ assets: ['animpreview'] });
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
@@ -93,10 +92,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animpreview.title@@Animation Previewer')}
+          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
         <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
+          {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </h2>
 
         <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
@@ -135,7 +134,7 @@ export default component$(() => {
 
         <div class="flex flex-col gap-1">
           <label for="animation">
-            {t('animpreview.yamlInput@@YAML Input')}
+            {t('animtab.yamlInput@@YAML Input')}
           </label>
           <textarea id="animation"
             class={{ 'lum-input h-96 font-mono': true }}
@@ -153,11 +152,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

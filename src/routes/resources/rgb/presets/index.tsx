@@ -1,33 +1,65 @@
-import { component$, useStore } from '@builder.io/qwik';
+import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { Gradient } from '~/components/util/HexUtils';
-import type { publishedPreset } from '~/components/util/PresetUtils';
-import { defaults } from '~/components/util/PresetUtils';
-import { presets } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '~/components/util/RGBUtils';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
+import { type BirdflopSession } from '~/routes/plugin@auth';
+import { Gradient } from '~/util/HexUtils';
+import type { publishedPreset } from '~/util/PresetUtils';
+import { defaults } from '~/util/PresetUtils';
+import { presets } from '~/util/PresetUtils';
+import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
+import { setUserData, sortColors } from '~/util/SharedUtils';
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'presets', url.searchParams);
+export const useData = routeLoader$(async ({ sharedMap }) => {
+  // Get session and merge saved presets
+  const session = sharedMap.get('session') as BirdflopSession | undefined;
+  return {
+    savedPresets: session?.user?.savedPresets ?? [],
+  };
 });
 
 export default component$(() => {
   const t = inlineTranslate();
 
-  const cookies = useCookies().value;
+  const data = useData().value;
   const presetStore = useStore({
     searchTerm: '',
-    savedPresets: [] as Partial<typeof defaults>[],
     showSaved: false,
-    ...cookies,
+    ...data,
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    if (presetStore.savedPresets.length > 0) return;
+    let savedPresets = localStorage.getItem('savedPresets');
+    try {
+      if (!savedPresets) {
+        // presets possibly stored in cookies
+        const cookie: { [key: string]: string; } = {};
+        document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+          const pairsplit = pair.split(/\s*=\s*/);
+          cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+        });
+        if (!cookie['presets']) return;
+        const cookieSavedPresets = decodeURIComponent(cookie['presets']);
+        savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
+        if (!savedPresets) return;
+        // remove cookie
+        document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        // save to localStorage
+        localStorage.setItem('savedPresets', cookieSavedPresets);
+      }
+      const parsed = JSON.parse(savedPresets);
+      presetStore.savedPresets.push(...parsed);
+    } catch (err) {
+      console.error('Error parsing saved presets', err);
+    }
   });
 
   const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
-    name: preset.text ?? 'Untitled',
+    name: preset.text ?? 'Birdflop',
     author: 'Personal',
     preset,
   }));
@@ -36,7 +68,7 @@ export default component$(() => {
     index === self.findIndex((p) => {
       if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
 
-      if (!p.name || p.name === 'Untitled') p.name = preset.name;
+      if (!p.name || p.name === 'Birdflop') p.name = preset.name;
       if (!p.author || p.author === 'Personal') p.author = preset.author;
       return true;
     }),
@@ -49,7 +81,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('gradient.title@@RGBirdflop')} Presets
+          {t('nav.resources.hexGradient.title@@RGBirdflop')} Presets
         </h1>
         <h2 class="text-gray-50 mt-2">
           Welcome to the one-stop shop for presets!
@@ -101,7 +133,7 @@ export default component$(() => {
                     }}>
                       {(() => {
                         const preset = p.preset;
-                        if (!p.name) p.name = 'Untitled';
+                        if (!p.name) p.name = 'Birdflop';
 
                         const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
                         if (colors.length < 2) return preset.name;
@@ -144,7 +176,8 @@ export default component$(() => {
                     });
                     if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
                     else presetStore.savedPresets.push(p.preset);
-                    if (isBrowser) setCookies('presets', { savedPresets: presetStore.savedPresets });
+                    if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore.savedPresets));
+                    setUserData({ savedPresets: presetStore.savedPresets });
                   }}>
                     {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
                       <Trash size={20} /> Remove
@@ -161,10 +194,10 @@ export default component$(() => {
                     display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
                     class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.hexGradient@@RGBirdflop')}
+                      {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.animatedTAB@@Animated TAB')}
+                      {t('nav.resources.animatedTAB.title@@Animated TAB')}
                     </a>
                   </DropdownRaw>
                 </div>

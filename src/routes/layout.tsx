@@ -1,12 +1,13 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
-import { component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import { Header } from '@luminescent/ui-qwik';
-import Backgrounds from '~/components/backgrounds';
+import Backgrounds from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
-import Nav from '../components/Nav';
+import Nav from '~/components/Nav';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
+import { inlineTranslate } from 'qwik-speak';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -20,11 +21,16 @@ type Notification = {
 } | rawNotification;
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
+export const OpenSectionsContext = createContextId<string[]>('opensections-context');
 export default component$(() => {
+  const t$ = $((string: string) => inlineTranslate()(string));
+
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
+  const openSections = useStore([] as string[]);
+  useContextProvider(OpenSectionsContext, openSections);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -69,7 +75,7 @@ export default component$(() => {
             <Cookie size={26} /> Cookies
           </Header>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
-            Privacy Policy
+            {t$('nav.privacyPolicy@@Privacy Policy')}
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">
@@ -94,7 +100,7 @@ export default component$(() => {
   return <>
     <Nav />
     <Background id="bg" class={{
-      'fixed scale-120 bottom-0 overflow-hidden -z-10 w-full h-full object-cover brightness-50': true,
+      'fixed scale-120 bottom-0 overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
       'transition-all duration-1000 blur-xl opacity-10 scale-150': loc.url.pathname != '/',
     }}/>
     <Slot />
