@@ -1,58 +1,49 @@
-import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { type BirdflopSession } from '~/routes/plugin@auth';
+import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { Gradient } from '~/util/HexUtils';
-import type { publishedPreset } from '~/util/PresetUtils';
-import { defaults } from '~/util/PresetUtils';
+import { defaults, type publishedPreset } from '~/util/PresetUtils';
 import { presets } from '~/util/PresetUtils';
 import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { setUserData, sortColors } from '~/util/SharedUtils';
 
-export const useData = routeLoader$(async ({ sharedMap }) => {
-  // Get session and merge saved presets
-  const session = sharedMap.get('session') as BirdflopSession | undefined;
-  return {
-    savedPresets: session?.user?.savedPresets ?? [],
-  };
-});
-
 export default component$(() => {
   const t = inlineTranslate();
 
-  const data = useData().value;
+  const session = useSession() as Readonly<Signal<BirdflopSession>>;
   const presetStore = useStore({
     searchTerm: '',
     showSaved: false,
-    ...data,
+    savedPresets: (session.value?.user?.savedPresets ?? []),
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    if (presetStore.savedPresets.length > 0) return;
-    let savedPresets = localStorage.getItem('savedPresets');
+    if (presetStore.savedPresets.length != 0) return;
+    let savedPresets: Partial<typeof defaults>[] = [];
     try {
-      if (!savedPresets) {
+      const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
+      savedPresets = savedPresets.concat(localStoragePresets);
+      if (!localStoragePresets) {
         // presets possibly stored in cookies
         const cookie: { [key: string]: string; } = {};
         document.cookie.split(/\s*;\s*/).forEach(function (pair) {
           const pairsplit = pair.split(/\s*=\s*/);
           cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
         });
-        if (!cookie['presets']) return;
-        const cookieSavedPresets = decodeURIComponent(cookie['presets']);
-        savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
-        if (!savedPresets) return;
-        // remove cookie
-        document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        // save to localStorage
-        localStorage.setItem('savedPresets', cookieSavedPresets);
+        if (cookie['presets']) {
+          const cookiePresets = decodeURIComponent(cookie['presets']);
+          savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
+          // remove cookie
+          document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
       }
-      const parsed = JSON.parse(savedPresets);
-      presetStore.savedPresets.push(...parsed);
+      presetStore.savedPresets.push(...savedPresets);
+      localStorage.setItem('savedPresets', JSON.stringify(presetStore));
     } catch (err) {
       console.error('Error parsing saved presets', err);
     }

@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useContext, useStore } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useStore, type Signal } from '@builder.io/qwik';
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
@@ -10,6 +10,7 @@ import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 
 export default component$(({ hidden }: {
@@ -20,7 +21,7 @@ export default component$(({ hidden }: {
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const loc = useLocation();
-  const session = useSession();
+  const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -53,7 +54,9 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const presetStore = useStore([] as Partial<typeof defaults>[]);
+  const presetStore = useStore([
+    ...(session.value?.user?.savedPresets ?? []),
+  ] as Partial<typeof defaults>[]);
 
   return (
     <div class={{
@@ -64,26 +67,26 @@ export default component$(({ hidden }: {
       <div class="flex flex-col gap-2"
         onClick$={async () => {
           if (presetStore.length != 0) return;
-          let savedPresets = localStorage.getItem('savedPresets');
+          let savedPresets: Partial<typeof defaults>[] = [];
           try {
-            if (!savedPresets) {
+            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
+            savedPresets = savedPresets.concat(localStoragePresets);
+            if (!localStoragePresets) {
               // presets possibly stored in cookies
               const cookie: { [key: string]: string; } = {};
               document.cookie.split(/\s*;\s*/).forEach(function (pair) {
                 const pairsplit = pair.split(/\s*=\s*/);
                 cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
               });
-              if (!cookie['presets']) return;
-              const cookieSavedPresets = decodeURIComponent(cookie['presets']);
-              savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
-              if (!savedPresets) return;
-              // remove cookie
-              document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-              // save to localStorage
-              localStorage.setItem('savedPresets', cookieSavedPresets);
+              if (cookie['presets']) {
+                const cookiePresets = decodeURIComponent(cookie['presets']);
+                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
+                // remove cookie
+                document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+              }
             }
-            const parsed = JSON.parse(savedPresets);
-            presetStore.push(...parsed);
+            presetStore.push(...savedPresets);
+            localStorage.setItem('savedPresets', JSON.stringify(presetStore));
           } catch (err) {
             console.error('Error parsing saved presets', err);
           }
