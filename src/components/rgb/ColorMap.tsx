@@ -48,7 +48,7 @@ export default component$(() => {
       <div id="add-button" class={{
         'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
       }}>
-        <Plus size={19} />
+        <Plus size={18} />
       </div>
       {rgbStore.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${rgbStore.colors.length}`}
         onMouseDown$={(e, el) => {

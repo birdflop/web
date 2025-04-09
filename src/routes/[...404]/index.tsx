@@ -29,7 +29,7 @@ export default component$(() => {
         </p>
         <div class="flex mt-4">
           <Link href="/" class="lum-btn lum-pad-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
-            <Home size={36} /> Go back home
+            <Home size={26}/> Go back home
           </Link>
         </div>
       </div>

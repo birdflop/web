@@ -13,6 +13,10 @@
     "copied": "Copied to clipboard!",
     "copyFailed": "Failed to copy to clipboard!",
     "decode": {
+      "decoded": {
+        "title": "RGB Text Decoded!",
+        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value."
+      },
       "description": "Copy-paste an existing RGB text here to edit it",
       "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
       "threshold": {

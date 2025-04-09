@@ -277,9 +277,9 @@ export default component$(() => {
               <input id="server_description" class="lum-input" onChange$={(e, el) => store.desc = el.value} />
             </div>
             <div class="flex flex-1 gap-4 justify-end">
-              <a class="lum-btn lum-pad-xl rounded-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
+              <a class="lum-btn lum-pad-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
                 href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&server_name=${store.name}&server_description=${store.desc}&billing_cycle=monthly`}>
-                <ShoppingCart size={36}/> Add to cart
+                <ShoppingCart size={26}/> Add to cart
               </a>
             </div>
           </div>}

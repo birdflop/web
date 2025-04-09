@@ -146,6 +146,9 @@ export default component$(() => {
             <Accordion sectionName="decode">
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue-900/50 text-xs py-1 px-2 rounded-md">
+                experimental
+              </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>

@@ -182,7 +182,7 @@ export default component$(({ hidden }: {
             onInput$={async (e, el) => loadPresetJSON(el.value)}/>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button class="lum-btn lum-pad-sm" id="export" onClick$={async () => {
+          <button class="lum-btn" id="export" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
@@ -204,9 +204,9 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <Copy size={24} /> {t('rgb.presets.copy@@Copy')}
+            <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
           </button>
-          <button class="lum-btn lum-pad-sm" id="createurl" onClick$={async () => {
+          <button class="lum-btn" id="createurl" onClick$={async () => {
             const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
             const url = new URL(base_url);
             const params: Partial<typeof defaults> = { ...rgbStore };
@@ -230,7 +230,7 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <LinkIcon size={24} /> {t('rgb.presets.url.get@@Get Url')}
+            <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}
           </button>
         </div>
       </div>

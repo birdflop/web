@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Header } from '@luminescent/ui-qwik';
-import { BookText } from 'lucide-icons-qwik';
+import { inlineTranslate } from 'qwik-speak';
 
 import { defaults, v3formats } from '~/util/PresetUtils';
 
@@ -18,14 +18,18 @@ export const useEndpoints = routeLoader$(async ({ url }) => {
 });
 
 export default component$(() => {
+  const t = inlineTranslate();
   const { endpoints } = useEndpoints().value;
 
   return <>
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 py-16 min-h-svh">
-      <div>
-        <h1 class="flex gap-4 items-center text-gray-100 text-2xl sm:text-4xl font-bold my-12 drop-shadow-lg">
-          <BookText size={64} /> RGBirdflop API Documentation
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
+          {t('nav.resources.hexGradient.title@@RGBirdflop')} API Documentation
         </h1>
+        <h2 class="text-gray-50 mt-1 mb-5">
+          {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
+        </h2>
         <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mb-3 drop-shadow-lg">
           Get Started
         </h2>

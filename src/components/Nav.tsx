@@ -21,8 +21,8 @@ export default component$(() => {
   return (
     <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent">
-        <LogoBirdflop width={32} fillGradient={['#54daf4', '#545eb6']} />
-        <span class="font-bold -ml-1">Birdflop</span>
+        <LogoBirdflop width={24} fillGradient={['#54daf4', '#545eb6']} />
+        <span class="font-semibold -ml-1 text-blue-50">Birdflop</span>
         <div class={{
           'transition-all': true,
           '-ml-6 opacity-0': !loc.isNavigating,
@@ -32,7 +32,9 @@ export default component$(() => {
       </Link>
 
       <DropdownRaw id="nav-hosting" q:slot='end' hover
-        display={<div class="flex items-center gap-3"><Server size={24} />{t('nav.hosting.title@@Hosting')}</div>}
+        display={<div class="flex items-center gap-2">
+          <Server size={20} /> {t('nav.hosting.title@@Hosting')}
+        </div>}
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
         <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
           {t('nav.hosting.panel@@Panel')}
@@ -48,7 +50,9 @@ export default component$(() => {
         </Link>
       </DropdownRaw>
       <DropdownRaw id="nav-resources" q:slot='end' hover
-        display={<div class="flex items-center gap-3"><Box size={24} />{t('nav.resources.title@@Resources')}</div>}
+        display={<div class="flex items-center gap-2">
+          <Box size={20} /> {t('nav.resources.title@@Resources')}
+        </div>}
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
         <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -66,8 +70,8 @@ export default component$(() => {
           {t('nav.resources.more@@More Resources')}
         </Link>
       </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent lum-pad-equal-xs': true }} id="lang-picker"
-        display={<Globe size={24} />} values={config.supportedLocales.map(value => (
+      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent': true }} id="lang-picker"
+        display={<Globe size={20} />} values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
             value: value.lang,
@@ -80,29 +84,26 @@ export default component$(() => {
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
-
-      <Form action={session.value ? signOut : signIn} q:slot='end' class="relative">
+      <Form action={session.value ? signOut : signIn} q:slot='end'>
         <input type="hidden" name="providerId" value="discord" />
         <input
           type="hidden"
           name="options.redirectTo"
           value={loc.url.pathname + loc.url.search}
         />
-        <button class="lum-btn lum-bg-transparent w-full justify-end fill-current lum-pad-equal-xs">
+        <button class="lum-btn lum-bg-transparent lum-pad-equal-md">
           {session.value && session.value.user?.image ?
             <>
-              <div class="flex gap-3 pr-7 items-center">
-                <span>{session.value.user?.name}</span>
-                <img src={session.value.user.image} width={28} height={28} class="rounded-full" />
-              </div>
+              <img src={session.value.user.image} width={20} height={20} class="rounded w-5 h-5 ml-1" />
+              <span class="mr-6">{session.value.user?.name}</span>
             </>
-            : <LogIn size={28} />
+            : <LogIn size={20} />
           }
         </button>
       </Form>
 
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
-        <Server size={24} /> {t('nav.hosting.title@@Hosting')}
+        <Server size={20} /> {t('nav.hosting.title@@Hosting')}
       </h3>
       <a q:slot="mobile" href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent">
         {t('nav.hosting.panel@@Panel')}
@@ -117,7 +118,7 @@ export default component$(() => {
         {t('nav.hosting.nodeStats@@Node Stats')}
       </Link>
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
-        <Box size={24} /> {t('nav.resources.title@@Resources')}
+        <Box size={20} /> {t('nav.resources.title@@Resources')}
       </h3>
       <Link q:slot="mobile" href="/resources/rgb" class="lum-btn lum-bg-transparent">
         {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -145,10 +146,10 @@ export default component$(() => {
 export const SocialButtons = component$(() => {
   return <>
     <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
-      <Github size={24} />
+      <Github size={20} />
     </a>
     <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
-      <LogoDiscord width={24} />
+      <LogoDiscord width={20} />
     </a>
   </>;
 });

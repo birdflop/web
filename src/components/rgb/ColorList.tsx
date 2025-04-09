@@ -72,13 +72,13 @@ export default component$(({ hidden }: {
           const newColors = rgbStore.colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           rgbStore.colors = newColors;
         }}>
-          <Dices size={24} /> {rgbStore.disperse && <span>Randomize</span>}
+          <Dices size={20} /> {rgbStore.disperse && <span>Randomize</span>}
         </button>
         {!rgbStore.disperse &&
           <button class="lum-btn lum-pad-xs w-full" disabled={rgbStore.colors.find((color, i) => color.pos != (100 / (rgbStore.colors.length - 1)) * i) ? false : true} onClick$={() => {
             rgbStore.colors = disperseColors(rgbStore.colors);
           }}>
-            <Ellipsis size={24} /> {t('rgb.colors.disperse@@Disperse')}
+            <Ellipsis size={20} /> {t('rgb.colors.disperse@@Disperse')}
           </button>
         }
       </div>
@@ -86,10 +86,10 @@ export default component$(({ hidden }: {
         {rgbStore.colors.map((color, i) => <div key={`${i}/${rgbStore.colors.length}`} class="flex relative gap-2">
           <div class="flex flex-col rounded-md">
             <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => rgbStore.colors = swapItems(rgbStore.colors, i, i - 1)}>
-              <ChevronUp size={24} />
+              <ChevronUp size={20} />
             </button>
             <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => rgbStore.colors = swapItems(rgbStore.colors, i, i + 1)}>
-              <ChevronDown size={24} />
+              <ChevronDown size={20} />
             </button>
           </div>
           <div class="flex flex-col justify-end gap-1">

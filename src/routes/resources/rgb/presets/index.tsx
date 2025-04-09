@@ -161,7 +161,7 @@ export default component$(() => {
                   </div>
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
-                  <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
+                  <button class="lum-btn text-sm" onClick$ ={() => {
                     const existingPreset = presetStore.savedPresets.find((savedPreset) => {
                       return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
                     });
@@ -176,14 +176,14 @@ export default component$(() => {
                       <Save size={20} /> Save
                     </>}
                   </button>
-                  <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
+                  <button class="lum-btn text-sm" onClick$ ={() => {
                     navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
                     <Copy size={20} /> Copy
                   </button>
                   <DropdownRaw id={`use-${i}`} hover
                     display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
-                    class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
+                    class={{ 'hidden sm:flex px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
                       {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>

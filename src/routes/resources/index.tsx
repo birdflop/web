@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
-import { Github } from 'lucide-icons-qwik';
+import { Github, Link } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
@@ -94,14 +94,14 @@ export default component$(() => {
             Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </div>
           <div class="flex gap-2">
-            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
+            <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-              <LogoDiscord width={24} />
+              <LogoDiscord width={20} />
               Invite
             </a>
-            <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
+            <a class="lum-btn"
               href="https://github.com/birdflop/botflop">
-              <Github size={24} />
+              <Github size={20} />
               Learn More
             </a>
           </div>
@@ -137,9 +137,9 @@ export default component$(() => {
             </ul>
           </div>
           <div class="flex gap-2">
-            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4"
+            <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://bin.birdflop.com/">
-              Try it
+              <Link size={20} /> Visit
             </a>
           </div>
         </div>
@@ -174,14 +174,14 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <a class="lum-btn lum-pad-md rounded-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 fill-current"
+            <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
-              <LogoDiscord width={24} />
+              <LogoDiscord width={20} />
               Invite
             </a>
-            <a class="lum-btn lum-pad-md rounded-lg text-lg gap-4 fill-current"
+            <a class="lum-btn"
               href="https://github.com/birdflop/birdtickets">
-              <Github size={24} />
+              <Github size={20} />
               Learn More
             </a>
           </div>

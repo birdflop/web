@@ -4,16 +4,19 @@ import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { generateOutput, getSignificantPoints } from '~/util/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
+import { NotificationContext } from '~/routes/layout';
 
 export default component$(({ threshold, hidden }: {
   threshold: Signal<number>,
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
+  const t$ = $((string: string) => inlineTranslate()(string));
+  const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
 
-  const decodeText = $((rgbtext: string, threshold: number) => {
-    const pattern = /(?:[&§]x((?:[&§][0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))([^§&#]*)/;
+  const decodeText = $(async (rgbtext: string, threshold: number) => {
+    const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
     const spans = rgbtext.match(new RegExp(pattern, 'g'));
     if (!spans) return;
     let color = '#ffffff';
@@ -21,7 +24,7 @@ export default component$(({ threshold, hidden }: {
       const result = string.match(pattern);
       if (!result) return { hex: color, pos: 0 };
       color = result[1]
-        ? `#${result[1].replace(/&/g, '')}`
+        ? `#${result[1].replace(/(?:[&§]|\\u00a7)/g, '')}`
         : result[2]
           ? `#${result[2]}`
           : result[0];
@@ -40,6 +43,16 @@ export default component$(({ threshold, hidden }: {
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
+    const id = Math.random().toString(36).substring(2, 15);
+    notifications.push({
+      id,
+      title: await t$('rgb.decode.decoded.title@@RGB Text Decoded!'),
+      description: await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'),
+      bgColor: 'lum-bg-green-900/50',
+    });
+    setTimeout(() => {
+      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+    }, 2000);
   });
 
   return (

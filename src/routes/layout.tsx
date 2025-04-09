@@ -119,7 +119,7 @@ export default component$(() => {
             <span class="flex gap-2 items-center flex-1"><Bell size={26} /> {notification.title}</span>
             <button class="lum-btn lum-pad-equal-xs lum-bg-transparent cursor-pointer" onClick$={() => {
               notifications.splice(notifications.findIndex((n) => n?.id === notification.id), 1);
-            }}><X size={16}/></button>
+            }}><X size={20}/></button>
           </Header>
         </div>;
       })}
