@@ -18,16 +18,16 @@ export default component$(() => {
   const openSections = useContext(OpenSectionsContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
     // Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.TextureLoader().load('');
 
     // Camera
     const camera = new THREE.PerspectiveCamera(75, preview.value.width / preview.value.height, 0.1, 1000);
-    camera.position.x = 0;
-    camera.rotation.y = 0;
-    camera.position.z = 0;
+    camera.position.x = 4;
+    camera.position.y = 1;
+    camera.position.z = -7;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -50,41 +50,43 @@ export default component$(() => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(pointLight, ambientLight);
 
-    // Manager for banner obj
-    let object: THREE.Object3D;
-    const manager = new THREE.LoadingManager(() => {
-      object.traverse((child: any) => {
-        if (child.isMesh) child.material.map = texture;
-      } );
-      object.position.x = 0;
-      object.position.y = -2;
-      object.position.z = -5;
-      object.rotation.y = -2;
-      scene.add(object);
-    });
+    // OBJ Loader for banner obj
+    const loader = new OBJLoader();
+    const stand = await loader.loadAsync('/banner/banner_stand.obj');
+    stand.position.y = -2;
+    stand.position.z = -5;
+    const mainObj = await loader.loadAsync('/banner/banner_main.obj');
+    const main = new THREE.Group();
+    main.add(mainObj);
+    mainObj.position.x = -0.1;
+    mainObj.position.y = -3.9;
+    main.position.x = 0.09;
+    main.position.y = 1.9;
+    main.position.z = -5;
+    const objects = { stand, main };
 
     // Texture Loader for banner obj
-    const textureLoader = new THREE.TextureLoader(manager);
-    const texture = textureLoader.load('/banner/banner_standing.png');
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('/banner/white_banner.png');
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.minFilter = THREE.NearestFilter;
     texture.magFilter = THREE.NearestFilter;
 
-    // OBJ Loader for banner obj
-    const loader = new OBJLoader(manager);
-    loader.load('/banner/banner_standing.obj', (obj) => object = obj,
-      (xhr) => {
-        if (!xhr.lengthComputable ) return;
-        const percentComplete = xhr.loaded / xhr.total * 100;
-        console.log('model ' + percentComplete.toFixed( 2 ) + '% downloaded');
-      }, (error) => {
-        console.error('An error happened', error);
+    // Add objects to scene
+    Object.values(objects).forEach((object) => {
+      object.traverse((child: any) => {
+        if (child.isMesh) child.material.map = texture;
       });
+      scene.add(object);
+    });
 
     // Animation Loop
     const animate = () => {
+      // sway forward and backward on z for main
+      objects.main.rotation.z = Math.sin(Date.now() * 0.001) * 0.05;
+      main.rotation.z = 0.05 + objects.main.rotation.z;
+
       renderer.render(scene, camera);
-      controls.update();
       requestAnimationFrame(animate);
     };
     animate();
