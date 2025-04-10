@@ -1,4 +1,5 @@
-import { component$, useContext, useSignal, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import type { NoSerialize } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -11,11 +12,35 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OpenSectionsContext } from '~/routes/layout';
 
+const colors = {
+  white: 0xffffff,
+  orange: 0xf9801d,
+  magenta: 0xc74ebd,
+  lightBlue: 0x3ab3da,
+  yellow: 0xfed83d,
+  lime: 0x80c71f,
+  pink: 0xf38baa,
+  gray: 0x474f52,
+  lightGray: 0x9d9d97,
+  cyan: 0x169c9c,
+  purple: 0x8932b8,
+  blue: 0x3c44aa,
+  brown: 0x835432,
+  green: 0x5e7c16,
+  red: 0xb02e26,
+  black: 0x1e1b1b,
+};
+
 export default component$(() => {
   const t = inlineTranslate();
   const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
   const openSections = useContext(OpenSectionsContext);
+
+  const bannerStore = useStore({
+    color: 'white' as keyof typeof colors,
+  });
+  const banner = useSignal<NoSerialize<THREE.Group>>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -56,6 +81,7 @@ export default component$(() => {
     stand.position.y = -2;
     stand.position.z = -5;
     const mainObj = await loader.loadAsync('/banner/banner_main.obj');
+    banner.value = noSerialize(mainObj);
     const main = new THREE.Group();
     main.add(mainObj);
     mainObj.position.x = -0.1;
@@ -73,9 +99,12 @@ export default component$(() => {
     texture.magFilter = THREE.NearestFilter;
 
     // Add objects to scene
-    Object.values(objects).forEach((object) => {
+    Object.entries(objects).forEach(([name, object]) => {
       object.traverse((child: any) => {
-        if (child.isMesh) child.material.map = texture;
+        if (child.isMesh) {
+          child.material.map = texture;
+          if (name === 'main') child.material.color = new THREE.Color(bannerStore.color);
+        }
       });
       scene.add(object);
     });
@@ -106,8 +135,22 @@ export default component$(() => {
             <Settings size={26} />
             {t('banner.options@@Options')}
           </Accordion>
-          <div>
-            Input Here
+          <div class="lum-card lum-bg-gray-800 flex-row flex-wrap gap-2 justify-center" id="colorpicker">
+            {Object.entries(colors).map(([colorName, color]) => {
+              return (
+                <button key={colorName} class={{
+                  'lum-btn lum-pad-equal-5xl ease-out hover:brightness-150': true,
+                }} style={{
+                  background: `#${color.toString(16).padStart(6, '0')}`,
+                }} onClick$={() => {
+                  bannerStore.color = colorName as keyof typeof colors;
+                  banner.value?.traverse((child: any) => {
+                    if (child.isMesh) child.material.color = new THREE.Color(color);
+                  });
+                }}
+                />
+              );
+            })}
           </div>
         </div>
         <div class="flex flex-col gap-2 border-l border-l-gray-800 pl-6" id="outputcolumn">
@@ -122,7 +165,7 @@ export default component$(() => {
             {t('banner.preview@@Preview')}
           </Accordion>
           <canvas ref={preview} id="preview" class={{
-            'lum-card p-0 bg-transparent transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+            'lum-card p-0 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
             'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
             'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
           }} height={300} />
