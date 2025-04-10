@@ -1,70 +1,86 @@
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
+import { component$, useContext, useSignal, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
 
 import { Eye, Settings } from 'lucide-icons-qwik';
 import Accordion from '~/components/Accordion';
 
-import * as three from 'three';
+import * as THREE from 'three';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { OpenSectionsContext } from '~/routes/layout';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const preview = useSignal<HTMLCanvasElement>();
+  const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
+
+  const openSections = useContext(OpenSectionsContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const scene = new three.Scene();
-    const camera = new three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new three.WebGLRenderer({
+    // Scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.TextureLoader().load('');
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(75, preview.value.width / preview.value.height, 0.1, 1000);
+    camera.position.x = 0;
+    camera.rotation.y = 0;
+    camera.position.z = 0;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({
       canvas: preview.value,
+      antialias: true,
     });
-
-    renderer.setPixelRatio(window.devicePixelRatio * 5);
-    camera.position.setZ(30);
-    camera.position.setX(0);
-
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(preview.value.width, preview.value.height);
     renderer.render(scene, camera);
 
     // Lights
-    const pointLight = new three.PointLight(0xffffff);
-    pointLight.position.set(5, 5, 5);
+    const pointLight = new THREE.PointLight(0xffffff, 50);
+    pointLight.position.set(2, 5, -2);
+    pointLight.castShadow = true;
+    const lightHelper = new THREE.PointLightHelper(pointLight);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(lightHelper, pointLight, ambientLight);
 
-    const ambientLight = new three.AmbientLight(0xffffff);
-    scene.add(pointLight, ambientLight);
+    // Manager for banner obj
+    let object: THREE.Object3D;
+    const manager = new THREE.LoadingManager(() => {
+      object.traverse((child: any) => {
+        if (child.isMesh) child.material.map = texture;
+      } );
+      object.position.x = 0;
+      object.position.y = -2;
+      object.position.z = -5;
+      object.rotation.y = -2;
+      scene.add(object);
+    });
 
-    // Helpers
-    const lightHelper = new three.PointLightHelper(pointLight);
-    scene.add(lightHelper);
+    // Texture Loader for banner obj
+    const textureLoader = new THREE.TextureLoader(manager);
+    const texture = textureLoader.load('/banner/banner_standing.png');
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.NearestFilter;
+    texture.magFilter = THREE.NearestFilter;
 
-    // Background
-    scene.background = new three.TextureLoader().load('');
-
-    // Avatar
-    const jeffTexture = new three.TextureLoader().load('/branding/pwa-icon-512x512.png');
-    const jeff = new three.Mesh(new three.BoxGeometry(3, 3, 3), new three.MeshBasicMaterial({ map: jeffTexture }));
-    scene.add(jeff);
-
-    jeff.position.z = -5;
-    jeff.position.x = 0;
-
-    camera.position.z = 0;
-    camera.position.x = 0;
-    camera.rotation.y = 0;
-
-    // Animation
-    const moveCamera = () => {
-      jeff.rotation.y += 0.01;
-      jeff.rotation.z += 0.01;
-    };
+    // OBJ Loader for banner obj
+    const loader = new OBJLoader(manager);
+    loader.load('/banner/banner_standing.obj', (obj) => object = obj,
+      (xhr) => {
+        if (!xhr.lengthComputable ) return;
+        const percentComplete = xhr.loaded / xhr.total * 100;
+        console.log('model ' + percentComplete.toFixed( 2 ) + '% downloaded');
+      }, (error) => {
+        console.error('An error happened', error);
+      });
 
     // Animation Loop
     const animate = () => {
       requestAnimationFrame(animate);
-      moveCamera();
       renderer.render(scene, camera);
     };
-
     animate();
   });
 
@@ -97,7 +113,11 @@ export default component$(() => {
             <Eye size={26} />
             {t('banner.preview@@Preview')}
           </Accordion>
-          <canvas ref={preview} id="preview" />
+          <canvas ref={preview} id="preview" class={{
+            'lum-card bg-transparent transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+            'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
+            'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
+          }} height={300} />
         </div>
       </div>
     </section>
