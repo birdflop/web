@@ -8,6 +8,7 @@ import Accordion from '~/components/Accordion';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OpenSectionsContext } from '~/routes/layout';
 
 export default component$(() => {
@@ -37,13 +38,17 @@ export default component$(() => {
     renderer.setSize(preview.value.width, preview.value.height);
     renderer.render(scene, camera);
 
+    // Camera Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set( 0, 0, -5 );
+    controls.update();
+
     // Lights
     const pointLight = new THREE.PointLight(0xffffff, 50);
     pointLight.position.set(2, 5, -2);
     pointLight.castShadow = true;
-    const lightHelper = new THREE.PointLightHelper(pointLight);
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(lightHelper, pointLight, ambientLight);
+    scene.add(pointLight, ambientLight);
 
     // Manager for banner obj
     let object: THREE.Object3D;
@@ -78,8 +83,9 @@ export default component$(() => {
 
     // Animation Loop
     const animate = () => {
-      requestAnimationFrame(animate);
       renderer.render(scene, camera);
+      controls.update();
+      requestAnimationFrame(animate);
     };
     animate();
   });
@@ -114,7 +120,7 @@ export default component$(() => {
             {t('banner.preview@@Preview')}
           </Accordion>
           <canvas ref={preview} id="preview" class={{
-            'lum-card bg-transparent transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+            'lum-card p-0 bg-transparent transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
             'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
             'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
           }} height={300} />
