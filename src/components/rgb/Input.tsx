@@ -21,13 +21,13 @@ export default component$(() => {
 
   return (
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 ">
-      <div class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
+      <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
         <Terminal size={26} />
         {t('rgb.inputText@@Input Text')}
         <span class="text-gray-400 text-sm font-normal">
           {t('rgb.inputTextSubtitle@@Type here to generate a gradient!')}
         </span>
-      </div>
+      </p>
       {rgbStore.previewStyle == 'chat' &&
         <div class={{
           'relative lum-bg-gray-800/50 rounded-lg': true,
