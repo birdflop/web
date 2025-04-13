@@ -17,6 +17,10 @@
         "description": "Легко объединить текстуры для анимации ресурс пака",
         "title": "Анимация текстур"
       },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
       "flags": {
         "description": "Простой генератор скриптов для запуска серверов Minecraft с оптимальными флагами.",
         "title": "Генератор кода запуска сервера"

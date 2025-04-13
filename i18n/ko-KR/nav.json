@@ -17,6 +17,10 @@
         "description": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
         "title": "애니메이션 텍스처"
       },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
       "flags": {
         "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
         "title": "플래그 생성기"

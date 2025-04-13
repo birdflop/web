@@ -226,7 +226,7 @@ export default component$(() => {
               <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-1">
                 {t('banner.options.baseColor.title@@Base Color')}
                 <span class="text-gray-400 text-sm font-normal">
-                  {t('banner.options.baseColor.title@@This is the base color of the banner to start with.')}
+                  {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
                 </span>
               </p>
               <div class="flex flex-wrap gap-1">
@@ -247,7 +247,7 @@ export default component$(() => {
                 })}
               </div>
               <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mt-4">
-                {t('banner.options.patterns.title@@Patterns')}
+                {t('banner.options.patterns@@Patterns')}
                 <button class="lum-btn lum-pad-equal-sm lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                   const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
                   const pattern = patterns[Math.floor(Math.random() * patterns.length)];
@@ -359,7 +359,7 @@ export default component$(() => {
             </div>
             <Accordion sectionName="command">
               <Terminal size={26} />
-              {t('banner.command@@Command')}
+              {t('banner.command.title@@Command')}
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
@@ -380,7 +380,7 @@ export default component$(() => {
                     bgColor: 'lum-bg-green-900/50',
                   };
                   navigator.clipboard.writeText(el.value).catch(async (err) => {
-                    notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
+                    notification.title = await t$('banner.copyFailed@@Failed to copy to clipboard!');
                     notification.description = err;
                     notification.bgColor = 'lum-bg-red-900/50';
                   });

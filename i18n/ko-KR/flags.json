@@ -8,6 +8,7 @@
       "description": "시작 스크립트에 추가 및 수정할 수 있는 다양한 사항들입니다.",
       "label": "설정"
     },
+    "description": "The collection of start arguments that typically optimize the server's performance",
     "environment": {
       "command": "명령",
       "description": "서버가 실행되는 운영 체제입니다.",

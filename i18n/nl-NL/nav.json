@@ -17,6 +17,10 @@
         "description": "Voeg gemakkelijk texture pack animaties samen",
         "title": "Geanimeerde Texturen"
       },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
       "flags": {
         "description": "A simple script generator to start your Minecraft servers with optimal flags",
         "title": "Flags Generator"

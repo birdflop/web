@@ -1,0 +1,18 @@
+{
+  "banner": {
+    "command": {
+      "title": "Command",
+      "copied": "The command has been copied to your clipboard successfully."
+    },
+    "copied": "Copied to clipboard!",
+    "copyFailed": "Failed to copy to clipboard!",
+    "options": {
+      "baseColor": {
+        "description": "This is the base color of the banner to start with.",
+        "title": "Base Color"
+      },
+      "patterns": "Patterns"
+    },
+    "preview": "Preview"
+  }
+}

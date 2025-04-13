@@ -25,7 +25,7 @@
     "prisma:generate": "prisma generate --no-engine",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:prod": "prisma migrate deploy",
-    "qwik-speak-extract": "qwik-speak-extract --supportedLangs=da-DK,en-US,es-ES,ko-KR,nl-NL,pl-PL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n",
+    "qwik-speak-extract": "qwik-speak-extract --supportedLangs=en-US,es-ES,ko-KR,nl-NL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n",
     "start": "vite --mode ssr --host",
     "start.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --forcenode --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "qwik": "qwik"
