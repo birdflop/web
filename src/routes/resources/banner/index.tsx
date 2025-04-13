@@ -15,6 +15,13 @@ import { OpenSectionsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/RGBUtils';
 
+const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve(img);
+  img.onerror = reject;
+  img.src = src;
+});
+
 export default component$(() => {
   const t = inlineTranslate();
   const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
@@ -31,12 +38,7 @@ export default component$(() => {
     }[];
   } = useStore({
     color: Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors,
-    patterns: [
-      {
-        color: Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors,
-        pattern: patterns[Math.floor(Math.random() * patterns.length)],
-      },
-    ],
+    patterns: [],
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -127,80 +129,63 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
+  useVisibleTask$(async ({ track }) => {
     track(() => bannerStore.color);
     track(() => bannerStore.patterns);
 
-    bannerStore.patterns.forEach((pattern, i) => {
+    for (let i = 0; i < bannerStore.patterns.length; i++) {
+      const pattern = bannerStore.patterns[i];
       const canvas = document.getElementById(`canvas-preview-${i}`) as HTMLCanvasElement;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      const baseImg = new Image();
-      baseImg.src = `/banner/patterns/previews/${pattern.pattern}.png`;
-      baseImg.onload = () => {
-        canvas.width = baseImg.width;
-        canvas.height = baseImg.height;
-        ctx.drawImage(baseImg, 0, 0);
 
-        ctx.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
-        ctx.globalCompositeOperation = 'multiply';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.globalCompositeOperation = 'destination-in';
-        ctx.drawImage(baseImg, 0, 0);
-      };
+      const baseImg = await createImage(`/banner/patterns/previews/${pattern.pattern}.png`);
+      canvas.width = baseImg.width;
+      canvas.height = baseImg.height;
+      ctx.drawImage(baseImg, 0, 0);
+      ctx.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.drawImage(baseImg, 0, 0);
 
       const texture = document.getElementById(`canvas-texture-${i}`) as HTMLCanvasElement;
       const ctxTexture = texture.getContext('2d');
       if (!ctxTexture) return;
-      const baseImgTexture = new Image();
-      baseImgTexture.src = `/banner/patterns/textures/${pattern.pattern}.png`;
-      baseImgTexture.onload = () => {
-        texture.width = baseImgTexture.width;
-        texture.height = baseImgTexture.height;
-        ctxTexture.drawImage(baseImgTexture, 0, 0);
 
-        ctxTexture.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
-        ctxTexture.globalCompositeOperation = 'multiply';
-        ctxTexture.fillRect(0, 0, texture.width, texture.height);
-
-        ctxTexture.globalCompositeOperation = 'destination-in';
-        ctxTexture.drawImage(baseImgTexture, 0, 0);
-      };
-    });
+      const baseImgTexture = await createImage(`/banner/patterns/textures/${pattern.pattern}.png`);
+      texture.width = baseImgTexture.width;
+      texture.height = baseImgTexture.height;
+      ctxTexture.drawImage(baseImgTexture, 0, 0);
+      ctxTexture.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
+      ctxTexture.globalCompositeOperation = 'multiply';
+      ctxTexture.fillRect(0, 0, texture.width, texture.height);
+      ctxTexture.globalCompositeOperation = 'destination-in';
+      ctxTexture.drawImage(baseImgTexture, 0, 0);
+    }
 
     const canvas = textureCanvas.value;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const baseImg = new Image();
-    baseImg.src = '/banner/patterns/textures/base.png';
-    baseImg.onload = () => {
-      canvas.width = baseImg.width;
-      canvas.height = baseImg.height;
-      ctx.drawImage(baseImg, 0, 0);
+    const baseImg = await createImage('/banner/patterns/textures/base.png');
+    canvas.width = baseImg.width;
+    canvas.height = baseImg.height;
+    ctx.drawImage(baseImg, 0, 0);
 
-      ctx.fillStyle = `#${colors[bannerStore.color].toString(16).padStart(6, '0')}`;
-      ctx.globalCompositeOperation = 'multiply';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = `#${colors[bannerStore.color].toString(16).padStart(6, '0')}`;
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.globalCompositeOperation = 'destination-in';
-      ctx.drawImage(baseImg, 0, 0);
-      ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.drawImage(baseImg, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
 
-      bannerStore.patterns.forEach((pattern, i) => {
-        const patternImg = document.getElementById(`canvas-texture-${i}`) as HTMLCanvasElement;
-        const ctxPattern = patternImg.getContext('2d');
-        if (!ctxPattern) return;
-        const baseImgPattern = new Image();
-        baseImgPattern.src = `/banner/patterns/textures/${pattern.pattern}.png`;
-        baseImgPattern.onload = () => {
-          ctx.drawImage(patternImg, 0, 0);
-        };
-      });
-
-      if (bannerTexture.value) bannerTexture.value.needsUpdate = true;
-    };
+    for (let i = 0; i < bannerStore.patterns.length; i++) {
+      const patternImg = document.getElementById(`canvas-texture-${i}`) as HTMLCanvasElement;
+      ctx.drawImage(patternImg, 0, 0);
+    }
+    if (bannerTexture.value) bannerTexture.value.needsUpdate = true;
   });
 
   return (
@@ -269,7 +254,7 @@ export default component$(() => {
                       <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
                         <ChevronRight size={20} />
                       </button>
-                      <button class="lum-btn lum-pad-equal-xs lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 1} onClick$={() => {
+                      <button class="lum-btn lum-pad-equal-xs lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
                         const newPatterns = bannerStore.patterns.slice(0);
                         newPatterns.splice(i, 1);
                         bannerStore.patterns = newPatterns;
@@ -308,7 +293,7 @@ export default component$(() => {
               'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
               'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
             }} />
-            <canvas ref={textureCanvas} id="texture" class="hidden" style={{
+            <canvas ref={textureCanvas} id="texture" style={{
               imageRendering: 'pixelated',
             }}></canvas>
           </div>
