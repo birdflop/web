@@ -201,14 +201,16 @@ export default component$(() => {
           {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
         </h2>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid sm:grid-cols-2 gap-2">
           <div class="flex flex-col gap-2" id="inputcolumn">
             <Accordion sectionName="options" alwaysOpen>
               <Settings size={26} />
               {t('banner.options.title@@Options')}
             </Accordion>
             <div class={{
-              'flex flex-col transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto text-left': true,
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('options') == -1,
+              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('options') != -1,
             }}>
               <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-1">
                 {t('banner.options.baseColor.title@@Base Color')}
@@ -379,15 +381,15 @@ export default component$(() => {
               />
             </div>
           </div>
-          <div class="flex flex-col gap-2 border-l border-l-gray-800 pl-2" id="outputcolumn">
+          <div class="flex flex-col gap-2 sm:border-l sm:border-l-gray-800 sm:pl-2" id="outputcolumn">
             <Accordion sectionName="preview" alwaysOpen>
               <Eye size={26} />
               {t('banner.preview@@Preview')}
             </Accordion>
             <canvas ref={preview} id="preview" class={{
-              'lum-card p-0 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto w-full': true,
-              'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
-              'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
+              'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
+              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
             }} />
             <canvas ref={textureCanvas} id="texture" class="hidden" style={{
               imageRendering: 'pixelated',
