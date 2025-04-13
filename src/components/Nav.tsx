@@ -66,6 +66,9 @@ export default component$(() => {
         <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent">
           {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
+        <Link q:slot="extra-buttons" href="/resources/banner" class="lum-btn lum-bg-transparent">
+          {t('nav.resources.banner.title@@Banner Generator')}
+        </Link>
         <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
           {t('nav.resources.more@@More Resources')}
         </Link>
@@ -131,6 +134,9 @@ export default component$(() => {
       </Link>
       <Link q:slot="mobile" href="/resources/flags" class="lum-btn lum-bg-transparent">
         {t('nav.resources.flags.title@@Flags Generator')}
+      </Link>
+      <Link q:slot="mobile" href="/resources/banner" class="lum-btn lum-bg-transparent">
+        {t('nav.resources.banner.title@@Banner Generator')}
       </Link>
       <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
         {t('nav.resources.more@@More Resources')}

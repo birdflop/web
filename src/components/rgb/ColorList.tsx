@@ -132,11 +132,10 @@ export default component$(({ hidden }: {
               <Trash size={20} />
             </button>
           </div>
-          <div
-            id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-              'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
-              'opacity-0 scale-95 pointer-events-none': opened.value != i,
-            }}>
+          <div id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
+            'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+            'opacity-0 scale-95 pointer-events-none': opened.value != i,
+          }}>
             <ColorPicker
               id={`colorlist-color-${i + 1}-picker`}
               value={color.hex}

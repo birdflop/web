@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { Blobs, Header, LogoDiscord } from '@luminescent/ui-qwik';
-import { Github, Link } from 'lucide-icons-qwik';
+import { Github, Link as LinkIcon } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
@@ -22,24 +22,24 @@ export default component$(() => {
             Gradient Tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
+            <Link class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
               <Header subheader={t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}>
                 {t('nav.resources.hexGradient.title@@RGBirdflop')}
               </Header>
               <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
-            <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/api/v2/docs">
+            </Link>
+            <Link class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/api/v2/docs">
               <Header subheader={t('nav.resources.hexGradientAPIDocs.description@@Documentation for the RGBirdflop API')}>
                 {t('nav.resources.hexGradientAPIDocs.title@@RGBirdflop API Docs')}
               </Header>
               <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
-            <a class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
+            </Link>
+            <Link class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
               <Header subheader={t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}>
                 {t('nav.resources.animatedTAB.title@@Animated TAB')}
               </Header>
               <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
+            </Link>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
@@ -47,24 +47,24 @@ export default component$(() => {
             Server tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
+            <Link class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
               <Header subheader={t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}>
                 {t('nav.resources.sparkProfile.title@@Spark Profile')}
               </Header>
               <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
-            <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
+            </Link>
+            <Link class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
               <Header subheader={t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}>
                 {t('nav.resources.paperTimings.title@@Paper Timings')}
               </Header>
               <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
-            <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
+            </Link>
+            <Link class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
               <Header subheader={t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}>
                 {t('nav.resources.flags.title@@Flags Generator')}
               </Header>
               <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
+            </Link>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
@@ -72,18 +72,24 @@ export default component$(() => {
             Miscellaneous tools
           </Header>
           <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <a class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
+            <Link class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/banner">
+              <Header subheader={t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}>
+                {t('nav.resources.banner.title@@Banner Generator')}
+              </Header>
+              <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </Link>
+            <Link class="lum-card lum-bg-cyan-900/30 hover:lum-bg-cyan-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
               <Header subheader={t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}>
                 {t('nav.resources.animatedTextures.title@@Animated Textures')}
               </Header>
-              <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
-            <a class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
+              <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            </Link>
+            <Link class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
               <Header subheader={t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}>
                 {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
               </Header>
               <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            </a>
+            </Link>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
@@ -139,7 +145,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://bin.birdflop.com/">
-              <Link size={20} /> Visit
+              <LinkIcon size={20} /> Visit
             </a>
           </div>
         </div>

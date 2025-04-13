@@ -1,17 +1,17 @@
 /* eslint-disable qwik/jsx-img */
-import { component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { $, component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import type { NoSerialize } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import { ChevronLeft, ChevronRight, Eye, Plus, Settings, Terminal, Trash } from 'lucide-icons-qwik';
+import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Settings, Terminal, Trash } from 'lucide-icons-qwik';
 import Accordion from '~/components/Accordion';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/RGBUtils';
 
@@ -24,10 +24,13 @@ const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, rej
 
 export default component$(() => {
   const t = inlineTranslate();
+  const t$ = $((string: string) => inlineTranslate()(string));
   const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
   const textureCanvas = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
+  const openPopup = useSignal(-1);
   const openSections = useContext(OpenSectionsContext);
+  const notifications = useContext(NotificationContext);
   const bannerTexture = useSignal<NoSerialize<THREE.CanvasTexture>>();
 
   const bannerStore: {
@@ -37,8 +40,21 @@ export default component$(() => {
       pattern: typeof patterns[number];
     }[];
   } = useStore({
-    color: Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors,
-    patterns: [],
+    color: 'blue',
+    patterns: [
+      {
+        color: 'cyan',
+        pattern: 'gradient',
+      },
+      {
+        color: 'lime',
+        pattern: 'creeper',
+      },
+      {
+        color: 'black',
+        pattern: 'creeper',
+      },
+    ],
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -223,7 +239,7 @@ export default component$(() => {
                     }} onClick$={() => {
                       bannerStore.color = colorName as keyof typeof colors;
                     }}>
-                      <img class="w-10 rounded-md" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
+                      <img class="w-10" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
                         imageRendering: 'pixelated',
                       }} />
                     </button>
@@ -246,13 +262,20 @@ export default component$(() => {
 
               <div class="flex flex-wrap gap-2 pt-2">
                 {bannerStore.patterns.map((pattern, i) =>
-                  <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1">
+                  <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
                     <div class="flex flex-col rounded-md">
                       <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
                         <ChevronLeft size={20} />
                       </button>
                       <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
                         <ChevronRight size={20} />
+                      </button>
+                      <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => {
+                        const newPatterns = bannerStore.patterns.slice(0);
+                        newPatterns.push(pattern);
+                        bannerStore.patterns = newPatterns;
+                      }}>
+                        <Copy size={20} />
                       </button>
                       <button class="lum-btn lum-pad-equal-xs lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
                         const newPatterns = bannerStore.patterns.slice(0);
@@ -262,7 +285,20 @@ export default component$(() => {
                         <Trash size={20} />
                       </button>
                     </div>
-                    <button class="lum-btn p-0 w-13">
+                    <button class="lum-btn p-0 w-17.5 lum-bg-gray-900"
+                      onMouseUp$={() => {
+                        console.log(openPopup.value);
+                        if (openPopup.value == i) return openPopup.value = -1;
+                        else openPopup.value = i;
+                        const abortController = new AbortController();
+                        document.addEventListener('click', (e) => {
+                          if (e.target instanceof HTMLElement && !e.target.closest(`#pattern-${i + 1}`) && !e.target.closest(`#pattern-${i + 1}-popup`)) {
+                            openPopup.value = -1;
+                            abortController.abort();
+                          }
+                        }, { signal: abortController.signal });
+                      }}
+                    >
                       <canvas id={`canvas-preview-${i}`} style={{
                         imageRendering: 'pixelated',
                       }} class={{
@@ -274,6 +310,49 @@ export default component$(() => {
                         'w-full rounded-md hidden': true,
                       }}/>
                     </button>
+                    <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
+                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+                      'opacity-0 scale-95 pointer-events-none': openPopup.value != i,
+                    }}>
+                      <div class="lum-card w-[23rem] lum-pad-equal-lg">
+                        <div class="flex flex-wrap gap-1">
+                          {Object.entries(colors).map(([colorName, color]) => {
+                            return (
+                              <button key={colorName} class={{
+                                'lum-btn p-1 hover:brightness-150': true,
+                              }} style={{
+                                background: `#${color.toString(16).padStart(6, '0')}`,
+                              }} onClick$={() => {
+                                const newPatterns = bannerStore.patterns.slice(0);
+                                newPatterns[i].color = colorName as keyof typeof colors;
+                                bannerStore.patterns = newPatterns;
+                              }}>
+                                <img class="w-7" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
+                                  imageRendering: 'pixelated',
+                                }} />
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div class="flex flex-wrap gap-1">
+                          {patterns.map((pattern) => {
+                            return (
+                              <button key={pattern} class={{
+                                'lum-btn p-0 hover:brightness-150': true,
+                              }} onClick$={() => {
+                                const newPatterns = bannerStore.patterns.slice(0);
+                                newPatterns[i].pattern = pattern;
+                                bannerStore.patterns = newPatterns;
+                              }}>
+                                <img class="w-9 rounded-md" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
+                                  imageRendering: 'pixelated',
+                                }} />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
                   </div>,
                 )}
               </div>
@@ -282,6 +361,36 @@ export default component$(() => {
               <Terminal size={26} />
               {t('banner.command@@Command')}
             </Accordion>
+            <div class={{
+              'flex flex-col gap-2 transition-all duration-200': true,
+              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('command') == -1,
+              'max-h-[250px] opacity-100 pointer-events-auto': openSections.indexOf('command') != -1,
+            }} id="command">
+              <textarea id="commandOutput" readOnly
+                class={{
+                  'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
+                }}
+                value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
+                onClick$={async (e, el) => {
+                  const id = Math.random().toString(36).substring(2, 15);
+                  const notification = {
+                    id,
+                    title: await t$('banner.copied@@Copied to clipboard!'),
+                    description: await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'),
+                    bgColor: 'lum-bg-green-900/50',
+                  };
+                  navigator.clipboard.writeText(el.value).catch(async (err) => {
+                    notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
+                    notification.description = err;
+                    notification.bgColor = 'lum-bg-red-900/50';
+                  });
+                  notifications.push(notification);
+                  setTimeout(() => {
+                    notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+                  }, 2000);
+                }}
+              />
+            </div>
           </div>
           <div class="flex flex-col gap-2 border-l border-l-gray-800 pl-2" id="outputcolumn">
             <Accordion sectionName="preview" alwaysOpen>
