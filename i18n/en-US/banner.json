@@ -1,8 +1,8 @@
 {
   "banner": {
     "command": {
-      "title": "Command",
-      "copied": "The command has been copied to your clipboard successfully."
+      "copied": "The command has been copied to your clipboard successfully.",
+      "title": "Command"
     },
     "copied": "Copied to clipboard!",
     "copyFailed": "Failed to copy to clipboard!",
@@ -11,7 +11,8 @@
         "description": "This is the base color of the banner to start with.",
         "title": "Base Color"
       },
-      "patterns": "Patterns"
+      "patterns": "Patterns",
+      "title": "Options"
     },
     "preview": "Preview"
   }

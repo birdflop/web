@@ -41,20 +41,7 @@ export default component$(() => {
     }[];
   } = useStore({
     color: 'blue',
-    patterns: [
-      {
-        color: 'cyan',
-        pattern: 'gradient',
-      },
-      {
-        color: 'lime',
-        pattern: 'creeper',
-      },
-      {
-        color: 'black',
-        pattern: 'creeper',
-      },
-    ],
+    patterns: [],
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -218,7 +205,7 @@ export default component$(() => {
           <div class="flex flex-col gap-2" id="inputcolumn">
             <Accordion sectionName="options" alwaysOpen>
               <Settings size={26} />
-              {t('banner.options@@Options')}
+              {t('banner.options.title@@Options')}
             </Accordion>
             <div class={{
               'flex flex-col transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto text-left': true,
@@ -402,7 +389,7 @@ export default component$(() => {
               'h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
               'opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
             }} />
-            <canvas ref={textureCanvas} id="texture" style={{
+            <canvas ref={textureCanvas} id="texture" class="hidden" style={{
               imageRendering: 'pixelated',
             }}></canvas>
           </div>
