@@ -107,7 +107,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
         </h2>
 
@@ -126,7 +126,7 @@ export default component$(() => {
               if (shadow.l > 50) shadow.s = shadow.s * 0.2;
               shadow.l = Math.round(shadow.l * 0.2);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
-              i = rgbStore.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
+              i = rgbStore.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
               return <span key={`char${i}`} style={{
                 color,
                 textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
@@ -206,6 +206,9 @@ export default component$(() => {
             <Accordion sectionName="decode">
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue-900/50 text-xs py-1 px-2 rounded-md">
+                experimental
+              </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>

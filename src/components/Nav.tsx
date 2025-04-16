@@ -46,7 +46,7 @@ export default component$(() => {
           {t('nav.hosting.billing@@Billing')}
         </a>
         <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent">
-          {t('nav.hosting.nodeStats@@Node Stats')}
+          {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </DropdownRaw>
       <DropdownRaw id="nav-resources" q:slot='end' hover
@@ -118,7 +118,7 @@ export default component$(() => {
         {t('nav.hosting.billing@@Billing')}
       </a>
       <Link q:slot="mobile" href="/node-stats" class="lum-btn lum-bg-transparent">
-        {t('nav.hosting.nodeStats@@Node Stats')}
+        {t('nav.hosting.nodeStats.title@@Node Stats')}
       </Link>
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
         <Box size={20} /> {t('nav.resources.title@@Resources')}

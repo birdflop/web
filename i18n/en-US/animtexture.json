@@ -3,6 +3,7 @@
     "cumulative": "Cumulative (Turn this on if gif frames are broken)",
     "downloadMCMETA": "Download MCMETA",
     "downloadPNG": "Download PNG",
+    "framePreview": "Frame Preview",
     "generate": "Generate",
     "textureName": "Texture Name"
   }

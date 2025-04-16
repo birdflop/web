@@ -23,14 +23,14 @@ export default component$(() => {
 
   return <>
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
+      <div class="flex flex-col gap-2 my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.hexGradient.title@@RGBirdflop')} API Documentation
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
-        <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mb-3 drop-shadow-lg">
+        <h2 class="text-gray-100 text-xl sm:text-3xl font-semibold">
           Get Started
         </h2>
         <p>
@@ -38,20 +38,20 @@ export default component$(() => {
           The API has default values that are the same as the RGBirdflop website, which are also shown in the docs below.
           To generate a gradient, make a GET request to /api/v2/rgb. The API will return a JSON object with the gradient output.
         </p>
-        <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mt-12 mb-6 drop-shadow-lg">
+        <h2 class="text-gray-100 text-xl sm:text-3xl font-semibold">
           Endpoints
         </h2>
         <div>
           {Object.keys(endpoints).map((path) => <div key={path}>
-            <h3 class="flex gap-4 items-center text-gray-100 text-lg sm:text-2xl font-bold mb-2 drop-shadow-lg">
+            <h3 class="text-gray-100 text-lg sm:text-2xl mb-2">
               {path}
             </h3>
             {(Object.entries(endpoints[path].methods) as [string, string][]).map(([method, description]) =>
-              <p key={method} class="flex gap-4 items-center text-gray-400 sm:text-lg drop-shadow-lg">
+              <p key={method} class="text-gray-400 sm:text-lg">
                 {method}: {description}
               </p>,
             )}
-            <h4 class="flex gap-4 items-center text-gray-400 sm:text-lg my-2 drop-shadow-lg">
+            <h4 class="text-gray-400 sm:text-lg my-2">
               Options
             </h4>
             <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
@@ -66,10 +66,10 @@ export default component$(() => {
             </div>
           </div>)}
         </div>
-        <h2 class="flex gap-4 items-center text-gray-100 text-xl sm:text-3xl font-bold mt-12 mb-6 drop-shadow-lg">
+        <h2 class="text-gray-100 text-xl sm:text-3xl font-semibold">
           Data Models
         </h2>
-        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
+        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">
           <Header id="formatobject" anchor>
             Format
           </Header>
@@ -111,8 +111,7 @@ export default component$(() => {
             <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
           </div>
         </div>
-        <br/>
-        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out" >
+        <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">
           <Header id="color" anchor>
             Color
           </Header>

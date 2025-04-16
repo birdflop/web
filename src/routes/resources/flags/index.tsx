@@ -173,45 +173,56 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-5xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="w-full my-10 min-h-[60px]">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.flags.title@@Flags Generator')}
         </h1>
-        <h2 class="text-gray-50 sm:text-xl mb-6">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
         </h2>
 
         <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6 fill-current">
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-1">
               <label for="input">
-                <span class="font-bold">{t('flags.fileName.label@@File Name')}</span><br/>
-                {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+                {t('flags.fileName.label@@File Name')}
               </label>
               <input class="lum-input" id="input" value={flagsStore.fileName} placeholder="server.jar" onChange$={(e, el) => {
                 if (el.value.replace(/ /g, '') == '') return;
                 if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
                 flagsStore.fileName = el.value;
               }}/>
+              <p class="text-gray-400 text-sm">
+                {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+              </p>
             </div>
             <div class="flex gap-2">
-              <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
-                flagsStore.operatingSystem = el.value;
-              }} values={environmentOptions} value={flagsStore.operatingSystem}>
-                <span class="font-bold">{t('flags.environment.label@@Environment')}</span><br/>
-                {t('flags.environment.description@@The operating system that the server runs on.')}
-              </Dropdown>
-              <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
-                flagsStore.serverType = el.value;
-              }} values={softwareOptions} value={flagsStore.serverType}>
-                <span class="font-bold">{t('flags.software.label@@Software')}</span><br/>
-                {t('flags.software.description@@The software in which your Minecraft server will run on.')}
-              </Dropdown>
+              <div class="flex flex-col gap-1">
+                <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
+                  flagsStore.operatingSystem = el.value;
+                }} values={environmentOptions} value={flagsStore.operatingSystem}>
+                  {t('flags.environment.label@@Environment')}
+                </Dropdown>
+                <p class="text-gray-400 text-sm">
+                  {t('flags.environment.description@@The operating system that the server runs on.')}
+                </p>
+              </div>
+              <div class="flex flex-col gap-1">
+                <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
+                  flagsStore.serverType = el.value;
+                }} values={softwareOptions} value={flagsStore.serverType}>
+                  {t('flags.software.label@@Software')}
+                </Dropdown>
+                <p class="text-gray-400 text-sm">
+                  {t('flags.software.description@@The software in which your Minecraft server will run on.')}
+                </p>
+              </div>
             </div>
             <div>
-              <span class="font-bold">{t('flags.memory.label@@Memory')}</span><br/>
-              {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+              <label for="labels-range-input">
+                {t('flags.memory.label@@Memory')}
+              </label>
               <div class="group relative w-full h-2 lum-bg-gray-800 hover:lum-bg-gray-700 select-none rounded-lg my-2">
                 <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lg" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
                 <div class="absolute w-full top-1 flex justify-between">
@@ -223,7 +234,7 @@ export default component$(() => {
                 </div>
                 <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
                   <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
-                  <div class="opacity-0 group-hover:opacity-100 w-24 py-2 bg-gray-800 rounded-lg flex justify-center transition-all z-50">
+                  <div class="lum-bg-gray-900 lum-pad-md text-center w-24 rounded-md opacity-0 group-hover:opacity-100 transition-all z-50">
                     {flagsStore.memory} GB
                   </div>
                 </div>
@@ -231,49 +242,58 @@ export default component$(() => {
                   flagsStore.memory = Number(el.value);
                 }} />
               </div>
+              <p class="text-gray-400 text-sm mt-6">
+                {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+              </p>
             </div>
           </div>
-          <div class="flex flex-col gap-4">
-            <div class="flex items-end gap-2">
-              <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
-                flagsStore.flags = el.value as AvailableFlags;
-              }} values={flagOptions} value={flagsStore.flags}>
-                <span class="font-bold">{t('flags.flags.label@@Flags')}</span><br/>
+          <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-1 w-full">
+              <div class="flex items-end gap-2">
+                <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
+                  flagsStore.flags = el.value as AvailableFlags;
+                }} values={flagOptions} value={flagsStore.flags}>
+                  {t('flags.flags.label@@Flags')}
+                </Dropdown>
+                <DropdownRaw id="flagshelp" onChange$={(e, el) => {
+                  flagsStore.flags = el.value as AvailableFlags;
+                }} display={<><CircleHelp size={24}/></>}>
+                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
+                    {t('flags.flags.aikars@@Aikar\'s Flags')}
+                  </a>
+                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
+                    {t('flags.flags.meowice@@MeowIce\'s Flags')}
+                  </a>
+                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
+                    {t('flags.flags.benchmarked@@Benchmarked')}
+                  </a>
+                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
+                    {t('flags.flags.hillttys@@hilltty\'s Flags')}
+                  </a>
+                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
+                    {t('flags.flags.obyduxs@@Obydux\'s Flags')}
+                  </a>
+                </DropdownRaw>
+              </div>
+              <p class="text-gray-400 text-sm">
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
-              </Dropdown>
-              <DropdownRaw id="flagshelp" onChange$={(e, el) => {
-                flagsStore.flags = el.value as AvailableFlags;
-              }} display={<><CircleHelp size={24}/></>}>
-                <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
-                  {t('flags.flags.aikars@@Aikar\'s Flags')}
-                </a>
-                <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
-                  {t('flags.flags.meowice@@MeowIce\'s Flags')}
-                </a>
-                <a class="lum-btn lum-bg-transparent" href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
-                  {t('flags.flags.benchmarked@@Benchmarked')}
-                </a>
-                <a class="lum-btn lum-bg-transparent" href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
-                  {t('flags.flags.hillttys@@hilltty\'s Flags')}
-                </a>
-                <a class="lum-btn lum-bg-transparent" href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
-                  {t('flags.flags.obyduxs@@Obydux\'s Flags')}
-                </a>
-              </DropdownRaw>
+              </p>
             </div>
             <div class="flex flex-col gap-2">
-              <div>
-                <span class="font-bold">{t('flags.config.label@@Config')}</span><br/>
-                {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
-              </div>
+              <p>
+                {t('flags.config.label@@Config')}<br/>
+                <span class="text-gray-400 text-sm">
+                  {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
+                </span>
+              </p>
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
-              }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={flagsStore[id]} onClick$={(e, el) => {
+              }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
+                <Toggle label={option.label} checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
                 }} />
                 {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
-              </>)}
+              </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
@@ -290,12 +310,13 @@ export default component$(() => {
           </div>
         </div>
 
-        {/* charlimit={256} */}
         <label for="Output" class="text-gray-50">
-          <span class="font-bold">{t('flags.script.label@@Script')}</span><br/>
-          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
+          {t('flags.script.label@@Script')}
         </label>
-        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full': true }} id="Output" value={((p: any) => generateResult(p).script)(flagsStore)}/>
+        <p class="text-gray-400 text-sm mb-2">
+          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
+        </p>
+        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full whitespace-pre-wrap break-all': true }} id="Output" value={generateResult(flagsStore).script}/>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@
     "cumulative": "누적 (GIF 프레임이 깨진 경우 이 기능을 켜세요)",
     "downloadMCMETA": "MCMETA 다운로드",
     "downloadPNG": "PNG 다운로드",
+    "framePreview": "Frame Preview",
     "generate": "생성",
     "textureName": "텍스처 이름"
   }

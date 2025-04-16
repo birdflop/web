@@ -2,7 +2,10 @@
   "nav": {
     "hosting": {
       "billing": "Billing",
-      "nodeStats": "Node Stats",
+      "nodeStats": {
+        "description": "Check the status of Birdflop's server nodes.",
+        "title": "Node Stats"
+      },
       "panel": "Panel",
       "plans": "Plans",
       "title": "Hosting"
@@ -32,6 +35,10 @@
       "hexGradientAPIDocs": {
         "description": "Documentation for the RGBirdflop API",
         "title": "RGBirdflop API Docs"
+      },
+      "hexGradientPresets": {
+        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
+        "title": "RGBirdflop Presets"
       },
       "more": "更多资源",
       "paperTimings": {

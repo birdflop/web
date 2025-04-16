@@ -3,6 +3,7 @@
     "cumulative": "Cumulativo (Ativa esta opção se os frames do gif estão estragados)",
     "downloadMCMETA": "Download do MCMETA",
     "downloadPNG": "Download do PNG",
+    "framePreview": "Frame Preview",
     "generate": "Gerar",
     "textureName": "Nome da textura"
   }

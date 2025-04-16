@@ -72,13 +72,10 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.hexGradient.title@@RGBirdflop')} Presets
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
-        <h2 class="text-gray-50 mt-2">
-          Welcome to the one-stop shop for presets!
-        </h2>
-        <h2 class="text-gray-400 mb-1">
-          Here you can find and save, copy, or directly use presets for use on RGBirdflop. Stay tuned for a way to submit your own presets!
+        <h2 class="text-gray-400 mt-1 mb-5">
+          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
         </h2>
         <div class={{
           'opacity-50': presetStore.savedPresets.length === 0,

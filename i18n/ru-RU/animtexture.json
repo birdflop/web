@@ -3,6 +3,7 @@
     "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
+    "framePreview": "Frame Preview",
     "generate": "Генерировать",
     "textureName": "Название текстуры"
   }

@@ -20,8 +20,8 @@ export const defaultPresets = {
 export const defaults = {
   version: 4,
   colors: [
-    { hex: '#084CFB', pos: 0 },
-    { hex: '#ADF3FD', pos: 100 },
+    { hex: '#54daf4', pos: 0 },
+    { hex: '#545eb6', pos: 100 },
   ],
   colorlength: 1,
   name: 'logo',

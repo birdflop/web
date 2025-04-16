@@ -71,7 +71,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
 

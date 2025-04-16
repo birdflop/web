@@ -197,7 +197,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.banner.title@@Banner Generator')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
         </h2>
 

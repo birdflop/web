@@ -84,19 +84,22 @@ export default component$(() => {
   });
 
   return <>
-    <section class="flex flex-col gap-3 mx-auto max-w-6xl px-6 py-16 items-center min-h-svh">
-      <div class="justify-center flex relative py-10 sm:py-24">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl flex gap-4 items-center">
+          <ShoppingCart size={48} /> Order your new server
+        </h1>
+        <h2 class="text-gray-400 mt-1 mb-5">
+          Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.
+        </h2>
         <div class="flex flex-col gap-8">
-          <h1 class="flex gap-4 items-center justify-center text-gray-100 text-2xl sm:text-4xl font-bold sm:mb-4 text-center drop-shadow-lg">
-            <ShoppingCart size={64} /> Order your new server
-          </h1>
           <Header subheader="This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.">
             Pick your plan
             <button class="text-blue-400 hover:underline text-sm font-normal" onClick$={() => store.showMiscPlans = !store.showMiscPlans}>
               {store.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
             </button>
           </Header>
-          <div class="grid md:grid-cols-3 gap-4">
+          <div class="grid md:grid-cols-3 gap-2">
             {Object.keys(plans).map((planName) => {
               const plan = plans[planName as keyof typeof plans];
               const ramOptions = Object.keys(plan.ramAndId);
@@ -141,7 +144,7 @@ export default component$(() => {
             <Header subheader="Here lies dragons! You most likely will not recieve support for these plans. Only proceed if you know what you're doing!">
               Misc Plans
             </Header>
-            <div class="grid md:grid-cols-3 gap-4">
+            <div class="grid md:grid-cols-3 gap-2">
               <a class="lum-card transition duration-300 hover:duration-75 ease-out lum-bg-red-700/30 hover:lum-bg-red-700"
                 href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target='_blank'>
                 <Header subheader="$3/mo - 1GB">
@@ -235,7 +238,7 @@ export default component$(() => {
             <Header subheader="This will be the amount of RAM in your new server.">
               Configure your RAM amount
             </Header>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
               {plans[store.plan as keyof typeof plans] && Object.keys(plans[store.plan as keyof typeof plans].ramAndId).map((gb) => {
                 return <button key={`${store.plan}-${gb}`}
                   onClick$={() => {
@@ -260,7 +263,7 @@ export default component$(() => {
           </>}
 
           <Anchor id="summary" />
-          {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6">
+          {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6 mb-24">
             <Package size={72} class="sm:mx-5 flex" />
             <div class="flex flex-1 flex-col gap-2">
               <Header>

@@ -28,7 +28,7 @@ export default component$(() => {
           Whoops! You've hit a dead-end.
         </p>
         <div class="flex mt-4">
-          <Link href="/" class="lum-btn lum-pad-lg text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4">
+          <Link href="/" class="lum-btn lum-pad-xl rounded-lg text-lg lum-bg-blue-600/80 hover:lum-bg-blue-600">
             <Home size={26}/> Go back home
           </Link>
         </div>
