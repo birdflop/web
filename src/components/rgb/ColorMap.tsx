@@ -29,7 +29,7 @@ export default component$(({ id = 'text' }: {
     onMouseEnter$={(e, el) => {
       const abortController = new AbortController();
       el.addEventListener('mousemove', e => {
-        const addbutton = document.getElementById('add-button')!;
+        const addbutton = document.getElementById(`colormap${id}-add-button`)!;
         if (e.target != el) {
           addbutton.classList.add('opacity-0');
           return;
@@ -41,13 +41,13 @@ export default component$(({ id = 'text' }: {
         addbutton.style.left = `${pos}%`;
       }, { signal: abortController.signal });
       el.addEventListener('mouseleave', () => {
-        const addbutton = document.getElementById('add-button')!;
+        const addbutton = document.getElementById(`colormap${id}-add-button`)!;
         addbutton.classList.add('opacity-0');
         abortController.abort();
       }, { signal: abortController.signal });
     }}
     >
-      <div id="add-button" class={{
+      <div id={`colormap${id}-add-button`} class={{
         'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
       }}>
         <Plus size={18} />
