@@ -14,7 +14,7 @@ export default component$(() => {
   }, { deep: true });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     if (document.getElementsByName('gifframes')[0]) return;
     const script = document.createElement('script');
     script.src = '/scripts/gif-frames.js';
@@ -42,8 +42,9 @@ export default component$(() => {
               const f = new FileReader();
               f.readAsDataURL(file);
               f.onloadend = async (e) => {
-                const b64 = e!.target!.result;
-                const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
+                const b64 = e.target?.result;
+                if (!b64) return;
+                const type = b64.toString().split(',')[0].split(';')[0].split(':')[1];
                 if (type == 'image/gif') {
                   // @ts-ignore
                   const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: animtextureStore.cumulative });

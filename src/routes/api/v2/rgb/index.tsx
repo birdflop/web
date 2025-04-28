@@ -3,7 +3,7 @@ import { v3formats } from '~/util/PresetUtils';
 import { generateOutput } from '~/util/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
-export const onGet: RequestHandler = async ({ json, query }) => {
+export const onGet: RequestHandler = ({ json, query }) => {
   let output = {};
   try {
     const queryjson: any = Object.fromEntries(query);
@@ -14,7 +14,7 @@ export const onGet: RequestHandler = async ({ json, query }) => {
       else if (queryjson[key] === 'true' || queryjson[key] === 'false') queryjson[key] = queryjson[key] === 'true';
       else if (!isNaN(Number(queryjson[key]))) queryjson[key] = Number(queryjson[key]);
     }
-    output = await getOutput(queryjson);
+    output = getOutput(queryjson);
   }
   catch (e: any) {
     console.error(e);
@@ -27,7 +27,7 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
   let output = {};
   try {
     const body = await parseBody();
-    output = await getOutput(body);
+    output = getOutput(body);
   }
   catch (e: any) {
     console.error(e);
@@ -37,7 +37,7 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
   throw json(200, output);
 };
 
-async function getOutput(body: any) {
+function getOutput(body: any) {
   const options = body?.silent ? {} : {
     input: {
       ...rgbDefaults,

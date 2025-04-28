@@ -69,26 +69,26 @@ export default component$(({ threshold, hidden }: {
       <textarea id="decode" class={{
         'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
       }} placeholder={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)}
-      onInput$={(e, el) => {
+      onInput$={async (e, el) => {
         const threshold = document.getElementById('threshold') as HTMLInputElement;
-        decodeText(el.value, Number(threshold.value));
+        await decodeText(el.value, Number(threshold.value));
       }}
       />
       <NumberInput input value={threshold.value} id="threshold" class={{ 'w-full': true }}
-        onInput$={(e, el) => {
+        onInput$={async (e, el) => {
           threshold.value = Number(el.value);
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
-        onIncrement$={() => {
+        onIncrement$={async () => {
           threshold.value = threshold.value + 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
-        onDecrement$={() => {
+        onDecrement$={async () => {
           threshold.value = threshold.value - 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
       >
         {t('rgb.decode.threshold.title@@Threshold')}

@@ -79,13 +79,13 @@ export default component$(() => {
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          <button class="lum-btn lum-pad-xs" onClick$={async () => {
+          <button class="lum-btn lum-pad-xs" onClick$={() => {
             document.cookie = 'optout=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
             Turn off cookies
           </button>
-          <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={async () => {
+          <button class="lum-btn lum-pad-xs lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
             document.cookie = 'cookies=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>

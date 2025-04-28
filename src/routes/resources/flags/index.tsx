@@ -1,4 +1,3 @@
-/* eslint-disable qwik/valid-lexical-scope */
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';

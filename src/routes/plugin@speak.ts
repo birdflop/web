@@ -10,7 +10,7 @@ export const onRequest: RequestHandler = ({ request, locale }) => {
   if (cookie) {
     const result = new RegExp('(?:^|; )' + encodeURIComponent('locale') + '=([^;]*)').exec(cookie);
     if (result) {
-      lang = JSON.parse(result[1])['lang'];
+      lang = JSON.parse(result[1])['lang'] as string;
     }
   }
   // Try to use user language

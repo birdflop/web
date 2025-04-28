@@ -46,9 +46,9 @@ export default component$(() => {
             <h3 class="text-gray-100 text-lg sm:text-2xl mb-2">
               {path}
             </h3>
-            {(Object.entries(endpoints[path].methods) as [string, string][]).map(([method, description]) =>
+            {Object.entries(endpoints[path].methods).map(([method, description]) =>
               <p key={method} class="text-gray-400 sm:text-lg">
-                {method}: {description}
+                {method}: {description as string}
               </p>,
             )}
             <h4 class="text-gray-400 sm:text-lg my-2">

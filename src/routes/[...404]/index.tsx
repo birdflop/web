@@ -5,7 +5,7 @@ import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { Home } from 'lucide-icons-qwik';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
-export const onGet: RequestHandler = async ({ json, request }) => {
+export const onGet: RequestHandler = ({ json, request }) => {
   // check if contenttype is json
   if (request.headers.get('content-type') !== 'application/json') return;
 

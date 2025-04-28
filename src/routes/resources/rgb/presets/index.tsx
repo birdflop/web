@@ -22,7 +22,7 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     if (presetStore.savedPresets.length != 0) return;
     let savedPresets: Partial<typeof defaults>[] = [];
     try {
@@ -158,14 +158,14 @@ export default component$(() => {
                   </div>
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
-                  <button class="lum-btn text-sm" onClick$ ={() => {
+                  <button class="lum-btn text-sm" onClick$ ={async () => {
                     const existingPreset = presetStore.savedPresets.find((savedPreset) => {
                       return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
                     });
                     if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
                     else presetStore.savedPresets.push(p.preset);
                     if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore.savedPresets));
-                    setUserData({ savedPresets: presetStore.savedPresets });
+                    await setUserData({ savedPresets: presetStore.savedPresets });
                   }}>
                     {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
                       <Trash size={20} /> Remove
@@ -173,8 +173,8 @@ export default component$(() => {
                       <Save size={20} /> Save
                     </>}
                   </button>
-                  <button class="lum-btn text-sm" onClick$ ={() => {
-                    navigator.clipboard.writeText(JSON.stringify(p.preset));
+                  <button class="lum-btn text-sm" onClick$ ={async () => {
+                    await navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
                     <Copy size={20} /> Copy
                   </button>

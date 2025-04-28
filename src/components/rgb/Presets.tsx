@@ -39,7 +39,7 @@ export default component$(({ hidden }: {
       };
     } catch (err) {
       notification.title = await t$('rgb.presets.invalid.title@@Invalid Preset');
-      notification.description = `Error: ${err}\n${t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
+      notification.description = `Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
       notification.bgColor = 'lum-bg-red-900/50';
       notifications.push(notification);
     }
@@ -65,11 +65,11 @@ export default component$(({ hidden }: {
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
       <div class="flex flex-col gap-2"
-        onClick$={async () => {
+        onClick$={() => {
           if (presetStore.length != 0) return;
           let savedPresets: Partial<typeof defaults>[] = [];
           try {
-            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
+            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]') as Partial<typeof defaults>[];
             savedPresets = savedPresets.concat(localStoragePresets);
             if (!localStoragePresets) {
               // presets possibly stored in cookies
@@ -80,7 +80,7 @@ export default component$(({ hidden }: {
               });
               if (cookie['presets']) {
                 const cookiePresets = decodeURIComponent(cookie['presets']);
-                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
+                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets as Partial<typeof defaults>[]);
                 // remove cookie
                 document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
               }
@@ -155,7 +155,7 @@ export default component$(({ hidden }: {
               presetStore.push(preset);
             }
             if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore));
-            setUserData({ savedPresets: presetStore });
+            await setUserData({ savedPresets: presetStore });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
@@ -215,7 +215,7 @@ export default component$(({ hidden }: {
                 value = JSON.stringify(value);
                 if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
               }
-              if (value === defaults[key as keyof typeof defaults]) return;
+              if (value === defaults[key]) return;
               url.searchParams.set(key, String(value));
             });
             window.history.pushState({}, '', url.href);

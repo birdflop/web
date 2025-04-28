@@ -66,7 +66,7 @@ export const plans = {
   },
 };
 
-export const useParams = routeLoader$(async ({ query }) => {
+export const useParams = routeLoader$(({ query }) => {
   return query;
 });
 

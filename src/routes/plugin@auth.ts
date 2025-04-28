@@ -55,7 +55,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
-        async session({ session }) {
+        session({ session }) {
           const { id, name, email, image, savedPresets } = session.user as BirdflopUser;
           return {
             expires: session.expires,
