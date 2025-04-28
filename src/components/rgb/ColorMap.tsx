@@ -1,4 +1,4 @@
-import { component$, useContext, useSignal } from '@builder.io/qwik';
+import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { convertToRGB, getBrightness, getRandomColor } from '~/util/RGBUtils';
 import { sortColors } from '~/util/SharedUtils';
@@ -8,23 +8,34 @@ import { Plus, Trash } from 'lucide-icons-qwik';
 export default component$(({ id = 'text' }: {
   id?: string;
 }) => {
-  const rgbStore = useContext(rgbStoreContext)
+  const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
+  const colors = useSignal(id == 'text' ? rgbStore.colors : rgbStore.shadowcolors);
+
+  useTask$(({ track }) => {
+    track(() => colors.value);
+    rgbStore[id == 'text' ? 'colors' : 'shadowcolors'] = colors.value;
+  });
+
+  useTask$(({ track }) => {
+    track(() => rgbStore[id == 'text' ? 'colors' : 'shadowcolors']);
+    colors.value = rgbStore[id == 'text' ? 'colors' : 'shadowcolors'];
+  });
 
   return (
     <div class={{
       'w-full h-2 mb-s5 rounded-full items-center relative': true,
       'hidden': rgbStore.disperse,
     }} id={'colormap' + id}
-    style={`background: linear-gradient(to right, ${sortColors(rgbStore.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
+    style={`background: linear-gradient(to right, ${sortColors(colors.value).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
     onMouseDown$={(e, el) => {
       if (e.target != el) return;
       const rect = el.getBoundingClientRect();
       const pos = ((e.clientX - rect.left) / rect.width) * 100;
-      if (rgbStore.colors.find(c => c.pos == pos)) return;
-      const newColors = rgbStore.colors.slice(0);
+      if (colors.value.find(c => c.pos == pos)) return;
+      const newColors = colors.value.slice(0);
       newColors.push({ hex: getRandomColor(), pos });
-      rgbStore.colors = sortColors(newColors);
+      colors.value = sortColors(newColors);
     }}
     onMouseEnter$={(e, el) => {
       const abortController = new AbortController();
@@ -36,7 +47,7 @@ export default component$(({ id = 'text' }: {
         }
         const rect = el.getBoundingClientRect();
         const pos = ((e.clientX - rect.left) / rect.width) * 100;
-        if (rgbStore.colors.find(c => c.pos == pos)) return;
+        if (colors.value.find(c => c.pos == pos)) return;
         addbutton.classList.remove('opacity-0');
         addbutton.style.left = `${pos}%`;
       }, { signal: abortController.signal });
@@ -52,7 +63,7 @@ export default component$(({ id = 'text' }: {
       }}>
         <Plus size={18} />
       </div>
-      {rgbStore.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${rgbStore.colors.length}`}
+      {colors.value.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${colors.value.length}`}
         onMouseDown$={(e, el) => {
           const abortController = new AbortController();
           const colormap = document.getElementById('colormap' + id)!;
@@ -64,16 +75,16 @@ export default component$(({ id = 'text' }: {
             let pos = ((e.clientX - rect.left) / rect.width) * 100;
             if (pos < 0) pos = 0;
             if (pos > 100) pos = 100;
-            if (rgbStore.colors.find(c => c.pos == pos)) return;
-            const newColors = rgbStore.colors.slice(0);
+            if (colors.value.find(c => c.pos == pos)) return;
+            const newColors = colors.value.slice(0);
             newColors[i].pos = pos;
-            rgbStore.colors = newColors;
+            colors.value = newColors;
           }, { signal: abortController.signal });
           document.addEventListener('mouseup', () => {
             el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
             el.style.filter = '';
             abortController.abort();
-            rgbStore.colors = sortColors(rgbStore.colors);
+            colors.value = sortColors(colors.value);
           }, { signal: abortController.signal });
         }} style={{
           left: `${color.pos}%`,
@@ -109,11 +120,11 @@ export default component$(({ id = 'text' }: {
             'left-0 items-start': color.pos < 50,
             'right-0 items-end': color.pos >= 50,
           }}>
-            {rgbStore.colors.length > 2 &&
+            {colors.value.length > 2 &&
               <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
-                const newColors = rgbStore.colors.slice(0);
+                const newColors = colors.value.slice(0);
                 newColors.splice(i, 1);
-                rgbStore.colors = sortColors(newColors);
+                colors.value = sortColors(newColors);
               }}>
                 <Trash size={20} />
               </button>
@@ -122,9 +133,9 @@ export default component$(({ id = 'text' }: {
               id={`colormap${id}-color-${i + 1}-picker`}
               value={color.hex}
               onInput$={newColor => {
-                const newColors = rgbStore.colors.slice(0);
+                const newColors = colors.value.slice(0);
                 newColors[i].hex = newColor;
-                rgbStore.colors = sortColors(newColors);
+                colors.value = sortColors(newColors);
               }}
               horizontal
             />

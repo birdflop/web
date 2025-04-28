@@ -26,6 +26,7 @@ import TextShadow from '~/components/rgb/TextShadow';
 export const rgbDefaults = {
   version: defaults.version,
   colors: defaults.colors,
+  shadowcolors: defaults.shadowcolors,
   colorlength: defaults.colorlength,
   text: defaults.text,
   format: defaults.format,

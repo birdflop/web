@@ -1,16 +1,11 @@
-import { $, component$, useContext } from '@builder.io/qwik';
-import { inlineTranslate } from 'qwik-speak';
+import { component$, useContext } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { NotificationContext } from '~/routes/layout';
 import ColorMap from './ColorMap';
 import ColorList from './ColorList';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
-  const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
-  const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
 
   return (
