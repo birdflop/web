@@ -6,8 +6,9 @@ import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwi
 import { sortColors } from '~/util/SharedUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
-export default component$(({ hidden }: {
-  hidden: boolean;
+export default component$(({ hidden, id = 'text' }: {
+  hidden?: boolean;
+  id?: string;
 }) => {
   const t = inlineTranslate();
   const opened = useSignal(-1);
@@ -18,9 +19,9 @@ export default component$(({ hidden }: {
       'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
       'h-0 opacity-0 pointer-events-none': hidden,
       'opacity-100 pointer-events-auto': !hidden,
-    }} id="colors">
+    }} id={'colorlist' + id}>
       <Slot />
-      {rgbStore.format.color != 'MiniMessage' &&
+      {rgbStore.format.color != 'MiniMessage' && id == 'text' &&
         <NumberInput input disabled min={1} max={rgbStore.text.length / rgbStore.colors.length} value={rgbStore.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
           onIncrement$={() => {
             rgbStore.colorlength++;
@@ -32,7 +33,7 @@ export default component$(({ hidden }: {
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       }
-      <NumberInput input min={2} max={rgbStore.text.length} value={rgbStore.colors.length} id="colorsinput" class={{ 'w-full': true }}
+      <NumberInput input min={2} max={rgbStore.text.length} value={rgbStore.colors.length} id={`colorlist${id}-amount`} class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
           if (colorAmount < 2) return;
@@ -93,8 +94,8 @@ export default component$(({ hidden }: {
             </button>
           </div>
           <div class="flex flex-col justify-end gap-1">
-            <label for={`colorlist-color-${i + 1}`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
-            <input key={`colorlist-color-${i + 1}-${color.hex}`} id={`colorlist-color-${i + 1}`}
+            <label for={`colorlist${id}-color-${i + 1}`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
+            <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
@@ -103,19 +104,19 @@ export default component$(({ hidden }: {
               style={`background: ${color.hex};`}
               value={color.hex}
               onInput$={(e, el) => {
-                const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                const picker = document.getElementById(`colorlist${id}-color-${i + 1}-picker`)!;
                 picker.dataset.value = el.value;
                 picker.dispatchEvent(new Event('input'));
               }}
               onMouseUp$={() => {
-                const picker = document.getElementById(`colorlist-color-${i + 1}-picker`)!;
+                const picker = document.getElementById(`colorlist${id}-color-${i + 1}-picker`)!;
                 picker.dataset.value = color.hex;
                 picker.dispatchEvent(new Event('input'));
                 if (opened.value == i) return opened.value = -1;
                 else opened.value = i;
                 const abortController = new AbortController();
                 document.addEventListener('click', (e) => {
-                  if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist-color-${i + 1}`) && !e.target.closest(`#colorlist-color-${i + 1}-popup`)) {
+                  if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist${id}-color-${i + 1}`) && !e.target.closest(`#colorlist${id}-color-${i + 1}-popup`)) {
                     opened.value = -1;
                     abortController.abort();
                   }
@@ -132,12 +133,12 @@ export default component$(({ hidden }: {
               <Trash size={20} />
             </button>
           </div>
-          <div id={`colorlist-color-${i + 1}-popup`} stoppropagation:mousedown class={{
+          <div id={`colorlist${id}-color-${i + 1}-popup`} stoppropagation:mousedown class={{
             'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
             'opacity-0 scale-95 pointer-events-none': opened.value != i,
           }}>
             <ColorPicker
-              id={`colorlist-color-${i + 1}-picker`}
+              id={`colorlist${id}-color-${i + 1}-picker`}
               value={color.hex}
               onInput$={newColor => {
                 const newColors = rgbStore.colors.slice(0);

@@ -409,7 +409,7 @@ export function generateOutput(
     output = `<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`;
   }
   // Handle Minecraft Format JSON
-  else if (format.color == 'Minecraft Formatting') {
+  else if (format.color == 'JSON') {
     const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 

@@ -5,15 +5,17 @@ import { sortColors } from '~/util/SharedUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
 
-export default component$(() => {
-  const rgbStore = useContext(rgbStoreContext);
+export default component$(({ id = 'text' }: {
+  id?: string;
+}) => {
+  const rgbStore = useContext(rgbStoreContext)
   const opened = useSignal(-1);
 
   return (
     <div class={{
       'w-full h-2 mb-s5 rounded-full items-center relative': true,
       'hidden': rgbStore.disperse,
-    }} id="colormap"
+    }} id={'colormap' + id}
     style={`background: linear-gradient(to right, ${sortColors(rgbStore.colors).map(color => `${color.hex} ${color.pos}%`).join(', ')});`}
     onMouseDown$={(e, el) => {
       if (e.target != el) return;
@@ -53,7 +55,7 @@ export default component$(() => {
       {rgbStore.colors.map((color, i) => <div class="absolute -mt-1 -ml-3" key={`${i}/${rgbStore.colors.length}`}
         onMouseDown$={(e, el) => {
           const abortController = new AbortController();
-          const colormap = document.getElementById('colormap')!;
+          const colormap = document.getElementById('colormap' + id)!;
           const rect = colormap.getBoundingClientRect();
           document.addEventListener('mousemove', e => {
             opened.value = -1;
@@ -78,7 +80,7 @@ export default component$(() => {
         }}
         preventdefault:mousedown
       >
-        <div key={`colormap-color-${i + 1}`} id={`colormap-color-${i + 1}`}
+        <div key={`colormap${id}-color-${i + 1}`} id={`colormap${id}-color-${i + 1}`}
           class={{
             'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full shadow-md border': true,
             'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
@@ -86,21 +88,21 @@ export default component$(() => {
           }}
           style={`background: ${color.hex};`}
           onMouseUp$={() => {
-            const picker = document.getElementById(`colormap-color-${i + 1}-picker`)!;
+            const picker = document.getElementById(`colormap${id}-color-${i + 1}-picker`)!;
             picker.dataset.value = color.hex;
             picker.dispatchEvent(new Event('input'));
             if (opened.value == i) return opened.value = -1;
             else opened.value = i;
             const abortController = new AbortController();
             document.addEventListener('click', (e) => {
-              if (e.target instanceof HTMLElement && !e.target.closest(`#colormap-color-${i + 1}`) && !e.target.closest(`#colormap-color-${i + 1}-popup`)) {
+              if (e.target instanceof HTMLElement && !e.target.closest(`#colormap${id}-color-${i + 1}`) && !e.target.closest(`#colormap${id}-color-${i + 1}-popup`)) {
                 opened.value = -1;
                 abortController.abort();
               }
             }, { signal: abortController.signal });
           }}
         />
-        <div id={`colormap-color-${i + 1}-popup`} stoppropagation:mousedown class="hidden sm:flex">
+        <div id={`colormap${id}-color-${i + 1}-popup`} stoppropagation:mousedown class="hidden sm:flex">
           <div class={{
             'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2': true,
             'opacity-0 scale-95 pointer-events-none': opened.value != i,
@@ -117,7 +119,7 @@ export default component$(() => {
               </button>
             }
             <ColorPicker
-              id={`colormap-color-${i + 1}-picker`}
+              id={`colormap${id}-color-${i + 1}-picker`}
               value={color.hex}
               onInput$={newColor => {
                 const newColors = rgbStore.colors.slice(0);

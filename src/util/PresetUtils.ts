@@ -160,7 +160,6 @@ export const presets: publishedPreset[] = [
 ];
 
 export const v3formats = [
-  defaults.format,
   {
     color: 'MiniMessage',
     bold: '<b>$t</b>',
@@ -168,9 +167,13 @@ export const v3formats = [
     underline: '<u>$t</u>',
     strikethrough: '<st>$t</st>',
   },
+  defaults.format,
   {
     color: '§x§$1§$2§$3§$4§$5§$6$f$c',
     char: '§',
+  },
+  {
+    color: 'JSON',
   },
   {
     color: '&x&$1&$2&$3&$4&$5&$6$f$c',
@@ -190,9 +193,6 @@ export const v3formats = [
     italic: '[ITALIC]$t[/ITALIC]',
     underline: '[UNDERLINE]$t[/UNDERLINE]',
     strikethrough: '[STRIKETHROUGH]$t[/STRIKETHROUGH]',
-  },
-  {
-    color: 'Minecraft Formatting',
   },
 ];
 

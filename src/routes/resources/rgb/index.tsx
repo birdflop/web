@@ -9,7 +9,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-import { Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -21,6 +21,7 @@ import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { OpenSectionsContext } from '~/routes/layout';
+import TextShadow from '~/components/rgb/TextShadow';
 
 export const rgbDefaults = {
   version: defaults.version,
@@ -122,6 +123,12 @@ export default component$(() => {
               {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1} />
+            <Accordion sectionName="textshadow">
+              <Blend size={26} />
+              {t('rgb.shadow.title@@Text Shadow')}
+            </Accordion>
+            <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
+
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <Accordion sectionName="output" alwaysOpen>
@@ -151,6 +158,7 @@ export default component$(() => {
               </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
+
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
