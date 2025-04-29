@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/HexUtils';
 import { defaults } from '~/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/util/RGBUtils';
+import { convertToHex, convertToRGB, disperseColors, generateOutput } from '~/util/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
@@ -34,6 +34,7 @@ export const rgbDefaults = {
   prefixsuffix: defaults.prefixsuffix,
   trimspaces: defaults.trimspaces,
   disperse: defaults.disperse,
+  syncshadow: defaults.syncshadow,
   bold: defaults.bold,
   italic: defaults.italic,
   underline: defaults.underline,
@@ -82,11 +83,14 @@ export default component$(() => {
             if (!rgbStore.text) return '\u00A0';
 
             const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const shadowColors = sortColors(rgbStore.shadowcolors).map((color) =>  ({ rgb: convertToRGB(color.hex), pos: color.pos }));
             if (colors.length < 2) return rgbStore.text;
 
             const gradient = new Gradient(colors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
+            const shadowGradient = new Gradient(shadowColors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
 
             let hex = '';
+            let shadowHex = '';
             const segments = [];
             let index = 0;
             const textArray = Array.from(rgbStore.text);
@@ -96,14 +100,13 @@ export default component$(() => {
             }
             return segments.map((segment, i) => {
               const rgb = gradient.next();
+              const rgbShadow = shadowGradient.next();
               hex = convertToHex(rgb);
-              const shadow = hexToHSL(hex);
-              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-              shadow.l = Math.round(shadow.l * 0.2);
+              shadowHex = convertToHex(rgbShadow);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
               return <span key={`char${i}`} style={{
                 color: `#${hex};`,
-                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                textShadow: `${shadowLength} 0 #${shadowHex};`,
               }} class={{
                 'underline': rgbStore.underline,
                 'strikethrough': rgbStore.strikethrough,

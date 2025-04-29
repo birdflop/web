@@ -2,10 +2,14 @@ import { component$, useContext } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import ColorMap from './ColorMap';
 import ColorList from './ColorList';
+import { Toggle } from '@luminescent/ui-qwik';
+import { inlineTranslate } from 'qwik-speak';
+import { hexToHSL, hslToHex } from '~/util/RGBUtils';
 
 export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
+  const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
   return (
@@ -19,6 +23,24 @@ export default component$(({ hidden }: {
           This feature only works with the vanilla JSON-based Minecraft formatting.
         </p>
       }
+      <Toggle id="syncshadow" checked={rgbStore.syncshadow}
+        label={`${t('rgb.shadow.sync@@Sync with text colors')}`}
+        onChange$={(e, el) => {
+          rgbStore.syncshadow = el.checked;
+          if (rgbStore.syncshadow) {
+            const newColors = rgbStore.colors.map(color => {
+              const shadow = hexToHSL(color.hex);
+              if (shadow.l > 50) shadow.s = Math.round(shadow.s * 0.2);
+              shadow.l = Math.round(shadow.l * 0.2);
+              return {
+                hex: hslToHex(shadow.h, shadow.s, shadow.l),
+                pos: color.pos,
+              };
+            });
+            rgbStore.shadowcolors = newColors;
+          }
+        }}
+      />
       <div class="py-2 px-4">
         <ColorMap id="shadow"/>
       </div>

@@ -9,7 +9,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-import { Blend, Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { Dropdown, NumberInput } from '@luminescent/ui-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
@@ -22,7 +22,6 @@ import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { OpenSectionsContext } from '~/routes/layout';
-import TextShadow from '~/components/rgb/TextShadow';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -212,12 +211,6 @@ export default component$(() => {
               </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
-
-            <Accordion sectionName="textshadow">
-              <Blend size={26} />
-              {t('rgb.shadow.title@@Text Shadow')}
-            </Accordion>
-            <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
