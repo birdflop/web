@@ -555,9 +555,10 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
 
   // Apply formatting to the entire output string
   if (rgbStore.format.bold && rgbStore.bold) output = rgbStore.format.bold.replace('$t', output);
-  if (rgbStore.format.italic && rgbStore.bold) output = rgbStore.format.italic.replace('$t', output);
-  if (rgbStore.format.underline && rgbStore.bold) output = rgbStore.format.underline.replace('$t', output);
-  if (rgbStore.format.strikethrough && rgbStore.bold) output = rgbStore.format.strikethrough.replace('$t', output);
+  if (rgbStore.format.italic && rgbStore.italic) output = rgbStore.format.italic.replace('$t', output);
+  if (rgbStore.format.underline && rgbStore.underline) output = rgbStore.format.underline.replace('$t', output);
+  if (rgbStore.format.strikethrough && rgbStore.strikethrough) output = rgbStore.format.strikethrough.replace('$t', output);
+  if (rgbStore.format.obfuscate && rgbStore.obfuscate) output = rgbStore.format.obfuscate.replace('$t', output);
   if (rgbStore.prefixsuffix) output = rgbStore.prefixsuffix.replace(/\$t/g, output);
 
   return output;
