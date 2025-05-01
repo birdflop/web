@@ -75,7 +75,7 @@ export default component$(() => {
   useVisibleTask$(() => unloadGoogleAds());
 
   const params = useParams().value;
-  const store = useStore({
+  const plansStore = useStore({
     plan: params.get('plan') ?? undefined as number | string | undefined,
     showMiscPlans: false,
     gb: 0,
@@ -95,8 +95,8 @@ export default component$(() => {
         <div class="flex flex-col gap-8">
           <Header subheader="This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.">
             Pick your plan
-            <button class="text-blue-400 hover:underline text-sm font-normal" onClick$={() => store.showMiscPlans = !store.showMiscPlans}>
-              {store.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
+            <button class="text-blue-400 hover:underline text-sm font-normal" onClick$={() => plansStore.showMiscPlans = !plansStore.showMiscPlans}>
+              {plansStore.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
             </button>
           </Header>
           <div class="grid md:grid-cols-3 gap-2">
@@ -107,14 +107,14 @@ export default component$(() => {
                 class={{
                   'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                   'opacity-50': plan.outOfStock,
-                  'lum-bg-gray-800 hover:lum-bg-gray-800/70': store.plan != planName,
-                  'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': store.plan == planName,
+                  'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.plan != planName,
+                  'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
                 }}
                 key={planName}
                 onClick$={() => {
                   if (plan.outOfStock) return window.open('https://discord.gg/nmgtX5z', '_blank')?.focus();
-                  store.plan = planName;
-                  store.gb = 0;
+                  plansStore.plan = planName;
+                  plansStore.gb = 0;
                   const anchor = document.getElementById('ram');
                   if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
                 }}>
@@ -134,13 +134,13 @@ export default component$(() => {
                 {plan.outOfStock && <p class="text-red-500">
                   Out of stock
                 </p>}
-                {store.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
+                {plansStore.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
                   transform: 'translateZ(-10px)',
                 }}/>}
               </button>;
             })}
           </div>
-          {store.showMiscPlans && <>
+          {plansStore.showMiscPlans && <>
             <Header subheader="Here lies dragons! You most likely will not recieve support for these plans. Only proceed if you know what you're doing!">
               Misc Plans
             </Header>
@@ -234,27 +234,27 @@ export default component$(() => {
           </>}
 
           <Anchor id="ram" />
-          {store.plan && isNaN(Number(store.plan)) && <>
+          {plansStore.plan && isNaN(Number(plansStore.plan)) && <>
             <Header subheader="This will be the amount of RAM in your new server.">
               Configure your RAM amount
             </Header>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {plans[store.plan as keyof typeof plans] && Object.keys(plans[store.plan as keyof typeof plans].ramAndId).map((gb) => {
-                return <button key={`${store.plan}-${gb}`}
+              {plans[plansStore.plan as keyof typeof plans] && Object.keys(plans[plansStore.plan as keyof typeof plans].ramAndId).map((gb) => {
+                return <button key={`${plansStore.plan}-${gb}`}
                   onClick$={() => {
-                    store.gb = Number(gb);
+                    plansStore.gb = Number(gb);
                     const anchor = document.getElementById('summary');
                     if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
                   }}
                   class={{
                     'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
-                    'lum-bg-gray-800 hover:lum-bg-gray-800/70': store.gb != Number(gb),
-                    'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': store.gb == Number(gb),
+                    'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.gb != Number(gb),
+                    'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
                   }}>
-                  <Header subheader={`~$${(Number(gb) * plans[store.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[store.plan as keyof typeof plans].$PerGB}/mo.`}>
+                  <Header subheader={`~$${(Number(gb) * plans[plansStore.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan as keyof typeof plans].$PerGB}/mo.`}>
                     {gb} GB
                   </Header>
-                  {store.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
+                  {plansStore.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
                     transform: 'translateZ(-10px)',
                   }}/>}
                 </button>;
@@ -263,25 +263,25 @@ export default component$(() => {
           </>}
 
           <Anchor id="summary" />
-          {!!store.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6 mb-24">
+          {!!plansStore.gb && <div class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-6 mb-24">
             <Package size={72} class="sm:mx-5 flex" />
             <div class="flex flex-1 flex-col gap-2">
               <Header>
                 Order Summary
               </Header>
-              <p>{store.plan} {store.gb} GB</p>
-              <p>Capped at ${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo.</p>
-              <p>~${(store.gb * plans[store.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
+              <p>{plansStore.plan} {plansStore.gb} GB</p>
+              <p>Capped at ${(plansStore.gb * plans[plansStore.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo.</p>
+              <p>~${(plansStore.gb * plans[plansStore.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
             </div>
             <div class="flex flex-1 flex-col gap-2">
               <label for="server_name" class="lum-label">Server Name</label>
-              <input id="server_name" class="lum-input" onChange$={(e, el) => store.name = el.value} />
+              <input id="server_name" class="lum-input" onChange$={(e, el) => plansStore.name = el.value} />
               <label for="server_description" class="lum-label">Server Description (optional)</label>
-              <input id="server_description" class="lum-input" onChange$={(e, el) => store.desc = el.value} />
+              <input id="server_description" class="lum-input" onChange$={(e, el) => plansStore.desc = el.value} />
             </div>
             <div class="flex flex-1 gap-4 justify-end">
               <a class="lum-btn lum-pad-xl text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
-                href={`https://client.birdflop.com/order/config/index/${plans[store.plan as keyof typeof plans]?.id}/?group_id=${plans[store.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[store.plan as keyof typeof plans]?.ramAndId as any)[store.gb]}&server_name=${store.name}&server_description=${store.desc}&billing_cycle=monthly`}>
+                href={`https://client.birdflop.com/order/config/index/${plans[plansStore.plan as keyof typeof plans]?.id}/?group_id=${plans[plansStore.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[plansStore.plan as keyof typeof plans]?.ramAndId as any)[plansStore.gb]}&server_name=${plansStore.name}&server_description=${plansStore.desc}&billing_cycle=monthly`}>
                 <ShoppingCart size={26}/> Add to cart
               </a>
             </div>

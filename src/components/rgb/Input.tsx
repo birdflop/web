@@ -53,7 +53,7 @@ export default component$(({ readOnly }: {
           </div>
           <p class="absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
-            {generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)}
+            {generateOutput(rgbStore)}
           </p>
         </div>
       }

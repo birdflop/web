@@ -68,7 +68,7 @@ export default component$(({ threshold, hidden }: {
       </label>
       <textarea id="decode" class={{
         'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-      }} placeholder={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)}
+      }} placeholder={generateOutput(rgbStore)}
       onInput$={async (e, el) => {
         const threshold = document.getElementById('threshold') as HTMLInputElement;
         await decodeText(el.value, Number(threshold.value));

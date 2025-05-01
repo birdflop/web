@@ -91,6 +91,7 @@ export function setCookies(name: names, json: { [key: string]: any }) {
   Object.keys(cookieValue).forEach(key => {
     if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(test[key as keyof typeof defaults])) delete cookieValue[key];
   });
+  if (cookieValue.syncshadow) delete cookieValue.shadowcolors;
 
   const existingCookie = cookie[name];
   const encodedValue = encodeURIComponent(JSON.stringify(cookieValue));

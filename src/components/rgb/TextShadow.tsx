@@ -41,10 +41,15 @@ export default component$(({ hidden }: {
           }
         }}
       />
-      <div class="py-2 px-4">
-        <ColorMap id="shadow"/>
+      <div class={{
+        'transition-all duration-300': true,
+        'opacity-50': rgbStore.syncshadow,
+      }}>
+        <div class="py-2 px-4">
+          <ColorMap id="shadow"/>
+        </div>
+        <ColorList id="shadow"/>
       </div>
-      <ColorList id="shadow"/>
     </div>
   );
 });

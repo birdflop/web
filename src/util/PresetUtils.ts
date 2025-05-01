@@ -23,10 +23,7 @@ export const defaults = {
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ],
-  shadowcolors: [
-    { hex: '#54daf4', pos: 0 },
-    { hex: '#545eb6', pos: 100 },
-  ],
+  shadowcolors: [] as { hex: string; pos: number }[],
   colorlength: 1,
   name: 'logo',
   text: 'Birdflop',
@@ -289,7 +286,7 @@ export function fromBinary(encoded: string) {
 
 export function loadPreset(p: string): Partial<typeof defaults> {
   let preset: any;
-  let newPreset = { ...defaults };
+  let newPreset: Partial<typeof defaults> = {};
   if (fromBinary(p) !== '') {
     const formatting = decompress(preset.formats, 4);
     preset = JSON.parse(fromBinary(p));
@@ -341,5 +338,5 @@ export function loadPreset(p: string): Partial<typeof defaults> {
     }
   });
 
-  return newPreset as Partial<typeof defaults>;
+  return newPreset;
 }

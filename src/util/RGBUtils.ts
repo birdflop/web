@@ -1,6 +1,8 @@
+import { rgbDefaults } from '~/routes/resources/rgb';
 import { AnimatedGradient, Gradient } from './HexUtils';
 import { defaults } from './PresetUtils';
 import { sortColors } from './SharedUtils';
+import { animTABDefaults } from '~/routes/resources/animtab';
 
 export function hex(c: number) {
   const s = '0123456789ABCDEF';
@@ -169,23 +171,15 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
   return arr;
 }
 
-export function getAnimFrames(store: typeof defaults) {
-  if (store.colors.length < 2) return { OutputArray: [], frames: [] };
+export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
+  if (rgbStore.colors.length < 2) return { OutputArray: [], frames: [] };
 
-  const frames = generateAnimationFrames(store);
-
-  const OutputArray = formatFrames(frames, store);
-
-  return { OutputArray, frames: frames.colorFrames };
-}
-
-function generateAnimationFrames(store: typeof defaults) {
-  const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-  const text = store.text ?? 'Birdflop';
+  const colors = rgbStore.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+  const text = rgbStore.text ?? 'Birdflop';
 
   let loopAmount;
-  const length = text.length * store.length / store.colorlength;
-  switch (Number(store.type)) {
+  const length = text.length * animtabStore.length / rgbStore.colorlength;
+  switch (Number(animtabStore.type)) {
   case 3:
     loopAmount = length;
     break;
@@ -201,7 +195,7 @@ function generateAnimationFrames(store: typeof defaults) {
     const frameColors = [];
     const gradient = new AnimatedGradient(colors, length, n);
 
-    if (store.type === 4) {
+    if (animtabStore.type === 4) {
       const hex = convertToHex(gradient.next());
       frameColors.push(hex);
       textFrames.push({ type: 'solid', text, colors: [hex] });
@@ -211,14 +205,14 @@ function generateAnimationFrames(store: typeof defaults) {
       let index = 0;
 
       while (index < textArray.length) {
-        segments.push(textArray.slice(index, index + store.colorlength).join(''));
-        index += store.colorlength;
+        segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
+        index += rgbStore.colorlength;
       }
 
       const segmentColors = [];
 
       for (const segment of segments) {
-        if (store.trimspaces && segment.match(/^\s+$/)) {
+        if (rgbStore.trimspaces && segment.match(/^\s+$/)) {
           segmentColors.push(null);
           continue;
         }
@@ -234,34 +228,36 @@ function generateAnimationFrames(store: typeof defaults) {
     colorFrames.push(frameColors);
   }
 
-  return { colorFrames, textFrames };
+  const OutputArray = formatFrames({ colorFrames, textFrames }, rgbStore, animtabStore);
+
+  return { OutputArray, frames: colorFrames };
 }
 
-function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, store: typeof defaults) {
+function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   const { textFrames } = frames;
   const OutputArray = [];
-  const text = store.text ?? 'Birdflop';
+  const text = rgbStore.text ?? 'Birdflop';
 
   for (let n = 0; n < textFrames.length; n++) {
     const frame = textFrames[n];
     let output = '';
 
-    if (store.format.color === 'MiniMessage') {
+    if (rgbStore.format.color === 'MiniMessage') {
       if (frame.type === 'solid') {
 
         const hex = frame.colors[0];
         output = `<color:#${hex}>${text}</color>`;
       } else if (frame.type === 'segments') {
-        if (store.colors.find((color, i) => color.pos != (100 / (store.colors.length - 1)) * i)) {
-          output = formatMiniMessageCustomPositions(store, n);
+        if (rgbStore.colors.find((color, i) => color.pos != (100 / (rgbStore.colors.length - 1)) * i)) {
+          output = formatMiniMessageCustomPositions(rgbStore, animtabStore, n);
         } else {
           const animatedColors = [];
 
-          for (let i = 0; i < store.colors.length; i++) {
-            const colors = store.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-            const length = text.length * store.length / store.colorlength;
+          for (let i = 0; i < rgbStore.colors.length; i++) {
+            const colors = rgbStore.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const length = text.length * animtabStore.length / rgbStore.colorlength;
 
-            const offset = (n + i * (length / store.colors.length)) % length;
+            const offset = (n + i * (length / rgbStore.colors.length)) % length;
             const shiftedGradient = new AnimatedGradient(colors, length, offset);
             const color = convertToHex(shiftedGradient.next());
             animatedColors.push('#' + color);
@@ -275,7 +271,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
         }
       }
     } else if (frame.type === 'solid') {
-      let hexOutput = store.format.color;
+      let hexOutput = rgbStore.format.color;
       const hex = frame.colors[0];
 
       for (let i = 1; i <= 6; i++) {
@@ -283,18 +279,18 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
       }
 
       let formatCodes = '';
-      if (store.format.color.includes('$f')) {
-        if (store.bold) formatCodes += store.format.char + 'l';
-        if (store.italic) formatCodes += store.format.char + 'o';
-        if (store.underline) formatCodes += store.format.char + 'n';
-        if (store.strikethrough) formatCodes += store.format.char + 'm';
+      if (rgbStore.format.color.includes('$f')) {
+        if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
+        if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
+        if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
+        if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', text);
 
-      if (store.prefixsuffix) {
-        hexOutput = store.prefixsuffix.replace(/\$t/g, hexOutput);
+      if (rgbStore.prefixsuffix) {
+        hexOutput = rgbStore.prefixsuffix.replace(/\$t/g, hexOutput);
       }
 
       output = hexOutput;
@@ -308,17 +304,17 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
           continue;
         }
 
-        let hexOutput = store.format.color;
+        let hexOutput = rgbStore.format.color;
         for (let j = 1; j <= 6; j++) {
           hexOutput = hexOutput.replace(`$${j}`, hex.charAt(j - 1));
         }
 
         let formatCodes = '';
-        if (store.format.color.includes('$f')) {
-          if (store.bold) formatCodes += store.format.char + 'l';
-          if (store.italic) formatCodes += store.format.char + 'o';
-          if (store.underline) formatCodes += store.format.char + 'n';
-          if (store.strikethrough) formatCodes += store.format.char + 'm';
+        if (rgbStore.format.color.includes('$f')) {
+          if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
+          if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
+          if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
+          if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
@@ -326,8 +322,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
         output += hexOutput;
       }
 
-      if (store.prefixsuffix) {
-        output = store.prefixsuffix.replace(/\$t/g, output);
+      if (rgbStore.prefixsuffix) {
+        output = rgbStore.prefixsuffix.replace(/\$t/g, output);
       }
     }
 
@@ -337,17 +333,17 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, st
   return OutputArray;
 }
 
-function formatMiniMessageCustomPositions(store: typeof defaults, frameIndex: number) {
-  const text = store.text ?? 'Birdflop';
-  const colors = sortColors(store.colors);
+function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults, frameIndex: number) {
+  const text = rgbStore.text ?? 'Birdflop';
+  const colors = sortColors(rgbStore.colors);
   let output = '';
 
   if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
   if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
 
   const animatedColors = colors.map((color, i) => {
-    const colorArray = store.colors.map(c => ({ rgb: convertToRGB(c.hex), pos: c.pos }));
-    const length = text.length * store.length / store.colorlength;
+    const colorArray = rgbStore.colors.map(c => ({ rgb: convertToRGB(c.hex), pos: c.pos }));
+    const length = text.length * animtabStore.length / rgbStore.colorlength;
     const offset = (frameIndex + i * (length / colors.length)) % length;
     const shiftedGradient = new AnimatedGradient(colorArray, length, offset);
     return {
@@ -378,19 +374,19 @@ function formatMiniMessageCustomPositions(store: typeof defaults, frameIndex: nu
   return output;
 }
 
-export function AnimationOutput(store: typeof defaults) {
+export function AnimationOutput(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   let FinalOutput = '';
 
-  const AnimFrames = getAnimFrames(store);
+  const AnimFrames = generateAnimTABFrames(rgbStore, animtabStore);
   let { OutputArray } = AnimFrames;
 
-  const format = store.outputFormat;
-  FinalOutput = format.replace('%name%', store.name);
-  FinalOutput = FinalOutput.replace('%speed%', `${store.speed}`);
-  if (store.type == 1) {
+  const format = animtabStore.outputFormat;
+  FinalOutput = format.replace('%name%', animtabStore.name);
+  FinalOutput = FinalOutput.replace('%speed%', `${animtabStore.speed}`);
+  if (animtabStore.type == 1) {
     OutputArray.reverse();
   }
-  else if (store.type == 3) {
+  else if (animtabStore.type == 3) {
     const OutputArray2 = OutputArray.slice();
     OutputArray = OutputArray.reverse().concat(OutputArray2);
   }
@@ -401,22 +397,11 @@ export function AnimationOutput(store: typeof defaults) {
   return FinalOutput;
 }
 
-export function generateOutput(
-  text = defaults.text,
-  colors = defaults.colors,
-  format = defaults.format,
-  prefixsuffix?: string,
-  trimspaces?: boolean,
-  colorlength?: number,
-  bold?: boolean,
-  italic?: boolean,
-  underline?: boolean,
-  strikethrough?: boolean,
-) {
+export function generateOutput(rgbStore: typeof rgbDefaults) {
   let output = '';
+  const colors = sortColors(rgbStore.colors);
 
-  if (format.color == 'MiniMessage' && colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i)) {
-    colors = sortColors(colors);
+  if (rgbStore.format.color == 'MiniMessage' && colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i)) {
     if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
     if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
     for (let i = 0; i < colors.length - 1; i++) {
@@ -428,64 +413,93 @@ export function generateOutput(
         nextColor = newColor;
       }
 
-      const numSteps = text.length;
+      const numSteps = rgbStore.text.length;
       const lowerRange = Math.round(colors[i].pos / 100 * numSteps);
       const upperRange = Math.round(colors[i + 1].pos / 100 * numSteps);
       if (lowerRange === upperRange) continue;
-      output += `<gradient:${currentColor.hex}:${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+      output += `<gradient:${currentColor.hex}:${nextColor.hex}>${rgbStore.text.substring(lowerRange, upperRange)}</gradient>`;
     }
   }
-  else if (format.color == 'MiniMessage') {
-    colors = sortColors(colors);
-    output = `<gradient:${colors.map(c => c.hex).join(':')}>${text}</gradient>`;
+  else if (rgbStore.format.color == 'MiniMessage') {
+    output = `<gradient:${colors.map(c => c.hex).join(':')}>${rgbStore.text}</gradient>`;
   }
   // Handle Minecraft Format JSON
-  else if (format.color == 'JSON') {
-    const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+  else if (rgbStore.format.color == 'JSON') {
+    const newColors = colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 
-    const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
+    const gradient = new Gradient(newColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
+    let shadowGradient: Gradient | undefined;
+
+    if (!rgbStore.syncshadow) {
+      const shadowColors = rgbStore.shadowcolors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+      shadowGradient = new Gradient(shadowColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
+    }
 
     // Create the base JSON structure
-    const jsonOutput: any = {
+    const jsonOutput: {
+      text: string;
+      extra: {
+        text: string;
+        color?: string;
+        shadow_color?: string;
+        bold?: boolean;
+        italic?: boolean;
+        underlined?: boolean;
+        strikethrough?: boolean;
+      }[];
+    } = {
       text: '',
       extra: [],
     };
 
     // Process each character
     let index = 0;
-    while (index < text.length) {
+    while (index < rgbStore.text.length) {
       // Handle multi-byte characters like emojis
-      const segment = Array.from(text).slice(index, index + (colorlength ?? 1)).join('');
+      const segment = Array.from(rgbStore.text).slice(index, index + (rgbStore.colorlength ?? 1)).join('');
+
+      const rgb = gradient.next();
+      const rgbShadow = shadowGradient ? shadowGradient.next() : undefined;
 
       // Skip formatting for pure space segments if trimspaces is true
-      if (trimspaces && segment.trim() === '') {
+      if (rgbStore.trimspaces && segment.trim() === '') {
         // Add a plain space to the output
         jsonOutput.extra.push({
           text: segment,
         });
-        gradient.next();
       } else {
         // Get the next color in the gradient
-        const rgb = gradient.next();
         const hex = convertToHex(rgb);
 
         // Add the character with its formatting
-        const charFormatting: any = {
+        const charFormatting: {
+          text: string;
+          color?: string;
+          shadow_color?: string;
+          bold?: boolean;
+          italic?: boolean;
+          underlined?: boolean;
+          strikethrough?: boolean;
+        } = {
           text: segment,
           color: '#' + hex,
         };
 
         // Only include formatting properties if they're true
-        if (bold) charFormatting.bold = true;
-        if (italic) charFormatting.italic = true;
-        if (underline) charFormatting.underlined = true;
-        if (strikethrough) charFormatting.strikethrough = true;
+        if (rgbStore.bold) charFormatting.bold = true;
+        if (rgbStore.italic) charFormatting.italic = true;
+        if (rgbStore.underline) charFormatting.underlined = true;
+        if (rgbStore.strikethrough) charFormatting.strikethrough = true;
+        if (rgbShadow) {
+          const shadowHex = convertToHex(rgbShadow);
+          charFormatting.shadow_color = '#' + shadowHex;
+        }
 
         jsonOutput.extra.push(charFormatting);
       }
 
-      index += colorlength || 1;
+      index += rgbStore.colorlength || 1;
     }
 
     // Convert the JSON object to a string
@@ -493,41 +507,39 @@ export function generateOutput(
   }
   // Handle other formats
   else {
-    const newColors = sortColors(colors).map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+    const newColors = colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 
-    const gradient = new Gradient(newColors, text.length / (colorlength ?? 1));
+    const gradient = new Gradient(newColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
 
     const segments = [];
     let index = 0;
 
     // Break text into segments without splitting multi-byte characters like emojis
-    while (index < text.length) {
-      const segment = Array.from(text).slice(index, index + (colorlength ?? 1)).join('');
+    while (index < rgbStore.text.length) {
+      const segment = Array.from(rgbStore.text).slice(index, index + (rgbStore.colorlength ?? 1)).join('');
       segments.push([segment]);
-      index += colorlength ?? 1;
+      index += rgbStore.colorlength ?? 1;
     }
 
     for (const segment of segments) {
       // Skip formatting only pure space segments, but not segments with emojis or non-space characters
-      if (trimspaces && segment[0].trim() === '') {
+      if (rgbStore.trimspaces && segment[0].trim() === '') {
         output += segment[0];
         gradient.next();
         continue;
       }
 
       const hex = convertToHex(gradient.next());
-      let hexOutput = format.color;
+      let hexOutput = rgbStore.format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
 
       let formatCodes = '';
-      if (format.color.includes('$f')) {
-        if (format.char) {
-          if (bold) formatCodes += format.char + 'l';
-          if (italic) formatCodes += format.char + 'o';
-          if (underline) formatCodes += format.char + 'n';
-          if (strikethrough) formatCodes += format.char + 'm';
-        }
+      if (rgbStore.format.color.includes('$f') && rgbStore.format.char) {
+        if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
+        if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
+        if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
+        if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
@@ -537,11 +549,11 @@ export function generateOutput(
   }
 
   // Apply formatting to the entire output string
-  if (format.bold && bold) output = format.bold.replace('$t', output);
-  if (format.italic && italic) output = format.italic.replace('$t', output);
-  if (format.underline && underline) output = format.underline.replace('$t', output);
-  if (format.strikethrough && strikethrough) output = format.strikethrough.replace('$t', output);
-  if (prefixsuffix) output = prefixsuffix.replace(/\$t/g, output);
+  if (rgbStore.format.bold && rgbStore.bold) output = rgbStore.format.bold.replace('$t', output);
+  if (rgbStore.format.italic && rgbStore.bold) output = rgbStore.format.italic.replace('$t', output);
+  if (rgbStore.format.underline && rgbStore.bold) output = rgbStore.format.underline.replace('$t', output);
+  if (rgbStore.format.strikethrough && rgbStore.bold) output = rgbStore.format.strikethrough.replace('$t', output);
+  if (rgbStore.prefixsuffix) output = rgbStore.prefixsuffix.replace(/\$t/g, output);
 
   return output;
 }

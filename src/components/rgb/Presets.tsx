@@ -151,6 +151,7 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
+            if (preset.syncshadow) delete preset.shadowcolors;
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
             }
@@ -187,6 +188,7 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
+            if (preset.syncshadow) delete preset.shadowcolors;
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
               id,

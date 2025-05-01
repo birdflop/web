@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/HexUtils';
 import { defaults } from '~/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput } from '~/util/RGBUtils';
+import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL, hslToHex } from '~/util/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
@@ -63,6 +63,17 @@ export default component$(() => {
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', rgbStore);
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
+    if (rgbStore.syncshadow) {
+      rgbStore.shadowcolors = rgbStore.colors.map(color => {
+        const shadow = hexToHSL(color.hex);
+        if (shadow.l > 50) shadow.s = Math.round(shadow.s * 0.2);
+        shadow.l = Math.round(shadow.l * 0.2);
+        return {
+          hex: hslToHex(shadow.h, shadow.s, shadow.l),
+          pos: color.pos,
+        };
+      });
+    }
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       track(() => rgbStore[key]);
     });
@@ -140,7 +151,7 @@ export default component$(() => {
               {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
-              value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
+              value={generateOutput(rgbStore)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />

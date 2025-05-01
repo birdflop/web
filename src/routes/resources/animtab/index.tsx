@@ -2,7 +2,7 @@ import { component$, useContext, useContextProvider, useSignal, useStore, useTas
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, types } from '~/util/PresetUtils';
-import { AnimationOutput, getAnimFrames, hexToHSL } from '~/util/RGBUtils';
+import { AnimationOutput, generateAnimTABFrames, hexToHSL } from '~/util/RGBUtils';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -74,7 +74,7 @@ export default component$(() => {
     (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
       track(() => animtabStore[key]);
     });
-    const { frames: newFrames } = getAnimFrames({ ...rgbStore, ...animtabStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' });
+    const { frames: newFrames } = generateAnimTABFrames({ ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' }, animtabStore);
     if (animtabStore.type == 1) {
       frames.list = newFrames.reverse();
     }
@@ -165,7 +165,7 @@ export default component$(() => {
               {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
-              value={AnimationOutput({ ...rgbStore, ...animtabStore })} />
+              value={AnimationOutput(rgbStore, animtabStore)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />

@@ -116,8 +116,7 @@ function getOutput(body: any) {
     if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
   }
 
-  const { text, prefixsuffix, trimspaces, colorlength, bold, italic, underline, strikethrough } = body ?? {};
-  const output = generateOutput(text, colors, format, prefixsuffix, trimspaces, colorlength, bold, italic, underline, strikethrough);
+  const output = generateOutput(body);
   return {
     output,
     ...options,
