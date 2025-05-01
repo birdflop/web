@@ -284,6 +284,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
         if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
         if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
+        if (rgbStore.obfuscate) formatCodes += rgbStore.format.char + 'k';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
@@ -315,6 +316,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
           if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
           if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
           if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
+          if (rgbStore.obfuscate) formatCodes += rgbStore.format.char + 'k';
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
@@ -481,6 +483,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
           italic?: boolean;
           underlined?: boolean;
           strikethrough?: boolean;
+          obfuscated?: boolean;
         } = {
           text: segment,
           color: '#' + hex,
@@ -491,6 +494,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         if (rgbStore.italic) charFormatting.italic = true;
         if (rgbStore.underline) charFormatting.underlined = true;
         if (rgbStore.strikethrough) charFormatting.strikethrough = true;
+        if (rgbStore.obfuscate) charFormatting.obfuscated = true;
         if (rgbShadow) {
           const shadowHex = convertToHex(rgbShadow);
           charFormatting.shadow_color = '#' + shadowHex;
@@ -540,6 +544,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
         if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
         if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
+        if (rgbStore.obfuscate) formatCodes += rgbStore.format.char + 'k';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);

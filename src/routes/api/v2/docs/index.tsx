@@ -78,7 +78,7 @@ export default component$(() => {
             <p class="text-red-500">required</p>
             <p>type: string</p>
             <p class="text-gray-400">The format to use for the color codes. $1 = #(r)rggbb, $2 = #r(r)ggbb, $3 = #rr(g)gbb, $4 = #rrg(g)bb, $5 = #rrgg(b)b, $6 = #rrggb(b), $f = format tags, $c = the character</p>
-            <p class="text-gray-500">example: "{defaults.format.color}" or "MiniMessage"</p>
+            <p class="text-gray-500">example: "{defaults.format.color}" or "MiniMessage" or "JSON"</p>
           </div>
           <div>
             <p class="font-bold text-white">char</p>
@@ -109,6 +109,12 @@ export default component$(() => {
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text strikethrough. $t is where the output text will go. If $t is not included, the output will not show.</p>
             <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
+          </div>
+          <div>
+            <p class="font-bold text-white">obfuscate</p>
+            <p>type: string</p>
+            <p class="text-gray-400">The code to use for making the text obfuscated. $t is where the output text will go. If $t is not included, the output will not show.</p>
+            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.obfuscate}</p>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">

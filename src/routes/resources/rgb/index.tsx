@@ -39,6 +39,7 @@ export const rgbDefaults = {
   italic: defaults.italic,
   underline: defaults.underline,
   strikethrough: defaults.strikethrough,
+  obfuscate: defaults.obfuscate,
   previewStyle: defaults.previewStyle,
 };
 

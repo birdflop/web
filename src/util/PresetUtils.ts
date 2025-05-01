@@ -5,6 +5,7 @@ export interface format {
   italic?: string;
   underline?: string;
   strikethrough?: string;
+  obfuscate?: string;
 }
 
 export interface publishedPreset {
@@ -24,8 +25,8 @@ export const defaults = {
     { hex: '#545eb6', pos: 100 },
   ],
   shadowcolors: [
-    { hex: '#54daf4', pos: 0 },
-    { hex: '#545eb6', pos: 100 },
+    { hex: '#1b2527', pos: 0 },
+    { hex: '#17181c', pos: 100 },
   ],
   colorlength: 1,
   name: 'logo',
@@ -47,6 +48,7 @@ export const defaults = {
   italic: false,
   underline: false,
   strikethrough: false,
+  obfuscate: false,
   previewStyle: 'default',
 };
 
@@ -171,6 +173,7 @@ export const v3formats = [
     italic: '<i>$t</i>',
     underline: '<u>$t</u>',
     strikethrough: '<st>$t</st>',
+    obfuscate: '<obf>$t</obf>',
   },
   defaults.format,
   {
