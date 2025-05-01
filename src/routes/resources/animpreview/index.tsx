@@ -8,8 +8,8 @@ import Input from '~/components/rgb/Input';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
 import { Dropdown } from '@luminescent/ui-qwik';
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animpreview', url.searchParams);
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'animpreview', url.searchParams);
 });
 
 const minecraftColors = {

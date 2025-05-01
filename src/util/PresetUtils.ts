@@ -23,7 +23,10 @@ export const defaults = {
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ],
-  shadowcolors: [] as { hex: string; pos: number }[],
+  shadowcolors: [
+    { hex: '#54daf4', pos: 0 },
+    { hex: '#545eb6', pos: 100 },
+  ],
   colorlength: 1,
   name: 'logo',
   text: 'Birdflop',

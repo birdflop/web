@@ -25,8 +25,8 @@ const defaults: flagsSchema = {
   memory: 0,
 };
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'parsed', url.searchParams) as flagsSchema;
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'parsed', url.searchParams) as flagsSchema;
 });
 
 export default component$(() => {

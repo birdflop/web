@@ -31,12 +31,12 @@ export const animTABDefaults = {
   outputFormat: defaults.outputFormat,
 };
 
-export const useRGBCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+export const useRGBCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
 });
 
-export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
 });
 
 export default component$(() => {

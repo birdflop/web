@@ -261,7 +261,7 @@ export default component$(() => {
                       </button>
                       <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => {
                         const newPatterns = bannerStore.patterns.slice(0);
-                        newPatterns.push(pattern);
+                        newPatterns.push({ ...pattern });
                         bannerStore.patterns = newPatterns;
                       }}>
                         <Copy size={20} />

@@ -42,8 +42,8 @@ export const rgbDefaults = {
   previewStyle: defaults.previewStyle,
 };
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');

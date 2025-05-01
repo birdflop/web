@@ -7,21 +7,12 @@ import { getPrismaClient } from './prisma';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
-function deepclone(obj: any) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
 export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchParams) {
-  let json = deepclone(defaults);
+  let json: { [key: string]: any } = {};
   try {
     const cookieVal = cookie.get(preset)?.value;
-    if (cookieVal) {
-      json = JSON.parse(decodeURIComponent(cookieVal));  // Decode the cookie value
-    } else if (preset == 'rgb' || preset == 'animtab') {
-      json = preset == 'rgb' ? deepclone(rgbDefaults) : deepclone(animTABDefaults);
-    } else {
-      json = {};
-    }
+    // Decode the cookie value
+    if (cookieVal) json = JSON.parse(decodeURIComponent(cookieVal));
   } catch (e) {
     console.error(e);
   }
@@ -47,9 +38,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
   // migrate
   let migrated = false;
   if (preset == 'rgb' || preset == 'animtab') {
-    const newrgbDefaults = deepclone(rgbDefaults);
-    const newanimTABDefaults = deepclone(animTABDefaults);
-    const names = preset == 'rgb' ? Object.keys(newrgbDefaults) : Object.keys(newanimTABDefaults);
+    const names = preset == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
     if (preset == 'animtab') names.push('version');
     names.forEach(name => {
       const cookieValue = cookie.get(name)?.value;
@@ -87,9 +76,8 @@ export function setCookies(name: names, json: { [key: string]: any }) {
   if (cookie.optout === 'true') return;
 
   const cookieValue = { ...json };
-  const test = deepclone(defaults);
   Object.keys(cookieValue).forEach(key => {
-    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(test[key as keyof typeof defaults])) delete cookieValue[key];
+    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete cookieValue[key];
   });
   if (cookieValue.syncshadow) delete cookieValue.shadowcolors;
 
