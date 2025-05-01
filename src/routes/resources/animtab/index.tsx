@@ -101,6 +101,24 @@ export default component$(() => {
     setFrame(performance.now());
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    if (!isBrowser && !rgbStore.obfuscate) return;
+    function obfuscate() {
+      const text = document.querySelectorAll('span.obfuscate');
+      text.forEach((el, i) => {
+        if (!rgbStore.obfuscate) {
+          el.textContent = rgbStore.text[i];
+          return;
+        }
+        el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
+      });
+      requestAnimationFrame(obfuscate);
+    }
+    obfuscate();
+    track(() => rgbStore.obfuscate);
+  });
+
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
@@ -134,6 +152,7 @@ export default component$(() => {
                 'underline': rgbStore.underline,
                 'strikethrough': rgbStore.strikethrough,
                 'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
+                'obfuscate': rgbStore.obfuscate,
               }}>
                 {segment[0].replace(/ /g, '\u00A0')}
               </span>;
