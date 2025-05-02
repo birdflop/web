@@ -6,7 +6,7 @@ import { defaults, loadPreset } from '~/util/PresetUtils';
 
 import { setUserData, sortColors } from '~/util/SharedUtils';
 import { Gradient } from '~/util/HexUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
+import { rgbToHex, hexToRGB } from '~/util/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
@@ -100,7 +100,7 @@ export default component$(({ hidden }: {
               }}>
                 {(() => {
                   if (!preset.text) preset.text = 'Birdflop';
-                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
                   if (colors.length < 2) return preset.text;
 
                   const gradient = new Gradient(colors, Math.ceil(preset.text.length / (preset.colorlength || 1)));
@@ -115,13 +115,10 @@ export default component$(({ hidden }: {
                   }
                   return segments.map((segment, i) => {
                     const rgb = gradient.next();
-                    hex = convertToHex(rgb);
-                    const shadow = hexToHSL(hex);
-                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-                    shadow.l = Math.round(shadow.l * 0.2);
+                    hex = rgbToHex(rgb);
                     return <span key={`char${i}`} style={{
                       color: `#${hex};`,
-                      textShadow: `1px 1px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                      textShadow: `1px 1px 0 #${hex};`,
                     }} class={{
                       'underline': preset.underline,
                       'strikethrough': preset.strikethrough,

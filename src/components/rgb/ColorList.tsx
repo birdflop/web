@@ -1,7 +1,7 @@
 import { component$, Slot, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { convertToRGB, disperseColors, getBrightness, getRandomColor, swapItems } from '~/util/RGBUtils';
+import { hexToRGB, disperseColors, getBrightness, getRandomColor, swapItems } from '~/util/RGBUtils';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
 import { sortColors } from '~/util/SharedUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
@@ -108,8 +108,8 @@ export default component$(({ hidden, id = 'text' }: {
             <label for={`colorlist${id}-color-${i + 1}`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
             <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}`}
               class={{
-                'text-gray-400 hover:text-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-                'text-gray-700 hover:text-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+                'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
+                'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
                 'lum-input w-full lum-pad-xs hover:': true,
               }}
               style={`background: ${color.hex};`}

@@ -1,6 +1,6 @@
 import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { convertToRGB, getBrightness, getRandomColor } from '~/util/RGBUtils';
+import { hexToRGB, getBrightness, getRandomColor } from '~/util/RGBUtils';
 import { sortColors } from '~/util/SharedUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
@@ -94,8 +94,8 @@ export default component$(({ id = 'text' }: {
         <div key={`colormap${id}-color-${i + 1}`} id={`colormap${id}-color-${i + 1}`}
           class={{
             'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full shadow-md border': true,
-            'border-gray-400': getBrightness(convertToRGB(color.hex)) < 126,
-            'border-gray-700': getBrightness(convertToRGB(color.hex)) > 126,
+            'border-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
+            'border-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
           }}
           style={`background: ${color.hex};`}
           onMouseUp$={() => {

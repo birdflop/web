@@ -2,7 +2,7 @@ import { component$, useContext, useContextProvider, useSignal, useStore, useTas
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { defaults, types } from '~/util/PresetUtils';
-import { AnimationOutput, generateAnimTABFrames, hexToHSL } from '~/util/RGBUtils';
+import { AnimationOutput, generateAnimTABFrames, hexToRGB } from '~/util/RGBUtils';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -140,14 +140,13 @@ export default component$(() => {
             let i = 0;
             return segments.map((segment) => {
               const color = `#${colors[i]}`;
-              const shadow = hexToHSL(color);
-              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-              shadow.l = Math.round(shadow.l * 0.2);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
+              const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
+              const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
               i = rgbStore.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
               return <span key={`char${i}`} style={{
                 color,
-                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                textShadow: `${shadowLength} 0 ${shadowColor};`,
               }} class={{
                 'underline': rgbStore.underline,
                 'strikethrough': rgbStore.strikethrough,

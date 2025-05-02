@@ -8,7 +8,7 @@ import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { Gradient } from '~/util/HexUtils';
 import { defaults, type publishedPreset } from '~/util/PresetUtils';
 import { presets } from '~/util/PresetUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
+import { rgbToHex, hexToRGB } from '~/util/RGBUtils';
 import { setUserData, sortColors } from '~/util/SharedUtils';
 
 export default component$(() => {
@@ -123,7 +123,7 @@ export default component$(() => {
                         const preset = p.preset;
                         if (!p.name) p.name = 'Birdflop';
 
-                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
                         if (colors.length < 2) return preset.name;
 
                         const gradient = new Gradient(colors, Math.ceil(p.name.length / (preset.colorlength || 1)));
@@ -138,13 +138,10 @@ export default component$(() => {
                         }
                         return segments.map((segment, i) => {
                           const rgb = gradient.next();
-                          hex = convertToHex(rgb);
-                          const shadow = hexToHSL(hex);
-                          if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-                          shadow.l = Math.round(shadow.l * 0.2);
+                          hex = rgbToHex(rgb);
                           return <span key={`char${i}`} style={{
                             color: `#${hex};`,
-                            textShadow: `3px 3px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                            textShadow: `3px 3px 0 #${hex};`,
                           }} class={{
                             'underline': preset.underline,
                             'strikethrough': preset.strikethrough,

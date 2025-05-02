@@ -12,7 +12,7 @@ export function hex(c: number) {
   return s.charAt((i - i % 16) / 16) + s.charAt(i % 16);
 }
 
-export function hexToHSL(hex: string) {
+function hexToHSL(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return { h: 100, s: 100, l: 100 };
   const r = parseInt(result[1], 16) / 255;
@@ -41,37 +41,6 @@ export function hexToHSL(hex: string) {
   l = Math.round(l * 100);
 
   return { h, s, l };
-}
-
-export function hslToHex(h: number, s: number, l: number): string {
-  l /= 100;
-  s /= 100;
-
-  const chroma = (1 - Math.abs(2 * l - 1)) * s;
-  const x = chroma * (1 - Math.abs((h / 60) % 2 - 1));
-  const m = l - chroma / 2;
-
-  let r = 0, g = 0, b = 0;
-
-  if (0 <= h && h < 60) {
-    r = chroma; g = x; b = 0;
-  } else if (60 <= h && h < 120) {
-    r = x; g = chroma; b = 0;
-  } else if (120 <= h && h < 180) {
-    r = 0; g = chroma; b = x;
-  } else if (180 <= h && h < 240) {
-    r = 0; g = x; b = chroma;
-  } else if (240 <= h && h < 300) {
-    r = x; g = 0; b = chroma;
-  } else if (300 <= h && h < 360) {
-    r = chroma; g = 0; b = x;
-  }
-
-  r = Math.round((r + m) * 255);
-  g = Math.round((g + m) * 255);
-  b = Math.round((b + m) * 255);
-
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
 export function getSignificantPoints(gradient: string[], threshold: number) {
@@ -108,7 +77,7 @@ export function getSignificantPoints(gradient: string[], threshold: number) {
   return significantPoints;
 }
 
-export function convertToHex(RGBAcolor: number[]) {
+export function rgbToHex(RGBAcolor: number[]) {
   return hex(RGBAcolor[0]) + hex(RGBAcolor[1]) + hex(RGBAcolor[2]);
 }
 
@@ -116,7 +85,7 @@ export function trim(s: string) {
   return (s.charAt(0) == '#') ? s.substring(1, 7) : s;
 }
 
-export function convertToRGB(hexcolor: string) {
+export function hexToRGB(hexcolor: string) {
   const color = [];
   color[0] = parseInt((trim(hexcolor)).substring(0, 2), 16);
   color[1] = parseInt((trim(hexcolor)).substring(2, 4), 16);
@@ -174,7 +143,7 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
 export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   if (rgbStore.colors.length < 2) return { OutputArray: [], frames: [] };
 
-  const colors = rgbStore.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+  const colors = rgbStore.colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
   const text = rgbStore.text ?? 'Birdflop';
 
   let loopAmount;
@@ -196,7 +165,7 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
     const gradient = new AnimatedGradient(colors, length, n);
 
     if (animtabStore.type === 4) {
-      const hex = convertToHex(gradient.next());
+      const hex = rgbToHex(gradient.next());
       frameColors.push(hex);
       textFrames.push({ type: 'solid', text, colors: [hex] });
     } else {
@@ -217,7 +186,7 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
           continue;
         }
 
-        const hex = convertToHex(gradient.next());
+        const hex = rgbToHex(gradient.next());
         segmentColors.push(hex);
         frameColors.push(hex);
       }
@@ -254,12 +223,12 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
           const animatedColors = [];
 
           for (let i = 0; i < rgbStore.colors.length; i++) {
-            const colors = rgbStore.colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const colors = rgbStore.colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
             const length = text.length * animtabStore.length / rgbStore.colorlength;
 
             const offset = (n + i * (length / rgbStore.colors.length)) % length;
             const shiftedGradient = new AnimatedGradient(colors, length, offset);
-            const color = convertToHex(shiftedGradient.next());
+            const color = rgbToHex(shiftedGradient.next());
             animatedColors.push('#' + color);
           }
 
@@ -344,12 +313,12 @@ function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabS
   if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
 
   const animatedColors = colors.map((color, i) => {
-    const colorArray = rgbStore.colors.map(c => ({ rgb: convertToRGB(c.hex), pos: c.pos }));
+    const colorArray = rgbStore.colors.map(c => ({ rgb: hexToRGB(c.hex), pos: c.pos }));
     const length = text.length * animtabStore.length / rgbStore.colorlength;
     const offset = (frameIndex + i * (length / colors.length)) % length;
     const shiftedGradient = new AnimatedGradient(colorArray, length, offset);
     return {
-      hex: convertToHex(shiftedGradient.next()),
+      hex: rgbToHex(shiftedGradient.next()),
       pos: color.pos,
     };
   });
@@ -427,14 +396,14 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
   }
   // Handle Minecraft Format JSON
   else if (rgbStore.format.color == 'JSON') {
-    const newColors = colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+    const newColors = colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 
     const gradient = new Gradient(newColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
     let shadowGradient: Gradient | undefined;
 
     if (!rgbStore.syncshadow) {
-      const shadowColors = rgbStore.shadowcolors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+      const shadowColors = rgbStore.shadowcolors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
       shadowGradient = new Gradient(shadowColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
     }
 
@@ -472,7 +441,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         });
       } else {
         // Get the next color in the gradient
-        const hex = convertToHex(rgb);
+        const hex = rgbToHex(rgb);
 
         // Add the character with its formatting
         const charFormatting: {
@@ -496,7 +465,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         if (rgbStore.strikethrough) charFormatting.strikethrough = true;
         if (rgbStore.obfuscate) charFormatting.obfuscated = true;
         if (rgbShadow) {
-          const shadowHex = convertToHex(rgbShadow);
+          const shadowHex = rgbToHex(rgbShadow);
           charFormatting.shadow_color = '#' + shadowHex;
         }
 
@@ -511,7 +480,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
   }
   // Handle other formats
   else {
-    const newColors = colors.map(color => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+    const newColors = colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
     if (newColors.length < 2) return 'Error: Not enough colors.';
 
     const gradient = new Gradient(newColors, rgbStore.text.length / (rgbStore.colorlength ?? 1));
@@ -534,7 +503,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         continue;
       }
 
-      const hex = convertToHex(gradient.next());
+      const hex = rgbToHex(gradient.next());
       let hexOutput = rgbStore.format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
 

@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/HexUtils';
 import { defaults } from '~/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL, hslToHex } from '~/util/RGBUtils';
+import { rgbToHex, hexToRGB, disperseColors, generateOutput } from '~/util/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
@@ -66,11 +66,10 @@ export default component$(() => {
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
     if (rgbStore.syncshadow) {
       rgbStore.shadowcolors = rgbStore.colors.map(color => {
-        const shadow = hexToHSL(color.hex);
-        if (shadow.l > 50) shadow.s = Math.round(shadow.s * 0.2);
-        shadow.l = Math.round(shadow.l * 0.2);
+        const shadowRGB = hexToRGB(color.hex).map(c => c * 0.25);
+        const shadowHex = `#${rgbToHex(shadowRGB)}`;
         return {
-          hex: hslToHex(shadow.h, shadow.s, shadow.l),
+          hex: shadowHex,
           pos: color.pos,
         };
       });
@@ -112,8 +111,8 @@ export default component$(() => {
           {(() => {
             if (!rgbStore.text) return '\u00A0';
 
-            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-            const shadowColors = sortColors(rgbStore.shadowcolors).map((color) =>  ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+            const shadowColors = sortColors(rgbStore.shadowcolors).map((color) =>  ({ rgb: hexToRGB(color.hex), pos: color.pos }));
             if (colors.length < 2) return rgbStore.text;
 
             const gradient = new Gradient(colors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
@@ -131,8 +130,8 @@ export default component$(() => {
             return segments.map((segment, i) => {
               const rgb = gradient.next();
               const rgbShadow = shadowGradient.next();
-              hex = convertToHex(rgb);
-              shadowHex = convertToHex(rgbShadow);
+              hex = rgbToHex(rgb);
+              shadowHex = rgbToHex(rgbShadow);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
               return <span key={`char${i}`} style={{
                 color: `#${hex};`,
