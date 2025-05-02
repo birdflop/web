@@ -413,7 +413,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
       extra: {
         text: string;
         color?: string;
-        shadow_color?: string;
+        shadow_color?: number[];
         bold?: boolean;
         italic?: boolean;
         underlined?: boolean;
@@ -447,7 +447,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         const charFormatting: {
           text: string;
           color?: string;
-          shadow_color?: string;
+          shadow_color?: number[];
           bold?: boolean;
           italic?: boolean;
           underlined?: boolean;
@@ -465,8 +465,9 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
         if (rgbStore.strikethrough) charFormatting.strikethrough = true;
         if (rgbStore.obfuscate) charFormatting.obfuscated = true;
         if (rgbShadow) {
-          const shadowHex = rgbToHex(rgbShadow);
-          charFormatting.shadow_color = '#' + shadowHex;
+          const rgbShadowMinecraft = rgbShadow.map(c => Math.round(c / 255 * 100) / 100);
+          rgbShadowMinecraft.push(1);
+          charFormatting.shadow_color = rgbShadowMinecraft;
         }
 
         jsonOutput.extra.push(charFormatting);
