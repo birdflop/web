@@ -34,6 +34,7 @@ export const rgbDefaults = {
   prefixsuffix: defaults.prefixsuffix,
   trimspaces: defaults.trimspaces,
   disperse: defaults.disperse,
+  lowercase: defaults.lowercase,
   syncshadow: defaults.syncshadow,
   bold: defaults.bold,
   italic: defaults.italic,

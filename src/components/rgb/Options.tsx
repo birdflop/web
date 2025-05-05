@@ -51,7 +51,7 @@ export default component$(({ hidden }: {
           <label for="prefixsuffix">
             {t('rgb.prefixsuffix@@Prefix/Suffix')}
           </label>
-          <input class="lum-input" id="prefixsuffix" value={rgbStore.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { rgbStore.prefixsuffix = el.value; }}/>
+          <input class="lum-input" id="prefixsuffix" value={rgbStore.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { rgbStore.prefixsuffix = el.value; }} />
         </div>
         {
           rgbStore.customFormat && <>
@@ -61,7 +61,7 @@ export default component$(({ hidden }: {
               <label for="customformat">
                 {t('rgb.colors.customFormat@@Custom Format')}
               </label>
-              <input class="lum-input" id="customformat" value={rgbStore.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.format.color = el.value; }}/>
+              <input class="lum-input" id="customformat" value={rgbStore.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.format.color = el.value; }} />
               <div class="font-mono text-sm">
                 <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
                 <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
@@ -88,6 +88,14 @@ export default component$(({ hidden }: {
               onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}
               label={'Trim colors from spaces'} />
             <p class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</p>
+          </div>
+        }
+        {rgbStore.format.color != 'MiniMessage' &&
+          <div class="flex flex-col gap-1">
+            <Toggle id="lowercase" checked={rgbStore.lowercase}
+              onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}
+              label={'Make hex code lowercase'} />
+            <p class="text-xs text-gray-400">Turn this on if for some reason your format needs all lowercase hex codes</p>
           </div>
         }
       </div>
