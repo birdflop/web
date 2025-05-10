@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Anchor, Header } from '@luminescent/ui-qwik';
+import { Anchor } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
 import Chart from '~/components/home/Chart';
 import { initiateTyper } from '~/util/Typer';
@@ -93,7 +93,9 @@ export default component$(() => {
     <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
       <div class="justify-center flex relative max-w-5xl px-6">
         <div class="flex flex-col gap-2">
-          <Anchor id="plans" />
+          <Anchor id="plans" class={{
+            'opacity-0': true,
+          }}/>
           <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
             Plans
           </h2>
@@ -105,9 +107,12 @@ export default component$(() => {
                 <p>
                   Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
                 </p>
-                <Header subheader={<>{ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB</>}>
+                <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                   {planName}
-                </Header>
+                </h2>
+                <h3 class="text-sm text-gray-400">
+                  {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
+                </h3>
                 <ul class="list-disc ml-5 flex flex-col gap-2 h-full">
                   {plan.features.map((feature) => {
                     return <li key={feature}>

@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Header } from '@luminescent/ui-qwik';
+import { Anchor } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import { defaults, v3formats } from '~/util/PresetUtils';
@@ -70,9 +70,11 @@ export default component$(() => {
           Data Models
         </h2>
         <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">
-          <Header id="formatobject" anchor>
-            Format
-          </Header>
+          <Anchor id="formatobject">
+            <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+              Format
+            </h2>
+          </Anchor>
           <div>
             <p class="font-bold text-white">color</p>
             <p class="text-red-500">required</p>
@@ -118,9 +120,11 @@ export default component$(() => {
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">
-          <Header id="color" anchor>
-            Color
-          </Header>
+          <Anchor id="color">
+            <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+              Color
+            </h2>
+          </Anchor>
           <div>
             <p class="font-bold text-white">hex</p>
             <p class="text-red-500">required</p>

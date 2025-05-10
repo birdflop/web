@@ -1,7 +1,6 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import { Header } from '@luminescent/ui-qwik';
 import Backgrounds from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
@@ -71,9 +70,12 @@ export default component$(() => {
         'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
         <div>
-          <Header subheader="We use cookies to automatically save and load your preferences.">
+          <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
             <Cookie size={26} /> Cookies
-          </Header>
+          </h2>
+          <h3 class="text-sm text-gray-400">
+            We use cookies to automatically save and load your preferences.
+          </h3>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
             {t$('nav.privacyPolicy@@Privacy Policy')}
           </Link>
@@ -115,12 +117,19 @@ export default component$(() => {
           'backdrop-blur-xl lum-card p-5 rounded-none sm:rounded-lg break-words': true,
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
-          <Header subheader={notification.description}>
-            <span class="flex gap-2 items-center flex-1"><Bell size={26} /> {notification.title}</span>
+          <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+            <span class="flex gap-2 items-center flex-1">
+              <Bell size={26} /> {notification.title}
+            </span>
             <button class="lum-btn p-1 lum-bg-transparent cursor-pointer" onClick$={() => {
               notifications.splice(notifications.findIndex((n) => n?.id === notification.id), 1);
-            }}><X size={20}/></button>
-          </Header>
+            }}>
+              <X size={20}/>
+            </button>
+          </h2>
+          <h3 class="text-sm text-gray-400">
+            {notification.description}
+          </h3>
         </div>;
       })}
     </div>
