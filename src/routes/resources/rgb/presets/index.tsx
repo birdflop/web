@@ -139,9 +139,11 @@ export default component$(() => {
                         return segments.map((segment, i) => {
                           const rgb = gradient.next();
                           hex = rgbToHex(rgb);
+                          const shadowRGB = rgb.map(c => Math.round(c * 0.25));
+                          const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
                           return <span key={`char${i}`} style={{
                             color: `#${hex};`,
-                            textShadow: `3px 3px 0 #${hex};`,
+                            textShadow: `3px 3px 0 ${shadowColor};`,
                           }} class={{
                             'underline': preset.underline,
                             'strikethrough': preset.strikethrough,
