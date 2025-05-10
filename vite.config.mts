@@ -31,6 +31,7 @@ export default defineConfig(() => {
             external: [
                 '@prisma/client/edge',
                 '@auth/prisma-adapter',
+                'gif-frames',
             ],
         },
     };
