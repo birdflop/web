@@ -2,9 +2,8 @@ import { formats } from './defaults';
 
 export function migrateFromV2(preset: any) {
   if (preset.version != 2) return;
-  const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough } = preset;
-  return { name, text, speed, type, customFormat, bold, italic, underline, strikethrough,
-    colors: preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })),
+  const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length } = preset;
+  return { name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length,
     format: formats.find((f) => f.color === preset.format) || {
       color: preset.format,
       char: preset.formatchar,
