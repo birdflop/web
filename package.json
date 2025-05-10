@@ -52,6 +52,7 @@
     "chart.js": "^4.4.9",
     "eslint": "^9.26.0",
     "eslint-plugin-qwik": "1.13.0",
+    "gif-frames": "^1.0.1",
     "globals": "^16.1.0",
     "lucide-icons-qwik": "^0.487.0",
     "prisma": "6.6.0",
