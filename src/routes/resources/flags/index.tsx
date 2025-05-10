@@ -181,7 +181,7 @@ export default component$(() => {
           {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
         </h2>
 
-        <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6 fill-current">
+        <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6">
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-1">
               <label for="input">
@@ -233,7 +233,7 @@ export default component$(() => {
                 </div>
                 <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
                   <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
-                  <div class="lum-bg-gray-900 lum-pad-md text-center w-24 rounded-md opacity-0 group-hover:opacity-100 transition-all z-50">
+                  <div class="lum-bg-gray-900 lum-btn-p-2 text-center w-24 rounded-md opacity-0 group-hover:opacity-100 transition-all z-50">
                     {flagsStore.memory} GB
                   </div>
                 </div>

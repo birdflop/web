@@ -163,7 +163,7 @@ export default component$(() => {
           })()}
         </Input>
 
-        <p class="lum-bg-gray-800 font-mono lum-pad-md rounded-md">
+        <p class="lum-bg-gray-800 font-mono lum-btn-p-2 rounded-md">
           {animprevStore.frames[animprevStore.frame]}
         </p>
       </div>

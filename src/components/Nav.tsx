@@ -73,7 +73,7 @@ export default component$(() => {
           {t('nav.resources.more@@More Resources')}
         </Link>
       </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'lum-bg-transparent': true }} id="lang-picker"
+      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent gap-1': true }} id="lang-picker"
         display={<Globe size={20} />} values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
@@ -94,7 +94,7 @@ export default component$(() => {
           name="options.redirectTo"
           value={loc.url.pathname + loc.url.search}
         />
-        <button class="lum-btn lum-bg-transparent lum-pad-equal-md">
+        <button class="lum-btn p-2 lum-bg-transparent">
           {session.value && session.value.user?.image ?
             <>
               <img src={session.value.user.image} width={20} height={20} class="rounded w-5 h-5 ml-1" />
@@ -151,10 +151,10 @@ export default component$(() => {
 
 export const SocialButtons = component$(() => {
   return <>
-    <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
+    <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn p-2 lum-bg-transparent">
       <Github size={20} />
     </a>
-    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn lum-bg-transparent fill-current lum-pad-equal-sm">
+    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent">
       <LogoDiscord width={20} />
     </a>
   </>;

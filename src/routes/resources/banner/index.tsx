@@ -222,7 +222,7 @@ export default component$(() => {
                 {Object.entries(colors).map(([colorName, color]) => {
                   return (
                     <button key={colorName} class={{
-                      'lum-btn lum-pad-equal-md hover:brightness-150': true,
+                      'lum-btn p-2 hover:brightness-150': true,
                     }} style={{
                       background: `#${color.toString(16).padStart(6, '0')}`,
                     }} onClick$={() => {
@@ -237,7 +237,7 @@ export default component$(() => {
               </div>
               <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mt-4">
                 {t('banner.options.patterns@@Patterns')}
-                <button class="lum-btn lum-pad-equal-sm lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
+                <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                   const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
                   const pattern = patterns[Math.floor(Math.random() * patterns.length)];
                   bannerStore.patterns = [
@@ -253,20 +253,20 @@ export default component$(() => {
                 {bannerStore.patterns.map((pattern, i) =>
                   <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
                     <div class="flex flex-col rounded-md">
-                      <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
+                      <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
                         <ChevronLeft size={20} />
                       </button>
-                      <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
+                      <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
                         <ChevronRight size={20} />
                       </button>
-                      <button class="lum-btn lum-pad-equal-xs border-y-transparent rounded-none" onClick$={() => {
+                      <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => {
                         const newPatterns = bannerStore.patterns.slice(0);
                         newPatterns.push({ ...pattern });
                         bannerStore.patterns = newPatterns;
                       }}>
                         <Copy size={20} />
                       </button>
-                      <button class="lum-btn lum-pad-equal-xs lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
+                      <button class="lum-btn p-1 lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
                         const newPatterns = bannerStore.patterns.slice(0);
                         newPatterns.splice(i, 1);
                         bannerStore.patterns = newPatterns;
@@ -303,7 +303,7 @@ export default component$(() => {
                       'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
                       'opacity-0 scale-95 pointer-events-none': openPopup.value != i,
                     }}>
-                      <div class="lum-card w-[23rem] lum-pad-equal-lg">
+                      <div class="lum-card w-[23rem] p-4">
                         <div class="flex flex-wrap gap-1">
                           {Object.entries(colors).map(([colorName, color]) => {
                             return (

@@ -121,7 +121,7 @@ export default component$(({ id = 'text' }: {
             'right-0 items-end': color.pos >= 50,
           }}>
             {colors.value.length > 2 &&
-              <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
+              <button class="lum-btn p-2 lum-bg-red-700 hover:lum-bg-red-600" onClick$={() => {
                 const newColors = colors.value.slice(0);
                 newColors.splice(i, 1);
                 colors.value = sortColors(newColors);

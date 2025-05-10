@@ -48,7 +48,7 @@ export default component$(({ readOnly }: {
             }}>
               <Slot />
             </p>
-            <textarea readOnly={readOnly} class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-pad-md resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
+            <textarea readOnly={readOnly} class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-btn-p-2 resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
               value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
           </div>
           <p class="absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
@@ -65,10 +65,10 @@ export default component$(({ readOnly }: {
           'font-mc-italic': rgbStore.italic,
           'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
         }}>
-          <p class="lum-bg-gray-800/50 rounded-lg lum-pad-md w-full h-full pointer-events-none whitespace-pre-wrap!">
+          <p class="lum-bg-gray-800/50 rounded-lg lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
             <Slot />
           </p>
-          <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-pad-md resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
+          <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
             value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
         </div>
       }

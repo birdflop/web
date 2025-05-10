@@ -52,16 +52,16 @@ export default component$(() => {
           </h2>
           <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <a href="#plans" class="lum-btn lum-pad-xl rounded-lg text-lg lum-bg-blue-600/80 hover:lum-bg-blue-600">
+              <a href="#plans" class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-blue-600/80 hover:lum-bg-blue-600">
                 <Server size={26} class="text-3xl" /> Hosting
               </a>
-              <Link href="/resources" class="lum-btn lum-pad-xl rounded-lg text-lg lum-bg-purple-600/80 hover:lum-bg-purple-600">
+              <Link href="/resources" class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-purple-600/80 hover:lum-bg-purple-600">
                 <Box size={26} class="text-3xl" /> Resources
               </Link>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 justify-center">
               <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-                class="lum-btn lum-pad-xl rounded-lg text-lg lum-bg-pink-600/80 hover:lum-bg-pink-600">
+                class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-pink-600/80 hover:lum-bg-pink-600">
                 <HandCoins size={26} class="text-3xl" /> Donate Today
               </a>
             </div>
@@ -302,7 +302,7 @@ export default component$(() => {
                 <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
                   Trustpilot
                 </a>
-                <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600 fill-current">
+                <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
                   Google
                 </a>
               </div>

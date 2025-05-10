@@ -78,7 +78,7 @@ export default component$(({ hidden, id = 'text' }: {
       </NumberInput>
       <div class="flex gap-2">
         <button class={{
-          'lum-btn lum-pad-equal-xs': true,
+          'lum-btn p-1': true,
           'w-full': rgbStore.disperse,
         }} onClick$={() => {
           const newColors = colors.value.map(color => ({ hex: getRandomColor(), pos: color.pos }));
@@ -87,7 +87,7 @@ export default component$(({ hidden, id = 'text' }: {
           <Dices size={20} /> {rgbStore.disperse && <span>Randomize</span>}
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn lum-pad-xs w-full" disabled={colors.value.find((color, i) => color.pos != (100 / (colors.value.length - 1)) * i) ? false : true} onClick$={() => {
+          <button class="lum-btn lum-btn-p-1 w-full" disabled={colors.value.find((color, i) => color.pos != (100 / (colors.value.length - 1)) * i) ? false : true} onClick$={() => {
             colors.value = disperseColors(colors.value);
           }}>
             <Ellipsis size={20} /> {t('rgb.colors.disperse@@Disperse')}
@@ -97,10 +97,10 @@ export default component$(({ hidden, id = 'text' }: {
       <div class="flex flex-col gap-2">
         {colors.value.map((color, i) => <div key={`${i}/${colors.value.length}`} class="flex relative gap-2">
           <div class="flex flex-col rounded-md">
-            <button class="lum-btn lum-pad-equal-xs border-b-transparent rounded-b-none" onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
+            <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
               <ChevronUp size={20} />
             </button>
-            <button class="lum-btn lum-pad-equal-xs border-t-transparent rounded-t-none" onClick$={() => colors.value = swapItems(colors.value, i, i + 1)}>
+            <button class="lum-btn p-1 border-t-transparent rounded-t-none" onClick$={() => colors.value = swapItems(colors.value, i, i + 1)}>
               <ChevronDown size={20} />
             </button>
           </div>
@@ -110,7 +110,7 @@ export default component$(({ hidden, id = 'text' }: {
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input w-full lum-pad-xs hover:': true,
+                'lum-input w-full lum-btn-p-1 hover:': true,
               }}
               style={`background: ${color.hex};`}
               value={color.hex}
@@ -136,7 +136,7 @@ export default component$(({ hidden, id = 'text' }: {
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn lum-pad-equal-sm lum-bg-red-700 hover:lum-bg-red-600" disabled={colors.value.length <= 2} onClick$={() => {
+            <button class="lum-btn p-2 lum-bg-red-700 hover:lum-bg-red-600" disabled={colors.value.length <= 2} onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.splice(i, 1);
               colors.value = newColors;

@@ -110,7 +110,7 @@ export default component$(() => {
               searchParams.set(key, String(value));
             });
             return (
-              <div class="lum-card lum-pad-equal-4xl lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
+              <div class="lum-card p-7 lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
                 <div class="flex gap-4 items-center">
                   <div class="flex flex-col gap-2">
                     <p class="text-gray-400 text-sm">
