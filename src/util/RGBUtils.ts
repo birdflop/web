@@ -165,7 +165,8 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
     const gradient = new AnimatedGradient(colors, length, n);
 
     if (animtabStore.type === 4) {
-      const hex = rgbToHex(gradient.next());
+      let hex = rgbToHex(gradient.next());
+      if (rgbStore.lowercase) hex = hex.toLowerCase();
       frameColors.push(hex);
       textFrames.push({ type: 'solid', text, colors: [hex] });
     } else {
@@ -186,7 +187,8 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
           continue;
         }
 
-        const hex = rgbToHex(gradient.next());
+        let hex = rgbToHex(gradient.next());
+        if (rgbStore.lowercase) hex = hex.toLowerCase();
         segmentColors.push(hex);
         frameColors.push(hex);
       }
@@ -507,7 +509,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
       const hex = rgbToHex(gradient.next());
       let hexOutput = rgbStore.format.color;
       for (let n = 1; n <= 6; n++) hexOutput = hexOutput.replace(`$${n}`, hex.charAt(n - 1));
-
+      if (rgbStore.lowercase) hexOutput = hexOutput.toLowerCase();
       let formatCodes = '';
       if (rgbStore.format.color.includes('$f') && rgbStore.format.char) {
         if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
