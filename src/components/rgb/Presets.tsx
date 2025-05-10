@@ -2,16 +2,18 @@ import { $, component$, isBrowser, useContext, useStore, type Signal } from '@bu
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
-import { defaults, loadPreset } from '~/util/PresetUtils';
+import { loadPreset } from '~/util/rgb/presets';
 
-import { setUserData, sortColors } from '~/util/SharedUtils';
-import { Gradient } from '~/util/HexUtils';
-import { rgbToHex, hexToRGB } from '~/util/RGBUtils';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { sortColors } from '~/util/rgb/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
+import { setUserData } from '~/util/SharedUtils';
+import { defaults } from '~/util/rgb/presets/defaults';
 
 export default component$(({ hidden }: {
   hidden: boolean;

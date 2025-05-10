@@ -3,7 +3,7 @@ import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Anchor } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
-import { defaults, v3formats } from '~/util/PresetUtils';
+import { defaults, formats } from '~/util/rgb/presets/defaults';
 
 export const useEndpoints = routeLoader$(async ({ url }) => {
   const data = await fetch(url.origin + '/api/v2');
@@ -92,31 +92,31 @@ export default component$(() => {
             <p class="font-bold text-white">bold</p>
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text bold. $t is where the output text will go. If $t is not included, the output will not show.</p>
-            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.bold}</p>
+            <p class="text-gray-500">example: {formats.find(format => format.color == 'MiniMessage')?.bold}</p>
           </div>
           <div>
             <p class="font-bold text-white">italic</p>
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text italic. $t is where the output text will go. If $t is not included, the output will not show.</p>
-            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.italic}</p>
+            <p class="text-gray-500">example: {formats.find(format => format.color == 'MiniMessage')?.italic}</p>
           </div>
           <div>
             <p class="font-bold text-white">underline</p>
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text underline. $t is where the output text will go. If $t is not included, the output will not show.</p>
-            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.underline}</p>
+            <p class="text-gray-500">example: {formats.find(format => format.color == 'MiniMessage')?.underline}</p>
           </div>
           <div>
             <p class="font-bold text-white">strikethrough</p>
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text strikethrough. $t is where the output text will go. If $t is not included, the output will not show.</p>
-            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
+            <p class="text-gray-500">example: {formats.find(format => format.color == 'MiniMessage')?.strikethrough}</p>
           </div>
           <div>
             <p class="font-bold text-white">obfuscate</p>
             <p>type: string</p>
             <p class="text-gray-400">The code to use for making the text obfuscated. $t is where the output text will go. If $t is not included, the output will not show.</p>
-            <p class="text-gray-500">example: {v3formats.find(format => format.color == 'MiniMessage')?.obfuscate}</p>
+            <p class="text-gray-500">example: {formats.find(format => format.color == 'MiniMessage')?.obfuscate}</p>
           </div>
         </div>
         <div class="lum-card lum-bg-gray-800 transition duration-1000 hover:duration-100 ease-in-out">

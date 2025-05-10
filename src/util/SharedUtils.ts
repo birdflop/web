@@ -2,8 +2,9 @@ import { server$, type Cookie } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
-import { defaults, loadPreset } from './PresetUtils';
+import { loadPreset } from './rgb/presets';
 import { getPrismaClient } from './prisma';
+import { defaults } from './rgb/presets/defaults';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
@@ -101,7 +102,3 @@ export const setUserData = server$(async function(data: {
   console.log(sessionData);
   return sessionData;
 });
-
-export function sortColors(colors: { hex: string, pos: number }[]) {
-  return [...colors].sort((a, b) => a.pos - b.pos);
-}

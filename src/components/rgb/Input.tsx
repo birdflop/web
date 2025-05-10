@@ -2,7 +2,7 @@ import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik'
 import { Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
-import { generateOutput } from '~/util/RGBUtils';
+import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ readOnly }: {

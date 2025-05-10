@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { v3formats } from '~/util/PresetUtils';
+import { formats } from '~/util/rgb/presets/defaults';
 import { Dropdown, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: {
@@ -29,7 +29,7 @@ export default component$(({ hidden }: {
             }
           }
         } values={[
-          ...v3formats.map(format => ({
+          ...formats.map(format => ({
             name: format.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
               .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}${rgbStore.obfuscate ? rgbStore.format.char + 'k' : ''}`)

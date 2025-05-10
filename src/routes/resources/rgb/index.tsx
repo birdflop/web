@@ -1,12 +1,12 @@
 import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Gradient } from '~/util/HexUtils';
-import { defaults } from '~/util/PresetUtils';
-import { rgbToHex, hexToRGB, disperseColors, generateOutput } from '~/util/RGBUtils';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { defaults } from '~/util/rgb/presets/defaults';
+import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
@@ -22,6 +22,7 @@ import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { OpenSectionsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
 export const rgbDefaults = {
   version: defaults.version,

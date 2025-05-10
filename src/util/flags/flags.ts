@@ -1,4 +1,4 @@
-import type { Generate } from '~/util/flags/interface/generate/Generate';
+import type { Generate } from '~/util/flags/types/generate/Generate';
 import type { AvailableConfig } from './config';
 import type { AvailableOperatingSystem } from './environment/operatingSystem';
 import type { AvailableServerType } from './environment/serverType';

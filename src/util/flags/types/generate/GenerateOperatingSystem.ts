@@ -1,4 +1,4 @@
-import type { Generate } from '~/util/flags/interface/generate/Generate';
+import type { Generate } from '~/util/flags/types/generate/Generate';
 
 export interface GenerateOperatingSystemResult {
     'script': string,

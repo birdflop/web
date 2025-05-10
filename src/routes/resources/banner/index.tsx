@@ -13,7 +13,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
-import { swapItems } from '~/util/RGBUtils';
+import { swapItems } from '~/util/rgb/RGBUtils';
 
 const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const img = new Image();

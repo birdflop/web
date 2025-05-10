@@ -1,9 +1,9 @@
 import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { hexToRGB, getBrightness, getRandomColor } from '~/util/RGBUtils';
-import { sortColors } from '~/util/SharedUtils';
+import { sortColors } from '~/util/rgb/RGBUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
+import { getBrightness, getRandomColor, hexToRGB } from '~/util/rgb/Colors';
 
 export default component$(({ id = 'text' }: {
   id?: string;

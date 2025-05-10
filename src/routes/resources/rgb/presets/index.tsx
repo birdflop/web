@@ -5,11 +5,12 @@ import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { Gradient } from '~/util/HexUtils';
-import { defaults, type publishedPreset } from '~/util/PresetUtils';
-import { presets } from '~/util/PresetUtils';
-import { rgbToHex, hexToRGB } from '~/util/RGBUtils';
-import { setUserData, sortColors } from '~/util/SharedUtils';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { defaults, presets } from '~/util/rgb/presets/defaults';
+import { sortColors } from '~/util/rgb/RGBUtils';
+import { setUserData } from '~/util/SharedUtils';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
+import { publishedPreset } from '~/util/rgb/presets';
 
 export default component$(() => {
   const t = inlineTranslate();

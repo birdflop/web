@@ -1,9 +1,10 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { defaults, types } from '~/util/PresetUtils';
-import { AnimationOutput, generateAnimTABFrames, hexToRGB } from '~/util/RGBUtils';
+import { defaults, types } from '~/util/rgb/presets/defaults';
+import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
+import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';

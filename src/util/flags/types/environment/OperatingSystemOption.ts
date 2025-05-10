@@ -1,5 +1,5 @@
-import type { EnvironmentOption } from '~/util/flags/interface/environment/EnvironmentOption';
-import type { GenerateOperatingSystem } from '~/util/flags/interface/generate/GenerateOperatingSystem';
+import type { EnvironmentOption } from '~/util/flags/types/environment/EnvironmentOption';
+import type { GenerateOperatingSystem } from '~/util/flags/types/generate/GenerateOperatingSystem';
 import type { AvailableConfig } from '~/util/flags/config';
 
 interface File {

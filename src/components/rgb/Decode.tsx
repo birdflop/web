@@ -2,9 +2,10 @@ import type { Signal } from '@builder.io/qwik';
 import { $, component$, useContext } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { generateOutput, getSignificantPoints } from '~/util/RGBUtils';
+import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { NotificationContext } from '~/routes/layout';
+import { getSignificantPoints } from '~/util/rgb/Decode';
 
 export default component$(({ threshold, hidden }: {
   threshold: Signal<number>,

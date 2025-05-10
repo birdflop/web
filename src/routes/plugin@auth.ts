@@ -1,5 +1,5 @@
 import type { User } from '@auth/qwik';
-import type { defaults } from '~/util/PresetUtils';
+import type { defaults } from '~/util/rgb/presets/defaults';
 import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';

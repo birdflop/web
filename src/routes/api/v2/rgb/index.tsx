@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { v3formats } from '~/util/PresetUtils';
-import { generateOutput } from '~/util/RGBUtils';
+import { formats } from '~/util/rgb/presets/defaults';
+import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbDefaults } from '~/routes/resources/rgb';
 
 export const onGet: RequestHandler = ({ json, query }) => {
@@ -101,7 +101,7 @@ function getOutput(body: any) {
   // make { color: "MiniMessage" } a valid format
   let format = body?.format;
   if (format && !format.char && (!format.bold || !format.italic || !format.underline || !format.strikethrough)) {
-    format = v3formats.find(f => f.color == format.color) ?? { ...format, char: '&' };
+    format = formats.find(f => f.color == format.color) ?? { ...format, char: '&' };
   }
 
   // make string[] a valid color array

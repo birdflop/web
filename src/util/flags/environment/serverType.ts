@@ -1,5 +1,5 @@
-import type { EnvironmentOptions } from '~/util/flags/interface/environment/EnvironmentOptions';
-import type { ServerTypeOption } from '~/util/flags/interface/environment/ServerTypeOption';
+import type { EnvironmentOptions } from '~/util/flags/types/environment/EnvironmentOptions';
+import type { ServerTypeOption } from '~/util/flags/types/environment/ServerTypeOption';
 import type { AvailableConfig } from '~/util/flags/config';
 import type { AvailableExtraFlags, AvailableFlags } from '~/util/flags/flags';
 
