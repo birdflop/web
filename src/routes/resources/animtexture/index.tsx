@@ -75,7 +75,8 @@ export default component$(() => {
       if (animtextureStore.frames.length == 0) return;
       if (time - lastTime > animtextureStore.frames[i].delay / 20 * 1000) {
         lastTime = time;
-        bounce ? i-- : i++;
+        if (bounce) i--;
+        else i++;
         if (i >= animtextureStore.frames.length) {
           if (animtextureStore.bounce) {
             bounce = !bounce;
@@ -93,7 +94,7 @@ export default component$(() => {
       animctx.clearRect(0, 0, anim.width, anim.height);
       animctx.drawImage(animtextureStore.frames[i].img, 0, 0, animtextureStore.width, animtextureStore.height);
       requestAnimationFrame(animate);
-    }
+    };
     requestAnimationFrame(animate);
   });
 
@@ -104,8 +105,8 @@ export default component$(() => {
           <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl flex items-center gap-3">
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
             <div class={{
-              "lum-loading w-6 h-6 border-3 transition-all": true,
-              "opacity-0": !animtextureStore.loading,
+              'lum-loading w-6 h-6 border-3 transition-all': true,
+              'opacity-0': !animtextureStore.loading,
             }} />
           </h1>
           <h2 class="text-gray-400 mt-1 mb-5">
@@ -162,8 +163,8 @@ export default component$(() => {
               }} />
             </div>
             <div class={{
-              "flex items-end gap-1": true,
-              "col-span-2": animtextureStore.lockdimensions,
+              'flex items-end gap-1': true,
+              'col-span-2': animtextureStore.lockdimensions,
             }}>
               <div class="flex-1 flex flex-col gap-1">
                 <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label>
@@ -173,7 +174,7 @@ export default component$(() => {
                 .png
               </p>
             </div>
-            <NumberInput input min={1} step={16} value={animtextureStore.width} id="width" class={{ "w-full": true }}
+            <NumberInput input min={1} step={16} value={animtextureStore.width} id="width" class={{ 'w-full': true }}
               onIncrement$={() => {
                 animtextureStore.width += 16;
               }}
@@ -197,7 +198,7 @@ export default component$(() => {
               </span>
             </NumberInput>
             {!animtextureStore.lockdimensions &&
-              <NumberInput input min={1} step={16} value={animtextureStore.height} id="height" class={{ "w-full": true }}
+              <NumberInput input min={1} step={16} value={animtextureStore.height} id="height" class={{ 'w-full': true }}
                 onIncrement$={() => {
                   animtextureStore.height += 16;
                 }}
@@ -245,8 +246,8 @@ export default component$(() => {
                   <X size={16}/>
                 </button>
                 <img width={96} height={96} class={{
-                  "rounded-t-md": true,
-                  "rounded-b-md": animtextureStore.syncduration,
+                  'rounded-t-md': true,
+                  'rounded-b-md': animtextureStore.syncduration,
                 }} src={frame.img.src} />
                 {!animtextureStore.syncduration &&
                   <input type="number" value={frame.delay}
@@ -285,7 +286,7 @@ export default component$(() => {
           }
 
           <div id="links" class="flex gap-2 mt-6">
-            <a class="lum-btn" id="pngd" target="_blank" download={animtextureStore.textureName + '.png'}>
+            <a class="lum-btn" id="pngd" target="_blank" download={animtextureStore.textureName + '.png'} href=''>
               <Download size={20} />
               {t('animtexture.downloadPNG@@Download PNG')}
             </a>
@@ -298,15 +299,15 @@ export default component$(() => {
                         index: i,
                         time: frame.delay,
                       })),
-                      ...(animtextureStore.bounce ? 
+                      ...(animtextureStore.bounce ?
                         animtextureStore.frames.map((frame, i) => ({
                           index: animtextureStore.frames.length - i,
                           time: animtextureStore.frames[i].delay,
                         }))
-                        : [])
+                        : []),
                     ],
                   },
-                }, null, 2
+                }, null, 2,
               ))}>
               <Download size={20} />
               {t('animtexture.downloadMCMETA@@Download MCMETA')}
@@ -314,9 +315,9 @@ export default component$(() => {
           </div>
         </div>
         <div class={{
-          "flex flex-col items-center max-w-24 transition-all": true,
-          "opacity-0": animtextureStore.frames.length == 0,
-          }}>
+          'flex flex-col items-center max-w-24 transition-all': true,
+          'opacity-0': animtextureStore.frames.length == 0,
+        }}>
           <p class="mb-2">
             {t('animtexture.animationPreview@@Animation Preview')}
           </p>
