@@ -1,20 +1,8 @@
-import { component$, useStore } from '@builder.io/qwik';
-import { server$, type DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import type { DocumentHead } from '@builder.io/qwik-city';
 
-// @ts-ignore
-import gifFrames from 'gif-frames';
 import { Toggle } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-
-const getGifFrames = server$(async (b64: string | ArrayBuffer, cumulative: boolean) => {
-  const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative });
-  return gifframes.map((frame: any) => {
-    const contentStream = frame.getImage();
-    const imageData = Buffer.from(contentStream._obj).toString('base64');
-    const b64frame = 'data:png;base64,' + imageData;
-    return { img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) };
-  });
-});
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -24,6 +12,16 @@ export default component$(() => {
     textureName: '',
     cumulative: false,
   }, { deep: true });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (document.getElementsByName('gifframes')[0]) return;
+    const script = document.createElement('script');
+    script.src = '/scripts/gif-frames.js';
+    script.defer = true;
+    script.setAttribute('name', 'gifframes');
+    document.head.appendChild(script);
+  });
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
@@ -48,8 +46,15 @@ export default component$(() => {
                 if (!b64) return;
                 const type = b64.toString().split(',')[0].split(';')[0].split(':')[1];
                 if (type == 'image/gif') {
-                  const gifframes = await getGifFrames(b64, animtextureStore.cumulative);
-                  animtextureStore.frames.push(...gifframes);
+                  // @ts-ignore
+                  const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: animtextureStore.cumulative });
+                  gifframes.forEach((frame: any) => {
+                    const contentStream = frame.getImage();
+                    const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
+                    const b64frame = `data:image/png;base64,${imageData}`;
+
+                    animtextureStore.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
+                  });
                   return;
                 }
                 animtextureStore.frames.push({ img: b64, delay: 20 });
