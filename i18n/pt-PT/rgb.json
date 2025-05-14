@@ -54,8 +54,16 @@
       "title": "Formatação",
       "underline": "Sublinhado"
     },
-    "inputText": "Texto de Input",
-    "inputTextSubtitle": "Type here to generate a gradient!",
+    "inputText": {
+      "description": "Type here to generate a gradient!",
+      "preview": {
+        "chat": "Minecraft Chat",
+        "default": "Default",
+        "title": "Preview Style",
+        "typeHere": "<RGBirdflop> Type here!"
+      },
+      "title": "Texto de Input"
+    },
     "options": "Options",
     "output": {
       "copied": "The RGB text has been copied to your clipboard successfully.",
@@ -64,6 +72,7 @@
     },
     "prefixsuffix": "Prefix/Suffix",
     "presets": {
+      "browse": "Browse",
       "copied": "Successfully copied preset to clipboard!",
       "copy": "Copy",
       "import": "Importar",
@@ -76,6 +85,7 @@
         "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
         "title": "Invalid Preset"
       },
+      "load": "Load saved preset",
       "pasteHere": "Paste here",
       "save": "Save",
       "saved": {
@@ -90,11 +100,6 @@
         "get": "Get Url",
         "title": "URL Updated!"
       }
-    },
-    "previewStyle": {
-      "chat": "Minecraft Chat",
-      "default": "Default",
-      "title": "Preview Style"
     }
   }
 }

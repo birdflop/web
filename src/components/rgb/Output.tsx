@@ -52,15 +52,15 @@ export default component$(({ hidden, value }: {
         }
       } values={[
         {
-          name: t('rgb.previewStyle.default@@Default'),
+          name: t('rgb.inputText.preview.default@@Default'),
           value: 'default',
         },
         {
-          name: t('rgb.previewStyle.chat@@Minecraft Chat'),
+          name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
           value: 'chat',
         },
       ]}>
-        {t('rgb.previewStyle.title@@Preview Style')}
+        {t('rgb.inputText.preview.title@@Preview Style')}
       </Dropdown>
     </div>
   );

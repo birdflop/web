@@ -134,16 +134,16 @@ export default component$(({ hidden }: {
               value: JSON.stringify(preset),
             }))
           } display={<span class="flex gap-3 flex-1">
-            <Download size={20} /> Load saved preset
+            <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
           </span>}>
           <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
-            <Globe size={20} /> Browse
+            <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           {t('rgb.presets.saved.presets@@Saved Presets')}
         </Dropdown>
         <div class="grid grid-cols-2 gap-2">
           <Link class="lum-btn" href="/resources/rgb/presets">
-            <Globe size={20} /> Browse
+            <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           <button class="lum-btn" id="save" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
