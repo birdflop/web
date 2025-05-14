@@ -1,10 +1,19 @@
 {
   "animtexture": {
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
     "cumulative": "累积（如果 GIF 帧断裂，请打开此选项）",
     "downloadMCMETA": "下载 MCMETA",
     "downloadPNG": "下载 PNG",
+    "duration": "Duration",
     "framePreview": "Frame Preview",
     "generate": "生成",
-    "textureName": "材质名称"
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
+    "textureName": "材质名称",
+    "width": "Width"
   }
 }

@@ -161,7 +161,7 @@ export default component$(() => {
             <ColorList hidden={openSections.indexOf('colors') == -1} />
             <Accordion sectionName="textshadow">
               <Blend size={26} />
-              {t('rgb.shadow.title@@Text Shadow')}
+              {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
             <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
 

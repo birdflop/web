@@ -90,7 +90,7 @@ export default component$(({ hidden, id = 'text' }: {
           <button class="lum-btn lum-btn-p-1 w-full" disabled={colors.value.find((color, i) => color.pos != (100 / (colors.value.length - 1)) * i) ? false : true} onClick$={() => {
             colors.value = disperseColors(colors.value);
           }}>
-            <Ellipsis size={20} /> {t('rgb.colors.disperse@@Disperse')}
+            <Ellipsis size={20} /> {t('rgb.colors.disperse.title@@Disperse')}
           </button>
         }
       </div>

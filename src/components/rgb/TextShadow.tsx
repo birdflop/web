@@ -23,7 +23,7 @@ export default component$(({ hidden }: {
         </p>
       }
       <Toggle id="syncshadow" checked={rgbStore.syncshadow}
-        label={`${t('rgb.shadow.sync@@Sync with text colors')}`}
+        label={`${t('rgb.colors.shadow.sync@@Sync with text colors')}`}
         onChange$={(e, el) => {
           rgbStore.syncshadow = el.checked;
         }}

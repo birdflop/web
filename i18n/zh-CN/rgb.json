@@ -6,9 +6,27 @@
       "charsPer": "Characters per color",
       "color": "颜色",
       "customFormat": "自定义格式",
-      "disperse": "Disperse",
+      "disperse": {
+        "always": {
+          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
+          "title": "Always Disperse Colors"
+        },
+        "title": "Disperse"
+      },
       "format": "颜色格式",
-      "title": "Colors"
+      "lowercase": {
+        "description": "Turn this on if you want to use lowercase hex codes.",
+        "title": "Lowercase Hex Codes"
+      },
+      "shadow": {
+        "sync": "Sync with text colors",
+        "title": "Text Shadow"
+      },
+      "title": "Colors",
+      "trimSpaces": {
+        "description": "Turn this off if you're using empty underlines / strikethroughs",
+        "title": "Trim colors from spaces"
+      }
     },
     "copied": "Copied to clipboard!",
     "copyFailed": "Failed to copy to clipboard!",
@@ -29,6 +47,7 @@
       "bold": "粗体",
       "character": "格式字符",
       "italic": "斜体",
+      "obfuscate": "Obfuscate",
       "options": "Format Options",
       "placeholders": "占位符",
       "strikethrough": "删除线",

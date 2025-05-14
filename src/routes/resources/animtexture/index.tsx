@@ -114,7 +114,9 @@ export default component$(() => {
 
           <div class="grid grid-cols-3 gap-2 mb-2">
             <div class="flex flex-col gap-1 col-span-3">
-              <label for="fileInput">Select Frame(s) or a GIF</label>
+              <label for="fileInput">
+                {t('animtexture.selectFrames@@Select Frame(s) or GIF')}
+              </label>
               <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
                 const files = Array.from(el.files ?? []);
                 animtextureStore.loading = true;
@@ -316,13 +318,13 @@ export default component$(() => {
           "opacity-0": animtextureStore.frames.length == 0,
           }}>
           <p class="mb-2">
-            Animation Preview
+            {t('animtexture.animationPreview@@Animation Preview')}
           </p>
           <canvas id="anim" class="lum-card w-full p-0" style={{
             imageRendering: 'pixelated',
           }} />
           <p class="my-2">
-            PNG Preview
+            {t('animtexture.pngPreview@@PNG Preview')}
           </p>
           <canvas id="c" class="lum-card w-full p-0" style={{
             imageRendering: 'pixelated',
