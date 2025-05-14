@@ -86,7 +86,9 @@
         "title": "Invalid Preset"
       },
       "load": "Load saved preset",
+      "noResults": "No results found.",
       "pasteHere": "Paste here",
+      "remove": "Remove",
       "save": "Save",
       "saved": {
         "description": "The preset has been saved successfully.",
@@ -94,12 +96,17 @@
         "title": "Preset Saved!",
         "warning": "Please login to save presets permanently."
       },
+      "showSaved": {
+        "description": "Switches between showing all public presets and presets you have saved.",
+        "title": "Show saved presets"
+      },
       "title": "预设",
       "url": {
         "description": "Successfully exported preset to url! (Check the URL bar)",
         "get": "导出为 Url",
         "title": "URL Updated!"
-      }
+      },
+      "use": "Use"
     }
   }
 }

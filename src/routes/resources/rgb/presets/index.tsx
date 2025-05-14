@@ -86,10 +86,10 @@ export default component$(() => {
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={<p class="flex flex-col">
               <span>
-                Show saved presets
+                {t('rgb.presets.showSaved.title@@Show saved presets')}
               </span>
               <span class="text-xs text-gray-400">
-                Switches between showing all public presets and presets you have saved.
+                {t('rgb.presets.showSaved.description@@Switches between showing all public presets and presets you have saved.')}
               </span>
             </p>} />
         </div>
@@ -168,18 +168,20 @@ export default component$(() => {
                     await setUserData({ savedPresets: presetStore.savedPresets });
                   }}>
                     {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
-                      <Trash size={20} /> Remove
+                      <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
                     </> : <>
-                      <Save size={20} /> Save
+                      <Save size={20} /> {t('rgb.presets.save@@Save')}
                     </>}
                   </button>
                   <button class="lum-btn text-sm" onClick$ ={async () => {
                     await navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
-                    <Copy size={20} /> Copy
+                    <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
                   </button>
                   <DropdownRaw id={`use-${i}`} hover
-                    display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
+                    display={<div class="flex items-center gap-3">
+                      <Box size={20} /> {t('rgb.presets.use@@Use')}
+                    </div>}
                     class={{ 'hidden sm:flex px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
                       {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -194,7 +196,10 @@ export default component$(() => {
           })}
           {filteredPresets.length === 0 && (
             <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
-              <p class="text-center text-gray-400">No results found. Stay tuned for a way to submit your own presets!</p>
+              <p class="text-center text-gray-400">
+                {t('rgb.presets.noResults@@No results found.')}
+                Stay tuned for a way to submit your own presets!
+              </p>
             </div>
           )}
         </div>

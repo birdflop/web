@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "Comprimento do Gradiente",
-    "outputFormat": "Formato de saída",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "Formato de saída"
+    },
     "yamlInput": "Entrada YAML"
   }
 }
