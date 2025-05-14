@@ -2,18 +2,22 @@ import type { Signal } from '@builder.io/qwik';
 import { $, component$, useContext } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { generateOutput, getSignificantPoints } from '~/util/RGBUtils';
+import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
+import { NotificationContext } from '~/routes/layout';
+import { getSignificantPoints } from '~/util/rgb/Decode';
 
 export default component$(({ threshold, hidden }: {
   threshold: Signal<number>,
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
+  const t$ = $((string: string) => inlineTranslate()(string));
+  const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
 
-  const decodeText = $((rgbtext: string, threshold: number) => {
-    const pattern = /(?:[&§]x((?:[&§][0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))([^§&#]*)/;
+  const decodeText = $(async (rgbtext: string, threshold: number) => {
+    const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
     const spans = rgbtext.match(new RegExp(pattern, 'g'));
     if (!spans) return;
     let color = '#ffffff';
@@ -21,7 +25,7 @@ export default component$(({ threshold, hidden }: {
       const result = string.match(pattern);
       if (!result) return { hex: color, pos: 0 };
       color = result[1]
-        ? `#${result[1].replace(/&/g, '')}`
+        ? `#${result[1].replace(/(?:[&§]|\\u00a7)/g, '')}`
         : result[2]
           ? `#${result[2]}`
           : result[0];
@@ -40,6 +44,16 @@ export default component$(({ threshold, hidden }: {
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
+    const id = Math.random().toString(36).substring(2, 15);
+    notifications.push({
+      id,
+      title: await t$('rgb.decode.decoded.title@@RGB Text Decoded!'),
+      description: await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'),
+      bgColor: 'lum-bg-green-900/50',
+    });
+    setTimeout(() => {
+      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+    }, 2000);
   });
 
   return (
@@ -55,27 +69,27 @@ export default component$(({ threshold, hidden }: {
       </label>
       <textarea id="decode" class={{
         'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-      }} placeholder={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)}
-      onInput$={(e, el) => {
+      }} placeholder={generateOutput(rgbStore)}
+      onInput$={async (e, el) => {
         const threshold = document.getElementById('threshold') as HTMLInputElement;
-        decodeText(el.value, Number(threshold.value));
+        await decodeText(el.value, Number(threshold.value));
       }}
       />
       <NumberInput input value={threshold.value} id="threshold" class={{ 'w-full': true }}
-        onInput$={(e, el) => {
+        onInput$={async (e, el) => {
           threshold.value = Number(el.value);
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
-        onIncrement$={() => {
+        onIncrement$={async () => {
           threshold.value = threshold.value + 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
-        onDecrement$={() => {
+        onDecrement$={async () => {
           threshold.value = threshold.value - 10;
           const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) decodeText(decode.value, threshold.value);
+          if (decode.value) await decodeText(decode.value, threshold.value);
         }}
       >
         {t('rgb.decode.threshold.title@@Threshold')}

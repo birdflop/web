@@ -1,15 +1,15 @@
-import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Gradient } from '~/util/HexUtils';
-import { defaults } from '~/util/PresetUtils';
-import { convertToHex, convertToRGB, disperseColors, generateOutput, hexToHSL } from '~/util/RGBUtils';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { defaults } from '~/util/rgb/presets/defaults';
+import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies, sortColors } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/SharedUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-import { Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -21,10 +21,13 @@ import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { OpenSectionsContext } from '~/routes/layout';
+import TextShadow from '~/components/rgb/TextShadow';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
 export const rgbDefaults = {
   version: defaults.version,
   colors: defaults.colors,
+  shadowcolors: defaults.shadowcolors,
   colorlength: defaults.colorlength,
   text: defaults.text,
   format: defaults.format,
@@ -32,15 +35,18 @@ export const rgbDefaults = {
   prefixsuffix: defaults.prefixsuffix,
   trimspaces: defaults.trimspaces,
   disperse: defaults.disperse,
+  lowercase: defaults.lowercase,
+  syncshadow: defaults.syncshadow,
   bold: defaults.bold,
   italic: defaults.italic,
   underline: defaults.underline,
   strikethrough: defaults.strikethrough,
+  obfuscate: defaults.obfuscate,
   previewStyle: defaults.previewStyle,
 };
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
@@ -60,9 +66,37 @@ export default component$(() => {
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', rgbStore);
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
+    if (rgbStore.syncshadow) {
+      rgbStore.shadowcolors = rgbStore.colors.map(color => {
+        const shadowRGB = hexToRGB(color.hex).map(c => c * 0.25);
+        const shadowHex = `#${rgbToHex(shadowRGB)}`;
+        return {
+          hex: shadowHex,
+          pos: color.pos,
+        };
+      });
+    }
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       track(() => rgbStore[key]);
     });
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    if (!isBrowser && !rgbStore.obfuscate) return;
+    function obfuscate() {
+      const text = document.querySelectorAll('span.obfuscate');
+      text.forEach((el, i) => {
+        if (!rgbStore.obfuscate) {
+          el.textContent = rgbStore.text[i];
+          return;
+        }
+        el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
+      });
+      requestAnimationFrame(obfuscate);
+    }
+    obfuscate();
+    track(() => rgbStore.obfuscate);
   });
 
   return (
@@ -71,7 +105,7 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </h2>
 
@@ -79,12 +113,15 @@ export default component$(() => {
           {(() => {
             if (!rgbStore.text) return '\u00A0';
 
-            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+            const shadowColors = sortColors(rgbStore.shadowcolors).map((color) =>  ({ rgb: hexToRGB(color.hex), pos: color.pos }));
             if (colors.length < 2) return rgbStore.text;
 
             const gradient = new Gradient(colors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
+            const shadowGradient = new Gradient(shadowColors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
 
             let hex = '';
+            let shadowHex = '';
             const segments = [];
             let index = 0;
             const textArray = Array.from(rgbStore.text);
@@ -94,18 +131,18 @@ export default component$(() => {
             }
             return segments.map((segment, i) => {
               const rgb = gradient.next();
-              hex = convertToHex(rgb);
-              const shadow = hexToHSL(hex);
-              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-              shadow.l = Math.round(shadow.l * 0.2);
+              const rgbShadow = shadowGradient.next();
+              hex = rgbToHex(rgb);
+              shadowHex = rgbToHex(rgbShadow);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
               return <span key={`char${i}`} style={{
                 color: `#${hex};`,
-                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                textShadow: `${shadowLength} 0 #${shadowHex};`,
               }} class={{
                 'underline': rgbStore.underline,
                 'strikethrough': rgbStore.strikethrough,
                 'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
+                'obfuscate': rgbStore.obfuscate,
               }}>
                 {segment.replace(/ /g, '\u00A0')}
               </span>;
@@ -122,6 +159,12 @@ export default component$(() => {
               {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={openSections.indexOf('colors') == -1} />
+            <Accordion sectionName="textshadow">
+              <Blend size={26} />
+              {t('rgb.shadow.title@@Text Shadow')}
+            </Accordion>
+            <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
+
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
             <Accordion sectionName="output" alwaysOpen>
@@ -129,7 +172,7 @@ export default component$(() => {
               {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
-              value={generateOutput(rgbStore.text, rgbStore.colors, rgbStore.format, rgbStore.prefixsuffix, rgbStore.trimspaces, rgbStore.colorlength, rgbStore.bold, rgbStore.italic, rgbStore.underline, rgbStore.strikethrough)} />
+              value={generateOutput(rgbStore)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />
@@ -146,8 +189,12 @@ export default component$(() => {
             <Accordion sectionName="decode">
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue-900/50 text-xs py-1 px-2 rounded-md">
+                experimental
+              </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
+
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">

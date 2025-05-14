@@ -13,10 +13,10 @@ export default component$(() => {
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.paperTimings.title@@Paper Timings')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
         </h2>
-        <h2 class="text-gray-50 sm:text-xl">
+        <h2 class="text-gray-400 sm:text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br />
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
         </h2>

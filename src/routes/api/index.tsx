@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 
-export const onGet: RequestHandler = async ({ json }) => {
+export const onGet: RequestHandler = ({ json }) => {
   throw json(200, {
     endpoints: {
       '/api/v2': {

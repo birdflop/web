@@ -1,16 +1,19 @@
-import { $, component$, isBrowser, useContext, useStore } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useStore, type Signal } from '@builder.io/qwik';
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Dropdown } from '@luminescent/ui-qwik';
-import { defaults, loadPreset } from '~/util/PresetUtils';
+import { loadPreset } from '~/util/rgb/presets';
 
-import { setUserData, sortColors } from '~/util/SharedUtils';
-import { Gradient } from '~/util/HexUtils';
-import { convertToHex, convertToRGB, hexToHSL } from '~/util/RGBUtils';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { sortColors } from '~/util/rgb/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
+import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
+import { setUserData } from '~/util/SharedUtils';
+import { defaults } from '~/util/rgb/presets/defaults';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -20,7 +23,7 @@ export default component$(({ hidden }: {
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const loc = useLocation();
-  const session = useSession();
+  const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);
@@ -38,7 +41,7 @@ export default component$(({ hidden }: {
       };
     } catch (err) {
       notification.title = await t$('rgb.presets.invalid.title@@Invalid Preset');
-      notification.description = `Error: ${err}\n${t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
+      notification.description = `Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
       notification.bgColor = 'lum-bg-red-900/50';
       notifications.push(notification);
     }
@@ -53,7 +56,9 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const presetStore = useStore([] as Partial<typeof defaults>[]);
+  const presetStore = useStore([
+    ...(session.value?.user?.savedPresets ?? []),
+  ] as Partial<typeof defaults>[]);
 
   return (
     <div class={{
@@ -62,28 +67,28 @@ export default component$(({ hidden }: {
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
       <div class="flex flex-col gap-2"
-        onClick$={async () => {
+        onClick$={() => {
           if (presetStore.length != 0) return;
-          let savedPresets = localStorage.getItem('savedPresets');
+          let savedPresets: Partial<typeof defaults>[] = [];
           try {
-            if (!savedPresets) {
+            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]') as Partial<typeof defaults>[];
+            savedPresets = savedPresets.concat(localStoragePresets);
+            if (!localStoragePresets) {
               // presets possibly stored in cookies
               const cookie: { [key: string]: string; } = {};
               document.cookie.split(/\s*;\s*/).forEach(function (pair) {
                 const pairsplit = pair.split(/\s*=\s*/);
                 cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
               });
-              if (!cookie['presets']) return;
-              const cookieSavedPresets = decodeURIComponent(cookie['presets']);
-              savedPresets = JSON.parse(cookieSavedPresets)?.savedPresets;
-              if (!savedPresets) return;
-              // remove cookie
-              document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-              // save to localStorage
-              localStorage.setItem('savedPresets', cookieSavedPresets);
+              if (cookie['presets']) {
+                const cookiePresets = decodeURIComponent(cookie['presets']);
+                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets as Partial<typeof defaults>[]);
+                // remove cookie
+                document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+              }
             }
-            const parsed = JSON.parse(savedPresets);
-            presetStore.push(...parsed);
+            presetStore.push(...savedPresets);
+            localStorage.setItem('savedPresets', JSON.stringify(presetStore));
           } catch (err) {
             console.error('Error parsing saved presets', err);
           }
@@ -97,7 +102,7 @@ export default component$(({ hidden }: {
               }}>
                 {(() => {
                   if (!preset.text) preset.text = 'Birdflop';
-                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
+                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
                   if (colors.length < 2) return preset.text;
 
                   const gradient = new Gradient(colors, Math.ceil(preset.text.length / (preset.colorlength || 1)));
@@ -112,13 +117,10 @@ export default component$(({ hidden }: {
                   }
                   return segments.map((segment, i) => {
                     const rgb = gradient.next();
-                    hex = convertToHex(rgb);
-                    const shadow = hexToHSL(hex);
-                    if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-                    shadow.l = Math.round(shadow.l * 0.2);
+                    hex = rgbToHex(rgb);
                     return <span key={`char${i}`} style={{
                       color: `#${hex};`,
-                      textShadow: `1px 1px 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                      textShadow: `1px 1px 0 #${hex};`,
                     }} class={{
                       'underline': preset.underline,
                       'strikethrough': preset.strikethrough,
@@ -148,11 +150,12 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
+            if (preset.syncshadow) delete preset.shadowcolors;
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
             }
             if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore));
-            setUserData({ savedPresets: presetStore });
+            await setUserData({ savedPresets: presetStore });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
@@ -179,11 +182,12 @@ export default component$(({ hidden }: {
             onInput$={async (e, el) => loadPresetJSON(el.value)}/>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <button class="lum-btn lum-pad-sm" id="export" onClick$={async () => {
+          <button class="lum-btn" id="export" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
+            if (preset.syncshadow) delete preset.shadowcolors;
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
               id,
@@ -201,18 +205,18 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <Copy size={24} /> {t('rgb.presets.copy@@Copy')}
+            <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
           </button>
-          <button class="lum-btn lum-pad-sm" id="createurl" onClick$={async () => {
+          <button class="lum-btn" id="createurl" onClick$={async () => {
             const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
             const url = new URL(base_url);
             const params: Partial<typeof defaults> = { ...rgbStore };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-              if (key == 'format' || key == 'colors') {
+              if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
                 value = JSON.stringify(value);
                 if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
               }
-              if (value === defaults[key as keyof typeof defaults]) return;
+              if (value === defaults[key]) return;
               url.searchParams.set(key, String(value));
             });
             window.history.pushState({}, '', url.href);
@@ -227,7 +231,7 @@ export default component$(({ hidden }: {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
           }}>
-            <LinkIcon size={24} /> {t('rgb.presets.url.get@@Get Url')}
+            <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}
           </button>
         </div>
       </div>

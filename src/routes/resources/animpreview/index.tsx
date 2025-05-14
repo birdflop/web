@@ -1,12 +1,15 @@
-import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContextProvider, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { getCookies, setCookies } from '~/util/SharedUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
+import Input from '~/components/rgb/Input';
+import { rgbDefaults, rgbStoreContext } from '../rgb';
+import { Dropdown } from '@luminescent/ui-qwik';
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animpreview', url.searchParams);
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'animpreview', url.searchParams);
 });
 
 const minecraftColors = {
@@ -34,7 +37,6 @@ export default component$(() => {
   const cookies = useCookies().value;
 
   const animprevStore = useStore({
-    text: 'Birdflop',
     speed: 50,
     frames: [] as string[],
     frame: 1,
@@ -57,6 +59,12 @@ export default component$(() => {
     - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`,
     ...cookies,
   }, { deep: true });
+
+  const rgbStore = useStore({
+    ...rgbDefaults,
+    text: '',
+  }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -89,20 +97,43 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-10 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
-        <h2 class="text-gray-50 sm:text-xl mb-12">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </h2>
 
-        <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
-          {animprevStore.frames[animprevStore.frame]}
-        </p>
+        <div class="flex flex-col gap-1">
+          <label for="animation">
+            {t('animtab.yamlInput@@YAML Input')}
+          </label>
+          <textarea id="animation"
+            class={{ 'lum-input h-96 font-mono': true }}
+            value={animprevStore.yaml}
+            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
+          />
+        </div>
 
-        <h1 class={'font-mc text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
+        <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
+          (e, el) => {
+            rgbStore.previewStyle = el.value;
+          }
+        } values={[
+          {
+            name: t('rgb.previewStyle.default@@Default'),
+            value: 'default',
+          },
+          {
+            name: t('rgb.previewStyle.chat@@Minecraft Chat'),
+            value: 'chat',
+          },
+        ]}>
+          {t('rgb.previewStyle.title@@Preview Style')}
+        </Dropdown>
+        <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
@@ -130,18 +161,11 @@ export default component$(() => {
               );
             });
           })()}
-        </h1>
+        </Input>
 
-        <div class="flex flex-col gap-1">
-          <label for="animation">
-            {t('animtab.yamlInput@@YAML Input')}
-          </label>
-          <textarea id="animation"
-            class={{ 'lum-input h-96 font-mono': true }}
-            value={animprevStore.yaml}
-            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
-          />
-        </div>
+        <p class="lum-bg-gray-800 font-mono lum-btn-p-2 rounded-md">
+          {animprevStore.frames[animprevStore.frame]}
+        </p>
       </div>
     </section>
   );

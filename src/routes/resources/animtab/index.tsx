@@ -1,9 +1,10 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { defaults, types } from '~/util/PresetUtils';
-import { AnimationOutput, getAnimFrames, hexToHSL } from '~/util/RGBUtils';
+import { defaults, types } from '~/util/rgb/presets/defaults';
+import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
+import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/SharedUtils';
@@ -31,12 +32,12 @@ export const animTABDefaults = {
   outputFormat: defaults.outputFormat,
 };
 
-export const useRGBCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+export const useRGBCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
 });
 
-export const useAnimTABCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
 });
 
 export default component$(() => {
@@ -74,7 +75,7 @@ export default component$(() => {
     (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
       track(() => animtabStore[key]);
     });
-    const { frames: newFrames } = getAnimFrames({ ...rgbStore, ...animtabStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' });
+    const { frames: newFrames } = generateAnimTABFrames({ ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' }, animtabStore);
     if (animtabStore.type == 1) {
       frames.list = newFrames.reverse();
     }
@@ -88,7 +89,7 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
       const deltaTime = (currentTime - lastTime);
@@ -101,13 +102,31 @@ export default component$(() => {
     setFrame(performance.now());
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    if (!isBrowser && !rgbStore.obfuscate) return;
+    function obfuscate() {
+      const text = document.querySelectorAll('span.obfuscate');
+      text.forEach((el, i) => {
+        if (!rgbStore.obfuscate) {
+          el.textContent = rgbStore.text[i];
+          return;
+        }
+        el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
+      });
+      requestAnimationFrame(obfuscate);
+    }
+    obfuscate();
+    track(() => rgbStore.obfuscate);
+  });
+
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-50 mt-1 mb-5">
+        <h2 class="text-gray-400 mt-1 mb-5">
           {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
         </h2>
 
@@ -122,18 +141,18 @@ export default component$(() => {
             let i = 0;
             return segments.map((segment) => {
               const color = `#${colors[i]}`;
-              const shadow = hexToHSL(color);
-              if (shadow.l > 50) shadow.s = shadow.s * 0.2;
-              shadow.l = Math.round(shadow.l * 0.2);
               const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
-              i = rgbStore.trimspaces ? segment[0] == ' ' ? i : i + 1 : i + 1;
+              const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
+              const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+              i = rgbStore.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
               return <span key={`char${i}`} style={{
                 color,
-                textShadow: `${shadowLength} 0 hsl(${shadow.h}deg ${shadow.s}% ${shadow.l}%);`,
+                textShadow: `${shadowLength} 0 ${shadowColor};`,
               }} class={{
                 'underline': rgbStore.underline,
                 'strikethrough': rgbStore.strikethrough,
                 'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
+                'obfuscate': rgbStore.obfuscate,
               }}>
                 {segment[0].replace(/ /g, '\u00A0')}
               </span>;
@@ -165,7 +184,7 @@ export default component$(() => {
               {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={openSections.indexOf('output') == -1}
-              value={AnimationOutput({ ...rgbStore, ...animtabStore })} />
+              value={AnimationOutput(rgbStore, animtabStore)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />
@@ -206,6 +225,9 @@ export default component$(() => {
             <Accordion sectionName="decode">
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue-900/50 text-xs py-1 px-2 rounded-md">
+                experimental
+              </span>
             </Accordion>
             <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
           </div>

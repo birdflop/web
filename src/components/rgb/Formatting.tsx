@@ -9,9 +9,9 @@ export default component$(({ hidden }: {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
-  const getFormatLabel = (formatType: 'bold' | 'italic' | 'underline' | 'strikethrough') => {
+  const getFormatLabel = (formatType: 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate') => {
     if (rgbStore.format.char) {
-      const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm' };
+      const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm', obfuscate: 'k' };
       return ` - ${rgbStore.format.char}${formatMap[formatType]}`;
     }
 
@@ -41,6 +41,9 @@ export default component$(({ hidden }: {
       <Toggle id="strikethrough" checked={rgbStore.strikethrough}
         onChange$={(e, el) => { rgbStore.strikethrough = el.checked; }}
         label={`${t('rgb.formatting.strikethrough@@Strikethrough')}${getFormatLabel('strikethrough')}`} />
+      <Toggle id="obfuscate" checked={rgbStore.obfuscate}
+        onChange$={(e, el) => { rgbStore.obfuscate = el.checked; }}
+        label={`${t('rgb.formatting.obfuscate@@Obfuscate')}${getFormatLabel('obfuscate')}`} />
     </div>
   );
 });

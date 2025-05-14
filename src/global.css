@@ -1,7 +1,12 @@
 @import "tailwindcss";
-@plugin "@luminescent/ui";
+
 @plugin "@anuragroy/tailwindcss-animate";
-@config "../tailwind.config.js";
+
+@import "@luminescent/ui/css";
+@plugin "@luminescent/ui";
+
+@config "@luminescent/ui-qwik/config";
+@source "../node_modules/@luminescent/ui-qwik";
 
 /* Pulled straight from minecraft.net */
 @font-face {

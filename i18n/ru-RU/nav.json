@@ -2,7 +2,10 @@
   "nav": {
     "hosting": {
       "billing": "Billing",
-      "nodeStats": "Node Stats",
+      "nodeStats": {
+        "description": "Check the status of Birdflop's server nodes.",
+        "title": "Node Stats"
+      },
       "panel": "Panel",
       "plans": "Plans",
       "title": "Hosting"
@@ -17,6 +20,10 @@
         "description": "Легко объединить текстуры для анимации ресурс пака",
         "title": "Анимация текстур"
       },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
       "flags": {
         "description": "Простой генератор скриптов для запуска серверов Minecraft с оптимальными флагами.",
         "title": "Генератор кода запуска сервера"
@@ -28,6 +35,10 @@
       "hexGradientAPIDocs": {
         "description": "Documentation for the RGBirdflop API",
         "title": "RGBirdflop API Docs"
+      },
+      "hexGradientPresets": {
+        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
+        "title": "RGBirdflop Presets"
       },
       "more": "More Resources",
       "paperTimings": {

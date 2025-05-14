@@ -33,11 +33,15 @@ export default component$(({ hidden }: {
           <label for="format-underline">
             {t('rgb.formatting.underline@@Underline')}
           </label>
-          <input class="lum-input" id="format-underline" value={rgbStore.format.underline} placeholder="<underline>$t</underline>" onInput$={(e, el) => { rgbStore.format.underline = el.value; }}/>
+          <input class="lum-input" id="format-underline" value={rgbStore.format.underline} placeholder="<underlined>$t</underlined>" onInput$={(e, el) => { rgbStore.format.underline = el.value; }}/>
           <label for="format-strikethrough">
             {t('rgb.formatting.strikethrough@@Strikethrough')}
           </label>
           <input class="lum-input" id="format-strikethrough" value={rgbStore.format.strikethrough} placeholder="<strikethrough>$t</strikethrough>" onInput$={(e, el) => { rgbStore.format.strikethrough = el.value; }}/>
+          <label for="format-obfuscate">
+            {t('rgb.formatting.obfuscate@@Obfuscate')}
+          </label>
+          <input class="lum-input" id="format-obfuscate" value={rgbStore.format.obfuscate} placeholder="<obfuscated>$t</obfuscated>" onInput$={(e, el) => { rgbStore.format.obfuscate = el.value; }}/>
           <div class="py-3 font-mono">
             <p>{t('rgb.formatting.placeholders@@Placeholders')}</p>
             <p>$t = Output Text</p>

@@ -2,26 +2,18 @@ import { server$, type Cookie } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { rgbDefaults } from '~/routes/resources/rgb';
 import { animTABDefaults } from '~/routes/resources/animtab';
-import { defaults, loadPreset } from './PresetUtils';
+import { loadPreset } from './rgb/presets';
 import { getPrismaClient } from './prisma';
+import { defaults } from './rgb/presets/defaults';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
-function deepclone(obj: any) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
 export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchParams) {
-  let json = deepclone(defaults);
+  let json: { [key: string]: any } = {};
   try {
     const cookieVal = cookie.get(preset)?.value;
-    if (cookieVal) {
-      json = JSON.parse(decodeURIComponent(cookieVal));  // Decode the cookie value
-    } else if (preset == 'rgb' || preset == 'animtab') {
-      json = preset == 'rgb' ? deepclone(rgbDefaults) : deepclone(animTABDefaults);
-    } else {
-      json = {};
-    }
+    // Decode the cookie value
+    if (cookieVal) json = JSON.parse(decodeURIComponent(cookieVal));
   } catch (e) {
     console.error(e);
   }
@@ -34,7 +26,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
         || (preset == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
           delete params[key];
         }
-        if (key == 'format' || key == 'colors') params[key] = JSON.parse(params[key]);
+        if (key == 'format' || key == 'colors' || key == 'shadowcolors') params[key] = JSON.parse(params[key]);
         else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
         else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
       } catch (e) {
@@ -47,16 +39,14 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
   // migrate
   let migrated = false;
   if (preset == 'rgb' || preset == 'animtab') {
-    const newrgbDefaults = deepclone(rgbDefaults);
-    const newanimTABDefaults = deepclone(animTABDefaults);
-    const names = preset == 'rgb' ? Object.keys(newrgbDefaults) : Object.keys(newanimTABDefaults);
+    const names = preset == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
     if (preset == 'animtab') names.push('version');
     names.forEach(name => {
       const cookieValue = cookie.get(name)?.value;
       if (!cookieValue) return;
       console.log('Migrating', name);
       try {
-        if (name == 'colors') json[name] = cookieValue.split(',');
+        if (name == 'colors' || name == 'shadowcolors') json[name] = cookieValue.split(',');
         else if (name == 'format') json[name] = JSON.parse(cookieValue);
         else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
         else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);
@@ -87,10 +77,10 @@ export function setCookies(name: names, json: { [key: string]: any }) {
   if (cookie.optout === 'true') return;
 
   const cookieValue = { ...json };
-  const test = deepclone(defaults);
   Object.keys(cookieValue).forEach(key => {
-    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(test[key as keyof typeof defaults])) delete cookieValue[key];
+    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete cookieValue[key];
   });
+  if (cookieValue.syncshadow) delete cookieValue.shadowcolors;
 
   const existingCookie = cookie[name];
   const encodedValue = encodeURIComponent(JSON.stringify(cookieValue));
@@ -112,7 +102,3 @@ export const setUserData = server$(async function(data: {
   console.log(sessionData);
   return sessionData;
 });
-
-export function sortColors(colors: { hex: string, pos: number }[]) {
-  return [...colors].sort((a, b) => a.pos - b.pos);
-}
