@@ -26,7 +26,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
         || (preset == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
           delete params[key];
         }
-        if (key == 'format' || key == 'colors') params[key] = JSON.parse(params[key]);
+        if (key == 'format' || key == 'colors' || key == 'shadowcolors') params[key] = JSON.parse(params[key]);
         else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
         else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
       } catch (e) {
@@ -46,7 +46,7 @@ export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchP
       if (!cookieValue) return;
       console.log('Migrating', name);
       try {
-        if (name == 'colors') json[name] = cookieValue.split(',');
+        if (name == 'colors' || name == 'shadowcolors') json[name] = cookieValue.split(',');
         else if (name == 'format') json[name] = JSON.parse(cookieValue);
         else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
         else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);

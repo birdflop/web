@@ -212,7 +212,7 @@ export default component$(({ hidden }: {
             const url = new URL(base_url);
             const params: Partial<typeof defaults> = { ...rgbStore };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-              if (key == 'format' || key == 'colors') {
+              if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
                 value = JSON.stringify(value);
                 if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
               }

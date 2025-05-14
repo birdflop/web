@@ -107,7 +107,7 @@ export default component$(() => {
             const searchParams = new URLSearchParams();
             const params = { ...p.preset };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-              if (key == 'format' || key == 'colors') value = JSON.stringify(value);
+              if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
               searchParams.set(key, String(value));
             });
             return (
