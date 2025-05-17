@@ -12,7 +12,7 @@ import { Link, useLocation } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
-import { setUserData } from '~/util/SharedUtils';
+import { setUserData } from '~/util/dataUtils';
 import { defaults } from '~/util/rgb/presets/defaults';
 
 export default component$(({ hidden }: {
