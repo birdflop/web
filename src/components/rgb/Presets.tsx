@@ -90,7 +90,17 @@ export default component$(({ hidden }: {
             presetStore.push(...savedPresets);
             localStorage.setItem('savedPresets', JSON.stringify(presetStore));
           } catch (err) {
-            console.error('Error parsing saved presets', err);
+            const id = Math.random().toString(36).substring(2, 15);
+            const notification = {
+              id,
+              title: 'Error parsing saved presets',
+              description: `Error: ${err}`,
+              bgColor: 'lum-bg-red-900/50',
+            };
+            notifications.push(notification);
+            setTimeout(() => {
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+            }, 2000);
           }
         }}>
         <Dropdown id="saved-presets" class={{ 'w-full': true }}

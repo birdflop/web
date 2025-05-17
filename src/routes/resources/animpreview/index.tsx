@@ -1,4 +1,4 @@
-import { component$, useContextProvider, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { getCookies, setCookies } from '~/util/SharedUtils';
@@ -7,6 +7,7 @@ import yaml from 'yaml';
 import Input from '~/components/rgb/Input';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
 import { Dropdown } from '@luminescent/ui-qwik';
+import { NotificationContext } from '~/routes/layout';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'animpreview', url.searchParams);
@@ -35,6 +36,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
+  const notifications = useContext(NotificationContext);
 
   const animprevStore = useStore({
     speed: 50,
@@ -87,8 +89,18 @@ export default component$(() => {
     try {
       json = yaml.parse(animprevStore.yaml);
     }
-    catch (e) {
-      console.error(e);
+    catch (err) {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error setting cookies',
+        description: `Error: ${err}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+      setTimeout(() => {
+        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+      }, 2000);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
