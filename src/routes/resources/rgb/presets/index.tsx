@@ -1,52 +1,89 @@
-import { component$, useStore } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { component$, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
-import { CopyOutline, CubeOutline, SaveOutline, TrashBinOutline } from 'qwik-ionicons';
+import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { Gradient } from '~/components/util/HexUtils';
-import type { defaults } from '~/components/util/PresetUtils';
-import { presets } from '~/components/util/PresetUtils';
-import { convertToHex, convertToRGB } from '~/components/util/RGBUtils';
-import { getCookies, setCookies, sortColors } from '~/components/util/SharedUtils';
-
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'presets', url.searchParams);
-});
+import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
+import { Gradient } from '~/util/rgb/HexUtils';
+import { defaults, presets } from '~/util/rgb/presets/defaults';
+import { sortColors } from '~/util/rgb/RGBUtils';
+import { setUserData } from '~/util/SharedUtils';
+import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
+import { publishedPreset } from '~/util/rgb/presets';
 
 export default component$(() => {
   const t = inlineTranslate();
 
-  const cookies = useCookies().value;
-  const store = useStore({
+  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const presetStore = useStore({
     searchTerm: '',
-    savedPresets: [] as Partial<typeof defaults>[],
     showSaved: false,
-    ...cookies,
+    savedPresets: (session.value?.user?.savedPresets ?? []),
   });
 
-  const filteredPresets = (store.showSaved && store.savedPresets.length > 0 ? store.savedPresets : presets).filter((preset) =>
-    (preset.name ?? 'Untitled').toLowerCase().includes(store.searchTerm.toLowerCase()),
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (presetStore.savedPresets.length != 0) return;
+    let savedPresets: Partial<typeof defaults>[] = [];
+    try {
+      const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
+      savedPresets = savedPresets.concat(localStoragePresets);
+      if (!localStoragePresets) {
+        // presets possibly stored in cookies
+        const cookie: { [key: string]: string; } = {};
+        document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+          const pairsplit = pair.split(/\s*=\s*/);
+          cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+        });
+        if (cookie['presets']) {
+          const cookiePresets = decodeURIComponent(cookie['presets']);
+          savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
+          // remove cookie
+          document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
+      }
+      presetStore.savedPresets.push(...savedPresets);
+      localStorage.setItem('savedPresets', JSON.stringify(presetStore));
+    } catch (err) {
+      console.error('Error parsing saved presets', err);
+    }
+  });
+
+  const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
+    name: preset.text ?? 'Birdflop',
+    author: 'Personal',
+    preset,
+  }));
+
+  const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
+    index === self.findIndex((p) => {
+      if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
+
+      if (!p.name || p.name === 'Birdflop') p.name = preset.name;
+      if (!p.author || p.author === 'Personal') p.author = preset.author;
+      return true;
+    }),
+  );
+  const filteredPresets = allPresets.filter((preset) =>
+    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="my-5 min-h-[60px] w-full">
         <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('gradient.title@@RGBirdflop')} Presets
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
-        <h2 class="text-gray-50 mt-2">
-          Welcome to the one-stop shop for presets!
-        </h2>
-        <h2 class="text-gray-400 mb-1">
-          Here you can find and save, copy, or directly use presets for use on RGBirdflop. Stay tuned for a way to submit your own presets!
+        <h2 class="text-gray-400 mt-1 mb-5">
+          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
         </h2>
         <div class={{
-          'opacity-50': store.savedPresets.length === 0,
+          'opacity-50': presetStore.savedPresets.length === 0,
         }}>
-          <Toggle id="advanced" disabled={store.savedPresets.length === 0}
-            checked={store.showSaved && store.savedPresets.length > 0}
-            onChange$={(e, el) => store.showSaved = el.checked}
+          <Toggle id="showsavedpresets" disabled={presetStore.savedPresets.length === 0}
+            checked={presetStore.showSaved && presetStore.savedPresets.length > 0}
+            onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={<p class="flex flex-col">
               <span>
                 Show saved presets
@@ -61,73 +98,94 @@ export default component$(() => {
           class="lum-input w-full my-4"
           id="search-input"
           placeholder="Search for a preset..."
-          value={store.searchTerm}
-          onInput$={(e, el) => store.searchTerm = el.value}
+          value={presetStore.searchTerm}
+          onInput$={(e, el) => presetStore.searchTerm = el.value}
         />
 
         <div class="grid grid-cols-2 gap-2">
-          {filteredPresets.map((preset, i) => {
+          {filteredPresets.map((p, i) => {
             const searchParams = new URLSearchParams();
-            const params: Partial<typeof defaults> = { ...preset };
+            const params = { ...p.preset };
             (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-              if (key == 'format' || key == 'colors') value = JSON.stringify(value);
+              if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
               searchParams.set(key, String(value));
             });
             return (
-              <div class="lum-card lum-pad-equal-4xl lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
+              <div class="lum-card p-7 lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
                 <div class="flex gap-4 items-center">
                   <div class="flex flex-col gap-2">
+                    <p class="text-gray-400 text-sm">
+                      {p.author}
+                    </p>
                     <h3 class={{
                       'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
                     }}>
                       {(() => {
-                        const colors = sortColors(preset.colors ?? presets[0].colors).map((color) => ({ rgb: convertToRGB(color.hex), pos: color.pos }));
-                        if (colors.length < 2) return preset.name ?? 'Untitled';
+                        const preset = p.preset;
+                        if (!p.name) p.name = 'Birdflop';
 
-                        const gradient = new Gradient(colors, Math.ceil((preset.name ?? 'Untitled').length));
+                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+                        if (colors.length < 2) return preset.name;
+
+                        const gradient = new Gradient(colors, Math.ceil(p.name.length / (preset.colorlength || 1)));
 
                         let hex = '';
-                        const segments = [...(preset.name ?? 'Untitled').matchAll(new RegExp('.{1,1}', 'g'))];
+                        const segments = [];
+                        let index = 0;
+                        const textArray = Array.from(p.name);
+                        while (index < textArray.length) {
+                          segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
+                          index += preset.colorlength ?? 1;
+                        }
                         return segments.map((segment, i) => {
-                          hex = convertToHex(gradient.next());
-                          return (
-                            <span key={`segment-${i}`} style={`color: #${hex};`}>
-                              {segment[0].replace(/ /g, '\u00A0')}
-                            </span>
-                          );
+                          const rgb = gradient.next();
+                          hex = rgbToHex(rgb);
+                          const shadowRGB = rgb.map(c => Math.round(c * 0.25));
+                          const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+                          return <span key={`char${i}`} style={{
+                            color: `#${hex};`,
+                            textShadow: `3px 3px 0 ${shadowColor};`,
+                          }} class={{
+                            'underline': preset.underline,
+                            'strikethrough': preset.strikethrough,
+                            'underline-strikethrough': preset.underline && preset.strikethrough,
+                          }}>
+                            {segment.replace(/ /g, '\u00A0')}
+                          </span>;
                         });
                       })()}
                     </h3>
                   </div>
                 </div>
                 <div class="hidden sm:flex gap-2 mt-2">
-                  <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    const existingPreset = store.savedPresets.find((p) => {
-                      return JSON.stringify(p) === JSON.stringify(preset);
+                  <button class="lum-btn text-sm" onClick$ ={async () => {
+                    const existingPreset = presetStore.savedPresets.find((savedPreset) => {
+                      return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
                     });
-                    if (existingPreset) store.savedPresets = store.savedPresets.filter((p) => p !== existingPreset);
-                    else store.savedPresets.push(preset);
-                    if (isBrowser) setCookies('presets', { savedPresets: store.savedPresets });
+                    if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
+                    else presetStore.savedPresets.push(p.preset);
+                    if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore.savedPresets));
+                    await setUserData({ savedPresets: presetStore.savedPresets });
                   }}>
-                    {store.savedPresets.find((p) => JSON.stringify(p) === JSON.stringify(preset)) ? <>
-                      <TrashBinOutline width={20} /> Remove
+                    {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
+                      <Trash size={20} /> Remove
                     </> : <>
-                      <SaveOutline width={20} /> Save
+                      <Save size={20} /> Save
                     </>}
                   </button>
-                  <button class="lum-btn lum-pad-sm text-sm" onClick$ ={() => {
-                    navigator.clipboard.writeText(JSON.stringify(preset));
+                  <button class="lum-btn text-sm" onClick$ ={async () => {
+                    await navigator.clipboard.writeText(JSON.stringify(p.preset));
                   }}>
-                    <CopyOutline width={20} /> Copy
+                    <Copy size={20} /> Copy
                   </button>
                   <DropdownRaw id={`use-${i}`} hover
-                    display={<div class="flex items-center gap-3"><CubeOutline width={20} />Use</div>}
-                    class={{ 'hidden sm:flex lum-pad-sm px-3 text-sm': true }}>
+                    display={<div class="flex items-center gap-3"><Box size={20} />Use</div>}
+                    class={{ 'hidden sm:flex px-3 text-sm': true }}>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.hexGradient@@RGBirdflop')}
+                      {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>
                     <a class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons'>
-                      {t('nav.animatedTAB@@Animated TAB')}
+                      {t('nav.resources.animatedTAB.title@@Animated TAB')}
                     </a>
                   </DropdownRaw>
                 </div>
@@ -162,7 +220,7 @@ export const head: DocumentHead = {
     },
     {
       name: 'og:image',
-      content: '/branding/icon.png',
+      content: '/branding/.png',
     },
   ],
 };

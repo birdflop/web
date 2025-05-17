@@ -1,0 +1,100 @@
+import type { Signal } from '@builder.io/qwik';
+import { $, component$, useContext } from '@builder.io/qwik';
+import { NumberInput } from '@luminescent/ui-qwik';
+import { inlineTranslate } from 'qwik-speak';
+import { generateOutput } from '~/util/rgb/RGBUtils';
+import { rgbStoreContext } from '~/routes/resources/rgb';
+import { NotificationContext } from '~/routes/layout';
+import { getSignificantPoints } from '~/util/rgb/Decode';
+
+export default component$(({ threshold, hidden }: {
+  threshold: Signal<number>,
+  hidden: boolean;
+}) => {
+  const t = inlineTranslate();
+  const t$ = $((string: string) => inlineTranslate()(string));
+  const notifications = useContext(NotificationContext);
+  const rgbStore = useContext(rgbStoreContext);
+
+  const decodeText = $(async (rgbtext: string, threshold: number) => {
+    const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
+    const spans = rgbtext.match(new RegExp(pattern, 'g'));
+    if (!spans) return;
+    let color = '#ffffff';
+    const colors = spans.map((string: string, i: number) => {
+      const result = string.match(pattern);
+      if (!result) return { hex: color, pos: 0 };
+      color = result[1]
+        ? `#${result[1].replace(/(?:[&§]|\\u00a7)/g, '')}`
+        : result[2]
+          ? `#${result[2]}`
+          : result[0];
+      return { hex: color, pos: (100 / (spans.length - 1)) * i };
+    });
+    const text = spans.map((string: string) => {
+      const result = string.match(pattern);
+      if (!result) return '';
+      return result[result.length - 1];
+    }).join('');
+    rgbStore.text = text ?? '';
+    const colorHexes = colors.map((color) => color.hex);
+    const significantPoints = getSignificantPoints(colorHexes, threshold);
+    const newColors = significantPoints.map((color) => {
+      const pos = colors.find(c => c.hex == color)?.pos ?? 0;
+      return { hex: color, pos };
+    });
+    rgbStore.colors = newColors;
+    const id = Math.random().toString(36).substring(2, 15);
+    notifications.push({
+      id,
+      title: await t$('rgb.decode.decoded.title@@RGB Text Decoded!'),
+      description: await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'),
+      bgColor: 'lum-bg-green-900/50',
+    });
+    setTimeout(() => {
+      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+    }, 2000);
+  });
+
+  return (
+    <div class={{
+      'flex flex-col gap-2 transition-all duration-300': true,
+      'max-h-0 opacity-0 pointer-events-none': hidden,
+      'max-h-[400px] opacity-100 pointer-events-auto': !hidden,
+    }} id="decode">
+      <p class="text-gray-500">{t('rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
+      <label for="decode">
+        <span>{t('rgb.decode.title@@Decode')}</span>
+        <span class="text-gray-500"> - {t('rgb.decode.description@@Copy-paste an existing RGB text here to edit it')}</span>
+      </label>
+      <textarea id="decode" class={{
+        'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
+      }} placeholder={generateOutput(rgbStore)}
+      onInput$={async (e, el) => {
+        const threshold = document.getElementById('threshold') as HTMLInputElement;
+        await decodeText(el.value, Number(threshold.value));
+      }}
+      />
+      <NumberInput input value={threshold.value} id="threshold" class={{ 'w-full': true }}
+        onInput$={async (e, el) => {
+          threshold.value = Number(el.value);
+          const decode = document.getElementById('decode') as HTMLInputElement;
+          if (decode.value) await decodeText(decode.value, threshold.value);
+        }}
+        onIncrement$={async () => {
+          threshold.value = threshold.value + 10;
+          const decode = document.getElementById('decode') as HTMLInputElement;
+          if (decode.value) await decodeText(decode.value, threshold.value);
+        }}
+        onDecrement$={async () => {
+          threshold.value = threshold.value - 10;
+          const decode = document.getElementById('decode') as HTMLInputElement;
+          if (decode.value) await decodeText(decode.value, threshold.value);
+        }}
+      >
+        {t('rgb.decode.threshold.title@@Threshold')}
+        <span class="text-gray-500"> - {t('rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors')}</span>
+      </NumberInput>
+    </div>
+  );
+});

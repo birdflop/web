@@ -1,11 +1,19 @@
 {
   "animtexture": {
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
     "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
+    "duration": "Duration",
+    "framePreview": "Frame Preview",
     "generate": "Генерировать",
-    "subtitle": "Легко объединить текстуры для анимации ресурс пака",
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
     "textureName": "Название текстуры",
-    "title": "Анимация текстур"
+    "width": "Width"
   }
 }

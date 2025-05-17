@@ -1,12 +1,15 @@
-import { component$, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContextProvider, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
-import { getCookies, setCookies } from '~/components/util/SharedUtils';
-import { inlineTranslate, useSpeak } from 'qwik-speak';
+import { getCookies, setCookies } from '~/util/SharedUtils';
+import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
+import Input from '~/components/rgb/Input';
+import { rgbDefaults, rgbStoreContext } from '../rgb';
+import { Dropdown } from '@luminescent/ui-qwik';
 
-export const useCookies = routeLoader$(async ({ cookie, url }) => {
-  return await getCookies(cookie, 'animpreview', url.searchParams);
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'animpreview', url.searchParams);
 });
 
 const minecraftColors = {
@@ -29,13 +32,11 @@ const minecraftColors = {
 };
 
 export default component$(() => {
-  useSpeak({ assets: ['animpreview'] });
   const t = inlineTranslate();
 
   const cookies = useCookies().value;
 
-  const store = useStore({
-    text: 'Birdflop',
+  const animprevStore = useStore({
     speed: 50,
     frames: [] as string[],
     frame: 1,
@@ -59,13 +60,19 @@ export default component$(() => {
     ...cookies,
   }, { deep: true });
 
+  const rgbStore = useStore({
+    ...rgbDefaults,
+    text: '',
+  }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
       const deltaTime = (currentTime - lastTime);
-      if (store.frames[0] && deltaTime > store.speed) {
-        store.frame = store.frame + 1 >= store.frames.length ? 0 : store.frame + 1;
+      if (animprevStore.frames[0] && deltaTime > animprevStore.speed) {
+        animprevStore.frame = animprevStore.frame + 1 >= animprevStore.frames.length ? 0 : animprevStore.frame + 1;
         lastTime = currentTime;
       }
       requestAnimationFrame(setFrame);
@@ -74,40 +81,63 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    track(() => store.yaml);
-    if (isBrowser) setCookies('animpreview', { yaml: store.yaml });
+    track(() => animprevStore.yaml);
+    if (isBrowser) setCookies('animpreview', { yaml: animprevStore.yaml });
     let json;
     try {
-      json = yaml.parse(store.yaml);
+      json = yaml.parse(animprevStore.yaml);
     }
     catch (e) {
       console.error(e);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
-    store.speed = json['change-interval'] ?? 50;
-    store.frames = json['texts'] ?? [];
+    animprevStore.speed = json['change-interval'] ?? 50;
+    animprevStore.frames = json['texts'] ?? [];
   });
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-10 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animpreview.title@@Animation Previewer')}
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="my-5 min-h-[60px] w-full">
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
+          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
-        <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animpreview.subtitle@@Preview TAB Animations without the need to put them ingame')}
+        <h2 class="text-gray-400 mt-1 mb-5">
+          {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </h2>
 
-        <p class="lum-card lum-bg-gray-800 font-mono lum-pad-md">
-          {store.frames[store.frame]}
-        </p>
+        <div class="flex flex-col gap-1">
+          <label for="animation">
+            {t('animtab.yamlInput@@YAML Input')}
+          </label>
+          <textarea id="animation"
+            class={{ 'lum-input h-96 font-mono': true }}
+            value={animprevStore.yaml}
+            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
+          />
+        </div>
 
-        <h1 class={'font-mc text-6xl my-6 break-all max-w-7xl -space-x-[1px]'}>
+        <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
+          (e, el) => {
+            rgbStore.previewStyle = el.value;
+          }
+        } values={[
+          {
+            name: t('rgb.previewStyle.default@@Default'),
+            value: 'default',
+          },
+          {
+            name: t('rgb.previewStyle.chat@@Minecraft Chat'),
+            value: 'chat',
+          },
+        ]}>
+          {t('rgb.previewStyle.title@@Preview Style')}
+        </Dropdown>
+        <Input readOnly>
           {(() => {
-            if (!store.frames[store.frame]) return '';
+            if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-            const spans = store.frames[store.frame].match(new RegExp(pattern, 'g'));
+            const spans = animprevStore.frames[animprevStore.frame].match(new RegExp(pattern, 'g'));
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
               const result = string.match(pattern);
@@ -131,18 +161,11 @@ export default component$(() => {
               );
             });
           })()}
-        </h1>
+        </Input>
 
-        <div class="flex flex-col gap-1">
-          <label for="animation">
-            {t('animpreview.yamlInput@@YAML Input')}
-          </label>
-          <textarea id="animation"
-            class={{ 'lum-input h-96 font-mono': true }}
-            value={store.yaml}
-            onInput$={(e, el) => { store.yaml = el.value; }}
-          />
-        </div>
+        <p class="lum-bg-gray-800 font-mono lum-btn-p-2 rounded-md">
+          {animprevStore.frames[animprevStore.frame]}
+        </p>
       </div>
     </section>
   );
@@ -153,11 +176,11 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them ingame. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
+      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
     },
     {
       name: 'og:image',

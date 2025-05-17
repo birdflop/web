@@ -1,11 +1,19 @@
 {
   "animtexture": {
-    "cumulative": "Cumulative (Turn this on if gif frames are broken)",
-    "downloadMCMETA": "Download MCMETA",
-    "downloadPNG": "Download PNG",
-    "generate": "Generate",
-    "subtitle": "Easily merge textures for resource pack animations",
-    "textureName": "Texture Name",
-    "title": "Animated Textures"
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
+    "cumulative": "Kümülatif (Gif kareleri bozuksa bunu açın)",
+    "downloadMCMETA": "MCMETA'yı İndirin",
+    "downloadPNG": "PNG İndir",
+    "duration": "Duration",
+    "framePreview": "Frame Preview",
+    "generate": "Oluşturmak",
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
+    "textureName": "Doku Adı",
+    "width": "Width"
   }
 }

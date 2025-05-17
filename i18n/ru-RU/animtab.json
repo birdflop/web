@@ -1,11 +1,12 @@
 {
   "animtab": {
-    "animationName": "Название анимации",
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "Название анимации",
+      "style": "Animation Style"
+    },
     "length": "Длина градиента",
     "outputFormat": "Формат",
-    "outputType": "Тип вывода",
-    "speed": "Скорость",
-    "subtitle": "Создать анимацию для плагина TAB",
-    "title": "Анимация TAB"
+    "yamlInput": "Ввод YAML"
   }
 }

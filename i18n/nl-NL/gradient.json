@@ -1,8 +1,0 @@
-{
-  "gradient": {
-    "prefix": "Voorvoegsel (normaal gebruikt voor commandos)",
-    "prefixPlaceholder": "Bijvoorbeeld: '/nick '",
-    "subtitle": "Hex-kleur overloop maker.",
-    "title": "Hex Overloop"
-  }
-}

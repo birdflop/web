@@ -1,18 +1,60 @@
 {
   "nav": {
-    "analysis": "분석",
-    "animatedTAB": "애니메이션 탭",
-    "animatedTextures": "애니메이션 텍스처",
-    "colorCodeStripper": "색상 코드 제거기",
-    "flags": "플래그",
-    "gradients": "그라디언트",
-    "hexGradient": "헥스 그라디언트",
-    "misc": "기타",
-    "more": "More Resources",
-    "paperTimings": "Paper Timings",
+    "hosting": {
+      "billing": "Billing",
+      "nodeStats": {
+        "description": "Check the status of Birdflop's server nodes.",
+        "title": "Node Stats"
+      },
+      "panel": "Panel",
+      "plans": "Plans",
+      "title": "Hosting"
+    },
     "privacyPolicy": "개인정보 처리방침",
-    "sparkProfile": "Spark Profile",
-    "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "탭 애니메이션 미리 보기"
+    "resources": {
+      "animatedTAB": {
+        "description": "TAB 플러그인 그라데이션 애니메이션 생성기",
+        "title": "애니메이션 TAB"
+      },
+      "animatedTextures": {
+        "description": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
+        "title": "애니메이션 텍스처"
+      },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
+      "flags": {
+        "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
+        "title": "플래그 생성기"
+      },
+      "hexGradient": {
+        "description": "헥스 코드 색상 그라데이션 생성기, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "헥스 코드 그라데이션"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Documentation for the RGBirdflop API",
+        "title": "RGBirdflop API Docs"
+      },
+      "hexGradientPresets": {
+        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
+        "title": "RGBirdflop Presets"
+      },
+      "more": "More Resources",
+      "paperTimings": {
+        "description": "Analyze Paper Timings and get possible optimizations",
+        "title": "Paper Timings"
+      },
+      "sparkProfile": {
+        "description": "Analyze a Spark Profile and get possible optimizations",
+        "title": "Spark Profile"
+      },
+      "tabAnimationPreview": {
+        "description": "게임에 넣지 않고 TAB 애니메이션을 미리보는 기능",
+        "title": "TAB 애니메이션 미리보기"
+      },
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }

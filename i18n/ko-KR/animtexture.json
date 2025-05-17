@@ -1,11 +1,19 @@
 {
   "animtexture": {
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
     "cumulative": "누적 (GIF 프레임이 깨진 경우 이 기능을 켜세요)",
     "downloadMCMETA": "MCMETA 다운로드",
     "downloadPNG": "PNG 다운로드",
+    "duration": "Duration",
+    "framePreview": "Frame Preview",
     "generate": "생성",
-    "subtitle": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
     "textureName": "텍스처 이름",
-    "title": "애니메이션 텍스처"
+    "width": "Width"
   }
 }

@@ -1,18 +1,60 @@
 {
   "nav": {
-    "analysis": "Analyseren",
-    "animatedTAB": "Geanimeerde TAB",
-    "animatedTextures": "Geanimeerde Texturen",
-    "colorCodeStripper": "Kleurcode Stripper",
-    "flags": "Flags",
-    "gradients": "Overlopen",
-    "hexGradient": "Hex Overloop",
-    "misc": "Overig",
-    "more": "More Resources",
-    "paperTimings": "Paper Timings",
+    "hosting": {
+      "billing": "Billing",
+      "nodeStats": {
+        "description": "Check the status of Birdflop's server nodes.",
+        "title": "Node Stats"
+      },
+      "panel": "Panel",
+      "plans": "Plans",
+      "title": "Hosting"
+    },
     "privacyPolicy": "Privacy Beleid",
-    "sparkProfile": "Spark Profile",
-    "tabAnimationPreview": "TAB Animation Previewer",
-    "tabAnimationPreviewer": "TAB Animatie Voorbeeld"
+    "resources": {
+      "animatedTAB": {
+        "description": "TAB plugin overloop animatie generator",
+        "title": "Genaimeerde TAB"
+      },
+      "animatedTextures": {
+        "description": "Voeg gemakkelijk texture pack animaties samen",
+        "title": "Geanimeerde Texturen"
+      },
+      "banner": {
+        "description": "Easily generate banner designs for Minecraft.",
+        "title": "Banner Generator"
+      },
+      "flags": {
+        "description": "A simple script generator to start your Minecraft servers with optimal flags",
+        "title": "Flags Generator"
+      },
+      "hexGradient": {
+        "description": "Hex-kleur overloop maker, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Documentation for the RGBirdflop API",
+        "title": "RGBirdflop API Docs"
+      },
+      "hexGradientPresets": {
+        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
+        "title": "RGBirdflop Presets"
+      },
+      "more": "More Resources",
+      "paperTimings": {
+        "description": "Analyze Paper Timings and get possible optimizations",
+        "title": "Paper Timings"
+      },
+      "sparkProfile": {
+        "description": "Analyze a Spark Profile and get possible optimizations",
+        "title": "Spark Profile"
+      },
+      "tabAnimationPreview": {
+        "description": "Preview TAB Animations without the need to put them in-game",
+        "title": "TAB Animatie Vooreeld"
+      },
+      "title": "Resources"
+    },
+    "termsofService": "Terms of Service"
   }
 }

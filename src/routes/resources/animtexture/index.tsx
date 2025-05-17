@@ -1,150 +1,337 @@
-import { $, component$, useOn, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, useStore, useTask$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
 
-import { Toggle } from '@luminescent/ui-qwik';
-import {
-  inlineTranslate,
-  useSpeak,
-} from 'qwik-speak';
+import { inlineTranslate } from 'qwik-speak';
+
+import { parseGIF, decompressFrames } from 'gifuct-js';
+import { Download, RefreshCw, X } from 'lucide-icons-qwik';
+import { NumberInput, Toggle } from '@luminescent/ui-qwik';
+
+export async function base64ToFile(dataURL: string) {
+  const arr = dataURL.split(',');
+  const match = arr[0].match(/:(.*?);/);
+  const mime = match ? match[1] : '';
+  const result = await fetch(dataURL);
+  return {
+    mime,
+    buffer: await result.arrayBuffer(),
+  };
+};
+
+const readFileAsDataURL = (file: Blob) => new Promise<ProgressEvent<FileReader>>((resolve, reject) => {
+  const f = new FileReader();
+  f.readAsDataURL(file);
+  f.onloadend = (e) => resolve(e);
+  f.onerror = reject;
+});
 
 export default component$(() => {
-  useSpeak({ assets: ['animtexture'] });
   const t = inlineTranslate();
 
-  const store = useStore({
-    frames: [] as any[],
-    textureName: '',
-    cumulative: false,
+  const animtextureStore = useStore({
+    frames: [] as { img: HTMLImageElement, delay: number }[],
+    textureName: 'animtexture',
+    loading: false,
+    width: 16,
+    height: 16,
+    lockdimensions: true,
+    bounce: false,
+    syncduration: false,
   }, { deep: true });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    if (document.getElementsByName('gifframes')[0]) return;
-    const script = document.createElement('script');
-    script.src = '/scripts/gif-frames.js';
-    script.defer = true;
-    script.setAttribute('name', 'gifframes');
-    document.head.appendChild(script);
+  useTask$(({ track }) => {
+    (Object.keys(animtextureStore) as Array<keyof typeof animtextureStore>).forEach((key) => {
+      if (key == 'loading') return;
+      track(() => animtextureStore[key]);
+    });
+    if (animtextureStore.lockdimensions) animtextureStore.height = animtextureStore.width;
+    if (!isBrowser) return;
+
+    const canvas = document.getElementById('c') as HTMLCanvasElement;
+    if (!canvas) return;
+    console.log('rerendering');
+    const ctx = canvas.getContext('2d')!;
+
+    canvas.width = animtextureStore.width;
+    canvas.height = animtextureStore.height * animtextureStore.frames.length;
+
+    for (let i = 0; i != animtextureStore.frames.length; i++) {
+      const img = animtextureStore.frames[i].img;
+      ctx.drawImage(img, 0, i * animtextureStore.height, animtextureStore.width, animtextureStore.height);
+    }
+
+    const pngd = document.getElementById('pngd') as HTMLAnchorElement;
+    pngd.href = canvas.toDataURL();
+
+    const anim = document.getElementById('anim') as HTMLCanvasElement;
+    if (!anim) return;
+    const animctx = anim.getContext('2d')!;
+    anim.width = animtextureStore.width;
+    anim.height = animtextureStore.height;
+    let i = 0;
+    let lastTime = 0;
+    let bounce = false;
+    const animate = (time: number) => {
+      if (animtextureStore.frames.length == 0) return;
+      if (time - lastTime > animtextureStore.frames[i].delay / 20 * 1000) {
+        lastTime = time;
+        if (bounce) i--;
+        else i++;
+        if (i >= animtextureStore.frames.length) {
+          if (animtextureStore.bounce) {
+            bounce = !bounce;
+            i--;
+          }
+          else {
+            i = 0;
+          }
+        }
+        if (i < 0) {
+          bounce = !bounce;
+          i++;
+        }
+      }
+      animctx.clearRect(0, 0, anim.width, anim.height);
+      animctx.drawImage(animtextureStore.frames[i].img, 0, 0, animtextureStore.width, animtextureStore.height);
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
   });
 
-  useOn('change', $((e, el) => {
-    const { files } = el as HTMLInputElement;
-    if (!files) return;
-    Array.from(files).forEach(file => {
-      const f = new FileReader();
-      f.readAsDataURL(file);
-      f.onloadend = async (e) => {
-        const b64 = e!.target!.result;
-        const type = b64!.toString().split(',')[0].split(';')[0].split(':')[1];
-        if (type == 'image/gif') {
-          // @ts-ignore
-          const gifframes = await gifFrames({ url: b64, frames: 'all', cumulative: store.cumulative });
-          gifframes.forEach((frame: any) => {
-            const contentStream = frame.getImage();
-            const imageData = window.btoa(String.fromCharCode.apply(null, contentStream._obj));
-            const b64frame = `data:image/png;base64,${imageData}`;
-
-            store.frames.push({ img: b64frame, delay: Math.ceil(20 * frame.frameInfo.delay / 100) });
-          });
-          return;
-        }
-        store.frames.push({ img: b64, delay: 20 });
-      };
-    });
-  }));
   return (
-    <section class="flex mx-auto max-w-4xl px-6 items-center justify-center min-h-svh pt-[72px]">
-      <div class="my-10 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          {t('animtexture.title@@Animated Textures')}
-        </h1>
-        <h2 class="text-gray-50 sm:text-xl mb-12">
-          {t('animtexture.subtitle@@Easily merge textures for resource pack animations')}
-        </h2>
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="flex my-5 min-h-[60px] w-full gap-4">
+        <div class="flex-1">
+          <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl flex items-center gap-3">
+            {t('nav.resources.animatedTextures.title@@Animated Textures')}
+            <div class={{
+              'lum-loading w-6 h-6 border-3 transition-all': true,
+              'opacity-0': !animtextureStore.loading,
+            }} />
+          </h1>
+          <h2 class="text-gray-400 mt-1 mb-5">
+            {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
+          </h2>
 
-        <div class="flex flex-col gap-2">
-          <label for="fileInput">Select Frame(s) or a GIF</label>
-          <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn rounded-lg file:cursor-pointer flex" />
-        </div>
+          <div class="grid grid-cols-3 gap-2 mb-2">
+            <div class="flex flex-col gap-1 col-span-3">
+              <label for="fileInput">
+                {t('animtexture.selectFrames@@Select Frame(s) or GIF')}
+              </label>
+              <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
+                const files = Array.from(el.files ?? []);
+                animtextureStore.loading = true;
+                for (const f of files) {
+                  const e = await readFileAsDataURL(f);
+                  if (!e.target?.result) return;
 
-        <div id="imgs" class="flex flex-wrap max-h-[620px] overflow-auto my-4 gap-2">
-          {store.frames.map((frame, i) => (
-            <div key={`frame${i}`} class="w-24 rounded-lg border-gray-700 border-2">
-              <img width={96} height={96} class="rounded-t-md" src={frame.img} />
-              <input type="number" value={frame.delay} onInput$={(e, el) => { store.frames[i].delay = el.value; }} class="w-full text-lg bg-gray-700 text-white text-center focus:bg-gray-600 p-2 rounded-b-md" />
+                  const frames = [...animtextureStore.frames];
+                  const file = await base64ToFile(e.target.result.toString());
+                  if (file.mime == 'image/gif') {
+                    const parsedGif = parseGIF(file.buffer);
+                    const gifFrames = decompressFrames(parsedGif, true);
+                    gifFrames.forEach((frame) => {
+                      const canvas = document.createElement('canvas');
+                      canvas.width = frame.dims.width;
+                      canvas.height = frame.dims.height;
+                      const ctx = canvas.getContext('2d')!;
+                      const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
+                      frameImageData.data.set(frame.patch);
+                      ctx.putImageData(frameImageData, 0, 0);
+                      const img = new Image();
+                      img.src = canvas.toDataURL();
+                      img.onload = () => {
+                        frames.push({
+                          img,
+                          delay: Math.ceil(frame.delay / 100),
+                        });
+                      };
+                    });
+                  }
+                  else {
+                    const img = new Image();
+                    img.src = e.target.result as string;
+                    frames.push({
+                      img,
+                      delay: 20,
+                    });
+                  }
+
+                  animtextureStore.frames = frames;
+                }
+                animtextureStore.loading = false;
+              }} />
             </div>
-          ))}
-        </div>
+            <div class={{
+              'flex items-end gap-1': true,
+              'col-span-2': animtextureStore.lockdimensions,
+            }}>
+              <div class="flex-1 flex flex-col gap-1">
+                <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label>
+                <input id="textureName" class={{ 'lum-input': true }} value={animtextureStore.textureName} onInput$={(e, el) => { animtextureStore.textureName = el.value; }}/>
+              </div>
+              <p class="lum-btn p-2">
+                .png
+              </p>
+            </div>
+            <NumberInput input min={1} step={16} value={animtextureStore.width} id="width" class={{ 'w-full': true }}
+              onIncrement$={() => {
+                animtextureStore.width += 16;
+              }}
+              onDecrement$={() => {
+                animtextureStore.width -= 16;
+              }}
+              onInput$={(e, el) => {
+                const value = Number(el.value);
+                if (isNaN(value)) return;
+                animtextureStore.width = value;
+              }}
+            >
+              <span class="flex gap-1 items-center">
+                {t('animtexture.width@@Width')}
+                <button class="lum-btn p-1" onClick$={() => {
+                  const maxWidth = Math.max(...animtextureStore.frames.map(frame => frame.img.naturalWidth));
+                  animtextureStore.width = maxWidth;
+                }}>
+                  <RefreshCw size={16} />
+                </button>
+              </span>
+            </NumberInput>
+            {!animtextureStore.lockdimensions &&
+              <NumberInput input min={1} step={16} value={animtextureStore.height} id="height" class={{ 'w-full': true }}
+                onIncrement$={() => {
+                  animtextureStore.height += 16;
+                }}
+                onDecrement$={() => {
+                  animtextureStore.height -= 16;
+                }}
+                onInput$={(e, el) => {
+                  const value = Number(el.value);
+                  if (isNaN(value)) return;
+                  animtextureStore.height = value;
+                }}
+              >
+                <span class="flex gap-1 items-center">
+                  {t('animtexture.height@@Height')}
+                  <button class="lum-btn p-1" onClick$={() => {
+                    const maxHeight = Math.max(...animtextureStore.frames.map(frame => frame.img.naturalHeight));
+                    animtextureStore.height = maxHeight;
+                  }}>
+                    <RefreshCw size={16} />
+                  </button>
+                </span>
+              </NumberInput>
+            }
+          </div>
+          <div class="flex flex-col gap-2">
+            <Toggle id="lockdimensions" checked={animtextureStore.lockdimensions}
+              onChange$={(e, el) => { animtextureStore.lockdimensions = el.checked; }}
+              label={t('animtexture.lockDimensions@@Lock Dimensions')} />
+            <Toggle id="bounce" checked={animtextureStore.bounce}
+              onChange$={(e, el) => { animtextureStore.bounce = el.checked; }}
+              label={t('animtexture.bounce@@Bounce Animation')} />
+            <Toggle id="syncduration" checked={animtextureStore.syncduration}
+              onChange$={(e, el) => { animtextureStore.syncduration = el.checked; }}
+              label={t('animtexture.syncDuration@@Sync Duration')} />
+          </div>
 
-        <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label><br />
-        <input id="textureName" class={{ 'lum-input mb-3 mt-2': true }} value={store.textureName} onInput$={(e, el) => { store.textureName = el.value; }}/>
-
-        <Toggle id="Cumulative" checked={store.cumulative}
-          onChange$={(e, el) => { store.cumulative = el.checked; }}
-          label={t('animtexture.cumulative@@Cumulative (Turn this on if gif frames are broken)')} />
-
-        <button class={{ 'lum-btn my-6': true }} onClick$={() => {
-          const canvas = document.getElementById('c') as HTMLCanvasElement;
-          canvas.classList.add('sm:flex');
-          const imglist = document.getElementById('imgs') as HTMLDivElement;
-          const ctx = canvas.getContext('2d')!;
-          const imgs = imglist.getElementsByTagName('IMG') as HTMLCollectionOf<HTMLImageElement>;
-          let max = 0;
-          for (let i = 0; i != imgs.length; i++) {
-            if (imgs[i].naturalWidth > max) max = imgs[i].naturalWidth;
+          <div id="imgs" class="lum-card flex-row flex-wrap max-h-[620px] overflow-auto gap-2 p-2 mt-4">
+            {animtextureStore.frames.map((frame, i) => (
+              <div key={`frame${i}-${frame.delay}`} class="lum-card lum-bg-gray-800 w-24 p-0 relative">
+                <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {
+                  const frames = [...animtextureStore.frames];
+                  frames.splice(i, 1);
+                  animtextureStore.frames = frames;
+                }}>
+                  <X size={16}/>
+                </button>
+                <img width={96} height={96} class={{
+                  'rounded-t-md': true,
+                  'rounded-b-md': animtextureStore.syncduration,
+                }} src={frame.img.src} />
+                {!animtextureStore.syncduration &&
+                  <input type="number" value={frame.delay}
+                    onInput$={(e, el) => {
+                      animtextureStore.frames[i].delay = Number(el.value);
+                    }}
+                    class="lum-input lum-bg-gray-900 mb-2 mx-2" />
+                }
+              </div>
+            ))}
+          </div>
+          {animtextureStore.syncduration && animtextureStore.frames[0] &&
+            <NumberInput input min={1} value={animtextureStore.frames[0].delay} id="height"
+              onIncrement$={() => {
+                animtextureStore.frames[0].delay++;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = animtextureStore.frames[0].delay;
+                });
+              }}
+              onDecrement$={() => {
+                animtextureStore.frames[0].delay--;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = animtextureStore.frames[0].delay;
+                });
+              }}
+              onInput$={(e, el) => {
+                const value = Number(el.value);
+                if (isNaN(value)) return;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = value;
+                });
+              }}
+            >
+              {t('animtexture.duration@@Duration')}
+            </NumberInput>
           }
-          canvas.width = max;
-          canvas.height = max * imgs.length;
-          ctx.imageSmoothingEnabled = false;
-          for (let i = 0; i != imgs.length; i++) {
-            ctx.drawImage(imgs[i], 0, i * max);
-            ctx.drawImage(imgs[i], 0, max * i, max, max);
-          }
-          const b64 = canvas.toDataURL();
-          const pngd = document.getElementById('pngd') as HTMLAnchorElement;
-          const mcmeta = document.getElementById('mcmeta') as HTMLAnchorElement;
-          pngd.href = b64;
-          pngd.download = store.textureName + '.png';
-          mcmeta.download = store.textureName + '.png.mcmeta';
 
-          const start = '{"animation":{"frames": [';
-          const frameBase = '{"index": ';
-          const frameMid = ', "time": ';
-          const frameEnd = '},';
-          let res = start;
-          for (let i = 0; i != store.frames.length; i++) {
-            let tmp = frameBase;
-            tmp += i;
-            tmp += frameMid;
-            tmp += store.frames[i].delay;
-            tmp += frameEnd;
-            res += tmp;
-          }
-          res = res.substring(0, res.length - 1);
-          res += ']}}';
-
-          mcmeta.href = 'data:text/plain;charset=utf-8,' + res;
-
-          const links = document.getElementById('links')!;
-          links.className = 'inline';
-        }}>
-          {t('animtexture.generate@@Generate')}
-        </button>
-
-        <div id="links" class="hidden">
-          <p class="mb-4">Animated Texture Generated Successfully!</p>
-          <div class="flex gap-2">
-            <a class="lum-btn" id="pngd" href='/'>
+          <div id="links" class="flex gap-2 mt-6">
+            <a class="lum-btn" id="pngd" target="_blank" download={animtextureStore.textureName + '.png'} href=''>
+              <Download size={20} />
               {t('animtexture.downloadPNG@@Download PNG')}
             </a>
-            <a class="lum-btn" id="mcmeta" target="_blank" href='data:text/plain;charset=utf-8,{"animation":{}}'>
+            <a class="lum-btn" id="mcmeta" target="_blank" download={animtextureStore.textureName + '.png.mcmeta'} href={
+              'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(
+                {
+                  animation: {
+                    frames: [
+                      ...animtextureStore.frames.map((frame, i) => ({
+                        index: i,
+                        time: frame.delay,
+                      })),
+                      ...(animtextureStore.bounce ?
+                        animtextureStore.frames.map((frame, i) => ({
+                          index: animtextureStore.frames.length - i,
+                          time: animtextureStore.frames[i].delay,
+                        }))
+                        : []),
+                    ],
+                  },
+                }, null, 2,
+              ))}>
+              <Download size={20} />
               {t('animtexture.downloadMCMETA@@Download MCMETA')}
             </a>
           </div>
         </div>
-
+        <div class={{
+          'flex flex-col items-center max-w-24 transition-all': true,
+          'opacity-0': animtextureStore.frames.length == 0,
+        }}>
+          <p class="mb-2">
+            {t('animtexture.animationPreview@@Animation Preview')}
+          </p>
+          <canvas id="anim" class="lum-card w-full p-0" style={{
+            imageRendering: 'pixelated',
+          }} />
+          <p class="my-2">
+            {t('animtexture.pngPreview@@PNG Preview')}
+          </p>
+          <canvas id="c" class="lum-card w-full p-0" style={{
+            imageRendering: 'pixelated',
+          }} />
+        </div>
       </div>
-      <canvas id="c" class="w-24 max-h-svh ml-48 hidden"></canvas>
     </section>
   );
 });

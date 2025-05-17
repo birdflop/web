@@ -1,0 +1,100 @@
+{
+  "rgb": {
+    "colors": {
+      "amount": "Color Amount",
+      "character": "Caractér",
+      "charsPer": "Characters per color",
+      "color": "Cor",
+      "customFormat": "Formato customizado",
+      "disperse": {
+        "always": {
+          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
+          "title": "Always Disperse Colors"
+        },
+        "title": "Disperse"
+      },
+      "format": "Formato de cor",
+      "lowercase": {
+        "description": "Turn this on if you want to use lowercase hex codes.",
+        "title": "Lowercase Hex Codes"
+      },
+      "shadow": {
+        "sync": "Sync with text colors",
+        "title": "Text Shadow"
+      },
+      "title": "Colors",
+      "trimSpaces": {
+        "description": "Turn this off if you're using empty underlines / strikethroughs",
+        "title": "Trim colors from spaces"
+      }
+    },
+    "copied": "Copied to clipboard!",
+    "copyFailed": "Failed to copy to clipboard!",
+    "decode": {
+      "decoded": {
+        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
+        "title": "RGB Text Decoded!"
+      },
+      "description": "Copy-paste an existing RGB text here to edit it",
+      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "threshold": {
+        "description": "Try changing this around if you're getting too many colors",
+        "title": "Threshold"
+      },
+      "title": "Decode"
+    },
+    "formatting": {
+      "bold": "Negrito",
+      "character": "Formatar caractér",
+      "italic": "Italico",
+      "obfuscate": "Obfuscate",
+      "options": "Format Options",
+      "placeholders": "Placeholders",
+      "strikethrough": "Riscado",
+      "title": "Formatação",
+      "underline": "Sublinhado"
+    },
+    "inputText": "Texto de Input",
+    "inputTextSubtitle": "Type here to generate a gradient!",
+    "options": "Options",
+    "output": {
+      "copied": "The RGB text has been copied to your clipboard successfully.",
+      "description": "Copy-paste this for RGB text!",
+      "title": "Output"
+    },
+    "prefixsuffix": "Prefix/Suffix",
+    "presets": {
+      "copied": "Successfully copied preset to clipboard!",
+      "copy": "Copy",
+      "import": "Importar",
+      "importSubtitle": "Load a JSON preset",
+      "imported": {
+        "description": "The preset has been imported successfully.",
+        "title": "Preset importada com sucesso!"
+      },
+      "invalid": {
+        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
+        "title": "Invalid Preset"
+      },
+      "pasteHere": "Paste here",
+      "save": "Save",
+      "saved": {
+        "description": "The preset has been saved successfully.",
+        "presets": "Saved Presets",
+        "title": "Preset Saved!",
+        "warning": "Please login to save presets permanently."
+      },
+      "title": "Presets",
+      "url": {
+        "description": "Successfully exported preset to url! (Check the URL bar)",
+        "get": "Get Url",
+        "title": "URL Updated!"
+      }
+    },
+    "previewStyle": {
+      "chat": "Minecraft Chat",
+      "default": "Default",
+      "title": "Preview Style"
+    }
+  }
+}

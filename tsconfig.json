@@ -16,11 +16,11 @@
     "isolatedModules": true,
     "outDir": "tmp",
     "noEmit": true,
-    "types": ["node", "vite/client"],
+    "types": ["node", "eslint", "vite/client", "@cloudflare/workers-types"],
     "paths": {
       "~/*": ["./src/*"]
     }
   },
-  "files": ["./.eslintrc.cjs"],
+  "files": ["eslint.config.js"],
   "include": ["src", "./*.d.ts", "./*.js"],
 }

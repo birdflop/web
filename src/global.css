@@ -1,37 +1,68 @@
 @import "tailwindcss";
-@plugin "@luminescent/ui";
+
 @plugin "@anuragroy/tailwindcss-animate";
-@config "../tailwind.config.js";
 
-/* fonts from https://github.com/IdreesInc/Monocraft */
+@import "@luminescent/ui/css";
+@plugin "@luminescent/ui";
 
+@config "@luminescent/ui-qwik/config";
+@source "../node_modules/@luminescent/ui-qwik";
+
+/* Pulled straight from minecraft.net */
+@font-face {
+  font-family: MinecraftOfficial;
+  src: url(/fonts/MinecraftOfficial.ttf);
+  font-display: swap;
+}
+
+/* https://font.download/font/minecraft-3 */
 @font-face {
   font-family: MinecraftRegular;
-  src: url(/fonts/MinecraftRegular.ttf);
+  src: url(/fonts/MinecraftRegular.woff);
   font-display: swap;
 }
-
 @font-face {
   font-family: MinecraftBold;
-  src: url(/fonts/MinecraftBold.ttf);
+  src: url(/fonts/MinecraftBold.woff);
   font-display: swap;
 }
-
 @font-face {
   font-family: MinecraftItalic;
-  src: url(/fonts/MinecraftItalic.ttf);
+  src: url(/fonts/MinecraftItalic.woff);
   font-display: swap;
 }
-
 @font-face {
   font-family: MinecraftBoldItalic;
-  src: url(/fonts/MinecraftBoldItalic.ttf);
+  src: url(/fonts/MinecraftBoldItalic.woff);
   font-display: swap;
 }
 
+/* https://online-fonts.com/fonts/minecraft-rus */
 @font-face {
   font-family: MinecraftRus;
   src: url(/fonts/MinecraftRus.ttf);
+  font-display: swap;
+}
+
+/* https://github.com/IdreesInc/Monocraft */
+@font-face {
+  font-family: MinecraftRegularAlt;
+  src: url(/fonts/MinecraftRegularAlt.ttf);
+  font-display: swap;
+}
+@font-face {
+  font-family: MinecraftBoldAlt;
+  src: url(/fonts/MinecraftBoldAlt.ttf);
+  font-display: swap;
+}
+@font-face {
+  font-family: MinecraftItalicAlt;
+  src: url(/fonts/MinecraftItalicAlt.ttf);
+  font-display: swap;
+}
+@font-face {
+  font-family: MinecraftBoldItalicAlt;
+  src: url(/fonts/MinecraftBoldItalicAlt.ttf);
   font-display: swap;
 }
 
@@ -40,23 +71,19 @@ html {
 }
 
 .font-mc {
-  font-family: MinecraftRegular, MinecraftRus;
+  font-family: MinecraftRegular, MinecraftOfficial, MinecraftRegularAlt, MinecraftRus;
 }
 
 .font-mc-bold {
-  font-family: MinecraftBold, MinecraftRus;
-  font-weight: bold;
+  font-family: MinecraftBold, MinecraftBoldAlt, MinecraftRus;
 }
 
 .font-mc-italic {
-  font-family: MinecraftItalic, MinecraftRus;
-  font-style: italic;
+  font-family: MinecraftItalic, MinecraftItalicAlt, MinecraftRus;
 }
 
 .font-mc-bold-italic {
-  font-family: MinecraftBoldItalic, MinecraftRus;
-  font-style: italic;
-  font-weight: bold;
+  font-family: MinecraftBoldItalic, MinecraftBoldItalicAlt, MinecraftRus;
 }
 
 .strikethrough {

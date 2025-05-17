@@ -1,14 +1,15 @@
 # Birdflop Website
 The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hosting and resources.
 
-<a href="https://discord.com/invite/nmgtX5z"> <img src="https://discord.com/api/guilds/746125698644705524/widget.png"></a>
-<a href="https://github.com/birdflop/web/commits"> <img src="https://img.shields.io/github/last-commit/birdflop/web?style=flat"></a>
-<a href="#"> <img src="https://img.shields.io/github/languages/code-size/birdflop/web?style=flat"></a>
-<a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=flat"></a>
-<a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=flat"></a>
-<a href="hthttps://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=flat"></a>
-<a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge" alt="CodeFactor" /></a>
-<a title="Crowdin" target="_blank" href="https://crowdin.com/project/simplymc"><img src="https://badges.crowdin.net/simplymc/localized.svg"></a>
+<a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge?style=for-the-badge" alt="CodeFactor" /></a>
+<a href="https://github.com/birdflop/web/commits"> <img src="https://img.shields.io/github/last-commit/birdflop/web?style=for-the-badge"></a>
+<a href="#"> <img src="https://img.shields.io/github/languages/code-size/birdflop/web?style=for-the-badge"></a>
+
+<a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=for-the-badge"></a>
+<a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=for-the-badge"></a>
+<a href="hthttps://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
+
+<a href="https://discord.com/invite/nmgtX5z"> <img src="https://discord.com/api/guilds/746125698644705524/widget.png?style=banner2"></a>
 
 <h2>Contributing</h2>
 All contributions are welcome. Birdflop is a community-project aiming to support its community.

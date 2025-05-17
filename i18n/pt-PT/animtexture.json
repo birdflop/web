@@ -1,11 +1,19 @@
 {
   "animtexture": {
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
     "cumulative": "Cumulativo (Ativa esta opção se os frames do gif estão estragados)",
     "downloadMCMETA": "Download do MCMETA",
     "downloadPNG": "Download do PNG",
+    "duration": "Duration",
+    "framePreview": "Frame Preview",
     "generate": "Gerar",
-    "subtitle": "Junta texturas animadas facilmente para animações de packs de recursos",
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
     "textureName": "Nome da textura",
-    "title": "Texturas Animadas"
+    "width": "Width"
   }
 }

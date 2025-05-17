@@ -1,11 +1,12 @@
 {
   "animtab": {
-    "animationName": "Animation Name",
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "Animation Name",
+      "style": "Animation Style"
+    },
     "length": "Gradient Length",
     "outputFormat": "Output Format",
-    "outputType": "Output Type",
-    "speed": "Speed",
-    "subtitle": "TAB plugin gradient animation creator",
-    "title": "Animated TAB"
+    "yamlInput": "YAML Input"
   }
 }

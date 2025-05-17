@@ -1,12 +1,12 @@
-import { component$, $, useOnDocument } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
-import { RouterHead } from './components/Head';
+import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
 import './global.css';
 import { config } from '~/speak-config';
 import { translationFn } from '~/speak-functions';
-import { QwikPartytown } from './components/partytown/partytown';
+import { QwikPartytown } from '~/components/Partytown';
 
 export default component$(() => {
   /**
@@ -19,15 +19,6 @@ export default component$(() => {
    * Init Qwik Speak
    */
   useQwikSpeak({ config, translationFn });
-
-  useOnDocument('load', $(() => {
-    const platform = navigator.platform || 'unknown';
-    if (platform.toUpperCase().indexOf('MAC') >= 0) {
-      document.querySelectorAll('.scale-for-mac').forEach(function(element) {
-        element.classList.add('macos-zoom-fix');
-      });
-    }
-  }));
 
   return (
     <QwikCityProvider>

@@ -1,19 +1,21 @@
-import { Slot, component$, useStore } from '@builder.io/qwik';
+import { Slot, component$, useSignal } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
+import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
-  const store = useStore({
-    redirect: '',
-    error: '',
-  });
+  const t = inlineTranslate();
+  const redirect = useSignal('');
+  const error = useSignal('');
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
       <div class="my-10 min-h-[60px]">
-        <h1 class="font-bold text-gray-50 text-2xl sm:text-4xl mb-2">
-          Spark Profile Analysis
+        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
+          {t('nav.resources.sparkProfile.title@@Spark Profile')}
         </h1>
-        <h2 class="text-gray-50 sm:text-xl">
+        <h2 class="text-gray-400 mt-1 mb-5">
+          {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}        </h2>
+        <h2 class="text-gray-400 sm:text-xl">
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br />
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
         </h2>
@@ -23,32 +25,32 @@ export default component$(() => {
         <label for="link">Paste the spark profile link here</label>
         <input class="lum-input mt-1 w-full" id="link" onInput$={(e, el) => {
           const link = el.value;
-          store.redirect = '';
+          redirect.value = '';
           if (link.startsWith('https://timin') || link.startsWith('https://www.spigotmc.org/go/timings?url=')) {
-            store.error = '⚠️ This is a Timings Report. Use the Timings Report Analysis for this type of report.';
+            error.value = '⚠️ This is a Timings Report. Use the Timings Report Analysis for this type of report.';
           }
           else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
-            store.error = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
+            error.value = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
           }
           else if (!link.startsWith('https://spark.lucko.me/')) {
-            store.error = '❌ This is an Invalid Spark Profile Link.';
+            error.value = '❌ This is an Invalid Spark Profile Link.';
           }
           else {
-            store.error = '';
+            error.value = '';
             const code = link.replace('https://spark.lucko.me/', '');
-            store.redirect = `/resources/sparkprofile/${code}`;
+            redirect.value = `/resources/sparkprofile/${code}`;
           }
         }}/>
 
         <p class={{
           'text-red-400 mt-3': true,
-          'hidden': !store.error,
-        }}>{store.error}</p>
+          'hidden': !error.value,
+        }}>{error.value}</p>
         <div class={{
           'flex mt-3': true,
-          'hidden': !store.redirect,
+          'hidden': !redirect.value,
         }}>
-          <Link href={store.redirect} class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600">
+          <Link href={redirect.value} class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600">
             Submit
           </Link>
         </div>

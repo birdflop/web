@@ -1,11 +1,12 @@
 {
   "animtab": {
-    "animationName": "Animatie Naam",
+    "animation": {
+      "interval": "Animation Interval",
+      "name": "Animatie Naam",
+      "style": "Animation Style"
+    },
     "length": "Gradient lengte",
     "outputFormat": "Uitkomst Opmaak",
-    "outputType": "Uitkomst Type",
-    "speed": "Snelheid",
-    "subtitle": "TAB plugin overloop animatie generator",
-    "title": "Genaimeerde TAB"
+    "yamlInput": "YAML Input"
   }
 }
