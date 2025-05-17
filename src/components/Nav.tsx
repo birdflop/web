@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, LogIn, Github, Server } from 'lucide-icons-qwik';
+import { Box, Globe, LogIn, Github, Server, Book } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -30,7 +30,9 @@ export default component$(() => {
           <div class="lum-loading w-4 h-4" />
         </div>
       </Link>
-
+      <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent">
+        <Book size={20} /> {t('nav.docs@@Docs')}
+      </Link>
       <DropdownRaw id="nav-hosting" q:slot='end' hover
         display={<div class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
