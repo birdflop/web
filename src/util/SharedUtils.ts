@@ -8,62 +8,64 @@ import { defaults } from './rgb/presets/defaults';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
-export function getCookies(cookie: Cookie, preset: names, urlParams?: URLSearchParams) {
+export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchParams) {
   let json: { [key: string]: any } = {};
-  try {
-    const cookieVal = cookie.get(preset)?.value;
-    // Decode the cookie value
-    if (cookieVal) json = JSON.parse(decodeURIComponent(cookieVal));
-  } catch (e) {
-    console.error(e);
-  }
+
+  const cookieVal = cookie.get(name)?.value;
+  // Decode the cookie value
+  if (cookieVal) json = JSON.parse(decodeURIComponent(cookieVal));
 
   if (urlParams) {
     const params = Object.fromEntries([...urlParams.entries()]) as any;
     Object.keys(params).forEach(key => {
-      try {
-        if ((preset == 'rgb' && !Object.keys(rgbDefaults).includes(key))
-        || (preset == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
-          delete params[key];
-        }
-        if (key == 'format' || key == 'colors' || key == 'shadowcolors') params[key] = JSON.parse(params[key]);
-        else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
-        else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
-      } catch (e) {
-        console.error(e);
+      if ((name == 'rgb' && !Object.keys(rgbDefaults).includes(key))
+      || (name == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
+        delete params[key];
       }
+      if (key == 'format' || key == 'colors' || key == 'shadowcolors') params[key] = JSON.parse(params[key]);
+      else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
+      else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
     });
     json = { ...json, ...params };
   }
 
-  // migrate
-  let migrated = false;
-  if (preset == 'rgb' || preset == 'animtab') {
-    const names = preset == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
-    if (preset == 'animtab') names.push('version');
-    names.forEach(name => {
-      const cookieValue = cookie.get(name)?.value;
-      if (!cookieValue) return;
-      console.log('Migrating', name);
-      try {
-        if (name == 'colors' || name == 'shadowcolors') json[name] = cookieValue.split(',');
-        else if (name == 'format') json[name] = JSON.parse(cookieValue);
-        else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
-        else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);
-        else json[name] = cookieValue;
-      }
-      catch (e) {
-        console.error(e);
-      }
-      console.log('Deleting', name);
-      cookie.delete(name, { path: '/' });
-      migrated = true;
-    });
-    json = loadPreset(JSON.stringify(json));
-  }
-  if (migrated) cookie.set(preset, JSON.stringify(json), { path: '/' });
+  // Migrate from individual cookies to a single cookie
+  const migrated = migrateCookies(cookie, name, json);
+  if (migrated) cookie.set(name, JSON.stringify(json), { path: '/' });
 
   return json;
+}
+
+export function migrateCookies(cookie: Cookie, name: names, json: { [key: string]: any }) {
+  if (name != 'rgb' && name != 'animtab') return;
+  const oldNames = name == 'rgb' ? Object.keys(rgbDefaults) : Object.keys(animTABDefaults);
+  if (name == 'animtab') oldNames.push('version');
+  let migrated = false;
+  oldNames.forEach(name => {
+    const cookieValue = cookie.get(name)?.value;
+    if (!cookieValue) return;
+    console.log('Migrating', name);
+    try {
+      if (name == 'colors' || name == 'shadowcolors') json[name] = cookieValue.split(',');
+      else if (name == 'format') json[name] = JSON.parse(cookieValue);
+      else if (cookieValue === 'true' || cookieValue === 'false') json[name] = cookieValue === 'true';
+      else if (!isNaN(Number(cookieValue))) json[name] = Number(cookieValue);
+      else json[name] = cookieValue;
+      migrated = true;
+    }
+    catch (e) {
+      console.error(e);
+    }
+    console.log('Deleting', name);
+    cookie.delete(name, { path: '/' });
+  });
+
+  // Migrate between versions
+  if (json.version != defaults.version) {
+    json = loadPreset(JSON.stringify(json));
+    migrated = true;
+  }
+  return migrated;
 }
 
 export function setCookies(name: names, json: { [key: string]: any }) {
