@@ -9,7 +9,6 @@
 .docs .docs-container {
   @apply pt-8 lg:pt-5;
   @apply min-w-48;
-  @apply lg:max-w-[850px];
 }
 
 .docs article a {

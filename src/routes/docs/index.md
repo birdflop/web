@@ -2,9 +2,11 @@
 title: Docs Overview
 ---
 
-# MDX Test Heading
+# Introduction
 
-This is a paragraph in Markdown.
+Welcome to birdflop's documentation!
+
+This part of the website will help you understand
 
 ## Subheading
 

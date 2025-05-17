@@ -1,15 +1,6 @@
 import { component$, useOnDocument, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import { type ContentMenu, useLocation, Link } from '@builder.io/qwik-city';
-import { useMarkdownItems } from '~/routes/docs/layout';
-
-type MDX = {
-  title: string;
-  contributors?: string[];
-  created_at?: string;
-  updated_at?: string;
-};
-
-type MarkdownItems = Record<string, MDX>;
+import { useMarkdownItems, type MarkdownItems } from '~/routes/docs/layout';
 
 export const CloseIcon = component$(() => (
   <svg
@@ -236,7 +227,7 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
       {/* Sidebar container */}
       <aside
         class={{
-          'w-[280px] min-h-full overflow-y-auto border-r border-gray-200 lg:block fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out lg:static shadow-lg lg:shadow-none text-gray-200': true,
+          'w-[280px] min-h-full overflow-y-auto border-r border-gray-200/50 lg:block fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out lg:static shadow-lg lg:shadow-none text-gray-200': true,
           'transform translate-x-0': store.sideMenuOpen,
           'transform -translate-x-full lg:translate-x-0': !store.sideMenuOpen,
         }}
