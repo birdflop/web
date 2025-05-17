@@ -157,10 +157,10 @@ export default component$(({ hidden }: {
           </Link>
           <button class="lum-btn" id="save" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
+            if (preset.syncshadow) delete preset.shadowcolors;
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
-            if (preset.syncshadow) delete preset.shadowcolors;
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
             }
@@ -194,10 +194,10 @@ export default component$(({ hidden }: {
         <div class="grid grid-cols-2 gap-2">
           <button class="lum-btn" id="export" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
+            if (preset.syncshadow) delete preset.shadowcolors;
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
-            if (preset.syncshadow) delete preset.shadowcolors;
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
               id,
