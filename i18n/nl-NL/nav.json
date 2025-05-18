@@ -1,5 +1,16 @@
 {
   "nav": {
+    "404": {
+      "description": "Whoops! You've hit a dead-end.",
+      "home": "Go back home",
+      "title": "404: Page not found"
+    },
+    "cookies": {
+      "acknowledge": "Okay",
+      "description": "We use cookies to automatically save and load your preferences.",
+      "optOut": "Turn off cookies",
+      "title": "Cookies"
+    },
     "hosting": {
       "billing": "Billing",
       "nodeStats": {

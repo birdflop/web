@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "渐变长度",
-    "outputFormat": "输出格式",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "输出格式"
+    },
     "yamlInput": "YAML 输入"
   }
 }
