@@ -122,17 +122,8 @@ export default component$(({ readOnly }: {
           </div>
           <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
-<<<<<<< HEAD
-            <p>{'<RGBirdflop> Type here!'}</p>
-            <InputField>
-=======
             <p>{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
-            <p class={{
-              'font-mc-bold': rgbStore.bold,
-              'font-mc-italic': rgbStore.italic,
-              'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-            }}>
->>>>>>> birdflop
+            <InputField>
               <Slot />
             </p>
             <InputField readOnly={readOnly}
