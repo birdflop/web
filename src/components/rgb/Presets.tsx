@@ -12,7 +12,7 @@ import { Link, useLocation } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
-import { setUserData } from '~/util/SharedUtils';
+import { setUserData } from '~/util/dataUtils';
 import { defaults } from '~/util/rgb/presets/defaults';
 
 export default component$(({ hidden }: {
@@ -90,7 +90,17 @@ export default component$(({ hidden }: {
             presetStore.push(...savedPresets);
             localStorage.setItem('savedPresets', JSON.stringify(presetStore));
           } catch (err) {
-            console.error('Error parsing saved presets', err);
+            const id = Math.random().toString(36).substring(2, 15);
+            const notification = {
+              id,
+              title: 'Error parsing saved presets',
+              description: `Error: ${err}`,
+              bgColor: 'lum-bg-red-900/50',
+            };
+            notifications.push(notification);
+            setTimeout(() => {
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+            }, 2000);
           }
         }}>
         <Dropdown id="saved-presets" class={{ 'w-full': true }}
@@ -134,23 +144,23 @@ export default component$(({ hidden }: {
               value: JSON.stringify(preset),
             }))
           } display={<span class="flex gap-3 flex-1">
-            <Download size={20} /> Load saved preset
+            <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
           </span>}>
           <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
-            <Globe size={20} /> Browse
+            <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           {t('rgb.presets.saved.presets@@Saved Presets')}
         </Dropdown>
         <div class="grid grid-cols-2 gap-2">
           <Link class="lum-btn" href="/resources/rgb/presets">
-            <Globe size={20} /> Browse
+            <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           <button class="lum-btn" id="save" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
+            if (preset.syncshadow) delete preset.shadowcolors;
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
-            if (preset.syncshadow) delete preset.shadowcolors;
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
             }
@@ -184,10 +194,10 @@ export default component$(({ hidden }: {
         <div class="grid grid-cols-2 gap-2">
           <button class="lum-btn" id="export" onClick$={async () => {
             const preset: Partial<typeof defaults> = { ...rgbStore };
+            if (preset.syncshadow) delete preset.shadowcolors;
             (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
             });
-            if (preset.syncshadow) delete preset.shadowcolors;
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
               id,

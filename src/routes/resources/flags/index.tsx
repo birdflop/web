@@ -2,7 +2,7 @@ import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/dataUtils';
 import type { flagsSchema } from '~/util/flags/generateResult';
 import { generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';

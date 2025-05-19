@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "Gradient Length",
-    "outputFormat": "Output Format",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "Output Format"
+    },
     "yamlInput": "YAML Input"
   }
 }

@@ -7,7 +7,7 @@ import { rgbDefaults, rgbStoreContext } from '../rgb';
 import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
@@ -249,7 +249,7 @@ export default component$(() => {
 
             <Accordion sectionName="outputformat">
               <FileJson size={26} />
-              {t('animtab.outputFormat@@Output Format')}
+              {t('animtab.outputFormat.title@@Output Format')}
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
@@ -257,7 +257,7 @@ export default component$(() => {
               'max-h-[500px] opacity-100 pointer-events-auto': openSections.indexOf('outputformat') != -1,
             }}>
               <label for="outputformat" class="text-gray-500">
-                Only use this if you're trying to use this tool for a different plugin or know what you're doing
+                {t('animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.')}
               </label>
               <textarea class="lum-input h-32 whitespace-pre" id="outputformat"
                 value={animtabStore.outputFormat}

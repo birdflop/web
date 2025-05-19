@@ -3,6 +3,7 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { Home } from 'lucide-icons-qwik';
+import { inlineTranslate } from 'qwik-speak';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const onGet: RequestHandler = ({ json, request }) => {
@@ -15,6 +16,8 @@ export const onGet: RequestHandler = ({ json, request }) => {
 };
 
 export default component$(() => {
+  const t = inlineTranslate();
+
   // Keeping below unloading in case we mess up navbar in future
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => unloadGoogleAds());
@@ -23,13 +26,15 @@ export default component$(() => {
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <div class="text-red-400 text-4xl">
         <LogoBirdflop confused width={100} fillGradient={['#54daf4', '#545eb6']} />
-        <h1 class="font-bold mb-4 mt-6">404: Page not found</h1>
+        <h1 class="font-bold mb-4 mt-6">
+          {t('nav.404.title@@404: Page not found')}
+        </h1>
         <p class="font-italic text-gray-400 text-xl">
-          Whoops! You've hit a dead-end.
+          {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
         </p>
         <div class="flex mt-4">
           <Link href="/" class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-blue-600/80 hover:lum-bg-blue-600">
-            <Home size={26}/> Go back home
+            <Home size={26}/> {t('nav.404.home@@Go back home')}
           </Link>
         </div>
       </div>

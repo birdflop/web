@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "Длина градиента",
-    "outputFormat": "Формат",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "Формат"
+    },
     "yamlInput": "Ввод YAML"
   }
 }
