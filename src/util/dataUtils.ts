@@ -32,7 +32,10 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
   // Migrate between versions
   if (json.version != defaults.version) {
     json = loadPreset(JSON.stringify(json));
-    cookie.set(name, JSON.stringify(json), { path: '/' });
+    cookie.set(name, JSON.stringify(json), {
+      path: '/',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    });
   }
 
   return json;
@@ -58,7 +61,7 @@ export function setCookies(name: names, json: { [key: string]: any }) {
   const encodedValue = encodeURIComponent(JSON.stringify(cookieValue));
   if (existingCookie === encodedValue) return;
   console.debug('cookie processed', name, encodedValue);
-  document.cookie = `${name}=${encodedValue}; path=/`;
+  document.cookie = `${name}=${encodedValue}; path=/; expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
 }
 
 export const setUserData = server$(async function(data: {
