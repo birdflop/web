@@ -4,7 +4,7 @@ import { qwikCity } from "@builder.io/qwik-city/vite";
 import { qwikSpeakInline } from "qwik-speak/inline";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { languages } from "./src/speak-config";
-import { partytownVite } from "@builder.io/partytown/utils";
+import { partytownVite } from "@qwik.dev/partytown/utils";
 import { join } from "path";
 import tailwindcss from "@tailwindcss/vite";
 export default defineConfig(() => {

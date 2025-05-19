@@ -8,7 +8,7 @@ import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { Gradient } from '~/util/rgb/HexUtils';
 import { defaults, presets } from '~/util/rgb/presets/defaults';
 import { sortColors } from '~/util/rgb/RGBUtils';
-import { setUserData } from '~/util/SharedUtils';
+import { setUserData } from '~/util/dataUtils';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { publishedPreset } from '~/util/rgb/presets';
 
