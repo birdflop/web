@@ -7,7 +7,7 @@ import { rgbDefaults, rgbStoreContext } from '../rgb';
 import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
