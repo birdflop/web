@@ -11,8 +11,8 @@ export const defaults = {
     { hex: '#545eb6', pos: 100 },
   ],
   shadowcolors: [
-    { hex: '#1b2527', pos: 0 },
-    { hex: '#17181c', pos: 100 },
+    { hex: '#15373D', pos: 0 },
+    { hex: '#15182E', pos: 100 },
   ],
   colorlength: 1,
   name: 'logo',

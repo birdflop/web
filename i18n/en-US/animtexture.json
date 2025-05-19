@@ -1,10 +1,19 @@
 {
   "animtexture": {
+    "animationPreview": "Animation Preview",
+    "bounce": "Bounce Animation",
     "cumulative": "Cumulative (Turn this on if gif frames are broken)",
     "downloadMCMETA": "Download MCMETA",
     "downloadPNG": "Download PNG",
+    "duration": "Duration",
     "framePreview": "Frame Preview",
     "generate": "Generate",
-    "textureName": "Texture Name"
+    "height": "Height",
+    "lockDimensions": "Lock Dimensions",
+    "pngPreview": "PNG Preview",
+    "selectFrames": "Select Frame(s) or GIF",
+    "syncDuration": "Sync Duration",
+    "textureName": "Texture Name",
+    "width": "Width"
   }
 }

@@ -6,7 +6,7 @@ import { defaults } from '~/util/rgb/presets/defaults';
 import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getCookies, setCookies } from '~/util/SharedUtils';
+import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
@@ -161,7 +161,7 @@ export default component$(() => {
             <ColorList hidden={openSections.indexOf('colors') == -1} />
             <Accordion sectionName="textshadow">
               <Blend size={26} />
-              {t('rgb.shadow.title@@Text Shadow')}
+              {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
             <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
 

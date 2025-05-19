@@ -1,5 +1,5 @@
 // @ts-ignore
-import { type PartytownConfig, partytownSnippet } from '@builder.io/partytown/integration';
+import { type PartytownConfig, partytownSnippet } from '@qwik.dev/partytown/integration';
 
 /**
  * Props for `<QwikPartytown/>`, which extends the Partytown Config.

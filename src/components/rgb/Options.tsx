@@ -79,23 +79,31 @@ export default component$(({ hidden }: {
         <div class="flex flex-col gap-1">
           <Toggle id="disperse" checked={rgbStore.disperse}
             onChange$={(e, el) => { rgbStore.disperse = el.checked; }}
-            label={<p class="flex flex-col"><span>Always disperse colors</span></p>} />
-          <p class="text-xs text-gray-400">Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.</p>
+            label={<p class="flex flex-col">
+              {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
+            </p>} />
+          <p class="text-xs text-gray-400">
+            {t('rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.')}
+          </p>
         </div>
         {rgbStore.format.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
             <Toggle id="trimspaces" checked={rgbStore.trimspaces}
               onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}
-              label={'Trim colors from spaces'} />
-            <p class="text-xs text-gray-400">Turn this off if you're using empty underlines / strikethroughs</p>
+              label={t('rgb.colors.trimSpaces.title@@Trim colors from spaces')} />
+            <p class="text-xs text-gray-400">
+              {t('rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs')}
+            </p>
           </div>
         }
         {rgbStore.format.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
             <Toggle id="lowercase" checked={rgbStore.lowercase}
               onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}
-              label={'Make hex code lowercase'} />
-            <p class="text-xs text-gray-400">Turn this on if for some reason your format needs all lowercase hex codes</p>
+              label={t('rgb.colors.lowercase.title@@Lowercase Hex Codes')} />
+            <p class="text-xs text-gray-400">
+              {t('rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.')}
+            </p>
           </div>
         }
       </div>

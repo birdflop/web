@@ -82,9 +82,9 @@ export default component$(({ readOnly }: {
       {!readOnly &&
         <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-2">
           <Terminal size={26} />
-          {t('rgb.inputText@@Input Text')}
+          {t('rgb.inputText.title@@Input Text')}
           <span class="text-gray-400 text-sm font-normal">
-            {t('rgb.inputTextSubtitle@@Type here to generate a gradient!')}
+            {t('rgb.inputText.description@@Type here to generate a gradient!')}
           </span>
         </p>
       }
@@ -122,8 +122,17 @@ export default component$(({ readOnly }: {
           </div>
           <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
+<<<<<<< HEAD
             <p>{'<RGBirdflop> Type here!'}</p>
             <InputField>
+=======
+            <p>{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
+            <p class={{
+              'font-mc-bold': rgbStore.bold,
+              'font-mc-italic': rgbStore.italic,
+              'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+            }}>
+>>>>>>> birdflop
               <Slot />
             </p>
             <InputField readOnly={readOnly}

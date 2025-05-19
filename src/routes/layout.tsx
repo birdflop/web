@@ -71,10 +71,10 @@ export default component$(() => {
       }}>
         <div>
           <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-            <Cookie size={26} /> Cookies
+            <Cookie size={26} /> {t$('nav.cookies.title@@Cookies')}
           </h2>
           <h3 class="text-sm text-gray-400">
-            We use cookies to automatically save and load your preferences.
+            {t$('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
           </h3>
           <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
             {t$('nav.privacyPolicy@@Privacy Policy')}
@@ -85,13 +85,13 @@ export default component$(() => {
             document.cookie = 'optout=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
-            Turn off cookies
+            {t$('nav.cookies.optOut@@Turn off cookies')}
           </button>
           <button class="lum-btn lum-btn-p-1 lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
             document.cookie = 'cookies=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
-            Okay
+            {t$('nav.cookies.acknowledge@@Okay')}
           </button>
         </div>
       </div>,

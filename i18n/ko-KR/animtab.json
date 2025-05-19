@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "그라데이션 길이",
-    "outputFormat": "출력 형식",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "출력 형식"
+    },
     "yamlInput": "YAML 입력"
   }
 }

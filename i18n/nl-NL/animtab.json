@@ -6,7 +6,10 @@
       "style": "Animation Style"
     },
     "length": "Gradient lengte",
-    "outputFormat": "Uitkomst Opmaak",
+    "outputFormat": {
+      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "title": "Uitkomst Opmaak"
+    },
     "yamlInput": "YAML Input"
   }
 }

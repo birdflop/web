@@ -27,7 +27,7 @@ export function loadPreset(p: string): Partial<typeof defaults> {
   }
 
   // if version is current, return the preset
-  if (preset.version === defaults.version) return preset;
+  if (preset.version === defaults.version || !preset.version) return preset;
 
   // if version is not current, migrate the preset
   const migratedFromV2 = migrateFromV2(preset);
