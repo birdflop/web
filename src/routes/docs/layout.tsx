@@ -1,8 +1,11 @@
 import { component$, Slot, useStyles$ } from '@builder.io/qwik';
 import { routeLoader$, useLocation } from '@builder.io/qwik-city';
 import styles from './docs.css?inline';
-import { DocsSidebar } from '~/components/sidebar/sidebar';
-// Define the type for markdown frontmatter
+import { DocsSidebar } from '~/components/docs/SideBar';
+import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
+import Contributors from '~/components/docs/Contributors';
+import { OnThisPage } from '~/components/docs/ThisPage';
+
 type MDX = {
   title: string;
   contributors?: string[];
@@ -44,25 +47,27 @@ export const useMarkdownItems = routeLoader$(async () => {
 export default component$(() => {
   useStyles$(styles);
   const markdownItems = useMarkdownItems();
-  const currentPath = useLocation().url.pathname;
+  const { url } = useLocation();
+  const currentPath = url.pathname;
   const currentItem = Object.entries(markdownItems.value).find(([k]) => {
-    console.log('k', k);
-    console.log('currentPath', currentPath);
     return currentPath == k;
   });
   const title = currentItem ? currentItem[1].title : 'Docs';
   return (
-    <div class="flex gap-12 xl:gap-20 items-stretch content-container pt-15 px-8 lg:pl-0 xl:pr-0 docs min-h-svh">
+    <div class="flex gap-12 xl:gap-20 items-stretch content-container pt-15 px-8 lg:pl-0 xl:pr-0 docs min-h-svh overflow-hidden">
       <DocsSidebar />
       <main class="contents">
-        <div class="docs-container w-full">
+        <div class="docs-container w-full px-40">
+          <Breadcrumbs />
           <article class="px-4 py-6">
             <h1 class="font-bold text-center">
               {title}
             </h1>
             <Slot />
+            <Contributors />
           </article>
         </div>
+        <OnThisPage />
       </main>
     </div>
   );

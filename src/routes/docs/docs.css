@@ -12,7 +12,7 @@
 }
 
 .docs article a {
-  color: var(--interactive-text-color);
+  color: var(--color-blue-400);
   text-decoration: underline;
 }
 
@@ -92,7 +92,7 @@ h6 a:hover .icon {
 .docs article p {
   margin-top: 1.6rem;
   margin-bottom: 0.9rem;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 400;
   line-height: 1.7;
   color: var(--secondary-text-color);
@@ -105,7 +105,7 @@ h6 a:hover .icon {
   line-height: 1.7;
   list-style: disc;
 
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 400;
   color: var(--secondary-text-color);
 }
@@ -139,7 +139,6 @@ pre {
 }
 
 .docs article pre code {
-  display: grid;
   counter-reset: line;
   background-color: transparent;
   border: none;
