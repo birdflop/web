@@ -129,61 +129,62 @@ export const MenuItems = component$(
       await saveOpenItems(newOpenItems);
     }); return (
       <ul class={{
-        'space-y-1 list-none m-0': true,
+        'list-none m-0': true,
         'pl-0': level === 0,
         'pl-3 ml-1 border-l border-gray-200/20': level > 0,
       }}>
         {items && items.length > 0 ? (
           items.map((item, i) => (
             <li key={i} class="mb-2">
-              {item.items ? (<div class="mb-1">                  <button
-                onClick$={() => toggleAccordion(i)}
-                class={{
-                  'w-full text-left flex items-center justify-between lum-btn lum-bg-transparent rounded': true,
-                  'font-medium': level === 0,
-                  'text-sm py-1.5': level > 0,
-                }}
-                aria-expanded={store.openItems.includes(i)}
-              >
-                <span class={{
-                  'font-medium flex items-center': true,
-                  'text-blue-400': isActiveOrParent(item),
-                }}>
-                  {item.text}
-                </span>
-                <span class={{
-                  'transform transition-transform duration-200': true,
-                  'rotate-90': store.openItems.includes(i),
-                }}>
-                  <ChevronRight size={16} class={{
-                    'text-gray-400': !isActiveOrParent(item),
+              {item.items ? (<div class="mb-1">
+                <button
+                  onClick$={() => toggleAccordion(i)}
+                  class={{
+                    'w-full justify-between lum-btn lum-bg-transparent': true,
+                    'font-medium': level === 0,
+                    'text-sm lum-btn-p-1': level > 0,
+                  }}
+                  aria-expanded={store.openItems.includes(i)}
+                >
+                  <span class={{
+                    'font-medium flex items-center': true,
                     'text-blue-400': isActiveOrParent(item),
-                  }} />
-                </span>
-              </button><div class={{
-                'transition-all duration-200 overflow-hidden': true,
-                'max-h-0 opacity-0 scale-98': !store.openItems.includes(i),
-                'max-h-screen opacity-100 mt-1': store.openItems.includes(i),
-                'pl-1': level > 0,
-              }}>
-                {item.items && item.items.length > 0 && (
-                  <MenuItems
-                    items={item.items}
-                    pathname={pathname}
-                    allOpen={false}
-                    markdownItems={markdownItems}
-                    onClick$={onClick$}
-                    level={level + 1}
-                  />
-                )}
+                  }}>
+                    {item.text}
+                  </span>
+                  <span class={{
+                    'transform transition-transform duration-200': true,
+                    'rotate-90': store.openItems.includes(i),
+                  }}>
+                    <ChevronRight size={16} class={{
+                      'text-gray-400': !isActiveOrParent(item),
+                      'text-blue-400': isActiveOrParent(item),
+                    }} />
+                  </span>
+                </button>
+                <div class={{
+                  'transition-all duration-200 overflow-hidden': true,
+                  'max-h-0 opacity-0 scale-98': !store.openItems.includes(i),
+                  'max-h-screen opacity-100 mt-1': store.openItems.includes(i),
+                  'pl-1': level > 0,
+                }}>
+                  {item.items && item.items.length > 0 && (
+                    <MenuItems
+                      items={item.items}
+                      pathname={pathname}
+                      allOpen={false}
+                      markdownItems={markdownItems}
+                      onClick$={onClick$}
+                      level={level + 1}
+                    />
+                  )}
+                </div>
               </div>
-              </div>) : (<Link
+              ) : (<Link
                 href={item.href}
                 class={{
                   'lum-btn lum-bg-transparent': true,
-                  'text-sm': level > 0,
-                  'py-1.5': level > 0,
-                  'hover:bg-gray-100/10': true,
+                  'text-sm lum-btn-p-1': level > 0,
                   'text-blue-400': item.href === pathname,
                 }}
                 onMouseOver$={$((evt: any, target: HTMLAnchorElement & { __prefetchLink: number }) => {
@@ -206,16 +207,11 @@ export const MenuItems = component$(
                 })}
                 onClick$={onClick$}
               >
-                <div class={{
-                  'w-full relative flex items-center': true,
-                  'pl-1': level > 0,
-                }}>
-                  {item.href && renderUpdated(item.href, markdownItems)}
-                  <span>{item.text}</span>
-                  {item.href === pathname && (
-                    <span class="absolute right-0 w-1.5 h-1.5 rounded-full bg-blue-500" />
-                  )}
-                </div>
+                {item.href && renderUpdated(item.href, markdownItems)}
+                <span>{item.text}</span>
+                {item.href === pathname && (
+                  <span class="absolute right-0 w-1.5 h-1.5 rounded-full bg-blue-500" />
+                )}
               </Link>
               )}
             </li>

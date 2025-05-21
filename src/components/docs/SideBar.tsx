@@ -2,42 +2,7 @@ import { component$, useOnDocument, useStore, $, useVisibleTask$ } from '@builde
 import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
 import { useMarkdownItems, type MarkdownItems } from '~/routes/docs/layout';
 import { MenuItems } from './Menuitems';
-
-export const CloseIcon = component$(() => (
-  <svg
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    class="text-gray-700"
-  >
-    <path
-      d="M18 6L6 18M6 6l12 12"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-));
-
-export const MenuIcon = component$(() => (
-  <svg
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    class="text-gray-700"
-  >
-    <path
-      d="M3 12h18M3 6h18M3 18h18"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-));
+import { Menu, Search, X } from 'lucide-icons-qwik';
 
 function capitalizeWords(string: string) {
   return string
@@ -322,11 +287,11 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
     <>
       <button
         aria-label="Toggle navigation menu"
-        class="fixed top-4 left-4 z-50 lg:hidden bg-white p-2 rounded-md shadow-md flex items-center justify-center"
+        class="lum-btn fixed top-4 left-4 z-50 lg:hidden p-2"
         onClick$={toggleMenu}
         type="button"
       >
-        {store.sideMenuOpen ? <CloseIcon /> : <MenuIcon />}
+        {store.sideMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       <div
@@ -340,45 +305,31 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
 
       <aside
         class={{
-          'min-h-full w-120 overflow-y-auto border-r border-gray-200/50 lg:block fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out lg:static shadow-lg lg:shadow-none text-gray-200': true,
+          'h-dvh w-120 overflow-y-auto lum-card px-4 rounded-none border-l-0 border-y-0 sticky top-0 left-0 z-40 transition-transform duration-300 ease-in-out lg:static shadow-lg lg:shadow-none': true,
           'transform translate-x-0': store.sideMenuOpen,
           'transform -translate-x-full lg:translate-x-0': !store.sideMenuOpen,
         }}
       >
-        <nav id="docs-sidebar" class="invisible min-h-full py-16 lg:py-4 px-6 lg:px-4 relative">
-          <div class="sticky top-0 pt-2 pb-4 z-10 border-b border-gray-100 mb-4 flex items-center justify-between">
+        <nav id="docs-sidebar" class="invisible min-h-full relative">
+          <div class="sticky top-0 py-2 z-10 flex items-center justify-between border-b border-gray-700 mb-4">
             <h3 class="font-bold text-lg">Documentation</h3>
             <button
-              class="lg:hidden bg-transparent border-none cursor-pointer p-1 rounded-full hover:bg-gray-100"
+              class="lg:hidden lum-btn lum-bg-transparent p-1"
               onClick$={toggleMenu}
               type="button"
               aria-label="Close menu"
             >
-              <CloseIcon />
+              <X size={24} />
             </button>
           </div>
 
-          <div class="relative mb-6">
+          <div class="flex gap-2 items-center mb-4">
+            <Search size={24} class="text-gray-400" />
             <input
               type="text"
-              placeholder="Search documentation..."
-              class="w-full px-4 py-2 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder="Search docs..."
+              class="w-full lum-input"
             />
-            <svg
-              class="absolute right-3 top-2.5 text-gray-400"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
           </div>
 
           {store.menuItems.length > 0 ? (
