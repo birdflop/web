@@ -50,7 +50,7 @@
 }
 
 .docs article p {
-  @apply text-gray-400 my-4;
+  @apply text-gray-400;
 }
 
 .docs article ul,

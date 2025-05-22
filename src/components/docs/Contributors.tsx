@@ -10,12 +10,16 @@ export default component$(() => {
   }
 
   return (
-    <div class="!py-2 lum-card">
-      <h3>Contributors</h3>
-      <p>Thank you to everyone who has helped us improve our documentation!</p>
-      <ul class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
+    <div class="lum-card my-12">
+      <h3 class="mb-0!">
+        Contributors
+      </h3>
+      <p>
+        Thank you to everyone who has helped us improve our documentation!
+      </p>
+      <div class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
         {contributors.map((contributor: string) => (
-          <li key={`contributor-${contributor}`} class="inline-block m-0 p-0">
+          <div key={`contributor-${contributor}`} class="inline-block m-0 p-0">
             <a href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer">
               <img
                 loading="lazy"
@@ -26,9 +30,9 @@ export default component$(() => {
                 class="!rounded-full w-10 h-auto"
               />
             </a>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 });

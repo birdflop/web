@@ -45,7 +45,6 @@
     "@modular-forms/qwik": "^0.29.1",
     "@prisma/client": "6.8.2",
     "@prisma/extension-accelerate": "2.0.0",
-    "@qwik.dev/partytown": "^0.11.1",
     "@shikijs/colorized-brackets": "^3.4.2",
     "@shikijs/rehype": "^3.4.2",
     "@shikijs/transformers": "^3.4.2",

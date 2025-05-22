@@ -183,7 +183,7 @@ export const MenuItems = component$(
               ) : (<Link
                 href={item.href}
                 class={{
-                  'lum-btn lum-bg-transparent': true,
+                  'lum-btn lum-bg-transparent text-left': true,
                   'text-sm lum-btn-p-1': level > 0,
                   'text-blue-400': item.href === pathname,
                 }}
@@ -208,9 +208,9 @@ export const MenuItems = component$(
                 onClick$={onClick$}
               >
                 {item.href && renderUpdated(item.href, markdownItems)}
-                <span>{item.text}</span>
+                <span class="flex-1">{item.text}</span>
                 {item.href === pathname && (
-                  <span class="absolute right-0 w-1.5 h-1.5 rounded-full bg-blue-500" />
+                  <span class="w-2 h-2 m-1 rounded-full bg-blue-500" />
                 )}
               </Link>
               )}
