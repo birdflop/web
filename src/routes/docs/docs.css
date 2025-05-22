@@ -1,92 +1,52 @@
 @import "tailwindcss";
 
-.docs .content-container {
-  @apply px-8 lg:pl-0 xl:pr-0;
-  @apply mx-auto min-h-[100vh];
-  max-width: min(var(--container-max-width), 100vw);
-}
-
-.docs .docs-container {
-  @apply pt-8 lg:pt-5;
-  @apply min-w-48;
+.docs {
+  --scroll-margin-top: 10rem
 }
 
 .docs article a {
-  color: var(--color-blue-400);
-  text-decoration: underline;
+  @apply text-blue-400 underline;
 }
 
 .docs article blockquote {
-  background: var(--blockquote-bg-color);
-  padding: 20px 13px 20px 10px;
-  border-left: 10px solid #ac7ef4;
-  margin: 30px 0;
+  @apply bg-gray-800 border-l-6 border-l-blue-400 rounded-md px-6 py-8 my-4 border border-gray-700;
 }
 
 .docs article blockquote p:first-child {
-  margin-top: 0;
+  @apply mt-0
 }
 
 .docs article blockquote p:last-child {
-  margin-bottom: 0;
+  @apply mb-0;
 }
 
 .docs article a:hover {
-  text-decoration: none;
+  @apply text-blue-500 no-underline;
 }
 
-
-.docs article h1 {
-  @apply mb-7;
-  @apply relative;
-
-  line-height: 1.2;
-  font-size: 55px;
-  font-weight: 800;
-  scroll-margin-top: var(--scroll-margin-top);
-}
-
+.docs article h1,
 .docs article h2,
 .docs article h3,
 .docs article h4,
 .docs article h5,
 .docs article h6 {
-  @apply text-xl font-semibold;
-  @apply relative;
-  margin-top: 1.2em;
+  @apply relative text-xl font-semibold;
   scroll-margin-top: var(--scroll-margin-top);
-
   margin-bottom: max(0.7em, 18px);
 }
 
-.docs article h2 {
+.docs article h1 {
+  @apply text-5xl font-extrabold;
   line-height: 1.2;
-  font-size: 42px;
-  font-weight: 800;
-  scroll-margin-top: var(--scroll-margin-top);
-  margin-top: 45px;
+}
+
+.docs article h2 {
+  @apply text-4xl font-bold;
+  line-height: 1.2;
 }
 
 .docs article h3 {
-  font-size: 1.8rem;
-}
-
-.docs h2 a,
-.docs h3 a,
-.docs h4 a,
-.docs h5 a,
-.docs h6 a {
-  position: absolute;
-  width: 100%;
-  height: 1em;
-}
-
-h2 a:hover .icon,
-h3 a:hover .icon,
-h4 a:hover .icon,
-h5 a:hover .icon,
-h6 a:hover .icon {
-  display: inline;
+  @apply text-3xl;
 }
 
 .docs article p {
@@ -100,8 +60,7 @@ h6 a:hover .icon {
 
 .docs article ul,
 .docs article ol {
-  @apply my-4;
-  @apply ml-10;
+  @apply my-4 ml-10;
   line-height: 1.7;
   list-style: disc;
 
@@ -115,8 +74,7 @@ h6 a:hover .icon {
 }
 
 .docs article li {
-  @apply my-1;
-  @apply pl-2;
+  @apply my-1 pl-2;
 }
 
 .docs article li::marker,
@@ -157,15 +115,15 @@ pre {
 
 @media (max-width: 640px) {
   .docs article code {
-    word-break: break-all;
+    @apply break-all;
   }
 
   .docs article h1 {
-    font-size: 40px;
+    @apply text-4xl;
   }
 
   .docs article h2 {
-    font-size: 30px;
+    @apply text-3xl;
   }
 }
 
@@ -181,15 +139,18 @@ pre {
 
 .docs article th:first-child,
 .docs article td:first-child {
-  padding-left: 0;
+  @apply pl-0;
 }
 
 .docs article th:last-child,
 .docs article td:last-child {
-  padding-right: 0;
+  @apply pr-0;
 }
 
 .docs article img {
-  border-radius: 5px;
-  overflow: hidden;
+  @apply rounded-md overflow-hidden;
+}
+
+.docs article hr {
+  @apply my-8 border-t-1 border-t-gray-700;
 }

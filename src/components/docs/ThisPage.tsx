@@ -93,7 +93,7 @@ export const OnThisPage = component$(() => {
                 href={`#${h.id}`}
                 class={{
                   'lum-btn text-ellipsis lum-bg-transparent': true,
-                  'text-blue-500': activeId.value === h.id,
+                  'text-blue-400': activeId.value === h.id,
                 }}
               >
                 {h.text}
