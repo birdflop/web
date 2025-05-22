@@ -12,7 +12,7 @@ contributors:
 
 Welcome to birdflop's documentation!
 
-This part of the website will help you understand how do to things such as:
+This part of the website will help you understand how to do things such as:
 
 - Using the panel
 - Using our tools

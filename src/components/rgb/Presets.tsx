@@ -60,7 +60,7 @@ export default component$(({ hidden }: {
     ...(session.value?.user?.savedPresets ?? []),
   ] as Partial<typeof defaults>[]);
 
-  console.log(presetStore);
+  // Removed console.log(presetStore) to avoid performance and security issues in production.
 
   return (
     <div class={{
