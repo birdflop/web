@@ -4,7 +4,6 @@ import { useDocumentHead } from '@builder.io/qwik-city';
 export default component$(() => {
   const { frontmatter } = useDocumentHead<{ contributors?: string[] }>();
   const contributors = frontmatter.contributors || [];
-  console.log('Contributors:', contributors);
   if (!contributors.length) {
     return null;
   }

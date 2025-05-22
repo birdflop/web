@@ -13,7 +13,6 @@ function capitalizeWords(string: string) {
 
 export const buildMenuFromMarkdownItems = (markdownItems: MarkdownItems): ContentMenu[] => {
   const paths = Object.keys(markdownItems).sort((a, b) => a.length - b.length);
-  console.log('Paths:', paths);
 
   const pathsByDir = new Map<string, string[]>();
 
@@ -239,7 +238,6 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
   useOnDocument(
     'DOMContentLoaded',
     $(() => {
-      console.log('Document loaded');
       if (markdownItems.value && Object.keys(markdownItems.value).length > 0) {
         store.menuItems = buildMenuFromMarkdownItems(markdownItems.value);
       } else {
@@ -275,9 +273,7 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
 
   return (
     <aside
-      class={{
-        'w-full sm:w-100 fixed sm:sticky sm:h-dvh lum-card bg-gray-900/50 backdrop-blur-lg rounded-none border-l-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0': true,
-      }}
+      class='w-full sm:w-100 fixed sm:sticky sm:h-dvh lum-card bg-gray-900/50 backdrop-blur-lg rounded-none border-l-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
     >
       <nav id="docs-sidebar" class="invisible min-h-full relative">
         <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
@@ -286,7 +282,7 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
             Documentation
           </h1>
 
-          <button class={{ 'lum-btn lum-bg-transparent p-2 sm:hidden': true }} onClick$={() => {
+          <button class='lum-btn lum-bg-transparent p-2 sm:hidden' onClick$={() => {
             store.sideMenuOpen = !store.sideMenuOpen;
             const abortController = new AbortController();
             document.addEventListener('click', (e) => {
