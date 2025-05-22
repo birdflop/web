@@ -138,7 +138,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-              <LogoDiscord width={20} />
+              <LogoDiscord size={20} />
               Invite
             </a>
             <a class="lum-btn"
@@ -223,7 +223,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
-              <LogoDiscord width={20} />
+              <LogoDiscord size={20} />
               Invite
             </a>
             <a class="lum-btn"

@@ -30,11 +30,11 @@ importers:
         specifier: ^9.27.0
         version: 9.27.0
       '@luminescent/ui':
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 3.0.1
+        version: 3.0.1
       '@luminescent/ui-qwik':
-        specifier: ^2.1.0
-        version: 2.1.0(@luminescent/ui@2.1.0)
+        specifier: ^3.0.1
+        version: 3.0.1(@luminescent/ui@3.0.1)
       '@modular-forms/qwik':
         specifier: ^0.29.1
         version: 0.29.1(@builder.io/qwik-city@1.14.1(acorn@8.14.0)(rollup@4.41.0)(typescript@5.8.3)(vite@5.4.14(@types/node@22.15.21)(lightningcss@1.30.1)))(@builder.io/qwik@1.14.1(vite@5.4.14(@types/node@22.15.21)(lightningcss@1.30.1)))(typescript@5.8.3)
@@ -120,14 +120,14 @@ importers:
         specifier: 5.1.4
         version: 5.1.4(typescript@5.8.3)(vite@5.4.14(@types/node@22.15.21)(lightningcss@1.30.1))
       wrangler:
-        specifier: ^4.16.0
-        version: 4.16.0(@cloudflare/workers-types@4.20250522.0)
+        specifier: ^4.16.1
+        version: 4.16.1(@cloudflare/workers-types@4.20250522.0)
       yaml:
         specifier: ^2.8.0
         version: 2.8.0
       zod:
-        specifier: ^3.25.20
-        version: 3.25.20
+        specifier: ^3.25.21
+        version: 3.25.21
 
 packages:
 
@@ -729,14 +729,14 @@ packages:
   '@kurkle/color@0.3.4':
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
-  '@luminescent/ui-qwik@2.1.0':
-    resolution: {integrity: sha512-s5vAj2ChEjiFpqtrzGIC1ipgIQqFJDhcjV0zXIL+tOlAVur5L4iuGTHbVVjS1B7JHkFaTgbryAVPzy0/o66Qcw==}
+  '@luminescent/ui-qwik@3.0.1':
+    resolution: {integrity: sha512-4So9bdU2SR6tH/TyHP4E9BkUJA/rs1f+5+M1lqr5uEv5MZBXkkQ75KEluWRSpTuCmAjBjsoMBmRhgtSKWyVgRA==}
     engines: {node: '>=23.11.0', npm: please-use-pnpm, pnpm: '>=10.10.0', yarn: please-use-pnpm}
     peerDependencies:
-      '@luminescent/ui': 2.1.0
+      '@luminescent/ui': 3.0.1
 
-  '@luminescent/ui@2.1.0':
-    resolution: {integrity: sha512-xYbNQbFoZpC7agPbvYLDhVdMAjEEwtLgrsSvTynKLmEf7MVb2gW6rwjyG4Lnxepo7obL2r9u/yaOdS60RAEuKw==}
+  '@luminescent/ui@3.0.1':
+    resolution: {integrity: sha512-thsrJdKfC4+SDlyYy5SsPta+6BolcvBW+ogvKWaM19itlxJGouFBuLiZT3rABgJc5nUJh3Ca1aTWZrTb5rEMnQ==}
     engines: {node: '>=23.11.0', npm: please-use-pnpm, pnpm: '>=10.10.0', yarn: please-use-pnpm}
 
   '@mdx-js/mdx@3.1.0':
@@ -2784,8 +2784,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.16.0:
-    resolution: {integrity: sha512-zQojiBJKAWRVG4WdUgTP5/i9N5UcwOixhWljnBrcKxJd+kpqUXVV/L03ytO+0cnr5IhgYUs7qhjd8EWU6UwPfg==}
+  wrangler@4.16.1:
+    resolution: {integrity: sha512-YiLdWXcaQva2K/bqokpsZbySPmoT8TJFyJPsQPZumnkgimM9+/g/yoXArByA+pf+xU8jhw7ybQ8X1yBGXv731g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -2828,8 +2828,8 @@ packages:
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
-  zod@3.25.20:
-    resolution: {integrity: sha512-z03fqpTMDF1G02VLKUMt6vyACE7rNWkh3gpXVHgPTw28NPtDFRGvcpTtPwn2kMKtQ0idtYJUTxchytmnqYswcw==}
+  zod@3.25.21:
+    resolution: {integrity: sha512-k3MXcS5jrVo00Irs53CngVH4gHL1LgcCfOd9fOmZ7Pq/BP8eBop0P5RJDX5SsKchuxTMewJI0/AuK7MdD6ePXw==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -3247,11 +3247,11 @@ snapshots:
 
   '@kurkle/color@0.3.4': {}
 
-  '@luminescent/ui-qwik@2.1.0(@luminescent/ui@2.1.0)':
+  '@luminescent/ui-qwik@3.0.1(@luminescent/ui@3.0.1)':
     dependencies:
-      '@luminescent/ui': 2.1.0
+      '@luminescent/ui': 3.0.1
 
-  '@luminescent/ui@2.1.0': {}
+  '@luminescent/ui@3.0.1': {}
 
   '@mdx-js/mdx@3.1.0(acorn@8.14.0)':
     dependencies:
@@ -5828,7 +5828,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250508.0
       '@cloudflare/workerd-windows-64': 1.20250508.0
 
-  wrangler@4.16.0(@cloudflare/workers-types@4.20250522.0):
+  wrangler@4.16.1(@cloudflare/workers-types@4.20250522.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.3.2(unenv@2.0.0-rc.17)(workerd@1.20250508.0)
@@ -5864,6 +5864,6 @@ snapshots:
 
   zod@3.22.4: {}
 
-  zod@3.25.20: {}
+  zod@3.25.21: {}
 
   zwitch@2.0.4: {}

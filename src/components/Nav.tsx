@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import { LogoBirdflop, LogoDiscord, Nav, DropdownRaw } from '@luminescent/ui-qwik';
+import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
 import { Box, Globe, LogIn, Github, Server, Book } from 'lucide-icons-qwik';
 
@@ -21,7 +21,7 @@ export default component$(() => {
   return (
     <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent p-2">
-        <LogoBirdflop width={24} fillGradient={['#54daf4', '#545eb6']} />
+        <LogoBirdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
         <span class="font-semibold -ml-1 text-blue-50">Birdflop</span>
         <div class={{
           'transition-all': true,
@@ -33,11 +33,11 @@ export default component$(() => {
       <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hidden sm:flex">
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <DropdownRaw id="nav-hosting" q:slot='end' hover
-        display={<div class="flex items-center gap-2">
-          <Server size={20} /> {t('nav.hosting.title@@Hosting')}
-        </div>}
+      <SelectMenuRaw id="nav-hosting" q:slot='end' hover customDropdown
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
+        <div q:slot="dropdown" class="flex items-center gap-2">
+          <Server size={20} /> {t('nav.hosting.title@@Hosting')}
+        </div>
         <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
           {t('nav.hosting.panel@@Panel')}
         </a>
@@ -50,12 +50,12 @@ export default component$(() => {
         <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent">
           {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
-      </DropdownRaw>
-      <DropdownRaw id="nav-resources" q:slot='end' hover
-        display={<div class="flex items-center gap-2">
-          <Box size={20} /> {t('nav.resources.title@@Resources')}
-        </div>}
+      </SelectMenuRaw>
+      <SelectMenuRaw id="nav-resources" q:slot='end' hover customDropdown
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
+        <div q:slot="dropdown" class="flex items-center gap-2">
+          <Box size={20} /> {t('nav.resources.title@@Resources')}
+        </div>
         <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
@@ -74,9 +74,9 @@ export default component$(() => {
         <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
           {t('nav.resources.more@@More Resources')}
         </Link>
-      </DropdownRaw>
-      <DropdownRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent gap-1': true }} id="lang-picker"
-        display={<Globe size={20} />} values={config.supportedLocales.map(value => (
+      </SelectMenuRaw>
+      <SelectMenuRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent gap-1': true }} id="lang-picker" customDropdown
+        values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
             value: value.lang,
@@ -85,7 +85,8 @@ export default component$(() => {
           document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
           location.reload();
         }}>
-      </DropdownRaw>
+        <Globe size={20} q:slot='dropdown' />
+      </SelectMenuRaw>
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
@@ -160,7 +161,7 @@ export const SocialButtons = component$(() => {
       <Github size={20} />
     </a>
     <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent">
-      <LogoDiscord width={20} />
+      <LogoDiscord size={20} />
     </a>
   </>;
 });

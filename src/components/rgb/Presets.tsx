@@ -1,7 +1,7 @@
 import { $, component$, isBrowser, useContext, useStore, type Signal } from '@builder.io/qwik';
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { Dropdown } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { loadPreset } from '~/util/rgb/presets';
 
 import { Gradient } from '~/util/rgb/HexUtils';
@@ -60,6 +60,8 @@ export default component$(({ hidden }: {
     ...(session.value?.user?.savedPresets ?? []),
   ] as Partial<typeof defaults>[]);
 
+  console.log(presetStore);
+
   return (
     <div class={{
       'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
@@ -103,9 +105,9 @@ export default component$(({ hidden }: {
             }, 2000);
           }
         }}>
-        <Dropdown id="saved-presets" class={{ 'w-full': true }}
+        <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
           onChange$={async (event, el) => loadPresetJSON(el.value)}
-          values={
+          values={presetStore.length == 0 ? undefined :
             presetStore.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
@@ -143,14 +145,15 @@ export default component$(({ hidden }: {
               </span>,
               value: JSON.stringify(preset),
             }))
-          } display={<span class="flex gap-3 flex-1">
+          }>
+          <span q:slot="dropdown" class="flex gap-3 flex-1">
             <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
-          </span>}>
-          <Link q:slot="extra-buttons" class="lum-btn" href="/resources/rgb/presets">
+          </span>
+          <Link q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="/resources/rgb/presets">
             <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           {t('rgb.presets.saved.presets@@Saved Presets')}
-        </Dropdown>
+        </SelectMenu>
         <div class="grid grid-cols-2 gap-2">
           <Link class="lum-btn" href="/resources/rgb/presets">
             <Globe size={20} /> {t('rgb.presets.browse@@Browse')}

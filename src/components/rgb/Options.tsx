@@ -2,7 +2,7 @@ import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { formats } from '~/util/rgb/presets/defaults';
-import { Dropdown, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -18,7 +18,7 @@ export default component$(({ hidden }: {
     }}>
       <div class="flex flex-col md:grid grid-cols-2 gap-2">
         <Slot />
-        <Dropdown id="format" value={rgbStore.customFormat ? 'custom' : JSON.stringify(rgbStore.format)} class={{ 'w-full': true }} onChange$={
+        <SelectMenu id="format" value={rgbStore.customFormat ? 'custom' : JSON.stringify(rgbStore.format)} class={{ 'w-full': true }} onChange$={
           (e, el) => {
             if (el.value == 'custom') {
               rgbStore.customFormat = true;
@@ -46,7 +46,7 @@ export default component$(({ hidden }: {
           },
         ]}>
           {t('rgb.colors.format@@Color Format')}
-        </Dropdown>
+        </SelectMenu>
         <div class="flex flex-col gap-1">
           <label for="prefixsuffix">
             {t('rgb.prefixsuffix@@Prefix/Suffix')}

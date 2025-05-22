@@ -26,7 +26,9 @@ const formatDate = (dateStr?: string): string => {
   }
 };
 
-export const OnThisPage = component$(() => {
+export const OnThisPage = component$(({ readOnly }: {
+  readOnly?: boolean;
+}) => {
   const { headings } = useContent();
   const contentHeadings = headings?.filter((h) => h.level <= 3) || [];
   const { frontmatter, meta } = useDocumentHead();
@@ -91,7 +93,7 @@ export const OnThisPage = component$(() => {
                 key={h.id}
                 href={`#${h.id}`}
                 class={{
-                  'lum-btn text-ellipsis lum-bg-transparent': true,
+                  'lum-btn text-ellipsis lum-bg-transparent whitespace-normal text-left': true,
                   'text-blue-400': activeId.value === h.id,
                 }}
               >
@@ -102,47 +104,49 @@ export const OnThisPage = component$(() => {
         </>
       ) : null}
 
-      <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">More</h6>
-      <div class="flex flex-col gap-2">
-        <a
-          class='lum-btn text-ellipsis lum-bg-transparent'
-          href={editUrl}
-          rel="noopener"
-          target="_blank"
-        >
-          <Edit size={20} />
-          <span>Edit this Page</span>
-        </a>
-        <a
-          class='lum-btn text-ellipsis lum-bg-transparent'
-          href='https://github.com/birdflop/web/issues/new/choose'
-          rel="noopener"
-          target="_blank"
-        >
-          <AlertCircle size={20} />
-          <span>Create an issue</span>
-        </a>
-        <div
-          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'
-        >
-          <User size={20} />
-          <span>Created by: {author}</span>
-        </div>
-        <div
-          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'
-        >
-          <Clock size={20} />
-          <span>Created: {created}</span>
-        </div>
-        {updated !== 'Unknown' && updated !== created && (
+      {!readOnly && <>
+        <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">More</h6>
+        <div class="flex flex-col gap-2">
+          <a
+            class='lum-btn text-ellipsis lum-bg-transparent'
+            href={editUrl}
+            rel="noopener"
+            target="_blank"
+          >
+            <Edit size={20} />
+            <span>Edit this Page</span>
+          </a>
+          <a
+            class='lum-btn text-ellipsis lum-bg-transparent'
+            href='https://github.com/birdflop/web/issues/new/choose'
+            rel="noopener"
+            target="_blank"
+          >
+            <AlertCircle size={20} />
+            <span>Create an issue</span>
+          </a>
           <div
             class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'
           >
-            <Clock size={20} />
-            <span>Last updated: {updated}</span>
+            <User size={20} />
+            <span>Created by: {author}</span>
           </div>
-        )}
-      </div>
+          <div
+            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500 text-left'
+          >
+            <Clock size={20} />
+            <span>Created:<br/>{created}</span>
+          </div>
+        </div>
+      </>}
+      {updated !== 'Unknown' && updated !== created && (
+        <div
+          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500 text-left'
+        >
+          <Clock size={20} />
+          <span>Last Updated:<br/>{updated}</span>
+        </div>
+      )}
     </aside>
   );
 });

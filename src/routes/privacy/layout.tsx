@@ -1,18 +1,7 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { routeLoader$, useLocation } from '@builder.io/qwik-city';
-import { DocsSidebar } from '~/components/docs/SideBar';
-import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
-import Contributors from '~/components/docs/Contributors';
+import { routeLoader$ } from '@builder.io/qwik-city';
 import { OnThisPage } from '~/components/docs/ThisPage';
-
-export type MDX = {
-  title: string;
-  contributors?: string[];
-  created_at?: string;
-  updated_at?: string;
-};
-
-export type MarkdownItems = Record<string, MDX>;
+import { MarkdownItems, MDX } from '../docs/layout';
 
 export const useMarkdownItems = routeLoader$(async () => {
   const rawData = await Promise.all(
@@ -44,29 +33,16 @@ export const useMarkdownItems = routeLoader$(async () => {
 });
 
 export default component$(() => {
-  const markdownItems = useMarkdownItems();
-  const { url } = useLocation();
-  const currentPath = url.pathname;
-  const currentItem = Object.entries(markdownItems.value).find(([k]) => {
-    return currentPath == k;
-  });
-  const title = currentItem ? currentItem[1].title : 'Docs';
   return (
     <div class="flex gap-12 xl:gap-20 items-stretch lg:pl-0 xl:pr-0 min-h-dvh">
-      <DocsSidebar />
-      <main class="contents">
-        <div class="w-full mt-48 sm:mt-30 min-w-48">
-          <Breadcrumbs />
+      <main class="contents ">
+        <div class="w-full mt-48 sm:mt-30 min-w-4 max-w-5xl ml-auto">
           <article class="px-4 md">
-            <h1 class="font-bold text-center border-b border-gray-700 pb-4">
-              {title}
-            </h1>
             <Slot />
-            <Contributors />
           </article>
         </div>
-        <OnThisPage />
       </main>
+      <OnThisPage readOnly />
     </div>
   );
 });

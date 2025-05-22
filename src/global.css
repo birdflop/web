@@ -4,8 +4,8 @@
 
 @plugin "@anuragroy/tailwindcss-animate";
 
-@import "@luminescent/ui/css";
-@plugin "@luminescent/ui";
+@import "@luminescent/ui";
+@plugin "@luminescent/ui/lum-bg";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
@@ -119,7 +119,11 @@ html {
 *::-webkit-scrollbar-corner {
   background-color: transparent;
 }
-.macos-zoom-fix {
-  transform: scale(0.75);
-  transform-origin: top;
+
+.md {
+  @import "@luminescent/ui/formatting";
+  h1, h2, h3, h4, h5, h6 {
+    margin-top: max(0.7em, 18px);
+    margin-bottom: max(0.7em, 18px);
+  }
 }
