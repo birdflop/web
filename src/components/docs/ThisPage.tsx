@@ -78,89 +78,66 @@ export const OnThisPage = component$(() => {
   const activeId = useActiveItem(contentHeadings.map((h) => h.id));
 
   return (
-    <aside class="py-8 pt-10 sticky top-0 w-80 text-sm overflow-y-auto hidden xl:block">
+    <aside
+      class={{
+        'hidden sm:flex max-w-100 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0': true,
+      }}
+    >
       {contentHeadings.length > 0 ? (
         <>
-          <h6 class="font-bold text-center pb-3 uppercase text-lg">On This Page</h6>
-          <ul class="px-2 font-medium text-[var(--interactive-text-color)]">
+          <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">On this page</h6>
+          <div class="flex flex-col gap-2">
             {contentHeadings.map((h) => (
-              <li
+              <a
                 key={h.id}
-                class="rounded-lg"
+                href={`#${h.id}`}
+                class={{
+                  'lum-btn text-ellipsis lum-bg-transparent': true,
+                  'text-blue-500': activeId.value === h.id,
+                }}
               >
-                {activeId.value === h.id ? (
-                  <span class="block px-3 py-2 whitespace-nowrap overflow-hidden text-ellipsis">
-                    {h.text}
-                  </span>
-                ) : (
-                  <a
-                    href={`#${h.id}`}
-                    class={`${h.level > 2 ? 'ml-0' : ''} block px-3 py-2 whitespace-nowrap overflow-hidden text-ellipsis`}
-                  >
-                    {h.text}
-                  </a>
-                )}
-              </li>
+                {h.text}
+              </a>
             ))}
-          </ul>
+          </div>
         </>
       ) : null}
 
-      <h6 class="font-bold text-center pb-3 uppercase">More</h6>
-      <ul class="px-2 font-medium text-[var(--interactive-text-color)]">
-        <li
-          key='more-items-on-this-page-edit'
-          class="rounded-lg"
+      <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">More</h6>
+      <div class="flex flex-col gap-2">
+        <a
+          class={'lum-btn text-ellipsis lum-bg-transparent'}
+          href={editUrl}
+          rel="noopener"
+          target="_blank"
         >
-          <a
-            class="inline-flex gap-x-2 px-3 py-2 items-center"
-            href={editUrl}
-            rel="noopener"
-            target="_blank"
-          >
-            <Edit size={20} />
-            <span>Edit this Page</span>
-          </a>
-        </li>
-        <li
-          key='more-items-on-this-page-issue'
-          class="rounded-lg"
+          <Edit size={20} />
+          <span>Edit this Page</span>
+        </a>
+        <a
+          class={'lum-btn text-ellipsis lum-bg-transparent'}
+          href='https://github.com/birdflop/web/issues/new/choose'
+          rel="noopener"
+          target="_blank"
         >
-          <a
-            class="inline-flex gap-x-2 px-3 py-2 items-center"
-            href='https://github.com/birdflop/web/issues/new/choose'
-            rel="noopener"
-            target="_blank"
-          >
-            <AlertCircle size={20} />
-            <span>Create an issue</span>
-          </a>
-        </li>
-        <li
-          key='more-items-on-this-page-created'
-          class="rounded-lg"
+          <AlertCircle size={20} />
+          <span>Create an issue</span>
+        </a>
+        <div
+          class={'lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'}
         >
+          <Clock size={20} />
+          <span>Created: {created}</span>
+        </div>
+        {updated !== 'Unknown' && updated !== created && (
           <div
-            class="inline-flex gap-x-2 px-3 py-2 items-center"
+            class={'lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'}
           >
             <Clock size={20} />
-            <span>Created: {created}</span>
+            <span>Last updated: {updated}</span>
           </div>
-        </li>
-        {updated !== 'Unknown' && (
-          <li
-            key='more-items-on-this-page-updated'
-            class="rounded-lg"
-          >
-            <div
-              class="inline-flex gap-x-2 px-3 py-2 items-center"
-            >
-              <Clock size={20} />
-              <span>Last updated: {updated}</span>
-            </div>
-          </li>
         )}
-      </ul>
+      </div>
     </aside>
   );
 });

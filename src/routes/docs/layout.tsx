@@ -54,13 +54,13 @@ export default component$(() => {
   });
   const title = currentItem ? currentItem[1].title : 'Docs';
   return (
-    <div class="flex gap-12 xl:gap-20 items-stretch content-container pt-15 px-8 lg:pl-0 xl:pr-0 docs min-h-svh overflow-hidden">
+    <div class="flex gap-12 xl:gap-20 items-stretch content-container lg:pl-0 xl:pr-0 docs min-h-dvh">
       <DocsSidebar />
       <main class="contents">
-        <div class="docs-container w-full px-40">
+        <div class="docs-container w-full mt-40 sm:mt-24">
           <Breadcrumbs />
-          <article class="px-4 py-6">
-            <h1 class="font-bold text-center">
+          <article class="px-4">
+            <h1 class="font-bold text-center border-b border-gray-700 pb-4">
               {title}
             </h1>
             <Slot />

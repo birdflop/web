@@ -2,7 +2,7 @@ import { component$, useOnDocument, useStore, $, useVisibleTask$ } from '@builde
 import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
 import { useMarkdownItems, type MarkdownItems } from '~/routes/docs/layout';
 import { MenuItems } from './Menuitems';
-import { Menu, Search, X } from 'lucide-icons-qwik';
+import { Book, Menu, Search } from 'lucide-icons-qwik';
 
 function capitalizeWords(string: string) {
   return string
@@ -201,16 +201,6 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
     }
   });
 
-  const toggleMenu = $(() => {
-    store.sideMenuOpen = !store.sideMenuOpen;
-
-    if (store.sideMenuOpen) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
-  });
-
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (markdownItems.value && Object.keys(markdownItems.value).length > 0) {
@@ -284,51 +274,43 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
     }));
 
   return (
-    <>
-      <button
-        aria-label="Toggle navigation menu"
-        class="lum-btn fixed top-4 left-4 z-50 lg:hidden p-2"
-        onClick$={toggleMenu}
-        type="button"
-      >
-        {store.sideMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+    <aside
+      class={{
+        'w-full sm:w-100 fixed sm:sticky sm:h-dvh lum-card bg-gray-900/50 backdrop-blur-lg rounded-none border-l-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0': true,
+      }}
+    >
+      <nav id="docs-sidebar" class="invisible min-h-full relative">
+        <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
+          <Book class="ml-2 sm:ml-0" />
+          <h1 class="flex font-semibold text-lg flex-1">
+            Documentation
+          </h1>
 
-      <div
-        class={{
-          'fixed inset-0 bg-gray-900 bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden': true,
-          'opacity-100': store.sideMenuOpen,
-          'opacity-0 pointer-events-none': !store.sideMenuOpen,
-        }}
-        onClick$={toggleMenu}
-      />
+          <button class={{ 'lum-btn lum-bg-transparent p-2 sm:hidden': true }} onClick$={() => {
+            store.sideMenuOpen = !store.sideMenuOpen;
+            const abortController = new AbortController();
+            document.addEventListener('click', (e) => {
+              if (!e.composedPath().includes(document.querySelector('aside')!) || e.target instanceof HTMLAnchorElement) {
+                store.sideMenuOpen = false;
+                abortController.abort();
+              }
+            }, { signal: abortController.signal });
+          }} aria-label="Toggle Menu">
+            <Menu />
+          </button>
+        </div>
 
-      <aside
-        class={{
-          'h-dvh w-120 overflow-y-auto lum-card px-4 rounded-none border-l-0 border-y-0 sticky top-0 left-0 z-40 transition-transform duration-300 ease-in-out lg:static shadow-lg lg:shadow-none': true,
-          'transform translate-x-0': store.sideMenuOpen,
-          'transform -translate-x-full lg:translate-x-0': !store.sideMenuOpen,
-        }}
-      >
-        <nav id="docs-sidebar" class="invisible min-h-full relative">
-          <div class="sticky top-0 py-2 z-10 flex items-center justify-between border-b border-gray-700 mb-4">
-            <h3 class="font-bold text-lg">Documentation</h3>
-            <button
-              class="lg:hidden lum-btn lum-bg-transparent p-1"
-              onClick$={toggleMenu}
-              type="button"
-              aria-label="Close menu"
-            >
-              <X size={24} />
-            </button>
-          </div>
-
-          <div class="flex gap-2 items-center mb-4">
+        <div class={{
+          'flex-col gap-3 my-4 mx-4 sm:mx-0': true,
+          'hidden sm:flex': !store.sideMenuOpen,
+          'flex': store.sideMenuOpen,
+        }}>
+          <div class="flex gap-3 items-center">
             <Search size={24} class="text-gray-400" />
             <input
               type="text"
               placeholder="Search docs..."
-              class="w-full lum-input"
+              class="w-full lum-input lum-btn-p-1"
             />
           </div>
 
@@ -346,9 +328,9 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
               <p class="mt-2 text-sm">Add markdown files to your docs directory</p>
             </div>
           )}
-        </nav>
-      </aside>
-    </>
+        </div>
+      </nav>
+    </aside>
   );
 });
 

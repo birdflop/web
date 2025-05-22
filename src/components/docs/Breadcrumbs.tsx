@@ -22,34 +22,26 @@ export const Breadcrumbs = component$(() => {
   }
 
   return (
-    <nav class="flex text-sm py-3 px-4 mb-6" aria-label="Breadcrumb">
-      <ol class="inline-flex items-center space-x-1 md:space-x-2">
-        <li class="inline-flex items-center">
-          <a href="/docs/" class="text-gray-500 hover:text-blue-600">
-            <Home class="w-4 h-4 text-gray-400" />
-          </a>
-        </li>
+    <nav class="fixed top-31 sm:top-20 text-sm mb-6 lum-card gap-1 flex-row items-center w-full sm:w-auto lum-bg-gray-900/50 backdrop-blur-lg rounded-none sm:rounded-full sm:border lum-btn-p-2 sm:p-2 z-20" aria-label="Breadcrumb">
+      <a href="/docs/" class="lum-btn p-1 rounded-full lum-bg-transparent">
+        <Home size={19} />
+      </a>
 
-        {breadcrumbs.map((crumb, index) => (
-          <li key={index}>
-            <div class="flex items-center">
-              <ChevronRight class="w-4 h-4 text-gray-400" />
-              {index < breadcrumbs.length - 1 ? (
-                <Link
-                  href={crumb.href}
-                  class="hover:text-blue-600 ml-1 md:ml-2"
-                >
-                  {crumb.text}
-                </Link>
-              ) : (
-                <span class="bg-blue-400/30 rounded-lg px-2 ml-1 md:ml-2 font-medium">
-                  {crumb.text}
-                </span>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
+      {breadcrumbs.map((crumb, index) => (
+        <div class="flex items-center gap-1" key={index}>
+          <ChevronRight class="w-4 h-4 text-gray-400" />
+          <Link
+            href={crumb.href}
+            class={{
+              'lum-btn lum-btn-p-1 rounded-full text-sm': true,
+              'lum-bg-transparent': index < breadcrumbs.length - 1,
+              'lum-bg-blue-400/30 hover:lum-bg-blue-400/30': index === breadcrumbs.length - 1,
+            }}
+          >
+            {crumb.text}
+          </Link>
+        </div>
+      ))}
     </nav>
   );
 });

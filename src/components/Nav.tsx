@@ -20,7 +20,7 @@ export default component$(() => {
 
   return (
     <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
-      <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent">
+      <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent p-2">
         <LogoBirdflop width={24} fillGradient={['#54daf4', '#545eb6']} />
         <span class="font-semibold -ml-1 text-blue-50">Birdflop</span>
         <div class={{
@@ -30,7 +30,7 @@ export default component$(() => {
           <div class="lum-loading w-4 h-4" />
         </div>
       </Link>
-      <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent">
+      <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hidden sm:flex">
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
       <DropdownRaw id="nav-hosting" q:slot='end' hover
@@ -139,6 +139,9 @@ export default component$(() => {
       </Link>
       <Link q:slot="mobile" href="/resources/banner" class="lum-btn lum-bg-transparent">
         {t('nav.resources.banner.title@@Banner Generator')}
+      </Link>
+      <Link q:slot="mobile" href="/docs" class="lum-btn lum-bg-transparent">
+        {t('nav.docs@@Docs')}
       </Link>
       <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
         {t('nav.resources.more@@More Resources')}
