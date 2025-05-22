@@ -50,46 +50,24 @@
 }
 
 .docs article p {
-  margin-top: 1.6rem;
-  margin-bottom: 0.9rem;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 1.7;
-  color: var(--secondary-text-color);
+  @apply text-gray-400 my-4;
 }
 
 .docs article ul,
 .docs article ol {
-  @apply my-4 ml-10;
-  line-height: 1.7;
-  list-style: disc;
-
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--secondary-text-color);
+  @apply my-4 ml-10 text-gray-400 list-disc;
 }
 
 .docs article ol {
-  list-style: decimal;
+  @apply list-decimal;
 }
 
 .docs article li {
   @apply my-1 pl-2;
 }
 
-.docs article li::marker,
-.docs article li::-webkit-details-marker {
-  color: var(--interactive-text-color);
-  font-weight: 800;
-}
-
-pre {
-  border-radius: 8px;
-}
-
 .docs article pre {
-  padding: 18px 15px;
-  overflow: auto;
+  @apply rounded-md overflow-auto p-4 bg-gray-800 my-2;
 }
 
 :root {
@@ -97,20 +75,11 @@ pre {
 }
 
 .docs article pre code {
-  counter-reset: line;
-  background-color: transparent;
-  border: none;
-  user-select: auto;
-  line-height: 1.28;
+  @apply border-none select-auto bg-transparent;
 }
 
 .docs article code {
-  background-color: var(--code-bg-color);
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 0.9em;
-  border-bottom: 2px solid var(--code-border-color);
-  user-select: all;
+  @apply bg-gray-800 py-0.5 px-1 rounded-md select-all border-b-2 border-b-gray-700;
 }
 
 @media (max-width: 640px) {
@@ -133,8 +102,7 @@ pre {
 
 .docs article th,
 .docs article td {
-  padding: 6px;
-  vertical-align: top;
+  @apply p-2 align-top;
 }
 
 .docs article th:first-child,
