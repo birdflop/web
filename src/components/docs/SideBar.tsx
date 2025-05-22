@@ -1,4 +1,4 @@
-import { component$, useOnDocument, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
 import { useMarkdownItems, type MarkdownItems } from '~/routes/docs/layout';
 import { MenuItems } from './Menuitems';
@@ -234,42 +234,6 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
       console.error('Error loading sidebar scroll position:', err);
     }
   });
-
-  useOnDocument(
-    'DOMContentLoaded',
-    $(() => {
-      if (markdownItems.value && Object.keys(markdownItems.value).length > 0) {
-        store.menuItems = buildMenuFromMarkdownItems(markdownItems.value);
-      } else {
-        console.log('No markdown items available to build menu');
-      }
-
-      try {
-        const val = sessionStorage.getItem('docs-sidebar');
-        const savedScroll = !val || /null|NaN/.test(val) ? 0 : +val;
-        const el = document.getElementById('docs-sidebar');
-        if (el) {
-          el.scrollTop = savedScroll;
-          el.classList.remove('invisible');
-          store.scrollPosition = savedScroll;
-        }
-
-        const handleResize = () => {
-          if (window.innerWidth >= 1024 && store.sideMenuOpen) {
-            store.sideMenuOpen = false;
-            document.body.classList.remove('overflow-hidden');
-          }
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-          window.removeEventListener('resize', handleResize);
-        };
-      } catch (err) {
-        console.error('Error loading sidebar scroll position:', err);
-      }
-    }));
 
   return (
     <aside
