@@ -5,7 +5,7 @@ import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
 import Contributors from '~/components/docs/Contributors';
 import { OnThisPage } from '~/components/docs/ThisPage';
 
-export type MDX = {
+type MDX = {
   title: string;
   contributors?: string[];
   created_at?: string;
@@ -14,7 +14,7 @@ export type MDX = {
 
 export type MarkdownItems = Record<string, MDX>;
 
-export const useMarkdownItems = routeLoader$(async () => {
+export const getMarkdownItems = async () => {
   const rawData = await Promise.all(
     Object.entries(import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}')).map(
       async ([k, v]) => {
@@ -41,7 +41,9 @@ export const useMarkdownItems = routeLoader$(async () => {
     }
   });
   return markdownItems;
-});
+};
+
+export const useMarkdownItems = routeLoader$(() => getMarkdownItems());
 
 export default component$(() => {
   const markdownItems = useMarkdownItems();
