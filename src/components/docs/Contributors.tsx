@@ -10,9 +10,9 @@ export default component$(() => {
 
   return (
     <div class="lum-card my-12">
-      <h3 class="mb-0!">
+      <h2 class="my-0!">
         Contributors
-      </h3>
+      </h2>
       <p>
         Thank you to everyone who has helped us improve our documentation!
       </p>
