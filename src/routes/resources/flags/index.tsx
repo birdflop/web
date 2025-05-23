@@ -26,7 +26,10 @@ const defaults: flagsSchema = {
 };
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'parsed', url.searchParams) as flagsSchema;
+  return getCookies(cookie, 'parsed', url.searchParams) as {
+    cookies: any,
+    errors: string[]
+  };
 });
 
 export default component$(() => {

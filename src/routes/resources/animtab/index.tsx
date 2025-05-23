@@ -22,7 +22,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -33,17 +33,38 @@ export const animTABDefaults = {
 };
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
 });
 
 export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+  return getCookies(cookie, 'animtab', url.searchParams) as {
+    cookies: Partial<typeof animTABDefaults>
+    errors: string[]
+  };
 });
 
 export default component$(() => {
   const t = inlineTranslate();
-  const rgbCookies = useRGBCookies().value;
-  const animTABCookies = useAnimTABCookies();
+  const { cookies: rgbCookies, errors: rgbErrors } = useRGBCookies().value;
+  const { cookies: animTABCookies, errors: animTABErrors } = useAnimTABCookies().value;
+  const errors = [...rgbErrors, ...animTABErrors];
+  const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
