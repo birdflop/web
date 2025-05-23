@@ -18,18 +18,19 @@ export default component$(() => {
       </p>
       <div class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
         {contributors.map((contributor: string) => (
-          <div key={`contributor-${contributor}`} class="inline-block m-0 p-0">
-            <a href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer">
-              <img
-                loading="lazy"
-                src={`https://github.com/${contributor}.png?size=80`}
-                width="40"
-                height="40"
-                alt={contributor}
-                class="!rounded-full w-10 h-auto"
-              />
-            </a>
-          </div>
+          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn lum-bg-gray-900 p-3 font-bold">
+            <img
+              loading="lazy"
+              src={`https://github.com/${contributor}.png?size=80`}
+              width="40"
+              height="40"
+              alt={contributor}
+              class="w-10 h-auto"
+            />
+            <span class="text-white">
+              {contributor}
+            </span>
+          </a>
         ))}
       </div>
     </div>
