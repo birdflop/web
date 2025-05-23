@@ -35,8 +35,21 @@ const minecraftColors = {
 export default component$(() => {
   const t = inlineTranslate();
 
-  const cookies = useCookies().value;
+  const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const animprevStore = useStore({
     speed: 50,
@@ -98,9 +111,6 @@ export default component$(() => {
         bgColor: 'lum-bg-red-900/50',
       };
       notifications.push(notification);
-      setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-      }, 2000);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
