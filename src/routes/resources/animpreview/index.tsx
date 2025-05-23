@@ -111,9 +111,6 @@ export default component$(() => {
         bgColor: 'lum-bg-red-900/50',
       };
       notifications.push(notification);
-      setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-      }, 2000);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
