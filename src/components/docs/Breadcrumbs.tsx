@@ -1,6 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { Link, useLocation } from '@builder.io/qwik-city';
-import { createBreadcrumbs, buildMenuFromMarkdownItems } from '~/components/docs/SideBar';
+import { createBreadcrumbs } from '~/components/docs/SideBar';
+import { buildMenu } from '~/util/buildMenu';
 import { useMarkdownItems } from '~/routes/docs/layout';
 import { ChevronRight, Home } from 'lucide-icons-qwik';
 
@@ -8,7 +9,7 @@ export const Breadcrumbs = component$(() => {
   const { url } = useLocation();
   const markdownItems = useMarkdownItems();
 
-  const menuItems = buildMenuFromMarkdownItems(markdownItems.value);
+  const menuItems = buildMenu(markdownItems.value);
   const menu = {
     text: 'Root',
     href: '/docs/',

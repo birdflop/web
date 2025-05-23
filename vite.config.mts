@@ -11,7 +11,7 @@ import shikiRehype from '@shikijs/rehype';
 import { transformerMetaHighlight, transformerMetaWordHighlight } from '@shikijs/transformers';
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
 import type { ShikiTransformer } from '@shikijs/types';
-
+import birdflopTheme from './src/theme.json'
 function transformerShowEmptyLines(): ShikiTransformer {
     return {
         line(node) {
@@ -64,7 +64,7 @@ export default defineConfig(() => {
                         [
                             shikiRehype,
                             {
-                                theme: 'dark-plus',
+                                theme: birdflopTheme,
                                 transformers: [
                                     transformerMetaHighlight(),
                                     transformerMetaWordHighlight(),

@@ -14,6 +14,15 @@ type MDX = {
 
 export type MarkdownItems = Record<string, MDX>;
 
+export const menuItemPriority: {
+  [key: string]: number;
+} = {
+  'Overview': 1,
+  'Getting Started': 2,
+  'Panel': 2,
+  'Extras': 101,
+};
+
 export const getMarkdownItems = async () => {
   const rawData = await Promise.all(
     Object.entries(import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}')).map(

@@ -1,9 +1,9 @@
 ---
 title: Overview
-date_created: 05-06-2025
-last_updated: 05-06-2025
-author: bwmp
-description: Overview of the documentation
+date_created: 05-20-2025
+last_updated: 05-20-2025
+author: Oli/bwmp
+description: Overview of the documentation and how to contribute
 contributors:
   - bwmp
 ---

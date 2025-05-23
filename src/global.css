@@ -23,16 +23,19 @@
   src: url(/fonts/MinecraftRegular.woff);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftBold;
   src: url(/fonts/MinecraftBold.woff);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftItalic;
   src: url(/fonts/MinecraftItalic.woff);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftBoldItalic;
   src: url(/fonts/MinecraftBoldItalic.woff);
@@ -52,16 +55,19 @@
   src: url(/fonts/MinecraftRegularAlt.ttf);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftBoldAlt;
   src: url(/fonts/MinecraftBoldAlt.ttf);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftItalicAlt;
   src: url(/fonts/MinecraftItalicAlt.ttf);
   font-display: swap;
 }
+
 @font-face {
   font-family: MinecraftBoldItalicAlt;
   src: url(/fonts/MinecraftBoldItalicAlt.ttf);
@@ -102,27 +108,41 @@ html {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
+
 *::-webkit-scrollbar {
   appearance: none;
   -webkit-appearance: none;
   width: 8px;
   height: 8px;
 }
+
 *::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
 *::-webkit-scrollbar-thumb {
   background-color: #ffffff20;
   border: 1px solid #ffffff20;
   border-radius: 3px;
 }
+
 *::-webkit-scrollbar-corner {
   background-color: transparent;
 }
 
+pre.shiki {
+  @apply lum-card;
+}
+
 .markdown {
   @import "@luminescent/ui/formatting";
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: max(0.7em, 18px);
     margin-bottom: max(0.7em, 18px);
   }

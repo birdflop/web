@@ -1,9 +1,5 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
 import { OnThisPage } from '~/components/docs/ThisPage';
-import { getMarkdownItems } from '../docs/layout';
-
-export const useMarkdownItems = routeLoader$(async () => getMarkdownItems());
 
 export default component$(() => {
   return (

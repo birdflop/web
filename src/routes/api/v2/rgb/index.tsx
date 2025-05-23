@@ -58,9 +58,9 @@ const descriptions: {
 const customTypes: {
   [key in keyof typeof rgbDefaults]?: string;
 } = {
-  colors: 'array of (Color object - see data models in docs) or array of (string)',
-  shadowcolors: 'array of (Color object - see data models in docs) or array of (string)',
-  format: 'Format object - see data models in docs',
+  colors: 'Color[] - see types in docs | string[]',
+  shadowcolors: 'Color[] - see types in docs | string[]',
+  format: 'RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs',
 };
 
 const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
