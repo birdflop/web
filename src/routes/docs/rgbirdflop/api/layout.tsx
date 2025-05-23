@@ -1,22 +1,28 @@
 import { component$ } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getGlobalHighlighter } from '~/util/highlighter';
+
 export const useEndpoints = routeLoader$(async ({ url }) => {
   const data = await fetch(url.origin + '/api/v2');
   const json = await data.json() as any;
   const paths = Object.keys(json.endpoints);
+
   for (const path of paths) {
     const endpointData = await fetch(url.origin + path);
     const endpointJson = await endpointData.json() as any;
     json.endpoints[path] = { methods: json.endpoints[path], options: endpointJson.options };
   }
+
   return json;
 });
 
-const highlighter = await getGlobalHighlighter();
+export const useHighlighter = routeLoader$(async () => {
+  return await getGlobalHighlighter();
+});
 
 export const Endpoints = component$(() => {
   const { endpoints } = useEndpoints().value;
+  const highlighter = useHighlighter().value;
 
   return Object.keys(endpoints).map((path) => <>
     <h3>
