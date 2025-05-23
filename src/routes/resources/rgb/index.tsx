@@ -20,7 +20,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
@@ -46,13 +46,30 @@ export const rgbDefaults = {
 };
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
 export default component$(() => {
   const t = inlineTranslate();
-  const rgbCookies = useCookies().value;
+  const { cookies: rgbCookies, errors } = useCookies().value;
+  const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
