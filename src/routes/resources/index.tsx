@@ -34,7 +34,7 @@ export default component$(() => {
                 {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
               </h3>
             </Link>
-            <Link class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/docs/rgbirdflop/api">
+            <Link class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://docs.web-d5m.pages.dev/docs/rgbirdflop/api/">
               <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
               <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 {t('nav.resources.hexGradientAPIDocs.title@@RGBirdflop API Docs')}

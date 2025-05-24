@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, LogIn, Github, Server, Book } from 'lucide-icons-qwik';
+import { Box, Globe, LogIn, Github, Server } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -29,9 +29,6 @@ export default component$(() => {
         }}>
           <div class="lum-loading w-4 h-4" />
         </div>
-      </Link>
-      <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hidden sm:flex">
-        <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
       <SelectMenuRaw id="nav-hosting" q:slot='end' hover customDropdown
         class={{ 'lum-bg-transparent hidden sm:flex': true }}>
@@ -140,9 +137,6 @@ export default component$(() => {
       </Link>
       <Link q:slot="mobile" href="/resources/banner" class="lum-btn lum-bg-transparent">
         {t('nav.resources.banner.title@@Banner Generator')}
-      </Link>
-      <Link q:slot="mobile" href="/docs" class="lum-btn lum-bg-transparent">
-        {t('nav.docs@@Docs')}
       </Link>
       <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
         {t('nav.resources.more@@More Resources')}
