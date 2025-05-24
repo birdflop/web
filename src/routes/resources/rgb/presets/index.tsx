@@ -1,7 +1,7 @@
 import { component$, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
-import { DropdownRaw, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
@@ -178,18 +178,18 @@ export default component$(() => {
                   }}>
                     <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
                   </button>
-                  <DropdownRaw id={`use-${i}`} hover
-                    display={<div class="flex items-center gap-3">
-                      <Box size={20} /> {t('rgb.presets.use@@Use')}
-                    </div>}
+                  <SelectMenuRaw id={`use-${i}`} hover customDropdown
                     class={{ 'hidden sm:flex px-3 text-sm': true }}>
-                    <a class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons'>
+                    <div q:slot="dropdown" class="flex items-center gap-3">
+                      <Box size={20} /> {t('rgb.presets.use@@Use')}
+                    </div>
+                    <a q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`}>
                       {t('nav.resources.hexGradient.title@@RGBirdflop')}
                     </a>
-                    <a class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons'>
+                    <a q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`}>
                       {t('nav.resources.animatedTAB.title@@Animated TAB')}
                     </a>
-                  </DropdownRaw>
+                  </SelectMenuRaw>
                 </div>
               </div>
             );

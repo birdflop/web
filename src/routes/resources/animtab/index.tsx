@@ -11,7 +11,7 @@ import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
-import { Dropdown, NumberInput } from '@luminescent/ui-qwik';
+import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -230,11 +230,11 @@ export default component$(() => {
                 }}>
                 {t('animtab.animation.interval@@Animation Interval')} (ms)
               </NumberInput>
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
+              <SelectMenu id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
                 values={types}
                 value={animtabStore.type}>
                 {t('animtab.animation.style@@Animation Style')}
-              </Dropdown>
+              </SelectMenu>
             </Options>
 
             <Accordion sectionName="presets">

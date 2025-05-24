@@ -1,5 +1,5 @@
 import { $, component$, useContext } from '@builder.io/qwik';
-import { Dropdown } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { NotificationContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/routes/resources/rgb';
@@ -46,7 +46,7 @@ export default component$(({ hidden, value }: {
           }, 2000);
         }}
       />
-      <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
+      <SelectMenu id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
         (e, el) => {
           rgbStore.previewStyle = el.value;
         }
@@ -61,7 +61,7 @@ export default component$(({ hidden, value }: {
         },
       ]}>
         {t('rgb.inputText.preview.title@@Preview Style')}
-      </Dropdown>
+      </SelectMenu>
     </div>
   );
 });
