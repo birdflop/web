@@ -1,20 +1,19 @@
 import { component$ } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
 import { getGlobalHighlighter } from '~/util/highlighter';
 import { apiEndpoints } from '~/routes/api/v2';
 
-export const useEndpoints = routeLoader$(async ({ url }) => {
+const getEndpoints = async () => {
   const paths = Object.keys(apiEndpoints.endpoints) as (keyof typeof apiEndpoints.endpoints)[];
   const json: typeof apiEndpoints = JSON.parse(JSON.stringify(apiEndpoints));
 
   for (const path of paths) {
-    const endpointData = await fetch(url.origin + path);
-    const { options } = await endpointData.json() as any;
-
     const highlighter = await getGlobalHighlighter();
+    const options = json.endpoints[path].options;
+    const optionNames = Object.keys(options) as (keyof typeof options)[];
 
-    const html = Object.keys(options).map(option => (
-      highlighter.codeToHtml(`// ${options[option].description}
+    const html = optionNames.map(option => {
+      if (!options[option]) return '';
+      return highlighter.codeToHtml(`// ${options[option].description}
 ${option}: ${options[option].type} = ${JSON.stringify(options[option].default, null, 2)}`, {
         lang: 'ts',
         theme: 'birdflop',
@@ -22,16 +21,17 @@ ${option}: ${options[option].type} = ${JSON.stringify(options[option].default, n
           title: option,
           description: options[option].description,
         },
-      })
-    ));
+      });
+    });
 
     json.endpoints[path].html = html;
   }
   return json.endpoints;
-});
+};
+
+const endpoints = await getEndpoints();
 
 export const Endpoints = component$(() => {
-  const endpoints = useEndpoints().value;
   const endpointNames = Object.keys(endpoints) as (keyof typeof endpoints)[];
 
   return endpointNames.map((path) => <>
