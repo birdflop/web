@@ -1,6 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { getGlobalHighlighter } from '~/util/highlighter';
 import { apiEndpoints } from '~/routes/api/v2';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 const getEndpoints = async () => {
   const paths = Object.keys(apiEndpoints.endpoints) as (keyof typeof apiEndpoints.endpoints)[];
@@ -29,9 +30,10 @@ ${option}: ${options[option].type} = ${JSON.stringify(options[option].default, n
   return json.endpoints;
 };
 
-const endpoints = await getEndpoints();
+export const useEndpoints = routeLoader$(async () => await getEndpoints());
 
 export const Endpoints = component$(() => {
+  const endpoints = useEndpoints().value;
   const endpointNames = Object.keys(endpoints) as (keyof typeof endpoints)[];
 
   return endpointNames.map((path) => <>
