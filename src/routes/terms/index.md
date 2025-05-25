@@ -110,8 +110,36 @@ Content on the Service from you and others (namely servers) may not be reviewed,
 
 ## Unavoidable Legal Parameters
 
-**THE SERVICE AND ANY OTHER SERVICE AND CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE ARE PROVIDED TO YOU ON AN AS IS OR AS AVAILABLE BASIS WITHOUT ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND.**
+THE SERVICE AND ANY OTHER SERVICE AND CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE ARE PROVIDED TO YOU ON AN AS IS OR AS AVAILABLE BASIS WITHOUT ANY REPRESENTATIONS OR WARRANTIES OF ANY KIND. WE DISCLAIM ANY AND ALL WARRANTIES AND REPRESENTATIONS (EXPRESS OR IMPLIED, ORAL OR WRITTEN) WITH RESPECT TO THE SERVICE AND CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE WHETHER ALLEGED TO ARISE BY OPERATION OF LAW, BY REASON OF CUSTOM OR USAGE IN THE TRADE, BY COURSE OF DEALING OR OTHERWISE.
 
-We disclaim any and all warranties and representations (express or implied, oral or written) with respect to the Service and content included on or otherwise made available to you through the Service.
+IN NO EVENT WILL BIRDFLOP BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY SPECIAL, INDIRECT, INCIDENTAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES OF ANY KIND ARISING OUT OF OR IN CONNECTION WITH THE SERVICE OR ANY OTHER SERVICE AND/OR CONTENT INCLUDED ON OR OTHERWISE MADE AVAILABLE TO YOU THROUGH THE SERVICE, REGARDLESS OF THE FORM OF ACTION, WHETHER IN CONTRACT, TORT, STRICT LIABILITY OR OTHERWISE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR ARE AWARE OF THE POSSIBILITY OF SUCH DAMAGES. OUR TOTAL LIABILITY FOR ALL CAUSES OF ACTION AND UNDER ALL THEORIES OF LIABILITY WILL BE LIMITED TO THE AMOUNT YOU PAID TO BIRDFLOP. THIS SECTION WILL BE GIVEN FULL EFFECT EVEN IF ANY REMEDY SPECIFIED IN THIS AGREEMENT IS DEEMED TO HAVE FAILED OF ITS ESSENTIAL PURPOSE.
 
-**IN NO EVENT WILL BIRDF
+You agree to defend, indemnify and hold us harmless from and against any and all costs, damages, liabilities, and expenses (including attorneys' fees, costs, penalties, interest and disbursements) we incur in relation to, arising from, or for the purpose of avoiding, any claim or demand from a third party relating to your use of the Service or the use of the Service by any person using your account, including any claim that your use of the Service violates any applicable law or regulation, or the rights of any third party, and/or your violation of these Terms.
+
+## Copyright Complaints
+
+We take intellectual property rights seriously. In accordance with the Digital Millennium Copyright Act ("DMCA") and other applicable law, we have adopted a policy of terminating, in appropriate circumstances and, at our sole discretion, access to the service for infringers, without providing a refund for clients.
+
+## Governing Law
+
+The validity of these Terms and the rights, obligations, and relations of the parties under these Terms will be construed and determined under and in accordance with the laws of Missouri, United States of America, without regard to conflicts of law principles.
+
+## Jurisdiction
+
+You expressly agree that exclusive jurisdiction for any dispute with the Service or relating to your use of it, resides in the courts of the Missouri and you further agree and expressly consent to the exercise of personal jurisdiction in the courts of Saint Louis County, Missouri, United States, in connection with any such dispute including any claim involving Service. You further agree that you and Service will not commence against the other a class action, class arbitration or other representative action or proceeding.
+
+## Termination
+
+If you breach any of these Terms, we have the right to suspend or disable your access to or use of the Service, with or without a refund for remaining service duration.
+
+## Entire Agreement
+
+These Terms constitute the entire agreement between you and Birdflop regarding the use of the Service, superseding any prior agreements between you and Birdflop relating to your use of the Service.
+
+## Feedback
+
+Please let us know what you think of the Service, these Terms and, in general, Birdflop. When you provide us with any feedback, comments or suggestions about the Service, these Terms and, in general, Birdflop, you irrevocably assign to us all of your right, title and interest in and to your feedback, comments and suggestions.
+
+## Questions & Contact Information
+
+Questions or comments about the Service may be directed to us at the email address [business@birdflop.com](mailto:business@birdflop.com)
