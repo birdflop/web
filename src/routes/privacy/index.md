@@ -1,6 +1,5 @@
 ---
 title: BIRDFLOP PRIVACY POLICY
-date_created: 0-0-0
 last_updated: 02-29-2024
 description: Our privacy policy applies to information we collect when you use or access our website, application, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective immediately after we post the revised privacy policy (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.
 ---

@@ -1,6 +1,5 @@
 ---
 title: BIRDFLOP TERMS OF SERVICE
-date_created: 0-0-0
 last_updated: 01-27-2025
 description: These terms of service ("Terms") apply to your access and use of Birdflop (the "Service"). Please read them carefully.
 ---
