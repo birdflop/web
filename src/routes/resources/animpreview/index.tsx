@@ -6,7 +6,7 @@ import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input from '~/components/rgb/Input';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
-import { Dropdown } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { NotificationContext } from '~/routes/layout';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
@@ -139,7 +139,7 @@ export default component$(() => {
           />
         </div>
 
-        <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
+        <SelectMenu id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
           (e, el) => {
             rgbStore.previewStyle = el.value;
           }
@@ -154,7 +154,7 @@ export default component$(() => {
           },
         ]}>
           {t('rgb.inputText.preview.title@@Preview Style')}
-        </Dropdown>
+        </SelectMenu>
         <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';

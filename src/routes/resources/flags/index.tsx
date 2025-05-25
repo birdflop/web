@@ -1,6 +1,6 @@
 import { component$, useStore, useTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
-import { Dropdown, Toggle, DropdownRaw } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import type { flagsSchema } from '~/util/flags/generateResult';
@@ -201,21 +201,21 @@ export default component$(() => {
             </div>
             <div class="flex gap-2">
               <div class="flex flex-col gap-1">
-                <Dropdown id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
+                <SelectMenu id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
                   flagsStore.operatingSystem = el.value;
                 }} values={environmentOptions} value={flagsStore.operatingSystem}>
                   {t('flags.environment.label@@Environment')}
-                </Dropdown>
+                </SelectMenu>
                 <p class="text-gray-400 text-sm">
                   {t('flags.environment.description@@The operating system that the server runs on.')}
                 </p>
               </div>
               <div class="flex flex-col gap-1">
-                <Dropdown id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
+                <SelectMenu id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
                   flagsStore.serverType = el.value;
                 }} values={softwareOptions} value={flagsStore.serverType}>
                   {t('flags.software.label@@Software')}
-                </Dropdown>
+                </SelectMenu>
                 <p class="text-gray-400 text-sm">
                   {t('flags.software.description@@The software in which your Minecraft server will run on.')}
                 </p>
@@ -252,14 +252,15 @@ export default component$(() => {
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-1 w-full">
               <div class="flex items-end gap-2">
-                <Dropdown id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
+                <SelectMenu id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
                   flagsStore.flags = el.value as AvailableFlags;
                 }} values={flagOptions} value={flagsStore.flags}>
                   {t('flags.flags.label@@Flags')}
-                </Dropdown>
-                <DropdownRaw id="flagshelp" onChange$={(e, el) => {
+                </SelectMenu>
+                <SelectMenuRaw id="flagshelp" onChange$={(e, el) => {
                   flagsStore.flags = el.value as AvailableFlags;
-                }} display={<><CircleHelp size={24}/></>}>
+                }} customDropdown>
+                  <CircleHelp size={24} q:slot='dropdown'/>
                   <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                     {t('flags.flags.aikars@@Aikar\'s Flags')}
                   </a>
@@ -275,7 +276,7 @@ export default component$(() => {
                   <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
                     {t('flags.flags.obyduxs@@Obydux\'s Flags')}
                   </a>
-                </DropdownRaw>
+                </SelectMenuRaw>
               </div>
               <p class="text-gray-400 text-sm">
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}

@@ -34,7 +34,7 @@ export default component$(() => {
                 {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
               </h3>
             </Link>
-            <Link class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/api/v2/docs">
+            <Link class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://docs.web-d5m.pages.dev/docs/rgbirdflop/api/">
               <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
               <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
                 {t('nav.resources.hexGradientAPIDocs.title@@RGBirdflop API Docs')}
@@ -138,7 +138,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-              <LogoDiscord width={20} />
+              <LogoDiscord size={20} />
               Invite
             </a>
             <a class="lum-btn"
@@ -223,7 +223,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <a class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
-              <LogoDiscord width={20} />
+              <LogoDiscord size={20} />
               Invite
             </a>
             <a class="lum-btn"
