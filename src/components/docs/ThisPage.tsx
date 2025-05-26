@@ -86,7 +86,7 @@ export const OnThisPage = component$(({ readOnly }: {
     >
       {contentHeadings.length > 0 ? (
         <>
-          <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">On this page</h6>
+          <h6 class="py-3 border-b border-b-gray-700">On this page</h6>
           <div class="flex flex-col gap-2 overflow-y-scroll">
             {contentHeadings.map((h) => (
               <a
@@ -105,7 +105,7 @@ export const OnThisPage = component$(({ readOnly }: {
       ) : null}
 
       {!readOnly && <>
-        <h6 class="font-semibold py-3 text-lg border-b border-b-gray-700">More</h6>
+        <h6 class="py-3 border-b border-b-gray-700">More</h6>
         <div class="flex flex-col gap-2">
           <a
             class='lum-btn text-ellipsis lum-bg-transparent'
