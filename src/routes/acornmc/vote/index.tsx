@@ -11,14 +11,14 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
-      <h1 class="font-bold text-gray-50 text-4xl sm:text-6xl mb-4">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px] markdown">
+      <h1>
         AcornMC Vote
       </h1>
-      <h2 class="text-gray-400 sm:text-2xl flex gap-2 items-center">
+      <p>
         Opening Links
-        <div class={{ 'lum-loading ml-2 w-6 h-6': true }} />
-      </h2>
+      </p>
+      <div class={{ 'lum-loading ml-2 w-6 h-6': true }} />
     </section>
   );
 });

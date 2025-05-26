@@ -28,307 +28,283 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex mx-auto px-6 items-center justify-center min-h-svh pt-[72px]">
-      <div class="text-center justify-center flex relative w-full">
-        <div class="flex flex-col gap-2 sm:gap-6 w-full px-4">
-          <h1 class="text-3xl sm:text-6xl xl:text-7xl font-bold tracking-tight animate-in fade-in slide-in-from-top-8 anim-duration-1000 drop-shadow-lg text-transparent mx-auto"
-            style={{
-              background: 'linear-gradient(135deg, #54daf4, #545eb6)',
-              backgroundClip: 'text',
-            }}
-          >
-            Birdflop
-          </h1>
-          <h2 class="text-gray-300 text-lg sm:text-2xl animate-in fade-in slide-in-from-top-16 anim-duration-1000">
-            The only 501(c)(3) nonprofit server host — dedicated to <span
-              class="typer"
-              id="main"
-              data-words={'minecraft hosting,public resources,communities,you'}
-              data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
-              data-delay="50"
-              data-deleteDelay="1500">
-            </span>
-            <span class="cursor" data-owner="main" data-cursor-display="|"></span>
-          </h2>
-          <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
-            <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <a href="#plans" class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-blue-600/80 hover:lum-bg-blue-600">
-                <Server size={26} class="text-3xl" /> Hosting
-              </a>
-              <Link href="/resources" class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-purple-600/80 hover:lum-bg-purple-600">
-                <Box size={26} class="text-3xl" /> Resources
-              </Link>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2 justify-center">
-              <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-                class="lum-btn lum-btn-p-4 rounded-lg text-lg lum-bg-pink-600/80 hover:lum-bg-pink-600">
-                <HandCoins size={26} class="text-3xl" /> Donate Today
-              </a>
-            </div>
-          </div>
+    <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-svh pt-[72px] markdown">
+      <h1 class={{
+        'my-0! text-3xl! sm:text-6xl! xl:text-7xl! mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
+        'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
+      }}
+      style={{
+        background: 'linear-gradient(135deg, #54daf4, #545eb6)',
+        backgroundClip: 'text',
+      }}
+      >
+        Birdflop
+      </h1>
+      <h4 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
+        The only 501(c)(3) nonprofit server host — dedicated to <span
+          class="typer"
+          id="main"
+          data-words={'minecraft hosting,public resources,communities,you'}
+          data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
+          data-delay="50"
+          data-deleteDelay="1500">
+        </span>
+        <span class="cursor" data-owner="main" data-cursor-display="|"></span>
+      </h4>
+      <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
+        <div class="flex flex-col sm:flex-row gap-2 justify-center">
+          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600">
+            <Server size={26} /> Hosting
+          </a>
+          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600">
+            <Box size={26}  /> Resources
+          </Link>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 justify-center">
+          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
+            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600">
+            <HandCoins size={26} /> Donate Today
+          </a>
         </div>
       </div>
     </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900 border-t border-gray-800">
-      <div class="justify-center flex relative max-w-4xl px-10">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Our Nonprofit Mission
-          </h2>
-          <p class="text-gray-200 sm:text-lg">
-            At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
-            {missionExpanded.value && <>
-              Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
-              <br />
-              <br />
-              Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
-            </>}
-            <button class="text-blue-400 hover:underline" onClick$={() => missionExpanded.value = !missionExpanded.value}>
-              {missionExpanded.value ? 'Read less' : 'Read more'}
-            </button>
+    <div class="bg-gray-900 border-t border-gray-800 markdown pb-16">
+      <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-10">
+        <h1>
+          Our Nonprofit Mission
+        </h1>
+        <p>
+          At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
+          {missionExpanded.value && <>
+            Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
+            <br />
+            <br />
+            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
+          </>}
+          <button class="text-blue-400 hover:underline" onClick$={() => missionExpanded.value = !missionExpanded.value}>
+            {missionExpanded.value ? 'Read less' : 'Read more'}
+          </button>
+        </p>
+      </section>
+      <section class="flex flex-col mx-auto max-w-5xl px-10 items-center justify-center pt-10">
+        <Anchor id="plans">
+          <h1 id="plans" class="mr-2">
+            Plans
+          </h1>
+        </Anchor>
+        <div class="grid md:grid-cols-3 gap-2">
+          {Object.keys(plans).map((planName) => {
+            const plan = plans[planName as keyof typeof plans];
+            const ramOptions = Object.keys(plan.ramAndId);
+            return <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" key={planName}>
+              <p>
+                Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
+              </p>
+              <h3 class="my-0!">
+                {planName}
+              </h3>
+              <p class="my-0!">
+                {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
+              </p>
+              <ul class="list-disc ml-4! h-full">
+                {plan.features.map((feature) => {
+                  return <li key={feature}>
+                    {feature}
+                  </li>;
+                })}
+              </ul>
+              {plan.outOfStock ?
+                <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4">
+                  <AlertTriangle size={20} class="text-3xl" /> Out of stock
+                </a>
+                :
+                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4">
+                  <ShoppingCart size={20} class="text-3xl" /> Order Now
+                </Link>
+              }
+            </div>;
+          })}
+        </div>
+        <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3">
+          <h4 class="my-0! flex items-center gap-2">
+            <CheckCircle size={30} /> Benefits Galore
+          </h4>
+          <p class="text-gray-100">
+            All plans come with a one-click modpack installer, DDoS protection, 3 off-site backups, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
           </p>
         </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-5xl px-6">
-        <div class="flex flex-col gap-2">
-          <Anchor id="plans" class={{
-            'opacity-0': true,
-          }}/>
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Plans
-          </h2>
-          <div class="grid md:grid-cols-3 gap-2">
-            {Object.keys(plans).map((planName) => {
-              const plan = plans[planName as keyof typeof plans];
-              const ramOptions = Object.keys(plan.ramAndId);
-              return <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" key={planName}>
-                <p>
-                  Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
-                </p>
-                <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                  {planName}
-                </h2>
-                <h3 class="text-sm text-gray-400">
-                  {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
-                </h3>
-                <ul class="list-disc ml-5 flex flex-col gap-2 h-full">
-                  {plan.features.map((feature) => {
-                    return <li key={feature}>
-                      {feature}
-                    </li>;
-                  })}
-                </ul>
-                {plan.outOfStock ?
-                  <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4">
-                    <AlertTriangle size={20} class="text-3xl" /> Out of stock
-                  </a>
-                  :
-                  <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4">
-                    <ShoppingCart size={20} class="text-3xl" /> Order Now
-                  </Link>
-                }
-              </div>;
-            })}
+      </section>
+      <section class="flex flex-col mx-auto max-w-6xl px-10 items-center justify-center pt-10">
+        <Anchor id="features">
+          <h1 id="features" class="mr-2">
+            Features
+          </h1>
+        </Anchor>
+        <div class="grid md:grid-cols-2 gap-2">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Rocket size={30} /> Sheer Performance
+            </h3>
+            <p>
+              We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
+            </p>
           </div>
-          <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto">
-            <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-              <CheckCircle size={26} /> Benefits Galore
-            </h1>
-            <p class="text-gray-100">
-              All plans come with a one-click modpack installer, DDoS protection, 3 off-site backups, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Settings size={30} /> Fully Configurable
+            </h3>
+            <p>
+              You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
+            </p>
+          </div>
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Eye size={30} /> Transparent
+            </h3>
+            <p>
+              We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
+            </p>
+          </div>
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Globe size={30} /> Price Matching
+            </h3>
+            <p>
+              We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
+            </p>
+          </div>
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Heart size={30} /> Instant Support
+            </h3>
+            <p>
+              You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
+            </p>
+          </div>
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <HandCoins size={30} /> Nonprofit
+            </h3>
+            <p>
+              Our nonprofit status helps us keep our services affordable and accessible. Clients receive periodic reimbursements for excess profit.
             </p>
           </div>
         </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-5xl px-6">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Features
-          </h2>
-          <div class="grid md:grid-cols-2 gap-2">
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Rocket size={26} /> Sheer Performance
-              </h1>
-              <p>
-                We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
-              </p>
-            </div>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Settings size={26} /> Fully Configurable
-              </h1>
-              <p>
-                You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
-              </p>
-            </div>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Eye size={26} /> Transparent
-              </h1>
-              <p>
-                We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
-              </p>
-            </div>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Globe size={26} /> Price Matching
-              </h1>
-              <p>
-                We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
-              </p>
-            </div>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Heart size={26} /> Instant Support
-              </h1>
-              <p>
-                You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
-              </p>
-            </div>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <HandCoins size={26} /> Nonprofit
-              </h1>
-              <p>
-                Our nonprofit status helps us keep our services affordable and accessible. Clients receive periodic reimbursements for excess profit.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-4xl px-10">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            How do reimbursements work?
-          </h2>
-          <p class="text-gray-200 sm:text-lg">
-            As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 28% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.44/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.
-          </p>
-        </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-4xl px-10">
-        <div class="flex flex-col gap-2">
-          <p class="text-gray-200 sm:text-lg text-center">
+      </section>
+      <section class="flex flex-col mx-auto max-w-4xl px-10 items-center justify-center pt-10">
+        <h1>
+          How do reimbursements work?
+        </h1>
+        <p>
+          As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 28% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.44/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.&nbsp;
+        </p>
+        <div class="mt-4">
+          <h4>
             Historical Reimbursement Rates for US and EU Clients
-          </p>
+          </h4>
           <HistoricLinePlot />
         </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-4xl px-10">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Where do my payments go?
-          </h2>
-          <div class="grid md:grid-cols-2 gap-2">
-            <div>
-              <Chart />
-              <p class="text-gray-400 text-center py-2 text-sm">
-                Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
-              </p>
-            </div>
-            <div class="flex flex-col gap-2">
-              <p class="text-gray-200 sm:text-lg">
-                Birdflop is a 501(c)(3) nonprofit organization. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
-              </p>
-              <p class="text-gray-200 sm:text-lg">
-                Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
-              </p>
-            </div>
+      </section>
+      <section class="flex flex-col mx-auto max-w-4xl px-10 items-center justify-center pt-10">
+        <h1>
+          Where do my payments go?
+        </h1>
+        <div class="grid md:grid-cols-2 gap-10">
+          <div>
+            <Chart />
+            <p class="text-gray-400 text-center py-2 text-sm">
+              Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
+            </p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <p>
+              Birdflop is a 501(c)(3) nonprofit organization. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
+            </p>
+            <p>
+              Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
+            </p>
           </div>
         </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-5xl px-6">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
+      </section>
+      <section class="flex flex-col mx-auto max-w-6xl px-10 items-center justify-center pt-10">
+        <Anchor id="features">
+          <h1 id="features" class="mr-2">
             Testimonials
-          </h2>
-          <div class="grid md:grid-cols-3 gap-2">
-            <a class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" href="https://g.co/kgs/mUU1j1G">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <User size={26} /> Mikkel Hansen
-              </h1>
-              <p class="h-full">
-                I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
-              </p>
-            </a>
-            <a class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <User size={26} /> Wizzy SMP
-              </h1>
-              <p class="h-full">
-                Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
-              </p>
-            </a>
-            <a class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <User size={26} /> Beaunation
-              </h1>
-              <p class="h-full">
-                I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
-              </p>
-            </a>
-            <a class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <User size={26} /> Jmaster
-              </h1>
-              <p class="h-full">
-                Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
-              </p>
-            </a>
-            <a class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out" href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <User size={26} /> Oliver Flynn
-              </h1>
-              <p class="h-full">
-                Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
-              </p>
-            </a>
-            <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
-              <h1 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-                <Star size={26} /> More
-              </h1>
-              <p class="h-full">
-                Check out our Trustpilot or Google page for more testimonials.
-              </p>
-              <div class="flex gap-2">
-                <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
-                  Trustpilot
-                </a>
-                <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
-                  Google
-                </a>
-              </div>
+          </h1>
+        </Anchor>
+        <div class="grid md:grid-cols-2 gap-2">
+          <a href="https://g.co/kgs/mUU1j1G"
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> Mikkel Hansen
+            </h3>
+            <p>
+              I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
+            </p>
+          </a>
+          <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> Wizzy SMP
+            </h3>
+            <p>
+              Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
+            </p>
+          </a>
+          <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> Beaunation
+            </h3>
+            <p>
+              I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
+            </p>
+          </a>
+          <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> Jmaster
+            </h3>
+            <p>
+              Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
+            </p>
+          </a>
+          <a href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d"
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> Oliver Flynn
+            </h3>
+            <p>
+              Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
+            </p>
+          </a>
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <Star size={30} /> More
+            </h3>
+            <p>
+              Check out our Trustpilot or Google page for more testimonials.
+            </p>
+            <div class="flex gap-2">
+              <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+                Trustpilot
+              </a>
+              <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+                Google
+              </a>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section class="flex mx-auto pt-16 items-center justify-center bg-gray-900">
-      <div class="justify-center flex relative max-w-4xl px-10">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-gray-100 text-3xl sm:text-5xl font-bold mb-4 text-center">
-            Still not convinced?
-          </h2>
-          <p class="text-gray-200 sm:text-lg">
-            Create a ticket on our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
-          </p>
-        </div>
-      </div>
-    </section>
-    <div class="pt-16 bg-gray-900" />
+      </section>
+      <section class="flex flex-col mx-auto max-w-4xl px-10 items-center justify-center pt-10">
+        <h1>
+          Still not convinced?
+        </h1>
+        <p>
+          Create a ticket on our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
+        </p>
+      </section>
+    </div>
   </>;
 });
 
