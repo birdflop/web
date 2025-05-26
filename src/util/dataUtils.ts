@@ -16,7 +16,11 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
 
   // parse the cookie value if it exists
   if (cookieVal) {
-    cookies = JSON.parse(cookieVal);
+    try {
+      cookies = JSON.parse(cookieVal);
+    } catch (e) {
+      errors.push(`Failed to parse cookie ${name}: ${e}`);
+    }
   }
 
   if (urlParams) {
