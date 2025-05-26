@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, LogIn, Github, Server, Book } from 'lucide-icons-qwik';
+import { Box, Globe, LogIn, Github, Server, Book, LogOut, User } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -90,23 +90,43 @@ export default component$(() => {
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
-      <Form action={session.value ? signOut : signIn} q:slot='end'>
-        <input type="hidden" name="providerId" value="discord" />
-        <input
-          type="hidden"
-          name="options.redirectTo"
-          value={loc.url.pathname + loc.url.search}
-        />
-        <button class="lum-btn p-2 lum-bg-transparent">
-          {session.value && session.value.user?.image ?
-            <>
-              <img src={session.value.user.image} width={20} height={20} class="rounded w-5 h-5 ml-1" />
-              <span class="mr-6">{session.value.user?.name}</span>
-            </>
-            : <LogIn size={20} />
-          }
-        </button>
-      </Form>
+      {session.value && session.value.user &&
+        <SelectMenuRaw q:slot='end' class={{ 'p-2 lum-bg-transparent gap-1': true }} id="profile" customDropdown>
+          <p q:slot='dropdown' class="flex items-center gap-2 pr-5 pl-1">
+            {session.value.user.image &&
+              <img src={session.value.user.image} width={20} height={20} class="rounded-full! w-5 h-5" />
+            }
+            {session.value.user?.name || 'User'}
+          </p>
+          <Link q:slot="extra-buttons" href="/profile" class="lum-btn lum-bg-transparent">
+            <User size={20} /> {t('nav.profile.title@@Profile')}
+          </Link>
+          <Form action={signOut} q:slot="extra-buttons">
+            <input type="hidden" name="providerId" value="discord" />
+            <input
+              type="hidden"
+              name="options.redirectTo"
+              value={loc.url.pathname + loc.url.search}
+            />
+            <button class="lum-btn lum-bg-transparent">
+              <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
+            </button>
+          </Form>
+        </SelectMenuRaw>
+      }
+      {!session.value &&
+        <Form action={signIn} q:slot='end'>
+          <input type="hidden" name="providerId" value="discord" />
+          <input
+            type="hidden"
+            name="options.redirectTo"
+            value={loc.url.pathname + loc.url.search}
+          />
+          <button class="lum-btn p-2 lum-bg-transparent">
+            <LogIn size={20} />
+          </button>
+        </Form>
+      }
 
       <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
         <Server size={20} /> {t('nav.hosting.title@@Hosting')}
