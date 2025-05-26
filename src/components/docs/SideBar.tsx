@@ -68,9 +68,9 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
       <nav id="docs-sidebar" class="invisible min-h-full relative">
         <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
           <Book class="ml-2 sm:ml-0" />
-          <h1 class="flex font-semibold text-lg flex-1">
+          <h5 class="flex flex-1 my-0!">
             Documentation
-          </h1>
+          </h5>
 
           <button class='lum-btn lum-bg-transparent p-2 sm:hidden' onClick$={() => {
             store.sideMenuOpen = !store.sideMenuOpen;

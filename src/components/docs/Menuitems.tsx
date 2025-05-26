@@ -50,7 +50,7 @@ export const MenuItems = component$(
     const menuId = items && items.length > 0 ? `menu-${items[0].text}` : 'menu-root';
 
     const store = useStore({
-      openItems: [] as number[],
+      openItems: [] as string[],
     });
 
     const isActiveOrParent = (item: ContentMenu): boolean => {
@@ -77,7 +77,7 @@ export const MenuItems = component$(
       return [];
     });
 
-    const saveOpenItems = $((items: number[]) => {
+    const saveOpenItems = $((items: string[]) => {
       try {
         localStorage.setItem(`docs-${menuId}-open`, JSON.stringify(items));
       } catch (err) {
@@ -95,14 +95,14 @@ export const MenuItems = component$(
         if (savedOpenItems && savedOpenItems.length > 0) {
           store.openItems = savedOpenItems;
         } else if (allOpen && items && items.length > 0) {
-          const newOpenItems = [] as number[];
+          const newOpenItems: string[] = [];
 
           items.forEach((item, index) => {
             if (
               item.items?.some((subItem) => pathname === subItem.href) ||
               pathname.startsWith(item.href || '')
             ) {
-              newOpenItems.push(index);
+              newOpenItems.push(item.href ?? `${index}`);
             }
           });
 
@@ -114,7 +114,7 @@ export const MenuItems = component$(
       });
     });
 
-    const toggleAccordion = $(async (index: number) => {
+    const toggleAccordion = $(async (index: string) => {
       const newOpenItems = [...store.openItems];
       const indexPosition = newOpenItems.indexOf(index);
 
@@ -128,23 +128,22 @@ export const MenuItems = component$(
 
       await saveOpenItems(newOpenItems);
     }); return (
-      <ul class={{
-        'list-none m-0': true,
+      <div class={{
         'pl-0': level === 0,
         'pl-3 ml-1 border-l border-gray-200/20': level > 0,
       }}>
         {items && items.length > 0 ? (
           items.map((item, i) => (
-            <li key={i} class="mb-2">
+            <div key={i} class="mb-2">
               {item.items ? (<div class="mb-1">
                 <button
-                  onClick$={() => toggleAccordion(i)}
+                  onClick$={() => toggleAccordion(item.href || `${i}`)}
                   class={{
                     'w-full justify-between lum-btn lum-bg-transparent': true,
                     'font-medium': level === 0,
                     'text-sm lum-btn-p-1': level > 0,
                   }}
-                  aria-expanded={store.openItems.includes(i)}
+                  aria-expanded={store.openItems.includes(item.href || `${i}`)}
                 >
                   <span class={{
                     'font-medium flex items-center': true,
@@ -154,7 +153,7 @@ export const MenuItems = component$(
                   </span>
                   <span class={{
                     'transform transition-transform duration-200': true,
-                    'rotate-90': store.openItems.includes(i),
+                    'rotate-90': store.openItems.includes(item.href || `${i}`),
                   }}>
                     <ChevronRight size={16} class={{
                       'text-gray-400': !isActiveOrParent(item),
@@ -164,8 +163,8 @@ export const MenuItems = component$(
                 </button>
                 <div class={{
                   'transition-all duration-200 overflow-hidden': true,
-                  'max-h-0 opacity-0 scale-98': !store.openItems.includes(i),
-                  'max-h-screen opacity-100 mt-1': store.openItems.includes(i),
+                  'max-h-0 opacity-0 scale-98': !store.openItems.includes(item.href || `${i}`),
+                  'max-h-screen opacity-100 mt-1': store.openItems.includes(item.href || `${i}`),
                   'pl-1': level > 0,
                 }}>
                   {item.items && item.items.length > 0 && (
@@ -183,7 +182,7 @@ export const MenuItems = component$(
               ) : (<Link
                 href={item.href}
                 class={{
-                  'lum-btn lum-bg-transparent text-left': true,
+                  'lum-btn lum-bg-transparent': true,
                   'text-sm lum-btn-p-1': level > 0,
                   'text-blue-400': item.href === pathname,
                 }}
@@ -214,12 +213,12 @@ export const MenuItems = component$(
                 )}
               </Link>
               )}
-            </li>
+            </div>
           ))
         ) : (
           <li class="text-gray-500 py-2 px-3 text-sm">No items available</li>
         )}
-      </ul>
+      </div>
     );
   },
 );
