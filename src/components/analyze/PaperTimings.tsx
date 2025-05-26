@@ -1,5 +1,6 @@
 import { Slot, component$, useSignal } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
+import { LogoPaper } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
@@ -8,18 +9,19 @@ export default component$(() => {
   const error = useSignal('');
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
-      <div class="my-10 min-h-[60px]">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.paperTimings.title@@Paper Timings')}
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+      <div class="min-h-[60px] w-full markdown">
+        <h1 class="flex gap-4 items-center my-3!">
+          <LogoPaper size={70} /> {t('nav.resources.paperTimings.title@@Paper Timings')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
-        </h2>
-        <h2 class="text-gray-400 sm:text-xl">
+        </p>
+        <p>
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br />
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
-        </h2>
+        </p>
+        <hr/>
 
         <Slot />
 

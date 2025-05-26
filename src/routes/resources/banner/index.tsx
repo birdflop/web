@@ -5,7 +5,7 @@ import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Settings, Terminal, Trash } from 'lucide-icons-qwik';
+import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Terminal, Trash } from 'lucide-icons-qwik';
 import Accordion from '~/components/Accordion';
 
 import * as THREE from 'three';
@@ -193,13 +193,14 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.banner.title@@Banner Generator')}
+      <div class="min-h-[60px] w-full markdown">
+        <h1 class="flex gap-4 items-center my-3!">
+          <Presentation size={70} /> {t('nav.resources.banner.title@@Banner Generator')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
-        </h2>
+        </p>
+        <hr/>
 
         <div class="grid sm:grid-cols-2 gap-2">
           <div class="flex flex-col gap-2" id="inputcolumn">
@@ -212,12 +213,12 @@ export default component$(() => {
               'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('options') == -1,
               'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('options') != -1,
             }}>
-              <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mb-1">
+              <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.baseColor.title@@Base Color')}
                 <span class="text-gray-400 text-sm font-normal">
                   {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
                 </span>
-              </p>
+              </h6>
               <div class="flex flex-wrap gap-1">
                 {Object.entries(colors).map(([colorName, color]) => {
                   return (
@@ -235,7 +236,7 @@ export default component$(() => {
                   );
                 })}
               </div>
-              <p class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center mt-4">
+              <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.patterns@@Patterns')}
                 <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                   const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
@@ -247,7 +248,7 @@ export default component$(() => {
                 }}>
                   <Plus size={20} />
                 </button>
-              </p>
+              </h6>
 
               <div class="flex flex-wrap gap-2 pt-2">
                 {bannerStore.patterns.map((pattern, i) =>

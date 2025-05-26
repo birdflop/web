@@ -17,9 +17,9 @@ export default component$(({ sectionName, alwaysOpen }: {
       if (openSections.indexOf(sectionName) == -1) openSections.push(sectionName);
       else openSections.splice(openSections.indexOf(sectionName), 1);
     }}>
-      <h1 class="flex flex-1 md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+      <h6 class="my-0! flex-1 flex items-center gap-3">
         <Slot />
-      </h1>
+      </h6>
       <div class={{
         'transition-transform duration-200': true,
         'sm:hidden': alwaysOpen,

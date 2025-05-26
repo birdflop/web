@@ -6,6 +6,7 @@ import { defaults, presets } from '~/util/rgb/presets/defaults';
 import { publishedPreset } from '~/util/rgb/presets';
 import { Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
+import { Save } from 'lucide-icons-qwik';
 
 export const savedPresetStoreContext = createContextId<Partial<typeof defaults>[]>('rgbstore-context');
 export default component$(() => {
@@ -70,13 +71,14 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+      <div class="min-h-[60px] w-full markdown">
+        <h1 class="flex gap-4 items-center my-3!">
+          <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
-        </h2>
+        </p>
+        <hr/>
         <div class={{
           'opacity-50': savedPresetStore.length === 0,
         }}>
