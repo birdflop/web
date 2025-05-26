@@ -146,4 +146,14 @@ pre.shiki {
     margin-top: max(0.7em, 18px);
     margin-bottom: max(0.7em, 18px);
   }
+
+  a {
+    @apply text-white! hover:no-underline!;
+  }
+}
+
+.markdown.docs {
+  a {
+    @apply text-blue-400! hover:underline!;
+  }
 }

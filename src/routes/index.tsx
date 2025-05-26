@@ -53,16 +53,16 @@ export default component$(() => {
       </h4>
       <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="#plans" class="lum-btn text-white! hover:no-underline! lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600">
+          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600">
             <Server size={26} /> Hosting
           </a>
-          <Link href="/resources" class="lum-btn text-white! hover:no-underline! lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600">
+          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600">
             <Box size={26}  /> Resources
           </Link>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
           <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-            class="lum-btn text-white! hover:no-underline! lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600">
+            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600">
             <HandCoins size={26} /> Donate Today
           </a>
         </div>
@@ -114,11 +114,11 @@ export default component$(() => {
                 })}
               </ul>
               {plan.outOfStock ?
-                <a href="https://discord.gg/nmgtX5z" target='_blank' class="text-white! hover:no-underline! lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4">
+                <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4">
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
                 :
-                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="text-white! hover:no-underline! lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4">
+                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4">
                   <ShoppingCart size={20} class="text-3xl" /> Order Now
                 </Link>
               }
@@ -234,7 +234,7 @@ export default component$(() => {
         </Anchor>
         <div class="grid md:grid-cols-2 gap-2">
           <a href="https://g.co/kgs/mUU1j1G"
-            class="text-white! hover:no-underline! lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Mikkel Hansen
             </h3>
@@ -243,7 +243,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="text-white! hover:no-underline! lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Wizzy SMP
             </h3>
@@ -252,7 +252,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="text-white! hover:no-underline! lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Beaunation
             </h3>
@@ -261,7 +261,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="text-white! hover:no-underline! lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Jmaster
             </h3>
@@ -270,7 +270,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d"
-            class="text-white! hover:no-underline! lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Oliver Flynn
             </h3>
@@ -286,10 +286,10 @@ export default component$(() => {
               Check out our Trustpilot or Google page for more testimonials.
             </p>
             <div class="flex gap-2">
-              <a href="https://www.trustpilot.com/review/birdflop.com" class="text-white! hover:no-underline! lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+              <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
                 Trustpilot
               </a>
-              <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="text-white! hover:no-underline! lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+              <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
                 Google
               </a>
             </div>

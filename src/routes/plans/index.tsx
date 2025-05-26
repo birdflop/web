@@ -92,6 +92,7 @@ export default component$(() => {
         <p>
           Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.
         </p>
+        <hr/>
         <div class="flex flex-col">
           <h2>
             Pick your plan
@@ -157,7 +158,6 @@ export default component$(() => {
 
             <div class="grid md:grid-cols-3 gap-2 mt-2">
               <a class={{
-                'text-white! hover:no-underline!': true,
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
               }}
               href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target='_blank'>
@@ -180,7 +180,6 @@ export default component$(() => {
                 </ul>
               </a>
               <a class={{
-                'text-white! hover:no-underline!': true,
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
               }}
               href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target='_blank'>
@@ -203,7 +202,6 @@ export default component$(() => {
                 </ul>
               </a>
               <a class={{
-                'text-white! hover:no-underline!': true,
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
               }}
               href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target='_blank'>
@@ -226,7 +224,6 @@ export default component$(() => {
                 </ul>
               </a>
               <a class={{
-                'text-white! hover:no-underline!': true,
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
               }}
               href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target='_blank'>
@@ -249,7 +246,6 @@ export default component$(() => {
                 </ul>
               </a>
               <a class={{
-                'text-white! hover:no-underline!': true,
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
               }}
               href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target='_blank'>
@@ -327,7 +323,7 @@ export default component$(() => {
               <input id="server_description" placeholder="This is my Minecraft server!" class="lum-input" onChange$={(e, el) => plansStore.desc = el.value} />
             </div>
             <div>
-              <a class="text-white! hover:no-underline! lum-btn lum-btn-p-4 text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
+              <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
                 href={`https://client.birdflop.com/order/config/index/${plans[plansStore.plan as keyof typeof plans]?.id}/?group_id=${plans[plansStore.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[plansStore.plan as keyof typeof plans]?.ramAndId as any)[plansStore.gb]}&server_name=${plansStore.name}&server_description=${plansStore.desc}&billing_cycle=monthly`}>
                 <ShoppingCart size={26}/> Add to cart
               </a>
