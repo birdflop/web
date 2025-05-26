@@ -1,30 +1,29 @@
-import { component$, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { component$, createContextId, useContextProvider, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { type DocumentHead } from '@builder.io/qwik-city';
-import { isBrowser } from '@builder.io/qwik/build';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
-import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { Gradient } from '~/util/rgb/HexUtils';
 import { defaults, presets } from '~/util/rgb/presets/defaults';
-import { sortColors } from '~/util/rgb/RGBUtils';
-import { setUserData } from '~/util/dataUtils';
-import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { publishedPreset } from '~/util/rgb/presets';
+import { Toggle } from '@luminescent/ui-qwik';
+import PresetPreview from '~/components/rgb/PresetPreview';
 
+export const savedPresetStoreContext = createContextId<Partial<typeof defaults>[]>('rgbstore-context');
 export default component$(() => {
   const t = inlineTranslate();
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
+
   const presetStore = useStore({
     searchTerm: '',
     showSaved: false,
-    savedPresets: (session.value?.user?.savedPresets ?? []),
   });
+
+  const savedPresetStore = useStore((session.value?.user?.savedPresets ?? []));
+  useContextProvider(savedPresetStoreContext, savedPresetStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (presetStore.savedPresets.length != 0) return;
+    if (savedPresetStore.length != 0) return;
     let savedPresets: Partial<typeof defaults>[] = [];
     try {
       const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
@@ -43,14 +42,14 @@ export default component$(() => {
           document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         }
       }
-      presetStore.savedPresets.push(...savedPresets);
+      savedPresetStore.push(...savedPresets);
       localStorage.setItem('savedPresets', JSON.stringify(presetStore));
     } catch (err) {
       console.error('Error parsing saved presets', err);
     }
   });
 
-  const savedPresetsParsed: publishedPreset[] = [...presetStore.savedPresets].map((preset) => ({
+  const savedPresetsParsed: publishedPreset[] = [...savedPresetStore].map((preset) => ({
     name: preset.text ?? 'Birdflop',
     author: 'Personal',
     preset,
@@ -79,10 +78,10 @@ export default component$(() => {
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
         </h2>
         <div class={{
-          'opacity-50': presetStore.savedPresets.length === 0,
+          'opacity-50': savedPresetStore.length === 0,
         }}>
-          <Toggle id="showsavedpresets" disabled={presetStore.savedPresets.length === 0}
-            checked={presetStore.showSaved && presetStore.savedPresets.length > 0}
+          <Toggle id="showsavedpresets" disabled={savedPresetStore.length === 0}
+            checked={presetStore.showSaved && savedPresetStore.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={<p class="flex flex-col">
               <span>
@@ -103,97 +102,7 @@ export default component$(() => {
         />
 
         <div class="grid grid-cols-2 gap-2">
-          {filteredPresets.map((p, i) => {
-            const searchParams = new URLSearchParams();
-            const params = { ...p.preset };
-            (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
-              if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
-              searchParams.set(key, String(value));
-            });
-            return (
-              <div class="lum-card p-7 lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${i}`}>
-                <div class="flex gap-4 items-center">
-                  <div class="flex flex-col gap-2">
-                    <p class="text-gray-400 text-sm">
-                      {p.author}
-                    </p>
-                    <h3 class={{
-                      'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-                    }}>
-                      {(() => {
-                        const preset = p.preset;
-                        if (!p.name) p.name = 'Birdflop';
-
-                        const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-                        if (colors.length < 2) return preset.name;
-
-                        const gradient = new Gradient(colors, Math.ceil(p.name.length / (preset.colorlength || 1)));
-
-                        let hex = '';
-                        const segments = [];
-                        let index = 0;
-                        const textArray = Array.from(p.name);
-                        while (index < textArray.length) {
-                          segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
-                          index += preset.colorlength ?? 1;
-                        }
-                        return segments.map((segment, i) => {
-                          const rgb = gradient.next();
-                          hex = rgbToHex(rgb);
-                          const shadowRGB = rgb.map(c => Math.round(c * 0.25));
-                          const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-                          return <span key={`char${i}`} style={{
-                            color: `#${hex};`,
-                            textShadow: `3px 3px 0 ${shadowColor};`,
-                          }} class={{
-                            'underline': preset.underline,
-                            'strikethrough': preset.strikethrough,
-                            'underline-strikethrough': preset.underline && preset.strikethrough,
-                          }}>
-                            {segment.replace(/ /g, '\u00A0')}
-                          </span>;
-                        });
-                      })()}
-                    </h3>
-                  </div>
-                </div>
-                <div class="hidden sm:flex gap-2 mt-2">
-                  <button class="lum-btn text-sm" onClick$ ={async () => {
-                    const existingPreset = presetStore.savedPresets.find((savedPreset) => {
-                      return JSON.stringify(savedPreset) === JSON.stringify(p.preset);
-                    });
-                    if (existingPreset) presetStore.savedPresets = presetStore.savedPresets.filter((p) => p !== existingPreset);
-                    else presetStore.savedPresets.push(p.preset);
-                    if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore.savedPresets));
-                    await setUserData({ savedPresets: presetStore.savedPresets });
-                  }}>
-                    {presetStore.savedPresets.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(p.preset)) ? <>
-                      <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
-                    </> : <>
-                      <Save size={20} /> {t('rgb.presets.save@@Save')}
-                    </>}
-                  </button>
-                  <button class="lum-btn text-sm" onClick$ ={async () => {
-                    await navigator.clipboard.writeText(JSON.stringify(p.preset));
-                  }}>
-                    <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
-                  </button>
-                  <SelectMenuRaw id={`use-${i}`} hover customDropdown
-                    class={{ 'hidden sm:flex px-3 text-sm': true }}>
-                    <div q:slot="dropdown" class="flex items-center gap-3">
-                      <Box size={20} /> {t('rgb.presets.use@@Use')}
-                    </div>
-                    <a q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" href={`/resources/rgb?${searchParams.toString()}`}>
-                      {t('nav.resources.hexGradient.title@@RGBirdflop')}
-                    </a>
-                    <a q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" href={`/resources/animtab?${searchParams.toString()}`}>
-                      {t('nav.resources.animatedTAB.title@@Animated TAB')}
-                    </a>
-                  </SelectMenuRaw>
-                </div>
-              </div>
-            );
-          })}
+          {filteredPresets.map((presetInfo) => <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />)}
           {filteredPresets.length === 0 && (
             <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-gray-400">
