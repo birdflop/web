@@ -23,7 +23,7 @@ export default component$(() => {
   useVisibleTask$(() => unloadGoogleAds());
 
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh markdown" >
+    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <div class="text-red-400">
         <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
         <h1>

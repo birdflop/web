@@ -17,7 +17,7 @@ export default component$(() => {
   if (!session.value || !session.value.user) {
     return (
       <Layout>
-        <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh markdown" >
+        <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
           <div class="text-red-400">
             <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
             <h1>
@@ -47,7 +47,7 @@ export default component$(() => {
 
   return (
     <Layout>
-      <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-[72px] markdown">
+      <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-[72px]">
         <div class="my-5 min-h-[60px] w-full">
           <div class="flex">
             <h1 class="flex flex-1 items-center gap-4">

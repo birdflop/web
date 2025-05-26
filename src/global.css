@@ -5,6 +5,7 @@
 @plugin "@anuragroy/tailwindcss-animate";
 
 @import "@luminescent/ui";
+@import "@luminescent/ui/formatting";
 @plugin "@luminescent/ui/lum-bg";
 
 @config "@luminescent/ui-qwik/config";
@@ -130,30 +131,12 @@ html {
   background-color: transparent;
 }
 
-pre.shiki {
-  @apply lum-card;
-}
-
-.markdown {
-  @import "@luminescent/ui/formatting";
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: max(0.7em, 18px);
-    margin-bottom: max(0.7em, 18px);
-  }
-
-  a {
-    @apply text-white! hover:no-underline!;
-  }
-}
-
-.markdown.docs {
-  a {
-    @apply text-blue-400! hover:underline!;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: max(0.7em, 18px);
+  margin-bottom: max(0.7em, 18px);
 }

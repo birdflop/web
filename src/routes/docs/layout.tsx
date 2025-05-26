@@ -68,7 +68,7 @@ export default component$(() => {
       <main class="contents">
         <div class="w-full mt-48 sm:mt-30 min-w-48">
           <Breadcrumbs />
-          <article class="px-4 markdown">
+          <article class="px-4">
             <h1 class="font-bold text-center border-b border-gray-700 pb-4">
               {title}
             </h1>
