@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder.io/qwik';
 import { Link, type DocumentHead } from '@builder.io/qwik-city';
 
-import { Anchor } from '@luminescent/ui-qwik';
+import { Anchor, LogoBirdflop } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
 import Chart from '~/components/home/Chart';
 import { initiateTyper } from '~/util/Typer';
@@ -30,15 +30,17 @@ export default component$(() => {
   return <>
     <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-svh pt-[72px] markdown">
       <h1 class={{
-        'my-0! text-3xl! sm:text-6xl! xl:text-7xl! mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
+        'my-0! text-3xl! sm:text-6xl! xl:text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
       style={{
-        background: 'linear-gradient(135deg, #54daf4, #545eb6)',
+        background: 'linear-gradient(180deg, #54daf4, #545eb6)',
         backgroundClip: 'text',
       }}
       >
-        Birdflop
+        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
+        <span class="-ml-11 opacity-0">b</span>irdflo<span class="-mr-11 opacity-0">p</span>
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1.5 scale-y-[-1] mt-8" />
       </h1>
       <h4 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
