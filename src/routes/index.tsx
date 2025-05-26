@@ -28,9 +28,9 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-svh pt-[72px]">
+    <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-dvh pt-[72px]">
       <h1 class={{
-        'my-0! text-3xl! sm:text-6xl! xl:text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
+        'my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
       style={{
@@ -40,9 +40,9 @@ export default component$(() => {
       >
         <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
         <span class="-ml-11 opacity-0">b</span>irdflo<span class="-mr-11 opacity-0">p</span>
-        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1.5 scale-y-[-1] mt-8" />
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8" />
       </h1>
-      <h4 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
+      <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
           class="typer"
           id="main"
@@ -52,7 +52,7 @@ export default component$(() => {
           data-deleteDelay="1500">
         </span>
         <span class="cursor" data-owner="main" data-cursor-display="|"></span>
-      </h4>
+      </h5>
       <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
           <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600">
