@@ -10,12 +10,19 @@ type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
 export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchParams) {
   let cookies: { [key: string]: any } = {};
+  const errors: string[] = [];
 
   const cookieVal = cookie.get(name)?.value;
-  // Decode the cookie value
-  if (cookieVal) cookies = JSON.parse(decodeURIComponent(cookieVal));
 
-  const errors: string[] = [];
+  // parse the cookie value if it exists
+  if (cookieVal) {
+    try {
+      cookies = JSON.parse(cookieVal);
+    } catch (e) {
+      errors.push(`Failed to parse cookie ${name}: ${e}`);
+    }
+  }
+
   if (urlParams) {
     const params = Object.fromEntries([...urlParams.entries()]) as any;
     Object.keys(params).forEach(key => {
