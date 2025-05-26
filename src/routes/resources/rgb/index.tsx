@@ -118,13 +118,16 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
-          {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-        </h2>
+      <div class="min-h-[60px] w-full">
+        <div class="markdown">
+          <h1 class="flex gap-4 items-center my-3!">
+            <Palette size={70} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+          </h1>
+          <p>
+            {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
+          </p>
+          <hr/>
+        </div>
 
         <Input>
           {(() => {

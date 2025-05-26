@@ -9,7 +9,7 @@ import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
 import { isBrowser } from '@builder.io/qwik/build';
-import { Box, Code, CircleHelp, RefreshCw, SquareTerminal } from 'lucide-icons-qwik';
+import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag } from 'lucide-icons-qwik';
 
 const defaults: flagsSchema = {
   operatingSystem: 'linux',
@@ -176,13 +176,16 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.flags.title@@Flags Generator')}
-        </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
-          {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
-        </h2>
+      <div class="min-h-[60px] w-full">
+        <div class="markdown">
+          <h1 class="flex gap-4 items-center my-3!">
+            <Flag size={70} /> {t('nav.resources.flags.title@@Flags Generator')}
+          </h1>
+          <p>
+            {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
+          </p>
+          <hr/>
+        </div>
 
         <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6">
           <div class="flex flex-col gap-2">

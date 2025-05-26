@@ -10,7 +10,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
@@ -143,13 +143,16 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.animatedTAB.title@@Animated TAB')}
-        </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
-          {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
-        </h2>
+      <div class="min-h-[60px] w-full">
+        <div class="markdown">
+          <h1 class="flex gap-4 items-center my-3!">
+            <Rainbow size={70} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+          </h1>
+          <p>
+            {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
+          </p>
+          <hr/>
+        </div>
 
         <Input>
           {(() => {
