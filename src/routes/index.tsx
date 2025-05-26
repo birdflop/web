@@ -28,7 +28,7 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-svh pt-[72px] markdown">
+    <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-svh pt-[72px]">
       <h1 class={{
         'my-0! text-3xl! sm:text-6xl! xl:text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
@@ -70,7 +70,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <div class="bg-gray-900 border-t border-gray-800 markdown pb-16">
+    <div class="bg-gray-900 border-t border-gray-800 pb-16">
       <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-10">
         <h1>
           Our Nonprofit Mission
