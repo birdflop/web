@@ -20,7 +20,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
@@ -46,13 +46,30 @@ export const rgbDefaults = {
 };
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
 });
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
 export default component$(() => {
   const t = inlineTranslate();
-  const rgbCookies = useCookies().value;
+  const { cookies: rgbCookies, errors } = useCookies().value;
+  const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
@@ -101,13 +118,14 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
+      <div class="min-h-[60px] w-full">
+        <h1 class="flex gap-4 items-center my-3!">
+          <Palette size={70} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-        </h2>
+        </p>
+        <hr/>
 
         <Input>
           {(() => {
@@ -213,12 +231,12 @@ export default component$(() => {
             </>}
           </div>
         </div>
-        <div class="text-sm mt-8">
+        <p class="mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
-        </div>
-        <h3 class="text-gray-400 text-sm mb-3">
-          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
-        </h3>
+        </p>
+        <p class="">
+          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="https://docs.web-d5m.pages.dev/docs/rgbirdflop/api/">an API!</a>
+        </p>
       </div>
     </section>
   );

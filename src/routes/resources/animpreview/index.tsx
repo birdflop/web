@@ -6,8 +6,10 @@ import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input from '~/components/rgb/Input';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
-import { Dropdown } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { NotificationContext } from '~/routes/layout';
+import { Eye } from 'lucide-icons-qwik';
+import { hexToRGB } from '~/util/rgb/Colors';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'animpreview', url.searchParams);
@@ -35,8 +37,21 @@ const minecraftColors = {
 export default component$(() => {
   const t = inlineTranslate();
 
-  const cookies = useCookies().value;
+  const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const animprevStore = useStore({
     speed: 50,
@@ -98,9 +113,6 @@ export default component$(() => {
         bgColor: 'lum-bg-red-900/50',
       };
       notifications.push(notification);
-      setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-      }, 2000);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
@@ -110,26 +122,16 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
+      <div class="min-h-[60px] w-full">
+        <h1 class="flex gap-4 items-center my-3!">
+          <Eye size={70} /> {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
-        </h2>
+        </p>
+        <hr/>
 
-        <div class="flex flex-col gap-1">
-          <label for="animation">
-            {t('animtab.yamlInput@@YAML Input')}
-          </label>
-          <textarea id="animation"
-            class={{ 'lum-input h-96 font-mono': true }}
-            value={animprevStore.yaml}
-            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
-          />
-        </div>
-
-        <Dropdown id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
+        <SelectMenu id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
           (e, el) => {
             rgbStore.previewStyle = el.value;
           }
@@ -144,7 +146,7 @@ export default component$(() => {
           },
         ]}>
           {t('rgb.inputText.preview.title@@Preview Style')}
-        </Dropdown>
+        </SelectMenu>
         <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
@@ -156,11 +158,16 @@ export default component$(() => {
               if (!result) return '';
               console.log(result);
               color = result[2] ? `#${result[2]}` : color;
+              const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
+              const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
               Object.keys(minecraftColors).forEach(key => {
                 if (result[3]?.includes(key)) color = minecraftColors[key as keyof typeof minecraftColors];
               });
               return (
-                <span key={`char${i}`} style={{ color: color }} class={{
+                <span key={`char${i}`} style={{
+                  color,
+                  textShadow: `4px 4px 0 ${shadowColor}`,
+                }} class={{
                   'underline': result[3]?.includes('&n'),
                   'strikethrough': result[3]?.includes('&m'),
                   'underline-strikethrough': result[3]?.includes('&n') && result[3]?.includes('&m'),
@@ -174,6 +181,17 @@ export default component$(() => {
             });
           })()}
         </Input>
+
+        <div class="flex flex-col gap-1 mb-2">
+          <label for="animation">
+            {t('animtab.yamlInput@@YAML Input')}
+          </label>
+          <textarea id="animation"
+            class={{ 'lum-input h-96 font-mono': true }}
+            value={animprevStore.yaml}
+            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
+          />
+        </div>
 
         <p class="lum-bg-gray-800 font-mono lum-btn-p-2 rounded-md">
           {animprevStore.frames[animprevStore.frame]}

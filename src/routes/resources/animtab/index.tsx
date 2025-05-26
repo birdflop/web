@@ -10,8 +10,8 @@ import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
-import { Clipboard, FileJson, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
-import { Dropdown, NumberInput } from '@luminescent/ui-qwik';
+import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
 import Input from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
@@ -22,7 +22,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 
 export const animTABDefaults = {
   name: defaults.name,
@@ -33,17 +33,38 @@ export const animTABDefaults = {
 };
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as Partial<typeof rgbDefaults>;
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
 });
 
 export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'animtab', url.searchParams) as Partial<typeof animTABDefaults>;
+  return getCookies(cookie, 'animtab', url.searchParams) as {
+    cookies: Partial<typeof animTABDefaults>
+    errors: string[]
+  };
 });
 
 export default component$(() => {
   const t = inlineTranslate();
-  const rgbCookies = useRGBCookies().value;
-  const animTABCookies = useAnimTABCookies();
+  const { cookies: rgbCookies, errors: rgbErrors } = useRGBCookies().value;
+  const { cookies: animTABCookies, errors: animTABErrors } = useAnimTABCookies().value;
+  const errors = [...rgbErrors, ...animTABErrors];
+  const notifications = useContext(NotificationContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    errors.forEach((error) => {
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error fetching data',
+        description: `${error}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+    });
+  });
 
   const rgbStore = useStore({
     ...structuredClone(rgbDefaults),
@@ -122,13 +143,14 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
-      <div class="my-5 min-h-[60px] w-full">
-        <h1 class="font-bold text-gray-50 text-2xl md:text-3xl xl:text-4xl">
-          {t('nav.resources.animatedTAB.title@@Animated TAB')}
+      <div class="min-h-[60px] w-full">
+        <h1 class="flex gap-4 items-center my-3!">
+          <Rainbow size={70} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>
-        <h2 class="text-gray-400 mt-1 mb-5">
+        <p>
           {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
-        </h2>
+        </p>
+        <hr/>
 
         <Input>
           {(() => {
@@ -209,11 +231,11 @@ export default component$(() => {
                 }}>
                 {t('animtab.animation.interval@@Animation Interval')} (ms)
               </NumberInput>
-              <Dropdown id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
+              <SelectMenu id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
                 values={types}
                 value={animtabStore.type}>
                 {t('animtab.animation.style@@Animation Style')}
-              </Dropdown>
+              </SelectMenu>
             </Options>
 
             <Accordion sectionName="presets">
