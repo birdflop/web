@@ -27,7 +27,6 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
     arr[indexA].pos = arr[indexB].pos;
     arr[indexB].pos = currentPos;
   }
-  console.log(arr[indexA], arr[indexB]);
 
   // swap the items in the array
   const temp = arr[indexA];

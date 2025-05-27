@@ -13,92 +13,104 @@ import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
 import type { ShikiTransformer } from '@shikijs/types';
 import birdflopTheme from './src/theme.json'
 function transformerShowEmptyLines(): ShikiTransformer {
-    return {
-        line(node) {
-            if (node.children.length === 0) {
-                node.children = [{ type: 'text', value: ' ' }];
-                return node;
-            }
-        },
-    };
+  return {
+    line(node) {
+      if (node.children.length === 0) {
+        node.children = [{ type: 'text', value: ' ' }];
+        return node;
+      }
+    },
+  };
 }
 
 function transformerMetaShowTitle(): ShikiTransformer {
-    return {
-        root(node) {
-            const meta = this.options.meta?.__raw;
-            if (!meta) {
-                return;
-            }
-            const titleMatch = meta.match(/title="([^"]*)"/);
-            if (!titleMatch) {
-                return;
-            }
-            const title = titleMatch[1] ?? '';
-            if (title.length > 0) {
-                node.children.unshift({
-                    type: 'element',
-                    tagName: 'div',
-                    properties: {
-                        class: 'shiki-title',
-                    },
-                    children: [{ type: 'text', value: title }],
-                });
-            }
-            meta.replace(titleMatch[0], '');
-        },
-    };
+  return {
+    root(node) {
+      const meta = this.options.meta?.__raw;
+      if (!meta) {
+        return;
+      }
+      const titleMatch = meta.match(/title="([^"]*)"/);
+      if (!titleMatch) {
+        return;
+      }
+      const title = titleMatch[1] ?? '';
+      if (title.length > 0) {
+        node.children.unshift({
+          type: 'element',
+          tagName: 'div',
+          properties: {
+            class: 'shiki-title',
+          },
+          children: [{ type: 'text', value: title }],
+        });
+      }
+      meta.replace(titleMatch[0], '');
+    },
+  };
 }
 
 export default defineConfig(() => {
-    return {
-        plugins: [
-            qwikCity({
-                mdxPlugins: {
-                    rehypeSyntaxHighlight: false,
-                    remarkGfm: true,
-                    rehypeAutolinkHeadings: true,
-                },
-                mdx: {
-                    rehypePlugins: [
-                        [
-                            shikiRehype,
-                            {
-                                theme: birdflopTheme,
-                                transformers: [
-                                    transformerMetaHighlight(),
-                                    transformerMetaWordHighlight(),
-                                    transformerColorizedBrackets(),
-                                    transformerShowEmptyLines(),
-                                    transformerMetaShowTitle(),
-                                ],
-                            },
-                        ],
-                    ],
-                },
-            }),
-            qwikVite(),
-            tsconfigPaths(),
-            qwikSpeakInline({
-                basePath: './',
-                supportedLangs: Object.keys(languages),
-                defaultLang: "en-US",
-                assetsPath: "i18n"
-            }),
-            partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
-            tailwindcss(),
-
-        ],
-        preview: {
-            headers: {
-                "Cache-Control": "public, max-age=600",
-            },
+  return {
+    plugins: [
+      qwikCity({
+        mdxPlugins: {
+          rehypeSyntaxHighlight: false,
+          remarkGfm: true,
+          rehypeAutolinkHeadings: true,
         },
-        ssr: {
-            external: [
-                '@prisma/client/edge',
-                '@auth/prisma-adapter',
+        mdx: {
+          rehypePlugins: [
+            [
+              shikiRehype,
+              {
+                theme: birdflopTheme,
+                transformers: [
+                  transformerMetaHighlight(),
+                  transformerMetaWordHighlight(),
+                  transformerColorizedBrackets(),
+                  transformerShowEmptyLines(),
+                  transformerMetaShowTitle(),
+                ],
+              },
             ],
+          ],
         },
-    };
+      }),
+      qwikVite(),
+      tsconfigPaths(),
+      qwikSpeakInline({
+        basePath: './',
+        supportedLangs: Object.keys(languages),
+        defaultLang: "en-US",
+        assetsPath: "i18n"
+      }),
+      partytownVite({ dest: join(__dirname, "dist", "~partytown") }),
+      tailwindcss(),
+    ],
+    preview: {
+      headers: {
+        "Cache-Control": "public, max-age=600",
+      },
+    },
+    ssr: {
+      external: [
+        '@prisma/client/edge',
+        '@auth/prisma-adapter',
+      ],
+    },
+    optimizeDeps: {
+      include: [
+        'yaml',
+        'gifuct-js',
+        'three/examples/jsm/loaders/OBJLoader',
+        'three/examples/jsm/controls/OrbitControls',
+        'three',
+        '@auth/prisma-adapter',
+        'chart.js',
+        '@prisma/client/edge',
+        '@prisma/extension-accelerate',
+      ],
+    },
+  };
 });

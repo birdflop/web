@@ -26,6 +26,13 @@ export function loadPreset(p: string): Partial<typeof defaults> {
     if (typeof preset.colors[0] == 'string') preset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
   }
 
+  // Check for any negative numbers in the preset
+  Object.keys(preset).forEach(key => {
+    if (typeof preset[key] === 'number' && preset[key] < 0) {
+      preset[key] = 0; // Reset negative values to 0
+    }
+  });
+
   // if version is current, return the preset
   if (preset.version === defaults.version || !preset.version) return preset;
 

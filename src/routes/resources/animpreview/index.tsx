@@ -139,7 +139,6 @@ export default component$(() => {
             return spans?.map((string: string, i: number) => {
               const result = string.match(pattern);
               if (!result) return '';
-              console.log(result);
               color = result[2] ? `#${result[2]}` : color;
               const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
               const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;

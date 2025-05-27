@@ -60,8 +60,6 @@ export default component$(({ hidden }: {
     ...(session.value?.user?.savedPresets ?? []),
   ] as Partial<typeof defaults>[]);
 
-  // Removed console.log(presetStore) to avoid performance and security issues in production.
-
   return (
     <div class={{
       'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,

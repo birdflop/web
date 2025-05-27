@@ -3,7 +3,6 @@ import type { RequestHandler } from '@builder.io/qwik-city';
 export const onGet: RequestHandler = ({ text, json, cookie, query }) => {
   // get all cookies
   const cookies = cookie.getAll();
-  console.debug('cookies', cookies);
   Object.keys(cookies).forEach((key) => {
     if (key.includes('authjs') || key.includes('FCNEC')) delete cookies[key];
   });
@@ -19,7 +18,6 @@ export const onGet: RequestHandler = ({ text, json, cookie, query }) => {
       return [key, value.value];
     }),
   );
-  console.debug('cookiesObject', cookiesObject);
 
   if (query.get('text') !== null) {
     throw text(200, JSON.stringify(cookiesObject, null, 2));
