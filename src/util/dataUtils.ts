@@ -61,13 +61,13 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
     errors.push(`Error loading preset: ${e}`);
   }
 
-  // Check for any negative numbers in the cookies
-  for (const key in cookies) {
-    if (typeof cookies[key] === 'number' && cookies[key] < 0) {
-      errors.push(`Negative value found in cookie ${name} for key ${key}: ${cookies[key]}`);
-      cookies[key] = 1; // Reset negative values to 1
+  // Check for any numbers lower than 1 in the cookies
+  Object.keys(cookies).forEach(key => {
+    if (typeof cookies[key] === 'number' && cookies[key] < 1) {
+      errors.push(`Invalid value found in ${key}: ${cookies[key]}`);
+      cookies[key] = 1; // Reset values lower than 1 to 1
     }
-  }
+  });
 
   // log any errors encountered
   if (errors.length > 0) {
