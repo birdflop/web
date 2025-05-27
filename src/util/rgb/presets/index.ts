@@ -29,7 +29,7 @@ export function loadPreset(p: string): Partial<typeof defaults> {
   // Check for any negative numbers in the preset
   Object.keys(preset).forEach(key => {
     if (typeof preset[key] === 'number' && preset[key] < 0) {
-      preset[key] = 0; // Reset negative values to 0
+      preset[key] = 1; // Reset negative values to 1
     }
   });
 
