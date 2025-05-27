@@ -39,6 +39,8 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
       let index = 0;
 
       while (index < textArray.length) {
+        // check if colorlength is set and valid
+        if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
         segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
         index += rgbStore.colorlength;
       }

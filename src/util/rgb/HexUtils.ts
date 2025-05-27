@@ -28,6 +28,7 @@ export class Gradient {
 
       const lowerRange = Math.round(colors[i].pos / 100 * this.steps);
       const upperRange = Math.round(colors[i + 1].pos / 100 * this.steps);
+      if (upperRange < 1) continue;
       if (lowerRange === upperRange) continue;
 
       this.gradients.push(
@@ -92,6 +93,8 @@ class TwoStopGradient {
 
 export class AnimatedGradient extends Gradient {
   constructor(colors: Gradient['colors'], numSteps: number, offset: number) {
+    if (numSteps < 2) numSteps = 2;
+    if (offset < 0) offset = 0;
     super(colors, numSteps);
     this.step = offset;
   }

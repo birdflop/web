@@ -122,8 +122,10 @@ export default component$(({ hidden }: {
                   let index = 0;
                   const textArray = Array.from(preset.text);
                   while (index < textArray.length) {
-                    segments.push(textArray.slice(index, index + (preset.colorlength ?? 1)).join(''));
-                    index += preset.colorlength ?? 1;
+                    // check if colorlength is set and valid
+                    if (!preset.colorlength || preset.colorlength < 1) preset.colorlength = 1;
+                    segments.push(textArray.slice(index, index + preset.colorlength).join(''));
+                    index += preset.colorlength;
                   }
                   return segments.map((segment, i) => {
                     const rgb = gradient.next();

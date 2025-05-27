@@ -94,9 +94,13 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
 
     // Process each character
     let index = 0;
-    while (index < rgbStore.text.length) {
+    const textArray = Array.from(rgbStore.text);
+    while (index < textArray.length) {
+      // check if colorlength is set and valid
+      if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
+
       // Handle multi-byte characters like emojis
-      const segment = Array.from(rgbStore.text).slice(index, index + (rgbStore.colorlength ?? 1)).join('');
+      const segment = textArray.slice(index, index + rgbStore.colorlength).join('');
 
       const rgb = gradient.next();
       const rgbShadow = shadowGradient ? shadowGradient.next() : undefined;
@@ -158,10 +162,13 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
     let index = 0;
 
     // Break text into segments without splitting multi-byte characters like emojis
-    while (index < rgbStore.text.length) {
-      const segment = Array.from(rgbStore.text).slice(index, index + (rgbStore.colorlength ?? 1)).join('');
+    const textArray = Array.from(rgbStore.text);
+    while (index < textArray.length) {
+      // check if colorlength is set and valid
+      if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
+      const segment = textArray.slice(index, index + rgbStore.colorlength).join('');
       segments.push([segment]);
-      index += rgbStore.colorlength ?? 1;
+      index += rgbStore.colorlength;
     }
 
     for (const segment of segments) {
