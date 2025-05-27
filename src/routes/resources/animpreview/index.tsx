@@ -6,7 +6,6 @@ import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input from '~/components/rgb/Input';
 import { rgbDefaults, rgbStoreContext } from '../rgb';
-import { SelectMenu } from '@luminescent/ui-qwik';
 import { NotificationContext } from '~/routes/layout';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB } from '~/util/rgb/Colors';
@@ -131,22 +130,6 @@ export default component$(() => {
         </p>
         <hr/>
 
-        <SelectMenu id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
-          (e, el) => {
-            rgbStore.previewStyle = el.value;
-          }
-        } values={[
-          {
-            name: t('rgb.inputText.preview.default@@Default'),
-            value: 'default',
-          },
-          {
-            name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
-            value: 'chat',
-          },
-        ]}>
-          {t('rgb.inputText.preview.title@@Preview Style')}
-        </SelectMenu>
         <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';

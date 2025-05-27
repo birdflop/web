@@ -1,8 +1,6 @@
 import { $, component$, useContext } from '@builder.io/qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { NotificationContext } from '~/routes/layout';
-import { rgbStoreContext } from '~/routes/resources/rgb';
 
 export default component$(({ hidden, value }: {
   hidden: boolean;
@@ -11,7 +9,6 @@ export default component$(({ hidden, value }: {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
-  const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class={{
@@ -46,22 +43,6 @@ export default component$(({ hidden, value }: {
           }, 2000);
         }}
       />
-      <SelectMenu id="previewstyle" value={rgbStore.previewStyle} class={{ 'w-full': true }} onChange$={
-        (e, el) => {
-          rgbStore.previewStyle = el.value;
-        }
-      } values={[
-        {
-          name: t('rgb.inputText.preview.default@@Default'),
-          value: 'default',
-        },
-        {
-          name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
-          value: 'chat',
-        },
-      ]}>
-        {t('rgb.inputText.preview.title@@Preview Style')}
-      </SelectMenu>
     </div>
   );
 });
