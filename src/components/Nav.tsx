@@ -2,12 +2,13 @@ import { component$ } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, LogIn, Github, Server, Book, LogOut, User } from 'lucide-icons-qwik';
+import { Box, Globe, LogIn, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
+import Accordion from './Accordion';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -39,16 +40,16 @@ export default component$(() => {
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
         </div>
         <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
-          {t('nav.hosting.panel@@Panel')}
+          <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
         <Link q:slot="extra-buttons" href="/plans" class="lum-btn lum-bg-transparent">
-          {t('nav.hosting.plans@@Plans')}
+          <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
         <a q:slot="extra-buttons" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent">
-          {t('nav.hosting.billing@@Billing')}
+          <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
         <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent">
-          {t('nav.hosting.nodeStats.title@@Node Stats')}
+          <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </SelectMenuRaw>
       <SelectMenuRaw id="nav-resources" q:slot='end' hover customDropdown
@@ -57,22 +58,22 @@ export default component$(() => {
           <Box size={20} /> {t('nav.resources.title@@Resources')}
         </div>
         <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
+          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.animatedTAB.title@@Animated TAB')}
+          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.sparkProfile.title@@Spark Profile')}
+          <Zap size={20} /> {t('nav.resources.sparkProfile.title@@Spark Profile')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.flags.title@@Flags Generator')}
+          <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/banner" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.banner.title@@Banner Generator')}
+          <Presentation size={20} /> {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
-          {t('nav.resources.more@@More Resources')}
+          <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </SelectMenuRaw>
       <SelectMenuRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent gap-1': true }} id="lang-picker" customDropdown
@@ -128,44 +129,44 @@ export default component$(() => {
         </Form>
       }
 
-      <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
+      <Accordion q:slot="mobile" sectionName="nav-hosting" alwaysOpen={true}>
         <Server size={20} /> {t('nav.hosting.title@@Hosting')}
-      </h3>
+      </Accordion>
       <a q:slot="mobile" href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent">
-        {t('nav.hosting.panel@@Panel')}
+        <Palette size={20} /> {t('nav.hosting.panel@@Panel')}
       </a>
       <Link q:slot="mobile" href="/plans" class="lum-btn lum-bg-transparent">
-        {t('nav.hosting.plans@@Plans')}
+        <Palette size={20} /> {t('nav.hosting.plans@@Plans')}
       </Link>
       <a q:slot="mobile" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent">
-        {t('nav.hosting.billing@@Billing')}
+        <Palette size={20} /> {t('nav.hosting.billing@@Billing')}
       </a>
       <Link q:slot="mobile" href="/node-stats" class="lum-btn lum-bg-transparent">
-        {t('nav.hosting.nodeStats.title@@Node Stats')}
+        <Palette size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
       </Link>
-      <h3 q:slot="mobile" class="flex items-center gap-3 mx-4 py-3 text-gray-200 font-semibold border-b border-gray-700">
+      <Accordion q:slot="mobile" sectionName="nav-resources" alwaysOpen={true}>
         <Box size={20} /> {t('nav.resources.title@@Resources')}
-      </h3>
+      </Accordion>
       <Link q:slot="mobile" href="/resources/rgb" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </Link>
       <Link q:slot="mobile" href="/resources/animtab" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </Link>
       <Link q:slot="mobile" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.sparkProfile.title@@Spark Profile')}
+        <Zap size={20} /> {t('nav.resources.sparkProfile.title@@Spark Profile')}
       </Link>
       <Link q:slot="mobile" href="/resources/flags" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.flags.title@@Flags Generator')}
+        <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
       </Link>
       <Link q:slot="mobile" href="/resources/banner" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.banner.title@@Banner Generator')}
+        <Presentation size={20} /> {t('nav.resources.banner.title@@Banner Generator')}
       </Link>
       <Link q:slot="mobile" href="/docs" class="lum-btn lum-bg-transparent">
         {t('nav.docs@@Docs')}
       </Link>
       <Link q:slot="mobile" href="/resources" class="lum-btn lum-bg-transparent">
-        {t('nav.resources.more@@More Resources')}
+        <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
       </Link>
       <div q:slot='mobile' class="flex justify-evenly">
         <SocialButtons />
