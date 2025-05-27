@@ -7,6 +7,7 @@ import Nav from '~/components/Nav';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { loadOpenItems } from '~/components/Accordion';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -20,7 +21,7 @@ type Notification = {
 } | rawNotification;
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
-export const OpenSectionsContext = createContextId<string[]>('opensections-context');
+export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
   const t$ = $((string: string) => inlineTranslate()(string));
 
@@ -28,11 +29,19 @@ export default component$(() => {
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
-  const openSections = useStore([] as string[]);
-  useContextProvider(OpenSectionsContext, openSections);
+  const openItemsStore = useStore({
+    items: [] as string[],
+  });
+  useContextProvider(openItemsContext, openItemsStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
+    // Load open items from localStorage
+    const savedOpenItems = await loadOpenItems();
+    if (savedOpenItems && savedOpenItems.length > 0) {
+      openItemsStore.items = savedOpenItems;
+    }
+
     // convert cookies to json
     const cookieJSON: any = document.cookie.split(';').reduce((res, c) => {
       const [key, val] = c.trim().split('=').map(decodeURIComponent);

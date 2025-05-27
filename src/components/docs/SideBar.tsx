@@ -5,7 +5,7 @@ import { buildMenu } from '~/util/buildMenu';
 import { MenuItems } from './Menuitems';
 import { Book, Menu, Search } from 'lucide-icons-qwik';
 
-export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
+export const DocsSidebar = component$(() => {
   const store = useStore({
     sideMenuOpen: false,
     scrollPosition: 0,
@@ -14,7 +14,6 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
 
   const { url } = useLocation();
   const markdownItems = useMarkdownItems();
-  const allOpen = props.allOpen || false;
 
   const saveScrollPosition = $(() => {
     try {
@@ -104,7 +103,6 @@ export const DocsSidebar = component$((props: { allOpen?: boolean }) => {
             <MenuItems
               items={store.menuItems}
               pathname={url.pathname}
-              allOpen={allOpen}
               markdownItems={markdownItems.value}
               onClick$={saveScrollPosition}
             />

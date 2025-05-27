@@ -20,7 +20,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, openItemsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
@@ -77,7 +77,7 @@ export default component$(() => {
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const openSections = useContext(OpenSectionsContext);
+  const openItemsStore = useContext(openItemsContext);
   const threshold = useSignal(50);
 
   useTask$(({ track }) => {
@@ -176,12 +176,12 @@ export default component$(() => {
               <Palette size={26} />
               {t('rgb.colors.title@@Colors')}
             </Accordion>
-            <ColorList hidden={openSections.indexOf('colors') == -1} />
+            <ColorList hidden={!openItemsStore.items.includes('colors')} />
             <Accordion sectionName="textshadow">
               <Blend size={26} />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
-            <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
+            <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
 
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
@@ -189,20 +189,20 @@ export default component$(() => {
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
             </Accordion>
-            <Output hidden={openSections.indexOf('output') == -1}
+            <Output hidden={!openItemsStore.items.includes('output')}
               value={generateOutput(rgbStore)} />
 
             <Accordion sectionName="options">
               <Settings size={26} />
               {t('rgb.options@@Options')}
             </Accordion>
-            <Options hidden={openSections.indexOf('options') == -1}/>
+            <Options hidden={!openItemsStore.items.includes('options')} />
 
             <Accordion sectionName="presets">
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
-            <Presets hidden={openSections.indexOf('presets') == -1}/>
+            <Presets hidden={!openItemsStore.items.includes('presets')} />
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
@@ -211,7 +211,7 @@ export default component$(() => {
                 experimental
               </span>
             </Accordion>
-            <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
+            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
 
           </div>
 
@@ -220,14 +220,14 @@ export default component$(() => {
               <Type size={26} />
               {t('rgb.formatting.title@@Formatting')}
             </Accordion>
-            <Formatting hidden={openSections.indexOf('formatting') == -1} />
+            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
-              <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
+              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
             </>}
           </div>
         </div>
