@@ -1,9 +1,42 @@
 import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
-import { Terminal } from 'lucide-icons-qwik';
+import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
 import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
+import { SelectMenuRaw } from '@luminescent/ui-qwik';
+
+const InputField = component$(({ class: className, readOnly }: {
+  class?: string;
+  readOnly?: boolean;
+}) => {
+  const rgbStore = useContext(rgbStoreContext);
+  return (
+    <div class={{
+      'relative text-2xl break-words': true,
+      [`${className}`]: className,
+    }}
+    style={{ textShadow: '2px 2px 0 #373737' }}>
+      <p class={{
+        'font-mc-bold': rgbStore.bold,
+        'font-mc-italic': rgbStore.italic,
+        'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+      }}>
+        <Slot />
+      </p>
+      <div class="absolute bottom-0 h-full flex flex-col w-[calc(100%+0.5rem)]">
+        <textarea class={{
+          'lum-input p-0 pt-1.5 -mb-2.5 rounded-sm resize-none w-full h-full whitespace-pre-wrap caret-white leading-none text-transparent hover:text-transparent lum-bg-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50 line': true,
+          'font-mc-bold': rgbStore.bold,
+          'font-mc-italic': rgbStore.italic,
+          'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+          [`${className}`]: className,
+        }} value={rgbStore.text} spellcheck={false} readOnly={readOnly} id="input"
+        onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+      </div>
+    </div>
+  );
+});
 
 export default component$(({ readOnly }: {
   readOnly?: boolean
@@ -21,57 +54,122 @@ export default component$(({ readOnly }: {
     input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
   });
 
-  return (
-    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3">
-      {!readOnly &&
-        <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-          <Terminal size={26} />
-          {t('rgb.inputText.title@@Input Text')}
-          <p class="text-gray-400 text-sm font-normal">
-            {t('rgb.inputText.description@@Type here to generate a gradient!')}
-          </p>
-        </h5>
-      }
-      {rgbStore.previewStyle == 'chat' &&
+  return <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 relative">
+    {!readOnly &&
+      <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+        <Terminal size={26} />
+        {t('rgb.inputText.title@@Input Text')}
+        <p class="text-gray-400 text-sm font-normal">
+          {t('rgb.inputText.description@@Type here to generate a gradient!')}
+        </p>
+      </h5>
+    }
+    {rgbStore.previewStyle != 'default' &&
+      <div class={{
+        'relative lum-bg-gray-800/50 rounded-lg': true,
+        'break-all font-mc': true,
+      }}>
+        <Background class="overflow-hidden rounded-lg" id="bg" alt="background" />
         <div class={{
-          'relative lum-bg-gray-800/50 rounded-lg': true,
-          'break-all font-mc': true,
-        }}>
-          <Background class="overflow-hidden rounded-lg" id="bg" alt="background" />
-          <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl max-h-64 break-words overflow-auto"
-            style={{ textShadow: '2px 2px 0 #373737' }}>
-            <p class="text-white!">{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
-            <p class={{
-              'font-mc-bold': rgbStore.bold,
-              'font-mc-italic': rgbStore.italic,
-              'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-            }}>
-              <Slot />
-            </p>
-            <textarea readOnly={readOnly} class="absolute bottom-0 lum-input pl-0 pr-1.5 py-0 rounded-none lum-btn-p-2 resize-none w-[calc(100%-0.5rem)] h-[calc(100%-2rem)] whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50" id="input"
-              value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-          </div>
-          <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
-            style={{ textShadow: '2px 2px 0 #373737' }}>
-            {generateOutput(rgbStore)}
-          </p>
+          'absolute flex flex-col w-full text-2xl max-h-64': true,
+          'bottom-0 h-full break-words overflow-auto': rgbStore.previewStyle == 'chat',
+          'top-5 justify-center items-center text-center min-h-8 px-2': rgbStore.previewStyle.includes('tab'),
+        }}
+        style={{ textShadow: '2px 2px 0 #373737' }}>
+          {rgbStore.previewStyle.includes('tab') &&
+            <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 break-words overflow-auto"
+              style={{ textShadow: '2px 2px 0 #373737' }}>
+              { rgbStore.previewStyle == 'tab-header' &&
+                <InputField readOnly={readOnly} class="text-center">
+                  <Slot />
+                </InputField>
+              }
+              <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+                style={{ textShadow: '2px 2px 0 #373737' }}>
+                <img class="h-6 rounded-none!" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
+                <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+              </div>
+              { rgbStore.previewStyle == 'tab-player' &&
+                <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+                  style={{ textShadow: '2px 2px 0 #373737' }}>
+                  <img class="h-6 rounded-none!" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                  <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
+                    <Slot />
+                  </InputField>
+                  <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                </div>
+              }
+              { rgbStore.previewStyle == 'tab-footer' &&
+                <InputField readOnly={readOnly} class="text-center">
+                  <Slot />
+                </InputField>
+              }
+            </div>
+          }
+          {rgbStore.previewStyle == 'chat' &&
+            <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
+              style={{ textShadow: '2px 2px 0 #373737' }}>
+              <p class="text-white!">{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
+              <InputField readOnly={readOnly}>
+                <Slot />
+              </InputField>
+            </div>
+          }
         </div>
-      }
-      {rgbStore.previewStyle == 'default' &&
-        <div class={{
-          'relative w-full': true,
-          'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
-          'font-mc-bold': rgbStore.bold,
-          'font-mc-italic': rgbStore.italic,
-          'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-        }}>
-          <p class="lum-bg-gray-800/50 rounded-lg lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
-            <Slot />
-          </p>
-          <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
-            value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-        </div>
-      }
-    </label>
-  );
+        <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
+          style={{ textShadow: '2px 2px 0 #373737' }}>
+          {generateOutput(rgbStore)}
+        </p>
+      </div>
+    }
+    {rgbStore.previewStyle == 'default' &&
+      <div class={{
+        'relative w-full': true,
+        'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
+        'font-mc-bold': rgbStore.bold,
+        'font-mc-italic': rgbStore.italic,
+        'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+      }}>
+        <p class="lum-bg-gray-800/50 rounded-lg lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
+          <Slot />
+        </p>
+        <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
+          value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+      </div>
+    }
+    <div class={{
+      'absolute top-1 right-1': true,
+      'top-10': !readOnly,
+    }}>
+      <SelectMenuRaw id="previewstyle" value={rgbStore.previewStyle} onChange$={
+        (e, el) => {
+          rgbStore.previewStyle = el.value;
+        }
+      } values={[
+        {
+          name: t('rgb.inputText.preview.default@@Default'),
+          value: 'default',
+        },
+        {
+          name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
+          value: 'chat',
+        },
+        {
+          name: t('rgb.inputText.preview.tab@@Minecraft Tab Header'),
+          value: 'tab-header',
+        },
+        {
+          name: t('rgb.inputText.preview.tab@@Minecraft Tab Footer'),
+          value: 'tab-footer',
+        },
+        {
+          name: t('rgb.inputText.preview.tab@@Minecraft Tab Player'),
+          value: 'tab-player',
+        },
+      ]} customDropdown class={{ 'p-1 gap-1 lum-bg-gray-900/75': true }}>
+        <Eye size={20} class="text-gray-400" q:slot="dropdown" />
+      </SelectMenuRaw>
+    </div>
+  </label>;
 });
