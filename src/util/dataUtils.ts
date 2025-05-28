@@ -57,7 +57,7 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
 
   if (urlParams) {
     const { params, errors: parseErrors } = parseParams(
-      Object.fromEntries([...urlParams.entries()]),
+      Object.fromEntries(urlParams.entries()),
       name,
     );
     if (parseErrors.length > 0) errors.push(...parseErrors);
