@@ -1,9 +1,9 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
-import { defaults, types } from '~/util/rgb/presets/defaults';
+import { types, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
 import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
-import { rgbDefaults, rgbStoreContext } from '../rgb';
+import { rgbStoreContext } from '../rgb';
 import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -12,7 +12,7 @@ import { isBrowser } from '@builder.io/qwik/build';
 
 import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
-import Input from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
 import Output from '~/components/rgb/Output';
@@ -23,14 +23,6 @@ import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
-
-export const animTABDefaults = {
-  name: defaults.name,
-  type: defaults.type,
-  speed: defaults.speed,
-  length: defaults.length,
-  outputFormat: defaults.outputFormat,
-};
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -71,6 +63,9 @@ export default component$(() => {
     ...rgbCookies,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
+
+  const previewStyle = useSignal('default');
+  useContextProvider(previewStyleContext, previewStyle);
 
   const openSections = useContext(OpenSectionsContext);
   const threshold = useSignal(50);
@@ -163,7 +158,7 @@ export default component$(() => {
             let i = 0;
             return segments.map((segment) => {
               const color = `#${colors[i]}`;
-              const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
+              const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
               const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
               const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
               i = rgbStore.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;

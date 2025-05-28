@@ -1,14 +1,15 @@
-import { component$, useContext, useContextProvider, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
-import Input from '~/components/rgb/Input';
-import { rgbDefaults, rgbStoreContext } from '../rgb';
+import Input, { previewStyleContext } from '~/components/rgb/Input';
+import { rgbStoreContext } from '../rgb';
 import { NotificationContext } from '~/routes/layout';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB } from '~/util/rgb/Colors';
+import { rgbDefaults } from '~/util/rgb/presets/defaults';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'animpreview', url.searchParams);
@@ -82,6 +83,9 @@ export default component$(() => {
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
+  const previewStyle = useSignal('default');
+  useContextProvider(previewStyleContext, previewStyle);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
@@ -140,6 +144,8 @@ export default component$(() => {
               const result = string.match(pattern);
               if (!result) return '';
               color = result[2] ? `#${result[2]}` : color;
+
+              const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
               const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
               const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
               Object.keys(minecraftColors).forEach(key => {
@@ -148,7 +154,7 @@ export default component$(() => {
               return (
                 <span key={`char${i}`} style={{
                   color,
-                  textShadow: `4px 4px 0 ${shadowColor}`,
+                  textShadow: `${shadowLength} 0 ${shadowColor}`,
                 }} class={{
                   'underline': result[3]?.includes('&n'),
                   'strikethrough': result[3]?.includes('&m'),

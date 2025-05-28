@@ -1,9 +1,9 @@
 import type { User } from '@auth/qwik';
-import type { defaults } from '~/util/rgb/presets/defaults';
 import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
+import { rgbPreset } from '~/util/rgb/presets';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -14,7 +14,7 @@ export interface BirdflopSession {
 }
 
 export interface BirdflopUser extends User {
-  savedPresets?: Partial<typeof defaults>[];
+  savedPresets?: rgbPreset[];
 }
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(

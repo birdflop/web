@@ -4,7 +4,7 @@ export const defaultPresets = {
   savedPresets: [],
 };
 
-export const defaults = {
+export const rgbDefaults = {
   version: 4,
   colors: [
     { hex: '#54daf4', pos: 0 },
@@ -15,18 +15,13 @@ export const defaults = {
     { hex: '#15182E', pos: 100 },
   ],
   colorlength: 1,
-  name: 'logo',
   text: 'Birdflop',
-  type: 1,
-  speed: 50,
-  length: 1,
   format: {
     color: '&#$1$2$3$4$5$6$f$c',
     char: '&',
   } as format,
   prefixsuffix: '',
   customFormat: false,
-  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
   trimspaces: true,
   disperse: false,
   lowercase: false,
@@ -36,7 +31,18 @@ export const defaults = {
   underline: false,
   strikethrough: false,
   obfuscate: false,
-  previewStyle: 'default',
+};
+
+export const animTABDefaults = {
+  name: 'logo',
+  type: 1,
+  speed: 50,
+  length: 1,
+  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
+};
+
+export const combinedDefaults = {
+  ...rgbDefaults, ...animTABDefaults,
 };
 
 export const presets: publishedPreset[] = [
@@ -45,7 +51,7 @@ export const presets: publishedPreset[] = [
     author: 'RGBirdflop',
     preset: {
       version: 4,
-      colors: defaults.colors,
+      colors: combinedDefaults.colors,
       length: 1,
     },
   },
@@ -162,7 +168,7 @@ export const formats = [
     strikethrough: '<st>$t</st>',
     obfuscate: '<obf>$t</obf>',
   },
-  defaults.format,
+  combinedDefaults.format,
   {
     color: '§x§$1§$2§$3§$4§$5§$6$f$c',
     char: '§',

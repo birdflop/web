@@ -1,7 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { formats } from '~/util/rgb/presets/defaults';
+import { formats, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { generateOutput } from '~/util/rgb/RGBUtils';
-import { rgbDefaults } from '~/routes/resources/rgb';
 
 export const onGet: RequestHandler = ({ json, query }) => {
   let output = {};
@@ -50,7 +49,7 @@ const descriptions: {
   syncshadow: 'Whether or not to sync the text shadow with the text. If this is true, shadow colors will not be applied.',
   bold: 'Whether or not to bold the text.',
   italic: 'Whether or not to italicize the text.',
-  underline: 'Whether or not to underline the text.',
+  underline: 'Whether or nots to underline the text.',
   strikethrough: 'Whether or not to strikethrough the text.',
   obfuscate: 'Whether or not to obfuscate the text.',
 };
@@ -64,7 +63,7 @@ const customTypes: {
 };
 
 const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
-  .filter(key => !['version', 'previewStyle', 'disperse', 'customFormat'].includes(key))
+  .filter(key => !['version', 'disperse', 'customFormat'].includes(key))
   .reduce((acc: {
     [key in keyof typeof rgbDefaults]?: {
       type: string;

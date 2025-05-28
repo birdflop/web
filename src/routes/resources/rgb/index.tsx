@@ -2,7 +2,7 @@ import { component$, createContextId, useContext, useContextProvider, useSignal,
 import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/rgb/HexUtils';
-import { defaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -10,7 +10,7 @@ import { getCookies, setCookies } from '~/util/dataUtils';
 import { isBrowser } from '@builder.io/qwik/build';
 
 import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
-import Input from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/rgb/Input';
 import ColorMap from '~/components/rgb/ColorMap';
 import ColorList from '~/components/rgb/ColorList';
 import Output from '~/components/rgb/Output';
@@ -24,26 +24,55 @@ import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 
-export const rgbDefaults = {
-  version: defaults.version,
-  colors: defaults.colors,
-  shadowcolors: defaults.shadowcolors,
-  colorlength: defaults.colorlength,
-  text: defaults.text,
-  format: defaults.format,
-  customFormat: defaults.customFormat,
-  prefixsuffix: defaults.prefixsuffix,
-  trimspaces: defaults.trimspaces,
-  disperse: defaults.disperse,
-  lowercase: defaults.lowercase,
-  syncshadow: defaults.syncshadow,
-  bold: defaults.bold,
-  italic: defaults.italic,
-  underline: defaults.underline,
-  strikethrough: defaults.strikethrough,
-  obfuscate: defaults.obfuscate,
-  previewStyle: defaults.previewStyle,
-};
+export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
+  if (!rgbStore.text) return '\u00A0';
+  if (rgbStore.colors.length < 2) return rgbStore.text;
+
+  const shadowColors = rgbStore.syncshadow
+    ? rgbStore.colors.map(color => {
+      const shadowRGB = hexToRGB(color.hex).map(c => c * 0.25);
+      const shadowHex = `#${rgbToHex(shadowRGB)}`;
+      return {
+        hex: shadowHex,
+        pos: color.pos,
+      };
+    }) : rgbStore.shadowcolors;
+
+  const colorsRGB = sortColors(rgbStore.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+  const shadowColorsRGB = sortColors(shadowColors).map((color) =>  ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+
+  const gradient = new Gradient(colorsRGB, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
+  const shadowGradient = new Gradient(shadowColorsRGB, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
+
+  let hex = '';
+  let shadowHex = '';
+  const segments = [];
+  let index = 0;
+  const textArray = Array.from(rgbStore.text);
+  while (index < textArray.length) {
+    // check if colorlength is set and valid
+    if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
+    segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
+    index += rgbStore.colorlength;
+  }
+  return segments.map((segment, i) => {
+    const rgb = gradient.next();
+    const rgbShadow = shadowGradient.next();
+    hex = rgbToHex(rgb);
+    shadowHex = rgbToHex(rgbShadow);
+    return <span key={`char${i}`} style={{
+      color: `#${hex};`,
+      textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
+    }} class={{
+      'underline': rgbStore.underline,
+      'strikethrough': rgbStore.strikethrough,
+      'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
+      'obfuscate': rgbStore.obfuscate,
+    }}>
+      {segment.replace(/ /g, '\u00A0')}
+    </span>;
+  });
+}
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -76,6 +105,9 @@ export default component$(() => {
     ...rgbCookies,
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
+
+  const previewStyle = useSignal('default');
+  useContextProvider(previewStyleContext, previewStyle);
 
   const openSections = useContext(OpenSectionsContext);
   const threshold = useSignal(50);
@@ -128,46 +160,7 @@ export default component$(() => {
         <hr/>
 
         <Input>
-          {(() => {
-            if (!rgbStore.text) return '\u00A0';
-
-            const colors = sortColors(rgbStore.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-            const shadowColors = sortColors(rgbStore.shadowcolors).map((color) =>  ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-            if (colors.length < 2) return rgbStore.text;
-
-            const gradient = new Gradient(colors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
-            const shadowGradient = new Gradient(shadowColors, Math.ceil(rgbStore.text.length / rgbStore.colorlength));
-
-            let hex = '';
-            let shadowHex = '';
-            const segments = [];
-            let index = 0;
-            const textArray = Array.from(rgbStore.text);
-            while (index < textArray.length) {
-              // check if colorlength is set and valid
-              if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
-              segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
-              index += rgbStore.colorlength;
-            }
-            return segments.map((segment, i) => {
-              const rgb = gradient.next();
-              const rgbShadow = shadowGradient.next();
-              hex = rgbToHex(rgb);
-              shadowHex = rgbToHex(rgbShadow);
-              const shadowLength = rgbStore.previewStyle == 'default' ? '4px 4px' : '2px 2px';
-              return <span key={`char${i}`} style={{
-                color: `#${hex};`,
-                textShadow: `${shadowLength} 0 #${shadowHex};`,
-              }} class={{
-                'underline': rgbStore.underline,
-                'strikethrough': rgbStore.strikethrough,
-                'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
-                'obfuscate': rgbStore.obfuscate,
-              }}>
-                {segment.replace(/ /g, '\u00A0')}
-              </span>;
-            });
-          })()}
+          {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
         </Input>
 
         <ColorMap />

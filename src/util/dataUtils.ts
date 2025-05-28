@@ -1,12 +1,20 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
-import { rgbDefaults } from '~/routes/resources/rgb';
-import { animTABDefaults } from '~/routes/resources/animtab';
-import { loadPreset } from './rgb/presets';
+import { loadPreset, rgbPreset } from './rgb/presets';
 import { getPrismaClient } from './prisma';
-import { defaults } from './rgb/presets/defaults';
+import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
+
+const getDefaults = (name: names) => {
+  switch (name) {
+  case 'rgb':
+    return rgbDefaults;
+  case 'animtab':
+    return animTABDefaults;
+  }
+  return {};
+};
 
 export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchParams) {
   let cookies: { [key: string]: any } = {};
@@ -29,8 +37,7 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
     };
     for (const key in params) {
       try {
-        if ((name == 'rgb' && !Object.keys(rgbDefaults).includes(key))
-          || (name == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
+        if (!Object.keys(getDefaults(name)).includes(key)) {
           delete params[key];
         }
         if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
@@ -49,7 +56,7 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
 
   try {
     // Migrate between versions
-    if (cookies.version != defaults.version) {
+    if (cookies.version != rgbDefaults.version) {
       cookies = loadPreset(JSON.stringify(cookies));
       cookie.set(name, JSON.stringify(cookies), {
         path: '/',
@@ -88,9 +95,14 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
   if (cookie.optout === 'true') return;
 
   const cookieValue = { ...cookies };
-  if (cookieValue.syncshadow) delete cookieValue.shadowcolors;
+
+  if (cookieValue.syncshadow && name == 'rgb') delete cookieValue.shadowcolors;
+  const defaults = getDefaults(name);
   Object.keys(cookieValue).forEach(key => {
-    if (key != 'version' && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete cookieValue[key];
+    if (key != 'version'
+      && JSON.stringify(cookieValue[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) {
+      delete cookieValue[key];
+    }
   });
 
   const existingCookie = cookie[name];
@@ -101,7 +113,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 }
 
 export const setUserData = server$(async function(data: {
-  savedPresets?: Partial<typeof defaults>[];
+  savedPresets?: rgbPreset[];
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
   const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
