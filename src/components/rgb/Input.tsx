@@ -1,4 +1,4 @@
-import { component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
@@ -38,6 +38,7 @@ const InputField = component$(({ class: className, readOnly }: {
   );
 });
 
+export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
 export default component$(({ readOnly }: {
   readOnly?: boolean
 }) => {
@@ -45,6 +46,7 @@ export default component$(({ readOnly }: {
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
+  const previewStyle = useContext(previewStyleContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -64,7 +66,7 @@ export default component$(({ readOnly }: {
         </p>
       </h5>
     }
-    {rgbStore.previewStyle != 'default' &&
+    {previewStyle.value != 'default' &&
       <div class={{
         'relative lum-bg-gray-800/50 rounded-lg': true,
         'break-all font-mc': true,
@@ -72,14 +74,14 @@ export default component$(({ readOnly }: {
         <Background class="overflow-hidden rounded-lg" id="bg" alt="background" />
         <div class={{
           'absolute flex flex-col w-full text-2xl max-h-64': true,
-          'bottom-0 h-full break-words overflow-auto': rgbStore.previewStyle == 'chat',
-          'top-5 justify-center items-center text-center min-h-8 px-2': rgbStore.previewStyle.includes('tab'),
+          'bottom-0 h-full break-words overflow-auto': previewStyle.value == 'chat',
+          'top-5 justify-center items-center text-center min-h-8 px-2': previewStyle.value.includes('tab'),
         }}
         style={{ textShadow: '2px 2px 0 #373737' }}>
-          {rgbStore.previewStyle.includes('tab') &&
+          {previewStyle.value.includes('tab') &&
             <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 break-words overflow-auto"
               style={{ textShadow: '2px 2px 0 #373737' }}>
-              { rgbStore.previewStyle == 'tab-header' &&
+              { previewStyle.value == 'tab-header' &&
                 <InputField readOnly={readOnly} class="text-center">
                   <Slot />
                 </InputField>
@@ -90,7 +92,7 @@ export default component$(({ readOnly }: {
                 <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
                 <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
               </div>
-              { rgbStore.previewStyle == 'tab-player' &&
+              { previewStyle.value == 'tab-player' &&
                 <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
                   style={{ textShadow: '2px 2px 0 #373737' }}>
                   <img class="h-6 rounded-none!" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
@@ -100,14 +102,14 @@ export default component$(({ readOnly }: {
                   <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
                 </div>
               }
-              { rgbStore.previewStyle == 'tab-footer' &&
+              { previewStyle.value == 'tab-footer' &&
                 <InputField readOnly={readOnly} class="text-center">
                   <Slot />
                 </InputField>
               }
             </div>
           }
-          {rgbStore.previewStyle == 'chat' &&
+          {previewStyle.value == 'chat' &&
             <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
               style={{ textShadow: '2px 2px 0 #373737' }}>
               <p class="text-white!">{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
@@ -123,7 +125,7 @@ export default component$(({ readOnly }: {
         </p>
       </div>
     }
-    {rgbStore.previewStyle == 'default' &&
+    {previewStyle.value == 'default' &&
       <div class={{
         'relative w-full': true,
         'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
@@ -142,9 +144,9 @@ export default component$(({ readOnly }: {
       'absolute top-1 right-1': true,
       'top-10': !readOnly,
     }}>
-      <SelectMenuRaw id="previewstyle" value={rgbStore.previewStyle} onChange$={
+      <SelectMenuRaw id="previewstyle" value={previewStyle.value} onChange$={
         (e, el) => {
-          rgbStore.previewStyle = el.value;
+          previewStyle.value = el.value;
         }
       } values={[
         {

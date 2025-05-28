@@ -1,9 +1,9 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Activity } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { defaultDescription, generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
@@ -117,20 +117,8 @@ export default component$(() => {
   </>;
 });
 
-export const head: DocumentHead = {
-  title: 'Birdflop Node Stats',
-  meta: [
-    {
-      name: 'description',
-      content: 'Check the status of Birdflop\'s nodes.',
-    },
-    {
-      name: 'og:description',
-      content: 'Check the status of Birdflop\'s nodes.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'Node Stats - Birdflop',
+  description: 'Check the status of Birdflop\'s nodes. ' + defaultDescription,
+  ads: true,
+});

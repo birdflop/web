@@ -2,18 +2,15 @@ import { $, component$, isBrowser, useContext, useStore, type Signal } from '@bu
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { SelectMenu } from '@luminescent/ui-qwik';
-import { loadPreset } from '~/util/rgb/presets';
+import { loadPreset, rgbPreset } from '~/util/rgb/presets';
 
-import { Gradient } from '~/util/rgb/HexUtils';
-import { sortColors } from '~/util/rgb/RGBUtils';
 import { NotificationContext } from '~/routes/layout';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
-import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { setUserData } from '~/util/dataUtils';
-import { defaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -33,7 +30,7 @@ export default component$(({ hidden }: {
       description: await t$('rgb.presets.imported.description@@The preset has been imported successfully.'),
       bgColor: 'lum-bg-green-900/50',
     };
-    let json: Partial<typeof defaults> | undefined;
+    let json: rgbPreset | undefined;
     try {
       const preset = loadPreset(presetJSON);
       json = {
@@ -48,7 +45,7 @@ export default component$(({ hidden }: {
     if (!json) return;
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach(key => {
       if (rgbStore[key] === undefined) return;
-      (rgbStore as any)[key] = json[key] ?? defaults[key];
+      (rgbStore as any)[key] = json[key] ?? combinedDefaults[key];
     });
     notifications.push(notification);
     setTimeout(() => {
@@ -58,7 +55,7 @@ export default component$(({ hidden }: {
 
   const presetStore = useStore([
     ...(session.value?.user?.savedPresets ?? []),
-  ] as Partial<typeof defaults>[]);
+  ] as rgbPreset[]);
 
   return (
     <div class={{
@@ -69,9 +66,9 @@ export default component$(({ hidden }: {
       <div class="flex flex-col gap-2"
         onClick$={() => {
           if (presetStore.length != 0) return;
-          let savedPresets: Partial<typeof defaults>[] = [];
+          let savedPresets: rgbPreset[] = [];
           try {
-            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]') as Partial<typeof defaults>[];
+            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]') as rgbPreset[];
             savedPresets = savedPresets.concat(localStoragePresets);
             if (!localStoragePresets) {
               // presets possibly stored in cookies
@@ -82,7 +79,7 @@ export default component$(({ hidden }: {
               });
               if (cookie['presets']) {
                 const cookiePresets = decodeURIComponent(cookie['presets']);
-                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets as Partial<typeof defaults>[]);
+                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets as rgbPreset[]);
                 // remove cookie
                 document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
               }
@@ -110,38 +107,7 @@ export default component$(({ hidden }: {
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
               }}>
-                {(() => {
-                  if (!preset.text) preset.text = 'Birdflop';
-                  const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-                  if (colors.length < 2) return preset.text;
-
-                  const gradient = new Gradient(colors, Math.ceil(preset.text.length / (preset.colorlength || 1)));
-
-                  let hex = '';
-                  const segments = [];
-                  let index = 0;
-                  const textArray = Array.from(preset.text);
-                  while (index < textArray.length) {
-                    // check if colorlength is set and valid
-                    if (!preset.colorlength || preset.colorlength < 1) preset.colorlength = 1;
-                    segments.push(textArray.slice(index, index + preset.colorlength).join(''));
-                    index += preset.colorlength;
-                  }
-                  return segments.map((segment, i) => {
-                    const rgb = gradient.next();
-                    hex = rgbToHex(rgb);
-                    return <span key={`char${i}`} style={{
-                      color: `#${hex};`,
-                      textShadow: `1px 1px 0 #${hex};`,
-                    }} class={{
-                      'underline': preset.underline,
-                      'strikethrough': preset.strikethrough,
-                      'underline-strikethrough': preset.underline && preset.strikethrough,
-                    }}>
-                      {segment.replace(/ /g, '\u00A0')}
-                    </span>;
-                  });
-                })()}
+                {renderPreview({ ...rgbDefaults, ...preset }, 1)}
               </span>,
               value: JSON.stringify(preset),
             }))
@@ -159,10 +125,10 @@ export default component$(({ hidden }: {
             <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           <button class="lum-btn" id="save" onClick$={async () => {
-            const preset: Partial<typeof defaults> = { ...rgbStore };
+            const preset: rgbPreset = { ...rgbStore };
             if (preset.syncshadow) delete preset.shadowcolors;
-            (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+            (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
+              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
             });
             if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               presetStore.push(preset);
@@ -196,10 +162,10 @@ export default component$(({ hidden }: {
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button class="lum-btn" id="export" onClick$={async () => {
-            const preset: Partial<typeof defaults> = { ...rgbStore };
+            const preset: rgbPreset = { ...rgbStore };
             if (preset.syncshadow) delete preset.shadowcolors;
-            (Object.keys(preset) as Array<keyof typeof defaults>).forEach(key => {
-              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(defaults[key as keyof typeof defaults])) delete preset[key];
+            (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
+              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
             });
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
@@ -223,13 +189,13 @@ export default component$(({ hidden }: {
           <button class="lum-btn" id="createurl" onClick$={async () => {
             const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
             const url = new URL(base_url);
-            const params: Partial<typeof defaults> = { ...rgbStore };
-            (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+            const params: rgbPreset = { ...rgbStore };
+            (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
               if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
                 value = JSON.stringify(value);
-                if (value === JSON.stringify(defaults[key as keyof typeof defaults])) return;
+                if (value === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) return;
               }
-              if (value === defaults[key]) return;
+              if (value === combinedDefaults[key]) return;
               url.searchParams.set(key, String(value));
             });
             window.history.pushState({}, '', url.href);

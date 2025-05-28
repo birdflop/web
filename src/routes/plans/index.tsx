@@ -1,8 +1,9 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Package, ShoppingCart } from 'lucide-icons-qwik';
+import { generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const plans = {
@@ -76,7 +77,7 @@ export default component$(() => {
 
   const params = useParams().value;
   const plansStore = useStore({
-    plan: params.get('plan') ?? undefined as number | string | undefined,
+    plan: params.get('plan') as keyof typeof plans,
     showMiscPlans: false,
     gb: 0,
     name: 'My server',
@@ -106,8 +107,8 @@ export default component$(() => {
           </p>
 
           <div class="grid md:grid-cols-3 gap-2 mt-2">
-            {Object.keys(plans).map((planName) => {
-              const plan = plans[planName as keyof typeof plans];
+            {(Object.keys(plans) as Array<keyof typeof plans>).map((planName) => {
+              const plan = plans[planName];
               const ramOptions = Object.keys(plan.ramAndId);
               return <button
                 class={{
@@ -278,7 +279,7 @@ export default component$(() => {
               This will be the amount of RAM in your new server.
             </p>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-              {plans[plansStore.plan as keyof typeof plans] && Object.keys(plans[plansStore.plan as keyof typeof plans].ramAndId).map((gb) => {
+              {plans[plansStore.plan] && Object.keys(plans[plansStore.plan].ramAndId).map((gb) => {
                 return <button key={`${plansStore.plan}-${gb}`}
                   onClick$={() => {
                     plansStore.gb = Number(gb);
@@ -296,7 +297,7 @@ export default component$(() => {
                     {gb} GB
                   </h3>
                   <p>
-                    {`~$${(Number(gb) * plans[plansStore.plan as keyof typeof plans].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan as keyof typeof plans].$PerGB}/mo.`}
+                    {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                   </p>
                   {plansStore.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
                     transform: 'translateZ(-10px)',
@@ -313,8 +314,8 @@ export default component$(() => {
                 Order Summary
               </h2>
               <p>{plansStore.plan} {plansStore.gb} GB</p>
-              <p>Capped at ${(plansStore.gb * plans[plansStore.plan as keyof typeof plans]?.$PerGB).toFixed(2)}/mo.</p>
-              <p>~${(plansStore.gb * plans[plansStore.plan as keyof typeof plans]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
+              <p>Capped at ${(plansStore.gb * plans[plansStore.plan]?.$PerGB).toFixed(2)}/mo.</p>
+              <p>~${(plansStore.gb * plans[plansStore.plan]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
             </div>
             <div class="flex-1 space-y-2">
               <label for="server_name">Server Name</label>
@@ -324,7 +325,14 @@ export default component$(() => {
             </div>
             <div>
               <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
-                href={`https://client.birdflop.com/order/config/index/${plans[plansStore.plan as keyof typeof plans]?.id}/?group_id=${plans[plansStore.plan as keyof typeof plans]?.groupId}&pricing_id=${(plans[plansStore.plan as keyof typeof plans]?.ramAndId as any)[plansStore.gb]}&server_name=${plansStore.name}&server_description=${plansStore.desc}&billing_cycle=monthly`}>
+                href={'https://client.birdflop.com/order/config/index/'
+                  + plans[plansStore.plan]?.id
+                  + '/?group_id=' + plans[plansStore.plan]?.groupId
+                  // @ts-expect-error type wont work with how this works
+                  + '&pricing_id=' + plans[plansStore.plan]?.ramAndId[plansStore.gb]
+                  + '&server_name=' + plansStore.name
+                  + '&server_description=' + plansStore.desc
+                  + '&billing_cycle=monthly'}>
                 <ShoppingCart size={26}/> Add to cart
               </a>
             </div>
@@ -336,20 +344,6 @@ export default component$(() => {
   </>;
 });
 
-export const head: DocumentHead = {
-  title: 'Order your new server',
-  meta: [
-    {
-      name: 'description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'Order your new server - Birdflop',
+});

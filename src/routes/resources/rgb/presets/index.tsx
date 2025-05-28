@@ -1,14 +1,14 @@
 import { component$, createContextId, useContextProvider, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { defaults, presets } from '~/util/rgb/presets/defaults';
-import { publishedPreset } from '~/util/rgb/presets';
+import { presets } from '~/util/rgb/presets/defaults';
+import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save } from 'lucide-icons-qwik';
+import { defaultDescription, generateHead } from '~/root';
 
-export const savedPresetStoreContext = createContextId<Partial<typeof defaults>[]>('rgbstore-context');
+export const savedPresetStoreContext = createContextId<rgbPreset[]>('rgbstore-context');
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -25,7 +25,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (savedPresetStore.length != 0) return;
-    let savedPresets: Partial<typeof defaults>[] = [];
+    let savedPresets: rgbPreset[] = [];
     try {
       const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
       savedPresets = savedPresets.concat(localStoragePresets);
@@ -85,14 +85,10 @@ export default component$(() => {
           <Toggle id="showsavedpresets" disabled={savedPresetStore.length === 0}
             checked={presetStore.showSaved && savedPresetStore.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
-            label={<p class="flex flex-col">
-              <span>
-                {t('rgb.presets.showSaved.title@@Show saved presets')}
-              </span>
-              <span class="text-xs text-gray-400">
-                {t('rgb.presets.showSaved.description@@Switches between showing all public presets and presets you have saved.')}
-              </span>
-            </p>} />
+            label={t('rgb.presets.showSaved.title@@Show saved presets')} />
+          <p class="text-xs text-gray-400 mt-1">
+            {t('rgb.presets.showSaved.description@@Switches between showing all public presets and presets you have saved.')}
+          </p>
         </div>
 
         <input
@@ -123,20 +119,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'RGBirdflop Presets',
-  meta: [
-    {
-      name: 'description',
-      content: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop.',
-    },
-    {
-      name: 'og:description',
-      content: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/.png',
-    },
-  ],
-};
+  description: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' + defaultDescription,
+  ads: true,
+});

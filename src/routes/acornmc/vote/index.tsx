@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
+import { generateHead } from '~/root';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -23,20 +23,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'AcornMC Vote',
-  meta: [
-    {
-      name: 'description',
-      content: 'Vote for AcornMC!',
-    },
-    {
-      name: 'og:description',
-      content: 'Vote for AcornMC!',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/acorn.png',
-    },
-  ],
-};
+  description: 'Vote for AcornMC!',
+  ads: true,
+});

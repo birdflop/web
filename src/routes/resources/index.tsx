@@ -1,8 +1,9 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import { Link, type DocumentHead } from '@builder.io/qwik-city';
-import { Blobs, LogoDiscord } from '@luminescent/ui-qwik';
-import { Box, Github, Link as LinkIcon } from 'lucide-icons-qwik';
+import { Link } from '@builder.io/qwik-city';
+import { Blobs, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
+import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { defaultDescription, generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
@@ -21,115 +22,127 @@ export default component$(() => {
           {t('nav.resources.description@@Here you can find all of Birdflop\'s public resources.')}
         </p>
         <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
-            Gradient Tools
-          </h3>
-          <p>
-            Tools to help you create gradient text in Minecraft.
-          </p>
-          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Link class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
-              <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.hexGradient.title@@RGBirdflop')}
-              </h3>
-              <p>
-                {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-              </p>
-            </Link>
-            <Link class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
-              <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.animatedTAB.title@@Animated TAB')}
-              </h3>
-              <p>
-                {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
-              </p>
-            </Link>
-          </div>
+        <h3 class="my-0!">
+          Gradient Tools
+        </h3>
+        <p class="mb-4">
+          Tools to help you create gradient text in Minecraft.
+        </p>
+        <div class="flex [&>*]:flex-1 flex-wrap gap-2">
+          <Link class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
+            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Palette size={30} />
+              {t('nav.resources.hexGradient.title@@RGBirdflop')}
+            </h4>
+            <p>
+              {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtab">
+            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Rainbow size={30} />
+              {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            </h4>
+            <p>
+              {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/rgb">
+            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Save size={30} />
+              {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+            </h4>
+            <p>
+              {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
+            </p>
+          </Link>
         </div>
         <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
-            Server tools
-          </h3>
-          <p>
-            Tools to help configure and setup minecraft servers.
-          </p>
-          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Link class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
-              <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.sparkProfile.title@@Spark Profile')}
-              </h3>
-              <p>
-                {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
-              </p>
-            </Link>
-            <Link class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
-              <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.paperTimings.title@@Paper Timings')}
-              </h3>
-              <p>
-                {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
-              </p>
-            </Link>
-            <Link class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
-              <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.flags.title@@Flags Generator')}
-              </h3>
-              <p>
-                {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
-              </p>
-            </Link>
-          </div>
+        <h3 class="my-0!">
+          Server tools
+        </h3>
+        <p class="mb-4">
+          Tools to help configure and setup minecraft servers.
+        </p>
+        <div class="flex [&>*]:flex-1 flex-wrap gap-2">
+          <Link class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
+            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Zap size={30} />
+              {t('nav.resources.sparkProfile.title@@Spark Profile')}
+            </h4>
+            <p>
+              {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/papertimings">
+            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <LogoPaper size={30} />
+              {t('nav.resources.paperTimings.title@@Paper Timings')}
+            </h4>
+            <p>
+              {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/flags">
+            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Flag size={30} />
+              {t('nav.resources.flags.title@@Flags Generator')}
+            </h4>
+            <p>
+              {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
+            </p>
+          </Link>
         </div>
         <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
-            Miscellaneous tools
-          </h3>
-          <p>
-            Miscellaneous tools to help with random miscellaneous things.
-          </p>
-          <div class="flex [&>*]:flex-1 flex-wrap gap-4">
-            <Link class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/banner">
-              <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.banner.title@@Banner Generator')}
-              </h3>
-              <p>
-                {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
-              </p>
-            </Link>
-            <Link class="lum-card lum-bg-cyan-900/30 hover:lum-bg-cyan-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
-              <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.animatedTextures.title@@Animated Textures')}
-              </h3>
-              <p>
-                {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
-              </p>
-            </Link>
-            <Link class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
-              <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-              <h3 class="my-0!">
-                {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
-              </h3>
-              <p>
-                {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
-              </p>
-            </Link>
-          </div>
+        <h3 class="my-0!">
+          Miscellaneous tools
+        </h3>
+        <p class="mb-4">
+          Miscellaneous tools to help with random miscellaneous things.
+        </p>
+        <div class="flex [&>*]:flex-1 flex-wrap gap-2 mb-2">
+          <Link class="lum-card lum-bg-purple-900/30 hover:lum-bg-purple-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/banner">
+            <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Presentation size={30} />
+              {t('nav.resources.banner.title@@Banner Generator')}
+            </h4>
+            <p>
+              {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-cyan-900/30 hover:lum-bg-cyan-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animtexture">
+            <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <GalleryHorizontalEnd size={30} />
+              {t('nav.resources.animatedTextures.title@@Animated Textures')}
+            </h4>
+            <p>
+              {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
+            </p>
+          </Link>
+          <Link class="lum-card lum-bg-lime-900/30 hover:lum-bg-lime-900/70 transition duration-300 hover:duration-75 ease-out relative" href="/resources/animpreview">
+            <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <h4 class="my-0! flex gap-3 items-center">
+              <Eye size={30} />
+              {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
+            </h4>
+            <p>
+              {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
+            </p>
+          </Link>
         </div>
-        <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative mb-2">
+          <h4 class="my-0! flex gap-3 items-center">
+            <Bot size={30} />
             Botflop
-          </h3>
+          </h4>
           <p>
             A Discord bot that watches chat to chime in and provide suggestions. Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </p>
@@ -146,11 +159,11 @@ export default component$(() => {
             </a>
           </div>
         </div>
-        <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative mb-2">
+          <h4 class="my-0! flex gap-3 items-center">
+            <Text size={30} />
             Binflop
-          </h3>
+          </h4>
           <p>
             Birdflop's spinoff of the original hastebin.com. Binflop improves upon Hastebin through the following methods:
           </p>
@@ -184,11 +197,11 @@ export default component$(() => {
             </a>
           </div>
         </div>
-        <hr/>
-        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative">
-          <h3 class="my-0!">
+        <div class="lum-card lum-bg-gray-800/50 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out relative mb-16">
+          <h4 class="my-0! flex gap-3 items-center">
+            <Bot size={30} />
             BirdTickets
-          </h3>
+          </h4>
           <p>
             A Discord ticket bot which provides premium features without a premium cost.
           </p>
@@ -231,26 +244,12 @@ export default component$(() => {
             </a>
           </div>
         </div>
-        <hr/>
       </div>
     </section>
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'Resources - Free Minecraft Resources by Birdflop',
-  meta: [
-    {
-      name: 'description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+  description: 'Public resources developed by Birdflop. ' + defaultDescription,
+});

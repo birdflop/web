@@ -43,7 +43,9 @@ export default component$(() => {
     }
 
     // convert cookies to json
-    const cookieJSON: any = document.cookie.split(';').reduce((res, c) => {
+    const cookieJSON: {
+      [key: string]: string;
+    } = document.cookie.split(';').reduce((res, c) => {
       const [key, val] = c.trim().split('=').map(decodeURIComponent);
       return Object.assign(res, { [key]: val });
     }, {});

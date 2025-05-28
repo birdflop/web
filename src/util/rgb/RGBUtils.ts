@@ -1,9 +1,8 @@
-import { rgbDefaults } from '~/routes/resources/rgb';
-import { defaults } from './presets/defaults';
+import { rgbDefaults } from './presets/defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { Gradient } from './HexUtils';
 
-export function disperseColors(colors: typeof defaults.colors) {
+export function disperseColors(colors: typeof rgbDefaults.colors) {
   const newColors = colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (colors.length - 1)) * i }));
   return newColors;
 }

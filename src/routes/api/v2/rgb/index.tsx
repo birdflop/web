@@ -1,65 +1,16 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { formats } from '~/util/rgb/presets/defaults';
+import { parseParams } from '~/util/dataUtils';
+import { formats, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { generateOutput } from '~/util/rgb/RGBUtils';
-import { rgbDefaults } from '~/routes/resources/rgb';
-
-const descriptions: {
-  [key in keyof typeof rgbDefaults]?: string;
-} = {
-  text: 'The text to use for the gradient.',
-  colors: 'The colors to use for the gradient. Must be in hex format.',
-  shadowcolors: 'The colors to use for the text shadow gradient. Must be in hex format. Requires syncshadow to be false and color format set to JSON',
-  format: 'The format to use for the color and format codes. For MiniMessage or JSON, { color: "MiniMessage" } can be used.',
-  prefixsuffix: 'The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.',
-  trimspaces: 'Whether or not to trim color codes from spaces. Turn this off if you\'re using empty underlines or strikethroughs.',
-  colorlength: 'The amount of characters for one color step.',
-  syncshadow: 'Whether or not to sync the text shadow with the text. If this is true, shadow colors will not be applied.',
-  bold: 'Whether or not to bold the text.',
-  italic: 'Whether or not to italicize the text.',
-  underline: 'Whether or not to underline the text.',
-  strikethrough: 'Whether or not to strikethrough the text.',
-  obfuscate: 'Whether or not to obfuscate the text.',
-};
-
-const customTypes: {
-  [key in keyof typeof rgbDefaults]?: string;
-} = {
-  colors: 'Color[] - see types in docs | string[]',
-  shadowcolors: 'Color[] - see types in docs | string[]',
-  format: 'RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs',
-};
-
-export const options = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
-  .filter(key => !['version', 'previewStyle', 'disperse', 'customFormat'].includes(key))
-  .reduce((acc: {
-    [key in keyof typeof rgbDefaults]?: {
-      type: string;
-      description: string;
-      default: any;
-    };
-  }, key) => {
-    const description = descriptions[key];
-    const customType = customTypes[key];
-    acc[key] = {
-      type: customType ?? typeof rgbDefaults[key],
-      description: description ?? `${key} has not been documented yet.`,
-      default: rgbDefaults[key],
-    };
-    return acc;
-  }, {});
 
 export const onGet: RequestHandler = ({ json, query }) => {
   let output = {};
   try {
-    const queryjson: any = Object.fromEntries(query);
+    const { params } = parseParams(
+      Object.fromEntries(query), 'rgb',
+    );
 
-    const keys = Object.keys(queryjson);
-    for (const key of keys) {
-      if (key == 'format' || key == 'colors' || key == 'shadowcolors') queryjson[key] = JSON.parse(queryjson[key]);
-      else if (queryjson[key] === 'true' || queryjson[key] === 'false') queryjson[key] = queryjson[key] === 'true';
-      else if (!isNaN(Number(queryjson[key]))) queryjson[key] = Number(queryjson[key]);
-    }
-    output = getOutput(queryjson);
+    output = getOutput(params);
   }
   catch (e: any) {
     console.error(e);
@@ -82,14 +33,59 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
   throw json(200, output);
 };
 
+const descriptions: {
+  [key in keyof typeof rgbDefaults]?: string;
+} = {
+  text: 'The text to use for the gradient.',
+  colors: 'The colors to use for the gradient. Must be in hex format.',
+  shadowcolors: 'The colors to use for the text shadow gradient. Must be in hex format. Requires syncshadow to be false and color format set to JSON',
+  format: 'The format to use for the color and format codes. For MiniMessage or JSON, { color: "MiniMessage" } can be used.',
+  prefixsuffix: 'The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.',
+  trimspaces: 'Whether or not to trim color codes from spaces. Turn this off if you\'re using empty underlines or strikethroughs.',
+  colorlength: 'The amount of characters for one color step.',
+  syncshadow: 'Whether or not to sync the text shadow with the text. If this is true, shadow colors will not be applied.',
+  bold: 'Whether or not to bold the text.',
+  italic: 'Whether or not to italicize the text.',
+  underline: 'Whether or nots to underline the text.',
+  strikethrough: 'Whether or not to strikethrough the text.',
+  obfuscate: 'Whether or not to obfuscate the text.',
+};
+
+const customTypes: {
+  [key in keyof typeof rgbDefaults]?: string;
+} = {
+  colors: 'Color[] - see types in docs | string[]',
+  shadowcolors: 'Color[] - see types in docs | string[]',
+  format: 'RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs',
+};
+
+export const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
+  .filter(key => !['version', 'disperse', 'customFormat'].includes(key))
+  .reduce((acc: {
+    [key in keyof typeof rgbDefaults]?: {
+      type: string;
+      description: string;
+      default: any;
+    };
+  }, key) => {
+    const description = descriptions[key];
+    const customType = customTypes[key];
+    acc[key] = {
+      type: customType ?? typeof rgbDefaults[key],
+      description: description ?? `${key} has not been documented yet.`,
+      default: rgbDefaults[key],
+    };
+    return acc;
+  }, {});
+
 function getOutput(body: any) {
-  const rgbOptions = body?.silent ? {} : {
+  const options = body?.silent ? {} : {
     input: {
       ...rgbDefaults,
       ...body,
     },
     options: {
-      ...options,
+      ...rgbOptions,
       silent: {
         type: 'boolean',
         description: 'Set this to true to hide the options and input.',
@@ -120,6 +116,6 @@ function getOutput(body: any) {
   });
   return {
     output,
-    ...rgbOptions,
+    ...options,
   };
 }

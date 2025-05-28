@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder.io/qwik';
-import { Link, type DocumentHead } from '@builder.io/qwik-city';
+import { Link } from '@builder.io/qwik-city';
 
 import { Anchor, LogoBirdflop } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
@@ -9,6 +9,7 @@ import { initiateTyper } from '~/util/Typer';
 import { plans } from './plans';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import HistoricLinePlot from '~/components/home/HistoricLinePlot';
+import { generateHead } from '~/root';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -310,20 +311,4 @@ export default component$(() => {
   </>;
 });
 
-export const head: DocumentHead = {
-  title: 'Birdflop - Minecraft Hosting & Resources',
-  meta: [
-    {
-      name: 'description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+export const head = generateHead({});

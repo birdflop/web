@@ -1,14 +1,12 @@
 import { component$, isBrowser, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { sortColors } from '~/util/rgb/RGBUtils';
-import { Gradient } from '~/util/rgb/HexUtils';
-import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
-import { defaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { publishedPreset } from '~/util/rgb/presets';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savedPresetStoreContext } from '~/routes/resources/rgb/presets';
 import { setUserData } from '~/util/dataUtils';
+import { renderPreview } from '~/routes/resources/rgb';
 
 export default component$(({ presetInfo }: {
   presetInfo: publishedPreset;
@@ -18,7 +16,7 @@ export default component$(({ presetInfo }: {
 
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
-  (Object.entries(params) as Array<[keyof typeof defaults, any]>).forEach(([key, value]) => {
+  (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
     if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
     searchParams.set(key, String(value));
   });
@@ -33,42 +31,11 @@ export default component$(({ presetInfo }: {
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
           }}>
-            {(() => {
-              const preset = presetInfo.preset;
-              if (!preset.name) preset.name = 'Birdflop';
-
-              const colors = sortColors(preset.colors ?? defaults.colors).map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-              if (colors.length < 2) return preset.name;
-
-              const gradient = new Gradient(colors, Math.ceil(presetInfo.name.length / (preset.colorlength || 1)));
-
-              let hex = '';
-              const segments = [];
-              let index = 0;
-              const textArray = Array.from(presetInfo.name);
-              while (index < textArray.length) {
-                // check if colorlength is set and valid
-                if (!preset.colorlength || preset.colorlength < 1) preset.colorlength = 1;
-                segments.push(textArray.slice(index, index + preset.colorlength).join(''));
-                index += preset.colorlength;
-              }
-              return segments.map((segment, i) => {
-                const rgb = gradient.next();
-                hex = rgbToHex(rgb);
-                const shadowRGB = rgb.map(c => Math.round(c * 0.25));
-                const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-                return <span key={`char${i}`} style={{
-                  color: `#${hex};`,
-                  textShadow: `3px 3px 0 ${shadowColor};`,
-                }} class={{
-                  'underline': preset.underline,
-                  'strikethrough': preset.strikethrough,
-                  'underline-strikethrough': preset.underline && preset.strikethrough,
-                }}>
-                  {segment.replace(/ /g, '\u00A0')}
-                </span>;
-              });
-            })()}
+            {renderPreview({
+              ...rgbDefaults,
+              ...presetInfo.preset,
+              text: presetInfo.name,
+            }, 3)}
           </p>
         </div>
       </div>

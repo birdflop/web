@@ -1,6 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 
-import { options } from './rgb';
+import { rgbOptions } from './rgb';
 
 export const apiEndpoints = {
   endpoints: {
@@ -9,7 +9,7 @@ export const apiEndpoints = {
         POST: 'Generate a gradient.',
         GET: 'Equivalent to POST, but with query parameters.',
       },
-      options,
+      options: rgbOptions,
       html: undefined as string[] | undefined,
     },
   },
