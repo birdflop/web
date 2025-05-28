@@ -18,8 +18,11 @@ export default component$(() => {
 
   const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
     name: preset.text ?? 'Birdflop',
+    id: Math.round(Math.random() * 1000000),
     author: 'Personal',
-    preset,
+    description: 'This preset was saved by you.',
+    preset: preset,
+    createdAt: new Date(),
   }));
 
   return <div>

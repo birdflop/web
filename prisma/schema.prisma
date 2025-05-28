@@ -9,12 +9,12 @@ datasource db {
 }
 
 model Presets {
-  id         Int      @id @default(autoincrement())
-  userId     String
-  title      String
-  presetJSON String
-  createdAt  DateTime @default(now())
-  timesUsed  Int      @default(0)
+  id          Int      @id @default(autoincrement())
+  name        String
+  author      String
+  description String?
+  preset      Json
+  createdAt   DateTime @default(now())
 }
 
 

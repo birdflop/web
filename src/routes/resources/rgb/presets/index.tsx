@@ -1,18 +1,32 @@
 import { component$, createContextId, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { presets } from '~/util/rgb/presets/defaults';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
+import { routeLoader$ } from '@builder.io/qwik-city';
+import { getPrismaClient } from '~/util/prisma';
+
+export const usePresets = routeLoader$(async ({ env, sharedMap }) => {
+  const session = sharedMap.get('session') as BirdflopSession | undefined;
+  const prisma = getPrismaClient(env.get('DATABASE_URL'));
+  if (!session || !prisma) throw new Error('No session or prisma client');
+
+  const presets = await prisma.presets.findMany({
+    where: {},
+  }) as publishedPreset[];
+
+  return presets;
+});
 
 export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const presets = usePresets().value;
 
   const presetStore = useStore({
     searchTerm: '',
@@ -43,17 +57,20 @@ export default component$(() => {
           document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         }
       }
-      savedPresets.value.push(...newSavedPresets);
+      savedPresets.value = [...savedPresets.value, ...newSavedPresets];
       localStorage.setItem('savedPresets', JSON.stringify(presetStore));
     } catch (err) {
       console.error('Error parsing saved presets', err);
     }
   });
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
+  const savedPresetsParsed = [...savedPresets.value].map((preset) => ({
     name: preset.text ?? 'Birdflop',
+    id: Math.round(Math.random() * 1000000),
     author: 'Personal',
-    preset,
+    description: 'This preset was saved by you.',
+    preset: preset,
+    createdAt: new Date(),
   }));
 
   const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
@@ -61,6 +78,7 @@ export default component$(() => {
       if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
 
       if (!p.name || p.name === 'Birdflop') p.name = preset.name;
+      if (!p.description || p.description === 'This preset was saved by you.') p.description = preset.description;
       if (!p.author || p.author === 'Personal') p.author = preset.author;
       return true;
     }),

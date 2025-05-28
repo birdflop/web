@@ -1,3 +1,4 @@
+import { Presets } from '@prisma/client';
 import { combinedDefaults } from './defaults';
 import { migrateFromV2, migrateFromV3 } from './migrate';
 
@@ -14,9 +15,7 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset {
-  name: string;
-  author: string;
+export interface publishedPreset extends Omit<Presets, 'preset'> {
   preset: rgbPreset;
 }
 
