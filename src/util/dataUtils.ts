@@ -24,8 +24,10 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
   }
 
   if (urlParams) {
-    const params = Object.fromEntries([...urlParams.entries()]) as any;
-    Object.keys(params).forEach(key => {
+    const params = Object.fromEntries([...urlParams.entries()]) as {
+      [key: string]: any;
+    };
+    for (const key in params) {
       try {
         if ((name == 'rgb' && !Object.keys(rgbDefaults).includes(key))
           || (name == 'animtab' && !Object.keys(animTABDefaults).includes(key))) {
@@ -41,7 +43,7 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
         params[key] = undefined;
         errors.push(`Error parsing the ${key} value: ${e}`);
       }
-    });
+    }
     cookies = { ...cookies, ...params };
   }
 
@@ -57,6 +59,19 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
   }
   catch (e) {
     errors.push(`Error loading preset: ${e}`);
+  }
+
+  // Check for any numbers lower than 1 in the cookies
+  Object.keys(cookies).forEach(key => {
+    if (typeof cookies[key] === 'number' && cookies[key] < 1) {
+      errors.push(`Invalid value found in ${key}: ${cookies[key]}`);
+      cookies[key] = 1; // Reset values lower than 1 to 1
+    }
+  });
+
+  // log any errors encountered
+  if (errors.length > 0) {
+    console.error(`Errors encountered while processing cookies for ${name}:`, errors);
   }
 
   return { cookies, errors };
@@ -90,11 +105,10 @@ export const setUserData = server$(async function(data: {
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
   const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
-  if (!session || !prisma) return console.log('No session or prisma client', session, prisma);
+  if (!session || !prisma) return console.error('No session or prisma client', session, prisma);
   const sessionData = await prisma.user.update({
     where: { id: session.user.id },
     data,
   });
-  console.log(sessionData);
   return sessionData;
 });

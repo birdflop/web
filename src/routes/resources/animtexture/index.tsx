@@ -49,7 +49,6 @@ export default component$(() => {
 
     const canvas = document.getElementById('c') as HTMLCanvasElement;
     if (!canvas) return;
-    console.log('rerendering');
     const ctx = canvas.getContext('2d')!;
 
     canvas.width = animtextureStore.width;

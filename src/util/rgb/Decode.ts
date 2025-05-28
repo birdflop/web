@@ -53,7 +53,6 @@ export function getSignificantPoints(gradient: string[], threshold: number) {
 
   // Iterate over differences to capture significant transitions
   for (let i = 1; i < differences.length; i++) {
-    console.log(differences[i - 1].change);
     if (differences[i - 1].change > threshold) { // Dynamic threshold based on gradient characteristics
       significantPoints.push(gradient[differences[i - 1].index]);
     }
