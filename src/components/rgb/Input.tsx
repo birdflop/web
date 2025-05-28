@@ -161,15 +161,15 @@ export default component$(({ readOnly }: {
           value: 'chat',
         },
         {
-          name: t('rgb.inputText.preview.tab@@Minecraft Tab Header'),
+          name: t('rgb.inputText.preview.tab.header@@Minecraft Tab Header'),
           value: 'tab-header',
         },
         {
-          name: t('rgb.inputText.preview.tab@@Minecraft Tab Footer'),
+          name: t('rgb.inputText.preview.tab.footer@@Minecraft Tab Footer'),
           value: 'tab-footer',
         },
         {
-          name: t('rgb.inputText.preview.tab@@Minecraft Tab Player'),
+          name: t('rgb.inputText.preview.tab.player@@Minecraft Tab Player'),
           value: 'tab-player',
         },
       ]} customDropdown class={{ 'p-1 gap-1 lum-bg-gray-900/75': true }}>

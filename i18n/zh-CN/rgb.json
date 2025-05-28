@@ -59,6 +59,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Default",
+        "tab": {
+          "footer": "Minecraft Tab Footer",
+          "header": "Minecraft Tab Header",
+          "player": "Minecraft Tab Player"
+        },
         "title": "Preview Style",
         "typeHere": "<RGBirdflop> Type here!"
       },
