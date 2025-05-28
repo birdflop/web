@@ -31,7 +31,11 @@ export default component$(({ presetInfo }: {
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
           }}>
-            {renderPreview({ ...rgbDefaults, ...presetInfo.preset }, 3)}
+            {renderPreview({
+              ...rgbDefaults,
+              ...presetInfo.preset,
+              text: presetInfo.name,
+            }, 3)}
           </p>
         </div>
       </div>
