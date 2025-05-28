@@ -47,6 +47,23 @@ export const combinedDefaults = {
 
 export const presets: publishedPreset[] = [
   {
+    name: 'SimplyTerraria',
+    author: 'FrankV22',
+    preset: {
+      version: 4,
+      colors: [
+        { hex: '#62B071', pos: 0 },
+        { hex: '#CDA785', pos: 100 },
+      ],
+      format: {
+        color: '[c/$1$2$3$4$5$6$f:$c]',
+        char: '&',
+        class: 'font-terraria',
+      },
+      customFormat: true,
+    },
+  },
+  {
     name: 'Birdflop',
     author: 'RGBirdflop',
     preset: {

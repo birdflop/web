@@ -75,6 +75,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: AndyBold;
+  src: url(/fonts/AndyBold.ttf);
+  font-display: swap;
+}
+
 html {
   font-family: Figtree, sans-serif;
   background-color: rgb(17 24 39);
@@ -94,6 +100,10 @@ html {
 
 .font-mc-bold-italic {
   font-family: MinecraftBoldItalic, MinecraftBoldItalicAlt, MinecraftRus;
+}
+
+.font-terraria {
+  font-family: AndyBold;
 }
 
 .strikethrough {

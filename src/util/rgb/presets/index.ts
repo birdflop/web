@@ -6,6 +6,7 @@ export type rgbPreset = Partial<typeof combinedDefaults>;
 export interface format {
   color: string;
   char?: string;
+  class?: string;
   bold?: string;
   italic?: string;
   underline?: string;
