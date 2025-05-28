@@ -106,6 +106,10 @@ export default component$(({ hidden }: {
             presetStore.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
+                'font-mc-bold': preset.bold,
+                'font-mc-italic': preset.italic,
+                'font-mc-bold-italic': preset.bold && preset.italic,
+                [`${preset.format?.class}`]: preset.format?.class,
               }}>
                 {renderPreview({ ...rgbDefaults, ...preset }, 1)}
               </span>,

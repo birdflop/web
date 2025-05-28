@@ -30,6 +30,10 @@ export default component$(({ presetInfo }: {
           </p>
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
+            'font-mc-bold': presetInfo.preset.bold,
+            'font-mc-italic': presetInfo.preset.italic,
+            'font-mc-bold-italic': presetInfo.preset.bold && presetInfo.preset.italic,
+            [`${presetInfo.preset.format?.class}`]: presetInfo.preset.format?.class,
           }}>
             {renderPreview({
               ...rgbDefaults,

@@ -21,6 +21,7 @@ const InputField = component$(({ class: className, readOnly }: {
         'font-mc-bold': rgbStore.bold,
         'font-mc-italic': rgbStore.italic,
         'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+        [`${rgbStore.format.class}`]: rgbStore.format.class,
       }}>
         <Slot />
       </p>
@@ -31,6 +32,7 @@ const InputField = component$(({ class: className, readOnly }: {
           'font-mc-italic': rgbStore.italic,
           'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
           [`${className}`]: className,
+          [`${rgbStore.format.class}`]: rgbStore.format.class,
         }} value={rgbStore.text} spellcheck={false} readOnly={readOnly} id="input"
         onInput$={(e, el) => { rgbStore.text = el.value; }}/>
       </div>
@@ -132,6 +134,7 @@ export default component$(({ readOnly }: {
         'font-mc-bold': rgbStore.bold,
         'font-mc-italic': rgbStore.italic,
         'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+        [`${rgbStore.format.class}`]: rgbStore.format.class,
       }}>
         <p class="lum-bg-gray-800/50 rounded-lg lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
           <Slot />

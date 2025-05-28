@@ -69,9 +69,6 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
       'strikethrough': rgbStore.strikethrough,
       'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
       'obfuscate': rgbStore.obfuscate,
-      ...(rgbStore.format.class ? {
-        [rgbStore.format.class]: true,
-      } : {}),
     }}>
       {segment.replace(/ /g, '\u00A0')}
     </span>;
