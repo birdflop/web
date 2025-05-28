@@ -66,28 +66,29 @@ export default component$(() => {
     const cookiePrompt = noSerialize({
       id: 'cookieprompt',
       element: <div class={{
-        'backdrop-blur-xl lum-card lum-bg-gray-800/60 p-5': true,
+        ['lum-bg-gray-800/60']: true,
+        'backdrop-blur-xl lum-card rounded-none sm:rounded-lg break-words': true,
         'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
         <div>
-          <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
-            <Cookie size={26} /> {t$('nav.cookies.title@@Cookies')}
-          </h2>
-          <h3 class="text-sm text-gray-400">
+          <h4 class="flex gap-2 items-center mt-0!">
+            <Cookie size={30} /> {t$('nav.cookies.title@@Cookies')}
+          </h4>
+          <p>
             {t$('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
-          </h3>
-          <Link class="lum-bg-transparent underline text-gray-500 text-sm" href="/privacy">
+          </p>
+          <Link href="/privacy">
             {t$('nav.privacyPolicy@@Privacy Policy')}
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          <button class="lum-btn lum-btn-p-1" onClick$={() => {
+          <button class="lum-btn" onClick$={() => {
             document.cookie = 'optout=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
             {t$('nav.cookies.optOut@@Turn off cookies')}
           </button>
-          <button class="lum-btn lum-btn-p-1 lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
+          <button class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
             document.cookie = 'cookies=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
@@ -114,22 +115,22 @@ export default component$(() => {
         if ('element' in notification) return notification.element;
         return <div class={{
           [notification.bgColor ?? 'lum-bg-gray-800/60']: true,
-          'backdrop-blur-xl lum-card p-5 rounded-none sm:rounded-lg break-words': true,
+          'backdrop-blur-xl lum-card rounded-none sm:rounded-lg break-words': true,
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
-          <h2 class="flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+          <h4 class="flex gap-2 items-center mt-0!">
             <span class="flex gap-2 items-center flex-1">
-              <Bell size={26} /> {notification.title}
+              <Bell size={30} /> {notification.title}
             </span>
             <button class="lum-btn p-1 lum-bg-transparent cursor-pointer" onClick$={() => {
               notifications.splice(notifications.findIndex((n) => n?.id === notification.id), 1);
             }}>
               <X size={20}/>
             </button>
-          </h2>
-          <h3 class="text-sm text-gray-400">
+          </h4>
+          <p>
             {notification.description}
-          </h3>
+          </p>
         </div>;
       })}
     </div>
