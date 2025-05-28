@@ -1,8 +1,9 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
-import { Link, type DocumentHead } from '@builder.io/qwik-city';
+import { Link } from '@builder.io/qwik-city';
 import { Blobs, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
 import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { defaultDescription, generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
@@ -248,20 +249,7 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'Resources - Free Minecraft Resources by Birdflop',
-  meta: [
-    {
-      name: 'description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+  description: 'Public resources developed by Birdflop. ' + defaultDescription,
+});

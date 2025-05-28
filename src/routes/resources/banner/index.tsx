@@ -1,7 +1,6 @@
 /* eslint-disable qwik/jsx-img */
 import { $, component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import type { NoSerialize } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
 
@@ -14,6 +13,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/rgb/RGBUtils';
+import { defaultDescription, generateHead } from '~/root';
 
 const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const img = new Image();
@@ -401,30 +401,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: 'Banner Generator',
-  meta: [
-    {
-      name: 'description',
-      content: 'Easily generate banner designs for Minecraft.',
-    },
-    {
-      name: 'og:description',
-      content: 'Easily generate banner designs for Minecraft.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-  scripts: [
-    {
-      props: {
-        async: true,
-        type: 'text/javascript',
-        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
-        crossOrigin: 'anonymous',
-      },
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'Banner Generator - Birdflop',
+  description: 'Easily generate banner designs for Minecraft. ' + defaultDescription,
+  ads: true,
+});

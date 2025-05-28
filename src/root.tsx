@@ -1,5 +1,5 @@
-import { component$ } from '@builder.io/qwik';
-import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
+import { component$, HTMLCrossOriginAttribute } from '@builder.io/qwik';
+import { DocumentHead, DocumentHeadValue, QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
@@ -39,3 +39,54 @@ export default component$(() => {
     </QwikCityProvider>
   );
 });
+
+export const defaultDescription = 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.';
+
+export function generateHead({
+  title = 'Birdflop - Minecraft Hosting & Resources',
+  description = defaultDescription,
+  image = '/branding/icon.png',
+  ads = false,
+  head = {},
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+  ads?: boolean;
+  head?: Partial<DocumentHeadValue>;
+}): DocumentHead {
+  return {
+    ...head,
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+      {
+        name: 'og:description',
+        content: description,
+      },
+      {
+        name: 'og:image',
+        content: image,
+      },
+      ...(head.meta ?? []),
+    ],
+    scripts: [
+      ...(ads
+        ? [
+          {
+            props: {
+              async: true,
+              type: 'text/javascript',
+              src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
+              crossOrigin: 'anonymous' as HTMLCrossOriginAttribute,
+            },
+          },
+        ]
+        : []),
+      ...(head.scripts ?? []),
+    ],
+  };
+}

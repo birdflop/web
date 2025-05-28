@@ -1,9 +1,10 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import type { RequestHandler } from '@builder.io/qwik-city';
-import { Link, type DocumentHead } from '@builder.io/qwik-city';
+import { Link } from '@builder.io/qwik-city';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { Home } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { defaultDescription, generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const onGet: RequestHandler = ({ json, request }) => {
@@ -42,20 +43,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: '404: Page not found',
-  meta: [
-    {
-      name: 'description',
-      content: 'Whoops! You\'ve hit a dead-end.',
-    },
-    {
-      name: 'og:description',
-      content: 'Whoops! You\'ve hit a dead-end.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+  description: 'Whoops! You\'ve hit a dead-end. ' + defaultDescription,
+  ads: true,
+});

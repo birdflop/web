@@ -1,11 +1,11 @@
 import { component$, isBrowser, useStore, useTask$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
 
 import { inlineTranslate } from 'qwik-speak';
 
 import { parseGIF, decompressFrames } from 'gifuct-js';
 import { Download, GalleryHorizontalEnd, RefreshCw, X } from 'lucide-icons-qwik';
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
+import { defaultDescription, generateHead } from '~/root';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -330,20 +330,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'Minecraft Animated Textures Creator - Birdflop',
-  meta: [
-    {
-      name: 'description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Easily merge textures for resource pack animations or convert from GIF, by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+  description: 'Easily merge textures for resource pack animations or convert from GIF. ' + defaultDescription,
+  ads: true,
+});

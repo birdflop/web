@@ -1,8 +1,9 @@
 import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Package, ShoppingCart } from 'lucide-icons-qwik';
+import { generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const plans = {
@@ -343,20 +344,6 @@ export default component$(() => {
   </>;
 });
 
-export const head: DocumentHead = {
-  title: 'Order your new server',
-  meta: [
-    {
-      name: 'description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'Order your new server - Birdflop',
+});

@@ -1,11 +1,11 @@
 import { component$, Signal, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { savedPresetStoreContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { publishedPreset } from '~/util/rgb/presets';
+import { generateHead } from '~/root';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -38,12 +38,4 @@ export default component$(() => {
   </div>;
 });
 
-export const head: DocumentHead = {
-  title: 'Profile',
-  meta: [
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+export const head = generateHead({});

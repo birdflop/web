@@ -1,5 +1,5 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 import { isBrowser } from '@builder.io/qwik/build';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
@@ -10,6 +10,7 @@ import { NotificationContext } from '~/routes/layout';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB } from '~/util/rgb/Colors';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { defaultDescription, generateHead } from '~/root';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'animpreview', url.searchParams);
@@ -189,20 +190,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'TAB Animation Previewer - Birdflop',
-  meta: [
-    {
-      name: 'description',
-      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Preview TAB Animations without the need to put them in-game. Developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-};
+  description: 'Preview TAB Animations without the need to put them in-game. ' + defaultDescription,
+  ads: true,
+});

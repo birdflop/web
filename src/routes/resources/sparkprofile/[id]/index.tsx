@@ -1,5 +1,4 @@
 import { component$, Resource } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import analyzeProfile from '~/util/analyze/functions/analyzeProfile';
@@ -16,6 +15,7 @@ export const useResults = routeLoader$(async ({ params }) => {
 });
 
 import SparkProfile from '~/components/analyze/SparkProfile';
+import { defaultDescription, generateHead } from '~/root';
 
 export default component$(() => {
   const results = useResults();
@@ -55,30 +55,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: 'Analyze Timings',
-  meta: [
-    {
-      name: 'description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
-    },
-    {
-      name: 'og:description',
-      content: 'Analyze your Paper Timings to get optimization recommendations',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-  scripts: [
-    {
-      props: {
-        async: true,
-        type: 'text/javascript',
-        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
-        crossOrigin: 'anonymous',
-      },
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'Automatic Minecraft Spark Profile Analyzer - Birdflop',
+  description: 'Analyze your Spark Profile to get optimization recommendations. Developed by Birdflop. ' + defaultDescription,
+  ads: true,
+});

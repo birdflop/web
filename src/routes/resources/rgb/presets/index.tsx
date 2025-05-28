@@ -1,5 +1,4 @@
 import { component$, createContextId, useContextProvider, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
-import { type DocumentHead } from '@builder.io/qwik-city';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { presets } from '~/util/rgb/presets/defaults';
@@ -7,6 +6,7 @@ import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save } from 'lucide-icons-qwik';
+import { defaultDescription, generateHead } from '~/root';
 
 export const savedPresetStoreContext = createContextId<rgbPreset[]>('rgbstore-context');
 export default component$(() => {
@@ -119,20 +119,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'RGBirdflop Presets',
-  meta: [
-    {
-      name: 'description',
-      content: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop.',
-    },
-    {
-      name: 'og:description',
-      content: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/.png',
-    },
-  ],
-};
+  description: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' + defaultDescription,
+  ads: true,
+});

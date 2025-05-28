@@ -1,5 +1,5 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { types, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
 import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
@@ -23,6 +23,7 @@ import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
 import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { defaultDescription, generateHead } from '~/root';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -291,30 +292,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: 'Animated TAB',
-  meta: [
-    {
-      name: 'description',
-      content: 'TAB plugin gradient animation creator',
-    },
-    {
-      name: 'og:description',
-      content: 'TAB plugin gradient animation creator',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-  scripts: [
-    {
-      props: {
-        async: true,
-        type: 'text/javascript',
-        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
-        crossOrigin: 'anonymous',
-      },
-    },
-  ],
-};
+export const head = generateHead({
+  title: 'RGB Birdflop Animated TAB',
+  description: 'TAB plugin gradient animation creator. ' + defaultDescription,
+  ads: true,
+});

@@ -1,5 +1,5 @@
 import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$, type DocumentHead } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/rgb/HexUtils';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -23,6 +23,7 @@ import Accordion from '~/components/Accordion';
 import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
+import { defaultDescription, generateHead } from '~/root';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
@@ -237,30 +238,8 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
+export const head = generateHead({
   title: 'RGB Birdflop - Minecraft RGB Gradient Creator',
-  meta: [
-    {
-      name: 'description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:description',
-      content: 'Public resources developed by Birdflop. Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $2/GB for some of the industry\'s fastest and cheapest servers, or use our free public resources.',
-    },
-    {
-      name: 'og:image',
-      content: '/branding/icon.png',
-    },
-  ],
-  scripts: [
-    {
-      props: {
-        async: true,
-        type: 'text/javascript',
-        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
-        crossOrigin: 'anonymous',
-      },
-    },
-  ],
-};
+  description: 'Hex gradient text generator. Developed by Birdflop. ' + defaultDescription,
+  ads: true,
+});
