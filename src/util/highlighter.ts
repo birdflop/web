@@ -1,6 +1,6 @@
 import birdflopTheme from '~/theme.json';
 import { createHighlighter, type HighlighterGeneric } from 'shiki';
-// @ts-ignore
+// @ts-expect-error - JavaScript engine types not available in current Shiki version
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
 const jsEngine = createJavaScriptRegexEngine();
 let highlighterGlobal: HighlighterGeneric<any, any> | undefined;
