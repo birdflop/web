@@ -9,10 +9,9 @@ import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 
-export const usePresets = routeLoader$(async ({ env, sharedMap }) => {
-  const session = sharedMap.get('session') as BirdflopSession | undefined;
+export const usePresets = routeLoader$(async ({ env }) => {
   const prisma = getPrismaClient(env.get('DATABASE_URL'));
-  if (!session || !prisma) throw new Error('No session or prisma client');
+  if (!prisma) throw new Error('No prisma client');
 
   const presets = await prisma.presets.findMany({
     where: {},
