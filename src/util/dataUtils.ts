@@ -16,6 +16,30 @@ const getDefaults = (name: names) => {
   return {};
 };
 
+export function parseParams(params: { [key: string]: any }, name: names) {
+  const errors: string[] = [];
+  for (const key in params) {
+    try {
+      if (!Object.keys(getDefaults(name)).includes(key)) {
+        delete params[key];
+      }
+      if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
+        params[key] = JSON.parse(params[key]);
+      }
+      else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
+      else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
+    }
+    catch (e) {
+      params[key] = undefined;
+      errors.push(`Error parsing the ${key} value: ${e}`);
+    }
+  }
+  return {
+    params,
+    errors,
+  };
+}
+
 export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchParams) {
   let cookies: { [key: string]: any } = {};
   const errors: string[] = [];
@@ -32,25 +56,11 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
   }
 
   if (urlParams) {
-    const params = Object.fromEntries([...urlParams.entries()]) as {
-      [key: string]: any;
-    };
-    for (const key in params) {
-      try {
-        if (!Object.keys(getDefaults(name)).includes(key)) {
-          delete params[key];
-        }
-        if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
-          params[key] = JSON.parse(params[key]);
-        }
-        else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
-        else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
-      }
-      catch (e) {
-        params[key] = undefined;
-        errors.push(`Error parsing the ${key} value: ${e}`);
-      }
-    }
+    const { params, errors: parseErrors } = parseParams(
+      Object.fromEntries([...urlParams.entries()]),
+      name,
+    );
+    if (parseErrors.length > 0) errors.push(...parseErrors);
     cookies = { ...cookies, ...params };
   }
 

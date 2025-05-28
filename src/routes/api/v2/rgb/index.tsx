@@ -1,19 +1,16 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
+import { parseParams } from '~/util/dataUtils';
 import { formats, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { generateOutput } from '~/util/rgb/RGBUtils';
 
 export const onGet: RequestHandler = ({ json, query }) => {
   let output = {};
   try {
-    const queryjson: any = Object.fromEntries(query);
+    const { params } = parseParams(
+      Object.fromEntries(query), 'rgb',
+    );
 
-    const keys = Object.keys(queryjson);
-    for (const key of keys) {
-      if (key == 'format' || key == 'colors' || key == 'shadowcolors') queryjson[key] = JSON.parse(queryjson[key]);
-      else if (queryjson[key] === 'true' || queryjson[key] === 'false') queryjson[key] = queryjson[key] === 'true';
-      else if (!isNaN(Number(queryjson[key]))) queryjson[key] = Number(queryjson[key]);
-    }
-    output = getOutput(queryjson);
+    output = getOutput(params);
   }
   catch (e: any) {
     console.error(e);
