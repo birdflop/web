@@ -1,4 +1,4 @@
-import { component$, createContextId, useContextProvider, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { component$, createContextId, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { presets } from '~/util/rgb/presets/defaults';
@@ -8,7 +8,7 @@ import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 
-export const savedPresetStoreContext = createContextId<rgbPreset[]>('rgbstore-context');
+export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -19,16 +19,16 @@ export default component$(() => {
     showSaved: false,
   });
 
-  const savedPresetStore = useStore((session.value?.user?.savedPresets ?? []));
-  useContextProvider(savedPresetStoreContext, savedPresetStore);
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresetStore.length != 0) return;
-    let savedPresets: rgbPreset[] = [];
+    if (savedPresets.value.length != 0) return;
+    let newSavedPresets: rgbPreset[] = [];
     try {
       const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
-      savedPresets = savedPresets.concat(localStoragePresets);
+      newSavedPresets = newSavedPresets.concat(localStoragePresets);
       if (!localStoragePresets) {
         // presets possibly stored in cookies
         const cookie: { [key: string]: string; } = {};
@@ -38,19 +38,19 @@ export default component$(() => {
         });
         if (cookie['presets']) {
           const cookiePresets = decodeURIComponent(cookie['presets']);
-          savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
+          newSavedPresets = newSavedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
           // remove cookie
           document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         }
       }
-      savedPresetStore.push(...savedPresets);
+      savedPresets.value.push(...newSavedPresets);
       localStorage.setItem('savedPresets', JSON.stringify(presetStore));
     } catch (err) {
       console.error('Error parsing saved presets', err);
     }
   });
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresetStore].map((preset) => ({
+  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
     name: preset.text ?? 'Birdflop',
     author: 'Personal',
     preset,
@@ -80,10 +80,10 @@ export default component$(() => {
         </p>
         <hr/>
         <div class={{
-          'opacity-50': savedPresetStore.length === 0,
+          'opacity-50': savedPresets.value.length === 0,
         }}>
-          <Toggle id="showsavedpresets" disabled={savedPresetStore.length === 0}
-            checked={presetStore.showSaved && savedPresetStore.length > 0}
+          <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
+            checked={presetStore.showSaved && savedPresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
           <p class="text-xs text-gray-400 mt-1">

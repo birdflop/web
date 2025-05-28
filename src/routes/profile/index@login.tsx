@@ -1,7 +1,7 @@
-import { component$, Signal, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, Signal, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
-import { savedPresetStoreContext } from '../resources/rgb/presets';
+import { savedPresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { publishedPreset } from '~/util/rgb/presets';
@@ -13,10 +13,10 @@ export default component$(() => {
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
-  const savedPresetStore = useStore((session.value?.user?.savedPresets ?? []));
-  useContextProvider(savedPresetStoreContext, savedPresetStore);
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresetStore].map((preset) => ({
+  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
     name: preset.text ?? 'Birdflop',
     author: 'Personal',
     preset,

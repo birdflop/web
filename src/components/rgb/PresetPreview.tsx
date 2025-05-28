@@ -4,15 +4,15 @@ import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { publishedPreset } from '~/util/rgb/presets';
 import { Box, Copy, Save, Trash } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savedPresetStoreContext } from '~/routes/resources/rgb/presets';
 import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
+import { savedPresetsContext } from '~/routes/resources/rgb/presets';
 
 export default component$(({ presetInfo }: {
   presetInfo: publishedPreset;
 }) => {
   const t = inlineTranslate();
-  let savedPresetStore = useContext(savedPresetStoreContext);
+  const savedPresets = useContext(savedPresetsContext);
 
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
@@ -45,15 +45,15 @@ export default component$(({ presetInfo }: {
       </div>
       <div class="hidden sm:flex gap-2 mt-2">
         <button class="lum-btn text-sm" onClick$ ={async () => {
-          const existingPreset = savedPresetStore.find((savedPreset) => {
+          const existingPreset = savedPresets.value.find((savedPreset) => {
             return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
           });
-          if (existingPreset) savedPresetStore = savedPresetStore.filter((p) => p !== existingPreset);
-          else savedPresetStore.push(presetInfo.preset);
-          if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresetStore));
-          await setUserData({ savedPresets: savedPresetStore });
+          if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
+          else savedPresets.value.push(presetInfo.preset);
+          if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
+          await setUserData({ savedPresets: savedPresets.value });
         }}>
-          {savedPresetStore.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)) ? <>
+          {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)) ? <>
             <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
           </> : <>
             <Save size={20} /> {t('rgb.presets.save@@Save')}
