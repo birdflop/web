@@ -36,7 +36,7 @@ export const Endpoints = component$(() => {
   const endpoints = useEndpoints().value;
   const endpointNames = Object.keys(endpoints) as (keyof typeof endpoints)[];
 
-  return endpointNames.map((path) => <>
+  return endpointNames.map((path) => <div key={path}>
     <h3>
       {path}
     </h3>
@@ -49,5 +49,5 @@ export const Endpoints = component$(() => {
       Options
     </h4>
     {endpoints[path].html?.map((option, i) => <div key={i} dangerouslySetInnerHTML={option} />)}
-  </>);
+  </div>);
 });
