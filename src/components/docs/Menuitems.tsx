@@ -130,7 +130,7 @@ export const MenuItems = component$(
             </div>
           ))
         ) : (
-          <li class="text-gray-500 py-2 px-3 text-sm">No items available</li>
+          <div class="text-gray-500 py-2 px-3 text-sm">No items available</div>
         )}
       </div>
     );
