@@ -1,8 +1,8 @@
 import { component$, isBrowser, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { savedPresetsContext } from '~/routes/resources/rgb/presets';
@@ -27,10 +27,37 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
   });
 
   return (
-    <Link href={`/resources/rgb/presets/${presetInfo.id}`} {...props} class="lum-card flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${presetInfo.name}-${presetInfo.author}`}>
+    <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props} class="lum-card flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${presetInfo.name}-${presetInfo.author}`}>
       <div class="flex flex-1 flex-col gap-2">
-        <p class="text-gray-400 text-sm">
-          {presetInfo.author}
+        <p class={{
+          'flex items-center gap-2': true,
+          'text-green-300/80!': !presetInfo.user && presetInfo.author == 'Saved by you',
+          'text-blue-300/80!': !presetInfo.user && presetInfo.author != 'Saved by you',
+          'text-orange-300/80!': !!presetInfo.user,
+        }}>
+          { presetInfo.user && <>
+            {presetInfo.user.image && presetInfo.user.name && (
+              <img src={presetInfo.user.image} alt={presetInfo.user.name}
+                width={24} height={24} class="w-6 h-6 rounded-full!" />
+            )}
+            {presetInfo.user.name}
+          </>
+          }
+          { presetInfo.author && !presetInfo.user && <>
+            {presetInfo.author == 'RGBirdflop' &&
+              <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
+            }
+            {presetInfo.author == 'Luminescent' &&
+              <LogoLuminescent size={20} class="text-luminescent-300" />
+            }
+            {presetInfo.author.includes('GitHub') &&
+              <Github size={20} />
+            }
+            {presetInfo.author == 'Saved by you' &&
+              <Save size={20} />
+            }
+            {presetInfo.author}
+          </>}
         </p>
         <p class={{
           'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,

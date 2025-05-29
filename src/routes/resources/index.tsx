@@ -56,7 +56,7 @@ export default component$(() => {
               {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
             </h4>
             <p>
-              {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
+              {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
             </p>
           </Link>
         </div>

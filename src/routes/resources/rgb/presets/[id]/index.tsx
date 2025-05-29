@@ -2,7 +2,7 @@ import { $, component$, createContextId, isBrowser, useContext, useContextProvid
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
-import { ChevronLeft, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
@@ -11,7 +11,7 @@ import { NotificationContext } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/rgb/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { setUserData } from '~/util/dataUtils';
 
 export const usePreset = routeLoader$(async ({ params, env }) => {
@@ -21,6 +21,9 @@ export const usePreset = routeLoader$(async ({ params, env }) => {
 
   const presetInfo = await prisma.presets.findUnique({
     where: { id: Number(params.id) },
+    include: {
+      user: true,
+    },
     cacheStrategy: {
       ttl: 60 * 60, // Cache for 1 hour
     },
@@ -96,7 +99,7 @@ export default component$(() => {
           <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
         <p>
-          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
+          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
         <hr/>
         <div class="flex">
@@ -110,40 +113,68 @@ export default component$(() => {
             {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
           </Input>
 
-          <h6 class="my-0!">
-            {presetInfo.author}
-          </h6>
-          <p>
-            {presetInfo.description}
-          </p>
+          <div class="lum-card p-6">
+            <h6 class={{
+              'flex items-center gap-2 my-0!': true,
+              'text-blue-300/80!': !presetInfo.user,
+              'text-orange-300/80!': !!presetInfo.user,
+            }}>
+              { presetInfo.user && <>
+                {presetInfo.user.image && presetInfo.user.name && (
+                  <img src={presetInfo.user.image} alt={presetInfo.user.name}
+                    width={32} height={32} class="w-8 h-8 rounded-full!" />
+                )}
+                {presetInfo.user.name}
+              </>
+              }
+              { presetInfo.author && !presetInfo.user && <>
+                {presetInfo.author == 'RGBirdflop' &&
+                  <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+                }
+                {presetInfo.author == 'Luminescent' &&
+                  <LogoLuminescent size={32} class="text-luminescent-300" />
+                }
+                {presetInfo.author.includes('GitHub') &&
+                  <Github size={32} />
+                }
+                {presetInfo.author}
+              </>}
+            </h6>
+            <hr class="my-1!"/>
+            <p>
+              {presetInfo.description}
+            </p>
+          </div>
 
-          <label for="preset" class="-mb-2">
-            Preset Contents - Click to copy
-          </label>
-          <textarea id="preset" readOnly
-            class={{
-              'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
-            }}
-            value={JSON.stringify(presetInfo.preset, null, 2)}
-            onClick$={async () => {
-              const id = Math.random().toString(36).substring(2, 15);
-              const notification = {
-                id,
-                title: await t$('rgb.copied@@Copied to clipboard!'),
-                description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
-                bgColor: 'lum-bg-green-900/50',
-              };
-              navigator.clipboard.writeText(JSON.stringify(presetInfo.preset)).catch(async (err) => {
-                notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
-                notification.description = err;
-                notification.bgColor = 'lum-bg-red-900/50';
-              });
-              notifications.push(notification);
-              setTimeout(() => {
-                notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-              }, 2000);
-            }}
-          />
+          <div class="lum-card p-6">
+            <label for="preset" class="-mb-2">
+              Preset Contents - Click to copy
+            </label>
+            <textarea id="preset" readOnly
+              class={{
+                'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
+              }}
+              value={JSON.stringify(presetInfo.preset, null, 2)}
+              onClick$={async () => {
+                const id = Math.random().toString(36).substring(2, 15);
+                const notification = {
+                  id,
+                  title: await t$('rgb.copied@@Copied to clipboard!'),
+                  description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
+                  bgColor: 'lum-bg-green-900/50',
+                };
+                navigator.clipboard.writeText(JSON.stringify(presetInfo.preset)).catch(async (err) => {
+                  notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
+                  notification.description = err;
+                  notification.bgColor = 'lum-bg-red-900/50';
+                });
+                notifications.push(notification);
+                setTimeout(() => {
+                  notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+                }, 2000);
+              }}
+            />
+          </div>
 
           <div class="flex gap-2">
             <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown

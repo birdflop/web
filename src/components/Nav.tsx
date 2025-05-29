@@ -90,9 +90,9 @@ export default component$(() => {
       </div>
       {session.value && session.value.user &&
         <SelectMenuRaw q:slot='end' class={{ 'p-2 lum-bg-transparent gap-1': true }} id="profile" customDropdown>
-          <p q:slot='dropdown' class="flex items-center gap-2 pr-5 pl-1">
+          <p q:slot='dropdown' class="flex items-center gap-2">
             {session.value.user.image &&
-              <img src={session.value.user.image} width={20} height={20} class="rounded-full! w-5 h-5" />
+              <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />
             }
             {session.value.user?.name || 'User'}
           </p>

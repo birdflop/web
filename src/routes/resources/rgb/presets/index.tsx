@@ -2,11 +2,11 @@ import { component$, createContextId, useContext, useContextProvider, useSignal,
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
-import { Toggle } from '@luminescent/ui-qwik';
+import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
-import { Save } from 'lucide-icons-qwik';
+import { Save, Search, Send } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { NotificationContext } from '~/routes/layout';
@@ -19,6 +19,9 @@ export const usePresets = routeLoader$(async ({ env }) => {
     where: {},
     cacheStrategy: {
       ttl: 60 * 60, // Cache for 1 hour
+    },
+    include: {
+      user: true,
     },
   }) as publishedPreset[];
 
@@ -36,6 +39,7 @@ export default component$(() => {
   const presetStore = useStore({
     searchTerm: '',
     showSaved: false,
+    showPending: false,
   });
 
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
@@ -70,25 +74,30 @@ export default component$(() => {
     }
   });
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
-    name: preset.text ?? 'Saved Preset',
-    author: 'Saved by you',
-    preset: preset,
-    createdAt: new Date(),
-  }));
+  const personalSavedPresets: publishedPreset[] = [];
+  savedPresets.value.forEach((preset) => {
+    console.log('Checking preset:', preset);
+    const isunique = presets.every((p) => {
+      console.log('Comparing with:', p.preset);
+      return JSON.stringify(p.preset) !== JSON.stringify(preset);
+    });
+    console.log(`isunique: ${isunique}`);
+    if (isunique) {
+      personalSavedPresets.push({
+        name: preset.text ?? 'Saved Preset',
+        author: 'Saved by you',
+        preset: preset,
+        createdAt: new Date(),
+        pending: false,
+      });
+    }
+  });
 
-  const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
-    index === self.findIndex((savedPreset) => {
-      if (JSON.stringify(savedPreset.preset) !== JSON.stringify(preset.preset)) return false;
-      if (!savedPreset.id && preset.id) {
-        Object.assign(savedPreset, preset);
-      }
-      return true;
-    }),
-  );
+  const allPresets: publishedPreset[] = [...personalSavedPresets, ...presets];
 
   let filteredPresets = allPresets.filter((preset) =>
-    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
+    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase())
+    && (presetStore.showPending ? preset.pending : !preset.pending),
   );
 
   if (presetStore.showSaved) {
@@ -101,10 +110,22 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
-          <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+          <Save size={70} />
+          <span class="flex-1">
+            {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+          </span>
+          <SelectMenuRaw id="hidden-select-menu" customDropdown class={{ 'opacity-0': true }}>
+            <Toggle id="showpendingpresets" q:slot='extra-buttons'
+              checked={presetStore.showPending && savedPresets.value.length > 0}
+              onChange$={(e, el) => presetStore.showPending = el.checked}
+              label={<span class="text-sm whitespace-nowrap">Show pending presets VERY DANGEROUS</span>} />
+          </SelectMenuRaw>
+          <Link href="/profile" class="lum-btn font-normal">
+            <Send size={20} /> Publish your own preset
+          </Link>
         </h1>
         <p>
-          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}{' Stay tuned for a way to submit your own presets!'}
+          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
         <hr/>
         <div class={{
@@ -119,13 +140,16 @@ export default component$(() => {
           </p>
         </div>
 
-        <input
-          class="lum-input w-full my-4"
-          id="search-input"
-          placeholder="Search for a preset..."
-          value={presetStore.searchTerm}
-          onInput$={(e, el) => presetStore.searchTerm = el.value}
-        />
+        <div class="flex gap-4 px-2 items-center">
+          <Search size={20} />
+          <input
+            class="lum-input w-full my-4"
+            id="search-input"
+            placeholder="Search for a preset..."
+            value={presetStore.searchTerm}
+            onInput$={(e, el) => presetStore.searchTerm = el.value}
+          />
+        </div>
 
         <div class="grid grid-cols-2 gap-2">
           {filteredPresets.map((presetInfo) =>
@@ -135,7 +159,10 @@ export default component$(() => {
             <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-gray-400">
                 {t('rgb.presets.noResults@@No results found.')}
-                Stay tuned for a way to submit your own presets!
+                <br />
+                Think something is missing?
+                <br />
+                publish your own preset at your profile page!
               </p>
             </div>
           )}

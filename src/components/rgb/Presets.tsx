@@ -137,7 +137,7 @@ export default component$(({ hidden }: {
               title: await t$('rgb.presets.saved.title@@Preset Saved!'),
               description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
                 : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
-              bgColor: session.value ? 'lum-bg-orange-900/50' : 'lum-bg-orange-900/50',
+              bgColor: session.value ? 'lum-bg-green-900/50' : 'lum-bg-orange-900/50',
             });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);

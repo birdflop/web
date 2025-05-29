@@ -1,6 +1,7 @@
 import { Presets } from '@prisma/client';
 import { combinedDefaults } from './defaults';
 import { migrateFromV2, migrateFromV3 } from './migrate';
+import { BirdflopUser } from '~/routes/plugin@auth';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
 
@@ -15,10 +16,18 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset extends Omit<Presets, 'preset' | 'id' | 'description'> {
+export interface publishedPreset extends Omit<Presets, 'preset' | 'id' | 'description' | 'userId'> {
   id?: number;
   description?: string;
+  userId?: string;
+  user?: BirdflopUser;
   preset: rgbPreset;
+}
+
+export interface presetSubmission extends Omit<publishedPreset, 'createdAt' | 'pending' | 'author' | 'userId'> {
+  author?: string;
+  createdAt?: Date;
+  pending?: boolean;
 }
 
 export function loadPreset(p: string): rgbPreset {
