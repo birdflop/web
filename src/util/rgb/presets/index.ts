@@ -15,7 +15,9 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset extends Omit<Presets, 'preset'> {
+export interface publishedPreset extends Omit<Presets, 'preset' | 'id' | 'description'> {
+  id?: number;
+  description?: string;
   preset: rgbPreset;
 }
 

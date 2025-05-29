@@ -102,7 +102,7 @@
         "warning": "Please login to save presets permanently."
       },
       "showSaved": {
-        "description": "Switches between showing all public presets and presets you have saved.",
+        "description": "Turn this on to show only your saved presets.",
         "title": "Show saved presets"
       },
       "title": "预设",

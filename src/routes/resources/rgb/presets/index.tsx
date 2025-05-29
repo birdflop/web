@@ -1,4 +1,4 @@
-import { component$, createContextId, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
@@ -8,6 +8,8 @@ import { Save } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
+import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
+import { NotificationContext } from '~/routes/layout';
 
 export const usePresets = routeLoader$(async ({ env }) => {
   const prisma = getPrismaClient(env.get('DATABASE_URL'));
@@ -15,6 +17,9 @@ export const usePresets = routeLoader$(async ({ env }) => {
 
   const presets = await prisma.presets.findMany({
     where: {},
+    cacheStrategy: {
+      ttl: 60 * 60, // Cache for 1 hour
+    },
   }) as publishedPreset[];
 
   return presets;
@@ -23,6 +28,7 @@ export const usePresets = routeLoader$(async ({ env }) => {
 export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
+  const notifications = useContext(NotificationContext);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
   const presets = usePresets().value;
@@ -40,51 +46,56 @@ export default component$(() => {
     if (savedPresets.value.length != 0) return;
     let newSavedPresets: rgbPreset[] = [];
     try {
-      const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]');
-      newSavedPresets = newSavedPresets.concat(localStoragePresets);
-      if (!localStoragePresets) {
-        // presets possibly stored in cookies
-        const cookie: { [key: string]: string; } = {};
-        document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-          const pairsplit = pair.split(/\s*=\s*/);
-          cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-        });
-        if (cookie['presets']) {
-          const cookiePresets = decodeURIComponent(cookie['presets']);
-          newSavedPresets = newSavedPresets.concat(JSON.parse(cookiePresets)?.savedPresets);
-          // remove cookie
-          document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        }
+      // try to get presets from localStorage
+      const localStoragePresets = localStorage.getItem('savedPresets');
+      // if localStorage is empty, try to get presets from cookies
+      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
+      else {
+        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
+        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
       }
-      savedPresets.value = [...savedPresets.value, ...newSavedPresets];
-      localStorage.setItem('savedPresets', JSON.stringify(presetStore));
+      savedPresets.value = savedPresets.value.concat(newSavedPresets);
     } catch (err) {
-      console.error('Error parsing saved presets', err);
+      const id = Math.random().toString(36).substring(2, 15);
+      const notification = {
+        id,
+        title: 'Error parsing saved presets',
+        description: `Error: ${err}`,
+        bgColor: 'lum-bg-red-900/50',
+      };
+      notifications.push(notification);
+      setTimeout(() => {
+        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+      }, 2000);
     }
   });
 
-  const savedPresetsParsed = [...savedPresets.value].map((preset) => ({
-    name: preset.text ?? 'Birdflop',
-    id: Math.round(Math.random() * 1000000),
-    author: 'Personal',
-    description: 'This preset was saved by you.',
+  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
+    name: preset.text ?? 'Saved Preset',
+    author: 'Saved by you',
     preset: preset,
     createdAt: new Date(),
   }));
 
   const allPresets: publishedPreset[] = [...savedPresetsParsed, ...presets].filter((preset, index, self) =>
-    index === self.findIndex((p) => {
-      if (JSON.stringify(p.preset) !== JSON.stringify(preset.preset)) return false;
-
-      if (!p.name || p.name === 'Birdflop') p.name = preset.name;
-      if (!p.description || p.description === 'This preset was saved by you.') p.description = preset.description;
-      if (!p.author || p.author === 'Personal') p.author = preset.author;
+    index === self.findIndex((savedPreset) => {
+      if (JSON.stringify(savedPreset.preset) !== JSON.stringify(preset.preset)) return false;
+      if (!savedPreset.id && preset.id) {
+        Object.assign(savedPreset, preset);
+      }
       return true;
     }),
   );
-  const filteredPresets = allPresets.filter((preset) =>
+
+  let filteredPresets = allPresets.filter((preset) =>
     preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase()),
   );
+
+  if (presetStore.showSaved) {
+    filteredPresets = filteredPresets.filter((preset) => savedPresets.value.some((savedPreset) =>
+      JSON.stringify(savedPreset) === JSON.stringify(preset.preset),
+    ));
+  }
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
@@ -104,7 +115,7 @@ export default component$(() => {
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
           <p class="text-xs text-gray-400 mt-1">
-            {t('rgb.presets.showSaved.description@@Switches between showing all public presets and presets you have saved.')}
+            {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
           </p>
         </div>
 
@@ -117,7 +128,9 @@ export default component$(() => {
         />
 
         <div class="grid grid-cols-2 gap-2">
-          {filteredPresets.map((presetInfo) => <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />)}
+          {filteredPresets.map((presetInfo) =>
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+          )}
           {filteredPresets.length === 0 && (
             <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-gray-400">
