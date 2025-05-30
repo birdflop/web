@@ -4,48 +4,7 @@ export const defaultPresets = {
   savedPresets: [],
 };
 
-export const rgbDefaults = {
-  version: 4,
-  colors: [
-    { hex: '#54daf4', pos: 0 },
-    { hex: '#545eb6', pos: 100 },
-  ],
-  shadowcolors: [
-    { hex: '#15373D', pos: 0 },
-    { hex: '#15182E', pos: 100 },
-  ],
-  colorlength: 1,
-  text: 'Birdflop',
-  format: {
-    color: '&#$1$2$3$4$5$6$f$c',
-    char: '&',
-  } as format,
-  prefixsuffix: '',
-  customFormat: false,
-  trimspaces: true,
-  disperse: false,
-  lowercase: false,
-  syncshadow: true,
-  bold: false,
-  italic: false,
-  underline: false,
-  strikethrough: false,
-  obfuscate: false,
-};
-
-export const animTABDefaults = {
-  name: 'logo',
-  type: 1,
-  speed: 50,
-  length: 1,
-  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
-};
-
-export const combinedDefaults = {
-  ...rgbDefaults, ...animTABDefaults,
-};
-
-export const formats = [
+export const formats: format[] = [
   {
     color: 'MiniMessage',
     bold: '<b>$t</b>',
@@ -54,7 +13,10 @@ export const formats = [
     strikethrough: '<st>$t</st>',
     obfuscate: '<obf>$t</obf>',
   },
-  combinedDefaults.format,
+  {
+    color: '&#$1$2$3$4$5$6$f$c',
+    char: '&',
+  },
   {
     color: '§x§$1§$2§$3§$4§$5§$6$f$c',
     char: '§',
@@ -83,9 +45,47 @@ export const formats = [
   },
 ];
 
-export const types = [
+export const animationStyles = [
   { name: 'Normal (Left -> Right)', value: 1 },
   { name: 'Reversed (Right -> Left)', value: 2 },
   { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
   { name: 'Full Text Cycle', value: 4 },
 ];
+
+export const rgbDefaults = {
+  version: 4,
+  colors: [
+    { hex: '#54daf4', pos: 0 },
+    { hex: '#545eb6', pos: 100 },
+  ],
+  shadowcolors: [
+    { hex: '#15373D', pos: 0 },
+    { hex: '#15182E', pos: 100 },
+  ],
+  colorlength: 1,
+  text: 'Birdflop',
+  format: formats[0],
+  prefixsuffix: '',
+  customFormat: false,
+  trimspaces: true,
+  disperse: false,
+  lowercase: false,
+  syncshadow: true,
+  bold: false,
+  italic: false,
+  underline: false,
+  strikethrough: false,
+  obfuscate: false,
+};
+
+export const animTABDefaults = {
+  name: 'logo',
+  type: 1,
+  speed: 50,
+  length: 1,
+  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
+};
+
+export const combinedDefaults = {
+  ...rgbDefaults, ...animTABDefaults,
+};
