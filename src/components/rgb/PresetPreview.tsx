@@ -27,7 +27,10 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
   });
 
   return (
-    <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props} class="lum-card flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out" key={`preset-${presetInfo.name}-${presetInfo.author}`}>
+    <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props}
+      class="lum-card flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      key={`preset-${presetInfo.name}-${presetInfo.author}`}
+      prefetch={false}>
       <div class="flex flex-1 flex-col gap-2">
         <p class={{
           'flex items-center gap-2': true,
