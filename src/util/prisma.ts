@@ -4,6 +4,7 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 function createPrismaClient(url: string) {
   return new PrismaClient({
     datasources: { db: { url } },
+    log: process.env.NODE_ENV !== 'production' ? ['query', 'info', 'warn', 'error'] : ['error'],
   }).$extends(withAccelerate());
 }
 
