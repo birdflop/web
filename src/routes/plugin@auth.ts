@@ -18,7 +18,14 @@ export interface BirdflopUser extends User {
   savedPresets?: rgbPreset[];
 }
 
-let cachedSessionAndUser: { user: User; session: Session } | null = null;
+const cachedSessionAndUser: {
+  value: {
+    user: User;
+    session: Session;
+  } | null;
+} = {
+  value: null,
+};
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
@@ -33,15 +40,15 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),
       async getSessionAndUser(sessionToken: string) {
-        if (cachedSessionAndUser) return cachedSessionAndUser as any;
+        if (cachedSessionAndUser.value) return cachedSessionAndUser.value as any;
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
           include: { user: true },
         });
         if (!userAndSession) return null;
         const { user, ...session } = userAndSession;
-        cachedSessionAndUser = { user, session };
-        return cachedSessionAndUser;
+        cachedSessionAndUser.value = { user, session };
+        return cachedSessionAndUser.value;
       },
     } : undefined;
 

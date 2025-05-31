@@ -12,11 +12,13 @@ import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { NotificationContext } from '~/routes/layout';
 
 export const usePresets = routeLoader$(async ({ env }) => {
+  let presets: publishedPreset[] = [];
+  const errors: string[] = [];
   try {
     const prisma = getPrismaClient(env.get('DATABASE_URL'));
     if (!prisma) throw new Error('No prisma client');
 
-    const presets = await prisma.presets.findMany({
+    presets = await prisma.presets.findMany({
       where: {},
       cacheStrategy: {
         ttl: 60 * 60, // Cache for 1 hour
@@ -25,12 +27,11 @@ export const usePresets = routeLoader$(async ({ env }) => {
         user: true,
       },
     }) as publishedPreset[];
-
-    return { presets };
   }
   catch (err) {
-    return { presets: [], error: err };
+    errors.push(`Error fetching presets: ${err}`);
   }
+  return { presets, errors };
 });
 
 export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
@@ -39,18 +40,20 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const { presets, error } = usePresets().value;
+  const { presets, errors } = usePresets().value;
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (error) {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error fetching presets',
-        description: `${error}`,
-        bgColor: 'lum-bg-red-900/50',
-      };
-      notifications.push(notification);
+    if (errors.length > 0) {
+      errors.forEach((error) => {
+        const id = Math.random().toString(36).substring(2, 15);
+        const notification = {
+          id,
+          title: 'Error fetching presets',
+          description: `${error}`,
+          bgColor: 'lum-bg-red-900/50',
+        };
+        notifications.push(notification);
+      });
     }
   });
 
