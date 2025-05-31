@@ -59,6 +59,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Default",
+        "tab": {
+          "footer": "Minecraft Tab Footer",
+          "header": "Minecraft Tab Header",
+          "player": "Minecraft Tab Player"
+        },
         "title": "Preview Style",
         "typeHere": "<RGBirdflop> Type here!"
       },
@@ -97,7 +102,7 @@
         "warning": "Please login to save presets permanently."
       },
       "showSaved": {
-        "description": "Switches between showing all public presets and presets you have saved.",
+        "description": "Turn this on to show only your saved presets.",
         "title": "Show saved presets"
       },
       "title": "프리셋",

@@ -1,3 +1,4 @@
+import { rgbPreset } from '.';
 import { formats } from './defaults';
 
 export function migrateFromV2(preset: any) {
@@ -18,4 +19,20 @@ export function migrateFromV3(preset: any) {
     ...preset,
     colors: preset.colors ? preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })) : undefined,
   };
+}
+
+export function migratePresetsFromCookies(savedPresets: rgbPreset[]) {
+  const cookie: { [key: string]: string; } = {};
+  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
+    const pairsplit = pair.split(/\s*=\s*/);
+    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
+  });
+  if (cookie['presets']) {
+    const cookiePresets = decodeURIComponent(cookie['presets']);
+    const savedPresetsFromCookie = JSON.parse(cookiePresets)?.savedPresets || [];
+    savedPresets = savedPresets.concat(savedPresetsFromCookie);
+    // remove cookie
+    document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  }
+  localStorage.setItem('savedPresets', JSON.stringify(savedPresets));
 }

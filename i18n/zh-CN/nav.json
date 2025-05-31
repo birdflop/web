@@ -22,6 +22,16 @@
       "title": "Hosting"
     },
     "privacyPolicy": "隐私政策",
+    "profile": {
+      "hey": "Hey",
+      "login": "Login",
+      "logout": "Logout",
+      "notLoggedIn": {
+        "description": "Click below to login",
+        "title": "You are not logged in!"
+      },
+      "title": "Profile"
+    },
     "resources": {
       "animatedTAB": {
         "description": "TAB插件渐变动画创建器",
@@ -35,6 +45,7 @@
         "description": "Easily generate banner designs for Minecraft.",
         "title": "Banner Generator"
       },
+      "description": "Here you can find all of Birdflop's public resources.",
       "flags": {
         "description": "一个简单的脚本生成器，用于以最佳标志启动Minecraft服务器。",
         "title": "标志生成器"

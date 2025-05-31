@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
 import { rgbPreset } from '~/util/rgb/presets';
+import { Session } from '@prisma/client';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -14,8 +15,17 @@ export interface BirdflopSession {
 }
 
 export interface BirdflopUser extends User {
-  savedPresets?: rgbPreset[];
+  privatePresets?: rgbPreset[];
 }
+
+const cachedSessionAndUser: {
+  value: {
+    user: User;
+    session: Session;
+  } | null;
+} = {
+  value: null,
+};
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
@@ -26,6 +36,21 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       secret = tempsecret;
     }
     const prisma = getPrismaClient(databaseUrl);
+
+    const customPrismaAdapter = prisma ? {
+      ...PrismaAdapter(prisma),
+      async getSessionAndUser(sessionToken: string) {
+        if (cachedSessionAndUser.value) return cachedSessionAndUser.value as any;
+        const userAndSession = await prisma.session.findUnique({
+          where: { sessionToken },
+          include: { user: true },
+        });
+        if (!userAndSession) return null;
+        const { user, ...session } = userAndSession;
+        cachedSessionAndUser.value = { user, session };
+        return cachedSessionAndUser.value;
+      },
+    } : undefined;
 
     return {
       providers: [
@@ -51,15 +76,15 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: prisma ? PrismaAdapter(prisma) : undefined,
+      adapter: customPrismaAdapter,
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
         session({ session }) {
-          const { id, name, email, image, savedPresets } = session.user as BirdflopUser;
+          const { id, name, email, image, privatePresets } = session.user as BirdflopUser;
           return {
             expires: session.expires,
-            user: { id, name, email, image, savedPresets },
+            user: { id, name, email, image, privatePresets },
           };
         },
       },

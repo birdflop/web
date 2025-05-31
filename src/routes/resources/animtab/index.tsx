@@ -1,7 +1,7 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { types, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
+import { animationStyles, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
 import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
 import { rgbStoreContext } from '../rgb';
 import { hexToRGB } from '~/util/rgb/Colors';
@@ -228,7 +228,7 @@ export default component$(() => {
                 {t('animtab.animation.interval@@Animation Interval')} (ms)
               </NumberInput>
               <SelectMenu id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
-                values={types}
+                values={animationStyles}
                 value={animtabStore.type}>
                 {t('animtab.animation.style@@Animation Style')}
               </SelectMenu>

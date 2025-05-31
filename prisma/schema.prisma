@@ -9,25 +9,29 @@ datasource db {
 }
 
 model Presets {
-  id         Int      @id @default(autoincrement())
-  userId     String
-  title      String
-  presetJSON String
-  createdAt  DateTime @default(now())
-  timesUsed  Int      @default(0)
+  id          Int      @id @default(autoincrement())
+  name        String
+  author      String
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  description String?
+  preset      Json
+  createdAt   DateTime @default(now())
+  pending     Boolean  @default(true)
 }
 
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  username      String?         @unique
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  savedPresets  Json?
-  accounts      Account[]
-  sessions      Session[]
+  id               String          @id @default(cuid())
+  name             String?
+  username         String?         @unique
+  email            String?         @unique
+  emailVerified    DateTime?
+  image            String?
+  privatePresets   Json?
+  publishedPresets Presets[]
+  accounts         Account[]
+  sessions         Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

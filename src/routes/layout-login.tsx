@@ -2,10 +2,19 @@ import { component$, Slot } from '@builder.io/qwik';
 
 import Layout from './layout';
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
-import { Form, useLocation } from '@builder.io/qwik-city';
+import { Form, RequestHandler, useLocation } from '@builder.io/qwik-city';
 import { LogIn, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
+
+export const onGet: RequestHandler = ({ cacheControl }) => {
+  cacheControl({
+    public: false,
+    maxAge: 0,
+    sMaxAge: 0,
+    staleWhileRevalidate: 0,
+  });
+};
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -47,12 +56,12 @@ export default component$(() => {
 
   return (
     <Layout>
-      <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-[72px]">
-        <div class="my-5 min-h-[60px] w-full">
-          <div class="flex">
-            <h1 class="flex flex-1 items-center gap-4">
+      <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+        <div class="min-h-[60px] w-full">
+          <div class="flex items-center">
+            <h1 class="flex gap-4 items-center my-3! flex-1">
               {session.value.user.image &&
-                <img src={session.value.user.image} width={30} height={30} class="rounded-full! w-14 h-14" />
+                <img src={session.value.user.image} width={70} height={70} class="rounded-full! w-17 h-17" />
               }
               {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
             </h1>
@@ -71,10 +80,10 @@ export default component$(() => {
             </div>
           </div>
           <hr />
+          <main>
+            <Slot />
+          </main>
         </div>
-        <main>
-          <Slot />
-        </main>
       </section>
     </Layout>
   );

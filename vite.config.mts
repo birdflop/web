@@ -110,6 +110,7 @@ export default defineConfig(() => {
         'chart.js',
         '@prisma/client/edge',
         '@prisma/extension-accelerate',
+        '@qwik.dev/partytown/integration'
       ],
     },
   };

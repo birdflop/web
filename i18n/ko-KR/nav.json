@@ -22,6 +22,16 @@
       "title": "Hosting"
     },
     "privacyPolicy": "개인정보 처리방침",
+    "profile": {
+      "hey": "Hey",
+      "login": "Login",
+      "logout": "Logout",
+      "notLoggedIn": {
+        "description": "Click below to login",
+        "title": "You are not logged in!"
+      },
+      "title": "Profile"
+    },
     "resources": {
       "animatedTAB": {
         "description": "TAB 플러그인 그라데이션 애니메이션 생성기",
@@ -35,6 +45,7 @@
         "description": "Easily generate banner designs for Minecraft.",
         "title": "Banner Generator"
       },
+      "description": "Here you can find all of Birdflop's public resources.",
       "flags": {
         "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
         "title": "플래그 생성기"

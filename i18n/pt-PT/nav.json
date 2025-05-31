@@ -22,6 +22,16 @@
       "title": "Hosting"
     },
     "privacyPolicy": "Politica de privacidade",
+    "profile": {
+      "hey": "Hey",
+      "login": "Login",
+      "logout": "Logout",
+      "notLoggedIn": {
+        "description": "Click below to login",
+        "title": "You are not logged in!"
+      },
+      "title": "Profile"
+    },
     "resources": {
       "animatedTAB": {
         "description": "Plugin TAB para criar animações com gradientes",
@@ -35,6 +45,7 @@
         "description": "Easily generate banner designs for Minecraft.",
         "title": "Banner Generator"
       },
+      "description": "Here you can find all of Birdflop's public resources.",
       "flags": {
         "description": "A simple script generator to start your Minecraft servers with optimal flags",
         "title": "Flags Generator"

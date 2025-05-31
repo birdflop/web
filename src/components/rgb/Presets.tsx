@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useContext, useStore, type Signal } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal, type Signal } from '@builder.io/qwik';
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { SelectMenu } from '@luminescent/ui-qwik';
@@ -11,6 +11,8 @@ import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { savedPresetsContext } from '~/routes/resources/rgb/presets';
+import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -53,9 +55,8 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const presetStore = useStore([
-    ...(session.value?.user?.savedPresets ?? []),
-  ] as rgbPreset[]);
+  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
 
   return (
     <div class={{
@@ -65,27 +66,18 @@ export default component$(({ hidden }: {
     }} id="presets">
       <div class="flex flex-col gap-2"
         onClick$={() => {
-          if (presetStore.length != 0) return;
-          let savedPresets: rgbPreset[] = [];
+          if (savedPresets.value.length != 0) return;
+          let newSavedPresets: rgbPreset[] = [];
           try {
-            const localStoragePresets = JSON.parse(localStorage.getItem('savedPresets') || '[]') as rgbPreset[];
-            savedPresets = savedPresets.concat(localStoragePresets);
-            if (!localStoragePresets) {
-              // presets possibly stored in cookies
-              const cookie: { [key: string]: string; } = {};
-              document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-                const pairsplit = pair.split(/\s*=\s*/);
-                cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-              });
-              if (cookie['presets']) {
-                const cookiePresets = decodeURIComponent(cookie['presets']);
-                savedPresets = savedPresets.concat(JSON.parse(cookiePresets)?.savedPresets as rgbPreset[]);
-                // remove cookie
-                document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-              }
+            // try to get presets from localStorage
+            const localStoragePresets = localStorage.getItem('savedPresets');
+            // if localStorage is empty, try to get presets from cookies
+            if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
+            else {
+              const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
+              newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
             }
-            presetStore.push(...savedPresets);
-            localStorage.setItem('savedPresets', JSON.stringify(presetStore));
+            savedPresets.value = savedPresets.value.concat(newSavedPresets);
           } catch (err) {
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
@@ -102,10 +94,14 @@ export default component$(({ hidden }: {
         }}>
         <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
           onChange$={async (event, el) => loadPresetJSON(el.value)}
-          values={presetStore.length == 0 ? undefined :
-            presetStore.map((preset) => ({
+          values={savedPresets.value.length == 0 ? undefined :
+            savedPresets.value.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
+                'font-mc-bold': preset.bold,
+                'font-mc-italic': preset.italic,
+                'font-mc-bold-italic': preset.bold && preset.italic,
+                [`${preset.format?.class}`]: preset.format?.class,
               }}>
                 {renderPreview({ ...rgbDefaults, ...preset }, 1)}
               </span>,
@@ -130,18 +126,18 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
             });
-            if (!presetStore.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
-              presetStore.push(preset);
+            if (!savedPresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
+              savedPresets.value.push(preset);
             }
-            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(presetStore));
-            await setUserData({ savedPresets: presetStore });
+            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
+            await setUserData({ privatePresets: savedPresets.value });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
               title: await t$('rgb.presets.saved.title@@Preset Saved!'),
               description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
                 : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
-              bgColor: session.value ? 'lum-bg-orange-900/50' : 'lum-bg-orange-900/50',
+              bgColor: session.value ? 'lum-bg-green-900/50' : 'lum-bg-orange-900/50',
             });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
