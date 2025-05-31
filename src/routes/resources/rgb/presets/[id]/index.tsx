@@ -53,7 +53,7 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   const searchParams = new URLSearchParams();

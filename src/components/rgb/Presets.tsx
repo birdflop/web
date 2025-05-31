@@ -55,7 +55,7 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   return (

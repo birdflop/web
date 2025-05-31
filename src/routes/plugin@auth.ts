@@ -15,7 +15,7 @@ export interface BirdflopSession {
 }
 
 export interface BirdflopUser extends User {
-  savedPresets?: rgbPreset[];
+  privatePresets?: rgbPreset[];
 }
 
 const cachedSessionAndUser: {
@@ -81,10 +81,10 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       secret,
       callbacks: {
         session({ session }) {
-          const { id, name, email, image, savedPresets } = session.user as BirdflopUser;
+          const { id, name, email, image, privatePresets } = session.user as BirdflopUser;
           return {
             expires: session.expires,
-            user: { id, name, email, image, savedPresets },
+            user: { id, name, email, image, privatePresets },
           };
         },
       },

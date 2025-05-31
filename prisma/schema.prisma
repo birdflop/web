@@ -28,7 +28,7 @@ model User {
   email            String?         @unique
   emailVerified    DateTime?
   image            String?
-  savedPresets     Json?
+  privatePresets   Json?
   publishedPresets Presets[]
   accounts         Account[]
   sessions         Session[]

@@ -43,7 +43,7 @@ export default component$(() => {
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   const modalRef = useSignal<HTMLDialogElement>();
