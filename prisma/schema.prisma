@@ -17,6 +17,7 @@ model Presets {
   description String?
   preset      Json
   createdAt   DateTime @default(now())
+  savedBy     User[]   @relation("SavedPresets")
   pending     Boolean  @default(true)
 }
 
@@ -29,6 +30,7 @@ model User {
   emailVerified    DateTime?
   image            String?
   privatePresets   Json?
+  savedPresets     Presets[]      @relation("SavedPresets")
   publishedPresets Presets[]
   accounts         Account[]
   sessions         Session[]
