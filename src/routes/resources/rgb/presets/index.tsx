@@ -114,9 +114,7 @@ export default component$(() => {
     }
   });
 
-  const allPresets: publishedPreset[] = [...personalSavedPresets, ...presets];
-
-  let filteredPresets = allPresets.filter((preset) =>
+  let filteredPresets = presets.filter((preset) =>
     preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase())
     && (presetStore.showPending ? preset.pending : !preset.pending),
   );
@@ -186,6 +184,19 @@ export default component$(() => {
                 publish your own preset at your profile page!
               </p>
             </div>
+          )}
+        </div>
+
+        <h3 class="flex gap-2 items-center">
+          <Save size={30} />
+          <span class="flex-1">
+            My RGBirdflop Presets
+          </span>
+        </h3>
+
+        <div class="grid grid-cols-2 gap-2">
+          {personalSavedPresets.map((presetInfo) =>
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
           )}
         </div>
 

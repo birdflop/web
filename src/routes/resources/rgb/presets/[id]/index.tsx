@@ -119,13 +119,14 @@ export default component$(() => {
               'text-blue-300/80!': !presetInfo.user,
               'text-orange-300/80!': !!presetInfo.user,
             }}>
-              { presetInfo.user && <>
+              { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
+                class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
                 {presetInfo.user.image && presetInfo.user.name && (
                   <img src={presetInfo.user.image} alt={presetInfo.user.name}
                     width={32} height={32} class="w-8 h-8 rounded-full!" />
                 )}
                 {presetInfo.user.name}
-              </>
+              </Link>
               }
               { presetInfo.author && !presetInfo.user && <>
                 {presetInfo.author == 'RGBirdflop' &&

@@ -28,7 +28,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
 
   return (
     <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props}
-      class="lum-card flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      class="lum-card p-5 flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
       key={`preset-${presetInfo.name}-${presetInfo.author}`}
       prefetch={false}>
       <div class="flex flex-1 flex-col gap-2">
@@ -38,13 +38,16 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
           'text-blue-300/80!': !presetInfo.user && presetInfo.author != 'Saved by you',
           'text-orange-300/80!': !!presetInfo.user,
         }}>
-          { presetInfo.user && <>
+          { presetInfo.user && <button preventdefault:click onClick$={async (e) => {
+            e.stopPropagation();
+            await nav(`/profile/${presetInfo.user?.id}`);
+          }} class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold">
             {presetInfo.user.image && presetInfo.user.name && (
               <img src={presetInfo.user.image} alt={presetInfo.user.name}
                 width={24} height={24} class="w-6 h-6 rounded-full!" />
             )}
             {presetInfo.user.name}
-          </>
+          </button>
           }
           { presetInfo.author && !presetInfo.user && <>
             {presetInfo.author == 'RGBirdflop' &&
