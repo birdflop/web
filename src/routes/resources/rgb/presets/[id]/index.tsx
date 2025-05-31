@@ -23,6 +23,7 @@ export const usePreset = routeLoader$(async ({ params, env }) => {
     where: { id: Number(params.id) },
     include: {
       user: true,
+      savedBy: true,
     },
     cacheStrategy: {
       ttl: 60 * 60, // Cache for 1 hour
@@ -194,11 +195,29 @@ export default component$(() => {
               const existingPreset = savedPresets.value.find((savedPreset) => {
                 return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
               });
-              if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
-              else savedPresets.value = [...savedPresets.value, presetInfo.preset];
+
+              if (existingPreset) {
+                savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
+                await setUserData({
+                  savedPresets: {
+                    delete: { id: presetInfo.id },
+                  },
+                });
+              }
+              else {
+                savedPresets.value = [...savedPresets.value, presetInfo.preset];
+                await setUserData({
+                  savedPresets: {
+                    connect: {
+                      id: presetInfo.id,
+                    },
+                  },
+                });
+              }
+
               if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-              await setUserData({ privatePresets: savedPresets.value });
             }}>
+              {presetInfo.savedBy?.length}
               {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
                 ? <span class="text-red-300 flex gap-3">
                   <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}

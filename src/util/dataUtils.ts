@@ -124,10 +124,15 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
+  savedPresets?: {
+    delete?: { id: number };
+    connect?: { id: number };
+  }
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
   const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
   if (!session || !prisma) return console.error('No session or prisma client', session, prisma);
+
   const sessionData = await prisma.user.update({
     where: { id: session.user.id },
     data,

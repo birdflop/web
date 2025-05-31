@@ -16,19 +16,21 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset extends Omit<Presets, 'preset' | 'id' | 'description' | 'userId'> {
-  id?: number;
-  description?: string;
+export interface publishedPreset extends Omit<Presets, 'preset' | 'description' | 'userId'> {
   userId?: string;
   user?: BirdflopUser;
+  description?: string;
+  savedBy?: BirdflopUser[];
   preset: rgbPreset;
 }
 
-export interface presetSubmission extends Omit<publishedPreset, 'createdAt' | 'pending' | 'author' | 'userId'> {
-  author?: string;
+export interface presetInfo extends Omit<publishedPreset, 'id' | 'author' | 'createdAt' > {
   createdAt?: Date;
-  pending?: boolean;
+  author?: string;
+  id?: number;
 }
+
+export type presetSubmission = Omit<presetInfo, 'pending'>;
 
 export function loadPreset(p: string): rgbPreset {
   const preset = JSON.parse(p);

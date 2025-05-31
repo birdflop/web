@@ -1,7 +1,7 @@
 import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save, Search, Send } from 'lucide-icons-qwik';
@@ -25,6 +25,7 @@ export const usePresets = routeLoader$(async ({ env }) => {
       },
       include: {
         user: true,
+        savedBy: true,
       },
     }) as publishedPreset[];
   }
@@ -95,20 +96,15 @@ export default component$(() => {
     }
   });
 
-  const personalSavedPresets: publishedPreset[] = [];
+  const personalSavedPresets: presetInfo[] = [];
   savedPresets.value.forEach((preset) => {
-    console.log('Checking preset:', preset);
     const isunique = presets.every((p) => {
-      console.log('Comparing with:', p.preset);
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
-    console.log(`isunique: ${isunique}`);
     if (isunique) {
       personalSavedPresets.push({
         name: preset.text ?? 'Saved Preset',
-        author: 'Saved by you',
         preset: preset,
-        createdAt: new Date(),
         pending: false,
       });
     }
