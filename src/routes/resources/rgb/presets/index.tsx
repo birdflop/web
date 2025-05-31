@@ -175,7 +175,7 @@ export default component$(() => {
             <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
           )}
           {filteredPresets.length === 0 && (
-            <div class="lum-card lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
+            <div class="lum-card col-span-2 lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-gray-400">
                 {t('rgb.presets.noResults@@No results found.')}
                 <br />

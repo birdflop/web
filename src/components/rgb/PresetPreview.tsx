@@ -28,12 +28,12 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
 
   return (
     <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props}
-      class="lum-card p-5 flex-row lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      class="lum-card p-5 lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
       key={`preset-${presetInfo.name}-${presetInfo.author}`}
       prefetch={false}>
-      <div class="flex flex-1 flex-col gap-2">
+      <div class="flex">
         <p class={{
-          'flex items-center gap-2': true,
+          'flex flex-1 items-center gap-2': true,
           'text-green-300/80!': !presetInfo.user && presetInfo.author == 'Saved by you',
           'text-blue-300/80!': !presetInfo.user && presetInfo.author != 'Saved by you',
           'text-orange-300/80!': !!presetInfo.user,
@@ -65,55 +65,69 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             {presetInfo.author}
           </>}
         </p>
-        <p class={{
-          'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-          'font-mc-bold': presetInfo.preset.bold,
-          'font-mc-italic': presetInfo.preset.italic,
-          'font-mc-bold-italic': presetInfo.preset.bold && presetInfo.preset.italic,
-          [`${presetInfo.preset.format?.class}`]: presetInfo.preset.format?.class,
-        }}>
-          {renderPreview({
-            ...rgbDefaults,
-            ...presetInfo.preset,
-            text: presetInfo.name,
-          }, 3)}
-        </p>
-        <p class="text-gray-400 text-sm">
-          {presetInfo.description}
+        <p class="text-xs">
+          {presetInfo.createdAt && new Date(presetInfo.createdAt)
+            .toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
         </p>
       </div>
-      <div class="flex gap-1 items-end">
-        <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-          class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent gap-1 text-orange-300': true }}>
-          <div q:slot="dropdown" class="flex items-center gap-3">
-            <MousePointer2 size={20} />
-          </div>
-          <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
-            e.stopPropagation();
-            await nav(`/resources/rgb?${searchParams.toString()}`);
+
+      <div class="flex h-full">
+        <div class="flex-1">
+          <p class={{
+            'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
+            'font-mc-bold': presetInfo.preset.bold,
+            'font-mc-italic': presetInfo.preset.italic,
+            'font-mc-bold-italic': presetInfo.preset.bold && presetInfo.preset.italic,
+            [`${presetInfo.preset.format?.class}`]: presetInfo.preset.format?.class,
           }}>
-            <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
-          </button>
-          <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+            {renderPreview({
+              ...rgbDefaults,
+              ...presetInfo.preset,
+              text: presetInfo.name,
+            }, 3)}
+          </p>
+
+          <p class="text-gray-400 text-sm pt-2">
+            {presetInfo.description}
+          </p>
+        </div>
+        <div class="flex gap-1 items-end">
+          <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
+            class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent gap-1 text-orange-300': true }}>
+            <div q:slot="dropdown" class="flex items-center gap-3">
+              <MousePointer2 size={20} />
+            </div>
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+              e.stopPropagation();
+              await nav(`/resources/rgb?${searchParams.toString()}`);
+            }}>
+              <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+            </button>
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+              e.stopPropagation();
+              await nav(`/resources/animtab?${searchParams.toString()}`);
+            }}>
+              <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            </button>
+          </SelectMenuRaw>
+          <button class="lum-btn text-sm lum-bg-transparent p-2" preventdefault:click onClick$={async (e) => {
             e.stopPropagation();
-            await nav(`/resources/animtab?${searchParams.toString()}`);
+            const existingPreset = savedPresets.value.find((savedPreset) => {
+              return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
+            });
+            if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
+            else savedPresets.value = [...savedPresets.value, presetInfo.preset];
+            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
+            await setUserData({ savedPresets: savedPresets.value });
           }}>
-            <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+              ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />}
           </button>
-        </SelectMenuRaw>
-        <button class="lum-btn text-sm lum-bg-transparent p-2" preventdefault:click onClick$={async (e) => {
-          e.stopPropagation();
-          const existingPreset = savedPresets.value.find((savedPreset) => {
-            return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
-          });
-          if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
-          else savedPresets.value = [...savedPresets.value, presetInfo.preset];
-          if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-          await setUserData({ savedPresets: savedPresets.value });
-        }}>
-          {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
-            ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />}
-        </button>
+        </div>
       </div>
     </Link>
   );
