@@ -130,7 +130,7 @@ export default component$(({ hidden }: {
               savedPresets.value.push(preset);
             }
             if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-            await setUserData({ savedPresets: savedPresets.value });
+            await setUserData({ privatePresets: savedPresets.value });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,

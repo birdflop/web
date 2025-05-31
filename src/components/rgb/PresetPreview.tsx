@@ -7,10 +7,10 @@ import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
-import { publishedPreset } from '~/util/rgb/presets';
+import { presetInfo } from '~/util/rgb/presets';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
-  presetInfo: publishedPreset;
+  presetInfo: presetInfo;
   class?: { [key: string]: boolean };
 }
 
@@ -34,8 +34,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
       <div class="flex">
         <p class={{
           'flex flex-1 items-center gap-2': true,
-          'text-green-300/80!': !presetInfo.user && presetInfo.author == 'Saved by you',
-          'text-blue-300/80!': !presetInfo.user && presetInfo.author != 'Saved by you',
+          'text-blue-300/80!': !presetInfo.user,
           'text-orange-300/80!': !!presetInfo.user,
         }}>
           { presetInfo.user && <button preventdefault:click onClick$={async (e) => {
@@ -58,9 +57,6 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             }
             {presetInfo.author.includes('GitHub') &&
               <Github size={20} />
-            }
-            {presetInfo.author == 'Saved by you' &&
-              <Save size={20} />
             }
             {presetInfo.author}
           </>}
@@ -119,10 +115,32 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             const existingPreset = savedPresets.value.find((savedPreset) => {
               return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
             });
-            if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
-            else savedPresets.value = [...savedPresets.value, presetInfo.preset];
+
+            if (existingPreset) {
+              savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
+              if (presetInfo.id) await setUserData({
+                savedPresets: {
+                  delete: { id: presetInfo.id },
+                },
+              });
+            }
+            else {
+              savedPresets.value = [...savedPresets.value, presetInfo.preset];
+              if (presetInfo.id) await setUserData({
+                savedPresets: {
+                  connect: {
+                    id: presetInfo.id,
+                  },
+                },
+              });
+            }
+
+            if (!presetInfo.id) {
+              await setUserData({
+                privatePresets: savedPresets.value,
+              });
+            }
             if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-            await setUserData({ savedPresets: savedPresets.value });
           }}>
             {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
               ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />}

@@ -4,7 +4,7 @@ import { unloadGoogleAds } from '~/util/GoogleAds';
 import { savedPresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
-import { presetSubmission, publishedPreset } from '~/util/rgb/presets';
+import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu } from '@luminescent/ui-qwik';
@@ -48,11 +48,9 @@ export default component$(() => {
 
   const modalRef = useSignal<HTMLDialogElement>();
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
-    name: preset.text ?? 'Birdflop',
-    author: 'Saved by you',
+  const savedPresetsParsed: presetInfo[] = [...savedPresets.value].map((preset) => ({
+    name: preset.text ?? 'Saved Preset',
     preset: preset,
-    createdAt: new Date(),
     pending: false,
   }));
 
