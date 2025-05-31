@@ -7,8 +7,8 @@ const getEndpoints = async () => {
   const paths = Object.keys(apiEndpoints.endpoints) as (keyof typeof apiEndpoints.endpoints)[];
   const json: typeof apiEndpoints = JSON.parse(JSON.stringify(apiEndpoints));
 
+  const highlighter = await getGlobalHighlighter();
   for (const path of paths) {
-    const highlighter = await getGlobalHighlighter();
     const options = json.endpoints[path].options;
     const optionNames = Object.keys(options) as (keyof typeof options)[];
 

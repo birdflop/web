@@ -20,6 +20,8 @@ export const menuItemPriority: {
   'Overview': 1,
   'Getting Started': 2,
   'Panel': 2,
+  'FAQ': 3,
+  'Rgbirdflop': 4,
   'Extras': 101,
 };
 
