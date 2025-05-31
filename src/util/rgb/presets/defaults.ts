@@ -1,9 +1,5 @@
 import { format } from '.';
 
-export const defaultPresets = {
-  savedPresets: [],
-};
-
 export const formats: format[] = [
   {
     color: 'MiniMessage',

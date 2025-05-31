@@ -197,7 +197,7 @@ export default component$(() => {
               if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
               else savedPresets.value = [...savedPresets.value, presetInfo.preset];
               if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-              await setUserData({ savedPresets: savedPresets.value });
+              await setUserData({ privatePresets: savedPresets.value });
             }}>
               {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
                 ? <span class="text-red-300 flex gap-3">

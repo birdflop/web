@@ -122,7 +122,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             if (existingPreset) savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
             else savedPresets.value = [...savedPresets.value, presetInfo.preset];
             if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-            await setUserData({ savedPresets: savedPresets.value });
+            await setUserData({ privatePresets: savedPresets.value });
           }}>
             {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
               ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />}

@@ -123,7 +123,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 }
 
 export const setUserData = server$(async function(data: {
-  savedPresets?: rgbPreset[];
+  privatePresets?: rgbPreset[];
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
   const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
