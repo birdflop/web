@@ -4,7 +4,7 @@ import { $, component$, createContextId, noSerialize, Slot, useContextProvider, 
 import Backgrounds from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { Link, RequestHandler, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
@@ -18,6 +18,15 @@ type Notification = {
   description?: string;
   bgColor?: string;
 } | rawNotification;
+
+export const onGet: RequestHandler = ({ cacheControl }) => {
+  cacheControl({
+    public: true,
+    maxAge: 5,
+    sMaxAge: 10,
+    staleWhileRevalidate: 60 * 60 * 24 * 365,
+  });
+};
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const OpenSectionsContext = createContextId<string[]>('opensections-context');

@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
 import { rgbPreset } from '~/util/rgb/presets';
+import { Session } from '@prisma/client';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -17,6 +18,8 @@ export interface BirdflopUser extends User {
   savedPresets?: rgbPreset[];
 }
 
+let cachedSessionAndUser: { user: User; session: Session } | null = null;
+
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
     const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
@@ -26,6 +29,21 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       secret = tempsecret;
     }
     const prisma = getPrismaClient(databaseUrl);
+
+    const customPrismaAdapter = prisma ? {
+      ...PrismaAdapter(prisma),
+      async getSessionAndUser(sessionToken: string) {
+        if (cachedSessionAndUser) return cachedSessionAndUser as any;
+        const userAndSession = await prisma.session.findUnique({
+          where: { sessionToken },
+          include: { user: true },
+        });
+        if (!userAndSession) return null;
+        const { user, ...session } = userAndSession;
+        cachedSessionAndUser = { user, session };
+        return cachedSessionAndUser;
+      },
+    } : undefined;
 
     return {
       providers: [
@@ -51,7 +69,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: prisma ? PrismaAdapter(prisma) : undefined,
+      adapter: customPrismaAdapter,
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
