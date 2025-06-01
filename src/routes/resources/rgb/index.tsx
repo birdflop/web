@@ -188,11 +188,7 @@ export default component$(() => {
             <Output hidden={openSections.indexOf('output') == -1}
               value={generateOutput(rgbStore)} />
 
-            <Accordion sectionName="options">
-              <Settings size={26} />
-              {t('rgb.options@@Options')}
-            </Accordion>
-            <Options hidden={openSections.indexOf('options') == -1}/>
+            <Options />
 
             <Accordion sectionName="presets">
               <Save size={26} />

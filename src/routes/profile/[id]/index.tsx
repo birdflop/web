@@ -121,7 +121,7 @@ export default component$(() => {
                 <ChevronLeft size={20} /> Go to presets
               </Link>
             </h3>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid sm:grid-cols-2 gap-2">
               {presets.map((preset) => (
                 <PresetPreview key={preset.id} presetInfo={preset} />
               ))}

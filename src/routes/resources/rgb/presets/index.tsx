@@ -124,9 +124,9 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="min-h-[60px] w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Save size={70} />
-          <span class="flex-1">
+        <h1 class="sm:flex items-center my-3!">
+          <span class="flex flex-1 gap-4 items-center">
+            <Save size={70} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
           <SelectMenuRaw id="hidden-select-menu" customDropdown class={{ 'opacity-0': true }}>
@@ -166,7 +166,7 @@ export default component$(() => {
           />
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid sm:grid-cols-2 gap-2">
           {filteredPresets.map((presetInfo) =>
             <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
           )}
@@ -190,7 +190,7 @@ export default component$(() => {
           </span>
         </h3>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid sm:grid-cols-2 gap-2">
           {personalSavedPresets.map((presetInfo) =>
             <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
           )}

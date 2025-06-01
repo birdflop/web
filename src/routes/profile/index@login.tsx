@@ -7,7 +7,7 @@ import PresetPreview from '~/components/rgb/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '../resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
@@ -65,7 +65,7 @@ export default component$(() => {
       </Link>
     </h3>
 
-    <div class="grid grid-cols-2 gap-2">
+    <div class="grid sm:grid-cols-2 gap-2">
       {savedPresetsParsed.map((presetInfo) =>
         <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
       )}
@@ -103,15 +103,20 @@ export default component$(() => {
         <hr/>
         <Form id="publish-preset-form" onSubmit$={async (e) => {
           const form = e.target as HTMLFormElement;
+
           const name = (form.querySelector('#publish-preset-name') as HTMLInputElement).value;
           const description = (form.querySelector('#publish-preset-description') as HTMLTextAreaElement).value;
+          if (!name || !description) return alert('Please fill out all fields.');
+
           const presetSelectElem = form.querySelector('#publish-preset-preset');
           if (!presetSelectElem || !(presetSelectElem instanceof HTMLSelectElement)) {
             alert('Preset select element not found.');
             return;
           }
+          const includetext = (form.querySelector('#publish-preset-includetext') as HTMLInputElement).checked;
           const preset = JSON.parse(presetSelectElem.value);
-          if (!name || !description || !preset) return alert('Please fill out all fields.');
+
+          if (!includetext) delete preset.text;
 
           console.log('Publishing preset:', { name, description, preset });
 
@@ -173,6 +178,9 @@ export default component$(() => {
             Preset description
           </label>
           <textarea class="lum-input" placeholder="This is my preset" id="publish-preset-description" />
+
+          <Toggle id="publish-preset-includetext"
+            label={'Include preset text'} />
         </Form>
         <hr/>
         <div class="flex gap-2 justify-end">

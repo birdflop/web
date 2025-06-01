@@ -4,17 +4,13 @@ import { rgbStoreContext } from '~/routes/resources/rgb';
 import { formats } from '~/util/rgb/presets/defaults';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
-export default component$(({ hidden }: {
-  hidden: boolean;
-}) => {
+export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class={{
       'flex flex-col gap-2 transition-all duration-200': true,
-      'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-[1000px] opacity-100 pointer-events-auto': !hidden,
     }}>
       <div class="flex flex-col md:grid grid-cols-2 gap-2">
         <Slot />
