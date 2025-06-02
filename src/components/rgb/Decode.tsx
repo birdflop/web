@@ -62,9 +62,8 @@ export default component$(({ threshold, hidden }: {
       'max-h-0 opacity-0 pointer-events-none': hidden,
       'max-h-[400px] opacity-100 pointer-events-auto': !hidden,
     }} id="decode">
-      <p>{t('rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
       <label for="decode">
-        <span>{t('rgb.decode.title@@Decode')}</span>
+        {t('rgb.decode.title@@Decode')}
         <span class="text-gray-500"> - {t('rgb.decode.description@@Copy-paste an existing RGB text here to edit it')}</span>
       </label>
       <textarea id="decode" class={{
@@ -95,6 +94,7 @@ export default component$(({ threshold, hidden }: {
         {t('rgb.decode.threshold.title@@Threshold')}
         <span class="text-gray-500"> - {t('rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors')}</span>
       </NumberInput>
+      <p class="text-sm">{t('rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
     </div>
   );
 });

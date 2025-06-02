@@ -1,13 +1,13 @@
 import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
-import { savedPresetsContext } from '../resources/rgb/presets';
+import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
-import { presetSubmission, publishedPreset } from '~/util/rgb/presets';
+import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '../resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
@@ -43,16 +43,17 @@ export default component$(() => {
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
+
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   const modalRef = useSignal<HTMLDialogElement>();
 
-  const savedPresetsParsed: publishedPreset[] = [...savedPresets.value].map((preset) => ({
-    name: preset.text ?? 'Birdflop',
-    author: 'Saved by you',
+  const privatePresetsParsed: presetInfo[] = [...privatePresets.value].map((preset) => ({
+    name: preset.text ?? 'Saved Preset',
     preset: preset,
-    createdAt: new Date(),
     pending: false,
   }));
 
@@ -60,15 +61,15 @@ export default component$(() => {
     <h3 class="flex gap-2 items-center">
       <Save size={30} />
       <span class="flex-1">
-        My RGBirdflop Presets
+        My Private RGBirdflop Presets
       </span>
       <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
         <ChevronLeft size={20} /> Go to presets
       </Link>
     </h3>
 
-    <div class="grid grid-cols-2 gap-2">
-      {savedPresetsParsed.map((presetInfo) =>
+    <div class="grid sm:grid-cols-2 gap-2">
+      {privatePresetsParsed.map((presetInfo) =>
         <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
       )}
       <button class="lum-card text-left lum-bg-green-900/20 hover:lum-bg-green-900 w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
@@ -105,15 +106,20 @@ export default component$(() => {
         <hr/>
         <Form id="publish-preset-form" onSubmit$={async (e) => {
           const form = e.target as HTMLFormElement;
+
           const name = (form.querySelector('#publish-preset-name') as HTMLInputElement).value;
           const description = (form.querySelector('#publish-preset-description') as HTMLTextAreaElement).value;
+          if (!name || !description) return alert('Please fill out all fields.');
+
           const presetSelectElem = form.querySelector('#publish-preset-preset');
           if (!presetSelectElem || !(presetSelectElem instanceof HTMLSelectElement)) {
             alert('Preset select element not found.');
             return;
           }
+          const includetext = (form.querySelector('#publish-preset-includetext') as HTMLInputElement).checked;
           const preset = JSON.parse(presetSelectElem.value);
-          if (!name || !description || !preset) return alert('Please fill out all fields.');
+
+          if (!includetext) delete preset.text;
 
           console.log('Publishing preset:', { name, description, preset });
 
@@ -153,8 +159,8 @@ export default component$(() => {
               <input type="text" class="lum-input" placeholder="My Preset" id="publish-preset-name" />
             </div>
             <SelectMenu id="publish-preset-preset" class={{ 'w-full': true }}
-              values={savedPresets.value.length == 0 ? undefined :
-                savedPresets.value.map((preset) => ({
+              values={privatePresets.value.length == 0 ? undefined :
+                privatePresets.value.map((preset) => ({
                   name: <span class={{
                     'break-all font-mc tracking-tight': true,
                     'font-mc-bold': preset.bold,
@@ -175,6 +181,9 @@ export default component$(() => {
             Preset description
           </label>
           <textarea class="lum-input" placeholder="This is my preset" id="publish-preset-description" />
+
+          <Toggle id="publish-preset-includetext"
+            label={'Include preset text'} />
         </Form>
         <hr/>
         <div class="flex gap-2 justify-end">

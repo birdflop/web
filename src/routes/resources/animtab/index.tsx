@@ -204,11 +204,7 @@ export default component$(() => {
             <Output hidden={openSections.indexOf('output') == -1}
               value={AnimationOutput(rgbStore, animtabStore)} />
 
-            <Accordion sectionName="options">
-              <Settings size={26} />
-              {t('rgb.options@@Options')}
-            </Accordion>
-            <Options hidden={openSections.indexOf('options') == -1}>
+            <Options>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
                   {t('animtab.animation.name@@Animation Name')}

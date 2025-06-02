@@ -3,7 +3,7 @@ import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
-import { rgbPreset } from '~/util/rgb/presets';
+import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { Session } from '@prisma/client';
 
 // This is a temporary secret, in case the env variable is not set
@@ -16,16 +16,16 @@ export interface BirdflopSession {
 
 export interface BirdflopUser extends User {
   privatePresets?: rgbPreset[];
+  savedPresets?: publishedPreset[];
 }
 
 const cachedSessionAndUser: {
-  value: {
+  [key: string]: {
     user: User;
     session: Session;
-  } | null;
-} = {
-  value: null,
-};
+    expires: Date;
+  }
+} = {};
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
@@ -40,15 +40,21 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),
       async getSessionAndUser(sessionToken: string) {
-        if (cachedSessionAndUser.value) return cachedSessionAndUser.value as any;
+
+        if (event.sharedMap.get('@isQData') && cachedSessionAndUser[sessionToken]
+          && cachedSessionAndUser[sessionToken].expires > new Date()) {
+          return cachedSessionAndUser[sessionToken] as any;
+        }
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
-          include: { user: true },
+          include: { user: {
+            include: { savedPresets: true },
+          } },
         });
         if (!userAndSession) return null;
         const { user, ...session } = userAndSession;
-        cachedSessionAndUser.value = { user, session };
-        return cachedSessionAndUser.value;
+        cachedSessionAndUser[sessionToken] = { user, session, expires: new Date(Date.now() + 10000) };
+        return cachedSessionAndUser[sessionToken];
       },
     } : undefined;
 
@@ -81,10 +87,13 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       secret,
       callbacks: {
         session({ session }) {
-          const { id, name, email, image, privatePresets } = session.user as BirdflopUser;
+          const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
+
           return {
             expires: session.expires,
-            user: { id, name, email, image, privatePresets },
+            user: {
+              id, name, email, image, privatePresets, savedPresets,
+            },
           };
         },
       },
