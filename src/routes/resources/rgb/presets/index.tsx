@@ -35,7 +35,7 @@ export const usePresets = routeLoader$(async ({ env }) => {
   return { presets, errors };
 });
 
-export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
+export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('privatepresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const notifications = useContext(NotificationContext);
@@ -64,12 +64,12 @@ export default component$(() => {
     showPending: false,
   });
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresets.value.length != 0) return;
+    if (privatePresets.value.length != 0) return;
     let newSavedPresets: rgbPreset[] = [];
     try {
       // try to get presets from localStorage
@@ -80,7 +80,7 @@ export default component$(() => {
         const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
         newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
       }
-      savedPresets.value = savedPresets.value.concat(newSavedPresets);
+      privatePresets.value = privatePresets.value.concat(newSavedPresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
@@ -97,7 +97,7 @@ export default component$(() => {
   });
 
   const personalSavedPresets: presetInfo[] = [];
-  savedPresets.value.forEach((preset) => {
+  privatePresets.value.forEach((preset) => {
     const isunique = presets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
@@ -116,7 +116,7 @@ export default component$(() => {
   );
 
   if (presetStore.showSaved) {
-    filteredPresets = filteredPresets.filter((preset) => savedPresets.value.some((savedPreset) =>
+    filteredPresets = filteredPresets.filter((preset) => privatePresets.value.some((savedPreset) =>
       JSON.stringify(savedPreset) === JSON.stringify(preset.preset),
     ));
   }
@@ -131,7 +131,7 @@ export default component$(() => {
           </span>
           <SelectMenuRaw id="hidden-select-menu" customDropdown class={{ 'opacity-0': true }}>
             <Toggle id="showpendingpresets" q:slot='extra-buttons'
-              checked={presetStore.showPending && savedPresets.value.length > 0}
+              checked={presetStore.showPending && privatePresets.value.length > 0}
               onChange$={(e, el) => presetStore.showPending = el.checked}
               label={<span class="text-sm whitespace-nowrap">Show pending presets VERY DANGEROUS</span>} />
           </SelectMenuRaw>
@@ -144,10 +144,10 @@ export default component$(() => {
         </p>
         <hr/>
         <div class={{
-          'opacity-50': savedPresets.value.length === 0,
+          'opacity-50': privatePresets.value.length === 0,
         }}>
-          <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
-            checked={presetStore.showSaved && savedPresets.value.length > 0}
+          <Toggle id="showsavedpresets" disabled={privatePresets.value.length === 0}
+            checked={presetStore.showSaved && privatePresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
           <p class="text-xs text-gray-400 mt-1">

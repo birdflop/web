@@ -3,7 +3,7 @@ import { QwikAuth$ } from '@auth/qwik';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
-import { rgbPreset } from '~/util/rgb/presets';
+import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { Session } from '@prisma/client';
 
 // This is a temporary secret, in case the env variable is not set
@@ -16,7 +16,7 @@ export interface BirdflopSession {
 
 export interface BirdflopUser extends User {
   privatePresets?: rgbPreset[];
-  savedPresets?: number[];
+  savedPresets?: publishedPreset[];
 }
 
 const cachedSessionAndUser: {
@@ -85,10 +85,12 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       callbacks: {
         session({ session }) {
           const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
-          console.log(session);
+
           return {
             expires: session.expires,
-            user: { id, name, email, image, privatePresets, savedPresets },
+            user: {
+              id, name, email, image, privatePresets, savedPresets,
+            },
           };
         },
       },

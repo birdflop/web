@@ -1,7 +1,7 @@
 import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
-import { savedPresetsContext } from '../resources/rgb/presets';
+import { privatePresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
@@ -43,12 +43,12 @@ export default component$(() => {
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   const modalRef = useSignal<HTMLDialogElement>();
 
-  const savedPresetsParsed: presetInfo[] = [...savedPresets.value].map((preset) => ({
+  const privatePresetsParsed: presetInfo[] = [...privatePresets.value].map((preset) => ({
     name: preset.text ?? 'Saved Preset',
     preset: preset,
     pending: false,
@@ -58,7 +58,7 @@ export default component$(() => {
     <h3 class="flex gap-2 items-center">
       <Save size={30} />
       <span class="flex-1">
-        My RGBirdflop Presets
+        My Private RGBirdflop Presets
       </span>
       <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
         <ChevronLeft size={20} /> Go to presets
@@ -66,7 +66,7 @@ export default component$(() => {
     </h3>
 
     <div class="grid sm:grid-cols-2 gap-2">
-      {savedPresetsParsed.map((presetInfo) =>
+      {privatePresetsParsed.map((presetInfo) =>
         <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
       )}
       <button class="lum-card text-left lum-bg-green-900/20 hover:lum-bg-green-900 w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
@@ -156,8 +156,8 @@ export default component$(() => {
               <input type="text" class="lum-input" placeholder="My Preset" id="publish-preset-name" />
             </div>
             <SelectMenu id="publish-preset-preset" class={{ 'w-full': true }}
-              values={savedPresets.value.length == 0 ? undefined :
-                savedPresets.value.map((preset) => ({
+              values={privatePresets.value.length == 0 ? undefined :
+                privatePresets.value.map((preset) => ({
                   name: <span class={{
                     'break-all font-mc tracking-tight': true,
                     'font-mc-bold': preset.bold,

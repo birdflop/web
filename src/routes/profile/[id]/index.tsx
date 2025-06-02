@@ -6,7 +6,7 @@ import PresetPreview from '~/components/rgb/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
-import { savedPresetsContext } from '~/routes/resources/rgb/presets';
+import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
@@ -49,12 +49,12 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresets.value.length != 0) return;
+    if (privatePresets.value.length != 0) return;
     let newSavedPresets: rgbPreset[] = [];
     try {
       // try to get presets from localStorage
@@ -65,7 +65,7 @@ export default component$(() => {
         const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
         newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
       }
-      savedPresets.value = savedPresets.value.concat(newSavedPresets);
+      privatePresets.value = privatePresets.value.concat(newSavedPresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {

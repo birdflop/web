@@ -35,7 +35,7 @@ export const usePreset = routeLoader$(async ({ params, env }) => {
   return presetInfo;
 });
 
-export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
+export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
@@ -54,8 +54,8 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
@@ -66,7 +66,7 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresets.value.length != 0) return;
+    if (privatePresets.value.length != 0) return;
     let newSavedPresets: rgbPreset[] = [];
     try {
       // try to get presets from localStorage
@@ -77,7 +77,7 @@ export default component$(() => {
         const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
         newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
       }
-      savedPresets.value = savedPresets.value.concat(newSavedPresets);
+      privatePresets.value = privatePresets.value.concat(newSavedPresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
@@ -133,7 +133,7 @@ export default component$(() => {
                 {presetInfo.author == 'RGBirdflop' &&
                   <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
                 }
-                {presetInfo.author == 'Luminescent' &&
+                {presetInfo.author == 'SimplyMC' &&
                   <LogoLuminescent size={32} class="text-luminescent-300" />
                 }
                 {presetInfo.author.includes('GitHub') &&
@@ -192,12 +192,12 @@ export default component$(() => {
               </Link>
             </SelectMenuRaw>
             <button class="lum-btn text-sm" onClick$={async () => {
-              const existingPreset = savedPresets.value.find((savedPreset) => {
+              const existingPreset = privatePresets.value.find((savedPreset) => {
                 return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
               });
 
               if (existingPreset) {
-                savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
+                privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
                 await setUserData({
                   savedPresets: {
                     disconnect: { id: presetInfo.id },
@@ -205,7 +205,7 @@ export default component$(() => {
                 });
               }
               else {
-                savedPresets.value = [...savedPresets.value, presetInfo.preset];
+                privatePresets.value = [...privatePresets.value, presetInfo.preset];
                 await setUserData({
                   savedPresets: {
                     connect: {
@@ -215,10 +215,10 @@ export default component$(() => {
                 });
               }
 
-              if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
+              if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(privatePresets.value));
             }}>
               {presetInfo.savedBy?.length}
-              {savedPresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+              {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
                 ? <span class="text-red-300 flex gap-3">
                   <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
                 </span>

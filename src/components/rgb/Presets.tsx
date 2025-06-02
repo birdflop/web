@@ -11,7 +11,7 @@ import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { savedPresetsContext } from '~/routes/resources/rgb/presets';
+import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 
 export default component$(({ hidden }: {
@@ -55,8 +55,8 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   return (
     <div class={{
@@ -66,7 +66,7 @@ export default component$(({ hidden }: {
     }} id="presets">
       <div class="flex flex-col gap-2"
         onClick$={() => {
-          if (savedPresets.value.length != 0) return;
+          if (privatePresets.value.length != 0) return;
           let newSavedPresets: rgbPreset[] = [];
           try {
             // try to get presets from localStorage
@@ -77,7 +77,7 @@ export default component$(({ hidden }: {
               const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
               newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
             }
-            savedPresets.value = savedPresets.value.concat(newSavedPresets);
+            privatePresets.value = privatePresets.value.concat(newSavedPresets);
           } catch (err) {
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
@@ -94,8 +94,8 @@ export default component$(({ hidden }: {
         }}>
         <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
           onChange$={async (event, el) => loadPresetJSON(el.value)}
-          values={savedPresets.value.length == 0 ? undefined :
-            savedPresets.value.map((preset) => ({
+          values={privatePresets.value.length == 0 ? undefined :
+            privatePresets.value.map((preset) => ({
               name: <span class={{
                 'break-all font-mc tracking-tight': true,
                 'font-mc-bold': preset.bold,
@@ -126,11 +126,11 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
             });
-            if (!savedPresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
-              savedPresets.value.push(preset);
+            if (!privatePresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
+              privatePresets.value.push(preset);
             }
-            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-            await setUserData({ privatePresets: savedPresets.value });
+            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(privatePresets.value));
+            await setUserData({ privatePresets: privatePresets.value });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,
