@@ -14,11 +14,11 @@ export const formats: format[] = [
     char: '&',
   },
   {
-    color: '§x§$1§$2§$3§$4§$5§$6$f$c',
-    char: '§',
+    color: 'JSON',
   },
   {
-    color: 'JSON',
+    color: '§x§$1§$2§$3§$4§$5§$6$f$c',
+    char: '§',
   },
   {
     color: '&x&$1&$2&$3&$4&$5&$6$f$c',
@@ -26,10 +26,6 @@ export const formats: format[] = [
   },
   {
     color: '<#$1$2$3$4$5$6>$f$c',
-    char: '&',
-  },
-  {
-    color: '<##$1$2$3$4$5$6>$f$c',
     char: '&',
   },
   {
