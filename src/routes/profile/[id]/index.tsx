@@ -4,10 +4,9 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 export const useUser = routeLoader$(async ({ params, env }) => {
@@ -54,18 +53,12 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0) return;
-    let newSavedPresets: rgbPreset[] = [];
+
     try {
-      // try to get presets from localStorage
-      const localStoragePresets = localStorage.getItem('savedPresets');
-      // if localStorage is empty, try to get presets from cookies
-      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-      else {
-        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-      }
-      privatePresets.value = privatePresets.value.concat(newSavedPresets);
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {

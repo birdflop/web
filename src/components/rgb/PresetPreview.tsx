@@ -1,29 +1,38 @@
-import { component$, isBrowser, useContext } from '@builder.io/qwik';
+import { component$, isBrowser, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
-import { privatePresetsContext } from '~/routes/resources/rgb/presets';
+import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
-import { presetInfo } from '~/util/rgb/presets';
+import { presetInfo, publishedPreset } from '~/util/rgb/presets';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
-  presetInfo: presetInfo;
+  presetInfo: presetInfo | publishedPreset;
   class?: { [key: string]: boolean };
 }
 
 export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
+  const savedPresets = useContext(savedPresetsContext);
   const nav = useNavigate();
+  const loading = useSignal(false);
 
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
   (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
     if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
     searchParams.set(key, String(value));
+  });
+
+  const existingPreset = savedPresets.value.find((savedPreset) => {
+    return savedPreset.id === presetInfo.id;
+  })?.preset
+  || privatePresets.value.find((savedPreset) => {
+    return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
   });
 
   return (
@@ -129,29 +138,33 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
               <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
             </button>
           </SelectMenuRaw>
-          <button class="lum-btn text-sm lum-bg-transparent p-2" preventdefault:click onClick$={async (e) => {
+          <button class="lum-btn text-sm lum-bg-transparent p-2" disabled={loading.value} preventdefault:click onClick$={async (e) => {
             e.stopPropagation();
-            const existingPreset = privatePresets.value.find((savedPreset) => {
-              return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
-            });
+            loading.value = true;
 
             if (existingPreset) {
               privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-              if (presetInfo.id) await setUserData({
-                savedPresets: {
-                  disconnect: { id: presetInfo.id },
-                },
-              });
+              if (presetInfo.id) {
+                savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
+                await setUserData({
+                  savedPresets: {
+                    disconnect: { id: presetInfo.id },
+                  },
+                });
+              }
             }
             else {
               privatePresets.value = [...privatePresets.value, presetInfo.preset];
-              if (presetInfo.id) await setUserData({
-                savedPresets: {
-                  connect: {
-                    id: presetInfo.id,
+              if (presetInfo.id) {
+                savedPresets.value = [...savedPresets.value, presetInfo as publishedPreset];
+                await setUserData({
+                  savedPresets: {
+                    connect: {
+                      id: presetInfo.id,
+                    },
                   },
-                },
-              });
+                });
+              }
             }
 
             if (!presetInfo.id) {
@@ -160,9 +173,12 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
               });
             }
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+            loading.value = false;
           }}>
-            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
-              ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />}
+            {!loading.value && presetInfo.savedBy?.length}
+            {loading.value && <div class="lum-loading w-5 h-5" />}
+            {!loading.value && (existingPreset
+              ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />)}
           </button>
         </div>
       </div>

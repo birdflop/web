@@ -23,6 +23,7 @@ const cachedSessionAndUser: {
   [key: string]: {
     user: User;
     session: Session;
+    expires: Date;
   }
 } = {};
 
@@ -39,18 +40,20 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),
       async getSessionAndUser(sessionToken: string) {
-        if (cachedSessionAndUser[sessionToken]) return cachedSessionAndUser[sessionToken] as any;
+
+        if (event.sharedMap.get('@isQData') && cachedSessionAndUser[sessionToken]
+          && cachedSessionAndUser[sessionToken].expires > new Date()) {
+          return cachedSessionAndUser[sessionToken] as any;
+        }
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
           include: { user: {
-            include: {
-              savedPresets: true,
-            },
+            include: { savedPresets: true },
           } },
         });
         if (!userAndSession) return null;
         const { user, ...session } = userAndSession;
-        cachedSessionAndUser[sessionToken] = { user, session };
+        cachedSessionAndUser[sessionToken] = { user, session, expires: new Date(Date.now() + 10000) };
         return cachedSessionAndUser[sessionToken];
       },
     } : undefined;

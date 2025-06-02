@@ -1,6 +1,6 @@
 import { Presets } from '@prisma/client';
 import { combinedDefaults } from './defaults';
-import { migrateFromV2, migrateFromV3 } from './migrate';
+import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
 import { BirdflopUser } from '~/routes/plugin@auth';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
@@ -59,4 +59,22 @@ export function loadPreset(p: string): rgbPreset {
   });
 
   return newPreset;
+}
+
+export function getPresets(): rgbPreset[] {
+  let privatePresets: rgbPreset[] = [];
+
+  // try to get presets from localStorage
+  const localStoragePresets = localStorage.getItem('privatePresets');
+
+  // if localStorage is empty, try to get presets from cookies
+  if (localStoragePresets) {
+    const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
+    privatePresets = privatePresets.concat(localStoragePresetsParsed);
+  }
+  else {
+    migratePresetsFromCookies(privatePresets);
+  }
+
+  return privatePresets;
 }

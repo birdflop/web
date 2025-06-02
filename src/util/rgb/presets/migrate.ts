@@ -34,5 +34,5 @@ export function migratePresetsFromCookies(savedPresets: rgbPreset[]) {
     // remove cookie
     document.cookie = 'presets=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   }
-  localStorage.setItem('savedPresets', JSON.stringify(savedPresets));
+  localStorage.setItem('privatePresets', JSON.stringify(savedPresets));
 }

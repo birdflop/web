@@ -1,7 +1,7 @@
 import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
-import { privatePresetsContext } from '../resources/rgb/presets';
+import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '../plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
@@ -45,6 +45,9 @@ export default component$(() => {
 
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
+
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
 
   const modalRef = useSignal<HTMLDialogElement>();
 

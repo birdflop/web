@@ -1,18 +1,18 @@
-import { $, component$, createContextId, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { NotificationContext } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/rgb/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { setUserData } from '~/util/dataUtils';
+import { privatePresetsContext, savedPresetsContext } from '..';
 
 export const usePreset = routeLoader$(async ({ params, env }) => {
   const prisma = getPrismaClient(env.get('DATABASE_URL'));
@@ -35,11 +35,11 @@ export const usePreset = routeLoader$(async ({ params, env }) => {
   return presetInfo;
 });
 
-export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
+  const loading = useSignal(false);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
   const presetInfo = usePreset().value;
@@ -57,6 +57,16 @@ export default component$(() => {
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
 
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
+
+  const existingPreset = savedPresets.value.find((savedPreset) => {
+    return savedPreset.id === presetInfo.id;
+  })?.preset
+  || privatePresets.value.find((savedPreset) => {
+    return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
+  });
+
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
   (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
@@ -66,18 +76,12 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (privatePresets.value.length != 0) return;
-    let newSavedPresets: rgbPreset[] = [];
+    // If savedPresets is empty, load presets from localStorage
+    if (savedPresets.value.length != 0) return;
+
     try {
-      // try to get presets from localStorage
-      const localStoragePresets = localStorage.getItem('savedPresets');
-      // if localStorage is empty, try to get presets from cookies
-      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-      else {
-        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-      }
-      privatePresets.value = privatePresets.value.concat(newSavedPresets);
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
@@ -191,33 +195,41 @@ export default component$(() => {
                 <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
               </Link>
             </SelectMenuRaw>
-            <button class="lum-btn text-sm" onClick$={async () => {
-              const existingPreset = privatePresets.value.find((savedPreset) => {
-                return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
-              });
+            <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
+              loading.value = true;
 
               if (existingPreset) {
                 privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-                await setUserData({
-                  savedPresets: {
-                    disconnect: { id: presetInfo.id },
-                  },
-                });
+                if (presetInfo.id) {
+                  savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
+                  presetInfo.savedBy?.splice(presetInfo.savedBy?.indexOf(session.value?.user), 1);
+                  await setUserData({
+                    savedPresets: {
+                      disconnect: { id: presetInfo.id },
+                    },
+                  });
+                }
               }
               else {
                 privatePresets.value = [...privatePresets.value, presetInfo.preset];
-                await setUserData({
-                  savedPresets: {
-                    connect: {
-                      id: presetInfo.id,
+                if (presetInfo.id) {
+                  savedPresets.value = [...savedPresets.value, presetInfo];
+                  presetInfo.savedBy?.push(session.value?.user);
+                  await setUserData({
+                    savedPresets: {
+                      connect: {
+                        id: presetInfo.id,
+                      },
                     },
-                  },
-                });
+                  });
+                }
               }
 
-              if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(privatePresets.value));
+              if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+              loading.value = false;
             }}>
-              {presetInfo.savedBy?.length}
+              {!loading.value && presetInfo.savedBy?.length}
+              {loading.value && <div class="lum-loading w-5 h-5" />}
               {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
                 ? <span class="text-red-300 flex gap-3">
                   <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}

@@ -1,14 +1,13 @@
 import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save, Search, Send } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { NotificationContext } from '~/routes/layout';
 
 export const usePresets = routeLoader$(async ({ env }) => {
@@ -36,6 +35,7 @@ export const usePresets = routeLoader$(async ({ env }) => {
 });
 
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('privatepresets-context');
+export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const notifications = useContext(NotificationContext);
@@ -67,20 +67,17 @@ export default component$(() => {
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
 
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (privatePresets.value.length != 0) return;
-    let newSavedPresets: rgbPreset[] = [];
+    // If privatePresets is empty, load presets from localStorage
+    if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+
     try {
-      // try to get presets from localStorage
-      const localStoragePresets = localStorage.getItem('savedPresets');
-      // if localStorage is empty, try to get presets from cookies
-      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-      else {
-        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-      }
-      privatePresets.value = privatePresets.value.concat(newSavedPresets);
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
@@ -96,13 +93,13 @@ export default component$(() => {
     }
   });
 
-  const personalSavedPresets: presetInfo[] = [];
+  const privatePresetsParsed: presetInfo[] = [];
   privatePresets.value.forEach((preset) => {
     const isunique = presets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
     if (isunique) {
-      personalSavedPresets.push({
+      privatePresetsParsed.push({
         name: preset.text ?? 'Saved Preset',
         preset: preset,
         pending: false,
@@ -116,8 +113,8 @@ export default component$(() => {
   );
 
   if (presetStore.showSaved) {
-    filteredPresets = filteredPresets.filter((preset) => privatePresets.value.some((savedPreset) =>
-      JSON.stringify(savedPreset) === JSON.stringify(preset.preset),
+    filteredPresets = filteredPresets.filter((preset) => savedPresets.value.some((savedPreset) =>
+      savedPreset.id === preset.id,
     ));
   }
 
@@ -144,10 +141,10 @@ export default component$(() => {
         </p>
         <hr/>
         <div class={{
-          'opacity-50': privatePresets.value.length === 0,
+          'opacity-50': savedPresets.value.length === 0,
         }}>
-          <Toggle id="showsavedpresets" disabled={privatePresets.value.length === 0}
-            checked={presetStore.showSaved && privatePresets.value.length > 0}
+          <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
+            checked={presetStore.showSaved && savedPresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
           <p class="text-xs text-gray-400 mt-1">
@@ -191,7 +188,7 @@ export default component$(() => {
         </h3>
 
         <div class="grid sm:grid-cols-2 gap-2">
-          {personalSavedPresets.map((presetInfo) =>
+          {privatePresetsParsed.map((presetInfo) =>
             <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
           )}
         </div>
