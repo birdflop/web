@@ -2,7 +2,7 @@ import { $, component$, isBrowser, useContext, useContextProvider, useSignal, ty
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { SelectMenu } from '@luminescent/ui-qwik';
-import { loadPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { NotificationContext } from '~/routes/layout';
 import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
@@ -11,8 +11,7 @@ import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { savedPresetsContext } from '~/routes/resources/rgb/presets';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
+import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -55,7 +54,10 @@ export default component$(({ hidden }: {
     }, 2000);
   });
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
+
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   return (
@@ -66,18 +68,12 @@ export default component$(({ hidden }: {
     }} id="presets">
       <div class="flex flex-col gap-2"
         onClick$={() => {
-          if (savedPresets.value.length != 0) return;
-          let newSavedPresets: rgbPreset[] = [];
+          // If privatePresets is empty, load presets from localStorage
+          if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+
           try {
-            // try to get presets from localStorage
-            const localStoragePresets = localStorage.getItem('savedPresets');
-            // if localStorage is empty, try to get presets from cookies
-            if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-            else {
-              const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-              newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-            }
-            savedPresets.value = savedPresets.value.concat(newSavedPresets);
+            const localStoragePresets = getPresets();
+            privatePresets.value = privatePresets.value.concat(localStoragePresets);
           } catch (err) {
             const id = Math.random().toString(36).substring(2, 15);
             const notification = {
@@ -94,20 +90,29 @@ export default component$(({ hidden }: {
         }}>
         <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
           onChange$={async (event, el) => loadPresetJSON(el.value)}
-          values={savedPresets.value.length == 0 ? undefined :
-            savedPresets.value.map((preset) => ({
-              name: <span class={{
-                'break-all font-mc tracking-tight': true,
-                'font-mc-bold': preset.bold,
-                'font-mc-italic': preset.italic,
-                'font-mc-bold-italic': preset.bold && preset.italic,
-                [`${preset.format?.class}`]: preset.format?.class,
-              }}>
-                {renderPreview({ ...rgbDefaults, ...preset }, 1)}
-              </span>,
-              value: JSON.stringify(preset),
-            }))
-          }>
+          values={privatePresets.value.map((preset) => ({
+            name: <span class={{
+              'break-all font-mc tracking-tight': true,
+              'font-mc-bold': preset.bold,
+              'font-mc-italic': preset.italic,
+              'font-mc-bold-italic': preset.bold && preset.italic,
+              [`${preset.format?.class}`]: preset.format?.class,
+            }}>
+              {renderPreview({ ...rgbDefaults, ...preset }, 1)}
+            </span>,
+            value: JSON.stringify(preset),
+          })).concat(savedPresets.value.map((preset) => ({
+            name: <span class={{
+              'break-all font-mc tracking-tight': true,
+              'font-mc-bold': preset.preset.bold,
+              'font-mc-italic': preset.preset.italic,
+              'font-mc-bold-italic': preset.preset.bold && preset.preset.italic,
+              [`${preset.preset.format?.class}`]: preset.preset.format?.class,
+            }}>
+              {renderPreview({ ...rgbDefaults, ...preset.preset, text: preset.name }, 1)}
+            </span>,
+            value: JSON.stringify(preset.preset),
+          })))}>
           <span q:slot="dropdown" class="flex gap-3 flex-1">
             <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
           </span>
@@ -126,11 +131,11 @@ export default component$(({ hidden }: {
             (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
               if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
             });
-            if (!savedPresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
-              savedPresets.value.push(preset);
+            if (!privatePresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
+              privatePresets.value.push(preset);
             }
-            if (isBrowser) localStorage.setItem('savedPresets', JSON.stringify(savedPresets.value));
-            await setUserData({ privatePresets: savedPresets.value });
+            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+            await setUserData({ privatePresets: privatePresets.value });
             const id = Math.random().toString(36).substring(2, 15);
             notifications.push({
               id,

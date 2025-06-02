@@ -60,7 +60,7 @@ export const rgbDefaults = {
   ],
   colorlength: 1,
   text: 'Birdflop',
-  format: formats[0],
+  format: formats[1],
   prefixsuffix: '',
   customFormat: false,
   trimspaces: true,
