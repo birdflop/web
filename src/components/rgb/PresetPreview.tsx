@@ -7,14 +7,15 @@ import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
-import { presetInfo, publishedPreset } from '~/util/rgb/presets';
+import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
   presetInfo: presetInfo | publishedPreset;
   class?: { [key: string]: boolean };
+  defaults?: rgbPreset;
 }
 
-export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
+export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props }) => {
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
@@ -86,13 +87,14 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
         <div class="flex-1">
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-            'font-mc-bold': presetInfo.preset.bold,
-            'font-mc-italic': presetInfo.preset.italic,
-            'font-mc-bold-italic': presetInfo.preset.bold && presetInfo.preset.italic,
-            [`${presetInfo.preset.format?.class}`]: presetInfo.preset.format?.class,
+            'font-mc-bold': presetInfo.preset.bold || defaults?.bold,
+            'font-mc-italic': presetInfo.preset.italic || defaults?.italic,
+            'font-mc-bold-italic': (presetInfo.preset.bold && presetInfo.preset.italic) || (defaults?.bold && defaults?.italic),
+            [`${presetInfo.preset.format?.class || defaults?.format?.class}`]: presetInfo.preset.format?.class || defaults?.format?.class,
           }}>
             {renderPreview({
               ...rgbDefaults,
+              ...defaults || {},
               ...presetInfo.preset,
               text: presetInfo.name,
             }, 3)}

@@ -9,6 +9,9 @@ import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
+import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbStoreContext } from '..';
+import { getCookies } from '~/util/dataUtils';
 
 export const usePresets = routeLoader$(async ({ env }) => {
   let presets: publishedPreset[] = [];
@@ -34,16 +37,32 @@ export const usePresets = routeLoader$(async ({ env }) => {
   return { presets, errors };
 });
 
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
+});
+
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('privatepresets-context');
 export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const notifications = useContext(NotificationContext);
 
+  const { cookies: rgbCookies, errors: rgbCookiesErrors } = useCookies().value;
+
+  const rgbStore = useStore({
+    ...structuredClone(rgbDefaults),
+    ...rgbCookies,
+  }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
+
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const { presets, errors } = usePresets().value;
+  const { presets, errors: presetsErrors } = usePresets().value;
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    const errors = [...rgbCookiesErrors, ...presetsErrors];
     if (errors.length > 0) {
       errors.forEach((error) => {
         const id = Math.random().toString(36).substring(2, 15);
@@ -62,6 +81,7 @@ export default component$(() => {
     searchTerm: '',
     showSaved: false,
     showPending: false,
+    previewWithSettings: false,
   });
 
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
@@ -141,7 +161,7 @@ export default component$(() => {
         </p>
         <hr/>
         <div class={{
-          'opacity-50': savedPresets.value.length === 0,
+          'opacity-50 mb-2': savedPresets.value.length === 0,
         }}>
           <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
             checked={presetStore.showSaved && savedPresets.value.length > 0}
@@ -151,6 +171,13 @@ export default component$(() => {
             {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
           </p>
         </div>
+        <Toggle id="previewwithsettings"
+          checked={presetStore.previewWithSettings}
+          onChange$={(e, el) => presetStore.previewWithSettings = el.checked}
+          label={t('rgb.presets.withCurrentOptions.title@@Show preview with current options')} />
+        <p class="text-xs text-gray-400 mt-1">
+          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
+        </p>
 
         <div class="flex gap-4 px-2 items-center">
           <Search size={20} />
@@ -165,7 +192,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 gap-2">
           {filteredPresets.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
           )}
           {filteredPresets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
@@ -189,7 +216,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 gap-2">
           {privatePresetsParsed.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
           )}
         </div>
 

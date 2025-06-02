@@ -46,6 +46,7 @@ export default component$(({ hidden }: {
     if (!json) return;
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach(key => {
       if (rgbStore[key] === undefined) return;
+      if (key == 'text') return (rgbStore as any)[key] = json[key] ?? rgbStore[key];
       (rgbStore as any)[key] = json[key] ?? combinedDefaults[key];
     });
     notifications.push(notification);
@@ -98,7 +99,7 @@ export default component$(({ hidden }: {
               'font-mc-bold-italic': preset.bold && preset.italic,
               [`${preset.format?.class}`]: preset.format?.class,
             }}>
-              {renderPreview({ ...rgbDefaults, ...preset }, 1)}
+              {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
             </span>,
             value: JSON.stringify(preset),
           })).concat(savedPresets.value.map((preset) => ({
@@ -109,7 +110,7 @@ export default component$(({ hidden }: {
               'font-mc-bold-italic': preset.preset.bold && preset.preset.italic,
               [`${preset.preset.format?.class}`]: preset.preset.format?.class,
             }}>
-              {renderPreview({ ...rgbDefaults, ...preset.preset, text: preset.name }, 1)}
+              {renderPreview({ ...rgbDefaults, text: preset.name ?? rgbStore.text, ...preset.preset }, 1)}
             </span>,
             value: JSON.stringify(preset.preset),
           })))}>
