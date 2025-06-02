@@ -125,7 +125,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
   savedPresets?: {
-    delete?: { id: number };
+    disconnect?: { id: number };
     connect?: { id: number };
   }
 }) {

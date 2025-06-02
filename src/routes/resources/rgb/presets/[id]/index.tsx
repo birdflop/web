@@ -200,7 +200,7 @@ export default component$(() => {
                 savedPresets.value = savedPresets.value.filter((p) => p !== existingPreset);
                 await setUserData({
                   savedPresets: {
-                    delete: { id: presetInfo.id },
+                    disconnect: { id: presetInfo.id },
                   },
                 });
               }

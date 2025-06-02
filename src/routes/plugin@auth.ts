@@ -16,6 +16,7 @@ export interface BirdflopSession {
 
 export interface BirdflopUser extends User {
   privatePresets?: rgbPreset[];
+  savedPresets?: number[];
 }
 
 const cachedSessionAndUser: {
@@ -41,7 +42,11 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         if (cachedSessionAndUser[sessionToken]) return cachedSessionAndUser[sessionToken] as any;
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
-          include: { user: true },
+          include: { user: {
+            include: {
+              savedPresets: true,
+            },
+          } },
         });
         if (!userAndSession) return null;
         const { user, ...session } = userAndSession;
@@ -79,10 +84,11 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       secret,
       callbacks: {
         session({ session }) {
-          const { id, name, email, image, privatePresets } = session.user as BirdflopUser;
+          const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
+          console.log(session);
           return {
             expires: session.expires,
-            user: { id, name, email, image, privatePresets },
+            user: { id, name, email, image, privatePresets, savedPresets },
           };
         },
       },
