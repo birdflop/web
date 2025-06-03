@@ -26,7 +26,7 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <div class="text-red-400">
-        <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
+        <LogoBirdflop confused size={100} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
         <h1>
           {t('nav.404.title@@404: Page not found')}
         </h1>

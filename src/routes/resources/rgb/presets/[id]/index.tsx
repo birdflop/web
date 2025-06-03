@@ -135,7 +135,7 @@ export default component$(() => {
               }
               { presetInfo.author && !presetInfo.user && <>
                 {presetInfo.author == 'RGBirdflop' &&
-                  <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+                  <LogoBirdflop size={32} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
                 }
                 {presetInfo.author == 'SimplyMC' &&
                   <LogoLuminescent size={32} class="text-luminescent-300" />

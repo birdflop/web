@@ -61,7 +61,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
             }
             { presetInfo.author && !presetInfo.user && <>
               {presetInfo.author == 'RGBirdflop' &&
-                <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
+                <LogoBirdflop size={20} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
               }
               {presetInfo.author == 'Luminescent' &&
                 <LogoLuminescent size={20} class="text-luminescent-300" />

@@ -22,7 +22,7 @@ export default component$(() => {
   return (
     <Nav fixed colorClass="lum-bg-gray-800/40 !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent p-2">
-        <LogoBirdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
+        <LogoBirdflop size={24} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
         <span class="font-semibold -ml-1 text-blue-50">Birdflop</span>
         <div class={{
           'transition-all': true,
