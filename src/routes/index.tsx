@@ -35,13 +35,13 @@ export default component$(() => {
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
       style={{
-        background: 'linear-gradient(180deg, #f77272, #f77272, #f77272, #fab775, #ffff6e, #7dfa7d, #7a7aff, #bb77ed, #ca3eed, #ca3eed)',
+        background: 'linear-gradient(180deg, #54daf4, #545eb6)',
         backgroundClip: 'text',
       }}
       >
-        <LogoBirdflop size={50} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} class="-mr-1.5" />
+        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
         <span class="-ml-11 opacity-0">b</span>irdflo<span class="-mr-11 opacity-0">p</span>
-        <LogoBirdflop size={50} fillGradient={['#ca3eed', '#ca3eed', '#ca3eed', '#bb77ed', '#7a7aff', '#7dfa7d', '#ffff6e', '#fab775']} class="-ml-1 scale-y-[-1] mt-8" />
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8" />
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
