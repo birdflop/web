@@ -36,16 +36,16 @@ export default component$(() => {
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
         </div>
-        <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="https://panel.birdflop.com/">
+        <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent rounded-lum-1" href="https://panel.birdflop.com/">
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
-        <Link q:slot="extra-buttons" href="/plans" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/plans" class="lum-btn lum-bg-transparent rounded-lum-1">
           <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
-        <a q:slot="extra-buttons" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent">
+        <a q:slot="extra-buttons" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent rounded-lum-1">
           <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
-        <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </SelectMenuRaw>
@@ -54,22 +54,22 @@ export default component$(() => {
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
         </div>
-        <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Zap size={20} /> {t('nav.resources.sparkProfile.title@@Spark Profile')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/banner" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources/banner" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Presentation size={20} /> {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent">
+        <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent rounded-lum-1">
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </SelectMenuRaw>
@@ -96,7 +96,7 @@ export default component$(() => {
             }
             {session.value.user?.name || 'User'}
           </p>
-          <Link q:slot="extra-buttons" href="/profile" class="lum-btn lum-bg-transparent">
+          <Link q:slot="extra-buttons" href="/profile" class="lum-btn lum-bg-transparent rounded-lum-1">
             <User size={20} /> {t('nav.profile.title@@Profile')}
           </Link>
           <Form action={signOut} q:slot="extra-buttons">
@@ -106,7 +106,7 @@ export default component$(() => {
               name="options.redirectTo"
               value={loc.url.pathname + loc.url.search}
             />
-            <button class="lum-btn lum-bg-transparent">
+            <button class="lum-btn lum-bg-transparent rounded-lum-1">
               <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
             </button>
           </Form>

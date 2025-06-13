@@ -115,7 +115,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
           { presetInfo.preset.colors && presetInfo.preset.colors.length > 0 &&
             <div class="flex gap-1 mt-2">
               {presetInfo.preset.colors.map((color, index) => (
-                <span key={index} class="p-2 rounded-sm"
+                <span key={index} class="p-2 rounded-lum-2"
                   style={{ backgroundColor: color.hex }} />
               ))}
             </div>
@@ -127,13 +127,13 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
             <div q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} />
             </div>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
               e.stopPropagation();
               await nav(`/resources/rgb?${searchParams.toString()}`);
             }}>
               <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
             </button>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
               e.stopPropagation();
               await nav(`/resources/animtab?${searchParams.toString()}`);
             }}>

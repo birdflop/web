@@ -11,6 +11,10 @@
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
 
+@theme {
+  --lum-border-radius: 0.625rem;
+}
+
 /* Pulled straight from minecraft.net */
 @font-face {
   font-family: MinecraftOfficial;

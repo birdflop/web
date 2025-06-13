@@ -32,7 +32,7 @@ export default component$(() => {
         </div>
         <div class="grid grid-cols-4 gap-2">
           <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=crabwings.birdflop.com:9100&orgId=1">
-            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Crabwings
             </h3>
@@ -42,7 +42,7 @@ export default component$(() => {
             crabwings.birdflop.com
           </a>
           <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=impeyes.birdflop.com:9100&orgId=1">
-            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Impeyes
             </h3>
@@ -52,7 +52,7 @@ export default component$(() => {
             impeyes.birdflop.com
           </a>
           <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=jellyfishjaws.birdflop.com:9100&orgId=1">
-            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Jellyfishjaws
             </h3>
@@ -62,7 +62,7 @@ export default component$(() => {
             jellyfishjaws.birdflop.com
           </a>
           <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=koalaknees.birdflop.com:9100&orgId=1">
-            <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Koalaknees
             </h3>
@@ -72,7 +72,7 @@ export default component$(() => {
             koalaknees.birdflop.com
           </a>
           <a class="lum-card lum-bg-teal-900/30 hover:lum-bg-teal-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=llamalips.birdflop.com:9100&orgId=1">
-            <Blobs color='teal' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='teal' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Llamalips
             </h3>
@@ -82,7 +82,7 @@ export default component$(() => {
             llamalips.birdflop.com
           </a>
           <a class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=monkeymouth.birdflop.com:9100&orgId=1">
-            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Monkeymouth
             </h3>
@@ -92,7 +92,7 @@ export default component$(() => {
             monkeymouth.birdflop.com
           </a>
           <a class="lum-card lum-bg-violet-900/30 hover:lum-bg-violet-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=narwhalnose.birdflop.com:9100&orgId=1">
-            <Blobs color='violet' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='violet' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Narwhalnose
             </h3>
@@ -102,7 +102,7 @@ export default component$(() => {
             narwhalnose.birdflop.com
           </a>
           <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=owlorgans.birdflop.com:9100&orgId=1">
-            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Owlorgans
             </h3>

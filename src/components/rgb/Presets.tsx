@@ -117,7 +117,7 @@ export default component$(({ hidden }: {
           <span q:slot="dropdown" class="flex gap-3 flex-1">
             <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
           </span>
-          <Link q:slot="extra-buttons" class="lum-btn lum-bg-transparent" href="/resources/rgb/presets">
+          <Link q:slot="extra-buttons" class="lum-btn lum-bg-transparent rounded-lum-1" href="/resources/rgb/presets">
             <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
           </Link>
           {t('rgb.presets.saved.presets@@Saved Presets')}

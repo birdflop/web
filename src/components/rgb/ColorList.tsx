@@ -96,7 +96,7 @@ export default component$(({ hidden, id = 'text' }: {
       </div>
       <div class="flex flex-col gap-2">
         {colors.value.map((color, i) => <div key={`${i}/${colors.value.length}`} class="flex relative gap-2">
-          <div class="flex flex-col rounded-md">
+          <div class="flex flex-col rounded-lum">
             <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
               <ChevronUp size={20} />
             </button>
@@ -136,7 +136,7 @@ export default component$(({ hidden, id = 'text' }: {
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn p-2 lum-bg-red-700 hover:lum-bg-red-600" disabled={colors.value.length <= 2} onClick$={() => {
+            <button class="lum-btn p-1.5 lum-bg-red-700 hover:lum-bg-red-600" disabled={colors.value.length <= 2} onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.splice(i, 1);
               colors.value = newColors;
