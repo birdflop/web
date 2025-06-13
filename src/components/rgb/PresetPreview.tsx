@@ -115,7 +115,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
           { presetInfo.preset.colors && presetInfo.preset.colors.length > 0 &&
             <div class="flex gap-1 mt-2">
               {presetInfo.preset.colors.map((color, index) => (
-                <span key={index} class="p-2 rounded-sm"
+                <span key={index} class="p-2 rounded-lum-2"
                   style={{ backgroundColor: color.hex }} />
               ))}
             </div>
