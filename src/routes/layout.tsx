@@ -87,7 +87,7 @@ export default component$(() => {
       id: 'cookieprompt',
       element: <div class={{
         ['lum-bg-gray-800/60']: true,
-        'backdrop-blur-xl lum-card rounded-none sm:rounded-lg break-words': true,
+        'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
         'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
         <div>
@@ -135,7 +135,7 @@ export default component$(() => {
         if ('element' in notification) return notification.element;
         return <div class={{
           [notification.bgColor ?? 'lum-bg-gray-800/60']: true,
-          'backdrop-blur-xl lum-card rounded-none sm:rounded-lg break-words': true,
+          'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
           <h4 class="flex gap-2 items-center mt-0!">

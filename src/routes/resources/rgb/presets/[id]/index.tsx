@@ -135,7 +135,7 @@ export default component$(() => {
               }
               { presetInfo.author && !presetInfo.user && <>
                 {presetInfo.author == 'RGBirdflop' &&
-                  <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+                  <LogoBirdflop size={32} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
                 }
                 {presetInfo.author == 'SimplyMC' &&
                   <LogoLuminescent size={32} class="text-luminescent-300" />
@@ -188,10 +188,10 @@ export default component$(() => {
               <div q:slot="dropdown" class="flex items-center gap-3">
                 <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
               </div>
-              <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent">
+              <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
                 <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
               </Link>
-              <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent">
+              <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
                 <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
               </Link>
             </SelectMenuRaw>

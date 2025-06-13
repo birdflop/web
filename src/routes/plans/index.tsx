@@ -127,7 +127,7 @@ export default component$(() => {
                     if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
                   }, 100);
                 }}>
-                {plansStore.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{
+                {plansStore.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{
                   transform: 'translateZ(-10px)',
                 }}/>}
                 <p>
@@ -299,7 +299,7 @@ export default component$(() => {
                   <p>
                     {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                   </p>
-                  {plansStore.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg': true }} style={{
+                  {plansStore.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum': true }} style={{
                     transform: 'translateZ(-10px)',
                   }}/>}
                 </button>;

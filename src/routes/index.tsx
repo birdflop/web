@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-import { Anchor, LogoBirdflop } from '@luminescent/ui-qwik';
+import { Anchor, Hoverable, LogoBirdflop } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
 import Chart from '~/components/home/Chart';
 import { initiateTyper } from '~/util/Typer';
@@ -34,14 +34,20 @@ export default component$(() => {
         'my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
-      style={{
-        background: 'linear-gradient(180deg, #54daf4, #545eb6)',
-        backgroundClip: 'text',
-      }}
       >
         <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
-        <span class="-ml-11 opacity-0">b</span>irdflo<span class="-mr-11 opacity-0">p</span>
-        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8" />
+        <p class="text-transparent!">
+          <span class="-ml-11">b</span>
+          <span
+            style={{
+              background: 'linear-gradient(180deg, #54daf4, #545eb6)',
+              backgroundClip: 'text',
+            }}>
+            irdflo
+          </span>
+          <span class="-mr-11">p</span>
+        </p>
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8 -z-1" />
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
@@ -56,16 +62,22 @@ export default component$(() => {
       </h5>
       <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600">
+          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Server size={26} /> Hosting
           </a>
-          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600">
+          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Box size={26}  /> Resources
           </Link>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
           <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600">
+            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <HandCoins size={26} /> Donate Today
           </a>
         </div>
@@ -117,18 +129,20 @@ export default component$(() => {
                 })}
               </ul>
               {plan.outOfStock ?
-                <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4">
+                <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4 w-min m-auto">
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
                 :
-                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4">
+                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4 w-min m-auto">
                   <ShoppingCart size={20} class="text-3xl" /> Order Now
                 </Link>
               }
             </div>;
           })}
         </div>
-        <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3">
+        <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="my-0! flex items-center gap-2">
             <CheckCircle size={30} /> Benefits Galore
           </h4>
@@ -144,7 +158,9 @@ export default component$(() => {
           </h1>
         </Anchor>
         <div class="grid md:grid-cols-2 gap-2">
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Rocket size={30} /> Sheer Performance
             </h3>
@@ -152,7 +168,9 @@ export default component$(() => {
               We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
             </p>
           </div>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Settings size={30} /> Fully Configurable
             </h3>
@@ -160,7 +178,9 @@ export default component$(() => {
               You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
             </p>
           </div>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Eye size={30} /> Transparent
             </h3>
@@ -168,7 +188,9 @@ export default component$(() => {
               We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
             </p>
           </div>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Globe size={30} /> Price Matching
             </h3>
@@ -176,7 +198,9 @@ export default component$(() => {
               We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
             </p>
           </div>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Heart size={30} /> Instant Support
             </h3>
@@ -184,7 +208,9 @@ export default component$(() => {
               You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
             </p>
           </div>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <HandCoins size={30} /> Nonprofit
             </h3>
@@ -237,7 +263,9 @@ export default component$(() => {
         </Anchor>
         <div class="grid md:grid-cols-2 gap-2">
           <a href="https://g.co/kgs/mUU1j1G"
-            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Mikkel Hansen
             </h3>
@@ -246,7 +274,9 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Wizzy SMP
             </h3>
@@ -255,7 +285,9 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Beaunation
             </h3>
@@ -264,7 +296,9 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Jmaster
             </h3>
@@ -273,7 +307,9 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d"
-            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+            class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <User size={30} /> Oliver Flynn
             </h3>
@@ -281,7 +317,9 @@ export default component$(() => {
               Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
             </p>
           </a>
-          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out">
+          <div class="lum-card lum-bg-gray-800 hover:lum-bg-gray-800/70 transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
               <Star size={30} /> More
             </h3>

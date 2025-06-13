@@ -253,7 +253,7 @@ export default component$(() => {
               <div class="flex flex-wrap gap-2 pt-2">
                 {bannerStore.patterns.map((pattern, i) =>
                   <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
-                    <div class="flex flex-col rounded-md">
+                    <div class="flex flex-col rounded-lum">
                       <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
                         <ChevronLeft size={20} />
                       </button>
@@ -291,12 +291,12 @@ export default component$(() => {
                       <canvas id={`canvas-preview-${i}`} style={{
                         imageRendering: 'pixelated',
                       }} class={{
-                        'w-full rounded-md': true,
+                        'w-full rounded-lum': true,
                       }}/>
                       <canvas id={`canvas-texture-${i}`} style={{
                         imageRendering: 'pixelated',
                       }} class={{
-                        'w-full rounded-md hidden': true,
+                        'w-full rounded-lum hidden': true,
                       }}/>
                     </button>
                     <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
@@ -333,7 +333,7 @@ export default component$(() => {
                                 newPatterns[i].pattern = pattern;
                                 bannerStore.patterns = newPatterns;
                               }}>
-                                <img class="w-9 rounded-md" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
+                                <img class="w-9 rounded-lum" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
                                   imageRendering: 'pixelated',
                                 }} />
                               </button>

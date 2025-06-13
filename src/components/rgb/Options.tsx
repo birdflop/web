@@ -25,6 +25,13 @@ export default component$(() => {
             }
           }
         } values={[
+          ...!rgbStore.customFormat && !formats.find((format) => format.color == rgbStore.format.color) ? [{
+            name: rgbStore.format.color
+              .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
+              .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}${rgbStore.obfuscate ? rgbStore.format.char + 'k' : ''}`)
+              .replace('$c', ''),
+            value: JSON.stringify(rgbStore.format),
+          }] : [],
           ...formats.map(format => ({
             name: format.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')

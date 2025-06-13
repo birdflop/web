@@ -7,14 +7,15 @@ import { setUserData } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
-import { presetInfo, publishedPreset } from '~/util/rgb/presets';
+import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
   presetInfo: presetInfo | publishedPreset;
   class?: { [key: string]: boolean };
+  defaults?: rgbPreset;
 }
 
-export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
+export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props }) => {
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
@@ -60,7 +61,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             }
             { presetInfo.author && !presetInfo.user && <>
               {presetInfo.author == 'RGBirdflop' &&
-                <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
+                <LogoBirdflop size={20} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
               }
               {presetInfo.author == 'Luminescent' &&
                 <LogoLuminescent size={20} class="text-luminescent-300" />
@@ -86,13 +87,14 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
         <div class="flex-1">
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-            'font-mc-bold': presetInfo.preset.bold,
-            'font-mc-italic': presetInfo.preset.italic,
-            'font-mc-bold-italic': presetInfo.preset.bold && presetInfo.preset.italic,
-            [`${presetInfo.preset.format?.class}`]: presetInfo.preset.format?.class,
+            'font-mc-bold': presetInfo.preset.bold || defaults?.bold,
+            'font-mc-italic': presetInfo.preset.italic || defaults?.italic,
+            'font-mc-bold-italic': (presetInfo.preset.bold && presetInfo.preset.italic) || (defaults?.bold && defaults?.italic),
+            [`${presetInfo.preset.format?.class || defaults?.format?.class}`]: presetInfo.preset.format?.class || defaults?.format?.class,
           }}>
             {renderPreview({
               ...rgbDefaults,
+              ...defaults || {},
               ...presetInfo.preset,
               text: presetInfo.name,
             }, 3)}
@@ -113,7 +115,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
           { presetInfo.preset.colors && presetInfo.preset.colors.length > 0 &&
             <div class="flex gap-1 mt-2">
               {presetInfo.preset.colors.map((color, index) => (
-                <span key={index} class="p-2 rounded-sm"
+                <span key={index} class="p-2 rounded-lum-2"
                   style={{ backgroundColor: color.hex }} />
               ))}
             </div>
@@ -125,13 +127,13 @@ export default component$<PresetPreviewProps>(({ presetInfo, ...props }) => {
             <div q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} />
             </div>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
               e.stopPropagation();
               await nav(`/resources/rgb?${searchParams.toString()}`);
             }}>
               <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
             </button>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent" preventdefault:click onClick$={async (e) => {
+            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
               e.stopPropagation();
               await nav(`/resources/animtab?${searchParams.toString()}`);
             }}>
