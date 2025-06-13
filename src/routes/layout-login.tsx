@@ -73,7 +73,7 @@ export default component$(() => {
                   name="options.redirectTo"
                   value={loc.url.pathname + loc.url.search}
                 />
-                <button class="lum-btn lum-bg-transparent">
+                <button class="lum-btn lum-bg-transparent rounded-lum-1">
                   <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
                 </button>
               </Form>

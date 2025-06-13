@@ -265,19 +265,19 @@ export default component$(() => {
                   flagsStore.flags = el.value as AvailableFlags;
                 }} customDropdown>
                   <CircleHelp size={24} q:slot='dropdown'/>
-                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
+                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                     {t('flags.flags.aikars@@Aikar\'s Flags')}
                   </a>
-                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
+                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
                     {t('flags.flags.meowice@@MeowIce\'s Flags')}
                   </a>
-                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
+                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
                     {t('flags.flags.benchmarked@@Benchmarked')}
                   </a>
-                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
+                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
                     {t('flags.flags.hillttys@@hilltty\'s Flags')}
                   </a>
-                  <a class="lum-btn lum-bg-transparent" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
+                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
                     {t('flags.flags.obyduxs@@Obydux\'s Flags')}
                   </a>
                 </SelectMenuRaw>
