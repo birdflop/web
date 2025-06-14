@@ -62,12 +62,12 @@ export default component$(() => {
       </h5>
       <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600"
+          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600 hover:lum-bg-blue-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Server size={26} /> Hosting
           </a>
-          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600"
+          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600 hover:lum-bg-purple-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Box size={26}  /> Resources
@@ -75,7 +75,7 @@ export default component$(() => {
         </div>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
           <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600"
+            class="lum-btn lum-btn-p-4 lum-bg-pink-600 hover:lum-bg-pink-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <HandCoins size={26} /> Donate Today
@@ -140,7 +140,7 @@ export default component$(() => {
             </div>;
           })}
         </div>
-        <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+        <div class="lum-card lum-bg-indigo-900 hover:lum-bg-indigo-800 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="my-0! flex items-center gap-2">

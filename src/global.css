@@ -11,6 +11,7 @@
 @source "../node_modules/@luminescent/ui-qwik";
 
 @theme {
+  --lum-default-alpha: 70;
   --lum-border-radius: 0.625rem;
   --lum-border-color: #dfdfdfaa;
 }
