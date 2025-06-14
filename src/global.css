@@ -6,13 +6,13 @@
 
 @import "@luminescent/ui";
 @import "@luminescent/ui/formatting";
-@plugin "@luminescent/ui/lum-bg";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
 
 @theme {
   --lum-border-radius: 0.625rem;
+  --lum-border-lightness: 10%;
 }
 
 /* Pulled straight from minecraft.net */
