@@ -12,7 +12,7 @@
 
 @theme {
   --lum-border-radius: 0.625rem;
-  --lum-border-lightness: 10%;
+  --lum-border-color: #dfdfdfaa;
 }
 
 /* Pulled straight from minecraft.net */
