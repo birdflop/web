@@ -9,6 +9,7 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
+import { ThemeToggle } from './theme-toggle';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -85,6 +86,7 @@ export default component$(() => {
         }}>
         <Globe size={20} q:slot='dropdown' />
       </SelectMenuRaw>
+      <ThemeToggle variant="compact" q:slot='end' />
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>

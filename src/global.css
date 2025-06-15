@@ -13,7 +13,7 @@
 @theme {
   --lum-default-alpha: 70;
   --lum-border-radius: 0.625rem;
-  --lum-border-color: #dfdfdfaa;
+  --color-lum-border: #dfdfdfaa;
 }
 
 /* Pulled straight from minecraft.net */
