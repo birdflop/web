@@ -9,7 +9,7 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
-import { ThemeToggle } from './theme-toggle';
+import { ThemeToggle } from './ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();

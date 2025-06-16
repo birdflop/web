@@ -207,7 +207,7 @@ export default component$(({ hidden }: {
       <div class="flex flex-col gap-1 mb-1">
         <label for="import">
           {t('rgb.presets.import@@Import')}
-          <span class="text-gray-500"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
+          <span class="text-lum-text-secondary"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
         </label>
         <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
           onInput$={async (e, el) => loadPresetJSON(el.value)}/>

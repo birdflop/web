@@ -30,7 +30,7 @@ export default component$(() => {
         <h1>
           {t('nav.404.title@@404: Page not found')}
         </h1>
-        <h4 class="text-gray-400">
+        <h4 class="text-lum-text-secondary">
           {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
         </h4>
         <div class="flex mt-4">

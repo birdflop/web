@@ -2,17 +2,17 @@ import { component$, Signal, useContext, useContextProvider, useSignal, useVisib
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
-import { BirdflopSession, useSession } from '../plugin@auth';
+import { BirdflopSession, useSession } from '~/routes/plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '../resources/rgb';
+import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import { NotificationContext } from '../layout';
+import { NotificationContext } from '~/routes/layout';
 
 const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
 
@@ -86,7 +86,7 @@ export default component$(() => {
 
     <dialog ref={modalRef}
       class={{
-        'm-auto text-gray-200 hidden open:flex': true,
+        'm-auto hidden open:flex': true,
         'lum-card lum-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
         'backdrop:bg-gray-950/50 backdrop:backdrop-blur-xs': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,

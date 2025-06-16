@@ -140,13 +140,13 @@ export default component$(() => {
             </div>;
           })}
         </div>
-        <div class="lum-card lum-bg-indigo-900 hover:lum-bg-indigo-800 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+        <div class="lum-card lum-bg-lum-card-bg/60  transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="my-0! flex items-center gap-2">
             <CheckCircle size={30} /> Benefits Galore
           </h4>
-          <p class="text-gray-100">
+          <p>
             All plans come with a one-click modpack installer, DDoS protection, 3 off-site backups, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
           </p>
         </div>
@@ -241,7 +241,7 @@ export default component$(() => {
         <div class="grid md:grid-cols-2 gap-10">
           <div>
             <Chart />
-            <p class="text-gray-400 text-center py-2 text-sm">
+            <p class="text-lum-text-secondary text-center py-2 text-sm">
               Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
             </p>
           </div>

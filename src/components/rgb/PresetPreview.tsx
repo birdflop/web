@@ -101,7 +101,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
           </p>
 
           { presetInfo.description &&
-            <p class="text-gray-400 text-sm pt-2">
+            <p class="text-lum-text-secondary text-sm pt-2">
               {presetInfo.description}
             </p>
           }

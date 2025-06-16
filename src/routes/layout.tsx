@@ -7,7 +7,7 @@ import Nav from '~/components/Nav';
 import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { generateThemeCSS, getThemePreference, useThemeProvider } from '~/util/theme-store';
+import { getCSSString, getThemePreference, ThemeContext, themes } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -31,12 +31,19 @@ export const onGet: RequestHandler = ({ cacheControl }) => {
 
 export const useServerTheme = routeLoader$(async ({ cookie }) => {
   const serverTheme = await getThemePreference(cookie) || 'auto';
-  console.log(serverTheme);
-  const themeCSS = generateThemeCSS(serverTheme);
+  const css = themes[serverTheme];
+  const cssString = getCSSString(serverTheme);
 
   return {
-    theme: serverTheme,
-    css: themeCSS,
+    currentTheme: serverTheme,
+    isDark: serverTheme === 'dark'
+    || (serverTheme === 'auto'
+      && (typeof window !== 'undefined'
+        && window.matchMedia?.('(prefers-color-scheme: dark)').matches
+      )
+    ),
+    css,
+    cssString,
   };
 });
 
@@ -52,10 +59,12 @@ export default component$(() => {
   useContextProvider(NotificationContext, notifications);
   const openSections = useStore([] as string[]);
   useContextProvider(OpenSectionsContext, openSections);
-  const theme = useThemeProvider();
 
   // Get server-side theme data
-  const serverThemeData = useServerTheme();  // Apply server-side theme only on initial load to prevent flash
+  const serverThemeData = useServerTheme();
+
+  const themeStore = useStore(serverThemeData.value);
+  useContextProvider(ThemeContext, themeStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -132,22 +141,22 @@ export default component$(() => {
     <style>
       {`
       :root {
-        ${serverThemeData.value?.css || ''}
+        ${serverThemeData.value?.cssString || ''}
       }
       `}
     </style>
     <Nav />
 
-    {theme.isDark.value &&
+    {themeStore.isDark &&
       <Background id="bg" class={{
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
         'transition-all duration-1000 blur-xl bottom-0! opacity-30 scale-150': loc.url.pathname != '/',
       }}/>
     }
-    {!theme.isDark.value &&
+    {!themeStore.isDark &&
       <LightBackground id="bg" class={{
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-80': true,
-        'transition-all duration-1000 blur-xl! bottom-0! opacity-50 scale-150': loc.url.pathname != '/',
+        'transition-all duration-1000 blur-xl! bottom-0! opacity-20 scale-150': loc.url.pathname != '/',
       }}/>
     }
     <Slot />

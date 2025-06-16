@@ -1,5 +1,5 @@
-import { component$, useSignal, useVisibleTask$, $ } from '@builder.io/qwik';
-import { type ThemeName, themes, setThemePreference } from '~/util/theme-store';
+import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
+import { type ThemeName, themes, setThemePreference, ThemeContext } from '~/util/theme-store';
 import { Moon, Sun, Sparkles } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
@@ -11,8 +11,7 @@ export interface ThemeToggleProps {
 
 export const ThemeToggle = component$<ThemeToggleProps>(
   ({ variant = 'compact', showLabel = false, class: className = '' }) => {
-    const isOpen = useSignal(false);
-    const currentTheme = useSignal<ThemeName>('dark');
+    const themeStore = useContext(ThemeContext);
 
     // Update current theme from DOM
     // eslint-disable-next-line qwik/no-use-visible-task
@@ -23,7 +22,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
             'data-theme-variant',
           ) as ThemeName;
           if (themeVariant) {
-            currentTheme.value = themeVariant;
+            themeStore.currentTheme = themeVariant;
           }
         };
 
@@ -72,7 +71,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     ];
 
     const currentThemeOption =
-      themeOptions.find((option) => option.value === currentTheme.value) ||
+      themeOptions.find((option) => option.value === themeStore.currentTheme) ||
       themeOptions[0];
     const handleThemeChange = $((newTheme: ThemeName) => {
       // Apply theme changes directly without reload
@@ -91,17 +90,15 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               : 'light';
           }
 
-          const themeColors = themes[effectiveTheme];
-          Object.entries(themeColors).forEach(([key, value]) => {
-            const cssVarName = `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-            root.style.setProperty(cssVarName, value);
+          const css = themes[effectiveTheme];
+          Object.entries(css).forEach(([key, value]) => {
+            root.style.setProperty(key, value);
           });
 
           root.setAttribute('data-theme', effectiveTheme);
           root.setAttribute('data-theme-variant', newTheme);
         })();
       }
-      isOpen.value = false;
     });
     const handleCycleTheme = $(async () => {
       // Get current theme from DOM attribute instead of context to avoid serialization
@@ -152,7 +149,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
           </div>
           {themeOptions.map((option) => {
             const IconComponent = option.icon;
-            const isActive = currentTheme.value === option.value;
+            const isActive = themeStore.currentTheme === option.value;
 
             return (
               <button q:slot="extra-buttons"

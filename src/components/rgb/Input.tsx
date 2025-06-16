@@ -63,7 +63,7 @@ export default component$(({ readOnly }: {
       <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
         <Terminal size={26} />
         {t('rgb.inputText.title@@Input Text')}
-        <p class="text-gray-400 text-sm font-normal">
+        <p class="text-lum-text-secondary text-sm font-normal">
           {t('rgb.inputText.description@@Type here to generate a gradient!')}
         </p>
       </h5>
@@ -173,7 +173,7 @@ export default component$(({ readOnly }: {
           value: 'tab-player',
         },
       ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
-        <Eye size={20} class="text-gray-400" q:slot="dropdown" />
+        <Eye size={20} class="text-lum-text-secondary" q:slot="dropdown" />
       </SelectMenuRaw>
     </div>
   </label>;

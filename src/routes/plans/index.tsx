@@ -102,7 +102,7 @@ export default component$(() => {
               {plansStore.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
             </button>
           </h2>
-          <p class="text-gray-400">
+          <p class="text-lum-text-secondary">
             This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
           </p>
 

@@ -215,7 +215,7 @@ export default component$(() => {
             }}>
               <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.baseColor.title@@Base Color')}
-                <span class="text-gray-400 text-sm font-normal">
+                <span class="text-lum-text-secondary text-sm font-normal">
                   {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
                 </span>
               </h6>

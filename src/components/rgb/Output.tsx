@@ -16,7 +16,7 @@ export default component$(({ hidden, value }: {
       'max-h-0 opacity-0 pointer-events-none': hidden,
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="output">
-      <label for="output" class="text-gray-500">
+      <label for="output" class="text-lum-text-secondary">
         {t('rgb.output.description@@Copy-paste this for RGB text!')}
       </label>
       <textarea id="output" readOnly

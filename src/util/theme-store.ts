@@ -1,4 +1,4 @@
-import { createContextId, useContext, useContextProvider, useSignal, useVisibleTask$, $, QRL, Signal } from '@builder.io/qwik';
+import { createContextId, $, Signal } from '@builder.io/qwik';
 import { Cookie, server$ } from '@builder.io/qwik-city';
 export type ThemeName = keyof typeof themes;
 
@@ -22,12 +22,8 @@ export const setThemePreference = server$(function (theme: ThemeName, c?: Cookie
   return cookie.set('theme-preference', theme);
 });
 
-export interface ThemeColors {
-  [key: string]: string | number;
-}
-
 const defaultTheme = {
-  '--color-bg': 'var(--color-gray-950)',
+  '--color-bg': 'var(--color-gray-900)',
   '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
   '--color-text': 'var(--color-gray-200)',
   '--color-lum-border': '#dfdfdfaa',
@@ -35,6 +31,8 @@ const defaultTheme = {
   '--color-lum-input-bg': 'var(--color-gray-800)',
   '--color-lum-input-hover-bg': 'var(--color-gray-700)',
   '--color-lum-accent': 'var(--color-blue-500)',
+  '--color-lum-text': 'var(--color-gray-100)',
+  '--color-lum-text-secondary': 'var(--color-gray-400)',
   '--lum-default-alpha': '70',
   '--lum-border-radius': '0.625rem',
 };
@@ -50,6 +48,8 @@ export const themes = {
     '--color-lum-input-bg': 'var(--color-blue-300)',
     '--color-lum-input-hover-bg': 'var(--color-blue-300)',
     '--color-lum-accent': 'var(--color-blue-500)',
+    '--color-lum-text': 'var(--color-gray-900)',
+    '--color-lum-text-secondary': 'var(--color-gray-600)',
     '--lum-default-alpha': '70',
     '--lum-border-radius': '0.625rem',
   },
@@ -58,14 +58,16 @@ export const themes = {
 
 export interface ThemeContextType {
   currentTheme: ThemeName;
-  setTheme: QRL<(theme: ThemeName) => void>;
   isDark: boolean;
-  themeColors: ThemeColors;
+  css: {
+    [key: string]: string;
+  }
 }
 
 export const ThemeContext = createContextId<ThemeContextType>('theme-context');
 
 // Apply theme to CSS variables
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const applyTheme = $((themeName: ThemeName, isDark: Signal<boolean>) => {
   if (typeof document === 'undefined') return;
 
@@ -90,75 +92,6 @@ const applyTheme = $((themeName: ThemeName, isDark: Signal<boolean>) => {
     (themeName === 'auto' && (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches));
 });
 
-export const useThemeProvider = () => {
-  const currentTheme = useSignal<ThemeName>('dark');
-  const isDark = useSignal(true);
-
-  const setTheme = $(async (theme: ThemeName) => {
-    currentTheme.value = theme;
-    await applyTheme(theme, isDark);
-    await setThemePreference(theme);
-  });
-
-  // Load saved theme on initialization
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    // Check if theme is already applied server-side
-    const root = document.documentElement;
-    const serverTheme = root.getAttribute('data-theme-variant');
-
-    let initialTheme: ThemeName;
-
-    if (serverTheme && themes[serverTheme as ThemeName]) {
-      // Use server-side theme if available
-      initialTheme = serverTheme as ThemeName;
-      currentTheme.value = initialTheme;
-    } else {
-      // Fallback to cookie-based theme detection
-      const savedTheme = await getThemePreference();
-      initialTheme = savedTheme || 'auto';
-      currentTheme.value = initialTheme;
-    }
-
-    // Apply theme (this will update if needed)
-    await applyTheme(initialTheme, isDark);
-
-    // Listen for system theme changes when using auto theme
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = () => {
-        if (currentTheme.value === 'auto') {
-          void applyTheme('auto', isDark);
-        }
-      };
-      mediaQuery.addEventListener('change', handleChange);
-
-      // Cleanup function
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  });
-
-  const contextValue: ThemeContextType = {
-    currentTheme: currentTheme.value,
-    setTheme,
-    isDark: isDark.value,
-    themeColors: themes[currentTheme.value],
-  };
-
-  useContextProvider(ThemeContext, contextValue);
-
-  return {
-    currentTheme,
-    setTheme,
-    isDark,
-    get themeColors() { return themes[currentTheme.value]; },
-  };
-};
-
-export const useTheme = () => {
-  return useContext(ThemeContext);
-};
-
 /**
  * Generate CSS variables string for server-side theme injection
  * This prevents theme flashing by applying theme styles immediately during SSR
@@ -166,27 +99,15 @@ export const useTheme = () => {
  * @param userAgent - Optional user agent string for auto theme detection
  * @returns CSS variables string to inject into the document
  */
-export function generateThemeCSS(themeName: ThemeName): string {
-  let effectiveTheme = themeName;
-
-  // Handle auto theme detection on server-side
-  if (themeName === 'auto') {
-    // Basic server-side dark mode detection (fallback to dark)
-    // In a real implementation, you might want to detect this differently
-    effectiveTheme = 'dark'; // Default fallback for server-side
-  }
-
-  const themeColors = themes[effectiveTheme];
+export function getCSSString(themeName: ThemeName): string {
+  const css = themes[themeName];
 
   // Generate CSS custom properties
-  const cssVars = Object.entries(themeColors)
-    .map(([key, value]) => {
-      const cssVarName = `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-      return `${cssVarName}: ${value};`;
-    })
+  const cssString = Object.entries(css)
+    .map(([cssVarName, value]) => `${cssVarName}: ${value};`)
     .join('\n    ');
 
-  return cssVars;
+  return cssString;
 }
 
 /**

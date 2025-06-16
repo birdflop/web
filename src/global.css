@@ -19,10 +19,6 @@
   --color-bg: var(--color-gray-950);
 }
 
-p, ul, ol {
-  color: var(--color-text);
-}
-
 a.lum-btn, a.lum-card {
   color: var(--color-text) !important;
   text-decoration: none;

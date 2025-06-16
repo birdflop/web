@@ -167,7 +167,7 @@ export default component$(() => {
             checked={presetStore.showSaved && savedPresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
-          <p class="text-xs text-gray-400 mt-1">
+          <p class="text-xs text-lum-text-secondary mt-1">
             {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
           </p>
         </div>
@@ -175,7 +175,7 @@ export default component$(() => {
           checked={presetStore.previewWithSettings}
           onChange$={(e, el) => presetStore.previewWithSettings = el.checked}
           label={t('rgb.presets.withCurrentOptions.title@@Show preview with current options')} />
-        <p class="text-xs text-gray-400 mt-1">
+        <p class="text-xs text-lum-text-secondary mt-1">
           {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
         </p>
 
@@ -196,7 +196,7 @@ export default component$(() => {
           )}
           {filteredPresets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
-              <p class="text-center text-gray-400">
+              <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
                 <br />
                 Think something is missing?

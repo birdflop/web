@@ -270,7 +270,7 @@ export default component$(() => {
               'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('outputformat') == -1,
               'max-h-[500px] opacity-100 pointer-events-auto': openSections.indexOf('outputformat') != -1,
             }}>
-              <label for="outputformat" class="text-gray-500">
+              <label for="outputformat" class="text-lum-text-secondary">
                 {t('animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.')}
               </label>
               <textarea class="lum-input h-32 whitespace-pre" id="outputformat"
