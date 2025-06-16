@@ -31,7 +31,7 @@ export default component$(() => {
             {fields.map((field: Field, i: number) => {
               return (
                 <div class="lum-card" key={`field${i}`}>
-                  <p class="text-white font-bold text-xl break-words">
+                  <p class="font-bold text-xl break-words">
                     {field.name.replace(/\./g, '\n> ')}
                   </p>
                   {field.value}

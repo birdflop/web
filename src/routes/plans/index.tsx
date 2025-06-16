@@ -114,7 +114,7 @@ export default component$(() => {
                 class={{
                   'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                   'opacity-50': plan.outOfStock,
-                  'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.plan != planName,
+                  'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
                   'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
                 }}
                 key={planName}
@@ -290,7 +290,7 @@ export default component$(() => {
                   }}
                   class={{
                     'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
-                    'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.gb != Number(gb),
+                    'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
                     'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
                   }}>
                   <h3 class="my-0!">

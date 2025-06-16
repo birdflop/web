@@ -87,7 +87,7 @@ export default component$(() => {
     <dialog ref={modalRef}
       class={{
         'm-auto text-gray-200 hidden open:flex': true,
-        'lum-card lum-bg-gray-900/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
+        'lum-card lum-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
         'backdrop:bg-gray-950/50 backdrop:backdrop-blur-xs': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,

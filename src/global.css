@@ -14,6 +14,18 @@
   --lum-default-alpha: 70;
   --lum-border-radius: 0.625rem;
   --color-lum-border: #dfdfdfaa;
+  --color-nav-bg: --alpha(var(--color-lum-input-bg) / 50%);
+  --color-text: var(--color-gray-200);
+  --color-bg: var(--color-gray-950);
+}
+
+p, ul, ol {
+  color: var(--color-text);
+}
+
+a.lum-btn, a.lum-card {
+  color: var(--color-text) !important;
+  text-decoration: none;
 }
 
 /* Pulled straight from minecraft.net */
@@ -88,7 +100,7 @@
 
 html {
   font-family: Figtree, sans-serif;
-  background-color: rgb(17 24 39);
+  background-color: var(--color-bg);
 }
 
 .font-mc {

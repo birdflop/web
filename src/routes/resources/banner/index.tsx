@@ -275,7 +275,7 @@ export default component$(() => {
                         <Trash size={20} />
                       </button>
                     </div>
-                    <button class="lum-btn p-0 w-17.5 lum-bg-gray-900"
+                    <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
                       onMouseUp$={() => {
                         if (openPopup.value == i) return openPopup.value = -1;
                         else openPopup.value = i;

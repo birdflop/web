@@ -1,4 +1,4 @@
-import { createContextId, useContext, useContextProvider, useSignal, useVisibleTask$, $ } from '@builder.io/qwik';
+import { createContextId, useContext, useContextProvider, useSignal, useVisibleTask$, $, QRL, Signal } from '@builder.io/qwik';
 import { Cookie, server$ } from '@builder.io/qwik-city';
 export type ThemeName = keyof typeof themes;
 
@@ -27,70 +27,76 @@ export interface ThemeColors {
 }
 
 const defaultTheme = {
-  '--lum-default-alpha': '70',
-  '--lum-border-radius': '0.625rem',
+  '--color-bg': 'var(--color-gray-950)',
+  '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
+  '--color-text': 'var(--color-gray-200)',
   '--color-lum-border': '#dfdfdfaa',
   '--color-lum-card-bg': 'var(--color-gray-900)',
   '--color-lum-input-bg': 'var(--color-gray-800)',
   '--color-lum-input-hover-bg': 'var(--color-gray-700)',
   '--color-lum-accent': 'var(--color-blue-500)',
+  '--lum-default-alpha': '70',
+  '--lum-border-radius': '0.625rem',
 };
 
 export const themes = {
   dark: defaultTheme,
   light: {
+    '--color-bg': 'var(--color-blue-200)',
+    '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 5%)',
+    '--color-text': 'var(--color-gray-900)',
+    '--color-lum-border': 'var(--color-gray-600)',
+    '--color-lum-card-bg': 'var(--color-blue-200)',
+    '--color-lum-input-bg': 'var(--color-blue-300)',
+    '--color-lum-input-hover-bg': 'var(--color-blue-300)',
+    '--color-lum-accent': 'var(--color-blue-500)',
     '--lum-default-alpha': '70',
     '--lum-border-radius': '0.625rem',
-    '--color-lum-border': '#dfdfdfaa',
-    '--color-lum-card-bg': 'var(--color-gray-100)',
-    '--color-lum-input-bg': 'var(--color-gray-200)',
-    '--color-lum-input-hover-bg': 'var(--color-gray-300)',
-    '--color-lum-accent': 'var(--color-blue-500)',
   },
   auto: defaultTheme,
 };
 
 export interface ThemeContextType {
   currentTheme: ThemeName;
-  setTheme: (theme: ThemeName) => void;
+  setTheme: QRL<(theme: ThemeName) => void>;
   isDark: boolean;
   themeColors: ThemeColors;
 }
 
 export const ThemeContext = createContextId<ThemeContextType>('theme-context');
 
+// Apply theme to CSS variables
+const applyTheme = $((themeName: ThemeName, isDark: Signal<boolean>) => {
+  if (typeof document === 'undefined') return;
+
+  let effectiveTheme = themeName;
+  if (themeName === 'auto') {
+    effectiveTheme = (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+
+  const themeColors = themes[effectiveTheme];
+  const root = document.documentElement;
+
+  // Apply CSS custom properties
+  Object.entries(themeColors).forEach(([key, value]) => {
+    root.style.setProperty(key, value);
+  });
+
+  // Update data attributes for additional styling hooks
+  root.setAttribute('data-theme', effectiveTheme);
+  root.setAttribute('data-theme-variant', themeName);
+
+  isDark.value = effectiveTheme === 'dark' ||
+    (themeName === 'auto' && (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches));
+});
+
 export const useThemeProvider = () => {
   const currentTheme = useSignal<ThemeName>('dark');
   const isDark = useSignal(true);
 
-  // Apply theme to CSS variables
-  const applyTheme = $((themeName: ThemeName) => {
-    if (typeof document === 'undefined') return;
-
-    let effectiveTheme = themeName;
-    if (themeName === 'auto') {
-      effectiveTheme = (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-    }
-
-    const themeColors = themes[effectiveTheme];
-    const root = document.documentElement;
-
-    // Apply CSS custom properties
-    Object.entries(themeColors).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
-    });
-
-    // Update data attributes for additional styling hooks
-    root.setAttribute('data-theme', effectiveTheme);
-    root.setAttribute('data-theme-variant', themeName);
-
-    isDark.value = effectiveTheme === 'dark' ||
-      (themeName === 'auto' && (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches));
-  });
-
   const setTheme = $(async (theme: ThemeName) => {
     currentTheme.value = theme;
-    await applyTheme(theme);
+    await applyTheme(theme, isDark);
     await setThemePreference(theme);
   });
 
@@ -115,14 +121,14 @@ export const useThemeProvider = () => {
     }
 
     // Apply theme (this will update if needed)
-    await applyTheme(initialTheme);
+    await applyTheme(initialTheme, isDark);
 
     // Listen for system theme changes when using auto theme
     if (typeof window !== 'undefined' && window.matchMedia) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => {
         if (currentTheme.value === 'auto') {
-          void applyTheme('auto');
+          void applyTheme('auto', isDark);
         }
       };
       mediaQuery.addEventListener('change', handleChange);
@@ -134,7 +140,7 @@ export const useThemeProvider = () => {
 
   const contextValue: ThemeContextType = {
     currentTheme: currentTheme.value,
-    setTheme: (theme: ThemeName) => void setTheme(theme),
+    setTheme,
     isDark: isDark.value,
     themeColors: themes[currentTheme.value],
   };

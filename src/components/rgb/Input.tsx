@@ -60,7 +60,7 @@ export default component$(({ readOnly }: {
 
   return <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 relative">
     {!readOnly &&
-      <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold text-gray-50 gap-3 items-center">
+      <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
         <Terminal size={26} />
         {t('rgb.inputText.title@@Input Text')}
         <p class="text-gray-400 text-sm font-normal">
@@ -70,7 +70,7 @@ export default component$(({ readOnly }: {
     }
     {previewStyle.value != 'default' &&
       <div class={{
-        'relative lum-bg-gray-800/50 rounded-lum': true,
+        'relative lum-bg-lum-input-bg/50 rounded-lum': true,
         'break-all font-mc': true,
       }}>
         <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
@@ -136,7 +136,7 @@ export default component$(({ readOnly }: {
         'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
         [`${rgbStore.format.class}`]: rgbStore.format.class,
       }}>
-        <p class="lum-bg-gray-800/50 rounded-lum lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
+        <p class="lum-bg-lum-input-bg/50 rounded-lum lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
           <Slot />
         </p>
         <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
@@ -172,7 +172,7 @@ export default component$(({ readOnly }: {
           name: t('rgb.inputText.preview.tab.player@@Minecraft Tab Player'),
           value: 'tab-player',
         },
-      ]} customDropdown class={{ 'p-1 gap-1 lum-bg-gray-900/75 rounded-lum-1': true }}>
+      ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
         <Eye size={20} class="text-gray-400" q:slot="dropdown" />
       </SelectMenuRaw>
     </div>

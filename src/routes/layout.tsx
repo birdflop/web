@@ -1,13 +1,13 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import Backgrounds from '~/components/Backgrounds';
+import Backgrounds, { lightBackgrounds } from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
 import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { generateThemeCSS, getThemePreference, themes } from '~/util/theme-store';
+import { generateThemeCSS, getThemePreference, useThemeProvider } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -46,77 +46,16 @@ export default component$(() => {
   const t$ = $((string: string) => inlineTranslate()(string));
 
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+  const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
   const openSections = useStore([] as string[]);
   useContextProvider(OpenSectionsContext, openSections);
+  const theme = useThemeProvider();
 
   // Get server-side theme data
   const serverThemeData = useServerTheme();  // Apply server-side theme only on initial load to prevent flash
-  // Don't track serverThemeData to avoid overriding client-side theme changes on navigation
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    if (typeof document !== 'undefined' && serverThemeData.value) {
-      const root = document.documentElement;
-
-      // Only apply server theme if no client theme is already set
-      const currentThemeVariant = root.getAttribute('data-theme-variant');
-      if (!currentThemeVariant || currentThemeVariant === 'undefined') {
-        const { theme, css } = serverThemeData.value;
-
-        // Apply CSS variables immediately
-        const cssVars = css.split('\n    ').filter((line) => line.trim());
-        cssVars.forEach((cssVar) => {
-          if (cssVar.includes(':')) {
-            const [property, value] = cssVar.split(':').map((s) => s.trim());
-            if (property && value) {
-              root.style.setProperty(property, value.replace(';', ''));
-            }
-          }
-        });
-
-        // Set data attributes immediately
-        const effectiveTheme = theme === 'auto' ? 'dark' : theme;
-        root.setAttribute('data-theme', effectiveTheme);
-        root.setAttribute('data-theme-variant', theme);
-      }
-    }
-  });
-  // Ensure theme persistence across page navigations
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    if (typeof document !== 'undefined') {
-      const root = document.documentElement;
-      const currentThemeVariant = root.getAttribute('data-theme-variant');
-
-      // If no theme is set or if we need to check cookies for user preference
-      if (!currentThemeVariant || currentThemeVariant === 'undefined') {
-        try {
-          const savedTheme = await getThemePreference();
-          if (savedTheme && themes[savedTheme]) {
-            let effectiveTheme = savedTheme;
-            if (savedTheme === 'auto') {
-              effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-            }
-
-            const themeColors = themes[effectiveTheme];
-            Object.entries(themeColors).forEach(([key, value]) => {
-              const cssVarName = `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-              root.style.setProperty(cssVarName, value);
-            });
-
-            root.setAttribute('data-theme', effectiveTheme);
-            root.setAttribute('data-theme-variant', savedTheme);
-          }
-        } catch (error) {
-          console.warn('Failed to load theme preference:', error);
-        }
-      }
-    }
-  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -155,7 +94,7 @@ export default component$(() => {
     const cookiePrompt = noSerialize({
       id: 'cookieprompt',
       element: <div class={{
-        ['lum-bg-gray-800/60']: true,
+        ['lum-bg-lum-input-bg/60']: true,
         'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
         'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
@@ -190,11 +129,27 @@ export default component$(() => {
   });
 
   return <>
+    <style>
+      {`
+      :root {
+        ${serverThemeData.value?.css || ''}
+      }
+      `}
+    </style>
     <Nav />
-    <Background id="bg" class={{
-      'fixed scale-120 bottom-0 overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
-      'transition-all duration-1000 blur-xl opacity-30 scale-150': loc.url.pathname != '/',
-    }}/>
+
+    {theme.isDark.value &&
+      <Background id="bg" class={{
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'transition-all duration-1000 blur-xl bottom-0! opacity-30 scale-150': loc.url.pathname != '/',
+      }}/>
+    }
+    {!theme.isDark.value &&
+      <LightBackground id="bg" class={{
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-80': true,
+        'transition-all duration-1000 blur-xl! bottom-0! opacity-50 scale-150': loc.url.pathname != '/',
+      }}/>
+    }
     <Slot />
     <div class={{
       'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
@@ -203,7 +158,7 @@ export default component$(() => {
         if (!notification) return null;
         if ('element' in notification) return notification.element;
         return <div class={{
-          [notification.bgColor ?? 'lum-bg-gray-800/60']: true,
+          [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
           'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
