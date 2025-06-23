@@ -67,11 +67,17 @@ export default component$(({ hidden }: {
       'max-h-0 opacity-0 pointer-events-none': hidden,
       'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
-      <div class="col-span-2 flex gap-1 mt-1">
-        <Link class="lum-btn flex-1 rounded-r-sm" href="/resources/rgb/presets">
+      <div class="sm:col-span-2 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 mt-1">
+        <Link class={{
+          'lum-btn flex-1': true,
+          'lg:rounded-r-sm': true,
+        }} href="/resources/rgb/presets">
           <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
         </Link>
-        <button class="lum-btn flex-1 rounded-sm" id="save" onClick$={async () => {
+        <button class={{
+          'lum-btn flex-1': true,
+          'lg:rounded-sm': true,
+        }} id="save" onClick$={async () => {
           const preset: rgbPreset = { ...rgbStore };
           if (preset.syncshadow) delete preset.shadowcolors;
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
@@ -96,7 +102,10 @@ export default component$(({ hidden }: {
         }}>
           <Save size={20} /> {t('rgb.presets.save@@Save')}
         </button>
-        <button class="lum-btn flex-1 rounded-sm" id="copy" onClick$={async () => {
+        <button class={{
+          'lum-btn flex-1': true,
+          'lg:rounded-sm': true,
+        }} id="copy" onClick$={async () => {
           const preset: rgbPreset = { ...rgbStore };
           if (preset.syncshadow) delete preset.shadowcolors;
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
@@ -121,7 +130,10 @@ export default component$(({ hidden }: {
         }}>
           <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
         </button>
-        <button class="lum-btn flex-1 rounded-l-sm" id="createurl" onClick$={async () => {
+        <button class={{
+          'lum-btn flex-1': true,
+          'lg:rounded-l-sm': true,
+        }} id="createurl" onClick$={async () => {
           const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
           const url = new URL(base_url);
           const params: rgbPreset = { ...rgbStore };
