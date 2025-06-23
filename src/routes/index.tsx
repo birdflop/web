@@ -31,13 +31,13 @@ export default component$(() => {
   return <>
     <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-dvh pt-[72px]">
       <h1 class={{
-        'my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
+        'relative my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
       >
-        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
+        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="left-0 absolute -z-1" />
         <p class="text-transparent!">
-          <span class="-ml-11">b</span>
+          <span>b</span>
           <span
             style={{
               background: 'linear-gradient(180deg, #54daf4, #545eb6)',
@@ -45,9 +45,9 @@ export default component$(() => {
             }}>
             irdflo
           </span>
-          <span class="-mr-11">p</span>
+          <span>p</span>
         </p>
-        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8 -z-1" />
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-right-0.5 absolute -z-1 scale-y-[-1] mt-8" />
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
