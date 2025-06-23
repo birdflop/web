@@ -53,14 +53,14 @@ export default component$(() => {
           'flex mt-3': true,
           'hidden': !redirect.value,
         }}>
-          <Link href={redirect.value} class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600">
+          <Link href={redirect.value} class="lum-btn lum-bg-blue hover:lum-bg-blue">
             Submit
           </Link>
         </div>
 
-        <p class="text-white my-12">
+        <p class="my-12">
           You can also copy the code into a link<br />
-          <span class="text-gray-300">https://birdflop.com/resources/sparkprofile/[code]</span><br />
+          <span class="text-lum-text-secondary">https://birdflop.com/resources/sparkprofile/[code]</span><br />
           Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400 hover:underline">botflop</a>
         </p>
       </div>

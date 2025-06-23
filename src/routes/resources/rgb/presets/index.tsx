@@ -70,7 +70,7 @@ export default component$(() => {
           id,
           title: 'Error fetching presets',
           description: `${error}`,
-          bgColor: 'lum-bg-red-900/50',
+          bgColor: 'lum-bg-red/50',
         };
         notifications.push(notification);
       });
@@ -104,7 +104,7 @@ export default component$(() => {
         id,
         title: 'Error parsing saved presets',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
       setTimeout(() => {
@@ -167,7 +167,7 @@ export default component$(() => {
             checked={presetStore.showSaved && savedPresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
-          <p class="text-xs text-gray-400 mt-1">
+          <p class="text-xs text-lum-text-secondary mt-1">
             {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
           </p>
         </div>
@@ -175,7 +175,7 @@ export default component$(() => {
           checked={presetStore.previewWithSettings}
           onChange$={(e, el) => presetStore.previewWithSettings = el.checked}
           label={t('rgb.presets.withCurrentOptions.title@@Show preview with current options')} />
-        <p class="text-xs text-gray-400 mt-1">
+        <p class="text-xs text-lum-text-secondary mt-1">
           {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
         </p>
 
@@ -195,8 +195,8 @@ export default component$(() => {
             <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
           )}
           {filteredPresets.length === 0 && (
-            <div class="lum-card col-span-2 lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
-              <p class="text-center text-gray-400">
+            <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
+              <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
                 <br />
                 Think something is missing?
