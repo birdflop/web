@@ -90,7 +90,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               : 'light';
           }
 
-          const css = themes[effectiveTheme];
+          const css = themes[effectiveTheme as keyof typeof themes];
           Object.entries(css).forEach(([key, value]) => {
             root.style.setProperty(key, value);
           });

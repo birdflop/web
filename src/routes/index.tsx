@@ -256,8 +256,8 @@ export default component$(() => {
         </div>
       </section>
       <section class="flex flex-col mx-auto max-w-6xl px-10 items-center justify-center pt-10">
-        <Anchor id="features">
-          <h1 id="features" class="mr-2">
+        <Anchor id="testimonials">
+          <h1 id="testimonials" class="mr-2">
             Testimonials
           </h1>
         </Anchor>

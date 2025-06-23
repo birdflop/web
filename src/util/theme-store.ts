@@ -1,31 +1,28 @@
 import { createContextId, $, Signal } from '@builder.io/qwik';
-import { Cookie, server$ } from '@builder.io/qwik-city';
-export type ThemeName = keyof typeof themes;
+import { Cookie } from '@builder.io/qwik-city';
+export type ThemeName = keyof typeof themes | 'auto';
 
 /**
  * Get the theme preference
  * @returns ThemeName | undefined
  */
-export const getThemePreference = server$(function (c?: Cookie): ThemeName | undefined {
-  const cookie = this.cookie || c;
+export const getThemePreference = function (cookie: Cookie): ThemeName {
   const cookieVal = cookie.get('theme-preference');
   const value = cookieVal?.value as ThemeName | undefined;
-  return value;
-});
+  return value || 'auto';
+};
 
 /**
  * Set the theme preference
  * @param theme - ThemeName
  */
-export const setThemePreference = server$(function (theme: ThemeName, c?: Cookie) {
-  const cookie = this.cookie || c;
-  return cookie.set('theme-preference', theme);
+export const setThemePreference = $(function (theme: ThemeName) {
+  return document.cookie = `theme-preference=${theme}; path=/;`;
 });
 
 const defaultTheme = {
   '--color-bg': 'var(--color-gray-900)',
   '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
-  '--color-text': 'var(--color-gray-200)',
   '--color-lum-border': '#dfdfdfaa',
   '--color-lum-card-bg': 'var(--color-gray-900)',
   '--color-lum-input-bg': 'var(--color-gray-800)',
@@ -42,7 +39,6 @@ export const themes = {
   light: {
     '--color-bg': 'var(--color-blue-200)',
     '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 5%)',
-    '--color-text': 'var(--color-gray-900)',
     '--color-lum-border': 'var(--color-gray-600)',
     '--color-lum-card-bg': 'var(--color-blue-200)',
     '--color-lum-input-bg': 'var(--color-blue-300)',
@@ -53,13 +49,12 @@ export const themes = {
     '--lum-default-alpha': '70',
     '--lum-border-radius': '0.625rem',
   },
-  auto: defaultTheme,
 };
 
 export interface ThemeContextType {
   currentTheme: ThemeName;
-  isDark: boolean;
-  css: {
+  isDark?: boolean;
+  css?: {
     [key: string]: string;
   }
 }
@@ -68,7 +63,7 @@ export const ThemeContext = createContextId<ThemeContextType>('theme-context');
 
 // Apply theme to CSS variables
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const applyTheme = $((themeName: ThemeName, isDark: Signal<boolean>) => {
+const applyTheme = $((themeName: ThemeName,  isDark: Signal<boolean>) => {
   if (typeof document === 'undefined') return;
 
   let effectiveTheme = themeName;

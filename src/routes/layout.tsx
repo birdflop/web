@@ -7,7 +7,7 @@ import Nav from '~/components/Nav';
 import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { getCSSString, getThemePreference, ThemeContext, themes } from '~/util/theme-store';
+import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -29,19 +29,17 @@ export const onGet: RequestHandler = ({ cacheControl }) => {
   });
 };
 
-export const useServerTheme = routeLoader$(async ({ cookie }) => {
-  const serverTheme = await getThemePreference(cookie) || 'auto';
+export const useServerTheme = routeLoader$(({ cookie }) => {
+  const serverTheme = getThemePreference(cookie);
+  if (serverTheme == 'auto') return {
+    currentTheme: serverTheme,
+  };
+
   const css = themes[serverTheme];
   const cssString = getCSSString(serverTheme);
-
   return {
     currentTheme: serverTheme,
-    isDark: serverTheme === 'dark'
-    || (serverTheme === 'auto'
-      && (typeof window !== 'undefined'
-        && window.matchMedia?.('(prefers-color-scheme: dark)').matches
-      )
-    ),
+    isDark: serverTheme === 'dark',
     css,
     cssString,
   };
@@ -63,7 +61,7 @@ export default component$(() => {
   // Get server-side theme data
   const serverThemeData = useServerTheme();
 
-  const themeStore = useStore(serverThemeData.value);
+  const themeStore = useStore<ThemeContextType>(serverThemeData.value);
   useContextProvider(ThemeContext, themeStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -138,24 +136,19 @@ export default component$(() => {
   });
 
   return <>
-    <style>
-      {`
-      :root {
-        ${serverThemeData.value?.cssString || ''}
-      }
-      `}
-    </style>
     <Nav />
 
-    {themeStore.isDark &&
+    {(themeStore.isDark === undefined || themeStore.isDark) &&
       <Background id="bg" class={{
+        'hidden dark:flex': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
         'transition-all duration-1000': loc.isNavigating,
         'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
     }
-    {!themeStore.isDark &&
+    {(themeStore.isDark === undefined || !themeStore.isDark) &&
       <LightBackground id="bg" class={{
+        'flex dark:hidden': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
         'transition-all duration-1000': loc.isNavigating,
         'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
