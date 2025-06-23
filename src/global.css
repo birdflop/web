@@ -6,13 +6,14 @@
 
 @import "@luminescent/ui";
 @import "@luminescent/ui/formatting";
-@plugin "@luminescent/ui/lum-bg";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
 
 @theme {
+  --lum-default-alpha: 70;
   --lum-border-radius: 0.625rem;
+  --lum-border-color: #dfdfdfaa;
 }
 
 /* Pulled straight from minecraft.net */

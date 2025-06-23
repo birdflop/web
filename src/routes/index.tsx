@@ -25,19 +25,19 @@ export default component$(() => {
     if (mediaQuery.matches) return;
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
-    bg.style.filter = `blur(${window.scrollY / 20}px) brightness(50%)`;
+    bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
   }));
 
   return <>
     <section class="flex flex-col mx-auto px-10 items-center justify-center text-center min-h-dvh pt-[72px]">
       <h1 class={{
-        'my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
+        'relative my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
       }}
       >
-        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="-mr-1.5" />
+        <LogoBirdflop size={50} fillGradient={['#54daf4', '#545eb6']} class="left-0 absolute -z-1" />
         <p class="text-transparent!">
-          <span class="-ml-11">b</span>
+          <span>b</span>
           <span
             style={{
               background: 'linear-gradient(180deg, #54daf4, #545eb6)',
@@ -45,9 +45,9 @@ export default component$(() => {
             }}>
             irdflo
           </span>
-          <span class="-mr-11">p</span>
+          <span>p</span>
         </p>
-        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-ml-1 scale-y-[-1] mt-8 -z-1" />
+        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-right-0.5 absolute -z-1 scale-y-[-1] mt-8" />
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000">
         The only 501(c)(3) nonprofit server host — dedicated to <span
@@ -62,12 +62,12 @@ export default component$(() => {
       </h5>
       <div class="flex flex-col gap-2 mt-8 animate-in fade-in slide-in-from-top-24 anim-duration-1000">
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600/80 hover:lum-bg-blue-600"
+          <a href="#plans" class="lum-btn lum-btn-p-4 lum-bg-blue-600 hover:lum-bg-blue-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Server size={26} /> Hosting
           </a>
-          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600/80 hover:lum-bg-purple-600"
+          <Link href="/resources" class="lum-btn lum-btn-p-4 lum-bg-purple-600 hover:lum-bg-purple-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <Box size={26}  /> Resources
@@ -75,7 +75,7 @@ export default component$(() => {
         </div>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
           <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
-            class="lum-btn lum-btn-p-4 lum-bg-pink-600/80 hover:lum-bg-pink-600"
+            class="lum-btn lum-btn-p-4 lum-bg-pink-600 hover:lum-bg-pink-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <HandCoins size={26} /> Donate Today
@@ -140,7 +140,7 @@ export default component$(() => {
             </div>;
           })}
         </div>
-        <div class="lum-card lum-bg-indigo-600/50 hover:lum-bg-indigo-600 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+        <div class="lum-card lum-bg-indigo-900 hover:lum-bg-indigo-800 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="my-0! flex items-center gap-2">

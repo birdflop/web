@@ -37,10 +37,10 @@
     "@auth/qwik": "0.7.1",
     "@builder.io/qwik": "1.14.1",
     "@builder.io/qwik-city": "1.14.1",
-    "@cloudflare/workers-types": "^4.20250612.0",
-    "@eslint/js": "^9.28.0",
-    "@luminescent/ui": "^4.0.0-0",
-    "@luminescent/ui-qwik": "^4.0.0-0",
+    "@cloudflare/workers-types": "^4.20250614.0",
+    "@eslint/js": "^9.29.0",
+    "@luminescent/ui": "^4.0.2",
+    "@luminescent/ui-qwik": "^4.0.2",
     "@modular-forms/qwik": "^0.29.1",
     "@prisma/client": "6.9.0",
     "@prisma/extension-accelerate": "2.0.1",
@@ -54,7 +54,7 @@
     "@types/node": "^24.0.1",
     "@types/three": "^0.177.0",
     "chart.js": "^4.4.9",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "eslint-plugin-qwik": "1.14.1",
     "gifuct-js": "^2.1.2",
     "globals": "^16.2.0",
@@ -72,7 +72,7 @@
     "vite-tsconfig-paths": "5.1.4",
     "wrangler": "^4.20.0",
     "yaml": "^2.8.0",
-    "zod": "^3.25.63"
+    "zod": "^3.25.64"
   },
   "packageManager": "pnpm@10.12.1",
   "pnpm": {
