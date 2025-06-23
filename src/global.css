@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 
 @import "tailwindcss";
 
@@ -6,13 +6,59 @@
 
 @import "@luminescent/ui";
 @import "@luminescent/ui/formatting";
-@plugin "@luminescent/ui/lum-bg";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
 
 @theme {
+  --lum-default-alpha: 70;
   --lum-border-radius: 0.625rem;
+  --color-green: var(--color-green-900);
+  --color-red: var(--color-red-900);
+  --color-orange: var(--color-orange-900);
+  --color-yellow: var(--color-yellow-900);
+  --color-blue: var(--color-blue-900);
+  --color-violet: var(--color-violet-900);
+  --color-pink: var(--color-pink-900);
+  --color-purple: var(--color-purple-900);
+  --color-cyan: var(--color-cyan-900);
+  --color-lime: var(--color-lime-900);
+  --color-teal: var(--color-teal-900);
+  --color-lum-border: #dfdfdfaa;
+  --color-nav-bg: --alpha(var(--color-lum-input-bg) / 50%);
+  --color-bg: var(--color-gray-950);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: var(--color-blue-200);
+    --color-nav-bg: --alpha(var(--color-blue-300) / 95%);
+    --color-green: var(--color-green-500);
+    --color-red: var(--color-red-500);
+    --color-orange: var(--color-orange-500);
+    --color-yellow: var(--color-yellow-500);
+    --color-blue: var(--color-blue-500);
+    --color-violet: var(--color-violet-500);
+    --color-pink: var(--color-pink-500);
+    --color-purple: var(--color-purple-500);
+    --color-cyan: var(--color-cyan-500);
+    --color-lime: var(--color-lime-500);
+    --color-teal: var(--color-teal-500);
+    --color-lum-border: var(--color-gray-600);
+    --color-lum-card-bg: var(--color-blue-200);
+    --color-lum-input-bg: var(--color-blue-300);
+    --color-lum-input-hover-bg: var(--color-blue-300);
+    --color-lum-accent: var(--color-blue-500);
+    --color-lum-text: var(--color-gray-900);
+    --color-lum-text-secondary: var(--color-gray-600);
+    --lum-default-alpha: 70;
+    --lum-border-radius: 0.625rem;
+  }
+}
+
+a.lum-btn, a.lum-card {
+  color: var(--color-text) !important;
+  text-decoration: none;
 }
 
 /* Pulled straight from minecraft.net */
@@ -87,7 +133,7 @@
 
 html {
   font-family: Figtree, sans-serif;
-  background-color: rgb(17 24 39);
+  background-color: var(--color-bg);
 }
 
 .font-mc {

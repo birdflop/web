@@ -12,14 +12,14 @@ export default component$(() => {
       plugins: {
         legend: {
           labels: {
-            color: 'white',
+            color: 'gray',
           },
         },
       },
       scales: {
         x: {
           ticks: {
-            color: 'white',
+            color: 'gray',
           },
           grid: {
             color: 'rgba(255, 255, 255, 0.1)',
@@ -27,7 +27,7 @@ export default component$(() => {
         },
         y: {
           ticks: {
-            color: 'white',
+            color: 'gray',
           },
           grid: {
             color: 'rgba(255, 255, 255, 0.1)',

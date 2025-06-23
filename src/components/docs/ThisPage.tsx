@@ -126,13 +126,13 @@ export const OnThisPage = component$(({ readOnly }: {
             <span>Create an issue</span>
           </a>
           <div
-            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500'
+            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary'
           >
             <User size={20} />
             <span>Created by: {author}</span>
           </div>
           <div
-            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500 text-left'
+            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left'
           >
             <Clock size={20} />
             <span>Created:<br/>{created}</span>
@@ -141,7 +141,7 @@ export const OnThisPage = component$(({ readOnly }: {
       </>}
       {updated !== 'Unknown' && updated !== created && (
         <div
-          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-gray-500 text-left'
+          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left'
         >
           <Clock size={20} />
           <span>Last Updated:<br/>{updated}</span>
