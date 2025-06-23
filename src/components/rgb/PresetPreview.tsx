@@ -38,7 +38,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
 
   return (
     <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props}
-      class="lum-card p-5 lum-bg-gray-800/30 hover:lum-bg-gray-800/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      class="lum-card p-5 lum-bg-lum-input-bg/30 hover:lum-bg-lum-input-bg/70 w-full transition duration-1000 hover:duration-75 ease-out"
       key={`preset-${presetInfo.name}-${presetInfo.author}`}
       prefetch={false}>
       { presetInfo.author &&
@@ -101,7 +101,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
           </p>
 
           { presetInfo.description &&
-            <p class="text-gray-400 text-sm pt-2">
+            <p class="text-lum-text-secondary text-sm pt-2">
               {presetInfo.description}
             </p>
           }

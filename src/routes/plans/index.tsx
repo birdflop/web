@@ -102,7 +102,7 @@ export default component$(() => {
               {plansStore.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
             </button>
           </h2>
-          <p class="text-gray-400">
+          <p class="text-lum-text-secondary">
             This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
           </p>
 
@@ -114,7 +114,7 @@ export default component$(() => {
                 class={{
                   'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                   'opacity-50': plan.outOfStock,
-                  'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.plan != planName,
+                  'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
                   'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
                 }}
                 key={planName}
@@ -290,7 +290,7 @@ export default component$(() => {
                   }}
                   class={{
                     'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
-                    'lum-bg-gray-800 hover:lum-bg-gray-800/70': plansStore.gb != Number(gb),
+                    'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
                     'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
                   }}>
                   <h3 class="my-0!">
@@ -324,7 +324,7 @@ export default component$(() => {
               <input id="server_description" placeholder="This is my Minecraft server!" class="lum-input" onChange$={(e, el) => plansStore.desc = el.value} />
             </div>
             <div>
-              <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
+              <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue/80 hover:lum-bg-blue gap-4 mt-auto"
                 href={'https://client.birdflop.com/order/config/index/'
                   + plans[plansStore.plan]?.id
                   + '/?group_id=' + plans[plansStore.plan]?.groupId

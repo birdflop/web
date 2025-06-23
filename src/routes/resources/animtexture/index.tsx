@@ -232,7 +232,7 @@ export default component$(() => {
 
         <div id="imgs" class="lum-card flex-row flex-wrap max-h-[620px] overflow-auto gap-2 p-2 mt-4">
           {animtextureStore.frames.map((frame, i) => (
-            <div key={`frame${i}-${frame.delay}`} class="lum-card lum-bg-gray-800 w-24 p-0 relative">
+            <div key={`frame${i}-${frame.delay}`} class="lum-card lum-bg-lum-input-bg w-24 p-0 relative">
               <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {
                 const frames = [...animtextureStore.frames];
                 frames.splice(i, 1);
@@ -249,7 +249,7 @@ export default component$(() => {
                     onInput$={(e, el) => {
                       animtextureStore.frames[i].delay = Number(el.value);
                     }}
-                    class="lum-input lum-bg-gray-900 mb-2 mx-2" />
+                    class="lum-input lum-bg-lum-card-bg mb-2 mx-2" />
               }
             </div>
           ))}

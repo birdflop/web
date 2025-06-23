@@ -96,14 +96,14 @@ export default component$<ChartProps>((props) => {
             legend: {
               display: true,
               labels: {
-                color: 'white',
+                color: 'gray',
                 usePointStyle: true,
               },
               position: 'bottom',
               title: {
                 display: true,
                 text: '',
-                color: 'white',
+                color: 'gray',
               },
             },
             tooltip: {

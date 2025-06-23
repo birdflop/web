@@ -9,6 +9,7 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
+import { ThemeToggle } from './ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -20,10 +21,10 @@ export default component$(() => {
   const session = useSession();
 
   return (
-    <Nav fixed colorClass="lum-bg-gray-800/30 !border-t-0 !border-x-0">
+    <Nav fixed colorClass="lum-bg-nav-bg !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent p-2">
         <LogoBirdflop size={24} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
-        <span class="font-semibold -ml-1 text-blue-50">Birdflop</span>
+        <span class="font-semibold -ml-1">Birdflop</span>
         <div class={{
           'transition-all': true,
           '-ml-6 opacity-0': !loc.isNavigating,
@@ -85,12 +86,13 @@ export default component$(() => {
         }}>
         <Globe size={20} q:slot='dropdown' />
       </SelectMenuRaw>
+      <ThemeToggle variant="compact" q:slot='end' />
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
       {session.value && session.value.user &&
         <SelectMenuRaw q:slot='end' class={{ 'p-2 lum-bg-transparent gap-1': true }} id="profile" customDropdown>
-          <p q:slot='dropdown' class="flex items-center gap-2">
+          <p q:slot='dropdown' class="flex items-center gap-2 text-lum-text">
             {session.value.user.image &&
               <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />
             }

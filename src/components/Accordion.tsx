@@ -10,7 +10,7 @@ export default component$(({ sectionName, alwaysOpen }: {
 
   return (
     <button class={{
-      'lum-btn lum-btn-p-2 lum-bg-gray-800/30': true,
+      'lum-btn lum-btn-p-2 lum-bg-lum-input-bg/30': true,
       'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': alwaysOpen,
       'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': alwaysOpen,
     }} onClick$={() => {
