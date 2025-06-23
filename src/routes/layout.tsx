@@ -105,7 +105,7 @@ export default component$(() => {
       element: <div class={{
         ['lum-bg-lum-input-bg/60']: true,
         'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
-        'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+        'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
         <div>
           <h4 class="flex gap-2 items-center mt-0!">
@@ -150,13 +150,15 @@ export default component$(() => {
     {themeStore.isDark &&
       <Background id="bg" class={{
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
-        'transition-all duration-1000 blur-xl bottom-0! opacity-30 scale-150': loc.url.pathname != '/',
+        'transition-all duration-1000': loc.isNavigating,
+        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
     }
     {!themeStore.isDark &&
       <LightBackground id="bg" class={{
-        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-80': true,
-        'transition-all duration-1000 blur-xl! bottom-0! opacity-20 scale-150': loc.url.pathname != '/',
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'transition-all duration-1000': loc.isNavigating,
+        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
     }
     <Slot />
@@ -169,7 +171,7 @@ export default component$(() => {
         return <div class={{
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
-          'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+          'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
           <h4 class="flex gap-2 items-center mt-0!">
             <span class="flex gap-2 items-center flex-1">
