@@ -70,7 +70,7 @@ export default component$(() => {
           id,
           title: 'Error fetching presets',
           description: `${error}`,
-          bgColor: 'lum-bg-red-900/50',
+          bgColor: 'lum-bg-red/50',
         };
         notifications.push(notification);
       });
@@ -104,7 +104,7 @@ export default component$(() => {
         id,
         title: 'Error parsing saved presets',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
       setTimeout(() => {

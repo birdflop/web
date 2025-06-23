@@ -229,8 +229,8 @@ export default component$(() => {
               <label for="labels-range-input">
                 {t('flags.memory.label@@Memory')}
               </label>
-              <div class="group relative w-full h-2 lum-bg-lum-input-bg hover:lum-bg-gray-700 select-none rounded-lum my-2">
-                <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lum" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
+              <div class="group relative w-full h-2 lum-bg-lum-input-bg hover:lum-bg-lum-card-bg/30 select-none rounded-lum my-2">
+                <div class="h-2 lum-bg-blue group-hover:lum-bg-blue rounded-lum" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
                 <div class="absolute w-full top-1 flex justify-between">
                   <span class="text-left">|</span>
                   <span class="text-center">|</span>
@@ -239,7 +239,7 @@ export default component$(() => {
                   <span class="text-right">|</span>
                 </div>
                 <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
-                  <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
+                  <div class="w-4 h-4 lum-bg-blue group-hover:lum-bg-blue rounded-full" />
                   <div class="lum-bg-lum-card-bg lum-btn-p-2 text-center w-24 rounded-lum opacity-0 group-hover:opacity-100 transition-all z-50">
                     {flagsStore.memory} GB
                   </div>
@@ -317,7 +317,7 @@ export default component$(() => {
           </div>
         </div>
 
-        <label for="Output" class="text-gray-50">
+        <label for="Output">
           {t('flags.script.label@@Script')}
         </label>
         <p class="text-lum-text-secondary text-sm mb-2">

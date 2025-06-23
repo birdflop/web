@@ -23,15 +23,15 @@ export default component$(() => {
         </p>
         <hr/>
         <div class="flex flex-wrap gap-2 mb-2">
-          <a class="lum-btn lum-bg-blue-600/70 hover:lum-bg-blue-600" href="https://status.birdflop.com/">
+          <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://status.birdflop.com/">
             Overview
           </a>
-          <a class="lum-btn lum-bg-blue-600/70 hover:lum-bg-blue-600" href="https://netdata.birdflop.com/panel">
+          <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://netdata.birdflop.com/panel">
             Web Services
           </a>
         </div>
         <div class="grid grid-cols-4 gap-2">
-          <a class="lum-card lum-bg-red-900/30 hover:lum-bg-red-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=crabwings.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-red/30 hover:lum-bg-red/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=crabwings.birdflop.com:9100&orgId=1">
             <Blobs color='red' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Crabwings
@@ -41,7 +41,7 @@ export default component$(() => {
             </p>
             crabwings.birdflop.com
           </a>
-          <a class="lum-card lum-bg-orange-900/30 hover:lum-bg-orange-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=impeyes.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-orange/30 hover:lum-bg-orange/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=impeyes.birdflop.com:9100&orgId=1">
             <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Impeyes
@@ -51,7 +51,7 @@ export default component$(() => {
             </p>
             impeyes.birdflop.com
           </a>
-          <a class="lum-card lum-bg-yellow-900/30 hover:lum-bg-yellow-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=jellyfishjaws.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-yellow/30 hover:lum-bg-yellow/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=jellyfishjaws.birdflop.com:9100&orgId=1">
             <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Jellyfishjaws
@@ -61,7 +61,7 @@ export default component$(() => {
             </p>
             jellyfishjaws.birdflop.com
           </a>
-          <a class="lum-card lum-bg-green-900/30 hover:lum-bg-green-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=koalaknees.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-green/30 hover:lum-bg-green/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=koalaknees.birdflop.com:9100&orgId=1">
             <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Koalaknees
@@ -71,7 +71,7 @@ export default component$(() => {
             </p>
             koalaknees.birdflop.com
           </a>
-          <a class="lum-card lum-bg-teal-900/30 hover:lum-bg-teal-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=llamalips.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-teal/30 hover:lum-bg-teal/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=llamalips.birdflop.com:9100&orgId=1">
             <Blobs color='teal' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Llamalips
@@ -81,7 +81,7 @@ export default component$(() => {
             </p>
             llamalips.birdflop.com
           </a>
-          <a class="lum-card lum-bg-blue-900/30 hover:lum-bg-blue-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=monkeymouth.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-blue/30 hover:lum-bg-blue/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=monkeymouth.birdflop.com:9100&orgId=1">
             <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Monkeymouth
@@ -91,7 +91,7 @@ export default component$(() => {
             </p>
             monkeymouth.birdflop.com
           </a>
-          <a class="lum-card lum-bg-violet-900/30 hover:lum-bg-violet-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=narwhalnose.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-violet/30 hover:lum-bg-violet/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=narwhalnose.birdflop.com:9100&orgId=1">
             <Blobs color='violet' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Narwhalnose
@@ -101,7 +101,7 @@ export default component$(() => {
             </p>
             narwhalnose.birdflop.com
           </a>
-          <a class="lum-card lum-bg-pink-900/30 hover:lum-bg-pink-900/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=owlorgans.birdflop.com:9100&orgId=1">
+          <a class="lum-card lum-bg-pink/30 hover:lum-bg-pink/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=owlorgans.birdflop.com:9100&orgId=1">
             <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h3 class="my-0!">
               Owlorgans

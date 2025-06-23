@@ -59,7 +59,7 @@ export default component$(({ id = 'text' }: {
     }}
     >
       <div id={`colormap${id}-add-button`} class={{
-        'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full border border-gray-700 bg-gray-800 opacity-0 pointer-events-none': true,
+        'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full lum-bg-lum-card-bg opacity-0 pointer-events-none': true,
       }}>
         <Plus size={18} />
       </div>

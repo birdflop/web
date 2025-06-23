@@ -123,7 +123,7 @@ export default component$(() => {
           }}>
             {t$('nav.cookies.optOut@@Turn off cookies')}
           </button>
-          <button class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue" onClick$={() => {
             document.cookie = 'cookies=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>

@@ -324,7 +324,7 @@ export default component$(() => {
               <input id="server_description" placeholder="This is my Minecraft server!" class="lum-input" onChange$={(e, el) => plansStore.desc = el.value} />
             </div>
             <div>
-              <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue-700/80 hover:lum-bg-blue-600 gap-4 mt-auto"
+              <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue/80 hover:lum-bg-blue gap-4 mt-auto"
                 href={'https://client.birdflop.com/order/config/index/'
                   + plans[plansStore.plan]?.id
                   + '/?group_id=' + plans[plansStore.plan]?.groupId

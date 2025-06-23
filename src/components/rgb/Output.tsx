@@ -30,12 +30,12 @@ export default component$(({ hidden, value }: {
             id,
             title: await t$('rgb.copied@@Copied to clipboard!'),
             description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
-            bgColor: 'lum-bg-green-900/50',
+            bgColor: 'lum-bg-green/50',
           };
           navigator.clipboard.writeText(value).catch(async (err) => {
             notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
             notification.description = err;
-            notification.bgColor = 'lum-bg-red-900/50';
+            notification.bgColor = 'lum-bg-red/50';
           });
           notifications.push(notification);
           setTimeout(() => {

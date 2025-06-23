@@ -65,7 +65,7 @@ export default component$(() => {
         id,
         title: 'Error parsing saved presets',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
       setTimeout(() => {
@@ -84,7 +84,7 @@ export default component$(() => {
           id,
           title: 'Error fetching user data',
           description: `${error}`,
-          bgColor: 'lum-bg-red-900/50',
+          bgColor: 'lum-bg-red/50',
         };
         notifications.push(notification);
       });

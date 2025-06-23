@@ -48,7 +48,7 @@ export default component$(() => {
         id,
         title: 'Error fetching data',
         description: `${error}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
     });
@@ -114,7 +114,7 @@ export default component$(() => {
         id,
         title: 'Error setting cookies',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
     }

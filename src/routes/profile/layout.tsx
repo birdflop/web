@@ -42,7 +42,7 @@ export default component$(() => {
                 name="options.redirectTo"
                 value={loc.url.pathname + loc.url.search}
               />
-              <button class="lum-btn lum-btn-p-4 lum-bg-blue-800 hover:lum-bg-blue-600 text-white">
+              <button class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white">
                 <LogIn size={20} /> {t('nav.profile.login@@Login')}
               </button>
             </Form>

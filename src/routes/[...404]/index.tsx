@@ -34,7 +34,7 @@ export default component$(() => {
           {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
         </h4>
         <div class="flex mt-4">
-          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue-800 hover:lum-bg-blue-600 text-white!">
+          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white!">
             <Home size={26}/> {t('nav.404.home@@Go back home')}
           </Link>
         </div>

@@ -83,7 +83,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <div class="bg-lum-card-bg border-t border-gray-800 pb-16">
+    <div class="bg-lum-card-bg border-t border-lum-border pb-16">
       <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-10">
         <h1>
           Our Nonprofit Mission
@@ -133,14 +133,14 @@ export default component$(() => {
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
                 :
-                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-500 mt-4 w-min m-auto">
+                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue/50 hover:lum-bg-blue-500 mt-4 w-min m-auto">
                   <ShoppingCart size={20} class="text-3xl" /> Order Now
                 </Link>
               }
             </div>;
           })}
         </div>
-        <div class="lum-card lum-bg-lum-card-bg/60  transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+        <div class="lum-card lum-bg-green/60 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="my-0! flex items-center gap-2">
@@ -327,10 +327,10 @@ export default component$(() => {
               Check out our Trustpilot or Google page for more testimonials.
             </p>
             <div class="flex gap-2">
-              <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+              <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue/50 hover:lum-bg-blue">
                 Trustpilot
               </a>
-              <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue-600/50 hover:lum-bg-blue-600">
+              <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue/50 hover:lum-bg-blue">
                 Google
               </a>
             </div>

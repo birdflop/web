@@ -49,7 +49,7 @@ export default component$(({ threshold, hidden }: {
       id,
       title: await t$('rgb.decode.decoded.title@@RGB Text Decoded!'),
       description: await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'),
-      bgColor: 'lum-bg-green-900/50',
+      bgColor: 'lum-bg-green/50',
     });
     setTimeout(() => {
       notifications.splice(notifications.findIndex((n) => n?.id === id), 1);

@@ -53,7 +53,7 @@ export default component$(() => {
           'flex mt-3': true,
           'hidden': !redirect.value,
         }}>
-          <Link href={redirect.value} class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600">
+          <Link href={redirect.value} class="lum-btn lum-bg-blue hover:lum-bg-blue">
             Submit
           </Link>
         </div>
