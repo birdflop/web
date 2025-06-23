@@ -25,7 +25,7 @@ export default component$(() => {
     if (mediaQuery.matches) return;
     const bg = document.getElementById('bg')!;
     bg.style.bottom = `${window.scrollY / 2}px`;
-    bg.style.filter = `blur(${window.scrollY / 20}px) brightness(50%)`;
+    bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
   }));
 
   return <>
