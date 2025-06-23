@@ -1,4 +1,4 @@
-import { createContextId, $, Signal } from '@builder.io/qwik';
+import { createContextId, $ } from '@builder.io/qwik';
 import { Cookie } from '@builder.io/qwik-city';
 export type ThemeName = keyof typeof themes | 'auto';
 
@@ -57,35 +57,10 @@ export interface ThemeContextType {
   css?: {
     [key: string]: string;
   }
+  cssString?: string;
 }
 
 export const ThemeContext = createContextId<ThemeContextType>('theme-context');
-
-// Apply theme to CSS variables
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const applyTheme = $((themeName: ThemeName,  isDark: Signal<boolean>) => {
-  if (typeof document === 'undefined') return;
-
-  let effectiveTheme = themeName;
-  if (themeName === 'auto') {
-    effectiveTheme = (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
-  }
-
-  const themeColors = themes[effectiveTheme];
-  const root = document.documentElement;
-
-  // Apply CSS custom properties
-  Object.entries(themeColors).forEach(([key, value]) => {
-    root.style.setProperty(key, value);
-  });
-
-  // Update data attributes for additional styling hooks
-  root.setAttribute('data-theme', effectiveTheme);
-  root.setAttribute('data-theme-variant', themeName);
-
-  isDark.value = effectiveTheme === 'dark' ||
-    (themeName === 'auto' && (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches));
-});
 
 /**
  * Generate CSS variables string for server-side theme injection
@@ -94,7 +69,7 @@ const applyTheme = $((themeName: ThemeName,  isDark: Signal<boolean>) => {
  * @param userAgent - Optional user agent string for auto theme detection
  * @returns CSS variables string to inject into the document
  */
-export function getCSSString(themeName: ThemeName): string {
+export function getCSSString(themeName: Exclude<ThemeName, 'auto'>): string {
   const css = themes[themeName];
 
   // Generate CSS custom properties

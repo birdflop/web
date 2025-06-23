@@ -70,7 +70,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
       },
     ];
 
-    const currentThemeOption =
+    const CurrentThemeOption =
       themeOptions.find((option) => option.value === themeStore.currentTheme) ||
       themeOptions[0];
     const handleThemeChange = $((newTheme: ThemeName) => {
@@ -113,17 +113,17 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     });
     // Compact variant - just the current theme icon
     if (variant === 'compact') {
-      const IconComponent = currentThemeOption.icon;
+      const IconComponent = CurrentThemeOption.icon;
       return (
         <button
           onClick$={handleCycleTheme}
           class={`lum-btn lum-bg-transparent group p-2 ${className}`}
-          title={`Current theme: ${currentThemeOption.label}. Click to cycle themes.`}
+          title={`Current theme: ${CurrentThemeOption.label}. Click to cycle themes.`}
         >
           <IconComponent class="text-theme-accent-primary group-hover:text-theme-text-primary h-5 w-5 transition-colors" />
           {showLabel && (
             <span class="text-theme-accent-primary group-hover:text-theme-text-primary ml-2 text-sm">
-              {currentThemeOption.label}
+              {CurrentThemeOption.label}
             </span>
           )}
         </button>
@@ -140,10 +140,10 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         }>
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
-            <currentThemeOption.icon class="text-theme-accent-primary group-hover:text-theme-text-primary h-5 w-5 transition-colors" />
+            <CurrentThemeOption.icon class="text-theme-accent-primary group-hover:text-theme-text-primary h-5 w-5 transition-colors" />
             {(variant === 'full' || showLabel) && (
               <span class="text-theme-accent-primary group-hover:text-theme-text-primary text-sm">
-                {currentThemeOption.label}
+                {CurrentThemeOption.label}
               </span>
             )}
           </div>

@@ -136,6 +136,7 @@ export default component$(() => {
   });
 
   return <>
+    <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
