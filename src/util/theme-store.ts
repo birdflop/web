@@ -67,7 +67,7 @@ export const themes = {
     '--color-lum-input-hover-bg': 'var(--color-blue-300)',
     '--color-lum-accent': 'var(--color-blue-500)',
     '--color-lum-text': 'var(--color-gray-900)',
-    '--color-lum-text-secondary': 'var(--color-gray-600)',
+    '--color-lum-text-secondary': 'var(--color-gray-800)',
     '--lum-default-alpha': '70',
     '--lum-border-radius': '0.625rem',
   },

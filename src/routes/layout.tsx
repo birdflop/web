@@ -69,6 +69,11 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
+    if (themeStore.isDark === undefined) {
+      // If the theme is not set, check the user's preference
+      themeStore.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
     // Load open items from localStorage
     const savedOpenItems = await loadOpenItems();
     if (savedOpenItems && savedOpenItems.length > 0) {

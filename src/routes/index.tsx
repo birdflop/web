@@ -3,13 +3,13 @@ import { Link } from '@builder.io/qwik-city';
 
 import { Anchor, Hoverable, LogoBirdflop } from '@luminescent/ui-qwik';
 import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings } from 'lucide-icons-qwik';
-import Chart from '~/components/home/Chart';
 import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
+import ExpensesChart from '~/components/home/ExpensesChart';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -240,7 +240,7 @@ export default component$(() => {
         </h1>
         <div class="grid md:grid-cols-2 gap-10">
           <div>
-            <Chart />
+            <ExpensesChart />
             <p class="text-lum-text-secondary text-center py-2 text-sm">
               Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
             </p>
