@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
 import { type ThemeName, themes, setThemePreference, ThemeContext } from '~/util/theme-store';
-import { Moon, Sun, Sparkles } from 'lucide-icons-qwik';
+import { Moon, Sun, Sparkles, Bomb, Battery } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
 export interface ThemeToggleProps {
@@ -67,6 +67,20 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         icon: Sun,
         description: 'Clean light theme',
         gradient: 'from-yellow-400 to-orange-500',
+      },
+      {
+        value: 'white',
+        label: 'White',
+        icon: Bomb,
+        description: 'Flashbang',
+        gradient: 'from-gray-200 to-gray-500',
+      },
+      {
+        value: 'black',
+        label: 'Black',
+        icon: Battery,
+        description: 'Full black theme for OLED',
+        gradient: 'from-black to-gray-900',
       },
     ];
 
@@ -164,7 +178,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
             }
             class={
               CurrentThemeOption.value === 'auto'
-                ? 'absolute top-1 left-5'
+                ? 'absolute top-2 left-7'
                 : ''
             } />
             {(variant === 'full' || showLabel) && (
