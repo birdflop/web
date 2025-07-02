@@ -4,7 +4,7 @@ import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-q
 
 import { Box, Globe, LogIn, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
 
-import { inlineTranslate, useSpeakConfig } from 'qwik-speak';
+import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
@@ -16,6 +16,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   const config = useSpeakConfig();
+  const locale = useSpeakLocale();
   const loc = useLocation();
   const signIn = useSignIn();
   const signOut = useSignOut();
@@ -80,7 +81,7 @@ export default component$(() => {
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true }} id="lang-picker" customDropdown
+      <SelectMenuRaw align="right" q:slot='end' class={{ 'hidden': !loc.url.pathname.includes('resources'), 'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true }} id="lang-picker" customDropdown
         values={config.supportedLocales.map(value => (
           {
             name: languages[value.lang as keyof typeof languages],
@@ -90,6 +91,9 @@ export default component$(() => {
           document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
           location.reload();
         }}>
+        <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot='dropdown'>
+          {locale.lang.split('-')[0]}
+        </span>
         <Globe size={20} q:slot='dropdown' />
       </SelectMenuRaw>
       <ThemeToggle variant="compact" q:slot='end' class="hover:lum-bg-nav-bg" />
@@ -97,7 +101,7 @@ export default component$(() => {
         <SocialButtons />
       </div>
       {session.value && session.value.user &&
-        <SelectMenuRaw q:slot='end' class={{ 'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true }} id="profile" customDropdown>
+        <SelectMenuRaw align="right" q:slot='end' class={{ 'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true }} id="profile" customDropdown>
           <p q:slot='dropdown' class="flex items-center gap-2 text-lum-text">
             {session.value.user.image &&
               <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />
