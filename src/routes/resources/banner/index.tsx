@@ -10,7 +10,7 @@ import Accordion from '~/components/Accordion';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/rgb/RGBUtils';
 import { defaultDescription, generateHead } from '~/root';
@@ -29,7 +29,7 @@ export default component$(() => {
   const textureCanvas = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
   const openPopup = useSignal(-1);
-  const openSections = useContext(OpenSectionsContext);
+  const openItemsStore = useContext(openItemsContext);
   const notifications = useContext(NotificationContext);
   const bannerTexture = useSignal<NoSerialize<THREE.CanvasTexture>>();
 
@@ -210,8 +210,8 @@ export default component$(() => {
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('options') == -1,
-              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('options') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
+              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
             }}>
               <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.baseColor.title@@Base Color')}
@@ -352,8 +352,8 @@ export default component$(() => {
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('command') == -1,
-              'max-h-[250px] opacity-100 pointer-events-auto': openSections.indexOf('command') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
+              'max-h-[250px] opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
             }} id="command">
               <textarea id="commandOutput" readOnly
                 class={{
@@ -388,12 +388,12 @@ export default component$(() => {
             </Accordion>
             <canvas ref={preview} id="preview" class={{
               'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
-              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
+              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
             }} />
             <canvas ref={textureCanvas} id="texture" class="hidden" style={{
               imageRendering: 'pixelated',
-            }}></canvas>
+            }}/>
           </div>
         </div>
       </div>

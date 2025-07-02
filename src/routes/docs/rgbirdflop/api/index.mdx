@@ -1,0 +1,65 @@
+---
+title: RGBirdflop API Documentation
+date_created: 05-22-2025
+last_updated: 05-22-2025
+description: This API is used to generate RGB gradient text for Minecraft and is based on JSON
+author: saboooor
+contributors:
+  - saboooor
+---
+
+import { Endpoints } from './layout.tsx';
+
+# Get Started
+
+This API is used to generate RGB gradient text for Minecraft and is based on JSON. Useful for creating gradient text in your own code for anything Minecraft-related. The API has default values that are the same as the RGBirdflop website, which are also shown in the docs below. To generate a gradient, make a GET request to /api/v2/rgb. The API will return a JSON object with the gradient output.
+
+## Endpoints
+
+<Endpoints/>
+
+## Types
+
+```ts
+type RegularFormatting = {
+  // example: "&#$1$2$3$4$5$6$f$c"
+  // $1 = #(r)rggbb
+  // $2 = #r(r)ggbb
+  // $3 = #rr(g)gbb
+  // $4 = #rrg(g)bb
+  // $5 = #rrgg(b)b
+  // $6 = #rrggb(b)
+  // $f = format tags
+  // $c = character
+  color: string,
+  // The character to use before format tags (default: "&")
+  char?: string,
+}
+```
+
+```ts
+type MiniMessageFormatting = {
+  color: "MiniMessage",
+  // $t is the output text
+  bold?: string,         // default: "<b>$t</b>"
+  italic?: string,       // default: "<i>$t</i>"
+  underline?: string,    // default: "<u>$t</u>"
+  strikethrough?: string,// default: "<st>$t</st>"
+  obfuscate?: string,    // default: "<obf>$t</obf>"
+}
+```
+
+```ts
+type JSONFormatting = {
+  color: "JSON",
+}
+```
+
+```ts
+type Color = {
+  // example: #54daf4
+  hex: string,
+  // example: 50 for 50%
+  pos: number,
+}
+```

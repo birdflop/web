@@ -22,7 +22,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
@@ -68,7 +68,7 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const openSections = useContext(OpenSectionsContext);
+  const openItemsStore = useContext(openItemsContext);
   const threshold = useSignal(50);
 
   const animtabStore = useStore({
@@ -186,7 +186,7 @@ export default component$(() => {
               <Palette size={26} />
               {t('rgb.colors.title@@Colors')}
             </Accordion>
-            <ColorList hidden={openSections.indexOf('colors') == -1}>
+            <ColorList hidden={!openItemsStore.items.includes('colors')}>
               <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
                 onIncrement$={() => animtabStore.length++}
                 onDecrement$={() => animtabStore.length--}
@@ -201,7 +201,7 @@ export default component$(() => {
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
             </Accordion>
-            <Output hidden={openSections.indexOf('output') == -1}
+            <Output hidden={!openItemsStore.items.includes('output')}
               value={AnimationOutput(rgbStore, animtabStore)} />
 
             <Options>
@@ -234,7 +234,7 @@ export default component$(() => {
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
-            <Presets hidden={openSections.indexOf('presets') == -1}/>
+            <Presets hidden={!openItemsStore.items.includes('presets')} />
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
@@ -243,7 +243,7 @@ export default component$(() => {
                 experimental
               </span>
             </Accordion>
-            <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
+            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
@@ -251,14 +251,14 @@ export default component$(() => {
               <Type size={26} />
               {t('rgb.formatting.title@@Formatting')}
             </Accordion>
-            <Formatting hidden={openSections.indexOf('formatting') == -1} />
+            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
-              <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
+              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
             </>}
 
             <Accordion sectionName="outputformat">
@@ -267,8 +267,8 @@ export default component$(() => {
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('outputformat') == -1,
-              'max-h-[500px] opacity-100 pointer-events-auto': openSections.indexOf('outputformat') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('outputformat'),
+              'max-h-[500px] opacity-100 pointer-events-auto': openItemsStore.items.includes('outputformat'),
             }}>
               <label for="outputformat" class="text-lum-text-secondary">
                 {t('animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.')}

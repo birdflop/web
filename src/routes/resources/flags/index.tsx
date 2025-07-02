@@ -305,11 +305,8 @@ export default component$(() => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
                 <Toggle key={id} label={option.label} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
-                  if (el.checked) {
-                    flagsStore.extraFlags.push(id);
-                  } else {
-                    flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
-                  }
+                  if (el.checked) flagsStore.extraFlags.push(id);
+                  else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
                 }} />
                 {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
               </>)}

@@ -46,6 +46,7 @@
     "@prisma/extension-accelerate": "2.0.1",
     "@qwik.dev/partytown": "^0.11.1",
     "@shikijs/colorized-brackets": "^3.6.0",
+    "@shikijs/engine-javascript": "^3.7.0",
     "@shikijs/rehype": "^3.6.0",
     "@shikijs/transformers": "^3.6.0",
     "@shikijs/types": "^3.6.0",

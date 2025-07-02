@@ -59,7 +59,7 @@ const customTypes: {
   format: 'RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs',
 };
 
-const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
+export const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[])
   .filter(key => !['version', 'disperse', 'customFormat'].includes(key))
   .reduce((acc: {
     [key in keyof typeof rgbDefaults]?: {
