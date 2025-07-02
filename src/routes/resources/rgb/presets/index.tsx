@@ -1,15 +1,17 @@
 import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { Save, Search, Send } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
 import { NotificationContext } from '~/routes/layout';
+import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbStoreContext } from '..';
+import { getCookies } from '~/util/dataUtils';
 
 export const usePresets = routeLoader$(async ({ env }) => {
   let presets: publishedPreset[] = [];
@@ -35,15 +37,32 @@ export const usePresets = routeLoader$(async ({ env }) => {
   return { presets, errors };
 });
 
-export const savedPresetsContext = createContextId<Signal<rgbPreset[]>>('savedpresets-context');
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'rgb', url.searchParams) as {
+    cookies: Partial<typeof rgbDefaults>
+    errors: string[]
+  };
+});
+
+export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('privatepresets-context');
+export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>('savedpresets-context');
 export default component$(() => {
   const t = inlineTranslate();
   const notifications = useContext(NotificationContext);
 
+  const { cookies: rgbCookies, errors: rgbCookiesErrors } = useCookies().value;
+
+  const rgbStore = useStore({
+    ...structuredClone(rgbDefaults),
+    ...rgbCookies,
+  }, { deep: true });
+  useContextProvider(rgbStoreContext, rgbStore);
+
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const { presets, errors } = usePresets().value;
+  const { presets, errors: presetsErrors } = usePresets().value;
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    const errors = [...rgbCookiesErrors, ...presetsErrors];
     if (errors.length > 0) {
       errors.forEach((error) => {
         const id = Math.random().toString(36).substring(2, 15);
@@ -51,7 +70,7 @@ export default component$(() => {
           id,
           title: 'Error fetching presets',
           description: `${error}`,
-          bgColor: 'lum-bg-red-900/50',
+          bgColor: 'lum-bg-red/50',
         };
         notifications.push(notification);
       });
@@ -62,32 +81,30 @@ export default component$(() => {
     searchTerm: '',
     showSaved: false,
     showPending: false,
+    previewWithSettings: false,
   });
 
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
+
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresets.value.length != 0) return;
-    let newSavedPresets: rgbPreset[] = [];
+    // If privatePresets is empty, load presets from localStorage
+    if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+
     try {
-      // try to get presets from localStorage
-      const localStoragePresets = localStorage.getItem('savedPresets');
-      // if localStorage is empty, try to get presets from cookies
-      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-      else {
-        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-      }
-      savedPresets.value = savedPresets.value.concat(newSavedPresets);
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
         id,
         title: 'Error parsing saved presets',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
       setTimeout(() => {
@@ -96,13 +113,13 @@ export default component$(() => {
     }
   });
 
-  const personalSavedPresets: presetInfo[] = [];
-  savedPresets.value.forEach((preset) => {
+  const privatePresetsParsed: presetInfo[] = [];
+  privatePresets.value.forEach((preset) => {
     const isunique = presets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
     if (isunique) {
-      personalSavedPresets.push({
+      privatePresetsParsed.push({
         name: preset.text ?? 'Saved Preset',
         preset: preset,
         pending: false,
@@ -117,21 +134,21 @@ export default component$(() => {
 
   if (presetStore.showSaved) {
     filteredPresets = filteredPresets.filter((preset) => savedPresets.value.some((savedPreset) =>
-      JSON.stringify(savedPreset) === JSON.stringify(preset.preset),
+      savedPreset.id === preset.id,
     ));
   }
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
       <div class="min-h-[60px] w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Save size={70} />
-          <span class="flex-1">
+        <h1 class="sm:flex items-center my-3!">
+          <span class="flex flex-1 gap-4 items-center">
+            <Save size={70} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
           <SelectMenuRaw id="hidden-select-menu" customDropdown class={{ 'opacity-0': true }}>
             <Toggle id="showpendingpresets" q:slot='extra-buttons'
-              checked={presetStore.showPending && savedPresets.value.length > 0}
+              checked={presetStore.showPending && privatePresets.value.length > 0}
               onChange$={(e, el) => presetStore.showPending = el.checked}
               label={<span class="text-sm whitespace-nowrap">Show pending presets VERY DANGEROUS</span>} />
           </SelectMenuRaw>
@@ -144,16 +161,23 @@ export default component$(() => {
         </p>
         <hr/>
         <div class={{
-          'opacity-50': savedPresets.value.length === 0,
+          'opacity-50 mb-2': savedPresets.value.length === 0,
         }}>
           <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
             checked={presetStore.showSaved && savedPresets.value.length > 0}
             onChange$={(e, el) => presetStore.showSaved = el.checked}
             label={t('rgb.presets.showSaved.title@@Show saved presets')} />
-          <p class="text-xs text-gray-400 mt-1">
+          <p class="text-xs text-lum-text-secondary mt-1">
             {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
           </p>
         </div>
+        <Toggle id="previewwithsettings"
+          checked={presetStore.previewWithSettings}
+          onChange$={(e, el) => presetStore.previewWithSettings = el.checked}
+          label={t('rgb.presets.withCurrentOptions.title@@Show preview with current options')} />
+        <p class="text-xs text-lum-text-secondary mt-1">
+          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
+        </p>
 
         <div class="flex gap-4 px-2 items-center">
           <Search size={20} />
@@ -166,13 +190,13 @@ export default component$(() => {
           />
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid sm:grid-cols-2 gap-2">
           {filteredPresets.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
           )}
           {filteredPresets.length === 0 && (
-            <div class="lum-card col-span-2 lum-bg-gray-800/40 hover:lum-bg-gray-800 w-full transition duration-1000 hover:duration-75 ease-out">
-              <p class="text-center text-gray-400">
+            <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
+              <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
                 <br />
                 Think something is missing?
@@ -190,9 +214,9 @@ export default component$(() => {
           </span>
         </h3>
 
-        <div class="grid grid-cols-2 gap-2">
-          {personalSavedPresets.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+        <div class="grid sm:grid-cols-2 gap-2">
+          {privatePresetsParsed.map((presetInfo) =>
+            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
           )}
         </div>
 

@@ -95,7 +95,7 @@ export default component$(() => {
         id,
         title: 'Error fetching data',
         description: `${error}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
     });
@@ -166,7 +166,7 @@ export default component$(() => {
 
         <ColorMap />
 
-        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2">
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1">
           <div class="flex flex-col gap-2 relative" id="column1">
             <Accordion sectionName="colors" alwaysOpen>
               <Palette size={26} />
@@ -180,7 +180,7 @@ export default component$(() => {
             <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
 
           </div>
-          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-gray-800/80" id="column2">
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/50" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
@@ -188,11 +188,7 @@ export default component$(() => {
             <Output hidden={!openItemsStore.items.includes('output')}
               value={generateOutput(rgbStore)} />
 
-            <Accordion sectionName="options">
-              <Settings size={26} />
-              {t('rgb.options@@Options')}
-            </Accordion>
-            <Options hidden={!openItemsStore.items.includes('options')} />
+            <Options />
 
             <Accordion sectionName="presets">
               <Save size={26} />
@@ -203,7 +199,7 @@ export default component$(() => {
             <Accordion sectionName="decode">
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue-900/50 text-xs py-1 px-2 rounded-md">
+              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
                 experimental
               </span>
             </Accordion>

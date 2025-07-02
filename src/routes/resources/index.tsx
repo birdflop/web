@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { Blobs, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
+import { Blobs, Hoverable, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
 import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
@@ -29,8 +29,10 @@ export default component$(() => {
           Tools to help you create gradient text in Minecraft.
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2">
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-red-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/rgb">
-            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-red/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb">
+            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Palette size={30} />
               {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -39,8 +41,10 @@ export default component$(() => {
               {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-blue-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/animtab">
-            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-blue/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtab">
+            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Rainbow size={30} />
               {t('nav.resources.animatedTAB.title@@Animated TAB')}
@@ -49,8 +53,10 @@ export default component$(() => {
               {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-green-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/rgb/presets">
-            <Blobs color='green' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-green/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb/presets">
+            <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Save size={30} />
               {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -68,8 +74,10 @@ export default component$(() => {
           Tools to help configure and setup minecraft servers.
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2">
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-yellow-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/sparkprofile">
-            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-yellow/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/sparkprofile">
+            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Zap size={30} />
               {t('nav.resources.sparkProfile.title@@Spark Profile')}
@@ -78,8 +86,10 @@ export default component$(() => {
               {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-pink-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/papertimings">
-            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-pink/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/papertimings">
+            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <LogoPaper size={30} />
               {t('nav.resources.paperTimings.title@@Paper Timings')}
@@ -88,8 +98,10 @@ export default component$(() => {
               {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-orange-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/flags">
-            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-orange/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/flags">
+            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Flag size={30} />
               {t('nav.resources.flags.title@@Flags Generator')}
@@ -107,8 +119,10 @@ export default component$(() => {
           Miscellaneous tools to help with random miscellaneous things.
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2 mb-2">
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-purple-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/banner">
-            <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-purple/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/banner">
+            <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Presentation size={30} />
               {t('nav.resources.banner.title@@Banner Generator')}
@@ -117,8 +131,10 @@ export default component$(() => {
               {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-cyan-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/animtexture">
-            <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-cyan/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtexture">
+            <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <GalleryHorizontalEnd size={30} />
               {t('nav.resources.animatedTextures.title@@Animated Textures')}
@@ -127,8 +143,10 @@ export default component$(() => {
               {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
             </p>
           </Link>
-          <Link class="lum-card lum-bg-gray-900/60 hover:lum-bg-lime-900/30 transition duration-1000 hover:duration-75 ease-out relative" href="/resources/animpreview">
-            <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lg -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-lime/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animpreview">
+            <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
             <h4 class="my-0! flex gap-3 items-center">
               <Eye size={30} />
               {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
@@ -138,7 +156,7 @@ export default component$(() => {
             </p>
           </Link>
         </div>
-        <div class="lum-card lum-bg-gray-900/70 hover:lum-bg-indigo-900/30 transition duration-1000 hover:duration-75 ease-out relative mb-2">
+        <div class="lum-card lum-bg-lum-card-bg/70 hover:lum-bg-blue/30 transition duration-1000 hover:duration-75 ease-out relative mb-2">
           <h4 class="my-0! flex gap-3 items-center">
             <Bot size={30} />
             Botflop
@@ -147,7 +165,7 @@ export default component$(() => {
             A Discord bot that watches chat to chime in and provide suggestions. Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
           </p>
           <div class="flex gap-2">
-            <a class="lum-btn lum-bg-indigo-600/50 hover:lum-bg-indigo-600"
+            <a class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
               href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
               <LogoDiscord size={20} />
               Invite
@@ -159,7 +177,7 @@ export default component$(() => {
             </a>
           </div>
         </div>
-        <div class="lum-card lum-bg-gray-900/70 hover:lum-bg-lime-900/30 transition duration-1000 hover:duration-75 ease-out relative mb-2">
+        <div class="lum-card lum-bg-lum-card-bg/70 hover:lum-bg-lime/30 transition duration-1000 hover:duration-75 ease-out relative mb-2">
           <h4 class="my-0! flex gap-3 items-center">
             <Text size={30} />
             Binflop
@@ -191,13 +209,13 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <a class="lum-btn lum-bg-lime-600/50 hover:lum-bg-lime-600"
+            <a class="lum-btn lum-bg-lime/50 hover:lum-bg-lime"
               href="https://bin.birdflop.com/">
               <LinkIcon size={20} /> Visit
             </a>
           </div>
         </div>
-        <div class="lum-card lum-bg-gray-900/70 hover:lum-bg-cyan-800/30 transition duration-1000 hover:duration-75 ease-out relative mb-16">
+        <div class="lum-card lum-bg-lum-card-bg/70 hover:lum-bg-cyan/30 transition duration-1000 hover:duration-75 ease-out relative mb-16">
           <h4 class="my-0! flex gap-3 items-center">
             <Bot size={30} />
             BirdTickets
@@ -232,7 +250,7 @@ export default component$(() => {
             </li>
           </ul>
           <div class="flex gap-2">
-            <a class="lum-btn lum-bg-cyan-900/70 hover:lum-bg-cyan-600"
+            <a class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan"
               href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
               <LogoDiscord size={20} />
               Invite

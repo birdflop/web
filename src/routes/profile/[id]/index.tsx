@@ -4,10 +4,9 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
-import { savedPresetsContext } from '~/routes/resources/rgb/presets';
-import { migratePresetsFromCookies } from '~/util/rgb/presets/migrate';
+import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 export const useUser = routeLoader$(async ({ params, env }) => {
@@ -49,30 +48,24 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const savedPresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  useContextProvider(privatePresetsContext, privatePresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (savedPresets.value.length != 0) return;
-    let newSavedPresets: rgbPreset[] = [];
+    // If privatePresets is empty, load presets from localStorage
+    if (privatePresets.value.length != 0) return;
+
     try {
-      // try to get presets from localStorage
-      const localStoragePresets = localStorage.getItem('savedPresets');
-      // if localStorage is empty, try to get presets from cookies
-      if (!localStoragePresets) migratePresetsFromCookies(newSavedPresets);
-      else {
-        const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
-        newSavedPresets = newSavedPresets.concat(localStoragePresetsParsed);
-      }
-      savedPresets.value = savedPresets.value.concat(newSavedPresets);
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const id = Math.random().toString(36).substring(2, 15);
       const notification = {
         id,
         title: 'Error parsing saved presets',
         description: `Error: ${err}`,
-        bgColor: 'lum-bg-red-900/50',
+        bgColor: 'lum-bg-red/50',
       };
       notifications.push(notification);
       setTimeout(() => {
@@ -91,7 +84,7 @@ export default component$(() => {
           id,
           title: 'Error fetching user data',
           description: `${error}`,
-          bgColor: 'lum-bg-red-900/50',
+          bgColor: 'lum-bg-red/50',
         };
         notifications.push(notification);
       });
@@ -121,7 +114,7 @@ export default component$(() => {
                 <ChevronLeft size={20} /> Go to presets
               </Link>
             </h3>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid sm:grid-cols-2 gap-2">
               {presets.map((preset) => (
                 <PresetPreview key={preset.id} presetInfo={preset} />
               ))}

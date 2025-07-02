@@ -215,7 +215,7 @@ export default component$(() => {
             }}>
               <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.baseColor.title@@Base Color')}
-                <span class="text-gray-400 text-sm font-normal">
+                <span class="text-lum-text-secondary text-sm font-normal">
                   {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
                 </span>
               </h6>
@@ -253,7 +253,7 @@ export default component$(() => {
               <div class="flex flex-wrap gap-2 pt-2">
                 {bannerStore.patterns.map((pattern, i) =>
                   <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
-                    <div class="flex flex-col rounded-md">
+                    <div class="flex flex-col rounded-lum">
                       <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
                         <ChevronLeft size={20} />
                       </button>
@@ -275,7 +275,7 @@ export default component$(() => {
                         <Trash size={20} />
                       </button>
                     </div>
-                    <button class="lum-btn p-0 w-17.5 lum-bg-gray-900"
+                    <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
                       onMouseUp$={() => {
                         if (openPopup.value == i) return openPopup.value = -1;
                         else openPopup.value = i;
@@ -291,12 +291,12 @@ export default component$(() => {
                       <canvas id={`canvas-preview-${i}`} style={{
                         imageRendering: 'pixelated',
                       }} class={{
-                        'w-full rounded-md': true,
+                        'w-full rounded-lum': true,
                       }}/>
                       <canvas id={`canvas-texture-${i}`} style={{
                         imageRendering: 'pixelated',
                       }} class={{
-                        'w-full rounded-md hidden': true,
+                        'w-full rounded-lum hidden': true,
                       }}/>
                     </button>
                     <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
@@ -333,7 +333,7 @@ export default component$(() => {
                                 newPatterns[i].pattern = pattern;
                                 bannerStore.patterns = newPatterns;
                               }}>
-                                <img class="w-9 rounded-md" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
+                                <img class="w-9 rounded-lum" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
                                   imageRendering: 'pixelated',
                                 }} />
                               </button>
@@ -366,12 +366,12 @@ export default component$(() => {
                     id,
                     title: await t$('banner.copied@@Copied to clipboard!'),
                     description: await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'),
-                    bgColor: 'lum-bg-green-900/50',
+                    bgColor: 'lum-bg-green/50',
                   };
                   navigator.clipboard.writeText(el.value).catch(async (err) => {
                     notification.title = await t$('banner.copyFailed@@Failed to copy to clipboard!');
                     notification.description = err;
-                    notification.bgColor = 'lum-bg-red-900/50';
+                    notification.bgColor = 'lum-bg-red/50';
                   });
                   notifications.push(notification);
                   setTimeout(() => {
@@ -381,7 +381,7 @@ export default component$(() => {
               />
             </div>
           </div>
-          <div class="flex flex-col gap-2 sm:border-l sm:border-l-gray-800 sm:pl-2" id="outputcolumn">
+          <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/50 sm:pl-2" id="outputcolumn">
             <Accordion sectionName="preview" alwaysOpen>
               <Eye size={26} />
               {t('banner.preview@@Preview')}
