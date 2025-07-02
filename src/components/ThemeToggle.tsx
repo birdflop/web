@@ -121,8 +121,8 @@ export const ThemeToggle = component$<ThemeToggleProps>(
           title={`Current theme: ${CurrentThemeOption.label}. Click to cycle themes.`}
         >
           {CurrentThemeOption.value === 'auto' && <>
-            <Moon size={20} class="transition-colors hidden dark:flex" />
-            <Sun size={20} class="transition-colors dark:hidden flex" />
+            <Moon size={20} class="hidden dark:flex" />
+            <Sun size={20} class="dark:hidden flex" />
           </>}
           <IconComponent size={
             CurrentThemeOption.value === 'auto'
@@ -131,8 +131,8 @@ export const ThemeToggle = component$<ThemeToggleProps>(
           }
           class={
             CurrentThemeOption.value === 'auto'
-              ? 'transition-colors absolute top-1 right-1'
-              : 'transition-colors'
+              ? 'absolute top-1 right-1'
+              : ''
           } />
           {showLabel && (
             <span class="ml-2 text-sm">
@@ -154,8 +154,8 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && <>
-              <Moon size={20} class="transition-colors hidden dark:flex" />
-              <Sun size={20} class="transition-colors dark:hidden flex" />
+              <Moon size={20} class="hidden dark:flex" />
+              <Sun size={20} class="dark:hidden flex" />
             </>}
             <CurrentThemeOption.icon size={
               CurrentThemeOption.value === 'auto'
@@ -164,8 +164,8 @@ export const ThemeToggle = component$<ThemeToggleProps>(
             }
             class={
               CurrentThemeOption.value === 'auto'
-                ? 'transition-colors absolute top-1 left-5'
-                : 'transition-colors'
+                ? 'absolute top-1 left-5'
+                : ''
             } />
             {(variant === 'full' || showLabel) && (
               <span class="text-sm">
