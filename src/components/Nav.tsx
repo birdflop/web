@@ -24,7 +24,7 @@ export default component$(() => {
   const openItemsStore = useContext(openItemsContext);
 
   return (
-    <Nav fixed colorClass="lum-bg-nav-bg !border-t-0 !border-x-0">
+    <Nav fixed colorClass="lum-bg-nav-bg/30 !border-t-0 !border-x-0">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent p-2">
         <LogoBirdflop size={24} fillGradient={['#f77272', '#fab775', '#ffff6e', '#7dfa7d', '#7a7aff', '#bb77ed', '#ca3eed']} />
         <span class="font-semibold -ml-1">Birdflop</span>
