@@ -23,7 +23,7 @@ export const Breadcrumbs = component$(() => {
   }
 
   return (
-    <nav class="fixed top-31 sm:top-20 text-sm mb-6 lum-card gap-1 flex-row items-center w-full sm:w-auto lum-bg-gray-900/50 backdrop-blur-lg rounded-none sm:rounded-full sm:border lum-btn-p-2 sm:p-2 z-20" aria-label="Breadcrumb">
+    <nav class="fixed top-31 sm:top-20 text-sm mb-6 lum-card gap-1 flex-row items-center w-full sm:w-auto backdrop-blur-lg rounded-none sm:rounded-full sm:border lum-btn-p-2 sm:p-2 z-20" aria-label="Breadcrumb">
       <a href="/docs/" class="lum-btn p-1 rounded-full lum-bg-transparent">
         <Home size={19} />
       </a>
