@@ -31,7 +31,10 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
       pathsByDir.set(parentPath, []);
     }
 
-    pathsByDir.get(parentPath)!.push(path);
+    const paths = pathsByDir.get(parentPath);
+    if (paths) {
+      paths.push(path);
+    }
   });
 
   const dirWithSubdirs = new Set<string>();

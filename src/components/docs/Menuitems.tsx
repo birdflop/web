@@ -1,4 +1,4 @@
-import { component$, $, useContext } from '@builder.io/qwik';
+import { component$, $, useContext, QRL } from '@builder.io/qwik';
 import { ContentMenu, Link } from '@builder.io/qwik-city';
 import { MarkdownItems } from '~/routes/docs/layout';
 import Accordion from '../Accordion';
@@ -41,7 +41,7 @@ export const MenuItems = component$(
     items?: ContentMenu[];
     pathname: string;
     markdownItems: MarkdownItems;
-    onClick$?: any;
+    onClick$?: QRL<() => void>;
     level?: number;
   }) => {
     const { items, pathname, markdownItems, onClick$ } = props;

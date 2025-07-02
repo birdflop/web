@@ -32,8 +32,8 @@ type RegularFormatting = {
   // $f = format tags
   // $c = character
   color: string,
-  // The character to use before format tags
-  char?: string = "&",
+  // The character to use before format tags (default: "&")
+  char?: string,
 }
 ```
 
@@ -41,11 +41,11 @@ type RegularFormatting = {
 type MiniMessageFormatting = {
   color: "MiniMessage",
   // $t is the output text
-  bold?: string = "<b>$t</b>",
-  italic?: string = "<i>$t</i>",
-  underline?: string = "<u>$t</u>",
-  strikethrough?: string = "<st>$t</st>",
-  obfuscate?: string = "<obf>$t</obf>",
+  bold?: string,         // default: "<b>$t</b>"
+  italic?: string,       // default: "<i>$t</i>"
+  underline?: string,    // default: "<u>$t</u>"
+  strikethrough?: string,// default: "<st>$t</st>"
+  obfuscate?: string,    // default: "<obf>$t</obf>"
 }
 ```
 

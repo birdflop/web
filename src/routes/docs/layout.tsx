@@ -41,7 +41,7 @@ export const getMarkdownItems = async () => {
   );
 
   const markdownItems: MarkdownItems = {};
-  rawData.map(([k, v]) => {
+  rawData.forEach(([k, v]) => {
     if (v.frontmatter) {
       markdownItems[k] = {
         title: v.frontmatter.title,
