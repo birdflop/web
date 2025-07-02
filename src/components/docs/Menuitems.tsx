@@ -69,8 +69,8 @@ export const MenuItems = component$(
                     sectionName={item.text || `docs-item-${i}`}
                     class={{
                       'w-full lum-bg-transparent': true,
-                      'text-sm lum-btn-p-1!': level > 0,
-                      'text-indigo-300': isActiveOrParent(item),
+                      'text-sm lum-btn-p-1! rounded-lum-1': level > 0,
+                      'text-indigo-500': isActiveOrParent(item),
                     }}
                   >
                     {item.text}
@@ -97,8 +97,8 @@ export const MenuItems = component$(
                   href={item.href}
                   class={{
                     'lum-btn lum-bg-transparent': true,
-                    'text-sm lum-btn-p-1': level > 0,
-                    'text-indigo-300!': item.href === pathname,
+                    'text-sm lum-btn-p-1 rounded-lum-1': level > 0,
+                    'text-indigo-500!': item.href === pathname,
                   }}
                   onMouseOver$={$((evt: any, target: HTMLAnchorElement & { __prefetchLink: number }) => {
                     const canHover = window.matchMedia('(hover: hover)').matches;

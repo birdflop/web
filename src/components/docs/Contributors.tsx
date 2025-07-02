@@ -18,16 +18,16 @@ export default component$(() => {
       </p>
       <div class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
         {contributors.map((contributor: string) => (
-          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn lum-bg-lum-card-bg p-3 font-bold">
+          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn lum-bg-lum-card-bg p-2 pr-3 gap-2 font-bold">
             <img
               loading="lazy"
               src={`https://github.com/${contributor}.png?size=80`}
               width="40"
               height="40"
               alt={contributor}
-              class="w-10 h-auto"
+              class="w-10 h-auto rounded-lum-1!"
             />
-            <span class="text-white">
+            <span>
               {contributor}
             </span>
           </a>

@@ -91,7 +91,7 @@ export const OnThisPage = component$(({ readOnly }: {
                 href={`#${h.id}`}
                 class={{
                   'lum-btn text-ellipsis lum-bg-transparent whitespace-normal text-left': true,
-                  'text-indigo-400!': activeId.value === h.id,
+                  'text-indigo-500!': activeId.value === h.id,
                   'font-bold text-xl': h.level == 1,
                   'font-medium text-lg': h.level == 2,
                   'font-normal text-base': h.level == 3,
