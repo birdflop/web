@@ -9,4 +9,4 @@ contributors:
 
 # Introduction
 
-Meow
+This part of the website is still in development. Please feel free to contribute pages to help us expand the documentation!

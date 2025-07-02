@@ -62,16 +62,16 @@ export const DocsSidebar = component$(() => {
 
   return (
     <aside
-      class='w-full sm:w-100 fixed sm:sticky sm:h-dvh lum-card bg-gray-900/50 backdrop-blur-lg rounded-none border-l-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
+      class='w-full lg:w-100 fixed lg:sticky lg:h-dvh lum-card bg-gray-900/50 backdrop-blur-lg rounded-none border-l-0 lg:border-y-0 top-0 z-[40] pt-14 lg:pt-20 px-0 lg:px-6 pb-0'
     >
       <nav id="docs-sidebar" class="invisible min-h-full relative">
         <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
-          <Book class="ml-2 sm:ml-0" />
+          <Book class="ml-2 lg:ml-0" />
           <h5 class="flex flex-1 my-0!">
             Documentation
           </h5>
 
-          <button class='lum-btn lum-bg-transparent p-2 sm:hidden' onClick$={() => {
+          <button class='lum-btn lum-bg-transparent p-2 lg:hidden' onClick$={() => {
             store.sideMenuOpen = !store.sideMenuOpen;
             const abortController = new AbortController();
             document.addEventListener('click', (e) => {
@@ -86,8 +86,8 @@ export const DocsSidebar = component$(() => {
         </div>
 
         <div class={{
-          'flex-col gap-3 my-4 mx-4 sm:mx-0': true,
-          'hidden sm:flex': !store.sideMenuOpen,
+          'flex-col gap-3 my-4 mx-4 lg:mx-0': true,
+          'hidden lg:flex': !store.sideMenuOpen,
           'flex': store.sideMenuOpen,
         }}>
           <div class="flex gap-3 items-center">
