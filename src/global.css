@@ -25,8 +25,8 @@
   --color-lime: var(--color-lime-900);
   --color-teal: var(--color-teal-900);
   --color-lum-border: #dfdfdfaa;
-  --color-nav-bg: --alpha(var(--color-lum-input-bg) / 50%);
-  --color-bg: var(--color-gray-950);
+  --color-nav-bg: --alpha(var(--color-sky-950) / 70%);
+  --color-bg: var(--color-gray-900);
 }
 
 @media (prefers-color-scheme: light) {

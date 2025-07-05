@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
 import { type ThemeName, themes, setThemePreference, ThemeContext } from '~/util/theme-store';
-import { Moon, Sun, Sparkles } from 'lucide-icons-qwik';
+import { Moon, Sun, Sparkles, Bomb, Battery } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
 export interface ThemeToggleProps {
@@ -43,7 +43,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     const themeOptions: Array<{
       value: ThemeName;
       label: string;
-      icon: any;
+      icon: typeof Sparkles;
       description: string;
       gradient: string;
     }> = [
@@ -67,6 +67,20 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         icon: Sun,
         description: 'Clean light theme',
         gradient: 'from-yellow-400 to-orange-500',
+      },
+      {
+        value: 'white',
+        label: 'White',
+        icon: Bomb,
+        description: 'Flashbang',
+        gradient: 'from-gray-200 to-gray-500',
+      },
+      {
+        value: 'black',
+        label: 'Black',
+        icon: Battery,
+        description: 'Full black theme for OLED',
+        gradient: 'from-black to-gray-900',
       },
     ];
 
@@ -117,12 +131,25 @@ export const ThemeToggle = component$<ThemeToggleProps>(
       return (
         <button
           onClick$={handleCycleTheme}
-          class={`lum-btn lum-bg-transparent group p-2 ${className}`}
+          class={`lum-btn lum-bg-transparent group p-2 relative ${className}`}
           title={`Current theme: ${CurrentThemeOption.label}. Click to cycle themes.`}
         >
-          <IconComponent class="text-theme-accent-primary group-hover:text-theme-text-primary h-5 w-5 transition-colors" />
+          {CurrentThemeOption.value === 'auto' && <>
+            <Moon size={20} class="hidden dark:flex" />
+            <Sun size={20} class="dark:hidden flex" />
+          </>}
+          <IconComponent size={
+            CurrentThemeOption.value === 'auto'
+              ? 10
+              : 20
+          }
+          class={
+            CurrentThemeOption.value === 'auto'
+              ? 'absolute top-1 right-1'
+              : ''
+          } />
           {showLabel && (
-            <span class="text-theme-accent-primary group-hover:text-theme-text-primary ml-2 text-sm">
+            <span class="ml-2 text-sm">
               {CurrentThemeOption.label}
             </span>
           )}
@@ -140,9 +167,22 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         }>
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
-            <CurrentThemeOption.icon class="text-theme-accent-primary group-hover:text-theme-text-primary h-5 w-5 transition-colors" />
+            {CurrentThemeOption.value === 'auto' && <>
+              <Moon size={20} class="hidden dark:flex" />
+              <Sun size={20} class="dark:hidden flex" />
+            </>}
+            <CurrentThemeOption.icon size={
+              CurrentThemeOption.value === 'auto'
+                ? 10
+                : 20
+            }
+            class={
+              CurrentThemeOption.value === 'auto'
+                ? 'absolute top-2 left-7'
+                : ''
+            } />
             {(variant === 'full' || showLabel) && (
-              <span class="text-theme-accent-primary group-hover:text-theme-text-primary text-sm">
+              <span class="text-sm">
                 {CurrentThemeOption.label}
               </span>
             )}
@@ -150,11 +190,12 @@ export const ThemeToggle = component$<ThemeToggleProps>(
           {themeOptions.map((option) => {
             const IconComponent = option.icon;
             const isActive = themeStore.currentTheme === option.value;
+            const value = option.value;
 
             return (
               <button q:slot="extra-buttons"
-                key={option.value}
-                onClick$={() => handleThemeChange(option.value)}
+                key={value}
+                onClick$={() => handleThemeChange(value)}
                 class={`lum-btn lum-bg-transparent text-left rounded-lum-1 ${
                   isActive
                     ? 'bg-gradient-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border'

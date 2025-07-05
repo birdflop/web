@@ -20,7 +20,7 @@ import Formatting from '~/components/rgb/Formatting';
 import FormatOptions from '~/components/rgb/FormatOptions';
 import Options from '~/components/rgb/Options';
 import Accordion from '~/components/Accordion';
-import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, openItemsContext } from '~/routes/layout';
 import TextShadow from '~/components/rgb/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { defaultDescription, generateHead } from '~/root';
@@ -110,7 +110,7 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const openSections = useContext(OpenSectionsContext);
+  const openItemsStore = useContext(openItemsContext);
   const threshold = useSignal(50);
 
   useTask$(({ track }) => {
@@ -172,12 +172,12 @@ export default component$(() => {
               <Palette size={26} />
               {t('rgb.colors.title@@Colors')}
             </Accordion>
-            <ColorList hidden={openSections.indexOf('colors') == -1} />
+            <ColorList hidden={!openItemsStore.items.includes('colors')} />
             <Accordion sectionName="textshadow">
               <Blend size={26} />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
-            <TextShadow hidden={openSections.indexOf('textshadow') == -1} />
+            <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
 
           </div>
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/50" id="column2">
@@ -185,7 +185,7 @@ export default component$(() => {
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
             </Accordion>
-            <Output hidden={openSections.indexOf('output') == -1}
+            <Output hidden={!openItemsStore.items.includes('output')}
               value={generateOutput(rgbStore)} />
 
             <Options />
@@ -194,7 +194,7 @@ export default component$(() => {
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
-            <Presets hidden={openSections.indexOf('presets') == -1}/>
+            <Presets hidden={!openItemsStore.items.includes('presets')} />
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
@@ -203,7 +203,7 @@ export default component$(() => {
                 experimental
               </span>
             </Accordion>
-            <Decode threshold={threshold} hidden={openSections.indexOf('decode') == -1} />
+            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
 
           </div>
 
@@ -212,22 +212,22 @@ export default component$(() => {
               <Type size={26} />
               {t('rgb.formatting.title@@Formatting')}
             </Accordion>
-            <Formatting hidden={openSections.indexOf('formatting') == -1} />
+            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
-              <FormatOptions hidden={openSections.indexOf('formatoptions') == -1} />
+              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
             </>}
           </div>
         </div>
         <p class="mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </p>
-        <p>
-          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="https://docs.web-d5m.pages.dev/docs/rgbirdflop/api/">an API!</a>
+        <p class="">
+          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
         </p>
       </div>
     </section>

@@ -43,37 +43,34 @@ export const OnThisPage = component$(({ readOnly }: {
 
   const useActiveItem = (itemIds: string[]) => {
     const activeId = useSignal<string | null>(null);
-    useOnDocument(
-      'scroll',
-      $(() => {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                activeId.value = entry.target.id;
-              }
-            });
-          },
-          { rootMargin: '0% 0% -80% 0%' },
-        );
+    useOnDocument('scroll', $(() => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              activeId.value = entry.target.id;
+            }
+          });
+        },
+        { rootMargin: '0% 0% -80% 0%' },
+      );
 
+      itemIds.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) {
+          observer.observe(element);
+        }
+      });
+
+      return () => {
         itemIds.forEach((id) => {
           const element = document.getElementById(id);
           if (element) {
-            observer.observe(element);
+            observer.unobserve(element);
           }
         });
-
-        return () => {
-          itemIds.forEach((id) => {
-            const element = document.getElementById(id);
-            if (element) {
-              observer.unobserve(element);
-            }
-          });
-        };
-      }),
-    );
+      };
+    }));
 
     return activeId;
   };
@@ -82,19 +79,23 @@ export const OnThisPage = component$(({ readOnly }: {
 
   return (
     <aside
-      class='hidden sm:flex w-[25%] sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
+      class='hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
     >
       {contentHeadings.length > 0 ? (
         <>
           <h6 class="py-3 border-b border-b-gray-700">On this page</h6>
-          <div class="flex flex-col gap-2 overflow-y-scroll">
+          <div class="flex flex-col gap-2 overflow-y-scroll relative">
             {contentHeadings.map((h) => (
               <a
                 key={h.id}
                 href={`#${h.id}`}
                 class={{
                   'lum-btn text-ellipsis lum-bg-transparent whitespace-normal text-left': true,
-                  'text-blue-400': activeId.value === h.id,
+                  'text-indigo-500!': activeId.value === h.id,
+                  'font-bold text-xl': h.level == 1,
+                  'font-medium text-lg': h.level == 2,
+                  'font-normal text-base': h.level == 3,
+                  'lum-btn-p-1': true,
                 }}
               >
                 {h.text}

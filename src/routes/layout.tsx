@@ -7,6 +7,7 @@ import Nav from '~/components/Nav';
 import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { loadOpenItems } from '~/components/Accordion';
 import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{
@@ -46,7 +47,7 @@ export const useServerTheme = routeLoader$(({ cookie }) => {
 });
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
-export const OpenSectionsContext = createContextId<string[]>('opensections-context');
+export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
   const t$ = $((string: string) => inlineTranslate()(string));
 
@@ -55,8 +56,10 @@ export default component$(() => {
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
-  const openSections = useStore([] as string[]);
-  useContextProvider(OpenSectionsContext, openSections);
+  const openItemsStore = useStore({
+    items: [] as string[],
+  });
+  useContextProvider(openItemsContext, openItemsStore);
 
   // Get server-side theme data
   const serverThemeData = useServerTheme();
@@ -66,6 +69,17 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
+    // If the theme is not set, check the user's preference
+    if (themeStore.isDark === undefined) {
+      themeStore.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    // Load open items from localStorage
+    const savedOpenItems = await loadOpenItems();
+    if (savedOpenItems && savedOpenItems.length > 0) {
+      openItemsStore.items = savedOpenItems;
+    }
+
     // convert cookies to json
     const cookieJSON: {
       [key: string]: string;

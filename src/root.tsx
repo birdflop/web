@@ -1,5 +1,5 @@
 import { component$, HTMLCrossOriginAttribute } from '@builder.io/qwik';
-import { DocumentHead, DocumentHeadValue, QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
+import { DocumentHead, DocumentHeadValue, QwikCityProvider, RouterOutlet } from '@builder.io/qwik-city';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
@@ -35,7 +35,6 @@ export default component$(() => {
       </head>
       <body class="text-lum-text">
         <RouterOutlet />
-        <ServiceWorkerRegister />
       </body>
     </QwikCityProvider>
   );
