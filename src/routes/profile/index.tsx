@@ -2,17 +2,17 @@ import { component$, Signal, useContext, useContextProvider, useSignal, useVisib
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
-import { BirdflopSession, useSession } from '../plugin@auth';
+import { BirdflopSession, useSession } from '~/routes/plugin@auth';
 import PresetPreview from '~/components/rgb/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '../resources/rgb';
+import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import { NotificationContext } from '../layout';
+import { NotificationContext } from '~/routes/layout';
 
 const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
 
@@ -72,7 +72,7 @@ export default component$(() => {
       {privatePresetsParsed.map((presetInfo) =>
         <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
       )}
-      <button class="lum-card text-left lum-bg-green-900/20 hover:lum-bg-green-900 w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
+      <button class="lum-card text-left lum-bg-green/20 hover:lum-bg-green w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
         modalRef.value?.showModal();
       }}>
         <h4 class="my-0!">
@@ -86,9 +86,9 @@ export default component$(() => {
 
     <dialog ref={modalRef}
       class={{
-        'm-auto text-gray-200 hidden open:flex': true,
-        'lum-card lum-bg-gray-900/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
-        'backdrop:bg-gray-950/50 backdrop:backdrop-blur-xs': true,
+        'm-auto hidden open:flex': true,
+        'lum-card drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
+        'backdrop:bg-gray-950/30 backdrop:backdrop-blur-xs': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
       }}>
@@ -144,7 +144,7 @@ export default component$(() => {
             id,
             title: 'Preset Published!',
             description: 'Your preset has been submitted for review. It will be available on the RGBirdflop presets repository soon.',
-            bgColor: 'lum-bg-green-900/50',
+            bgColor: 'lum-bg-green/50',
           });
           setTimeout(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
@@ -192,7 +192,7 @@ export default component$(() => {
           }}>
             <X size={20} /> Cancel
           </button>
-          <button form="publish-preset-form" class="lum-btn lum-bg-green-900 hover:lum-bg-green-800" id="publish-preset">
+          <button form="publish-preset-form" class="lum-btn lum-bg-green/50 hover:lum-bg-green" id="publish-preset">
             <Save size={20} /> Publish
           </button>
         </div>

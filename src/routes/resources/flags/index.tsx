@@ -199,7 +199,7 @@ export default component$(() => {
                 if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
                 flagsStore.fileName = el.value;
               }}/>
-              <p class="text-gray-400 text-sm">
+              <p class="text-lum-text-secondary text-sm">
                 {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
               </p>
             </div>
@@ -210,7 +210,7 @@ export default component$(() => {
                 }} values={environmentOptions} value={flagsStore.operatingSystem}>
                   {t('flags.environment.label@@Environment')}
                 </SelectMenu>
-                <p class="text-gray-400 text-sm">
+                <p class="text-lum-text-secondary text-sm">
                   {t('flags.environment.description@@The operating system that the server runs on.')}
                 </p>
               </div>
@@ -220,7 +220,7 @@ export default component$(() => {
                 }} values={softwareOptions} value={flagsStore.serverType}>
                   {t('flags.software.label@@Software')}
                 </SelectMenu>
-                <p class="text-gray-400 text-sm">
+                <p class="text-lum-text-secondary text-sm">
                   {t('flags.software.description@@The software in which your Minecraft server will run on.')}
                 </p>
               </div>
@@ -229,8 +229,8 @@ export default component$(() => {
               <label for="labels-range-input">
                 {t('flags.memory.label@@Memory')}
               </label>
-              <div class="group relative w-full h-2 lum-bg-gray-800 hover:lum-bg-gray-700 select-none rounded-lum my-2">
-                <div class="h-2 lum-bg-blue-800 group-hover:lum-bg-blue-700 rounded-lum" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
+              <div class="group relative w-full h-2 lum-bg-lum-input-bg hover:lum-bg-lum-card-bg/30 select-none rounded-lum my-2">
+                <div class="h-2 lum-bg-blue group-hover:lum-bg-blue rounded-lum" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
                 <div class="absolute w-full top-1 flex justify-between">
                   <span class="text-left">|</span>
                   <span class="text-center">|</span>
@@ -239,8 +239,8 @@ export default component$(() => {
                   <span class="text-right">|</span>
                 </div>
                 <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
-                  <div class="w-4 h-4 lum-bg-blue-700 group-hover:lum-bg-blue-600 rounded-full" />
-                  <div class="lum-bg-gray-900 lum-btn-p-2 text-center w-24 rounded-lum opacity-0 group-hover:opacity-100 transition-all z-50">
+                  <div class="w-4 h-4 lum-bg-blue group-hover:lum-bg-blue rounded-full" />
+                  <div class="lum-bg-lum-card-bg lum-btn-p-2 text-center w-24 rounded-lum opacity-0 group-hover:opacity-100 transition-all z-50">
                     {flagsStore.memory} GB
                   </div>
                 </div>
@@ -248,7 +248,7 @@ export default component$(() => {
                   flagsStore.memory = Number(el.value);
                 }} />
               </div>
-              <p class="text-gray-400 text-sm mt-6">
+              <p class="text-lum-text-secondary text-sm mt-6">
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
               </p>
             </div>
@@ -282,14 +282,14 @@ export default component$(() => {
                   </a>
                 </SelectMenuRaw>
               </div>
-              <p class="text-gray-400 text-sm">
+              <p class="text-lum-text-secondary text-sm">
                 {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
               </p>
             </div>
             <div class="flex flex-col gap-2">
               <p>
                 {t('flags.config.label@@Config')}<br/>
-                <span class="text-gray-400 text-sm">
+                <span class="text-lum-text-secondary text-sm">
                   {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
                 </span>
               </p>
@@ -299,28 +299,25 @@ export default component$(() => {
                 <Toggle label={option.label} checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
                 }} />
-                {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
+                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
               </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
                 <Toggle key={id} label={option.label} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
-                  if (el.checked) {
-                    flagsStore.extraFlags.push(id);
-                  } else {
-                    flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
-                  }
+                  if (el.checked) flagsStore.extraFlags.push(id);
+                  else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
                 }} />
-                {option.description && <p class="text-gray-400 text-sm">{option.description}</p>}
+                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
               </>)}
             </div>
           </div>
         </div>
 
-        <label for="Output" class="text-gray-50">
+        <label for="Output">
           {t('flags.script.label@@Script')}
         </label>
-        <p class="text-gray-400 text-sm mb-2">
+        <p class="text-lum-text-secondary text-sm mb-2">
           {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
         </p>
         <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full whitespace-pre-wrap break-all': true }} id="Output" value={generateResult(flagsStore).script}/>

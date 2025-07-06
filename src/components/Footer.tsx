@@ -6,11 +6,11 @@ export default component$(() => {
   const t = inlineTranslate();
 
   return (
-    <footer class="relative flex flex-col gap-1 items-center justify-center text-center w-full z-10 bg-gray-950/30 border-t border-t-gray-700 p-6">
+    <footer class="relative flex flex-col gap-1 items-center justify-center text-center w-full z-10 lum-bg-lum-card-bg border-0 border-t p-6">
       <div class="flex gap-1 mb-2">
         <SocialButtons />
       </div>
-      <span class="text-sm text-gray-300 max-w-6xl text-center">
+      <span class="text-sm max-w-6xl text-center">
         Copyright © 2025 Birdflop. All rights reserved. Birdflop is a registered 501(c)(3) nonprofit organization (EIN: 93-2401009).<br />
         By using this site, you agree to our{' '}
         <a href="/terms" class="text-blue-400 hover:underline">{t('nav.termsofService@@Terms of Service')}</a>{' '}

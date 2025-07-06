@@ -1,5 +1,5 @@
 import { component$, HTMLCrossOriginAttribute } from '@builder.io/qwik';
-import { DocumentHead, DocumentHeadValue, QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
+import { DocumentHead, DocumentHeadValue, QwikCityProvider, RouterOutlet } from '@builder.io/qwik-city';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
@@ -7,6 +7,7 @@ import './global.css';
 import { config } from '~/speak-config';
 import { translationFn } from '~/speak-functions';
 import { QwikPartytown } from '~/components/Partytown';
+
 export default component$(() => {
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
@@ -32,9 +33,8 @@ export default component$(() => {
         />
         <RouterHead />
       </head>
-      <body class="text-gray-300">
+      <body class="text-lum-text">
         <RouterOutlet />
-        <ServiceWorkerRegister />
       </body>
     </QwikCityProvider>
   );

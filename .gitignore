@@ -44,3 +44,5 @@ lerna-debug.log*
 
 # Cloudflare
 functions/**/*.js
+
+vite.config.mts.*

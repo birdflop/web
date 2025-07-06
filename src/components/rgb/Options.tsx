@@ -83,7 +83,7 @@ export default component$(() => {
           <Toggle id="disperse" checked={rgbStore.disperse}
             onChange$={(e, el) => { rgbStore.disperse = el.checked; }}
             label={t('rgb.colors.disperse.always.title@@Always Disperse Colors')} />
-          <p class="text-xs text-gray-400">
+          <p class="text-xs text-lum-text-secondary">
             {t('rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.')}
           </p>
         </div>
@@ -92,7 +92,7 @@ export default component$(() => {
             <Toggle id="trimspaces" checked={rgbStore.trimspaces}
               onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}
               label={t('rgb.colors.trimSpaces.title@@Trim colors from spaces')} />
-            <p class="text-xs text-gray-400">
+            <p class="text-xs text-lum-text-secondary">
               {t('rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs')}
             </p>
           </div>
@@ -102,7 +102,7 @@ export default component$(() => {
             <Toggle id="lowercase" checked={rgbStore.lowercase}
               onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}
               label={t('rgb.colors.lowercase.title@@Lowercase Hex Codes')} />
-            <p class="text-xs text-gray-400">
+            <p class="text-xs text-lum-text-secondary">
               {t('rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.')}
             </p>
           </div>

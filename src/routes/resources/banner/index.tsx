@@ -10,7 +10,7 @@ import Accordion from '~/components/Accordion';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { NotificationContext, OpenSectionsContext } from '~/routes/layout';
+import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/rgb/RGBUtils';
 import { defaultDescription, generateHead } from '~/root';
@@ -29,7 +29,7 @@ export default component$(() => {
   const textureCanvas = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
   const openPopup = useSignal(-1);
-  const openSections = useContext(OpenSectionsContext);
+  const openItemsStore = useContext(openItemsContext);
   const notifications = useContext(NotificationContext);
   const bannerTexture = useSignal<NoSerialize<THREE.CanvasTexture>>();
 
@@ -210,12 +210,12 @@ export default component$(() => {
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('options') == -1,
-              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('options') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
+              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
             }}>
               <h6 class="my-0! flex gap-3 items-center">
                 {t('banner.options.baseColor.title@@Base Color')}
-                <span class="text-gray-400 text-sm font-normal">
+                <span class="text-lum-text-secondary text-sm font-normal">
                   {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
                 </span>
               </h6>
@@ -275,7 +275,7 @@ export default component$(() => {
                         <Trash size={20} />
                       </button>
                     </div>
-                    <button class="lum-btn p-0 w-17.5 lum-bg-gray-900"
+                    <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
                       onMouseUp$={() => {
                         if (openPopup.value == i) return openPopup.value = -1;
                         else openPopup.value = i;
@@ -352,8 +352,8 @@ export default component$(() => {
             </Accordion>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('command') == -1,
-              'max-h-[250px] opacity-100 pointer-events-auto': openSections.indexOf('command') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
+              'max-h-[250px] opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
             }} id="command">
               <textarea id="commandOutput" readOnly
                 class={{
@@ -366,12 +366,12 @@ export default component$(() => {
                     id,
                     title: await t$('banner.copied@@Copied to clipboard!'),
                     description: await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'),
-                    bgColor: 'lum-bg-green-900/50',
+                    bgColor: 'lum-bg-green/50',
                   };
                   navigator.clipboard.writeText(el.value).catch(async (err) => {
                     notification.title = await t$('banner.copyFailed@@Failed to copy to clipboard!');
                     notification.description = err;
-                    notification.bgColor = 'lum-bg-red-900/50';
+                    notification.bgColor = 'lum-bg-red/50';
                   });
                   notifications.push(notification);
                   setTimeout(() => {
@@ -381,19 +381,19 @@ export default component$(() => {
               />
             </div>
           </div>
-          <div class="flex flex-col gap-2 sm:border-l sm:border-l-gray-800 sm:pl-2" id="outputcolumn">
+          <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/50 sm:pl-2" id="outputcolumn">
             <Accordion sectionName="preview" alwaysOpen>
               <Eye size={26} />
               {t('banner.preview@@Preview')}
             </Accordion>
             <canvas ref={preview} id="preview" class={{
               'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': openSections.indexOf('preview') == -1,
-              'max-h-auto opacity-100 pointer-events-auto': openSections.indexOf('preview') != -1,
+              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
+              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
             }} />
             <canvas ref={textureCanvas} id="texture" class="hidden" style={{
               imageRendering: 'pixelated',
-            }}></canvas>
+            }}/>
           </div>
         </div>
       </div>

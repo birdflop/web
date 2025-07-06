@@ -1,12 +1,14 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import Backgrounds from '~/components/Backgrounds';
+import Backgrounds, { lightBackgrounds } from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
-import { Link, RequestHandler, useLocation } from '@builder.io/qwik-city';
+import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { loadOpenItems } from '~/components/Accordion';
+import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -28,20 +30,56 @@ export const onGet: RequestHandler = ({ cacheControl }) => {
   });
 };
 
+export const useServerTheme = routeLoader$(({ cookie }) => {
+  const serverTheme = getThemePreference(cookie);
+  if (serverTheme == 'auto') return {
+    currentTheme: serverTheme,
+  };
+
+  const css = themes[serverTheme];
+  const cssString = getCSSString(serverTheme);
+  return {
+    currentTheme: serverTheme,
+    isDark: serverTheme === 'dark',
+    css,
+    cssString,
+  };
+});
+
 export const NotificationContext = createContextId<Notification[]>('notification-context');
-export const OpenSectionsContext = createContextId<string[]>('opensections-context');
+export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
   const t$ = $((string: string) => inlineTranslate()(string));
 
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+  const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
   const loc = useLocation();
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
-  const openSections = useStore([] as string[]);
-  useContextProvider(OpenSectionsContext, openSections);
+  const openItemsStore = useStore({
+    items: [] as string[],
+  });
+  useContextProvider(openItemsContext, openItemsStore);
+
+  // Get server-side theme data
+  const serverThemeData = useServerTheme();
+
+  const themeStore = useStore<ThemeContextType>(serverThemeData.value);
+  useContextProvider(ThemeContext, themeStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
+    // If the theme is not set, check the user's preference
+    if (themeStore.isDark === undefined) {
+      themeStore.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    // Load open items from localStorage
+    const savedOpenItems = await loadOpenItems();
+    if (savedOpenItems && savedOpenItems.length > 0) {
+      openItemsStore.items = savedOpenItems;
+    }
+
     // convert cookies to json
     const cookieJSON: {
       [key: string]: string;
@@ -77,9 +115,9 @@ export default component$(() => {
     const cookiePrompt = noSerialize({
       id: 'cookieprompt',
       element: <div class={{
-        ['lum-bg-gray-800/60']: true,
+        ['lum-bg-lum-input-bg/60']: true,
         'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
-        'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+        'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
       }}>
         <div>
           <h4 class="flex gap-2 items-center mt-0!">
@@ -99,7 +137,7 @@ export default component$(() => {
           }}>
             {t$('nav.cookies.optOut@@Turn off cookies')}
           </button>
-          <button class="lum-btn lum-bg-blue-700 hover:lum-bg-blue-600" onClick$={() => {
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue" onClick$={() => {
             document.cookie = 'cookies=true; path=/';
             notifications.splice(notifications.findIndex((n) => n?.id === 'cookieprompt'), 1);
           }}>
@@ -112,11 +150,25 @@ export default component$(() => {
   });
 
   return <>
+    <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
-    <Background id="bg" class={{
-      'fixed scale-120 bottom-0 overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
-      'transition-all duration-1000 blur-xl opacity-30 scale-150': loc.url.pathname != '/',
-    }}/>
+
+    {(themeStore.isDark === undefined || themeStore.isDark) &&
+      <Background id="bg" class={{
+        'hidden dark:flex': themeStore.isDark === undefined,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'transition-all duration-1000': loc.isNavigating,
+        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
+      }}/>
+    }
+    {(themeStore.isDark === undefined || !themeStore.isDark) &&
+      <LightBackground id="bg" class={{
+        'flex dark:hidden': themeStore.isDark === undefined,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'transition-all duration-1000': loc.isNavigating,
+        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
+      }}/>
+    }
     <Slot />
     <div class={{
       'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
@@ -125,9 +177,9 @@ export default component$(() => {
         if (!notification) return null;
         if ('element' in notification) return notification.element;
         return <div class={{
-          [notification.bgColor ?? 'lum-bg-gray-800/60']: true,
+          [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card rounded-none sm:rounded-lum break-words': true,
-          'animate-in fade-in slide-in-from-bottom-8, sm:slide-in-from-right-8 anim-duration-500': true,
+          'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id}>
           <h4 class="flex gap-2 items-center mt-0!">
             <span class="flex gap-2 items-center flex-1">

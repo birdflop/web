@@ -1,6 +1,6 @@
 // components/elements/HistoricLinePlot.tsx
 import { component$ } from '@builder.io/qwik';
-import Chart from '~/components/home/Chart';
+import Chart from '~/components/Chart';
 import { historicPrices } from './historicPrices';
 
 export default component$(() => {
@@ -12,25 +12,25 @@ export default component$(() => {
       plugins: {
         legend: {
           labels: {
-            color: 'white',
+            color: 'var(--color-lum-text)',
           },
         },
       },
       scales: {
         x: {
           ticks: {
-            color: 'white',
+            color: 'var(--color-lum-text)',
           },
           grid: {
-            color: 'rgba(255, 255, 255, 0.1)',
+            color: 'var(--color-lum-text-secondary)',
           },
         },
         y: {
           ticks: {
-            color: 'white',
+            color: 'var(--color-lum-text)',
           },
           grid: {
-            color: 'rgba(255, 255, 255, 0.1)',
+            color: 'var(--color-lum-text-secondary)',
           },
         },
       },
