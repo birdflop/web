@@ -1,0 +1,117 @@
+{
+  "rgb": {
+    "colors": {
+      "amount": "Anzahl an Farben",
+      "character": "Zeichen",
+      "charsPer": "Zeichen pro Farbe",
+      "color": "Farbe",
+      "customFormat": "Benutzerdefiniertes Format",
+      "disperse": {
+        "always": {
+          "description": "Aktivieren wenn sie wollen dass der Farbverlauf immer gleichmäßig verteilt ist. Dies deaktiviert die Farbverlaufskarte.",
+          "title": "Farben immer zerstreuen"
+        },
+        "title": "Zerstreuen"
+      },
+      "format": "Farbformat",
+      "lowercase": {
+        "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
+        "title": "Kleingeschriebene Hex-Codes"
+      },
+      "shadow": {
+        "sync": "Mit Textfarben synchronisieren",
+        "title": "Textschatten"
+      },
+      "title": "Farben",
+      "trimSpaces": {
+        "description": "Deaktivieren falls sie leere Unterstreichung/Durchstreichung nutzen.",
+        "title": "Farben von Leerzeichen trennen"
+      }
+    },
+    "copied": "In die Zwischenablage kopiert!",
+    "copyFailed": "Konnte nicht kopiert werden!",
+    "decode": {
+      "decoded": {
+        "description": "Der RGB Text wurde erfolgreich dekodiert. Falls das Ergebnis nicht ihren Erwartungen entspricht, versuchen sie den Schwellenwert zu ändern.",
+        "title": "RGB Text Dekodiert!"
+      },
+      "description": "Fügen sie einen RGB Text ein um ihn zu bearbeiten.",
+      "disclaimer": "Diese Funktion versucht die Farbpunkte des Fabrverlaufs und deren Positionen zu vorhersagen. Es ist nicht 100% genau, deshalb empfehlen wir Voreinstellungen für das Speichern ihrer Farbverläufe.",
+      "threshold": {
+        "description": "Versuchen sie dies zu ändern falls sie zu viele Farben kriegen.",
+        "title": "Schwelle"
+      },
+      "title": "Dekodieren"
+    },
+    "formatting": {
+      "bold": "Fett",
+      "character": "Formattierungszeichen",
+      "italic": "Kursiv",
+      "obfuscate": "Obfuskiert",
+      "options": "Formattierungsoptionen",
+      "placeholders": "Platzhalter",
+      "strikethrough": "Durchstrichen",
+      "title": "Formattierung",
+      "underline": "Unterstrichen"
+    },
+    "inputText": {
+      "description": "Schreiben sie hier um einen Farbverlauf zu generieren!",
+      "preview": {
+        "chat": "Minecraft Chat",
+        "default": "Standard",
+        "tab": {
+          "footer": "Minecraft Tab Fußzeile",
+          "header": "Minecraft Tab Kopfzeile",
+          "player": "Minecraft Tab Spieler"
+        },
+        "title": "Vorschau des Styls",
+        "typeHere": "<RGBirdflop> hier schreiben!"
+      },
+      "title": "Eingabetext"
+    },
+    "options": "Optionen",
+    "output": {
+      "copied": "Der RGB Text wurde erfolgreich in die Zwischenablage kopiert.",
+      "description": "Fügen sie dies für einen RGB Text ein.",
+      "title": "Ausgabe"
+    },
+    "prefixsuffix": "Präfix/Suffix",
+    "presets": {
+      "browse": "Suchen",
+      "copied": "Voreinstellung in die Zwischenablage kopiert!",
+      "copy": "Kopieren",
+      "import": "Importieren",
+      "importSubtitle": "Eine JSON Voreinstellung laden.",
+      "imported": {
+        "description": "Die Voreinstellung wurde erfolgreich importiert.",
+        "title": "Voreinstellung erfolgreich importiert!"
+      },
+      "invalid": {
+        "description": "Bitte melden sie das an https://discord.gg/9vUZ9MREVz mit der Voreinstellung die sie importieren wollen.",
+        "title": "Ungültige Voreinstellung"
+      },
+      "load": "Voreinstellung laden.",
+      "noResults": "Keine Ergebnisse gefunden.",
+      "pasteHere": "Hier einfügen",
+      "remove": "Entfernen",
+      "save": "Speichern",
+      "saved": {
+        "description": "Die Voreinstellung wurde erfolgreich gespeichert.",
+        "presets": "Gespeicherte Voreinstellungen",
+        "title": "Voreinstellung gespeichert!",
+        "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
+      },
+      "showSaved": {
+        "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
+        "title": "Gespeicherte Voreinstellungen anzeigen"
+      },
+      "title": "Voreinstellungen",
+      "url": {
+        "description": "Voreinstellung erfolgreich zu URL exportiert! (Überprüfen sue die URL-Leiste)",
+        "get": "URL holen",
+        "title": "URL Aktualisiert!"
+      },
+      "use": "Nutzen"
+    }
+  }
+}

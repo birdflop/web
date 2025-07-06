@@ -1,0 +1,15 @@
+{
+  "animtab": {
+    "animation": {
+      "interval": "Dauer der Animation",
+      "name": "Name der Animation",
+      "style": "Styl der Animation"
+    },
+    "length": "Länge des Farbverlaufs",
+    "outputFormat": {
+      "description": "Nutzen sie das nur wenn sie dieses Tool für ein anderes Plugin verwenden oder wissen was sie tun.",
+      "title": "Ausgangsformat"
+    },
+    "yamlInput": "YAML Eingabe"
+  }
+}

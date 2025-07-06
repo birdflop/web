@@ -1,13 +1,13 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
+      "interval": "Интервал анимации",
       "name": "Название анимации",
-      "style": "Animation Style"
+      "style": "Стил анимации"
     },
     "length": "Длина градиента",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "Используйте это только в том случае, если вы пытаетесь использовать этот инструмент для другого плагина или знаете, что делаете.",
       "title": "Формат"
     },
     "yamlInput": "Ввод YAML"
