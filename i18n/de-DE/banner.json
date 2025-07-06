@@ -1,0 +1,19 @@
+{
+  "banner": {
+    "command": {
+      "copied": "Das Kommando wurde in die Zwischenablage kopiert.",
+      "title": "Kommando"
+    },
+    "copied": "In die Zwischenablage kopiert!",
+    "copyFailed": "Konnte nicht kopiert werden!",
+    "options": {
+      "baseColor": {
+        "description": "Das ist die Farbe womit das Banner anfängt.",
+        "title": "Grundfarbe"
+      },
+      "patterns": "Muster",
+      "title": "Optionen"
+    },
+    "preview": "Vorschau"
+  }
+}
