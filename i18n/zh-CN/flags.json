@@ -1,17 +1,17 @@
 {
   "flags": {
     "autoRestart": {
-      "description": "是否在停止后自动重新启动。",
+      "description": "是否在程序停止后自动重新启动。",
       "label": "自动重启"
     },
     "config": {
       "description": "可以添加和修改启动脚本的各种设置。",
       "label": "配置"
     },
-    "description": "The collection of start arguments that typically optimize the server's performance",
+    "description": "用于优化服务器性能的启动参数。",
     "environment": {
       "command": "命令",
-      "description": "服务器运行的操作系统。",
+      "description": "用于运行服务器的操作系统。",
       "label": "操作系统",
       "linux": "Linux",
       "macos": "macOS",
@@ -20,12 +20,12 @@
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
-        "description": "基准测试（G1GC）的额外性能标志，仅限于GraalVM用户。",
+        "description": "基准测试（G1GC）的额外性能标志，仅限GraalVM使用。",
         "label": "基准测试（GraalVM）"
       },
       "meowiceGraalVM": {
-        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
-        "label": "MeowIce's Flags (GraalVM)"
+        "description": "MeowIce的额外性能标志，仅限GraalVM使用。",
+        "label": "MeowIce的标志（GraalVM）"
       },
       "vectors": {
         "description": "启用SIMD操作，以优化Pufferfish及其分支上的地图项目渲染。",
@@ -42,13 +42,13 @@
       "etils": "Etil的标志",
       "hillttys": "hilltty的标志",
       "label": "标志",
-      "meowice": "MeowIce's Flags",
+      "meowice": "MeowIce的标志",
       "none": "无",
       "obyduxs": "Obydux的标志"
     },
     "gui": {
       "description": "是否显示内置的服务器管理GUI。",
-      "label": "使用GUI"
+      "label": "不使用GUI"
     },
     "memory": {
       "description": "分配给服务器的内存（RAM）量。",
@@ -67,11 +67,11 @@
       "waterfall": "Waterfall"
     },
     "software": {
-      "description": "您的Minecraft服务器将在其上运行的软件。",
+      "description": "将要运行Minecraft服务器的软件类型。",
       "label": "软件"
     },
     "variables": {
-      "description": "是否在脚本中使用环境变量来定义内存、文件名和其他常常更改的元素。",
+      "description": "是否在脚本中使用环境变量来定义内存、文件名等常常更改的元素。",
       "label": "使用变量"
     }
   }
