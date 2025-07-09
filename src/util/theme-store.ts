@@ -9,7 +9,7 @@ export type ThemeName = keyof typeof themes | 'auto';
 export const getThemePreference = function (cookie: Cookie): ThemeName {
   const cookieVal = cookie.get('theme-preference');
   const value = cookieVal?.value as ThemeName | undefined;
-  return value || 'auto';
+  return value || 'dark';
 };
 
 /**
