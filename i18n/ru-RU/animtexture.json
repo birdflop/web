@@ -5,14 +5,14 @@
     "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
-    "duration": "Длина",
+    "duration": "Длительность",
     "framePreview": "Предварительный просмотр кадра",
     "generate": "Генерировать",
     "height": "Высота",
     "lockDimensions": "Зафиксировать размеры",
     "pngPreview": "Предварительный просмотр PNG",
-    "selectFrames": "Выберите кадре иле GIF",
-    "syncDuration": "Синхронизироватье длине",
+    "selectFrames": "Выберите кадры или GIF",
+    "syncDuration": "Синхронизировать длительность",
     "textureName": "Название текстуры",
     "width": "Ширина"
   }
