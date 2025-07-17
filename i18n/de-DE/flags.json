@@ -1,0 +1,78 @@
+{
+  "flags": {
+    "autoRestart": {
+      "description": "Ob es nach dem Ende neu starten soll.",
+      "label": "Auto-Neustart"
+    },
+    "config": {
+      "description": "Die verschiedenen Ergänzungen und Modifikationen die für das Startscript übernommen werden können.",
+      "label": "Konfiguration"
+    },
+    "description": "Die Sammlung an Startargumenten die typisch Serverleistung optimieren.",
+    "environment": {
+      "command": "Kommando",
+      "description": "Das Betriebssystem auf dem der Server läuft.",
+      "label": "Umgebung",
+      "linux": "Linux",
+      "macos": "macOS",
+      "pterodactyl": "Pterodactyl",
+      "windows": "Windows"
+    },
+    "extraFlags": {
+      "benchmarkedGraalVM": {
+        "description": "Zusätzliche Leistungskennzeichnungen für Benchmarked (G1GC) exklusiv für GraalVM Nutzer.",
+        "label": "Benchmarked (GraalVM)"
+      },
+      "meowiceGraalVM": {
+        "description": "Zusätzliche Leistungskennzeichnungen für MeowIces Kennzeichnungen exklusiv für GraalVM Nutzer.",
+        "label": "MeowIce's Kennzeichnungen (GraalVM)"
+      },
+      "vectors": {
+        "description": "Aktiviert SIMD Operationen um Kartenitem rendern auf Pufferfish und dessen Abzweigungen zu optimieren.",
+        "label": "Moderne Vektoren"
+      }
+    },
+    "fileName": {
+      "description": "Name der Datei die für den Serverstart genutzt wird.",
+      "label": "Dateiname"
+    },
+    "flags": {
+      "aikars": "Aikar's Kennzeichnungen",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Kennzeichnungen",
+      "hillttys": "hilltty's Kennzeichnungen",
+      "label": "Kennzeichnungen",
+      "meowice": "MeowIce's Kennzeichnungen",
+      "none": "Keine",
+      "obyduxs": "Obydux's Kennzeichnungen"
+    },
+    "gui": {
+      "description": "Ob die eingebaute Serververwaltungs-GUI angezeigt werden soll.",
+      "label": "Keine GUI"
+    },
+    "memory": {
+      "description": "Die Menge an Speicher (RAM) die zum Server allokiert werden soll.",
+      "label": "Speicher"
+    },
+    "script": {
+      "description": "Das ergebende Script welches für den Serverstart genutzt wird. Platzieren sie es im selben Pfad wie {{fileName}} und führen sie es aus!",
+      "label": "Script"
+    },
+    "serverType": {
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
+      "velocity": "Velocity",
+      "waterfall": "Waterfall"
+    },
+    "software": {
+      "description": "Die Software in der der Minecraft-Server laufen wird.",
+      "label": "Software"
+    },
+    "variables": {
+      "description": "Ob Umgebungsvariablen im Script für das definieren von Speicher, Dateiname und andere häufig geänderte Elemente genutzt werden sollen.",
+      "label": "Variablen nutzen"
+    }
+  }
+}

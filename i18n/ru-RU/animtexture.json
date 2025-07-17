@@ -1,19 +1,19 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
+    "animationPreview": "Предварительный просмотр анимазнии",
+    "bounce": "Анимация отскока",
     "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
-    "duration": "Duration",
-    "framePreview": "Frame Preview",
+    "duration": "Длина",
+    "framePreview": "Предварительный просмотр кадра",
     "generate": "Генерировать",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
+    "height": "Высота",
+    "lockDimensions": "Зафиксировать размеры",
+    "pngPreview": "Предварительный просмотр PNG",
+    "selectFrames": "Выберите кадре иле GIF",
+    "syncDuration": "Синхронизироватье длине",
     "textureName": "Название текстуры",
-    "width": "Width"
+    "width": "Ширина"
   }
 }

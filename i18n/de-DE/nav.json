@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "404": {
+      "description": "Ups! Hier geht es nicht weiter.",
+      "home": "Zurück zum Start.",
+      "title": "404: Seite nicht gefunden."
+    },
+    "cookies": {
+      "acknowledge": "Okay",
+      "description": "Wir nutzen Cookies um deine Einstellungen zu speichern und zu laden.",
+      "optOut": "Cookies deaktivieren",
+      "title": "Cookies"
+    },
+    "hosting": {
+      "billing": "Abrechnung",
+      "nodeStats": {
+        "description": "Status der Birdflop Serverknoten abrufen.",
+        "title": "Knotenstatistiken"
+      },
+      "panel": "Panel",
+      "plans": "Pläne",
+      "title": "Hosting"
+    },
+    "privacyPolicy": "Datenschutzrichtlinie",
+    "profile": {
+      "hey": "Hey",
+      "login": "Einloggen",
+      "logout": "Ausloggen",
+      "notLoggedIn": {
+        "description": "Unten klicken fürs Einloggen.",
+        "title": "sie sind nicht eingeloggt!"
+      },
+      "title": "Profil"
+    },
+    "resources": {
+      "animatedTAB": {
+        "description": "TAB Plugin Farbverlaufanimations-Ersteller",
+        "title": "Animierter TAB"
+      },
+      "animatedTextures": {
+        "description": "Einfach Texturen für Ressourcenpaket-Animationen verbinden",
+        "title": "Animierte Texturen"
+      },
+      "banner": {
+        "description": "Einfach Bannerdesigns für Minecraft generieren.",
+        "title": "Banner Generator"
+      },
+      "description": "Hier finden sie alle öffentliche Birdflop Ressourcen.",
+      "flags": {
+        "description": "Ein einfacher Scriptgenerator um deinen Minecraft-Server mit optimalen Kennzeichnungen zu starten.",
+        "title": "Kennzeichnungsgenerator"
+      },
+      "hexGradient": {
+        "description": "Hex-Farbverlauf Text Generator, angetrieben by Birdflop, ein 501(c)(3) gemeinnütziger Minecraft host.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientAPIDocs": {
+        "description": "Dokumentation für die RGBirdflop API.",
+        "title": "RGBirdflop API Dokumentation"
+      },
+      "hexGradientPresets": {
+        "description": "Hier können sie Voreinstellungen für RGBirdflop finden und speichern, kopieren oder sofort nutzen.",
+        "title": "RGBirdflop Voreinstellungen"
+      },
+      "more": "Mehr Ressourcen",
+      "paperTimings": {
+        "description": "Paper Timings analysieren und optimisieren.",
+        "title": "Paper Timings"
+      },
+      "sparkProfile": {
+        "description": "Spark-Profile analysieren und optimisieren.",
+        "title": "Spark Profil"
+      },
+      "tabAnimationPreview": {
+        "description": "Vorschau von TAB Animationen ohne diese ins Spiel einzufügen.",
+        "title": "TAB Animation Vorschau"
+      },
+      "title": "Ressourcen"
+    },
+    "termsofService": "Nutzungsbedingungen"
+  }
+}

@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "Команда была скопирована в ваш буфер обмена.",
+      "title": "Команда"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Скопирована в ваш буфер обмена!",
+    "copyFailed": "Не удалось скопирована в ваш буфер обмена!",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "Ета базовый цвет баннер.",
+        "title": "Базовый цвет"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "Узоры",
+      "title": "Опции"
     },
-    "preview": "Preview"
+    "preview": "Предварительный просмотр"
   }
 }
