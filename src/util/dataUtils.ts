@@ -3,7 +3,6 @@ import type { BirdflopSession } from '~/routes/plugin@auth';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { getPrismaClient } from './prisma';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
-import { env } from 'cloudflare:workers';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
