@@ -9,15 +9,12 @@ import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
-export const useUser = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
+export const useUser = routeLoader$(async ({ params }) => {
+  const prisma = getPrismaClient();
   if (!prisma) throw new Error('No prisma client');
 
   const user = await prisma.user.findUnique({
     where: { id: params.id },
-    cacheStrategy: {
-      ttl: 60 * 60, // Cache for 1 hour
-    },
   }) as BirdflopUser;
   if (!user) {
     throw new Error('User not found');
@@ -26,15 +23,12 @@ export const useUser = routeLoader$(async ({ params, env }) => {
   let presets: publishedPreset[] = [];
   const errors: string[] = [];
   try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
+    const prisma = getPrismaClient();
     if (!prisma) throw new Error('No prisma client');
 
     presets = await prisma.presets.findMany({
       where: {
         userId: user.id,
-      },
-      cacheStrategy: {
-        ttl: 60 * 60, // Cache for 1 hour
       },
     }) as publishedPreset[];
   }

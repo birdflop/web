@@ -130,7 +130,7 @@ export const setUserData = server$(async function(data: {
   }
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
-  const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
+  const prisma = getPrismaClient();
   if (!session || !prisma) return console.warn('No session or prisma client');
 
   const userData = await prisma.user.update({

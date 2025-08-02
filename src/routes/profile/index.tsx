@@ -20,7 +20,7 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
     throw new Error('User not authenticated');
   }
 
-  const prisma = getPrismaClient(this.env.get('DATABASE_URL'));
+  const prisma = getPrismaClient();
 
   await prisma?.presets.create({
     data: {

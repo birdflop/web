@@ -29,13 +29,12 @@ const cachedSessionAndUser: {
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
-    const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
     let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
     if (!secret) {
       console.error('AUTH_SECRET is not set, using a temporary secret');
       secret = tempsecret;
     }
-    const prisma = getPrismaClient(databaseUrl);
+    const prisma = getPrismaClient();
 
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),
