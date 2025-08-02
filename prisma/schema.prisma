@@ -1,10 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider  = "sqlite"
-  url = ""
+  url       = "file:./dev.db"
 }
 
 model Presets {
