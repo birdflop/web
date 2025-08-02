@@ -86,6 +86,31 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
+        async signIn({ user, account, profile }) {
+          if (account?.provider === 'discord' && profile) {
+            try {
+              if (profile.avatar) {
+                const avatarHash = (profile as any).avatar;
+                const format = avatarHash?.startsWith('a_') ? 'gif' : 'png';
+                const newImageUrl = `https://cdn.discordapp.com/avatars/${(profile as any).id}/${avatarHash}.${format}`;
+                user.image = newImageUrl;
+
+                if (prisma) {
+                  await prisma.user.update({
+                    where: { id: user.id },
+                    data: {
+                      image: newImageUrl,
+                      updatedAt: new Date(),
+                    },
+                  });
+                }
+              }
+            } catch (error) {
+              console.error('Failed to refresh Discord profile picture on sign in:', error);
+            }
+          }
+          return true;
+        },
         session({ session }) {
           const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
 

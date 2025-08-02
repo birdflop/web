@@ -1,65 +1,170 @@
-import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import {
+  $,
+  component$,
+  createContextId,
+  useContext,
+  useContextProvider,
+  useSignal,
+  useStore,
+  useVisibleTask$,
+  type Signal,
+} from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { getPresets, presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import {
+  getPresets,
+  presetInfo,
+  publishedPreset,
+  rgbPreset,
+} from '~/util/rgb/presets';
+import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgb/PresetPreview';
-import { Save, Search, Send } from 'lucide-icons-qwik';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  Search,
+  Send,
+} from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-export const usePresets = routeLoader$(async ({ env }) => {
+export const usePresets = routeLoader$(async ({ env, url }) => {
   let presets: publishedPreset[] = [];
+  let count = 0;
   const errors: string[] = [];
+
+  const searchParams = url.searchParams;
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+  const perPage = Math.max(
+    1,
+    Math.min(100, parseInt(searchParams.get('perPage') || '20', 10)),
+  );
+  const searchTerm = searchParams.get('search') || '';
+  const showPending = searchParams.get('showPending') === 'true';
+  const showSaved = searchParams.get('showSaved') === 'true';
+  const savedPresetIds =
+    searchParams.get('savedPresetIds')?.split(',').filter(Boolean) || [];
+  const sortBy = searchParams.get('sortBy') || 'createdAt';
+  const sortOrder = searchParams.get('sortOrder') || 'desc';
+
   try {
     const prisma = getPrismaClient(env.get('DATABASE_URL'));
     if (!prisma) throw new Error('No prisma client');
 
-    presets = await prisma.presets.findMany({
-      where: {},
+    const whereClause: any = {
+      pending: showPending,
+    };
+
+    if (searchTerm) {
+      whereClause.name = {
+        contains: searchTerm,
+      };
+    }
+
+    if (showSaved && savedPresetIds.length > 0) {
+      whereClause.id = {
+        in: savedPresetIds,
+      };
+    }
+
+    count = await prisma.presets.count({
+      where: whereClause,
+    });
+
+    let orderBy: any;
+    switch (sortBy) {
+    case 'name':
+      orderBy = { name: sortOrder };
+      break;
+    case 'saves':
+      orderBy = { savedBy: {
+        _count: sortOrder,
+      } };
+      break;
+    case 'createdAt':
+    default:
+      orderBy = { createdAt: sortOrder };
+      break;
+    }
+
+    presets = (await prisma.presets.findMany({
+      where: whereClause,
+      skip: (page - 1) * perPage,
+      take: perPage,
+      orderBy,
       cacheStrategy: {
-        ttl: 60 * 60, // Cache for 1 hour
+        ttl: 60 * 60,
       },
       include: {
         user: true,
         savedBy: true,
       },
-    }) as publishedPreset[];
-  }
-  catch (err) {
+    })) as publishedPreset[];
+  } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
-  return { presets, errors };
+  return {
+    presets,
+    count,
+    errors,
+    page,
+    perPage,
+    searchTerm,
+    showPending,
+    showSaved,
+    sortBy,
+    sortOrder,
+  };
 });
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
-    cookies: Partial<typeof rgbDefaults>
-    errors: string[]
+    cookies: Partial<typeof rgbDefaults>;
+    errors: string[];
   };
 });
 
-export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>('privatepresets-context');
-export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>('savedpresets-context');
+export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
+  'privatepresets-context',
+);
+export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>(
+  'savedpresets-context',
+);
 export default component$(() => {
   const t = inlineTranslate();
   const notifications = useContext(NotificationContext);
+  const nav = useNavigate();
 
   const { cookies: rgbCookies, errors: rgbCookiesErrors } = useCookies().value;
 
-  const rgbStore = useStore({
-    ...structuredClone(rgbDefaults),
-    ...rgbCookies,
-  }, { deep: true });
+  const rgbStore = useStore(
+    {
+      ...structuredClone(rgbDefaults),
+      ...rgbCookies,
+    },
+    { deep: true },
+  );
   useContextProvider(rgbStoreContext, rgbStore);
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
-  const { presets, errors: presetsErrors } = usePresets().value;
+  const {
+    presets,
+    count,
+    errors: presetsErrors,
+    page,
+    perPage,
+    searchTerm,
+    showPending,
+    showSaved,
+    sortBy,
+    sortOrder,
+  } = usePresets().value;
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
@@ -78,9 +183,6 @@ export default component$(() => {
   });
 
   const presetStore = useStore({
-    searchTerm: '',
-    showSaved: false,
-    showPending: false,
     previewWithSettings: false,
   });
 
@@ -93,7 +195,8 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
-    if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+    if (privatePresets.value.length != 0 || savedPresets.value.length != 0)
+      return;
 
     try {
       const localStoragePresets = getPresets();
@@ -108,7 +211,10 @@ export default component$(() => {
       };
       notifications.push(notification);
       setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+        notifications.splice(
+          notifications.findIndex((n) => n?.id === id),
+          1,
+        );
       }, 2000);
     }
   });
@@ -127,16 +233,39 @@ export default component$(() => {
     }
   });
 
-  let filteredPresets = presets.filter((preset) =>
-    preset.name.toLowerCase().includes(presetStore.searchTerm.toLowerCase())
-    && (presetStore.showPending ? preset.pending : !preset.pending),
-  );
+  const totalPages = Math.ceil(count / perPage);
 
-  if (presetStore.showSaved) {
-    filteredPresets = filteredPresets.filter((preset) => savedPresets.value.some((savedPreset) =>
-      savedPreset.id === preset.id,
-    ));
-  }
+  const updateURL = $((params: Record<string, string | number | boolean>) => {
+    const url = new URL(window.location.href);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === '' || value === false || (value === 1 && key === 'page')) {
+        url.searchParams.delete(key);
+      } else {
+        url.searchParams.set(key, String(value));
+      }
+    });
+    if (params.showSaved || showSaved) {
+      const savedIds = savedPresets.value.map((p) => p.id).join(',');
+      if (savedIds) {
+        url.searchParams.set('savedPresetIds', savedIds);
+      } else {
+        url.searchParams.delete('savedPresetIds');
+      }
+    } else {
+      url.searchParams.delete('savedPresetIds');
+    }
+    void nav(url.pathname + url.search);
+  });
+
+  const searchTimeoutId = useSignal<number | undefined>(undefined);
+  const debouncedSearch = $((searchValue: string) => {
+    if (searchTimeoutId.value) {
+      clearTimeout(searchTimeoutId.value);
+    }
+    searchTimeoutId.value = setTimeout(() => {
+      void updateURL({ search: searchValue, page: 1 });
+    }, 300) as unknown as number;
+  });
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
@@ -146,82 +275,332 @@ export default component$(() => {
             <Save size={70} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
-          <SelectMenuRaw id="hidden-select-menu" customDropdown class={{ 'opacity-0': true }}>
-            <Toggle id="showpendingpresets" q:slot='extra-buttons'
-              checked={presetStore.showPending && privatePresets.value.length > 0}
-              onChange$={(e, el) => presetStore.showPending = el.checked}
-              label={<span class="text-sm whitespace-nowrap">Show pending presets VERY DANGEROUS</span>} />
+          <SelectMenuRaw
+            id="hidden-select-menu"
+            customDropdown
+            class={{ 'opacity-0': true }}
+          >
+            <Toggle
+              id="showpendingpresets"
+              q:slot="extra-buttons"
+              checked={showPending && privatePresets.value.length > 0}
+              onChange$={(e, el) =>
+                void updateURL({ showPending: el.checked, page: 1 })
+              }
+              label={
+                <span class="text-sm whitespace-nowrap">
+                  {t('rgb.presets.showPending.title@@Show pending presets (VERY DANGEROUS)')}
+                </span>
+              }
+            />
           </SelectMenuRaw>
           <Link href="/profile" class="lum-btn font-normal">
-            <Send size={20} /> Publish your own preset
+            <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
           </Link>
         </h1>
         <p>
-          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
+          {t(
+            'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+          )}
         </p>
-        <hr/>
-        <div class={{
-          'opacity-50 mb-2': savedPresets.value.length === 0,
-        }}>
-          <Toggle id="showsavedpresets" disabled={savedPresets.value.length === 0}
-            checked={presetStore.showSaved && savedPresets.value.length > 0}
-            onChange$={(e, el) => presetStore.showSaved = el.checked}
-            label={t('rgb.presets.showSaved.title@@Show saved presets')} />
+        <hr />
+        <div
+          class={{
+            'opacity-50 mb-2': savedPresets.value.length === 0,
+          }}
+        >
+          <Toggle
+            id="showsavedpresets"
+            disabled={savedPresets.value.length === 0}
+            checked={showSaved && savedPresets.value.length > 0}
+            onChange$={(e, el) =>
+              void updateURL({ showSaved: el.checked, page: 1 })
+            }
+            label={t('rgb.presets.showSaved.title@@Show saved presets')}
+          />
           <p class="text-xs text-lum-text-secondary mt-1">
-            {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
+            {t(
+              'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
+            )}
           </p>
         </div>
-        <Toggle id="previewwithsettings"
+        <Toggle
+          id="previewwithsettings"
           checked={presetStore.previewWithSettings}
-          onChange$={(e, el) => presetStore.previewWithSettings = el.checked}
-          label={t('rgb.presets.withCurrentOptions.title@@Show preview with current options')} />
+          onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
+          label={t(
+            'rgb.presets.withCurrentOptions.title@@Show preview with current options',
+          )}
+        />
         <p class="text-xs text-lum-text-secondary mt-1">
-          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
+          {t(
+            'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.',
+          )}
         </p>
 
-        <div class="flex gap-4 px-2 items-center">
-          <Search size={20} />
-          <input
-            class="lum-input w-full my-4"
-            id="search-input"
-            placeholder="Search for a preset..."
-            value={presetStore.searchTerm}
-            onInput$={(e, el) => presetStore.searchTerm = el.value}
-          />
+        <div class="flex flex-col sm:flex-row gap-4 px-2 items-start sm:items-center">
+          <div class="flex gap-4 items-center flex-1 w-full">
+            <Search size={20} class="shrink-0" />
+            <input
+              class="lum-input w-full my-4"
+              id="search-input"
+              placeholder="Search for a preset..."
+              value={searchTerm}
+              onInput$={(e, el) => void debouncedSearch(el.value)}
+            />
+          </div>
+          <div class="flex gap-2 items-center shrink-0">
+            <SelectMenu
+              value={`${sortBy}-${sortOrder}`}
+              onChange$={(e, el) => {
+                const [newSortBy, newSortOrder] = el.value.split('-');
+                void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
+              }}
+              title="Sort presets by"
+              values = {[
+                {
+                  name: t('rgb.presets.sortBy.newest@@Newest first'),
+                  value: 'createdAt-desc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.oldest@@Oldest first'),
+                  value: 'createdAt-asc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
+                  value: 'name-asc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
+                  value: 'name-desc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
+                  value: 'saves-desc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
+                  value: 'saves-asc',
+                },
+              ]}
+            />
+          </div>
+        </div>
+        <div>
+          <p class="text-xs text-lum-text-secondary mt-1">
+            {t('rgb.presets.totalCount@@Total presets: ') +
+              presets.length +
+              ' / ' +
+              count}
+            {totalPages > 1 && (
+              <span class="ml-2">
+                {t('rgb.presets.pageInfo@@Page ') + page + ' of ' + totalPages}
+              </span>
+            )}
+          </p>
         </div>
 
+        {totalPages > 1 && (
+          <div class="flex items-center gap-2 my-4 relative">
+            <div class="flex justify-center items-center gap-2 flex-1">
+              <button
+                class="lum-btn lum-btn-sm"
+                disabled={page === 1}
+                onClick$={() => {
+                  void updateURL({ page: Math.max(1, page - 1) });
+                }}
+              >
+                <ChevronLeft size={16} />
+                {t('rgb.presets.pagination.previous@@Previous')}
+              </button>
+
+              <div class="flex gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (page <= 3) {
+                    pageNum = i + 1;
+                  } else if (page >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = page - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={pageNum}
+                      class={`lum-btn lum-btn-sm min-w-10 ${
+                        pageNum === page
+                          ? 'lum-bg-lum-primary text-white'
+                          : 'lum-bg-transparent'
+                      }`}
+                      onClick$={() => {
+                        void updateURL({ page: pageNum });
+                      }}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                class="lum-btn lum-btn-sm"
+                disabled={page === totalPages}
+                onClick$={() => {
+                  void updateURL({ page: Math.min(totalPages, page + 1) });
+                }}
+              >
+                {t('rgb.presets.pagination.next@@Next')}
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <div class="flex gap-2 items-center absolute right-0">
+              <span class="text-sm text-lum-text-secondary whitespace-nowrap">
+                {t('rgb.presets.pagination.perPage@@Per page:')}
+              </span>
+              <SelectMenu
+                value={perPage}
+                onChange$={(e, el) => {
+                  const newPerPage = parseInt(el.value, 10);
+                  void updateURL({ perPage: newPerPage, page: 1 });
+                }}
+                title="Items per page"
+                values={[
+                  { name: '10', value: '10' },
+                  { name: '20', value: '20' },
+                  { name: '50', value: '50' },
+                  { name: '100', value: '100' },
+                ]}
+              />
+            </div>
+          </div>
+        )}
         <div class="grid sm:grid-cols-2 gap-2">
-          {filteredPresets.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
-          )}
-          {filteredPresets.length === 0 && (
+          {presets.map((presetInfo) => (
+            <PresetPreview
+              key={`${presetInfo.name}-${presetInfo.author}`}
+              presetInfo={presetInfo}
+              defaults={presetStore.previewWithSettings ? rgbStore : undefined}
+            />
+          ))}
+          {presets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
                 <br />
-                Think something is missing?
+                {t('rgb.presets.suggestion.one@@Think something is missing?')}
                 <br />
-                publish your own preset at your profile page!
+                {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
               </p>
             </div>
           )}
         </div>
+        {totalPages > 1 && (
+          <div class="flex items-center gap-2 my-4 relative">
+            <div class="flex justify-center items-center gap-2 flex-1">
+              <button
+                class="lum-btn lum-btn-sm"
+                disabled={page === 1}
+                onClick$={() => {
+                  void updateURL({ page: Math.max(1, page - 1) });
+                }}
+              >
+                <ChevronLeft size={16} />
+                {t('rgb.presets.pagination.previous@@Previous')}
+              </button>
 
+              <div class="flex gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum: number;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (page <= 3) {
+                    pageNum = i + 1;
+                  } else if (page >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = page - 2 + i;
+                  }
+
+                  return (
+                    <button
+                      key={pageNum}
+                      class={`lum-btn lum-btn-sm min-w-10 ${
+                        pageNum === page
+                          ? 'lum-bg-lum-primary text-white'
+                          : 'lum-bg-transparent'
+                      }`}
+                      onClick$={() => {
+                        void updateURL({ page: pageNum });
+                      }}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                class="lum-btn lum-btn-sm"
+                disabled={page === totalPages}
+                onClick$={() => {
+                  void updateURL({ page: Math.min(totalPages, page + 1) });
+                }}
+              >
+                {t('rgb.presets.pagination.next@@Next')}
+                <ChevronRight size={16} />
+              </button>
+            </div>
+
+            <div class="flex gap-2 items-center absolute right-0">
+              <span class="text-sm text-lum-text-secondary whitespace-nowrap">
+                {t('rgb.presets.pagination.perPage@@Per page:')}
+              </span>
+              <SelectMenu
+                value={perPage.toString()}
+                onChange$={(e, el) => {
+                  const newPerPage = parseInt(el.value, 10);
+                  void updateURL({ perPage: newPerPage, page: 1 });
+                }}
+                title="Items per page"
+                values={[
+                  { name: '10', value: '10' },
+                  { name: '20', value: '20' },
+                  { name: '50', value: '50' },
+                  { name: '100', value: '100' },
+                ]}
+              />
+            </div>
+          </div>
+        )}
         <h3 class="flex gap-2 items-center">
           <Save size={30} />
-          <span class="flex-1">
-            My RGBirdflop Presets
-          </span>
+          <span class="flex-1">{t('rgb.presets.private@@My RGBirdflop Presets')}</span>
         </h3>
 
         <div class="grid sm:grid-cols-2 gap-2">
-          {privatePresetsParsed.map((presetInfo) =>
-            <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} defaults={presetStore.previewWithSettings ? rgbStore : undefined} />,
-          )}
+          {privatePresetsParsed.map((presetInfo) => (
+            <PresetPreview
+              key={`${presetInfo.name}-${presetInfo.author}`}
+              presetInfo={presetInfo}
+              defaults={presetStore.previewWithSettings ? rgbStore : undefined}
+            />
+          ))}
         </div>
 
         <div class="text-sm mt-8">
-          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
+          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+          gradient creator that generates hex formatted text. RGB Birdflop is a
+          public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+          affordable and accessible hosting and public resources. If you would
+          like to support our mission, please{' '}
+          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
+            click here
+          </a>{' '}
+          to make a charitable donation, 100% tax-deductible in the US.
         </div>
       </div>
     </section>
@@ -230,6 +609,8 @@ export default component$(() => {
 
 export const head = generateHead({
   title: 'RGBirdflop Presets',
-  description: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' + defaultDescription,
+  description:
+    'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' +
+    defaultDescription,
   ads: true,
 });

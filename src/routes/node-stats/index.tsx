@@ -6,6 +6,49 @@ import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 import { unloadGoogleAds } from '~/util/GoogleAds';
 
+const nodes = [
+  {
+    name: 'Crabwings',
+    location: 'New York City Metro, USA',
+    color: 'red',
+  },
+  {
+    name: 'Impeyes',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'orange',
+  },
+  {
+    name: 'Jellyfishjaws',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'yellow',
+  },
+  {
+    name: 'Koalaknees',
+    location: 'Ashburn, VA, USA',
+    color: 'green',
+  },
+  {
+    name: 'Llamalips',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'teal',
+  },
+  {
+    name: 'Monkeymouth',
+    location: 'New York City Metro, USA',
+    color: 'blue',
+  },
+  {
+    name: 'Narwhalnose',
+    location: 'Ashburn, VA, USA',
+    color: 'violet',
+  },
+  {
+    name: 'Owlorgans',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'pink',
+  },
+];
+
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -24,93 +67,28 @@ export default component$(() => {
         <hr/>
         <div class="flex flex-wrap gap-2 mb-2">
           <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://status.birdflop.com/">
-            Overview
+            {t('nav.hosting.nodeStats.overview@@Overview')}
           </a>
           <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://netdata.birdflop.com/panel">
-            Web Services
+            {t('nav.hosting.nodeStats.webServices@@Web Services')}
           </a>
         </div>
-        <div class="grid grid-cols-4 gap-2">
-          <a class="lum-card lum-bg-red/30 hover:lum-bg-red/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=crabwings.birdflop.com:9100&orgId=1">
-            <Blobs color='red' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Crabwings
-            </h3>
-            <p>
-              New York City Metro, USA
-            </p>
-            crabwings.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-orange/30 hover:lum-bg-orange/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=impeyes.birdflop.com:9100&orgId=1">
-            <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Impeyes
-            </h3>
-            <p>
-              Falkenstein, Germany (EU)
-            </p>
-            impeyes.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-yellow/30 hover:lum-bg-yellow/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=jellyfishjaws.birdflop.com:9100&orgId=1">
-            <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Jellyfishjaws
-            </h3>
-            <p>
-              Falkenstein, Germany (EU)
-            </p>
-            jellyfishjaws.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-green/30 hover:lum-bg-green/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=koalaknees.birdflop.com:9100&orgId=1">
-            <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Koalaknees
-            </h3>
-            <p>
-              Ashburn, VA, USA
-            </p>
-            koalaknees.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-teal/30 hover:lum-bg-teal/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=llamalips.birdflop.com:9100&orgId=1">
-            <Blobs color='teal' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Llamalips
-            </h3>
-            <p>
-              Falkenstein, Germany (EU)
-            </p>
-            llamalips.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-blue/30 hover:lum-bg-blue/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=monkeymouth.birdflop.com:9100&orgId=1">
-            <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Monkeymouth
-            </h3>
-            <p>
-              New York City Metro, USA
-            </p>
-            monkeymouth.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-violet/30 hover:lum-bg-violet/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=narwhalnose.birdflop.com:9100&orgId=1">
-            <Blobs color='violet' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Narwhalnose
-            </h3>
-            <p>
-              Ashburn, VA, USA
-            </p>
-            narwhalnose.birdflop.com
-          </a>
-          <a class="lum-card lum-bg-pink/30 hover:lum-bg-pink/70 transition duration-300 hover:duration-75 ease-out relative" href="https://telemetry.birdflop.com/d/stats/public-statistics?var-node=owlorgans.birdflop.com:9100&orgId=1">
-            <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
-              Owlorgans
-            </h3>
-            <p>
-              Falkenstein, Germany (EU)
-            </p>
-            owlorgans.birdflop.com
-          </a>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+          {nodes.map((node) => (
+            <a class={`lum-card lum-bg-${node.color}/30 hover:lum-bg-${node.color}/70 transition duration-300 hover:duration-75 ease-out relative min-w-64`}
+              href={`https://telemetry.birdflop.com/d/stats/public-statistics?var-node=${node.name.toLowerCase()}.birdflop.com:9100&orgId=1`}
+              key={node.name}
+            >
+              <Blobs color={node.color as keyof typeof Blobs} class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+              <h3 class="my-0!">
+                {node.name}
+              </h3>
+              <p>
+                {node.location}
+              </p>
+              {node.name.toLowerCase()}.birdflop.com
+            </a>
+          ))}
         </div>
       </div>
     </section>

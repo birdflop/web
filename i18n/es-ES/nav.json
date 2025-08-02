@@ -11,6 +11,7 @@
       "optOut": "Turn off cookies",
       "title": "Cookies"
     },
+    "docs": "Docs",
     "hosting": {
       "billing": "Billing",
       "nodeStats": {
