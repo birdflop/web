@@ -14,8 +14,15 @@ import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qw
 import { setUserData } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
 
-export const usePreset = routeLoader$(async ({ params }) => {
-  const prisma = getPrismaClient();
+export const usePreset = routeLoader$(async ({ params, env }) => {
+  const CLOUDFLARE_D1_TOKEN = env.get('CLOUDFLARE_D1_TOKEN');
+  const CLOUDFLARE_ACCOUNT_ID = env.get('CLOUDFLARE_ACCOUNT_ID');
+  const CLOUDFLARE_DATABASE_ID = env.get('CLOUDFLARE_DATABASE_ID');
+  const prisma = getPrismaClient({
+    CLOUDFLARE_D1_TOKEN,
+    CLOUDFLARE_ACCOUNT_ID,
+    CLOUDFLARE_DATABASE_ID,
+  });
   if (!prisma) throw new Error('No prisma client');
   if (isNaN(Number(params.id))) throw new Error('No preset ID provided');
 

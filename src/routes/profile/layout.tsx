@@ -1,20 +1,11 @@
 import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from '../plugin@auth';
-import { Form, RequestHandler, useLocation } from '@builder.io/qwik-city';
+import { Form, useLocation } from '@builder.io/qwik-city';
 import { LogIn, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ThemeToggle } from '~/components/ThemeToggle';
-
-export const onGet: RequestHandler = ({ cacheControl }) => {
-  cacheControl({
-    public: false,
-    maxAge: 0,
-    sMaxAge: 0,
-    staleWhileRevalidate: 0,
-  });
-};
 
 export default component$(() => {
   const t = inlineTranslate();

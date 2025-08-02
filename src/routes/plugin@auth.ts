@@ -4,7 +4,6 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { getPrismaClient } from '~/util/prisma';
 import Discord from '@auth/qwik/providers/discord';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
-import { Session } from '@prisma/client';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -19,31 +18,27 @@ export interface BirdflopUser extends User {
   savedPresets?: publishedPreset[];
 }
 
-const cachedSessionAndUser: {
-  [key: string]: {
-    user: User;
-    session: Session;
-    expires: Date;
-  }
-} = {};
-
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
     let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
+
+    const CLOUDFLARE_D1_TOKEN = event?.platform?.env?.CLOUDFLARE_D1_TOKEN || process.env.CLOUDFLARE_D1_TOKEN;
+    const CLOUDFLARE_ACCOUNT_ID = event?.platform?.env?.CLOUDFLARE_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID;
+    const CLOUDFLARE_DATABASE_ID = event?.platform?.env?.CLOUDFLARE_DATABASE_ID || process.env.CLOUDFLARE_DATABASE_ID;
+
     if (!secret) {
       console.error('AUTH_SECRET is not set, using a temporary secret');
       secret = tempsecret;
     }
-    const prisma = getPrismaClient();
+    const prisma = getPrismaClient({
+      CLOUDFLARE_D1_TOKEN,
+      CLOUDFLARE_ACCOUNT_ID,
+      CLOUDFLARE_DATABASE_ID,
+    });
 
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),
       async getSessionAndUser(sessionToken: string) {
-
-        if (event.sharedMap.get('@isQData') && cachedSessionAndUser[sessionToken]
-          && cachedSessionAndUser[sessionToken].expires > new Date()) {
-          return cachedSessionAndUser[sessionToken] as any;
-        }
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
           include: { user: {
@@ -52,8 +47,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         });
         if (!userAndSession) return null;
         const { user, ...session } = userAndSession;
-        cachedSessionAndUser[sessionToken] = { user, session, expires: new Date(Date.now() + 10000) };
-        return cachedSessionAndUser[sessionToken];
+        return { user, session } as any;
       },
     } : undefined;
 
