@@ -196,7 +196,7 @@ export default component$(() => {
             </ColorList>
           </div>
 
-          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/50" id="column2">
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
