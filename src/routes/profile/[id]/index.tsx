@@ -10,14 +10,19 @@ import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 export const useUser = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
+  const CLOUDFLARE_D1_TOKEN = env.get('CLOUDFLARE_D1_TOKEN');
+  const CLOUDFLARE_ACCOUNT_ID = env.get('CLOUDFLARE_ACCOUNT_ID');
+  const CLOUDFLARE_DATABASE_ID = env.get('CLOUDFLARE_DATABASE_ID');
+  const prisma = getPrismaClient({
+    CLOUDFLARE_D1_TOKEN,
+    CLOUDFLARE_ACCOUNT_ID,
+    CLOUDFLARE_DATABASE_ID,
+  });
+
   if (!prisma) throw new Error('No prisma client');
 
   const user = await prisma.user.findUnique({
     where: { id: params.id },
-    cacheStrategy: {
-      ttl: 60 * 60, // Cache for 1 hour
-    },
   }) as BirdflopUser;
   if (!user) {
     throw new Error('User not found');
@@ -26,15 +31,9 @@ export const useUser = routeLoader$(async ({ params, env }) => {
   let presets: publishedPreset[] = [];
   const errors: string[] = [];
   try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
-    if (!prisma) throw new Error('No prisma client');
-
     presets = await prisma.presets.findMany({
       where: {
         userId: user.id,
-      },
-      cacheStrategy: {
-        ttl: 60 * 60, // Cache for 1 hour
       },
     }) as publishedPreset[];
   }

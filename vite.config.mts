@@ -95,7 +95,6 @@ export default defineConfig(() => {
     },
     ssr: {
       external: [
-        '@prisma/client/edge',
         '@auth/prisma-adapter',
       ],
     },
@@ -108,8 +107,6 @@ export default defineConfig(() => {
         'three',
         '@auth/prisma-adapter',
         'chart.js',
-        '@prisma/client/edge',
-        '@prisma/extension-accelerate',
         '@qwik.dev/partytown/integration'
       ],
     },

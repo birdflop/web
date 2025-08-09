@@ -4,7 +4,7 @@ import { $, component$, createContextId, noSerialize, Slot, useContextProvider, 
 import Backgrounds, { lightBackgrounds } from '~/components/Backgrounds';
 import Footer from '~/components/Footer';
 import Nav from '~/components/Nav';
-import { Link, RequestHandler, routeLoader$, useLocation } from '@builder.io/qwik-city';
+import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Accordion';
@@ -20,15 +20,6 @@ type Notification = {
   description?: string;
   bgColor?: string;
 } | rawNotification;
-
-export const onGet: RequestHandler = ({ cacheControl }) => {
-  cacheControl({
-    public: true,
-    maxAge: 5,
-    sMaxAge: 10,
-    staleWhileRevalidate: 60 * 60 * 24 * 365,
-  });
-};
 
 export const useServerTheme = routeLoader$(({ cookie }) => {
   const serverTheme = getThemePreference(cookie);

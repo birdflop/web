@@ -34,7 +34,7 @@ import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-export const usePresets = routeLoader$(async ({ env, url }) => {
+export const usePresets = routeLoader$(async ({ url, env }) => {
   let presets: publishedPreset[] = [];
   let count = 0;
   const errors: string[] = [];
@@ -54,7 +54,14 @@ export const usePresets = routeLoader$(async ({ env, url }) => {
   const sortOrder = searchParams.get('sortOrder') || 'desc';
 
   try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
+    const CLOUDFLARE_D1_TOKEN = env.get('CLOUDFLARE_D1_TOKEN');
+    const CLOUDFLARE_ACCOUNT_ID = env.get('CLOUDFLARE_ACCOUNT_ID');
+    const CLOUDFLARE_DATABASE_ID = env.get('CLOUDFLARE_DATABASE_ID');
+    const prisma = getPrismaClient({
+      CLOUDFLARE_D1_TOKEN,
+      CLOUDFLARE_ACCOUNT_ID,
+      CLOUDFLARE_DATABASE_ID,
+    });
     if (!prisma) throw new Error('No prisma client');
 
     const whereClause: any = {
@@ -98,9 +105,6 @@ export const usePresets = routeLoader$(async ({ env, url }) => {
       skip: (page - 1) * perPage,
       take: perPage,
       orderBy,
-      cacheStrategy: {
-        ttl: 60 * 60,
-      },
       include: {
         user: true,
         savedBy: true,
