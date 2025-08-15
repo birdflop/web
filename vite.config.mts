@@ -81,7 +81,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
         'three',
         '@auth/prisma-adapter',
         'chart.js',
-        '@qwik.dev/partytown/integration'
+        '@qwik.dev/partytown/integration',
+        '@prisma/adapter-d1',
       ],
     },
 

@@ -18,6 +18,13 @@
 	"observability": {
 		"enabled": true
 	},
+	"d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "birdflop",
+      "database_id": "bcc55b06-8269-4055-9662-96fa37e2892a"
+    }
+  ]
 	/**
 	"routes": [
     {

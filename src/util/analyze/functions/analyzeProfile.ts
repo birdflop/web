@@ -23,7 +23,7 @@ export default async function analyzeProfile(id: string) {
     const response_raw = await fetch(url_raw, {
       headers: { 'Accept': 'application/json' },
     });
-    sampler = await response_raw.json() as any;
+    sampler = await response_raw.json();
   }
   catch (err) {
     return [{ name: '❌ Processing Error', value: `Birdflop cannot process this spark profile. Please use an alternative spark profile. ${err}` }];
@@ -60,7 +60,7 @@ export default async function analyzeProfile(id: string) {
 
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
-  const json = await req.json() as any;
+  const json = await req.json();
   const latest = json.versions[json.versions.length - 1];
 
   const fields: Field[] = [];

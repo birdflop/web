@@ -1,3 +1,2 @@
 reject:
   - "typescript" # lint broken on 5.9
-  - "@auth/prisma-adapter" # 2.7.4 is the last version that works
