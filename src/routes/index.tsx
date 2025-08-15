@@ -225,7 +225,7 @@ export default component$(() => {
           How do reimbursements work?
         </h1>
         <p>
-          As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 28% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.44/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.&nbsp;
+          As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 26% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.48/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.&nbsp;
         </p>
         <div class="mt-4">
           <h4>

@@ -180,7 +180,7 @@ export default component$(() => {
             <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
 
           </div>
-          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/50" id="column2">
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10" id="column2">
             <Accordion sectionName="output" alwaysOpen>
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
@@ -227,7 +227,7 @@ export default component$(() => {
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </p>
         <p class="">
-          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/api/v2/docs">an API!</a>
+          Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">an API!</a>
         </p>
       </div>
     </section>

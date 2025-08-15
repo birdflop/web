@@ -119,23 +119,20 @@ export default component$(() => {
 
   const configOptions = {
     gui: {
-      label: <>
-        <SquareTerminal class="w-6 h-6"/> {t('flags.gui.label@@No GUI')}
-      </>,
+      icon: SquareTerminal,
+      label: t('flags.gui.label@@No GUI'),
       description: t('flags.gui.description@@Whether to display the built-in server management GUI.'),
       disable: ['pterodactyl', 'velocity', 'waterfall'],
     },
     variables: {
-      label: <>
-        <Code class="w-6 h-6" /> {t('flags.variables.label@@Use Variables')}
-      </>,
+      icon: Code,
+      label: t('flags.variables.label@@Use Variables'),
       description: t('flags.variables.description@@Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.'),
       disable: [] as string[],
     },
     autoRestart: {
-      label: <>
-        <RefreshCw class="w-6 h-6" /> {t('flags.autoRestart.label@@Auto-restart')}
-      </>,
+      icon: RefreshCw,
+      label: t('flags.autoRestart.label@@Auto-restart'),
       description: t('flags.autoRestart.description@@Whether to automatically restart after it is stopped.'),
       disable: [] as string[],
     },
@@ -143,21 +140,18 @@ export default component$(() => {
 
   const extraFlagsOptions = {
     vectors: {
-      label: <>
-        <Box class="w-6 h-6" /> {t('flags.extraFlags.vectors.label@@Modern Vectors')}
-      </>,
+      icon: Box,
+      label: t('flags.extraFlags.vectors.label@@Modern Vectors'),
       description: t('flags.extraFlags.vectors.description@@Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.'),
     },
     benchmarkedGraalVM: {
-      label: <>
-        <Box class="w-6 h-6" /> {t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)')}
-      </>,
+      icon: Box,
+      label: t('flags.extraFlags.benchmarkedGraalVM.label@@Benchmarked (GraalVM)'),
       description: t('flags.extraFlags.benchmarkedGraalVM.description@@Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.'),
     },
     meowiceGraalVM: {
-      label: <>
-        <Box class="w-6 h-6" /> {t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)')}
-      </>,
+      icon: Box,
+      label: t('flags.extraFlags.meowiceGraalVM.label@@MeowIce\'s Flags (GraalVM)'),
       description: t('flags.extraFlags.meowiceGraalVM.description@@Additional performance flags for MeowIce\'s Flags exclusive to GraalVM users.'),
     },
   };
@@ -296,19 +290,30 @@ export default component$(() => {
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
               }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
-                <Toggle label={option.label} checked={flagsStore[id]} onClick$={(e, el) => {
+                <Toggle label={<div>
+                  {option.label}
+                </div>} checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
                 }} />
-                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+                <div class="flex gap-2">
+                  <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+                </div>
               </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <Toggle key={id} label={option.label} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
+                <option.icon size={24} />
+                <Toggle key={id} label={<div>
+                  {option.label}
+                </div>} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
                   if (el.checked) flagsStore.extraFlags.push(id);
                   else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
                 }} />
-                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+                <div class="flex gap-2">
+                  <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+                </div>
               </>)}
             </div>
           </div>
