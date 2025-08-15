@@ -13,6 +13,7 @@ import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
+import { InputJsonValue } from '@prisma/client/runtime/library';
 
 const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
 
@@ -35,7 +36,7 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
       userId: session.user.id,
       author: session.user.name,
       description: presetInfo.description,
-      preset: presetInfo.preset,
+      preset: presetInfo.preset as InputJsonValue,
     },
   });
 

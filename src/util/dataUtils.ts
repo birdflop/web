@@ -144,7 +144,7 @@ export const setUserData = server$(async function(data: {
 
   const userData = await prisma.user.update({
     where: { id: session.user.id },
-    data,
+    data: data as JSON,
     include: {
       savedPresets: true,
     },
