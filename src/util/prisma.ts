@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '~/prisma';
 import { PrismaD1 } from '@prisma/adapter-d1';
 
 type D1Params = {
