@@ -1,4 +1,4 @@
-import { PrismaClient } from '~/prisma/edge';
+import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
 function createPrismaClient(url: string) {
