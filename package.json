@@ -30,7 +30,7 @@
     "drizzle:studio": "drizzle-kit studio",
     "drizzle:up": "drizzle-kit up",
     "lint": "eslint \"src/**/*.ts*\"",
-    "postinstall": "drizzle-kit generate",
+    "postinstall": "drizzle-kit generate && wrangler types",
     "preview": "qwik build preview && vite preview --open",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
