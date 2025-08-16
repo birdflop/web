@@ -1,13 +1,13 @@
 import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { $, component$, createContextId, noSerialize, Slot, useContextProvider, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
-import Backgrounds, { lightBackgrounds } from '~/components/Backgrounds';
-import Footer from '~/components/Footer';
-import Nav from '~/components/Nav';
+import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
+import Footer from '~/components/Elements/Footer';
+import Nav from '~/components/Elements/Nav';
 import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { loadOpenItems } from '~/components/Accordion';
+import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
 
 type rawNotification = NoSerialize<{

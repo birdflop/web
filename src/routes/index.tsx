@@ -7,9 +7,9 @@ import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
 import { unloadGoogleAds } from '~/util/GoogleAds';
-import HistoricLinePlot from '~/components/home/HistoricLinePlot';
+import HistoricLinePlot from '~/components/Home/HistoricLinePlot';
 import { generateHead } from '~/root';
-import ExpensesChart from '~/components/home/ExpensesChart';
+import ExpensesChart from '~/components/Home/ExpensesChart';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);

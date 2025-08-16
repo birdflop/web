@@ -3,7 +3,7 @@ import { component$, Signal, useContext, useContextProvider, useSignal, useVisib
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
 import { BirdflopSession, useSession } from '~/routes/plugin@auth';
-import PresetPreview from '~/components/rgb/PresetPreview';
+import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
 import { ChevronLeft, Save, X } from 'lucide-icons-qwik';

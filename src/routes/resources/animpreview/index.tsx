@@ -3,7 +3,7 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
 import { NotificationContext } from '~/routes/layout';
 import { Eye } from 'lucide-icons-qwik';

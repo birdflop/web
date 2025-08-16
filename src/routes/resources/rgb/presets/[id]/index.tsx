@@ -7,7 +7,7 @@ import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';

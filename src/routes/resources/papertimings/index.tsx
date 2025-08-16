@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 
-import PaperTimings from '~/components/analyze/PaperTimings';
+import PaperTimings from '~/components/Analyze/PaperTimings';
 import { defaultDescription, generateHead } from '~/root';
 
 export default component$(() => {

@@ -1,10 +1,13 @@
 import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import darkBackgrounds, { lightBackgrounds } from '~/components/Backgrounds';
+import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
+
+import ImgPwaIcon8x8 from '/branding/pwa-icon-8x8.png?url';
+import ImgMcPing5 from '/minecraft/ping_5.png?url';
 
 const InputField = component$(({ class: className, readOnly }: {
   class?: string;
@@ -90,18 +93,18 @@ export default component$(({ readOnly }: {
               }
               <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
                 style={{ textShadow: '2px 2px 0 #373737' }}>
-                <img class="h-6 rounded-none!" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
                 <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
-                <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
               </div>
               { previewStyle.value == 'tab-player' &&
                 <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
                   style={{ textShadow: '2px 2px 0 #373737' }}>
-                  <img class="h-6 rounded-none!" src="/branding/pwa-icon-8x8.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                  <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
                   <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
                     <Slot />
                   </InputField>
-                  <img class="h-6 rounded-none!" src="/minecraft/ping_5.png" alt="RGBirdflop" style="image-rendering: pixelated;" />
+                  <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
                 </div>
               }
               { previewStyle.value == 'tab-footer' &&

@@ -5,7 +5,7 @@ import { Form, useLocation } from '@builder.io/qwik-city';
 import { LogIn, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { ThemeToggle } from '~/components/ThemeToggle';
+import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();

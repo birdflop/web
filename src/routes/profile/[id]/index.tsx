@@ -2,7 +2,7 @@ import { component$, Signal, useContext, useContextProvider, useSignal, useVisib
 import { generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getPrismaClient } from '~/util/prisma';
-import PresetPreview from '~/components/rgb/PresetPreview';
+import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
 import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';

@@ -14,7 +14,7 @@ export const useResults = routeLoader$(async ({ params }) => {
   return results;
 });
 
-import SparkProfile from '~/components/analyze/SparkProfile';
+import SparkProfile from '~/components/Analyze/SparkProfile';
 import { defaultDescription, generateHead } from '~/root';
 
 export default component$(() => {

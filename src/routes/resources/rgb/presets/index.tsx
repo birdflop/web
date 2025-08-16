@@ -18,7 +18,7 @@ import {
   rgbPreset,
 } from '~/util/rgb/presets';
 import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
-import PresetPreview from '~/components/rgb/PresetPreview';
+import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import {
   ChevronLeft,
   ChevronRight,

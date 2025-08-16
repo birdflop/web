@@ -11,16 +11,16 @@ import { getCookies, setCookies } from '~/util/dataUtils';
 
 import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
-import ColorMap from '~/components/rgb/ColorMap';
-import ColorList from '~/components/rgb/ColorList';
-import Output from '~/components/rgb/Output';
-import Presets from '~/components/rgb/Presets';
-import Decode from '~/components/rgb/Decode';
-import Formatting from '~/components/rgb/Formatting';
-import FormatOptions from '~/components/rgb/FormatOptions';
-import Options from '~/components/rgb/Options';
-import Accordion from '~/components/Accordion';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import ColorMap from '~/components/Rgbirdflop/ColorMap';
+import ColorList from '~/components/Rgbirdflop/ColorList';
+import Output from '~/components/Rgbirdflop/Output';
+import Presets from '~/components/Rgbirdflop/Presets';
+import Decode from '~/components/Rgbirdflop/Decode';
+import Formatting from '~/components/Rgbirdflop/Formatting';
+import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
+import Options from '~/components/Rgbirdflop/Options';
+import Accordion from '~/components/Elements/Accordion';
 import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { defaultDescription, generateHead } from '~/root';
 
