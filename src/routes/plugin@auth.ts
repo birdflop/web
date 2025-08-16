@@ -1,9 +1,9 @@
 import type { User } from '@auth/qwik';
 import { QwikAuth$ } from '@auth/qwik';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getPrismaClient } from '~/util/prisma';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import Discord from '@auth/qwik/providers/discord';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { getDB } from '~/util/db';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -20,16 +20,16 @@ export interface BirdflopUser extends User {
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
-    const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
     let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
     if (!secret) {
       console.error('AUTH_SECRET is not set, using a temporary secret');
       secret = tempsecret;
     }
-    const prisma = getPrismaClient(databaseUrl);
+    const db = getDB();
 
-    const customPrismaAdapter = prisma ? {
-      ...PrismaAdapter(prisma),
+    const customPrismaAdapter = db ? {
+      ...DrizzleAdapter(db),
+      /*
       async getSessionAndUser(sessionToken: string) {
         const userAndSession = await prisma.session.findUnique({
           where: { sessionToken },
@@ -41,6 +41,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         const { user, ...session } = userAndSession;
         return { user, session } as any;
       },
+      */
     } : undefined;
 
     return {
@@ -71,9 +72,10 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
-        async signIn({ user, account, profile }) {
+        signIn({ account, profile }) {
           if (account?.provider === 'discord' && profile) {
             try {
+              /*
               if (profile.avatar) {
                 const avatarHash = (profile as any).avatar;
                 const format = avatarHash?.startsWith('a_') ? 'gif' : 'png';
@@ -90,6 +92,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
                   });
                 }
               }
+              */
             } catch (error) {
               console.error('Failed to refresh Discord profile picture on sign in:', error);
             }

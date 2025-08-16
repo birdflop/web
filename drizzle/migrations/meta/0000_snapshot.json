@@ -1,19 +1,12 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c4a5a2d0-3b23-47e8-82c6-86e8d206041d",
+  "id": "808df278-0185-40d4-b1c3-bc5b2fa879fc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "Account": {
-      "name": "Account",
+    "account": {
+      "name": "account",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
         "userId": {
           "name": "userId",
           "type": "text",
@@ -91,13 +84,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "refresh_token_expires_in": {
-          "name": "refresh_token_expires_in",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "createdAt": {
           "name": "createdAt",
           "type": "integer",
@@ -115,30 +101,36 @@
           "default": "CURRENT_TIMESTAMP"
         }
       },
-      "indexes": {
-        "provider_providerAccountId_idx": {
-          "name": "provider_providerAccountId_idx",
+      "indexes": {},
+      "foreignKeys": {
+        "account_userId_user_id_fk": {
+          "name": "account_userId_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "account_provider_providerAccountId_pk": {
           "columns": [
             "provider",
             "providerAccountId"
           ],
-          "isUnique": true
-        },
-        "account_userId_idx": {
-          "name": "account_userId_idx",
-          "columns": [
-            "userId"
-          ],
-          "isUnique": false
+          "name": "account_provider_providerAccountId_pk"
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "Presets": {
-      "name": "Presets",
+    "presets": {
+      "name": "presets",
       "columns": {
         "id": {
           "name": "id",
@@ -205,8 +197,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "SavedPresets": {
-      "name": "SavedPresets",
+    "saved-presets": {
+      "name": "saved-presets",
       "columns": {
         "userId": {
           "name": "userId",
@@ -226,31 +218,24 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "SavedPresets_userId_presetId_pk": {
+        "saved-presets_userId_presetId_pk": {
           "columns": [
             "userId",
             "presetId"
           ],
-          "name": "SavedPresets_userId_presetId_pk"
+          "name": "saved-presets_userId_presetId_pk"
         }
       },
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "Session": {
-      "name": "Session",
+    "session": {
+      "name": "session",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
         "sessionToken": {
           "name": "sessionToken",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
@@ -286,13 +271,6 @@
         }
       },
       "indexes": {
-        "Session_sessionToken_unique": {
-          "name": "Session_sessionToken_unique",
-          "columns": [
-            "sessionToken"
-          ],
-          "isUnique": true
-        },
         "session_userId_idx": {
           "name": "session_userId_idx",
           "columns": [
@@ -301,13 +279,27 @@
           "isUnique": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "session_userId_user_id_fk": {
+          "name": "session_userId_user_id_fk",
+          "tableFrom": "session",
+          "tableTo": "user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "User": {
-      "name": "User",
+    "user": {
+      "name": "user",
       "columns": {
         "id": {
           "name": "id",
@@ -376,15 +368,15 @@
         }
       },
       "indexes": {
-        "User_username_unique": {
-          "name": "User_username_unique",
+        "user_username_unique": {
+          "name": "user_username_unique",
           "columns": [
             "username"
           ],
           "isUnique": true
         },
-        "User_email_unique": {
-          "name": "User_email_unique",
+        "user_email_unique": {
+          "name": "user_email_unique",
           "columns": [
             "email"
           ],
@@ -396,8 +388,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "VerificationToken": {
-      "name": "VerificationToken",
+    "verificationToken": {
+      "name": "verificationToken",
       "columns": {
         "identifier": {
           "name": "identifier",
@@ -421,18 +413,17 @@
           "autoincrement": false
         }
       },
-      "indexes": {
-        "identifier_token_idx": {
-          "name": "identifier_token_idx",
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "verificationToken_identifier_token_pk": {
           "columns": [
             "identifier",
             "token"
           ],
-          "isUnique": true
+          "name": "verificationToken_identifier_token_pk"
         }
       },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
     }

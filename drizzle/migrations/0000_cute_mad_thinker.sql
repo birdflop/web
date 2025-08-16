@@ -1,5 +1,4 @@
-CREATE TABLE `Account` (
-	`id` text PRIMARY KEY NOT NULL,
+CREATE TABLE `account` (
 	`userId` text NOT NULL,
 	`type` text NOT NULL,
 	`provider` text NOT NULL,
@@ -11,14 +10,13 @@ CREATE TABLE `Account` (
 	`scope` text,
 	`id_token` text,
 	`session_state` text,
-	`refresh_token_expires_in` integer,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	PRIMARY KEY(`provider`, `providerAccountId`),
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `provider_providerAccountId_idx` ON `Account` (`provider`,`providerAccountId`);--> statement-breakpoint
-CREATE INDEX `account_userId_idx` ON `Account` (`userId`);--> statement-breakpoint
-CREATE TABLE `Presets` (
+CREATE TABLE `presets` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
 	`author` text NOT NULL,
@@ -29,24 +27,23 @@ CREATE TABLE `Presets` (
 	`pending` integer DEFAULT 1 NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `SavedPresets` (
+CREATE TABLE `saved-presets` (
 	`userId` text NOT NULL,
 	`presetId` integer NOT NULL,
 	PRIMARY KEY(`userId`, `presetId`)
 );
 --> statement-breakpoint
-CREATE TABLE `Session` (
-	`id` text PRIMARY KEY NOT NULL,
-	`sessionToken` text NOT NULL,
+CREATE TABLE `session` (
+	`sessionToken` text PRIMARY KEY NOT NULL,
 	`userId` text NOT NULL,
 	`expires` integer NOT NULL,
 	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `Session_sessionToken_unique` ON `Session` (`sessionToken`);--> statement-breakpoint
-CREATE INDEX `session_userId_idx` ON `Session` (`userId`);--> statement-breakpoint
-CREATE TABLE `User` (
+CREATE INDEX `session_userId_idx` ON `session` (`userId`);--> statement-breakpoint
+CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text,
 	`username` text,
@@ -58,12 +55,11 @@ CREATE TABLE `User` (
 	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `User_username_unique` ON `User` (`username`);--> statement-breakpoint
-CREATE UNIQUE INDEX `User_email_unique` ON `User` (`email`);--> statement-breakpoint
-CREATE TABLE `VerificationToken` (
+CREATE UNIQUE INDEX `user_username_unique` ON `user` (`username`);--> statement-breakpoint
+CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
+CREATE TABLE `verificationToken` (
 	`identifier` text NOT NULL,
 	`token` text NOT NULL,
-	`expires` integer NOT NULL
+	`expires` integer NOT NULL,
+	PRIMARY KEY(`identifier`, `token`)
 );
---> statement-breakpoint
-CREATE UNIQUE INDEX `identifier_token_idx` ON `VerificationToken` (`identifier`,`token`);

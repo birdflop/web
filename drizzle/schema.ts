@@ -1,10 +1,12 @@
-import { sqliteTable, integer, text, primaryKey, uniqueIndex, index } from "drizzle-orm/sqlite-core";
-import { sql } from "drizzle-orm";
-import { relations } from "drizzle-orm";
+import { sqliteTable, integer, text, primaryKey, index } from "drizzle-orm/sqlite-core";
+import { sql, relations } from "drizzle-orm";
+import type { AdapterAccountType } from "@auth/qwik/adapters"
 
 // -------------------- User --------------------
-export const users = sqliteTable("User", {
-  id: text("id").primaryKey().notNull(), // random ID
+export const users = sqliteTable("user", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   username: text("username").unique(),
   email: text("email").unique(),
@@ -16,7 +18,7 @@ export const users = sqliteTable("User", {
 });
 
 // -------------------- Presets --------------------
-export const presets = sqliteTable("Presets", {
+export const presets = sqliteTable("presets", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   author: text("author").notNull(),
@@ -28,10 +30,11 @@ export const presets = sqliteTable("Presets", {
 });
 
 // -------------------- Account --------------------
-export const accounts = sqliteTable("Account", {
-  id: text("id").primaryKey().notNull(),
-  userId: text("userId").notNull(),
-  type: text("type").notNull(),
+export const accounts = sqliteTable("account", {
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: text("type").$type<AdapterAccountType>().notNull(),
   provider: text("provider").notNull(),
   providerAccountId: text("providerAccountId").notNull(),
   refresh_token: text("refresh_token"),
@@ -41,22 +44,20 @@ export const accounts = sqliteTable("Account", {
   scope: text("scope"),
   id_token: text("id_token"),
   session_state: text("session_state"),
-  refresh_token_expires_in: integer("refresh_token_expires_in"),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-}, (table) => [
-  uniqueIndex("provider_providerAccountId_idx").on(
-    table.provider,
-    table.providerAccountId
-  ),
-  index("account_userId_idx").on(table.userId),
-]);
+}, (account) => ([
+  primaryKey({
+    columns: [account.provider, account.providerAccountId],
+  }),
+]));
 
 // -------------------- Session --------------------
-export const sessions = sqliteTable("Session", {
-  id: text("id").primaryKey().notNull(),
-  sessionToken: text("sessionToken").notNull().unique(),
-  userId: text("userId").notNull(),
+export const sessions = sqliteTable("session", {
+  sessionToken: text("sessionToken").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
   expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -65,19 +66,22 @@ export const sessions = sqliteTable("Session", {
 ]);
 
 // -------------------- VerificationToken --------------------
-export const verificationTokens = sqliteTable("VerificationToken", {
-  identifier: text("identifier").notNull(),
-  token: text("token").notNull(),
-  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-}, (table) => [
-  uniqueIndex("identifier_token_idx").on(
-    table.identifier,
-    table.token
-  ),
-]);
+export const verificationTokens = sqliteTable(
+  "verificationToken",
+  {
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+  },
+  (verificationToken) => ([
+    primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  ])
+);
 
 // -------------------- SavedPresets Join Table --------------------
-export const savedPresetsJoin = sqliteTable("SavedPresets", {
+export const savedPresetsJoin = sqliteTable("saved-presets", {
   userId: text("userId").notNull(),
   presetId: integer("presetId").notNull(),
 }, (table) => [
@@ -86,8 +90,6 @@ export const savedPresetsJoin = sqliteTable("SavedPresets", {
 
 // ---------- User Relations ----------
 export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions),
   publishedPresets: many(presets),
   savedPresets: many(savedPresetsJoin),
 }));
@@ -99,22 +101,6 @@ export const presetsRelations = relations(presets, ({ one, many }) => ({
     references: [users.id],
   }),
   savedBy: many(savedPresetsJoin),
-}));
-
-// ---------- Account Relations ----------
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
-  }),
-}));
-
-// ---------- Session Relations ----------
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
-  }),
 }));
 
 // ---------- SavedPresets Join Table Relations ----------

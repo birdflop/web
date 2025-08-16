@@ -43,6 +43,7 @@
   "type": "module",
   "devDependencies": {
     "@anuragroy/tailwindcss-animate": "^1.0.6",
+    "@auth/drizzle-adapter": "^1.10.0",
     "@auth/prisma-adapter": "2.10.0",
     "@auth/qwik": "0.8.0",
     "@builder.io/qwik": "1.15.0",

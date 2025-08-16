@@ -49,3 +49,4 @@ vite.config.mts.*
 
 src/prisma
 worker-configuration.d.ts
+.wrangler
