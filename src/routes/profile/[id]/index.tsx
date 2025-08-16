@@ -25,10 +25,7 @@ export const useUser = routeLoader$(async ({ params, env }) => {
 
   let presets: publishedPreset[] = [];
   const errors: string[] = [];
-  try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
-    if (!prisma) throw new Error('No prisma client');
-
+  try { 
     presets = await prisma.presets.findMany({
       where: {
         userId: user.id,
