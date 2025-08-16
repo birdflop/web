@@ -6,8 +6,8 @@ import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import ImgPwaIcon8x8 from '/branding/pwa-icon-8x8.png?url';
-import ImgMcPing5 from '/minecraft/ping_5.png?url';
+const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
+const ImgMcPing5 = '/minecraft/ping_5.png';
 
 const InputField = component$(({ class: className, readOnly }: {
   class?: string;
