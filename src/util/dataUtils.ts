@@ -131,15 +131,7 @@ export const setUserData = server$(async function(data: {
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
 
-  const CLOUDFLARE_D1_TOKEN = this.env.get('CLOUDFLARE_D1_TOKEN');
-  const CLOUDFLARE_ACCOUNT_ID = this.env.get('CLOUDFLARE_ACCOUNT_ID');
-  const CLOUDFLARE_DATABASE_ID = this.env.get('CLOUDFLARE_DATABASE_ID');
-  const prisma = getPrismaClient({
-    CLOUDFLARE_D1_TOKEN,
-    CLOUDFLARE_ACCOUNT_ID,
-    CLOUDFLARE_DATABASE_ID,
-  });
-
+  const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
   if (!session || !prisma) return console.warn('No session or prisma client');
 
   const userData = await prisma.user.update({

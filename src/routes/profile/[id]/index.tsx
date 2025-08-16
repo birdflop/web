@@ -10,15 +10,7 @@ import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 export const useUser = routeLoader$(async ({ params, env }) => {
-  const CLOUDFLARE_D1_TOKEN = env.get('CLOUDFLARE_D1_TOKEN');
-  const CLOUDFLARE_ACCOUNT_ID = env.get('CLOUDFLARE_ACCOUNT_ID');
-  const CLOUDFLARE_DATABASE_ID = env.get('CLOUDFLARE_DATABASE_ID');
-  const prisma = getPrismaClient({
-    CLOUDFLARE_D1_TOKEN,
-    CLOUDFLARE_ACCOUNT_ID,
-    CLOUDFLARE_DATABASE_ID,
-  });
-
+  const prisma = getPrismaClient(env.get('DATABASE_URL'));
   if (!prisma) throw new Error('No prisma client');
 
   const user = await prisma.user.findUnique({

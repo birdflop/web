@@ -20,21 +20,13 @@ export interface BirdflopUser extends User {
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
+    const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
     let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
-
-    const CLOUDFLARE_D1_TOKEN = event?.platform?.env?.CLOUDFLARE_D1_TOKEN || process.env.CLOUDFLARE_D1_TOKEN;
-    const CLOUDFLARE_ACCOUNT_ID = event?.platform?.env?.CLOUDFLARE_ACCOUNT_ID || process.env.CLOUDFLARE_ACCOUNT_ID;
-    const CLOUDFLARE_DATABASE_ID = event?.platform?.env?.CLOUDFLARE_DATABASE_ID || process.env.CLOUDFLARE_DATABASE_ID;
-
     if (!secret) {
       console.error('AUTH_SECRET is not set, using a temporary secret');
       secret = tempsecret;
     }
-    const prisma = getPrismaClient({
-      CLOUDFLARE_D1_TOKEN,
-      CLOUDFLARE_ACCOUNT_ID,
-      CLOUDFLARE_DATABASE_ID,
-    });
+    const prisma = getPrismaClient(databaseUrl);
 
     const customPrismaAdapter = prisma ? {
       ...PrismaAdapter(prisma),

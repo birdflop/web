@@ -21,13 +21,16 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
     throw new Error('User not authenticated');
   }
 
-  const CLOUDFLARE_D1_TOKEN = this.env.get('CLOUDFLARE_D1_TOKEN');
-  const CLOUDFLARE_ACCOUNT_ID = this.env.get('CLOUDFLARE_ACCOUNT_ID');
-  const CLOUDFLARE_DATABASE_ID = this.env.get('CLOUDFLARE_DATABASE_ID');
-  const prisma = getPrismaClient({
-    CLOUDFLARE_D1_TOKEN,
-    CLOUDFLARE_ACCOUNT_ID,
-    CLOUDFLARE_DATABASE_ID,
+  const prisma = getPrismaClient(this.env.get('DATABASE_URL'));
+
+  await prisma?.presets.create({
+    data: {
+      name: presetInfo.name,
+      userId: session.user.id,
+      author: session.user.name,
+      description: presetInfo.description,
+      preset: presetInfo.preset,
+    },
   });
 
   await prisma?.presets.create({
