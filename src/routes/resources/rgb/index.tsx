@@ -1,4 +1,4 @@
-import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/rgb/HexUtils';
@@ -7,7 +7,6 @@ import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils'
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import { isBrowser } from '@builder.io/qwik/build';
 
 import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import Input, { previewStyleContext } from '~/components/rgb/Input';

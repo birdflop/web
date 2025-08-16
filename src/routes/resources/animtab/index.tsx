@@ -1,4 +1,4 @@
-import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { animationStyles, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
@@ -8,7 +8,6 @@ import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import { isBrowser } from '@builder.io/qwik/build';
 
 import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';

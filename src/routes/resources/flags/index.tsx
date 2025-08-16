@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { SelectMenu, Toggle, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
@@ -8,7 +8,6 @@ import { generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
-import { isBrowser } from '@builder.io/qwik/build';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 
