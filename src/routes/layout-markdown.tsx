@@ -1,5 +1,5 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { OnThisPage } from '~/components/Docs/ThisPage';
+import { OnThisPage } from '~/components/docs/ThisPage';
 
 import { useServerTheme as useServerThemeFromLayout } from './layout';
 export const useServerTheme = useServerThemeFromLayout;

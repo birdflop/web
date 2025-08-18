@@ -1,9 +1,9 @@
 import { component$, Slot } from '@builder.io/qwik';
 import { routeLoader$, useLocation } from '@builder.io/qwik-city';
-import { DocsSidebar } from '~/components/Docs/SideBar';
-import { Breadcrumbs } from '~/components/Docs/Breadcrumbs';
-import Contributors from '~/components/Docs/Contributors';
-import { OnThisPage } from '~/components/Docs/ThisPage';
+import { DocsSidebar } from '~/components/docs/SideBar';
+import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
+import Contributors from '~/components/docs/Contributors';
+import { OnThisPage } from '~/components/docs/ThisPage';
 
 type MDX = {
   title: string;
