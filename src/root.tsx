@@ -1,10 +1,9 @@
-import { component$, HTMLCrossOriginAttribute, isDev } from '@builder.io/qwik';
+import { component$, HTMLCrossOriginAttribute, isDev, useServerData } from '@builder.io/qwik';
 import {
   DocumentHead,
   DocumentHeadValue,
   QwikCityProvider,
   RouterOutlet,
-  useLocation,
 } from '@builder.io/qwik-city';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
@@ -25,9 +24,9 @@ export default component$(() => {
    * Init Qwik Speak
    */
   useQwikSpeak({ config, translationFn });
-  const loc = useLocation();
-  const isBirdflopDomain = !isDev && (loc.url.hostname === 'birdflop.com' || loc.url.hostname === 'www.birdflop.com');
-
+  const serverDataUrl = useServerData<string>('url');
+  const url = new URL(serverDataUrl || 'https://unknown');
+  const isBirdflop = !isDev && (url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com');
   return (
     <QwikCityProvider>
       <head>
@@ -39,7 +38,7 @@ export default component$(() => {
           type='text/partytown'
           src='https://www.googletagmanager.com/gtag/js?id=AW-11483620641'
         />
-        {isBirdflopDomain && (
+        {isBirdflop && (
           <script
             defer
             src='https://umami.bwmp.dev/script.js'
