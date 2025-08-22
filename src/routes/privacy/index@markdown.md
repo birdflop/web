@@ -1,6 +1,6 @@
 ---
 title: BIRDFLOP PRIVACY POLICY
-last_updated: 02-29-2024
+last_updated: 08-21-2025
 description: Our privacy policy applies to information we collect when you use or access our website, application, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective immediately after we post the revised privacy policy (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.
 ---
 
@@ -20,7 +20,7 @@ When you access or use our services, we automatically collect information about 
 
 - **Log Information:** We may log information about your use of our services, including the type of browser you use, access times, pages viewed, your IP address and the page you visited before navigating to our services.
 - **Profiler Information:** We may collect data on your submitted timings reports and Spark profiles.
-- **Information Collected by Cookies and Other Tracking Technologies:** We use various technologies to collect information, including Microsoft Clarity, and this may include sending cookies to your computer. Cookies are small data files stored on your hard drive or in your device memory that helps us to improve our services and your experience, see which areas and features of our services are popular, and count visits. We may also collect information using web beacons (also known as "tracking pixels"). Web beacons are electronic images that may be used in our services or emails and to track count visits or understand usage and campaign effectiveness.
+- **Information Collected by Cookies and Other Tracking Technologies:** We use various technologies to collect information, including Umami, and this may include sending cookies to your computer. Cookies are small data files stored on your hard drive or in your device memory that helps us to improve our services and your experience, see which areas and features of our services are popular, and count visits. We may also collect information using web beacons (also known as "tracking pixels"). Web beacons are electronic images that may be used in our services or emails and to track count visits or understand usage and campaign effectiveness.
 
 For more details about how we collect information, including details about cookies and how to disable them, please see **"Your Information Choices"** below.
 
