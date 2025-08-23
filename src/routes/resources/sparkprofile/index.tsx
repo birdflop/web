@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 
-import SparkProfile from '~/components/Analyze/SparkProfile';
+import SparkProfile from '~/components/analyze/SparkProfile';
 import { defaultDescription, generateHead } from '~/root';
 
 export default component$(() => {
