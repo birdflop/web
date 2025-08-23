@@ -22,7 +22,7 @@ export const useUser = routeLoader$(async ({ params, env }) => {
 
   let presets: publishedPreset[] = [];
   const errors: string[] = [];
-  try { 
+  try {
     presets = await prisma.presets.findMany({
       where: {
         userId: user.id,
