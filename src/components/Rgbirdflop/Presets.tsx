@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useContext, useContextProvider, useSignal, type Signal } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal } from '@builder.io/qwik';
 import { Download, Globe, Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { SelectMenu } from '@luminescent/ui-qwik';
@@ -7,7 +7,6 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
 import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
-import type { BirdflopSession } from '~/routes/plugin@auth';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -21,7 +20,7 @@ export default component$(({ hidden }: {
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const loc = useLocation();
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
 
   const loadPresetJSON = $(async (presetJSON: string) => {
     const id = Math.random().toString(36).substring(2, 15);

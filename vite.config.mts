@@ -79,10 +79,11 @@ export default defineConfig(({ command, mode }): UserConfig => {
         'three/examples/jsm/loaders/OBJLoader',
         'three/examples/jsm/controls/OrbitControls',
         'three',
-        '@auth/prisma-adapter',
+        '@auth/drizzle-adapter',
+        'drizzle-orm/sqlite-core',
+        'drizzle-orm/sql/sql',
         'chart.js',
         '@qwik.dev/partytown/integration',
-        '@prisma/adapter-d1',
       ],
     },
 
@@ -114,11 +115,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
         // Do cache the server response in preview (non-adapter production build)
         "Cache-Control": "public, max-age=600",
       },
-    },
-    ssr: {
-      external: [
-        '@auth/prisma-adapter',
-      ],
     },
   };
 });

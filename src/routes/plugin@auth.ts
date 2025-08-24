@@ -5,6 +5,13 @@ import Discord from '@auth/qwik/providers/discord';
 import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { getDB } from '~/util/db';
 
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+} from '../../drizzle/schema';
+
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
 
@@ -27,21 +34,14 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     }
     const db = getDB();
 
-    const customPrismaAdapter = db ? {
-      ...DrizzleAdapter(db),
-      /*
-      async getSessionAndUser(sessionToken: string) {
-        const userAndSession = await prisma.session.findUnique({
-          where: { sessionToken },
-          include: { user: {
-            include: { savedPresets: true },
-          } },
-        });
-        if (!userAndSession) return null;
-        const { user, ...session } = userAndSession;
-        return { user, session } as any;
-      },
-      */
+    const customDrizzleAdapter = db ? {
+      ...DrizzleAdapter(db, {
+        usersTable: users,
+        accountsTable: accounts,
+        sessionsTable: sessions,
+        verificationTokensTable: verificationTokens,
+        authenticatorsTable: undefined,
+      }),
     } : undefined;
 
     return {
@@ -68,7 +68,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: customPrismaAdapter,
+      adapter: customDrizzleAdapter,
       trustHost: true, // uncomment this if previewing on localhost
       secret,
       callbacks: {
@@ -100,12 +100,13 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           return true;
         },
         session({ session }) {
-          const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
+          console.log(session);
+          const { id, name, email, image, privatePresets } = session.user;
 
           return {
             expires: session.expires,
             user: {
-              id, name, email, image, privatePresets, savedPresets,
+              id, name, email, image, privatePresets,
             },
           };
         },

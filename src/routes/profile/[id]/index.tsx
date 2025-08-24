@@ -1,19 +1,19 @@
 import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
 import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
+import { getDB } from '~/util/db';
 
-export const useUser = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
-  if (!prisma) throw new Error('No prisma client');
+export const useUser = routeLoader$(async ({ params }) => {
+  const db = getDB();
+  if (!db) throw new Error('No database connection');
 
-  const user = await prisma.user.findUnique({
+  const user = await db.user.findUnique({
     where: { id: params.id },
   }) as BirdflopUser;
   if (!user) {
@@ -23,7 +23,7 @@ export const useUser = routeLoader$(async ({ params, env }) => {
   let presets: publishedPreset[] = [];
   const errors: string[] = [];
   try {
-    presets = await prisma.presets.findMany({
+    presets = await db.presets.findMany({
       where: {
         userId: user.id,
       },

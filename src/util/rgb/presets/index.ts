@@ -1,4 +1,3 @@
-import { Presets } from '@prisma/client';
 import { combinedDefaults } from './defaults';
 import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
 import { BirdflopUser } from '~/routes/plugin@auth';
@@ -16,7 +15,7 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset extends Omit<Presets, 'preset' | 'description' | 'userId'> {
+export interface publishedPreset extends Omit<any, 'preset' | 'description' | 'userId'> {
   userId?: string;
   user?: BirdflopUser;
   description?: string;

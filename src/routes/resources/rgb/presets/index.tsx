@@ -28,7 +28,6 @@ import {
 } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$, useNavigate } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
@@ -54,8 +53,7 @@ export const usePresets = routeLoader$(async ({ url, env }) => {
   const sortOrder = searchParams.get('sortOrder') || 'desc';
 
   try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
-    if (!prisma) throw new Error('No prisma client');
+    throw new Error('No prisma client');
 
     const whereClause: any = {
       pending: showPending,

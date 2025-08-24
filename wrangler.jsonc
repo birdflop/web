@@ -22,7 +22,9 @@
     {
       "binding": "DB",
       "database_name": "birdflop-d1",
-      "database_id": "f764ce6a-0298-4958-a14e-84be004a0ab2"
+      "database_id": "f764ce6a-0298-4958-a14e-84be004a0ab2",
+			"migrations_dir": "./drizzle/migrations",
+			"experimental_remote": true
     }
   ]
 	/**

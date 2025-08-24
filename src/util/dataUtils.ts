@@ -1,8 +1,9 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
-import type { BirdflopSession } from '~/routes/plugin@auth';
 import { loadPreset, rgbPreset } from './rgb/presets';
-import { getPrismaClient } from './prisma';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
+import { BirdflopSession } from '~/routes/plugin@auth';
+import { getDB, users } from './db';
+import { eq } from 'drizzle-orm';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
@@ -124,23 +125,18 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
-  savedPresets?: {
-    disconnect?: { id: number };
-    connect?: { id: number };
-  }
 }) {
   const session = this.sharedMap.get('session') as BirdflopSession | undefined;
 
-  const prisma = getPrismaClient(this.env?.get('DATABASE_URL'));
-  if (!session || !prisma) return console.warn('No session or prisma client');
+  const db = getDB();
+  if (!session || !db || !session.user.id) return console.warn('No session or database client');
 
-  const userData = await prisma.user.update({
-    where: { id: session.user.id },
-    data: data as JSON,
-    include: {
-      savedPresets: true,
-    },
-  });
+  const userData = await db.update(users)
+    .set({
+      privatePresets: data.privatePresets,
+    })
+    .where(eq(users.id, session.user.id))
+    .returning().get();
 
   return userData;
 });

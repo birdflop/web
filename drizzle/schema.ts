@@ -1,6 +1,7 @@
-import { sqliteTable, integer, text, primaryKey, index } from "drizzle-orm/sqlite-core";
-import { sql, relations } from "drizzle-orm";
+import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core";
 import type { AdapterAccountType } from "@auth/qwik/adapters"
+import { sql } from "drizzle-orm/sql/sql";
+import { rgbPreset } from "~/util/rgb/presets";
 
 // -------------------- User --------------------
 export const users = sqliteTable("user", {
@@ -9,10 +10,10 @@ export const users = sqliteTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   username: text("username").unique(),
-  email: text("email").unique(),
+  email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
-  privatePresets: text("privatePresets"), // store JSON as string
+  privatePresets: text("privatePresets", { mode: 'json' }).$type<rgbPreset[]>(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
@@ -26,7 +27,7 @@ export const presets = sqliteTable("presets", {
   description: text("description"),
   preset: text("preset").notNull(), // JSON as string
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  pending: integer("pending", { mode: "boolean" }).default(sql`1`).notNull(),
+  pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
 });
 
 // -------------------- Account --------------------
@@ -44,13 +45,11 @@ export const accounts = sqliteTable("account", {
   scope: text("scope"),
   id_token: text("id_token"),
   session_state: text("session_state"),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-}, (account) => ([
-  primaryKey({
+}, (account) => ({
+  compoundKey: primaryKey({
     columns: [account.provider, account.providerAccountId],
   }),
-]));
+}));
 
 // -------------------- Session --------------------
 export const sessions = sqliteTable("session", {
@@ -59,58 +58,15 @@ export const sessions = sqliteTable("session", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-}, (table) => [
-  index("session_userId_idx").on(table.userId),
-]);
+});
 
-// -------------------- VerificationToken --------------------
-export const verificationTokens = sqliteTable(
-  "verificationToken",
-  {
-    identifier: text("identifier").notNull(),
-    token: text("token").notNull(),
-    expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
-  },
-  (verificationToken) => ([
-    primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token],
-    }),
-  ])
-);
-
-// -------------------- SavedPresets Join Table --------------------
-export const savedPresetsJoin = sqliteTable("saved-presets", {
-  userId: text("userId").notNull(),
-  presetId: integer("presetId").notNull(),
-}, (table) => [
-  primaryKey({ columns: [table.userId, table.presetId] }),
-]);
-
-// ---------- User Relations ----------
-export const usersRelations = relations(users, ({ many }) => ({
-  publishedPresets: many(presets),
-  savedPresets: many(savedPresetsJoin),
-}));
-
-// ---------- Presets Relations ----------
-export const presetsRelations = relations(presets, ({ one, many }) => ({
-  user: one(users, {
-    fields: [presets.userId],
-    references: [users.id],
-  }),
-  savedBy: many(savedPresetsJoin),
-}));
-
-// ---------- SavedPresets Join Table Relations ----------
-export const savedPresetsRelations = relations(savedPresetsJoin, ({ one }) => ({
-  user: one(users, {
-    fields: [savedPresetsJoin.userId],
-    references: [users.id],
-  }),
-  preset: one(presets, {
-    fields: [savedPresetsJoin.presetId],
-    references: [presets.id],
+export const verificationTokens = sqliteTable("verificationToken", {
+  identifier: text("identifier").notNull(),
+  token: text("token").notNull(),
+  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+},
+(verificationToken) => ({
+  compositePk: primaryKey({
+    columns: [verificationToken.identifier, verificationToken.token],
   }),
 }));

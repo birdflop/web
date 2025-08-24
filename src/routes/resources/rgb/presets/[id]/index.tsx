@@ -5,7 +5,6 @@ import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
@@ -13,13 +12,14 @@ import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { setUserData } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
+import { getDB } from '~/util/db';
 
-export const usePreset = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
-  if (!prisma) throw new Error('No prisma client');
+export const usePreset = routeLoader$(async ({ params }) => {
+  const db = getDB();
+  if (!db) throw new Error('No database connection');
   if (isNaN(Number(params.id))) throw new Error('No preset ID provided');
 
-  const presetInfo = await prisma.presets.findUnique({
+  const presetInfo = await db.presets.findUnique({
     where: { id: Number(params.id) },
     include: {
       user: true,
