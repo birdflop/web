@@ -33,9 +33,14 @@ import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-export const usePresets = routeLoader$(async ({ url, env }) => {
-  let presets: publishedPreset[] = [];
-  let count = 0;
+import { getDB } from '~/util/db';
+import { and, count, eq, ilike, inArray } from 'drizzle-orm';
+import { presets } from '~/../drizzle/schema';
+
+export const usePresets = routeLoader$(async ({ url }) => {
+  // FIX THIS
+  let publishedPresets: any[] = [];
+  let presetCount = 0;
   const errors: string[] = [];
 
   const searchParams = url.searchParams;
@@ -48,65 +53,78 @@ export const usePresets = routeLoader$(async ({ url, env }) => {
   const showPending = searchParams.get('showPending') === 'true';
   const showSaved = searchParams.get('showSaved') === 'true';
   const savedPresetIds =
-    searchParams.get('savedPresetIds')?.split(',').filter(Boolean) || [];
+    searchParams.get('savedPresetIds')?.split(',').filter(Boolean).map((id) => parseInt(id)) || [];
   const sortBy = searchParams.get('sortBy') || 'createdAt';
   const sortOrder = searchParams.get('sortOrder') || 'desc';
 
   try {
-    throw new Error('No prisma client');
+    const db = getDB();
+    if (!db) throw new Error('No database client');
 
-    const whereClause: any = {
-      pending: showPending,
-    };
+    presetCount = await db.select({
+      count: count(),
+    })
+      .from(presets)
+      .where(and(
+        eq(presets.pending, showPending),
+        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        showSaved && savedPresetIds.length > 0
+          ? inArray(presets.id, savedPresetIds)
+          : undefined,
+      ))
+      .get()
+      .then((r) => r?.count ?? 0);
 
-    if (searchTerm) {
-      whereClause.name = {
-        contains: searchTerm,
-      };
-    }
-
-    if (showSaved && savedPresetIds.length > 0) {
-      whereClause.id = {
-        in: savedPresetIds,
-      };
-    }
-
-    count = await prisma.presets.count({
-      where: whereClause,
-    });
-
-    let orderBy: any;
+    let orderBy;
     switch (sortBy) {
     case 'name':
-      orderBy = { name: sortOrder };
+      orderBy = presets.name;
       break;
-    case 'saves':
+    /*
+      case 'saves':
       orderBy = { savedBy: {
         _count: sortOrder,
       } };
       break;
+    */
     case 'createdAt':
     default:
-      orderBy = { createdAt: sortOrder };
+      orderBy = presets.createdAt;
       break;
     }
 
-    presets = (await prisma.presets.findMany({
-      where: whereClause,
-      skip: (page - 1) * perPage,
-      take: perPage,
-      orderBy,
-      include: {
-        user: true,
-        savedBy: true,
-      },
-    })) as publishedPreset[];
+    publishedPresets = await db.select()
+      .from(presets)
+      .where(and(
+        eq(presets.pending, showPending),
+        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        showSaved && savedPresetIds.length > 0
+          ? inArray(presets.id, savedPresetIds)
+          : undefined,
+      ))
+      .orderBy(orderBy)
+      .limit(perPage)
+      .offset((page - 1) * perPage)
+      .then((r) => r ?? []);
+
+    /*
+      prisma.presets.findMany({
+        where: whereClause,
+        skip: (page - 1) * perPage,
+        take: perPage,
+        orderBy,
+        include: {
+          user: true,
+          savedBy: true,
+        },
+      });
+    */
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
   return {
-    presets,
-    count,
+    publishedPresets,
+    presetCount,
     errors,
     page,
     perPage,
@@ -149,8 +167,8 @@ export default component$(() => {
 
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
   const {
-    presets,
-    count,
+    publishedPresets,
+    presetCount,
     errors: presetsErrors,
     page,
     perPage,
@@ -160,6 +178,7 @@ export default component$(() => {
     sortBy,
     sortOrder,
   } = usePresets().value;
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
@@ -216,7 +235,7 @@ export default component$(() => {
 
   const privatePresetsParsed: presetInfo[] = [];
   privatePresets.value.forEach((preset) => {
-    const isunique = presets.every((p) => {
+    const isunique = publishedPresets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
     if (isunique) {
@@ -228,7 +247,7 @@ export default component$(() => {
     }
   });
 
-  const totalPages = Math.ceil(count / perPage);
+  const totalPages = Math.ceil(presetCount / perPage);
 
   const updateURL = $((params: Record<string, string | number | boolean>) => {
     const url = new URL(window.location.href);
@@ -344,7 +363,7 @@ export default component$(() => {
               onInput$={(e, el) => void debouncedSearch(el.value)}
             />
           </div>
-          <div class="flex gap-2 items-center shrink-0">
+          <div class="flex gap-2 items-center">
             <SelectMenu
               value={`${sortBy}-${sortOrder}`}
               onChange$={(e, el) => {
@@ -382,11 +401,11 @@ export default component$(() => {
           </div>
         </div>
         <div>
-          <p class="text-xs text-lum-text-secondary mt-1">
+          <p class="text-xs text-lum-text-secondary mb-1">
             {t('rgb.presets.totalCount@@Total presets: ') +
-              presets.length +
+              publishedPresets.length +
               ' / ' +
-              count}
+              presetCount}
             {totalPages > 1 && (
               <span class="ml-2">
                 {t('rgb.presets.pageInfo@@Page ') + page + ' of ' + totalPages}
@@ -474,14 +493,14 @@ export default component$(() => {
           </div>
         )}
         <div class="grid sm:grid-cols-2 gap-2">
-          {presets.map((presetInfo) => (
+          {publishedPresets.map((presetInfo) => (
             <PresetPreview
               key={`${presetInfo.name}-${presetInfo.author}`}
               presetInfo={presetInfo}
               defaults={presetStore.previewWithSettings ? rgbStore : undefined}
             />
           ))}
-          {presets.length === 0 && (
+          {publishedPresets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
