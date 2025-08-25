@@ -5,7 +5,7 @@ import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
 import { getPresets, publishedPreset } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
-import { privatePresetsContext } from '~/routes/resources/rgb/presets';
+import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 import { getDB } from '~/util/db';
 
@@ -41,6 +41,9 @@ export default component$(() => {
   const session = useSession() as Readonly<Signal<BirdflopSession>>;
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
+
+  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  useContextProvider(savedPresetsContext, savedPresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
