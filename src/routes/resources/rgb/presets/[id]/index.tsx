@@ -31,8 +31,6 @@ export const usePreset = routeLoader$(async ({ params }) => {
     .groupBy(presets.id, users.id)
     .get();
 
-  console.log(presetInfo);
-
   if (!presetInfo) throw new Error('Preset not found');
 
   return {

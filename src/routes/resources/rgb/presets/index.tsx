@@ -112,7 +112,6 @@ export const usePresets = routeLoader$(async ({ url }) => {
       .offset((page - 1) * perPage)
       // FIX THIS
       .then((r) => r ?? []) as publishedPreset[];
-    console.log(presetsFromDB);
 
     publishedPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
       ...presets, user, saveCount,

@@ -10,6 +10,8 @@ import {
   accounts,
   sessions,
   verificationTokens,
+  savedPresets,
+  presets,
 } from '../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
@@ -35,16 +37,6 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     }
     const db = getDB();
 
-    const customDrizzleAdapter = db ? {
-      ...DrizzleAdapter(db, {
-        usersTable: users,
-        accountsTable: accounts,
-        sessionsTable: sessions,
-        verificationTokensTable: verificationTokens,
-        authenticatorsTable: undefined,
-      }),
-    } : undefined;
-
     return {
       providers: [
         Discord({
@@ -69,7 +61,13 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: customDrizzleAdapter,
+      adapter: DrizzleAdapter(db, {
+        usersTable: users,
+        accountsTable: accounts,
+        sessionsTable: sessions,
+        verificationTokensTable: verificationTokens,
+        authenticatorsTable: undefined,
+      }),
       trustHost: process.env.NODE_ENV === 'development',
       secret,
       callbacks: {
@@ -92,14 +90,23 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           }
           return true;
         },
-        session({ session }) {
-          console.log(session);
+        async session({ session }) {
           const { id, name, email, image, privatePresets } = session.user;
+
+          // fetch saved presets for this user
+          const savedFromDB = await db.select({
+            preset: presets,
+          })
+            .from(savedPresets)
+            .where(eq(savedPresets.userId, session.user.id))
+            .innerJoin(presets, eq(presets.id, savedPresets.presetId))
+            .all();
+          const saved = savedFromDB.map(({ preset }) => preset);
 
           return {
             expires: session.expires,
             user: {
-              id, name, email, image, privatePresets,
+              id, name, email, image, privatePresets, savedPresets: saved,
             },
           };
         },

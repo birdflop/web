@@ -23,7 +23,6 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
   try {
     const db = getDB();
 
-    console.log(presetInfo.preset);
     await db.insert(presets)
       .values({
         name: presetInfo.name,
