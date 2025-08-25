@@ -11,6 +11,7 @@ import {
   sessions,
   verificationTokens,
 } from '../../drizzle/schema';
+import { eq } from 'drizzle-orm';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
@@ -69,30 +70,22 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         }),
       ],
       adapter: customDrizzleAdapter,
-      trustHost: true, // uncomment this if previewing on localhost
+      trustHost: process.env.NODE_ENV === 'development',
       secret,
       callbacks: {
-        signIn({ account, profile }) {
+        async signIn({ user, account, profile }) {
           if (account?.provider === 'discord' && profile) {
             try {
-              /*
-              if (profile.avatar) {
+              if (profile.avatar && user.id) {
                 const avatarHash = (profile as any).avatar;
                 const format = avatarHash?.startsWith('a_') ? 'gif' : 'png';
                 const newImageUrl = `https://cdn.discordapp.com/avatars/${(profile as any).id}/${avatarHash}.${format}`;
                 user.image = newImageUrl;
 
-                if (prisma) {
-                  await prisma.user.update({
-                    where: { id: user.id },
-                    data: {
-                      image: newImageUrl,
-                      updatedAt: new Date(),
-                    },
-                  });
-                }
+                await db.update(users)
+                  .set({ image: newImageUrl })
+                  .where(eq(users.id, user.id));
               }
-              */
             } catch (error) {
               console.error('Failed to refresh Discord profile picture on sign in:', error);
             }
