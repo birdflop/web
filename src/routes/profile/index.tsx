@@ -6,13 +6,14 @@ import { BirdflopSession, useSession } from '~/routes/plugin@auth';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
-import { ChevronLeft, Save, X } from 'lucide-icons-qwik';
+import { Save, Store, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
 import { getDB } from '~/util/db';
+import { presets } from '~/../drizzle/schema';
 
 const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
 
@@ -20,29 +21,24 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
     throw new Error('User not authenticated');
   }
 
-  const db = getDB();
+  try {
+    const db = getDB();
 
-  await prisma?.presets.create({
-    data: {
-      name: presetInfo.name,
-      userId: session.user.id,
-      author: session.user.name,
-      description: presetInfo.description,
-      preset: presetInfo.preset,
-    },
-  });
+    console.log(presetInfo.preset);
+    await db.insert(presets)
+      .values({
+        name: presetInfo.name,
+        userId: session.user.id,
+        author: session.user.name,
+        description: presetInfo.description,
+        preset: JSON.stringify(presetInfo.preset),
+        pending: false,
+      });
+  } catch (error) {
+    console.error('Error publishing preset:', error);
+    return { success: false, error };
+  }
 
-  await prisma?.presets.create({
-    data: {
-      name: presetInfo.name,
-      userId: session.user.id,
-      author: session.user.name,
-      description: presetInfo.description,
-      preset: presetInfo.preset,
-    },
-  });
-
-  // Simulate a successful submission
   return { success: true };
 });
 
@@ -67,38 +63,45 @@ export default component$(() => {
     pending: false,
   }));
 
-  return <div>
+  return <div class="flex flex-col justify-center min-h-[50svh]">
     <h3 class="flex gap-2 items-center">
       <Save size={30} />
       <span class="flex-1">
         My Private RGBirdflop Presets
       </span>
       <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-        <ChevronLeft size={20} /> Go to presets
+        <Store size={20} /> Go to presets
       </Link>
     </h3>
 
-    <div class="grid sm:grid-cols-2 gap-2">
-      {privatePresetsParsed.map((presetInfo) =>
-        <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
-      )}
-      <button class="lum-card text-left lum-bg-green/20 hover:lum-bg-green w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
-        modalRef.value?.showModal();
-      }}>
-        <h4 class="my-0!">
-          Publish a preset
-        </h4>
-        <p>
-          Click here to publish a saved preset from this list to the RGBirdflop presets repository.
-        </p>
-      </button>
-    </div>
+    {privatePresetsParsed.length > 0 &&
+      <div class="grid sm:grid-cols-2 gap-2">
+        {privatePresetsParsed.map((presetInfo) =>
+          <PresetPreview key={`${presetInfo.name}-${presetInfo.author}`} presetInfo={presetInfo} />,
+        )}
+        <button class="lum-card text-left lum-bg-green/20 hover:lum-bg-green w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
+          modalRef.value?.showModal();
+        }}>
+          <h4 class="my-0!">
+            Publish a preset
+          </h4>
+          <p>
+            Click here to publish a saved preset from this list to the RGBirdflop presets repository.
+          </p>
+        </button>
+      </div>
+    }
+
+    {privatePresetsParsed.length === 0 &&
+      <p>
+        You don't have any presets saved yet. Go to RGBirdflop and save some!
+      </p>
+    }
 
     <dialog ref={modalRef}
       class={{
-        'm-auto hidden open:flex': true,
+        'm-auto hidden open:flex text-lum-text': true,
         'lum-card drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
-        'backdrop:bg-gray-950/30 backdrop:backdrop-blur-xs': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
       }}>
@@ -131,34 +134,36 @@ export default component$(() => {
 
           if (!includetext) delete preset.text;
 
-          console.log('Publishing preset:', { name, description, preset });
+          const result = await publishPreset({
+            name,
+            description,
+            preset,
+          }, session.value);
 
-          try {
-            await publishPreset({
-              name,
-              description,
-              preset,
-            }, session.value);
-          } catch (error) {
-            console.error('Error publishing preset:', error);
-            alert(`An error occurred while publishing the preset. ${error}`);
-            return;
-          }
-
-          modalRef.value?.close();
-        }}
-        onSubmitCompleted$={(e) => {
-          console.log(e);
           const id = Math.random().toString(36).substring(2, 15);
-          notifications.push({
+          let notification = {
             id,
-            title: 'Preset Published!',
+            title: 'Preset Submitted!',
             description: 'Your preset has been submitted for review. It will be available on the RGBirdflop presets repository soon.',
             bgColor: 'lum-bg-green/50',
-          });
+          };
+
+          if (!result.success) {
+            notification = {
+              id,
+              title: 'Preset Submission Failed',
+              description: `Your preset failed to submit: ${result.error}`,
+              bgColor: 'lum-bg-red/50',
+            };
+          }
+
+          notifications.push(notification);
+
           setTimeout(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 2000);
+          }, 3000);
+
+          if (result.success) modalRef.value?.close();
         }}
         class="flex flex-col gap-2">
           <div class="grid sm:grid-cols-2 gap-2">

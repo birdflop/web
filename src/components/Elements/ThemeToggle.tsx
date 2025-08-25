@@ -158,13 +158,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     }
     // Dropdown variant - full theme selector
     return (
-      <div class={`relative z-50 ${className}`}
-        style={
-          // To do: Add custom styles for dropdown on luminescent ui
-          {
-            '--lum-default-alpha': 100,
-          }
-        }>
+      <div class={`relative ${className}`}>
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && <>
@@ -196,14 +190,14 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               <button q:slot="extra-buttons"
                 key={value}
                 onClick$={() => handleThemeChange(value)}
-                class={`lum-btn lum-bg-transparent text-left rounded-lum-1 ${
-                  isActive
-                    ? 'bg-gradient-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border'
-                    : 'hover:bg-white/10'
-                }`}
+                class={{
+                  'lum-btn lum-bg-transparent text-left rounded-lum-1 p-2 pr-4': true,
+                  'bg-gradient-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border': isActive,
+                  'hover:bg-white/10': !isActive,
+                }}
               >
                 <div
-                  class={`h-8 w-8 rounded-full bg-gradient-to-r ${option.gradient} flex items-center justify-center`}
+                  class={`rounded-lum-1 p-2 bg-gradient-to-r ${option.gradient} flex items-center justify-center`}
                 >
                   <IconComponent class="h-4 w-4 text-white" />
                 </div>
