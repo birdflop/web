@@ -2,7 +2,7 @@ import { component$, Signal, useContext, useContextProvider, useSignal, useVisib
 import { generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
-import { BirdflopSession, useSession } from '~/routes/plugin@auth';
+import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
@@ -51,7 +51,7 @@ export const useUser = routeLoader$(async ({ params }) => {
 export default component$(() => {
   const notifications = useContext(NotificationContext);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
 

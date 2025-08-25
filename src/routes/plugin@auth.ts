@@ -1,8 +1,6 @@
-import type { User } from '@auth/qwik';
 import { QwikAuth$ } from '@auth/qwik';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import Discord from '@auth/qwik/providers/discord';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
 import { getDB } from '~/util/db';
 
 import {
@@ -17,16 +15,6 @@ import { eq } from 'drizzle-orm';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
-
-export interface BirdflopSession {
-  user: BirdflopUser;
-  expires: Date & string;
-}
-
-export interface BirdflopUser extends User {
-  privatePresets?: rgbPreset[];
-  savedPresets?: publishedPreset[];
-}
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {

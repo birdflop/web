@@ -1,6 +1,6 @@
 import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
+import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
@@ -46,7 +46,7 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
   const loading = useSignal(false);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const presetInfo = usePreset().value;
 
   const rgbStore = useStore({

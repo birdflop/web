@@ -1,7 +1,6 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
-import { BirdflopSession } from '~/routes/plugin@auth';
 import { getDB, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
 
@@ -126,7 +125,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
 }) {
-  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+  const session = this.sharedMap.get('session');
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
@@ -142,7 +141,7 @@ export const setUserData = server$(async function(data: {
 });
 
 export const savePreset = server$(async function(presetId: number) {
-  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+  const session = this.sharedMap.get('session');
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
@@ -161,7 +160,7 @@ export const savePreset = server$(async function(presetId: number) {
 });
 
 export const unsavePreset = server$(async function(presetId: number) {
-  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+  const session = this.sharedMap.get('session');
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');

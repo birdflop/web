@@ -10,7 +10,7 @@ import {
   type Signal,
 } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
+import { useSession } from '~/routes/plugin@auth';
 import {
   getPresets,
   presetInfo,
@@ -175,7 +175,7 @@ export default component$(() => {
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const {
     publishedPresets,
     presetCount,

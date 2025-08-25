@@ -1,8 +1,8 @@
-import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
-import { BirdflopSession, useSession } from '~/routes/plugin@auth';
+import { useSession } from '~/routes/plugin@auth';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { presetInfo, presetSubmission } from '~/util/rgb/presets';
 import { generateHead } from '~/root';
@@ -14,14 +14,11 @@ import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
 import { getDB, presets } from '~/util/db';
 
-const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
-
-  if (!session || !session.user || !session.user.id || !session.user.name) {
-    throw new Error('User not authenticated');
-  }
-
+const publishPreset = server$(async function(presetInfo: presetSubmission) {
+  const session = this.sharedMap.get('session');
   try {
     const db = getDB();
+    if (!session || !db || !session.user.id) return console.warn('No session or database client');
 
     await db.insert(presets)
       .values({
@@ -45,7 +42,7 @@ export default component$(() => {
   useVisibleTask$(() => unloadGoogleAds());
   const notifications = useContext(NotificationContext);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
 
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);

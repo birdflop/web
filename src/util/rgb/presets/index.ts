@@ -1,6 +1,5 @@
 import { combinedDefaults } from './defaults';
 import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
-import { BirdflopUser } from '~/routes/plugin@auth';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
 
@@ -17,9 +16,7 @@ export interface format {
 
 export interface publishedPreset extends Omit<any, 'preset' | 'description' | 'userId'> {
   userId?: string;
-  user?: BirdflopUser;
   description?: string;
-  savedBy?: BirdflopUser[];
   preset: rgbPreset;
 }
 
