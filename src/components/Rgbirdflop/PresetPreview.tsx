@@ -3,7 +3,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { setUserData } from '~/util/dataUtils';
+import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
@@ -114,7 +114,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
 
           { presetInfo.preset.colors && presetInfo.preset.colors.length > 0 &&
             <div class="flex gap-1 mt-2">
-              {presetInfo.preset.colors.map((color, index) => (
+              {presetInfo.preset.colors.map((color: any, index: number) => (
                 <span key={index} class="p-2 rounded-lum-2"
                   style={{ backgroundColor: color.hex }} />
               ))}
@@ -148,39 +148,31 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
               privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
               if (presetInfo.id) {
                 savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                await setUserData({
-                  savedPresets: {
-                    disconnect: { id: presetInfo.id },
-                  },
-                });
+                presetInfo.saveCount--;
+                await unsavePreset(presetInfo.id);
               }
             }
             else {
               privatePresets.value = [...privatePresets.value, presetInfo.preset];
               if (presetInfo.id) {
-                savedPresets.value = [...savedPresets.value, presetInfo as publishedPreset];
-                await setUserData({
-                  savedPresets: {
-                    connect: {
-                      id: presetInfo.id,
-                    },
-                  },
-                });
+                savedPresets.value = [...savedPresets.value, presetInfo];
+                presetInfo.saveCount++;
+                await savePreset(presetInfo.id);
               }
             }
 
-            if (!presetInfo.id) {
-              await setUserData({
-                privatePresets: privatePresets.value,
-              });
-            }
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             loading.value = false;
           }}>
-            {!loading.value && presetInfo.savedBy?.length}
-            {loading.value && <div class="lum-loading w-5 h-5" />}
-            {!loading.value && (existingPreset
-              ? <Trash size={20} class="text-red-300" /> : <Save size={20} class="text-green-300" />)}
+            {!loading.value && presetInfo.saveCount}
+            {loading.value && <div class="lum-loading w-3 h-3" />}
+            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+              ? <span class="text-red-300 flex gap-3">
+                <Trash size={20} />
+              </span>
+              : <span class="text-green-300 flex gap-3">
+                <Save size={20}  />
+              </span>}
           </button>
         </div>
       </div>

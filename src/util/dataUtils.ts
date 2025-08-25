@@ -2,8 +2,8 @@ import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
 import { BirdflopSession } from '~/routes/plugin@auth';
-import { getDB, users } from './db';
-import { eq } from 'drizzle-orm';
+import { getDB, savedPresets, users } from './db';
+import { and, eq } from 'drizzle-orm';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
 
@@ -139,4 +139,42 @@ export const setUserData = server$(async function(data: {
     .returning().get();
 
   return userData;
+});
+
+export const savePreset = server$(async function(presetId: number) {
+  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+
+  const db = getDB();
+  if (!session || !db || !session.user.id) return console.warn('No session or database client');
+
+  try {
+    const userData = await db.insert(savedPresets)
+      .values({
+        userId: session.user.id,
+        presetId,
+      });
+    return userData;
+  } catch (error) {
+    console.error('Error saving preset:', error);
+    throw error;
+  }
+});
+
+export const unsavePreset = server$(async function(presetId: number) {
+  const session = this.sharedMap.get('session') as BirdflopSession | undefined;
+
+  const db = getDB();
+  if (!session || !db || !session.user.id) return console.warn('No session or database client');
+
+  try {
+    const userData = await db.delete(savedPresets)
+      .where(and(
+        eq(savedPresets.userId, session.user.id),
+        eq(savedPresets.presetId, presetId),
+      ));
+    return userData;
+  } catch (error) {
+    console.error('Error unsaving preset:', error);
+    throw error;
+  }
 });

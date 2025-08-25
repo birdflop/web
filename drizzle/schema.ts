@@ -18,18 +18,6 @@ export const users = sqliteTable("user", {
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
-// -------------------- Presets --------------------
-export const presets = sqliteTable("presets", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(),
-  author: text("author").notNull(),
-  userId: text("userId"), // FK to User.id
-  description: text("description"),
-  preset: text("preset").notNull(), // JSON as string
-  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-  pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
-});
-
 // -------------------- Account --------------------
 export const accounts = sqliteTable("account", {
   userId: text("userId")
@@ -69,4 +57,35 @@ export const verificationTokens = sqliteTable("verificationToken", {
   compositePk: primaryKey({
     columns: [verificationToken.identifier, verificationToken.token],
   }),
+}));
+
+
+
+
+// -------------------- Presets --------------------
+export const presets = sqliteTable("presets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  author: text("author").notNull(),
+  userId: text("userId")
+    .references(() => users.id),
+  description: text("description"),
+  preset: text("preset", { mode: 'json' }).$type<rgbPreset>().notNull(),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+  pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
+});
+
+// -------------------- Saved Presets (Join Table) --------------------
+export const savedPresets = sqliteTable("savedPresets", {
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  presetId: integer("presetId")
+    .notNull()
+    .references(() => presets.id, { onDelete: "cascade" }),
+  savedAt: integer("savedAt", { mode: "timestamp_ms" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+}, (t) => ({
+  pk: primaryKey({ columns: [t.userId, t.presetId] }),
 }));

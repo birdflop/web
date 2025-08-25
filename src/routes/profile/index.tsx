@@ -12,8 +12,7 @@ import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
-import { getDB } from '~/util/db';
-import { presets } from '~/../drizzle/schema';
+import { getDB, presets } from '~/util/db';
 
 const publishPreset = server$(async function(presetInfo: presetSubmission, session: BirdflopSession) {
 
@@ -31,7 +30,7 @@ const publishPreset = server$(async function(presetInfo: presetSubmission, sessi
         userId: session.user.id,
         author: session.user.name,
         description: presetInfo.description,
-        preset: JSON.stringify(presetInfo.preset),
+        preset: presetInfo.preset,
         pending: false,
       });
   } catch (error) {

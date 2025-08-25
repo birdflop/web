@@ -33,9 +33,8 @@ import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-import { getDB } from '~/util/db';
-import { and, count, eq, ilike, inArray } from 'drizzle-orm';
-import { presets } from '~/../drizzle/schema';
+import { getDB, presets, savedPresets, users } from '~/util/db';
+import { and, count, eq, ilike, inArray, sql } from 'drizzle-orm';
 
 export const usePresets = routeLoader$(async ({ url }) => {
   // FIX THIS
@@ -93,7 +92,10 @@ export const usePresets = routeLoader$(async ({ url }) => {
       break;
     }
 
-    publishedPresets = await db.select()
+    const presetsFromDB = await db.select({
+      presets, user: users,
+      saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
+    })
       .from(presets)
       .where(and(
         eq(presets.pending, showPending),
@@ -102,10 +104,19 @@ export const usePresets = routeLoader$(async ({ url }) => {
           ? inArray(presets.id, savedPresetIds)
           : undefined,
       ))
+      .leftJoin(users, eq(users.id, presets.userId))
+      .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
+      .groupBy(presets.id, users.id)
       .orderBy(orderBy)
       .limit(perPage)
       .offset((page - 1) * perPage)
-      .then((r) => r ?? []);
+      // FIX THIS
+      .then((r) => r ?? []) as publishedPreset[];
+    console.log(presetsFromDB);
+
+    publishedPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
+      ...presets, user, saveCount,
+    }));
 
     /*
       prisma.presets.findMany({

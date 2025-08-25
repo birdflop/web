@@ -1,7 +1,7 @@
 import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { getPresets, publishedPreset } from '~/util/rgb/presets';
+import { getPresets } from '~/util/rgb/presets';
 import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
@@ -10,26 +10,36 @@ import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { setUserData } from '~/util/dataUtils';
+import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
-import { getDB } from '~/util/db';
+import { getDB, presets, savedPresets, users } from '~/util/db';
+import { eq, sql } from 'drizzle-orm';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
   if (!db) throw new Error('No database connection');
   if (isNaN(Number(params.id))) throw new Error('No preset ID provided');
 
-  const presetInfo = await db.presets.findUnique({
-    where: { id: Number(params.id) },
-    include: {
-      user: true,
-      savedBy: true,
-    },
-  }) as publishedPreset | null;
+  const presetInfo = await db.select({
+    presets, user: users,
+    saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
+  })
+    .from(presets)
+    .leftJoin(users, eq(users.id, presets.userId))
+    .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
+    .where(eq(presets.id, Number(params.id)))
+    .groupBy(presets.id, users.id)
+    .get();
+
+  console.log(presetInfo);
 
   if (!presetInfo) throw new Error('Preset not found');
 
-  return presetInfo;
+  return {
+    ...presetInfo.presets,
+    user: presetInfo.user,
+    saveCount: presetInfo.saveCount,
+  };
 });
 
 export default component$(() => {
@@ -199,34 +209,24 @@ export default component$(() => {
                 privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
                 if (presetInfo.id) {
                   savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                  presetInfo.savedBy?.splice(presetInfo.savedBy?.indexOf(session.value?.user), 1);
-                  await setUserData({
-                    savedPresets: {
-                      disconnect: { id: presetInfo.id },
-                    },
-                  });
+                  presetInfo.saveCount--;
+                  await unsavePreset(presetInfo.id);
                 }
               }
               else {
                 privatePresets.value = [...privatePresets.value, presetInfo.preset];
                 if (presetInfo.id) {
                   savedPresets.value = [...savedPresets.value, presetInfo];
-                  presetInfo.savedBy?.push(session.value?.user);
-                  await setUserData({
-                    savedPresets: {
-                      connect: {
-                        id: presetInfo.id,
-                      },
-                    },
-                  });
+                  presetInfo.saveCount++;
+                  await savePreset(presetInfo.id);
                 }
               }
 
               if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
               loading.value = false;
             }}>
-              {!loading.value && presetInfo.savedBy?.length}
-              {loading.value && <div class="lum-loading w-5 h-5" />}
+              {!loading.value && presetInfo.saveCount}
+              {loading.value && <div class="lum-loading w-3 h-3" />}
               {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
                 ? <span class="text-red-300 flex gap-3">
                   <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
