@@ -126,7 +126,7 @@ export default component$(({ hidden }: {
         </div>
         <div class={{
           'flex flex-col transition-all gap-1 flex-1 lum-bg-lum-card-bg rounded-lum': true,
-          'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('saved-presets'),
+          'max-h-0 opacity-0 scale-98 pointer-events-none': !openItemsStore.items.includes('saved-presets'),
           'max-h-screen opacity-100 my-1 p-1': openItemsStore.items.includes('saved-presets'),
         }}>
           {privatePresets.value.concat(savedPresets.value.map((preset) => ({
@@ -146,7 +146,7 @@ export default component$(({ hidden }: {
       <Link class={{
         'lum-btn flex-1 border-blue hover:border-blue': true,
       }} href="/resources/rgb/presets">
-        <Globe size={20} /> {t('rgb.presets.find@@Find new presets')}
+        <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
       <div class="flex flex-wrap gap-1 mt-1">
         <div class="flex flex-col gap-1 flex-1">
