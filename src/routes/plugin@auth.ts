@@ -56,7 +56,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         verificationTokensTable: verificationTokens,
         authenticatorsTable: undefined,
       }),
-      trustHost: process.env.NODE_ENV === 'development',
+      trustHost: true,
       secret,
       callbacks: {
         async signIn({ user, account, profile }) {
