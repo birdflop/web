@@ -73,6 +73,8 @@ export const presets = sqliteTable("presets", {
     .references(() => users.id),
   description: text("description"),
   preset: text("preset", { mode: 'json' }).$type<rgbPreset>().notNull().unique(),
+  upvotes: integer("upvotes").default(0).notNull(),
+  downvotes: integer("downvotes").default(0).notNull(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
 });
