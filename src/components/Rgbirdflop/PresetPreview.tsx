@@ -105,8 +105,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       }
 
       { Preset.preset.text &&
-        <p class="text-sm text-red-400/50!">
-          This preset will overwrite your text to "{Preset.preset.text}"
+        <p class="text-sm text-yellow-400/80!">
+          This preset will change your current input to "{Preset.preset.text}"
         </p>
       }
     </Link>
