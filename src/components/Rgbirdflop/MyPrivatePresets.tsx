@@ -25,7 +25,7 @@ const publishPreset = server$(async function(submission: PublicPresetSubmission)
         author: session.user.name,
         description: submission.description,
         preset: submission.preset,
-      }).returning();
+      }).onConflictDoNothing().returning();
     return { success: true, result };
   } catch (error) {
     console.error('Error publishing preset:', error);
@@ -118,7 +118,7 @@ export default component$(() => {
           });
 
           const id = Math.random().toString(36).substring(2, 15);
-          let notification = {
+          let notification = result.result?.[0] ? {
             id,
             title: 'Preset Submitted!',
             description: 'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.',
@@ -126,6 +126,12 @@ export default component$(() => {
             buttons: [
               { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
             ],
+          } : {
+            id,
+            title: 'Preset Submission Failed',
+            description: 'Your preset failed to submit. Is there already a preset with the same configuration?',
+            bgColor: 'lum-bg-yellow/50',
+            buttons: [],
           };
 
           if (!result.success) {
