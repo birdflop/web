@@ -85,7 +85,7 @@ export interface PublicPresetWithUser extends PublicPreset {
   saveCount: number;
 }
 export interface PresetPartial extends Omit<PublicPresetWithUser,
-  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount'> {
+  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount' | 'upvotes' | 'downvotes'> {
   id?: number;
   author?: string;
   user?: User | null;
@@ -94,6 +94,8 @@ export interface PresetPartial extends Omit<PublicPresetWithUser,
   createdAt?: Date;
   pending?: boolean;
   saveCount?: number;
+  upvotes?: number;
+  downvotes?: number;
 }
 export type PublicPresetInsert = typeof presets.$inferInsert;
 export type PublicPresetSubmission = Omit<PublicPresetInsert, 'userId' | 'author'>;

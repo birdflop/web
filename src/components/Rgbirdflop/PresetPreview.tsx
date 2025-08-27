@@ -1,7 +1,7 @@
-import { component$, isBrowser, useContext, useSignal } from '@builder.io/qwik';
+import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
@@ -14,9 +14,13 @@ interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
   Preset: PresetPartial;
   class?: { [key: string]: boolean };
   defaults?: rgbPreset;
+  publishRefs?: {
+    modalRef: Signal<HTMLDialogElement | undefined>;
+    selectedPreset: Signal<string | undefined>;
+  };
 }
 
-export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) => {
+export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, ...props }) => {
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
@@ -161,6 +165,12 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
             <Save size={20}  />
           </span>}
       </button>
+      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-1" onClick$={() => {
+        publishRefs.modalRef.value?.showModal();
+        publishRefs.selectedPreset.value = JSON.stringify(Preset.preset);
+      }}>
+        <Send size={20} /> Publish
+      </button>}
     </div>
   </div>;
 });

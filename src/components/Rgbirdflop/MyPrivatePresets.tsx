@@ -3,7 +3,7 @@ import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
-import { CircleUserRound, Plus, Save, Send, X } from 'lucide-icons-qwik';
+import { CircleUserRound, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -42,6 +42,7 @@ export default component$(() => {
 
   const privatePresets = useContext(privatePresetsContext);
   const modalRef = useSignal<HTMLDialogElement>();
+  const selectedPreset = useSignal<string>();
 
   const privatePresetsParsed: PresetPartial[] = [...privatePresets.value].map((preset) => ({
     name: preset.text ?? 'Saved Preset',
@@ -63,19 +64,10 @@ export default component$(() => {
     {privatePresetsParsed.length > 0 &&
       <div class="grid sm:grid-cols-2 gap-2">
         {privatePresetsParsed.map((Preset) =>
-          <PresetPreview key={`${Preset.name}-${Preset.author}`} Preset={Preset} />,
+          <PresetPreview key={`${Preset.name}-${Preset.author}`} Preset={Preset} publishRefs={{
+            modalRef, selectedPreset,
+          }} />,
         )}
-        <button class="lum-card text-left lum-bg-green/20 hover:lum-bg-green w-full transition duration-1000 hover:duration-75 ease-out" onClick$={() => {
-          modalRef.value?.showModal();
-        }}>
-          <h4 class="my-0! flex gap-2 items-center">
-            <Send size={28} />
-            Publish a preset
-          </h4>
-          <p>
-            Click here to publish a saved preset from this list to the RGBirdflop presets repository.
-          </p>
-        </button>
       </div>
     }
 
@@ -150,7 +142,10 @@ export default component$(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 3000);
 
-          if (result.success) modalRef.value?.close();
+          if (result.success) {
+            modalRef.value?.close();
+            selectedPreset.value = undefined;
+          }
         }}
         class="flex flex-col gap-2">
           <div class="grid sm:grid-cols-2 gap-2">
@@ -160,23 +155,25 @@ export default component$(() => {
               </label>
               <input type="text" class="lum-input" placeholder="My Preset" id="publish-preset-name" />
             </div>
-            <SelectMenu id="publish-preset-preset" class={{ 'w-full': true }}
-              values={privatePresets.value.length == 0 ? undefined :
-                privatePresets.value.map((preset) => ({
-                  name: <span class={{
-                    'break-all font-mc tracking-tight': true,
-                    'font-mc-bold': preset.bold,
-                    'font-mc-italic': preset.italic,
-                    'font-mc-bold-italic': preset.bold && preset.italic,
-                    [`${preset.format?.class}`]: preset.format?.class,
-                  }}>
-                    {renderPreview({ ...rgbDefaults, ...preset }, 1)}
-                  </span>,
-                  value: JSON.stringify(preset),
-                }))
-              }>
-              Select a preset to publish
-            </SelectMenu>
+            {selectedPreset.value && (
+              <SelectMenu id="publish-preset-preset" class={{ 'w-full': true }}
+                values={privatePresets.value.length == 0 ? undefined :
+                  privatePresets.value.map((preset) => ({
+                    name: <span class={{
+                      'break-all font-mc tracking-tight': true,
+                      'font-mc-bold': preset.bold,
+                      'font-mc-italic': preset.italic,
+                      'font-mc-bold-italic': preset.bold && preset.italic,
+                      [`${preset.format?.class}`]: preset.format?.class,
+                    }}>
+                      {renderPreview({ ...rgbDefaults, ...preset }, 1)}
+                    </span>,
+                    value: JSON.stringify(preset),
+                  }))
+                } value={selectedPreset.value}>
+                Select a preset to publish
+              </SelectMenu>
+            )}
           </div>
 
           <label for="publish-preset-description" class="-mb-1">
@@ -191,6 +188,7 @@ export default component$(() => {
         <div class="flex gap-2 justify-end">
           <button class="lum-btn" onClick$={() => {
             modalRef.value?.close();
+            selectedPreset.value = undefined;
           }}>
             <X size={20} /> Cancel
           </button>
