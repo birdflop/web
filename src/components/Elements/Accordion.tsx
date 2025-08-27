@@ -1,4 +1,4 @@
-import { $, component$, Slot, useContext } from '@builder.io/qwik';
+import { $, component$, PropsOf, Slot, useContext } from '@builder.io/qwik';
 import { ChevronRight } from 'lucide-icons-qwik';
 import { openItemsContext } from '~/routes/layout';
 
@@ -34,11 +34,13 @@ export const toggleAccordion = $(async (index: string, openItems: string[]) => {
   return newOpenItems;
 });
 
-export default component$(({ sectionName, alwaysOpen, class: className }: {
+interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
   alwaysOpen?: boolean;
   class?: { [key: string]: boolean; }
-}) => {
+}
+
+export default component$(({ sectionName, alwaysOpen, class: className, ...props }: AccordionProps) => {
   const openItemsStore = useContext(openItemsContext);
 
   return (
@@ -47,7 +49,7 @@ export default component$(({ sectionName, alwaysOpen, class: className }: {
       'sm:bg-transparent sm:rounded-none sm:border-x-0 sm:border-t-0': alwaysOpen,
       'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': alwaysOpen,
       ...className,
-    }} onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)}>
+    }} onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)} { ...props }>
       <span class="font-medium flex-1 flex items-center gap-3">
         <Slot />
       </span>
