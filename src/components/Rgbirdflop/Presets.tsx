@@ -1,11 +1,11 @@
 import { $, component$, isBrowser, useContext, useContextProvider, useSignal } from '@builder.io/qwik';
-import { Save, Link as LinkIcon, Copy } from 'lucide-icons-qwik';
+import { Save, Link as LinkIcon, Copy, Globe } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
-import { useLocation } from '@builder.io/qwik-city';
+import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -69,32 +69,61 @@ export default component$(({ hidden }: {
       'opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
       <div class="flex flex-col">
-        <Accordion onClick$={() => {
-          // If privatePresets is empty, load presets from localStorage
-          if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+        <div class="flex gap-1">
+          <Accordion onClick$={() => {
+            // If privatePresets is empty, load presets from localStorage
+            if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
 
-          try {
-            const localStoragePresets = getPresets();
-            privatePresets.value = privatePresets.value.concat(localStoragePresets);
-          } catch (err) {
+            try {
+              const localStoragePresets = getPresets();
+              privatePresets.value = privatePresets.value.concat(localStoragePresets);
+            } catch (err) {
+              const id = Math.random().toString(36).substring(2, 15);
+              const notification = {
+                id,
+                title: 'Error parsing saved presets',
+                description: `Error: ${err}`,
+                bgColor: 'lum-bg-red/50',
+              };
+              notifications.push(notification);
+              setTimeout(() => {
+                notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+              }, 2000);
+            }
+          }}
+          sectionName="saved-presets"
+          class={{ 'flex-1': true }}
+          >
+            {t('rgb.presets.saved.presets@@Saved Presets')}
+          </Accordion>
+          <button class={{
+            'lum-btn': true,
+          }} id="save" onClick$={async () => {
+            const preset: rgbPreset = { ...rgbStore };
+            if (preset.syncshadow) delete preset.shadowcolors;
+            (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
+              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
+            });
+            if (!privatePresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
+              privatePresets.value.push(preset);
+            }
+            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+            await setUserData({ privatePresets: privatePresets.value });
             const id = Math.random().toString(36).substring(2, 15);
-            const notification = {
+            notifications.push({
               id,
-              title: 'Error parsing saved presets',
-              description: `Error: ${err}`,
-              bgColor: 'lum-bg-red/50',
-            };
-            notifications.push(notification);
+              title: await t$('rgb.presets.saved.title@@Preset Saved!'),
+              description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
+                : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
+              bgColor: session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50',
+            });
             setTimeout(() => {
               notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
             }, 2000);
-          }
-        }}
-        sectionName="saved-presets"
-        class={{ 'flex-1': true }}
-        >
-          {t('rgb.presets.saved.presets@@Saved Presets')}
-        </Accordion>
+          }}>
+            <Save size={20} /> {t('rgb.presets.save@@Save')}
+          </button>
+        </div>
         <div class={{
           'flex flex-col transition-all gap-1 flex-1 lum-bg-lum-card-bg rounded-lum': true,
           'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('saved-presets'),
@@ -113,34 +142,12 @@ export default component$(({ hidden }: {
             {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
           </button>)}
         </div>
-        <button class={{
-          'lum-btn flex-1 mt-1': true,
-        }} id="save" onClick$={async () => {
-          const preset: rgbPreset = { ...rgbStore };
-          if (preset.syncshadow) delete preset.shadowcolors;
-          (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
-            if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
-          });
-          if (!privatePresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
-            privatePresets.value.push(preset);
-          }
-          if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-          await setUserData({ privatePresets: privatePresets.value });
-          const id = Math.random().toString(36).substring(2, 15);
-          notifications.push({
-            id,
-            title: await t$('rgb.presets.saved.title@@Preset Saved!'),
-            description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
-              : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
-            bgColor: session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50',
-          });
-          setTimeout(() => {
-            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 2000);
-        }}>
-          <Save size={20} /> {t('rgb.presets.save@@Save')}
-        </button>
       </div>
+      <Link class={{
+        'lum-btn flex-1 border-blue hover:border-blue': true,
+      }} href="/resources/rgb/presets">
+        <Globe size={20} /> {t('rgb.presets.find@@Find new presets')}
+      </Link>
       <div class="flex flex-wrap gap-1 mt-1">
         <div class="flex flex-col gap-1 flex-1">
           <label for="import">

@@ -2,7 +2,7 @@ import { component$, useContext } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, LogIn, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
+import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -138,7 +138,7 @@ export default component$(() => {
             value={loc.url.pathname + loc.url.search}
           />
           <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
-            <LogIn size={20} />
+            Log in
           </button>
         </Form>
       }

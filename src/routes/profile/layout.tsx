@@ -2,7 +2,7 @@ import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from '../plugin@auth';
 import { Form, useLocation } from '@builder.io/qwik-city';
-import { LogIn, LogOut } from 'lucide-icons-qwik';
+import { CircleUserRound, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
@@ -34,7 +34,7 @@ export default component$(() => {
                 value={loc.url.pathname + loc.url.search}
               />
               <button class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white">
-                <LogIn size={20} /> {t('nav.profile.login@@Login')}
+                <CircleUserRound size={20} /> {t('nav.profile.login@@Login')}
               </button>
             </Form>
           </div>

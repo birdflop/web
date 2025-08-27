@@ -308,7 +308,8 @@ export default component$(() => {
         <hr />
         <div
           class={{
-            'opacity-50 mb-2': savedPresets.value.length === 0,
+            'mb-2': true,
+            'opacity-50': savedPresets.value.length === 0,
           }}
         >
           <Toggle

@@ -44,7 +44,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
           'text-blue-300/80!': !Preset.user,
           'text-orange-300/80!': !!Preset.user,
         }}>
-          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-1 p-1 cursor-pointer font-semibold">
+          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-1 lum-btn-p-1 gap-2 cursor-pointer font-semibold">
             {Preset.user.image && Preset.user.name && (
               <img src={Preset.user.image} alt={Preset.user.name}
                 width={24} height={24} class="w-6 h-6 rounded-full!" />
@@ -116,7 +116,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
         }
       </div>
       <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
-        class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent rounded-lum-1 gap-1 text-orange-300': true }}>
+        class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-1 gap-1 text-orange-300': true }}>
         <div q:slot="dropdown" class="flex items-center gap-3">
           <MousePointer2 size={20} />
         </div>
@@ -127,7 +127,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
       </SelectMenuRaw>
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-1 p-2" disabled={loading.value} onClick$={async () => {
+      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-1" disabled={loading.value} onClick$={async () => {
         loading.value = true;
 
         if (existingPreset) {
