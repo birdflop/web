@@ -119,9 +119,11 @@ export default component$(() => {
         </div>
 
         <div class="flex flex-col gap-4 mt-2">
-          <Input>
-            {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
-          </Input>
+          <div>
+            <Input>
+              {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+            </Input>
+          </div>
 
           <div class="lum-card p-6">
             <h6 class={{

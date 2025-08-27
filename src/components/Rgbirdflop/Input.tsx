@@ -64,7 +64,7 @@ export default component$(({ readOnly }: {
 
   return <>
     {!readOnly &&
-      <h5 class="!mt-0 !mb-2 flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
+      <h5 class="mt-0! mb-2! flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
         <Terminal size={26} />
         {t('rgb.inputText.title@@Input Text')}
         <p class="text-lum-text-secondary text-sm font-normal">
@@ -72,8 +72,7 @@ export default component$(({ readOnly }: {
         </p>
       </h5>
     }
-    <Formatting/>
-    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-3 relative">
+    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-0 relative">
       {previewStyle.value != 'default' &&
         <div class={{
           'relative lum-bg-lum-input-bg/50 rounded-lum': true,
@@ -182,5 +181,6 @@ export default component$(({ readOnly }: {
         </SelectMenuRaw>
       </div>
     </label>
+    <Formatting/>
   </>;
 });

@@ -135,7 +135,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
           if (Preset.id) {
             savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
             await unsavePreset(Preset.id);
-            if (Preset.saveCount) Preset.saveCount--;
+            if (Preset.saveCount !== undefined) Preset.saveCount--;
           }
         }
         else {
@@ -143,7 +143,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
           if (Preset.id) {
             savedPresets.value = [...savedPresets.value, Preset];
             await savePreset(Preset.id);
-            if (Preset.saveCount) Preset.saveCount++;
+            if (Preset.saveCount !== undefined) Preset.saveCount++;
           }
         }
 
@@ -153,6 +153,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
         {!loading.value && Preset.saveCount}
         {loading.value && <div class="lum-loading w-3 h-3" />}
         {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
+          || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
           ? <span class="text-red-300 flex gap-3">
             <Trash size={20} />
           </span>

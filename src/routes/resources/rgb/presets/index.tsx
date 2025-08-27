@@ -33,7 +33,7 @@ import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
 import { and, count, eq, ilike, inArray, sql } from 'drizzle-orm';
-import MySavedPresets from '~/components/Rgbirdflop/MySavedPresets';
+import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 
 export const usePresets = routeLoader$(async ({ url }) => {
   let publicPresets: PublicPreset[] = [];
@@ -571,7 +571,7 @@ export default component$(() => {
             </div>
           </div>
         )}
-        <MySavedPresets />
+        <MyPrivatePresets />
 
         <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB

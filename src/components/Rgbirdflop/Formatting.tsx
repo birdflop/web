@@ -22,7 +22,7 @@ export default component$(() => {
   };
 
   return (
-    <div class="flex w-full gap-1" id="formatting">
+    <div class="flex w-full gap-1 my-2" id="formatting">
       <button type="button" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.bold,

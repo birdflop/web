@@ -3,7 +3,7 @@ import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/
 import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
-import { Plus, Save, Send, X } from 'lucide-icons-qwik';
+import { CircleUserRound, Plus, Save, Send, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -51,7 +51,7 @@ export default component$(() => {
 
   return <div class="flex flex-col justify-center">
     <h3 class="flex gap-2 items-center" id="my-presets">
-      <Save size={30} />
+      <CircleUserRound size={30} />
       <span class="flex-1">
         My Private RGBirdflop Presets
       </span>

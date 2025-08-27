@@ -4,7 +4,7 @@ import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
 import { useSession } from '~/routes/plugin@auth';
 import { generateHead } from '~/root';
-import MySavedPresets from '~/components/Rgbirdflop/MySavedPresets';
+import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -17,7 +17,7 @@ export default component$(() => {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
-  return <MySavedPresets />;
+  return <MyPrivatePresets />;
 });
 
 export const head = generateHead({});
