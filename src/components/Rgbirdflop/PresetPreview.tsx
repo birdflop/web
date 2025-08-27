@@ -6,7 +6,7 @@ import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qw
 import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
-import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
+import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
 
@@ -20,7 +20,6 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
-  const nav = useNavigate();
   const loading = useSignal(false);
 
   const searchParams = new URLSearchParams();
@@ -37,146 +36,130 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) =
     return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
   });
 
-  return (
+  return <div class="lum-card lum-bg-lum-input-bg/20 p-0 gap-0">
+    { Preset.author &&
+      <div class="flex p-1 pr-4 items-center bg-lum-card-bg rounded-lum rounded-b-0">
+        <p class={{
+          'flex flex-1 items-center gap-2': true,
+          'text-blue-300/80!': !Preset.user,
+          'text-orange-300/80!': !!Preset.user,
+        }}>
+          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-1 p-1 cursor-pointer font-semibold">
+            {Preset.user.image && Preset.user.name && (
+              <img src={Preset.user.image} alt={Preset.user.name}
+                width={24} height={24} class="w-6 h-6 rounded-full!" />
+            )}
+            {Preset.user.name}
+          </Link>
+          }
+          { Preset.author && !Preset.user && <>
+            {Preset.author == 'RGBirdflop' &&
+              <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
+            }
+            {Preset.author == 'Luminescent' &&
+              <LogoLuminescent size={20} class="text-luminescent-300" />
+            }
+            {Preset.author.includes('GitHub') &&
+              <Github size={20} />
+            }
+            {Preset.author}
+          </>}
+        </p>
+        <p class="text-xs">
+          {Preset.createdAt && new Date(Preset.createdAt)
+            .toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+        </p>
+      </div>
+    }
     <Link href={Preset.id ? `/resources/rgb/presets/${Preset.id}` : '#'} {...props}
-      class="lum-card p-5 lum-bg-lum-input-bg/30 hover:lum-bg-lum-input-bg/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      class="flex-1 flex flex-col justify-center text-white! no-underline! p-4 border-y border-y-lum-border/10 hover:bg-lum-input-bg/70 w-full transition duration-1000 hover:duration-75 ease-out"
       key={`preset-${Preset.name}-${Preset.author}`}
       prefetch={false}>
-      { Preset.author &&
-        <div class="flex">
-          <p class={{
-            'flex flex-1 items-center gap-2': true,
-            'text-blue-300/80!': !Preset.user,
-            'text-orange-300/80!': !!Preset.user,
-          }}>
-            { Preset.user && <button preventdefault:click onClick$={async (e) => {
-              e.stopPropagation();
-              await nav(`/profile/${Preset.user?.id}`);
-            }} class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold">
-              {Preset.user.image && Preset.user.name && (
-                <img src={Preset.user.image} alt={Preset.user.name}
-                  width={24} height={24} class="w-6 h-6 rounded-full!" />
-              )}
-              {Preset.user.name}
-            </button>
-            }
-            { Preset.author && !Preset.user && <>
-              {Preset.author == 'RGBirdflop' &&
-                <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
-              }
-              {Preset.author == 'Luminescent' &&
-                <LogoLuminescent size={20} class="text-luminescent-300" />
-              }
-              {Preset.author.includes('GitHub') &&
-                <Github size={20} />
-              }
-              {Preset.author}
-            </>}
-          </p>
-          <p class="text-xs">
-            {Preset.createdAt && new Date(Preset.createdAt)
-              .toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-          </p>
-        </div>
+      <p class={{
+        'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
+        'font-mc-bold': Preset.preset.bold || defaults?.bold,
+        'font-mc-italic': Preset.preset.italic || defaults?.italic,
+        'font-mc-bold-italic': (Preset.preset.bold && Preset.preset.italic) || (defaults?.bold && defaults?.italic),
+        [`${Preset.preset.format?.class || defaults?.format?.class}`]: Preset.preset.format?.class || defaults?.format?.class,
+      }}>
+        {renderPreview({
+          ...rgbDefaults,
+          ...defaults || {},
+          ...Preset.preset,
+          text: Preset.name,
+        }, 3)}
+      </p>
+
+      { Preset.description &&
+        <p class="text-lum-text-secondary text-sm pt-2">
+          {Preset.description}
+        </p>
       }
 
-      <div class="flex h-full">
-        <div class="flex-1">
-          <p class={{
-            'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-            'font-mc-bold': Preset.preset.bold || defaults?.bold,
-            'font-mc-italic': Preset.preset.italic || defaults?.italic,
-            'font-mc-bold-italic': (Preset.preset.bold && Preset.preset.italic) || (defaults?.bold && defaults?.italic),
-            [`${Preset.preset.format?.class || defaults?.format?.class}`]: Preset.preset.format?.class || defaults?.format?.class,
-          }}>
-            {renderPreview({
-              ...rgbDefaults,
-              ...defaults || {},
-              ...Preset.preset,
-              text: Preset.name,
-            }, 3)}
-          </p>
-
-          { Preset.description &&
-            <p class="text-lum-text-secondary text-sm pt-2">
-              {Preset.description}
-            </p>
-          }
-
-          { Preset.preset.text &&
-            <p class="text-sm text-red-400/50!">
-              This preset will overwrite your text to "{Preset.preset.text}"
-            </p>
-          }
-
-          { Preset.preset.colors && Preset.preset.colors.length > 0 &&
-            <div class="flex gap-1 mt-2">
-              {Preset.preset.colors.map((color, index) => (
-                <span key={index} class="p-2 rounded-lum-2"
-                  style={{ backgroundColor: color.hex }} />
-              ))}
-            </div>
-          }
-        </div>
-        <div class="flex gap-1 items-end">
-          <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
-            class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent gap-1 text-orange-300': true }}>
-            <div q:slot="dropdown" class="flex items-center gap-3">
-              <MousePointer2 size={20} />
-            </div>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
-              e.stopPropagation();
-              await nav(`/resources/rgb?${searchParams.toString()}`);
-            }}>
-              <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
-            </button>
-            <button q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1" preventdefault:click onClick$={async (e) => {
-              e.stopPropagation();
-              await nav(`/resources/animtab?${searchParams.toString()}`);
-            }}>
-              <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
-            </button>
-          </SelectMenuRaw>
-          <button class="lum-btn text-sm lum-bg-transparent p-2" disabled={loading.value} preventdefault:click onClick$={async (e) => {
-            e.stopPropagation();
-            loading.value = true;
-
-            if (existingPreset) {
-              privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-              if (Preset.id) {
-                savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
-                await unsavePreset(Preset.id);
-                if (Preset.saveCount) Preset.saveCount--;
-              }
-            }
-            else {
-              privatePresets.value = [...privatePresets.value, Preset.preset];
-              if (Preset.id) {
-                savedPresets.value = [...savedPresets.value, Preset];
-                await savePreset(Preset.id);
-                if (Preset.saveCount) Preset.saveCount++;
-              }
-            }
-
-            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-            loading.value = false;
-          }}>
-            {!loading.value && Preset.saveCount}
-            {loading.value && <div class="lum-loading w-3 h-3" />}
-            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
-              ? <span class="text-red-300 flex gap-3">
-                <Trash size={20} />
-              </span>
-              : <span class="text-green-300 flex gap-3">
-                <Save size={20}  />
-              </span>}
-          </button>
-        </div>
-      </div>
+      { Preset.preset.text &&
+        <p class="text-sm text-red-400/50!">
+          This preset will overwrite your text to "{Preset.preset.text}"
+        </p>
+      }
     </Link>
-  );
+    <div class="flex gap-1 items-center p-1 bg-lum-card-bg rounded-lum rounded-b-0">
+      <div class="flex-1 flex gap-1 pl-2">
+        { Preset.preset.colors && Preset.preset.colors.length > 0 &&
+          Preset.preset.colors.map((color, index) => (
+            <span key={index} class="p-2 rounded-lum-2"
+              style={{ backgroundColor: color.hex }} />
+          ))
+        }
+      </div>
+      <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
+        class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent rounded-lum-1 gap-1 text-orange-300': true }}>
+        <div q:slot="dropdown" class="flex items-center gap-3">
+          <MousePointer2 size={20} />
+        </div>
+        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        </Link>
+        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        </Link>
+      </SelectMenuRaw>
+      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-1 p-2" disabled={loading.value} onClick$={async () => {
+        loading.value = true;
+
+        if (existingPreset) {
+          privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
+          if (Preset.id) {
+            savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
+            await unsavePreset(Preset.id);
+            if (Preset.saveCount) Preset.saveCount--;
+          }
+        }
+        else {
+          privatePresets.value = [...privatePresets.value, Preset.preset];
+          if (Preset.id) {
+            savedPresets.value = [...savedPresets.value, Preset];
+            await savePreset(Preset.id);
+            if (Preset.saveCount) Preset.saveCount++;
+          }
+        }
+
+        if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+        loading.value = false;
+      }}>
+        {!loading.value && Preset.saveCount}
+        {loading.value && <div class="lum-loading w-3 h-3" />}
+        {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
+          ? <span class="text-red-300 flex gap-3">
+            <Trash size={20} />
+          </span>
+          : <span class="text-green-300 flex gap-3">
+            <Save size={20}  />
+          </span>}
+      </button>
+    </div>
+  </div>;
 });

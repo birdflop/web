@@ -25,7 +25,7 @@ import {
   Send,
 } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$, useNavigate } from '@builder.io/qwik-city';
+import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
@@ -296,9 +296,9 @@ export default component$(() => {
               }
             />
           </SelectMenuRaw>
-          <Link href="/profile" class="lum-btn font-normal">
+          <a href="#my-presets" class="lum-btn font-normal">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
-          </Link>
+          </a>
         </h1>
         <p>
           {t(
