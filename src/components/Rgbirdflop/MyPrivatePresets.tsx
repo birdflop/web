@@ -18,20 +18,19 @@ const publishPreset = server$(async function(submission: PublicPresetSubmission)
     const db = getDB();
     if (!session || !db || !session.user.id) return { success: false, error: 'No session or database client' };
 
-    await db.insert(presets)
+    const result = await db.insert(presets)
       .values({
         name: submission.name,
         userId: session.user.id,
         author: session.user.name,
         description: submission.description,
         preset: submission.preset,
-      });
+      }).returning();
+    return { success: true, result };
   } catch (error) {
     console.error('Error publishing preset:', error);
     return { success: false, error };
   }
-
-  return { success: true };
 });
 
 export default component$(() => {
@@ -122,8 +121,11 @@ export default component$(() => {
           let notification = {
             id,
             title: 'Preset Submitted!',
-            description: 'Your preset has been submitted for review. It will be available on the RGBirdflop presets repository soon.',
+            description: 'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.',
             bgColor: 'lum-bg-green/50',
+            buttons: [
+              { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
+            ],
           };
 
           if (!result.success) {
@@ -132,6 +134,7 @@ export default component$(() => {
               title: 'Preset Submission Failed',
               description: `Your preset failed to submit: ${result.error}`,
               bgColor: 'lum-bg-red/50',
+              buttons: [],
             };
           }
 

@@ -19,6 +19,7 @@ type Notification = {
   title: string;
   description?: string;
   bgColor?: string;
+  buttons?: { text: string; href: string }[];
 } | rawNotification;
 
 export const useServerTheme = routeLoader$(({ cookie }) => {
@@ -185,6 +186,15 @@ export default component$(() => {
           <p>
             {notification.description}
           </p>
+          {notification.buttons && notification.buttons.length > 0 &&
+            <div class="flex flex-wrap gap-2 mt-2">
+              {notification.buttons.map((button, index) =>
+                <Link key={index} href={button.href} class="lum-btn lum-bg-blue hover:lum-bg-blue">
+                  {button.text}
+                </Link>,
+              )}
+            </div>
+          }
         </div>;
       })}
     </div>
