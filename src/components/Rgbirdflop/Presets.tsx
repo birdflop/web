@@ -62,20 +62,69 @@ export default component$(({ hidden }: {
 
   return (
     <div class={{
-      'grid sm:grid-cols-2 gap-2 transition-all duration-200': true,
-      'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-[250px] opacity-100 pointer-events-auto': !hidden,
+      'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
+      'h-0 opacity-0 pointer-events-none': hidden,
+      'opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
-      <div class="sm:col-span-2 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 mt-1">
-        <Link class={{
-          'lum-btn flex-1': true,
-          'lg:rounded-r-sm': true,
-        }} href="/resources/rgb/presets">
-          <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
-        </Link>
+      <div class="flex gap-1 flex-wrap">
+        <div class="flex flex-col gap-1 flex-1"
+          onClick$={() => {
+            // If privatePresets is empty, load presets from localStorage
+            if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+
+            try {
+              const localStoragePresets = getPresets();
+              privatePresets.value = privatePresets.value.concat(localStoragePresets);
+            } catch (err) {
+              const id = Math.random().toString(36).substring(2, 15);
+              const notification = {
+                id,
+                title: 'Error parsing saved presets',
+                description: `Error: ${err}`,
+                bgColor: 'lum-bg-red/50',
+              };
+              notifications.push(notification);
+              setTimeout(() => {
+                notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+              }, 2000);
+            }
+          }}>
+          <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
+            onChange$={async (event, el) => loadPresetJSON(el.value)}
+            values={privatePresets.value.map((preset) => ({
+              name: <span class={{
+                'break-all font-mc tracking-tight': true,
+                'font-mc-bold': preset.bold,
+                'font-mc-italic': preset.italic,
+                'font-mc-bold-italic': preset.bold && preset.italic,
+                [`${preset.format?.class}`]: preset.format?.class,
+              }}>
+                {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
+              </span>,
+              value: JSON.stringify(preset),
+            })).concat(savedPresets.value.map((preset) => ({
+              name: <span class={{
+                'break-all font-mc tracking-tight': true,
+                'font-mc-bold': preset.preset.bold,
+                'font-mc-italic': preset.preset.italic,
+                'font-mc-bold-italic': preset.preset.bold && preset.preset.italic,
+                [`${preset.preset.format?.class}`]: preset.preset.format?.class,
+              }}>
+                {renderPreview({ ...rgbDefaults, text: preset.name ?? rgbStore.text, ...preset.preset }, 1)}
+              </span>,
+              value: JSON.stringify(preset.preset),
+            })))}>
+            <span q:slot="dropdown" class="flex gap-3 flex-1">
+              <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
+            </span>
+            <Link q:slot="extra-buttons" class="lum-btn lum-bg-transparent rounded-lum-1 border-blue" href="/resources/rgb/presets">
+              <Globe size={20} /> {t('rgb.presets.find@@Find')}
+            </Link>
+            {t('rgb.presets.saved.presets@@Saved Presets')}
+          </SelectMenu>
+        </div>
         <button class={{
           'lum-btn flex-1': true,
-          'lg:rounded-sm': true,
         }} id="save" onClick$={async () => {
           const preset: rgbPreset = { ...rgbStore };
           if (preset.syncshadow) delete preset.shadowcolors;
@@ -101,9 +150,23 @@ export default component$(({ hidden }: {
         }}>
           <Save size={20} /> {t('rgb.presets.save@@Save')}
         </button>
+        <Link class={{
+          'lum-btn flex-1 border-blue hover:border-blue': true,
+        }} href="/resources/rgb/presets">
+          <Globe size={20} /> {t('rgb.presets.find@@Find')}
+        </Link>
+      </div>
+      <div class="flex flex-wrap gap-1 mt-1">
+        <div class="flex flex-col gap-1 flex-1">
+          <label for="import">
+            {t('rgb.presets.import@@Import')}
+            <span class="text-lum-text-secondary"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
+          </label>
+          <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
+            onInput$={async (e, el) => loadPresetJSON(el.value)}/>
+        </div>
         <button class={{
           'lum-btn flex-1': true,
-          'lg:rounded-sm': true,
         }} id="copy" onClick$={async () => {
           const preset: rgbPreset = { ...rgbStore };
           if (preset.syncshadow) delete preset.shadowcolors;
@@ -131,7 +194,6 @@ export default component$(({ hidden }: {
         </button>
         <button class={{
           'lum-btn flex-1': true,
-          'lg:rounded-l-sm': true,
         }} id="createurl" onClick$={async () => {
           const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
           const url = new URL(base_url);
@@ -158,70 +220,6 @@ export default component$(({ hidden }: {
         }}>
           <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}
         </button>
-      </div>
-      <div class="flex flex-col gap-2"
-        onClick$={() => {
-          // If privatePresets is empty, load presets from localStorage
-          if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
-
-          try {
-            const localStoragePresets = getPresets();
-            privatePresets.value = privatePresets.value.concat(localStoragePresets);
-          } catch (err) {
-            const id = Math.random().toString(36).substring(2, 15);
-            const notification = {
-              id,
-              title: 'Error parsing saved presets',
-              description: `Error: ${err}`,
-              bgColor: 'lum-bg-red/50',
-            };
-            notifications.push(notification);
-            setTimeout(() => {
-              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-            }, 2000);
-          }
-        }}>
-        <SelectMenu id="saved-presets" class={{ 'w-full': true }} customDropdown
-          onChange$={async (event, el) => loadPresetJSON(el.value)}
-          values={privatePresets.value.map((preset) => ({
-            name: <span class={{
-              'break-all font-mc tracking-tight': true,
-              'font-mc-bold': preset.bold,
-              'font-mc-italic': preset.italic,
-              'font-mc-bold-italic': preset.bold && preset.italic,
-              [`${preset.format?.class}`]: preset.format?.class,
-            }}>
-              {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
-            </span>,
-            value: JSON.stringify(preset),
-          })).concat(savedPresets.value.map((preset) => ({
-            name: <span class={{
-              'break-all font-mc tracking-tight': true,
-              'font-mc-bold': preset.preset.bold,
-              'font-mc-italic': preset.preset.italic,
-              'font-mc-bold-italic': preset.preset.bold && preset.preset.italic,
-              [`${preset.preset.format?.class}`]: preset.preset.format?.class,
-            }}>
-              {renderPreview({ ...rgbDefaults, text: preset.name ?? rgbStore.text, ...preset.preset }, 1)}
-            </span>,
-            value: JSON.stringify(preset.preset),
-          })))}>
-          <span q:slot="dropdown" class="flex gap-3 flex-1">
-            <Download size={20} /> {t('rgb.presets.load@@Load saved preset')}
-          </span>
-          <Link q:slot="extra-buttons" class="lum-btn lum-bg-transparent rounded-lum-1" href="/resources/rgb/presets">
-            <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
-          </Link>
-          {t('rgb.presets.saved.presets@@Saved Presets')}
-        </SelectMenu>
-      </div>
-      <div class="flex flex-col gap-1 mb-1">
-        <label for="import">
-          {t('rgb.presets.import@@Import')}
-          <span class="text-lum-text-secondary"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
-        </label>
-        <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
-          onInput$={async (e, el) => loadPresetJSON(el.value)}/>
       </div>
     </div>
   );

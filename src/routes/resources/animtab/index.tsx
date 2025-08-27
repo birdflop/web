@@ -9,7 +9,7 @@ import { hexToRGB } from '~/util/rgb/Colors';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 
-import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import ColorMap from '~/components/Rgbirdflop/ColorMap';
@@ -17,7 +17,6 @@ import ColorList from '~/components/Rgbirdflop/ColorList';
 import Output from '~/components/Rgbirdflop/Output';
 import Presets from '~/components/Rgbirdflop/Presets';
 import Decode from '~/components/Rgbirdflop/Decode';
-import Formatting from '~/components/Rgbirdflop/Formatting';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
@@ -228,12 +227,21 @@ export default component$(() => {
                 {t('animtab.animation.style@@Animation Style')}
               </SelectMenu>
             </Options>
+          </div>
 
-            <Accordion sectionName="presets">
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <Accordion sectionName="presets" alwaysOpen>
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
+            {rgbStore.customFormat && <>
+              <Accordion sectionName="formatoptions">
+                <Settings size={26} />
+                {t('rgb.formatting.options@@Format Options')}
+              </Accordion>
+              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
+            </>}
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
@@ -243,22 +251,6 @@ export default component$(() => {
               </span>
             </Accordion>
             <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
-          </div>
-
-          <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="formatting" alwaysOpen>
-              <Type size={26} />
-              {t('rgb.formatting.title@@Formatting')}
-            </Accordion>
-            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
-
-            {rgbStore.customFormat && <>
-              <Accordion sectionName="formatoptions">
-                <Settings size={26} />
-                {t('rgb.formatting.options@@Format Options')}
-              </Accordion>
-              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
-            </>}
 
             <Accordion sectionName="outputformat">
               <FileJson size={26} />
