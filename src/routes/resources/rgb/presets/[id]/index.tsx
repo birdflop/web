@@ -117,46 +117,104 @@ export default component$(() => {
             <ChevronLeft size={20} /> Back to Presets
           </Link>
         </div>
+        {
+          presetInfo.pending &&
+          <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-yellow">
+            {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
+          </p>
+        }
 
-        <div class="flex flex-col gap-4 mt-2">
+        <h6 class={{
+          'flex items-center gap-2 mb-0!': true,
+          'text-blue-300/80!': !presetInfo.user,
+          'text-orange-300/80!': !!presetInfo.user,
+        }}>
+          { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
+            class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
+            {presetInfo.user.image && presetInfo.user.name && (
+              <img src={presetInfo.user.image} alt={presetInfo.user.name}
+                width={32} height={32} class="w-8 h-8 rounded-full!" />
+            )}
+            {presetInfo.user.name}
+          </Link>
+          }
+          { presetInfo.author && !presetInfo.user && <>
+            {presetInfo.author == 'RGBirdflop' &&
+              <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+            }
+            {presetInfo.author == 'SimplyMC' &&
+              <LogoLuminescent size={32} class="text-luminescent-300" />
+            }
+            {presetInfo.author.includes('GitHub') &&
+              <Github size={32} />
+            }
+            {presetInfo.author}
+          </>}
+        </h6>
+        <p class="mb-2">
+          {t('rgb.presets.createdAt@@Created at')} {new Date(presetInfo.createdAt)
+            .toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+        </p>
+        <p class="text-white! mb-5">
+          {presetInfo.description}
+        </p>
+
+        <div class="flex gap-2">
+          <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
+            class={{ 'hidden sm:flex text-sm gap-1 text-orange-300': true }}>
+            <div q:slot="dropdown" class="flex items-center gap-3">
+              <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
+            </div>
+            <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+              <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+            </Link>
+            <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+              <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            </Link>
+          </SelectMenuRaw>
+          <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
+            loading.value = true;
+
+            if (existingPreset) {
+              privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
+              if (presetInfo.id) {
+                savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
+                presetInfo.saveCount--;
+                await unsavePreset(presetInfo.id);
+              }
+            }
+            else {
+              privatePresets.value = [...privatePresets.value, presetInfo.preset];
+              if (presetInfo.id) {
+                savedPresets.value = [...savedPresets.value, presetInfo];
+                presetInfo.saveCount++;
+                await savePreset(presetInfo.id);
+              }
+            }
+
+            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+            loading.value = false;
+          }}>
+            {!loading.value && presetInfo.saveCount}
+            {loading.value && <div class="lum-loading w-3 h-3" />}
+            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+              ? <span class="text-red-300 flex gap-3">
+                <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
+              </span>
+              : <span class="text-green-300 flex gap-3">
+                <Save size={20}  /> {t$('rgb.presets.save@@Save')}
+              </span>}
+          </button>
+        </div>
+        <div class="flex flex-col gap-4 mt-6">
           <div>
             <Input>
               {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
             </Input>
-          </div>
-
-          <div class="lum-card p-6">
-            <h6 class={{
-              'flex items-center gap-2 my-0!': true,
-              'text-blue-300/80!': !presetInfo.user,
-              'text-orange-300/80!': !!presetInfo.user,
-            }}>
-              { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
-                class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
-                {presetInfo.user.image && presetInfo.user.name && (
-                  <img src={presetInfo.user.image} alt={presetInfo.user.name}
-                    width={32} height={32} class="w-8 h-8 rounded-full!" />
-                )}
-                {presetInfo.user.name}
-              </Link>
-              }
-              { presetInfo.author && !presetInfo.user && <>
-                {presetInfo.author == 'RGBirdflop' &&
-                  <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
-                }
-                {presetInfo.author == 'SimplyMC' &&
-                  <LogoLuminescent size={32} class="text-luminescent-300" />
-                }
-                {presetInfo.author.includes('GitHub') &&
-                  <Github size={32} />
-                }
-                {presetInfo.author}
-              </>}
-            </h6>
-            <hr class="my-1!"/>
-            <p>
-              {presetInfo.description}
-            </p>
           </div>
 
           <div class="lum-card p-6">
@@ -187,54 +245,6 @@ export default component$(() => {
                 }, 2000);
               }}
             />
-          </div>
-
-          <div class="flex gap-2">
-            <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-              class={{ 'hidden sm:flex text-sm gap-1 text-orange-300': true }}>
-              <div q:slot="dropdown" class="flex items-center gap-3">
-                <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
-              </div>
-              <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-                <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
-              </Link>
-              <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-                <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
-              </Link>
-            </SelectMenuRaw>
-            <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
-              loading.value = true;
-
-              if (existingPreset) {
-                privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-                if (presetInfo.id) {
-                  savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                  presetInfo.saveCount--;
-                  await unsavePreset(presetInfo.id);
-                }
-              }
-              else {
-                privatePresets.value = [...privatePresets.value, presetInfo.preset];
-                if (presetInfo.id) {
-                  savedPresets.value = [...savedPresets.value, presetInfo];
-                  presetInfo.saveCount++;
-                  await savePreset(presetInfo.id);
-                }
-              }
-
-              if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-              loading.value = false;
-            }}>
-              {!loading.value && presetInfo.saveCount}
-              {loading.value && <div class="lum-loading w-3 h-3" />}
-              {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
-                ? <span class="text-red-300 flex gap-3">
-                  <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
-                </span>
-                : <span class="text-green-300 flex gap-3">
-                  <Save size={20}  /> {t$('rgb.presets.save@@Save')}
-                </span>}
-            </button>
           </div>
         </div>
 

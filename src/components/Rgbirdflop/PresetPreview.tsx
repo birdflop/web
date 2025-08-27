@@ -3,7 +3,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savePreset, unsavePreset } from '~/util/dataUtils';
+import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
@@ -141,6 +141,11 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             await unsavePreset(Preset.id);
             if (Preset.saveCount !== undefined) Preset.saveCount--;
           }
+          else {
+            await setUserData({
+              privatePresets: privatePresets.value,
+            });
+          }
         }
         else {
           privatePresets.value = [...privatePresets.value, Preset.preset];
@@ -148,6 +153,11 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             savedPresets.value = [...savedPresets.value, Preset];
             await savePreset(Preset.id);
             if (Preset.saveCount !== undefined) Preset.saveCount++;
+          }
+          else {
+            await setUserData({
+              privatePresets: privatePresets.value,
+            });
           }
         }
 

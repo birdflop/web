@@ -25,7 +25,6 @@ const publishPreset = server$(async function(submission: PublicPresetSubmission)
         author: session.user.name,
         description: submission.description,
         preset: submission.preset,
-        pending: false,
       });
   } catch (error) {
     console.error('Error publishing preset:', error);
