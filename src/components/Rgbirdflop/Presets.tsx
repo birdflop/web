@@ -129,6 +129,11 @@ export default component$(({ hidden }: {
           'max-h-0 opacity-0 scale-98 pointer-events-none': !openItemsStore.items.includes('saved-presets'),
           'max-h-screen opacity-100 my-1 p-1': openItemsStore.items.includes('saved-presets'),
         }}>
+          {privatePresets.value.length === 0 && savedPresets.value.length === 0 && (
+            <div class="lum-card lum-bg-lum-input-bg/50 rounded-lum p-2 text-center">
+              {t('rgb.presets.nopresets@@No presets saved yet!')}
+            </div>
+          )}
           {privatePresets.value.concat(savedPresets.value.map((preset) => ({
             text: preset.name ?? rgbStore.text,
             ...preset.preset,
