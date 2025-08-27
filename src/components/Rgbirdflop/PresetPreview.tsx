@@ -105,8 +105,13 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       }
 
       { Preset.preset.text &&
-        <p class="text-sm text-yellow-400/80!">
+        <p class="text-sm text-yellow-400/80! pt-2">
           This preset will change your current input to "{Preset.preset.text}"
+        </p>
+      }
+      { Preset.pending &&
+        <p class="text-sm text-red-400/80! pt-2">
+          {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
         </p>
       }
     </Link>

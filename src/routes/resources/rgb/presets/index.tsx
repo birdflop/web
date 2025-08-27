@@ -32,10 +32,11 @@ import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
-import { and, count, eq, ilike, inArray, sql } from 'drizzle-orm';
+import { and, count, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 
-export const usePresets = routeLoader$(async ({ url }) => {
+export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
+  const session = sharedMap.get('session') as { user: { id: string } } | null;
   let publicPresets: PublicPreset[] = [];
   let presetCount = 0;
   const errors: string[] = [];
@@ -89,7 +90,10 @@ export const usePresets = routeLoader$(async ({ url }) => {
     })
       .from(presets)
       .where(and(
-        eq(presets.pending, showPending),
+        or(
+          eq(presets.pending, showPending),
+          session?.user?.id ? eq(presets.userId, session?.user?.id) : undefined,
+        ),
         searchTerm ? ilike(presets.name, searchTerm) : undefined,
         showSaved && savedPresetIds.length > 0
           ? inArray(presets.id, savedPresetIds)
