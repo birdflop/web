@@ -14,20 +14,6 @@ export interface format {
   obfuscate?: string;
 }
 
-export interface publishedPreset extends Omit<any, 'preset' | 'description' | 'userId'> {
-  userId?: string;
-  description?: string;
-  preset: rgbPreset;
-}
-
-export interface presetInfo extends Omit<publishedPreset, 'id' | 'author' | 'createdAt' > {
-  createdAt?: Date;
-  author?: string;
-  id?: number;
-}
-
-export type presetSubmission = Omit<presetInfo, 'pending'>;
-
 export function loadPreset(p: string): rgbPreset {
   const preset = JSON.parse(p);
   let newPreset: rgbPreset = {};

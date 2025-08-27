@@ -18,6 +18,8 @@ export const users = sqliteTable("user", {
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 });
 
+export type User = typeof users.$inferSelect;
+
 // -------------------- Account --------------------
 export const accounts = sqliteTable("account", {
   userId: text("userId")
@@ -74,6 +76,25 @@ export const presets = sqliteTable("presets", {
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
 });
+
+export type PublicPreset = typeof presets.$inferSelect;
+export interface PublicPresetWithUser extends PublicPreset {
+  user: User;
+  saveCount: number;
+}
+export interface PresetPartial extends Omit<PublicPresetWithUser,
+  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount'> {
+  id?: number;
+  author?: string;
+  user?: User | null;
+  userId?: string | null;
+  description?: string | null;
+  createdAt?: Date;
+  pending?: boolean;
+  saveCount?: number;
+}
+export type PublicPresetInsert = typeof presets.$inferInsert;
+export type PublicPresetSubmission = Omit<PublicPresetInsert, 'userId' | 'author'>;
 
 // -------------------- Saved Presets (Join Table) --------------------
 export const savedPresets = sqliteTable("savedPresets", {

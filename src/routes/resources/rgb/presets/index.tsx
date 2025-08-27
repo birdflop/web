@@ -13,8 +13,6 @@ import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import {
   getPresets,
-  presetInfo,
-  publishedPreset,
   rgbPreset,
 } from '~/util/rgb/presets';
 import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
@@ -33,12 +31,12 @@ import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-import { getDB, presets, savedPresets, users } from '~/util/db';
+import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
 import { and, count, eq, ilike, inArray, sql } from 'drizzle-orm';
+import MySavedPresets from '~/components/Rgbirdflop/MySavedPresets';
 
 export const usePresets = routeLoader$(async ({ url }) => {
-  // FIX THIS
-  let publishedPresets: any[] = [];
+  let publicPresets: PublicPreset[] = [];
   let presetCount = 0;
   const errors: string[] = [];
 
@@ -79,13 +77,6 @@ export const usePresets = routeLoader$(async ({ url }) => {
     case 'name':
       orderBy = presets.name;
       break;
-    /*
-      case 'saves':
-      orderBy = { savedBy: {
-        _count: sortOrder,
-      } };
-      break;
-    */
     case 'createdAt':
     default:
       orderBy = presets.createdAt;
@@ -110,30 +101,17 @@ export const usePresets = routeLoader$(async ({ url }) => {
       .orderBy(orderBy)
       .limit(perPage)
       .offset((page - 1) * perPage)
-      // FIX THIS
-      .then((r) => r ?? []) as publishedPreset[];
+      .then((r) => r ?? []);
 
-    publishedPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
+    publicPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
       ...presets, user, saveCount,
     }));
 
-    /*
-      prisma.presets.findMany({
-        where: whereClause,
-        skip: (page - 1) * perPage,
-        take: perPage,
-        orderBy,
-        include: {
-          user: true,
-          savedBy: true,
-        },
-      });
-    */
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
   return {
-    publishedPresets,
+    publicPresets,
     presetCount,
     errors,
     page,
@@ -156,7 +134,7 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context',
 );
-export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>(
+export const savedPresetsContext = createContextId<Signal<any[]>>(
   'savedpresets-context',
 );
 export default component$(() => {
@@ -177,7 +155,7 @@ export default component$(() => {
 
   const session = useSession();
   const {
-    publishedPresets,
+    publicPresets,
     presetCount,
     errors: presetsErrors,
     page,
@@ -243,9 +221,9 @@ export default component$(() => {
     }
   });
 
-  const privatePresetsParsed: presetInfo[] = [];
+  const privatePresetsParsed: PresetPartial[] = [];
   privatePresets.value.forEach((preset) => {
-    const isunique = publishedPresets.every((p) => {
+    const isunique = publicPresets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
     if (isunique) {
@@ -398,14 +376,6 @@ export default component$(() => {
                   name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
                   value: 'name-desc',
                 },
-                {
-                  name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
-                  value: 'saves-desc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
-                  value: 'saves-asc',
-                },
               ]}
             />
           </div>
@@ -413,7 +383,7 @@ export default component$(() => {
         <div>
           <p class="text-xs text-lum-text-secondary mb-1">
             {t('rgb.presets.totalCount@@Total presets: ') +
-              publishedPresets.length +
+              publicPresets.length +
               ' / ' +
               presetCount}
             {totalPages > 1 && (
@@ -503,14 +473,14 @@ export default component$(() => {
           </div>
         )}
         <div class="grid sm:grid-cols-2 gap-2">
-          {publishedPresets.map((presetInfo) => (
+          {publicPresets.map((publicPreset) => (
             <PresetPreview
-              key={`${presetInfo.name}-${presetInfo.author}`}
-              presetInfo={presetInfo}
+              key={`${publicPreset.name}-${publicPreset.author}`}
+              Preset={publicPreset}
               defaults={presetStore.previewWithSettings ? rgbStore : undefined}
             />
           ))}
-          {publishedPresets.length === 0 && (
+          {publicPresets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
@@ -600,20 +570,7 @@ export default component$(() => {
             </div>
           </div>
         )}
-        <h3 class="flex gap-2 items-center">
-          <Save size={30} />
-          <span class="flex-1">{t('rgb.presets.private@@My RGBirdflop Presets')}</span>
-        </h3>
-
-        <div class="grid sm:grid-cols-2 gap-2">
-          {privatePresetsParsed.map((presetInfo) => (
-            <PresetPreview
-              key={`${presetInfo.name}-${presetInfo.author}`}
-              presetInfo={presetInfo}
-              defaults={presetStore.previewWithSettings ? rgbStore : undefined}
-            />
-          ))}
-        </div>
+        <MySavedPresets />
 
         <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB

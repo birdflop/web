@@ -1,4 +1,4 @@
-import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
@@ -8,7 +8,7 @@ import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
-import { getDB, users, presets } from '~/util/db';
+import { getDB, users, presets, PublicPreset } from '~/util/db';
 import { eq } from 'drizzle-orm';
 
 export const useUser = routeLoader$(async ({ params }) => {
@@ -22,26 +22,27 @@ export const useUser = routeLoader$(async ({ params }) => {
 
   if (!userInfo) throw new Error('User not found');
 
-  // FIX THIS
   let presetsFromDB: {
-    user: any,
-    presets: any,
+    user: typeof userInfo,
+    preset: PublicPreset,
   }[] = [];
   const errors: string[] = [];
   try {
-    presetsFromDB = await db.select()
+    presetsFromDB = await db.select({
+      user: users,
+      preset: presets,
+    })
       .from(presets)
       .where(eq(presets.userId, userInfo.id))
-      .leftJoin(users, eq(users.id, presets.userId))
-      // FIX THIS
-      .then((r) => r ?? []) as typeof presetsFromDB;
+      .innerJoin(users, eq(users.id, presets.userId))
+      .then((r) => r ?? []);
   }
   catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
 
-  const userPresets = presetsFromDB.map(({ user, presets }) => ({
-    ...presets,
+  const userPresets = presetsFromDB.map(({ user, preset }) => ({
+    ...preset,
     user: user,
   }));
 
@@ -123,7 +124,7 @@ export default component$(() => {
             </h3>
             <div class="grid sm:grid-cols-2 gap-2">
               {userPresets.map((preset) => (
-                <PresetPreview key={preset.id} presetInfo={preset} />
+                <PresetPreview key={preset.id} Preset={preset} />
               ))}
             </div>
           </div>}

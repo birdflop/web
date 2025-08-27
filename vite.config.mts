@@ -84,6 +84,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         'drizzle-orm/sql/sql',
         'chart.js',
         '@qwik.dev/partytown/integration',
+        'drizzle-orm',
       ],
     },
 

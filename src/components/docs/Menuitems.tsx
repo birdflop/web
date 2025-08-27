@@ -100,7 +100,7 @@ export const MenuItems = component$(
                     'text-sm lum-btn-p-1 rounded-lum-1': level > 0,
                     'text-indigo-500!': item.href === pathname,
                   }}
-                  onMouseOver$={$((evt: any, target: HTMLAnchorElement & { __prefetchLink: number }) => {
+                  onMouseOver$={$((evt, target: HTMLAnchorElement & { __prefetchLink: number }) => {
                     const canHover = window.matchMedia('(hover: hover)').matches;
                     if (!canHover) return;
 

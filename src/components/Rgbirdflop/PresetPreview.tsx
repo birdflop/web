@@ -7,15 +7,16 @@ import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/routes/resources/rgb';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps, useNavigate } from '@builder.io/qwik-city';
-import { presetInfo, publishedPreset, rgbPreset } from '~/util/rgb/presets';
+import { rgbPreset } from '~/util/rgb/presets';
+import { PresetPartial } from '~/util/db';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
-  presetInfo: presetInfo | publishedPreset;
+  Preset: PresetPartial;
   class?: { [key: string]: boolean };
   defaults?: rgbPreset;
 }
 
-export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props }) => {
+export default component$<PresetPreviewProps>(({ Preset, defaults, ...props }) => {
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
@@ -23,57 +24,57 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
   const loading = useSignal(false);
 
   const searchParams = new URLSearchParams();
-  const params = { ...presetInfo.preset };
+  const params = { ...Preset.preset };
   (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
     if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
     searchParams.set(key, String(value));
   });
 
   const existingPreset = savedPresets.value.find((savedPreset) => {
-    return savedPreset.id === presetInfo.id;
+    return savedPreset.id === Preset.id;
   })?.preset
   || privatePresets.value.find((savedPreset) => {
-    return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
+    return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
   });
 
   return (
-    <Link href={presetInfo.id ? `/resources/rgb/presets/${presetInfo.id}` : '#'} {...props}
+    <Link href={Preset.id ? `/resources/rgb/presets/${Preset.id}` : '#'} {...props}
       class="lum-card p-5 lum-bg-lum-input-bg/30 hover:lum-bg-lum-input-bg/70 w-full transition duration-1000 hover:duration-75 ease-out"
-      key={`preset-${presetInfo.name}-${presetInfo.author}`}
+      key={`preset-${Preset.name}-${Preset.author}`}
       prefetch={false}>
-      { presetInfo.author &&
+      { Preset.author &&
         <div class="flex">
           <p class={{
             'flex flex-1 items-center gap-2': true,
-            'text-blue-300/80!': !presetInfo.user,
-            'text-orange-300/80!': !!presetInfo.user,
+            'text-blue-300/80!': !Preset.user,
+            'text-orange-300/80!': !!Preset.user,
           }}>
-            { presetInfo.user && <button preventdefault:click onClick$={async (e) => {
+            { Preset.user && <button preventdefault:click onClick$={async (e) => {
               e.stopPropagation();
-              await nav(`/profile/${presetInfo.user?.id}`);
+              await nav(`/profile/${Preset.user?.id}`);
             }} class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold">
-              {presetInfo.user.image && presetInfo.user.name && (
-                <img src={presetInfo.user.image} alt={presetInfo.user.name}
+              {Preset.user.image && Preset.user.name && (
+                <img src={Preset.user.image} alt={Preset.user.name}
                   width={24} height={24} class="w-6 h-6 rounded-full!" />
               )}
-              {presetInfo.user.name}
+              {Preset.user.name}
             </button>
             }
-            { presetInfo.author && !presetInfo.user && <>
-              {presetInfo.author == 'RGBirdflop' &&
+            { Preset.author && !Preset.user && <>
+              {Preset.author == 'RGBirdflop' &&
                 <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
               }
-              {presetInfo.author == 'Luminescent' &&
+              {Preset.author == 'Luminescent' &&
                 <LogoLuminescent size={20} class="text-luminescent-300" />
               }
-              {presetInfo.author.includes('GitHub') &&
+              {Preset.author.includes('GitHub') &&
                 <Github size={20} />
               }
-              {presetInfo.author}
+              {Preset.author}
             </>}
           </p>
           <p class="text-xs">
-            {presetInfo.createdAt && new Date(presetInfo.createdAt)
+            {Preset.createdAt && new Date(Preset.createdAt)
               .toLocaleDateString(undefined, {
                 year: 'numeric',
                 month: 'short',
@@ -87,34 +88,34 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
         <div class="flex-1">
           <p class={{
             'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-            'font-mc-bold': presetInfo.preset.bold || defaults?.bold,
-            'font-mc-italic': presetInfo.preset.italic || defaults?.italic,
-            'font-mc-bold-italic': (presetInfo.preset.bold && presetInfo.preset.italic) || (defaults?.bold && defaults?.italic),
-            [`${presetInfo.preset.format?.class || defaults?.format?.class}`]: presetInfo.preset.format?.class || defaults?.format?.class,
+            'font-mc-bold': Preset.preset.bold || defaults?.bold,
+            'font-mc-italic': Preset.preset.italic || defaults?.italic,
+            'font-mc-bold-italic': (Preset.preset.bold && Preset.preset.italic) || (defaults?.bold && defaults?.italic),
+            [`${Preset.preset.format?.class || defaults?.format?.class}`]: Preset.preset.format?.class || defaults?.format?.class,
           }}>
             {renderPreview({
               ...rgbDefaults,
               ...defaults || {},
-              ...presetInfo.preset,
-              text: presetInfo.name,
+              ...Preset.preset,
+              text: Preset.name,
             }, 3)}
           </p>
 
-          { presetInfo.description &&
+          { Preset.description &&
             <p class="text-lum-text-secondary text-sm pt-2">
-              {presetInfo.description}
+              {Preset.description}
             </p>
           }
 
-          { presetInfo.preset.text &&
+          { Preset.preset.text &&
             <p class="text-sm text-red-400/50!">
-              This preset will overwrite your text to "{presetInfo.preset.text}"
+              This preset will overwrite your text to "{Preset.preset.text}"
             </p>
           }
 
-          { presetInfo.preset.colors && presetInfo.preset.colors.length > 0 &&
+          { Preset.preset.colors && Preset.preset.colors.length > 0 &&
             <div class="flex gap-1 mt-2">
-              {presetInfo.preset.colors.map((color: any, index: number) => (
+              {Preset.preset.colors.map((color, index) => (
                 <span key={index} class="p-2 rounded-lum-2"
                   style={{ backgroundColor: color.hex }} />
               ))}
@@ -122,7 +123,7 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
           }
         </div>
         <div class="flex gap-1 items-end">
-          <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
+          <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
             class={{ 'hidden sm:flex p-2 text-sm lum-bg-transparent gap-1 text-orange-300': true }}>
             <div q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} />
@@ -146,27 +147,27 @@ export default component$<PresetPreviewProps>(({ presetInfo, defaults, ...props 
 
             if (existingPreset) {
               privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-              if (presetInfo.id) {
-                savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                presetInfo.saveCount--;
-                await unsavePreset(presetInfo.id);
+              if (Preset.id) {
+                savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
+                await unsavePreset(Preset.id);
+                if (Preset.saveCount) Preset.saveCount--;
               }
             }
             else {
-              privatePresets.value = [...privatePresets.value, presetInfo.preset];
-              if (presetInfo.id) {
-                savedPresets.value = [...savedPresets.value, presetInfo];
-                presetInfo.saveCount++;
-                await savePreset(presetInfo.id);
+              privatePresets.value = [...privatePresets.value, Preset.preset];
+              if (Preset.id) {
+                savedPresets.value = [...savedPresets.value, Preset];
+                await savePreset(Preset.id);
+                if (Preset.saveCount) Preset.saveCount++;
               }
             }
 
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             loading.value = false;
           }}>
-            {!loading.value && presetInfo.saveCount}
+            {!loading.value && Preset.saveCount}
             {loading.value && <div class="lum-loading w-3 h-3" />}
-            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
               ? <span class="text-red-300 flex gap-3">
                 <Trash size={20} />
               </span>

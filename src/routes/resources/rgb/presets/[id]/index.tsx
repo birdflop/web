@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
