@@ -72,7 +72,8 @@ export default component$(({ readOnly }: {
         </p>
       </h5>
     }
-    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-0 relative">
+    <Formatting/>
+    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
       {previewStyle.value != 'default' &&
         <div class={{
           'relative lum-bg-lum-input-bg/50 rounded-lum': true,
@@ -181,6 +182,5 @@ export default component$(({ readOnly }: {
         </SelectMenuRaw>
       </div>
     </label>
-    <Formatting/>
   </>;
 });
