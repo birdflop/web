@@ -41,6 +41,7 @@ lerna-debug.log*
 
 # Secrets
 .env
+.dev.vars
 
 # Cloudflare
 functions/**/*.js

@@ -1,4 +1,4 @@
-// components/elements/HistoricLinePlot.tsx
+// components/home/ExpensesChart.tsx
 import { component$ } from '@builder.io/qwik';
 import Chart from '~/components/Elements/Chart';
 

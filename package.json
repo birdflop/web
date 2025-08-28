@@ -11,6 +11,7 @@
     "node": ">=23.11.0"
   },
   "author": "birdflop",
+  "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "wrangler types && qwik build",

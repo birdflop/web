@@ -3,6 +3,7 @@ import {
   User as UserFromAuth,
 } from '@auth/qwik';
 import { rgbPreset } from './util/rgb/presets';
+import { PublicPreset } from '../drizzle/schema';
 
 declare module '@auth/qwik' {
   interface User extends UserFromAuth {

@@ -137,8 +137,8 @@ export default component$(() => {
         <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
-            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-            const spans = animprevStore.frames[animprevStore.frame].match(new RegExp(pattern, 'g'));
+            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
+            const spans = animprevStore.frames[animprevStore.frame].match(pattern);
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
               const result = string.match(pattern);

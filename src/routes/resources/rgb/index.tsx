@@ -132,6 +132,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
+    let rafId = 0;
     function obfuscate() {
       const text = document.querySelectorAll('span.obfuscate');
       text.forEach((el, i) => {
@@ -141,10 +142,11 @@ export default component$(() => {
         }
         el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
       });
-      requestAnimationFrame(obfuscate);
+      rafId = requestAnimationFrame(obfuscate);
     }
     obfuscate();
     track(() => rgbStore.obfuscate);
+    return () => cancelAnimationFrame(rafId);
   });
 
   return (
