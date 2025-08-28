@@ -41,8 +41,13 @@ lerna-debug.log*
 
 # Secrets
 .env
+.dev.vars
 
 # Cloudflare
 functions/**/*.js
 
 vite.config.mts.*
+
+worker-configuration.d.ts
+.wrangler
+tmp/*

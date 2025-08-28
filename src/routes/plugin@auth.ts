@@ -1,62 +1,29 @@
-import type { User } from '@auth/qwik';
 import { QwikAuth$ } from '@auth/qwik';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { getPrismaClient } from '~/util/prisma';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import Discord from '@auth/qwik/providers/discord';
-import { publishedPreset, rgbPreset } from '~/util/rgb/presets';
-import { Session } from '@prisma/client';
+import { getDB } from '~/util/db';
+
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+  savedPresets,
+  presets,
+} from '../../drizzle/schema';
+import { eq } from 'drizzle-orm';
 
 // This is a temporary secret, in case the env variable is not set
 const tempsecret = Math.random().toString(36).slice(2);
 
-export interface BirdflopSession {
-  user: BirdflopUser;
-  expires: Date & string;
-}
-
-export interface BirdflopUser extends User {
-  privatePresets?: rgbPreset[];
-  savedPresets?: publishedPreset[];
-}
-
-const cachedSessionAndUser: {
-  [key: string]: {
-    user: User;
-    session: Session;
-    expires: Date;
-  }
-} = {};
-
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
-    const databaseUrl = event?.platform?.env?.DATABASE_URL || process.env.DATABASE_URL;
     let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
     if (!secret) {
       console.error('AUTH_SECRET is not set, using a temporary secret');
       secret = tempsecret;
     }
-    const prisma = getPrismaClient(databaseUrl);
-
-    const customPrismaAdapter = prisma ? {
-      ...PrismaAdapter(prisma),
-      async getSessionAndUser(sessionToken: string) {
-
-        if (event.sharedMap.get('@isQData') && cachedSessionAndUser[sessionToken]
-          && cachedSessionAndUser[sessionToken].expires > new Date()) {
-          return cachedSessionAndUser[sessionToken] as any;
-        }
-        const userAndSession = await prisma.session.findUnique({
-          where: { sessionToken },
-          include: { user: {
-            include: { savedPresets: true },
-          } },
-        });
-        if (!userAndSession) return null;
-        const { user, ...session } = userAndSession;
-        cachedSessionAndUser[sessionToken] = { user, session, expires: new Date(Date.now() + 10000) };
-        return cachedSessionAndUser[sessionToken];
-      },
-    } : undefined;
+    const db = getDB();
 
     return {
       providers: [
@@ -82,28 +49,28 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           },
         }),
       ],
-      adapter: customPrismaAdapter,
-      trustHost: true, // uncomment this if previewing on localhost
+      adapter: DrizzleAdapter(db, {
+        usersTable: users,
+        accountsTable: accounts,
+        sessionsTable: sessions,
+        verificationTokensTable: verificationTokens,
+        authenticatorsTable: undefined,
+      }),
+      trustHost: true,
       secret,
       callbacks: {
         async signIn({ user, account, profile }) {
           if (account?.provider === 'discord' && profile) {
             try {
-              if (profile.avatar) {
+              if (profile.avatar && user.id) {
                 const avatarHash = (profile as any).avatar;
                 const format = avatarHash?.startsWith('a_') ? 'gif' : 'png';
                 const newImageUrl = `https://cdn.discordapp.com/avatars/${(profile as any).id}/${avatarHash}.${format}`;
                 user.image = newImageUrl;
 
-                if (prisma) {
-                  await prisma.user.update({
-                    where: { id: user.id },
-                    data: {
-                      image: newImageUrl,
-                      updatedAt: new Date(),
-                    },
-                  });
-                }
+                await db.update(users)
+                  .set({ image: newImageUrl })
+                  .where(eq(users.id, user.id));
               }
             } catch (error) {
               console.error('Failed to refresh Discord profile picture on sign in:', error);
@@ -111,13 +78,23 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           }
           return true;
         },
-        session({ session }) {
-          const { id, name, email, image, privatePresets, savedPresets } = session.user as BirdflopUser;
+        async session({ session }) {
+          const { id, name, email, image, privatePresets } = session.user;
+
+          // fetch saved presets for this user
+          const savedFromDB = await db.select({
+            preset: presets,
+          })
+            .from(savedPresets)
+            .where(eq(savedPresets.userId, session.user.id))
+            .innerJoin(presets, eq(presets.id, savedPresets.presetId))
+            .all();
+          const saved = savedFromDB.map(({ preset }) => preset);
 
           return {
             expires: session.expires,
             user: {
-              id, name, email, image, privatePresets, savedPresets,
+              id, name, email, image, privatePresets, savedPresets: saved,
             },
           };
         },

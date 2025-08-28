@@ -1,10 +1,9 @@
-import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { isBrowser } from '@builder.io/qwik/build';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
 import { NotificationContext } from '~/routes/layout';
 import { Eye } from 'lucide-icons-qwik';
@@ -138,8 +137,8 @@ export default component$(() => {
         <Input readOnly>
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
-            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-            const spans = animprevStore.frames[animprevStore.frame].match(new RegExp(pattern, 'g'));
+            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
+            const spans = animprevStore.frames[animprevStore.frame].match(pattern);
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
               const result = string.match(pattern);
