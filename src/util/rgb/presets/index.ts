@@ -1,7 +1,5 @@
-import { Presets } from '@prisma/client';
 import { combinedDefaults } from './defaults';
 import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
-import { BirdflopUser } from '~/routes/plugin@auth';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
 
@@ -15,22 +13,6 @@ export interface format {
   strikethrough?: string;
   obfuscate?: string;
 }
-
-export interface publishedPreset extends Omit<Presets, 'preset' | 'description' | 'userId'> {
-  userId?: string;
-  user?: BirdflopUser;
-  description?: string;
-  savedBy?: BirdflopUser[];
-  preset: rgbPreset;
-}
-
-export interface presetInfo extends Omit<publishedPreset, 'id' | 'author' | 'createdAt' > {
-  createdAt?: Date;
-  author?: string;
-  id?: number;
-}
-
-export type presetSubmission = Omit<presetInfo, 'pending'>;
 
 export function loadPreset(p: string): rgbPreset {
   const preset = JSON.parse(p);

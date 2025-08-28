@@ -2,10 +2,10 @@
 
 @import "tailwindcss";
 
-@plugin "@anuragroy/tailwindcss-animate";
-
 @import "@luminescent/ui";
 @import "@luminescent/ui/formatting";
+
+@plugin "@anuragroy/tailwindcss-animate";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";

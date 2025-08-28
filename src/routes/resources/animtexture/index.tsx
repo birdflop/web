@@ -220,14 +220,17 @@ export default component$(() => {
         </div>
         <div class="flex flex-col gap-2">
           <Toggle id="lockdimensions" checked={animtextureStore.lockdimensions}
-            onChange$={(e, el) => { animtextureStore.lockdimensions = el.checked; }}
-            label={t('animtexture.lockDimensions@@Lock Dimensions')} />
+            onChange$={(e, el) => { animtextureStore.lockdimensions = el.checked; }}>
+            {t('animtexture.lockDimensions@@Lock Dimensions')}
+          </Toggle>
           <Toggle id="bounce" checked={animtextureStore.bounce}
-            onChange$={(e, el) => { animtextureStore.bounce = el.checked; }}
-            label={t('animtexture.bounce@@Bounce Animation')} />
+            onChange$={(e, el) => { animtextureStore.bounce = el.checked; }}>
+            {t('animtexture.bounce@@Bounce Animation')}
+          </Toggle>
           <Toggle id="syncduration" checked={animtextureStore.syncduration}
-            onChange$={(e, el) => { animtextureStore.syncduration = el.checked; }}
-            label={t('animtexture.syncDuration@@Sync Duration')} />
+            onChange$={(e, el) => { animtextureStore.syncduration = el.checked; }}>
+            {t('animtexture.syncDuration@@Sync Duration')}
+          </Toggle>
         </div>
 
         <div id="imgs" class="lum-card flex-row flex-wrap max-h-[620px] overflow-auto gap-2 p-2 mt-4">

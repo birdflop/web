@@ -1,4 +1,4 @@
-import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/rgb/HexUtils';
@@ -7,21 +7,19 @@ import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils'
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import { isBrowser } from '@builder.io/qwik/build';
 
-import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
-import ColorMap from '~/components/rgb/ColorMap';
-import ColorList from '~/components/rgb/ColorList';
-import Output from '~/components/rgb/Output';
-import Presets from '~/components/rgb/Presets';
-import Decode from '~/components/rgb/Decode';
-import Formatting from '~/components/rgb/Formatting';
-import FormatOptions from '~/components/rgb/FormatOptions';
-import Options from '~/components/rgb/Options';
-import Accordion from '~/components/Accordion';
+import { Blend, Clipboard, Palette, Save, Settings, Sparkles } from 'lucide-icons-qwik';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import ColorMap from '~/components/Rgbirdflop/ColorMap';
+import ColorList from '~/components/Rgbirdflop/ColorList';
+import Output from '~/components/Rgbirdflop/Output';
+import Presets from '~/components/Rgbirdflop/Presets';
+import Decode from '~/components/Rgbirdflop/Decode';
+import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
+import Options from '~/components/Rgbirdflop/Options';
+import Accordion from '~/components/Elements/Accordion';
 import { NotificationContext, openItemsContext } from '~/routes/layout';
-import TextShadow from '~/components/rgb/TextShadow';
+import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -134,6 +132,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
+    let rafId = 0;
     function obfuscate() {
       const text = document.querySelectorAll('span.obfuscate');
       text.forEach((el, i) => {
@@ -143,10 +142,11 @@ export default component$(() => {
         }
         el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
       });
-      requestAnimationFrame(obfuscate);
+      rafId = requestAnimationFrame(obfuscate);
     }
     obfuscate();
     track(() => rgbStore.obfuscate);
+    return () => cancelAnimationFrame(rafId);
   });
 
   return (
@@ -190,11 +190,22 @@ export default component$(() => {
 
             <Options />
 
-            <Accordion sectionName="presets">
+          </div>
+
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <Accordion sectionName="presets" alwaysOpen>
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
+
+            {rgbStore.customFormat && <>
+              <Accordion sectionName="formatoptions">
+                <Settings size={26} />
+                {t('rgb.formatting.options@@Format Options')}
+              </Accordion>
+              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
+            </>}
 
             <Accordion sectionName="decode">
               <Sparkles size={26} />
@@ -204,23 +215,6 @@ export default component$(() => {
               </span>
             </Accordion>
             <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
-
-          </div>
-
-          <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="formatting" alwaysOpen>
-              <Type size={26} />
-              {t('rgb.formatting.title@@Formatting')}
-            </Accordion>
-            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
-
-            {rgbStore.customFormat && <>
-              <Accordion sectionName="formatoptions">
-                <Settings size={26} />
-                {t('rgb.formatting.options@@Format Options')}
-              </Accordion>
-              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
-            </>}
           </div>
         </div>
         <p class="mt-8">

@@ -5,7 +5,7 @@ import type { NoSerialize } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Terminal, Trash } from 'lucide-icons-qwik';
-import Accordion from '~/components/Accordion';
+import Accordion from '~/components/Elements/Accordion';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
