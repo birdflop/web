@@ -14,6 +14,30 @@ CREATE TABLE `account` (
 	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `presets` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL,
+	`author` text NOT NULL,
+	`userId` text,
+	`description` text,
+	`preset` text NOT NULL,
+	`upvotes` integer DEFAULT 0 NOT NULL,
+	`downvotes` integer DEFAULT 0 NOT NULL,
+	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`pending` integer DEFAULT true NOT NULL,
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `presets_preset_unique` ON `presets` (`preset`);--> statement-breakpoint
+CREATE TABLE `savedPresets` (
+	`userId` text NOT NULL,
+	`presetId` integer NOT NULL,
+	`savedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	PRIMARY KEY(`userId`, `presetId`),
+	FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`presetId`) REFERENCES `presets`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `session` (
 	`sessionToken` text PRIMARY KEY NOT NULL,
 	`userId` text NOT NULL,
@@ -25,7 +49,7 @@ CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text,
 	`username` text,
-	`email` text NOT NULL,
+	`email` text,
 	`emailVerified` integer,
 	`image` text,
 	`privatePresets` text,

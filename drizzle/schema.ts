@@ -10,7 +10,7 @@ export const users = sqliteTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   username: text("username").unique(),
-  email: text("email").notNull().unique(),
+  email: text("email").unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
   privatePresets: text("privatePresets", { mode: 'json' }).$type<rgbPreset[]>(),

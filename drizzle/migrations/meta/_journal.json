@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1756017258684,
-      "tag": "0000_material_dazzler",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1756017335622,
-      "tag": "0001_damp_ikaris",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1756114336216,
-      "tag": "0002_dry_exodus",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1756116748149,
-      "tag": "0003_grey_caretaker",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1756290928869,
-      "tag": "0004_tan_glorian",
+      "when": 1756396426287,
+      "tag": "0000_broad_puff_adder",
       "breakpoints": true
     }
   ]
