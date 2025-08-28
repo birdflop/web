@@ -23,11 +23,12 @@ export default component$(({ hidden }: {
         </p>
       }
       <Toggle id="syncshadow" checked={rgbStore.syncshadow}
-        label={`${t('rgb.colors.shadow.sync@@Sync with text colors')}`}
         onChange$={(e, el) => {
           rgbStore.syncshadow = el.checked;
         }}
-      />
+      >
+        {t('rgb.colors.shadow.sync@@Sync with text colors')}
+      </Toggle>
       <div class={{
         'transition-all duration-300': true,
         'opacity-50': rgbStore.syncshadow,

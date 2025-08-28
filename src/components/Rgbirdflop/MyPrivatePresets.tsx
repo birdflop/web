@@ -189,8 +189,9 @@ export default component$(() => {
           </label>
           <textarea class="lum-input" placeholder="This is my preset" id="publish-preset-description" />
 
-          <Toggle id="publish-preset-includetext"
-            label={'Include preset text'} />
+          <Toggle id="publish-preset-includetext" >
+            Include preset input text (You usually do not need to enable this.)
+          </Toggle>
         </Form>
         <hr/>
         <div class="flex gap-2 justify-end">

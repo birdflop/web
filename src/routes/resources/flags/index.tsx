@@ -289,28 +289,27 @@ export default component$(() => {
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
               }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
-                <Toggle label={<div>
-                  {option.label}
-                </div>} checked={flagsStore[id]} onClick$={(e, el) => {
+                <Toggle checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
-                }} />
-                <div class="flex gap-2">
+                }}>
                   <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.label}
+                </Toggle>
+                <div class="flex gap-2">
                   {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
                 </div>
               </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <option.icon size={24} />
-                <Toggle key={id} label={<div>
-                  {option.label}
-                </div>} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
+                <Toggle key={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
                   if (el.checked) flagsStore.extraFlags.push(id);
                   else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
-                }} />
-                <div class="flex gap-2">
+                }}>
                   <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.label}
+                </Toggle>
+                <div class="flex gap-2">
                   {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
                 </div>
               </>)}

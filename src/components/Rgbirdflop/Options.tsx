@@ -81,8 +81,9 @@ export default component$(() => {
         }
         <div class="flex flex-col gap-1">
           <Toggle id="disperse" checked={rgbStore.disperse}
-            onChange$={(e, el) => { rgbStore.disperse = el.checked; }}
-            label={t('rgb.colors.disperse.always.title@@Always Disperse Colors')} />
+            onChange$={(e, el) => { rgbStore.disperse = el.checked; }}>
+            {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
+          </Toggle>
           <p class="text-xs text-lum-text-secondary">
             {t('rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.')}
           </p>
@@ -90,8 +91,9 @@ export default component$(() => {
         {rgbStore.format.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
             <Toggle id="trimspaces" checked={rgbStore.trimspaces}
-              onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}
-              label={t('rgb.colors.trimSpaces.title@@Trim colors from spaces')} />
+              onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}>
+              {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
+            </Toggle>
             <p class="text-xs text-lum-text-secondary">
               {t('rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs')}
             </p>
@@ -100,8 +102,9 @@ export default component$(() => {
         {rgbStore.format.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
             <Toggle id="lowercase" checked={rgbStore.lowercase}
-              onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}
-              label={t('rgb.colors.lowercase.title@@Lowercase Hex Codes')} />
+              onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}>
+              {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
+            </Toggle>
             <p class="text-xs text-lum-text-secondary">
               {t('rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.')}
             </p>

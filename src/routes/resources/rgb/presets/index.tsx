@@ -293,12 +293,11 @@ export default component$(() => {
               onChange$={(e, el) =>
                 void updateURL({ showPending: el.checked, page: 1 })
               }
-              label={
-                <span class="text-sm whitespace-nowrap">
-                  {t('rgb.presets.showPending.title@@Show pending presets (VERY DANGEROUS)')}
-                </span>
-              }
-            />
+            >
+              <span class="text-sm whitespace-nowrap">
+                {t('rgb.presets.showPending.title@@Show pending presets (VERY DANGEROUS)')}
+              </span>
+            </Toggle>
           </SelectMenuRaw>
           <a href="#my-presets" class="lum-btn font-normal">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
@@ -323,8 +322,9 @@ export default component$(() => {
             onChange$={(e, el) =>
               void updateURL({ showSaved: el.checked, page: 1 })
             }
-            label={t('rgb.presets.showSaved.title@@Show saved presets')}
-          />
+          >
+            {t('rgb.presets.showSaved.title@@Show saved presets')}
+          </Toggle>
           <p class="text-xs text-lum-text-secondary mt-1">
             {t(
               'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
@@ -335,14 +335,11 @@ export default component$(() => {
           id="previewwithsettings"
           checked={presetStore.previewWithSettings}
           onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
-          label={t(
-            'rgb.presets.withCurrentOptions.title@@Show preview with current options',
-          )}
-        />
+        >
+          {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
+        </Toggle>
         <p class="text-xs text-lum-text-secondary mt-1">
-          {t(
-            'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.',
-          )}
+          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 px-2 items-start sm:items-center">
