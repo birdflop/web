@@ -3,150 +3,147 @@
     "colors": {
       "amount": "颜色数量",
       "character": "字符",
-      "charsPer": "Characters per color",
+      "charsPer": "每种颜色的字符数",
       "color": "颜色",
       "customFormat": "自定义格式",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "如果您希望渐变始终均匀分布，请开启此选项。这将禁用渐变图。",
+          "title": "始终分散颜色"
         },
-        "title": "Disperse"
+        "title": "分散"
       },
       "format": "颜色格式",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "如果您想使用小写十六进制代码，请开启此选项。",
+        "title": "小写十六进制代码"
       },
-      "randomize": "Randomize",
+      "randomize": "随机化",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow",
-        "warning": "Warning: Text shadow only works with JSON formatting!"
+        "sync": "与文本颜色同步",
+        "title": "文本阴影",
+        "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },
-      "title": "Colors",
+      "title": "颜色",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "如果您使用空的下划线/删除线，请关闭此选项",
+        "title": "从空格中修剪颜色"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "已复制到剪贴板！",
+    "copyFailed": "复制到剪贴板失败！",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "RGB 文本已成功解码！如果这不是您期望的结果，请尝试更改阈值。",
+        "title": "RGB 文本已解码！"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
-      "experimental": "experimental",
+      "description": "在此处复制粘贴现有的 RGB 文本进行编辑",
+      "disclaimer": "此功能尝试预测渐变中的颜色点和它们的位置，它并不 100% 准确，因此我们建议使用预设功能来保存您的渐变。",
+      "experimental": "实验性",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "如果您获得太多颜色，请尝试更改此值",
+        "title": "阈值"
       },
-      "title": "Decode"
+      "title": "解码"
     },
     "formatting": {
       "bold": "粗体",
       "character": "格式字符",
       "italic": "斜体",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "占位符",
+      "obfuscate": "混淆",
+      "options": "格式选项",
+      "placeholders": "占位符：",
       "strikethrough": "删除线",
       "title": "格式",
       "underline": "下划线"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "在此输入以生成渐变！",
       "preview": {
-        "chat": "Minecraft Chat",
-        "default": "Default",
+        "chat": "Minecraft 聊天",
+        "default": "默认",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Minecraft Tab 页脚",
+          "header": "Minecraft Tab 页眉",
+          "player": "Minecraft Tab 玩家"
         },
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> 在此输入！"
       },
       "title": "输入文本"
     },
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "Copy-paste this for RGB text!",
+      "copied": "RGB 文本已成功复制到您的剪贴板。",
+      "description": "复制粘贴此内容以获得 RGB 文本！",
       "title": "输出"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "前缀/后缀",
     "presets": {
-      "back": "Back to presets",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
-      "createNew": "Create a new preset",
-      "createdAt": "Created at",
-      "find": "Find more presets",
+      "back": "返回预设",
+      "copied": "预设已成功复制到剪贴板！",
+      "copy": "复制",
+      "createNew": "创建新预设",
+      "createdAt": "创建于",
+      "find": "查找更多预设",
       "import": "导入",
-      "importSubtitle": "Load a JSON preset",
+      "importSubtitle": "加载 JSON 预设",
       "imported": {
-        "description": "The preset has been imported successfully.",
-        "title": "成功导入预设！"
+        "description": "预设已成功导入。",
+        "title": "预设导入成功！"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "请将此问题报告给 https://discord.gg/9vUZ9MREVz，并附上您尝试导入的预设。",
+        "title": "无效预设"
       },
-      "myPrivate": "My Private RGBirdflop Presets",
-      "noResults": "No results found.",
-      "nopresets": "No presets saved yet!",
-      "pageInfo": "Page ",
+      "myPrivate": "我的私人 RGBirdflop 预设",
+      "noResults": "未找到结果。",
+      "nopresets": "尚未保存任何预设！",
+      "pageInfo": "第 ",
       "pagination": {
-        "next": "Next",
-        "perPage": "Per page:",
-        "previous": "Previous"
+        "next": "下一页",
+        "perPage": "每页：",
+        "previous": "上一页"
       },
-      "pasteHere": "Paste here",
-      "pending": "This preset is pending review and may not be available to other users yet.",
-      "presetData": "Preset Data",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "在此粘贴",
+      "pending": "此预设正在等待审核，可能尚未对其他用户可用。",
+      "presetData": "预设数据",
+      "publish": "发布您自己的预设",
+      "remove": "删除",
+      "save": "保存",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "预设已成功保存。",
+        "presets": "已保存的预设",
+        "title": "预设已保存！",
+        "warning": "请登录以永久保存预设。"
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "显示待审核的预设（非常危险）"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "开启此选项以仅显示您已保存的预设。",
+        "title": "显示已保存的预设"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first",
-        "title": "Sort by"
+        "nameAZ": "名称 A-Z",
+        "nameZA": "名称 Z-A",
+        "newest": "最新优先",
+        "oldest": "最旧优先",
+        "title": "排序方式"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "认为缺少什么吗？",
+        "two": "在您的个人资料页面发布您自己的预设！"
       },
       "title": "预设",
-      "totalCount": "Total presets: ",
+      "totalCount": "总预设数：",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "导出为 Url",
-        "title": "URL Updated!"
+        "description": "预设已成功导出到 URL！（检查 URL 栏）",
+        "get": "获取 URL",
+        "title": "URL 已更新！"
       },
-      "use": "Use",
+      "use": "使用",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "开启此选项以显示应用了当前选项的预览。",
+        "title": "使用当前选项显示预览"
       }
     }
   }

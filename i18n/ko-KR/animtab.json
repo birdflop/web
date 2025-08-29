@@ -1,13 +1,13 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
+      "interval": "애니메이션 간격",
       "name": "애니메이션 이름",
-      "style": "Animation Style"
+      "style": "애니메이션 스타일"
     },
     "length": "그라데이션 길이",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "다른 플러그인에서 이 도구를 사용하려고 하거나 무엇을 하고 있는지 알고 있는 경우에만 사용하세요.",
       "title": "출력 형식"
     },
     "yamlInput": "YAML 입력"

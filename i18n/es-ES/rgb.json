@@ -1,152 +1,149 @@
 {
   "rgb": {
     "colors": {
-      "amount": "Color Amount",
+      "amount": "Cantidad de colores",
       "character": "Carácter",
-      "charsPer": "Characters per color",
+      "charsPer": "Caracteres por color",
       "color": "Color",
       "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "Active esto si quiere que el degradado siempre esté igualmente distribuido. Esto deshabilitará el mapa de degradado.",
+          "title": "Siempre dispersar colores"
         },
-        "title": "Disperse"
+        "title": "Dispersar"
       },
       "format": "Formato de color",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "Active esto si quiere usar códigos hexadecimales en minúsculas.",
+        "title": "Códigos hexadecimales en minúsculas"
       },
-      "randomize": "Randomize",
+      "randomize": "Aleatorizar",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow",
-        "warning": "Warning: Text shadow only works with JSON formatting!"
+        "sync": "Sincronizar con colores de texto",
+        "title": "Sombra de texto",
+        "warning": "¡Advertencia: La sombra de texto solo funciona con formato JSON!"
       },
-      "title": "Colors",
+      "title": "Colores",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "Desactive esto si está usando subrayados / tachados vacíos",
+        "title": "Recortar colores de espacios"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "¡Copiado al portapapeles!",
+    "copyFailed": "¡Error al copiar al portapapeles!",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "¡Texto RGB decodificado exitosamente! Si esto no es lo que esperaba, intente cambiar el valor del umbral.",
+        "title": "¡Texto RGB decodificado!"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "description": "Copie y pegue un texto RGB existente aquí para editarlo",
+      "disclaimer": "Esta función intenta predecir los puntos de color en los degradados y dónde están, no es 100% precisa y recomendamos usar la función de preajustes en su lugar para guardar sus degradados.",
       "experimental": "experimental",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "Intente cambiar esto si está obteniendo demasiados colores",
+        "title": "Umbral"
       },
-      "title": "Decode"
+      "title": "Decodificar"
     },
     "formatting": {
       "bold": "Negrita",
       "character": "Carácter de formato",
       "italic": "Itálica",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "Marcadores de posición",
+      "obfuscate": "Ofuscar",
+      "options": "Opciones de formato",
+      "placeholders": "Marcadores de posición:",
       "strikethrough": "Tachado",
       "title": "Formato",
       "underline": "Subrayado"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "¡Escriba aquí para generar un degradado!",
       "preview": {
-        "chat": "Minecraft Chat",
-        "default": "Default",
+        "chat": "Chat de Minecraft",
+        "default": "Predeterminado",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Pie de página de Minecraft Tab",
+          "header": "Encabezado de Minecraft Tab",
+          "player": "Jugador de Minecraft Tab"
         },
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> ¡Escriba aquí!"
       },
       "title": "Texto de entrada"
     },
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "Copy-paste this for RGB text!",
+      "copied": "El texto RGB ha sido copiado a su portapapeles exitosamente.",
+      "description": "¡Copie y pegue esto para texto RGB!",
       "title": "Salida"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "Prefijo/Sufijo",
     "presets": {
-      "back": "Back to presets",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
-      "createNew": "Create a new preset",
-      "createdAt": "Created at",
-      "find": "Find more presets",
+      "back": "Volver a preajustes",
+      "copied": "¡Preajuste copiado exitosamente al portapapeles!",
+      "copy": "Copiar",
+      "createNew": "Crear un nuevo preajuste",
+      "createdAt": "Creado en",
+      "find": "Encontrar más preajustes",
       "import": "Importar",
-      "importSubtitle": "Load a JSON preset",
+      "importSubtitle": "Cargar un preajuste JSON",
       "imported": {
-        "description": "The preset has been imported successfully.",
-        "title": "¡Importado con éxito!"
+        "description": "El preajuste ha sido importado exitosamente.",
+        "title": "¡Preajuste importado exitosamente!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "Por favor reporte esto a https://discord.gg/9vUZ9MREVz con el preajuste que intentó importar.",
+        "title": "Preajuste inválido"
       },
-      "myPrivate": "My Private RGBirdflop Presets",
-      "noResults": "No results found.",
-      "nopresets": "No presets saved yet!",
-      "pageInfo": "Page ",
+      "myPrivate": "Mis preajustes privados de RGBirdflop",
+      "noResults": "No se encontraron resultados.",
+      "nopresets": "¡Aún no hay preajustes guardados!",
+      "pageInfo": "Página ",
       "pagination": {
-        "next": "Next",
-        "perPage": "Per page:",
-        "previous": "Previous"
+        "next": "Siguiente",
+        "perPage": "Por página:",
+        "previous": "Anterior"
       },
-      "pasteHere": "Paste here",
-      "pending": "This preset is pending review and may not be available to other users yet.",
-      "presetData": "Preset Data",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "Pegar aquí",
+      "pending": "Este preajuste está pendiente de revisión y puede no estar disponible para otros usuarios aún.",
+      "presetData": "Datos del preajuste",
+      "publish": "Publicar su propio preajuste",
+      "remove": "Eliminar",
+      "save": "Guardar",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "El preajuste ha sido guardado exitosamente.",
+        "presets": "Preajustes guardados",
+        "title": "¡Preajuste guardado!",
+        "warning": "Por favor inicie sesión para guardar preajustes permanentemente."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Mostrar preajustes pendientes (MUY PELIGROSO)"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "Active esto para mostrar solo sus preajustes guardados.",
+        "title": "Mostrar preajustes guardados"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first",
-        "title": "Sort by"
+        "nameAZ": "Nombre A-Z",
+        "nameZA": "Nombre Z-A",
+        "newest": "Más reciente primero",
+        "oldest": "Más antiguo primero",
+        "title": "Ordenar por"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "¿Cree que falta algo?",
+        "two": "¡publique su propio preajuste en su página de perfil!"
       },
-      "title": "Predefinidos",
-      "totalCount": "Total presets: ",
+      "title": "Preajustes",
+      "totalCount": "Total de preajustes: ",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "Get Url",
-        "title": "URL Updated!"
+        "description": "¡Preajuste exportado exitosamente a URL! (Verifique la barra de URL)",
+        "get": "Obtener URL",
+        "title": "¡URL actualizada!"
       },
-      "use": "Use",
+      "use": "Usar",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Active esto para mostrar las vistas previas con las opciones actuales aplicadas.",
+        "title": "Mostrar vista previa con opciones actuales"
       }
     }
   }

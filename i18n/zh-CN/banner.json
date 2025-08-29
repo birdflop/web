@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "命令已成功复制到您的剪贴板。",
+      "title": "命令"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "已复制到剪贴板！",
+    "copyFailed": "复制到剪贴板失败！",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "这是横幅开始的基础颜色。",
+        "title": "基础颜色"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "图案",
+      "title": "选项"
     },
-    "preview": "Preview"
+    "preview": "预览"
   }
 }

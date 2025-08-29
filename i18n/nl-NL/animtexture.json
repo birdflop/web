@@ -1,16 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
+    "animationPreview": "Animatie voorvertoning",
+    "bounce": "Stuit animatie",
     "downloadMCMETA": "Download MCMETA",
     "downloadPNG": "Download PNG",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
-    "textureName": "Textuur Naam",
-    "width": "Width"
+    "duration": "Duur",
+    "height": "Hoogte",
+    "lockDimensions": "Afmetingen vergrendelen",
+    "pngPreview": "PNG voorvertoning",
+    "selectFrames": "Selecteer frame(s) of GIF",
+    "syncDuration": "Duur synchroniseren",
+    "textureName": "Textuur naam",
+    "width": "Breedte"
   }
 }

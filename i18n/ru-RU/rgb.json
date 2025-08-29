@@ -3,150 +3,147 @@
     "colors": {
       "amount": "Количество цветов",
       "character": "Символ",
-      "charsPer": "Characters per color",
+      "charsPer": "Символов на цвет",
       "color": "цвет",
       "customFormat": "Другой формат",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "Включите это, если хотите, чтобы градиент всегда был равномерно распределен. Это отключит карту градиента.",
+          "title": "Всегда рассеивать цвета"
         },
-        "title": "Disperse"
+        "title": "Рассеивать"
       },
       "format": "Формат цвета",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "Включите это, если хотите использовать строчные шестнадцатеричные коды.",
+        "title": "Строчные шестнадцатеричные коды"
       },
-      "randomize": "Randomize",
+      "randomize": "Рандомизировать",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow",
-        "warning": "Warning: Text shadow only works with JSON formatting!"
+        "sync": "Синхронизировать с цветами текста",
+        "title": "Тень текста",
+        "warning": "Предупреждение: Тень текста работает только с JSON форматированием!"
       },
-      "title": "Colors",
+      "title": "Цвета",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "Отключите это, если используете пустые подчеркивания / зачеркивания",
+        "title": "Обрезать цвета от пробелов"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Скопировано в буфер обмена!",
+    "copyFailed": "Не удалось скопировать в буфер обмена!",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "Существующий RGB текст успешно декодирован! Если это не то, что вы ожидали, попробуйте изменить значение порога.",
+        "title": "RGB текст декодирован!"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
-      "experimental": "experimental",
+      "description": "Скопируйте и вставьте существующий RGB текст сюда для редактирования",
+      "disclaimer": "Эта функция пытается предсказать цветовые точки в градиентах и где они находятся, она не на 100% точна, и мы рекомендуем использовать функцию пресетов для сохранения ваших градиентов.",
+      "experimental": "экспериментально",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "Попробуйте изменить это, если получаете слишком много цветов",
+        "title": "Порог"
       },
-      "title": "Decode"
+      "title": "Декодировать"
     },
     "formatting": {
       "bold": "Жирный",
       "character": "Символ формата",
       "italic": "Наклонный",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "Заполнители",
+      "obfuscate": "Запутывать",
+      "options": "Опции форматирования",
+      "placeholders": "Заполнители:",
       "strikethrough": "Зачёркнутый",
       "title": "Форматирование",
       "underline": "Подчёркнутый"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "Введите здесь, чтобы сгенерировать градиент!",
       "preview": {
-        "chat": "Minecraft Chat",
-        "default": "Default",
+        "chat": "Minecraft чат",
+        "default": "По умолчанию",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Minecraft Tab подвал",
+          "header": "Minecraft Tab заголовок",
+          "player": "Minecraft Tab игрок"
         },
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> Введите здесь!"
       },
       "title": "Ваш текст"
     },
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "Copy-paste this for RGB text!",
+      "copied": "RGB текст был успешно скопирован в ваш буфер обмена.",
+      "description": "Скопируйте и вставьте это для RGB текста!",
       "title": "Вывод"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "Префикс/Суффикс",
     "presets": {
-      "back": "Back to presets",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
-      "createNew": "Create a new preset",
-      "createdAt": "Created at",
-      "find": "Find more presets",
+      "back": "Вернуться к пресетам",
+      "copied": "Пресет успешно скопирован в буфер обмена!",
+      "copy": "Копировать",
+      "createNew": "Создать новый пресет",
+      "createdAt": "Создан в",
+      "find": "Найти больше пресетов",
       "import": "Импорт",
-      "importSubtitle": "Load a JSON preset",
+      "importSubtitle": "Загрузить JSON пресет",
       "imported": {
-        "description": "The preset has been imported successfully.",
+        "description": "Пресет был успешно импортирован.",
         "title": "Настройки успешно импортированы!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "Пожалуйста, сообщите об этом на https://discord.gg/9vUZ9MREVz с пресетом, который вы пытались импортировать.",
+        "title": "Неверный пресет"
       },
-      "myPrivate": "My Private RGBirdflop Presets",
-      "noResults": "No results found.",
-      "nopresets": "No presets saved yet!",
-      "pageInfo": "Page ",
+      "myPrivate": "Мои приватные RGBirdflop пресеты",
+      "noResults": "Результаты не найдены.",
+      "nopresets": "Пресеты еще не сохранены!",
+      "pageInfo": "Страница ",
       "pagination": {
-        "next": "Next",
-        "perPage": "Per page:",
-        "previous": "Previous"
+        "next": "Следующая",
+        "perPage": "На странице:",
+        "previous": "Предыдущая"
       },
-      "pasteHere": "Paste here",
-      "pending": "This preset is pending review and may not be available to other users yet.",
-      "presetData": "Preset Data",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "Вставить сюда",
+      "pending": "Этот пресет ожидает проверки и может быть недоступен для других пользователей.",
+      "presetData": "Данные пресета",
+      "publish": "Опубликовать свой собственный пресет",
+      "remove": "Удалить",
+      "save": "Сохранить",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "Пресет был успешно сохранен.",
+        "presets": "Сохраненные пресеты",
+        "title": "Пресет сохранен!",
+        "warning": "Пожалуйста, войдите в систему, чтобы сохранить пресеты навсегда."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Показать ожидающие пресеты (ОЧЕНЬ ОПАСНО)"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "Включите это, чтобы показать только ваши сохраненные пресеты.",
+        "title": "Показать сохраненные пресеты"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first",
-        "title": "Sort by"
+        "nameAZ": "Имя А-Я",
+        "nameZA": "Имя Я-А",
+        "newest": "Сначала новые",
+        "oldest": "Сначала старые",
+        "title": "Сортировать по"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "Думаете, что-то отсутствует?",
+        "two": "опубликуйте свой собственный пресет на странице профиля!"
       },
       "title": "Пресеты",
-      "totalCount": "Total presets: ",
+      "totalCount": "Всего пресетов: ",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "Get Url",
-        "title": "URL Updated!"
+        "description": "Пресет успешно экспортирован в URL! (Проверьте строку URL)",
+        "get": "Получить URL",
+        "title": "URL обновлен!"
       },
-      "use": "Use",
+      "use": "Использовать",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Включите это, чтобы показать предварительные просмотры с примененными текущими опциями.",
+        "title": "Показать предварительный просмотр с текущими опциями"
       }
     }
   }

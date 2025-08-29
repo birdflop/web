@@ -1,77 +1,77 @@
 {
   "flags": {
     "autoRestart": {
-      "description": "중지된 후 자동으로 다시 시작할지 여부",
+      "description": "중지된 후 자동으로 재시작할지 여부.",
       "label": "자동 재시작"
     },
     "config": {
-      "description": "시작 스크립트에 추가 및 수정할 수 있는 다양한 사항들입니다.",
-      "label": "설정"
+      "description": "시작 스크립트에 할 수 있는 다양한 추가 및 수정 사항.",
+      "label": "구성"
     },
-    "description": "The collection of start arguments that typically optimize the server's performance",
+    "description": "일반적으로 서버 성능을 최적화하는 시작 인수 모음",
     "environment": {
       "command": "명령",
-      "description": "서버가 실행되는 운영 체제입니다.",
-      "label": "Environment",
-      "linux": "리녹스",
-      "macos": "맥OS",
+      "description": "서버가 실행되는 운영 체제.",
+      "label": "환경",
+      "linux": "Linux",
+      "macos": "macOS",
       "pterodactyl": "Pterodactyl",
-      "windows": "윈도우"
+      "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
-        "description": "GraalVM 사용자에게만 제공되는 벤치마크 (G1GC)를 위한 추가 성능 플래그",
-        "label": "벤치마크 (GraalVM)"
+        "description": "GraalVM 사용자 전용 Benchmarked (G1GC)를 위한 추가 성능 플래그.",
+        "label": "Benchmarked (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
-        "label": "MeowIce's Flags (GraalVM)"
+        "description": "GraalVM 사용자 전용 MeowIce의 플래그를 위한 추가 성능 플래그.",
+        "label": "MeowIce의 플래그 (GraalVM)"
       },
       "vectors": {
-        "description": "Pufferfish 및 그의 파생체에서 지도 항목 렌더링을 최적화하기 위해 SIMD 작업을 활성화",
-        "label": "현대적인 벡터"
+        "description": "Pufferfish와 그 포크에서 맵 아이템 렌더링을 최적화하기 위한 SIMD 작업을 활성화합니다.",
+        "label": "현대적 벡터"
       }
     },
     "fileName": {
-      "description": "서버를 시작하는 데 사용될 파일 이름",
+      "description": "서버를 시작하는 데 사용할 파일의 이름.",
       "label": "파일 이름"
     },
     "flags": {
-      "aikars": "Aikar 플래그",
-      "benchmarked": "벤치마크",
-      "etils": "Etil 플래그",
-      "hillttys": "hilltty 플래그",
+      "aikars": "Aikar의 플래그",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil의 플래그",
+      "hillttys": "hilltty의 플래그",
       "label": "플래그",
-      "meowice": "MeowIce's Flags",
+      "meowice": "MeowIce의 플래그",
       "none": "없음",
-      "obyduxs": "Obydux 플래그"
+      "obyduxs": "Obydux의 플래그"
     },
     "gui": {
-      "description": "내장된 서버 관리 GUI를 표시할지 여부",
-      "label": "GUI 사용"
+      "description": "내장된 서버 관리 GUI를 표시할지 여부.",
+      "label": "GUI 없음"
     },
     "memory": {
-      "description": "서버에 할당할 메모리 (RAM) 양",
+      "description": "서버에 할당할 메모리(RAM)의 양.",
       "label": "메모리"
     },
     "script": {
-      "description": "서버를 시작하는 데 사용할 수 있는 결과 스크립트. 이 파일을 {{fileName}}과 동일한 위치에 두고 실행하십시오!",
+      "description": "서버를 시작하는 데 사용할 수 있는 결과 스크립트. 이 파일을 {{fileName}}과 같은 위치에 배치한 다음 실행하세요!",
       "label": "스크립트"
     },
     "serverType": {
-      "fabric": "패브릭",
-      "forge": "포지",
-      "paper": "페이퍼",
-      "purpur": "퍼퍼",
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
       "velocity": "Velocity",
-      "waterfall": "워터폴"
+      "waterfall": "Waterfall"
     },
     "software": {
-      "description": "Minecraft 서버가 실행될 소프트웨어입니다.",
+      "description": "Minecraft 서버가 실행될 소프트웨어.",
       "label": "소프트웨어"
     },
     "variables": {
-      "description": "스크립트 내에서 환경 변수를 사용하여 메모리, 파일 이름 및 기타 자주 변경되는 요소 정의 여부",
+      "description": "메모리, 파일 이름 및 기타 일반적으로 변경되는 요소를 정의하기 위해 스크립트 내에서 환경 변수를 사용할지 여부.",
       "label": "변수 사용"
     }
   }

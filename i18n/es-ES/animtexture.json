@@ -1,18 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
+    "animationPreview": "Vista previa de animación",
+    "bounce": "Animación de rebote",
     "downloadMCMETA": "Descargar MCMETA",
     "downloadPNG": "Descargar PNG",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "subtitle": "Fácilmente fusiona texturas para animaciones de paquetes de recursos",
-    "syncDuration": "Sync Duration",
-    "textureName": "Nombre de la textura",
-    "title": "Texturas animadas",
-    "width": "Width"
+    "duration": "Duración",
+    "height": "Altura",
+    "lockDimensions": "Bloquear dimensiones",
+    "pngPreview": "Vista previa PNG",
+    "selectFrames": "Seleccionar marco(s) o GIF",
+    "syncDuration": "Sincronizar duración",
+    "textureName": "Nombre de textura",
+    "width": "Ancho"
   }
 }

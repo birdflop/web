@@ -1,16 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
-    "downloadMCMETA": "MCMETA'yı İndirin",
-    "downloadPNG": "PNG İndir",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
-    "textureName": "Doku Adı",
-    "width": "Width"
+    "animationPreview": "Animasyon önizlemesi",
+    "bounce": "Zıplama animasyonu",
+    "downloadMCMETA": "MCMETA indir",
+    "downloadPNG": "PNG indir",
+    "duration": "Süre",
+    "height": "Yükseklik",
+    "lockDimensions": "Boyutları kilitle",
+    "pngPreview": "PNG önizlemesi",
+    "selectFrames": "Kare(ler) veya GIF seç",
+    "syncDuration": "Süreyi senkronize et",
+    "textureName": "Doku adı",
+    "width": "Genişlik"
   }
 }

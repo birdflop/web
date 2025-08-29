@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "Komut başarıyla panonuza kopyalandı.",
+      "title": "Komut"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Panoya kopyalandı!",
+    "copyFailed": "Panoya kopyalanamadı!",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "Bu, başlamak için kullanılacak bayrağın temel rengidir.",
+        "title": "Temel renk"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "Desenler",
+      "title": "Seçenekler"
     },
-    "preview": "Preview"
+    "preview": "Önizleme"
   }
 }

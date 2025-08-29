@@ -1,16 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
+    "animationPreview": "애니메이션 미리보기",
+    "bounce": "바운스 애니메이션",
     "downloadMCMETA": "MCMETA 다운로드",
     "downloadPNG": "PNG 다운로드",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
+    "duration": "지속 시간",
+    "height": "높이",
+    "lockDimensions": "치수 잠금",
+    "pngPreview": "PNG 미리보기",
+    "selectFrames": "프레임 또는 GIF 선택",
+    "syncDuration": "지속 시간 동기화",
     "textureName": "텍스처 이름",
-    "width": "Width"
+    "width": "너비"
   }
 }

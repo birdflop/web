@@ -1,16 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
+    "animationPreview": "动画预览",
+    "bounce": "弹跳动画",
     "downloadMCMETA": "下载 MCMETA",
     "downloadPNG": "下载 PNG",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
-    "textureName": "材质名称",
-    "width": "Width"
+    "duration": "持续时间",
+    "height": "高度",
+    "lockDimensions": "锁定尺寸",
+    "pngPreview": "PNG 预览",
+    "selectFrames": "选择帧或 GIF",
+    "syncDuration": "同步持续时间",
+    "textureName": "纹理名称",
+    "width": "宽度"
   }
 }

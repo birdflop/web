@@ -1,13 +1,13 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
+      "interval": "Intervalo de animación",
       "name": "Nombre de la animación",
-      "style": "Animation Style"
+      "style": "Estilo de animación"
     },
     "length": "Longitud de la gradiente",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "Solo use esto si está intentando usar esta herramienta para un plugin diferente o sabe lo que está haciendo.",
       "title": "Formato de salida"
     },
     "yamlInput": "Entrada YAML"

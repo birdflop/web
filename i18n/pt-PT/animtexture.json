@@ -1,16 +1,16 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
-    "downloadMCMETA": "Download do MCMETA",
-    "downloadPNG": "Download do PNG",
-    "duration": "Duration",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
+    "animationPreview": "Pré-visualização da animação",
+    "bounce": "Animação de salto",
+    "downloadMCMETA": "Transferir MCMETA",
+    "downloadPNG": "Transferir PNG",
+    "duration": "Duração",
+    "height": "Altura",
+    "lockDimensions": "Bloquear dimensões",
+    "pngPreview": "Pré-visualização PNG",
+    "selectFrames": "Selecionar frame(s) ou GIF",
+    "syncDuration": "Sincronizar duração",
     "textureName": "Nome da textura",
-    "width": "Width"
+    "width": "Largura"
   }
 }

@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "El comando ha sido copiado a su portapapeles exitosamente.",
+      "title": "Comando"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "¡Copiado al portapapeles!",
+    "copyFailed": "¡Error al copiar al portapapeles!",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "Este es el color base del estandarte para comenzar.",
+        "title": "Color base"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "Patrones",
+      "title": "Opciones"
     },
-    "preview": "Preview"
+    "preview": "Vista previa"
   }
 }

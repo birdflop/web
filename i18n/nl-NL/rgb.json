@@ -1,152 +1,149 @@
 {
   "rgb": {
     "colors": {
-      "amount": "Color Amount",
-      "character": "Letter",
-      "charsPer": "Characters per color",
+      "amount": "Aantal kleuren",
+      "character": "Karakter",
+      "charsPer": "Karakters per kleur",
       "color": "Kleur",
-      "customFormat": "Eigen Opmaak",
+      "customFormat": "Aangepast formaat",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "Zet dit aan als je wilt dat de gradiënt altijd gelijkmatig verdeeld is. Dit zal de gradiënt kaart uitschakelen.",
+          "title": "Altijd kleuren verspreiden"
         },
-        "title": "Disperse"
+        "title": "Verspreiden"
       },
-      "format": "Kleur Opmaak",
+      "format": "Kleurformaat",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "Zet dit aan als je kleine hexadecimale codes wilt gebruiken.",
+        "title": "Kleine hexadecimale codes"
       },
-      "randomize": "Randomize",
+      "randomize": "Willekeurig maken",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow",
-        "warning": "Warning: Text shadow only works with JSON formatting!"
+        "sync": "Synchroniseren met tekstkleuren",
+        "title": "Tekstschaduw",
+        "warning": "Waarschuwing: Tekstschaduw werkt alleen met JSON-opmaak!"
       },
-      "title": "Colors",
+      "title": "Kleuren",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "Zet dit uit als je lege onderstrepingen / doorhalingen gebruikt",
+        "title": "Kleuren van spaties afkappen"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Gekopieerd naar klembord!",
+    "copyFailed": "Kon niet naar klembord kopiëren!",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "De bestaande RGB-tekst is succesvol gedecodeerd! Als dit niet is wat je verwachtte, probeer dan de drempelwaarde te wijzigen.",
+        "title": "RGB-tekst gedecodeerd!"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
-      "experimental": "experimental",
+      "description": "Kopieer en plak hier een bestaande RGB-tekst om deze te bewerken",
+      "disclaimer": "Deze functie probeert de kleurpunten in de gradiënten en waar ze zich bevinden te voorspellen, het is niet 100% nauwkeurig en we raden aan om in plaats daarvan de voorinstellingen functie te gebruiken om je gradiënten op te slaan.",
+      "experimental": "experimenteel",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "Probeer dit te wijzigen als je te veel kleuren krijgt",
+        "title": "Drempel"
       },
-      "title": "Decode"
+      "title": "Decoderen"
     },
     "formatting": {
-      "bold": "Dik",
-      "character": "Opmaak Letter",
-      "italic": "Schuingedrukt",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "Plaatsvervangers",
-      "strikethrough": "Doorgestreept",
+      "bold": "Vet",
+      "character": "Opmaak karakter",
+      "italic": "Cursief",
+      "obfuscate": "Verduisteren",
+      "options": "Opmaak opties",
+      "placeholders": "Plaatshouders:",
+      "strikethrough": "Doorhalen",
       "title": "Opmaak",
-      "underline": "Understreept"
+      "underline": "Onderstrepen"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "Typ hier om een gradiënt te genereren!",
       "preview": {
         "chat": "Minecraft Chat",
-        "default": "Default",
+        "default": "Standaard",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Minecraft Tab Voettekst",
+          "header": "Minecraft Tab Koptekst",
+          "player": "Minecraft Tab Speler"
         },
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> Typ hier!"
       },
-      "title": "Tekst"
+      "title": "Invoertekst"
     },
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "Copy-paste this for RGB text!",
-      "title": "Output"
+      "copied": "De RGB-tekst is succesvol naar je klembord gekopieerd.",
+      "description": "Kopieer en plak dit voor RGB-tekst!",
+      "title": "Uitvoer"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "Voorvoegsel/Achtervoegsel",
     "presets": {
-      "back": "Back to presets",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
-      "createNew": "Create a new preset",
-      "createdAt": "Created at",
-      "find": "Find more presets",
+      "back": "Terug naar voorinstellingen",
+      "copied": "Voorinstelling succesvol naar klembord gekopieerd!",
+      "copy": "Kopiëren",
+      "createNew": "Maak een nieuwe voorinstelling",
+      "createdAt": "Gemaakt op",
+      "find": "Vind meer voorinstellingen",
       "import": "Importeren",
-      "importSubtitle": "Load a JSON preset",
+      "importSubtitle": "Laad een JSON-voorinstelling",
       "imported": {
-        "description": "The preset has been imported successfully.",
-        "title": "Successfully imported preset!"
+        "description": "De voorinstelling is succesvol geïmporteerd.",
+        "title": "Voorinstelling succesvol geïmporteerd!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "Rapporteer dit alstublieft aan https://discord.gg/9vUZ9MREVz met de voorinstelling die u probeerde te importeren.",
+        "title": "Ongeldige voorinstelling"
       },
-      "myPrivate": "My Private RGBirdflop Presets",
-      "noResults": "No results found.",
-      "nopresets": "No presets saved yet!",
-      "pageInfo": "Page ",
+      "myPrivate": "Mijn privé RGBirdflop voorinstellingen",
+      "noResults": "Geen resultaten gevonden.",
+      "nopresets": "Nog geen voorinstellingen opgeslagen!",
+      "pageInfo": "Pagina ",
       "pagination": {
-        "next": "Next",
-        "perPage": "Per page:",
-        "previous": "Previous"
+        "next": "Volgende",
+        "perPage": "Per pagina:",
+        "previous": "Vorige"
       },
-      "pasteHere": "Paste here",
-      "pending": "This preset is pending review and may not be available to other users yet.",
-      "presetData": "Preset Data",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "Plak hier",
+      "pending": "Deze voorinstelling wacht op beoordeling en is mogelijk nog niet beschikbaar voor andere gebruikers.",
+      "presetData": "Voorinstelling gegevens",
+      "publish": "Publiceer je eigen voorinstelling",
+      "remove": "Verwijderen",
+      "save": "Opslaan",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "De voorinstelling is succesvol opgeslagen.",
+        "presets": "Opgeslagen voorinstellingen",
+        "title": "Voorinstelling opgeslagen!",
+        "warning": "Log in om voorinstellingen permanent op te slaan."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Toon wachtende voorinstellingen (ZEER GEVAARLIJK)"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "Zet dit aan om alleen je opgeslagen voorinstellingen te tonen.",
+        "title": "Toon opgeslagen voorinstellingen"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first",
-        "title": "Sort by"
+        "nameAZ": "Naam A-Z",
+        "nameZA": "Naam Z-A",
+        "newest": "Nieuwste eerst",
+        "oldest": "Oudste eerst",
+        "title": "Sorteren op"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "Denk je dat er iets ontbreekt?",
+        "two": "publiceer je eigen voorinstelling op je profielpagina!"
       },
-      "title": "Vooraf ingesteld",
-      "totalCount": "Total presets: ",
+      "title": "Voorinstellingen",
+      "totalCount": "Totaal voorinstellingen: ",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "Get Url",
-        "title": "URL Updated!"
+        "description": "Voorinstelling succesvol naar URL geëxporteerd! (Controleer de URL-balk)",
+        "get": "Krijg URL",
+        "title": "URL bijgewerkt!"
       },
-      "use": "Use",
+      "use": "Gebruiken",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Zet dit aan om de voorvertoningen te tonen met de huidige opties toegepast.",
+        "title": "Toon voorvertoning met huidige opties"
       }
     }
   }

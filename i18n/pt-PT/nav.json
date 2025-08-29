@@ -1,9 +1,9 @@
 {
   "nav": {
     "404": {
-      "description": "Whoops! You've hit a dead-end.",
-      "home": "Go back home",
-      "title": "404: Page not found"
+      "description": "Ups! Chegou a um beco sem saída.",
+      "home": "Voltar ao início",
+      "title": "404: Página não encontrada"
     },
     "cookies": {
       "acknowledge": "Okay",
@@ -11,83 +11,83 @@
       "optOut": "Turn off cookies",
       "title": "Cookies"
     },
-    "docs": "Docs",
+    "docs": "Documentação",
     "hosting": {
-      "billing": "Billing",
+      "billing": "Faturação",
       "nodeStats": {
-        "description": "Check the status of Birdflop's server nodes.",
-        "overview": "Overview",
-        "title": "Node Stats",
-        "webServices": "Web Services"
+        "description": "Verificar o estado dos nós do servidor do Birdflop.",
+        "overview": "Visão geral",
+        "title": "Estatísticas do nó",
+        "webServices": "Serviços web"
       },
-      "panel": "Panel",
-      "plans": "Plans",
-      "title": "Hosting"
+      "panel": "Painel",
+      "plans": "Planos",
+      "title": "Alojamento"
     },
-    "privacyPolicy": "Politica de privacidade",
+    "privacyPolicy": "Política de privacidade",
     "profile": {
-      "hey": "Hey",
-      "login": "Login",
-      "logout": "Logout",
+      "hey": "Olá",
+      "login": "Iniciar sessão",
+      "logout": "Terminar sessão",
       "notLoggedIn": {
-        "description": "Click below to login",
-        "title": "You are not logged in!"
+        "description": "Clique abaixo para iniciar sessão",
+        "title": "Não iniciou sessão!"
       },
-      "title": "Profile"
+      "title": "Perfil"
     },
     "resources": {
       "animatedTAB": {
-        "description": "Plugin TAB para criar animações com gradientes",
+        "description": "Criador de animação de gradiente do plugin TAB",
         "title": "TAB animado"
       },
       "animatedTextures": {
-        "description": "Junta texturas animadas facilmente para animações de packs de recursos",
-        "title": "Texturas Animadas"
+        "description": "Fusione facilmente texturas para animações de pacotes de recursos",
+        "title": "Texturas animadas"
       },
       "banner": {
-        "description": "Easily generate banner designs for Minecraft.",
-        "title": "Banner Generator"
+        "description": "Gere facilmente designs de bandeira para Minecraft.",
+        "title": "Gerador de bandeira"
       },
-      "description": "Here you can find all of Birdflop's public resources.",
+      "description": "Aqui pode encontrar todos os recursos públicos do Birdflop.",
       "flags": {
-        "description": "A simple script generator to start your Minecraft servers with optimal flags",
-        "title": "Flags Generator"
+        "description": "Um gerador de script simples para iniciar os seus servidores Minecraft com bandeiras óptimas",
+        "title": "Gerador de bandeiras"
       },
       "gradientTools": {
-        "description": "Tools to help you create gradient text in Minecraft.",
-        "title": "Gradient Tools"
+        "description": "Ferramentas para ajudá-lo a criar texto de gradiente em Minecraft.",
+        "title": "Ferramentas de gradiente"
       },
       "hexGradient": {
-        "description": "Criador de cores em gradiente hexadecimal, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "description": "Gerador de texto de gradiente hexadecimal, alimentado pelo Birdflop, um host Minecraft sem fins lucrativos 501(c)(3).",
         "title": "RGBirdflop"
       },
       "hexGradientPresets": {
-        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
-        "title": "RGBirdflop Presets"
+        "description": "Aqui pode encontrar e guardar, copiar ou usar diretamente predefinições para uso no RGBirdflop.",
+        "title": "Predefinições RGBirdflop"
       },
       "miscellaneousTools": {
-        "description": "Miscellaneous tools to help with random miscellaneous things.",
-        "title": "Miscellaneous Tools"
+        "description": "Ferramentas diversas para ajudar com coisas diversas aleatórias.",
+        "title": "Ferramentas diversas"
       },
-      "more": "More Resources",
+      "more": "Mais recursos",
       "paperTimings": {
-        "description": "Analyze Paper Timings and get possible optimizations",
-        "title": "Timings do Paper"
+        "description": "Analise Paper Timings e obtenha possíveis otimizações",
+        "title": "Paper Timings"
       },
       "serverTools": {
-        "description": "Tools to help configure and setup minecraft servers.",
-        "title": "Server Tools"
+        "description": "Ferramentas para ajudar a configurar e configurar servidores Minecraft.",
+        "title": "Ferramentas do servidor"
       },
       "sparkProfile": {
-        "description": "Analyze a Spark Profile and get possible optimizations",
-        "title": "Perfil spark"
+        "description": "Analise um perfil Spark e obtenha possíveis otimizações",
+        "title": "Perfil Spark"
       },
       "tabAnimationPreview": {
-        "description": "Visualize as animações do TAB sem a necessidade de colocá-las no jogo",
-        "title": "Visualizador da animação do TAB"
+        "description": "Pré-visualize animações TAB sem necessidade de as colocar no jogo",
+        "title": "Pré-visualização da animação TAB"
       },
-      "title": "Resources"
+      "title": "Recursos"
     },
-    "termsofService": "Terms of Service"
+    "termsofService": "Termos de serviço"
   }
 }
