@@ -16,7 +16,9 @@
       "billing": "Billing",
       "nodeStats": {
         "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "overview": "Overview",
+        "title": "Node Stats",
+        "webServices": "Web Services"
       },
       "panel": "Panel",
       "plans": "Plans",
@@ -51,22 +53,30 @@
         "description": "一个简单的脚本生成器，用于以最佳标志启动Minecraft服务器。",
         "title": "标志生成器"
       },
+      "gradientTools": {
+        "description": "Tools to help you create gradient text in Minecraft.",
+        "title": "Gradient Tools"
+      },
       "hexGradient": {
         "description": "创建十六进制颜色渐变, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
-      },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
       },
       "hexGradientPresets": {
         "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
         "title": "RGBirdflop Presets"
       },
+      "miscellaneousTools": {
+        "description": "Miscellaneous tools to help with random miscellaneous things.",
+        "title": "Miscellaneous Tools"
+      },
       "more": "更多资源",
       "paperTimings": {
         "description": "Analyze Paper Timings and get possible optimizations",
         "title": "Paper计时"
+      },
+      "serverTools": {
+        "description": "Tools to help configure and setup minecraft servers.",
+        "title": "Server Tools"
       },
       "sparkProfile": {
         "description": "Analyze a Spark Profile and get possible optimizations",

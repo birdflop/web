@@ -18,9 +18,11 @@
         "description": "Turn this on if you want to use lowercase hex codes.",
         "title": "Lowercase Hex Codes"
       },
+      "randomize": "Randomize",
       "shadow": {
         "sync": "Sync with text colors",
-        "title": "Text Shadow"
+        "title": "Text Shadow",
+        "warning": "Warning: Text shadow only works with JSON formatting!"
       },
       "title": "Colors",
       "trimSpaces": {
@@ -37,6 +39,7 @@
       },
       "description": "Copy-paste an existing RGB text here to edit it",
       "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "experimental": "experimental",
       "threshold": {
         "description": "Try changing this around if you're getting too many colors",
         "title": "Threshold"
@@ -64,12 +67,10 @@
           "header": "Minecraft Tab Header",
           "player": "Minecraft Tab Player"
         },
-        "title": "Preview Style",
         "typeHere": "<RGBirdflop> Type here!"
       },
       "title": "입력 텍스트"
     },
-    "options": "Options",
     "output": {
       "copied": "The RGB text has been copied to your clipboard successfully.",
       "description": "Copy-paste this for RGB text!",
@@ -77,9 +78,12 @@
     },
     "prefixsuffix": "Prefix/Suffix",
     "presets": {
-      "browse": "Browse",
+      "back": "Back to presets",
       "copied": "Successfully copied preset to clipboard!",
       "copy": "Copy",
+      "createNew": "Create a new preset",
+      "createdAt": "Created at",
+      "find": "Find more presets",
       "import": "가져오기",
       "importSubtitle": "Load a JSON preset",
       "imported": {
@@ -90,14 +94,18 @@
         "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
         "title": "Invalid Preset"
       },
-      "load": "Load saved preset",
+      "myPrivate": "My Private RGBirdflop Presets",
       "noResults": "No results found.",
+      "nopresets": "No presets saved yet!",
       "pageInfo": "Page ",
       "pagination": {
         "next": "Next",
+        "perPage": "Per page:",
         "previous": "Previous"
       },
       "pasteHere": "Paste here",
+      "pending": "This preset is pending review and may not be available to other users yet.",
+      "presetData": "Preset Data",
       "private": "My RGBirdflop Presets",
       "publish": "Publish your own preset",
       "remove": "Remove",
@@ -121,7 +129,8 @@
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
         "newest": "Newest first",
-        "oldest": "Oldest first"
+        "oldest": "Oldest first",
+        "title": "Sort by"
       },
       "suggestion": {
         "one": "Think something is missing?",

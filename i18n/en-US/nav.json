@@ -5,18 +5,14 @@
       "home": "Go back home",
       "title": "404: Page not found"
     },
-    "cookies": {
-      "acknowledge": "Okay",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Turn off cookies",
-      "title": "Cookies"
-    },
     "docs": "Docs",
     "hosting": {
       "billing": "Billing",
       "nodeStats": {
         "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "overview": "Overview",
+        "title": "Node Stats",
+        "webServices": "Web Services"
       },
       "panel": "Panel",
       "plans": "Plans",
@@ -51,22 +47,30 @@
         "description": "A simple script generator to start your Minecraft servers with optimal flags",
         "title": "Flags Generator"
       },
+      "gradientTools": {
+        "description": "Tools to help you create gradient text in Minecraft.",
+        "title": "Gradient Tools"
+      },
       "hexGradient": {
         "description": "Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
-      },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
       },
       "hexGradientPresets": {
         "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
         "title": "RGBirdflop Presets"
       },
+      "miscellaneousTools": {
+        "description": "Miscellaneous tools to help with random miscellaneous things.",
+        "title": "Miscellaneous Tools"
+      },
       "more": "More Resources",
       "paperTimings": {
         "description": "Analyze Paper Timings and get possible optimizations",
         "title": "Paper Timings"
+      },
+      "serverTools": {
+        "description": "Tools to help configure and setup minecraft servers.",
+        "title": "Server Tools"
       },
       "sparkProfile": {
         "description": "Analyze a Spark Profile and get possible optimizations",

@@ -16,7 +16,9 @@
       "billing": "Billing",
       "nodeStats": {
         "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "overview": "Overview",
+        "title": "Node Stats",
+        "webServices": "Web Services"
       },
       "panel": "Panel",
       "plans": "Plans",
@@ -51,22 +53,30 @@
         "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
         "title": "플래그 생성기"
       },
+      "gradientTools": {
+        "description": "Tools to help you create gradient text in Minecraft.",
+        "title": "Gradient Tools"
+      },
       "hexGradient": {
         "description": "헥스 코드 색상 그라데이션 생성기, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "헥스 코드 그라데이션"
-      },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
       },
       "hexGradientPresets": {
         "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
         "title": "RGBirdflop Presets"
       },
+      "miscellaneousTools": {
+        "description": "Miscellaneous tools to help with random miscellaneous things.",
+        "title": "Miscellaneous Tools"
+      },
       "more": "More Resources",
       "paperTimings": {
         "description": "Analyze Paper Timings and get possible optimizations",
         "title": "Paper Timings"
+      },
+      "serverTools": {
+        "description": "Tools to help configure and setup minecraft servers.",
+        "title": "Server Tools"
       },
       "sparkProfile": {
         "description": "Analyze a Spark Profile and get possible optimizations",

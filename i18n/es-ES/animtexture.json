@@ -2,12 +2,9 @@
   "animtexture": {
     "animationPreview": "Animation Preview",
     "bounce": "Bounce Animation",
-    "cumulative": "Acumulativo (Activa esto si los fotogramas de gif están rotos)",
     "downloadMCMETA": "Descargar MCMETA",
     "downloadPNG": "Descargar PNG",
     "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "Generar",
     "height": "Height",
     "lockDimensions": "Lock Dimensions",
     "pngPreview": "PNG Preview",

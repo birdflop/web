@@ -2,12 +2,9 @@
   "animtexture": {
     "animationPreview": "Animation Preview",
     "bounce": "Bounce Animation",
-    "cumulative": "Kümülatif (Gif kareleri bozuksa bunu açın)",
     "downloadMCMETA": "MCMETA'yı İndirin",
     "downloadPNG": "PNG İndir",
     "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "Oluşturmak",
     "height": "Height",
     "lockDimensions": "Lock Dimensions",
     "pngPreview": "PNG Preview",

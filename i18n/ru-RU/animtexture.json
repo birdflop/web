@@ -2,12 +2,10 @@
   "animtexture": {
     "animationPreview": "Предварительный просмотр анимазнии",
     "bounce": "Анимация отскока",
-    "cumulative": "Кумулятивный (Включите если фреймы gif сломаны)",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
     "duration": "Длительность",
     "framePreview": "Предварительный просмотр кадра",
-    "generate": "Генерировать",
     "height": "Высота",
     "lockDimensions": "Зафиксировать размеры",
     "pngPreview": "Предварительный просмотр PNG",

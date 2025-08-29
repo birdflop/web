@@ -2,12 +2,10 @@
   "animtexture": {
     "animationPreview": "Vorschau der Animation",
     "bounce": "Springende Animation",
-    "cumulative": "Kumulativ (Anschalten falls GIF Bilder nicht funktionieren.)",
     "downloadMCMETA": "MCMETA Herunterladen",
     "downloadPNG": "PNG Herunterladen",
     "duration": "Dauer",
     "framePreview": "Vorschau der Bilder",
-    "generate": "Generieren",
     "height": "Höhe",
     "lockDimensions": "Dimensionen feststellen",
     "pngPreview": "PNG Vorschau",

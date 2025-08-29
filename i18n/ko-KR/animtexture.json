@@ -2,12 +2,9 @@
   "animtexture": {
     "animationPreview": "Animation Preview",
     "bounce": "Bounce Animation",
-    "cumulative": "누적 (GIF 프레임이 깨진 경우 이 기능을 켜세요)",
     "downloadMCMETA": "MCMETA 다운로드",
     "downloadPNG": "PNG 다운로드",
     "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "생성",
     "height": "Height",
     "lockDimensions": "Lock Dimensions",
     "pngPreview": "PNG Preview",

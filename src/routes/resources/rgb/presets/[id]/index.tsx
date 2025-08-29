@@ -203,10 +203,10 @@ export default component$(() => {
             {loading.value && <div class="lum-loading w-3 h-3" />}
             {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
               ? <span class="text-red-300 flex gap-3">
-                <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
+                <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
               </span>
               : <span class="text-green-300 flex gap-3">
-                <Save size={20}  /> {t$('rgb.presets.save@@Save')}
+                <Save size={20}  /> {t('rgb.presets.save@@Save')}
               </span>}
           </button>
         </div>
