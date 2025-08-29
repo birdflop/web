@@ -26,19 +26,18 @@
 			"migrations_dir": "./drizzle/migrations",
 			"experimental_remote": true
 		},
-	]
-	/**
+	],
 	"routes": [
-    {
-      "pattern": "birdflop.com",
-      "custom_domain": true
-    },
-    {
-      "pattern": "www.birdflop.com",
-      "custom_domain": true
-    }
-  ]
-	**/
+		{
+			"pattern": "beta.birdflop.com",
+			"custom_domain": true,
+			"zone_id": "19cc9ed61bbd27fd0ae5adf8230421b2"
+		},
+		/*
+		{ "pattern": "birdflop.com", "custom_domain": true },
+		{ "pattern": "www.birdflop.com", "custom_domain": true }
+		*/
+	]
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
