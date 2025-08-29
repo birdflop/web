@@ -360,7 +360,7 @@ export default component$(() => {
                 const [newSortBy, newSortOrder] = el.value.split('-');
                 void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
               }}
-              title="Sort presets by"
+              title={t('rgb.presets.sortBy.title@@Sort by')}
               values = {[
                 {
                   name: t('rgb.presets.sortBy.newest@@Newest first'),

@@ -184,7 +184,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         publishRefs.modalRef.value?.showModal();
         publishRefs.selectedPreset.value = JSON.stringify(Preset.preset);
       }}>
-        <Send size={20} /> Publish
+        <Send size={20} /> {t('rgb.presets.publish@@Publish')}
       </button>}
     </div>
   </div>;

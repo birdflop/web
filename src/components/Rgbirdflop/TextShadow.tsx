@@ -18,8 +18,8 @@ export default component$(({ hidden }: {
       'opacity-100 pointer-events-auto': !hidden,
     }} id="decode">
       {rgbStore.format.color != 'JSON' &&
-        <p class="text-red-500">
-          This feature only works with the vanilla JSON-based Minecraft formatting.
+        <p class="text-red-500!">
+          {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON formatting!')}
         </p>
       }
       <Toggle id="syncshadow" checked={rgbStore.syncshadow}

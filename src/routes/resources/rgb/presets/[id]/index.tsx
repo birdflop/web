@@ -114,7 +114,7 @@ export default component$(() => {
         <hr/>
         <div class="flex">
           <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-            <ChevronLeft size={20} /> Back to Presets
+            <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
           </Link>
         </div>
         {
@@ -219,7 +219,7 @@ export default component$(() => {
 
           <div class="lum-card p-6">
             <label for="preset" class="-mb-2">
-              Preset Contents - Click to copy
+              {t('rgb.presets.presetData@@Preset Data')}
             </label>
             <textarea id="preset" readOnly
               class={{

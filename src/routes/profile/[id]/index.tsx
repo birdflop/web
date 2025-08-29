@@ -10,6 +10,7 @@ import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 import { getDB, users, presets, PublicPreset } from '~/util/db';
 import { eq } from 'drizzle-orm';
+import { inlineTranslate } from 'qwik-speak';
 
 export const useUser = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -51,6 +52,7 @@ export const useUser = routeLoader$(async ({ params }) => {
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
+  const t = inlineTranslate();
 
   const session = useSession();
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
@@ -119,7 +121,7 @@ export default component$(() => {
                 {userInfo?.name || 'User'}'s Public RGBirdflop Presets
               </span>
               <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-                <ChevronLeft size={20} /> Go to presets
+                <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
               </Link>
             </h3>
             <div class="grid sm:grid-cols-2 gap-2">

@@ -211,7 +211,7 @@ export default component$(() => {
               <Sparkles size={26} />
               {t('rgb.decode.title@@Decode')}
               <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-                experimental
+                {t('rgb.decode.experimental@@experimental')}
               </span>
             </Accordion>
             <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
@@ -220,7 +220,7 @@ export default component$(() => {
         <p class="mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </p>
-        <p class="">
+        <p>
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">an API!</a>
         </p>
       </div>

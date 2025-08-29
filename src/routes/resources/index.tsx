@@ -23,10 +23,10 @@ export default component$(() => {
         </p>
         <hr/>
         <h3 class="my-0!">
-          Gradient Tools
+          {t('nav.resources.gradientTools.title@@Gradient Tools')}
         </h3>
         <p class="mb-4">
-          Tools to help you create gradient text in Minecraft.
+          {t('nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.')}
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2">
           <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-red/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
@@ -68,10 +68,10 @@ export default component$(() => {
         </div>
         <hr/>
         <h3 class="my-0!">
-          Server tools
+          {t('nav.resources.serverTools.title@@Server Tools')}
         </h3>
         <p class="mb-4">
-          Tools to help configure and setup minecraft servers.
+          {t('nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.')}
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2">
           <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-yellow/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
@@ -113,10 +113,10 @@ export default component$(() => {
         </div>
         <hr/>
         <h3 class="my-0!">
-          Miscellaneous tools
+          {t('nav.resources.miscellaneousTools.title@@Miscellaneous Tools')}
         </h3>
         <p class="mb-4">
-          Miscellaneous tools to help with random miscellaneous things.
+          {t('nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.')}
         </p>
         <div class="flex [&>*]:flex-1 flex-wrap gap-2 mb-2">
           <Link class="lum-card lum-bg-lum-card-bg/60 hover:lum-bg-purple/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"

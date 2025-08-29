@@ -11,6 +11,7 @@ import { Form, Link, server$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
 import { getDB, PresetPartial, presets, PublicPresetSubmission } from '~/util/db';
 import { rgbPreset } from '~/util/rgb/presets';
+import { inlineTranslate } from 'qwik-speak';
 
 const publishPreset = server$(async function(submission: PublicPresetSubmission) {
   const session = this.sharedMap.get('session');
@@ -37,6 +38,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => unloadGoogleAds());
   const notifications = useContext(NotificationContext);
+  const t = inlineTranslate();
 
   const privatePresets = useContext(privatePresetsContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -52,10 +54,10 @@ export default component$(() => {
     <h3 class="flex gap-2 items-center" id="my-presets">
       <CircleUserRound size={30} />
       <span class="flex-1">
-        My Private RGBirdflop Presets
+        {t('rgb.presets.myPrivate@@My Private RGBirdflop Presets')}
       </span>
       <Link href="/resources/rgb" class="lum-btn lum-bg-transparent">
-        <Plus size={20} /> Create a new preset
+        <Plus size={20} /> {t('rgb.presets.createNew@@Create a new preset')}
       </Link>
     </h3>
 

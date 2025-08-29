@@ -84,7 +84,9 @@ export default component$(({ hidden, id = 'text' }: {
           const newColors = colors.value.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           colors.value = newColors;
         }}>
-          <Dices size={20} /> {rgbStore.disperse && <span>Randomize</span>}
+          <Dices size={20} /> {rgbStore.disperse && <span>
+            {t('rgb.colors.randomize@@Randomize')}
+          </span>}
         </button>
         {!rgbStore.disperse &&
           <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={colors.value.find((color, i) => color.pos != (100 / (colors.value.length - 1)) * i) ? false : true} onClick$={() => {
