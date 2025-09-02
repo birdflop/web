@@ -7,8 +7,10 @@
     "duration": "持续时间",
     "height": "高度",
     "lockDimensions": "锁定尺寸",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG 预览",
-    "selectFrames": "选择帧或 GIF",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "同步持续时间",
     "textureName": "纹理名称",
     "width": "宽度"

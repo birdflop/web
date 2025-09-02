@@ -7,8 +7,10 @@
     "duration": "지속 시간",
     "height": "높이",
     "lockDimensions": "치수 잠금",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG 미리보기",
-    "selectFrames": "프레임 또는 GIF 선택",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "지속 시간 동기화",
     "textureName": "텍스처 이름",
     "width": "너비"

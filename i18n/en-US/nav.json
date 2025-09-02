@@ -35,7 +35,7 @@
         "title": "Animated TAB"
       },
       "animatedTextures": {
-        "description": "Easily merge textures for resource pack animations",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "Animated Textures"
       },
       "banner": {

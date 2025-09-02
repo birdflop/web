@@ -41,7 +41,7 @@
         "title": "애니메이션 TAB"
       },
       "animatedTextures": {
-        "description": "리소스 팩 애니메이션을 위한 텍스처를 쉽게 병합",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "애니메이션 텍스처"
       },
       "banner": {

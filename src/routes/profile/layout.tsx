@@ -44,7 +44,7 @@ export default component$(() => {
   }
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <div class="lum-card flex-row items-center lum-btn-p-3 lum-bg-lum-card-bg">
           <div class="my-3! flex-1">

@@ -1,4 +1,4 @@
-import { component$, isBrowser, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 
 import { inlineTranslate } from 'qwik-speak';
 
@@ -6,6 +6,9 @@ import { parseGIF, decompressFrames } from 'gifuct-js';
 import { Download, GalleryHorizontalEnd, RefreshCw, X } from 'lucide-icons-qwik';
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import { rgbStoreContext } from '../rgb';
+import { rgbDefaults } from '~/util/rgb/presets/defaults';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -27,6 +30,10 @@ const readFileAsDataURL = (file: Blob) => new Promise<ProgressEvent<FileReader>>
 
 export default component$(() => {
   const t = inlineTranslate();
+  useContextProvider(rgbStoreContext, rgbDefaults);
+
+  const previewStyle = useSignal('chat');
+  useContextProvider(previewStyleContext, previewStyle);
 
   const animtextureStore = useStore({
     frames: [] as { img: HTMLImageElement, delay: number }[],
@@ -37,6 +44,7 @@ export default component$(() => {
     lockdimensions: true,
     bounce: false,
     syncduration: false,
+    showChatPreview: false,
   }, { deep: true });
 
   useTask$(({ track }) => {
@@ -98,65 +106,146 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 gap-10 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <GalleryHorizontalEnd size={70} /> {t('nav.resources.animatedTextures.title@@Animated Textures')}
         </h1>
         <p>
-          {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
+          {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
         </p>
         <hr/>
+        <div class="flex flex-col gap-1 mb-5">
+          <label for="fileInput">
+            {t('animtexture.selectFrames@@Select GIF or image from your device')}
+          </label>
+          <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
+            const files = Array.from(el.files ?? []);
+            animtextureStore.loading = true;
+            for (const f of files) {
+              const e = await readFileAsDataURL(f);
+              if (!e.target?.result) return;
 
-        <div class="grid grid-cols-3 gap-2 mb-2">
-          <div class="flex flex-col gap-1 col-span-3">
-            <label for="fileInput">
-              {t('animtexture.selectFrames@@Select Frame(s) or GIF')}
-            </label>
-            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
-              const files = Array.from(el.files ?? []);
-              animtextureStore.loading = true;
-              for (const f of files) {
-                const e = await readFileAsDataURL(f);
-                if (!e.target?.result) return;
-
-                const frames = [...animtextureStore.frames];
-                const file = await base64ToFile(e.target.result.toString());
-                if (file.mime == 'image/gif') {
-                  const parsedGif = parseGIF(file.buffer);
-                  const gifFrames = decompressFrames(parsedGif, true);
-                  gifFrames.forEach((frame) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = frame.dims.width;
-                    canvas.height = frame.dims.height;
-                    const ctx = canvas.getContext('2d')!;
-                    const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                    frameImageData.data.set(frame.patch);
-                    ctx.putImageData(frameImageData, 0, 0);
-                    const img = new Image();
-                    img.src = canvas.toDataURL();
-                    img.onload = () => {
-                      frames.push({
-                        img,
-                        delay: Math.ceil(frame.delay / 100),
-                      });
-                    };
-                  });
-                }
-                else {
+              const frames = [...animtextureStore.frames];
+              const file = await base64ToFile(e.target.result.toString());
+              if (file.mime == 'image/gif') {
+                const parsedGif = parseGIF(file.buffer);
+                const gifFrames = decompressFrames(parsedGif, true);
+                gifFrames.forEach((frame) => {
+                  const canvas = document.createElement('canvas');
+                  canvas.width = frame.dims.width;
+                  canvas.height = frame.dims.height;
+                  const ctx = canvas.getContext('2d')!;
+                  const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
+                  frameImageData.data.set(frame.patch);
+                  ctx.putImageData(frameImageData, 0, 0);
                   const img = new Image();
-                  img.src = e.target.result as string;
+                  img.src = canvas.toDataURL();
+                  img.onload = () => {
+                    frames.push({
+                      img,
+                      delay: Math.ceil(frame.delay / 100),
+                    });
+                  };
+                });
+              }
+              else {
+                const img = new Image();
+                img.src = e.target.result as string;
+                frames.push({
+                  img,
+                  delay: 20,
+                });
+              }
+
+              animtextureStore.frames = frames;
+            }
+            animtextureStore.loading = false;
+          }} />
+        </div>
+        <div class="flex flex-col gap-1 col-span-3">
+          <label for="fileInput">
+            {t('animtexture.pasteUrl@@Paste GIF or image URL')}
+          </label>
+          <input id="fileInput" type="text" class="lum-input" placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true" onChange$={async (event, el) => {
+            let url = el.value;
+            if (!url) return;
+
+            animtextureStore.loading = true;
+
+            // if the url is a discord emoji, you can replace .webp with .gif
+            if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
+              url = url.replace('.webp', '.gif').split('?')[0];
+              el.value = url;
+            }
+
+            const f = await (await fetch(url)).blob();
+
+            const e = await readFileAsDataURL(f);
+            if (!e.target?.result) return;
+
+            const frames = [...animtextureStore.frames];
+            const file = await base64ToFile(e.target.result.toString());
+            if (file.mime == 'image/gif') {
+              const parsedGif = parseGIF(file.buffer);
+              const gifFrames = decompressFrames(parsedGif, true);
+              gifFrames.forEach((frame) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = frame.dims.width;
+                canvas.height = frame.dims.height;
+                const ctx = canvas.getContext('2d')!;
+                const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
+                frameImageData.data.set(frame.patch);
+                ctx.putImageData(frameImageData, 0, 0);
+                const img = new Image();
+                img.src = canvas.toDataURL();
+                img.onload = () => {
                   frames.push({
                     img,
-                    delay: 20,
+                    delay: Math.ceil(frame.delay / 100),
                   });
-                }
+                };
+              });
+            }
+            else {
+              const img = new Image();
+              img.src = e.target.result as string;
+              frames.push({
+                img,
+                delay: 20,
+              });
+            }
 
-                animtextureStore.frames = frames;
-              }
-              animtextureStore.loading = false;
-            }} />
-          </div>
+            animtextureStore.frames = frames;
+
+            animtextureStore.loading = false;
+          }} />
+        </div>
+
+        <hr/>
+
+        <Toggle id="showchatpreview" checked={animtextureStore.showChatPreview}
+          onChange$={(e, el) => { animtextureStore.showChatPreview = el.checked; }}>
+          {t('animtexture.showChatPreview@@Show Minecraft chat preview')}
+        </Toggle>
+
+        { animtextureStore.showChatPreview &&
+          <Input readOnly
+            noFormatRow
+            chatInput={`this is so funny <sprite:${animtextureStore.textureName}>`}
+            playerName="AnimatedTexture">
+            <span class="text-white! items-center gap-2">
+              this is so funny
+            </span>
+            <span class="ml-2 inline-block align-middle">
+              <canvas id="anim" class="p-0 w-6 h-6" style={{
+                imageRendering: 'pixelated',
+              }} />
+            </span>
+          </Input>
+        }
+
+        <div class="grid grid-cols-3 gap-2 my-4">
           <div class={{
             'flex items-end gap-1': true,
             'col-span-2': animtextureStore.lockdimensions,
@@ -314,20 +403,28 @@ export default component$(() => {
       </div>
       <div class={{
         'flex flex-col items-center max-w-24 transition-all': true,
-        'opacity-0': animtextureStore.frames.length == 0,
       }}>
-        <p class="mb-2">
-          {t('animtexture.animationPreview@@Animation Preview')}
-        </p>
-        <canvas id="anim" class="lum-card w-full p-0" style={{
-          imageRendering: 'pixelated',
-        }} />
-        <p class="my-2">
-          {t('animtexture.pngPreview@@PNG Preview')}
-        </p>
-        <canvas id="c" class="lum-card w-full p-0" style={{
-          imageRendering: 'pixelated',
-        }} />
+        {!animtextureStore.showChatPreview && <>
+          <p class="mb-2">
+            {t('animtexture.animationPreview@@Animation Preview')}
+          </p>
+          <canvas id="anim" class="lum-card w-full p-0" style={{
+            imageRendering: 'pixelated',
+          }} />
+        </>}
+        {animtextureStore.frames.length != 1 && <>
+          <p class="my-2">
+            {t('animtexture.pngPreview@@PNG Preview')}
+          </p>
+          <div class={{
+            'lum-card w-full p-0': true,
+            'min-h-100': animtextureStore.frames.length == 0,
+          }}>
+            <canvas id="c" class="w-full rounded-lum" style={{
+              imageRendering: 'pixelated',
+            }} />
+          </div>
+        </>}
       </div>
     </section>
   );

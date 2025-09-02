@@ -7,8 +7,10 @@
     "duration": "Duur",
     "height": "Hoogte",
     "lockDimensions": "Afmetingen vergrendelen",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG voorvertoning",
-    "selectFrames": "Selecteer frame(s) of GIF",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "Duur synchroniseren",
     "textureName": "Textuur naam",
     "width": "Breedte"

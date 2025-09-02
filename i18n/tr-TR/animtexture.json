@@ -7,8 +7,10 @@
     "duration": "Süre",
     "height": "Yükseklik",
     "lockDimensions": "Boyutları kilitle",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG önizlemesi",
-    "selectFrames": "Kare(ler) veya GIF seç",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "Süreyi senkronize et",
     "textureName": "Doku adı",
     "width": "Genişlik"

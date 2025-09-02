@@ -7,8 +7,10 @@
     "duration": "Duration",
     "height": "Height",
     "lockDimensions": "Lock Dimensions",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "Sync Duration",
     "textureName": "Texture Name",
     "width": "Width"

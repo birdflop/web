@@ -2,10 +2,10 @@ import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ 
 import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
-import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
+import { generateOutput } from '~/util/rgb/RGBUtils';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
@@ -29,24 +29,29 @@ const InputField = component$(({ class: className, readOnly }: {
       }}>
         <Slot />
       </p>
-      <div class="absolute bottom-0 h-full flex flex-col w-[calc(100%+0.5rem)]">
-        <textarea class={{
-          'lum-input p-0 pt-1.5 -mb-2.5 rounded-sm resize-none w-full h-full whitespace-pre-wrap caret-white leading-none text-transparent hover:text-transparent lum-bg-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50 line': true,
-          'font-mc-bold': rgbStore.bold,
-          'font-mc-italic': rgbStore.italic,
-          'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-          [`${className}`]: className,
-          [`${rgbStore.format.class}`]: rgbStore.format.class,
-        }} value={rgbStore.text} spellcheck={false} readOnly={readOnly} id="input"
-        onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-      </div>
+      {!readOnly &&
+        <div class="absolute bottom-0 h-full flex flex-col w-[calc(100%+0.5rem)]">
+          <textarea class={{
+            'lum-input p-0 pt-1.5 -mb-2.5 rounded-sm resize-none w-full h-full whitespace-pre-wrap caret-white leading-none text-transparent hover:text-transparent lum-bg-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50 line': true,
+            'font-mc-bold': rgbStore.bold,
+            'font-mc-italic': rgbStore.italic,
+            'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+            [`${className}`]: className,
+            [`${rgbStore.format.class}`]: rgbStore.format.class,
+          }} value={rgbStore.text} spellcheck={false} id="input"
+          onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+        </div>
+      }
     </div>
   );
 });
 
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
-export default component$(({ readOnly }: {
+export default component$(({ readOnly, noFormatRow, chatInput, playerName }: {
   readOnly?: boolean
+  noFormatRow?: boolean
+  chatInput?: string
+  playerName?: string
 }) => {
   const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
@@ -72,7 +77,9 @@ export default component$(({ readOnly }: {
         </p>
       </h5>
     }
-    <Formatting/>
+    {!noFormatRow &&
+      <Formatting/>
+    }
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
       {previewStyle.value != 'default' &&
         <div class={{
@@ -120,8 +127,15 @@ export default component$(({ readOnly }: {
             {previewStyle.value == 'chat' &&
               <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
                 style={{ textShadow: '2px 2px 0 #373737' }}>
-                <p class="text-white!">{t('rgb.inputText.preview.typeHere@@<RGBirdflop> Type here!')}</p>
+                {!readOnly &&
+                  <p class="text-white!">
+                    {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
+                  </p>
+                }
                 <InputField readOnly={readOnly}>
+                  <span class="text-white! mr-2">
+                    {readOnly ? `<${playerName}>` : null}
+                  </span>
                   <Slot />
                 </InputField>
               </div>
@@ -129,7 +143,7 @@ export default component$(({ readOnly }: {
           </div>
           <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
             style={{ textShadow: '2px 2px 0 #373737' }}>
-            {generateOutput(rgbStore)}
+            {chatInput ?? generateOutput(rgbStore)}
           </p>
         </div>
       }
@@ -145,8 +159,10 @@ export default component$(({ readOnly }: {
           <p class="lum-bg-lum-input-bg/50 rounded-lum lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
             <Slot />
           </p>
-          <textarea readOnly={readOnly} class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
+          {!readOnly &&
+          <textarea class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
             value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+          }
         </div>
       }
       <div class={{

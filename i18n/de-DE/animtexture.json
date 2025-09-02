@@ -8,8 +8,10 @@
     "framePreview": "Vorschau der Bilder",
     "height": "Höhe",
     "lockDimensions": "Dimensionen feststellen",
+    "pasteUrl": "Paste GIF or image URL",
     "pngPreview": "PNG Vorschau",
-    "selectFrames": "Wählen sie Bilder oder GIF",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
     "syncDuration": "Dauer synchronisieren",
     "textureName": "Name der Textur",
     "width": "Breite"

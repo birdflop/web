@@ -41,7 +41,7 @@
         "title": "动画 TAB"
       },
       "animatedTextures": {
-        "description": "轻松合并资源包动画的纹理",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "动画纹理"
       },
       "banner": {
