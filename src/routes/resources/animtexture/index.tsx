@@ -45,6 +45,7 @@ export default component$(() => {
     bounce: false,
     syncduration: false,
     showChatPreview: false,
+    accumulate: false,
   }, { deep: true });
 
   useTask$(({ track }) => {
@@ -115,6 +116,9 @@ export default component$(() => {
           {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
         </p>
         <hr/>
+        <h3>
+          Input Image(s)
+        </h3>
         <div class="flex flex-col gap-1 mb-5">
           <label for="fileInput">
             {t('animtexture.selectFrames@@Select GIF or image from your device')}
@@ -126,7 +130,7 @@ export default component$(() => {
               const e = await readFileAsDataURL(f);
               if (!e.target?.result) return;
 
-              const frames = [...animtextureStore.frames];
+              const frames = animtextureStore.accumulate ? [...animtextureStore.frames] : [];
               const file = await base64ToFile(e.target.result.toString());
               if (file.mime == 'image/gif') {
                 const parsedGif = parseGIF(file.buffer);
@@ -162,64 +166,68 @@ export default component$(() => {
             }
             animtextureStore.loading = false;
           }} />
-        </div>
-        <div class="flex flex-col gap-1 col-span-3">
-          <label for="fileInput">
+          <label for="urlInput" class="mt-6">
             {t('animtexture.pasteUrl@@Paste GIF or image URL')}
           </label>
-          <input id="fileInput" type="text" class="lum-input" placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true" onChange$={async (event, el) => {
-            let url = el.value;
-            if (!url) return;
+          <input id="urlInput" type="text" class="lum-input mb-6"
+            placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true"
+            onChange$={async (event, el) => {
+              let url = el.value;
+              if (!url) return;
 
-            animtextureStore.loading = true;
+              animtextureStore.loading = true;
 
-            // if the url is a discord emoji, you can replace .webp with .gif
-            if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
-              url = url.replace('.webp', '.gif').split('?')[0];
-              el.value = url;
-            }
+              // if the url is a discord emoji, you can replace .webp with .gif
+              if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
+                url = url.replace('.webp', '.gif').split('?')[0];
+                el.value = url;
+              }
 
-            const f = await (await fetch(url)).blob();
+              const f = await (await fetch(url)).blob();
 
-            const e = await readFileAsDataURL(f);
-            if (!e.target?.result) return;
+              const e = await readFileAsDataURL(f);
+              if (!e.target?.result) return;
 
-            const frames = [...animtextureStore.frames];
-            const file = await base64ToFile(e.target.result.toString());
-            if (file.mime == 'image/gif') {
-              const parsedGif = parseGIF(file.buffer);
-              const gifFrames = decompressFrames(parsedGif, true);
-              gifFrames.forEach((frame) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = frame.dims.width;
-                canvas.height = frame.dims.height;
-                const ctx = canvas.getContext('2d')!;
-                const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                frameImageData.data.set(frame.patch);
-                ctx.putImageData(frameImageData, 0, 0);
+              const frames = animtextureStore.accumulate ? [...animtextureStore.frames] : [];
+              const file = await base64ToFile(e.target.result.toString());
+              if (file.mime == 'image/gif') {
+                const parsedGif = parseGIF(file.buffer);
+                const gifFrames = decompressFrames(parsedGif, true);
+                gifFrames.forEach((frame) => {
+                  const canvas = document.createElement('canvas');
+                  canvas.width = frame.dims.width;
+                  canvas.height = frame.dims.height;
+                  const ctx = canvas.getContext('2d')!;
+                  const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
+                  frameImageData.data.set(frame.patch);
+                  ctx.putImageData(frameImageData, 0, 0);
+                  const img = new Image();
+                  img.src = canvas.toDataURL();
+                  img.onload = () => {
+                    frames.push({
+                      img,
+                      delay: Math.ceil(frame.delay / 100),
+                    });
+                  };
+                });
+              }
+              else {
                 const img = new Image();
-                img.src = canvas.toDataURL();
-                img.onload = () => {
-                  frames.push({
-                    img,
-                    delay: Math.ceil(frame.delay / 100),
-                  });
-                };
-              });
-            }
-            else {
-              const img = new Image();
-              img.src = e.target.result as string;
-              frames.push({
-                img,
-                delay: 20,
-              });
-            }
+                img.src = e.target.result as string;
+                frames.push({
+                  img,
+                  delay: 20,
+                });
+              }
 
-            animtextureStore.frames = frames;
+              animtextureStore.frames = frames;
 
-            animtextureStore.loading = false;
-          }} />
+              animtextureStore.loading = false;
+            }} />
+          <Toggle id="accumulate" checked={animtextureStore.accumulate}
+            onChange$={(e, el) => { animtextureStore.accumulate = el.checked; }}>
+            {t('animtexture.accumulate@@Accumulate images')}
+          </Toggle>
         </div>
 
         <hr/>
@@ -322,55 +330,60 @@ export default component$(() => {
           </Toggle>
         </div>
 
-        <div id="imgs" class="lum-card flex-row flex-wrap max-h-[620px] overflow-auto gap-2 p-2 mt-4">
-          {animtextureStore.frames.map((frame, i) => (
-            <div key={`frame${i}-${frame.delay}`} class="lum-card lum-bg-lum-input-bg w-24 p-0 relative">
-              <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {
-                const frames = [...animtextureStore.frames];
-                frames.splice(i, 1);
-                animtextureStore.frames = frames;
-              }}>
-                <X size={16}/>
-              </button>
-              <img width={96} height={96} class={{
-                'rounded-t-md': true,
-                'rounded-b-md': animtextureStore.syncduration,
-              }} src={frame.img.src} />
-              {!animtextureStore.syncduration &&
-                  <input type="number" value={frame.delay}
+        {animtextureStore.frames.length > 0 && <>
+          <div id="imgs" class="lum-card flex-row flex-wrap max-h-[620px] overflow-auto gap-2 p-2 mt-4">
+            {animtextureStore.frames.map((frame, i) => (
+              <div key={`frame${i}-${frame.delay}`} class="lum-card lum-bg-lum-input-bg w-24 p-0 gap-0 relative">
+                <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {
+                  const frames = [...animtextureStore.frames];
+                  frames.splice(i, 1);
+                  animtextureStore.frames = frames;
+                }}>
+                  <X size={16}/>
+                </button>
+                <img width={96} height={96} class={{
+                  'rounded-t-md': true,
+                  'rounded-b-md': animtextureStore.syncduration,
+                }} src={frame.img.src} />
+                <label for={`frame-${i}-delay`} class="m-1">
+                  ticks
+                </label>
+                {!animtextureStore.syncduration &&
+                  <input id={`frame-${i}-delay`} type="number" value={frame.delay}
                     onInput$={(e, el) => {
                       animtextureStore.frames[i].delay = Number(el.value);
                     }}
-                    class="lum-input lum-bg-lum-card-bg mb-2 mx-2" />
-              }
-            </div>
-          ))}
-        </div>
-        {animtextureStore.syncduration && animtextureStore.frames[0] &&
-          <NumberInput input min={1} value={animtextureStore.frames[0].delay} id="height"
-            onIncrement$={() => {
-              animtextureStore.frames[0].delay++;
-              animtextureStore.frames.forEach((frame) => {
-                frame.delay = animtextureStore.frames[0].delay;
-              });
-            }}
-            onDecrement$={() => {
-              animtextureStore.frames[0].delay--;
-              animtextureStore.frames.forEach((frame) => {
-                frame.delay = animtextureStore.frames[0].delay;
-              });
-            }}
-            onInput$={(e, el) => {
-              const value = Number(el.value);
-              if (isNaN(value)) return;
-              animtextureStore.frames.forEach((frame) => {
-                frame.delay = value;
-              });
-            }}
-          >
-            {t('animtexture.duration@@Duration')}
-          </NumberInput>
-        }
+                    class="lum-input lum-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
+                }
+              </div>
+            ))}
+          </div>
+          {animtextureStore.syncduration &&
+            <NumberInput input min={1} value={animtextureStore.frames[0].delay} id="height"
+              onIncrement$={() => {
+                animtextureStore.frames[0].delay++;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = animtextureStore.frames[0].delay;
+                });
+              }}
+              onDecrement$={() => {
+                animtextureStore.frames[0].delay--;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = animtextureStore.frames[0].delay;
+                });
+              }}
+              onInput$={(e, el) => {
+                const value = Number(el.value);
+                if (isNaN(value)) return;
+                animtextureStore.frames.forEach((frame) => {
+                  frame.delay = value;
+                });
+              }}
+            >
+              {t('animtexture.duration@@Duration')}
+            </NumberInput>
+          }
+        </>}
 
         <div id="links" class="flex gap-2 mt-6">
           <a class="lum-btn" id="pngd" target="_blank" download={animtextureStore.textureName + '.png'} href=''>
