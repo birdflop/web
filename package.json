@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=23.11.0"
   },
-  "author": "LuminescentDev",
+  "author": "BrewMC",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "qwik build",
