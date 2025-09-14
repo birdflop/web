@@ -50,11 +50,11 @@ export default component$(() => {
   );
 });
 
-export const defaultDescription = 'Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.';
+export const defaultDescription = 'Play BrewMC at brew.mc.gg.';
 
 export function generateHead({
-  title = 'Birdflop - Server Hosting & Resources',
-  description = defaultDescription,
+  title = 'Brew MC',
+  description = defaultDescriptio,
   image = '/branding/icon.png',
   ads = false,
   head = {},
