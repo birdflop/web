@@ -48,6 +48,7 @@ export const useServerTheme = routeLoader$(({ cookie }) => {
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
+
 export default component$(() => {
   const t$ = $((string: string) => inlineTranslate()(string));
 
@@ -169,7 +170,52 @@ export default component$(() => {
         'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
     }
+
     <Slot />
+
+    {/* AGPL credit footer (Option A) */}
+    <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-6">
+      <p class="text-sm opacity-70 text-center">
+        Forked from{' '}
+        <a
+          href="https://github.com/birdflop/web"
+          target="_blank"
+          rel="noreferrer"
+          class="underline"
+        >
+          birdflop/web
+        </a>
+        {' '}• Original RGB:{' '}
+        <a
+          href="https://rgb.birdflop.com"
+          target="_blank"
+          rel="noreferrer"
+          class="underline"
+        >
+          rgb.birdflop.com
+        </a>
+        {' '}• Source:{' '}
+        <a
+          href="https://github.com/truthssh/brewmc-rgb"
+          target="_blank"
+          rel="noreferrer"
+          class="underline"
+        >
+          GitHub
+        </a>
+        {' '}• License:{' '}
+        <a
+          href="https://github.com/truthssh/brewmc-rgb/blob/main/LICENSE"
+          target="_blank"
+          rel="noreferrer"
+          class="underline"
+        >
+          AGPL-3.0
+        </a>
+        .
+      </p>
+    </section>
+
     <div class={{
       'fixed bottom-0 sm:bottom-4 sm:right-4 z-[1000] flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
     }} id="notifications">
@@ -197,6 +243,7 @@ export default component$(() => {
         </div>;
       })}
     </div>
+
     <Footer />
   </>;
 });
