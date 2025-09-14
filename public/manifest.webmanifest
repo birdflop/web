@@ -1,11 +1,11 @@
 {
     "theme_color" : "#0D0D0D",
     "background_color" : "#0D0D0D",
-    "name": "Birdflop",
-    "short_name": "Birdflop",
+    "name": "BrewMC",
+    "short_name": "BrewMC",
     "start_url": ".",
     "display": "standalone",
-    "description": "The only 501(c)(3) nonprofit Minecraft server host.",
+    "description": "Play at brew.mc.gg",
     "icons": [
         {
             "src": "/branding/pwa-icon-192x192.png",
@@ -32,4 +32,5 @@
             "purpose": "any maskable"
         }
     ]
+
 }
