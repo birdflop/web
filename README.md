@@ -1,22 +1,43 @@
-# Birdflop Website
-The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hosting and resources.
+# BrewMC Fork of Birdflop Website
+The website for BrewMC — play at **brew.mc.gg**  
+Live at: **https://rgb.brewmc.com**
 
+---
+
+## 📖 About This Fork
+This project is a **fork** of the original [birdflop/web](https://github.com/birdflop/web) repository.  
+Huge thanks to Birdflop and their community for creating the base website and RGB gradient tools.
+
+---
+
+## 🔗 Original Project
+- [Birdflop/web on GitHub](https://github.com/birdflop/web)  
+- [Birdflop Discord](https://discord.com/invite/nmgtX5z)
+
+---
+
+## 📊 Badges
 <a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge?style=for-the-badge" alt="CodeFactor" /></a>
 <a href="https://github.com/birdflop/web/commits"> <img src="https://img.shields.io/github/last-commit/birdflop/web?style=for-the-badge"></a>
 <a href="#"> <img src="https://img.shields.io/github/languages/code-size/birdflop/web?style=for-the-badge"></a>
 
 <a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=for-the-badge"></a>
 <a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=for-the-badge"></a>
-<a href="hthttps://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
+<a href="https://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
 
-<a href="https://discord.com/invite/nmgtX5z"> <img src="https://discord.com/api/guilds/746125698644705524/widget.png?style=banner2"></a>
+---
+ 
+This fork focuses on BrewMC’s branding and features, while maintaining credit to Birdflop’s original work.
 
-<h2>Contributing</h2>
-All contributions are welcome. Birdflop is a community-project aiming to support its community.
-<br><br>
-<h2>Forking</h2>
-If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
-<h2>Licensing</h2>
-This project is dual-licensed. For open-source usage, it is available under the AGPL-3.0 license (OSS_LICENSE.md). Additional closed-source use, both commercial and non-commercial, is permitted under the details outlined in CSS_LICENSE.md. Licensing is required to re-use the RGBirdflop / RGB Birdflop gradient creator code.
-<br><br>
+---
+
+## 📜 Licensing
+This project is **dual-licensed**:  
+- Open-source usage is covered under the **AGPL-3.0 license** (see `OSS_LICENSE.md`).  
+- Additional closed-source use (commercial and non-commercial) is permitted under the details in `CSS_LICENSE.md`.  
+- Licensing is required to re-use the **RGB gradient creator** code from the original project.  
+
+---
+
+## 👥 Credits
 <a href="https://github.com/birdflop/web/graphs/contributors"><img src="https://contrib.rocks/image?repo=birdflop/web"></a>
