@@ -1,17 +1,22 @@
 {
   "name": "rgb-brewmc",
-  "version": "8.14.0",
+  "version": "0.1.0",
+  "private": true,
   "homepage": "https://rgb.brewmc.com",
-  "description": "Friendly Survival Server.",
+  "description": "BrewMC RGB site (fork of birdflop/web) — gradient tools and resources.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/truthssh/rgb.brewmc.com/"
+    "url": "git+https://github.com/truthssh/brewmc-rgb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/truthssh/brewmc-rgb/issues"
   },
   "engines": {
-    "node": ">=23.11.0"
+    "node": ">=20.0.0"
   },
-  "author": "BrewMC",
+  "author": "BrewMC (truthssh)",
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "scripts": {
     "build": "qwik build",
     "build.client": "vite build",
@@ -27,10 +32,9 @@
     "prisma:migrate:prod": "prisma migrate deploy",
     "qwik-speak-extract": "qwik-speak-extract --supportedLangs=en-US,es-ES,ko-KR,nl-NL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n",
     "start": "vite --mode ssr --host",
-    "start.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --forcenode --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
+    "start.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "qwik": "qwik"
   },
-  "type": "module",
   "devDependencies": {
     "@anuragroy/tailwindcss-animate": "^1.0.6",
     "@auth/prisma-adapter": "2.7.4",
