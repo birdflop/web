@@ -2,5 +2,5 @@ User-agent: *
 Disallow: /acornmc/
 Disallow: /terms/
 Disallow: /privacy/
-Disallow: https://rgb.birdlfop.com
+Disallow: https://rgb.brewmc.com
 Disallow: /resources/rgb/?*
