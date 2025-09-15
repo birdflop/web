@@ -25,7 +25,7 @@ import { defaultDescription, generateHead } from '~/root';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
-  if (rgbStore.colors.length < 2) return rgbStore.text;
+  if (rgbStore.colors.length < 1) return rgbStore.text;
 
   const shadowColors = rgbStore.syncshadow
     ? rgbStore.colors.map(color => {

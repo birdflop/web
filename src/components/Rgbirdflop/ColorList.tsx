@@ -44,7 +44,7 @@ export default component$(({ hidden, id = 'text' }: {
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       }
-      <NumberInput input min={2} max={rgbStore.text.length} value={colors.value.length} id={`colorlist${id}-amount`} class={{ 'w-full': true }}
+      <NumberInput input min={1} max={rgbStore.text.length} value={colors.value.length} id={`colorlist${id}-amount`} class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
           if (colorAmount < 2) return;
@@ -138,7 +138,7 @@ export default component$(({ hidden, id = 'text' }: {
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn p-1.5 lum-bg-red-700 hover:lum-bg-red-600 rounded-l-sm" disabled={colors.value.length <= 2} onClick$={() => {
+            <button class="lum-btn p-1.5 lum-bg-red-700 hover:lum-bg-red-600 rounded-l-sm" disabled={colors.value.length <= 1} onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.splice(i, 1);
               colors.value = newColors;
