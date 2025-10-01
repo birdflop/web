@@ -1,7 +1,7 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
+      "copied": "El comando se ha copiado correctamente en el portapapeles.",
       "title": "Command"
     },
     "copied": "Copied to clipboard!",
