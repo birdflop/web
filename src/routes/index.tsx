@@ -29,7 +29,7 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex flex-col text-gray-100 mx-auto px-10 items-center justify-center text-center min-h-dvh pt-[72px]">
+    <section class="flex flex-col text-gray-100 mx-auto px-10 items-center justify-center text-center min-h-lvh pt-[72px]">
       <h1 class={{
         'relative my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
@@ -83,7 +83,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <div class="bg-lum-card-bg border-t border-lum-border pb-16">
+    <div class="bg-lum-card-bg border-t border-lum-border/30 pb-16">
       <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-10">
         <h1>
           Our Nonprofit Mission
