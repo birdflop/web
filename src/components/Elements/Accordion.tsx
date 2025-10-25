@@ -46,8 +46,7 @@ export default component$(({ sectionName, alwaysOpen, class: className, ...props
   return (
     <button class={{
       'lum-btn lum-btn-p-2 lum-bg-lum-input-bg/30': true,
-      'sm:lum-bg-transparent sm:rounded-none': alwaysOpen,
-      'sm:hover:bg-transparent sm:hover:border-x-0 sm:hover:border-t-0': alwaysOpen,
+      'sm:lum-bg-transparent sm:hover:bg-transparent': alwaysOpen,
       ...className,
     }} onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)} { ...props }>
       <span class="font-medium flex-1 flex items-center gap-3">
