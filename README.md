@@ -14,9 +14,17 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 <h2>Contributing</h2>
 All contributions are welcome. Birdflop is a community-project aiming to support its community.
 <br><br>
+<a href="https://github.com/birdflop/web/graphs/contributors"><img src="https://contrib.rocks/image?repo=birdflop/web"></a>
 <h2>Forking</h2>
 If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
 <h2>Licensing</h2>
 This project is dual-licensed. For open-source usage, it is available under the AGPL-3.0 license (OSS_LICENSE.md). Additional closed-source use, both commercial and non-commercial, is permitted under the details outlined in CSS_LICENSE.md. Licensing is required to re-use the RGBirdflop / RGB Birdflop gradient creator code.
 <br><br>
-<a href="https://github.com/birdflop/web/graphs/contributors"><img src="https://contrib.rocks/image?repo=birdflop/web"></a>
+
+<a href="https://www.star-history.com/#birdflop/web&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=birdflop/web&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=birdflop/web&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=birdflop/web&type=date&legend=top-left" />
+ </picture>
+</a>
