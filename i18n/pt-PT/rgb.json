@@ -1,143 +1,149 @@
 {
   "rgb": {
     "colors": {
-      "amount": "Color Amount",
-      "character": "Caractér",
-      "charsPer": "Characters per color",
+      "amount": "Quantidade de cores",
+      "character": "Carácter",
+      "charsPer": "Caracteres por cor",
       "color": "Cor",
-      "customFormat": "Formato customizado",
+      "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "Ative isto se quiser que o gradiente esteja sempre igualmente distribuído. Isto irá desativar o mapa de gradiente.",
+          "title": "Sempre dispersar cores"
         },
-        "title": "Disperse"
+        "title": "Dispersar"
       },
       "format": "Formato de cor",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "Ative isto se quiser usar códigos hexadecimais em minúsculas.",
+        "title": "Códigos hexadecimais em minúsculas"
       },
+      "randomize": "Aleatorizar",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow"
+        "sync": "Sincronizar com cores de texto",
+        "title": "Sombra de texto",
+        "warning": "Aviso: A sombra de texto só funciona com formatação JSON!"
       },
-      "title": "Colors",
+      "title": "Cores",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "Desative isto se estiver a usar sublinhados / riscados vazios",
+        "title": "Cortar cores dos espaços"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Copiado para a área de transferência!",
+    "copyFailed": "Falha ao copiar para a área de transferência!",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "Texto RGB decodificado com sucesso! Se isto não for o que esperava, tente alterar o valor do limiar.",
+        "title": "Texto RGB decodificado!"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "description": "Copie e cole um texto RGB existente aqui para o editar",
+      "disclaimer": "Esta funcionalidade tenta prever os pontos de cor nos gradientes e onde estão, não é 100% precisa e recomendamos usar a funcionalidade de predefinições em vez disso para guardar os seus gradientes.",
+      "experimental": "experimental",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "Tente alterar isto se estiver a obter demasiadas cores",
+        "title": "Limiar"
       },
-      "title": "Decode"
+      "title": "Decodificar"
     },
     "formatting": {
       "bold": "Negrito",
-      "character": "Formatar caractér",
-      "italic": "Italico",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "Placeholders",
+      "character": "Carácter de formatação",
+      "italic": "Itálico",
+      "obfuscate": "Ofuscar",
+      "options": "Opções de formatação",
+      "placeholders": "Marcadores de posição:",
       "strikethrough": "Riscado",
       "title": "Formatação",
       "underline": "Sublinhado"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "Escreva aqui para gerar um gradiente!",
       "preview": {
-        "chat": "Minecraft Chat",
-        "default": "Default",
+        "chat": "Chat do Minecraft",
+        "default": "Padrão",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Rodapé do Minecraft Tab",
+          "header": "Cabeçalho do Minecraft Tab",
+          "player": "Jogador do Minecraft Tab"
         },
-        "title": "Preview Style",
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> Escreva aqui!"
       },
-      "title": "Texto de Input"
+      "title": "Texto de entrada"
     },
-    "options": "Options",
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "Copy-paste this for RGB text!",
-      "title": "Output"
+      "copied": "O texto RGB foi copiado para a sua área de transferência com sucesso.",
+      "description": "Copie e cole isto para texto RGB!",
+      "title": "Saída"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "Prefixo/Sufixo",
     "presets": {
-      "browse": "Browse",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
+      "back": "Voltar às predefinições",
+      "copied": "Predefinição copiada para a área de transferência com sucesso!",
+      "copy": "Copiar",
+      "createNew": "Criar uma nova predefinição",
+      "createdAt": "Criado em",
+      "find": "Encontrar mais predefinições",
       "import": "Importar",
-      "importSubtitle": "Load a JSON preset",
+      "importSubtitle": "Carregar uma predefinição JSON",
       "imported": {
-        "description": "The preset has been imported successfully.",
-        "title": "Preset importada com sucesso!"
+        "description": "A predefinição foi importada com sucesso.",
+        "title": "Predefinição importada com sucesso!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "Por favor, reporte isto a https://discord.gg/9vUZ9MREVz com a predefinição que tentou importar.",
+        "title": "Predefinição inválida"
       },
-      "load": "Load saved preset",
-      "noResults": "No results found.",
-      "pageInfo": "Page ",
+      "myPrivate": "As minhas predefinições privadas do RGBirdflop",
+      "noResults": "Nenhum resultado encontrado.",
+      "nopresets": "Ainda não há predefinições guardadas!",
+      "pageInfo": "Página ",
       "pagination": {
-        "next": "Next",
-        "previous": "Previous"
+        "next": "Seguinte",
+        "perPage": "Por página:",
+        "previous": "Anterior"
       },
-      "pasteHere": "Paste here",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "Colar aqui",
+      "pending": "Esta predefinição está pendente de revisão e pode não estar disponível para outros utilizadores ainda.",
+      "presetData": "Dados da predefinição",
+      "publish": "Publique a sua própria predefinição",
+      "remove": "Remover",
+      "save": "Guardar",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "A predefinição foi guardada com sucesso.",
+        "presets": "Predefinições guardadas",
+        "title": "Predefinição guardada!",
+        "warning": "Por favor, faça login para guardar predefinições permanentemente."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Mostrar predefinições pendentes (MUITO PERIGOSO)"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "Ative isto para mostrar apenas as suas predefinições guardadas.",
+        "title": "Mostrar predefinições guardadas"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first"
+        "nameAZ": "Nome A-Z",
+        "nameZA": "Nome Z-A",
+        "newest": "Mais recente primeiro",
+        "oldest": "Mais antigo primeiro",
+        "title": "Ordenar por"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "Acha que falta alguma coisa?",
+        "two": "publique a sua própria predefinição na sua página de perfil!"
       },
-      "title": "Presets",
-      "totalCount": "Total presets: ",
+      "title": "Predefinições",
+      "totalCount": "Total de predefinições: ",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "Get Url",
-        "title": "URL Updated!"
+        "description": "Predefinição exportada para URL com sucesso! (Verifique a barra de URL)",
+        "get": "Obter URL",
+        "title": "URL atualizada!"
       },
-      "use": "Use",
+      "use": "Usar",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Ative isto para mostrar as pré-visualizações com as opções atuais aplicadas.",
+        "title": "Mostrar pré-visualização com opções atuais"
       }
     }
   }

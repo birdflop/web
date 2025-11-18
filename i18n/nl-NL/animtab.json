@@ -1,13 +1,13 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
+      "interval": "Animatie interval",
       "name": "Animatie Naam",
-      "style": "Animation Style"
+      "style": "Animatie stijl"
     },
     "length": "Gradient lengte",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "Gebruik dit alleen als je probeert dit hulpmiddel voor een andere plugin te gebruiken of weet wat je doet.",
       "title": "Uitkomst Opmaak"
     },
     "yamlInput": "YAML Input"

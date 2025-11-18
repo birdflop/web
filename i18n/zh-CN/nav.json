@@ -1,9 +1,9 @@
 {
   "nav": {
     "404": {
-      "description": "Whoops! You've hit a dead-end.",
-      "home": "Go back home",
-      "title": "404: Page not found"
+      "description": "哎呀！您遇到了死胡同。",
+      "home": "返回首页",
+      "title": "404：页面未找到"
     },
     "cookies": {
       "acknowledge": "Okay",
@@ -11,73 +11,83 @@
       "optOut": "Turn off cookies",
       "title": "Cookies"
     },
-    "docs": "Docs",
+    "docs": "文档",
     "hosting": {
-      "billing": "Billing",
+      "billing": "计费",
       "nodeStats": {
-        "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "description": "检查 Birdflop 服务器节点的状态。",
+        "overview": "概览",
+        "title": "节点统计",
+        "webServices": "网络服务"
       },
-      "panel": "Panel",
-      "plans": "Plans",
-      "title": "Hosting"
+      "panel": "面板",
+      "plans": "计划",
+      "title": "托管"
     },
     "privacyPolicy": "隐私政策",
     "profile": {
-      "hey": "Hey",
-      "login": "Login",
-      "logout": "Logout",
+      "hey": "嘿",
+      "login": "登录",
+      "logout": "登出",
       "notLoggedIn": {
-        "description": "Click below to login",
-        "title": "You are not logged in!"
+        "description": "点击下方登录",
+        "title": "您尚未登录！"
       },
-      "title": "Profile"
+      "title": "个人资料"
     },
     "resources": {
       "animatedTAB": {
-        "description": "TAB插件渐变动画创建器",
-        "title": "动画TAB"
+        "description": "TAB 插件渐变动画创建器",
+        "title": "动画 TAB"
       },
       "animatedTextures": {
-        "description": "轻松合并材质以创建资源包动画",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "动画纹理"
       },
       "banner": {
-        "description": "Easily generate banner designs for Minecraft.",
-        "title": "Banner Generator"
+        "description": "轻松生成 Minecraft 的横幅设计。",
+        "title": "横幅生成器"
       },
-      "description": "Here you can find all of Birdflop's public resources.",
+      "description": "在这里您可以找到 Birdflop 的所有公共资源。",
       "flags": {
-        "description": "一个简单的脚本生成器，用于以最佳标志启动Minecraft服务器。",
+        "description": "一个简单的脚本生成器，用于以最佳标志启动您的 Minecraft 服务器",
         "title": "标志生成器"
       },
+      "gradientTools": {
+        "description": "帮助您在 Minecraft 中创建渐变文本的工具。",
+        "title": "渐变工具"
+      },
       "hexGradient": {
-        "description": "创建十六进制颜色渐变, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "description": "十六进制渐变文本生成器，由 Birdflop 提供支持，这是一个 501(c)(3) 非营利性 Minecraft 托管服务。",
         "title": "RGBirdflop"
       },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
-      },
       "hexGradientPresets": {
-        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
-        "title": "RGBirdflop Presets"
+        "description": "在这里您可以找到、保存、复制或直接使用 RGBirdflop 的预设。",
+        "title": "RGBirdflop 预设"
+      },
+      "miscellaneousTools": {
+        "description": "帮助处理随机杂项事情的杂项工具。",
+        "title": "杂项工具"
       },
       "more": "更多资源",
       "paperTimings": {
-        "description": "Analyze Paper Timings and get possible optimizations",
-        "title": "Paper计时"
+        "description": "分析 Paper Timings 并获得可能的优化",
+        "title": "Paper Timings"
+      },
+      "serverTools": {
+        "description": "帮助配置和设置 Minecraft 服务器的工具。",
+        "title": "服务器工具"
       },
       "sparkProfile": {
-        "description": "Analyze a Spark Profile and get possible optimizations",
-        "title": "Spark分析"
+        "description": "分析 Spark 配置文件并获得可能的优化",
+        "title": "Spark 配置文件"
       },
       "tabAnimationPreview": {
-        "description": "在无需放入游戏中的情况下预览TAB动画",
-        "title": "TAB动画预览"
+        "description": "无需在游戏中放置即可预览 TAB 动画",
+        "title": "TAB 动画预览"
       },
-      "title": "Resources"
+      "title": "资源"
     },
-    "termsofService": "Terms of Service"
+    "termsofService": "服务条款"
   }
 }

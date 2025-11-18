@@ -1,50 +1,60 @@
-import { component$, Signal, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
-import PresetPreview from '~/components/rgb/PresetPreview';
-import { BirdflopSession, BirdflopUser, useSession } from '~/routes/plugin@auth';
-import { getPresets, publishedPreset } from '~/util/rgb/presets';
+import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
+import { useSession } from '~/routes/plugin@auth';
+import { getPresets } from '~/util/rgb/presets';
 import { NotificationContext } from '~/routes/layout';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
-export const useUser = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
-  if (!prisma) throw new Error('No prisma client');
+import { getDB, users, presets, PublicPreset } from '~/util/db';
+import { eq } from 'drizzle-orm';
+import { inlineTranslate } from 'qwik-speak';
 
-  const user = await prisma.user.findUnique({
-    where: { id: params.id },
-    cacheStrategy: {
-      ttl: 60 * 60, // Cache for 1 hour
-    },
-  }) as BirdflopUser;
-  if (!user) {
-    throw new Error('User not found');
-  }
+export const useUser = routeLoader$(async ({ params }) => {
+  const db = getDB();
+  if (!db) throw new Error('No database connection');
 
-  let presets: publishedPreset[] = [];
+  const userInfo = await db.select()
+    .from(users)
+    .where(eq(users.id, params.id))
+    .get();
+
+  if (!userInfo) throw new Error('User not found');
+
+  let presetsFromDB: {
+    user: typeof userInfo,
+    preset: PublicPreset,
+  }[] = [];
   const errors: string[] = [];
   try {
-    presets = await prisma.presets.findMany({
-      where: {
-        userId: user.id,
-      },
-      cacheStrategy: {
-        ttl: 60 * 60, // Cache for 1 hour
-      },
-    }) as publishedPreset[];
+    presetsFromDB = await db.select({
+      user: users,
+      preset: presets,
+    })
+      .from(presets)
+      .where(eq(presets.userId, userInfo.id))
+      .innerJoin(users, eq(users.id, presets.userId))
+      .then((r) => r ?? []);
   }
   catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
-  return { user, presets, errors };
+
+  const userPresets = presetsFromDB.map(({ user, preset }) => ({
+    ...preset,
+    user: user,
+  }));
+
+  return { userInfo, userPresets, errors };
 });
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
+  const t = inlineTranslate();
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
 
@@ -74,7 +84,7 @@ export default component$(() => {
     }
   });
 
-  const { user, presets, errors } = useUser().value;
+  const { userInfo, userPresets, errors } = useUser().value;
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (errors.length > 0) {
@@ -92,31 +102,31 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <div class="flex items-center">
           <h1 class="flex gap-4 items-center my-3! flex-1">
-            {user.image &&
-              <img src={user.image} width={70} height={70} class="rounded-full! w-17 h-17" />
+            {userInfo.image &&
+              <img src={userInfo.image} width={70} height={70} class="rounded-full! w-17 h-17" />
             }
-            {user?.name || 'User'}
+            {userInfo?.name || 'User'}
           </h1>
         </div>
         <hr />
         <main>
-          {presets.length > 0 && <div>
+          {userPresets.length > 0 && <div>
             <h3 class="flex gap-2 items-center">
               <Save size={30} />
               <span class="flex-1">
-                {user?.name || 'User'}'s Public RGBirdflop Presets
+                {userInfo?.name || 'User'}'s Public RGBirdflop Presets
               </span>
               <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-                <ChevronLeft size={20} /> Go to presets
+                <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
               </Link>
             </h3>
             <div class="grid sm:grid-cols-2 gap-2">
-              {presets.map((preset) => (
-                <PresetPreview key={preset.id} presetInfo={preset} />
+              {userPresets.map((preset) => (
+                <PresetPreview key={preset.id} Preset={preset} />
               ))}
             </div>
           </div>}

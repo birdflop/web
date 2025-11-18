@@ -10,15 +10,13 @@ import {
   type Signal,
 } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
+import { useSession } from '~/routes/plugin@auth';
 import {
   getPresets,
-  presetInfo,
-  publishedPreset,
   rgbPreset,
 } from '~/util/rgb/presets';
 import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
-import PresetPreview from '~/components/rgb/PresetPreview';
+import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import {
   ChevronLeft,
   ChevronRight,
@@ -27,16 +25,20 @@ import {
   Send,
 } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$, useNavigate } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
+import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
-export const usePresets = routeLoader$(async ({ env, url }) => {
-  let presets: publishedPreset[] = [];
-  let count = 0;
+import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
+import { and, count, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
+
+export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
+  const session = sharedMap.get('session') as { user: { id: string } } | null;
+  let publicPresets: PublicPreset[] = [];
+  let presetCount = 0;
   const errors: string[] = [];
 
   const searchParams = url.searchParams;
@@ -49,69 +51,72 @@ export const usePresets = routeLoader$(async ({ env, url }) => {
   const showPending = searchParams.get('showPending') === 'true';
   const showSaved = searchParams.get('showSaved') === 'true';
   const savedPresetIds =
-    searchParams.get('savedPresetIds')?.split(',').filter(Boolean) || [];
+    searchParams.get('savedPresetIds')?.split(',').filter(Boolean).map((id) => parseInt(id)) || [];
   const sortBy = searchParams.get('sortBy') || 'createdAt';
   const sortOrder = searchParams.get('sortOrder') || 'desc';
 
   try {
-    const prisma = getPrismaClient(env.get('DATABASE_URL'));
-    if (!prisma) throw new Error('No prisma client');
+    const db = getDB();
+    if (!db) throw new Error('No database client');
 
-    const whereClause: any = {
-      pending: showPending,
-    };
+    presetCount = await db.select({
+      count: count(),
+    })
+      .from(presets)
+      .where(and(
+        eq(presets.pending, showPending),
+        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        showSaved && savedPresetIds.length > 0
+          ? inArray(presets.id, savedPresetIds)
+          : undefined,
+      ))
+      .get()
+      .then((r) => r?.count ?? 0);
 
-    if (searchTerm) {
-      whereClause.name = {
-        contains: searchTerm,
-      };
-    }
-
-    if (showSaved && savedPresetIds.length > 0) {
-      whereClause.id = {
-        in: savedPresetIds,
-      };
-    }
-
-    count = await prisma.presets.count({
-      where: whereClause,
-    });
-
-    let orderBy: any;
+    let orderBy;
     switch (sortBy) {
     case 'name':
-      orderBy = { name: sortOrder };
-      break;
-    case 'saves':
-      orderBy = { savedBy: {
-        _count: sortOrder,
-      } };
+      orderBy = presets.name;
       break;
     case 'createdAt':
     default:
-      orderBy = { createdAt: sortOrder };
+      orderBy = presets.createdAt;
       break;
     }
 
-    presets = (await prisma.presets.findMany({
-      where: whereClause,
-      skip: (page - 1) * perPage,
-      take: perPage,
-      orderBy,
-      cacheStrategy: {
-        ttl: 60 * 60,
-      },
-      include: {
-        user: true,
-        savedBy: true,
-      },
-    })) as publishedPreset[];
+    const presetsFromDB = await db.select({
+      presets, user: users,
+      saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
+    })
+      .from(presets)
+      .where(and(
+        or(
+          eq(presets.pending, showPending),
+          session?.user?.id ? eq(presets.userId, session?.user?.id) : undefined,
+        ),
+        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        showSaved && savedPresetIds.length > 0
+          ? inArray(presets.id, savedPresetIds)
+          : undefined,
+      ))
+      .leftJoin(users, eq(users.id, presets.userId))
+      .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
+      .groupBy(presets.id, users.id)
+      .orderBy(orderBy)
+      .limit(perPage)
+      .offset((page - 1) * perPage)
+      .then((r) => r ?? []);
+
+    publicPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
+      ...presets, user, saveCount,
+    }));
+
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
   return {
-    presets,
-    count,
+    publicPresets,
+    presetCount,
     errors,
     page,
     perPage,
@@ -133,7 +138,7 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context',
 );
-export const savedPresetsContext = createContextId<Signal<publishedPreset[]>>(
+export const savedPresetsContext = createContextId<Signal<any[]>>(
   'savedpresets-context',
 );
 export default component$(() => {
@@ -152,10 +157,10 @@ export default component$(() => {
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const {
-    presets,
-    count,
+    publicPresets,
+    presetCount,
     errors: presetsErrors,
     page,
     perPage,
@@ -165,6 +170,7 @@ export default component$(() => {
     sortBy,
     sortOrder,
   } = usePresets().value;
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
@@ -219,9 +225,9 @@ export default component$(() => {
     }
   });
 
-  const privatePresetsParsed: presetInfo[] = [];
+  const privatePresetsParsed: PresetPartial[] = [];
   privatePresets.value.forEach((preset) => {
-    const isunique = presets.every((p) => {
+    const isunique = publicPresets.every((p) => {
       return JSON.stringify(p.preset) !== JSON.stringify(preset);
     });
     if (isunique) {
@@ -233,7 +239,7 @@ export default component$(() => {
     }
   });
 
-  const totalPages = Math.ceil(count / perPage);
+  const totalPages = Math.ceil(presetCount / perPage);
 
   const updateURL = $((params: Record<string, string | number | boolean>) => {
     const url = new URL(window.location.href);
@@ -268,7 +274,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="sm:flex items-center my-3!">
           <span class="flex flex-1 gap-4 items-center">
@@ -287,16 +293,15 @@ export default component$(() => {
               onChange$={(e, el) =>
                 void updateURL({ showPending: el.checked, page: 1 })
               }
-              label={
-                <span class="text-sm whitespace-nowrap">
-                  {t('rgb.presets.showPending.title@@Show pending presets (VERY DANGEROUS)')}
-                </span>
-              }
-            />
+            >
+              <span class="text-sm whitespace-nowrap">
+                {t('rgb.presets.showPending.title@@Show pending presets (VERY DANGEROUS)')}
+              </span>
+            </Toggle>
           </SelectMenuRaw>
-          <Link href="/profile" class="lum-btn font-normal">
+          <a href="#my-presets" class="lum-btn font-normal">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
-          </Link>
+          </a>
         </h1>
         <p>
           {t(
@@ -306,7 +311,8 @@ export default component$(() => {
         <hr />
         <div
           class={{
-            'opacity-50 mb-2': savedPresets.value.length === 0,
+            'mb-2': true,
+            'opacity-50': savedPresets.value.length === 0,
           }}
         >
           <Toggle
@@ -316,8 +322,9 @@ export default component$(() => {
             onChange$={(e, el) =>
               void updateURL({ showSaved: el.checked, page: 1 })
             }
-            label={t('rgb.presets.showSaved.title@@Show saved presets')}
-          />
+          >
+            {t('rgb.presets.showSaved.title@@Show saved presets')}
+          </Toggle>
           <p class="text-xs text-lum-text-secondary mt-1">
             {t(
               'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
@@ -328,14 +335,11 @@ export default component$(() => {
           id="previewwithsettings"
           checked={presetStore.previewWithSettings}
           onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
-          label={t(
-            'rgb.presets.withCurrentOptions.title@@Show preview with current options',
-          )}
-        />
+        >
+          {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
+        </Toggle>
         <p class="text-xs text-lum-text-secondary mt-1">
-          {t(
-            'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.',
-          )}
+          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 px-2 items-start sm:items-center">
@@ -349,14 +353,14 @@ export default component$(() => {
               onInput$={(e, el) => void debouncedSearch(el.value)}
             />
           </div>
-          <div class="flex gap-2 items-center shrink-0">
+          <div class="flex gap-2 items-center">
             <SelectMenu
               value={`${sortBy}-${sortOrder}`}
               onChange$={(e, el) => {
                 const [newSortBy, newSortOrder] = el.value.split('-');
                 void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
               }}
-              title="Sort presets by"
+              title={t('rgb.presets.sortBy.title@@Sort by')}
               values = {[
                 {
                   name: t('rgb.presets.sortBy.newest@@Newest first'),
@@ -374,24 +378,16 @@ export default component$(() => {
                   name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
                   value: 'name-desc',
                 },
-                {
-                  name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
-                  value: 'saves-desc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
-                  value: 'saves-asc',
-                },
               ]}
             />
           </div>
         </div>
         <div>
-          <p class="text-xs text-lum-text-secondary mt-1">
+          <p class="text-xs text-lum-text-secondary mb-1">
             {t('rgb.presets.totalCount@@Total presets: ') +
-              presets.length +
+              publicPresets.length +
               ' / ' +
-              count}
+              presetCount}
             {totalPages > 1 && (
               <span class="ml-2">
                 {t('rgb.presets.pageInfo@@Page ') + page + ' of ' + totalPages}
@@ -479,14 +475,14 @@ export default component$(() => {
           </div>
         )}
         <div class="grid sm:grid-cols-2 gap-2">
-          {presets.map((presetInfo) => (
+          {publicPresets.map((publicPreset) => (
             <PresetPreview
-              key={`${presetInfo.name}-${presetInfo.author}`}
-              presetInfo={presetInfo}
+              key={`${publicPreset.name}-${publicPreset.author}`}
+              Preset={publicPreset}
               defaults={presetStore.previewWithSettings ? rgbStore : undefined}
             />
           ))}
-          {presets.length === 0 && (
+          {publicPresets.length === 0 && (
             <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
               <p class="text-center text-lum-text-secondary">
                 {t('rgb.presets.noResults@@No results found.')}
@@ -576,20 +572,7 @@ export default component$(() => {
             </div>
           </div>
         )}
-        <h3 class="flex gap-2 items-center">
-          <Save size={30} />
-          <span class="flex-1">{t('rgb.presets.private@@My RGBirdflop Presets')}</span>
-        </h3>
-
-        <div class="grid sm:grid-cols-2 gap-2">
-          {privatePresetsParsed.map((presetInfo) => (
-            <PresetPreview
-              key={`${presetInfo.name}-${presetInfo.author}`}
-              presetInfo={presetInfo}
-              defaults={presetStore.previewWithSettings ? rgbStore : undefined}
-            />
-          ))}
-        </div>
+        <MyPrivatePresets />
 
         <div class="text-sm mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB

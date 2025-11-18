@@ -1,4 +1,4 @@
-import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Gradient } from '~/util/rgb/HexUtils';
@@ -7,27 +7,25 @@ import { disperseColors, generateOutput, sortColors } from '~/util/rgb/RGBUtils'
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import { isBrowser } from '@builder.io/qwik/build';
 
-import { Blend, Clipboard, Palette, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
-import ColorMap from '~/components/rgb/ColorMap';
-import ColorList from '~/components/rgb/ColorList';
-import Output from '~/components/rgb/Output';
-import Presets from '~/components/rgb/Presets';
-import Decode from '~/components/rgb/Decode';
-import Formatting from '~/components/rgb/Formatting';
-import FormatOptions from '~/components/rgb/FormatOptions';
-import Options from '~/components/rgb/Options';
-import Accordion from '~/components/Accordion';
+import { Blend, Clipboard, Palette, Save, Settings, Sparkles } from 'lucide-icons-qwik';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import ColorMap from '~/components/Rgbirdflop/ColorMap';
+import ColorList from '~/components/Rgbirdflop/ColorList';
+import Output from '~/components/Rgbirdflop/Output';
+import Presets from '~/components/Rgbirdflop/Presets';
+import Decode from '~/components/Rgbirdflop/Decode';
+import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
+import Options from '~/components/Rgbirdflop/Options';
+import Accordion from '~/components/Elements/Accordion';
 import { NotificationContext, openItemsContext } from '~/routes/layout';
-import TextShadow from '~/components/rgb/TextShadow';
+import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { defaultDescription, generateHead } from '~/root';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
-  if (rgbStore.colors.length < 2) return rgbStore.text;
+  if (rgbStore.colors.length < 1) return rgbStore.text;
 
   const shadowColors = rgbStore.syncshadow
     ? rgbStore.colors.map(color => {
@@ -134,6 +132,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
+    let rafId = 0;
     function obfuscate() {
       const text = document.querySelectorAll('span.obfuscate');
       text.forEach((el, i) => {
@@ -143,14 +142,15 @@ export default component$(() => {
         }
         el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
       });
-      requestAnimationFrame(obfuscate);
+      rafId = requestAnimationFrame(obfuscate);
     }
     obfuscate();
     track(() => rgbStore.obfuscate);
+    return () => cancelAnimationFrame(rafId);
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Palette size={70} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -190,29 +190,14 @@ export default component$(() => {
 
             <Options />
 
-            <Accordion sectionName="presets">
+          </div>
+
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <Accordion sectionName="presets" alwaysOpen>
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
-
-            <Accordion sectionName="decode">
-              <Sparkles size={26} />
-              {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-                experimental
-              </span>
-            </Accordion>
-            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
-
-          </div>
-
-          <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="formatting" alwaysOpen>
-              <Type size={26} />
-              {t('rgb.formatting.title@@Formatting')}
-            </Accordion>
-            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
@@ -221,12 +206,21 @@ export default component$(() => {
               </Accordion>
               <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
             </>}
+
+            <Accordion sectionName="decode">
+              <Sparkles size={26} />
+              {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+                {t('rgb.decode.experimental@@experimental')}
+              </span>
+            </Accordion>
+            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
           </div>
         </div>
         <p class="mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
         </p>
-        <p class="">
+        <p>
           Wanna automate generating gradients or use this in your own project? We have <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">an API!</a>
         </p>
       </div>

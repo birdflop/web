@@ -1,61 +1,61 @@
 {
   "flags": {
     "autoRestart": {
-      "description": "是否在程序停止后自动重新启动。",
+      "description": "停止后是否自动重启。",
       "label": "自动重启"
     },
     "config": {
-      "description": "可以添加和修改启动脚本的各种设置。",
+      "description": "可以对启动脚本进行的各种添加和修改。",
       "label": "配置"
     },
-    "description": "用于优化服务器性能的启动参数。",
+    "description": "通常优化服务器性能的启动参数集合",
     "environment": {
       "command": "命令",
-      "description": "用于运行服务器的操作系统。",
-      "label": "操作系统",
+      "description": "服务器运行的操作系统。",
+      "label": "环境",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "翼龙面板",
+      "pterodactyl": "Pterodactyl",
       "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
-        "description": "基准测试（G1GC）的额外性能标志，仅限GraalVM使用。",
-        "label": "基准测试（GraalVM）"
+        "description": "Benchmarked (G1GC) 的额外性能标志，专供 GraalVM 用户使用。",
+        "label": "Benchmarked (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "MeowIce的额外性能标志，仅限GraalVM使用。",
-        "label": "MeowIce的标志（GraalVM）"
+        "description": "MeowIce 标志的额外性能标志，专供 GraalVM 用户使用。",
+        "label": "MeowIce 标志 (GraalVM)"
       },
       "vectors": {
-        "description": "启用SIMD操作，以优化Pufferfish及其分支上的地图项目渲染。",
-        "label": "现代矢量"
+        "description": "启用 SIMD 操作以优化 Pufferfish 及其分支上的地图项目渲染。",
+        "label": "现代向量"
       }
     },
     "fileName": {
-      "description": "将用于启动服务器的文件的名称。",
+      "description": "将用于启动服务器的文件名。",
       "label": "文件名"
     },
     "flags": {
-      "aikars": "Aikar的标志",
-      "benchmarked": "基准测试",
-      "etils": "Etil的标志",
-      "hillttys": "hilltty的标志",
+      "aikars": "Aikar 标志",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil 标志",
+      "hillttys": "hilltty 标志",
       "label": "标志",
-      "meowice": "MeowIce的标志",
+      "meowice": "MeowIce 标志",
       "none": "无",
-      "obyduxs": "Obydux的标志"
+      "obyduxs": "Obydux 标志"
     },
     "gui": {
-      "description": "是否显示内置的服务器管理GUI。",
-      "label": "不使用GUI"
+      "description": "是否显示内置的服务器管理 GUI。",
+      "label": "无 GUI"
     },
     "memory": {
-      "description": "分配给服务器的内存（RAM）量。",
+      "description": "分配给服务器的内存 (RAM) 量。",
       "label": "内存"
     },
     "script": {
-      "description": "生成的脚本，可用于启动服务器。将此文件放在与{{fileName}}相同的位置，然后执行它！",
+      "description": "可用于启动服务器的结果脚本。将此文件放在与 {{fileName}} 相同的位置，然后执行它！",
       "label": "脚本"
     },
     "serverType": {
@@ -67,11 +67,11 @@
       "waterfall": "Waterfall"
     },
     "software": {
-      "description": "将要运行Minecraft服务器的软件类型。",
+      "description": "您的 Minecraft 服务器将在其上运行的软件。",
       "label": "软件"
     },
     "variables": {
-      "description": "是否在脚本中使用环境变量来定义内存、文件名等常常更改的元素。",
+      "description": "是否在脚本中使用环境变量来定义内存、文件名和其他经常更改的元素。",
       "label": "使用变量"
     }
   }

@@ -1,3 +1,2 @@
 reject:
-  - "vite" # building broken on v6
-  - "@auth/prisma-adapter" # 2.7.4 is the last version that works
+  - "typescript" # lint broken on 5.9

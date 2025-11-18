@@ -1,9 +1,9 @@
 {
   "nav": {
     "404": {
-      "description": "Whoops! You've hit a dead-end.",
-      "home": "Go back home",
-      "title": "404: Page not found"
+      "description": "Oeps! Je hebt een doodlopende weg bereikt.",
+      "home": "Ga terug naar huis",
+      "title": "404: Pagina niet gevonden"
     },
     "cookies": {
       "acknowledge": "Okay",
@@ -11,73 +11,83 @@
       "optOut": "Turn off cookies",
       "title": "Cookies"
     },
-    "docs": "Docs",
+    "docs": "Documentatie",
     "hosting": {
-      "billing": "Billing",
+      "billing": "Facturering",
       "nodeStats": {
-        "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "description": "Controleer de status van Birdflop's serverknooppunten.",
+        "overview": "Overzicht",
+        "title": "Knooppunt statistieken",
+        "webServices": "Webdiensten"
       },
-      "panel": "Panel",
-      "plans": "Plans",
+      "panel": "Paneel",
+      "plans": "Plannen",
       "title": "Hosting"
     },
-    "privacyPolicy": "Privacy Beleid",
+    "privacyPolicy": "Privacybeleid",
     "profile": {
-      "hey": "Hey",
-      "login": "Login",
-      "logout": "Logout",
+      "hey": "Hé",
+      "login": "Inloggen",
+      "logout": "Uitloggen",
       "notLoggedIn": {
-        "description": "Click below to login",
-        "title": "You are not logged in!"
+        "description": "Klik hieronder om in te loggen",
+        "title": "Je bent niet ingelogd!"
       },
-      "title": "Profile"
+      "title": "Profiel"
     },
     "resources": {
       "animatedTAB": {
-        "description": "TAB plugin overloop animatie generator",
-        "title": "Genaimeerde TAB"
+        "description": "TAB plugin gradiënt animatie maker",
+        "title": "Geanimeerde TAB"
       },
       "animatedTextures": {
-        "description": "Voeg gemakkelijk texture pack animaties samen",
-        "title": "Geanimeerde Texturen"
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "title": "Geanimeerde texturen"
       },
       "banner": {
-        "description": "Easily generate banner designs for Minecraft.",
-        "title": "Banner Generator"
+        "description": "Genereer eenvoudig bannerontwerpen voor Minecraft.",
+        "title": "Banner generator"
       },
-      "description": "Here you can find all of Birdflop's public resources.",
+      "description": "Hier kun je alle openbare bronnen van Birdflop vinden.",
       "flags": {
-        "description": "A simple script generator to start your Minecraft servers with optimal flags",
-        "title": "Flags Generator"
+        "description": "Een eenvoudige scriptgenerator om je Minecraft-servers te starten met optimale vlaggen",
+        "title": "Vlaggen generator"
+      },
+      "gradientTools": {
+        "description": "Hulpmiddelen om je te helpen gradiënttekst in Minecraft te maken.",
+        "title": "Gradiënt hulpmiddelen"
       },
       "hexGradient": {
-        "description": "Hex-kleur overloop maker, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+        "description": "Hexadecimale gradiënt tekst generator, aangedreven door Birdflop, een 501(c)(3) non-profit Minecraft host.",
         "title": "RGBirdflop"
       },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
-      },
       "hexGradientPresets": {
-        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
-        "title": "RGBirdflop Presets"
+        "description": "Hier kun je voorinstellingen vinden en opslaan, kopiëren of direct gebruiken voor gebruik op RGBirdflop.",
+        "title": "RGBirdflop voorinstellingen"
       },
-      "more": "More Resources",
+      "miscellaneousTools": {
+        "description": "Diverse hulpmiddelen om te helpen met willekeurige diverse dingen.",
+        "title": "Diverse hulpmiddelen"
+      },
+      "more": "Meer bronnen",
       "paperTimings": {
-        "description": "Analyze Paper Timings and get possible optimizations",
+        "description": "Analyseer Paper Timings en krijg mogelijke optimalisaties",
         "title": "Paper Timings"
       },
+      "serverTools": {
+        "description": "Hulpmiddelen om te helpen bij het configureren en instellen van Minecraft-servers.",
+        "title": "Server hulpmiddelen"
+      },
       "sparkProfile": {
-        "description": "Analyze a Spark Profile and get possible optimizations",
-        "title": "Spark Profile"
+        "description": "Analyseer een Spark profiel en krijg mogelijke optimalisaties",
+        "title": "Spark profiel"
       },
       "tabAnimationPreview": {
-        "description": "Preview TAB Animations without the need to put them in-game",
-        "title": "TAB Animatie Vooreeld"
+        "description": "Bekijk TAB-animaties zonder ze in het spel te hoeven plaatsen",
+        "title": "TAB animatie voorvertoning"
       },
-      "title": "Resources"
+      "title": "Bronnen"
     },
-    "termsofService": "Terms of Service"
+    "termsofService": "Gebruiksvoorwaarden"
   }
 }

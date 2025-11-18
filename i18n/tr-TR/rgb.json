@@ -1,143 +1,149 @@
 {
   "rgb": {
     "colors": {
-      "amount": "Renk Miktarı",
+      "amount": "Renk miktarı",
       "character": "Karakter",
-      "charsPer": "Characters per color",
+      "charsPer": "Renk başına karakter",
       "color": "Renk",
-      "customFormat": "Custom Format",
+      "customFormat": "Özel format",
       "disperse": {
         "always": {
-          "description": "Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.",
-          "title": "Always Disperse Colors"
+          "description": "Gradyantın her zaman eşit şekilde yayılmasını istiyorsanız bunu açın. Bu, gradyant haritasını devre dışı bırakacaktır.",
+          "title": "Renkleri her zaman dağıt"
         },
-        "title": "Disperse"
+        "title": "Dağıt"
       },
-      "format": "Özel Format",
+      "format": "Renk formatı",
       "lowercase": {
-        "description": "Turn this on if you want to use lowercase hex codes.",
-        "title": "Lowercase Hex Codes"
+        "description": "Küçük harfli hex kodları kullanmak istiyorsanız bunu açın.",
+        "title": "Küçük harfli hex kodları"
       },
+      "randomize": "Rastgele yap",
       "shadow": {
-        "sync": "Sync with text colors",
-        "title": "Text Shadow"
+        "sync": "Metin renkleriyle senkronize et",
+        "title": "Metin gölgesi",
+        "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
-      "title": "Colors",
+      "title": "Renkler",
       "trimSpaces": {
-        "description": "Turn this off if you're using empty underlines / strikethroughs",
-        "title": "Trim colors from spaces"
+        "description": "Boş alt çizgiler / üst çizgiler kullanıyorsanız bunu kapatın",
+        "title": "Boşluklardan renkleri kırp"
       }
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Panoya kopyalandı!",
+    "copyFailed": "Panoya kopyalanamadı!",
     "decode": {
       "decoded": {
-        "description": "Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
-        "title": "RGB Text Decoded!"
+        "description": "Mevcut RGB metni başarıyla çözüldü! Bu beklediğiniz şey değilse, eşik değerini değiştirmeyi deneyin.",
+        "title": "RGB metni çözüldü!"
       },
-      "description": "Copy-paste an existing RGB text here to edit it",
-      "disclaimer": "This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
+      "description": "Düzenlemek için mevcut bir RGB metnini buraya kopyalayıp yapıştırın",
+      "disclaimer": "Bu özellik, gradyanlardaki renk noktalarını ve nerede olduklarını tahmin etmeye çalışır, %100 doğru değildir ve gradyanlarınızı kaydetmek için bunun yerine ön ayar özelliğini kullanmanızı öneririz.",
+      "experimental": "deneysel",
       "threshold": {
-        "description": "Try changing this around if you're getting too many colors",
-        "title": "Threshold"
+        "description": "Çok fazla renk alıyorsanız bunu değiştirmeyi deneyin",
+        "title": "Eşik"
       },
-      "title": "Decode"
+      "title": "Çöz"
     },
     "formatting": {
       "bold": "Kalın",
-      "character": "Biçim Karakteri",
+      "character": "Format karakteri",
       "italic": "İtalik",
-      "obfuscate": "Obfuscate",
-      "options": "Format Options",
-      "placeholders": "Yer tutucular",
+      "obfuscate": "Karıştır",
+      "options": "Format seçenekleri",
+      "placeholders": "Yer tutucular:",
       "strikethrough": "Üstü çizili",
-      "title": "Biçimlendirme",
+      "title": "Format",
       "underline": "Altı çizili"
     },
     "inputText": {
-      "description": "Type here to generate a gradient!",
+      "description": "Gradyant oluşturmak için buraya yazın!",
       "preview": {
-        "chat": "Minecraft Chat",
-        "default": "Default",
+        "chat": "Minecraft Sohbet",
+        "default": "Varsayılan",
         "tab": {
-          "footer": "Minecraft Tab Footer",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "footer": "Minecraft Tab Alt bilgi",
+          "header": "Minecraft Tab Üst bilgi",
+          "player": "Minecraft Tab Oyuncu"
         },
-        "title": "Preview Style",
-        "typeHere": "<RGBirdflop> Type here!"
+        "typeHere": "<RGBirdflop> Buraya yazın!"
       },
-      "title": "Metin Girişi"
+      "title": "Giriş metni"
     },
-    "options": "Options",
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
-      "description": "RGB metin için bunu kopyalayıp yapıştırın!",
+      "copied": "RGB metni başarıyla panonuza kopyalandı.",
+      "description": "RGB metni için bunu kopyalayıp yapıştırın!",
       "title": "Çıktı"
     },
-    "prefixsuffix": "Prefix/Suffix",
+    "prefixsuffix": "Ön ek/Son ek",
     "presets": {
-      "browse": "Browse",
-      "copied": "Successfully copied preset to clipboard!",
-      "copy": "Copy",
-      "import": "Import",
-      "importSubtitle": "Load a JSON preset",
+      "back": "Ön ayarlara geri dön",
+      "copied": "Ön ayar başarıyla panoya kopyalandı!",
+      "copy": "Kopyala",
+      "createNew": "Yeni bir ön ayar oluştur",
+      "createdAt": "Oluşturuldu",
+      "find": "Daha fazla ön ayar bul",
+      "import": "İçe aktar",
+      "importSubtitle": "JSON ön ayarı yükle",
       "imported": {
-        "description": "The preset has been imported successfully.",
-        "title": "Ön Ayar başarıyla içe aktarıldı!"
+        "description": "Ön ayar başarıyla içe aktarıldı.",
+        "title": "Ön ayar başarıyla içe aktarıldı!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
-        "title": "Invalid Preset"
+        "description": "Lütfen bunu https://discord.gg/9vUZ9MREVz adresine içe aktarmaya çalıştığınız ön ayarla birlikte bildirin.",
+        "title": "Geçersiz ön ayar"
       },
-      "load": "Load saved preset",
-      "noResults": "No results found.",
-      "pageInfo": "Page ",
+      "myPrivate": "Benim özel RGBirdflop ön ayarlarım",
+      "noResults": "Sonuç bulunamadı.",
+      "nopresets": "Henüz ön ayar kaydedilmedi!",
+      "pageInfo": "Sayfa ",
       "pagination": {
-        "next": "Next",
-        "previous": "Previous"
+        "next": "Sonraki",
+        "perPage": "Sayfa başına:",
+        "previous": "Önceki"
       },
-      "pasteHere": "Paste here",
-      "private": "My RGBirdflop Presets",
-      "publish": "Publish your own preset",
-      "remove": "Remove",
-      "save": "Save",
+      "pasteHere": "Buraya yapıştır",
+      "pending": "Bu ön ayar inceleme bekliyor ve henüz diğer kullanıcılar için kullanılabilir olmayabilir.",
+      "presetData": "Ön ayar verisi",
+      "publish": "Kendi ön ayarınızı yayınlayın",
+      "remove": "Kaldır",
+      "save": "Kaydet",
       "saved": {
-        "description": "The preset has been saved successfully.",
-        "presets": "Saved Presets",
-        "title": "Preset Saved!",
-        "warning": "Please login to save presets permanently."
+        "description": "Ön ayar başarıyla kaydedildi.",
+        "presets": "Kaydedilen ön ayarlar",
+        "title": "Ön ayar kaydedildi!",
+        "warning": "Lütfen ön ayarları kalıcı olarak kaydetmek için giriş yapın."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Bekleyen ön ayarları göster (ÇOK TEHLİKELİ)"
       },
       "showSaved": {
-        "description": "Turn this on to show only your saved presets.",
-        "title": "Show saved presets"
+        "description": "Sadece kaydedilen ön ayarlarınızı göstermek için bunu açın.",
+        "title": "Kaydedilen ön ayarları göster"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
-        "nameAZ": "Name A-Z",
-        "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first"
+        "nameAZ": "Ad A-Z",
+        "nameZA": "Ad Z-A",
+        "newest": "En yeni önce",
+        "oldest": "En eski önce",
+        "title": "Sırala"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "Bir şey eksik olduğunu mu düşünüyorsunuz?",
+        "two": "profil sayfanızda kendi ön ayarınızı yayınlayın!"
       },
-      "title": "Ön Ayarlar",
-      "totalCount": "Total presets: ",
+      "title": "Ön ayarlar",
+      "totalCount": "Toplam ön ayar: ",
       "url": {
-        "description": "Successfully exported preset to url! (Check the URL bar)",
-        "get": "Get Url",
-        "title": "URL Updated!"
+        "description": "Ön ayar başarıyla URL'ye aktarıldı! (URL çubuğunu kontrol edin)",
+        "get": "URL al",
+        "title": "URL güncellendi!"
       },
-      "use": "Use",
+      "use": "Kullan",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Mevcut seçeneklerle uygulanan önizlemeleri göstermek için bunu açın.",
+        "title": "Mevcut seçeneklerle önizleme göster"
       }
     }
   }

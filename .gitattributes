@@ -1,0 +1,8 @@
+# Treat everything inside drizzle/migrations as generated
+drizzle/migrations/** linguist-generated=true
+
+# Ensure consistent line endings
+drizzle/migrations/** text eol=lf
+
+# If you never want to see diffs in these files
+drizzle/migrations/** -diff

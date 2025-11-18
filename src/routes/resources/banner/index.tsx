@@ -5,7 +5,7 @@ import type { NoSerialize } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Terminal, Trash } from 'lucide-icons-qwik';
-import Accordion from '~/components/Accordion';
+import Accordion from '~/components/Elements/Accordion';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -192,7 +192,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Presentation size={70} /> {t('nav.resources.banner.title@@Banner Generator')}

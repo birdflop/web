@@ -1,9 +1,9 @@
 {
   "nav": {
     "404": {
-      "description": "Whoops! You've hit a dead-end.",
-      "home": "Go back home",
-      "title": "404: Page not found"
+      "description": "앗! 막다른 길에 도달했습니다.",
+      "home": "홈으로 돌아가기",
+      "title": "404: 페이지를 찾을 수 없습니다"
     },
     "cookies": {
       "acknowledge": "Okay",
@@ -11,27 +11,29 @@
       "optOut": "Turn off cookies",
       "title": "Cookies"
     },
-    "docs": "Docs",
+    "docs": "문서",
     "hosting": {
-      "billing": "Billing",
+      "billing": "청구",
       "nodeStats": {
-        "description": "Check the status of Birdflop's server nodes.",
-        "title": "Node Stats"
+        "description": "Birdflop의 서버 노드 상태를 확인하세요.",
+        "overview": "개요",
+        "title": "노드 통계",
+        "webServices": "웹 서비스"
       },
-      "panel": "Panel",
-      "plans": "Plans",
-      "title": "Hosting"
+      "panel": "패널",
+      "plans": "플랜",
+      "title": "호스팅"
     },
-    "privacyPolicy": "개인정보 처리방침",
+    "privacyPolicy": "개인정보 보호정책",
     "profile": {
-      "hey": "Hey",
-      "login": "Login",
-      "logout": "Logout",
+      "hey": "안녕하세요",
+      "login": "로그인",
+      "logout": "로그아웃",
       "notLoggedIn": {
-        "description": "Click below to login",
-        "title": "You are not logged in!"
+        "description": "로그인하려면 아래를 클릭하세요",
+        "title": "로그인되지 않았습니다!"
       },
-      "title": "Profile"
+      "title": "프로필"
     },
     "resources": {
       "animatedTAB": {
@@ -39,45 +41,53 @@
         "title": "애니메이션 TAB"
       },
       "animatedTextures": {
-        "description": "리소스 팩 애니메이션을 위해 텍스처를 쉽게 병합하세요",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "애니메이션 텍스처"
       },
       "banner": {
-        "description": "Easily generate banner designs for Minecraft.",
-        "title": "Banner Generator"
+        "description": "Minecraft를 위한 배너 디자인을 쉽게 생성.",
+        "title": "배너 생성기"
       },
-      "description": "Here you can find all of Birdflop's public resources.",
+      "description": "여기서 Birdflop의 모든 공개 리소스를 찾을 수 있습니다.",
       "flags": {
-        "description": "최적 플래그로 Minecraft 서버를 시작하는 간단한 스크립트 생성기",
+        "description": "최적의 플래그로 Minecraft 서버를 시작하기 위한 간단한 스크립트 생성기",
         "title": "플래그 생성기"
       },
-      "hexGradient": {
-        "description": "헥스 코드 색상 그라데이션 생성기, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
-        "title": "헥스 코드 그라데이션"
+      "gradientTools": {
+        "description": "Minecraft에서 그라데이션 텍스트를 만드는 데 도움이 되는 도구.",
+        "title": "그라데이션 도구"
       },
-      "hexGradientAPIDocs": {
-        "description": "Documentation for the RGBirdflop API",
-        "title": "RGBirdflop API Docs"
+      "hexGradient": {
+        "description": "16진수 그라데이션 텍스트 생성기, 501(c)(3) 비영리 Minecraft 호스트인 Birdflop에서 제공.",
+        "title": "RGBirdflop"
       },
       "hexGradientPresets": {
-        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
-        "title": "RGBirdflop Presets"
+        "description": "여기서 RGBirdflop에서 사용할 사전 설정을 찾고, 저장하고, 복사하거나 직접 사용할 수 있습니다.",
+        "title": "RGBirdflop 사전 설정"
       },
-      "more": "More Resources",
+      "miscellaneousTools": {
+        "description": "무작위 기타 작업을 돕는 기타 도구.",
+        "title": "기타 도구"
+      },
+      "more": "더 많은 리소스",
       "paperTimings": {
-        "description": "Analyze Paper Timings and get possible optimizations",
+        "description": "Paper Timings를 분석하고 가능한 최적화 가져오기",
         "title": "Paper Timings"
       },
+      "serverTools": {
+        "description": "Minecraft 서버 구성 및 설정을 돕는 도구.",
+        "title": "서버 도구"
+      },
       "sparkProfile": {
-        "description": "Analyze a Spark Profile and get possible optimizations",
-        "title": "Spark Profile"
+        "description": "Spark 프로필을 분석하고 가능한 최적화 가져오기",
+        "title": "Spark 프로필"
       },
       "tabAnimationPreview": {
-        "description": "게임에 넣지 않고 TAB 애니메이션을 미리보는 기능",
+        "description": "게임에 넣을 필요 없이 TAB 애니메이션 미리보기",
         "title": "TAB 애니메이션 미리보기"
       },
-      "title": "Resources"
+      "title": "리소스"
     },
-    "termsofService": "Terms of Service"
+    "termsofService": "서비스 약관"
   }
 }

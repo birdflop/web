@@ -11,11 +11,14 @@
       "optOut": "Cookies deaktivieren",
       "title": "Cookies"
     },
+    "docs": "Docs",
     "hosting": {
       "billing": "Abrechnung",
       "nodeStats": {
         "description": "Status der Birdflop Serverknoten abrufen.",
-        "title": "Knotenstatistiken"
+        "overview": "Overview",
+        "title": "Knotenstatistiken",
+        "webServices": "Web Services"
       },
       "panel": "Panel",
       "plans": "Pläne",
@@ -38,7 +41,7 @@
         "title": "Animierter TAB"
       },
       "animatedTextures": {
-        "description": "Einfach Texturen für Ressourcenpaket-Animationen verbinden",
+        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         "title": "Animierte Texturen"
       },
       "banner": {
@@ -49,6 +52,10 @@
       "flags": {
         "description": "Ein einfacher Scriptgenerator um deinen Minecraft-Server mit optimalen Kennzeichnungen zu starten.",
         "title": "Kennzeichnungsgenerator"
+      },
+      "gradientTools": {
+        "description": "Tools to help you create gradient text in Minecraft.",
+        "title": "Gradient Tools"
       },
       "hexGradient": {
         "description": "Hex-Farbverlauf Text Generator, angetrieben by Birdflop, ein 501(c)(3) gemeinnütziger Minecraft host.",
@@ -62,10 +69,18 @@
         "description": "Hier können sie Voreinstellungen für RGBirdflop finden und speichern, kopieren oder sofort nutzen.",
         "title": "RGBirdflop Voreinstellungen"
       },
+      "miscellaneousTools": {
+        "description": "Miscellaneous tools to help with random miscellaneous things.",
+        "title": "Miscellaneous Tools"
+      },
       "more": "Mehr Ressourcen",
       "paperTimings": {
         "description": "Paper Timings analysieren und optimisieren.",
         "title": "Paper Timings"
+      },
+      "serverTools": {
+        "description": "Tools to help configure and setup minecraft servers.",
+        "title": "Server Tools"
       },
       "sparkProfile": {
         "description": "Spark-Profile analysieren und optimisieren.",

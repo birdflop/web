@@ -1,19 +1,18 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
-    "cumulative": "Kümülatif (Gif kareleri bozuksa bunu açın)",
-    "downloadMCMETA": "MCMETA'yı İndirin",
-    "downloadPNG": "PNG İndir",
-    "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "Oluşturmak",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
-    "textureName": "Doku Adı",
-    "width": "Width"
+    "animationPreview": "Animasyon önizlemesi",
+    "bounce": "Zıplama animasyonu",
+    "downloadMCMETA": "MCMETA indir",
+    "downloadPNG": "PNG indir",
+    "duration": "Süre",
+    "height": "Yükseklik",
+    "lockDimensions": "Boyutları kilitle",
+    "pasteUrl": "Paste GIF or image URL",
+    "pngPreview": "PNG önizlemesi",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
+    "syncDuration": "Süreyi senkronize et",
+    "textureName": "Doku adı",
+    "width": "Genişlik"
   }
 }

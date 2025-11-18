@@ -1,20 +1,11 @@
 import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from '../plugin@auth';
-import { Form, RequestHandler, useLocation } from '@builder.io/qwik-city';
-import { LogIn, LogOut } from 'lucide-icons-qwik';
+import { Form, useLocation } from '@builder.io/qwik-city';
+import { CircleUserRound, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { ThemeToggle } from '~/components/ThemeToggle';
-
-export const onGet: RequestHandler = ({ cacheControl }) => {
-  cacheControl({
-    public: false,
-    maxAge: 0,
-    sMaxAge: 0,
-    staleWhileRevalidate: 0,
-  });
-};
+import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -43,7 +34,7 @@ export default component$(() => {
                 value={loc.url.pathname + loc.url.search}
               />
               <button class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white">
-                <LogIn size={20} /> {t('nav.profile.login@@Login')}
+                <CircleUserRound size={20} /> {t('nav.profile.login@@Login')}
               </button>
             </Form>
           </div>
@@ -53,15 +44,20 @@ export default component$(() => {
   }
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
-        <div class="flex items-center">
-          <h1 class="flex gap-4 items-center my-3! flex-1">
-            {session.value.user.image &&
-              <img src={session.value.user.image} width={70} height={70} class="rounded-full! w-17 h-17" />
-            }
-            {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
-          </h1>
+        <div class="lum-card flex-row items-center lum-btn-p-3 lum-bg-lum-card-bg">
+          <div class="my-3! flex-1">
+            <h3 class="flex gap-4 items-center mt-0! mb-1!">
+              {session.value.user.image &&
+                <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
+              }
+              {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+            </h3>
+            <p>
+              Your ID is: {session.value.user.id}
+            </p>
+          </div>
           <div class="flex items-center gap-4">
             <ThemeToggle variant='full' />
             <Form action={signOut} q:slot="extra-buttons">
@@ -71,13 +67,12 @@ export default component$(() => {
                 name="options.redirectTo"
                 value={loc.url.pathname + loc.url.search}
               />
-              <button class="lum-btn lum-bg-transparent rounded-lum-1">
+              <button class="lum-btn lum-bg-transparent">
                 <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
               </button>
             </Form>
           </div>
         </div>
-        <hr />
         <main>
           <Slot />
         </main>

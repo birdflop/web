@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "Het commando is succesvol naar je klembord gekopieerd.",
+      "title": "Commando"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "Gekopieerd naar klembord!",
+    "copyFailed": "Kon niet naar klembord kopiëren!",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "Dit is de basiskleur van de banner om mee te beginnen.",
+        "title": "Basis kleur"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "Patronen",
+      "title": "Opties"
     },
-    "preview": "Preview"
+    "preview": "Voorvertoning"
   }
 }

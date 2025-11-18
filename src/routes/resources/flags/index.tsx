@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { SelectMenu, Toggle, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
@@ -8,7 +8,6 @@ import { generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
-import { isBrowser } from '@builder.io/qwik/build';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -170,7 +169,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <div class="markdown">
           <h1 class="flex gap-4 items-center my-3!">
@@ -290,28 +289,27 @@ export default component$(() => {
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
               }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
-                <Toggle label={<div>
-                  {option.label}
-                </div>} checked={flagsStore[id]} onClick$={(e, el) => {
+                <Toggle checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
-                }} />
-                <div class="flex gap-2">
+                }}>
                   <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.label}
+                </Toggle>
+                <div class="flex gap-2">
                   {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
                 </div>
               </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <option.icon size={24} />
-                <Toggle key={id} label={<div>
-                  {option.label}
-                </div>} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
+                <Toggle key={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
                   if (el.checked) flagsStore.extraFlags.push(id);
                   else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
-                }} />
-                <div class="flex gap-2">
+                }}>
                   <option.icon size={24} class="min-w-6 min-h-6" />
+                  {option.label}
+                </Toggle>
+                <div class="flex gap-2">
                   {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
                 </div>
               </>)}

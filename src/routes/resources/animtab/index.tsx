@@ -1,4 +1,4 @@
-import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { animationStyles, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
@@ -8,20 +8,18 @@ import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import { isBrowser } from '@builder.io/qwik/build';
 
-import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles, Type } from 'lucide-icons-qwik';
+import { Clipboard, FileJson, Palette, Rainbow, Save, Settings, Sparkles } from 'lucide-icons-qwik';
 import { SelectMenu, NumberInput } from '@luminescent/ui-qwik';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
-import ColorMap from '~/components/rgb/ColorMap';
-import ColorList from '~/components/rgb/ColorList';
-import Output from '~/components/rgb/Output';
-import Presets from '~/components/rgb/Presets';
-import Decode from '~/components/rgb/Decode';
-import Formatting from '~/components/rgb/Formatting';
-import FormatOptions from '~/components/rgb/FormatOptions';
-import Options from '~/components/rgb/Options';
-import Accordion from '~/components/Accordion';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import ColorMap from '~/components/Rgbirdflop/ColorMap';
+import ColorList from '~/components/Rgbirdflop/ColorList';
+import Output from '~/components/Rgbirdflop/Output';
+import Presets from '~/components/Rgbirdflop/Presets';
+import Decode from '~/components/Rgbirdflop/Decode';
+import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
+import Options from '~/components/Rgbirdflop/Options';
+import Accordion from '~/components/Elements/Accordion';
 import { NotificationContext, openItemsContext } from '~/routes/layout';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -122,6 +120,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
+    let rafId = 0;
     function obfuscate() {
       const text = document.querySelectorAll('span.obfuscate');
       text.forEach((el, i) => {
@@ -131,14 +130,15 @@ export default component$(() => {
         }
         el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
       });
-      requestAnimationFrame(obfuscate);
+      rafId = requestAnimationFrame(obfuscate);
     }
     obfuscate();
     track(() => rgbStore.obfuscate);
+    return () => cancelAnimationFrame(rafId);
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Rainbow size={70} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
@@ -229,30 +229,14 @@ export default component$(() => {
                 {t('animtab.animation.style@@Animation Style')}
               </SelectMenu>
             </Options>
+          </div>
 
-            <Accordion sectionName="presets">
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <Accordion sectionName="presets" alwaysOpen>
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
-
-            <Accordion sectionName="decode">
-              <Sparkles size={26} />
-              {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-                experimental
-              </span>
-            </Accordion>
-            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
-          </div>
-
-          <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="formatting" alwaysOpen>
-              <Type size={26} />
-              {t('rgb.formatting.title@@Formatting')}
-            </Accordion>
-            <Formatting hidden={!openItemsStore.items.includes('formatting')} />
-
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions">
                 <Settings size={26} />
@@ -260,6 +244,15 @@ export default component$(() => {
               </Accordion>
               <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
             </>}
+
+            <Accordion sectionName="decode">
+              <Sparkles size={26} />
+              {t('rgb.decode.title@@Decode')}
+              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+                {t('rgb.decode.experimental@@experimental')}
+              </span>
+            </Accordion>
+            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
 
             <Accordion sectionName="outputformat">
               <FileJson size={26} />

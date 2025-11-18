@@ -1,19 +1,18 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
-    "cumulative": "Cumulativo (Ativa esta opção se os frames do gif estão estragados)",
-    "downloadMCMETA": "Download do MCMETA",
-    "downloadPNG": "Download do PNG",
-    "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "Gerar",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
+    "animationPreview": "Pré-visualização da animação",
+    "bounce": "Animação de salto",
+    "downloadMCMETA": "Transferir MCMETA",
+    "downloadPNG": "Transferir PNG",
+    "duration": "Duração",
+    "height": "Altura",
+    "lockDimensions": "Bloquear dimensões",
+    "pasteUrl": "Paste GIF or image URL",
+    "pngPreview": "Pré-visualização PNG",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
+    "syncDuration": "Sincronizar duração",
     "textureName": "Nome da textura",
-    "width": "Width"
+    "width": "Largura"
   }
 }

@@ -1,19 +1,19 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
-      "title": "Command"
+      "copied": "명령이 클립보드에 성공적으로 복사되었습니다.",
+      "title": "명령"
     },
-    "copied": "Copied to clipboard!",
-    "copyFailed": "Failed to copy to clipboard!",
+    "copied": "클립보드에 복사되었습니다!",
+    "copyFailed": "클립보드에 복사하지 못했습니다!",
     "options": {
       "baseColor": {
-        "description": "This is the base color of the banner to start with.",
-        "title": "Base Color"
+        "description": "이것은 배너를 시작할 기본 색상입니다.",
+        "title": "기본 색상"
       },
-      "patterns": "Patterns",
-      "title": "Options"
+      "patterns": "패턴",
+      "title": "옵션"
     },
-    "preview": "Preview"
+    "preview": "미리보기"
   }
 }

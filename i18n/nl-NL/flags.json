@@ -1,18 +1,18 @@
 {
   "flags": {
     "autoRestart": {
-      "description": "Whether to automatically restart after it is stopped.",
-      "label": "Auto-restart"
+      "description": "Of automatisch opnieuw opstarten na het stoppen.",
+      "label": "Automatisch opnieuw opstarten"
     },
     "config": {
-      "description": "The various additions and modifications that can be made to your start script.",
-      "label": "Config"
+      "description": "De verschillende toevoegingen en wijzigingen die kunnen worden gemaakt aan je startscript.",
+      "label": "Configuratie"
     },
-    "description": "The collection of start arguments that typically optimize the server's performance",
+    "description": "De verzameling startargumenten die doorgaans de prestaties van de server optimaliseren",
     "environment": {
-      "command": "Command",
-      "description": "The operating system that the server runs on.",
-      "label": "Environment",
+      "command": "Commando",
+      "description": "Het besturingssysteem waarop de server draait.",
+      "label": "Omgeving",
       "linux": "Linux",
       "macos": "macOS",
       "pterodactyl": "Pterodactyl",
@@ -20,42 +20,42 @@
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
-        "description": "Additional performance flags for Benchmarked (G1GC) exclusive to GraalVM users.",
+        "description": "Extra prestatievlaggen voor Benchmarked (G1GC) exclusief voor GraalVM-gebruikers.",
         "label": "Benchmarked (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
-        "label": "MeowIce's Flags (GraalVM)"
+        "description": "Extra prestatievlaggen voor MeowIce's vlaggen exclusief voor GraalVM-gebruikers.",
+        "label": "MeowIce's vlaggen (GraalVM)"
       },
       "vectors": {
-        "description": "Enables SIMD operations to optimize map item rendering on Pufferfish and its forks.",
-        "label": "Modern Vectors"
+        "description": "Schakelt SIMD-bewerkingen in om kaartitemrendering te optimaliseren op Pufferfish en zijn forks.",
+        "label": "Moderne vectoren"
       }
     },
     "fileName": {
-      "description": "The name of the file that will be used to start your server.",
-      "label": "File Name"
+      "description": "De naam van het bestand dat zal worden gebruikt om je server te starten.",
+      "label": "Bestandsnaam"
     },
     "flags": {
-      "aikars": "Aikar's Flags",
+      "aikars": "Aikar's vlaggen",
       "benchmarked": "Benchmarked",
-      "etils": "Etil's Flags",
-      "hillttys": "hilltty's Flags",
-      "label": "Flags",
-      "meowice": "MeowIce's Flags",
-      "none": "None",
-      "obyduxs": "Obydux's Flags"
+      "etils": "Etil's vlaggen",
+      "hillttys": "hilltty's vlaggen",
+      "label": "Vlaggen",
+      "meowice": "MeowIce's vlaggen",
+      "none": "Geen",
+      "obyduxs": "Obydux's vlaggen"
     },
     "gui": {
-      "description": "Whether to display the built-in server management GUI.",
-      "label": "No GUI"
+      "description": "Of de ingebouwde serverbeheer GUI moet worden weergegeven.",
+      "label": "Geen GUI"
     },
     "memory": {
-      "description": "The amount of memory (RAM) to allocate to your server.",
-      "label": "Memory"
+      "description": "De hoeveelheid geheugen (RAM) die aan je server moet worden toegewezen.",
+      "label": "Geheugen"
     },
     "script": {
-      "description": "The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!",
+      "description": "Het resulterende script dat kan worden gebruikt om je server te starten. Plaats dit bestand op dezelfde locatie als {{fileName}}, voer het dan uit!",
       "label": "Script"
     },
     "serverType": {
@@ -67,12 +67,12 @@
       "waterfall": "Waterfall"
     },
     "software": {
-      "description": "The software in which your Minecraft server will run on.",
+      "description": "De software waarop je Minecraft-server zal draaien.",
       "label": "Software"
     },
     "variables": {
-      "description": "Whether to use environment variables within the script to define memory, file name, and other commonly changed elements.",
-      "label": "Use Variables"
+      "description": "Of omgevingsvariabelen binnen het script moeten worden gebruikt om geheugen, bestandsnaam en andere veelvuldig gewijzigde elementen te definiëren.",
+      "label": "Variabelen gebruiken"
     }
   }
 }

@@ -1,19 +1,18 @@
 {
   "animtexture": {
-    "animationPreview": "Animation Preview",
-    "bounce": "Bounce Animation",
-    "cumulative": "Cumulatief (Zet dit aan als GIF Frames weg zijn)",
+    "animationPreview": "Animatie voorvertoning",
+    "bounce": "Stuit animatie",
     "downloadMCMETA": "Download MCMETA",
     "downloadPNG": "Download PNG",
-    "duration": "Duration",
-    "framePreview": "Frame Preview",
-    "generate": "Genereer",
-    "height": "Height",
-    "lockDimensions": "Lock Dimensions",
-    "pngPreview": "PNG Preview",
-    "selectFrames": "Select Frame(s) or GIF",
-    "syncDuration": "Sync Duration",
-    "textureName": "Textuur Naam",
-    "width": "Width"
+    "duration": "Duur",
+    "height": "Hoogte",
+    "lockDimensions": "Afmetingen vergrendelen",
+    "pasteUrl": "Paste GIF or image URL",
+    "pngPreview": "PNG voorvertoning",
+    "selectFrames": "Select GIF or image from your device",
+    "showChatPreview": "Show Minecraft chat preview",
+    "syncDuration": "Duur synchroniseren",
+    "textureName": "Textuur naam",
+    "width": "Breedte"
   }
 }

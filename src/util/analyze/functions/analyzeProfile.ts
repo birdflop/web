@@ -60,6 +60,7 @@ export default async function analyzeProfile(id: string) {
 
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
+
   const json = await req.json() as any;
   const latest = json.versions[json.versions.length - 1];
 

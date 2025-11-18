@@ -1,38 +1,43 @@
-import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { useSession, type BirdflopSession } from '~/routes/plugin@auth';
-import { getPresets, publishedPreset } from '~/util/rgb/presets';
+import { useSession } from '~/routes/plugin@auth';
+import { getPresets } from '~/util/rgb/presets';
 import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { getPrismaClient } from '~/util/prisma';
 import { NotificationContext } from '~/routes/layout';
-import Input, { previewStyleContext } from '~/components/rgb/Input';
+import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { setUserData } from '~/util/dataUtils';
+import { savePreset, unsavePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
+import { getDB, presets, savedPresets, users } from '~/util/db';
+import { eq, sql } from 'drizzle-orm';
 
-export const usePreset = routeLoader$(async ({ params, env }) => {
-  const prisma = getPrismaClient(env.get('DATABASE_URL'));
-  if (!prisma) throw new Error('No prisma client');
+export const usePreset = routeLoader$(async ({ params }) => {
+  const db = getDB();
+  if (!db) throw new Error('No database connection');
   if (isNaN(Number(params.id))) throw new Error('No preset ID provided');
 
-  const presetInfo = await prisma.presets.findUnique({
-    where: { id: Number(params.id) },
-    include: {
-      user: true,
-      savedBy: true,
-    },
-    cacheStrategy: {
-      ttl: 60 * 60, // Cache for 1 hour
-    },
-  }) as publishedPreset | null;
+  const presetInfo = await db.select({
+    presets, user: users,
+    saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
+  })
+    .from(presets)
+    .leftJoin(users, eq(users.id, presets.userId))
+    .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
+    .where(eq(presets.id, Number(params.id)))
+    .groupBy(presets.id, users.id)
+    .get();
 
   if (!presetInfo) throw new Error('Preset not found');
 
-  return presetInfo;
+  return {
+    ...presetInfo.presets,
+    user: presetInfo.user,
+    saveCount: presetInfo.saveCount,
+  };
 });
 
 export default component$(() => {
@@ -41,7 +46,7 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
   const loading = useSignal(false);
 
-  const session = useSession() as Readonly<Signal<BirdflopSession>>;
+  const session = useSession();
   const presetInfo = usePreset().value;
 
   const rgbStore = useStore({
@@ -98,7 +103,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-[72px]">
+    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-[60px] w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -109,52 +114,112 @@ export default component$(() => {
         <hr/>
         <div class="flex">
           <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-            <ChevronLeft size={20} /> Back to Presets
+            <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
           </Link>
         </div>
+        {
+          presetInfo.pending &&
+          <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-yellow">
+            {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
+          </p>
+        }
 
-        <div class="flex flex-col gap-4 mt-2">
-          <Input>
-            {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
-          </Input>
+        <h6 class={{
+          'flex items-center gap-2 mb-0!': true,
+          'text-blue-300/80!': !presetInfo.user,
+          'text-orange-300/80!': !!presetInfo.user,
+        }}>
+          { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
+            class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
+            {presetInfo.user.image && presetInfo.user.name && (
+              <img src={presetInfo.user.image} alt={presetInfo.user.name}
+                width={32} height={32} class="w-8 h-8 rounded-full!" />
+            )}
+            {presetInfo.user.name}
+          </Link>
+          }
+          { presetInfo.author && !presetInfo.user && <>
+            {presetInfo.author == 'RGBirdflop' &&
+              <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+            }
+            {presetInfo.author == 'SimplyMC' &&
+              <LogoLuminescent size={32} class="text-luminescent-300" />
+            }
+            {presetInfo.author.includes('GitHub') &&
+              <Github size={32} />
+            }
+            {presetInfo.author}
+          </>}
+        </h6>
+        <p class="mb-2">
+          {t('rgb.presets.createdAt@@Created at')} {new Date(presetInfo.createdAt)
+            .toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+        </p>
+        <p class="text-white! mb-5">
+          {presetInfo.description}
+        </p>
 
-          <div class="lum-card p-6">
-            <h6 class={{
-              'flex items-center gap-2 my-0!': true,
-              'text-blue-300/80!': !presetInfo.user,
-              'text-orange-300/80!': !!presetInfo.user,
-            }}>
-              { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
-                class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
-                {presetInfo.user.image && presetInfo.user.name && (
-                  <img src={presetInfo.user.image} alt={presetInfo.user.name}
-                    width={32} height={32} class="w-8 h-8 rounded-full!" />
-                )}
-                {presetInfo.user.name}
-              </Link>
+        <div class="flex gap-2">
+          <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
+            class={{ 'hidden sm:flex text-sm gap-1 text-orange-300': true }}>
+            <div q:slot="dropdown" class="flex items-center gap-3">
+              <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
+            </div>
+            <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+              <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+            </Link>
+            <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+              <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            </Link>
+          </SelectMenuRaw>
+          <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
+            loading.value = true;
+
+            if (existingPreset) {
+              privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
+              if (presetInfo.id) {
+                savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
+                presetInfo.saveCount--;
+                await unsavePreset(presetInfo.id);
               }
-              { presetInfo.author && !presetInfo.user && <>
-                {presetInfo.author == 'RGBirdflop' &&
-                  <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
-                }
-                {presetInfo.author == 'SimplyMC' &&
-                  <LogoLuminescent size={32} class="text-luminescent-300" />
-                }
-                {presetInfo.author.includes('GitHub') &&
-                  <Github size={32} />
-                }
-                {presetInfo.author}
-              </>}
-            </h6>
-            <hr class="my-1!"/>
-            <p>
-              {presetInfo.description}
-            </p>
+            }
+            else {
+              privatePresets.value = [...privatePresets.value, presetInfo.preset];
+              if (presetInfo.id) {
+                savedPresets.value = [...savedPresets.value, presetInfo];
+                presetInfo.saveCount++;
+                await savePreset(presetInfo.id);
+              }
+            }
+
+            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+            loading.value = false;
+          }}>
+            {!loading.value && presetInfo.saveCount}
+            {loading.value && <div class="lum-loading w-3 h-3" />}
+            {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
+              ? <span class="text-red-300 flex gap-3">
+                <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
+              </span>
+              : <span class="text-green-300 flex gap-3">
+                <Save size={20}  /> {t('rgb.presets.save@@Save')}
+              </span>}
+          </button>
+        </div>
+        <div class="flex flex-col gap-4 mt-6">
+          <div>
+            <Input>
+              {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+            </Input>
           </div>
 
           <div class="lum-card p-6">
             <label for="preset" class="-mb-2">
-              Preset Contents - Click to copy
+              {t('rgb.presets.presetData@@Preset Data')}
             </label>
             <textarea id="preset" readOnly
               class={{
@@ -180,64 +245,6 @@ export default component$(() => {
                 }, 2000);
               }}
             />
-          </div>
-
-          <div class="flex gap-2">
-            <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-              class={{ 'hidden sm:flex text-sm gap-1 text-orange-300': true }}>
-              <div q:slot="dropdown" class="flex items-center gap-3">
-                <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
-              </div>
-              <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-                <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
-              </Link>
-              <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-                <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
-              </Link>
-            </SelectMenuRaw>
-            <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
-              loading.value = true;
-
-              if (existingPreset) {
-                privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-                if (presetInfo.id) {
-                  savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                  presetInfo.savedBy?.splice(presetInfo.savedBy?.indexOf(session.value?.user), 1);
-                  await setUserData({
-                    savedPresets: {
-                      disconnect: { id: presetInfo.id },
-                    },
-                  });
-                }
-              }
-              else {
-                privatePresets.value = [...privatePresets.value, presetInfo.preset];
-                if (presetInfo.id) {
-                  savedPresets.value = [...savedPresets.value, presetInfo];
-                  presetInfo.savedBy?.push(session.value?.user);
-                  await setUserData({
-                    savedPresets: {
-                      connect: {
-                        id: presetInfo.id,
-                      },
-                    },
-                  });
-                }
-              }
-
-              if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-              loading.value = false;
-            }}>
-              {!loading.value && presetInfo.savedBy?.length}
-              {loading.value && <div class="lum-loading w-5 h-5" />}
-              {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
-                ? <span class="text-red-300 flex gap-3">
-                  <Trash size={20} /> {t$('rgb.presets.remove@@Remove')}
-                </span>
-                : <span class="text-green-300 flex gap-3">
-                  <Save size={20}  /> {t$('rgb.presets.save@@Save')}
-                </span>}
-            </button>
           </div>
         </div>
 

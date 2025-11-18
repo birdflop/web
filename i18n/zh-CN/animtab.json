@@ -1,13 +1,13 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
+      "interval": "动画间隔",
       "name": "动画名称",
-      "style": "Animation Style"
+      "style": "动画样式"
     },
     "length": "渐变长度",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "仅当您尝试将此工具用于其他插件或知道自己在做什么时才使用此选项。",
       "title": "输出格式"
     },
     "yamlInput": "YAML 输入"

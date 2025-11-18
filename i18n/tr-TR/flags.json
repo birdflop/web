@@ -2,16 +2,16 @@
   "flags": {
     "autoRestart": {
       "description": "Durdurulduktan sonra otomatik olarak yeniden başlatılıp başlatılmayacağı.",
-      "label": "Otomatik-Restart"
+      "label": "Otomatik yeniden başlat"
     },
     "config": {
-      "description": "Başlangıç betiğinizde yapılabilecek çeşitli eklemeler ve değişiklikler.",
-      "label": "Konfigürasyon"
+      "description": "Başlangıç betiğinize yapılabilecek çeşitli eklemeler ve değişiklikler.",
+      "label": "Yapılandırma"
     },
-    "description": "The collection of start arguments that typically optimize the server's performance",
+    "description": "Genellikle sunucunun performansını optimize eden başlangıç argümanlarının topluluğu",
     "environment": {
-      "command": "Command",
-      "description": "The operating system that the server runs on.",
+      "command": "Komut",
+      "description": "Sunucunun çalıştığı işletim sistemi.",
       "label": "Ortam",
       "linux": "Linux",
       "macos": "macOS",
@@ -21,42 +21,42 @@
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "GraalVM kullanıcılarına özel Benchmarked (G1GC) için ek performans bayrakları.",
-        "label": "Karşılaştırılmış (GraalVM)"
+        "label": "Benchmarked (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
-        "label": "MeowIce's Flags (GraalVM)"
+        "description": "GraalVM kullanıcılarına özel MeowIce'in bayrakları için ek performans bayrakları.",
+        "label": "MeowIce'in bayrakları (GraalVM)"
       },
       "vectors": {
-        "description": "Pufferfish ve forklarında harita öğesi oluşturmayı optimize etmek için SIMD işlemlerini etkinleştirir.",
-        "label": "Modern Vektörler"
+        "description": "Pufferfish ve fork'larında harita öğesi renderlamasını optimize etmek için SIMD işlemlerini etkinleştirir.",
+        "label": "Modern vektörler"
       }
     },
     "fileName": {
       "description": "Sunucunuzu başlatmak için kullanılacak dosyanın adı.",
-      "label": "Dosya Adı"
+      "label": "Dosya adı"
     },
     "flags": {
-      "aikars": "Aikar's Flags",
+      "aikars": "Aikar'ın bayrakları",
       "benchmarked": "Benchmarked",
-      "etils": "Etil's Flags",
-      "hillttys": "hilltty's Flags",
+      "etils": "Etil'in bayrakları",
+      "hillttys": "hilltty'nin bayrakları",
       "label": "Bayraklar",
-      "meowice": "MeowIce's Flags",
-      "none": "None",
-      "obyduxs": "Obydux's Flags"
+      "meowice": "MeowIce'in bayrakları",
+      "none": "Yok",
+      "obyduxs": "Obydux'un bayrakları"
     },
     "gui": {
-      "description": "Yerleşik sunucu yönetimi GUI'sinin görüntülenip görüntülenmeyeceği.",
-      "label": "GUISiz"
+      "description": "Yerleşik sunucu yönetimi GUI'sinin gösterilip gösterilmeyeceği.",
+      "label": "GUI yok"
     },
     "memory": {
-      "description": "Sunucunuza ayrılacak bellek (RAM) miktarı.",
+      "description": "Sunucunuza tahsis edilecek bellek (RAM) miktarı.",
       "label": "Bellek"
     },
     "script": {
-      "description": "Sunucunuzu başlatmak için kullanılabilecek sonuç betiği. Bu dosyayı {{fileName}} ile aynı konuma yerleştirin, ardından çalıştırın!",
-      "label": "Komut Dosyası"
+      "description": "Sunucunuzu başlatmak için kullanılabilecek sonuç betiği. Bu dosyayı {{fileName}} ile aynı konuma yerleştirin, sonra çalıştırın!",
+      "label": "Betik"
     },
     "serverType": {
       "fabric": "Fabric",
@@ -67,12 +67,12 @@
       "waterfall": "Waterfall"
     },
     "software": {
-      "description": "Minecraft sunucunuzun üzerinde çalışacağı yazılım.",
+      "description": "Minecraft sunucunuzun çalışacağı yazılım.",
       "label": "Yazılım"
     },
     "variables": {
-      "description": "Bellek, dosya adı ve yaygın olarak değiştirilen diğer öğeleri tanımlamak için kod içinde ortam değişkenlerinin kullanılıp kullanılmayacağı.",
-      "label": "Değişkenleri Kullanın"
+      "description": "Betik içinde bellek, dosya adı ve diğer yaygın olarak değiştirilen öğeleri tanımlamak için ortam değişkenlerinin kullanılıp kullanılmayacağı.",
+      "label": "Değişkenleri kullan"
     }
   }
 }

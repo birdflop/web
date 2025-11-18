@@ -1,15 +1,15 @@
 {
   "animtab": {
     "animation": {
-      "interval": "Animation Interval",
-      "name": "Animation Name",
-      "style": "Animation Style"
+      "interval": "Animasyon Aralığı",
+      "name": "Animasyon Adı",
+      "style": "Animasyon Stili"
     },
     "length": "Gradyant Uzunluğu",
     "outputFormat": {
-      "description": "Only use this if you're trying to use this tool for a different plugin or know what you're doing.",
+      "description": "Bu aracı farklı bir eklenti için kullanmaya çalışıyorsanız veya ne yaptığınızı biliyorsanız bunu kullanın.",
       "title": "Çıktı Formatı"
     },
-    "yamlInput": "YAML Input"
+    "yamlInput": "YAML Girişi"
   }
 }

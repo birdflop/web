@@ -11,7 +11,7 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-[72px]">
+    <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-20">
       <h1>
         AcornMC Vote
       </h1>

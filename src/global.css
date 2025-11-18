@@ -2,10 +2,10 @@
 
 @import "tailwindcss";
 
-@plugin "@anuragroy/tailwindcss-animate";
-
 @import "@luminescent/ui";
 @import "@luminescent/ui/formatting";
+
+@plugin "@anuragroy/tailwindcss-animate";
 
 @config "@luminescent/ui-qwik/config";
 @source "../node_modules/@luminescent/ui-qwik";
@@ -27,6 +27,8 @@
   --color-lum-border: #dfdfdfaa;
   --color-nav-bg: --alpha(var(--color-sky-950) / 70%);
   --color-bg: var(--color-gray-900);
+
+  --lum-depth: 1
 }
 
 @media (prefers-color-scheme: light) {
