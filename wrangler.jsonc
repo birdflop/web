@@ -24,14 +24,12 @@
 			"database_name": "birdflop",
 			"database_id": "3d1b9459-8cc0-4569-93d6-f858b02b372e",
 			"migrations_dir": "./drizzle/migrations",
-			"experimental_remote": true
+			"remote": true
 		},
 	],
 	"routes": [
-		/*
 		{ "pattern": "birdflop.com", "custom_domain": true },
 		{ "pattern": "www.birdflop.com", "custom_domain": true }
-		*/
 	]
 	/**
 	 * Smart Placement
