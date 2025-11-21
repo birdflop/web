@@ -1,5 +1,5 @@
 import { $, component$, PropsOf, Slot, useContext } from '@builder.io/qwik';
-import { ChevronRight } from 'lucide-icons-qwik';
+import { Dropdown } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
 export const loadOpenItems = $(() => {
@@ -44,21 +44,15 @@ export default component$(({ sectionName, alwaysOpen, class: className, ...props
   const openItemsStore = useContext(openItemsContext);
 
   return (
-    <button class={{
-      'lum-btn lum-btn-p-2 lum-bg-lum-input-bg/30': true,
-      'sm:lum-bg-transparent sm:hover:bg-transparent': alwaysOpen,
+    <Dropdown class={{
+      'cursor-pointer': !alwaysOpen,
+      'sm:lum-bg-transparent sm:hover:lum-bg-transparent focus:scale-100': !!alwaysOpen,
       ...className,
-    }} onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)} { ...props }>
-      <span class="font-medium flex-1 flex items-center gap-3">
+    }} opened={openItemsStore.items.includes(sectionName) && !alwaysOpen}
+    onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)} { ...props }>
+      <div class="flex items-center gap-2">
         <Slot />
-      </span>
-      <div class={{
-        'transition-transform duration-200': true,
-        'sm:hidden': alwaysOpen,
-        'rotate-90': openItemsStore.items.includes(sectionName),
-      }}>
-        <ChevronRight size={20} />
       </div>
-    </button>
+    </Dropdown>
   );
 });

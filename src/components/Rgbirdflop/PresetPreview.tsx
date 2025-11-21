@@ -40,15 +40,16 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
     return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
   });
 
-  return <div class="lum-card lum-bg-lum-input-bg/20 p-0 gap-0">
+  return <div class="lum-card lum-bg-gray-950/50 p-0 gap-0 hover:lum-bg-gray-900/70 transition duration-1000 hover:duration-75 ease-out"
+    style={{ '--lum-border-radius': '1rem' }}>
     { Preset.author &&
-      <div class="flex p-1 pr-4 items-center bg-lum-card-bg rounded-lum rounded-b-0">
+      <div class="flex lum-btn-p-1 items-center lum-bg-gray-900 rounded-lum-1 m-1">
         <p class={{
           'flex flex-1 items-center gap-2': true,
           'text-blue-300/80!': !Preset.user,
           'text-orange-300/80!': !!Preset.user,
         }}>
-          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-1 lum-btn-p-1 gap-2 cursor-pointer font-semibold">
+          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-2 lum-btn-p-1 gap-2 cursor-pointer font-semibold -ml-1">
             {Preset.user.image && Preset.user.name && (
               <img src={Preset.user.image} alt={Preset.user.name}
                 width={24} height={24} class="w-6 h-6 rounded-full!" />
@@ -80,7 +81,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       </div>
     }
     <Link href={Preset.id ? `/resources/rgb/presets/${Preset.id}` : '#'} {...props}
-      class="flex-1 flex flex-col justify-center text-white! no-underline! p-4 border-y border-y-lum-border/10 hover:bg-lum-input-bg/70 w-full transition duration-1000 hover:duration-75 ease-out"
+      class="flex-1 flex flex-col justify-center text-white! no-underline! p-4 group w-full"
       key={`preset-${Preset.name}-${Preset.author}`}
       prefetch={false}>
       <p class={{
@@ -115,17 +116,18 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         </p>
       }
     </Link>
-    <div class="flex gap-1 items-center p-1 bg-lum-card-bg rounded-lum rounded-b-0">
-      <div class="flex-1 flex gap-1 pl-2">
+    <div class="flex p-1 items-center lum-bg-gray-900 rounded-lum-1 m-1 gap-1">
+      <div class="flex gap-1 p-1">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (
-            <span key={index} class="p-2 rounded-lum-2"
+            <span key={index} class="p-2 rounded-lum-3 border border-lum-border/50"
               style={{ backgroundColor: color.hex }} />
           ))
         }
       </div>
+      <div class="flex-1" />
       <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
-        class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-1 gap-1 text-orange-300': true }}>
+        class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-2 gap-1 text-orange-300 lum-btn-p-1': true }}>
         <div q:slot="dropdown" class="flex items-center gap-3">
           <MousePointer2 size={20} />
         </div>
@@ -136,7 +138,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
       </SelectMenuRaw>
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-1" disabled={loading.value} onClick$={async () => {
+      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={async () => {
         loading.value = true;
 
         if (existingPreset) {

@@ -125,14 +125,14 @@ export default component$(({ hidden }: {
           </button>
         </div>
         <div class={{
-          'flex flex-col transition-all gap-1 flex-1 lum-bg-lum-card-bg rounded-lum': true,
+          'flex flex-col transition-all gap-1 flex-1 lum-bg-lum-input-bg rounded-lum': true,
           'max-h-0 opacity-0 scale-98 pointer-events-none': !openItemsStore.items.includes('saved-presets'),
           'max-h-screen opacity-100 my-1 p-1': openItemsStore.items.includes('saved-presets'),
         }}>
           {privatePresets.value.length === 0 && savedPresets.value.length === 0 && (
-            <div class="lum-card lum-bg-lum-input-bg/50 rounded-lum p-2 text-center">
+            <p class="rounded-lum p-2 text-center">
               {t('rgb.presets.nopresets@@No presets saved yet!')}
-            </div>
+            </p>
           )}
           {privatePresets.value.concat(savedPresets.value.map((preset) => ({
             text: preset.name ?? rgbStore.text,
