@@ -160,7 +160,7 @@ export default component$(() => {
         </p>
         <hr/>
 
-        <Input playerName="RGBirdflop">
+        <Input>
           {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
         </Input>
 

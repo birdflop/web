@@ -212,7 +212,7 @@ export default component$(() => {
         </div>
         <div class="flex flex-col gap-4 mt-6">
           <div class="lum-card gap-0">
-            <Input playerName="RGBirdflop">
+            <Input>
               {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
             </Input>
           </div>
