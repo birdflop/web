@@ -40,10 +40,16 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
     return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
   });
 
-  return <div class="lum-card lum-bg-gray-950/50 p-0 gap-0 hover:lum-bg-gray-900/70 transition duration-1000 hover:duration-75 ease-out"
-    style={{ '--lum-border-radius': '1rem' }}>
+  return <div class="lum-card p-0 gap-0 lum-bg-gray-900 transition duration-1000 hover:duration-75 ease-out border-none"
+    style={{
+      '--lum-border-radius': '1rem',
+      background: `linear-gradient(to bottom right, ${
+        (Preset.preset.colors ?? defaults?.colors)
+          ?.map((color) => `${color.hex}10 ${color.pos}%`).join(', ')
+      })`,
+    }}>
     { Preset.author &&
-      <div class="flex lum-btn-p-1 items-center lum-bg-gray-900 rounded-lum-1 m-1">
+      <div class="flex lum-btn-p-1 items-center bg-gray-950/30 rounded-lum-1 m-1 border-none">
         <p class={{
           'flex flex-1 items-center gap-2': true,
           'text-blue-300/80!': !Preset.user,
@@ -116,7 +122,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         </p>
       }
     </Link>
-    <div class="flex p-1 items-center lum-bg-gray-900 rounded-lum-1 m-1 gap-1">
+    <div class="flex p-1 items-center bg-gray-950/30 rounded-lum-1 m-1 gap-1">
       <div class="flex gap-1 p-1">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (

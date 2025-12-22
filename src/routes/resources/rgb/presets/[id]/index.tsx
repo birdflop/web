@@ -119,7 +119,7 @@ export default component$(() => {
         </div>
         {
           presetInfo.pending &&
-          <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-yellow">
+          <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-orange">
             {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
           </p>
         }
@@ -211,19 +211,19 @@ export default component$(() => {
           </button>
         </div>
         <div class="flex flex-col gap-4 mt-6">
-          <div>
-            <Input>
+          <div class="lum-card gap-0">
+            <Input playerName="RGBirdflop">
               {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
             </Input>
           </div>
 
           <div class="lum-card p-6">
-            <label for="preset" class="-mb-2">
+            <label for="preset" class="">
               {t('rgb.presets.presetData@@Preset Data')}
             </label>
             <textarea id="preset" readOnly
               class={{
-                'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
+                'lum-input h-32 w-full font-mono whitespace-pre-wrap': true,
               }}
               value={JSON.stringify(presetInfo.preset, null, 2)}
               onClick$={async () => {

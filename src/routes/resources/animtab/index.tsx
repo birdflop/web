@@ -148,7 +148,7 @@ export default component$(() => {
         </p>
         <hr/>
 
-        <Input>
+        <Input playerName="AnimTAB">
           {(() => {
             if (!rgbStore.text || !frames.list[0]) return '\u00A0';
 

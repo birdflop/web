@@ -134,7 +134,7 @@ export default component$(() => {
         </p>
         <hr/>
 
-        <Input readOnly>
+        <Input readOnly playerName="AnimPreview">
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;

@@ -23,6 +23,7 @@ import {
   Save,
   Search,
   Send,
+  Settings,
 } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
@@ -282,10 +283,13 @@ export default component$(() => {
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
           <SelectMenuRaw
-            id="hidden-select-menu"
+            id="pendingpresets-button"
+            class={{
+              'p-1 gap-0 opacity-20': true,
+            }}
             customDropdown
-            class={{ 'opacity-0': true }}
           >
+            <Settings size={20} q:slot='dropdown' />
             <Toggle
               id="showpendingpresets"
               q:slot="extra-buttons"
@@ -299,7 +303,7 @@ export default component$(() => {
               </span>
             </Toggle>
           </SelectMenuRaw>
-          <a href="#my-presets" class="lum-btn font-normal">
+          <a href="#my-presets" class="lum-btn font-normal ml-2">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
           </a>
         </h1>
@@ -309,38 +313,37 @@ export default component$(() => {
           )}
         </p>
         <hr />
-        <div
-          class={{
-            'mb-2': true,
-            'opacity-50': savedPresets.value.length === 0,
-          }}
-        >
-          <Toggle
-            id="showsavedpresets"
-            disabled={savedPresets.value.length === 0}
-            checked={showSaved && savedPresets.value.length > 0}
-            onChange$={(e, el) =>
-              void updateURL({ showSaved: el.checked, page: 1 })
-            }
-          >
-            {t('rgb.presets.showSaved.title@@Show saved presets')}
-          </Toggle>
-          <p class="text-xs text-lum-text-secondary mt-1">
-            {t(
-              'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
-            )}
-          </p>
+        <div class="flex flex-col gap-2">
+          {savedPresets.value.length > 0 && <div>
+            <Toggle
+              id="showsavedpresets"
+              disabled={savedPresets.value.length === 0}
+              checked={showSaved && savedPresets.value.length > 0}
+              onChange$={(e, el) =>
+                void updateURL({ showSaved: el.checked, page: 1 })
+              }
+            >
+              {t('rgb.presets.showSaved.title@@Show saved presets')}
+            </Toggle>
+            <p class="text-xs text-lum-text-secondary mt-1">
+              {t(
+                'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
+              )}
+            </p>
+          </div>}
+          <div>
+            <Toggle
+              id="previewwithsettings"
+              checked={presetStore.previewWithSettings}
+              onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
+            >
+              {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
+            </Toggle>
+            <p class="text-xs text-lum-text-secondary mt-1">
+              {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
+            </p>
+          </div>
         </div>
-        <Toggle
-          id="previewwithsettings"
-          checked={presetStore.previewWithSettings}
-          onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
-        >
-          {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
-        </Toggle>
-        <p class="text-xs text-lum-text-secondary mt-1">
-          {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
-        </p>
 
         <div class="flex flex-col sm:flex-row gap-4 px-2 items-start sm:items-center">
           <div class="flex gap-4 items-center flex-1 w-full">
