@@ -2,7 +2,7 @@ import { $, component$, isBrowser, useContext, useContextProvider, useSignal, us
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import { ChevronLeft, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, TextCursor, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
@@ -165,7 +165,7 @@ export default component$(() => {
 
         <div class="flex gap-2">
           <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-            class={{ 'hidden sm:flex text-sm gap-1 text-orange-300': true }}>
+            class={{ 'hidden sm:flex text-sm gap-1 lum-bg-orange hover:bg-orange': true }}>
             <div q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
             </div>
@@ -176,7 +176,11 @@ export default component$(() => {
               <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
             </Link>
           </SelectMenuRaw>
-          <button class="lum-btn text-sm" disabled={loading.value} onClick$={async () => {
+          <button class={{
+            'lum-btn text-sm': true,
+            'lum-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+            'lum-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+          }} disabled={loading.value} onClick$={async () => {
             loading.value = true;
 
             if (existingPreset) {
@@ -202,12 +206,32 @@ export default component$(() => {
             {!loading.value && presetInfo.saveCount}
             {loading.value && <div class="lum-loading w-3 h-3" />}
             {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
-              ? <span class="text-red-300 flex gap-3">
+              ? <>
                 <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
-              </span>
-              : <span class="text-green-300 flex gap-3">
+              </>
+              : <>
                 <Save size={20}  /> {t('rgb.presets.save@@Save')}
-              </span>}
+              </>}
+          </button>
+          <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={async () => {
+            const id = Math.random().toString(36).substring(2, 15);
+            const notification = {
+              id,
+              title: await t$('rgb.copied@@Copied to clipboard!'),
+              description: await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'),
+              bgColor: 'lum-bg-green/50',
+            };
+            navigator.clipboard.writeText(JSON.stringify(presetInfo.preset)).catch(async (err) => {
+              notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
+              notification.description = err;
+              notification.bgColor = 'lum-bg-red/50';
+            });
+            notifications.push(notification);
+            setTimeout(() => {
+              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+            }, 2000);
+          }}>
+            <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
           </button>
         </div>
         <div class="flex flex-col gap-4 mt-6">
@@ -221,30 +245,40 @@ export default component$(() => {
             <label for="preset" class="">
               {t('rgb.presets.presetData@@Preset Data')}
             </label>
-            <textarea id="preset" readOnly
-              class={{
-                'lum-input h-32 w-full font-mono whitespace-pre-wrap': true,
-              }}
-              value={JSON.stringify(presetInfo.preset, null, 2)}
-              onClick$={async () => {
-                const id = Math.random().toString(36).substring(2, 15);
-                const notification = {
-                  id,
-                  title: await t$('rgb.copied@@Copied to clipboard!'),
-                  description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
-                  bgColor: 'lum-bg-green/50',
-                };
-                navigator.clipboard.writeText(JSON.stringify(presetInfo.preset)).catch(async (err) => {
-                  notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
-                  notification.description = err;
-                  notification.bgColor = 'lum-bg-red/50';
-                });
-                notifications.push(notification);
-                setTimeout(() => {
-                  notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-                }, 2000);
-              }}
-            />
+            <div class="text-white! font-bold lum-card lum-bg-gray-800">
+              {Object.keys(presetInfo.preset).map((key) => (
+                <div key={key} class="flex gap-2">
+                  <span class="font-mono text-lum-text-secondary">{key}:</span>
+                  <span class="font-mono">{JSON.stringify((presetInfo.preset as any)[key], null, 2)}</span>
+                </div>
+              ))}
+              {/* eslint-disable-next-line no-constant-binary-expression */}
+              {false &&
+                <div>
+                  <h3 class="mt-0!">
+                    Admin View
+                  </h3>
+                  <div class="flex items-center gap-1">
+                    {presetInfo.pending &&
+                      <button class="lum-btn lum-bg-green hover:bg-green" onClick$={() => {
+                      }}>
+                        <Check size={20} /> Approve
+                      </button>
+                    }
+                    <button class="lum-btn lum-bg-red hover:bg-red" onClick$={() => {
+                    }}>
+                      <Trash size={20} /> Delete
+                    </button>
+                    {presetInfo.preset.text &&
+                      <button class="lum-btn lum-bg-yellow hover:bg-yellow" onClick$={() => {
+                      }}>
+                        <TextCursor size={20} /> Remove Text Input
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </div>
 
