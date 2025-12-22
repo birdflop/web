@@ -365,10 +365,10 @@ export default component$(() => {
               }}
               title={t('rgb.presets.sortBy.title@@Sort by')}
               values = {[
-                {
-                  name: t('rgb.presets.sortBy.newest@@Newest first'),
-                  value: 'createdAt-desc',
-                },
+                //{ pls fix :3
+                //  name: t('rgb.presets.sortBy.newest@@Newest first'),
+                //  value: 'createdAt-desc',
+                //},
                 {
                   name: t('rgb.presets.sortBy.oldest@@Oldest first'),
                   value: 'createdAt-asc',
@@ -377,10 +377,10 @@ export default component$(() => {
                   name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
                   value: 'name-asc',
                 },
-                {
-                  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
-                  value: 'name-desc',
-                },
+                //{
+                //  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
+                //  value: 'name-desc',
+                //},
               ]}
             />
           </div>
