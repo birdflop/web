@@ -5,7 +5,7 @@ import { getPresets } from '~/util/rgb/presets';
 import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { NotificationContext } from '~/routes/layout';
+import { NotificationContext, useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -14,7 +14,6 @@ import { savePreset, unsavePreset, updatePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq, sql } from 'drizzle-orm';
-const admin = false; // TODO: add admin check
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -49,6 +48,9 @@ export default component$(() => {
 
   const session = useSession();
   const presetInfo = usePreset().value;
+
+  const admins = useAdmins().value;
+  const admin = session.value?.user?.id && admins?.includes(session.value.user.id);
 
   const rgbStore = useStore({
     ...rgbDefaults,

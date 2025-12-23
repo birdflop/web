@@ -38,6 +38,11 @@ export const useServerTheme = routeLoader$(({ cookie }) => {
   };
 });
 
+export const useAdmins = routeLoader$(({ env }) => {
+  const adminIds = env.get('ADMINS')?.split(',').map(id => id.trim());
+  return adminIds;
+});
+
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
