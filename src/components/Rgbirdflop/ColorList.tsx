@@ -112,9 +112,9 @@ export default component$(({ hidden, id = 'text' }: {
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input w-full lum-btn-p-1 rounded-r-sm': true,
+                'lum-input w-full lum-btn-p-1 rounded-r-sm lum-bg': true,
               }}
-              style={`background: ${color.hex};`}
+              style={`--bg-color: ${color.hex};`}
               value={color.hex}
               onInput$={(e, el) => {
                 const picker = document.getElementById(`colorlist${id}-color-${i + 1}-picker`)!;

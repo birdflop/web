@@ -223,9 +223,9 @@ export default component$(() => {
                 {Object.entries(colors).map(([colorName, color]) => {
                   return (
                     <button key={colorName} class={{
-                      'lum-btn p-2 hover:brightness-150': true,
+                      'lum-btn p-2 hover:brightness-80 lum-bg': true,
                     }} style={{
-                      background: `#${color.toString(16).padStart(6, '0')}`,
+                      '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                     }} onClick$={() => {
                       bannerStore.color = colorName as keyof typeof colors;
                     }}>
@@ -308,9 +308,9 @@ export default component$(() => {
                           {Object.entries(colors).map(([colorName, color]) => {
                             return (
                               <button key={colorName} class={{
-                                'lum-btn p-1 hover:brightness-150': true,
+                                'lum-btn p-1 hover:brightness-150 lum-bg': true,
                               }} style={{
-                                background: `#${color.toString(16).padStart(6, '0')}`,
+                                '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                               }} onClick$={() => {
                                 const newPatterns = bannerStore.patterns.slice(0);
                                 newPatterns[i].color = colorName as keyof typeof colors;

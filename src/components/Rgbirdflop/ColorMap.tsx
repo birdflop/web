@@ -3,7 +3,7 @@ import { rgbStoreContext } from '~/routes/resources/rgb';
 import { sortColors } from '~/util/rgb/RGBUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
-import { getBrightness, getRandomColor, hexToRGB } from '~/util/rgb/Colors';
+import { getRandomColor } from '~/util/rgb/Colors';
 
 export default component$(({ id = 'text' }: { id?: string }) => {
   const rgbStore = useContext(rgbStoreContext);
@@ -131,12 +131,10 @@ export default component$(({ id = 'text' }: { id?: string }) => {
             key={`colormap${id}-color-${i + 1}`}
             id={`colormap${id}-color-${i + 1}`}
             class={{
-              'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full shadow-md border':
+              'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full lum-bg drop-shadow-md':
                 true,
-              'border-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
-              'border-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
             }}
-            style={`background: ${color.hex};`}
+            style={`--bg-color: ${color.hex};`}
             onMouseUp$={() => {
               const picker = document.getElementById(
                 `colormap${id}-color-${i + 1}-picker`,

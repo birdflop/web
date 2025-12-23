@@ -40,8 +40,9 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
     return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
   });
 
-  return <div class="lum-card p-0 gap-0 lum-bg-gray-900 transition duration-1000 hover:duration-75 ease-out border-none"
+  return <div class="lum-card p-0 gap-0 lum-bg transition duration-1000 hover:duration-75 ease-out border-none"
     style={{
+      '--bg-color': (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + '10',
       '--lum-border-radius': '1rem',
       background: `linear-gradient(to bottom right, ${
         (Preset.preset.colors ?? defaults?.colors)
