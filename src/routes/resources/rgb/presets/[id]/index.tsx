@@ -258,6 +258,7 @@ export default component$(() => {
                     const updatedPreset = await updatePreset(presetInfo.id, {
                       preset: presetInfo.preset,
                     });
+                    window.location.reload();
                     console.log('Updated preset:', updatedPreset);
                   }}>
                     <Trash size={16} />
@@ -278,6 +279,7 @@ export default component$(() => {
                 {presetInfo.pending &&
                   <button class="lum-btn lum-bg-green hover:bg-green" onClick$={async () => {
                     await updatePreset(presetInfo.id, { pending: false });
+                    window.location.reload();
                   }}>
                     <Check size={20} /> Approve
                   </button>
