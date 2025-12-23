@@ -205,13 +205,15 @@ export const updatePreset = server$(async function(presetId: number, presetData:
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
+  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
+  const admin = session.user.id && admins?.includes(session.user.id);
 
   try {
     const updatedPreset = await db.update(presets)
       .set(presetData)
       .where(and(
         eq(presets.id, presetId),
-        eq(presets.userId, session.user.id),
+        admin ? undefined : eq(presets.userId, session.user.id),
       ))
       .returning().get();
     return updatedPreset;
@@ -226,12 +228,14 @@ export const deletePreset = server$(async function(presetId: number) {
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
+  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
+  const admin = session.user.id && admins?.includes(session.user.id);
 
   try {
     await db.delete(presets)
       .where(and(
         eq(presets.id, presetId),
-        eq(presets.userId, session.user.id),
+        admin ? undefined : eq(presets.userId, session.user.id),
       ));
   } catch (error) {
     console.error('Error deleting preset:', error);
