@@ -2,7 +2,7 @@ import { $, component$, isBrowser, useContext, useContextProvider, useSignal, us
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, TextCursor, Trash } from 'lucide-icons-qwik';
+import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
@@ -10,10 +10,11 @@ import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savePreset, unsavePreset } from '~/util/dataUtils';
+import { savePreset, unsavePreset, updatePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq, sql } from 'drizzle-orm';
+const admin = false; // TODO: add admin check
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -247,16 +248,23 @@ export default component$(() => {
             </label>
             <div class="text-white! font-bold lum-card lum-bg-gray-800">
               {Object.keys(presetInfo.preset).map((key) => (
-                <div key={key} class="flex gap-2">
+                <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
+                  {admin &&
+                    <button class="lum-btn lum-bg-transparent text-red-300 p-1 hover:lum-bg-red" onClick$={async () => {
+                      delete presetInfo.preset[key as keyof typeof presetInfo.preset];
+                      await updatePreset(presetInfo.id, presetInfo.preset);
+                    }}>
+                      <Trash size={16} />
+                    </button>
+                  }
                   <span class="font-mono text-lum-text-secondary">{key}:</span>
                   <span class="font-mono">{JSON.stringify((presetInfo.preset as any)[key], null, 2)}</span>
                 </div>
               ))}
-              {/* eslint-disable-next-line no-constant-binary-expression */}
-              {false &&
+              {admin &&
                 <div>
                   <h3 class="mt-0!">
-                    Admin View
+                    Manage Preset
                   </h3>
                   <div class="flex items-center gap-1">
                     {presetInfo.pending &&
@@ -269,12 +277,6 @@ export default component$(() => {
                     }}>
                       <Trash size={20} /> Delete
                     </button>
-                    {presetInfo.preset.text &&
-                      <button class="lum-btn lum-bg-yellow hover:bg-yellow" onClick$={() => {
-                      }}>
-                        <TextCursor size={20} /> Remove Text Input
-                      </button>
-                    }
                   </div>
                 </div>
               }

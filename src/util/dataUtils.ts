@@ -1,7 +1,7 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
-import { getDB, savedPresets, users } from './db';
+import { getDB, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
@@ -174,6 +174,67 @@ export const unsavePreset = server$(async function(presetId: number) {
     return userData;
   } catch (error) {
     console.error('Error unsaving preset:', error);
+    throw error;
+  }
+});
+
+export const publishPreset = server$(async function(submission: PublicPresetSubmission) {
+  const session = this.sharedMap.get('session');
+
+  const db = getDB();
+  if (!session || !db || !session.user.id) return { success: false, error: 'No session or database client' };
+
+  try {
+    const result = await db.insert(presets)
+      .values({
+        name: submission.name,
+        userId: session.user.id,
+        author: session.user.name,
+        description: submission.description,
+        preset: submission.preset,
+      }).onConflictDoNothing().returning();
+    return { success: true, result };
+  } catch (error) {
+    console.error('Error publishing preset:', error);
+    return { success: false, error };
+  }
+});
+
+export const updatePreset = server$(async function(presetId: number, presetData: Partial<rgbPreset>) {
+  const session = this.sharedMap.get('session');
+
+  const db = getDB();
+  if (!session || !db || !session.user.id) return console.warn('No session or database client');
+
+  try {
+    const updatedPreset = await db.update(presets)
+      .set(presetData)
+      .where(and(
+        eq(presets.id, presetId),
+        eq(presets.userId, session.user.id),
+      ))
+      .returning().get();
+    return updatedPreset;
+  } catch (error) {
+    console.error('Error updating preset:', error);
+    throw error;
+  }
+});
+
+export const deletePreset = server$(async function(presetId: number) {
+  const session = this.sharedMap.get('session');
+
+  const db = getDB();
+  if (!session || !db || !session.user.id) return console.warn('No session or database client');
+
+  try {
+    await db.delete(presets)
+      .where(and(
+        eq(presets.id, presetId),
+        eq(presets.userId, session.user.id),
+      ));
+  } catch (error) {
+    console.error('Error deleting preset:', error);
     throw error;
   }
 });

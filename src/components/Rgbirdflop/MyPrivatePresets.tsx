@@ -7,32 +7,12 @@ import { CircleUserRound, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
-import { Form, Link, server$ } from '@builder.io/qwik-city';
+import { Form, Link } from '@builder.io/qwik-city';
 import { NotificationContext } from '~/routes/layout';
-import { getDB, PresetPartial, presets, PublicPresetSubmission } from '~/util/db';
+import { PresetPartial } from '~/util/db';
 import { rgbPreset } from '~/util/rgb/presets';
 import { inlineTranslate } from 'qwik-speak';
-
-const publishPreset = server$(async function(submission: PublicPresetSubmission) {
-  const session = this.sharedMap.get('session');
-  try {
-    const db = getDB();
-    if (!session || !db || !session.user.id) return { success: false, error: 'No session or database client' };
-
-    const result = await db.insert(presets)
-      .values({
-        name: submission.name,
-        userId: session.user.id,
-        author: session.user.name,
-        description: submission.description,
-        preset: submission.preset,
-      }).onConflictDoNothing().returning();
-    return { success: true, result };
-  } catch (error) {
-    console.error('Error publishing preset:', error);
-    return { success: false, error };
-  }
-});
+import { publishPreset } from '~/util/dataUtils';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
