@@ -156,9 +156,20 @@ export default component$(() => {
               day: 'numeric',
             })}
         </p>
-        <p class="text-white! mb-5">
-          {presetInfo.description}
-        </p>
+        {admin ?
+          <input type="text" class="lum-input w-full mb-4" value={presetInfo.description}
+            onChange$={async (e, el) => {
+              presetInfo.description = el.value;
+              await updatePreset(presetInfo.id, {
+                description: presetInfo.description,
+              });
+              window.location.reload();
+            }} />
+          :
+          <p class="text-white! mb-5">
+            {presetInfo.description}
+          </p>
+        }
 
         {presetInfo.pending &&
         <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-orange">
