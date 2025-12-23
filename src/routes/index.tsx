@@ -83,7 +83,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <div class="bg-lum-card-bg border-t border-lum-border/30 pb-16">
+    <div class="bg-lum-card-bg border-t border-t-lum-border/10 pb-16">
       <section class="flex flex-col mx-auto max-w-3xl px-10 items-center justify-center pt-10">
         <h1>
           Our Nonprofit Mission

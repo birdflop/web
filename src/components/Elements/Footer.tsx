@@ -6,7 +6,7 @@ export default component$(() => {
   const t = inlineTranslate();
 
   return (
-    <footer class="relative flex flex-col gap-1 items-center justify-center text-center w-full z-10 lum-bg-lum-card-bg border-0 border-t p-6">
+    <footer class="relative flex flex-col gap-1 items-center justify-center text-center w-full z-10 bg-lum-card-bg border-t border-t-lum-border/10 p-6">
       <div class="flex gap-1 mb-2">
         <SocialButtons />
       </div>
