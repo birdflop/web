@@ -118,12 +118,6 @@ export default component$(() => {
             <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
           </Link>
         </div>
-        {
-          presetInfo.pending &&
-          <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-orange">
-            {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
-          </p>
-        }
 
         <h6 class={{
           'flex items-center gap-2 mb-0!': true,
@@ -163,6 +157,11 @@ export default component$(() => {
         <p class="text-white! mb-5">
           {presetInfo.description}
         </p>
+
+        {presetInfo.pending &&
+        <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-orange">
+          {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
+        </p>}
 
         <div class="flex gap-2">
           <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
@@ -236,52 +235,58 @@ export default component$(() => {
           </button>
         </div>
         <div class="flex flex-col gap-4 mt-6">
-          <div class="lum-card gap-0">
-            <Input>
+          <div>
+            <h3 class="my-0!">
+              {t('rgb.presets.preview@@Preset Preview')}
+            </h3>
+            <Input noLabel>
               {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
             </Input>
           </div>
 
-          <div class="lum-card p-6">
-            <label for="preset" class="">
-              {t('rgb.presets.presetData@@Preset Data')}
-            </label>
-            <div class="text-white! font-bold lum-card lum-bg-gray-800">
-              {Object.keys(presetInfo.preset).map((key) => (
-                <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
-                  {admin &&
-                    <button class="lum-btn lum-bg-transparent text-red-300 p-1 hover:lum-bg-red" onClick$={async () => {
-                      delete presetInfo.preset[key as keyof typeof presetInfo.preset];
-                      await updatePreset(presetInfo.id, presetInfo.preset);
-                    }}>
-                      <Trash size={16} />
-                    </button>
-                  }
-                  <span class="font-mono text-lum-text-secondary">{key}:</span>
-                  <span class="font-mono">{JSON.stringify((presetInfo.preset as any)[key], null, 2)}</span>
-                </div>
-              ))}
-              {admin &&
-                <div>
-                  <h3 class="mt-0!">
-                    Manage Preset
-                  </h3>
-                  <div class="flex items-center gap-1">
-                    {presetInfo.pending &&
-                      <button class="lum-btn lum-bg-green hover:bg-green" onClick$={() => {
-                      }}>
-                        <Check size={20} /> Approve
-                      </button>
-                    }
-                    <button class="lum-btn lum-bg-red hover:bg-red" onClick$={() => {
-                    }}>
-                      <Trash size={20} /> Delete
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
+          <h3 class="my-0!">
+            {t('rgb.presets.presetData@@Preset Data')}
+          </h3>
+          <div class="text-white! font-bold lum-card lum-bg-gray-800">
+            {Object.keys(presetInfo.preset).map((key) => (
+              <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
+                {admin &&
+                  <button class="lum-btn lum-bg-transparent text-red-300 p-1 hover:lum-bg-red" onClick$={async () => {
+                    delete presetInfo.preset[key as keyof typeof presetInfo.preset];
+                    const updatedPreset = await updatePreset(presetInfo.id, {
+                      preset: presetInfo.preset,
+                    });
+                    console.log('Updated preset:', updatedPreset);
+                  }}>
+                    <Trash size={16} />
+                  </button>
+                }
+                <span class="font-mono text-lum-text-secondary">{key}:</span>
+                <span class="font-mono">{JSON.stringify((presetInfo.preset as any)[key], null, 2)}</span>
+              </div>
+            ))}
           </div>
+
+          {admin &&
+            <>
+              <h3 class="my-0!">
+                Manage Preset
+              </h3>
+              <div class="flex items-center gap-1">
+                {presetInfo.pending &&
+                  <button class="lum-btn lum-bg-green hover:bg-green" onClick$={async () => {
+                    await updatePreset(presetInfo.id, { pending: false });
+                  }}>
+                    <Check size={20} /> Approve
+                  </button>
+                }
+                <button class="lum-btn lum-bg-red hover:bg-red" onClick$={() => {
+                }}>
+                  <Trash size={20} /> Delete
+                </button>
+              </div>
+            </>
+          }
         </div>
 
         <div class="text-sm mt-8">

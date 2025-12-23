@@ -1,7 +1,7 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
-import { getDB, presets, PublicPresetSubmission, savedPresets, users } from './db';
+import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview';
@@ -200,7 +200,7 @@ export const publishPreset = server$(async function(submission: PublicPresetSubm
   }
 });
 
-export const updatePreset = server$(async function(presetId: number, presetData: Partial<rgbPreset>) {
+export const updatePreset = server$(async function(presetId: number, presetData: Partial<PresetPartial>) {
   const session = this.sharedMap.get('session');
 
   const db = getDB();

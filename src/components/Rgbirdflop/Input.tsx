@@ -47,8 +47,9 @@ const InputField = component$(({ class: className, readOnly }: {
 });
 
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
-export default component$(({ readOnly, noFormatRow, chatInput, playerName = 'RGBirdflop' }: {
+export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerName = 'RGBirdflop' }: {
   readOnly?: boolean
+  noLabel?: boolean
   noFormatRow?: boolean
   chatInput?: string
   playerName?: string
@@ -68,7 +69,7 @@ export default component$(({ readOnly, noFormatRow, chatInput, playerName = 'RGB
   });
 
   return <>
-    {!readOnly &&
+    {!readOnly && !noLabel &&
       <h5 class="mt-0! mb-2! flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
         <Terminal size={26} />
         {t('rgb.inputText.title@@Input Text')}
