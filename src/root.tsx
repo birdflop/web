@@ -1,4 +1,8 @@
-import { component$, HTMLCrossOriginAttribute } from '@builder.io/qwik';
+import {
+  component$,
+  HTMLCrossOriginAttribute,
+  useServerData,
+} from '@builder.io/qwik';
 import {
   DocumentHead,
   DocumentHeadValue,
@@ -24,6 +28,10 @@ export default component$(() => {
    * Init Qwik Speak
    */
   useQwikSpeak({ config, translationFn });
+  const serverDataUrl = useServerData<string>('url');
+  const url = new URL(serverDataUrl || 'http://unknown');
+  const isBirdflop =
+    url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com';
   return (
     <QwikCityProvider>
       <head>
@@ -35,12 +43,21 @@ export default component$(() => {
           type='text/partytown'
           src='https://www.googletagmanager.com/gtag/js?id=AW-11483620641'
         />
-        <script
-          defer
-          src='https://umami.bwmp.dev/script.js'
-          data-website-id='49e1c025-20df-48d7-9da7-82f1c2ecff88'
-          data-domains='birdflop.com,www.birdflop.com'
-        />
+        {isBirdflop ? (
+          <script
+            defer
+            src='https://umami.bwmp.dev/script.js'
+            data-website-id='49e1c025-20df-48d7-9da7-82f1c2ecff88'
+            data-domains='birdflop.com,www.birdflop.com'
+          />
+        ) : (
+          <script
+            defer
+            src='https://umami.bwmp.dev/script.js'
+            data-website-id='b68075e9-39d9-4401-9d8f-2d3e84d76ca5'
+            data-domains='*'
+          />
+        )}
         <RouterHead />
       </head>
       <body class='text-lum-text'>
@@ -50,7 +67,8 @@ export default component$(() => {
   );
 });
 
-export const defaultDescription = 'Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.';
+export const defaultDescription =
+  'Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.';
 
 export function generateHead({
   title = 'Birdflop - Server Hosting & Resources',
