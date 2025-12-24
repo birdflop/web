@@ -1,4 +1,4 @@
-import { $, component$, PropsOf, Slot, useContext } from '@builder.io/qwik';
+import { $, component$, PropsOf, QRL, Slot, useContext } from '@builder.io/qwik';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
@@ -37,10 +37,11 @@ export const toggleAccordion = $(async (index: string, openItems: string[]) => {
 interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
   alwaysOpen?: boolean;
+  onClick$?: QRL<() => void>;
   class?: { [key: string]: boolean; }
 }
 
-export default component$(({ sectionName, alwaysOpen, class: className, ...props }: AccordionProps) => {
+export default component$(({ sectionName, alwaysOpen, class: className, onClick$, ...props }: AccordionProps) => {
   const openItemsStore = useContext(openItemsContext);
 
   return (
@@ -48,8 +49,11 @@ export default component$(({ sectionName, alwaysOpen, class: className, ...props
       'cursor-pointer': !alwaysOpen,
       'sm:lum-bg-transparent sm:hover:lum-bg-transparent focus:scale-100': !!alwaysOpen,
       ...className,
-    }} opened={openItemsStore.items.includes(sectionName) && !alwaysOpen}
-    onClick$={async () => openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items)} { ...props }>
+    }} opened={openItemsStore.items.includes(sectionName) && !alwaysOpen} { ...props }
+    onClick$={async () => {
+      await onClick$?.();
+      openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items);
+    }}>
       <div class="flex items-center gap-2">
         <Slot />
       </div>
