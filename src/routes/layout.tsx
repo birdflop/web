@@ -134,12 +134,14 @@ export default component$(() => {
     let width = window.innerWidth;
     let height = window.innerHeight;
 
+    let aspect = width / height;
+    const viewSize = 3.5;
+
     // Camera
-    const camera = new THREE.PerspectiveCamera(
-      35,
-      width / height,
-      0.1,
-      100,
+    const camera = new THREE.OrthographicCamera(
+      -viewSize * aspect, viewSize * aspect, // left, right
+      viewSize, -viewSize,                   // top, bottom
+      0.1, 1000,               // near, far
     );
 
     camera.position.z = 6;
@@ -152,19 +154,6 @@ export default component$(() => {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
     renderer.render(scene, camera);
-
-    window.addEventListener('resize', () => {
-      console.log('Resizing bird canvas');
-
-      width = window.innerWidth;
-      height = window.innerHeight;
-
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(width, height);
-      renderer.render(scene, camera);
-    });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
@@ -182,8 +171,37 @@ export default component$(() => {
 
     const bird = gltf.scene;
     bird.scale.set(0.5, 0.5, 0.5);
-    bird.rotation.y = Math.PI; // Face forward
+    bird.rotation.y = 2.5; // Face forward
     bird.rotation.x = 0;
+    const margin = 0.25; // units
+
+    bird.position.set(
+      camera.right - margin,  // near right edge
+      camera.bottom + margin, // near bottom edge (negative number + positive margin = near bottom)
+      0,
+    );
+
+    function onWindowResize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      aspect = width / height;
+
+      camera.left = -viewSize * aspect;
+      camera.right = viewSize * aspect;
+      camera.top = viewSize;
+      camera.bottom = -viewSize;
+
+      camera.updateProjectionMatrix();
+
+      bird.position.set(
+        camera.right - margin,  // near right edge
+        camera.bottom + margin, // near bottom edge (negative number + positive margin = near bottom)
+        0,
+      );
+
+      renderer.setSize(width, height);
+    }
+    window.addEventListener('resize', onWindowResize);
 
     // Texture Loader for parrot obj
     const parrotTexture = new THREE.TextureLoader().load('/birdflop-bird.png');
@@ -229,11 +247,6 @@ export default component$(() => {
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    const position = {
-      x: 0,
-      y: 0,
-    };
-
     const headWorldPos = new THREE.Vector3();
     const targetLocal = new THREE.Vector3();
     function updateHeadLook(time: number) {
@@ -243,11 +256,11 @@ export default component$(() => {
       head.getWorldPosition(headWorldPos);
 
       const mouseWorld = new THREE.Vector3(
-        mouse.x * 3,
-        mouse.y * 2,
+        mouse.x * camera.right,
+        mouse.y * camera.top,
         0,
       );
-
+      console.log(mouseWorld);
       // Direction to mouse in world space
       targetLocal.copy(mouseWorld).sub(headWorldPos);
 
@@ -285,7 +298,7 @@ export default component$(() => {
         legR.rotation.x = 0;
 
         // flying animation
-        bird.position.y = (Math.sin(time / 25) * 0.0125) + position.y;
+        // bird.position.y = (Math.sin(time / 25) * 0.0125) + position.y;
         wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
         wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
       }
@@ -294,7 +307,7 @@ export default component$(() => {
         legL.rotation.x = 0.45;
         legR.rotation.x = 0.45;
 
-        bird.position.y = position.y;
+        // bird.position.y = position.y;
       }
 
       renderer.render(scene, camera);
@@ -329,7 +342,7 @@ export default component$(() => {
     }
     <Slot />
     <div class={{
-      'fixed bottom-0 sm:bottom-4 sm:right-4 z-1000 flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
+      'fixed bottom-0 sm:bottom-4 sm:right-24 flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
     }} id="notifications">
       {notifications.map((notification) => {
         if (!notification) return null;
