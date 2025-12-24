@@ -169,7 +169,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
       <div class={{
         'absolute top-1 right-1': true,
       }}>
-        <SelectMenuRaw id="previewstyle" value={previewStyle.value} onChange$={
+        <SelectMenuRaw align="right" id="previewstyle" value={previewStyle.value} onChange$={
           (e, el) => {
             previewStyle.value = el.value;
           }
