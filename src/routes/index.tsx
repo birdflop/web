@@ -29,7 +29,7 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="flex flex-col text-gray-100 mx-auto px-10 items-center justify-center text-center min-h-lvh pt-[72px]">
+    <section class="flex flex-col text-gray-100 mx-auto px-10 items-center justify-center text-center min-h-lvh pt-18">
       <h1 class={{
         'relative my-0! text-7xl! flex items-center mx-auto drop-shadow-lg text-transparent bg-clip-text': true,
         'animate-in fade-in slide-in-from-top-8 anim-duration-1000': true,
