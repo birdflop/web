@@ -33,7 +33,7 @@ import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
-import { and, count, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
@@ -54,7 +54,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const savedPresetIds =
     searchParams.get('savedPresetIds')?.split(',').filter(Boolean).map((id) => parseInt(id)) || [];
   const sortBy = searchParams.get('sortBy') || 'createdAt';
-  const sortOrder = searchParams.get('sortOrder') || 'desc';
+  const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc';
 
   try {
     const db = getDB();
@@ -77,11 +77,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
     let orderBy;
     switch (sortBy) {
     case 'name':
-      orderBy = presets.name;
+      orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
       break;
     case 'createdAt':
     default:
-      orderBy = presets.createdAt;
+      orderBy = sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
       break;
     }
 
@@ -365,10 +365,10 @@ export default component$(() => {
               }}
               title={t('rgb.presets.sortBy.title@@Sort by')}
               values = {[
-                //{ pls fix :3
-                //  name: t('rgb.presets.sortBy.newest@@Newest first'),
-                //  value: 'createdAt-desc',
-                //},
+                {
+                  name: t('rgb.presets.sortBy.newest@@Newest first'),
+                  value: 'createdAt-desc',
+                },
                 {
                   name: t('rgb.presets.sortBy.oldest@@Oldest first'),
                   value: 'createdAt-asc',
@@ -377,10 +377,10 @@ export default component$(() => {
                   name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
                   value: 'name-asc',
                 },
-                //{
-                //  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
-                //  value: 'name-desc',
-                //},
+                {
+                  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
+                  value: 'name-desc',
+                },
               ]}
             />
           </div>
