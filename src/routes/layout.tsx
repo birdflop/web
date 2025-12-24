@@ -1,4 +1,4 @@
-import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
+import type { JSXOutput, NoSerialize, Signal } from '@builder.io/qwik';
 import { component$, createContextId, Slot, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
@@ -9,6 +9,9 @@ import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
+
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -52,6 +55,8 @@ export default component$(() => {
   // Select background images
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
+
+  const birdRef = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -119,9 +124,107 @@ export default component$(() => {
     if (!showCookieConsent.value) return;
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    // Scene
+    const scene = new THREE.Scene();
+    scene.background = new THREE.TextureLoader().load('');
+
+    // get width of element
+    const width = birdRef.value.clientWidth;
+    const height = birdRef.value.clientHeight;
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(
+      35,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100,
+    );
+
+    camera.position.z = 6;
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: birdRef.value,
+      antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(width, height);
+    renderer.render(scene, camera);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7);
+    scene.add(directionalLight);
+
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.4);
+    scene.add(hemisphereLight);
+
+    // GLTF Loader for parrot model
+    const loader = new GLTFLoader();
+    const gltf = await loader.loadAsync('/birdflop-bird.glb');
+
+    const bird = gltf.scene;
+    bird.scale.set(0.5, 0.5, 0.5);
+    bird.rotation.y = 2.5;
+    bird.rotation.x = 0;
+
+    // Texture Loader for banner obj
+    const parrotTexture = new THREE.TextureLoader().load('/birdflop-bird.png');
+    if (!parrotTexture) return;
+    parrotTexture.colorSpace = THREE.SRGBColorSpace;
+    parrotTexture.minFilter = THREE.NearestFilter;
+    parrotTexture.magFilter = THREE.NearestFilter;
+
+    // Add parrot to scene
+    bird.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material.map = parrotTexture;
+        child.material.map.flipY = false; // glTF textures usually have flipY = false
+      }
+    });
+
+    const body = bird.getObjectByName('body');
+    const wingL = bird.getObjectByName('left_wing');
+    const wingR = bird.getObjectByName('right_wing');
+    const tail = bird.getObjectByName('tail');
+    const legL = bird.getObjectByName('left_leg');
+    const legR = bird.getObjectByName('right_leg');
+    const head = bird.getObjectByName('head');
+
+    if (!body || !wingL || !wingR || !tail || !legL || !legR || !head) {
+      console.warn('One or more bones not found! Not rendering bird.');
+      return;
+    }
+
+    head.rotation.x += 0.15;
+    body.rotation.x = THREE.MathUtils.degToRad(-28);
+    wingL.rotation.x = -0.25;
+    wingR.rotation.x = -0.25;
+    tail.rotation.x = -0.35;
+    legL.rotation.x = 0.45;
+    legR.rotation.x = 0.45;
+
+    scene.add(bird);
+
+    // Animation Loop
+    const animate = () => {
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  });
+
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
+
+    <canvas ref={birdRef} class={{
+      'fixed bottom-0 blur-none overflow-hidden z-10 w-lvw h-lvh pointer-events-none': true,
+    }}/>
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
       <Background id="bg" class={{
