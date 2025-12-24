@@ -79,6 +79,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
     case 'name':
       orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
       break;
+    case 'saves':
+      orderBy = sortOrder === 'desc'
+        ? desc(sql`COUNT(${savedPresets.userId})`)
+        : sql`COUNT(${savedPresets.userId})`;
+      break;
     case 'createdAt':
     default:
       orderBy = sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
@@ -380,6 +385,14 @@ export default component$(() => {
                 {
                   name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
                   value: 'name-desc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
+                  value: 'saves-desc',
+                },
+                {
+                  name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
+                  value: 'saves-asc',
                 },
               ]}
             />
