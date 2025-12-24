@@ -79,7 +79,7 @@ export const OnThisPage = component$(({ readOnly }: {
 
   return (
     <aside
-      class='hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-[40] pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
+      class='hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-40 pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
     >
       {contentHeadings.length > 0 ? (
         <>

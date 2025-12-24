@@ -12,7 +12,7 @@ export default component$(({ hidden }: {
     <div class={{
       'flex flex-col gap-2 transition-all duration-200': true,
       'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-[500px] opacity-100 pointer-events-auto': !hidden,
+      'max-h-125 opacity-100 pointer-events-auto': !hidden,
     }} id="formatoptions">
       {(rgbStore.format.char != undefined && !rgbStore.format.bold && !rgbStore.format.italic && !rgbStore.format.underline && !rgbStore.format.strikethrough) && <>
         <label for="format-char">

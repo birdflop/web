@@ -60,7 +60,7 @@ export default component$(({ threshold, hidden }: {
     <div class={{
       'flex flex-col gap-2 transition-all duration-300': true,
       'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-[400px] opacity-100 pointer-events-auto': !hidden,
+      'max-h-100 opacity-100 pointer-events-auto': !hidden,
     }} id="decode">
       <label for="decode">
         {t('rgb.decode.title@@Decode')}

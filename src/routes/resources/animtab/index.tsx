@@ -187,7 +187,7 @@ export default component$(() => {
               {t('rgb.colors.title@@Colors')}
             </Accordion>
             <ColorList hidden={!openItemsStore.items.includes('colors')}>
-              <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full !opacity-100': true }}
+              <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full opacity-100!': true }}
                 onIncrement$={() => animtabStore.length++}
                 onDecrement$={() => animtabStore.length--}
               >
@@ -261,7 +261,7 @@ export default component$(() => {
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
               'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('outputformat'),
-              'max-h-[500px] opacity-100 pointer-events-auto': openItemsStore.items.includes('outputformat'),
+              'max-h-125 opacity-100 pointer-events-auto': openItemsStore.items.includes('outputformat'),
             }}>
               <label for="outputformat" class="text-lum-text-secondary">
                 {t('animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.')}

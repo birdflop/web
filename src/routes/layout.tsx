@@ -8,7 +8,7 @@ import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
 import { Bell, Cookie, X } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
-import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, themes } from '~/util/theme-store';
+import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from '~/util/themeUtil';
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -28,23 +28,8 @@ type Notification = {
 
 type Settings = {
   cookies?: boolean;
+  theme?: ThemeName;
 }
-
-export const useServerTheme = routeLoader$(({ cookie }) => {
-  const serverTheme = getThemePreference(cookie);
-  if (serverTheme == 'auto') return {
-    currentTheme: serverTheme,
-  };
-
-  const css = themes[serverTheme];
-  const cssString = getCSSString(serverTheme);
-  return {
-    currentTheme: serverTheme,
-    isDark: serverTheme === 'dark',
-    css,
-    cssString,
-  };
-});
 
 export const useAdmins = routeLoader$(({ env }) => {
   const adminIds = env.get('ADMINS')?.split(',').map(id => id.trim());
@@ -52,7 +37,26 @@ export const useAdmins = routeLoader$(({ env }) => {
 });
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'settings', url.searchParams);
+  const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {
+    cookies: Settings;
+    errors: string[];
+  };;
+
+  const theme = settingsCookies.cookies.theme || 'dark';
+
+  return {
+    ...settingsCookies,
+    theme: {
+      currentTheme: theme,
+      ...(theme !== 'auto' &&
+        {
+          isDark: theme === 'dark',
+          css: themes[theme],
+          cssString: getCSSString(theme),
+        }
+      ),
+    },
+  };
 });
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
@@ -72,12 +76,18 @@ export default component$(() => {
   const notifications = useStore([] as Notification[]);
   useContextProvider(NotificationContext, notifications);
 
-  // Show cookie consent notification if not already accepted/opted out
-  const { cookies: settingsCookies } = useSettingsCookies().value;
+  // Settings store
+  const { cookies: settingsCookies, theme: serverThemeData } = useSettingsCookies().value;
   const settingsStore = useStore({
     ...settingsCookies,
   } as Settings);
   useContextProvider(SettingsContext, settingsStore);
+
+  // Theme store
+  const themeStore = useStore<ThemeContextType>(serverThemeData);
+  useContextProvider(ThemeContext, themeStore);
+
+  // Show cookie consent notification if not already accepted/opted out
   const showCookieConsent = useSignal(false);
 
   // Open items store
@@ -85,13 +95,6 @@ export default component$(() => {
     items: [] as string[],
   });
   useContextProvider(openItemsContext, openItemsStore);
-
-  // Get server-side theme data
-  const serverThemeData = useServerTheme();
-
-  // Theme store
-  const themeStore = useStore<ThemeContextType>(serverThemeData.value);
-  useContextProvider(ThemeContext, themeStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {

@@ -1,24 +1,5 @@
-import { createContextId, $ } from '@builder.io/qwik';
-import { Cookie } from '@builder.io/qwik-city';
+import { createContextId } from '@builder.io/qwik';
 export type ThemeName = keyof typeof themes | 'auto';
-
-/**
- * Get the theme preference
- * @returns ThemeName | undefined
- */
-export const getThemePreference = function (cookie: Cookie): ThemeName {
-  const cookieVal = cookie.get('theme-preference');
-  const value = cookieVal?.value as ThemeName | undefined;
-  return value || 'dark';
-};
-
-/**
- * Set the theme preference
- * @param theme - ThemeName
- */
-export const setThemePreference = $(function (theme: ThemeName) {
-  return document.cookie = `theme-preference=${theme}; path=/;`;
-});
 
 const darkTheme = {
   '--color-bg': 'var(--color-gray-900)',

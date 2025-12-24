@@ -181,7 +181,7 @@ export default component$(() => {
           <hr/>
         </div>
 
-        <div class="flex [&>*]:flex-1 flex-wrap gap-4 justify-between my-6">
+        <div class="flex *:flex-1 flex-wrap gap-4 justify-between my-6">
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-1">
               <label for="input">

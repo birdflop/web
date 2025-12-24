@@ -356,7 +356,7 @@ export default component$(() => {
                 <p class="mb-2">
                   {t('animtexture.frames@@Animation Frames')}
                 </p>
-                <div id="imgs" class="lum-card flex-row flex-wrap min-h-[calc(100%-32px)] max-h-[620px] overflow-auto gap-2 p-2">
+                <div id="imgs" class="lum-card flex-row flex-wrap min-h-[calc(100%-32px)] max-h-155 overflow-auto gap-2 p-2">
                   {animtextureFrames.value.map((frame, i) => (
                     <div key={`frame${i}`} class="lum-card lum-bg-lum-input-bg w-24 p-0 gap-0 relative">
                       <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {

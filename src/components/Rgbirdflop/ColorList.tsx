@@ -33,7 +33,7 @@ export default component$(({ hidden, id = 'text' }: {
     }} id={'colorlist' + id}>
       <Slot />
       {rgbStore.format.color != 'MiniMessage' && id == 'text' &&
-        <NumberInput input disabled min={1} max={rgbStore.text.length / colors.value.length} value={rgbStore.colorlength} id="colorlength" class={{ 'w-full !opacity-100': true }}
+        <NumberInput input disabled min={1} max={rgbStore.text.length / colors.value.length} value={rgbStore.colorlength} id="colorlength" class={{ 'w-full opacity-100!': true }}
           onIncrement$={() => {
             rgbStore.colorlength++;
           }}
@@ -147,7 +147,7 @@ export default component$(({ hidden, id = 'text' }: {
             </button>
           </div>
           <div id={`colorlist${id}-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-            'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+            'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2 left-0': true,
             'opacity-0 scale-95 pointer-events-none': opened.value != i,
           }}>
             <ColorPicker

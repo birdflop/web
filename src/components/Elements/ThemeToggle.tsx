@@ -1,7 +1,9 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
-import { type ThemeName, themes, setThemePreference, ThemeContext } from '~/util/theme-store';
+import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
 import { Moon, Sun, Sparkles, Battery } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SettingsContext } from '~/routes/layout';
+import { setCookies } from '~/util/dataUtils';
 
 export interface ThemeToggleProps {
   variant?: 'compact' | 'full' | 'dropdown';
@@ -12,6 +14,7 @@ export interface ThemeToggleProps {
 export const ThemeToggle = component$<ThemeToggleProps>(
   ({ variant = 'compact', showLabel = false, class: className = '' }) => {
     const themeStore = useContext(ThemeContext);
+    const settingsStore = useContext(SettingsContext);
 
     // Update current theme from DOM
     // eslint-disable-next-line qwik/no-use-visible-task
@@ -23,6 +26,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
           ) as ThemeName;
           if (themeVariant) {
             themeStore.currentTheme = themeVariant;
+            settingsStore.theme = themeVariant;
           }
         };
 
@@ -80,33 +84,33 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     const CurrentThemeOption =
       themeOptions.find((option) => option.value === themeStore.currentTheme) ||
       themeOptions[0];
+
     const handleThemeChange = $((newTheme: ThemeName) => {
       // Apply theme changes directly without reload
       if (typeof document !== 'undefined') {
-        void (async () => {
-          // Save to cookie
-          await setThemePreference(newTheme);
+        settingsStore.theme = newTheme;
+        setCookies('settings', settingsStore);
 
-          // Apply theme immediately
-          const root = document.documentElement;
-          let effectiveTheme = newTheme;
-          if (newTheme === 'auto') {
-            effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)')
-              .matches
-              ? 'dark'
-              : 'light';
-          }
+        // Apply theme immediately
+        const root = document.documentElement;
+        let effectiveTheme = newTheme;
+        if (newTheme === 'auto') {
+          effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)')
+            .matches
+            ? 'dark'
+            : 'light';
+        }
 
-          const css = themes[effectiveTheme as keyof typeof themes];
-          Object.entries(css).forEach(([key, value]) => {
-            root.style.setProperty(key, value);
-          });
+        const css = themes[effectiveTheme as keyof typeof themes];
+        Object.entries(css).forEach(([key, value]) => {
+          root.style.setProperty(key, value);
+        });
 
-          root.setAttribute('data-theme', effectiveTheme);
-          root.setAttribute('data-theme-variant', newTheme);
-        })();
+        root.setAttribute('data-theme', effectiveTheme);
+        root.setAttribute('data-theme-variant', newTheme);
       }
     });
+
     const handleCycleTheme = $(async () => {
       // Get current theme from DOM attribute instead of context to avoid serialization
       const currentTheme =

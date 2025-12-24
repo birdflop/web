@@ -167,7 +167,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
           >
             <div
               class={{
-                'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2':
+                'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2':
                   true,
                 'opacity-0 scale-95 pointer-events-none': opened.value != i,
                 'left-0 items-start': color.pos < 50,

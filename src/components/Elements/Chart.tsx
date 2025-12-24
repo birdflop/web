@@ -1,7 +1,7 @@
 // components/elements/Chart.tsx
 import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Chart, registerables } from 'chart.js';
-import { ThemeContext } from '~/util/theme-store';
+import { ThemeContext } from '~/util/themeUtil';
 
 export interface ChartProps {
   config: {
