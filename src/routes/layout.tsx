@@ -260,7 +260,7 @@ export default component$(() => {
         mouse.y * camera.top,
         0,
       );
-      console.log(mouseWorld);
+
       // Direction to mouse in world space
       targetLocal.copy(mouseWorld).sub(headWorldPos);
 
