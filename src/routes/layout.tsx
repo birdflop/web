@@ -12,7 +12,7 @@ import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, theme
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { getCookies } from '~/util/dataUtils';
+import { getCookies, setCookies } from '~/util/dataUtils';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -25,6 +25,10 @@ type Notification = {
   bgColor?: string;
   buttons?: { text: string; href: string }[];
 } | rawNotification;
+
+type Settings = {
+  cookies?: boolean;
+}
 
 export const useServerTheme = routeLoader$(({ cookie }) => {
   const serverTheme = getThemePreference(cookie);
@@ -47,11 +51,12 @@ export const useAdmins = routeLoader$(({ env }) => {
   return adminIds;
 });
 
-export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'cookies', url.searchParams);
+export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'settings', url.searchParams);
 });
 
 export const NotificationContext = createContextId<Notification[]>('notification-context');
+export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
   const t = (string: string) => inlineTranslate()(string);
@@ -68,7 +73,11 @@ export default component$(() => {
   useContextProvider(NotificationContext, notifications);
 
   // Show cookie consent notification if not already accepted/opted out
-  const cookies = useCookies().value.cookies;
+  const { cookies: settingsCookies } = useSettingsCookies().value;
+  const settingsStore = useStore({
+    ...settingsCookies,
+  } as Settings);
+  useContextProvider(SettingsContext, settingsStore);
   const showCookieConsent = useSignal(false);
 
   // Open items store
@@ -98,7 +107,7 @@ export default component$(() => {
     }
 
     // check if cookies have been accepted or opted out
-    if (cookies.optout !== undefined) return;
+    if (settingsStore.cookies !== undefined) return;
     try {
       // Fetch user's location information
       const response = await fetch('https://ipapi.co/json/');
@@ -373,7 +382,7 @@ export default component$(() => {
           }
         </div>;
       })}
-      {showCookieConsent.value &&
+      {showCookieConsent.value && settingsStore.cookies === undefined &&
         <div class={{
           'lum-bg-lum-input-bg/60': true,
           'backdrop-blur-xl lum-card rounded-none sm:rounded-lum wrap-break-word': true,
@@ -392,14 +401,14 @@ export default component$(() => {
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2">
             <button class="lum-btn" onClick$={() => {
-              document.cookie = 'cookies={"optout":true}; path=/';
-              showCookieConsent.value = false;
+              settingsStore.cookies = false;
+              setCookies('settings', settingsStore);
             }}>
               {t('nav.cookies.optOut@@Reject')}
             </button>
             <button class="lum-btn lum-bg-blue hover:lum-bg-blue" onClick$={() => {
-              document.cookie = 'cookies={"optout":false}; path=/';
-              showCookieConsent.value = false;
+              settingsStore.cookies = true;
+              setCookies('settings', settingsStore);
             }}>
               {t('nav.cookies.acknowledge@@Accept')}
             </button>

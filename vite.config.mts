@@ -78,6 +78,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         'gifuct-js',
         'three/examples/jsm/loaders/OBJLoader',
         'three/examples/jsm/controls/OrbitControls',
+        'three/examples/jsm/loaders/GLTFLoader',
         'three',
         '@auth/drizzle-adapter',
         'drizzle-orm/sqlite-core',

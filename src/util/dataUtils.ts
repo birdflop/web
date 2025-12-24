@@ -4,7 +4,7 @@ import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
 import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
 
-type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'cookies';
+type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
 const getDefaults = (name: names) => {
   switch (name) {
@@ -103,8 +103,8 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
 
-  const cookiePopup = JSON.parse(cookie.cookies);
-  if (cookiePopup.optout) return; // don't set cookies if user has opted out
+  const settings = JSON.parse(cookie.settings);
+  if (settings.cookies === false) return; // don't set cookies if user has opted out
 
   const cookieValue = { ...cookies };
 
