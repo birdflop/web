@@ -149,19 +149,19 @@ export default component$(({ hidden }: {
         </div>
       </div>
       <Link class={{
-        'lum-btn flex-1 border-blue hover:border-blue': true,
+        'lum-btn border-blue hover:border-blue': true,
       }} href="/resources/rgb/presets">
         <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
+      <div class="flex flex-col gap-1">
+        <label for="import">
+          {t('rgb.presets.import@@Import')}
+          <span class="text-lum-text-secondary"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
+        </label>
+        <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
+          onInput$={async (e, el) => loadPresetJSON(el.value)}/>
+      </div>
       <div class="flex flex-wrap gap-1 mt-1">
-        <div class="flex flex-col gap-1 flex-1">
-          <label for="import">
-            {t('rgb.presets.import@@Import')}
-            <span class="text-lum-text-secondary"> - {t('rgb.presets.importSubtitle@@Load a JSON preset')}</span>
-          </label>
-          <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
-            onInput$={async (e, el) => loadPresetJSON(el.value)}/>
-        </div>
         <button class={{
           'lum-btn flex-1': true,
         }} id="copy" onClick$={async () => {
