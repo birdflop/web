@@ -193,7 +193,7 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-[60px] w-full">
+      <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Presentation size={70} /> {t('nav.resources.banner.title@@Banner Generator')}
         </h1>
@@ -300,10 +300,10 @@ export default component$(() => {
                       }}/>
                     </button>
                     <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
-                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-[1000] mt-2 left-0': true,
+                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2 left-0': true,
                       'opacity-0 scale-95 pointer-events-none': openPopup.value != i,
                     }}>
-                      <div class="lum-card w-[23rem] p-4">
+                      <div class="lum-card w-92 p-4">
                         <div class="flex flex-wrap gap-1">
                           {Object.entries(colors).map(([colorName, color]) => {
                             return (
@@ -353,7 +353,7 @@ export default component$(() => {
             <div class={{
               'flex flex-col gap-2 transition-all duration-200': true,
               'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
-              'max-h-[250px] opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
+              'max-h-62.5 opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
             }} id="command">
               <textarea id="commandOutput" readOnly
                 class={{

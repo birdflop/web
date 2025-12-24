@@ -130,14 +130,14 @@ export default component$(() => {
     const scene = new THREE.Scene();
     scene.background = new THREE.TextureLoader().load('');
 
-    // get width of element
-    const width = birdRef.value.clientWidth;
-    const height = birdRef.value.clientHeight;
+    // get width of window
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
     // Camera
     const camera = new THREE.PerspectiveCamera(
       35,
-      window.innerWidth / window.innerHeight,
+      width / height,
       0.1,
       100,
     );
@@ -152,6 +152,19 @@ export default component$(() => {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
     renderer.render(scene, camera);
+
+    window.addEventListener('resize', () => {
+      console.log('Resizing bird canvas');
+
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(width, height);
+      renderer.render(scene, camera);
+    });
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
@@ -169,10 +182,10 @@ export default component$(() => {
 
     const bird = gltf.scene;
     bird.scale.set(0.5, 0.5, 0.5);
-    bird.rotation.y = 2.5;
+    bird.rotation.y = Math.PI; // Face forward
     bird.rotation.x = 0;
 
-    // Texture Loader for banner obj
+    // Texture Loader for parrot obj
     const parrotTexture = new THREE.TextureLoader().load('/birdflop-bird.png');
     if (!parrotTexture) return;
     parrotTexture.colorSpace = THREE.SRGBColorSpace;
@@ -205,13 +218,85 @@ export default component$(() => {
     wingL.rotation.x = -0.25;
     wingR.rotation.x = -0.25;
     tail.rotation.x = -0.35;
-    legL.rotation.x = 0.45;
-    legR.rotation.x = 0.45;
 
     scene.add(bird);
 
+    let animation: 'flying' | undefined;
+    const mouse = { x: 0, y: 0 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+
+    const position = {
+      x: 0,
+      y: 0,
+    };
+
+    const headWorldPos = new THREE.Vector3();
+    const targetLocal = new THREE.Vector3();
+    function updateHeadLook(time: number) {
+      if (!head || !bird) return;
+
+      // Head position in world space
+      head.getWorldPosition(headWorldPos);
+
+      const mouseWorld = new THREE.Vector3(
+        mouse.x * 3,
+        mouse.y * 2,
+        0,
+      );
+
+      // Direction to mouse in world space
+      targetLocal.copy(mouseWorld).sub(headWorldPos);
+
+      // Convert direction into BODY local space
+      bird.worldToLocal(targetLocal);
+
+      // Compute angles relative to body forward
+      const yaw = Math.atan2(targetLocal.x, targetLocal.z);
+      const pitch = Math.atan2(
+        targetLocal.y,
+        Math.sqrt(targetLocal.x * targetLocal.x + targetLocal.z * targetLocal.z),
+      );
+
+      // Clamp like Minecraft
+      const clampedYaw = -THREE.MathUtils.clamp(yaw, -0.6, 0.6);
+      const clampedPitch = THREE.MathUtils.clamp(pitch, -0.4, 0.4);
+
+      // Idle motion
+      const idle = Math.sin(time * 0.002) * 0.03;
+
+      // Smooth interpolation
+      head.rotation.y = THREE.MathUtils.lerp(head.rotation.y, clampedYaw, 0.12);
+      head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, clampedPitch + idle, 0.12);
+
+      // Kill roll
+      head.rotation.z = 0;
+    }
+
     // Animation Loop
-    const animate = () => {
+    const animate = (time: number) => {
+      updateHeadLook(time);
+      if (animation == 'flying') {
+        // legs up
+        legL.rotation.x = 0;
+        legR.rotation.x = 0;
+
+        // flying animation
+        bird.position.y = (Math.sin(time / 25) * 0.0125) + position.y;
+        wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
+        wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
+      }
+      else {
+        // legs down
+        legL.rotation.x = 0.45;
+        legR.rotation.x = 0.45;
+
+        bird.position.y = position.y;
+      }
+
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
