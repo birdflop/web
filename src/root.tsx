@@ -55,7 +55,6 @@ export default component$(() => {
             defer
             src='https://umami.bwmp.dev/script.js'
             data-website-id='b68075e9-39d9-4401-9d8f-2d3e84d76ca5'
-            data-domains='*'
           />
         )}
         <RouterHead />
