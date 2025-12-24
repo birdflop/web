@@ -6,9 +6,9 @@
       "title": "404: Seite nicht gefunden."
     },
     "cookies": {
-      "acknowledge": "Okay",
+      "acknowledge": "Accept",
       "description": "Wir nutzen Cookies um deine Einstellungen zu speichern und zu laden.",
-      "optOut": "Cookies deaktivieren",
+      "optOut": "Reject",
       "title": "Cookies"
     },
     "docs": "Docs",

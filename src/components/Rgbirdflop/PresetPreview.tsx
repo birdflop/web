@@ -9,6 +9,7 @@ import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/r
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
+const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
   Preset: PresetPartial;
@@ -50,16 +51,16 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       })`,
     }}>
     { Preset.author &&
-      <div class="flex lum-btn-p-1 items-center bg-gray-950/30 rounded-lum-1 m-1 border-none">
-        <p class={{
+      <div class="flex lum-btn-p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1 border-none">
+        <div class={{
           'flex flex-1 items-center gap-2': true,
           'text-blue-300/80!': !Preset.user,
-          'text-orange-300/80!': !!Preset.user,
         }}>
           { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-2 lum-btn-p-1 gap-2 cursor-pointer font-semibold -ml-1">
             {Preset.user.image && Preset.user.name && (
-              <img src={Preset.user.image} alt={Preset.user.name}
-                width={24} height={24} class="w-6 h-6 rounded-full!" />
+              <object data={Preset.user.image} class="w-6 h-6 rounded-full! text-white normal">
+                <img src={fallbackpfp} alt={Preset.user.name} width="100" height="100" />
+              </object>
             )}
             {Preset.user.name}
           </Link>
@@ -76,7 +77,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             }
             {Preset.author}
           </>}
-        </p>
+        </div>
         <p class="text-xs">
           {Preset.createdAt && new Date(Preset.createdAt)
             .toLocaleDateString(undefined, {
@@ -123,7 +124,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         </p>
       }
     </Link>
-    <div class="flex p-1 items-center bg-gray-950/30 rounded-lum-1 m-1 gap-1">
+    <div class="flex p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1 gap-1">
       <div class="flex gap-1 p-1">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (

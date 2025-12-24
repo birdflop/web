@@ -6,9 +6,9 @@
       "title": "404: 페이지를 찾을 수 없습니다"
     },
     "cookies": {
-      "acknowledge": "Okay",
+      "acknowledge": "Accept",
       "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Turn off cookies",
+      "optOut": "Reject",
       "title": "Cookies"
     },
     "docs": "문서",

@@ -139,7 +139,7 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-[60px] w-full">
+      <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Rainbow size={70} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </h1>

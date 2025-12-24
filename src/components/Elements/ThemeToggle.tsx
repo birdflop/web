@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
 import { type ThemeName, themes, setThemePreference, ThemeContext } from '~/util/theme-store';
-import { Moon, Sun, Sparkles, Bomb, Battery } from 'lucide-icons-qwik';
+import { Moon, Sun, Sparkles, Battery } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
 export interface ThemeToggleProps {
@@ -67,13 +67,6 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         icon: Sun,
         description: 'Clean light theme',
         gradient: 'from-yellow-400 to-orange-500',
-      },
-      {
-        value: 'white',
-        label: 'White',
-        icon: Bomb,
-        description: 'Flashbang',
-        gradient: 'from-gray-200 to-gray-500',
       },
       {
         value: 'black',
@@ -192,12 +185,12 @@ export const ThemeToggle = component$<ThemeToggleProps>(
                 onClick$={() => handleThemeChange(value)}
                 class={{
                   'lum-btn lum-bg-transparent text-left rounded-lum-1 p-2 pr-4': true,
-                  'bg-gradient-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border': isActive,
+                  'bg-linear-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border': isActive,
                   'hover:bg-white/10': !isActive,
                 }}
               >
                 <div
-                  class={`rounded-lum-1 p-2 bg-gradient-to-r ${option.gradient} flex items-center justify-center`}
+                  class={`rounded-lum-1 p-2 bg-linear-to-r ${option.gradient} flex items-center justify-center`}
                 >
                   <IconComponent class="h-4 w-4 text-white" />
                 </div>

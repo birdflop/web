@@ -281,7 +281,7 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-[60px] w-full">
+      <div class="min-h-15 w-full">
         <h1 class="sm:flex items-center my-3!">
           <span class="flex flex-1 gap-4 items-center">
             <Save size={70} />

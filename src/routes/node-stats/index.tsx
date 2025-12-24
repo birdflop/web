@@ -57,7 +57,7 @@ export default component$(() => {
 
   return <>
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-[60px] w-full">
+      <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
           <Activity size={70} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </h1>
@@ -66,10 +66,10 @@ export default component$(() => {
         </p>
         <hr/>
         <div class="flex flex-wrap gap-2 mb-2">
-          <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://status.birdflop.com/">
+          <a class="lum-btn lum-bg-blue hover:lum-bg-blue" href="https://status.birdflop.com/">
             {t('nav.hosting.nodeStats.overview@@Overview')}
           </a>
-          <a class="lum-btn lum-bg-blue/70 hover:lum-bg-blue" href="https://netdata.birdflop.com/panel">
+          <a class="lum-btn lum-bg-blue hover:lum-bg-blue" href="https://netdata.birdflop.com/panel">
             {t('nav.hosting.nodeStats.webServices@@Web Services')}
           </a>
         </div>

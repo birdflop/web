@@ -12,6 +12,7 @@ import { getCSSString, getThemePreference, ThemeContext, ThemeContextType, theme
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { getCookies } from '~/util/dataUtils';
 
 type rawNotification = NoSerialize<{
   id: string;
@@ -46,6 +47,10 @@ export const useAdmins = routeLoader$(({ env }) => {
   return adminIds;
 });
 
+export const useCookies = routeLoader$(({ cookie, url }) => {
+  return getCookies(cookie, 'cookies', url.searchParams);
+});
+
 export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
@@ -63,6 +68,7 @@ export default component$(() => {
   useContextProvider(NotificationContext, notifications);
 
   // Show cookie consent notification if not already accepted/opted out
+  const cookies = useCookies().value.cookies;
   const showCookieConsent = useSignal(false);
 
   // Open items store
@@ -91,15 +97,8 @@ export default component$(() => {
       openItemsStore.items = savedOpenItems;
     }
 
-    // convert cookies to json
-    const cookieJSON: {
-      [key: string]: string;
-    } = document.cookie.split(';').reduce((res, c) => {
-      const [key, val] = c.trim().split('=').map(decodeURIComponent);
-      return Object.assign(res, { [key]: val });
-    }, {});
-    if (cookieJSON['cookies'] || cookieJSON['optout']) return;
-
+    // check if cookies have been accepted or opted out
+    if (cookies.optout !== undefined) return;
     try {
       // Fetch user's location information
       const response = await fetch('https://ipapi.co/json/');
@@ -120,8 +119,6 @@ export default component$(() => {
       console.error('Error determining user location:', error);
       showCookieConsent.value = true;
     }
-
-    if (!showCookieConsent.value) return;
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -395,16 +392,16 @@ export default component$(() => {
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2">
             <button class="lum-btn" onClick$={() => {
-              document.cookie = 'optout=true; path=/';
+              document.cookie = 'cookies={"optout":true}; path=/';
               showCookieConsent.value = false;
             }}>
-              {t('nav.cookies.optOut@@Turn off cookies')}
+              {t('nav.cookies.optOut@@Reject')}
             </button>
             <button class="lum-btn lum-bg-blue hover:lum-bg-blue" onClick$={() => {
-              document.cookie = 'cookies=true; path=/';
+              document.cookie = 'cookies={"optout":false}; path=/';
               showCookieConsent.value = false;
             }}>
-              {t('nav.cookies.acknowledge@@Okay')}
+              {t('nav.cookies.acknowledge@@Accept')}
             </button>
           </div>
         </div>

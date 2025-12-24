@@ -6,9 +6,9 @@
       "title": "404: Sayfa bulunamadı"
     },
     "cookies": {
-      "acknowledge": "Okay",
+      "acknowledge": "Accept",
       "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Turn off cookies",
+      "optOut": "Reject",
       "title": "Cookies"
     },
     "docs": "Belgeler",
