@@ -27,8 +27,8 @@ function renderTemplateSegment(hexWithoutHash: string, text: string, rgbStore: t
   let out = rgbStore.format.color;
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(rgbStore));
-  out = out.replace('$c', text);
   if (rgbStore.lowercase) out = out.toLowerCase();
+  out = out.replace('$c', text);
   return out;
 }
 
