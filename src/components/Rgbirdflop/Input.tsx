@@ -17,7 +17,7 @@ const InputField = component$(({ class: className, readOnly }: {
   const rgbStore = useContext(rgbStoreContext);
   return (
     <div class={{
-      'relative text-2xl break-words': true,
+      'relative text-2xl wrap-break-word': true,
       [`${className}`]: className,
     }}
     style={{ textShadow: '2px 2px 0 #373737' }}>
@@ -90,12 +90,12 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
           <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
           <div class={{
             'absolute flex flex-col w-full text-2xl max-h-64': true,
-            'bottom-0 h-full break-words overflow-auto': previewStyle.value == 'chat',
+            'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat',
             'top-5 justify-center items-center text-center min-h-8 px-2': previewStyle.value.includes('tab'),
           }}
           style={{ textShadow: '2px 2px 0 #373737' }}>
             {previewStyle.value.includes('tab') &&
-              <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 break-words overflow-auto"
+              <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
                 style={{ textShadow: '2px 2px 0 #373737' }}>
                 { previewStyle.value == 'tab-header' &&
                   <InputField readOnly={readOnly} class="text-center">
@@ -126,7 +126,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
               </div>
             }
             {previewStyle.value == 'chat' &&
-              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 break-words overflow-auto"
+              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 wrap-break-word overflow-auto"
                 style={{ textShadow: '2px 2px 0 #373737' }}>
                 {!readOnly &&
                   <p class="text-white!">
