@@ -128,8 +128,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       <div class="flex gap-1 p-1">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (
-            <span key={index} class="p-2 rounded-lum-3 border border-lum-border/50"
-              style={{ backgroundColor: color.hex }} />
+            <span key={index} class="p-2 rounded-lum-3 lum-bg"
+              style={{ '--bg-color': color.hex }} />
           ))
         }
       </div>
