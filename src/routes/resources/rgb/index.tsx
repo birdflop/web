@@ -186,7 +186,7 @@ export default component$(() => {
     notifications.push(chatBox);
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('format');
+    coordinatesToLandOn.value = getPosOfElement('format-dropdown');
     chatBox.setDescription('You can change the format of the hex codes if the server you\'re using requires a different format.');
     notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
     notifications.push(chatBox);
