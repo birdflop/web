@@ -2,7 +2,7 @@ import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { sortColors } from '~/util/rgb/RGBUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
-import { Plus, Trash } from 'lucide-icons-qwik';
+import { Plus } from 'lucide-icons-qwik';
 import { getRandomColor } from '~/util/rgb/Colors';
 
 export default component$(({ id = 'text' }: { id?: string }) => {
@@ -89,8 +89,17 @@ export default component$(({ id = 'text' }: { id?: string }) => {
       </div>
       {colors.value.map((color, i) => (
         <div
-          class='absolute -mt-1 -ml-3'
           key={`${i}/${colors.value.length}`}
+          id={`colormap${id}-color-${i + 1}`}
+          class={{
+            'absolute -mt-1.5 -ml-3 w-5 h-5 hover:scale-125 rounded-full lum-bg drop-shadow-md transition-transform': true,
+          }}
+          style={{
+            '--bg-color': color.hex,
+            left: `${color.pos}%`,
+          }}
+          preventdefault:mousedown
+          preventdefault:contextmenu
           onMouseDown$={(e, el) => {
             const abortController = new AbortController();
             const colormap = document.getElementById('colormap' + id)!;
@@ -99,8 +108,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               'mousemove',
               (e) => {
                 opened.value = -1;
-                el.classList.add('-mt-2', 'scale-125', 'z-[1000]');
-                el.style.filter = 'drop-shadow(0 0 10px rgb(31 41 55))';
+                el.classList.add('scale-150');
                 let pos = ((e.clientX - rect.left) / rect.width) * 100;
                 if (pos < 0) pos = 0;
                 if (pos > 100) pos = 100;
@@ -114,7 +122,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
             document.addEventListener(
               'mouseup',
               () => {
-                el.classList.remove('-mt-2', 'scale-125', 'z-[1000]');
+                el.classList.remove('scale-150');
                 el.style.filter = '';
                 abortController.abort();
                 colors.value = sortColors(colors.value);
@@ -122,84 +130,87 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               { signal: abortController.signal },
             );
           }}
-          style={{
-            left: `${color.pos}%`,
+          onMouseUp$={() => {
+            // set opened value
+            if (opened.value == i) return (opened.value = -1);
+            else opened.value = i;
+
+            const picker = document.getElementById(`colormap${id}-color-picker`);
+            const popup = document.getElementById(`colormap${id}-color-popup`);
+            if (!picker || !popup) return;
+
+            // set the color picker's value and trigger input to update color picker
+            picker.dataset.value = color.hex;
+            picker.dispatchEvent(new Event('input'));
+
+            // set the position of the popup
+            if (color.pos < 50) {
+              popup.style.left = `${color.pos}%`;
+              popup.style.right = 'auto';
+            } else {
+              popup.style.left = 'auto';
+              popup.style.right = `${100 - color.pos}%`;
+            }
+
+            // close popup on outside click
+            const abortController = new AbortController();
+            document.addEventListener('click', (e) => {
+              if (e.target instanceof HTMLElement &&
+                !e.target.closest(`#colormap${id}-color-popup`)) {
+                opened.value = -1;
+                abortController.abort();
+              }
+            },
+            { signal: abortController.signal },
+            );
           }}
-          preventdefault:mousedown
-        >
-          <div
-            key={`colormap${id}-color-${i + 1}`}
-            id={`colormap${id}-color-${i + 1}`}
-            class={{
-              'transition-transform w-5 h-5 -mt-0.5 hover:scale-125 rounded-full lum-bg drop-shadow-md':
-                true,
-            }}
-            style={`--bg-color: ${color.hex};`}
-            onMouseUp$={() => {
-              const picker = document.getElementById(
-                `colormap${id}-color-${i + 1}-picker`,
-              )!;
-              picker.dataset.value = color.hex;
-              picker.dispatchEvent(new Event('input'));
-              if (opened.value == i) return (opened.value = -1);
-              else opened.value = i;
-              const abortController = new AbortController();
-              document.addEventListener(
-                'click',
-                (e) => {
-                  if (
-                    e.target instanceof HTMLElement &&
-                    !e.target.closest(`#colormap${id}-color-${i + 1}`) &&
-                    !e.target.closest(`#colormap${id}-color-${i + 1}-popup`)
-                  ) {
-                    opened.value = -1;
-                    abortController.abort();
-                  }
-                },
-                { signal: abortController.signal },
-              );
-            }}
-          />
-          <div
-            id={`colormap${id}-color-${i + 1}-popup`}
-            stoppropagation:mousedown
-            class='hidden sm:flex'
-          >
-            <div
-              class={{
-                'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2':
-                  true,
-                'opacity-0 scale-95 pointer-events-none': opened.value != i,
-                'left-0 items-start': color.pos < 50,
-                'right-0 items-end': color.pos >= 50,
-              }}
-            >
-              {colors.value.length > 2 && (
-                <button
-                  class='lum-btn p-2 lum-bg-red-700 hover:lum-bg-red-600'
-                  onClick$={() => {
-                    const newColors = colors.value.slice(0);
-                    newColors.splice(i, 1);
-                    colors.value = sortColors(newColors);
-                  }}
-                >
-                  <Trash size={20} />
-                </button>
-              )}
-              <ColorPicker
-                id={`colormap${id}-color-${i + 1}-picker`}
-                value={color.hex}
-                onInput$={(newColor) => {
-                  const newColors = colors.value.slice(0);
-                  newColors[i].hex = newColor;
-                  colors.value = sortColors(newColors);
-                }}
-                horizontal
-              />
-            </div>
-          </div>
-        </div>
+          onContextMenu$={() => {
+            const newColors = colors.value.slice(0);
+            newColors.splice(i, 1);
+            colors.value = sortColors(newColors);
+            opened.value = -1;
+          }}
+        />
       ))}
+      {opened.value > -1 && (
+        <div
+          id={`colormap${id}-color-popup`}
+          stoppropagation:mousedown
+          class={{
+            'hidden': true,
+            'sm:flex': opened.value > -1,
+            'flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2': true,
+            'animate-in fade-in slide-in-from-top-2': true,
+            'items-start': colors.value[opened.value]?.pos < 50,
+            'items-end': colors.value[opened.value]?.pos >= 50,
+          }}
+          style={{
+            '--lum-border-radius': '1rem',
+            left: colors.value[opened.value]?.pos < 50 ? `${colors.value[opened.value]?.pos}%` : 'auto',
+            right: colors.value[opened.value]?.pos >= 50 ? `${100 - colors.value[opened.value]?.pos}%` : 'auto',
+          }}
+        >
+          <div class="lum-card p-2 gap-0">
+            <p class="font-bold text-white!">
+              {Math.round(colors.value[opened.value]?.pos)}%
+            </p>
+            <p>
+              Right click to remove
+            </p>
+          </div>
+          <ColorPicker
+            id={`colormap${id}-color-picker`}
+            value={colors.value[opened.value]?.hex}
+            onInput$={(newColor) => {
+              if (opened.value < 0) return;
+              const newColors = colors.value.slice(0);
+              newColors[opened.value].hex = newColor;
+              colors.value = sortColors(newColors);
+            }}
+            horizontal
+          />
+        </div>
+      )}
     </div>
   );
 });
