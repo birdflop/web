@@ -195,7 +195,7 @@ export default component$(() => {
               )}
             </div>
           }
-          {!notification.persist &&
+          {notification.persist &&
             <p class="lum-text-xs text-lum-text-secondary/50! mt-1!">
               {t('nav.clickToDismiss@@Click to dismiss')}
             </p>
