@@ -15,7 +15,7 @@ export default component$(({ hidden, value }: {
       'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
       'max-h-0 opacity-0 pointer-events-none': hidden,
       'max-h-62.5 opacity-100 pointer-events-auto': !hidden,
-    }} id="output">
+    }} id="outputcontainer">
       <label for="output" class="text-lum-text-secondary">
         {t('rgb.output.description@@Copy-paste this for RGB text!')}
       </label>

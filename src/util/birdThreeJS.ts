@@ -1,8 +1,12 @@
 import { Signal } from '@builder.io/qwik';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Notification } from './Notification';
 
-export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>, anchorElementRef: Signal<HTMLDivElement | undefined>) {
+export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>,
+  anchorElementRef: Signal<HTMLDivElement | undefined>,
+  notifications: Notification[],
+  coordinatesToLandOn: Signal<{ x: number; y: number } | undefined>) {
   // check if birdRef is defined
   if (!birdRef.value) return console.warn('birdRef is undefined in birdThreeJS');
 
@@ -180,6 +184,21 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     };
   }
 
+  function screenToWorld(x: number, y: number, camera: THREE.OrthographicCamera) {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // Normalized device coordinates (NDC) from -1 to 1
+    const ndcX = (x / width) * 2 - 1;
+    const ndcY = - (y / height) * 2 + 1;
+
+    // Map NDC to world coordinates using camera frustum size
+    const worldX = ndcX * camera.right;  // since right = positive max X
+    const worldY = ndcY * camera.top;    // since top = positive max Y
+
+    return new THREE.Vector3(worldX, worldY, 0);
+  }
+
   // Anchor speech bubble to head
   function updateAnchorElement() {
     if (!head || !anchorElementRef.value) return;
@@ -190,30 +209,69 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     anchorElementRef.value.style.top = `${screen.y}px`;
   }
 
+  let targetPos: THREE.Vector3 | undefined;
+
   // Animation Loop
   const animate = (time: number) => {
     updateHeadLook(time);
     updateAnchorElement();
 
+    if (notifications.length > 0) {
+      animation = 'waving';
+    }
+
+    if (coordinatesToLandOn.value) {
+      const { x, y } = coordinatesToLandOn.value;
+      targetPos = screenToWorld(x, y, camera);
+    }
+
+    if (targetPos) {
+      // Move bird toward target position
+      const direction = new THREE.Vector3().subVectors(targetPos, bird.position);
+      const distance = direction.length();
+
+      if (distance > 0.1) {
+        direction.normalize();
+        bird.position.addScaledVector(direction, 0.0125);
+        animation = 'flying';
+      }
+      else {
+        animation = undefined;
+      }
+    }
+    else {
+      animation = undefined;
+    }
+
     if (animation === 'flying') {
       // legs up
-      legL.rotation.x = 0;
-      legR.rotation.x = 0;
+      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0, 0.12);
+      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0, 0.12);
+      body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-36), 0.1);
 
       // flying animation
-      bird.position.y += Math.sin(time / 25) * 0.0015;
+      bird.position.y += Math.sin(time / 25) * 0.003;
       wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
       wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
     }
     else if (animation === 'waving') {
       // waving animation
-      wingL.rotation.z = Math.sin(time / 200) * 0.3;
-      wingR.rotation.z = -Math.sin(time / 200) * 0.3;
+      const wing = bird.rotation.y < Math.PI ? wingR : wingL;
+      const otherWing = bird.rotation.y < Math.PI ? wingL : wingR;
+      wing.rotation.x = -Math.sin(time / 60) * 0.4;
+      wing.rotation.z = bird.rotation.y < Math.PI ? 2.5 : -2.5;
+
+      // move body slightly up
+      body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-20), 0.1);
+
+      // keep other wing idle
+      otherWing.rotation.z = Math.sin(time / 500) * 0.05;
     }
     else {
       // legs down
-      legL.rotation.x = 0.45;
-      legR.rotation.x = 0.45;
+      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0.45, 0.12);
+      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0.45, 0.12);
+      body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-28), 0.1);
 
       // idle animation
       wingL.rotation.z = Math.sin(time / 500) * 0.05;

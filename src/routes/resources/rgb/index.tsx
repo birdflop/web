@@ -18,7 +18,7 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import { openItemsContext } from '~/routes/layout';
+import { BirdLandContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
@@ -80,6 +80,17 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
     errors: string[]
   };
 });
+
+function getPosOfElement(id: string) {
+  const el = document.getElementById(id);
+
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top,
+  };
+}
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
 export default component$(() => {
@@ -145,6 +156,58 @@ export default component$(() => {
     obfuscate();
     track(() => rgbStore.obfuscate);
     return () => cancelAnimationFrame(rafId);
+  });
+
+  const coordinatesToLandOn = useContext(BirdLandContext);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    const chatBox = new Notification('Flopbird:')
+      .setDescription('Hi! I\'m here to help you create RGB gradients!')
+      .setBgColor('lum-bg-lum-card-bg/50')
+      .setPersist(true);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('input');
+    chatBox.setDescription('First, type something into the text box I\'m on top of!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('colorlistcolorstext');
+    chatBox.setDescription('Next, pick some colors from the color list to create your gradient!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('output');
+    chatBox.setDescription('Finally, copy the output and use it in Minecraft!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('format');
+    chatBox.setDescription('You can change the format of the hex codes if the server you\'re using requires a different format.');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('colormaptext');
+    chatBox.setDescription('The color map shows you how the colors are distributed across your text. You can use this to fine-tune your gradient!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('underline');
+    chatBox.setDescription('You can also add formatting to your text over here, try it out!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = getPosOfElement('presets');
+    chatBox.setDescription('Finally, before I go, you can also check out some preset gradients that other users have made for easy access!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
   });
 
   return (

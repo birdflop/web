@@ -96,7 +96,7 @@ export default component$(({ hidden, id = 'text' }: {
           </button>
         }
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2" id={'colorlistcolors' + id}>
         {colors.value.map((color, i) => <div key={`${i}/${colors.value.length}`} class="flex relative gap-1">
           <div class="flex flex-col gap-1">
             <button class="lum-btn p-1 rounded-b-sm" onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>

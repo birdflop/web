@@ -1,4 +1,4 @@
-import { component$, createContextId, Slot, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, Signal, Slot, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
@@ -46,6 +46,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
+export const BirdLandContext = createContextId<Signal<{ x: number; y: number } | undefined>>('birdland-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
@@ -56,8 +57,11 @@ export default component$(() => {
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
 
+  // bird mascot refs
   const birdRef = useSignal<HTMLCanvasElement>();
   const anchorElementRef = useSignal<HTMLDivElement>();
+  const coordinatesToLandOn = useSignal<{ x: number; y: number }>();
+  useContextProvider(BirdLandContext, coordinatesToLandOn);
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -121,7 +125,7 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef));
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, coordinatesToLandOn));
 
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
@@ -151,7 +155,7 @@ export default component$(() => {
     <div ref={anchorElementRef} class={{
       'fixed flex flex-col sm:gap-2 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
     }} id="notifications" style={{
-      '--lum-border-radius': '1.5rem',
+      '--lum-border-radius': '1rem',
       transform: 'translate(-100%, -100%)',
     }}>
       {notifications.map((notification) => {
@@ -170,7 +174,7 @@ export default component$(() => {
 
         return <button id={notification.id} class={{
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
-          'backdrop-blur-xl lum-card sm:rounded-lum min-w-84 text-left': true,
+          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id} onClick$={(e, el) => {
           el.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');

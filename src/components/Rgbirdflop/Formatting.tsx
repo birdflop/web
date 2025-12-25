@@ -23,7 +23,7 @@ export default component$(() => {
 
   return (
     <div class="flex w-full gap-1 my-2" id="formatting">
-      <button type="button" class={{
+      <button type="button" id="bold" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.bold,
       }} aria-pressed={rgbStore.bold} title={t('rgb.formatting.bold@@Bold')}
@@ -33,7 +33,7 @@ export default component$(() => {
           {t('rgb.formatting.bold@@Bold')}{getFormatLabel('bold')}
         </span>
       </button>
-      <button type="button" class={{
+      <button type="button" id="italic" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.italic,
       }} aria-pressed={rgbStore.italic} title={t('rgb.formatting.italic@@Italic')}
@@ -43,7 +43,7 @@ export default component$(() => {
           {t('rgb.formatting.italic@@Italic')}{getFormatLabel('italic')}
         </span>
       </button>
-      <button type="button" class={{
+      <button type="button" id="underline" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.underline,
       }} aria-pressed={rgbStore.underline} title={t('rgb.formatting.underline@@Underline')}
@@ -53,7 +53,7 @@ export default component$(() => {
           {t('rgb.formatting.underline@@Underline')}{getFormatLabel('underline')}
         </span>
       </button>
-      <button type="button" class={{
+      <button type="button" id="strikethrough" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.strikethrough,
       }} aria-pressed={rgbStore.strikethrough} title={t('rgb.formatting.strikethrough@@Strikethrough')}
@@ -63,7 +63,7 @@ export default component$(() => {
           {t('rgb.formatting.strikethrough@@Strikethrough')}{getFormatLabel('strikethrough')}
         </span>
       </button>
-      <button type="button" class={{
+      <button type="button" id="obfuscate" class={{
         'lum-btn lum-bg-transparent p-2 group': true,
         'lum-bg-blue hover:lum-bg-blue/50': rgbStore.obfuscate,
       }} aria-pressed={rgbStore.obfuscate} title={t('rgb.formatting.obfuscate@@Obfuscate')}
