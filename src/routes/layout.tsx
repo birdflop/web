@@ -182,7 +182,7 @@ export default component$(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 300);
         }}>
-          <h5 class="flex gap-2 items-center my-0!">
+          <h5 class="flex gap-1 items-center my-0!">
             <span class="flex gap-2 items-center flex-1">
               {notification.title}
             </span>
@@ -191,7 +191,7 @@ export default component$(() => {
             {notification.description}
           </p>
           {notification.buttons && notification.buttons.length > 0 &&
-            <div class="flex flex-wrap gap-2 mt-2">
+            <div class="flex flex-wrap items-center justify-end gap-2">
               {notification.buttons.map((button, index) =>
                 <Link key={index} href={button.href} class="lum-btn lum-bg-blue hover:lum-bg-blue">
                   {button.text}
@@ -209,13 +209,13 @@ export default component$(() => {
       {showCookieConsent.value && settingsStore.cookies === undefined &&
         <div class={{
           'lum-bg-lum-input-bg/60': true,
-          'backdrop-blur-xl lum-card rounded-none sm:rounded-lum wrap-break-word': true,
+          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }}>
           <div>
-            <h4 class="flex gap-2 items-center mt-0!">
-              <Cookie size={30} /> {t('nav.cookies.title@@Cookies')}
-            </h4>
+            <h5 class="flex gap-1 items-center my-0!">
+              <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
+            </h5>
             <p>
               {t('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
             </p>
@@ -224,13 +224,13 @@ export default component$(() => {
             </Link>
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2">
-            <button class="lum-btn" onClick$={() => {
+            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
               settingsStore.cookies = false;
               setCookies('settings', settingsStore);
             }}>
               {t('nav.cookies.optOut@@Reject')}
             </button>
-            <button class="lum-btn lum-bg-blue hover:lum-bg-blue" onClick$={() => {
+            <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
               settingsStore.cookies = true;
               setCookies('settings', settingsStore);
             }}>
