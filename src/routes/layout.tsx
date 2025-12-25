@@ -174,7 +174,7 @@ export default component$(() => {
 
         return <button id={notification.id} class={{
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
-          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
+          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left max-w-lg': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id} onClick$={(e, el) => {
           el.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');

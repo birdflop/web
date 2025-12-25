@@ -1,4 +1,4 @@
-import { component$, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import { $, component$, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { sortColors } from '~/util/rgb/RGBUtils';
 import { ColorPicker } from '@luminescent/ui-qwik';
@@ -21,6 +21,14 @@ export default component$(({ id = 'text' }: { id?: string }) => {
     track(() => rgbStore[id == 'text' ? 'colors' : 'shadowcolors']);
     colors.value = rgbStore[id == 'text' ? 'colors' : 'shadowcolors'];
   });
+
+  useOnDocument('click', $((e) => {
+    if (e.target instanceof HTMLElement
+      && !e.target.closest(`#colormap${id}-color-popup`)
+      && !e.target.closest(`#colormap${id}`)) {
+      opened.value = -1;
+    }
+  }));
 
   return (
     <div
@@ -151,18 +159,6 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               popup.style.left = 'auto';
               popup.style.right = `${100 - color.pos}%`;
             }
-
-            // close popup on outside click
-            const abortController = new AbortController();
-            document.addEventListener('click', (e) => {
-              if (e.target instanceof HTMLElement &&
-                !e.target.closest(`#colormap${id}-color-popup`)) {
-                opened.value = -1;
-                abortController.abort();
-              }
-            },
-            { signal: abortController.signal },
-            );
           }}
           onContextMenu$={() => {
             const newColors = colors.value.slice(0);
@@ -172,45 +168,40 @@ export default component$(({ id = 'text' }: { id?: string }) => {
           }}
         />
       ))}
-      {opened.value > -1 && (
-        <div
-          id={`colormap${id}-color-popup`}
-          stoppropagation:mousedown
-          class={{
-            'hidden': true,
-            'sm:flex': opened.value > -1,
-            'flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2': true,
-            'animate-in fade-in slide-in-from-top-2': true,
-            'items-start': colors.value[opened.value]?.pos < 50,
-            'items-end': colors.value[opened.value]?.pos >= 50,
-          }}
-          style={{
-            '--lum-border-radius': '1rem',
-            left: colors.value[opened.value]?.pos < 50 ? `${colors.value[opened.value]?.pos}%` : 'auto',
-            right: colors.value[opened.value]?.pos >= 50 ? `${100 - colors.value[opened.value]?.pos}%` : 'auto',
-          }}
-        >
-          <div class="lum-card p-2 gap-0">
-            <p class="font-bold text-white!">
-              {Math.round(colors.value[opened.value]?.pos)}%
-            </p>
-            <p>
-              Right click to remove
-            </p>
-          </div>
-          <ColorPicker
-            id={`colormap${id}-color-picker`}
-            value={colors.value[opened.value]?.hex}
-            onInput$={(newColor) => {
-              if (opened.value < 0) return;
-              const newColors = colors.value.slice(0);
-              newColors[opened.value].hex = newColor;
-              colors.value = sortColors(newColors);
-            }}
-            horizontal
-          />
+      <div
+        id={`colormap${id}-color-popup`}
+        stoppropagation:mousedown
+        class={{
+          'hidden': true,
+          'sm:flex': opened.value > -1,
+          'flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2': true,
+          'animate-in fade-in slide-in-from-top-2': true,
+        }}
+        style={{
+          '--lum-border-radius': '1rem',
+          left: colors.value[opened.value]?.pos < 50 ? `${colors.value[opened.value]?.pos}%` : 'auto',
+          right: colors.value[opened.value]?.pos >= 50 ? `${100 - colors.value[opened.value]?.pos}%` : 'auto',
+        }}
+      >
+        <div class="lum-card p-2 gap-0">
+          <p class="font-bold text-white!">
+            {Math.round(colors.value[opened.value]?.pos)}%
+          </p>
+          <p>
+            Right click to remove
+          </p>
         </div>
-      )}
+        <ColorPicker
+          id={`colormap${id}-color-picker`}
+          value={colors.value[opened.value]?.hex}
+          onInput$={(newColor) => {
+            const newColors = colors.value.slice(0);
+            newColors[opened.value].hex = newColor;
+            colors.value = sortColors(newColors);
+          }}
+          horizontal
+        />
+      </div>
     </div>
   );
 });

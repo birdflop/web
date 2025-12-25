@@ -1,4 +1,4 @@
-import { component$, Slot, useContext, useSignal, useTask$ } from '@builder.io/qwik';
+import { $, component$, Slot, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { disperseColors, swapItems, sortColors } from '~/util/rgb/RGBUtils';
@@ -25,6 +25,14 @@ export default component$(({ hidden, id = 'text' }: {
     colors.value = rgbStore[id == 'text' ? 'colors' : 'shadowcolors'];
   });
 
+  useOnDocument('click', $((e) => {
+    if (e.target instanceof HTMLElement
+      && !e.target.closest(`#colorlist${id}-color-popup`)
+      && !e.target.closest(`#colorlistcolors${id}`)) {
+      opened.value = -1;
+    }
+  }));
+
   return (
     <div class={{
       'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
@@ -33,18 +41,20 @@ export default component$(({ hidden, id = 'text' }: {
     }} id={'colorlist' + id}>
       <Slot />
       {rgbStore.format.color != 'MiniMessage' && id == 'text' &&
-        <NumberInput input disabled min={1} max={rgbStore.text.length / colors.value.length} value={rgbStore.colorlength} id="colorlength" class={{ 'w-full opacity-100!': true }}
-          onIncrement$={() => {
-            rgbStore.colorlength++;
-          }}
-          onDecrement$={() => {
-            rgbStore.colorlength--;
-          }}
+        <NumberInput input disabled id="colorlength"
+          min={1} max={rgbStore.text.length / colors.value.length}
+          value={rgbStore.colorlength}
+          class={{ 'w-full opacity-100!': true }}
+          onIncrement$={() => rgbStore.colorlength++}
+          onDecrement$={() => rgbStore.colorlength--}
         >
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       }
-      <NumberInput input min={1} max={rgbStore.text.length} value={colors.value.length} id={`colorlist${id}-amount`} class={{ 'w-full': true }}
+      <NumberInput input id={`colorlist${id}-amount`}
+        min={1} max={rgbStore.text.length}
+        value={colors.value.length}
+        class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
           if (colorAmount < 2) return;
@@ -96,19 +106,24 @@ export default component$(({ hidden, id = 'text' }: {
           </button>
         }
       </div>
-      <div class="flex flex-col gap-2" id={'colorlistcolors' + id}>
-        {colors.value.map((color, i) => <div key={`${i}/${colors.value.length}`} class="flex relative gap-1">
+      <div class="flex flex-col gap-2 relative" id={'colorlistcolors' + id}>
+        {colors.value.map((color, i) => <div
+          key={`${i}/${colors.value.length}`}
+          id={`colorlist${id}-color-${i + 1}`}
+          class="flex relative gap-1">
           <div class="flex flex-col gap-1">
-            <button class="lum-btn p-1 rounded-b-sm" onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
+            <button class="lum-btn p-1 rounded-b-sm"
+              onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
               <ChevronUp size={20} />
             </button>
-            <button class="lum-btn p-1 rounded-t-sm" onClick$={() => colors.value = swapItems(colors.value, i, i + 1)}>
+            <button class="lum-btn p-1 rounded-t-sm"
+              onClick$={() => colors.value = swapItems(colors.value, i, i + 1)}>
               <ChevronDown size={20} />
             </button>
           </div>
-          <div class="flex flex-col justify-end gap-1 ml-1">
-            <label for={`colorlist${id}-color-${i + 1}`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
-            <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}`}
+          <div class="flex flex-col justify-end ml-1">
+            <label for={`colorlist${id}-color-${i + 1}-input`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
+            <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
@@ -121,24 +136,26 @@ export default component$(({ hidden, id = 'text' }: {
                 picker.dataset.value = el.value;
                 picker.dispatchEvent(new Event('input'));
               }}
-              onMouseUp$={() => {
-                const picker = document.getElementById(`colorlist${id}-color-${i + 1}-picker`)!;
-                picker.dataset.value = color.hex;
-                picker.dispatchEvent(new Event('input'));
-                if (opened.value == i) return opened.value = -1;
+              onFocus$={() => {
+                // set opened value
+                if (opened.value == i) return (opened.value = -1);
                 else opened.value = i;
-                const abortController = new AbortController();
-                document.addEventListener('click', (e) => {
-                  if (e.target instanceof HTMLElement && !e.target.closest(`#colorlist${id}-color-${i + 1}`) && !e.target.closest(`#colorlist${id}-color-${i + 1}-popup`)) {
-                    opened.value = -1;
-                    abortController.abort();
-                  }
-                }, { signal: abortController.signal });
+
+                const picker = document.getElementById(`colorlist${id}-color-picker`)!;
+                const popup = document.getElementById(`colorlist${id}-color-popup`);
+                if (!picker || !popup) return;
+
+                // set the position of the popup relative to the list of colors
+                const colorContainer = document.getElementById(`colorlist${id}-color-${i + 1}`)!;
+                popup.style.top = `${colorContainer.offsetTop + colorContainer.offsetHeight + 8}px`;
+
+                // set the color picker's value and trigger input to update color picker
+                picker.dataset.value = color.hex;
               }}
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn p-1.5 lum-bg-red-700 hover:lum-bg-red-600 rounded-l-sm" disabled={colors.value.length <= 1} onClick$={() => {
+            <button class="lum-btn p-1.5 lum-bg-red hover:lum-bg-red rounded-l-sm" onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.splice(i, 1);
               colors.value = newColors;
@@ -146,23 +163,63 @@ export default component$(({ hidden, id = 'text' }: {
               <Trash size={20} />
             </button>
           </div>
-          <div id={`colorlist${id}-color-${i + 1}-popup`} stoppropagation:mousedown class={{
-            'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2 left-0': true,
-            'opacity-0 scale-95 pointer-events-none': opened.value != i,
-          }}>
-            <ColorPicker
-              id={`colorlist${id}-color-${i + 1}-picker`}
-              value={color.hex}
-              onInput$={newColor => {
-                const newColors = colors.value.slice(0);
-                newColors[i].hex = newColor;
-                colors.value = sortColors(newColors);
-              }}
-              showInput={false}
-            />
-          </div>
         </div>,
         )}
+        <div
+          id={`colorlist${id}-color-popup`}
+          stoppropagation:mousedown
+          class={{
+            'flex': opened.value > -1,
+            'hidden': opened.value < 0,
+            'flex-col gap-2 motion-safe:transition-all absolute z-10': true,
+            'animate-in fade-in slide-in-from-top-2': true,
+          }}
+          style={{
+            '--lum-border-radius': '1rem',
+          }}
+        >
+          <ColorPicker
+            id={`colorlist${id}-color-picker`}
+            value={colors.value[opened.value]?.hex}
+            onInput$={(newColor) => {
+              const newColors = colors.value.slice(0);
+              newColors[opened.value].hex = newColor;
+              colors.value = sortColors(newColors);
+            }}
+            showInput={false}
+            horizontal
+          />
+          <div class="lum-card p-2 gap-0 items-center">
+            <NumberInput input id={`colorlist${id}-color-pos`}
+              min={0} max={100}
+              value={Math.round(colors.value[opened.value]?.pos)}
+              onChange$={(e, el) => {
+                const newColors = colors.value.slice(0);
+                let newPos = Number(el.value);
+                if (newPos < 0) newPos = 0;
+                if (newPos > 100) newPos = 100;
+                newColors[opened.value].pos = newPos;
+                colors.value = sortColors(newColors);
+              }}
+              onIncrement$={() => {
+                const newColors = colors.value.slice(0);
+                let newPos = newColors[opened.value].pos + 1;
+                if (newPos > 100) newPos = 100;
+                newColors[opened.value].pos = newPos;
+                colors.value = sortColors(newColors);
+              }}
+              onDecrement$={() => {
+                const newColors = colors.value.slice(0);
+                let newPos = newColors[opened.value].pos - 1;
+                if (newPos < 0) newPos = 0;
+                newColors[opened.value].pos = newPos;
+                colors.value = sortColors(newColors);
+              }}
+            >
+              {t('rgb.colors.position@@Position (%)')}
+            </NumberInput>
+          </div>
+        </div>
       </div>
     </div>
   );
