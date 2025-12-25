@@ -163,7 +163,7 @@ export default component$(() => {
   useVisibleTask$(async () => {
     const chatBox = new Notification('Flopbird:')
       .setDescription('Hi! I\'m here to help you create RGB gradients!')
-      .setBgColor('lum-bg-lum-card-bg/50')
+      .setBgColor('lum-bg-cyan/50')
       .setPersist(true);
     notifications.push(chatBox);
 
@@ -206,6 +206,12 @@ export default component$(() => {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     coordinatesToLandOn.value = getPosOfElement('presets');
     chatBox.setDescription('Finally, before I go, you can also check out some preset gradients that other users have made for easy access!');
+    notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
+    notifications.push(chatBox);
+
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    coordinatesToLandOn.value = undefined;
+    chatBox.setDescription('I\'ll be down here letting you know if there\'s anything new. Happy gradient making!');
     notifications.splice(notifications.findIndex(n => n.id === chatBox.id), 1);
     notifications.push(chatBox);
   });

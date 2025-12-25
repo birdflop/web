@@ -122,7 +122,8 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
   scene.add(bird);
 
   // Animation state
-  let animation: 'flying' | 'waving' | undefined;
+  let emote: 'waving' | undefined;
+  let flying = false;
 
   // Track mouse position
   const mouse = { x: 0, y: 0 };
@@ -216,9 +217,8 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     updateHeadLook(time);
     updateAnchorElement();
 
-    if (notifications.length > 0) {
-      animation = 'waving';
-    }
+    if (notifications.length > 0) emote = 'waving';
+    else emote = undefined;
 
     if (coordinatesToLandOn.value) {
       const { x, y } = coordinatesToLandOn.value;
@@ -233,28 +233,14 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
       if (distance > 0.1) {
         direction.normalize();
         bird.position.addScaledVector(direction, 0.0125);
-        animation = 'flying';
+        flying = true;
       }
       else {
-        animation = undefined;
+        flying = false;
       }
     }
-    else {
-      animation = undefined;
-    }
 
-    if (animation === 'flying') {
-      // legs up
-      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0, 0.12);
-      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0, 0.12);
-      body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-36), 0.1);
-
-      // flying animation
-      bird.position.y += Math.sin(time / 25) * 0.003;
-      wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
-      wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
-    }
-    else if (animation === 'waving') {
+    if (emote === 'waving') {
       // waving animation
       const wing = bird.rotation.y < Math.PI ? wingR : wingL;
       const otherWing = bird.rotation.y < Math.PI ? wingL : wingR;
@@ -277,6 +263,18 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
       wingL.rotation.z = Math.sin(time / 500) * 0.05;
       wingR.rotation.z = -Math.sin(time / 500) * 0.05;
       tail.rotation.x = -Math.sin(time / 500) * 0.05;
+    }
+
+    if (flying) {
+      // legs up
+      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0, 0.12);
+      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0, 0.12);
+      body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-36), 0.1);
+
+      // flying animation
+      bird.position.y += Math.sin(time / 25) * 0.003;
+      wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
+      wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
     }
 
     renderer.render(scene, camera);

@@ -153,7 +153,7 @@ export default component$(() => {
     }
     <Slot />
     <div ref={anchorElementRef} class={{
-      'fixed flex flex-col sm:gap-2 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+      'fixed flex flex-col gap-1 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
     }} id="notifications" style={{
       '--lum-border-radius': '1rem',
       transform: 'translate(-100%, -100%)',
