@@ -5,7 +5,8 @@ import { getPresets } from '~/util/rgb/presets';
 import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
-import { NotificationContext, useAdmins } from '~/routes/layout';
+import { NotificationContext, Notification } from '~/util/Notification';
+import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
 import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -91,17 +92,11 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error parsing saved presets',
-        description: `Error: ${err}`,
-        bgColor: 'lum-bg-red/50',
-      };
+      const notification = new Notification('Error parsing saved presets')
+        .setDescription(`Error: ${err}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
-      setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-      }, 2000);
     }
   });
 
@@ -227,22 +222,17 @@ export default component$(() => {
               </>}
           </button>
           <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={async () => {
-            const id = Math.random().toString(36).substring(2, 15);
-            const notification = {
-              id,
-              title: await t$('rgb.copied@@Copied to clipboard!'),
-              description: await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'),
-              bgColor: 'lum-bg-green/50',
-            };
-            navigator.clipboard.writeText(JSON.stringify(presetInfo.preset)).catch(async (err) => {
-              notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
-              notification.description = err;
-              notification.bgColor = 'lum-bg-red/50';
-            });
+            const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
+              .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
+              .setBgColor('lum-bg-green/50');
+            navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))
+              .catch(async (err) => {
+                notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+                  .setDescription('Error: ' + err)
+                  .setBgColor('lum-bg-red/50')
+                  .setPersist(true);
+              });
             notifications.push(notification);
-            setTimeout(() => {
-              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-            }, 2000);
           }}>
             <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
           </button>

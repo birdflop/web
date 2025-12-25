@@ -8,7 +8,7 @@ import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import { Form, Link } from '@builder.io/qwik-city';
-import { NotificationContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { PresetPartial } from '~/util/db';
 import { rgbPreset } from '~/util/rgb/presets';
 import { inlineTranslate } from 'qwik-speak';
@@ -99,39 +99,26 @@ export default component$(() => {
             preset,
           });
 
-          const id = Math.random().toString(36).substring(2, 15);
-          let notification = result.result?.[0] ? {
-            id,
-            title: 'Preset Submitted!',
-            description: 'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.',
-            bgColor: 'lum-bg-green/50',
-            buttons: [
-              { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
-            ],
-          } : {
-            id,
-            title: 'Preset Submission Failed',
-            description: 'Your preset failed to submit. Is there already a preset with the same configuration?',
-            bgColor: 'lum-bg-yellow/50',
-            buttons: [],
-          };
+          const notification = result.result?.[0] ?
+            new Notification('Preset Submitted!')
+              .setDescription('Your preset has been submitted for review. It may take a few days for it to be reviewed and published.')
+              .setBgColor('lum-bg-green/50')
+              .setButtons([
+                { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
+              ]) :
+            new Notification('Preset Submission Failed')
+              .setDescription('Your preset failed to submit. Is there already a preset with the same configuration?')
+              .setBgColor('lum-bg-yellow/50')
+              .setPersist(true);
 
           if (!result.success) {
-            notification = {
-              id,
-              title: 'Preset Submission Failed',
-              description: `Your preset failed to submit: ${result.error}`,
-              bgColor: 'lum-bg-red/50',
-              buttons: [],
-            };
+            // if there is no result, the preset definitely failed anyways, so only update description
+            notification.setDescription(`Your preset failed to submit: ${result.error}`)
+              .setBgColor('lum-bg-red/50')
+              .setPersist(true);
           }
 
           notifications.push(notification);
-
-          setTimeout(() => {
-            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 3000);
-
           if (result.success) {
             modalRef.value?.close();
             selectedPreset.value = undefined;

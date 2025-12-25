@@ -1,29 +1,17 @@
-import type { JSXOutput, NoSerialize } from '@builder.io/qwik';
 import { component$, createContextId, Slot, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
 import Nav from '~/components/Elements/Nav';
 import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
-import { Bell, Cookie, X } from 'lucide-icons-qwik';
+import { Cookie } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from '~/util/themeUtil';
 
+import { Notification, NotificationContext } from '~/util/Notification';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
-
-type rawNotification = NoSerialize<{
-  id: string;
-  element: JSXOutput;
-}>
-type Notification = {
-  id: string;
-  title: string;
-  description?: string;
-  bgColor?: string;
-  buttons?: { text: string; href: string }[];
-} | rawNotification;
 
 type Settings = {
   cookies?: boolean;
@@ -58,7 +46,6 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
-export const NotificationContext = createContextId<Notification[]>('notification-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
@@ -70,6 +57,7 @@ export default component$(() => {
   const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
 
   const birdRef = useSignal<HTMLCanvasElement>();
+  const anchorElementRef = useSignal<HTMLDivElement>();
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -133,7 +121,7 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef));
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef));
 
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
@@ -160,27 +148,31 @@ export default component$(() => {
       }}/>
     }
     <Slot />
-    <div class={{
-      'fixed bottom-0 sm:bottom-4 sm:right-24 flex flex-col sm:gap-2 max-w-full md:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4': true,
-    }} id="notifications">
+    <div ref={anchorElementRef} class={{
+      'fixed flex flex-col sm:gap-2 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+    }} id="notifications" style={{
+      '--lum-border-radius': '1.5rem',
+      transform: 'translate(-100%, -100%)',
+    }}>
       {notifications.map((notification) => {
         if (!notification) return null;
-        if ('element' in notification) return notification.element;
-        return <div class={{
+        const id = notification.id;
+
+        return <button class={{
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
-          'backdrop-blur-xl lum-card rounded-none sm:rounded-lum wrap-break-word': true,
+          'backdrop-blur-xl lum-card sm:rounded-lum min-w-84 text-left': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
-        }} key={notification.id}>
-          <h4 class="flex gap-2 items-center mt-0!">
+        }} key={notification.id} onClick$={(e, el) => {
+          el.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');
+          setTimeout(() => {
+            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+          }, 300);
+        }}>
+          <h5 class="flex gap-2 items-center my-0!">
             <span class="flex gap-2 items-center flex-1">
-              <Bell size={30} /> {notification.title}
+              {notification.title}
             </span>
-            <button class="lum-btn p-1 lum-bg-transparent cursor-pointer" onClick$={() => {
-              notifications.splice(notifications.findIndex((n) => n?.id === notification.id), 1);
-            }}>
-              <X size={20}/>
-            </button>
-          </h4>
+          </h5>
           <p>
             {notification.description}
           </p>
@@ -193,7 +185,7 @@ export default component$(() => {
               )}
             </div>
           }
-        </div>;
+        </button>;
       })}
       {showCookieConsent.value && settingsStore.cookies === undefined &&
         <div class={{

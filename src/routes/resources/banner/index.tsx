@@ -10,7 +10,8 @@ import Accordion from '~/components/Elements/Accordion';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { NotificationContext, openItemsContext } from '~/routes/layout';
+import { openItemsContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '~/util/rgb/RGBUtils';
 import { defaultDescription, generateHead } from '~/root';
@@ -363,22 +364,17 @@ export default component$(() => {
                 }}
                 value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
                 onClick$={async (e, el) => {
-                  const id = Math.random().toString(36).substring(2, 15);
-                  const notification = {
-                    id,
-                    title: await t$('banner.copied@@Copied to clipboard!'),
-                    description: await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'),
-                    bgColor: 'lum-bg-green/50',
-                  };
+                  const notification = new Notification(await t$('banner.copied@@Copied to clipboard!'))
+                    .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
+                    .setBgColor('lum-bg-green/50');
+
                   navigator.clipboard.writeText(el.value).catch(async (err) => {
-                    notification.title = await t$('banner.copyFailed@@Failed to copy to clipboard!');
-                    notification.description = err;
-                    notification.bgColor = 'lum-bg-red/50';
+                    notification.setTitle(await t$('banner.copyFailed@@Failed to copy to clipboard!'))
+                      .setDescription(err)
+                      .setBgColor('lum-bg-red/50')
+                      .setPersist(true);
                   });
                   notifications.push(notification);
-                  setTimeout(() => {
-                    notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-                  }, 2000);
                 }}
               />
             </div>

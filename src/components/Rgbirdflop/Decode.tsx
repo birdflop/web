@@ -4,7 +4,7 @@ import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { generateOutput } from '~/util/rgb/RGBUtils';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { NotificationContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { getSignificantPoints } from '~/util/rgb/Decode';
 
 export default component$(({ threshold, hidden }: {
@@ -44,16 +44,10 @@ export default component$(({ threshold, hidden }: {
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
-    const id = Math.random().toString(36).substring(2, 15);
-    notifications.push({
-      id,
-      title: await t$('rgb.decode.decoded.title@@RGB Text Decoded!'),
-      description: await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'),
-      bgColor: 'lum-bg-green/50',
-    });
-    setTimeout(() => {
-      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-    }, 2000);
+    const notification = new Notification(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
+      .setDescription(await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'))
+      .setBgColor('lum-bg-green/50');
+    notifications.push(notification);
   });
 
   return (

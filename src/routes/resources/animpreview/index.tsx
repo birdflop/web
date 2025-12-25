@@ -5,7 +5,7 @@ import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
-import { NotificationContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB } from '~/util/rgb/Colors';
 import { rgbDefaults } from '~/util/rgb/presets/defaults';
@@ -42,13 +42,10 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error fetching data',
-        description: `${error}`,
-        bgColor: 'lum-bg-red/50',
-      };
+      const notification = new Notification('Error fetching data')
+        .setDescription(`${error}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
     });
   });
@@ -108,13 +105,10 @@ export default component$(() => {
       json = yaml.parse(animprevStore.yaml);
     }
     catch (err) {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error setting cookies',
-        description: `Error: ${err}`,
-        bgColor: 'lum-bg-red/50',
-      };
+      const notification = new Notification('Error parsing YAML')
+        .setDescription(`Error: ${err}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
     }
     if (!json) return;

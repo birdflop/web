@@ -4,7 +4,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import { NotificationContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
@@ -70,17 +70,11 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error parsing saved presets',
-        description: `Error: ${err}`,
-        bgColor: 'lum-bg-red/50',
-      };
+      const notification = new Notification('Error parsing saved presets')
+        .setDescription(`Error: ${err}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
-      setTimeout(() => {
-        notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-      }, 2000);
     }
   });
 
@@ -89,13 +83,10 @@ export default component$(() => {
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
-        const id = Math.random().toString(36).substring(2, 15);
-        const notification = {
-          id,
-          title: 'Error fetching user data',
-          description: `${error}`,
-          bgColor: 'lum-bg-red/50',
-        };
+        const notification = new Notification('Error fetching user data')
+          .setDescription(`Error: ${error}`)
+          .setBgColor('lum-bg-red/50')
+          .setPersist(true);
         notifications.push(notification);
       });
     }

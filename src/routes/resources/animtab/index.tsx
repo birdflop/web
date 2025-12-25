@@ -20,7 +20,8 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import { NotificationContext, openItemsContext } from '~/routes/layout';
+import { openItemsContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
@@ -46,13 +47,10 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
-      const id = Math.random().toString(36).substring(2, 15);
-      const notification = {
-        id,
-        title: 'Error fetching data',
-        description: `${error}`,
-        bgColor: 'lum-bg-red/50',
-      };
+      const notification = new Notification('Error fetching data')
+        .setDescription(`${error}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
     });
   });

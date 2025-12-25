@@ -3,7 +3,8 @@ import { Save, Link as LinkIcon, Copy, Globe } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
-import { NotificationContext, openItemsContext } from '~/routes/layout';
+import { openItemsContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
@@ -23,13 +24,9 @@ export default component$(({ hidden }: {
   const session = useSession();
 
   const loadPresetJSON = $(async (presetJSON: string) => {
-    const id = Math.random().toString(36).substring(2, 15);
-    const notification = {
-      id,
-      title: await t$('rgb.presets.imported.title@@Successfully imported preset!'),
-      description: await t$('rgb.presets.imported.description@@The preset has been imported successfully.'),
-      bgColor: 'lum-bg-green/50',
-    };
+    const notification = new Notification(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
+      .setDescription(await t$('rgb.presets.imported.description@@The preset has been imported successfully.'))
+      .setBgColor('lum-bg-green/50');
     let json: rgbPreset | undefined;
     try {
       const preset = loadPreset(presetJSON);
@@ -37,9 +34,10 @@ export default component$(({ hidden }: {
         ...preset,
       };
     } catch (err) {
-      notification.title = await t$('rgb.presets.invalid.title@@Invalid Preset');
-      notification.description = `Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`;
-      notification.bgColor = 'lum-bg-red/50';
+      notification.setTitle(await t$('rgb.presets.invalid.title@@Invalid Preset'))
+        .setDescription(`Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`)
+        .setBgColor('lum-bg-red/50')
+        .setPersist(true);
       notifications.push(notification);
     }
     if (!json) return;
@@ -49,9 +47,6 @@ export default component$(({ hidden }: {
       (rgbStore as any)[key] = json[key] ?? combinedDefaults[key];
     });
     notifications.push(notification);
-    setTimeout(() => {
-      notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-    }, 2000);
   });
 
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
@@ -78,17 +73,11 @@ export default component$(({ hidden }: {
               const localStoragePresets = getPresets();
               privatePresets.value = privatePresets.value.concat(localStoragePresets);
             } catch (err) {
-              const id = Math.random().toString(36).substring(2, 15);
-              const notification = {
-                id,
-                title: 'Error parsing saved presets',
-                description: `Error: ${err}`,
-                bgColor: 'lum-bg-red/50',
-              };
+              const notification = new Notification('Error parsing saved presets')
+                .setDescription(`Error: ${err}`)
+                .setBgColor('lum-bg-red/50')
+                .setPersist(true);
               notifications.push(notification);
-              setTimeout(() => {
-                notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-              }, 2000);
             }
           }}
           sectionName="saved-presets"
@@ -109,17 +98,11 @@ export default component$(({ hidden }: {
             }
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             await setUserData({ privatePresets: privatePresets.value });
-            const id = Math.random().toString(36).substring(2, 15);
-            notifications.push({
-              id,
-              title: await t$('rgb.presets.saved.title@@Preset Saved!'),
-              description: session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
-                : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'),
-              bgColor: session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50',
-            });
-            setTimeout(() => {
-              notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-            }, 2000);
+            const notification = new Notification(await t$('rgb.presets.saved.title@@Preset Saved!'))
+              .setDescription(session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
+                : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'))
+              .setBgColor(session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50');
+            notifications.push(notification);
           }}>
             <Save size={20} /> {t('rgb.presets.save@@Save')}
           </button>
@@ -170,22 +153,16 @@ export default component$(({ hidden }: {
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
             if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
           });
-          const id = Math.random().toString(36).substring(2, 15);
-          const notification = {
-            id,
-            title: await t$('rgb.copied@@Copied to clipboard!'),
-            description: await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'),
-            bgColor: 'lum-bg-green/50',
-          };
+          const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
+            .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
+            .setBgColor('lum-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(preset)).catch(async (err) => {
-            notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
-            notification.description = err;
-            notification.bgColor = 'lum-bg-red/50';
+            notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+              .setDescription('Error: ' + err)
+              .setBgColor('lum-bg-red/50')
+              .setPersist(true);
           });
           notifications.push(notification);
-          setTimeout(() => {
-            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 2000);
         }}>
           <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
         </button>
@@ -204,16 +181,10 @@ export default component$(({ hidden }: {
             url.searchParams.set(key, String(value));
           });
           window.history.pushState({}, '', url.href);
-          const id = Math.random().toString(36).substring(2, 15);
-          notifications.push({
-            id,
-            title: await t$('rgb.presets.url.title@@URL Updated!'),
-            description: await t$('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'),
-            bgColor: 'lum-bg-green/50',
-          });
-          setTimeout(() => {
-            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 2000);
+          const notification = new Notification(await t$('rgb.presets.url.title@@URL Updated!'))
+            .setDescription(await t$('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'))
+            .setBgColor('lum-bg-green/50');
+          notifications.push(notification);
         }}>
           <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}
         </button>

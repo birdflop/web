@@ -2,7 +2,7 @@ import { Signal } from '@builder.io/qwik';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>) {
+export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>, anchorElementRef: Signal<HTMLDivElement | undefined>) {
   // check if birdRef is defined
   if (!birdRef.value) return console.warn('birdRef is undefined in birdThreeJS');
 
@@ -65,6 +65,24 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     }
   });
 
+  // Bird bones
+  const body = bird.getObjectByName('body');
+  const wingL = bird.getObjectByName('left_wing');
+  const wingR = bird.getObjectByName('right_wing');
+  const tail = bird.getObjectByName('tail');
+  const legL = bird.getObjectByName('left_leg');
+  const legR = bird.getObjectByName('right_leg');
+  const head = bird.getObjectByName('head');
+  if (!body || !wingL || !wingR || !tail || !legL || !legR || !head)
+    return console.warn('One or more bones not found! Not rendering bird.');
+
+  // Initial bone rotations
+  head.rotation.x += 0.15;
+  body.rotation.x = THREE.MathUtils.degToRad(-28);
+  wingL.rotation.x = -0.25;
+  wingR.rotation.x = -0.25;
+  tail.rotation.x = -0.35;
+
   // Position bird near bottom-right corner
   const margin = 0.25;
   bird.position.set(
@@ -95,24 +113,6 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     renderer.setSize(width, height);
   }
   window.addEventListener('resize', onWindowResize);
-
-  // Bird bones
-  const body = bird.getObjectByName('body');
-  const wingL = bird.getObjectByName('left_wing');
-  const wingR = bird.getObjectByName('right_wing');
-  const tail = bird.getObjectByName('tail');
-  const legL = bird.getObjectByName('left_leg');
-  const legR = bird.getObjectByName('right_leg');
-  const head = bird.getObjectByName('head');
-  if (!body || !wingL || !wingR || !tail || !legL || !legR || !head)
-    return console.warn('One or more bones not found! Not rendering bird.');
-
-  // Initial bone rotations
-  head.rotation.x += 0.15;
-  body.rotation.x = THREE.MathUtils.degToRad(-28);
-  wingL.rotation.x = -0.25;
-  wingR.rotation.x = -0.25;
-  tail.rotation.x = -0.35;
 
   // Add bird to scene
   scene.add(bird);
@@ -170,9 +170,31 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     head.rotation.z = 0;
   }
 
+  // Convert world position to screen position
+  function worldToScreen(pos: THREE.Vector3, camera: THREE.OrthographicCamera) {
+    const vector = pos.clone().project(camera);
+
+    return {
+      x: (vector.x * 0.5 + 0.5) * window.innerWidth,
+      y: (-vector.y * 0.5 + 0.5) * window.innerHeight,
+    };
+  }
+
+  // Anchor speech bubble to head
+  function updateAnchorElement() {
+    if (!head || !anchorElementRef.value) return;
+    head.getWorldPosition(headWorldPos);
+
+    const screen = worldToScreen(headWorldPos, camera);
+    anchorElementRef.value.style.left = `${screen.x}px`;
+    anchorElementRef.value.style.top = `${screen.y}px`;
+  }
+
   // Animation Loop
   const animate = (time: number) => {
     updateHeadLook(time);
+    updateAnchorElement();
+
     if (animation === 'flying') {
       // legs up
       legL.rotation.x = 0;

@@ -1,6 +1,6 @@
 import { $, component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { NotificationContext } from '~/routes/layout';
+import { Notification, NotificationContext } from '~/util/Notification';
 
 export default component$(({ hidden, value }: {
   hidden: boolean;
@@ -25,22 +25,16 @@ export default component$(({ hidden, value }: {
         }}
         value={value}
         onClick$={async () => {
-          const id = Math.random().toString(36).substring(2, 15);
-          const notification = {
-            id,
-            title: await t$('rgb.copied@@Copied to clipboard!'),
-            description: await t$('rgb.output.copied@@The RGB text has been copied to your clipboard successfully.'),
-            bgColor: 'lum-bg-green/50',
-          };
+          const notification = new Notification(await t$('rgb.output.copied@@Copied to clipboard!'))
+            .setDescription(await t$('rgb.output.copied.description@@The RGB text has been copied to your clipboard successfully.'))
+            .setBgColor('lum-bg-green/50');
           navigator.clipboard.writeText(value).catch(async (err) => {
-            notification.title = await t$('rgb.copyFailed@@Failed to copy to clipboard!');
-            notification.description = err;
-            notification.bgColor = 'lum-bg-red/50';
+            notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+              .setDescription(err)
+              .setBgColor('lum-bg-red/50')
+              .setPersist(true);
           });
           notifications.push(notification);
-          setTimeout(() => {
-            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
-          }, 2000);
         }}
       />
     </div>
