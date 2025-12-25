@@ -94,7 +94,7 @@
         "title": "Voreinstellung erfolgreich importiert!"
       },
       "invalid": {
-        "description": "Bitte melden sie das an https://discord.gg/9vUZ9MREVz mit der Voreinstellung die sie importieren wollen.",
+        "description": "Bitte melden sie mit der Voreinstellung die sie importieren wollen.",
         "title": "Ungültige Voreinstellung"
       },
       "myPrivate": "My Private RGBirdflop Presets",

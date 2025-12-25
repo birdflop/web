@@ -35,8 +35,12 @@ export default component$(({ hidden }: {
       };
     } catch (err) {
       notification.setTitle(await t$('rgb.presets.invalid.title@@Invalid Preset'))
-        .setDescription(`Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.')}`)
+        .setDescription(`Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to the Discord server with the preset you tried to import.')}`)
         .setBgColor('lum-bg-red/50')
+        .setButtons([{
+          text: 'Discord',
+          href: 'https://discord.gg/9vUZ9MREVz',
+        }])
         .setPersist(true);
       notifications.push(notification);
     }

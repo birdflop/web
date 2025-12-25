@@ -91,7 +91,7 @@
         "title": "¡Preajuste importado exitosamente!"
       },
       "invalid": {
-        "description": "Por favor reporte esto a https://discord.gg/9vUZ9MREVz con el preajuste que intentó importar.",
+        "description": "Por favor reporte esto con el preajuste que intentó importar.",
         "title": "Preajuste inválido"
       },
       "myPrivate": "Mis preajustes privados de RGBirdflop",

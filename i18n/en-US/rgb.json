@@ -91,7 +91,7 @@
         "title": "Successfully imported preset!"
       },
       "invalid": {
-        "description": "Please report this to https://discord.gg/9vUZ9MREVz with the preset you tried to import.",
+        "description": "Please report this to the Discord server with the preset you tried to import.",
         "title": "Invalid Preset"
       },
       "myPrivate": "My Private RGBirdflop Presets",
