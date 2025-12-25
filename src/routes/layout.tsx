@@ -157,8 +157,15 @@ export default component$(() => {
       {notifications.map((notification) => {
         if (!notification) return null;
         const id = notification.id;
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          el?.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');
+          setTimeout(() => {
+            notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
+          }, 300);
+        }, 4000);
 
-        return <button class={{
+        return <button id={notification.id} class={{
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card sm:rounded-lum min-w-84 text-left': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
