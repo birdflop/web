@@ -75,11 +75,13 @@ export default component$(() => {
     controls.update();
 
     // Lights
-    const pointLight = new THREE.PointLight(0xffffff, 50);
-    pointLight.position.set(2, 5, -2);
-    pointLight.castShadow = true;
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(pointLight, ambientLight);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7);
+    scene.add(directionalLight);
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.4);
+    scene.add(hemisphereLight);
 
     // OBJ Loader for banner obj
     const loader = new OBJLoader();
