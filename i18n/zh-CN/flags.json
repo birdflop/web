@@ -13,15 +13,15 @@
       "command": "命令",
       "description": "服务器运行的操作系统。",
       "label": "环境",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "linux": "利纳克斯",
+      "macos": "MacOS",
+      "pterodactyl": "翼手龙",
+      "windows": "视窗"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Benchmarked (G1GC) 的额外性能标志，专供 GraalVM 用户使用。",
-        "label": "Benchmarked (GraalVM)"
+        "label": "基准测试（GraalVM）"
       },
       "meowiceGraalVM": {
         "description": "MeowIce 标志的额外性能标志，专供 GraalVM 用户使用。",
@@ -38,7 +38,7 @@
     },
     "flags": {
       "aikars": "Aikar 标志",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "基准",
       "etils": "Etil 标志",
       "hillttys": "hilltty 标志",
       "label": "标志",
@@ -59,12 +59,12 @@
       "label": "脚本"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
-      "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "fabric": "织物",
+      "forge": "锻造",
+      "paper": "纸张",
+      "purpur": "普尔布尔",
+      "velocity": "速度",
+      "waterfall": "瀑布"
     },
     "software": {
       "description": "您的 Minecraft 服务器将在其上运行的软件。",

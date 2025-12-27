@@ -18,11 +18,11 @@
         "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
         "title": "Kleingeschriebene Hex-Codes"
       },
-      "randomize": "Randomize",
+      "randomize": "Randomisieren",
       "shadow": {
         "sync": "Mit Textfarben synchronisieren",
         "title": "Textschatten",
-        "warning": "Warning: Text shadow only works with JSON formatting!"
+        "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },
       "title": "Farben",
       "trimSpaces": {
@@ -39,7 +39,7 @@
       },
       "description": "Fügen sie einen RGB Text ein um ihn zu bearbeiten.",
       "disclaimer": "Diese Funktion versucht die Farbpunkte des Fabrverlaufs und deren Positionen zu vorhersagen. Es ist nicht 100% genau, deshalb empfehlen wir Voreinstellungen für das Speichern ihrer Farbverläufe.",
-      "experimental": "experimental",
+      "experimental": "experimentell",
       "threshold": {
         "description": "Versuchen sie dies zu ändern falls sie zu viele Farben kriegen.",
         "title": "Schwelle"
@@ -80,13 +80,13 @@
     },
     "prefixsuffix": "Präfix/Suffix",
     "presets": {
-      "back": "Back to presets",
+      "back": "Zurück zu den Voreinstellungen",
       "browse": "Suchen",
       "copied": "Voreinstellung in die Zwischenablage kopiert!",
       "copy": "Kopieren",
-      "createNew": "Create a new preset",
-      "createdAt": "Created at",
-      "find": "Find more presets",
+      "createNew": "Eine neue Voreinstellung erstellen",
+      "createdAt": "Erstellt am",
+      "find": "Weitere Voreinstellungen finden",
       "import": "Importieren",
       "importSubtitle": "Eine JSON Voreinstellung laden.",
       "imported": {
@@ -97,19 +97,19 @@
         "description": "Bitte melden sie mit der Voreinstellung die sie importieren wollen.",
         "title": "Ungültige Voreinstellung"
       },
-      "myPrivate": "My Private RGBirdflop Presets",
+      "myPrivate": "Meine privaten RGBirdflop-Voreinstellungen",
       "noResults": "Keine Ergebnisse gefunden.",
-      "nopresets": "No presets saved yet!",
-      "pageInfo": "Page ",
+      "nopresets": "Noch keine Voreinstellungen gespeichert!",
+      "pageInfo": "Seite",
       "pagination": {
-        "next": "Next",
-        "perPage": "Per page:",
-        "previous": "Previous"
+        "next": "Weiter",
+        "perPage": "Pro Seite:",
+        "previous": "Vorherige"
       },
       "pasteHere": "Hier einfügen",
-      "pending": "This preset is pending review and may not be available to other users yet.",
-      "presetData": "Preset Data",
-      "publish": "Publish your own preset",
+      "pending": "Diese Voreinstellung befindet sich noch in der Überarbeitung und ist möglicherweise noch nicht für andere Benutzer verfügbar.",
+      "presetData": "Voreingestellte Daten",
+      "publish": "Veröffentlichen Sie Ihre eigene Voreinstellung",
       "remove": "Entfernen",
       "save": "Speichern",
       "saved": {
@@ -119,7 +119,7 @@
         "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
       },
       "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
+        "title": "Ausstehende Voreinstellungen anzeigen (SEHR GEFÄHRLICH)"
       },
       "showSaved": {
         "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
@@ -128,16 +128,16 @@
       "sortBy": {
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
-        "newest": "Newest first",
-        "oldest": "Oldest first",
-        "title": "Sort by"
+        "newest": "Neuestes zuerst",
+        "oldest": "Älteste zuerst",
+        "title": "Sortieren nach"
       },
       "suggestion": {
-        "one": "Think something is missing?",
-        "two": "publish your own preset at your profile page!"
+        "one": "Vermissen Sie etwas?",
+        "two": "Veröffentlichen Sie Ihre eigene Voreinstellung auf Ihrer Profilseite!"
       },
       "title": "Voreinstellungen",
-      "totalCount": "Total presets: ",
+      "totalCount": "Voreinstellungen insgesamt:",
       "url": {
         "description": "Voreinstellung erfolgreich zu URL exportiert! (Überprüfen sue die URL-Leiste)",
         "get": "URL holen",
@@ -145,8 +145,8 @@
       },
       "use": "Nutzen",
       "withCurrentOptions": {
-        "description": "Turn this on to show the previews with the current options applied.",
-        "title": "Show preview with current options"
+        "description": "Aktivieren Sie diese Option, um die Vorschauen mit den aktuellen Optionen anzuzeigen.",
+        "title": "Vorschau mit aktuellen Optionen anzeigen"
       }
     }
   }

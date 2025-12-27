@@ -1,149 +1,149 @@
 {
   "rgb": {
     "colors": {
-      "amount": "Cantidad de colores",
+      "amount": "Color Cantidad",
       "character": "Carácter",
       "charsPer": "Caracteres por color",
       "color": "Color",
       "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
-          "description": "Active esto si quiere que el degradado siempre esté igualmente distribuido. Esto deshabilitará el mapa de degradado.",
-          "title": "Siempre dispersar colores"
+          "description": "Active esta opción si desea que el degradado se extienda siempre por igual. Esto desactivará el mapa de degradado.",
+          "title": "Dispersar siempre los colores"
         },
         "title": "Dispersar"
       },
       "format": "Formato de color",
       "lowercase": {
-        "description": "Active esto si quiere usar códigos hexadecimales en minúsculas.",
+        "description": "Active esta opción si desea utilizar códigos hexadecimales en minúsculas.",
         "title": "Códigos hexadecimales en minúsculas"
       },
       "randomize": "Aleatorizar",
       "shadow": {
-        "sync": "Sincronizar con colores de texto",
+        "sync": "Sincronización con los colores del texto",
         "title": "Sombra de texto",
-        "warning": "¡Advertencia: La sombra de texto solo funciona con formato JSON!"
+        "warning": "Advertencia: La sombra de texto sólo funciona con formato JSON o MiniMessage."
       },
       "title": "Colores",
       "trimSpaces": {
-        "description": "Desactive esto si está usando subrayados / tachados vacíos",
-        "title": "Recortar colores de espacios"
+        "description": "Desactívalo si utilizas subrayados / tachados vacíos.",
+        "title": "Recortar colores de los espacios"
       }
     },
-    "copied": "¡Copiado al portapapeles!",
-    "copyFailed": "¡Error al copiar al portapapeles!",
+    "copied": "Copiado al portapapeles.",
+    "copyFailed": "No se ha podido copiar en el portapapeles.",
     "decode": {
       "decoded": {
-        "description": "¡Texto RGB decodificado exitosamente! Si esto no es lo que esperaba, intente cambiar el valor del umbral.",
-        "title": "¡Texto RGB decodificado!"
+        "description": "¡Decodificado con éxito el texto RGB existente! Si no es lo que esperaba, pruebe a cambiar el valor del umbral.",
+        "title": "Texto RGB descodificado"
       },
       "description": "Copie y pegue un texto RGB existente aquí para editarlo",
-      "disclaimer": "Esta función intenta predecir los puntos de color en los degradados y dónde están, no es 100% precisa y recomendamos usar la función de preajustes en su lugar para guardar sus degradados.",
+      "disclaimer": "Esta función intenta predecir los puntos de color en los degradados y dónde se encuentran, no es 100% precisa y recomendamos utilizar la función de preajustes en su lugar para guardar sus degradados.",
       "experimental": "experimental",
       "threshold": {
-        "description": "Intente cambiar esto si está obteniendo demasiados colores",
+        "description": "Trate de cambiar esto si usted está recibiendo demasiados colores",
         "title": "Umbral"
       },
-      "title": "Decodificar"
+      "title": "Descodifique"
     },
     "formatting": {
       "bold": "Negrita",
-      "character": "Carácter de formato",
-      "italic": "Itálica",
+      "character": "Formato Carácter",
+      "italic": "Cursiva",
       "obfuscate": "Ofuscar",
       "options": "Opciones de formato",
       "placeholders": "Marcadores de posición:",
       "strikethrough": "Tachado",
       "title": "Formato",
-      "underline": "Subrayado"
+      "underline": "Subraye"
     },
     "inputText": {
-      "description": "¡Escriba aquí para generar un degradado!",
+      "description": "Escriba aquí para generar un degradado.",
       "preview": {
-        "chat": "Chat de Minecraft",
-        "default": "Predeterminado",
+        "chat": "Chat Minecraft",
+        "default": "Por defecto",
         "tab": {
-          "footer": "Pie de página de Minecraft Tab",
-          "header": "Encabezado de Minecraft Tab",
-          "player": "Jugador de Minecraft Tab"
+          "footer": "Pie de pestaña Minecraft",
+          "header": "Minecraft Tab Header",
+          "player": "Minecraft Tab Player"
         },
         "typeHere": "¡Escriba aquí!"
       },
       "title": "Texto de entrada"
     },
     "output": {
-      "copied": "El texto RGB ha sido copiado a su portapapeles exitosamente.",
-      "description": "¡Copie y pegue esto para texto RGB!",
+      "copied": "El texto RGB se ha copiado correctamente en el portapapeles.",
+      "description": "Copie y pegue esto para texto RGB",
       "title": "Salida"
     },
     "prefixsuffix": "Prefijo/Sufijo",
     "presets": {
-      "back": "Volver a preajustes",
-      "copied": "¡Preajuste copiado exitosamente al portapapeles!",
-      "copy": "Copiar",
+      "back": "Volver a los preajustes",
+      "copied": "Preajuste copiado con éxito en el portapapeles.",
+      "copy": "Copia",
       "createNew": "Crear un nuevo preajuste",
       "createdAt": "Creado en",
-      "find": "Encontrar más preajustes",
+      "find": "Más preajustes",
       "import": "Importar",
       "importSubtitle": "Cargar un preajuste JSON",
       "imported": {
-        "description": "El preajuste ha sido importado exitosamente.",
-        "title": "¡Preajuste importado exitosamente!"
+        "description": "El preajuste se ha importado correctamente.",
+        "title": "¡Preajuste importado con éxito!"
       },
       "invalid": {
-        "description": "Por favor reporte esto con el preajuste que intentó importar.",
-        "title": "Preajuste inválido"
+        "description": "Por favor, informa de esto al servidor Discord con el preset que intentaste importar.",
+        "title": "Preajuste no válido"
       },
       "myPrivate": "Mis preajustes privados de RGBirdflop",
-      "noResults": "No se encontraron resultados.",
-      "nopresets": "¡Aún no hay preajustes guardados!",
-      "pageInfo": "Página ",
+      "noResults": "No se han encontrado resultados.",
+      "nopresets": "Aún no se han guardado los preajustes.",
+      "pageInfo": "Página",
       "pagination": {
         "next": "Siguiente",
         "perPage": "Por página:",
         "previous": "Anterior"
       },
       "pasteHere": "Pegar aquí",
-      "pending": "Este preajuste está pendiente de revisión y puede no estar disponible para otros usuarios aún.",
-      "presetData": "Datos del preajuste",
-      "publish": "Publicar su propio preajuste",
+      "pending": "Este preajuste está pendiente de revisión y puede que aún no esté disponible para otros usuarios.",
+      "presetData": "Datos preestablecidos",
+      "publish": "Publique su propio preajuste",
       "remove": "Eliminar",
       "save": "Guardar",
       "saved": {
-        "description": "El preajuste ha sido guardado exitosamente.",
+        "description": "La preselección se ha guardado correctamente.",
         "presets": "Preajustes guardados",
         "title": "¡Preajuste guardado!",
-        "warning": "Por favor inicie sesión para guardar preajustes permanentemente."
+        "warning": "Inicia sesión para guardar los preajustes de forma permanente."
       },
       "showPending": {
-        "title": "Mostrar preajustes pendientes (MUY PELIGROSO)"
+        "title": "Mostrar preselecciones pendientes (MUY PELIGROSO)"
       },
       "showSaved": {
-        "description": "Active esto para mostrar solo sus preajustes guardados.",
+        "description": "Actívalo para mostrar sólo los preajustes guardados.",
         "title": "Mostrar preajustes guardados"
       },
       "sortBy": {
         "nameAZ": "Nombre A-Z",
         "nameZA": "Nombre Z-A",
-        "newest": "Más reciente primero",
-        "oldest": "Más antiguo primero",
+        "newest": "Lo más nuevo primero",
+        "oldest": "El más antiguo primero",
         "title": "Ordenar por"
       },
       "suggestion": {
-        "one": "¿Cree que falta algo?",
-        "two": "¡publique su propio preajuste en su página de perfil!"
+        "one": "¿Crees que falta algo?",
+        "two": "¡publica tu propio preajuste en tu página de perfil!"
       },
       "title": "Preajustes",
-      "totalCount": "Total de preajustes: ",
+      "totalCount": "Total de preajustes:",
       "url": {
-        "description": "¡Preajuste exportado exitosamente a URL! (Verifique la barra de URL)",
-        "get": "Obtener URL",
-        "title": "¡URL actualizada!"
+        "description": "¡Preajuste exportado con éxito a url! (Compruebe la barra de URL)",
+        "get": "Obtener Url",
+        "title": "URL actualizada"
       },
-      "use": "Usar",
+      "use": "Utilice",
       "withCurrentOptions": {
-        "description": "Active esto para mostrar las vistas previas con las opciones actuales aplicadas.",
-        "title": "Mostrar vista previa con opciones actuales"
+        "description": "Actívelo para mostrar las previsualizaciones con las opciones actuales aplicadas.",
+        "title": "Mostrar vista previa con las opciones actuales"
       }
     }
   }

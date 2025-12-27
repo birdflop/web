@@ -15,13 +15,13 @@
       "label": "Umgebung",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
+      "pterodactyl": "Pterodaktylus",
       "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Zusätzliche Leistungskennzeichnungen für Benchmarked (G1GC) exklusiv für GraalVM Nutzer.",
-        "label": "Benchmarked (GraalVM)"
+        "label": "Benchmarking (GraalVM)"
       },
       "meowiceGraalVM": {
         "description": "Zusätzliche Leistungskennzeichnungen für MeowIces Kennzeichnungen exklusiv für GraalVM Nutzer.",
@@ -38,7 +38,7 @@
     },
     "flags": {
       "aikars": "Aikar's Kennzeichnungen",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "Benchmarking",
       "etils": "Etil's Kennzeichnungen",
       "hillttys": "hilltty's Kennzeichnungen",
       "label": "Kennzeichnungen",
@@ -56,15 +56,15 @@
     },
     "script": {
       "description": "Das ergebende Script welches für den Serverstart genutzt wird. Platzieren sie es im selben Pfad wie {{fileName}} und führen sie es aus!",
-      "label": "Script"
+      "label": "Drehbuch"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
+      "fabric": "Stoff",
+      "forge": "Schmiede",
+      "paper": "Papier",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "Geschwindigkeit",
+      "waterfall": "Wasserfall"
     },
     "software": {
       "description": "Die Software in der der Minecraft-Server laufen wird.",

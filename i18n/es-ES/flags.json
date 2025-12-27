@@ -5,74 +5,74 @@
       "label": "Reinicio automático"
     },
     "config": {
-      "description": "Las varias adiciones y modificaciones que se pueden hacer a su script de inicio.",
-      "label": "Configuración"
+      "description": "Las diversas adiciones y modificaciones que se pueden hacer a su script de inicio.",
+      "label": "Configurar"
     },
-    "description": "La colección de argumentos de inicio que típicamente optimizan el rendimiento del servidor",
+    "description": "La colección de argumentos de inicio que suelen optimizar el rendimiento del servidor",
     "environment": {
       "command": "Comando",
-      "description": "El sistema operativo en el que se ejecuta el servidor.",
-      "label": "Entorno",
+      "description": "El sistema operativo que utiliza el servidor.",
+      "label": "Medio ambiente",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
+      "pterodactyl": "Pterodáctilo",
       "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
-        "description": "Banderas de rendimiento adicionales para Benchmarked (G1GC) exclusivas para usuarios de GraalVM.",
-        "label": "Benchmarked (GraalVM)"
+        "description": "Indicadores de rendimiento adicionales para Benchmarked (G1GC) exclusivos para usuarios de GraalVM.",
+        "label": "Evaluación comparativa (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "Banderas de rendimiento adicionales para las Banderas de MeowIce exclusivas para usuarios de GraalVM.",
+        "description": "Flags de rendimiento adicionales para los Flags de MeowIce exclusivos para usuarios de GraalVM.",
         "label": "Banderas de MeowIce (GraalVM)"
       },
       "vectors": {
-        "description": "Habilita operaciones SIMD para optimizar el renderizado de elementos del mapa en Pufferfish y sus forks.",
+        "description": "Habilita las operaciones SIMD para optimizar el renderizado de elementos del mapa en Pufferfish y sus bifurcaciones.",
         "label": "Vectores modernos"
       }
     },
     "fileName": {
-      "description": "El nombre del archivo que se usará para iniciar su servidor.",
+      "description": "El nombre del archivo que se utilizará para iniciar el servidor.",
       "label": "Nombre del archivo"
     },
     "flags": {
       "aikars": "Banderas de Aikar",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "Comparativa",
       "etils": "Banderas de Etil",
       "hillttys": "Banderas de hilltty",
       "label": "Banderas",
       "meowice": "Banderas de MeowIce",
-      "none": "Ninguna",
+      "none": "Ninguno",
       "obyduxs": "Banderas de Obydux"
     },
     "gui": {
-      "description": "Si se debe mostrar la GUI de gestión del servidor integrada.",
+      "description": "Si desea mostrar la interfaz gráfica de usuario de gestión del servidor integrado.",
       "label": "Sin GUI"
     },
     "memory": {
-      "description": "La cantidad de memoria (RAM) para asignar a su servidor.",
+      "description": "La cantidad de memoria (RAM) a asignar a su servidor.",
       "label": "Memoria"
     },
     "script": {
-      "description": "El script resultante que se puede usar para iniciar su servidor. ¡Coloque este archivo en la misma ubicación que {{fileName}}, luego ejecútelo!",
-      "label": "Script"
+      "description": "El script resultante que se puede utilizar para iniciar su servidor. Coloque este archivo en la misma ubicación que {{fileName}} y ejecútelo.",
+      "label": "Guión"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
+      "fabric": "Tejido",
+      "forge": "Forja",
+      "paper": "Papel",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "Velocidad",
+      "waterfall": "Cascada"
     },
     "software": {
-      "description": "El software en el que se ejecutará su servidor de Minecraft.",
+      "description": "El software en el que se ejecutará tu servidor Minecraft.",
       "label": "Software"
     },
     "variables": {
-      "description": "Si se deben usar variables de entorno dentro del script para definir memoria, nombre del archivo y otros elementos comúnmente cambiados.",
-      "label": "Usar variables"
+      "description": "Si se van a utilizar variables de entorno dentro del script para definir la memoria, el nombre del archivo y otros elementos que se modifican con frecuencia.",
+      "label": "Variables de uso"
     }
   }
 }

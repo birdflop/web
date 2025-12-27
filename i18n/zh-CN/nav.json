@@ -41,7 +41,7 @@
         "title": "动画 TAB"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "利用 GIF 和 Discord 表情符号等轻松创建纹理，以便在 Minecraft 聊天中使用精灵或任何资源包动画。",
         "title": "动画纹理"
       },
       "banner": {
@@ -72,7 +72,7 @@
       "more": "更多资源",
       "paperTimings": {
         "description": "分析 Paper Timings 并获得可能的优化",
-        "title": "Paper Timings"
+        "title": "试卷时间"
       },
       "serverTools": {
         "description": "帮助配置和设置 Minecraft 服务器的工具。",

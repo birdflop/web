@@ -1,8 +1,8 @@
 {
   "nav": {
     "404": {
-      "description": "¡Ups! Has llegado a un callejón sin salida.",
-      "home": "Volver al inicio",
+      "description": "¡Vaya! Has llegado a un callejón sin salida.",
+      "home": "Volver a casa",
       "title": "404: Página no encontrada"
     },
     "cookies": {
@@ -11,13 +11,13 @@
       "optOut": "Reject",
       "title": "Cookies"
     },
-    "docs": "Documentación",
+    "docs": "Docs",
     "hosting": {
       "billing": "Facturación",
       "nodeStats": {
-        "description": "Verificar el estado de los nodos del servidor de Birdflop.",
-        "overview": "Resumen",
-        "title": "Estadísticas del nodo",
+        "description": "Comprueba el estado de los nodos servidores de Birdflop.",
+        "overview": "Visión general",
+        "title": "Estadísticas de nodo",
         "webServices": "Servicios web"
       },
       "panel": "Panel",
@@ -27,67 +27,67 @@
     "privacyPolicy": "Política de privacidad",
     "profile": {
       "hey": "Hola",
-      "login": "Iniciar sesión",
-      "logout": "Cerrar sesión",
+      "login": "Inicio de sesión",
+      "logout": "Cierre de sesión",
       "notLoggedIn": {
-        "description": "Haga clic abajo para iniciar sesión",
-        "title": "¡No ha iniciado sesión!"
+        "description": "Haga clic a continuación para iniciar sesión",
+        "title": "No ha iniciado sesión."
       },
       "title": "Perfil"
     },
     "resources": {
       "animatedTAB": {
-        "description": "Creador de animaciones de degradado para el plugin TAB",
+        "description": "Plugin TAB creador de animaciones de degradado",
         "title": "TAB animado"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Crea fácilmente texturas a partir de GIFs y emojis de Discord, etc. para usarlas en el chat de Minecraft con sprites o cualquier animación del paquete de recursos.",
         "title": "Texturas animadas"
       },
       "banner": {
-        "description": "Genera fácilmente diseños de estandartes para Minecraft.",
-        "title": "Generador de estandartes"
+        "description": "Genera fácilmente diseños de banners para Minecraft.",
+        "title": "Generador de banners"
       },
-      "description": "Aquí puede encontrar todos los recursos públicos de Birdflop.",
+      "description": "Aquí puedes encontrar todos los recursos públicos de Birdflop.",
       "flags": {
-        "description": "Un generador de scripts simple para iniciar sus servidores de Minecraft con banderas óptimas",
+        "description": "Un sencillo generador de scripts para iniciar tus servidores Minecraft con banderas óptimas",
         "title": "Generador de banderas"
       },
       "gradientTools": {
-        "description": "Herramientas para ayudarle a crear texto degradado en Minecraft.",
+        "description": "Herramientas para ayudarte a crear texto degradado en Minecraft.",
         "title": "Herramientas de degradado"
       },
       "hexGradient": {
-        "description": "Generador de texto degradado hexadecimal, impulsado por Birdflop, un anfitrión de Minecraft sin fines de lucro 501(c)(3).",
+        "description": "Hex gradiente generador de texto, Powered by Birdflop, un 501 (c) (3) sin fines de lucro Minecraft host.",
         "title": "RGBirdflop"
       },
       "hexGradientPresets": {
-        "description": "Aquí puede encontrar y guardar, copiar o usar directamente preajustes para usar en RGBirdflop.",
-        "title": "Preajustes de RGBirdflop"
+        "description": "Aquí puedes encontrar y guardar, copiar o utilizar directamente preajustes para su uso en RGBirdflop.",
+        "title": "Preajustes RGBirdflop"
       },
       "miscellaneousTools": {
-        "description": "Herramientas misceláneas para ayudar con cosas misceláneas aleatorias.",
-        "title": "Herramientas misceláneas"
+        "description": "Herramientas varias para ayudar con cosas varias al azar.",
+        "title": "Herramientas varias"
       },
       "more": "Más recursos",
       "paperTimings": {
-        "description": "Analizar Paper Timings y obtener posibles optimizaciones",
-        "title": "Paper Timings"
+        "description": "Analice los tiempos de papel y obtenga posibles optimizaciones",
+        "title": "Tiempos de papel"
       },
       "serverTools": {
-        "description": "Herramientas para ayudar a configurar y configurar servidores de Minecraft.",
-        "title": "Herramientas del servidor"
+        "description": "Herramientas para configurar y poner en marcha servidores minecraft.",
+        "title": "Herramientas de servidor"
       },
       "sparkProfile": {
-        "description": "Analizar un perfil de Spark y obtener posibles optimizaciones",
+        "description": "Analizar un perfil Spark y obtener posibles optimizaciones",
         "title": "Perfil de Spark"
       },
       "tabAnimationPreview": {
         "description": "Vista previa de animaciones TAB sin necesidad de ponerlas en el juego",
-        "title": "Vista previa de animación TAB"
+        "title": "Vista previa de la animación TAB"
       },
       "title": "Recursos"
     },
-    "termsofService": "Términos de servicio"
+    "termsofService": "Condiciones de uso"
   }
 }

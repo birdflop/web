@@ -41,7 +41,7 @@
         "title": "Animasyonlu TAB"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Minecraft sohbetinde sprite'larla veya herhangi bir kaynak paketi animasyonuyla kullanmak için GIF'lerden ve Discord emojilerinden vb. kolayca dokular oluşturun.",
         "title": "Animasyonlu dokular"
       },
       "banner": {
@@ -72,7 +72,7 @@
       "more": "Daha fazla kaynak",
       "paperTimings": {
         "description": "Paper Timings'i analiz edin ve olası optimizasyonları alın",
-        "title": "Paper Timings"
+        "title": "Kağıt Zamanlamaları"
       },
       "serverTools": {
         "description": "Minecraft sunucularını yapılandırmanıza ve kurmanıza yardımcı olan araçlar.",

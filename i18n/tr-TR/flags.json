@@ -16,7 +16,7 @@
       "linux": "Linux",
       "macos": "macOS",
       "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "windows": "Pencereler"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -59,12 +59,12 @@
       "label": "Betik"
     },
     "serverType": {
-      "fabric": "Fabric",
+      "fabric": "Kumaş",
       "forge": "Forge",
-      "paper": "Paper",
+      "paper": "Kağıt",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "Hız",
+      "waterfall": "Şelale"
     },
     "software": {
       "description": "Minecraft sunucunuzun çalışacağı yazılım.",

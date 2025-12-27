@@ -8,10 +8,10 @@
     "framePreview": "Предварительный просмотр кадра",
     "height": "Высота",
     "lockDimensions": "Зафиксировать размеры",
-    "pasteUrl": "Paste GIF or image URL",
+    "pasteUrl": "Вставьте GIF или URL-адрес изображения",
     "pngPreview": "Предварительный просмотр PNG",
-    "selectFrames": "Select GIF or image from your device",
-    "showChatPreview": "Show Minecraft chat preview",
+    "selectFrames": "Выберите GIF или изображение с вашего устройства",
+    "showChatPreview": "Показать предварительный просмотр чата Minecraft",
     "syncDuration": "Синхронизировать длительность",
     "textureName": "Название текстуры",
     "width": "Ширина"

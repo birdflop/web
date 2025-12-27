@@ -15,13 +15,13 @@
       "label": "Ambiente",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "pterodactyl": "Pterodáctilo",
+      "windows": "Janelas"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Bandeiras de desempenho adicionais para Benchmarked (G1GC) exclusivas para utilizadores GraalVM.",
-        "label": "Benchmarked (GraalVM)"
+        "label": "Avaliação comparativa (GraalVM)"
       },
       "meowiceGraalVM": {
         "description": "Bandeiras de desempenho adicionais para as Bandeiras de MeowIce exclusivas para utilizadores GraalVM.",
@@ -38,7 +38,7 @@
     },
     "flags": {
       "aikars": "Bandeiras de Aikar",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "Avaliação comparativa",
       "etils": "Bandeiras de Etil",
       "hillttys": "Bandeiras de hilltty",
       "label": "Bandeiras",
@@ -59,12 +59,12 @@
       "label": "Script"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
+      "fabric": "Tecido",
+      "forge": "Forja",
+      "paper": "Papel",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "Velocidade",
+      "waterfall": "Cascata"
     },
     "software": {
       "description": "O software em que o seu servidor Minecraft irá correr.",

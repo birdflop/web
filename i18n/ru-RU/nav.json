@@ -1,9 +1,9 @@
 {
   "nav": {
     "404": {
-      "description": "Whoops! You've hit a dead-end.",
-      "home": "Go back home",
-      "title": "404: Page not found"
+      "description": "Упс! Вы зашли в тупик.",
+      "home": "Возвращайтесь домой",
+      "title": "404: Страница не найдена"
     },
     "cookies": {
       "acknowledge": "Accept",
@@ -13,27 +13,27 @@
     },
     "docs": "Docs",
     "hosting": {
-      "billing": "Billing",
+      "billing": "Выставление счетов",
       "nodeStats": {
-        "description": "Check the status of Birdflop's server nodes.",
-        "overview": "Overview",
-        "title": "Node Stats",
-        "webServices": "Web Services"
+        "description": "Проверьте состояние серверных узлов Birdflop.",
+        "overview": "Обзор",
+        "title": "Статистика узлов",
+        "webServices": "Веб-сервисы"
       },
-      "panel": "Panel",
-      "plans": "Plans",
-      "title": "Hosting"
+      "panel": "Панель",
+      "plans": "Планы",
+      "title": "Хостинг"
     },
     "privacyPolicy": "Политика",
     "profile": {
-      "hey": "Hey",
-      "login": "Login",
-      "logout": "Logout",
+      "hey": "Привет",
+      "login": "Вход в систему",
+      "logout": "Выход из системы",
       "notLoggedIn": {
-        "description": "Click below to login",
-        "title": "You are not logged in!"
+        "description": "Нажмите ниже, чтобы войти в систему",
+        "title": "Вы не вошли в систему!"
       },
-      "title": "Profile"
+      "title": "Профиль"
     },
     "resources": {
       "animatedTAB": {
@@ -41,53 +41,53 @@
         "title": "Анимация TAB"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Легко создавайте текстуры из GIF, эмодзи Discord и т.д. для использования в чате Minecraft со спрайтами или любой анимацией из ресурспака.",
         "title": "Анимация текстур"
       },
       "banner": {
-        "description": "Easily generate banner designs for Minecraft.",
-        "title": "Banner Generator"
+        "description": "Легко генерируйте дизайны баннеров для Minecraft.",
+        "title": "Генератор баннеров"
       },
-      "description": "Here you can find all of Birdflop's public resources.",
+      "description": "Здесь вы найдете все публичные ресурсы Birdflop.",
       "flags": {
         "description": "Простой генератор скриптов для запуска серверов Minecraft с оптимальными флагами.",
         "title": "Генератор кода запуска сервера"
       },
       "gradientTools": {
-        "description": "Tools to help you create gradient text in Minecraft.",
-        "title": "Gradient Tools"
+        "description": "Инструменты, которые помогут вам создать градиентный текст в Minecraft.",
+        "title": "Инструменты градиента"
       },
       "hexGradient": {
         "description": "Создатель HEX градиента, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
       },
       "hexGradientPresets": {
-        "description": "Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
-        "title": "RGBirdflop Presets"
+        "description": "Здесь вы можете найти и сохранить, скопировать или напрямую использовать пресеты для использования на RGBirdflop.",
+        "title": "Пресеты RGBirdflop"
       },
       "miscellaneousTools": {
-        "description": "Miscellaneous tools to help with random miscellaneous things.",
-        "title": "Miscellaneous Tools"
+        "description": "Различные инструменты для работы с разными вещами.",
+        "title": "Разные инструменты"
       },
-      "more": "More Resources",
+      "more": "Дополнительные ресурсы",
       "paperTimings": {
-        "description": "Analyze Paper Timings and get possible optimizations",
-        "title": "Paper Timings"
+        "description": "Проанализируйте расписания и получите возможную оптимизацию",
+        "title": "Расписание работы"
       },
       "serverTools": {
-        "description": "Tools to help configure and setup minecraft servers.",
-        "title": "Server Tools"
+        "description": "Инструменты для настройки и установки серверов minecraft.",
+        "title": "Серверные инструменты"
       },
       "sparkProfile": {
-        "description": "Analyze a Spark Profile and get possible optimizations",
+        "description": "Анализ профиля Spark и получение возможных оптимизаций",
         "title": "Spark профиль"
       },
       "tabAnimationPreview": {
         "description": "Предварительный просмотр TAB-анимации",
         "title": "Предпросмотр анимации TAB"
       },
-      "title": "Resources"
+      "title": "Ресурсы"
     },
-    "termsofService": "Terms of Service"
+    "termsofService": "Условия предоставления услуг"
   }
 }

@@ -15,13 +15,13 @@
       "label": "환경",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
+      "pterodactyl": "익룡",
       "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "GraalVM 사용자 전용 Benchmarked (G1GC)를 위한 추가 성능 플래그.",
-        "label": "Benchmarked (GraalVM)"
+        "label": "벤치마킹(GraalVM)"
       },
       "meowiceGraalVM": {
         "description": "GraalVM 사용자 전용 MeowIce의 플래그를 위한 추가 성능 플래그.",
@@ -38,7 +38,7 @@
     },
     "flags": {
       "aikars": "Aikar의 플래그",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "벤치마킹",
       "etils": "Etil의 플래그",
       "hillttys": "hilltty의 플래그",
       "label": "플래그",
@@ -59,12 +59,12 @@
       "label": "스크립트"
     },
     "serverType": {
-      "fabric": "Fabric",
+      "fabric": "패브릭",
       "forge": "Forge",
-      "paper": "Paper",
+      "paper": "종이",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "속도",
+      "waterfall": "워터폴"
     },
     "software": {
       "description": "Minecraft 서버가 실행될 소프트웨어.",

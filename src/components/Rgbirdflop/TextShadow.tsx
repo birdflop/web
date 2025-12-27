@@ -17,9 +17,9 @@ export default component$(({ hidden }: {
       'h-0 opacity-0 pointer-events-none': hidden,
       'opacity-100 pointer-events-auto': !hidden,
     }} id="decode">
-      {rgbStore.format.color != 'JSON' &&
+      {rgbStore.format.color != 'JSON' && rgbStore.format.color != 'MiniMessage' &&
         <p class="text-red-500!">
-          {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON formatting!')}
+          {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON or MiniMessage formatting!')}
         </p>
       }
       <Toggle id="syncshadow" checked={rgbStore.syncshadow}

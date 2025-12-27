@@ -30,6 +30,7 @@ import {
   Settings,
   Sparkles,
 } from 'lucide-icons-qwik';
+import HostingAd from '~/components/Rgbirdflop/HostingAd';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import ColorMap from '~/components/Rgbirdflop/ColorMap';
 import ColorList from '~/components/Rgbirdflop/ColorList';
@@ -239,6 +240,7 @@ export default component$(() => {
         'Pacific/Guam', // US territories
         'Atlantic/Bermuda', // Close to US
       ];
+      // const shouldShowAds = usPreferredRegions.some(region => tz.startsWith(region));
       const shouldShowAds = !usPreferredRegions.some(region => tz.startsWith(region));
 
       if (shouldShowAds) {
@@ -359,18 +361,7 @@ export default component$(() => {
   return (
     <section class='relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center'>
       {showAds.value && adAsset && (
-        <div class='hidden 2xl:flex justify-center'>
-          <a
-            href='/#plans'
-            class='sticky top-24 w-96 h-144 rounded-lg bg-cover bg-center opacity-70 hover:opacity-100 transition-opacity'
-            style={{ backgroundImage: `url(${adAsset.image})` }}
-            aria-label='View Birdflop plans'
-            data-umami-event='Hosting Ad Click'
-            data-umami-event-page='RGBirdflop'
-            data-umami-event-action='Left Ad'
-            data-umami-event-variant={adAsset.label}
-          />
-        </div>
+        <HostingAd variant={adAsset} position='Left' />
       )}
       <div class='min-h-15 max-w-6xl'>
         <h1 class='flex gap-4 items-center my-3!'>
@@ -471,18 +462,7 @@ export default component$(() => {
         </p>
       </div>
       {showAds.value && adAsset && (
-        <div class='hidden 3xl:flex justify-center'>
-          <a
-            href='/#plans'
-            class='sticky top-24 w-96 h-144 rounded-lg bg-cover bg-center opacity-70 hover:opacity-100 transition-opacity'
-            style={{ backgroundImage: `url(${adAsset.image})` }}
-            aria-label='View Birdflop plans'
-            data-umami-event='Hosting Ad Click'
-            data-umami-event-page='RGBirdflop'
-            data-umami-event-action='Right Ad'
-            data-umami-event-variant={adAsset.label}
-          />
-        </div>
+        <HostingAd variant={adAsset} position='Right' />
       )}
     </section>
   );
