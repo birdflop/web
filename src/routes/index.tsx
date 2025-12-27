@@ -44,7 +44,7 @@ export default component$(() => {
               backgroundClip: 'text',
             }}>
             irdflop
-            </span>
+          </span>
         </p>
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000 drop-shadow-md">
