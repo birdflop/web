@@ -43,11 +43,9 @@ export default component$(() => {
               background: 'linear-gradient(180deg, #54daf4, #545eb6)',
               backgroundClip: 'text',
             }}>
-            irdflo
-          </span>
-          <span>p</span>
+            irdflop
+            </span>
         </p>
-        <LogoBirdflop size={50} fillGradient={['#545eb6', '#527CC5', '#52AEDE']} class="-right-0.5 absolute -z-1 scale-y-[-1] mt-8" />
       </h1>
       <h5 class="animate-in fade-in slide-in-from-top-16 anim-duration-1000 drop-shadow-md">
         The only 501(c)(3) nonprofit server host — dedicated to <span
