@@ -41,27 +41,27 @@ export default component$(() => {
       value: 'none',
     },
     {
-      name: t('flags.flags.aikars@@Aikar\'s Flags'),
+      name: 'Aikar\'s Flags',
       value: 'aikars',
     },
     {
-      name: t('flags.flags.meowice@@MeowIce\'s Flags'),
+      name: 'MeowIce\'s Flags',
       value: 'meowice',
     },
     {
-      name: t('flags.flags.benchmarked@@Benchmarked'),
+      name: 'Benchmarked',
       value: 'benchmarked',
     },
     {
-      name: t('flags.flags.hillttys@@hilltty\'s Flags'),
+      name: 'hilltty\'s Flags',
       value: 'hillttys',
     },
     {
-      name: t('flags.flags.obyduxs@@Obydux\'s Flags'),
+      name: 'Obydux\'s Flags',
       value: 'obyduxs',
     },
     {
-      name: t('flags.flags.etils@@Etil\'s Flags'),
+      name: 'Etil\'s Flags',
       value: 'etils',
     },
   ];
@@ -91,27 +91,27 @@ export default component$(() => {
 
   const softwareOptions = [
     {
-      name: t('flags.serverType.paper@@Paper'),
+      name: 'Paper',
       value: 'paper',
     },
     {
-      name: t('flags.serverType.purpur@@Purpur'),
+      name: 'Purpur',
       value: 'purpur',
     },
     //{
-    //  name: t('flags.serverType.forge@@Forge'),
+    //  name: 'Forge',
     //  value: 'forge',
     //},
     //{
-    //  name: t('flags.serverType.fabric@@Fabric'),
+    //  name: 'Fabric',
     //  value: 'fabric',
     //},
     {
-      name: t('flags.serverType.velocity@@Velocity'),
+      name: 'Velocity',
       value: 'velocity',
     },
     {
-      name: t('flags.serverType.waterfall@@Waterfall'),
+      name: 'Waterfall',
       value: 'waterfall',
     },
   ];
