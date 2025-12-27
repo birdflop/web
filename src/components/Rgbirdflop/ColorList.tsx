@@ -132,7 +132,7 @@ export default component$(({ hidden, id = 'text' }: {
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
               onInput$={(e, el) => {
-                const picker = document.getElementById(`colorlist${id}-color-${i + 1}-picker`)!;
+                const picker = document.getElementById(`colorlist${id}-color-picker`)!;
                 picker.dataset.value = el.value;
                 picker.dispatchEvent(new Event('input'));
               }}
