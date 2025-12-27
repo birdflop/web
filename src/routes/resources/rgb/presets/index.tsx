@@ -599,5 +599,5 @@ export const head = generateHead({
   description:
     'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' +
     defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

@@ -282,5 +282,5 @@ export default component$(() => {
 export const head = generateHead({
   title: 'RGB Birdflop Animated TAB',
   description: 'TAB plugin gradient animation creator. ' + defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

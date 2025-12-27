@@ -98,5 +98,5 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Node Stats - Birdflop',
   description: 'Check the status of Birdflop\'s nodes. ' + defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

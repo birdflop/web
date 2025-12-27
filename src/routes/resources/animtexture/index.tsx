@@ -470,5 +470,5 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Minecraft Animated Textures Creator - Birdflop',
   description: 'Easily merge textures for resource pack animations or convert from GIF. ' + defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

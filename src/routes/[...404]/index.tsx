@@ -46,5 +46,5 @@ export default component$(() => {
 export const head = generateHead({
   title: '404: Page not found',
   description: 'Whoops! You\'ve hit a dead-end. ' + defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

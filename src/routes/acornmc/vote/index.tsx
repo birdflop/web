@@ -26,5 +26,5 @@ export default component$(() => {
 export const head = generateHead({
   title: 'AcornMC Vote',
   description: 'Vote for AcornMC!',
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });

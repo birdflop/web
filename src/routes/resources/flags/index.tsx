@@ -332,5 +332,5 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Minecraft Flags Generator - Birdflop',
   description: 'A simple script generator to start your Minecraft servers with optimal flags. ' + defaultDescription,
-  ads: true,
+  ads: false, // changed from true universally to disable google ads
 });
