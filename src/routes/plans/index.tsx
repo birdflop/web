@@ -117,6 +117,9 @@ export default component$(() => {
                   'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
                   'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
                 }}
+                data-umami-event='Plan Pick Click'
+                data-umami-event-page='plans'
+                data-umami-event-variant={planName}
                 key={planName}
                 onClick$={() => {
                   if (plan.outOfStock) return window.open('https://discord.gg/nmgtX5z', '_blank')?.focus();
@@ -292,7 +295,11 @@ export default component$(() => {
                     'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                     'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
                     'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
-                  }}>
+                  }}
+                  data-umami-event='Plan RAM Click'
+                  data-umami-event-plan={plansStore.plan}
+                  data-umami-event-amount={gb}
+                >
                   <h3 class="my-0!">
                     {gb} GB
                   </h3>
@@ -332,7 +339,12 @@ export default component$(() => {
                   + '&pricing_id=' + plans[plansStore.plan]?.ramAndId[plansStore.gb]
                   + '&server_name=' + plansStore.name
                   + '&server_description=' + plansStore.desc
-                  + '&billing_cycle=monthly'}>
+                  + '&billing_cycle=monthly'}
+                target='_blank'
+                data-umami-event='Plan AddToCart Click'
+                data-umami-event-plan={plansStore.plan}
+                data-umami-event-amount={plansStore.gb}
+              >
                 <ShoppingCart size={26}/> Add to cart
               </a>
             </div>

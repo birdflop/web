@@ -133,7 +133,10 @@ export default component$(() => {
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
                 :
-                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue/50 hover:lum-bg-blue-500 mt-4 w-min m-auto">
+                <Link href={`/plans?plan=${encodeURIComponent(planName)}`} class="lum-btn lum-bg-blue/50 hover:lum-bg-blue-500 mt-4 w-min m-auto"
+                  data-umami-event='Plan Ordernow Click'
+                  data-umami-event-page='home'
+                  data-umami-event-variant={planName}>
                   <ShoppingCart size={20} class="text-3xl" /> Order Now
                 </Link>
               }
