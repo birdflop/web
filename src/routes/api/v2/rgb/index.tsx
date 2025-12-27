@@ -38,7 +38,7 @@ const descriptions: {
 } = {
   text: 'The text to use for the gradient.',
   colors: 'The colors to use for the gradient. Must be in hex format.',
-  shadowcolors: 'The colors to use for the text shadow gradient. Must be in hex format. Requires syncshadow to be false and color format set to JSON',
+  shadowcolors: 'The colors to use for the text shadow gradient. Must be in hex format. Requires syncshadow to be false and color format set to JSON or MiniMessage',
   format: 'The format to use for the color and format codes. For MiniMessage or JSON, { color: "MiniMessage" } can be used.',
   prefixsuffix: 'The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.',
   trimspaces: 'Whether or not to trim color codes from spaces. Turn this off if you\'re using empty underlines or strikethroughs.',

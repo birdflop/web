@@ -60,7 +60,7 @@
     "inputText": {
       "description": "Typ hier om een gradiënt te genereren!",
       "preview": {
-        "chat": "Minecraft Chat",
+        "chat": "Minecraft chat",
         "default": "Standaard",
         "tab": {
           "footer": "Minecraft Tab Voettekst",

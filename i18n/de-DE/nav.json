@@ -11,14 +11,14 @@
       "optOut": "Reject",
       "title": "Cookies"
     },
-    "docs": "Docs",
+    "docs": "Dokumente",
     "hosting": {
       "billing": "Abrechnung",
       "nodeStats": {
         "description": "Status der Birdflop Serverknoten abrufen.",
-        "overview": "Overview",
+        "overview": "Übersicht",
         "title": "Knotenstatistiken",
-        "webServices": "Web Services"
+        "webServices": "Webdienste"
       },
       "panel": "Panel",
       "plans": "Pläne",
@@ -26,7 +26,7 @@
     },
     "privacyPolicy": "Datenschutzrichtlinie",
     "profile": {
-      "hey": "Hey",
+      "hey": "Hallo",
       "login": "Einloggen",
       "logout": "Ausloggen",
       "notLoggedIn": {
@@ -41,12 +41,12 @@
         "title": "Animierter TAB"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Einfaches Erstellen von Texturen aus GIFs und Discord-Emojis usw. zur Verwendung im Minecraft-Chat mit Sprites oder jeder Resource Pack-Animation.",
         "title": "Animierte Texturen"
       },
       "banner": {
         "description": "Einfach Bannerdesigns für Minecraft generieren.",
-        "title": "Banner Generator"
+        "title": "Banner-Generator"
       },
       "description": "Hier finden sie alle öffentliche Birdflop Ressourcen.",
       "flags": {
@@ -54,8 +54,8 @@
         "title": "Kennzeichnungsgenerator"
       },
       "gradientTools": {
-        "description": "Tools to help you create gradient text in Minecraft.",
-        "title": "Gradient Tools"
+        "description": "Tools zur Erstellung von Text mit Farbverlauf in Minecraft.",
+        "title": "Werkzeuge für Farbverläufe"
       },
       "hexGradient": {
         "description": "Hex-Farbverlauf Text Generator, angetrieben by Birdflop, ein 501(c)(3) gemeinnütziger Minecraft host.",
@@ -70,17 +70,17 @@
         "title": "RGBirdflop Voreinstellungen"
       },
       "miscellaneousTools": {
-        "description": "Miscellaneous tools to help with random miscellaneous things.",
-        "title": "Miscellaneous Tools"
+        "description": "Verschiedene Werkzeuge, die bei verschiedenen Dingen helfen.",
+        "title": "Verschiedene Tools"
       },
       "more": "Mehr Ressourcen",
       "paperTimings": {
         "description": "Paper Timings analysieren und optimisieren.",
-        "title": "Paper Timings"
+        "title": "Zeitplan für das Papier"
       },
       "serverTools": {
-        "description": "Tools to help configure and setup minecraft servers.",
-        "title": "Server Tools"
+        "description": "Tools, die bei der Konfiguration und Einrichtung von Minecraft-Servern helfen.",
+        "title": "Server-Tools"
       },
       "sparkProfile": {
         "description": "Spark-Profile analysieren und optimisieren.",

@@ -8,28 +8,28 @@
       "description": "Различные дополнения и модификации, которые могут быть сделаны к вашему стартовому скрипту.",
       "label": "Конфигурация"
     },
-    "description": "The collection of start arguments that typically optimize the server's performance",
+    "description": "Коллекция аргументов запуска, которые обычно оптимизируют производительность сервера",
     "environment": {
       "command": "Команда",
       "description": "Операционная система, на которой работает сервер.",
       "label": "Операционная система",
       "linux": "Linux",
       "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
+      "pterodactyl": "Птеродактиль",
       "windows": "Windows"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Дополнительные флаги производительности для Benchmarked (G1GC) эксклюзивно для пользователей GraalVM.",
-        "label": "Benchmarked (GraalVM)"
+        "label": "Бенчмаркинг (GraalVM)"
       },
       "meowiceGraalVM": {
-        "description": "Additional performance flags for MeowIce's Flags exclusive to GraalVM users.",
-        "label": "MeowIce's Flags (GraalVM)"
+        "description": "Дополнительные флаги производительности для MeowIce's Flags, предназначенные исключительно для пользователей GraalVM.",
+        "label": "Флаги MeowIce (GraalVM)"
       },
       "vectors": {
         "description": "Включает SIMD операции для оптимизации отображения карты на Pufferfish и ее форки.",
-        "label": "Modern Vectors"
+        "label": "Современные векторы"
       }
     },
     "fileName": {
@@ -37,14 +37,14 @@
       "label": "Имя файла"
     },
     "flags": {
-      "aikars": "Aikar's Flags",
-      "benchmarked": "Benchmarked",
-      "etils": "Etil's Flags",
-      "hillttys": "hilltty's Flags",
-      "label": "Flags",
-      "meowice": "MeowIce's Flags",
+      "aikars": "Флаги Айкара",
+      "benchmarked": "Бенчмарки",
+      "etils": "Флаги Этиля",
+      "hillttys": "Флаги Хилтти",
+      "label": "Флаги",
+      "meowice": "Флаги MeowIce",
       "none": "Отсутствует",
-      "obyduxs": "Obydux's Flags"
+      "obyduxs": "Флаги Обидукса"
     },
     "gui": {
       "description": "Отображать встроенный интерфейс управления сервером.",
@@ -59,12 +59,12 @@
       "label": "Скрипт"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
-      "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "fabric": "Ткань",
+      "forge": "Кузница",
+      "paper": "Бумага",
+      "purpur": "Пурпур",
+      "velocity": "Скорость",
+      "waterfall": "Водопад"
     },
     "software": {
       "description": "Программное обеспечение, на котором будет работать ваш сервер Minecraft.",

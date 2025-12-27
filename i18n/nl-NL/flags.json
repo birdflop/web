@@ -21,7 +21,7 @@
     "extraFlags": {
       "benchmarkedGraalVM": {
         "description": "Extra prestatievlaggen voor Benchmarked (G1GC) exclusief voor GraalVM-gebruikers.",
-        "label": "Benchmarked (GraalVM)"
+        "label": "Gebenchmarkt (GraalVM)"
       },
       "meowiceGraalVM": {
         "description": "Extra prestatievlaggen voor MeowIce's vlaggen exclusief voor GraalVM-gebruikers.",
@@ -38,7 +38,7 @@
     },
     "flags": {
       "aikars": "Aikar's vlaggen",
-      "benchmarked": "Benchmarked",
+      "benchmarked": "Benchmark",
       "etils": "Etil's vlaggen",
       "hillttys": "hilltty's vlaggen",
       "label": "Vlaggen",
@@ -59,12 +59,12 @@
       "label": "Script"
     },
     "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
+      "fabric": "Stof",
+      "forge": "Smederij",
+      "paper": "Papier",
       "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
+      "velocity": "Snelheid",
+      "waterfall": "Waterval"
     },
     "software": {
       "description": "De software waarop je Minecraft-server zal draaien.",

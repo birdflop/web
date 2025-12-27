@@ -5,9 +5,9 @@
       "name": "Nombre de la animación",
       "style": "Estilo de animación"
     },
-    "length": "Longitud de la gradiente",
+    "length": "Longitud del gradiente",
     "outputFormat": {
-      "description": "Solo use esto si está intentando usar esta herramienta para un plugin diferente o sabe lo que está haciendo.",
+      "description": "Utilícelo sólo si está intentando utilizar esta herramienta para un plugin diferente o si sabe lo que está haciendo.",
       "title": "Formato de salida"
     },
     "yamlInput": "Entrada YAML"

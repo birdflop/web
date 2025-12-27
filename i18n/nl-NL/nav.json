@@ -41,7 +41,7 @@
         "title": "Geanimeerde TAB"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Maak eenvoudig texturen van GIF's en Discord emoji's etc. voor gebruik in Minecraft chat met sprites of een resource pack animatie.",
         "title": "Geanimeerde texturen"
       },
       "banner": {
@@ -72,7 +72,7 @@
       "more": "Meer bronnen",
       "paperTimings": {
         "description": "Analyseer Paper Timings en krijg mogelijke optimalisaties",
-        "title": "Paper Timings"
+        "title": "Papierschema's"
       },
       "serverTools": {
         "description": "Hulpmiddelen om te helpen bij het configureren en instellen van Minecraft-servers.",

@@ -41,7 +41,7 @@
         "title": "TAB animado"
       },
       "animatedTextures": {
-        "description": "Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
+        "description": "Crie facilmente texturas a partir de GIFs e emojis Discord, etc. para utilizar no chat do Minecraft com sprites ou qualquer animação de pacotes de recursos.",
         "title": "Texturas animadas"
       },
       "banner": {
@@ -72,7 +72,7 @@
       "more": "Mais recursos",
       "paperTimings": {
         "description": "Analise Paper Timings e obtenha possíveis otimizações",
-        "title": "Paper Timings"
+        "title": "Horários dos documentos"
       },
       "serverTools": {
         "description": "Ferramentas para ajudar a configurar e configurar servidores Minecraft.",

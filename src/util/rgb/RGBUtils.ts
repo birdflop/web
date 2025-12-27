@@ -49,6 +49,83 @@ function normalizeShadowRGB(rgb: number[]): number[] {
   return norm;
 }
 
+function getShadowColors(rgbStore: typeof rgbDefaults): { hex: string; pos: number }[] {
+  if (rgbStore.syncshadow) {
+    return rgbStore.colors.map((color) => {
+      const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
+      return { hex: `#${rgbToHex(shadowRGB)}`, pos: color.pos };
+    });
+  }
+
+  if (rgbStore.shadowcolors && rgbStore.shadowcolors.length > 0) {
+    return rgbStore.shadowcolors.map((color) => ({ hex: color.hex, pos: color.pos }));
+  }
+
+  return [];
+}
+
+type ShadowSegment = {
+  text: string;
+  hex: string;
+  start: number;
+  end: number;
+};
+
+function buildShadowSegments(
+  rgbStore: typeof rgbDefaults,
+  shadowColors: { hex: string; pos: number }[],
+): ShadowSegment[] {
+  const segments = segmentText(rgbStore.text, rgbStore.colorlength);
+  if (!segments.length) return [];
+
+  const shadowGradient = new Gradient(
+    shadowColors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos })),
+    segments.length,
+  );
+
+  let cursor = 0;
+  return segments.map((text) => {
+    const start = cursor;
+    const end = cursor + text.length;
+    cursor = end;
+    return {
+      text,
+      start,
+      end,
+      hex: `#${rgbToHex(shadowGradient.next())}`,
+    };
+  });
+}
+
+function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end: number): string {
+  let currentHex: string | undefined;
+  let buffer = '';
+  let out = '';
+
+  const flush = () => {
+    if (!buffer || !currentHex) return;
+    out += `<shadow:${currentHex}:1>${buffer}</shadow>`;
+    buffer = '';
+  };
+
+  for (const seg of shadowSegments) {
+    if (seg.end <= start || seg.start >= end) continue;
+
+    const sliceStart = Math.max(start, seg.start) - seg.start;
+    const sliceEnd = Math.min(end, seg.end) - seg.start;
+    const slice = seg.text.slice(sliceStart, sliceEnd);
+    if (!slice) continue;
+
+    if (currentHex && currentHex !== seg.hex) flush();
+
+    currentHex = seg.hex;
+    buffer += slice;
+  }
+
+  flush();
+  return out;
+}
+
 export function disperseColors(colors: typeof rgbDefaults.colors) {
   if (colors.length <= 1) {
     return colors.slice(0).map((color) => ({ hex: color.hex, pos: 0 }));
@@ -90,15 +167,21 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
 
 export function generateOutput(rgbStore: typeof rgbDefaults) {
   const colors = sortColors(rgbStore.colors);
+  const shadowColors = sortColors(getShadowColors(rgbStore));
 
   if (colors.length === 1) {
+    if (rgbStore.format.color === 'MiniMessage') {
+      const single = renderMiniMessageGradient(colors, rgbStore, shadowColors);
+      return applyWrappers(single, rgbStore);
+    }
+
     const single = renderSingleColorOutput(colors[0].hex, rgbStore);
     return applyWrappers(single, rgbStore);
   }
 
   let output = '';
   if (rgbStore.format.color === 'MiniMessage') {
-    output = renderMiniMessageGradient(colors, rgbStore);
+    output = renderMiniMessageGradient(colors, rgbStore, shadowColors);
   } else if (rgbStore.format.color === 'JSON') {
     output = renderJsonGradient(colors, rgbStore);
   } else {
@@ -157,14 +240,24 @@ function renderSingleColorOutput(singleHex: string, rgbStore: typeof rgbDefaults
   return renderTemplateSegment(hex, rgbStore.text, rgbStore);
 }
 
-function renderMiniMessageGradient(colors: { hex: string; pos: number }[], rgbStore: typeof rgbDefaults): string {
-  if (colors.length === 1) {
-    // Single color, no gradient needed
-    return `<color:${colors[0].hex}>${rgbStore.text}</color>`;
-  }
+function renderMiniMessageGradient(
+  colors: { hex: string; pos: number }[],
+  rgbStore: typeof rgbDefaults,
+  shadowColors: { hex: string; pos: number }[] = [],
+): string {
+  const shadowSegments = shadowColors.length > 0
+    ? buildShadowSegments(rgbStore, shadowColors)
+    : undefined;
 
-  const uneven = colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i);
-  if (uneven) {
+  const buildShadowRange = (start: number, end: number) => {
+    if (!shadowSegments || !shadowSegments.length) return rgbStore.text.substring(start, end);
+    return buildShadowContent(shadowSegments, start, end) || rgbStore.text.substring(start, end);
+  };
+
+  const renderUnevenGradient = (text: string) => {
+    const uneven = colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i);
+    if (!uneven) return null;
+
     const copy = [...colors];
     if (copy[0].pos !== 0) copy.unshift({ hex: copy[0].hex, pos: 0 });
     if (copy[copy.length - 1].pos !== 100) copy.push({ hex: copy[copy.length - 1].hex, pos: 100 });
@@ -179,20 +272,28 @@ function renderMiniMessageGradient(colors: { hex: string; pos: number }[], rgbSt
         nextColor = swap;
       }
 
-      const numSteps = rgbStore.text.length;
+      const numSteps = text.length;
       const lowerRange = Math.round((copy[i].pos / 100) * numSteps);
       const upperRange = Math.round((copy[i + 1].pos / 100) * numSteps);
       if (lowerRange === upperRange) continue;
-      out += `<gradient:${currentColor.hex}:${nextColor.hex}>${rgbStore.text.substring(lowerRange, upperRange)}</gradient>`;
+
+      const innerText = buildShadowRange(lowerRange, upperRange);
+      out += `<gradient:${currentColor.hex}:${nextColor.hex}>${innerText}</gradient>`;
     }
     return out;
-  }
-  const newColors = colors.map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
-  if (newColors.length === 0) return 'Error: Not enough colors.';
+  };
 
-  // Default even gradient
+  if (colors.length === 1) {
+    const inner = buildShadowRange(0, rgbStore.text.length);
+    return `<color:${colors[0].hex}>${inner}</color>`;
+  }
+
+  const unevenOut = renderUnevenGradient(rgbStore.text);
+  if (unevenOut !== null) return unevenOut;
+
   const hexes = colors.map(c => c.hex).join(':');
-  return `<gradient:${hexes}>${rgbStore.text}</gradient>`;
+  const inner = buildShadowRange(0, rgbStore.text.length);
+  return `<gradient:${hexes}>${inner}</gradient>`;
 }
 
 function renderJsonGradient(colors: { hex: string; pos: number }[], rgbStore: typeof rgbDefaults): string {
