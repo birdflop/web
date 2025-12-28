@@ -132,6 +132,7 @@ export default component$(({ hidden, id = 'text' }: {
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
               onInput$={(e, el) => {
+                // set the color picker's value and trigger input to update color picker
                 const picker = document.getElementById(`colorlist${id}-color-picker`)!;
                 picker.dataset.value = el.value;
                 picker.dispatchEvent(new Event('input'));
@@ -151,6 +152,7 @@ export default component$(({ hidden, id = 'text' }: {
 
                 // set the color picker's value and trigger input to update color picker
                 picker.dataset.value = color.hex;
+                picker.dispatchEvent(new Event('input'));
               }}
             />
           </div>
