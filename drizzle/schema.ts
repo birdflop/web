@@ -73,6 +73,7 @@ export const presets = sqliteTable("presets", {
     .references(() => users.id),
   description: text("description"),
   preset: text("preset", { mode: 'json' }).$type<rgbPreset>().notNull().unique(),
+  colorVector: text("colorVector", { mode: 'json' }).$type<number[]>(),
   upvotes: integer("upvotes").default(0).notNull(),
   downvotes: integer("downvotes").default(0).notNull(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
@@ -85,7 +86,7 @@ export interface PublicPresetWithUser extends PublicPreset {
   saveCount: number;
 }
 export interface PresetPartial extends Omit<PublicPresetWithUser,
-  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount' | 'upvotes' | 'downvotes'> {
+  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount' | 'upvotes' | 'downvotes' | 'colorVector'> {
   id?: number;
   author?: string;
   user?: User | null;
@@ -96,6 +97,7 @@ export interface PresetPartial extends Omit<PublicPresetWithUser,
   saveCount?: number;
   upvotes?: number;
   downvotes?: number;
+  colorVector?: number[] | null;
 }
 export type PublicPresetInsert = typeof presets.$inferInsert;
 export type PublicPresetSubmission = Omit<PublicPresetInsert, 'userId' | 'author'>;
