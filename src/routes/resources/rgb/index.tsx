@@ -59,7 +59,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
         pos: color.pos,
       };
     })
-    : rgbStore.shadowcolors;
+    : (rgbStore.enableshadow ? rgbStore.shadowcolors : []);
 
   const colorsRGB = sortColors(rgbStore.colors).map((color) => ({
     rgb: hexToRGB(color.hex),

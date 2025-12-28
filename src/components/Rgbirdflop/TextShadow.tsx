@@ -29,6 +29,13 @@ export default component$(({ hidden }: {
       >
         {t('rgb.colors.shadow.sync@@Sync with text colors')}
       </Toggle>
+      <Toggle id="enableshadow" checked={rgbStore.enableshadow}
+        onChange$={(e, el) => {
+          rgbStore.enableshadow = el.checked;
+        }}
+      >
+        {t('rgb.colors.shadow.enable@@Enable text shadow')}
+      </Toggle>
       <div class={{
         'transition-all duration-300': true,
         'opacity-50': rgbStore.syncshadow,

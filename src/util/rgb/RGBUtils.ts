@@ -50,14 +50,14 @@ function normalizeShadowRGB(rgb: number[]): number[] {
 }
 
 function getShadowColors(rgbStore: typeof rgbDefaults): { hex: string; pos: number }[] {
-  if (rgbStore.syncshadow) {
+  if (rgbStore.enableshadow && rgbStore.syncshadow) {
     return rgbStore.colors.map((color) => {
       const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
       return { hex: `#${rgbToHex(shadowRGB)}`, pos: color.pos };
     });
   }
 
-  if (rgbStore.shadowcolors && rgbStore.shadowcolors.length > 0) {
+  if (rgbStore.shadowcolors && rgbStore.shadowcolors.length > 0 && rgbStore.enableshadow) {
     return rgbStore.shadowcolors.map((color) => ({ hex: color.hex, pos: color.pos }));
   }
 
@@ -245,7 +245,7 @@ function renderMiniMessageGradient(
   rgbStore: typeof rgbDefaults,
   shadowColors: { hex: string; pos: number }[] = [],
 ): string {
-  const shadowSegments = shadowColors.length > 0
+  const shadowSegments = (shadowColors.length > 0 && rgbStore.enableshadow)
     ? buildShadowSegments(rgbStore, shadowColors)
     : undefined;
 

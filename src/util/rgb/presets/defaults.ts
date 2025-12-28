@@ -63,6 +63,7 @@ export const rgbDefaults = {
   disperse: false,
   lowercase: false,
   syncshadow: true,
+  enableshadow: false,
   bold: false,
   italic: false,
   underline: false,
