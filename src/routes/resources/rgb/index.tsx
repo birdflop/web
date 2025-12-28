@@ -74,10 +74,12 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     colorsRGB,
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
   );
-  const shadowGradient = new Gradient(
-    shadowColorsRGB,
-    Math.ceil(rgbStore.text.length / rgbStore.colorlength),
-  );
+  const shadowGradient = shadowColorsRGB.length > 0
+    ? new Gradient(
+      shadowColorsRGB,
+      Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+    )
+    : null;
 
   let hex = '';
   let shadowHex = '';
@@ -95,15 +97,17 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   }
   return segments.map((segment, i) => {
     const rgb = gradient.next();
-    const rgbShadow = shadowGradient.next();
+    const rgbShadow = shadowGradient?.next();
     hex = rgbToHex(rgb);
-    shadowHex = rgbToHex(rgbShadow);
+    shadowHex = rgbShadow ? rgbToHex(rgbShadow) : '';
     return (
       <span
         key={`char${i}`}
         style={{
           color: `#${hex};`,
-          textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
+          ...(shadowGradient && shadowHex && {
+            textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
+          }),
         }}
         class={{
           underline: rgbStore.underline,
