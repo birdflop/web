@@ -27,15 +27,13 @@ export default component$(({ hidden }: {
           rgbStore.syncshadow = el.checked;
         }}
       >
-        {t('rgb.colors.shadow.sync@@Sync with text colors')}
+        {t('rgb.colors.shadow.sync.title@@Sync with text colors')}
       </Toggle>
-      <Toggle id="enableshadow" checked={rgbStore.enableshadow}
-        onChange$={(e, el) => {
-          rgbStore.enableshadow = el.checked;
-        }}
-      >
-        {t('rgb.colors.shadow.enable@@Enable text shadow')}
-      </Toggle>
+      <div class="flex gap-2">
+        <p class="text-lum-text-secondary text-sm">
+          {t('rgb.colors.shadow.sync.description@@When enabled, a custom shadow color gradient will not be used and vanilla Minecraft shadow colors will be used instead.')}
+        </p>
+      </div>
       <div class={{
         'transition-all duration-300': true,
         'opacity-50': rgbStore.syncshadow,

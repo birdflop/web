@@ -51,15 +51,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (rgbStore.colors.length < 1) return rgbStore.text;
 
   const shadowColors = rgbStore.syncshadow
-    ? rgbStore.colors.map((color) => {
-      const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
-      const shadowHex = `#${rgbToHex(shadowRGB)}`;
-      return {
-        hex: shadowHex,
-        pos: color.pos,
-      };
-    })
-    : (rgbStore.enableshadow ? rgbStore.shadowcolors : []);
+    ? [] : rgbStore.shadowcolors;
 
   const colorsRGB = sortColors(rgbStore.colors).map((color) => ({
     rgb: hexToRGB(color.hex),
