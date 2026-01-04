@@ -186,5 +186,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'TAB Animation Previewer - Birdflop',
   description: 'Preview TAB Animations without the need to put them in-game. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

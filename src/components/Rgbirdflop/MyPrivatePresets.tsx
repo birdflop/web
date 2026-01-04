@@ -1,6 +1,5 @@
-import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useContext, useSignal } from '@builder.io/qwik';
 
-import { unloadGoogleAds } from '~/util/GoogleAds';
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { CircleUserRound, Plus, Save, X } from 'lucide-icons-qwik';
@@ -17,7 +16,6 @@ import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => unloadGoogleAds());
   const notifications = useContext(NotificationContext);
   const t = inlineTranslate();
 

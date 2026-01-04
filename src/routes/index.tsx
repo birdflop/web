@@ -6,7 +6,6 @@ import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star,
 import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
-import { unloadGoogleAds } from '~/util/GoogleAds';
 import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
 import ExpensesChart from '~/components/home/ExpensesChart';
@@ -15,10 +14,7 @@ export default component$(() => {
   const missionExpanded = useSignal(false);
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    initiateTyper();
-    unloadGoogleAds();
-  });
+  useVisibleTask$(() => initiateTyper());
 
   useOnWindow('scroll', $(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

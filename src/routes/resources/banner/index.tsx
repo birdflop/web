@@ -402,5 +402,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Banner Generator - Birdflop',
   description: 'Easily generate banner designs for Minecraft. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });
