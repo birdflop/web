@@ -28,7 +28,7 @@ import {
 import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 

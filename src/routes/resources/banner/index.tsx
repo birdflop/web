@@ -13,7 +13,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { colors, patterns } from '~/util/banner';
-import { swapItems } from '~/util/rgb/RGBUtils';
+import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 
 const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {

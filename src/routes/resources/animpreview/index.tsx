@@ -7,8 +7,7 @@ import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
-import { hexToRGB } from '~/util/rgb/Colors';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {

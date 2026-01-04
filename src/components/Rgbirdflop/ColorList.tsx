@@ -1,10 +1,9 @@
 import { $, component$, Slot, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { disperseColors, swapItems, sortColors } from '~/util/rgb/RGBUtils';
+import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { getBrightness, getRandomColor, hexToRGB } from '~/util/rgb/Colors';
 
 export default component$(({ hidden, id = 'text' }: {
   hidden?: boolean;

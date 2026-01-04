@@ -5,7 +5,7 @@ import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Backgro
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
-import { generateOutput } from '~/util/rgb/RGBUtils';
+import { generateOutput } from '@birdflop/rgbirdflop';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';

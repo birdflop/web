@@ -9,7 +9,7 @@ import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
-import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import Accordion from '../Elements/Accordion';
 

@@ -9,7 +9,7 @@ import { NotificationContext, Notification } from '~/util/Notification';
 import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
-import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';

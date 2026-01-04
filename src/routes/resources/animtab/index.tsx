@@ -1,10 +1,8 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { animationStyles, rgbDefaults, animTABDefaults } from '~/util/rgb/presets/defaults';
-import { AnimationOutput, generateAnimTABFrames } from '~/util/rgb/AnimTABUtils';
+import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '../rgb';
-import { hexToRGB } from '~/util/rgb/Colors';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';

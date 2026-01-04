@@ -1,6 +1,6 @@
 import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';

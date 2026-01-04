@@ -11,13 +11,15 @@ import {
 } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { Gradient } from '~/util/rgb/HexUtils';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
 import {
+  rgbDefaults,
+  Gradient,
   disperseColors,
   generateOutput,
   sortColors,
-} from '~/util/rgb/RGBUtils';
+  hexToRGB,
+  rgbToHex,
+} from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
@@ -43,7 +45,6 @@ import Accordion from '~/components/Elements/Accordion';
 import { BirdLandContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
-import { hexToRGB, rgbToHex } from '~/util/rgb/Colors';
 import { defaultDescription, generateHead } from '~/root';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {

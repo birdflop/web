@@ -4,8 +4,6 @@
     "target": "ES2017",
     "module": "ES2020",
     "lib": ["es2020", "DOM"],
-    "jsx": "react-jsx",
-    "jsxImportSource": "@builder.io/qwik",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
@@ -21,6 +19,5 @@
       "~/*": ["./src/*"],
     },
   },
-  "include": ["src", "tailwind.config.js", "src/tailwind.config.js"],
-  "exclude": ["src/tailwind.config.js"],
+  "include": ["src", "tailwind.config.js"],
 }

@@ -1,7 +1,6 @@
 import type { RequestHandler } from '@builder.io/qwik-city';
 import { parseParams } from '~/util/dataUtils';
-import { formats, rgbDefaults } from '~/util/rgb/presets/defaults';
-import { generateOutput } from '~/util/rgb/RGBUtils';
+import { formats, rgbDefaults, generateOutput } from '@birdflop/rgbirdflop';
 
 export const onGet: RequestHandler = ({ json, query }) => {
   let output = {};

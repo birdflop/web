@@ -8,7 +8,7 @@ import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');

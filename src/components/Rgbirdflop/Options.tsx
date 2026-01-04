@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { formats } from '~/util/rgb/presets/defaults';
+import { formats } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(() => {

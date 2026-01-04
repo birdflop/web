@@ -5,7 +5,7 @@ import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { CircleUserRound, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/routes/resources/rgb';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbPreset } from '~/util/rgb/presets';
