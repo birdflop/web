@@ -107,13 +107,20 @@ export default component$(() => {
       const response = await fetch('https://ipapi.co/json/');
       const locationData = await response.json();
 
+      // Type guard for locationData
+      type LocationData = {
+        region_code?: string;
+        country_code?: string;
+      };
+      const { region_code, country_code } = locationData as LocationData;
+
       // Check if user is from California or EU
-      const isCaliforniaUser = locationData.region_code === 'CA' && locationData.country_code === 'US';
+      const isCaliforniaUser = region_code === 'CA' && country_code === 'US';
       const isEUUser = [
         'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
         'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL',
         'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB',
-      ].includes(locationData.country_code);
+      ].includes(country_code ?? '');
 
       // Only show consent popup for California or EU users
       showCookieConsent.value = isCaliforniaUser || isEUUser;

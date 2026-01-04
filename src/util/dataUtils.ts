@@ -1,6 +1,6 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
-import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
+import { animTABDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';

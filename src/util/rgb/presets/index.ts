@@ -1,4 +1,4 @@
-import { combinedDefaults } from '../Defaults';
+import { combinedDefaults } from '@birdflop/rgbirdflop';
 import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
