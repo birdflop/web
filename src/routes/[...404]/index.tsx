@@ -19,7 +19,6 @@ export default component$(() => {
   const t = inlineTranslate();
 
   // Keeping below unloading in case we mess up navbar in future
-  // eslint-disable-next-line qwik/no-use-visible-task
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >

@@ -1,4 +1,4 @@
-import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
@@ -71,7 +71,6 @@ export const useParams = routeLoader$(({ query }) => {
 });
 
 export default component$(() => {
-  // eslint-disable-next-line qwik/no-use-visible-task
 
   const params = useParams().value;
   const plansStore = useStore({

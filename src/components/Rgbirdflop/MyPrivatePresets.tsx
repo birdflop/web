@@ -15,7 +15,7 @@ import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
 import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
 
 export default component$(() => {
-  // eslint-disable-next-line qwik/no-use-visible-task
+
   const notifications = useContext(NotificationContext);
   const t = inlineTranslate();
 

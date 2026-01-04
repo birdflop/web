@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { Blobs, Hoverable, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
 import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
@@ -7,8 +7,6 @@ import { defaultDescription, generateHead } from '~/root';
 
 export default component$(() => {
   const t = inlineTranslate();
-
-  // eslint-disable-next-line qwik/no-use-visible-task
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">

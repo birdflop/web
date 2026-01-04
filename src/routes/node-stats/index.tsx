@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Activity } from 'lucide-icons-qwik';
@@ -50,8 +50,6 @@ const nodes = [
 
 export default component$(() => {
   const t = inlineTranslate();
-
-  // eslint-disable-next-line qwik/no-use-visible-task
 
   return <>
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">

@@ -60,7 +60,7 @@ export default defineConfig(
       },
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
