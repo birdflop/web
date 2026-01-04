@@ -35,12 +35,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npm.pkg.github.com'
 
-      - name: Publish to npm
+      - name: Publish to GitHub Packages
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         run: |
           cd packages/rgbirdflop
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
