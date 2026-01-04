@@ -1,5 +1,5 @@
 {
-  "name": "@birdflop/rgb",
+  "name": "@birdflop/rgbirdflop",
   "version": "0.1.0",
   "description": "RGB gradient library for generating Minecraft text gradients.",
   "main": "./lib/index.js",
@@ -36,11 +36,11 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "devDependencies": {
-    "@types/eslint": "^8.56.11",
-    "@types/node": "^22.5.0",
-    "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@typescript-eslint/parser": "^8.2.0",
-    "eslint": "^8.57.0",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "eslint": "^9.39.2",
     "typescript": "5.5.4"
   }
 }
