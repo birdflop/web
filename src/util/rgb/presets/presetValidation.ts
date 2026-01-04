@@ -128,7 +128,7 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
   }
 
   // Validate each color
-  preset.colors.forEach((color, index) => {
+  preset.colors.forEach((color: { hex?: string; pos?: number }, index: number) => {
     if (!color.hex) {
       errors.push({
         field: `preset.colors[${index}]`,
@@ -155,7 +155,7 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
   });
 
   // Check for duplicate positions
-  const positions = preset.colors.map(c => c.pos);
+  const positions: (number | undefined)[] = preset.colors.map((c: { hex?: string; pos?: number }) => c.pos);
   const duplicatePositions = positions.filter((pos, index) => positions.indexOf(pos) !== index);
   if (duplicatePositions.length > 0) {
     errors.push({
