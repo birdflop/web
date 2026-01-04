@@ -1,6 +1,6 @@
 import type { rgbPreset } from '.';
 import type { PublicPresetSubmission } from '../../db';
-import { checkPresetSimilarity, type SimilarPreset } from '../vectorize';
+import { checkPresetSimilarity, type SimilarPreset } from './vectorize';
 
 export interface ValidationError {
   field: string;

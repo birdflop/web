@@ -1,4 +1,4 @@
-import { getDB, presets } from '../db';
+import { getDB, presets } from '../../db';
 import { presetToVector } from './vectorize';
 import { eq } from 'drizzle-orm';
 

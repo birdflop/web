@@ -1,7 +1,7 @@
 import { AnimatedGradient } from './HexUtils';
 import { hexToRGB, rgbToHex } from './Colors';
 import { sortColors } from './RGBUtils';
-import { animTABDefaults, rgbDefaults } from './presets/defaults';
+import { animTABDefaults, rgbDefaults } from './Defaults';
 
 export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   if (rgbStore.colors.length < 2) return { OutputArray: [], frames: [] };

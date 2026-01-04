@@ -1,18 +1,7 @@
-import { combinedDefaults } from './defaults';
+import { combinedDefaults } from '../Defaults';
 import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
-
-export interface format {
-  color: string;
-  char?: string;
-  class?: string;
-  bold?: string;
-  italic?: string;
-  underline?: string;
-  strikethrough?: string;
-  obfuscate?: string;
-}
 
 export function loadPreset(p: string): rgbPreset {
   const preset = JSON.parse(p);

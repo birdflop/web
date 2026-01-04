@@ -3,7 +3,7 @@ import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
 import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
-import { presetToVector } from './rgb/vectorize';
+import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';

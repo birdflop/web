@@ -1,4 +1,4 @@
-import { rgbDefaults } from './presets/defaults';
+import { rgbDefaults } from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { Gradient } from './HexUtils';
 

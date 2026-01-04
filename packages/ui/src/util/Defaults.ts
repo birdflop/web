@@ -1,4 +1,13 @@
-import { format } from '.';
+export interface format {
+  color: string;
+  char?: string;
+  class?: string;
+  bold?: string;
+  italic?: string;
+  underline?: string;
+  strikethrough?: string;
+  obfuscate?: string;
+}
 
 export const formats: format[] = [
   {

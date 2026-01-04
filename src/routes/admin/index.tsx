@@ -1,10 +1,10 @@
 import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
 import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
-import { backfillColorVectors } from '~/util/rgb/backfillVectors';
+import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
 import { isNotNull, eq, sql } from 'drizzle-orm';
-import { vectorDistance } from '~/util/rgb/vectorize';
+import { vectorDistance } from '~/util/rgb/presets/vectorize';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 

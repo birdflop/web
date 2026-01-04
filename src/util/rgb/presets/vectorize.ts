@@ -1,5 +1,5 @@
-import type { rgbPreset } from './presets';
-import { getDB, presets, users, savedPresets, type User } from '../db';
+import type { rgbPreset } from '.';
+import { getDB, presets, users, savedPresets, type User } from '../../db';
 import { isNotNull, eq, sql } from 'drizzle-orm';
 import { hexToRGB } from './Colors';
 

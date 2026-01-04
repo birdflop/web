@@ -13,7 +13,7 @@ import { rgbPreset } from '~/util/rgb/presets';
 import { inlineTranslate } from 'qwik-speak';
 import { publishPreset } from '~/util/dataUtils';
 import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
-import type { SimilarPreset } from '~/util/rgb/vectorize';
+import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
