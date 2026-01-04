@@ -14,7 +14,8 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "build": "wrangler types && qwik build",
+    "build": "pnpm build.pkg && wrangler types && qwik build",
+    "build.pkg": "cd packages/rgbirdflop && pnpm run build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/cloudflare-pages/vite.config.mts",
