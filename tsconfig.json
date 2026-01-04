@@ -22,5 +22,5 @@
     }
   },
   "files": ["eslint.config.js"],
-  "include": ["src", "./*.d.ts", "./*.js", "eslint.config.js"],
+  "include": ["src", "./*.d.ts", "./*.js"],
 }
