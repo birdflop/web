@@ -1,6 +1,5 @@
 import {
   component$,
-  HTMLCrossOriginAttribute,
   useServerData,
 } from '@builder.io/qwik';
 import {
@@ -73,13 +72,11 @@ export function generateHead({
   title = 'Birdflop - Server Hosting & Resources',
   description = defaultDescription,
   image = '/branding/icon.png',
-  ads = false,
   head = {},
 }: {
   title?: string;
   description?: string;
   image?: string;
-  ads?: boolean;
   head?: Partial<DocumentHeadValue>;
 }): DocumentHead {
   return {
@@ -101,18 +98,6 @@ export function generateHead({
       ...(head.meta ?? []),
     ],
     scripts: [
-      ...(ads
-        ? [
-          {
-            props: {
-              async: true,
-              type: 'text/javascript',
-              src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8716785491986947',
-              crossOrigin: 'anonymous' as HTMLCrossOriginAttribute,
-            },
-          },
-        ]
-        : []),
       ...(head.scripts ?? []),
     ],
   };

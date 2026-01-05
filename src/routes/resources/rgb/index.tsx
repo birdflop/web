@@ -468,5 +468,4 @@ export const head = generateHead({
   title: 'RGB Birdflop - Minecraft RGB Gradient Creator',
   description:
     'Hex gradient text generator. Developed by Birdflop. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

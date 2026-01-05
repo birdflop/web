@@ -4,13 +4,11 @@ import { Blobs, Hoverable, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
 import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
-import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export default component$(() => {
   const t = inlineTranslate();
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => unloadGoogleAds());
 
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">

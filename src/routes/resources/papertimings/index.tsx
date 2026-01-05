@@ -18,5 +18,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Automatic Minecraft Timings Analyzer - Birdflop',
   description: 'Analyze your Paper Timings to get optimization recommendations. Developed by Birdflop. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });
