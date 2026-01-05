@@ -80,7 +80,7 @@ export const rgbDefaults = {
   underline: false,
   strikethrough: false,
   obfuscate: false,
-  gradientType: 'oklab' satisfies GradientType,
+  gradientType: 'rgb' satisfies GradientType,
 };
 
 export const animTABDefaults = {

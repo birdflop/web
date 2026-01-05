@@ -49,6 +49,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
 export const BirdLandContext = createContextId<Signal<{ x: number; y: number } | undefined>>('birdland-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
+export const showAllGradientsContext = createContextId<Signal<boolean>>('showallgradients-context');
 export default component$(() => {
   const t = (string: string) => inlineTranslate()(string);
   const loc = useLocation();
@@ -86,6 +87,10 @@ export default component$(() => {
     items: [] as string[],
   });
   useContextProvider(openItemsContext, openItemsStore);
+
+  // Show all gradients toggle
+  const showAllGradients = useSignal(false);
+  useContextProvider(showAllGradientsContext, showAllGradients);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {

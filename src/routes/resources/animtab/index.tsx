@@ -1,7 +1,7 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB } from '@birdflop/rgbirdflop';
+import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES, GradientType } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '../rgb';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -18,7 +18,7 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import { openItemsContext } from '~/routes/layout';
+import { openItemsContext, showAllGradientsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -61,6 +61,8 @@ export default component$(() => {
 
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
+
+  const showAllGradients = useContext(showAllGradientsContext);
 
   const openItemsStore = useContext(openItemsContext);
   const threshold = useSignal(50);
@@ -146,31 +148,76 @@ export default component$(() => {
 
         <Input>
           {(() => {
-            if (!rgbStore.text || !frames.list[0]) return '\u00A0';
+            if (!rgbStore.text) return '\u00A0';
 
-            const colors = frames.list[frames.current];
-            if (!colors) return '\u00A0';
+            const renderFrames = (store: typeof rgbDefaults) => {
+              // Generate frames for this specific gradient type
+              const { frames: framesList } = generateAnimTABFrames(
+                { ...store, text: store.text || 'Birdflop' },
+                animtabStore,
+              );
 
-            const segments = [...rgbStore.text.matchAll(new RegExp(`.{1,${rgbStore.colorlength}}`, 'g'))];
-            let i = 0;
-            return segments.map((segment) => {
-              const color = `#${colors[i]}`;
-              const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
-              const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
-              const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-              i = rgbStore.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
-              return <span key={`char${i}`} style={{
-                color,
-                textShadow: `${shadowLength} 0 ${shadowColor};`,
-              }} class={{
-                'underline': rgbStore.underline,
-                'strikethrough': rgbStore.strikethrough,
-                'underline-strikethrough': rgbStore.underline && rgbStore.strikethrough,
-                'obfuscate': rgbStore.obfuscate,
-              }}>
-                {segment[0].replace(/ /g, '\u00A0')}
-              </span>;
-            });
+              let processedFrames = framesList;
+              if (animtabStore.type == 1) {
+                processedFrames = [...framesList].reverse();
+              } else if (animtabStore.type == 3) {
+                const frames2 = framesList.slice();
+                processedFrames = [...framesList].reverse().concat(frames2);
+              }
+
+              if (!processedFrames[0]) return '\u00A0';
+              const colors = processedFrames[frames.current % processedFrames.length];
+              if (!colors) return '\u00A0';
+
+              const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+              let i = 0;
+              return segments.map((segment) => {
+                const color = `#${colors[i]}`;
+                const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
+                const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
+                const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+                i = store.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
+                return <span key={`char${i}`} style={{
+                  color,
+                  textShadow: `${shadowLength} 0 ${shadowColor};`,
+                }} class={{
+                  'underline': store.underline,
+                  'strikethrough': store.strikethrough,
+                  'underline-strikethrough': store.underline && store.strikethrough,
+                  'obfuscate': store.obfuscate,
+                }}>
+                  {segment[0].replace(/ /g, '\u00A0')}
+                </span>;
+              });
+            };
+
+            if (showAllGradients.value && previewStyle.value != 'default') {
+              return GRADIENT_TYPES.map((gradientType) => {
+                const tempStore = {
+                  ...rgbStore,
+                  gradientType: gradientType as GradientType,
+                };
+                const isActive = gradientType === rgbStore.gradientType;
+                return (
+                  <span key={gradientType} class='flex items-center gap-2'>
+                    <span
+                      class={{
+                        'text-[10px] font-semibold uppercase tracking-wider px-1 py-0.5 rounded min-w-15 text-center lum-bg-gray-700/50': true,
+                        'text-lum-text': isActive,
+                        'text-gray-400': !isActive,
+                      }}
+                    >
+                      {gradientType}
+                    </span>
+                    <span class='flex-1'>
+                      {renderFrames(tempStore)}
+                    </span>
+                  </span>
+                );
+              });
+            }
+
+            return renderFrames(rgbStore);
           })()}
         </Input>
 

@@ -20,6 +20,7 @@ import {
   sortColors,
   hexToRGB,
   rgbToHex,
+  GRADIENT_TYPES,
 } from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -43,7 +44,11 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import { BirdLandContext, openItemsContext } from '~/routes/layout';
+import {
+  BirdLandContext,
+  openItemsContext,
+  showAllGradientsContext,
+} from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { defaultDescription, generateHead } from '~/root';
@@ -61,7 +66,9 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
         pos: color.pos,
       };
     })
-    : (rgbStore.enableshadow ? rgbStore.shadowcolors : []);
+    : rgbStore.enableshadow
+      ? rgbStore.shadowcolors
+      : [];
 
   const colorsRGB = sortColors(rgbStore.colors).map((color) => ({
     rgb: hexToRGB(color.hex),
@@ -77,13 +84,14 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
     rgbStore.gradientType as GradientType,
   );
-  const shadowGradient = shadowColorsRGB.length > 0
-    ? new ColorGradient(
-      shadowColorsRGB,
-      Math.ceil(rgbStore.text.length / rgbStore.colorlength),
-      rgbStore.gradientType as GradientType,
-    )
-    : null;
+  const shadowGradient =
+    shadowColorsRGB.length > 0
+      ? new ColorGradient(
+        shadowColorsRGB,
+        Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+          rgbStore.gradientType as GradientType,
+      )
+      : null;
 
   let hex = '';
   let shadowHex = '';
@@ -109,7 +117,8 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
         key={`char${i}`}
         style={{
           color: `#${hex};`,
-          ...(shadowGradient && shadowHex && {
+          ...(shadowGradient &&
+            shadowHex && {
             textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
           }),
         }}
@@ -186,6 +195,8 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
+  const showAllGradients = useContext(showAllGradientsContext);
+
   const openItemsStore = useContext(openItemsContext);
   const threshold = useSignal(50);
   const showAds = useSignal(false);
@@ -249,7 +260,9 @@ export default component$(() => {
         'Atlantic/Bermuda', // Close to US
       ];
       // const shouldShowAds = usPreferredRegions.some(region => tz.startsWith(region));
-      const shouldShowAds = !usPreferredRegions.some(region => tz.startsWith(region));
+      const shouldShowAds = !usPreferredRegions.some((region) =>
+        tz.startsWith(region),
+      );
 
       if (shouldShowAds) {
         showAds.value = true;
@@ -381,11 +394,42 @@ export default component$(() => {
             'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
           )}
         </p>
-        <hr />
-
-        <Input>
-          {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
-        </Input>
+        <div class='relative'>
+          <Input>
+            {showAllGradients.value && previewStyle.value != 'default'
+              ? GRADIENT_TYPES.map((gradientType) => {
+                const tempStore = {
+                  ...rgbStore,
+                  gradientType: gradientType as GradientType,
+                };
+                const isActive = gradientType === rgbStore.gradientType;
+                return (
+                  <span key={gradientType} class='flex items-center gap-2'>
+                    <span
+                      class={{
+                        'text-[10px] font-semibold uppercase tracking-wider px-1 py-0.5 rounded min-w-15 text-center lum-bg-gray-700/50':
+                            true,
+                        'text-lum-text': isActive,
+                        'text-gray-400': !isActive,
+                      }}
+                    >
+                      {gradientType}
+                    </span>
+                    <span class='flex-1'>
+                      {renderPreview(
+                        tempStore,
+                        previewStyle.value == 'default' ? 4 : 2,
+                      )}
+                    </span>
+                  </span>
+                );
+              })
+              : renderPreview(
+                rgbStore,
+                previewStyle.value == 'default' ? 4 : 2,
+              )}
+          </Input>
+        </div>
 
         <ColorMap />
 
