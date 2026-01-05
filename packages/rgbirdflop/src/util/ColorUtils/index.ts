@@ -2,13 +2,14 @@ import { RgbGradient, RgbAnimatedGradient } from './RgbGradients';
 import { HslGradient, HslAnimatedGradient } from './HslGradients';
 import { OklabGradient, OklabAnimatedGradient } from './OklabGradients';
 import { OklchGradient, OklchAnimatedGradient } from './OklchGradients';
+import { CielabGradient, CielabAnimatedGradient } from './CielabGradients';
 import { LuvLChAnimatedGradient, LuvLChGradient } from './LuvLChGradients';
 
 /**
  * Available gradient types as a const array.
  * This is the single source of truth for gradient type values.
  */
-export const GRADIENT_TYPES = ['rgb', 'hsl', 'oklab', 'oklch', 'luvLch'] as const;
+export const GRADIENT_TYPES = ['rgb', 'hsl', 'oklab', 'oklch', 'cielab', 'luvLch'] as const;
 
 /**
  * Union type of all available gradient types.
@@ -21,7 +22,7 @@ export type GradientType = typeof GRADIENT_TYPES[number];
  * Provides a consistent API regardless of the underlying color space.
  */
 export class ColorGradient {
-  private gradient: RgbGradient | HslGradient | OklabGradient | OklchGradient | LuvLChGradient;
+  private gradient: RgbGradient | HslGradient | OklabGradient | OklchGradient | CielabGradient | LuvLChGradient;
   private type: GradientType;
 
   /**
@@ -46,6 +47,9 @@ export class ColorGradient {
       break;
     case 'oklch':
       this.gradient = new OklchGradient(colors, numSteps);
+      break;
+    case 'cielab':
+      this.gradient = new CielabGradient(colors, numSteps);
       break;
     case 'luvLch':
       this.gradient = new LuvLChGradient(colors, numSteps);
@@ -78,7 +82,7 @@ export class ColorGradient {
  * Includes offset support for animation effects.
  */
 export class ColorAnimatedGradient {
-  private gradient: RgbAnimatedGradient | HslAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | LuvLChAnimatedGradient;
+  private gradient: RgbAnimatedGradient | HslAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | CielabAnimatedGradient | LuvLChAnimatedGradient;
   private type: GradientType;
 
   /**
@@ -105,6 +109,9 @@ export class ColorAnimatedGradient {
       break;
     case 'oklch':
       this.gradient = new OklchAnimatedGradient(colors, numSteps, offset);
+      break;
+    case 'cielab':
+      this.gradient = new CielabAnimatedGradient(colors, numSteps, offset);
       break;
     case 'luvLch':
       this.gradient = new LuvLChAnimatedGradient(colors, numSteps, offset);
@@ -137,4 +144,5 @@ export { RgbGradient, RgbAnimatedGradient } from './RgbGradients';
 export { HslGradient, HslAnimatedGradient } from './HslGradients';
 export { OklabGradient, OklabAnimatedGradient } from './OklabGradients';
 export { OklchGradient, OklchAnimatedGradient } from './OklchGradients';
+export { CielabGradient, CielabAnimatedGradient } from './CielabGradients';
 export { LuvLChGradient, LuvLChAnimatedGradient } from './LuvLChGradients';

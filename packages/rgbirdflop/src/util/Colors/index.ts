@@ -3,4 +3,5 @@ export * from './Hex';
 export * from './HSL';
 export * from './OKLAB';
 export * from './OKLCh';
+export * from './CIELAB';
 export * from './LuvLCh';
