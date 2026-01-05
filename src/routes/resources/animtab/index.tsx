@@ -1,7 +1,7 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES, GradientType } from '@birdflop/rgbirdflop';
+import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '../rgb';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -195,7 +195,7 @@ export default component$(() => {
               return GRADIENT_TYPES.map((gradientType) => {
                 const tempStore = {
                   ...rgbStore,
-                  gradientType: gradientType as GradientType,
+                  gradientType: gradientType,
                 };
                 const isActive = gradientType === rgbStore.gradientType;
                 return (

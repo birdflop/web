@@ -400,7 +400,7 @@ export default component$(() => {
               ? GRADIENT_TYPES.map((gradientType) => {
                 const tempStore = {
                   ...rgbStore,
-                  gradientType: gradientType as GradientType,
+                  gradientType: gradientType,
                 };
                 const isActive = gradientType === rgbStore.gradientType;
                 return (
