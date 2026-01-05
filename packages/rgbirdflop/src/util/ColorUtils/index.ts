@@ -1,4 +1,5 @@
 import { RgbGradient, RgbAnimatedGradient } from './RgbGradients';
+import { HslGradient, HslAnimatedGradient } from './HslGradients';
 import { OklabGradient, OklabAnimatedGradient } from './OklabGradients';
 import { OklchGradient, OklchAnimatedGradient } from './OklchGradients';
 import { LuvLChAnimatedGradient, LuvLChGradient } from './LuvLChGradients';
@@ -7,7 +8,7 @@ import { LuvLChAnimatedGradient, LuvLChGradient } from './LuvLChGradients';
  * Available gradient types as a const array.
  * This is the single source of truth for gradient type values.
  */
-export const GRADIENT_TYPES = ['rgb', 'oklab', 'oklch', 'luvLch'] as const;
+export const GRADIENT_TYPES = ['rgb', 'hsl', 'oklab', 'oklch', 'luvLch'] as const;
 
 /**
  * Union type of all available gradient types.
@@ -20,14 +21,14 @@ export type GradientType = typeof GRADIENT_TYPES[number];
  * Provides a consistent API regardless of the underlying color space.
  */
 export class ColorGradient {
-  private gradient: RgbGradient | OklabGradient | OklchGradient | LuvLChGradient;
+  private gradient: RgbGradient | HslGradient | OklabGradient | OklchGradient | LuvLChGradient;
   private type: GradientType;
 
   /**
    * Creates a new gradient with the specified interpolation type
    * @param colors - Array of color stops with RGB values and positions
    * @param numSteps - Number of steps in the gradient
-   * @param type - Interpolation type: 'rgb' for linear RGB, 'oklab' for perceptually uniform (default: 'rgb')
+   * @param type - Interpolation type: 'rgb' for linear RGB, 'hsl' for intuitive, 'oklab'/'oklch' for perceptually uniform (default: 'rgb')
    */
   constructor(
     colors: { rgb: number[], pos: number }[],
@@ -37,6 +38,9 @@ export class ColorGradient {
     this.type = type;
 
     switch (type) {
+    case 'hsl':
+      this.gradient = new HslGradient(colors, numSteps);
+      break;
     case 'oklab':
       this.gradient = new OklabGradient(colors, numSteps);
       break;
@@ -74,7 +78,7 @@ export class ColorGradient {
  * Includes offset support for animation effects.
  */
 export class ColorAnimatedGradient {
-  private gradient: RgbAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | LuvLChAnimatedGradient;
+  private gradient: RgbAnimatedGradient | HslAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | LuvLChAnimatedGradient;
   private type: GradientType;
 
   /**
@@ -82,7 +86,7 @@ export class ColorAnimatedGradient {
    * @param colors - Array of color stops with RGB values and positions
    * @param numSteps - Number of steps in the gradient
    * @param offset - Starting offset for animation
-   * @param type - Interpolation type: 'rgb' for linear RGB, 'oklab' for perceptually uniform (default: 'rgb')
+   * @param type - Interpolation type: 'rgb' for linear RGB, 'hsl' for intuitive, 'oklab'/'oklch' for perceptually uniform (default: 'rgb')
    */
   constructor(
     colors: { rgb: number[], pos: number }[],
@@ -93,6 +97,9 @@ export class ColorAnimatedGradient {
     this.type = type;
 
     switch (type) {
+    case 'hsl':
+      this.gradient = new HslAnimatedGradient(colors, numSteps, offset);
+      break;
     case 'oklab':
       this.gradient = new OklabAnimatedGradient(colors, numSteps, offset);
       break;
@@ -127,6 +134,7 @@ export class ColorAnimatedGradient {
 
 // Re-export individual gradient classes for direct use
 export { RgbGradient, RgbAnimatedGradient } from './RgbGradients';
+export { HslGradient, HslAnimatedGradient } from './HslGradients';
 export { OklabGradient, OklabAnimatedGradient } from './OklabGradients';
 export { OklchGradient, OklchAnimatedGradient } from './OklchGradients';
 export { LuvLChGradient, LuvLChAnimatedGradient } from './LuvLChGradients';

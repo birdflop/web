@@ -4,7 +4,7 @@ import { useSession } from '~/routes/plugin@auth';
 import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
 import { isNotNull, eq, sql } from 'drizzle-orm';
-import { vectorDistance } from '~/util/rgb/presets/vectorize';
+import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 
