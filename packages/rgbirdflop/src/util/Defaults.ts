@@ -1,3 +1,5 @@
+import type { GradientType } from './ColorUtils';
+
 export interface format {
   color: string;
   char?: string;
@@ -78,6 +80,7 @@ export const rgbDefaults = {
   underline: false,
   strikethrough: false,
   obfuscate: false,
+  gradientType: 'oklab' satisfies GradientType,
 };
 
 export const animTABDefaults = {

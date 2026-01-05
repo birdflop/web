@@ -1,4 +1,4 @@
-import { AnimatedGradient } from './HexUtils';
+import { ColorAnimatedGradient, GradientType } from './ColorUtils';
 import { hexToRGB, rgbToHex } from './Colors';
 import { sortColors } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
@@ -25,7 +25,7 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
 
   for (let n = 0; n < loopAmount; n++) {
     const frameColors = [];
-    const gradient = new AnimatedGradient(colors, length, n);
+    const gradient = new ColorAnimatedGradient(colors, length, n, rgbStore.gradientType as GradientType);
 
     if (animtabStore.type === 4) {
       let hex = rgbToHex(gradient.next());
@@ -94,7 +94,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
             const length = text.length * animtabStore.length / rgbStore.colorlength;
 
             const offset = (n + i * (length / rgbStore.colors.length)) % length;
-            const shiftedGradient = new AnimatedGradient(colors, length, offset);
+            const shiftedGradient = new ColorAnimatedGradient(colors, length, offset, rgbStore.gradientType as GradientType);
             const color = rgbToHex(shiftedGradient.next());
             animatedColors.push('#' + color);
           }
@@ -183,7 +183,7 @@ function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabS
     const colorArray = rgbStore.colors.map(c => ({ rgb: hexToRGB(c.hex), pos: c.pos }));
     const length = text.length * animtabStore.length / rgbStore.colorlength;
     const offset = (frameIndex + i * (length / colors.length)) % length;
-    const shiftedGradient = new AnimatedGradient(colorArray, length, offset);
+    const shiftedGradient = new ColorAnimatedGradient(colorArray, length, offset, rgbStore.gradientType as GradientType);
     return {
       hex: rgbToHex(shiftedGradient.next()),
       pos: color.pos,

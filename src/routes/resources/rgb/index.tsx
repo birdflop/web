@@ -13,7 +13,8 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 
 import {
   rgbDefaults,
-  Gradient,
+  ColorGradient,
+  GradientType,
   disperseColors,
   generateOutput,
   sortColors,
@@ -71,14 +72,16 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     pos: color.pos,
   }));
 
-  const gradient = new Gradient(
+  const gradient = new ColorGradient(
     colorsRGB,
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+    rgbStore.gradientType as GradientType,
   );
   const shadowGradient = shadowColorsRGB.length > 0
-    ? new Gradient(
+    ? new ColorGradient(
       shadowColorsRGB,
       Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+      rgbStore.gradientType as GradientType,
     )
     : null;
 

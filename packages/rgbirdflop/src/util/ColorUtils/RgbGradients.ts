@@ -1,15 +1,20 @@
 /**
- * Typescript implementation of HexUtils Gradients from RoseGarden.
+ * RGB-based gradient classes using linear RGB interpolation.
+ * Typescript implementation from RoseGarden HexUtils.
  * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
- * Modified to work with custom gradient points.
  */
-export class Gradient {
+
+/**
+ * Gradient that interpolates colors in RGB color space.
+ * Uses linear interpolation between color stops.
+ */
+export class RgbGradient {
   colors: { rgb: number[], pos: number }[];
-  gradients: TwoStopGradient[];
+  gradients: RgbTwoStopGradient[];
   steps: number;
   step: number;
 
-  constructor(colors: Gradient['colors'], numSteps: number) {
+  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
     this.colors = colors;
     this.gradients = [];
     this.steps = numSteps - 1;
@@ -32,7 +37,7 @@ export class Gradient {
       if (lowerRange === upperRange) continue;
 
       this.gradients.push(
-        new TwoStopGradient(
+        new RgbTwoStopGradient(
           currentColor.rgb,
           nextColor.rgb,
           lowerRange,
@@ -42,7 +47,9 @@ export class Gradient {
     }
   }
 
-  /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
+  /**
+   * Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b]
+   */
   next() {
     if (this.steps < 1) return this.colors[0].rgb;
 
@@ -62,7 +69,11 @@ export class Gradient {
   }
 }
 
-class TwoStopGradient {
+/**
+ * Two-stop gradient in RGB color space.
+ * Interpolates linearly between two RGB colors.
+ */
+class RgbTwoStopGradient {
   startColor: number[];
   endColor: number[];
   lowerRange: number;
@@ -91,8 +102,11 @@ class TwoStopGradient {
   }
 }
 
-export class AnimatedGradient extends Gradient {
-  constructor(colors: Gradient['colors'], numSteps: number, offset: number) {
+/**
+ * Animated gradient in RGB color space with offset support.
+ */
+export class RgbAnimatedGradient extends RgbGradient {
+  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

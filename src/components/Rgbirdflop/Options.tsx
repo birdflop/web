@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { formats } from '@birdflop/rgbirdflop';
+import { formats, GRADIENT_TYPES, type GradientType } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(() => {
@@ -49,6 +49,20 @@ export default component$(() => {
           },
         ]}>
           {t('rgb.colors.format@@Color Format')}
+        </SelectMenu>
+        <SelectMenu
+          id="gradientType"
+          value={rgbStore.gradientType}
+          class={{ 'w-full': true }}
+          onChange$={(e, el) => {
+            rgbStore.gradientType = el.value as GradientType;
+          }}
+          values={GRADIENT_TYPES.map(type => ({
+            name: type,
+            value: type,
+          }))}
+        >
+          {t('rgb.colors.gradientType@@Gradient Type')}
         </SelectMenu>
         <div class="flex flex-col gap-1">
           <label for="prefixsuffix">

@@ -1,8 +1,47 @@
 import { $, component$, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { sortColors, getRandomColor } from '@birdflop/rgbirdflop';
+import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex } from '@birdflop/rgbirdflop';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus } from 'lucide-icons-qwik';
+
+/**
+ * Generates a CSS gradient string using the specified gradient type
+ * Samples the gradient at multiple points to approximate perceptually uniform gradients
+ */
+function generateGradientCSS(
+  colors: { hex: string; pos: number }[],
+  gradientType: string,
+  samples = 20,
+): string {
+  if (colors.length < 2) {
+    return colors[0]?.hex ?? 'transparent';
+  }
+
+  // For RGB, use native CSS gradient (fastest)
+  if (gradientType === 'rgb') {
+    return `linear-gradient(to right, ${sortColors(colors)
+      .map((color) => `${color.hex} ${color.pos}%`)
+      .join(', ')})`;
+  }
+
+  // For OKLAB, OKLCh, LuvLCh - sample the gradient to approximate perceptually uniform interpolation
+  const colorsRGB = sortColors(colors).map((color) => ({
+    rgb: hexToRGB(color.hex),
+    pos: color.pos,
+  }));
+
+  const gradient = new ColorGradient(colorsRGB, samples, gradientType as GradientType);
+  const sampledColors: string[] = [];
+
+  for (let i = 0; i < samples; i++) {
+    const rgb = gradient.next();
+    const hex = `#${rgbToHex(rgb)}`;
+    const pos = (i / (samples - 1)) * 100;
+    sampledColors.push(`${hex} ${pos.toFixed(1)}%`);
+  }
+
+  return `linear-gradient(to right, ${sampledColors.join(', ')})`;
+}
 
 export default component$(({ id = 'text' }: { id?: string }) => {
   const rgbStore = useContext(rgbStoreContext);
@@ -37,11 +76,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
       }}
       id={'colormap' + id}
       style={`background: ${
-        colors.value.length > 1
-          ? `linear-gradient(to right, ${sortColors(colors.value)
-            .map((color) => `${color.hex} ${color.pos}%`)
-            .join(', ')})`
-          : colors.value[0]?.hex ?? 'transparent'
+        generateGradientCSS(colors.value, rgbStore.gradientType)
       };`}
       onMouseDown$={(e, el) => {
         if (e.target != el) return;
