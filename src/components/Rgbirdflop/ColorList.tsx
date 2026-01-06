@@ -52,9 +52,12 @@ export default component$(({ hidden, id = 'text' }: {
           const newColors = [];
           for (let i = 0; i < colorAmount; i++) {
             if (colors[i]) newColors.push(colors[i]);
-            else newColors.push({ hex: getRandomColor(), pos: Math.random() * 100 });
+            else newColors.push({ hex: getRandomColor() });
           }
-          rgbStore[colorsKey] = newColors;
+          rgbStore[colorsKey] = newColors.map((color, i) => ({
+            hex: color.hex,
+            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
+          }));
         }}
         onIncrement$={() => {
           const newColors = [...colors, {
