@@ -44,7 +44,7 @@ export default component$(({ hidden, id = 'text' }: {
       }
       <NumberInput input id={`colorlist${id}-amount`}
         min={1} max={rgbStore.text.length}
-        value={colors.length}
+        value={rgbStore[colorsKey]?.length}
         class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
