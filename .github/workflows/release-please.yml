@@ -54,14 +54,12 @@ jobs:
 
       - name: Build package
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
-        run: |
-          cd packages/rgbirdflop
-          pnpm build
+        working-directory: packages/rgbirdflop
+        run: pnpm build
 
       - name: Publish to GitHub Packages
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
-        run: |
-          cd packages/rgbirdflop
-          npm publish
+        working-directory: packages/rgbirdflop
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
