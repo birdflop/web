@@ -1,0 +1,67 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/rgbirdflop/**'
+      - '.release-please-manifest.json'
+      - 'release-please-config.json'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # Optional: You can add steps here to publish packages after release is created
+      # This will only run when a release is actually published
+      - name: Checkout code
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: ${{ steps.release.outputs.release_created }}
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.27.0
+
+      - name: Setup Node.js
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://npm.pkg.github.com'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: pnpm install
+
+      - name: Build package
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        run: |
+          cd packages/rgbirdflop
+          pnpm build
+
+      - name: Publish to GitHub Packages
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        run: |
+          cd packages/rgbirdflop
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

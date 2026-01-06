@@ -58,5 +58,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Automatic Minecraft Spark Profile Analyzer - Birdflop',
   description: 'Analyze your Spark Profile to get optimization recommendations. Developed by Birdflop. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

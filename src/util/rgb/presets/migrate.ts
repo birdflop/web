@@ -1,5 +1,5 @@
 import { rgbPreset } from '.';
-import { formats } from './defaults';
+import { formats } from '@birdflop/rgbirdflop';
 
 export function migrateFromV2(preset: any) {
   if (preset.version != 2) return;

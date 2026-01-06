@@ -1,10 +1,9 @@
-import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Activity } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
-import { unloadGoogleAds } from '~/util/GoogleAds';
 
 const nodes = [
   {
@@ -52,9 +51,6 @@ const nodes = [
 export default component$(() => {
   const t = inlineTranslate();
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => unloadGoogleAds());
-
   return <>
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
@@ -98,5 +94,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Node Stats - Birdflop',
   description: 'Check the status of Birdflop\'s nodes. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

@@ -28,12 +28,12 @@ import {
 import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '..';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
-import { and, count, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
+import { and, count, desc, eq, like, inArray, or, sql } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
@@ -66,7 +66,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       .from(presets)
       .where(and(
         eq(presets.pending, showPending),
-        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
         showSaved && savedPresetIds.length > 0
           ? inArray(presets.id, savedPresetIds)
           : undefined,
@@ -100,7 +100,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
           eq(presets.pending, showPending),
           session?.user?.id ? eq(presets.userId, session?.user?.id) : undefined,
         ),
-        searchTerm ? ilike(presets.name, searchTerm) : undefined,
+        searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
         showSaved && savedPresetIds.length > 0
           ? inArray(presets.id, savedPresetIds)
           : undefined,
@@ -119,6 +119,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
+    console.error('Error fetching presets:', err);
   }
   return {
     publicPresets,
@@ -229,6 +230,7 @@ export default component$(() => {
         name: preset.text ?? 'Saved Preset',
         preset: preset,
         pending: false,
+        colorVector: null,
       });
     }
   });
@@ -599,5 +601,4 @@ export const head = generateHead({
   description:
     'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' +
     defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

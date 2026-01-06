@@ -1,10 +1,9 @@
-import { component$, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useStore } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Package, ShoppingCart } from 'lucide-icons-qwik';
 import { generateHead } from '~/root';
-import { unloadGoogleAds } from '~/util/GoogleAds';
 
 export const plans = {
   'EU Premium': {
@@ -72,8 +71,6 @@ export const useParams = routeLoader$(({ query }) => {
 });
 
 export default component$(() => {
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => unloadGoogleAds());
 
   const params = useParams().value;
   const plansStore = useStore({

@@ -1,0 +1,47 @@
+{
+  "name": "@birdflop/rgbirdflop",
+  "version": "0.1.0",
+  "description": "RGB gradient library for generating Minecraft text gradients.",
+  "main": "./lib/index.js",
+  "types": "./lib-types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib-types/index.d.ts"
+    },
+    "./components/*": {
+      "import": "./lib/components/*",
+      "require": "./lib/components/*",
+      "types": "./lib-types/components/*"
+    }
+  },
+  "files": [
+    "lib",
+    "lib-types"
+  ],
+  "engines": {
+    "node": ">=15.0.0"
+  },
+  "license": "AGPL-3.0-or-later",
+  "private": false,
+  "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "@birdflop:registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "echo \"No dev script specified\" && exit 0",
+    "lint": "eslint \"src/**/*.ts*\"",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^25.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "eslint": "^9.39.2",
+    "typescript": "5.5.4"
+  }
+}

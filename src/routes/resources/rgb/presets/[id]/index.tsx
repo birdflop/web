@@ -9,9 +9,9 @@ import { NotificationContext, Notification } from '~/util/Notification';
 import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '../..';
-import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savePreset, unsavePreset, updatePreset } from '~/util/dataUtils';
+import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq, sql } from 'drizzle-orm';
@@ -280,12 +280,14 @@ export default component$(() => {
                 {presetInfo.pending &&
                   <button class="lum-btn lum-bg-green hover:bg-green" onClick$={async () => {
                     await updatePreset(presetInfo.id, { pending: false });
-                    window.location.reload();
+                    window.location.assign('/resources/rgb/presets');
                   }}>
                     <Check size={20} /> Approve
                   </button>
                 }
-                <button class="lum-btn lum-bg-red hover:bg-red" onClick$={() => {
+                <button class="lum-btn lum-bg-red hover:bg-red" onClick$={async () => {
+                  await deletePreset(presetInfo.id);
+                  window.location.reload();
                 }}>
                   <Trash size={20} /> Delete
                 </button>
@@ -305,5 +307,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'RGBirdflop Presets',
   description: 'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

@@ -13,7 +13,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { colors, patterns } from '~/util/banner';
-import { swapItems } from '~/util/rgb/RGBUtils';
+import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 
 const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
@@ -402,5 +402,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Banner Generator - Birdflop',
   description: 'Easily generate banner designs for Minecraft. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

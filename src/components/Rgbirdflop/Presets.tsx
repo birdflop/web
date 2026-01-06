@@ -9,7 +9,7 @@ import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
-import { combinedDefaults, rgbDefaults } from '~/util/rgb/presets/defaults';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import Accordion from '../Elements/Accordion';
 
@@ -93,9 +93,8 @@ export default component$(({ hidden }: {
             'lum-btn': true,
           }} id="save" onClick$={async () => {
             const preset: rgbPreset = { ...rgbStore };
-            if (preset.syncshadow) delete preset.shadowcolors;
             (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
-              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
+              if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key])) delete preset[key];
             });
             if (!privatePresets.value.find(p => JSON.stringify(p) === JSON.stringify(preset))) {
               privatePresets.value.push(preset);
@@ -153,9 +152,8 @@ export default component$(({ hidden }: {
           'lum-btn flex-1': true,
         }} id="copy" onClick$={async () => {
           const preset: rgbPreset = { ...rgbStore };
-          if (preset.syncshadow) delete preset.shadowcolors;
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
-            if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) delete preset[key];
+            if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key])) delete preset[key];
           });
           const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
             .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))

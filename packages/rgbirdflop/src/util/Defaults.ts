@@ -1,4 +1,15 @@
-import { format } from '.';
+import type { GradientType } from './ColorUtils';
+
+export interface format {
+  color: string;
+  char?: string;
+  class?: string;
+  bold?: string;
+  italic?: string;
+  underline?: string;
+  strikethrough?: string;
+  obfuscate?: string;
+}
 
 export const formats: format[] = [
   {
@@ -50,10 +61,7 @@ export const rgbDefaults = {
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ],
-  shadowcolors: [
-    { hex: '#15373D', pos: 0 },
-    { hex: '#15182E', pos: 100 },
-  ],
+  shadowcolors: null as null | Array<{ hex: string; pos: number }>,
   colorlength: 1,
   text: 'Birdflop',
   format: formats[1],
@@ -62,13 +70,12 @@ export const rgbDefaults = {
   trimspaces: true,
   disperse: false,
   lowercase: false,
-  syncshadow: true,
-  enableshadow: false,
   bold: false,
   italic: false,
   underline: false,
   strikethrough: false,
   obfuscate: false,
+  gradientType: 'rgb' satisfies GradientType,
 };
 
 export const animTABDefaults = {

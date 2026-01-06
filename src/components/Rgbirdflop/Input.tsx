@@ -1,11 +1,12 @@
 import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
-import { Eye, Terminal } from 'lucide-icons-qwik';
+import { Eye, Grid2X2, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/routes/resources/rgb';
+import { showAllGradientsContext } from '~/routes/layout';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
-import { generateOutput } from '~/util/rgb/RGBUtils';
+import { generateOutput } from '@birdflop/rgbirdflop';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
@@ -16,33 +17,24 @@ const InputField = component$(({ class: className, readOnly }: {
 }) => {
   const rgbStore = useContext(rgbStoreContext);
   return (
-    <div class={{
-      'relative text-2xl wrap-break-word': true,
-      [`${className}`]: className,
-    }}
-    style={{ textShadow: '2px 2px 0 #373737' }}>
-      <p class={{
+    <p
+      contentEditable={readOnly ? 'false' : 'true'}
+      spellcheck={false}
+      class={{
+        'relative text-2xl wrap-break-word outline-none whitespace-pre-wrap caret-white': true,
         'font-mc-bold': rgbStore.bold,
         'font-mc-italic': rgbStore.italic,
         'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+        [`${className}`]: className,
         [`${rgbStore.format.class}`]: rgbStore.format.class,
-      }}>
-        <Slot />
-      </p>
-      {!readOnly &&
-        <div class="absolute bottom-0 h-full flex flex-col w-[calc(100%+0.5rem)]">
-          <textarea class={{
-            'lum-input p-0 pt-1.5 -mb-2.5 rounded-sm resize-none w-full h-full whitespace-pre-wrap caret-white leading-none text-transparent hover:text-transparent lum-bg-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50 line': true,
-            'font-mc-bold': rgbStore.bold,
-            'font-mc-italic': rgbStore.italic,
-            'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-            [`${className}`]: className,
-            [`${rgbStore.format.class}`]: rgbStore.format.class,
-          }} value={rgbStore.text} spellcheck={false} id="input"
-          onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-        </div>
-      }
-    </div>
+      }}
+      style={{ textShadow: '2px 2px 0 #373737' }}
+      onInput$={(e, el) => {
+        rgbStore.text = el.innerText;
+      }}
+    >
+      <Slot />
+    </p>
   );
 });
 
@@ -59,6 +51,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
+  const showAllGradients = useContext(showAllGradientsContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -89,9 +82,9 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         }}>
           <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
           <div class={{
-            'absolute flex flex-col w-full text-2xl max-h-64': true,
+            'absolute flex flex-col w-full text-2xl': true,
             'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat',
-            'top-5 justify-center items-center text-center min-h-8 px-2': previewStyle.value.includes('tab'),
+            'top-5 justify-center items-center text-center min-h-8 px-2 max-h-64': previewStyle.value.includes('tab'),
           }}
           style={{ textShadow: '2px 2px 0 #373737' }}>
             {previewStyle.value.includes('tab') &&
@@ -109,13 +102,13 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
                   <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
                 </div>
                 { previewStyle.value == 'tab-player' &&
-                  <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+                  <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
                     style={{ textShadow: '2px 2px 0 #373737' }}>
                     <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
                     <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
                       <Slot />
                     </InputField>
-                    <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
+                    <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
                   </div>
                 }
                 { previewStyle.value == 'tab-footer' &&
@@ -126,8 +119,8 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
               </div>
             }
             {previewStyle.value == 'chat' &&
-              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 text-2xl max-h-64 wrap-break-word overflow-auto"
-                style={{ textShadow: '2px 2px 0 #373737' }}>
+              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-2 text-2xl wrap-break-word overflow-y-auto"
+                style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
                 {!readOnly &&
                   <p class="text-white!">
                     {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
@@ -166,9 +159,22 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
           }
         </div>
       }
-      <div class={{
+      <div class={{ 'flex gap-1': true,
         'absolute top-1 right-1': true,
       }}>
+        {previewStyle.value != 'default' && (
+          <button
+            class={{
+              'p-1 rounded-lum-1 lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
+              'text-lum-primary': showAllGradients.value,
+              'text-lum-text-secondary': !showAllGradients.value,
+            }}
+            onClick$={() => showAllGradients.value = !showAllGradients.value}
+            title={showAllGradients.value ? 'Show only selected gradient' : 'Show all gradients'}
+          >
+            <Grid2X2 size={20} />
+          </button>
+        )}
         <SelectMenuRaw align="right" id="previewstyle" value={previewStyle.value} onChange$={
           (e, el) => {
             previewStyle.value = el.value;

@@ -1,6 +1,6 @@
 {
   "name": "birdflop",
-  "version": "10.0.0",
+  "version": "12.0.0",
   "homepage": "https://www.birdflop.com",
   "description": "The only 501(c)(3) nonprofit Minecraft server host.",
   "repository": {
@@ -14,7 +14,8 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "build": "wrangler types && qwik build",
+    "build": "pnpm build.pkg && wrangler types && qwik build",
+    "build.pkg": "cd packages/rgbirdflop && pnpm run build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/cloudflare-pages/vite.config.mts",
@@ -44,6 +45,7 @@
     "@anuragroy/tailwindcss-animate": "^1.0.6",
     "@auth/drizzle-adapter": "^1.11.1",
     "@auth/qwik": "0.9.1",
+    "@birdflop/rgbirdflop": "workspace:*",
     "@builder.io/qwik": "1.18.0",
     "@builder.io/qwik-city": "1.18.0",
     "@eslint/js": "^9.39.2",
@@ -66,7 +68,7 @@
     "eslint": "^9.39.2",
     "eslint-plugin-qwik": "1.18.0",
     "gifuct-js": "^2.1.2",
-    "globals": "^16.5.0",
+    "globals": "^17.0.0",
     "lucide-icons-qwik": "0.540.0",
     "qwik-speak": "^0.24.0",
     "shiki": "^3.20.0",
@@ -74,13 +76,12 @@
     "three": "^0.182.0",
     "threejs-toys": "^0.0.8",
     "typescript": "5.8.3",
-    "typescript-eslint": "^8.50.1",
-    "undici": "^7.16.0",
+    "typescript-eslint": "^8.52.0",
     "vite": "7.3.0",
     "vite-tsconfig-paths": "6.0.3",
     "wrangler": "^4.56.0",
     "yaml": "^2.8.2",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
-  "packageManager": "pnpm@10.26.2"
+  "packageManager": "pnpm@10.27.0"
 }

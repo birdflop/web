@@ -1,10 +1,10 @@
-import { $, component$, Slot, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
+import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { disperseColors, swapItems, sortColors } from '~/util/rgb/RGBUtils';
+import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { getBrightness, getRandomColor, hexToRGB } from '~/util/rgb/Colors';
+import { getColors } from './ColorMap';
 
 export default component$(({ hidden, id = 'text' }: {
   hidden?: boolean;
@@ -13,17 +13,8 @@ export default component$(({ hidden, id = 'text' }: {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
-  const colors = useSignal(id == 'text' ? rgbStore.colors : rgbStore.shadowcolors);
-
-  useTask$(({ track }) => {
-    track(() => colors.value);
-    rgbStore[id == 'text' ? 'colors' : 'shadowcolors'] = colors.value;
-  });
-
-  useTask$(({ track }) => {
-    track(() => rgbStore[id == 'text' ? 'colors' : 'shadowcolors']);
-    colors.value = rgbStore[id == 'text' ? 'colors' : 'shadowcolors'];
-  });
+  const colorsKey = id == 'text' ? 'colors' : 'shadowcolors';
+  const colors = getColors(rgbStore, id);
 
   useOnDocument('click', $((e) => {
     if (e.target instanceof HTMLElement
@@ -42,7 +33,7 @@ export default component$(({ hidden, id = 'text' }: {
       <Slot />
       {rgbStore.format.color != 'MiniMessage' && id == 'text' &&
         <NumberInput input disabled id="colorlength"
-          min={1} max={rgbStore.text.length / colors.value.length}
+          min={1} max={rgbStore.text.length / colors.length}
           value={rgbStore.colorlength}
           class={{ 'w-full opacity-100!': true }}
           onIncrement$={() => rgbStore.colorlength++}
@@ -53,34 +44,33 @@ export default component$(({ hidden, id = 'text' }: {
       }
       <NumberInput input id={`colorlist${id}-amount`}
         min={1} max={rgbStore.text.length}
-        value={colors.value.length}
+        value={colors.length}
         class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
-          if (colorAmount < 2) return;
-          if (colorAmount > rgbStore.text.length) return colorAmount = rgbStore.text.length;
+          if (colorAmount > rgbStore.text.length) colorAmount = rgbStore.text.length;
           const newColors = [];
           for (let i = 0; i < colorAmount; i++) {
-            if (colors.value[i]) newColors.push(colors.value[i]);
-            else newColors.push({ hex: getRandomColor(), pos: 100 });
+            if (colors[i]) newColors.push(colors[i]);
+            else newColors.push({ hex: getRandomColor(), pos: Math.random() * 100 });
           }
-          colors.value = newColors;
+          rgbStore[colorsKey] = newColors;
         }}
         onIncrement$={() => {
-          const newColors = [...colors.value, {
+          const newColors = [...colors, {
             hex: getRandomColor(),
           }];
-          colors.value = newColors.map((color, i) => ({
+          rgbStore[colorsKey] = newColors.map((color, i) => ({
             hex: color.hex,
-            pos: (100 / (newColors.length - 1)) * i,
+            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
         }}
         onDecrement$={() => {
-          const newColors = colors.value.slice(0);
+          const newColors = colors.slice(0);
           newColors.pop();
-          colors.value = newColors.map((color, i) => ({
+          rgbStore[colorsKey] = newColors.map((color, i) => ({
             hex: color.hex,
-            pos: (100 / (newColors.length - 1)) * i,
+            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
         }}
       >
@@ -91,33 +81,37 @@ export default component$(({ hidden, id = 'text' }: {
           'lum-btn p-2 rounded-r-sm': true,
           'w-full': rgbStore.disperse,
         }} onClick$={() => {
-          const newColors = colors.value.map(color => ({ hex: getRandomColor(), pos: color.pos }));
-          colors.value = newColors;
+          const newColors = colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
+          rgbStore[colorsKey] = newColors;
         }}>
           <Dices size={20} /> {rgbStore.disperse && <span>
             {t('rgb.colors.randomize@@Randomize')}
           </span>}
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={colors.value.find((color, i) => color.pos != (100 / (colors.value.length - 1)) * i) ? false : true} onClick$={() => {
-            colors.value = disperseColors(colors.value);
+          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={
+            !colors.find((color, i) => {
+              return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
+            })}
+          onClick$={() => {
+            rgbStore[colorsKey] = disperseColors(colors);
           }}>
             <Ellipsis size={20} /> {t('rgb.colors.disperse.title@@Disperse')}
           </button>
         }
       </div>
       <div class="flex flex-col gap-2 relative" id={'colorlistcolors' + id}>
-        {colors.value.map((color, i) => <div
-          key={`${i}/${colors.value.length}`}
+        {colors.map((color, i) => <div
+          key={`${i}/${colors.length}`}
           id={`colorlist${id}-color-${i + 1}`}
           class="flex relative gap-1">
           <div class="flex flex-col gap-1">
             <button class="lum-btn p-1 rounded-b-sm"
-              onClick$={() => colors.value = swapItems(colors.value, i, i - 1)}>
+              onClick$={() => rgbStore[colorsKey] = swapItems(colors, i, i - 1)}>
               <ChevronUp size={20} />
             </button>
             <button class="lum-btn p-1 rounded-t-sm"
-              onClick$={() => colors.value = swapItems(colors.value, i, i + 1)}>
+              onClick$={() => rgbStore[colorsKey] = swapItems(colors, i, i + 1)}>
               <ChevronDown size={20} />
             </button>
           </div>
@@ -158,9 +152,9 @@ export default component$(({ hidden, id = 'text' }: {
           </div>
           <div class="flex flex-col justify-end">
             <button class="lum-btn p-1.5 lum-bg-red hover:lum-bg-red rounded-l-sm" onClick$={() => {
-              const newColors = colors.value.slice(0);
+              const newColors = colors.slice(0);
               newColors.splice(i, 1);
-              colors.value = newColors;
+              rgbStore[colorsKey] = newColors;
             }}>
               <Trash size={20} />
             </button>
@@ -182,43 +176,42 @@ export default component$(({ hidden, id = 'text' }: {
         >
           <ColorPicker
             id={`colorlist${id}-color-picker`}
-            value={colors.value[opened.value]?.hex}
+            value={colors[opened.value]?.hex}
             onInput$={(newColor) => {
-              const newColors = colors.value.slice(0);
+              const newColors = colors.slice(0);
               newColors[opened.value].hex = newColor;
-              colors.value = sortColors(newColors);
+              rgbStore[colorsKey] = sortColors(newColors);
             }}
             showInput={false}
             horizontal
           />
-          <div class="lum-card p-2 gap-0 items-center">
+          <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
-              value={Math.round(colors.value[opened.value]?.pos)}
+              value={Math.round(colors[opened.value]?.pos)}
               onChange$={(e, el) => {
-                const newColors = colors.value.slice(0);
+                const newColors = colors.slice(0);
                 let newPos = Number(el.value);
                 if (newPos < 0) newPos = 0;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = newPos;
-                colors.value = sortColors(newColors);
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
               }}
               onIncrement$={() => {
-                const newColors = colors.value.slice(0);
+                const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos + 1;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = newPos;
-                colors.value = sortColors(newColors);
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
               }}
               onDecrement$={() => {
-                const newColors = colors.value.slice(0);
+                const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos - 1;
                 if (newPos < 0) newPos = 0;
-                newColors[opened.value].pos = newPos;
-                colors.value = sortColors(newColors);
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
               }}
-            >
-              {t('rgb.colors.position@@Position (%)')}
+            >Position (%)
             </NumberInput>
           </div>
         </div>

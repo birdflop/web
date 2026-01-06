@@ -1,8 +1,10 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
-import { animTABDefaults, rgbDefaults } from './rgb/presets/defaults';
+import { animTABDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
 import { and, eq } from 'drizzle-orm';
+import { presetToVector } from './rgb/presets/vectorize';
+import { validatePresetSubmission } from './rgb/presets/presetValidation';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
@@ -109,7 +111,6 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
   const cookieValue = { ...cookies };
 
-  if (cookieValue.syncshadow && name == 'rgb') delete cookieValue.shadowcolors;
   const defaults = getDefaults(name);
   Object.keys(cookieValue).forEach(key => {
     if (key != 'version'
@@ -188,6 +189,20 @@ export const publishPreset = server$(async function(submission: PublicPresetSubm
   if (!session || !db || !session.user.id) return { success: false, error: 'No session or database client' };
 
   try {
+    // Validate submission
+    const validation = await validatePresetSubmission(submission, true);
+    if (!validation.isValid) {
+      return {
+        success: false,
+        error: validation.errors.map(e => e.message).join('; '),
+        validationErrors: validation.errors,
+        similarPresets: validation.similarPresets,
+      };
+    }
+
+    // Generate color vector for the preset
+    const colorVector = presetToVector(submission.preset);
+
     const result = await db.insert(presets)
       .values({
         name: submission.name,
@@ -195,8 +210,13 @@ export const publishPreset = server$(async function(submission: PublicPresetSubm
         author: session.user.name,
         description: submission.description,
         preset: submission.preset,
+        colorVector: colorVector,
       }).onConflictDoNothing().returning();
-    return { success: true, result };
+    return {
+      success: true,
+      result,
+      warnings: validation.warnings,
+    };
   } catch (error) {
     console.error('Error publishing preset:', error);
     return { success: false, error };
@@ -212,6 +232,11 @@ export const updatePreset = server$(async function(presetId: number, presetData:
   const admin = session.user.id && admins?.includes(session.user.id);
 
   try {
+    // If the preset data is being updated, regenerate the colorVector
+    if (presetData.preset) {
+      presetData.colorVector = presetToVector(presetData.preset);
+    }
+
     const updatedPreset = await db.update(presets)
       .set(presetData)
       .where(and(

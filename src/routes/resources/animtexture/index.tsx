@@ -8,7 +8,7 @@ import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -470,5 +470,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'Minecraft Animated Textures Creator - Birdflop',
   description: 'Easily merge textures for resource pack animations or convert from GIF. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

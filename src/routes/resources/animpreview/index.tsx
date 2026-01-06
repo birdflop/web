@@ -7,8 +7,7 @@ import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '../rgb';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
-import { hexToRGB } from '~/util/rgb/Colors';
-import { rgbDefaults } from '~/util/rgb/presets/defaults';
+import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
@@ -186,5 +185,4 @@ export default component$(() => {
 export const head = generateHead({
   title: 'TAB Animation Previewer - Birdflop',
   description: 'Preview TAB Animations without the need to put them in-game. ' + defaultDescription,
-  ads: false, // changed from true universally to disable google ads
 });

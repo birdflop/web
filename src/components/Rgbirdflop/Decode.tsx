@@ -2,7 +2,7 @@ import type { Signal } from '@builder.io/qwik';
 import { $, component$, useContext } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { generateOutput } from '~/util/rgb/RGBUtils';
+import { generateOutput } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { getSignificantPoints } from '~/util/rgb/Decode';

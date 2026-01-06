@@ -1,4 +1,3 @@
-
 function hexToHSL(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return { h: 100, s: 100, l: 100 };
