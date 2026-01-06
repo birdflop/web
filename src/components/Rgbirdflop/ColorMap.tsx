@@ -1,6 +1,6 @@
-import { $, component$, useContext, useOnDocument, useSignal, useTask$ } from '@builder.io/qwik';
+import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
-import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex } from '@birdflop/rgbirdflop';
+import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults } from '@birdflop/rgbirdflop';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { Plus } from 'lucide-icons-qwik';
 
@@ -43,22 +43,15 @@ function generateGradientCSS(
   return `linear-gradient(to right, ${sampledColors.join(', ')})`;
 }
 
+export function getColors(rgbStore: typeof rgbDefaults, id: string) {
+  return id == 'text' ? rgbStore.colors : getShadowColors(rgbStore);
+}
+
 export default component$(({ id = 'text' }: { id?: string }) => {
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
-  const colors = useSignal(
-    id == 'text' ? rgbStore.colors : rgbStore.shadowcolors,
-  );
-
-  useTask$(({ track }) => {
-    track(() => colors.value);
-    rgbStore[id == 'text' ? 'colors' : 'shadowcolors'] = colors.value;
-  });
-
-  useTask$(({ track }) => {
-    track(() => rgbStore[id == 'text' ? 'colors' : 'shadowcolors']);
-    colors.value = rgbStore[id == 'text' ? 'colors' : 'shadowcolors'];
-  });
+  const colorsKey = id == 'text' ? 'colors' : 'shadowcolors';
+  const colors = getColors(rgbStore, id);
 
   useOnDocument('click', $((e) => {
     if (e.target instanceof HTMLElement
@@ -76,16 +69,16 @@ export default component$(({ id = 'text' }: { id?: string }) => {
       }}
       id={'colormap' + id}
       style={`background: ${
-        generateGradientCSS(colors.value, rgbStore.gradientType)
+        generateGradientCSS(colors, rgbStore.gradientType)
       };`}
       onMouseDown$={(e, el) => {
         if (e.target != el) return;
         const rect = el.getBoundingClientRect();
         const pos = ((e.clientX - rect.left) / rect.width) * 100;
-        if (colors.value.find((c) => c.pos == pos)) return;
-        const newColors = colors.value.slice(0);
+        if (colors.find((c) => c.pos == pos)) return;
+        const newColors = colors.slice(0);
         newColors.push({ hex: getRandomColor(), pos });
-        colors.value = sortColors(newColors);
+        rgbStore[colorsKey] = sortColors(newColors);
       }}
       onMouseEnter$={(e, el) => {
         const abortController = new AbortController();
@@ -101,7 +94,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
             }
             const rect = el.getBoundingClientRect();
             const pos = ((e.clientX - rect.left) / rect.width) * 100;
-            if (colors.value.find((c) => c.pos == pos)) return;
+            if (colors.find((c) => c.pos == pos)) return;
             addbutton.classList.remove('opacity-0');
             addbutton.style.left = `${pos}%`;
           },
@@ -129,9 +122,9 @@ export default component$(({ id = 'text' }: { id?: string }) => {
       >
         <Plus size={18} />
       </div>
-      {colors.value.map((color, i) => (
+      {colors.map((color, i) => (
         <div
-          key={`${i}/${colors.value.length}`}
+          key={`${i}/${colors.length}`}
           id={`colormap${id}-color-${i + 1}`}
           class={{
             'absolute -mt-1.5 -ml-3 w-5 h-5 hover:scale-125 rounded-full lum-bg drop-shadow-md transition-transform': true,
@@ -154,10 +147,10 @@ export default component$(({ id = 'text' }: { id?: string }) => {
                 let pos = ((e.clientX - rect.left) / rect.width) * 100;
                 if (pos < 0) pos = 0;
                 if (pos > 100) pos = 100;
-                if (colors.value.find((c) => c.pos == pos)) return;
-                const newColors = colors.value.slice(0);
+                if (colors.find((c) => c.pos == pos)) return;
+                const newColors = colors.slice(0);
                 newColors[i].pos = pos;
-                colors.value = newColors;
+                rgbStore[colorsKey] = newColors;
               },
               { signal: abortController.signal },
             );
@@ -167,7 +160,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
                 el.classList.remove('scale-150');
                 el.style.filter = '';
                 abortController.abort();
-                colors.value = sortColors(colors.value);
+                rgbStore[colorsKey] = sortColors(colors);
               },
               { signal: abortController.signal },
             );
@@ -195,9 +188,9 @@ export default component$(({ id = 'text' }: { id?: string }) => {
             }
           }}
           onContextMenu$={() => {
-            const newColors = colors.value.slice(0);
+            const newColors = colors.slice(0);
             newColors.splice(i, 1);
-            colors.value = sortColors(newColors);
+            rgbStore[colorsKey] = sortColors(newColors);
             opened.value = -1;
           }}
         />
@@ -213,13 +206,13 @@ export default component$(({ id = 'text' }: { id?: string }) => {
         }}
         style={{
           '--lum-border-radius': '1rem',
-          left: colors.value[opened.value]?.pos < 50 ? `${colors.value[opened.value]?.pos}%` : 'auto',
-          right: colors.value[opened.value]?.pos >= 50 ? `${100 - colors.value[opened.value]?.pos}%` : 'auto',
+          left: colors[opened.value]?.pos < 50 ? `${colors[opened.value]?.pos}%` : 'auto',
+          right: colors[opened.value]?.pos >= 50 ? `${100 - colors[opened.value]?.pos}%` : 'auto',
         }}
       >
         <div class="lum-card p-2 gap-0">
           <p class="font-bold text-white!">
-            {Math.round(colors.value[opened.value]?.pos)}%
+            {Math.round(colors[opened.value]?.pos)}%
           </p>
           <p>
             Right click to remove
@@ -227,11 +220,11 @@ export default component$(({ id = 'text' }: { id?: string }) => {
         </div>
         <ColorPicker
           id={`colormap${id}-color-picker`}
-          value={colors.value[opened.value]?.hex}
+          value={colors[opened.value]?.hex}
           onInput$={(newColor) => {
-            const newColors = colors.value.slice(0);
+            const newColors = colors.slice(0);
             newColors[opened.value].hex = newColor;
-            colors.value = sortColors(newColors);
+            rgbStore[colorsKey] = sortColors(newColors);
           }}
           horizontal
         />

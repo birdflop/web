@@ -20,9 +20,6 @@
       },
       "randomize": "随机化",
       "shadow": {
-        "sync": {
-          "title": "与文本颜色同步"
-        },
         "title": "文本阴影",
         "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },

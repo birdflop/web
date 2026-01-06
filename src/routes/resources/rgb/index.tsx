@@ -57,14 +57,11 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
   if (rgbStore.colors.length < 1) return rgbStore.text;
 
-  const shadowColors = rgbStore.syncshadow
-    ? [] : rgbStore.shadowcolors;
-
   const colorsRGB = sortColors(rgbStore.colors).map((color) => ({
     rgb: hexToRGB(color.hex),
     pos: color.pos,
   }));
-  const shadowColorsRGB = sortColors(shadowColors).map((color) => ({
+  const shadowColorsRGB = sortColors(rgbStore.shadowcolors).map((color) => ({
     rgb: hexToRGB(color.hex),
     pos: color.pos,
   }));
@@ -74,14 +71,10 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
     rgbStore.gradientType as GradientType,
   );
-  const shadowGradient =
-    shadowColorsRGB.length > 0
-      ? new ColorGradient(
-        shadowColorsRGB,
-        Math.ceil(rgbStore.text.length / rgbStore.colorlength),
-          rgbStore.gradientType as GradientType,
-      )
-      : null;
+  const shadowGradient = new ColorGradient(
+    shadowColorsRGB,
+    Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+  );
 
   let hex = '';
   let shadowHex = '';
@@ -195,16 +188,6 @@ export default component$(() => {
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', rgbStore);
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
-    if (rgbStore.syncshadow) {
-      rgbStore.shadowcolors = rgbStore.colors.map((color) => {
-        const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
-        const shadowHex = `#${rgbToHex(shadowRGB)}`;
-        return {
-          hex: shadowHex,
-          pos: color.pos,
-        };
-      });
-    }
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       track(() => rgbStore[key]);
     });

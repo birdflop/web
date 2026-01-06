@@ -111,7 +111,6 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
   const cookieValue = { ...cookies };
 
-  if (cookieValue.syncshadow && name == 'rgb') delete cookieValue.shadowcolors;
   const defaults = getDefaults(name);
   Object.keys(cookieValue).forEach(key => {
     if (key != 'version'

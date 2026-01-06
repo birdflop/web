@@ -20,9 +20,6 @@
       },
       "randomize": "Aleatorizar",
       "shadow": {
-        "sync": {
-          "title": "Sincronizar com cores de texto"
-        },
         "title": "Sombra de texto",
         "warning": "Aviso: A sombra de texto só funciona com formatação JSON!"
       },

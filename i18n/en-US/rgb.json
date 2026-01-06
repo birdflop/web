@@ -20,9 +20,6 @@
       },
       "randomize": "Randomize",
       "shadow": {
-        "sync": {
-          "title": "Sync with text colors"
-        },
         "title": "Text Shadow",
         "warning": "Warning: Text shadow only works with JSON or MiniMessage formatting!"
       },

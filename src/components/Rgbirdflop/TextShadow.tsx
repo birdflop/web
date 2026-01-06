@@ -2,7 +2,6 @@ import { component$, useContext } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import ColorMap from './ColorMap';
 import ColorList from './ColorList';
-import { Toggle } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 export default component$(({ hidden }: {
@@ -22,21 +21,9 @@ export default component$(({ hidden }: {
           {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON or MiniMessage formatting!')}
         </p>
       }
-      <Toggle id="syncshadow" checked={rgbStore.syncshadow}
-        onChange$={(e, el) => {
-          rgbStore.syncshadow = el.checked;
-        }}
-      >
-        {t('rgb.colors.shadow.sync.title@@Sync with text colors')}
-      </Toggle>
-      <div class="flex gap-2">
-        <p class="text-lum-text-secondary text-sm">
-          {t('rgb.colors.shadow.sync.description@@When enabled, a custom shadow color gradient will not be used and vanilla Minecraft shadow colors will be used instead.')}
-        </p>
-      </div>
       <div class={{
         'transition-all duration-300': true,
-        'opacity-50': rgbStore.syncshadow,
+        'opacity-50': !rgbStore.shadowcolors,
       }}>
         <div class="py-2 px-4">
           <ColorMap id="shadow"/>

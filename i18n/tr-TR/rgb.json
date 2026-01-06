@@ -20,9 +20,6 @@
       },
       "randomize": "Rastgele yap",
       "shadow": {
-        "sync": {
-          "title": "Metin renkleriyle senkronize et"
-        },
         "title": "Metin gölgesi",
         "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
