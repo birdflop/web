@@ -48,12 +48,11 @@ export default component$(({ hidden, id = 'text' }: {
         class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
-          if (colorAmount < 2) return;
-          if (colorAmount > rgbStore.text.length) return colorAmount = rgbStore.text.length;
+          if (colorAmount > rgbStore.text.length) colorAmount = rgbStore.text.length;
           const newColors = [];
           for (let i = 0; i < colorAmount; i++) {
             if (colors[i]) newColors.push(colors[i]);
-            else newColors.push({ hex: getRandomColor(), pos: 100 });
+            else newColors.push({ hex: getRandomColor(), pos: Math.random() * 100 });
           }
           rgbStore[colorsKey] = newColors;
         }}
@@ -63,7 +62,7 @@ export default component$(({ hidden, id = 'text' }: {
           }];
           rgbStore[colorsKey] = newColors.map((color, i) => ({
             hex: color.hex,
-            pos: (100 / (newColors.length - 1)) * i,
+            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
         }}
         onDecrement$={() => {
@@ -71,7 +70,7 @@ export default component$(({ hidden, id = 'text' }: {
           newColors.pop();
           rgbStore[colorsKey] = newColors.map((color, i) => ({
             hex: color.hex,
-            pos: (100 / (newColors.length - 1)) * i,
+            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
         }}
       >
