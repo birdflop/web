@@ -157,7 +157,6 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               'mouseup',
               () => {
                 el.classList.remove('scale-150');
-                el.style.filter = '';
                 abortController.abort();
                 rgbStore[colorsKey] = sortColors(colors);
               },
