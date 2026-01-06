@@ -163,7 +163,7 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
 
 export function generateOutput(rgbStore: typeof rgbDefaults) {
   const colors = sortColors(rgbStore.colors);
-  const shadowColors = sortColors(getShadowColors(rgbStore));
+  const shadowColors = rgbStore.shadowcolors ? sortColors(rgbStore.shadowcolors) : undefined;
 
   if (colors.length === 1) {
     if (rgbStore.format.color === 'MiniMessage') {
