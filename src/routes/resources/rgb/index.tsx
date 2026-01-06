@@ -54,7 +54,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { defaultDescription, generateHead } from '~/root';
 
-export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
+export function computePreviewTokens(rgbStore: typeof rgbDefaults) {
   if (!rgbStore.text) return '\u00A0';
   if (rgbStore.colors.length < 1) return rgbStore.text;
 
@@ -91,32 +91,44 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     );
     index += rgbStore.colorlength;
   }
-  return segments.map((segment, i) => {
+  return segments.map((segment) => {
     const rgb = gradient.next();
     const rgbShadow = shadowGradient?.next();
     hex = rgbToHex(rgb);
     shadowHex = rgbShadow ? rgbToHex(rgbShadow) : '';
-    return (
-      <span
-        key={`char${i}`}
-        style={{
-          color: `#${hex};`,
-          ...(shadowGradient &&
-            shadowHex && {
-            textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
-          }),
-        }}
-        class={{
-          underline: rgbStore.underline,
-          strikethrough: rgbStore.strikethrough,
-          'underline-strikethrough':
+    return {
+      segment: segment.replace(/ /g, '\u00A0'),
+      hex,
+      shadowHex,
+    };
+  });
+}
+
+export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
+  const previewTokens = computePreviewTokens(rgbStore);
+  if (typeof previewTokens === 'string') {
+    return <span>{previewTokens}</span>;
+  }
+  return previewTokens.map((token, i) => {
+    const { segment, hex, shadowHex } = token;
+    return <span
+      key={`char${i}`}
+      style={{
+        color: `#${hex};`,
+        ...(shadowHex && {
+          textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
+        }),
+      }}
+      class={{
+        underline: rgbStore.underline,
+        strikethrough: rgbStore.strikethrough,
+        'underline-strikethrough':
             rgbStore.underline && rgbStore.strikethrough,
-          obfuscate: rgbStore.obfuscate,
-        }}
-      >
-        {segment.replace(/ /g, '\u00A0')}
-      </span>
-    );
+        obfuscate: rgbStore.obfuscate,
+      }}
+    >
+      {segment.replace(/ /g, '\u00A0')}
+    </span>;
   });
 }
 
