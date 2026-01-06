@@ -1,4 +1,5 @@
 import { rgbToOklch, interpolateOklch, oklchToRgb, type OKLCh } from '../Colors';
+import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
 
 /**
  * OKLCh-based gradient classes using perceptually uniform color interpolation.
@@ -13,86 +14,9 @@ import { rgbToOklch, interpolateOklch, oklchToRgb, type OKLCh } from '../Colors'
  * hue interpolation properly (shortest path around the color wheel).
  * Combines OKLAB's superior perceptual uniformity with intuitive cylindrical controls.
  */
-export class OklchGradient {
-  colors: { rgb: number[], pos: number }[];
-  gradients: OklchTwoStopGradient[];
-  steps: number;
-  step: number;
-
+export class OklchGradient extends BaseGradient {
   constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
-    this.colors = colors;
-    this.gradients = [];
-    this.steps = numSteps - 1;
-    this.step = 0;
-
-    // Ensure gradient starts at 0%
-    if (colors[0].pos !== 0) {
-      colors.unshift({ rgb: colors[0].rgb, pos: 0 });
-    }
-    // Ensure gradient ends at 100%
-    if (colors[colors.length - 1].pos !== 100) {
-      colors.push({ rgb: colors[colors.length - 1].rgb, pos: 100 });
-    }
-
-    for (let i = 0; i < colors.length - 1; i++) {
-      let currentColor = colors[i];
-      let nextColor = colors[i + 1];
-
-      // Swap if positions are reversed
-      if (currentColor.pos > nextColor.pos) {
-        const temp = currentColor;
-        currentColor = nextColor;
-        nextColor = temp;
-      }
-
-      const lowerRange = Math.round(currentColor.pos / 100 * this.steps);
-      const upperRange = Math.round(nextColor.pos / 100 * this.steps);
-
-      if (upperRange < 1) continue;
-      if (lowerRange === upperRange) continue;
-
-      this.gradients.push(
-        new OklchTwoStopGradient(
-          currentColor.rgb,
-          nextColor.rgb,
-          lowerRange,
-          upperRange,
-        ),
-      );
-    }
-  }
-
-  /**
-   * Gets the next color in the gradient sequence as an RGB array [r, g, b]
-   * Values are in 0-255 range
-   */
-  next(): number[] {
-    if (this.steps < 1) {
-      // Single color, just return it
-      return this.colors[0].rgb;
-    }
-
-    const adjustedStep = Math.round(
-      Math.abs(
-        ((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps,
-      ),
-    );
-
-    let color: number[];
-    if (this.gradients.length < 2) {
-      color = this.gradients[0].colorAt(adjustedStep);
-    } else {
-      const gradient = this.gradients.find(
-        g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
-      );
-      if (!gradient) {
-        return this.colors[0].rgb;
-      }
-      color = gradient.colorAt(adjustedStep);
-    }
-
-    this.step++;
-    return color;
+    super(colors, numSteps, OklchTwoStopGradient);
   }
 }
 
@@ -102,34 +26,17 @@ export class OklchGradient {
  * Handles hue interpolation intelligently (shortest path around the color wheel).
  * Provides superior color accuracy compared to RGB and better hue control than OKLAB.
  */
-class OklchTwoStopGradient {
-  startColor: OKLCh;
-  endColor: OKLCh;
-  lowerRange: number;
-  upperRange: number;
-
-  constructor(startRgb: number[], endRgb: number[], lowerRange: number, upperRange: number) {
-    this.startColor = rgbToOklch(startRgb);
-    this.endColor = rgbToOklch(endRgb);
-    this.lowerRange = lowerRange;
-    this.upperRange = upperRange;
+class OklchTwoStopGradient extends BaseTwoStopGradient<OKLCh> {
+  protected rgbToColorSpace(rgb: number[]): OKLCh {
+    return rgbToOklch(rgb);
   }
 
-  /**
-   * Returns the RGB color at a specific step in the gradient
-   * @param step - The current step position
-   * @returns RGB array [r, g, b] in 0-255 range
-   */
-  colorAt(step: number): number[] {
-    // Calculate interpolation factor (0 to 1)
-    const range = this.upperRange - this.lowerRange;
-    const factor = range > 0 ? (step - this.lowerRange) / range : 0;
+  protected interpolate(start: OKLCh, end: OKLCh, factor: number): OKLCh {
+    return interpolateOklch(start, end, factor);
+  }
 
-    // Interpolate in OKLCh space (handles hue wrapping and perceptual uniformity)
-    const interpolated = interpolateOklch(this.startColor, this.endColor, factor);
-
-    // Convert back to RGB
-    return oklchToRgb(interpolated);
+  protected colorSpaceToRgb(color: OKLCh): number[] {
+    return oklchToRgb(color);
   }
 }
 
