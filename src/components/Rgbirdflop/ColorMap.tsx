@@ -123,7 +123,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
         <Plus size={18} />
       </div>
       {colors.map((color, i) => (
-        <button
+        <div
           key={`${i}/${colors.length}`}
           id={`colormap${id}-color-${i + 1}`}
           class={{
