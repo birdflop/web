@@ -182,7 +182,7 @@ export default component$(({ hidden, id = 'text' }: {
             showInput={false}
             horizontal
           />
-          <div class="lum-card p-2 gap-0 items-center">
+          <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
               value={Math.round(colors[opened.value]?.pos)}
@@ -208,8 +208,7 @@ export default component$(({ hidden, id = 'text' }: {
                 newColors[opened.value].pos = newPos;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
-            >
-              {t('rgb.colors.position@@Position (%)')}
+            >Position (%)
             </NumberInput>
           </div>
         </div>

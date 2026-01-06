@@ -21,6 +21,7 @@ import {
   hexToRGB,
   rgbToHex,
   GRADIENT_TYPES,
+  getShadowColors,
 } from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -61,7 +62,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     rgb: hexToRGB(color.hex),
     pos: color.pos,
   }));
-  const shadowColorsRGB = sortColors(rgbStore.shadowcolors).map((color) => ({
+  const shadowColorsRGB = sortColors(getShadowColors(rgbStore)).map((color) => ({
     rgb: hexToRGB(color.hex),
     pos: color.pos,
   }));

@@ -1,8 +1,8 @@
 import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/routes/resources/rgb';
 import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults } from '@birdflop/rgbirdflop';
-import { ColorPicker } from '@luminescent/ui-qwik';
-import { Plus } from 'lucide-icons-qwik';
+import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
+import { Plus, Trash } from 'lucide-icons-qwik';
 
 /**
  * Generates a CSS gradient string using the specified gradient type
@@ -123,7 +123,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
         <Plus size={18} />
       </div>
       {colors.map((color, i) => (
-        <div
+        <button
           key={`${i}/${colors.length}`}
           id={`colormap${id}-color-${i + 1}`}
           class={{
@@ -134,7 +134,6 @@ export default component$(({ id = 'text' }: { id?: string }) => {
             left: `${color.pos}%`,
           }}
           preventdefault:mousedown
-          preventdefault:contextmenu
           onMouseDown$={(e, el) => {
             const abortController = new AbortController();
             const colormap = document.getElementById('colormap' + id)!;
@@ -187,12 +186,6 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               popup.style.right = `${100 - color.pos}%`;
             }
           }}
-          onContextMenu$={() => {
-            const newColors = colors.slice(0);
-            newColors.splice(i, 1);
-            rgbStore[colorsKey] = sortColors(newColors);
-            opened.value = -1;
-          }}
         />
       ))}
       <div
@@ -210,13 +203,41 @@ export default component$(({ id = 'text' }: { id?: string }) => {
           right: colors[opened.value]?.pos >= 50 ? `${100 - colors[opened.value]?.pos}%` : 'auto',
         }}
       >
-        <div class="lum-card p-2 gap-0">
-          <p class="font-bold text-white!">
-            {Math.round(colors[opened.value]?.pos)}%
-          </p>
-          <p>
-            Right click to remove
-          </p>
+        <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
+          <NumberInput input id={`colorlist${id}-color-pos`}
+            min={0} max={100}
+            value={Math.round(colors[opened.value]?.pos)}
+            onChange$={(e, el) => {
+              const newColors = colors.slice(0);
+              let newPos = Number(el.value);
+              if (newPos < 0) newPos = 0;
+              if (newPos > 100) newPos = 100;
+              newColors[opened.value].pos = newPos;
+              rgbStore[colorsKey] = sortColors(newColors);
+            }}
+            onIncrement$={() => {
+              const newColors = colors.slice(0);
+              let newPos = newColors[opened.value].pos + 1;
+              if (newPos > 100) newPos = 100;
+              newColors[opened.value].pos = newPos;
+              rgbStore[colorsKey] = sortColors(newColors);
+            }}
+            onDecrement$={() => {
+              const newColors = colors.slice(0);
+              let newPos = newColors[opened.value].pos - 1;
+              if (newPos < 0) newPos = 0;
+              newColors[opened.value].pos = newPos;
+              rgbStore[colorsKey] = sortColors(newColors);
+            }}
+          >Position (%)
+          </NumberInput>
+          <button class="lum-btn p-2 lum-bg-red hover:lum-bg-red" onClick$={() => {
+            const newColors = colors.slice(0);
+            newColors.splice(opened.value, 1);
+            rgbStore[colorsKey] = newColors;
+          }}>
+            <Trash size={20} />
+          </button>
         </div>
         <ColorPicker
           id={`colormap${id}-color-picker`}

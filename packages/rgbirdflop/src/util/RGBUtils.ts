@@ -49,7 +49,7 @@ function normalizeShadowRGB(rgb: number[]): number[] {
   return norm;
 }
 
-function getShadowColors(rgbStore: typeof rgbDefaults): { hex: string; pos: number }[] {
+export function getShadowColors(rgbStore: typeof rgbDefaults): { hex: string; pos: number }[] {
   if (!rgbStore.shadowcolors) {
     return rgbStore.colors.map((color) => {
       const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
