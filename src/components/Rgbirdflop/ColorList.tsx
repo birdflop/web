@@ -90,7 +90,11 @@ export default component$(({ hidden, id = 'text' }: {
           </span>}
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i) ? false : true} onClick$={() => {
+          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={
+            !colors.find((color, i) => {
+              return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
+            })}
+          onClick$={() => {
             rgbStore[colorsKey] = disperseColors(colors);
           }}>
             <Ellipsis size={20} /> {t('rgb.colors.disperse.title@@Disperse')}
@@ -191,21 +195,21 @@ export default component$(({ hidden, id = 'text' }: {
                 let newPos = Number(el.value);
                 if (newPos < 0) newPos = 0;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = newPos;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
               onIncrement$={() => {
                 const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos + 1;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = newPos;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
               onDecrement$={() => {
                 const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos - 1;
                 if (newPos < 0) newPos = 0;
-                newColors[opened.value].pos = newPos;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
             >Position (%)

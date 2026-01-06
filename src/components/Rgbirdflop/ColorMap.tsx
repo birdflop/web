@@ -148,7 +148,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
                 if (pos > 100) pos = 100;
                 if (colors.find((c) => c.pos == pos)) return;
                 const newColors = colors.slice(0);
-                newColors[i].pos = pos;
+                newColors[i].pos = Math.round(pos * 1000) / 1000;
                 rgbStore[colorsKey] = newColors;
               },
               { signal: abortController.signal },
@@ -211,21 +211,21 @@ export default component$(({ id = 'text' }: { id?: string }) => {
               let newPos = Number(el.value);
               if (newPos < 0) newPos = 0;
               if (newPos > 100) newPos = 100;
-              newColors[opened.value].pos = newPos;
+              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
               rgbStore[colorsKey] = sortColors(newColors);
             }}
             onIncrement$={() => {
               const newColors = colors.slice(0);
               let newPos = newColors[opened.value].pos + 1;
               if (newPos > 100) newPos = 100;
-              newColors[opened.value].pos = newPos;
+              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
               rgbStore[colorsKey] = sortColors(newColors);
             }}
             onDecrement$={() => {
               const newColors = colors.slice(0);
               let newPos = newColors[opened.value].pos - 1;
               if (newPos < 0) newPos = 0;
-              newColors[opened.value].pos = newPos;
+              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
               rgbStore[colorsKey] = sortColors(newColors);
             }}
           >Position (%)

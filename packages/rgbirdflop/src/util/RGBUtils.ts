@@ -126,7 +126,11 @@ export function disperseColors(colors: typeof rgbDefaults.colors) {
   if (colors.length <= 1) {
     return colors.slice(0).map((color) => ({ hex: color.hex, pos: 0 }));
   }
-  const newColors = colors.slice(0).map((color, i) => ({ hex: color.hex, pos: (100 / (colors.length - 1)) * i }));
+  const pos = 100 / (colors.length - 1);
+  const newColors = colors.slice(0).map((color, i) => ({
+    hex: color.hex,
+    pos: Math.round(pos * i * 1000) / 1000,
+  }));
   return newColors;
 }
 
