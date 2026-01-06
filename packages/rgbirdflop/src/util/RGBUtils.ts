@@ -212,7 +212,7 @@ function renderSingleColorOutput(singleHex: string, rgbStore: typeof rgbDefaults
     const jsonOutput: JsonOutput = { text: '', extra: [] };
 
     let shadowGradient: ColorGradient | undefined;
-    if (rgbStore.shadowcolors && rgbStore.shadowcolors.length > 0) {
+    if (rgbStore.shadowcolors) {
       const shadowColors = rgbStore.shadowcolors.map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
       shadowGradient = new ColorGradient(
         shadowColors,
