@@ -20,7 +20,9 @@
       },
       "randomize": "Randomisieren",
       "shadow": {
-        "sync": "Mit Textfarben synchronisieren",
+        "sync": {
+          "title": "Mit Textfarben synchronisieren"
+        },
         "title": "Textschatten",
         "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },

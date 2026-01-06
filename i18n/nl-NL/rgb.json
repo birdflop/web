@@ -20,7 +20,9 @@
       },
       "randomize": "Willekeurig maken",
       "shadow": {
-        "sync": "Synchroniseren met tekstkleuren",
+        "sync": {
+          "title": "Synchroniseren met tekstkleuren"
+        },
         "title": "Tekstschaduw",
         "warning": "Waarschuwing: Tekstschaduw werkt alleen met JSON-opmaak!"
       },
