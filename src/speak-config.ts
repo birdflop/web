@@ -5,6 +5,7 @@ export const languages = {
   'ko-KR': '한국어',
   'de-DE': 'Deutsch',
   'nl-NL': 'Nederlands',
+  'pl-PL': 'Polski',
   'pt-PT': 'Português',
   'ru-RU': 'Русский',
   'tr-TR': 'Türkçe',

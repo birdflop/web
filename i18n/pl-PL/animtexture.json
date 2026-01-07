@@ -1,0 +1,18 @@
+{
+  "animtexture": {
+    "animationPreview": "Podgląd Animacji",
+    "bounce": "Odbij Animacje",
+    "downloadMCMETA": "POBIERZ MCMETA",
+    "downloadPNG": "POBIERZ PNG",
+    "duration": "Czas Trwania",
+    "height": "Wysokość",
+    "lockDimensions": "Zablokuj Rozmiar",
+    "pasteUrl": "Wklej link do GIF'a lub obrazka",
+    "pngPreview": "Podgląd PNG",
+    "selectFrames": "Wybierz GIF lub obrazek z urządzenia",
+    "showChatPreview": "Podgląd z Chatu Minecraft",
+    "syncDuration": "Czas Synchronizacji",
+    "textureName": "Nazwa Tekstury",
+    "width": "Szerokość"
+  }
+}

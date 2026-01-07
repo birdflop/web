@@ -16,6 +16,7 @@ const deeplLangMap = {
   'ko-KR': 'KO',
   'de-DE': 'DE',
   'nl-NL': 'NL',
+  'pl-PL': 'PL',
   'pt-PT': 'PT-PT',
   'ru-RU': 'RU',
   'tr-TR': 'TR',
@@ -24,7 +25,7 @@ const deeplLangMap = {
 
 async function parseSupportedFromSpeakConfig() {
   const fallback = {
-    languages: ['en-US', 'es-ES', 'ko-KR', 'de-DE', 'nl-NL', 'pt-PT', 'ru-RU', 'tr-TR', 'zh-CN'],
+    languages: ['en-US', 'es-ES', 'ko-KR', 'de-DE', 'nl-NL', 'pl-PL', 'pt-PT', 'ru-RU', 'tr-TR', 'zh-CN'],
     assets: ['animtab', 'animtexture', 'flags', 'nav', 'rgb'],
   };
 

@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "404": {
+      "description": "Ups! Wystąpił błąd.",
+      "home": "Powrót na stronę główną",
+      "title": "404: Strona nie znaleziona"
+    },
+    "docs": "Dokumentacja",
+    "hosting": {
+      "billing": "Rozliczenia",
+      "nodeStats": {
+        "description": "Sprawdź status węzłow BirdFlop.",
+        "overview": "Przegląd",
+        "title": "Statystyki serwera",
+        "webServices": "Usługi Sieciowe"
+      },
+      "panel": "Panel",
+      "plans": "Plany",
+      "title": "Hosting"
+    },
+    "privacyPolicy": "Polityka Prywatności",
+    "profile": {
+      "hey": "Hej",
+      "login": "Zaloguj",
+      "logout": "Wyloguj",
+      "notLoggedIn": {
+        "description": "Kliknij poniżej aby się zalogować",
+        "title": "Nie jesteś zalogowany!"
+      },
+      "title": "Profil"
+    },
+    "resources": {
+      "animatedTAB": {
+        "description": "Generator animacji dla pluginu TAB",
+        "title": "Animowany TAB"
+      },
+      "animatedTextures": {
+        "description": "W prosty sposób stwórz swoje tekstury do wykorzystania na chacie lub w swoich paczkach zasobów.",
+        "title": "Animowane Tekstury"
+      },
+      "banner": {
+        "description": "Łatwe generowanie banerów.",
+        "title": "Generator Banerów"
+      },
+      "description": "Tutaj znajdziesz wszystkie publiczne zasoby BirdFlop",
+      "flags": {
+        "description": "Prosty generator skryptów startowych aby zoptymalizować twój serwer przy starcie.",
+        "title": "Generator flag startowych"
+      },
+      "gradientTools": {
+        "description": "Narzędzia do generowania tekstu z gradientem w Minecraft",
+        "title": "Narzędzia do gradientów"
+      },
+      "hexGradient": {
+        "description": "Generator gradientu, Zasilany przez Birdflop, 501(c)(3) bez-zyskowy hosting serwerów Minecraft.",
+        "title": "RGBirdflop"
+      },
+      "hexGradientPresets": {
+        "description": "Tutaj możesz zapisać,skopiować, lub bezpośrednio użyć szablonów do wykorzystania na RGBirdflop.",
+        "title": "RGBirdflop Szablony"
+      },
+      "miscellaneousTools": {
+        "description": "Narzędzia , które pomoga z przeróżnymi, losowymi rzeczami.",
+        "title": "Inne narzędzia"
+      },
+      "more": "Więcej zasobów",
+      "paperTimings": {
+        "description": "Przeanalizuj timingi Paper, aby uzyskać możliwe optymalizacje.",
+        "title": "Analiza timingów Paper"
+      },
+      "serverTools": {
+        "description": "Narzędzia pomagające w konfiguracji serwera.",
+        "title": "Narzędzia Serwerowe"
+      },
+      "sparkProfile": {
+        "description": "Przeanalizuj Spark Profile, aby uzyskać możliwe optymalizacje.",
+        "title": "Spark Profile"
+      },
+      "tabAnimationPreview": {
+        "description": "Podgląd animacji TAB, bez konieczności wrzucania ich na serwer",
+        "title": "Podlgąd animacji TAB"
+      },
+      "title": "Zasoby"
+    },
+    "termsofService": "Warunki Korzystania"
+  }
+}

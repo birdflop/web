@@ -1,0 +1,80 @@
+{
+  "flags": {
+    "autoRestart": {
+      "description": "Automatyczny restar w wypadku wyłączenia serwera.",
+      "label": "Auto-restart"
+    },
+    "config": {
+      "description": "Dodaki i modyfikacje twojego skryptu startowego.",
+      "label": "Config"
+    },
+    "description": "Zbiór argumentów startowych optymalizujących działanie serwera.",
+    "environment": {
+      "command": "Command",
+      "description": "System operacyjny, którego używa serwer",
+      "label": "Środowisko",
+      "linux": "Linux",
+      "macos": "macOS",
+      "pterodactyl": "Pterodactyl",
+      "windows": "Windows"
+    },
+    "extraFlags": {
+      "benchmarkedGraalVM": {
+        "description": "Dodatkowe flagi wydajnościowe dla Benchmarked (G1GC), dostępne wyłącznie dla użytkowników GraalVM.",
+        "label": "Benchmarked (GraalVM)"
+      },
+      "meowiceGraalVM": {
+        "description": "Dodatkowe flagi wydajnościowe dla flag MeowIce, dostępne wyłącznie dla użytkowników GraalVM.",
+        "label": "Flagi MeowIce (GraalVM)"
+      },
+      "vectors": {
+        "description": "Włącza operacje SIMD w celu optymalizacji renderowania mapek na Pufferfish i jego forkach.",
+        "label": "Nowoczesne wektory"
+      }
+    },
+
+    "fileName": {
+      "description": "Nazwa pliku startowego, który zostanie użyty aby go uruchomić",
+      "label": "Nazwa Pliku"
+    },
+    "flags": {
+      "aikars": "Aikar's Flags",
+      "benchmarked": "Benchmarked",
+      "etils": "Etil's Flags",
+      "hillttys": "hilltty's Flags",
+      "label": "Flags",
+      "meowice": "MeowIce's Flags",
+      "none": "None",
+      "obyduxs": "Obydux's Flags"
+    },
+    "gui": {
+      "description": "Czy wyświetlać wbudowane GUI do zarządzania serwerem.",
+      "label": "Brak GUI"
+    },
+    "memory": {
+      "description": "Ilość pamięci (RAM) jaka zostanie przydzielona dla serwera",
+      "label": "RAM"
+    },
+    "script": {
+      "description": "Skrypt, który zostanie użyty aby uruchomić serwer. Umieść ten plik w tym samym folderze co {{fileName}} a następnie uruchom.",
+      "label": "Skrypt"
+    },
+    "serverType": {
+      "fabric": "Fabric",
+      "forge": "Forge",
+      "paper": "Paper",
+      "purpur": "Purpur",
+      "velocity": "Velocity",
+      "waterfall": "Waterfall"
+    },
+    "software": {
+      "description": "Silnik jakiego będzie używał twój serwer.",
+      "label": "Silnik"
+    },
+    "variables": {
+      "description": "Czy używać zmiennych środowiskowych w skrypcie aby określić ilośc pamięci, nazwę pliku oraz inne często zmieniane elementy",
+                      
+      "label": "Używaj zmiennych"
+    }
+  }
+}

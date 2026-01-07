@@ -1,0 +1,19 @@
+{
+  "banner": {
+    "command": {
+      "copied": "Komenda została skopiowana do schowka.",
+      "title": "Komenda"
+    },
+    "copied": "Skopiowano do schowka!",
+    "copyFailed": "Nie udało się skopiować!",
+    "options": {
+      "baseColor": {
+        "description": "To jest kolor podstawowy banera, od którego rozpoczniesz proces tworzenia.",
+        "title": "Kolor Podstawowy"
+      },
+      "patterns": "Wzory",
+      "title": "Opcje"
+    },
+    "preview": "Podgląd"
+  }
+}

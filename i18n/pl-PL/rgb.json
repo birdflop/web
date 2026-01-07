@@ -1,0 +1,150 @@
+{
+  "rgb": {
+    "colors": {
+      "amount": "Ilość kolorów",
+      "character": "Znak",
+      "charsPer": "Znaków na kolor",
+      "color": "Kolor",
+      "customFormat": "Format Własny",
+      "disperse": {
+        "always": {
+          "description": "Włącz tą opcję jeśli chcesz aby gradient był równomiernie rozłożony",
+          "title": "Zawsze rozpraszaj kolory"
+        },
+        "title": "Rozprosz"
+      },
+      "format": "Format kolorów",
+      "lowercase": {
+        "description": "Włącz jeśli chcesz używać małych kodów koloru.",
+        "title": "Małe kolory kodu"
+      },
+      "randomize": "Losuj",
+      "shadow": {
+        "sync": "Sychronizuj z kolorem tekstu",
+        "title": "Cień tekstu",
+        "warning": "Uwaga: Cień tekstu działa tylko w wypadku uzycia formatu JSON lub MiniMessage!"
+      },
+      "title": "Kolory",
+      "trimSpaces": {
+        "description": "Wyłącz, jeśli używasz pustych podkreśleń / przekreśleń",
+        "title": "Usuwaj kolory ze spacji"
+      }
+    },
+    "copied": "Skopiowano do schowska!",
+    "copyFailed": "Nie udało się skopiować!",
+    "decode": {
+      "decoded": {
+        "description": "Pomyślnie udało się rozkodować twoje RGB! Jeśli to nie jest to, czego oczekiwałeś, spróbuj zmienić wartość progu.",
+        "title": "RGB Rozkodowane!"
+      },
+      "description": "Wklej swój tekst w formacie RGB aby go rozkodować.",
+      "disclaimer": "Ta funkcja próbuje przewidzieć punkty kolorów w gradientach oraz ich położenie. Nie jest w 100% dokładna - zalecamy korzystanie z szablonów do zapisywania gradientów.",
+      "experimental": "eksperymentalne",
+      "threshold": {
+        "description": "Spróbuj to zmienić jeśli widoczne jest zbyt wiele koloró",
+        "title": "Dróg"
+      },
+      "title": "Rozkoduj"
+    },
+    "formatting": {
+      "bold": "Pogrubienie",
+      "character": "Styl Formatowania ",
+      "italic": "Kursywa",
+      "obfuscate": "Zaciemnienie",
+      "options": "Opcje Formatowania",
+      "placeholders": "Placeholdery:",
+      "strikethrough": "Przekreślenie",
+      "title": "Formatowanie",
+      "underline": "Podkreślenie"
+    },
+    "inputText": {
+      "description": "Wpisz tekst tutaj aby wygenerować gradient!",
+      "preview": {
+        "chat": "Minecraft Chat",
+        "default": "Podstawowe",
+        "tab": {
+          "footer": "Minecraft Tab Stopka",
+          "header": "Minecraft Tab Nagłówek",
+          "player": "Minecraft Tab Gracz"
+        },
+        "typeHere": "Wpisz tutaj!"
+      },
+      "title": "Tekst Wejściowy"
+    },
+    "output": {
+      "copied": "Tekst RGB został skopiowany do schowka!",
+      "description": "Skopiuj to aby otrzymać swó tekst w formacie RGB!",
+      "title": "Wyjście"
+    },
+    "prefixsuffix": "Prefix/Suffix",
+    "presets": {
+      "back": "Powrót do szablonów",
+      "copied": "Skopiowano szablon do schowka!",
+      "copy": "Kopiuj",
+      "createNew": "Stwórz szablon",
+      "createdAt": "Stworzono w",
+      "find": "Przeglądaj szablony",
+      "import": "Importuj",
+      "importSubtitle": "Importuj szablon w formacie JSON",
+      "imported": {
+        "description": "Import szablonu przebiegł pomyślnie.",
+        "title": "Udało się zaimportować szablon!"
+      },
+      "invalid": {
+        "description": "Prosimy o zgłoszenie tego problemu na serwerze Discord, dołączając szablon, który próbowałeś zaimportować..",
+        "title": "Niewłaściwy Szablon"
+      },
+      "myPrivate": "Moje szablony RGBirdflop ",
+      "noResults": "Brak wyników.",
+      "nopresets": "Nie masz jeszcze zapisanych szablonów!",
+      "pageInfo": "Strona ",
+      "pagination": {
+        "next": "Następna strona",
+        "perPage": "Wyniki na stronę:",
+        "previous": "Poprzednia strona"
+      },
+      "pasteHere": "Wklej tutaj",
+      "pending": "Szablon wciąż czeka na weryfikację. Może on być niedostępny dla innych użytkowników.",
+      "presetData": "Dane Szablonu",
+      "publish": "Opublikuj swój szablon!",
+      "remove": "Usuń",
+      "save": "Zapisz",
+      "saved": {
+        "description": "Udało się zapisać szablon.",
+        "presets": "Zapisane szablony",
+        "title": "Szablon zapisany!",
+        "warning": "Zaloguj się aby zapisywać szablony."
+      },
+      "showPending": {
+        "title": "Pokaż szablony czekające na weryfikację (NIEBEZPIECZNE)"
+      },
+      "showSaved": {
+        "description": "Włącz tą opcję jeśli chcesz widzieć tylko szablony zapisane przez ciebie.",
+        "title": "Pokaż zapisane szablony"
+      },
+      "sortBy": {
+        "nameAZ": "Nazwa A-Z",
+        "nameZA": "Nazwa Z-A",
+        "newest": "Od najnowszych",
+        "oldest": "Od najstarszych",
+        "title": "Filtruj po:"
+      },
+      "suggestion": {
+        "one": "Coś tutaj brakuje?",
+        "two": "opublikuj własne szablony na swoim profilu!"
+      },
+      "title": "Szablony",
+      "totalCount": "Łącznie szablonów: ",
+      "url": {
+        "description": "Udało się zapisać szablon do URL! (Sprawdź pasek URL)",
+        "get": "Zdobądź Url",
+        "title": "URL Zaaktualizowane!"
+      },
+      "use": "Użyj",
+      "withCurrentOptions": {
+        "description": "Włącz te opcję, aby pokazać podgląd z bieżącymi opcjami.",
+        "title": "Pokaż podgląd z aktualnymi ustawieniami"
+      }
+    }
+  }
+}
