@@ -21,14 +21,13 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   const rgbStore = useContext(rgbStoreContext);
   return (
     <div class={{
-      'relative text-2xl focus-within:border-lum-accent break-all': true,
+      'relative focus-within:border-lum-accent break-all caret-white': true,
       [`${className}`]: className,
       'font-mc-bold': rgbStore.bold,
       'font-mc-italic': rgbStore.italic,
       'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
       [`${rgbStore.format.class}`]: rgbStore.format.class,
-    }}
-    style={{ textShadow: '2px 2px 0 #373737' }}>
+    }}>
       <p class={{
         'pointer-events-none whitespace-pre-wrap': true,
         [`${inputClass}`]: inputClass,
@@ -37,7 +36,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
       </p>
       {!readOnly &&
         <textarea class={{
-          'absolute inset-0 whitespace-pre-wrap text-transparent caret-white rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
         value={rgbStore.text} spellcheck={false} id="input"
@@ -60,31 +59,28 @@ const DefaultInput = component$(({ readOnly }: { readOnly: boolean | undefined }
 const MCPreviewTabSection = component$(({ readOnly }: { readOnly: boolean | undefined }) => {
   const previewStyle = useContext(previewStyleContext);
 
-  return <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
-    style={{ textShadow: '2px 2px 0 #373737' }}>
+  return <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto">
     { previewStyle.value == 'tab-header' &&
-      <InputField readOnly={readOnly} class="text-center">
+      <InputField readOnly={readOnly} inputClass="text-center">
         <Slot />
       </InputField>
     }
-    <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
-      style={{ textShadow: '2px 2px 0 #373737' }}>
+    <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto">
       <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
       <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
       <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
     </div>
     { previewStyle.value == 'tab-player' &&
-      <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
-        style={{ textShadow: '2px 2px 0 #373737' }}>
+      <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto">
         <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
-        <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
+        <InputField readOnly={readOnly} class="flex-1 -my-1">
           <Slot />
         </InputField>
         <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
       </div>
     }
     { previewStyle.value == 'tab-footer' &&
-      <InputField readOnly={readOnly} class="text-center">
+      <InputField readOnly={readOnly} inputClass="text-center">
         <Slot />
       </InputField>
     }
@@ -99,7 +95,7 @@ const MCPreviewChatSection = component$(({ readOnly, playerName = 'RGBirdflop' }
   const t = inlineTranslate();
 
   return <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl wrap-break-word overflow-y-auto"
-    style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
+    style={{ maxHeight: 'calc(100% - 7rem)' }}>
     {!readOnly &&
       <p class="text-white!">
         {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
@@ -113,6 +109,27 @@ const MCPreviewChatSection = component$(({ readOnly, playerName = 'RGBirdflop' }
       }
       <Slot />
     </InputField>
+  </div>;
+});
+
+// The default input field style
+const MCPreviewGUISection = component$(({ readOnly }: {
+  readOnly: boolean | undefined,
+}) => {
+  return <div class="absolute inset-0 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
+
+    <div class="w-2/5 relative">
+      <img src="/minecraft/chest.png" alt="Minecraft Chest GUI" class="w-full rounded-none!" style="image-rendering: pixelated;"/>
+      <div class="absolute inset-0">
+        <InputField readOnly={readOnly} inputClass="*:text-shadow-none!" class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] text-xs sm:text-sm md:text-base lg:text-2xl">
+          <Slot />
+        </InputField>
+        <p class="absolute top-[calc(72/168*100%)] left-[calc(8/176*100%)] text-xs sm:text-sm md:text-base lg:text-2xl text-[#404040]! text-shadow-none">
+          Inventory
+        </p>
+      </div>
+    </div>
+
   </div>;
 });
 
@@ -130,15 +147,19 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
   return <div class={{
     'relative lum-bg-lum-input-bg/50 rounded-lum': true,
     'break-all font-mc': true,
-  }}>
+  }}
+  style={{ textShadow: '2px 2px 0 #373737' }}>
     <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
+
+    <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto">
+      {chatInput ?? generateOutput(rgbStore)}
+    </p>
 
     <div class={{
       'absolute flex flex-col w-full text-2xl': true,
       'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat' || previewStyle.value.includes('gui'),
       'top-5 justify-center items-center text-center min-h-8 px-2 max-h-64': previewStyle.value.includes('tab'),
-    }}
-    style={{ textShadow: '2px 2px 0 #373737' }}>
+    }}>
       {previewStyle.value.includes('tab') &&
         <MCPreviewTabSection readOnly={readOnly}>
           <Slot />
@@ -149,12 +170,12 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
           <Slot />
         </MCPreviewChatSection>
       }
+      {previewStyle.value.includes('gui') &&
+        <MCPreviewGUISection readOnly={readOnly}>
+          <Slot />
+        </MCPreviewGUISection>
+      }
     </div>
-
-    <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
-      style={{ textShadow: '2px 2px 0 #373737' }}>
-      {chatInput ?? generateOutput(rgbStore)}
-    </p>
   </div>;
 });
 

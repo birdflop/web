@@ -383,8 +383,7 @@ export default component$(() => {
                   <span key={gradientType} class='flex items-center gap-2'>
                     <span
                       class={{
-                        'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center':
-                            true,
+                        'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
                         'text-lum-text': isActive,
                         'text-gray-400': !isActive,
                       }}
