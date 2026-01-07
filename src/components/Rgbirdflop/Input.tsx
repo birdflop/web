@@ -11,52 +11,136 @@ import { generateOutput } from '@birdflop/rgbirdflop';
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
 
-const InputField = component$(({ class: className, readOnly }: {
+const InputField = component$(({ class: className, inputClass, readOnly }: {
   class?: string;
+  inputClass?: string;
   readOnly?: boolean;
 }) => {
   const rgbStore = useContext(rgbStoreContext);
   return (
     <div class={{
-      'relative text-2xl wrap-break-word': true,
+      'relative text-2xl focus-within:border-lum-accent break-all': true,
       [`${className}`]: className,
+      'font-mc-bold': rgbStore.bold,
+      'font-mc-italic': rgbStore.italic,
+      'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
+      [`${rgbStore.format.class}`]: rgbStore.format.class,
     }}
     style={{ textShadow: '2px 2px 0 #373737' }}>
       <p class={{
-        'font-mc-bold': rgbStore.bold,
-        'font-mc-italic': rgbStore.italic,
-        'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-        [`${rgbStore.format.class}`]: rgbStore.format.class,
+        'pointer-events-none whitespace-pre-wrap': true,
+        [`${inputClass}`]: inputClass,
       }}>
         <Slot />
       </p>
       {!readOnly &&
-        <div class="absolute bottom-0 h-full flex flex-col w-[calc(100%+0.5rem)]">
-          <textarea class={{
-            'lum-input p-0 pt-1.5 -mb-2.5 rounded-sm resize-none w-full h-full whitespace-pre-wrap caret-white leading-none text-transparent hover:text-transparent lum-bg-transparent hover:lum-bg-transparent hover:outline-1 hover:outline-gray-400/50 line': true,
-            'font-mc-bold': rgbStore.bold,
-            'font-mc-italic': rgbStore.italic,
-            'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-            [`${className}`]: className,
-            [`${rgbStore.format.class}`]: rgbStore.format.class,
-          }} value={rgbStore.text} spellcheck={false} id="input"
-          onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-        </div>
+        <textarea class={{
+          'absolute inset-0 whitespace-pre-wrap text-transparent caret-white rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          [`${inputClass}`]: inputClass,
+        }}
+        value={rgbStore.text} spellcheck={false} id="input"
+        onInput$={(e, el) => { rgbStore.text = el.value; }}/>
       }
     </div>
   );
 });
 
+const DefaultInput = component$(({ readOnly }: { readOnly: boolean | undefined }) => {
+  return <InputField readOnly={readOnly}
+    class="w-full lum-input p-0 text-3xl md:text-4xl xl:text-5xl font-mc"
+    inputClass="lum-btn-p-2">
+    <Slot />
+  </InputField>;
+});
+
+const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdflop' }: {
+  readOnly: boolean | undefined,
+  chatInput?: string,
+  playerName?: string,
+}) => {
+  const t = inlineTranslate();
+  const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
+  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+  const rgbStore = useContext(rgbStoreContext);
+  const previewStyle = useContext(previewStyleContext);
+
+  return <div class={{
+    'relative lum-bg-lum-input-bg/50 rounded-lum': true,
+    'break-all font-mc': true,
+  }}>
+    <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
+    <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
+      style={{ textShadow: '2px 2px 0 #373737' }}>
+      {chatInput ?? generateOutput(rgbStore)}
+    </p>
+    <div class={{
+      'absolute flex flex-col w-full text-2xl': true,
+      'inset-0': previewStyle.value == 'chest',
+      'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat',
+      'top-5 justify-center items-center text-center min-h-8 px-2 max-h-64': previewStyle.value.includes('tab'),
+    }}
+    style={{ textShadow: '2px 2px 0 #373737' }}>
+      {previewStyle.value.includes('tab') &&
+        <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
+          style={{ textShadow: '2px 2px 0 #373737' }}>
+          { previewStyle.value == 'tab-header' &&
+            <InputField readOnly={readOnly} class="text-center">
+              <Slot />
+            </InputField>
+          }
+          <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+            style={{ textShadow: '2px 2px 0 #373737' }}>
+            <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
+            <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
+            <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
+          </div>
+          { previewStyle.value == 'tab-player' &&
+            <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
+              style={{ textShadow: '2px 2px 0 #373737' }}>
+              <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
+              <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
+                <Slot />
+              </InputField>
+              <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
+            </div>
+          }
+          { previewStyle.value == 'tab-footer' &&
+            <InputField readOnly={readOnly} class="text-center">
+              <Slot />
+            </InputField>
+          }
+        </div>
+      }
+      {previewStyle.value == 'chat' &&
+        <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl wrap-break-word overflow-y-auto"
+          style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
+          {!readOnly &&
+            <p class="text-white!">
+              {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
+            </p>
+          }
+          <InputField readOnly={readOnly}>
+            {readOnly &&
+              <span class="text-white! mr-2">
+                {`<${playerName}>`}
+              </span>
+            }
+            <Slot />
+          </InputField>
+        </div>
+      }
+    </div>
+  </div>;
+});
+
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
-export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerName = 'RGBirdflop' }: {
+export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerName }: {
   readOnly?: boolean
   noLabel?: boolean
   noFormatRow?: boolean
   chatInput?: string
   playerName?: string
 }) => {
-  const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
-  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
@@ -84,90 +168,14 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
       <Formatting/>
     }
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
-      {previewStyle.value != 'default' &&
-        <div class={{
-          'relative lum-bg-lum-input-bg/50 rounded-lum': true,
-          'break-all font-mc': true,
-        }}>
-          <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
-          <div class={{
-            'absolute flex flex-col w-full text-2xl': true,
-            'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat',
-            'top-5 justify-center items-center text-center min-h-8 px-2 max-h-64': previewStyle.value.includes('tab'),
-          }}
-          style={{ textShadow: '2px 2px 0 #373737' }}>
-            {previewStyle.value.includes('tab') &&
-              <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
-                style={{ textShadow: '2px 2px 0 #373737' }}>
-                { previewStyle.value == 'tab-header' &&
-                  <InputField readOnly={readOnly} class="text-center">
-                    <Slot />
-                  </InputField>
-                }
-                <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
-                  style={{ textShadow: '2px 2px 0 #373737' }}>
-                  <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
-                  <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
-                  <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
-                </div>
-                { previewStyle.value == 'tab-player' &&
-                  <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
-                    style={{ textShadow: '2px 2px 0 #373737' }}>
-                    <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
-                    <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
-                      <Slot />
-                    </InputField>
-                    <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
-                  </div>
-                }
-                { previewStyle.value == 'tab-footer' &&
-                  <InputField readOnly={readOnly} class="text-center">
-                    <Slot />
-                  </InputField>
-                }
-              </div>
-            }
-            {previewStyle.value == 'chat' &&
-              <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-2 text-2xl wrap-break-word overflow-y-auto"
-                style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
-                {!readOnly &&
-                  <p class="text-white!">
-                    {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
-                  </p>
-                }
-                <InputField readOnly={readOnly}>
-                  <span class="text-white! mr-2">
-                    {readOnly ? `<${playerName}>` : null}
-                  </span>
-                  <Slot />
-                </InputField>
-              </div>
-            }
-          </div>
-          <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
-            style={{ textShadow: '2px 2px 0 #373737' }}>
-            {chatInput ?? generateOutput(rgbStore)}
-          </p>
-        </div>
-      }
-      {previewStyle.value == 'default' &&
-        <div class={{
-          'relative w-full': true,
-          'text-3xl md:text-4xl xl:text-5xl break-all font-mc': true,
-          'font-mc-bold': rgbStore.bold,
-          'font-mc-italic': rgbStore.italic,
-          'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-          [`${rgbStore.format.class}`]: rgbStore.format.class,
-        }}>
-          <p class="lum-bg-lum-input-bg/50 rounded-lum lum-btn-p-2 w-full h-full pointer-events-none whitespace-pre-wrap!">
-            <Slot />
-          </p>
-          {!readOnly &&
-          <textarea class="absolute top-0 lum-input lum-btn-p-2 resize-none w-full h-full whitespace-pre-wrap! caret-white text-transparent lum-bg-transparent hover:text-transparent hover:lum-bg-transparent hover:backdrop-brightness-150" id="input"
-            value={rgbStore.text} spellcheck={false} onInput$={(e, el) => { rgbStore.text = el.value; }}/>
-          }
-        </div>
-      }
+      {previewStyle.value != 'default' && <MCPreviewInput readOnly={readOnly}
+        chatInput={chatInput}
+        playerName={playerName}>
+        <Slot />
+      </MCPreviewInput>      }
+      {previewStyle.value == 'default' && <DefaultInput readOnly={readOnly}>
+        <Slot />
+      </DefaultInput>}
       <div class={{ 'flex gap-1': true,
         'absolute top-1 right-1': true,
       }}>

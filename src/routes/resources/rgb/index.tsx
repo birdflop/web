@@ -114,7 +114,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           obfuscate: rgbStore.obfuscate,
         }}
       >
-        {segment.replace(/ /g, '\u00A0')}
+        {segment}
       </span>
     );
   });
