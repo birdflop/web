@@ -135,8 +135,7 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
 
     <div class={{
       'absolute flex flex-col w-full text-2xl': true,
-      'inset-0': previewStyle.value == 'chest',
-      'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat',
+      'bottom-0 h-full wrap-break-word overflow-auto': previewStyle.value == 'chat' || previewStyle.value.includes('gui'),
       'top-5 justify-center items-center text-center min-h-8 px-2 max-h-64': previewStyle.value.includes('tab'),
     }}
     style={{ textShadow: '2px 2px 0 #373737' }}>
@@ -242,6 +241,10 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
           {
             name: t('rgb.inputText.preview.tab.player@@Minecraft Tab Player'),
             value: 'tab-player',
+          },
+          {
+            name: t('rgb.inputText.preview.gui.chest@@Minecraft GUI Chest'),
+            value: 'gui-chest',
           },
         ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
           <Eye size={20} class="text-lum-text-secondary" q:slot="dropdown" />

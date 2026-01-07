@@ -122,7 +122,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 gap-10 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
-          <GalleryHorizontalEnd size={70} /> {t('nav.resources.animatedTextures.title@@Animated Textures')}
+          <GalleryHorizontalEnd size={48} /> {t('nav.resources.animatedTextures.title@@Animated Textures')}
         </h1>
         <p>
           {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}

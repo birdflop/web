@@ -274,7 +274,7 @@ export default component$(() => {
       <div class="min-h-15 w-full">
         <h1 class="sm:flex items-center my-3!">
           <span class="flex flex-1 gap-4 items-center">
-            <Save size={70} />
+            <Save size={48} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
           <SelectMenuRaw

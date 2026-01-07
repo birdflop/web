@@ -173,7 +173,7 @@ export default component$(() => {
       <div class="min-h-15 w-full">
         <div class="markdown">
           <h1 class="flex gap-4 items-center my-3!">
-            <Flag size={70} /> {t('nav.resources.flags.title@@Flags Generator')}
+            <Flag size={48} /> {t('nav.resources.flags.title@@Flags Generator')}
           </h1>
           <p>
             {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}

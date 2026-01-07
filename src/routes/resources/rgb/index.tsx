@@ -360,7 +360,7 @@ export default component$(() => {
       )}
       <div class='min-h-15 max-w-6xl'>
         <h1 class='flex gap-4 items-center my-3!'>
-          <Palette size={70} />{' '}
+          <Palette size={48} />
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </h1>
         <p>
@@ -368,6 +368,8 @@ export default component$(() => {
             'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
           )}
         </p>
+        <hr/>
+
         <div class='relative'>
           <Input>
             {showAllGradients.value && previewStyle.value != 'default'

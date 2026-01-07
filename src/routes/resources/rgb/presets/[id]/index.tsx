@@ -104,7 +104,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
-          <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+          <Save size={48} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
         <p>
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}

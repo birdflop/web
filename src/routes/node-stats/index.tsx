@@ -55,7 +55,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
-          <Activity size={70} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
+          <Activity size={48} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </h1>
         <p>
           {t('nav.hosting.nodeStats.description@@Check the status of Birdflop\'s server nodes.')}
