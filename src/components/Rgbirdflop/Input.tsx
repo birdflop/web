@@ -7,10 +7,12 @@ import { showAllGradientsContext } from '~/routes/layout';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
+export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
 
+// The main input field component where you type your text
 const InputField = component$(({ class: className, inputClass, readOnly }: {
   class?: string;
   inputClass?: string;
@@ -45,6 +47,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   );
 });
 
+// The default input field style
 const DefaultInput = component$(({ readOnly }: { readOnly: boolean | undefined }) => {
   return <InputField readOnly={readOnly}
     class="w-full lum-input p-0 text-3xl md:text-4xl xl:text-5xl font-mc"
@@ -53,12 +56,72 @@ const DefaultInput = component$(({ readOnly }: { readOnly: boolean | undefined }
   </InputField>;
 });
 
+// The default input field style
+const MCPreviewTabSection = component$(({ readOnly }: { readOnly: boolean | undefined }) => {
+  const previewStyle = useContext(previewStyleContext);
+
+  return <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
+    style={{ textShadow: '2px 2px 0 #373737' }}>
+    { previewStyle.value == 'tab-header' &&
+      <InputField readOnly={readOnly} class="text-center">
+        <Slot />
+      </InputField>
+    }
+    <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
+      style={{ textShadow: '2px 2px 0 #373737' }}>
+      <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
+      <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
+      <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
+    </div>
+    { previewStyle.value == 'tab-player' &&
+      <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
+        style={{ textShadow: '2px 2px 0 #373737' }}>
+        <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
+        <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
+          <Slot />
+        </InputField>
+        <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
+      </div>
+    }
+    { previewStyle.value == 'tab-footer' &&
+      <InputField readOnly={readOnly} class="text-center">
+        <Slot />
+      </InputField>
+    }
+  </div>;
+});
+
+// The default input field style
+const MCPreviewChatSection = component$(({ readOnly, playerName = 'RGBirdflop' }: {
+  readOnly: boolean | undefined,
+  playerName?: string,
+}) => {
+  const t = inlineTranslate();
+
+  return <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl wrap-break-word overflow-y-auto"
+    style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
+    {!readOnly &&
+      <p class="text-white!">
+        {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
+      </p>
+    }
+    <InputField readOnly={readOnly}>
+      {readOnly &&
+        <span class="text-white! mr-2">
+          {`<${playerName}>`}
+        </span>
+      }
+      <Slot />
+    </InputField>
+  </div>;
+});
+
+// The Minecraft preview style for the input field
 const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdflop' }: {
   readOnly: boolean | undefined,
   chatInput?: string,
   playerName?: string,
 }) => {
-  const t = inlineTranslate();
   const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const rgbStore = useContext(rgbStoreContext);
@@ -69,10 +132,7 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
     'break-all font-mc': true,
   }}>
     <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
-    <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
-      style={{ textShadow: '2px 2px 0 #373737' }}>
-      {chatInput ?? generateOutput(rgbStore)}
-    </p>
+
     <div class={{
       'absolute flex flex-col w-full text-2xl': true,
       'inset-0': previewStyle.value == 'chest',
@@ -81,59 +141,25 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
     }}
     style={{ textShadow: '2px 2px 0 #373737' }}>
       {previewStyle.value.includes('tab') &&
-        <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto"
-          style={{ textShadow: '2px 2px 0 #373737' }}>
-          { previewStyle.value == 'tab-header' &&
-            <InputField readOnly={readOnly} class="text-center">
-              <Slot />
-            </InputField>
-          }
-          <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left h-6 flex gap-0.5 pr-0.5 mx-auto"
-            style={{ textShadow: '2px 2px 0 #373737' }}>
-            <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
-            <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
-            <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
-          </div>
-          { previewStyle.value == 'tab-player' &&
-            <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto"
-              style={{ textShadow: '2px 2px 0 #373737' }}>
-              <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
-              <InputField readOnly={readOnly} class="flex-1 -mt-0.5">
-                <Slot />
-              </InputField>
-              <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
-            </div>
-          }
-          { previewStyle.value == 'tab-footer' &&
-            <InputField readOnly={readOnly} class="text-center">
-              <Slot />
-            </InputField>
-          }
-        </div>
+        <MCPreviewTabSection readOnly={readOnly}>
+          <Slot />
+        </MCPreviewTabSection>
       }
       {previewStyle.value == 'chat' &&
-        <div class="absolute bottom-25 w-[75%] bg-black/50 min-h-8 px-2 py-0.5 text-2xl wrap-break-word overflow-y-auto"
-          style={{ textShadow: '2px 2px 0 #373737', maxHeight: 'calc(100% - 7rem)' }}>
-          {!readOnly &&
-            <p class="text-white!">
-              {`<${playerName}>`} {t('rgb.inputText.preview.typeHere@@Type here!')}
-            </p>
-          }
-          <InputField readOnly={readOnly}>
-            {readOnly &&
-              <span class="text-white! mr-2">
-                {`<${playerName}>`}
-              </span>
-            }
-            <Slot />
-          </InputField>
-        </div>
+        <MCPreviewChatSection readOnly={readOnly} playerName={playerName}>
+          <Slot />
+        </MCPreviewChatSection>
       }
     </div>
+
+    <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto"
+      style={{ textShadow: '2px 2px 0 #373737' }}>
+      {chatInput ?? generateOutput(rgbStore)}
+    </p>
   </div>;
 });
 
-export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
+// The main Input component that combines everything
 export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerName }: {
   readOnly?: boolean
   noLabel?: boolean
@@ -172,7 +198,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         chatInput={chatInput}
         playerName={playerName}>
         <Slot />
-      </MCPreviewInput>      }
+      </MCPreviewInput>}
       {previewStyle.value == 'default' && <DefaultInput readOnly={readOnly}>
         <Slot />
       </DefaultInput>}
