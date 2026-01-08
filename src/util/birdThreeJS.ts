@@ -3,15 +3,15 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Notification } from './Notification';
 
-function getPosOfElement(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-
+function targetElement(id?: string) {
   const oldEl = document.querySelector('.bird-target');
   if (oldEl) oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
 
-  el.classList.add('outline-3', 'outline-lum-accent', 'bird-target', 'rounded-lum');
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
 
+  el.classList.add('outline-3', 'outline-lum-accent', 'bird-target', 'rounded-lum');
   const rect = el.getBoundingClientRect();
   return {
     x: rect.left + rect.width / 2,
@@ -234,8 +234,17 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     return current + delta * factor;
   }
 
-  function updateRotationTowards(bird: any, targetAngle: number, smoothFactor = 0.1) {
-    bird.rotation.y = smoothRotate(bird.rotation.y, targetAngle, smoothFactor);
+  function updateRotationTowards(
+    bird: any,
+    targetAngle: number,
+    deltaTime: number,
+    speed = 6,
+  ) {
+    bird.rotation.y = smoothRotate(
+      bird.rotation.y,
+      targetAngle,
+      Math.min(1, speed * deltaTime),
+    );
   }
 
   function getCameraRotation(birdPos: THREE.Vector3, camera: THREE.Camera) {
@@ -276,19 +285,22 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
   }
 
   // Animation Loop
+  const moveSpeed = 2; // world units per second
+  const idleRotation = 2.5;
+  let lastTime = 0;
+  const defaultTargetPos = new THREE.Vector3(camera.right - margin, camera.bottom + margin, 0);
   const animate = (time: number) => {
+    const deltaTime = (time - lastTime) / 1000; // seconds
+    lastTime = time;
+
     updateHeadLook(time);
     updateAnchorElement();
 
     emote = notifications.length > 0 ? 'waving' : undefined;
 
-    if (elementIdToLandOn.value) {
-      const pos = getPosOfElement(elementIdToLandOn.value);
-      if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
-    }
-    else {
-      targetPos = screenToWorld(window.innerWidth - margin * 100, window.innerHeight - margin * 100, camera);
-    }
+    const pos = targetElement(elementIdToLandOn.value);
+    if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
+    else targetPos = defaultTargetPos;
 
     if (targetPos) {
       const direction = new THREE.Vector3().subVectors(targetPos, bird.position);
@@ -300,17 +312,15 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
       const blendFactor = 0.25;
       const desiredRotation = THREE.MathUtils.lerp(targetRotation, cameraRotation, blendFactor);
 
-      updateRotationTowards(bird, desiredRotation);
+      updateRotationTowards(bird, desiredRotation, deltaTime);
 
       if (distance > 0.1) {
         direction.normalize();
-        bird.position.addScaledVector(direction, 0.0125);
+        bird.position.addScaledVector(direction, moveSpeed * deltaTime);
         flying = true;
       } else {
         flying = false;
-        // Idle rotation
-        const idleRotation = 2.5;
-        updateRotationTowards(bird, idleRotation);
+        updateRotationTowards(bird, idleRotation, deltaTime);
       }
     }
 
