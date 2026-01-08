@@ -370,13 +370,13 @@ export default component$(() => {
 
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
           <div class='flex flex-col gap-2 relative' id='column1'>
-            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />
               {t('rgb.colors.title@@Colors')}
             </div>
             <ColorList hidden={!openItemsStore.items.includes('colors')} />
             <Accordion sectionName='textshadow'>
-              <Blend size={26} />
+              <Blend />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
             <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
@@ -385,7 +385,7 @@ export default component$(() => {
             class='flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10'
             id='column2'
           >
-            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Clipboard />
               {t('rgb.output.title@@Output')}
             </div>
@@ -394,7 +394,7 @@ export default component$(() => {
               value={generateOutput(rgbStore)}
             />
 
-            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Settings />
               {t('rgb.options@@Options')}
             </div>
@@ -402,7 +402,7 @@ export default component$(() => {
           </div>
 
           <div class='mb-4 flex flex-col gap-2' id='column3'>
-            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Save />
               {t('rgb.presets.title@@Presets')}
             </div>
@@ -411,7 +411,7 @@ export default component$(() => {
             {rgbStore.customFormat && (
               <>
                 <Accordion sectionName='formatoptions'>
-                  <Settings size={26} />
+                  <Settings />
                   {t('rgb.formatting.options@@Format Options')}
                 </Accordion>
                 <FormatOptions
@@ -421,7 +421,7 @@ export default component$(() => {
             )}
 
             <Accordion sectionName='decode'>
-              <Sparkles size={26} />
+              <Sparkles />
               {t('rgb.decode.title@@Decode')}
               <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>
                 {t('rgb.decode.experimental@@experimental')}
