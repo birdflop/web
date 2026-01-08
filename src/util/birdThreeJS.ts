@@ -124,12 +124,6 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
 
     camera.updateProjectionMatrix();
 
-    bird.position.set(
-      camera.right - margin,  // near right edge
-      camera.bottom + margin, // near bottom edge (negative number + positive margin = near bottom)
-      0,
-    );
-
     renderer.setSize(width, height);
   }
   window.addEventListener('resize', onWindowResize);
@@ -291,6 +285,9 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     if (elementIdToLandOn.value) {
       const pos = getPosOfElement(elementIdToLandOn.value);
       if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
+    }
+    else {
+      targetPos = screenToWorld(window.innerWidth - margin * 100, window.innerHeight - margin * 100, camera);
     }
 
     if (targetPos) {

@@ -218,9 +218,11 @@ export default component$(() => {
               {notification.action?.text ?? t('nav.clickToDismiss@@Click to dismiss')}
             </p>
           }
+          {/*
           <audio autoplay volume={0.2}>
             <source src={`/minecraft/parrot_sounds/idle${Math.floor(Math.random() * 5) + 1}.ogg`} type="audio/ogg" />
           </audio>
+          */}
         </button>;
       })}
     </div>
