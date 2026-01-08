@@ -138,7 +138,7 @@ export default component$(() => {
             value={loc.url.pathname + loc.url.search}
           />
           <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
-            {t('nav.profile.login@@Log in')}
+            {t('nav.profile.login@@Login')}
           </button>
         </Form>
       }

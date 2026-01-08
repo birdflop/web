@@ -370,10 +370,10 @@ export default component$(() => {
 
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
           <div class='flex flex-col gap-2 relative' id='column1'>
-            <Accordion sectionName='colors' alwaysOpen>
-              <Palette size={26} />
+            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+              <Palette />
               {t('rgb.colors.title@@Colors')}
-            </Accordion>
+            </div>
             <ColorList hidden={!openItemsStore.items.includes('colors')} />
             <Accordion sectionName='textshadow'>
               <Blend size={26} />
@@ -385,27 +385,27 @@ export default component$(() => {
             class='flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10'
             id='column2'
           >
-            <Accordion sectionName='output' alwaysOpen>
-              <Clipboard size={26} />
+            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+              <Clipboard />
               {t('rgb.output.title@@Output')}
-            </Accordion>
+            </div>
             <Output
               hidden={!openItemsStore.items.includes('output')}
               value={generateOutput(rgbStore)}
             />
 
-            <Accordion sectionName='options' alwaysOpen>
-              <Settings size={26} />
+            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+              <Settings />
               {t('rgb.options@@Options')}
-            </Accordion>
+            </div>
             <Options hidden={!openItemsStore.items.includes('options')} />
           </div>
 
           <div class='mb-4 flex flex-col gap-2' id='column3'>
-            <Accordion sectionName='presets' alwaysOpen>
-              <Save size={26} />
+            <div class="hidden sm:flex items-center border-b border-lum-border/10 p-2 gap-2">
+              <Save />
               {t('rgb.presets.title@@Presets')}
-            </Accordion>
+            </div>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
 
             {rgbStore.customFormat && (
