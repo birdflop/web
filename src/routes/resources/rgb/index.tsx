@@ -257,7 +257,6 @@ export default component$(() => {
   const coordinatesToLandOn = useContext(BirdLandContext);
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    return; // Disable guided tour for now
     const chatBox = new Notification('Flopbird:')
       .setDescription('Hi! I\'m here to help you create RGB gradients!')
       .setBgColor('lum-bg-cyan/50')
