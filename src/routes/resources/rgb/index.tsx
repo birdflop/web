@@ -287,6 +287,7 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    return; // Disable guided tour for now
     const notification = new Notification()
       .setTitle('Flopbird:')
       .setDescription('Hi! I\'m here to help you create RGB gradients!')
