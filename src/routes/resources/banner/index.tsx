@@ -207,7 +207,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-2 gap-2">
           <div class="flex flex-col gap-2" id="inputcolumn">
-            <Accordion sectionName="options" alwaysOpen>
+            <Accordion sectionName="options" pcOnly>
               <Settings size={26} />
               {t('banner.options.title@@Options')}
             </Accordion>
@@ -381,7 +381,7 @@ export default component$(() => {
             </div>
           </div>
           <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/50 sm:pl-2" id="outputcolumn">
-            <Accordion sectionName="preview" alwaysOpen>
+            <Accordion sectionName="preview" pcOnly>
               <Eye size={26} />
               {t('banner.preview@@Preview')}
             </Accordion>

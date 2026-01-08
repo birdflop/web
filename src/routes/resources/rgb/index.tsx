@@ -369,13 +369,44 @@ export default component$(() => {
         <ColorMap />
 
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
+          <div class="lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 max-w-full overflow-auto">
+            <button>
+              <Palette />
+              {t('rgb.colors.title@@Colors')}
+            </button>
+            <button>
+              <Blend />
+              {t('rgb.colors.shadow.title@@Text Shadow')}
+            </button>
+            <button>
+              <Clipboard />
+              {t('rgb.output.title@@Output')}
+            </button>
+            <button>
+              <Settings />
+              {t('rgb.options@@Options')}
+            </button>
+            {rgbStore.customFormat && (
+              <button>
+                <Settings />
+                {t('rgb.formatting.options@@Format Options')}
+              </button>
+            )}
+            <button>
+              <Sparkles />
+              {t('rgb.decode.title@@Decode')}
+              <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>
+                {t('rgb.decode.experimental@@experimental')}
+              </span>
+            </button>
+          </div>
           <div class='flex flex-col gap-2 relative' id='column1'>
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />
               {t('rgb.colors.title@@Colors')}
             </div>
             <ColorList hidden={!openItemsStore.items.includes('colors')} />
-            <Accordion sectionName='textshadow'>
+            <Accordion sectionName='textshadow' pcOnly>
               <Blend />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
@@ -410,7 +441,7 @@ export default component$(() => {
 
             {rgbStore.customFormat && (
               <>
-                <Accordion sectionName='formatoptions'>
+                <Accordion sectionName='formatoptions' pcOnly>
                   <Settings />
                   {t('rgb.formatting.options@@Format Options')}
                 </Accordion>
@@ -420,7 +451,7 @@ export default component$(() => {
               </>
             )}
 
-            <Accordion sectionName='decode'>
+            <Accordion sectionName='decode' pcOnly>
               <Sparkles />
               {t('rgb.decode.title@@Decode')}
               <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>

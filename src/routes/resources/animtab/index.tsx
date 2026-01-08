@@ -226,7 +226,7 @@ export default component$(() => {
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1">
           <div class="flex flex-col gap-2 relative" id="column1">
-            <Accordion sectionName="colors" alwaysOpen>
+            <Accordion sectionName="colors" pcOnly>
               <Palette size={26} />
               {t('rgb.colors.title@@Colors')}
             </Accordion>
@@ -241,14 +241,14 @@ export default component$(() => {
           </div>
 
           <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10" id="column2">
-            <Accordion sectionName="output" alwaysOpen>
+            <Accordion sectionName="output" pcOnly>
               <Clipboard size={26} />
               {t('rgb.output.title@@Output')}
             </Accordion>
             <Output hidden={!openItemsStore.items.includes('output')}
               value={AnimationOutput(rgbStore, animtabStore)} />
 
-            <Accordion sectionName='options' alwaysOpen>
+            <Accordion sectionName='options' pcOnly>
               <Settings size={26} />
               {t('rgb.options@@Options')}
             </Accordion>
@@ -280,7 +280,7 @@ export default component$(() => {
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="presets" alwaysOpen>
+            <Accordion sectionName="presets" pcOnly>
               <Save size={26} />
               {t('rgb.presets.title@@Presets')}
             </Accordion>
