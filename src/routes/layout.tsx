@@ -223,40 +223,43 @@ export default component$(() => {
           </audio>
         </button>;
       })}
-      {showCookieConsent.value && settingsStore.cookies === undefined &&
-        <div class={{
-          'lum-bg-lum-input-bg/60': true,
-          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
-          'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
-        }}>
-          <div>
-            <h5 class="flex gap-1 items-center my-0!">
-              <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
-            </h5>
-            <p>
-              {t('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
-            </p>
-            <Link href="/privacy">
-              {t('nav.privacyPolicy@@Privacy Policy')}
-            </Link>
-          </div>
-          <div class="flex flex-wrap items-center justify-end gap-2">
-            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
-              settingsStore.cookies = false;
-              setCookies('settings', settingsStore);
-            }}>
-              {t('nav.cookies.optOut@@Reject')}
-            </button>
-            <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
-              settingsStore.cookies = true;
-              setCookies('settings', settingsStore);
-            }}>
-              {t('nav.cookies.acknowledge@@Accept')}
-            </button>
-          </div>
-        </div>
-      }
     </div>
+    {showCookieConsent.value && settingsStore.cookies === undefined &&
+      <div class={{
+        'fixed bottom-4 left-4 lum-bg-lum-input-bg/60': true,
+        'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
+        'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 anim-duration-500': true,
+      }}
+      style={{
+        '--lum-border-radius': '1rem',
+      }}>
+        <div>
+          <h5 class="flex gap-1 items-center my-0!">
+            <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
+          </h5>
+          <p>
+            {t('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
+          </p>
+          <Link href="/privacy">
+            {t('nav.privacyPolicy@@Privacy Policy')}
+          </Link>
+        </div>
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
+            settingsStore.cookies = false;
+            setCookies('settings', settingsStore);
+          }}>
+            {t('nav.cookies.optOut@@Reject')}
+          </button>
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
+            settingsStore.cookies = true;
+            setCookies('settings', settingsStore);
+          }}>
+            {t('nav.cookies.acknowledge@@Accept')}
+          </button>
+        </div>
+      </div>
+    }
     <Footer />
   </>;
 });
