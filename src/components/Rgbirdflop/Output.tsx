@@ -25,7 +25,8 @@ export default component$(({ hidden, value }: {
         }}
         value={value}
         onClick$={async () => {
-          const notification = new Notification(await t$('rgb.output.copied@@Copied to clipboard!'))
+          const notification = new Notification()
+            .setTitle(await t$('rgb.output.copied@@Copied to clipboard!'))
             .setDescription(await t$('rgb.output.copied.description@@The RGB text has been copied to your clipboard successfully.'))
             .setBgColor('lum-bg-green/50');
           navigator.clipboard.writeText(value).catch(async (err) => {

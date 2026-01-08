@@ -1,16 +1,35 @@
-import { createContextId } from '@builder.io/qwik';
+import { createContextId, QRL } from '@builder.io/qwik';
 
-export class Notification {
+interface NotificationType {
   id: string;
-  title: string;
+  title?: string;
   description?: string;
   bgColor?: string;
   buttons?: { text: string; href: string }[];
+  action?: { text: string; onClick$: QRL<() => void> };
+  persist?: boolean;
+}
+
+export class Notification implements NotificationType {
+  id: string;
+  title?: string;
+  description?: string;
+  bgColor?: string;
+  buttons?: { text: string; href: string }[];
+  action?: { text: string; onClick$: QRL<() => void> };
   persist?: boolean;
 
-  constructor(title: string) {
+  constructor(notification?: Partial<Notification>) {
     this.id = Math.random().toString(36).substring(2, 15);
-    this.title = title;
+
+    if (notification) {
+      this.title = notification.title;
+      this.description = notification.description;
+      this.bgColor = notification.bgColor;
+      this.buttons = notification.buttons || [];
+      this.action = notification.action;
+      this.persist = notification.persist || false;
+    }
     return this;
   }
 
@@ -34,10 +53,27 @@ export class Notification {
     return this;
   }
 
+  setAction(action : typeof this.action) {
+    this.action = action;
+    return this;
+  }
+
   setPersist(persist: boolean) {
     this.persist = persist;
     return this;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      bgColor: this.bgColor,
+      buttons: this.buttons,
+      action: this.action,
+      persist: this.persist,
+    };
+  }
 }
 
-export const NotificationContext = createContextId<Notification[]>('notification-context');
+export const NotificationContext = createContextId<NotificationType[]>('notification-context');

@@ -173,6 +173,7 @@ export default component$(() => {
       {notifications.map((notification) => {
         if (!notification) return null;
         const id = notification.id;
+        const onClick$ = notification.action?.onClick$;
 
         if (!notification.persist) {
           setTimeout(() => {
@@ -188,7 +189,8 @@ export default component$(() => {
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left max-w-lg': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
-        }} key={notification.id} onClick$={(e, el) => {
+        }} key={notification.id} onClick$={async (e, el) => {
+          await onClick$?.();
           el.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');
           setTimeout(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
@@ -213,7 +215,7 @@ export default component$(() => {
           }
           {notification.persist &&
             <p class="lum-text-xs text-lum-text-secondary/50! mt-1!">
-              {t('nav.clickToDismiss@@Click to dismiss')}
+              {notification.action?.text ?? t('nav.clickToDismiss@@Click to dismiss')}
             </p>
           }
           <audio autoplay volume={0.5}>

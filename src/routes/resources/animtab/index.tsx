@@ -45,7 +45,8 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
-      const notification = new Notification('Error fetching data')
+      const notification = new Notification()
+        .setTitle('Error loading cookies')
         .setDescription(`${error}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);

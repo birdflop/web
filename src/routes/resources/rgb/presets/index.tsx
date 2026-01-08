@@ -183,7 +183,8 @@ export default component$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
     if (errors.length > 0) {
       errors.forEach((error) => {
-        const notification = new Notification('Error fetching presets')
+        const notification = new Notification()
+          .setTitle('Error fetching presets')
           .setDescription(`${error}`)
           .setBgColor('lum-bg-red/50')
           .setPersist(true);
@@ -212,7 +213,8 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const notification = new Notification('Error parsing saved presets')
+      const notification = new Notification()
+        .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);

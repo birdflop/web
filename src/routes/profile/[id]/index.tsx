@@ -70,7 +70,8 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const notification = new Notification('Error parsing saved presets')
+      const notification = new Notification()
+        .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -83,7 +84,8 @@ export default component$(() => {
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
-        const notification = new Notification('Error fetching user data')
+        const notification = new Notification()
+          .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
           .setBgColor('lum-bg-red/50')
           .setPersist(true);

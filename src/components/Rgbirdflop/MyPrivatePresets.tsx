@@ -134,13 +134,15 @@ export default component$(() => {
           isSubmitting.value = false;
 
           const notification = result.result?.[0] ?
-            new Notification('Preset Submitted!')
+            new Notification()
+              .setTitle('Preset Submitted!')
               .setDescription('Your preset has been submitted for review. It may take a few days for it to be reviewed and published.')
               .setBgColor('lum-bg-green/50')
               .setButtons([
                 { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
               ]) :
-            new Notification('Preset Submission Failed')
+            new Notification()
+              .setTitle('Preset Submission Failed')
               .setDescription('Your preset failed to submit. Is there already a preset with the same configuration?')
               .setBgColor('lum-bg-yellow/50')
               .setPersist(true);

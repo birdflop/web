@@ -364,7 +364,8 @@ export default component$(() => {
                 }}
                 value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
                 onClick$={async (e, el) => {
-                  const notification = new Notification(await t$('banner.copied@@Copied to clipboard!'))
+                  const notification = new Notification()
+                    .setTitle(await t$('banner.copied@@Copied to clipboard!'))
                     .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
                     .setBgColor('lum-bg-green/50');
 

@@ -92,7 +92,8 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const notification = new Notification('Error parsing saved presets')
+      const notification = new Notification()
+        .setTitle('Error parsing saved presets')
         .setDescription(`Error: ${err}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -222,7 +223,8 @@ export default component$(() => {
               </>}
           </button>
           <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={async () => {
-            const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
+            const notification = new Notification()
+              .setTitle(await t$('rgb.copied@@Copied to clipboard!'))
               .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
               .setBgColor('lum-bg-green/50');
             navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))

@@ -8,6 +8,7 @@ import {
   useTask$,
   useVisibleTask$,
   isBrowser,
+  $,
 } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
@@ -159,7 +160,8 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
-      const notification = new Notification('Error fetching data')
+      const notification = new Notification()
+        .setTitle('Error loading cookies')
         .setDescription(`${error}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -194,6 +196,7 @@ export default component$(() => {
     });
   });
 
+  // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
@@ -217,6 +220,7 @@ export default component$(() => {
     return () => cancelAnimationFrame(rafId);
   });
 
+  // Ads
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return;
@@ -253,104 +257,78 @@ export default component$(() => {
       console.warn('Ad region detection failed', err);
     }
   });
+  const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
 
+  // Flopbird guide
   const coordinatesToLandOn = useContext(BirdLandContext);
+  const flopBirdTrack = [
+    {
+      id: 'input',
+      description: 'First, type something into the text box I\'m on top of!',
+    },
+    {
+      id: 'input',
+      description: 'First, type something into the text box I\'m on top of!',
+    },
+    {
+      id: 'colorlistcolorstext',
+      description: 'Next, pick some colors from the color list to create your gradient!',
+    },
+    {
+      id: 'output',
+      description: 'Finally, copy the output and use it in Minecraft!',
+    },
+    {
+      id: 'format-dropdown',
+      description: 'You can change the format of the hex codes if the server you\'re using requires a different format.',
+    },
+    {
+      id: 'colormaptext',
+      description: 'The color map shows you how the colors are distributed across your text. You can use this to fine-tune your gradient!',
+    },
+    {
+      id: 'underline',
+      description: 'You can also add formatting to your text over here, try it out!',
+    },
+    {
+      id: 'presets',
+      description: 'Finally, before I go, you can also check out some preset gradients that other users have made for easy access!',
+    },
+    {
+      id: undefined,
+      description: 'I\'ll be down here letting you know if there\'s anything new. Happy gradient making!',
+    },
+  ];
+
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    const chatBox = new Notification('Flopbird:')
+  useVisibleTask$(() => {
+    const notification = new Notification()
+      .setTitle('Flopbird:')
       .setDescription('Hi! I\'m here to help you create RGB gradients!')
       .setBgColor('lum-bg-cyan/50')
-      .setPersist(true);
-    notifications.push(chatBox);
+      .setPersist(true).toJSON();
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('input');
-    chatBox.setDescription(
-      'First, type something into the text box I\'m on top of!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
+    notification.action = {
+      text: 'Click to continue',
+      onClick$: $(() => {
+        flopBirdTrack.shift();
+        const nextStep = flopBirdTrack[0];
+        if (!nextStep) return;
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('colorlistcolorstext');
-    chatBox.setDescription(
-      'Next, pick some colors from the color list to create your gradient!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
+        coordinatesToLandOn.value = nextStep.id
+          ? getPosOfElement(nextStep.id)
+          : undefined;
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('output');
-    chatBox.setDescription('Finally, copy the output and use it in Minecraft!');
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
+        const nextNotification = new Notification(notification)
+          .setDescription(nextStep.description);
+        notifications.push(nextNotification);
+      }),
+    };
 
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('format-dropdown');
-    chatBox.setDescription(
-      'You can change the format of the hex codes if the server you\'re using requires a different format.',
+    notifications.push(
+      notification,
     );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('colormaptext');
-    chatBox.setDescription(
-      'The color map shows you how the colors are distributed across your text. You can use this to fine-tune your gradient!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('underline');
-    chatBox.setDescription(
-      'You can also add formatting to your text over here, try it out!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = getPosOfElement('presets');
-    chatBox.setDescription(
-      'Finally, before I go, you can also check out some preset gradients that other users have made for easy access!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
-
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    coordinatesToLandOn.value = undefined;
-    chatBox.setDescription(
-      'I\'ll be down here letting you know if there\'s anything new. Happy gradient making!',
-    );
-    notifications.splice(
-      notifications.findIndex((n) => n.id === chatBox.id),
-      1,
-    );
-    notifications.push(chatBox);
   });
-
-  const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
 
   return (
     <section class='relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center'>

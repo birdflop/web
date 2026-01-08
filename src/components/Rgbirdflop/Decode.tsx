@@ -44,7 +44,8 @@ export default component$(({ threshold, hidden }: {
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
-    const notification = new Notification(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
+    const notification = new Notification()
+      .setTitle(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
       .setDescription(await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'))
       .setBgColor('lum-bg-green/50');
     notifications.push(notification);
