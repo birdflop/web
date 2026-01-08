@@ -216,7 +216,9 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     head.getWorldPosition(headWorldPos);
 
     const screen = worldToScreen(headWorldPos, camera);
-    anchorElementRef.value.style.left = `${screen.x}px`;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobile) anchorElementRef.value.style.left = `${screen.x}px`;
+    else anchorElementRef.value.style.left = 'calc(100% - 10px)'; // fixed position on mobile
     anchorElementRef.value.style.top = `${screen.y}px`;
   }
 
