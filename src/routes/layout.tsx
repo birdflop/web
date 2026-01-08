@@ -46,7 +46,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
-export const BirdLandContext = createContextId<Signal<{ x: number; y: number } | undefined>>('birdland-context');
+export const BirdLandContext = createContextId<Signal<string | undefined>>('birdland-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export const showAllGradientsContext = createContextId<Signal<boolean>>('showallgradients-context');
@@ -61,8 +61,8 @@ export default component$(() => {
   // bird mascot refs
   const birdRef = useSignal<HTMLCanvasElement>();
   const anchorElementRef = useSignal<HTMLDivElement>();
-  const coordinatesToLandOn = useSignal<{ x: number; y: number }>();
-  useContextProvider(BirdLandContext, coordinatesToLandOn);
+  const elementIdToLandOn = useSignal<string>();
+  useContextProvider(BirdLandContext, elementIdToLandOn);
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -137,14 +137,14 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, coordinatesToLandOn));
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
 
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
 
     <canvas ref={birdRef} class={{
-      'fixed bottom-0 blur-none overflow-hidden z-10 w-lvw h-lvh pointer-events-none': true,
+      'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
     }}/>
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&

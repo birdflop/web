@@ -3,10 +3,26 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Notification } from './Notification';
 
+function getPosOfElement(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const oldEl = document.querySelector('.bird-target');
+  if (oldEl) oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
+
+  el.classList.add('outline-3', 'outline-lum-accent', 'bird-target', 'rounded-lum');
+
+  const rect = el.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top,
+  };
+}
+
 export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>,
   anchorElementRef: Signal<HTMLDivElement | undefined>,
   notifications: Notification[],
-  coordinatesToLandOn: Signal<{ x: number; y: number } | undefined>) {
+  elementIdToLandOn: Signal<string | undefined>) {
   // check if birdRef is defined
   if (!birdRef.value) return console.warn('birdRef is undefined in birdThreeJS');
 
@@ -272,9 +288,9 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
 
     emote = notifications.length > 0 ? 'waving' : undefined;
 
-    if (coordinatesToLandOn.value) {
-      const { x, y } = coordinatesToLandOn.value;
-      targetPos = screenToWorld(x, y, camera);
+    if (elementIdToLandOn.value) {
+      const pos = getPosOfElement(elementIdToLandOn.value);
+      if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
     }
 
     if (targetPos) {

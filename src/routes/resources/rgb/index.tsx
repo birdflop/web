@@ -128,17 +128,6 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
-function getPosOfElement(id: string) {
-  const el = document.getElementById(id);
-
-  if (!el) return;
-  const rect = el.getBoundingClientRect();
-  return {
-    x: rect.left + rect.width / 2,
-    y: rect.top,
-  };
-}
-
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
 const AD_VARIANTS = {
@@ -260,7 +249,7 @@ export default component$(() => {
   const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
 
   // Flopbird guide
-  const coordinatesToLandOn = useContext(BirdLandContext);
+  const elementIdToLandOn = useContext(BirdLandContext);
   const flopBirdTrack = [
     {
       id: 'input',
@@ -310,9 +299,7 @@ export default component$(() => {
         const nextStep = flopBirdTrack.shift();
         if (!nextStep) return;
 
-        coordinatesToLandOn.value = nextStep.id
-          ? getPosOfElement(nextStep.id)
-          : undefined;
+        elementIdToLandOn.value = nextStep.id;
 
         const nextNotification = new Notification(notification)
           .setDescription(nextStep.description);
