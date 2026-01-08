@@ -267,10 +267,6 @@ export default component$(() => {
       description: 'First, type something into the text box I\'m on top of!',
     },
     {
-      id: 'input',
-      description: 'First, type something into the text box I\'m on top of!',
-    },
-    {
       id: 'colorlistcolorstext',
       description: 'Next, pick some colors from the color list to create your gradient!',
     },
@@ -311,8 +307,7 @@ export default component$(() => {
     notification.action = {
       text: 'Click to continue',
       onClick$: $(() => {
-        flopBirdTrack.shift();
-        const nextStep = flopBirdTrack[0];
+        const nextStep = flopBirdTrack.shift();
         if (!nextStep) return;
 
         coordinatesToLandOn.value = nextStep.id
