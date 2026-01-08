@@ -10,7 +10,9 @@ import { generateOutput } from '@birdflop/rgbirdflop';
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
+const ImgItem = '/banner/dyes/cyan_dye.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
+const ImgChestGui = '/minecraft/chest.png';
 
 // The main input field component where you type your text
 const InputField = component$(({ class: className, inputClass, readOnly }: {
@@ -113,23 +115,48 @@ const MCPreviewChatSection = component$(({ readOnly, playerName = 'RGBirdflop' }
 });
 
 // The default input field style
-const MCPreviewGUISection = component$(({ readOnly }: {
-  readOnly: boolean | undefined,
-}) => {
-  return <div class="absolute inset-0 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
+const MCPreviewGUISection = component$(({ readOnly }: { readOnly: boolean | undefined }) => {
+  const previewStyle = useContext(previewStyleContext);
 
+  return <div class="absolute inset-0 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
     <div class="w-2/5 relative">
-      <img src="/minecraft/chest.png" alt="Minecraft Chest GUI" class="w-full rounded-none!" style="image-rendering: pixelated;"/>
-      <div class="absolute inset-0">
-        <InputField readOnly={readOnly} inputClass="*:text-shadow-none!" class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] text-xs sm:text-sm md:text-base lg:text-2xl">
-          <Slot />
-        </InputField>
-        <p class="absolute top-[calc(72/168*100%)] left-[calc(8/176*100%)] text-xs sm:text-sm md:text-base lg:text-2xl text-[#404040]! text-shadow-none">
-          Inventory
+      <img src={ImgChestGui} alt="Minecraft Chest GUI" class="w-full rounded-none!" style="image-rendering: pixelated;" width={176} height={168} />
+      <div class="absolute inset-0 text-xs sm:text-sm md:text-base lg:text-2xl">
+        {previewStyle.value == 'gui-chest' &&
+          <InputField readOnly={readOnly} inputClass="*:text-shadow-none!" class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] w-[calc(160/176*100%)]">
+            <Slot />
+          </InputField>
+        }
+        {previewStyle.value != 'gui-chest' &&
+          <p class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] text-[#404040]! text-shadow-none">
+            Minecraft GUI Preview
+          </p>
+        }
+        <img src={ImgItem} alt="Minecraft Item Icon" class="absolute top-[calc(18/168*100%)] left-[calc(9/176*100%)] w-[calc(13/168*100%)] h-[calc(13/168*100%)] rounded-none!" style="image-rendering: pixelated;" width={16} height={16} />
+        <p class="absolute top-[calc(72/168*100%)] left-[calc(8/176*100%)] text-[#404040]! text-shadow-none">
+          RGBirdflop
         </p>
+        {previewStyle.value == 'gui-item-name' &&
+          <div class="absolute top-[calc(28/168*100%)] left-[calc(20/176*100%)] bg-[#100010]/95 lum-btn-p-1">
+            <InputField readOnly={readOnly} inputClass="*:text-shadow-none!">
+              <Slot />
+            </InputField>
+            <div class="*:absolute *:bg-[#100010]/95">
+              <div class="left-0 top-full w-full h-0.5"/>
+              <div class="left-0 bottom-full w-full h-0.5"/>
+              <div class="left-full top-0 h-full w-0.5"/>
+              <div class="right-full top-0 h-full w-0.5"/>
+            </div>
+            <div class="*:absolute">
+              <div class="bg-[#28007f]/50 left-0.5 top-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5"/>
+              <div class="bg-[#5000ff]/50 left-0.5 bottom-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5"/>
+              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 left-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5"/>
+              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 right-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5"/>
+            </div>
+          </div>
+        }
       </div>
     </div>
-
   </div>;
 });
 
@@ -266,6 +293,10 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
           {
             name: t('rgb.inputText.preview.gui.chest@@Minecraft GUI Chest'),
             value: 'gui-chest',
+          },
+          {
+            name: t('rgb.inputText.preview.gui.item@@Minecraft GUI Item Name'),
+            value: 'gui-item-name',
           },
         ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
           <Eye size={20} class="text-lum-text-secondary" q:slot="dropdown" />
