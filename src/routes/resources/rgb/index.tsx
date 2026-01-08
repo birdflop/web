@@ -393,7 +393,11 @@ export default component$(() => {
               value={generateOutput(rgbStore)}
             />
 
-            <Options />
+            <Accordion sectionName='options' alwaysOpen>
+              <Settings size={26} />
+              {t('rgb.options@@Options')}
+            </Accordion>
+            <Options hidden={!openItemsStore.items.includes('options')} />
           </div>
 
           <div class='mb-4 flex flex-col gap-2' id='column3'>

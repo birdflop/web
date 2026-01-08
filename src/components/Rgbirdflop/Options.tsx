@@ -4,13 +4,15 @@ import { rgbStoreContext } from '~/routes/resources/rgb';
 import { formats, GRADIENT_TYPES, type GradientType } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
-export default component$(() => {
+export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class={{
-      'flex flex-col gap-2 transition-all duration-200': true,
+      'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+      'max-h-0 opacity-0 pointer-events-none': hidden,
+      'max-h-120 opacity-100 pointer-events-auto': !hidden,
     }}>
       <div class="flex flex-col md:grid grid-cols-2 gap-2">
         <Slot />
