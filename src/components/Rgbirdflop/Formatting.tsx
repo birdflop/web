@@ -22,53 +22,48 @@ export default component$(() => {
   };
 
   return (
-    <div class="flex gap-1" id="formatting">
+    <div class="lum-card p-1 flex-row gap-1 items-center *:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1 justify-evenly" id="formatting">
       <button type="button" id="bold" class={{
-        'lum-btn lum-bg-transparent p-2 group': true,
-        'lum-bg-blue hover:lum-bg-blue/50': rgbStore.bold,
+        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.bold,
       }} aria-pressed={rgbStore.bold} title={t('rgb.formatting.bold@@Bold')}
       onClick$={() => { rgbStore.bold = !rgbStore.bold; }}>
-        <Bold />
+        <Bold size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 -top-[105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card lum-bg-lum-input-bg/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.bold@@Bold')}{getFormatLabel('bold')}
         </span>
       </button>
       <button type="button" id="italic" class={{
-        'lum-btn lum-bg-transparent p-2 group': true,
-        'lum-bg-blue hover:lum-bg-blue/50': rgbStore.italic,
+        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.italic,
       }} aria-pressed={rgbStore.italic} title={t('rgb.formatting.italic@@Italic')}
       onClick$={() => { rgbStore.italic = !rgbStore.italic; }}>
-        <Italic />
+        <Italic size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 -top-[105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card lum-bg-lum-input-bg/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.italic@@Italic')}{getFormatLabel('italic')}
         </span>
       </button>
       <button type="button" id="underline" class={{
-        'lum-btn lum-bg-transparent p-2 group': true,
-        'lum-bg-blue hover:lum-bg-blue/50': rgbStore.underline,
+        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.underline,
       }} aria-pressed={rgbStore.underline} title={t('rgb.formatting.underline@@Underline')}
       onClick$={() => { rgbStore.underline = !rgbStore.underline; }}>
-        <Underline />
+        <Underline size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 -top-[105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card lum-bg-lum-input-bg/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.underline@@Underline')}{getFormatLabel('underline')}
         </span>
       </button>
       <button type="button" id="strikethrough" class={{
-        'lum-btn lum-bg-transparent p-2 group': true,
-        'lum-bg-blue hover:lum-bg-blue/50': rgbStore.strikethrough,
+        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.strikethrough,
       }} aria-pressed={rgbStore.strikethrough} title={t('rgb.formatting.strikethrough@@Strikethrough')}
       onClick$={() => { rgbStore.strikethrough = !rgbStore.strikethrough; }}>
-        <Strikethrough />
+        <Strikethrough size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 -top-[105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card lum-bg-lum-input-bg/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.strikethrough@@Strikethrough')}{getFormatLabel('strikethrough')}
         </span>
       </button>
       <button type="button" id="obfuscate" class={{
-        'lum-btn lum-bg-transparent p-2 group': true,
-        'lum-bg-blue hover:lum-bg-blue/50': rgbStore.obfuscate,
+        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.obfuscate,
       }} aria-pressed={rgbStore.obfuscate} title={t('rgb.formatting.obfuscate@@Obfuscate')}
       onClick$={() => { rgbStore.obfuscate = !rgbStore.obfuscate; }}>
-        <Wand2 />
+        <Wand2 size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 -top-[105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card lum-bg-lum-input-bg/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.obfuscate@@Obfuscate')}{getFormatLabel('obfuscate')}
         </span>

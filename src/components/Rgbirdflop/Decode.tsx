@@ -1,5 +1,4 @@
-import type { Signal } from '@builder.io/qwik';
-import { $, component$, useContext } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { generateOutput } from '@birdflop/rgbirdflop';
@@ -7,14 +6,14 @@ import { rgbStoreContext } from '~/routes/resources/rgb';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { getSignificantPoints } from '~/util/rgb/Decode';
 
-export default component$(({ threshold, hidden }: {
-  threshold: Signal<number>,
+export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
+  const threshold = useSignal(50);
 
   const decodeText = $(async (rgbtext: string, threshold: number) => {
     const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;

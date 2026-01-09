@@ -64,7 +64,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
   return (
     <div
       class={{
-        'w-full h-2 mb-s5 rounded-full items-center relative': true,
+        'w-full h-2 my-2 rounded-full items-center relative': true,
         hidden: rgbStore.disperse,
       }}
       id={'colormap' + id}

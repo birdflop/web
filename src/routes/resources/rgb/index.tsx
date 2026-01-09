@@ -131,7 +131,8 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
-const AD_VARIANTS = {
+
+export const AD_VARIANTS = {
   'ai-generated': {
     image: '/ad-ai.png',
     label: 'AI Generated',
@@ -141,8 +142,9 @@ const AD_VARIANTS = {
     label: 'Handmade by Pemi',
   },
 } as const;
-type AdVariantKey = keyof typeof AD_VARIANTS;
-const AD_VARIANT_STORAGE_KEY = 'rgb-ad-variant';
+export type AdVariantKey = keyof typeof AD_VARIANTS;
+export const AD_VARIANT_STORAGE_KEY = 'rgb-ad-variant';
+
 export default component$(() => {
   const t = inlineTranslate();
   const { cookies: rgbCookies, errors } = useCookies().value;
@@ -159,13 +161,10 @@ export default component$(() => {
     });
   });
 
-  const rgbStore = useStore(
-    {
-      ...structuredClone(rgbDefaults),
-      ...rgbCookies,
-    },
-    { deep: true },
-  );
+  const rgbStore = useStore({
+    ...structuredClone(rgbDefaults),
+    ...rgbCookies,
+  }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
   const previewStyle = useSignal('default');
@@ -174,7 +173,7 @@ export default component$(() => {
   const showAllGradients = useContext(showAllGradientsContext);
 
   const openItemsStore = useContext(openItemsContext);
-  const threshold = useSignal(50);
+
   const showAds = useSignal(false);
   const adVariant = useSignal<AdVariantKey | null>(null);
 
@@ -273,7 +272,7 @@ export default component$(() => {
       description: 'The color map shows you how the colors are distributed across your text. You can use this to fine-tune your gradient!',
     },
     {
-      id: 'underline',
+      id: 'formatting',
       description: 'You can also add formatting to your text over here, try it out!',
     },
     {
@@ -328,45 +327,45 @@ export default component$(() => {
           {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </p>
 
-        <div class='relative'>
-          <Input>
-            {showAllGradients.value && previewStyle.value != 'default'
-              ? GRADIENT_TYPES.map((gradientType) => {
-                const tempStore = {
-                  ...rgbStore,
-                  gradientType: gradientType,
-                };
-                const isActive = gradientType === rgbStore.gradientType;
-                return (
-                  <span key={gradientType} class='flex items-center gap-2'>
-                    <span
-                      class={{
-                        'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
-                        'text-lum-text': isActive,
-                        'text-gray-400': !isActive,
-                      }}
-                    >
-                      {gradientType}
-                    </span>
-                    <span class='flex-1'>
-                      {renderPreview(
-                        tempStore,
-                        previewStyle.value == 'default' ? 4 : 2,
-                      )}
-                    </span>
+        <Input>
+          {showAllGradients.value && previewStyle.value != 'default'
+            ? GRADIENT_TYPES.map((gradientType) => {
+              const tempStore = {
+                ...rgbStore,
+                gradientType: gradientType,
+              };
+              const isActive = gradientType === rgbStore.gradientType;
+              return (
+                <span key={gradientType} class='flex items-center gap-2'>
+                  <span
+                    class={{
+                      'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                      'text-lum-text': isActive,
+                      'text-gray-400': !isActive,
+                    }}
+                  >
+                    {gradientType}
                   </span>
-                );
-              })
-              : renderPreview(
-                rgbStore,
-                previewStyle.value == 'default' ? 4 : 2,
-              )}
-          </Input>
-        </div>
+                  <span class='flex-1'>
+                    {renderPreview(
+                      tempStore,
+                      previewStyle.value == 'default' ? 4 : 2,
+                    )}
+                  </span>
+                </span>
+              );
+            })
+            : renderPreview(
+              rgbStore,
+              previewStyle.value == 'default' ? 4 : 2,
+            )}
+        </Input>
 
         <ColorMap />
+
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
           <MobileNavbar />
+
           <div class='flex flex-col gap-2 relative' id='column1'>
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />
@@ -379,6 +378,7 @@ export default component$(() => {
             </Accordion>
             <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
           </div>
+
           <div
             class='flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10'
             id='column2'
@@ -406,17 +406,15 @@ export default component$(() => {
             </div>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
 
-            {rgbStore.customFormat && (
-              <>
-                <Accordion sectionName='formatoptions' pcOnly>
-                  <Settings />
-                  {t('rgb.formatting.options@@Format Options')}
-                </Accordion>
-                <FormatOptions
-                  hidden={!openItemsStore.items.includes('formatoptions')}
-                />
-              </>
-            )}
+            {rgbStore.customFormat && <>
+              <Accordion sectionName='formatoptions' pcOnly>
+                <Settings />
+                {t('rgb.formatting.options@@Format Options')}
+              </Accordion>
+              <FormatOptions
+                hidden={!openItemsStore.items.includes('formatoptions')}
+              />
+            </>}
 
             <Accordion sectionName='decode' pcOnly>
               <Sparkles />
@@ -425,10 +423,7 @@ export default component$(() => {
                 {t('rgb.decode.experimental@@experimental')}
               </span>
             </Accordion>
-            <Decode
-              threshold={threshold}
-              hidden={!openItemsStore.items.includes('decode')}
-            />
+            <Decode hidden={!openItemsStore.items.includes('decode')} />
           </div>
         </div>
         <p class='mt-8'>

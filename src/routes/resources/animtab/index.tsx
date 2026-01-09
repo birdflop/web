@@ -1,8 +1,8 @@
 import { component$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
-import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES } from '@birdflop/rgbirdflop';
-import { rgbStoreContext } from '../rgb';
+import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES, disperseColors } from '@birdflop/rgbirdflop';
+import { AD_VARIANT_STORAGE_KEY, AD_VARIANTS, AdVariantKey, rgbStoreContext } from '../rgb';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
@@ -21,6 +21,8 @@ import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext, showAllGradientsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { defaultDescription, generateHead } from '~/root';
+import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
+import HostingAd from '~/components/Rgbirdflop/HostingAd';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -60,18 +62,20 @@ export default component$(() => {
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
+  const animtabStore = useStore({
+    ...animTABDefaults,
+    ...animTABCookies,
+  }, { deep: true });
+
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
   const showAllGradients = useContext(showAllGradientsContext);
 
   const openItemsStore = useContext(openItemsContext);
-  const threshold = useSignal(50);
 
-  const animtabStore = useStore({
-    ...animTABDefaults,
-    ...animTABCookies,
-  }, { deep: true });
+  const showAds = useSignal(false);
+  const adVariant = useSignal<AdVariantKey | null>(null);
 
   const frames = useStore({
     list: [] as (string | null)[][],
@@ -83,25 +87,33 @@ export default component$(() => {
       setCookies('rgb', rgbStore);
       setCookies('animtab', { version: rgbStore.version, ...animtabStore });
     }
+    if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       track(() => rgbStore[key]);
     });
     (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
       track(() => animtabStore[key]);
     });
+
     const { frames: newFrames } = generateAnimTABFrames({ ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' }, animtabStore);
-    if (animtabStore.type == 1) {
+
+    switch (animtabStore.type) {
+    case 1:
+      // Reverse
       frames.list = newFrames.reverse();
-    }
-    else if (animtabStore.type == 3) {
+      break;
+    case 3: {
+      // Ping Pong
       const frames2 = newFrames.slice();
       frames.list = newFrames.reverse().concat(frames2);
+      break;
     }
-    else {
+    default:
       frames.list = newFrames;
     }
   });
 
+  // Animtab frames updater
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
@@ -116,6 +128,7 @@ export default component$(() => {
     setFrame(performance.now());
   });
 
+  // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     if (!isBrowser && !rgbStore.obfuscate) return;
@@ -127,7 +140,10 @@ export default component$(() => {
           el.textContent = rgbStore.text[i];
           return;
         }
-        el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
+        el.textContent = Math.random()
+          .toString(36)
+          .substring(1, 3)
+          .replace('.', '');
       });
       rafId = requestAnimationFrame(obfuscate);
     }
@@ -136,8 +152,50 @@ export default component$(() => {
     return () => cancelAnimationFrame(rafId);
   });
 
+  // Ads
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!isBrowser) return;
+
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const stored = localStorage.getItem(
+        AD_VARIANT_STORAGE_KEY,
+      ) as AdVariantKey | null;
+
+      const usPreferredRegions = [
+        'America/', // North/Central/South America
+        'Pacific/Honolulu', // Hawaii
+        'Pacific/Guam', // US territories
+        'Atlantic/Bermuda', // Close to US
+      ];
+      // const shouldShowAds = usPreferredRegions.some(region => tz.startsWith(region));
+      const shouldShowAds = !usPreferredRegions.some((region) =>
+        tz.startsWith(region),
+      );
+
+      if (shouldShowAds) {
+        showAds.value = true;
+        if (stored && AD_VARIANTS[stored]) {
+          adVariant.value = stored;
+        } else {
+          const keys = Object.keys(AD_VARIANTS) as AdVariantKey[];
+          const chosen = keys[Math.floor(Math.random() * keys.length)];
+          adVariant.value = chosen;
+          localStorage.setItem(AD_VARIANT_STORAGE_KEY, chosen);
+        }
+      }
+    } catch (err) {
+      console.warn('Ad region detection failed', err);
+    }
+  });
+  const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
+
   return (
     <section class='relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center'>
+      {showAds.value && adAsset && (
+        <HostingAd variant={adAsset} position='Left' />
+      )}
       <div class='min-h-15 max-w-6xl'>
         <h2 class='flex gap-3 items-center my-2!'>
           <Rainbow size={46} />
@@ -225,11 +283,13 @@ export default component$(() => {
         <ColorMap />
 
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1">
+          <MobileNavbar />
+
           <div class="flex flex-col gap-2 relative" id="column1">
-            <Accordion sectionName="colors" pcOnly>
-              <Palette size={26} />
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Palette />
               {t('rgb.colors.title@@Colors')}
-            </Accordion>
+            </div>
             <ColorList hidden={!openItemsStore.items.includes('colors')}>
               <NumberInput id="length" input disabled value={animtabStore.length * rgbStore.text.length} min={rgbStore.text.length} class={{ 'w-full opacity-100!': true }}
                 onIncrement$={() => animtabStore.length++}
@@ -240,18 +300,23 @@ export default component$(() => {
             </ColorList>
           </div>
 
-          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10" id="column2">
-            <Accordion sectionName="output" pcOnly>
-              <Clipboard size={26} />
+          <div
+            class='flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10'
+            id='column2'
+          >
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Clipboard />
               {t('rgb.output.title@@Output')}
-            </Accordion>
-            <Output hidden={!openItemsStore.items.includes('output')}
-              value={AnimationOutput(rgbStore, animtabStore)} />
+            </div>
+            <Output
+              hidden={!openItemsStore.items.includes('output')}
+              value={AnimationOutput(rgbStore, animtabStore)}
+            />
 
-            <Accordion sectionName='options' pcOnly>
-              <Settings size={26} />
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Settings />
               {t('rgb.options@@Options')}
-            </Accordion>
+            </div>
             <Options hidden={!openItemsStore.items.includes('options')}>
               <div class="flex flex-col gap-1 col-span-2">
                 <label for="nameinput">
@@ -279,31 +344,34 @@ export default component$(() => {
             </Options>
           </div>
 
-          <div class="mb-4 flex flex-col gap-2" id="column3">
-            <Accordion sectionName="presets" pcOnly>
-              <Save size={26} />
+          <div class='mb-4 flex flex-col gap-2' id='column3'>
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Save />
               {t('rgb.presets.title@@Presets')}
-            </Accordion>
+            </div>
             <Presets hidden={!openItemsStore.items.includes('presets')} />
+
             {rgbStore.customFormat && <>
-              <Accordion sectionName="formatoptions">
-                <Settings size={26} />
+              <Accordion sectionName='formatoptions' pcOnly>
+                <Settings />
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
-              <FormatOptions hidden={!openItemsStore.items.includes('formatoptions')} />
+              <FormatOptions
+                hidden={!openItemsStore.items.includes('formatoptions')}
+              />
             </>}
 
-            <Accordion sectionName="decode">
-              <Sparkles size={26} />
+            <Accordion sectionName='decode' pcOnly>
+              <Sparkles />
               {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+              <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>
                 {t('rgb.decode.experimental@@experimental')}
               </span>
             </Accordion>
-            <Decode threshold={threshold} hidden={!openItemsStore.items.includes('decode')} />
+            <Decode hidden={!openItemsStore.items.includes('decode')} />
 
-            <Accordion sectionName="outputformat">
-              <FileJson size={26} />
+            <Accordion sectionName="outputformat" pcOnly>
+              <FileJson />
               {t('animtab.outputFormat.title@@Output Format')}
             </Accordion>
             <div class={{
@@ -321,10 +389,28 @@ export default component$(() => {
             </div>
           </div>
         </div>
-        <div class="text-sm mt-8">
-          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">click here</a> to make a charitable donation, 100% tax-deductible in the US.
-        </div>
+        <p class='mt-8'>
+          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+          gradient creator that generates hex formatted text. RGB Birdflop is a
+          public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+          affordable and accessible hosting and public resources. If you would
+          like to support our mission, please{' '}
+          <a href='https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U'>
+            click here
+          </a>{' '}
+          to make a charitable donation, 100% tax-deductible in the US.
+        </p>
+        <p>
+          Wanna automate generating gradients or use this in your own project?
+          We have{' '}
+          <a class='text-blue-400 hover:underline' href='/docs/rgbirdflop/api'>
+            an API!
+          </a>
+        </p>
       </div>
+      {showAds.value && adAsset && (
+        <HostingAd variant={adAsset} position='Right' />
+      )}
     </section>
   );
 });
