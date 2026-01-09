@@ -250,7 +250,6 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'RGB Birdflop - Minecraft RGB Gradient Creator',
-  description:
-    'Hex gradient text generator. Developed by Birdflop. ' + defaultDescription,
+  title: 'RGB Birdflop Animated TAB',
+  description: 'TAB plugin gradient animation creator. ' + defaultDescription,
 });
