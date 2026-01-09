@@ -11,13 +11,14 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Box size={48} /> {t('nav.resources.title@@Resources')}
-        </h1>
-        <p>
+        <h2 class='flex gap-3 items-center my-2!'>
+          <Box size={46} />
+          {t('nav.resources.title@@Resources')}
+        </h2>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.description@@Here you can find all of Birdflop\'s public resources.')}
         </p>
-        <hr/>
+
         <h3 class="my-0!">
           {t('nav.resources.gradientTools.title@@Gradient Tools')}
         </h3>

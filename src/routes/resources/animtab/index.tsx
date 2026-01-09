@@ -139,13 +139,13 @@ export default component$(() => {
   return (
     <section class='relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center'>
       <div class='min-h-15 max-w-6xl'>
-        <h1 class="flex gap-4 items-center my-3!">
-          <Rainbow size={48} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
-        </h1>
-        <p>
+        <h2 class='flex gap-3 items-center my-2!'>
+          <Rainbow size={46} />
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        </h2>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
         </p>
-        <hr/>
 
         <Input>
           {(() => {

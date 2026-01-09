@@ -54,6 +54,7 @@ import {
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import { defaultDescription, generateHead } from '~/root';
+import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
@@ -319,16 +320,13 @@ export default component$(() => {
         <HostingAd variant={adAsset} position='Left' />
       )}
       <div class='min-h-15 max-w-6xl'>
-        <h1 class='flex gap-4 items-center my-3!'>
-          <Palette size={48} />
+        <h2 class='flex gap-3 items-center my-2!'>
+          <Palette size={46} />
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </h1>
-        <p>
-          {t(
-            'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
-          )}
+        </h2>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
+          {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
         </p>
-        <hr/>
 
         <div class='relative'>
           <Input>
@@ -368,73 +366,7 @@ export default component$(() => {
 
         <ColorMap />
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
-          <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('colors')
-                ? openItemsStore.items.filter(item => item !== 'colors')
-                : ['colors'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('colors'),
-            }}>
-              <Palette />
-              {t('rgb.colors.title@@Colors')}
-            </button>
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('output')
-                ? openItemsStore.items.filter(item => item !== 'output')
-                : ['output'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('output'),
-            }}>
-              <Clipboard />
-              {t('rgb.output.title@@Output')}
-            </button>
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('options')
-                ? openItemsStore.items.filter(item => item !== 'options')
-                : ['options'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('options'),
-            }}>
-              <Settings />
-              {t('rgb.options@@Options')}
-            </button>
-            {rgbStore.customFormat && (
-              <button onClick$={() => {
-                openItemsStore.items = openItemsStore.items.includes('formatoptions')
-                  ? openItemsStore.items.filter(item => item !== 'formatoptions')
-                  : ['formatoptions'];
-              }} class={{
-                'lum-bg-blue!': openItemsStore.items.includes('formatoptions'),
-              }}>
-                <Settings />
-                {t('rgb.formatting.options@@Format Options')}
-              </button>
-            )}
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('textshadow')
-                ? openItemsStore.items.filter(item => item !== 'textshadow')
-                : ['textshadow'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
-            }}>
-              <Blend />
-              {t('rgb.colors.shadow.title@@Text Shadow')}
-            </button>
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('decode')
-                ? openItemsStore.items.filter(item => item !== 'decode')
-                : ['decode'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('decode'),
-            }}>
-              <Sparkles />
-              {t('rgb.decode.title@@Decode')}
-              <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>
-                {t('rgb.decode.experimental@@experimental')}
-              </span>
-            </button>
-          </div>
+          <MobileNavbar />
           <div class='flex flex-col gap-2 relative' id='column1'>
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />

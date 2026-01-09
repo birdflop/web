@@ -228,18 +228,20 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   });
 
   return <>
-    {!readOnly && !noLabel &&
-      <h5 class="mt-0! mb-2! flex md:text-lg xl:text-xl font-semibold gap-3 items-center">
-        <Terminal size={26} />
-        {t('rgb.inputText.title@@Input Text')}
-        <p class="text-lum-text-secondary text-sm font-normal">
-          {t('rgb.inputText.description@@Type here to generate a gradient!')}
-        </p>
-      </h5>
-    }
-    {!noFormatRow &&
-      <Formatting/>
-    }
+    <div class="flex">
+      {!readOnly && !noLabel &&
+        <h5 class="my-2! flex flex-1 md:text-lg xl:text-xl font-semibold gap-3 items-center">
+          <Terminal />
+          {t('rgb.inputText.title@@Input Text')}
+          <p class="text-lum-text-secondary text-sm font-normal">
+            {t('rgb.inputText.description@@Type here to generate a gradient!')}
+          </p>
+        </h5>
+      }
+      {!noFormatRow &&
+        <Formatting/>
+      }
+    </div>
     <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
       {previewStyle.value != 'default' && <MCPreviewInput readOnly={readOnly}
         chatInput={chatInput}

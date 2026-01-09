@@ -274,9 +274,9 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="sm:flex items-center my-3!">
-          <span class="flex flex-1 gap-4 items-center">
-            <Save size={48} />
+        <h2 class='flex gap-3 items-center my-2!'>
+          <Save size={46} />
+          <span class="flex-1">
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
           <SelectMenuRaw
@@ -303,13 +303,10 @@ export default component$(() => {
           <a href="#my-presets" class="lum-btn font-normal ml-2">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
           </a>
-        </h1>
-        <p>
-          {t(
-            'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
-          )}
+        </h2>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
+          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
-        <hr />
         <div class="flex flex-col gap-2">
           {savedPresets.value.length > 0 && <div>
             <Toggle
