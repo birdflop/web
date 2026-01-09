@@ -5,7 +5,7 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
+import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';

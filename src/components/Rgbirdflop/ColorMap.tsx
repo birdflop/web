@@ -1,5 +1,5 @@
 import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults } from '@birdflop/rgbirdflop';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';

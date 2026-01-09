@@ -29,7 +29,7 @@ import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { rgbStoreContext } from '..';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';

@@ -2,7 +2,7 @@ import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ 
 import { Eye, Grid2X2, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { showAllGradientsContext } from '~/routes/layout';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';

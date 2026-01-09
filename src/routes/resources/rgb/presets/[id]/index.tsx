@@ -8,7 +8,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
 import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { renderPreview, rgbStoreContext } from '../..';
+import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';

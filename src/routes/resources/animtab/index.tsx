@@ -2,7 +2,7 @@ import { component$, useContext, useContextProvider, useSignal, useStore, useTas
 import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { animationStyles, rgbDefaults, animTABDefaults, AnimationOutput, generateAnimTABFrames, hexToRGB, GRADIENT_TYPES, disperseColors } from '@birdflop/rgbirdflop';
-import { AD_VARIANT_STORAGE_KEY, AD_VARIANTS, AdVariantKey, rgbStoreContext } from '../rgb';
+import { AD_VARIANT_STORAGE_KEY, AD_VARIANTS, AdVariantKey, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';

@@ -1,7 +1,7 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();

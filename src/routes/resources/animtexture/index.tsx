@@ -7,7 +7,7 @@ import { Download, GalleryHorizontalEnd, RefreshCw, X } from 'lucide-icons-qwik'
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '../rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 
 export async function base64ToFile(dataURL: string) {
