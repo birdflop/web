@@ -380,16 +380,6 @@ export default component$(() => {
               {t('rgb.colors.title@@Colors')}
             </button>
             <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('textshadow')
-                ? openItemsStore.items.filter(item => item !== 'textshadow')
-                : ['textshadow'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
-            }}>
-              <Blend />
-              {t('rgb.colors.shadow.title@@Text Shadow')}
-            </button>
-            <button onClick$={() => {
               openItemsStore.items = openItemsStore.items.includes('output')
                 ? openItemsStore.items.filter(item => item !== 'output')
                 : ['output'];
@@ -421,6 +411,16 @@ export default component$(() => {
                 {t('rgb.formatting.options@@Format Options')}
               </button>
             )}
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('textshadow')
+                ? openItemsStore.items.filter(item => item !== 'textshadow')
+                : ['textshadow'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
+            }}>
+              <Blend />
+              {t('rgb.colors.shadow.title@@Text Shadow')}
+            </button>
             <button onClick$={() => {
               openItemsStore.items = openItemsStore.items.includes('decode')
                 ? openItemsStore.items.filter(item => item !== 'decode')
