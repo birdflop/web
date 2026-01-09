@@ -84,7 +84,7 @@ export default component$(({ animtab }: {
             ? openItemsStore.items.filter(item => item !== 'outputformat')
             : ['outputformat'];
         }} class={{
-          'lum-bg-b lue!': openItemsStore.items.includes('outputformat'),
+          'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
         }}>
           <FileJson />
           {t('animtab.outputFormat.title@@Output Format')}
