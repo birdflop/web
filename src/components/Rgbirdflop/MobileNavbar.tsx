@@ -53,16 +53,6 @@ export default component$(() => {
           {t('rgb.formatting.options@@Format Options')}
         </button>
       )}
-      <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('textshadow')
-          ? openItemsStore.items.filter(item => item !== 'textshadow')
-          : ['textshadow'];
-      }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
-      }}>
-        <Blend />
-        {t('rgb.colors.shadow.title@@Text Shadow')}
-      </button>
       <Slot />
       <button onClick$={() => {
         openItemsStore.items = openItemsStore.items.includes('decode')
