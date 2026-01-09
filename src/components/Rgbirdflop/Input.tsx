@@ -1,9 +1,8 @@
 import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
-import { Eye, Grid2X2, Terminal } from 'lucide-icons-qwik';
+import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { showAllGradientsContext } from '~/routes/layout';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
@@ -217,7 +216,6 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
-  const showAllGradients = useContext(showAllGradientsContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -254,19 +252,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
       <div class={{ 'flex gap-1': true,
         'absolute top-1 right-1': true,
       }}>
-        {previewStyle.value != 'default' && (
-          <button
-            class={{
-              'p-1 rounded-lum-1 lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
-              'text-lum-primary': showAllGradients.value,
-              'text-lum-text-secondary': !showAllGradients.value,
-            }}
-            onClick$={() => showAllGradients.value = !showAllGradients.value}
-            title={showAllGradients.value ? 'Show only selected gradient' : 'Show all gradients'}
-          >
-            <Grid2X2 size={20} />
-          </button>
-        )}
+        <Slot name="extra-buttons" />
         <SelectMenuRaw align="right" id="previewstyle" value={previewStyle.value} onChange$={
           (e, el) => {
             previewStyle.value = el.value;

@@ -1,12 +1,10 @@
-import { component$, useContext } from '@builder.io/qwik';
-import { Blend, Clipboard, FileJson, Palette, Settings, Sparkles } from 'lucide-icons-qwik';
+import { component$, Slot, useContext } from '@builder.io/qwik';
+import { Blend, Clipboard, Palette, Settings, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
-export default component$(({ animtab }: {
-  animtab?: boolean;
-}) => {
+export default component$(() => {
   const t = inlineTranslate();
   const openItemsStore = useContext(openItemsContext);
   const rgbStore = useContext(rgbStoreContext);
@@ -65,6 +63,7 @@ export default component$(({ animtab }: {
         <Blend />
         {t('rgb.colors.shadow.title@@Text Shadow')}
       </button>
+      <Slot />
       <button onClick$={() => {
         openItemsStore.items = openItemsStore.items.includes('decode')
           ? openItemsStore.items.filter(item => item !== 'decode')
@@ -78,18 +77,6 @@ export default component$(({ animtab }: {
           {t('rgb.decode.experimental@@experimental')}
         </span>
       </button>
-      {animtab &&
-        <button onClick$={() => {
-          openItemsStore.items = openItemsStore.items.includes('outputformat')
-            ? openItemsStore.items.filter(item => item !== 'outputformat')
-            : ['outputformat'];
-        }} class={{
-          'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
-        }}>
-          <FileJson />
-          {t('animtab.outputFormat.title@@Output Format')}
-        </button>
-      }
     </div>
   );
 });

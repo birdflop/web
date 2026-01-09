@@ -2,13 +2,13 @@ import {
   component$,
   createContextId,
   useContext,
-  useContextProvider,
   useSignal,
-  useStore,
   useTask$,
   useVisibleTask$,
   isBrowser,
   $,
+  Slot,
+  Signal,
 } from '@builder.io/qwik';
 
 import {
@@ -16,11 +16,9 @@ import {
   ColorGradient,
   GradientType,
   disperseColors,
-  generateOutput,
   sortColors,
   hexToRGB,
   rgbToHex,
-  GRADIENT_TYPES,
   getShadowColors,
 } from '@birdflop/rgbirdflop';
 
@@ -30,6 +28,7 @@ import { setCookies } from '~/util/dataUtils';
 import {
   Blend,
   Clipboard,
+  Grid2X2,
   Palette,
   Save,
   Settings,
@@ -48,7 +47,6 @@ import Accordion from '~/components/Elements/Accordion';
 import {
   BirdLandContext,
   openItemsContext,
-  showAllGradientsContext,
 } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
@@ -98,6 +96,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     shadowHex = rgbShadow ? rgbToHex(rgbShadow) : '';
     return (
       <span
+        q:slot='input'
         key={`char${i}`}
         style={{
           color: `#${hex};`,
@@ -121,6 +120,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
 }
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
+export const showAllGradientsContext = createContextId<Signal<boolean>>('showallgradients-context');
 
 export const AD_VARIANTS = {
   'ai-generated': {
@@ -135,14 +135,11 @@ export const AD_VARIANTS = {
 export type AdVariantKey = keyof typeof AD_VARIANTS;
 export const AD_VARIANT_STORAGE_KEY = 'rgb-ad-variant';
 
-export default component$(({ useCookiesValue }: {
-  useCookiesValue: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  }
+export default component$(({ errors, output }: {
+  errors: string[];
+  output: string;
 }) => {
   const t = inlineTranslate();
-  const { cookies: rgbCookies, errors } = useCookiesValue;
   const notifications = useContext(NotificationContext);
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -156,18 +153,10 @@ export default component$(({ useCookiesValue }: {
     });
   });
 
-  const rgbStore = useStore({
-    ...structuredClone(rgbDefaults),
-    ...rgbCookies,
-  }, { deep: true });
-  useContextProvider(rgbStoreContext, rgbStore);
-
-  const previewStyle = useSignal('default');
-  useContextProvider(previewStyleContext, previewStyle);
-
-  const showAllGradients = useContext(showAllGradientsContext);
-
+  const rgbStore = useContext(rgbStoreContext);
   const openItemsStore = useContext(openItemsContext);
+  const previewStyle = useContext(previewStyleContext);
+  const showAllGradients = useContext(showAllGradientsContext);
 
   const showAds = useSignal(false);
   const adVariant = useSignal<AdVariantKey | null>(null);
@@ -314,59 +303,40 @@ export default component$(({ useCookiesValue }: {
         <HostingAd variant={adAsset} position='Left' />
       )}
       <div class='min-h-15 max-w-6xl'>
-        <h2 class='flex gap-3 items-center my-2!'>
-          <Palette size={46} />
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </h2>
-        <p class="mb-4 border-b border-lum-border/10 pb-4">
-          {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-        </p>
+        <Slot name="header" />
 
         <Input>
-          {showAllGradients.value && previewStyle.value != 'default'
-            ? GRADIENT_TYPES.map((gradientType) => {
-              const tempStore = {
-                ...rgbStore,
-                gradientType: gradientType,
-              };
-              const isActive = gradientType === rgbStore.gradientType;
-              return (
-                <span key={gradientType} class='flex items-center gap-2'>
-                  <span
-                    class={{
-                      'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
-                      'text-lum-text': isActive,
-                      'text-gray-400': !isActive,
-                    }}
-                  >
-                    {gradientType}
-                  </span>
-                  <span class='flex-1'>
-                    {renderPreview(
-                      tempStore,
-                      previewStyle.value == 'default' ? 4 : 2,
-                    )}
-                  </span>
-                </span>
-              );
-            })
-            : renderPreview(
-              rgbStore,
-              previewStyle.value == 'default' ? 4 : 2,
-            )}
+          <Slot name="input" />
+          {previewStyle.value != 'default' && (
+            <button q:slot="extra-buttons"
+              class={{
+                'p-1 rounded-lum-1 lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
+                'text-lum-primary': showAllGradients.value,
+                'text-lum-text-secondary': !showAllGradients.value,
+              }}
+              onClick$={() => showAllGradients.value = !showAllGradients.value}
+              title={showAllGradients.value ? 'Show only selected gradient' : 'Show all gradients'}
+            >
+              <Grid2X2 size={20} />
+            </button>
+          )}
         </Input>
 
         <ColorMap />
 
         <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
-          <MobileNavbar />
+          <MobileNavbar>
+            <Slot name="mobile-navbar" />
+          </MobileNavbar>
 
           <div class='flex flex-col gap-2 relative' id='column1'>
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />
               {t('rgb.colors.title@@Colors')}
             </div>
-            <ColorList hidden={!openItemsStore.items.includes('colors')} />
+            <ColorList hidden={!openItemsStore.items.includes('colors')}>
+              <Slot name="color-list" />
+            </ColorList>
             <Accordion sectionName='textshadow' pcOnly>
               <Blend />
               {t('rgb.colors.shadow.title@@Text Shadow')}
@@ -384,14 +354,16 @@ export default component$(({ useCookiesValue }: {
             </div>
             <Output
               hidden={!openItemsStore.items.includes('output')}
-              value={generateOutput(rgbStore)}
+              value={output}
             />
 
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Settings />
               {t('rgb.options@@Options')}
             </div>
-            <Options hidden={!openItemsStore.items.includes('options')} />
+            <Options hidden={!openItemsStore.items.includes('options')}>
+              <Slot name='options' />
+            </Options>
           </div>
 
           <div class='mb-4 flex flex-col gap-2' id='column3'>
@@ -419,6 +391,8 @@ export default component$(({ useCookiesValue }: {
               </span>
             </Accordion>
             <Decode hidden={!openItemsStore.items.includes('decode')} />
+
+            <Slot name="column3" />
           </div>
         </div>
         <p class='mt-8'>
