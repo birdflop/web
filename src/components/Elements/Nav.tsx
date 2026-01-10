@@ -138,7 +138,7 @@ export default component$(() => {
             value={loc.url.pathname + loc.url.search}
           />
           <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
-            {t('nav.profile.login@@Log in')}
+            {t('nav.profile.login@@Login')}
           </button>
         </Form>
       }
@@ -147,7 +147,7 @@ export default component$(() => {
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
       <Accordion q:slot="mobile" sectionName="nav-hosting" class={{
-        'lum-bg-transparent hover:lum-bg-nav-bg': true,
+        'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
       }}>
         <Server size={20} /> {t('nav.hosting.title@@Hosting')}
       </Accordion>
@@ -170,7 +170,7 @@ export default component$(() => {
         </Link>
       </div>
       <Accordion q:slot="mobile" sectionName="nav-resources" class={{
-        'lum-bg-transparent hover:lum-bg-nav-bg': true,
+        'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
       }}>
         <Box size={20} /> {t('nav.resources.title@@Resources')}
       </Accordion>
