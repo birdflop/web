@@ -114,9 +114,6 @@
         "title": "Voorinstelling opgeslagen!",
         "warning": "Log in om voorinstellingen permanent op te slaan."
       },
-      "showPending": {
-        "title": "Toon wachtende voorinstellingen (ZEER GEVAARLIJK)"
-      },
       "showSaved": {
         "description": "Zet dit aan om alleen je opgeslagen voorinstellingen te tonen.",
         "title": "Toon opgeslagen voorinstellingen"

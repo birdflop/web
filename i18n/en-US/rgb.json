@@ -114,9 +114,6 @@
         "title": "Preset Saved!",
         "warning": "Please login to save presets permanently."
       },
-      "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
-      },
       "showSaved": {
         "description": "Turn this on to show only your saved presets.",
         "title": "Show saved presets"

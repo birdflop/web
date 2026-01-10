@@ -114,9 +114,6 @@
         "title": "Predefinição guardada!",
         "warning": "Por favor, faça login para guardar predefinições permanentemente."
       },
-      "showPending": {
-        "title": "Mostrar predefinições pendentes (MUITO PERIGOSO)"
-      },
       "showSaved": {
         "description": "Ative isto para mostrar apenas as suas predefinições guardadas.",
         "title": "Mostrar predefinições guardadas"

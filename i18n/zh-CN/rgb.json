@@ -114,9 +114,6 @@
         "title": "预设已保存！",
         "warning": "请登录以永久保存预设。"
       },
-      "showPending": {
-        "title": "显示待审核的预设（非常危险）"
-      },
       "showSaved": {
         "description": "开启此选项以仅显示您已保存的预设。",
         "title": "显示已保存的预设"

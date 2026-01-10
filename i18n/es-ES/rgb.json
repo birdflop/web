@@ -114,9 +114,6 @@
         "title": "¡Preajuste guardado!",
         "warning": "Inicia sesión para guardar los preajustes de forma permanente."
       },
-      "showPending": {
-        "title": "Mostrar preselecciones pendientes (MUY PELIGROSO)"
-      },
       "showSaved": {
         "description": "Actívalo para mostrar sólo los preajustes guardados.",
         "title": "Mostrar preajustes guardados"

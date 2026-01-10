@@ -114,9 +114,6 @@
         "title": "Ön ayar kaydedildi!",
         "warning": "Lütfen ön ayarları kalıcı olarak kaydetmek için giriş yapın."
       },
-      "showPending": {
-        "title": "Bekleyen ön ayarları göster (ÇOK TEHLİKELİ)"
-      },
       "showSaved": {
         "description": "Sadece kaydedilen ön ayarlarınızı göstermek için bunu açın.",
         "title": "Kaydedilen ön ayarları göster"

@@ -117,9 +117,6 @@
         "title": "Voreinstellung gespeichert!",
         "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
       },
-      "showPending": {
-        "title": "Ausstehende Voreinstellungen anzeigen (SEHR GEFÄHRLICH)"
-      },
       "showSaved": {
         "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
         "title": "Gespeicherte Voreinstellungen anzeigen"

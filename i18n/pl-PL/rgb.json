@@ -115,9 +115,6 @@
         "title": "Szablon zapisany!",
         "warning": "Zaloguj się aby zapisywać szablony."
       },
-      "showPending": {
-        "title": "Pokaż szablony czekające na weryfikację (NIEBEZPIECZNE)"
-      },
       "showSaved": {
         "description": "Włącz tą opcję jeśli chcesz widzieć tylko szablony zapisane przez ciebie.",
         "title": "Pokaż zapisane szablony"
