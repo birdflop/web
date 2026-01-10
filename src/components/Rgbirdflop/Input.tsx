@@ -135,8 +135,13 @@ const MCPreviewGUISection = component$(({ readOnly }: { readOnly: boolean | unde
         <p class="absolute top-[calc(72/168*100%)] left-[calc(8/176*100%)] text-[#404040]! text-shadow-none">
           RGBirdflop
         </p>
-        {previewStyle.value == 'gui-item-name' &&
+        {previewStyle.value.includes('gui-item') &&
           <div class="absolute top-[calc(28/168*100%)] left-[calc(20/176*100%)] bg-[#100010]/95 lum-btn-p-1">
+            {previewStyle.value == 'gui-item-lore' &&
+              <p class="text-white!">
+                Cyan Dye
+              </p>
+            }
             <InputField readOnly={readOnly} inputClass="*:text-shadow-none!">
               <Slot />
             </InputField>
@@ -285,6 +290,10 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
           {
             name: t('rgb.inputText.preview.gui.item@@Minecraft GUI Item Name'),
             value: 'gui-item-name',
+          },
+          {
+            name: t('rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore'),
+            value: 'gui-item-lore',
           },
         ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
           <Eye size={20} class="text-lum-text-secondary" q:slot="dropdown" />
