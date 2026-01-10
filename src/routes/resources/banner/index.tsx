@@ -4,7 +4,7 @@ import type { NoSerialize } from '@builder.io/qwik';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Trash } from 'lucide-icons-qwik';
+import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Terminal, Trash } from 'lucide-icons-qwik';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -205,6 +205,40 @@ export default component$(() => {
         </p>
 
         <div class="grid sm:grid-cols-2 gap-2">
+
+          <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('options')
+                ? openItemsStore.items.filter(item => item !== 'options')
+                : ['options'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('options'),
+            }}>
+              <Settings />
+              {t('banner.options.title@@Options')}
+            </button>
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('command')
+                ? openItemsStore.items.filter(item => item !== 'command')
+                : ['command'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('command'),
+            }}>
+              <Terminal />
+              {t('banner.command.title@@Command')}
+            </button>
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('preview')
+                ? openItemsStore.items.filter(item => item !== 'preview')
+                : ['preview'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('preview'),
+            }}>
+              <Eye />
+              {t('banner.preview@@Preview')}
+            </button>
+          </div>
+
           <div class="flex flex-col gap-2" id="inputcolumn">
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Settings />
@@ -349,7 +383,7 @@ export default component$(() => {
               </div>
             </div>
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Settings />
+              <Terminal />
               {t('banner.command.title@@Command')}
             </div>
             <div class={{
