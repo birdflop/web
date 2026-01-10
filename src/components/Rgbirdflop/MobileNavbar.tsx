@@ -1,5 +1,5 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
-import { Clipboard, Palette, Settings, Sparkles } from 'lucide-icons-qwik';
+import { Clipboard, Palette, Save, Settings, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
@@ -40,6 +40,16 @@ export default component$(() => {
       }}>
         <Settings />
         {t('rgb.options@@Options')}
+      </button>
+      <button onClick$={() => {
+        openItemsStore.items = openItemsStore.items.includes('presets')
+          ? openItemsStore.items.filter(item => item !== 'presets')
+          : ['presets'];
+      }} class={{
+        'lum-bg-blue!': openItemsStore.items.includes('presets'),
+      }}>
+        <Save />
+        {t('rgb.presets.title@@Presets')}
       </button>
       {rgbStore.customFormat && (
         <button onClick$={() => {
