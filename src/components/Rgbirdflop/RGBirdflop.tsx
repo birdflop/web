@@ -44,10 +44,7 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import {
-  BirdLandContext,
-  openItemsContext,
-} from '~/routes/layout';
+import { BirdLandContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
@@ -172,7 +169,7 @@ export default component$(({ errors, output }: {
   // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    if (!isBrowser && !rgbStore.obfuscate) return;
+    if (!isBrowser || !rgbStore.obfuscate) return;
     let rafId = 0;
     function obfuscate() {
       const text = document.querySelectorAll('span.obfuscate');

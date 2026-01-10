@@ -1,5 +1,5 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
-import { Blend, Clipboard, Palette, Settings, Sparkles } from 'lucide-icons-qwik';
+import { Clipboard, Palette, Settings, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
