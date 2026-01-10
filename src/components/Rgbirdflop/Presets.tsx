@@ -139,7 +139,7 @@ export default component$(({ hidden }: {
       </div>
       <Link class={{
         'lum-btn border-blue hover:border-blue': true,
-      }} href="/resources/rgb/presets">
+      }} href="/resources/rgb/presets" id="findmorepresets">
         <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
       <div class="flex flex-col gap-1">

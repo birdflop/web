@@ -239,14 +239,17 @@ export default component$(({ errors, output }: {
     {
       id: 'colorlistcolorstext',
       description: 'Next, pick some colors from the color list to create your gradient!',
+      openItem: 'colors',
     },
     {
       id: 'output',
       description: 'Finally, copy the output and use it in Minecraft!',
+      openItem: 'output',
     },
     {
       id: 'format-dropdown',
       description: 'You can change the format of the hex codes if the server you\'re using requires a different format.',
+      openItem: 'options',
     },
     {
       id: 'colormaptext',
@@ -257,11 +260,11 @@ export default component$(({ errors, output }: {
       description: 'You can also add formatting to your text over here, try it out!',
     },
     {
-      id: 'presets',
+      id: 'findmorepresets',
       description: 'Finally, before I go, you can also check out some preset gradients that other users have made for easy access!',
+      openItem: 'presets',
     },
     {
-      id: undefined,
       description: 'I\'ll be down here letting you know if there\'s anything new. Happy gradient making!',
     },
   ];
@@ -282,6 +285,9 @@ export default component$(({ errors, output }: {
         if (!nextStep) return;
 
         elementIdToLandOn.value = nextStep.id;
+        if (nextStep.openItem && !openItemsStore.items.includes(nextStep.openItem)) {
+          openItemsStore.items = [nextStep.openItem];
+        }
 
         const nextNotification = new Notification(notification)
           .setDescription(nextStep.description);
