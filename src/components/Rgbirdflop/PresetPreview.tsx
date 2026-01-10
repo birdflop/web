@@ -4,7 +4,7 @@ import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
-import { renderPreview } from '~/routes/resources/rgb';
+import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';

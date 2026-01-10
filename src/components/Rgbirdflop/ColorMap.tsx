@@ -1,5 +1,5 @@
 import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults } from '@birdflop/rgbirdflop';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
@@ -64,7 +64,7 @@ export default component$(({ id = 'text' }: { id?: string }) => {
   return (
     <div
       class={{
-        'w-full h-2 mb-s5 rounded-full items-center relative': true,
+        'w-full h-2 my-2 rounded-full items-center relative': true,
         hidden: rgbStore.disperse,
       }}
       id={'colormap' + id}

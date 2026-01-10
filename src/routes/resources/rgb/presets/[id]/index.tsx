@@ -8,7 +8,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
 import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { renderPreview, rgbStoreContext } from '../..';
+import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
@@ -104,13 +104,14 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Save size={48} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Save size={32} />
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
-        <hr/>
+
         <div class="flex">
           <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
             <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}

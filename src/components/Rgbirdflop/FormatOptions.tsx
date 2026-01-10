@@ -1,6 +1,6 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 export default component$(({ hidden }: {
   hidden: boolean;
