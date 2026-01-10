@@ -14,12 +14,14 @@
         "title": "Dağıt"
       },
       "format": "Renk formatı",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Küçük harfli hex kodları kullanmak istiyorsanız bunu açın.",
         "title": "Küçük harfli hex kodları"
       },
       "randomize": "Rastgele yap",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Metin gölgesi",
         "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Minecraft Sohbet",
         "default": "Varsayılan",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Alt bilgi",
           "header": "Minecraft Tab Üst bilgi",
@@ -70,6 +77,7 @@
       },
       "title": "Giriş metni"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB metni başarıyla panonuza kopyalandı.",
       "description": "RGB metni için bunu kopyalayıp yapıştırın!",
@@ -105,6 +113,7 @@
       "pasteHere": "Buraya yapıştır",
       "pending": "Bu ön ayar inceleme bekliyor ve henüz diğer kullanıcılar için kullanılabilir olmayabilir.",
       "presetData": "Ön ayar verisi",
+      "preview": "Preset Preview",
       "publish": "Kendi ön ayarınızı yayınlayın",
       "remove": "Kaldır",
       "save": "Kaydet",
@@ -119,6 +128,8 @@
         "title": "Kaydedilen ön ayarları göster"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Ad A-Z",
         "nameZA": "Ad Z-A",
         "newest": "En yeni önce",

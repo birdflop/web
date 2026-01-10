@@ -1,10 +1,12 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "动画预览",
     "bounce": "弹跳动画",
     "downloadMCMETA": "下载 MCMETA",
     "downloadPNG": "下载 PNG",
     "duration": "持续时间",
+    "frames": "Animation Frames",
     "height": "高度",
     "lockDimensions": "锁定尺寸",
     "pasteUrl": "粘贴 GIF 或图像 URL",
@@ -12,6 +14,7 @@
     "selectFrames": "从设备中选择 GIF 或图像",
     "showChatPreview": "显示 Minecraft 聊天预览",
     "syncDuration": "同步持续时间",
+    "texture": "Texture",
     "textureName": "纹理名称",
     "width": "宽度"
   }

@@ -14,12 +14,14 @@
         "title": "分散"
       },
       "format": "颜色格式",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "如果您想使用小写十六进制代码，请开启此选项。",
         "title": "小写十六进制代码"
       },
       "randomize": "随机化",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "文本阴影",
         "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Minecraft 聊天",
         "default": "默认",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab 页脚",
           "header": "Minecraft Tab 页眉",
@@ -70,6 +77,7 @@
       },
       "title": "输入文本"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB 文本已成功复制到您的剪贴板。",
       "description": "复制粘贴此内容以获得 RGB 文本！",
@@ -105,6 +113,7 @@
       "pasteHere": "在此粘贴",
       "pending": "此预设正在等待审核，可能尚未对其他用户可用。",
       "presetData": "预设数据",
+      "preview": "Preset Preview",
       "publish": "发布您自己的预设",
       "remove": "删除",
       "save": "保存",
@@ -119,6 +128,8 @@
         "title": "显示已保存的预设"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "名称 A-Z",
         "nameZA": "名称 Z-A",
         "newest": "最新优先",

@@ -14,12 +14,14 @@
         "title": "Zerstreuen"
       },
       "format": "Farbformat",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
         "title": "Kleingeschriebene Hex-Codes"
       },
       "randomize": "Randomisieren",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Textschatten",
         "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Standard",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Fußzeile",
           "header": "Minecraft Tab Kopfzeile",
@@ -108,6 +115,7 @@
       "pasteHere": "Hier einfügen",
       "pending": "Diese Voreinstellung befindet sich noch in der Überarbeitung und ist möglicherweise noch nicht für andere Benutzer verfügbar.",
       "presetData": "Voreingestellte Daten",
+      "preview": "Preset Preview",
       "publish": "Veröffentlichen Sie Ihre eigene Voreinstellung",
       "remove": "Entfernen",
       "save": "Speichern",
@@ -122,6 +130,8 @@
         "title": "Gespeicherte Voreinstellungen anzeigen"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
         "newest": "Neuestes zuerst",

@@ -8,7 +8,6 @@
     "length": "Długość Gradientu",
     "outputFormat": {
       "description": "Używaj tylko jeśli wiesz co robisz.",
-
       "title": "Format Wyjściowy"
     },
     "yamlInput": "YAML Input"

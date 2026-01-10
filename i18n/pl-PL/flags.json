@@ -32,7 +32,6 @@
         "label": "Nowoczesne wektory"
       }
     },
-
     "fileName": {
       "description": "Nazwa pliku startowego, który zostanie użyty aby go uruchomić",
       "label": "Nazwa Pliku"
@@ -73,7 +72,6 @@
     },
     "variables": {
       "description": "Czy używać zmiennych środowiskowych w skrypcie aby określić ilośc pamięci, nazwę pliku oraz inne często zmieniane elementy",
-                      
       "label": "Używaj zmiennych"
     }
   }

@@ -14,12 +14,14 @@
         "title": "Verspreiden"
       },
       "format": "Kleurformaat",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Zet dit aan als je kleine hexadecimale codes wilt gebruiken.",
         "title": "Kleine hexadecimale codes"
       },
       "randomize": "Willekeurig maken",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Tekstschaduw",
         "warning": "Waarschuwing: Tekstschaduw werkt alleen met JSON-opmaak!"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Minecraft chat",
         "default": "Standaard",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Voettekst",
           "header": "Minecraft Tab Koptekst",
@@ -70,6 +77,7 @@
       },
       "title": "Invoertekst"
     },
+    "options": "Options",
     "output": {
       "copied": "De RGB-tekst is succesvol naar je klembord gekopieerd.",
       "description": "Kopieer en plak dit voor RGB-tekst!",
@@ -105,6 +113,7 @@
       "pasteHere": "Plak hier",
       "pending": "Deze voorinstelling wacht op beoordeling en is mogelijk nog niet beschikbaar voor andere gebruikers.",
       "presetData": "Voorinstelling gegevens",
+      "preview": "Preset Preview",
       "publish": "Publiceer je eigen voorinstelling",
       "remove": "Verwijderen",
       "save": "Opslaan",
@@ -119,6 +128,8 @@
         "title": "Toon opgeslagen voorinstellingen"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Naam A-Z",
         "nameZA": "Naam Z-A",
         "newest": "Nieuwste eerst",

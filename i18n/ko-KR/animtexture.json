@@ -1,10 +1,12 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "애니메이션 미리보기",
     "bounce": "바운스 애니메이션",
     "downloadMCMETA": "MCMETA 다운로드",
     "downloadPNG": "PNG 다운로드",
     "duration": "지속 시간",
+    "frames": "Animation Frames",
     "height": "높이",
     "lockDimensions": "치수 잠금",
     "pasteUrl": "GIF 또는 이미지 URL 붙여넣기",
@@ -12,6 +14,7 @@
     "selectFrames": "기기에서 GIF 또는 이미지 선택",
     "showChatPreview": "마인크래프트 채팅 미리보기 표시",
     "syncDuration": "지속 시간 동기화",
+    "texture": "Texture",
     "textureName": "텍스처 이름",
     "width": "너비"
   }

@@ -14,12 +14,14 @@
         "title": "Dispersar"
       },
       "format": "Formato de color",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Active esta opción si desea utilizar códigos hexadecimales en minúsculas.",
         "title": "Códigos hexadecimales en minúsculas"
       },
       "randomize": "Aleatorizar",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Sombra de texto",
         "warning": "Advertencia: La sombra de texto sólo funciona con formato JSON o MiniMessage."
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Chat Minecraft",
         "default": "Por defecto",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Pie de pestaña Minecraft",
           "header": "Minecraft Tab Header",
@@ -70,6 +77,7 @@
       },
       "title": "Texto de entrada"
     },
+    "options": "Options",
     "output": {
       "copied": "El texto RGB se ha copiado correctamente en el portapapeles.",
       "description": "Copie y pegue esto para texto RGB",
@@ -105,6 +113,7 @@
       "pasteHere": "Pegar aquí",
       "pending": "Este preajuste está pendiente de revisión y puede que aún no esté disponible para otros usuarios.",
       "presetData": "Datos preestablecidos",
+      "preview": "Preset Preview",
       "publish": "Publique su propio preajuste",
       "remove": "Eliminar",
       "save": "Guardar",
@@ -119,6 +128,8 @@
         "title": "Mostrar preajustes guardados"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Nombre A-Z",
         "nameZA": "Nombre Z-A",
         "newest": "Lo más nuevo primero",
