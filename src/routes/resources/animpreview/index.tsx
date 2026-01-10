@@ -133,11 +133,13 @@ export default component$(() => {
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
+            const pattern2 = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
             const spans = animprevStore.frames[animprevStore.frame].match(pattern);
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
-              const result = string.match(pattern);
+              const result = string.match(pattern2);
               if (!result) return '';
+              console.log(result);
               color = result[2] ? `#${result[2]}` : color;
 
               const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
@@ -158,7 +160,7 @@ export default component$(() => {
                   'font-mc-italic': result[3]?.includes('&o'),
                   'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
                 }}>
-                  {result[result.length - 1].replace(/ /g, '\u00A0')}
+                  {result[result.length - 1]}
                 </span>
               );
             });

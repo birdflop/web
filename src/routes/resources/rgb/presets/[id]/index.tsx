@@ -290,7 +290,7 @@ export default component$(() => {
                 }
                 <button class="lum-btn lum-bg-red hover:bg-red" onClick$={async () => {
                   await deletePreset(presetInfo.id);
-                  window.location.reload();
+                  window.location.assign('/resources/rgb/presets');
                 }}>
                   <Trash size={20} /> Delete
                 </button>
