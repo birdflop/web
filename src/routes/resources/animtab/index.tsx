@@ -161,7 +161,7 @@ export default component$(() => {
               'underline-strikethrough': store.underline && store.strikethrough,
               'obfuscate': store.obfuscate,
             }}>
-              {segment[0].replace(/ /g, '\u00A0')}
+              {segment[0]}
             </span>;
           });
         };

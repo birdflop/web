@@ -250,9 +250,11 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         chatInput={chatInput}
         playerName={playerName}>
         <Slot />
+        <Slot name="input" />
       </MCPreviewInput>}
       {previewStyle.value == 'default' && <DefaultInput readOnly={readOnly}>
         <Slot />
+        <Slot name="input" />
       </DefaultInput>}
       <div class={{ 'flex gap-1': true,
         'absolute top-1 right-1': true,
