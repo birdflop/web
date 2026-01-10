@@ -248,12 +248,32 @@ export default component$(({ errors, output }: {
     },
     {
       id: 'format-dropdown',
-      description: 'You can change the format of the hex codes if the server you\'re using requires a different format.',
+      description: 'You can change the format of the hex codes if the server you\'re playing on requires a different format.',
+      openItem: 'options',
+    },
+    {
+      id: 'length',
+      description: 'This setting changes how long the gradient scroll effect is, a higher value gives you a smoother, longer animation',
+      openItem: 'colors',
+    },
+    {
+      id: 'type-dropdown',
+      description: 'This is the animation type, which changes the style of your gradient animation.',
       openItem: 'options',
     },
     {
       id: 'colormaptext',
       description: 'The color map shows you how the colors are distributed across your text. You can use this to fine-tune your gradient!',
+    },
+    {
+      id: 'gradientType-dropdown',
+      description: 'There are multiple gradient types to choose from, this is useful if the gradient doesn\'t look vibrant enough :)',
+      openItem: 'options',
+    },
+    {
+      id: 'prefixsuffix',
+      description: 'If you are using a command such as /nick, you can add a prefix/suffix to your text here to make it easier to copy and paste! Make sure to include $t where you want your text to go.',
+      openItem: 'options',
     },
     {
       id: 'formatting',
@@ -282,6 +302,10 @@ export default component$(({ errors, output }: {
       onClick$: $(() => {
         const nextStep = flopBirdTrack.shift();
         if (!nextStep) return;
+
+        if (nextStep.id && !document.getElementById(nextStep.id)) {
+          return;
+        }
 
         elementIdToLandOn.value = nextStep.id;
         if (nextStep.openItem && !openItemsStore.items.includes(nextStep.openItem)) {
