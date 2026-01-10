@@ -36,10 +36,10 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
-      <h2 class='flex gap-3 items-center my-2!' q:slot='header'>
-        <Palette size={46} />
+      <h1 class='flex gap-3 text-2xl! items-center my-2!' q:slot='header'>
+        <Palette size={32} />
         {t('nav.resources.hexGradient.title@@RGBirdflop')}
-      </h2>
+      </h1>
       <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot='header'>
         {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
       </p>

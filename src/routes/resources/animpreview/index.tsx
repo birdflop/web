@@ -121,10 +121,10 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h2 class='flex gap-3 items-center my-2!'>
-          <Eye size={46} />
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Eye size={32} />
           {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
-        </h2>
+        </h1>
         <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </p>

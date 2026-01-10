@@ -196,10 +196,10 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h2 class='flex gap-3 items-center my-2!'>
-          <Presentation size={46} />
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Presentation size={32} />
           {t('nav.resources.banner.title@@Banner Generator')}
-        </h2>
+        </h1>
         <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
         </p>

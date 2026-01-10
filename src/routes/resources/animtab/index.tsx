@@ -103,10 +103,10 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={[...rgbErrors, ...animTABErrors]} output={AnimationOutput(rgbStore, animtabStore)}>
-      <h2 class='flex gap-3 items-center my-2!' q:slot='header'>
-        <Rainbow size={46} />
+      <h1 class='flex gap-3 text-2xl! items-center my-2!' q:slot='header'>
+        <Rainbow size={32} />
         {t('nav.resources.animatedTAB.title@@Animated TAB')}
-      </h2>
+      </h1>
       <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot='header'>
         {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
       </p>

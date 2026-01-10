@@ -274,8 +274,8 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h2 class='flex gap-3 items-center my-2!'>
-          <Save size={46} />
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Save size={32} />
           <span class="flex-1">
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </span>
@@ -303,7 +303,7 @@ export default component$(() => {
           <a href="#my-presets" class="lum-btn font-normal ml-2">
             <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
           </a>
-        </h2>
+        </h1>
         <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
