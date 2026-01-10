@@ -300,11 +300,12 @@ export default component$(({ errors, output }: {
     notification.action = {
       text: 'Click to continue',
       onClick$: $(() => {
-        const nextStep = flopBirdTrack.shift();
+        let nextStep = flopBirdTrack.shift();
         if (!nextStep) return;
 
-        if (nextStep.id && !document.getElementById(nextStep.id)) {
-          return;
+        while (nextStep.id && !document.getElementById(nextStep.id)) {
+          nextStep = flopBirdTrack.shift();
+          if (!nextStep) return;
         }
 
         elementIdToLandOn.value = nextStep.id;
