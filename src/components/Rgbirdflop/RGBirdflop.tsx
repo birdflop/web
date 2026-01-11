@@ -169,25 +169,22 @@ export default component$(({ errors, output }: {
   // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
-    if (!isBrowser || !rgbStore.obfuscate) return;
-    let rafId = 0;
+    if (!isBrowser) return;
+    console.log('Starting obfuscate task');
+    const text = document.querySelectorAll('span.obfuscate');
     function obfuscate() {
-      const text = document.querySelectorAll('span.obfuscate');
       text.forEach((el, i) => {
-        if (!rgbStore.obfuscate) {
-          el.textContent = rgbStore.text[i];
-          return;
-        }
+        if (!rgbStore.obfuscate) return el.textContent = rgbStore.text[i];
         el.textContent = Math.random()
           .toString(36)
           .substring(1, 3)
           .replace('.', '');
       });
-      rafId = requestAnimationFrame(obfuscate);
+      requestAnimationFrame(obfuscate);
     }
-    obfuscate();
+    if (rgbStore.obfuscate) obfuscate();
     track(() => rgbStore.obfuscate);
-    return () => cancelAnimationFrame(rafId);
+    track(() => rgbStore.text);
   });
 
   // Ads
