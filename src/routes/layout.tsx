@@ -46,10 +46,9 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
-export const BirdLandContext = createContextId<Signal<{ x: number; y: number } | undefined>>('birdland-context');
+export const BirdLandContext = createContextId<Signal<string | undefined>>('birdland-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
-export const showAllGradientsContext = createContextId<Signal<boolean>>('showallgradients-context');
 export default component$(() => {
   const t = (string: string) => inlineTranslate()(string);
   const loc = useLocation();
@@ -61,8 +60,8 @@ export default component$(() => {
   // bird mascot refs
   const birdRef = useSignal<HTMLCanvasElement>();
   const anchorElementRef = useSignal<HTMLDivElement>();
-  const coordinatesToLandOn = useSignal<{ x: number; y: number }>();
-  useContextProvider(BirdLandContext, coordinatesToLandOn);
+  const elementIdToLandOn = useSignal<string>();
+  useContextProvider(BirdLandContext, elementIdToLandOn);
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -87,10 +86,6 @@ export default component$(() => {
     items: [] as string[],
   });
   useContextProvider(openItemsContext, openItemsStore);
-
-  // Show all gradients toggle
-  const showAllGradients = useSignal(false);
-  useContextProvider(showAllGradientsContext, showAllGradients);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -137,14 +132,14 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, coordinatesToLandOn));
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
 
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
 
     <canvas ref={birdRef} class={{
-      'fixed bottom-0 blur-none overflow-hidden z-10 w-lvw h-lvh pointer-events-none': true,
+      'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
     }}/>
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
@@ -173,6 +168,7 @@ export default component$(() => {
       {notifications.map((notification) => {
         if (!notification) return null;
         const id = notification.id;
+        const onClick$ = notification.action?.onClick$;
 
         if (!notification.persist) {
           setTimeout(() => {
@@ -188,7 +184,8 @@ export default component$(() => {
           [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left max-w-lg': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
-        }} key={notification.id} onClick$={(e, el) => {
+        }} key={notification.id} onClick$={async (e, el) => {
+          await onClick$?.();
           el.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-8', 'sm:slide-out-to-right-8');
           setTimeout(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
@@ -213,45 +210,53 @@ export default component$(() => {
           }
           {notification.persist &&
             <p class="lum-text-xs text-lum-text-secondary/50! mt-1!">
-              {t('nav.clickToDismiss@@Click to dismiss')}
+              {notification.action?.text ?? t('nav.clickToDismiss@@Click to dismiss')}
             </p>
           }
+          {/*
+          <audio autoplay volume={0.2}>
+            <source src={`/minecraft/parrot_sounds/idle${Math.floor(Math.random() * 5) + 1}.ogg`} type="audio/ogg" />
+          </audio>
+          */}
         </button>;
       })}
-      {showCookieConsent.value && settingsStore.cookies === undefined &&
-        <div class={{
-          'lum-bg-lum-input-bg/60': true,
-          'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
-          'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
-        }}>
-          <div>
-            <h5 class="flex gap-1 items-center my-0!">
-              <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
-            </h5>
-            <p>
-              {t('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
-            </p>
-            <Link href="/privacy">
-              {t('nav.privacyPolicy@@Privacy Policy')}
-            </Link>
-          </div>
-          <div class="flex flex-wrap items-center justify-end gap-2">
-            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
-              settingsStore.cookies = false;
-              setCookies('settings', settingsStore);
-            }}>
-              {t('nav.cookies.optOut@@Reject')}
-            </button>
-            <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
-              settingsStore.cookies = true;
-              setCookies('settings', settingsStore);
-            }}>
-              {t('nav.cookies.acknowledge@@Accept')}
-            </button>
-          </div>
-        </div>
-      }
     </div>
+    {showCookieConsent.value && settingsStore.cookies === undefined &&
+      <div class={{
+        'fixed bottom-4 left-4 lum-bg-lum-input-bg/60': true,
+        'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
+        'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 anim-duration-500': true,
+      }}
+      style={{
+        '--lum-border-radius': '1rem',
+      }}>
+        <div>
+          <h5 class="flex gap-1 items-center my-0!">
+            <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
+          </h5>
+          <p>
+            {t('nav.cookies.description@@We use cookies to automatically save and load your preferences.')}
+          </p>
+          <Link href="/privacy">
+            {t('nav.privacyPolicy@@Privacy Policy')}
+          </Link>
+        </div>
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
+            settingsStore.cookies = false;
+            setCookies('settings', settingsStore);
+          }}>
+            {t('nav.cookies.optOut@@Reject')}
+          </button>
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
+            settingsStore.cookies = true;
+            setCookies('settings', settingsStore);
+          }}>
+            {t('nav.cookies.acknowledge@@Accept')}
+          </button>
+        </div>
+      </div>
+    }
     <Footer />
   </>;
 });

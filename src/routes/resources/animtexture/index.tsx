@@ -7,7 +7,7 @@ import { Download, GalleryHorizontalEnd, RefreshCw, X } from 'lucide-icons-qwik'
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '../rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 
 export async function base64ToFile(dataURL: string) {
@@ -121,13 +121,14 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 gap-10 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <GalleryHorizontalEnd size={70} /> {t('nav.resources.animatedTextures.title@@Animated Textures')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <GalleryHorizontalEnd size={32} />
+          {t('nav.resources.animatedTextures.title@@Animated Textures')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
         </p>
-        <hr/>
+
         <div class="flex gap-4">
           <div class="flex-1">
             <h3 class="mt-0!">

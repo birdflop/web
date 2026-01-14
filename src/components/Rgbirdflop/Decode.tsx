@@ -1,20 +1,19 @@
-import type { Signal } from '@builder.io/qwik';
-import { $, component$, useContext } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { generateOutput } from '@birdflop/rgbirdflop';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { getSignificantPoints } from '~/util/rgb/Decode';
 
-export default component$(({ threshold, hidden }: {
-  threshold: Signal<number>,
+export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
   const t$ = $((string: string) => inlineTranslate()(string));
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
+  const threshold = useSignal(50);
 
   const decodeText = $(async (rgbtext: string, threshold: number) => {
     const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
@@ -44,7 +43,8 @@ export default component$(({ threshold, hidden }: {
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
-    const notification = new Notification(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
+    const notification = new Notification()
+      .setTitle(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
       .setDescription(await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'))
       .setBgColor('lum-bg-green/50');
     notifications.push(notification);

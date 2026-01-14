@@ -1,10 +1,12 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "Animasyon önizlemesi",
     "bounce": "Zıplama animasyonu",
     "downloadMCMETA": "MCMETA indir",
     "downloadPNG": "PNG indir",
     "duration": "Süre",
+    "frames": "Animation Frames",
     "height": "Yükseklik",
     "lockDimensions": "Boyutları kilitle",
     "pasteUrl": "GIF veya resim URL'sini yapıştırın",
@@ -12,6 +14,7 @@
     "selectFrames": "Cihazınızdan GIF veya resim seçin",
     "showChatPreview": "Minecraft sohbet önizlemesini göster",
     "syncDuration": "Süreyi senkronize et",
+    "texture": "Texture",
     "textureName": "Doku adı",
     "width": "Genişlik"
   }

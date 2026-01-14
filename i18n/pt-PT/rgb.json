@@ -14,12 +14,14 @@
         "title": "Dispersar"
       },
       "format": "Formato de cor",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Ative isto se quiser usar códigos hexadecimais em minúsculas.",
         "title": "Códigos hexadecimais em minúsculas"
       },
       "randomize": "Aleatorizar",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Sombra de texto",
         "warning": "Aviso: A sombra de texto só funciona com formatação JSON!"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Chat do Minecraft",
         "default": "Padrão",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Rodapé do Minecraft Tab",
           "header": "Cabeçalho do Minecraft Tab",
@@ -70,6 +77,7 @@
       },
       "title": "Texto de entrada"
     },
+    "options": "Options",
     "output": {
       "copied": "O texto RGB foi copiado para a sua área de transferência com sucesso.",
       "description": "Copie e cole isto para texto RGB!",
@@ -105,6 +113,7 @@
       "pasteHere": "Colar aqui",
       "pending": "Esta predefinição está pendente de revisão e pode não estar disponível para outros utilizadores ainda.",
       "presetData": "Dados da predefinição",
+      "preview": "Preset Preview",
       "publish": "Publique a sua própria predefinição",
       "remove": "Remover",
       "save": "Guardar",
@@ -114,14 +123,13 @@
         "title": "Predefinição guardada!",
         "warning": "Por favor, faça login para guardar predefinições permanentemente."
       },
-      "showPending": {
-        "title": "Mostrar predefinições pendentes (MUITO PERIGOSO)"
-      },
       "showSaved": {
         "description": "Ative isto para mostrar apenas as suas predefinições guardadas.",
         "title": "Mostrar predefinições guardadas"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Nome A-Z",
         "nameZA": "Nome Z-A",
         "newest": "Mais recente primeiro",

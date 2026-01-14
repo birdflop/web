@@ -8,7 +8,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
 import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { renderPreview, rgbStoreContext } from '../..';
+import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
@@ -92,7 +92,8 @@ export default component$(() => {
       const localStoragePresets = getPresets();
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
-      const notification = new Notification('Error parsing saved presets')
+      const notification = new Notification()
+        .setTitle('Error parsing saved presets')
         .setDescription(`Error: ${err}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -103,13 +104,14 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Save size={70} /> {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Save size={32} />
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
         </p>
-        <hr/>
+
         <div class="flex">
           <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
             <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
@@ -222,7 +224,8 @@ export default component$(() => {
               </>}
           </button>
           <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={async () => {
-            const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
+            const notification = new Notification()
+              .setTitle(await t$('rgb.copied@@Copied to clipboard!'))
               .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
               .setBgColor('lum-bg-green/50');
             navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))
@@ -287,7 +290,7 @@ export default component$(() => {
                 }
                 <button class="lum-btn lum-bg-red hover:bg-red" onClick$={async () => {
                   await deletePreset(presetInfo.id);
-                  window.location.reload();
+                  window.location.assign('/resources/rgb/presets');
                 }}>
                   <Trash size={20} /> Delete
                 </button>

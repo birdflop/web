@@ -5,7 +5,7 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { renderPreview, rgbStoreContext } from '~/routes/resources/rgb';
+import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
@@ -24,7 +24,8 @@ export default component$(({ hidden }: {
   const session = useSession();
 
   const loadPresetJSON = $(async (presetJSON: string) => {
-    const notification = new Notification(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
+    const notification = new Notification()
+      .setTitle(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
       .setDescription(await t$('rgb.presets.imported.description@@The preset has been imported successfully.'))
       .setBgColor('lum-bg-green/50');
     let json: rgbPreset | undefined;
@@ -77,7 +78,8 @@ export default component$(({ hidden }: {
               const localStoragePresets = getPresets();
               privatePresets.value = privatePresets.value.concat(localStoragePresets);
             } catch (err) {
-              const notification = new Notification('Error parsing saved presets')
+              const notification = new Notification()
+                .setTitle('Error loading saved presets')
                 .setDescription(`Error: ${err}`)
                 .setBgColor('lum-bg-red/50')
                 .setPersist(true);
@@ -101,7 +103,8 @@ export default component$(({ hidden }: {
             }
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             await setUserData({ privatePresets: privatePresets.value });
-            const notification = new Notification(await t$('rgb.presets.saved.title@@Preset Saved!'))
+            const notification = new Notification()
+              .setTitle(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
               .setDescription(session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
                 : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'))
               .setBgColor(session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50');
@@ -136,7 +139,7 @@ export default component$(({ hidden }: {
       </div>
       <Link class={{
         'lum-btn border-blue hover:border-blue': true,
-      }} href="/resources/rgb/presets">
+      }} href="/resources/rgb/presets" id="findmorepresets">
         <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
       <div class="flex flex-col gap-1">
@@ -155,7 +158,8 @@ export default component$(({ hidden }: {
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
             if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key])) delete preset[key];
           });
-          const notification = new Notification(await t$('rgb.copied@@Copied to clipboard!'))
+          const notification = new Notification()
+            .setTitle(await t$('rgb.copied@@Copied to clipboard!'))
             .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
             .setBgColor('lum-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(preset)).catch(async (err) => {
@@ -183,7 +187,8 @@ export default component$(({ hidden }: {
             url.searchParams.set(key, String(value));
           });
           window.history.pushState({}, '', url.href);
-          const notification = new Notification(await t$('rgb.presets.url.title@@URL Updated!'))
+          const notification = new Notification()
+            .setTitle(await t$('rgb.presets.url.title@@URL Updated!'))
             .setDescription(await t$('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'))
             .setBgColor('lum-bg-green/50');
           notifications.push(notification);

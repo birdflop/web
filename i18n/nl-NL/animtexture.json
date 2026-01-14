@@ -1,10 +1,12 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "Animatie voorvertoning",
     "bounce": "Stuit animatie",
     "downloadMCMETA": "Downloaden MCMETA",
     "downloadPNG": "PNG downloaden",
     "duration": "Duur",
+    "frames": "Animation Frames",
     "height": "Hoogte",
     "lockDimensions": "Afmetingen vergrendelen",
     "pasteUrl": "GIF of URL van afbeelding plakken",
@@ -12,6 +14,7 @@
     "selectFrames": "Selecteer GIF of afbeelding van uw apparaat",
     "showChatPreview": "Voorbeeld van Minecraft-chat weergeven",
     "syncDuration": "Duur synchroniseren",
+    "texture": "Texture",
     "textureName": "Textuur naam",
     "width": "Breedte"
   }

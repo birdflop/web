@@ -1,10 +1,12 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "Podgląd Animacji",
     "bounce": "Odbij Animacje",
     "downloadMCMETA": "POBIERZ MCMETA",
     "downloadPNG": "POBIERZ PNG",
     "duration": "Czas Trwania",
+    "frames": "Animation Frames",
     "height": "Wysokość",
     "lockDimensions": "Zablokuj Rozmiar",
     "pasteUrl": "Wklej link do GIF'a lub obrazka",
@@ -12,6 +14,7 @@
     "selectFrames": "Wybierz GIF lub obrazek z urządzenia",
     "showChatPreview": "Podgląd z Chatu Minecraft",
     "syncDuration": "Czas Synchronizacji",
+    "texture": "Texture",
     "textureName": "Nazwa Tekstury",
     "width": "Szerokość"
   }

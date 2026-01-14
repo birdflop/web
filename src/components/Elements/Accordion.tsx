@@ -36,20 +36,19 @@ export const toggleAccordion = $(async (index: string, openItems: string[]) => {
 
 interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
-  alwaysOpen?: boolean;
+  pcOnly?: boolean;
   onClick$?: QRL<() => void>;
   class?: { [key: string]: boolean; }
 }
 
-export default component$(({ sectionName, alwaysOpen, class: className, onClick$, ...props }: AccordionProps) => {
+export default component$(({ sectionName, pcOnly, class: className, onClick$, ...props }: AccordionProps) => {
   const openItemsStore = useContext(openItemsContext);
 
   return (
     <Dropdown class={{
-      'cursor-pointer': !alwaysOpen,
-      'sm:lum-bg-transparent sm:hover:lum-bg-transparent focus:scale-100': !!alwaysOpen,
+      'hidden sm:flex': !!pcOnly,
       ...className,
-    }} opened={openItemsStore.items.includes(sectionName) && !alwaysOpen} { ...props }
+    }} opened={openItemsStore.items.includes(sectionName) && !pcOnly} { ...props }
     onClick$={async () => {
       await onClick$?.();
       openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items);

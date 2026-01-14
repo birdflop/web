@@ -4,7 +4,7 @@ import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
-import { renderPreview } from '~/routes/resources/rgb';
+import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
@@ -125,7 +125,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       }
     </Link>
     <div class="flex p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1 gap-1">
-      <div class="flex gap-1 p-1">
+      { Preset.preset.gradientType && <div class="lum-bg-blue lum-btn-p-1 rounded-lum-2 text-xs my-1 ml-1">
+        {Preset.preset.gradientType}
+      </div> }
+      <div class="flex gap-1 my-1 ml-1">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (
             <span key={index} class="p-2 rounded-lum-3 lum-bg"

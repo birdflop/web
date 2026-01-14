@@ -14,12 +14,14 @@
         "title": "Disperse"
       },
       "format": "Color Format",
+      "gradientType": "Gradient Type",
       "lowercase": {
         "description": "Turn this on if you want to use lowercase hex codes.",
         "title": "Lowercase Hex Codes"
       },
       "randomize": "Randomize",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Text Shadow",
         "warning": "Warning: Text shadow only works with JSON or MiniMessage formatting!"
       },
@@ -61,6 +63,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Default",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Footer",
           "header": "Minecraft Tab Header",
@@ -70,6 +77,7 @@
       },
       "title": "Input Text"
     },
+    "options": "Options",
     "output": {
       "copied": "The RGB text has been copied to your clipboard successfully.",
       "description": "Copy-paste this for RGB text!",
@@ -105,6 +113,7 @@
       "pasteHere": "Paste here",
       "pending": "This preset is pending review and may not be available to other users yet.",
       "presetData": "Preset Data",
+      "preview": "Preset Preview",
       "publish": "Publish your own preset",
       "remove": "Remove",
       "save": "Save",
@@ -114,14 +123,13 @@
         "title": "Preset Saved!",
         "warning": "Please login to save presets permanently."
       },
-      "showPending": {
-        "title": "Show pending presets (VERY DANGEROUS)"
-      },
       "showSaved": {
         "description": "Turn this on to show only your saved presets.",
         "title": "Show saved presets"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
         "newest": "Newest first",

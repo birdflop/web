@@ -1,11 +1,13 @@
 {
   "animtexture": {
+    "accumulate": "Add to existing frames",
     "animationPreview": "Предварительный просмотр анимазнии",
     "bounce": "Анимация отскока",
     "downloadMCMETA": "Скачать MCMETA",
     "downloadPNG": "Скачать PNG",
     "duration": "Длительность",
     "framePreview": "Предварительный просмотр кадра",
+    "frames": "Animation Frames",
     "height": "Высота",
     "lockDimensions": "Зафиксировать размеры",
     "pasteUrl": "Вставьте GIF или URL-адрес изображения",
@@ -13,6 +15,7 @@
     "selectFrames": "Выберите GIF или изображение с вашего устройства",
     "showChatPreview": "Показать предварительный просмотр чата Minecraft",
     "syncDuration": "Синхронизировать длительность",
+    "texture": "Texture",
     "textureName": "Название текстуры",
     "width": "Ширина"
   }

@@ -3,7 +3,7 @@ import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
-import { rgbStoreContext } from '~/routes/resources/rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
 export default component$(({ hidden, id = 'text' }: {

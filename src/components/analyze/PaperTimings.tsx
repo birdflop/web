@@ -11,17 +11,18 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <LogoPaper size={70} /> {t('nav.resources.paperTimings.title@@Paper Timings')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <LogoPaper size={32} />
+          {t('nav.resources.paperTimings.title@@Paper Timings')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
         </p>
+
         <p>
           These are not magic values. Many of these settings have real consequences on your server's mechanics.<br />
           See <a href="https://eternity.community/index.php/paper-optimization/" class="text-blue-400 hover:underline">this guide</a> for detailed information on the functionality of each setting.
         </p>
-        <hr/>
 
         <Slot />
 

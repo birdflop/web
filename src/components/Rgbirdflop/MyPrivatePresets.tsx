@@ -4,7 +4,7 @@ import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { CircleUserRound, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '~/routes/resources/rgb';
+import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -134,13 +134,15 @@ export default component$(() => {
           isSubmitting.value = false;
 
           const notification = result.result?.[0] ?
-            new Notification('Preset Submitted!')
+            new Notification()
+              .setTitle('Preset Submitted!')
               .setDescription('Your preset has been submitted for review. It may take a few days for it to be reviewed and published.')
               .setBgColor('lum-bg-green/50')
               .setButtons([
                 { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
               ]) :
-            new Notification('Preset Submission Failed')
+            new Notification()
+              .setTitle('Preset Submission Failed')
               .setDescription('Your preset failed to submit. Is there already a preset with the same configuration?')
               .setBgColor('lum-bg-yellow/50')
               .setPersist(true);

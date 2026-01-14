@@ -5,7 +5,6 @@ import type { NoSerialize } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import { ChevronLeft, ChevronRight, Copy, Eye, Plus, Presentation, Settings, Terminal, Trash } from 'lucide-icons-qwik';
-import Accordion from '~/components/Elements/Accordion';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
@@ -197,20 +196,54 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Presentation size={70} /> {t('nav.resources.banner.title@@Banner Generator')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Presentation size={32} />
+          {t('nav.resources.banner.title@@Banner Generator')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
         </p>
-        <hr/>
 
         <div class="grid sm:grid-cols-2 gap-2">
-          <div class="flex flex-col gap-2" id="inputcolumn">
-            <Accordion sectionName="options" alwaysOpen>
-              <Settings size={26} />
+
+          <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('options')
+                ? openItemsStore.items.filter(item => item !== 'options')
+                : ['options'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('options'),
+            }}>
+              <Settings />
               {t('banner.options.title@@Options')}
-            </Accordion>
+            </button>
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('command')
+                ? openItemsStore.items.filter(item => item !== 'command')
+                : ['command'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('command'),
+            }}>
+              <Terminal />
+              {t('banner.command.title@@Command')}
+            </button>
+            <button onClick$={() => {
+              openItemsStore.items = openItemsStore.items.includes('preview')
+                ? openItemsStore.items.filter(item => item !== 'preview')
+                : ['preview'];
+            }} class={{
+              'lum-bg-blue!': openItemsStore.items.includes('preview'),
+            }}>
+              <Eye />
+              {t('banner.preview@@Preview')}
+            </button>
+          </div>
+
+          <div class="flex flex-col gap-2" id="inputcolumn">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Settings />
+              {t('banner.options.title@@Options')}
+            </div>
             <div class={{
               'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
               'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
@@ -349,12 +382,12 @@ export default component$(() => {
                 )}
               </div>
             </div>
-            <Accordion sectionName="command">
-              <Terminal size={26} />
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Terminal />
               {t('banner.command.title@@Command')}
-            </Accordion>
+            </div>
             <div class={{
-              'flex flex-col gap-2 transition-all duration-200': true,
+              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
               'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
               'max-h-62.5 opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
             }} id="command">
@@ -364,7 +397,8 @@ export default component$(() => {
                 }}
                 value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
                 onClick$={async (e, el) => {
-                  const notification = new Notification(await t$('banner.copied@@Copied to clipboard!'))
+                  const notification = new Notification()
+                    .setTitle(await t$('banner.copied@@Copied to clipboard!'))
                     .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
                     .setBgColor('lum-bg-green/50');
 
@@ -379,11 +413,11 @@ export default component$(() => {
               />
             </div>
           </div>
-          <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/50 sm:pl-2" id="outputcolumn">
-            <Accordion sectionName="preview" alwaysOpen>
-              <Eye size={26} />
+          <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/10 sm:pl-2" id="outputcolumn">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Eye />
               {t('banner.preview@@Preview')}
-            </Accordion>
+            </div>
             <canvas ref={preview} id="preview" class={{
               'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
               'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),

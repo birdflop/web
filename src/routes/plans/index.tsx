@@ -85,7 +85,7 @@ export default component$(() => {
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
         <h1 class="flex gap-4 items-center my-3!">
-          <ShoppingCart size={70} /> Order your new server
+          <ShoppingCart size={48} /> Order your new server
         </h1>
         <p>
           Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.

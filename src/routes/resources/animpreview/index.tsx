@@ -4,7 +4,7 @@ import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '../rgb';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -41,7 +41,8 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
-      const notification = new Notification('Error fetching data')
+      const notification = new Notification()
+        .setTitle('Error loading cookies')
         .setDescription(`${error}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -104,7 +105,8 @@ export default component$(() => {
       json = yaml.parse(animprevStore.yaml);
     }
     catch (err) {
-      const notification = new Notification('Error parsing YAML')
+      const notification = new Notification()
+        .setTitle('Error parsing YAML')
         .setDescription(`Error: ${err}`)
         .setBgColor('lum-bg-red/50')
         .setPersist(true);
@@ -119,23 +121,25 @@ export default component$(() => {
   return (
     <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
       <div class="min-h-15 w-full">
-        <h1 class="flex gap-4 items-center my-3!">
-          <Eye size={70} /> {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
+        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+          <Eye size={32} />
+          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
         </h1>
-        <p>
+        <p class="mb-4 border-b border-lum-border/10 pb-4">
           {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
         </p>
-        <hr/>
 
         <Input readOnly playerName="AnimPreview">
           {(() => {
             if (!animprevStore.frames[animprevStore.frame]) return '';
             const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
+            const pattern2 = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
             const spans = animprevStore.frames[animprevStore.frame].match(pattern);
             let color = '#ffffff';
             return spans?.map((string: string, i: number) => {
-              const result = string.match(pattern);
+              const result = string.match(pattern2);
               if (!result) return '';
+              console.log(result);
               color = result[2] ? `#${result[2]}` : color;
 
               const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
@@ -156,7 +160,7 @@ export default component$(() => {
                   'font-mc-italic': result[3]?.includes('&o'),
                   'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
                 }}>
-                  {result[result.length - 1].replace(/ /g, '\u00A0')}
+                  {result[result.length - 1]}
                 </span>
               );
             });
