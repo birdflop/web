@@ -1,7 +1,7 @@
 ---
 title: Hytale Server Setup
-date_created: 05-06-2025
-last_updated: 05-06-2025
+date_created: 01-13-2026
+last_updated: 01-13-2026
 description: How to set up a Hytale server
 author: Oli/bwmp
 contributors:

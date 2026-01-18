@@ -18,11 +18,11 @@ export const menuItemPriority: {
   [key: string]: number;
 } = {
   'Overview': 1,
-  'Getting Started': 2,
   'Panel': 2,
-  'FAQ': 3,
-  'Rgbirdflop': 4,
-  'Extras': 101,
+  'Games': 3,
+  'Non Profit': 4,
+  'Open Source': 5,
+  'Rgbirdflop': 6,
 };
 
 export const getMarkdownItems = async () => {
@@ -42,6 +42,8 @@ export const getMarkdownItems = async () => {
 
   const markdownItems: MarkdownItems = {};
   rawData.forEach(([k, v]) => {
+    // skip marksdown cheatsheet and extras
+    if (k.includes('extras')) return;
     if (v.frontmatter) {
       markdownItems[k] = {
         title: v.frontmatter.title,
