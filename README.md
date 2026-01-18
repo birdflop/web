@@ -4,7 +4,6 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 <a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge?style=for-the-badge" alt="CodeFactor" /></a>
 <a href="https://github.com/birdflop/web/commits"> <img src="https://img.shields.io/github/last-commit/birdflop/web?style=for-the-badge"></a>
 <a href="#"> <img src="https://img.shields.io/github/languages/code-size/birdflop/web?style=for-the-badge"></a>
-
 <a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=for-the-badge"></a>
 <a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=for-the-badge"></a>
 <a href="https://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
