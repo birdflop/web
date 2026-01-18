@@ -31,7 +31,7 @@
     "drizzle:push": "drizzle-kit push",
     "drizzle:studio": "drizzle-kit studio",
     "drizzle:up": "drizzle-kit up",
-    "wrangler:migrate-local": "wrangler d1 migrations apply birdflop-d1",
+    "wrangler:migrate-local": "wrangler d1 migrations apply birdflop",
     "lint": "eslint \"src/**/*.ts*\"",
     "postinstall": "drizzle-kit generate && wrangler types",
     "preview": "qwik build preview && vite preview --open",
