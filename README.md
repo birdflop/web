@@ -7,7 +7,7 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 
 <a href="https://github.com/birdflop/web/watchers"> <img src="https://img.shields.io/github/watchers/birdflop/web?style=for-the-badge"></a>
 <a href="https://github.com/birdflop/web/stargazers"> <img src="https://img.shields.io/github/stars/birdflop/web?style=for-the-badge"></a>
-<a href="hthttps://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
+<a href="https://github.com/birdflop/web/network/members"> <img src="https://img.shields.io/github/forks/birdflop/web?style=for-the-badge"></a>
 
 <a href="https://discord.com/invite/nmgtX5z"> <img src="https://discord.com/api/guilds/746125698644705524/widget.png?style=banner2"></a>
 
