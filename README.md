@@ -38,8 +38,6 @@ AUTH_SECRET=this_can_be_any_random_string
 AUTH_DISCORD_ID=the_client_id_from_your_discord_application
 AUTH_DISCORD_SECRET=the_client_secret_from_your_discord_application
 
-NODE_VERSION=23.11.0
-
 ADMINS=your_user_id_in_profile_page_after_you_login
 ```
 
