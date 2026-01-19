@@ -2,7 +2,7 @@ import { component$, useContext } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
+import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow, Settings } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -10,7 +10,6 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
 import { openItemsContext } from '~/routes/layout';
-import { ThemeToggle } from './ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -99,7 +98,9 @@ export default component$(() => {
         </span>
         <Globe size={20} q:slot='dropdown' />
       </SelectMenuRaw>
-      <ThemeToggle variant="compact" q:slot='end' class="hover:lum-bg-nav-bg" />
+      <Link q:slot="end" href="/settings" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
+        <Settings size={20} />
+      </Link>
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>

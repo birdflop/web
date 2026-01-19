@@ -1,11 +1,10 @@
 import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from '../plugin@auth';
-import { Form, useLocation } from '@builder.io/qwik-city';
-import { CircleUserRound, LogOut } from 'lucide-icons-qwik';
+import { Form, Link, useLocation } from '@builder.io/qwik-city';
+import { CircleUserRound, LogOut, Settings } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -59,7 +58,10 @@ export default component$(() => {
             </p>
           </div>
           <div class="flex items-center gap-4">
-            <ThemeToggle variant='full' />
+            <Link href="/settings" class="lum-btn lum-bg-transparent">
+              <Settings/>
+              {t('nav.settings.title@@Settings')}
+            </Link>
             <Form action={signOut} q:slot="extra-buttons">
               <input type="hidden" name="providerId" value="discord" />
               <input
