@@ -98,8 +98,14 @@ export default component$(() => {
         </span>
         <Globe size={20} q:slot='dropdown' />
       </SelectMenuRaw>
-      <Link q:slot="end" href="/settings" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
-        <Settings size={20} />
+      <Link
+        q:slot="end"
+        href="/settings"
+        class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg"
+        aria-label={t('nav.settings.title@@Settings')}
+        title={t('nav.settings.title@@Settings')}
+      >
+        <Settings size={20} aria-hidden="true" />
       </Link>
       <div q:slot='end' class="hidden sm:flex gap-2">
         <SocialButtons />
