@@ -51,6 +51,7 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Resources - Free Minecraft Resources by Birdflop',
-  description: 'Public resources developed by Birdflop. ' + defaultDescription,
+  title: 'Settings - Birdflop',
+  description: 'Manage your Birdflop settings and preferences. ' + defaultDescription,
+});
 });
