@@ -30,11 +30,11 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2
       '@luminescent/ui':
-        specifier: ^6.5.0-0
-        version: 6.5.0-0
+        specifier: ^6.6.0-2
+        version: 6.6.0-2
       '@luminescent/ui-qwik':
-        specifier: ^6.5.0-0
-        version: 6.5.0-0(@luminescent/ui@6.5.0-0)
+        specifier: ^6.6.0-2
+        version: 6.6.0-2(@luminescent/ui@6.6.0-2)
       '@modular-forms/qwik':
         specifier: ^0.29.1
         version: 0.29.1(@builder.io/qwik-city@1.18.0(@types/node@25.0.5)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.52.5)(typescript@5.8.3)(yaml@2.8.2))(@builder.io/qwik@1.18.0(vite@7.3.1(@types/node@25.0.5)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2)))(typescript@5.8.3)
@@ -1173,14 +1173,14 @@ packages:
   '@kurkle/color@0.3.4':
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
-  '@luminescent/ui-qwik@6.5.0-0':
-    resolution: {integrity: sha512-AwaungrDOsZH2ZzltJXJqVBX6RTIBNcCpb7t/76eHPrMTXky3pYmQcTS+wnY8Pz1/yjLhuvNCXN3uFSuCKmLNQ==}
+  '@luminescent/ui-qwik@6.6.0-2':
+    resolution: {integrity: sha512-3Fe64BWs6HD1R9j4+tZXsXknnTKce2f8+iZTkHB0950EYMYfWLOL6ZHEMVOF9uv01r97Kb9s8tL1PA8BVYBYxQ==}
     engines: {node: '>=23.11.0', npm: please-use-pnpm, pnpm: '>=10.10.0', yarn: please-use-pnpm}
     peerDependencies:
-      '@luminescent/ui': 6.5.0-0
+      '@luminescent/ui': 6.6.0-2
 
-  '@luminescent/ui@6.5.0-0':
-    resolution: {integrity: sha512-wasm4gVZSXFiLLNkluVOAxRF6txcUg5uXm4YZtCSNxplWTLpcNMNRt1YWUQ/kppB8CcE3YIiV4C8qLvmeBEBzw==}
+  '@luminescent/ui@6.6.0-2':
+    resolution: {integrity: sha512-veo7q76lyBPNmV4ilDzawapd9kvXfVmvqDCqTLCktlyDB+5e4qFYKx8Q65gEXsrxX0qEU1FsxOYKVktK6bF0xw==}
     engines: {node: '>=23.11.0', npm: please-use-pnpm, pnpm: '>=10.10.0', yarn: please-use-pnpm}
 
   '@mdx-js/mdx@3.1.1':
@@ -4325,11 +4325,11 @@ snapshots:
 
   '@kurkle/color@0.3.4': {}
 
-  '@luminescent/ui-qwik@6.5.0-0(@luminescent/ui@6.5.0-0)':
+  '@luminescent/ui-qwik@6.6.0-2(@luminescent/ui@6.6.0-2)':
     dependencies:
-      '@luminescent/ui': 6.5.0-0
+      '@luminescent/ui': 6.6.0-2
 
-  '@luminescent/ui@6.5.0-0': {}
+  '@luminescent/ui@6.6.0-2': {}
 
   '@mdx-js/mdx@3.1.1':
     dependencies:
