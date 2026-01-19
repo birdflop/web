@@ -218,7 +218,7 @@ export default component$(() => {
                   {t('flags.memory.calcOverhead@@Calculate Overhead')}
                 </Toggle>
                 <p class="text-sm whitespace-pre-wrap">
-                  {t('flags.memory.calcOverhead.description@@This is recommended to avoid out-of-memory issues your server.\nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.')}
+                  {t('flags.memory.calcOverhead.description@@This is recommended to avoid out-of-memory issues on your server.\nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.')}
                 </p>
               </div>
             </div>
