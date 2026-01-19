@@ -8,19 +8,22 @@ interface GenerateResult {
   'flags'?: string[]
 }
 
-export interface flagsSchema {
-  operatingSystem: string,
-  serverType: string,
-  gui: boolean,
-  variables: boolean,
-  autoRestart: boolean,
-  extraFlags: AvailableExtraFlags[],
-  fileName: string,
-  flags: AvailableFlags,
-  withResult: boolean,
-  withFlags: boolean,
-  memory: number,
-}
+export const flagsDefaults = {
+  operatingSystem: 'linux',
+  serverType: 'paper',
+  gui: false,
+  variables: false,
+  autoRestart: false,
+  extraFlags: [] as AvailableExtraFlags[],
+  fileName: 'server.jar',
+  flags: 'aikars' as AvailableFlags,
+  withResult: true,
+  withFlags: false,
+  memory: 8,
+  calcOverhead: true,
+};
+
+export type flagsSchema = typeof flagsDefaults;
 
 export function generateResult(parsed: flagsSchema): GenerateResult {
   const selectedFlags = flags[parsed.flags];

@@ -160,7 +160,18 @@ export default component$(({ errors, output }: {
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('rgb', rgbStore);
+
+    // Disperse colors if enabled
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
+
+    // update characters per color if over max
+    if (rgbStore.colorlength > rgbStore.text.length / rgbStore.colors.length) {
+      rgbStore.colorlength = Math.max(1,
+        Math.floor(rgbStore.text.length / rgbStore.colors.length),
+      );
+    }
+
+    // track all rgbStore properties
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       track(() => rgbStore[key]);
     });

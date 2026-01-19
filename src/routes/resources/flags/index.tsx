@@ -3,27 +3,12 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { SelectMenu, Toggle, SelectMenuRaw, RangeInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
-import type { flagsSchema } from '~/util/flags/generateResult';
-import { generateResult } from '~/util/flags/generateResult';
+import { flagsDefaults, generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
-import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag } from 'lucide-icons-qwik';
+import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag, MemoryStick } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-
-const defaults: flagsSchema = {
-  operatingSystem: 'linux',
-  serverType: 'paper',
-  gui: false,
-  variables: false,
-  autoRestart: false,
-  extraFlags: [],
-  fileName: 'server.jar',
-  flags: 'aikars',
-  withResult: true,
-  withFlags: false,
-  memory: 0,
-};
 
 const environmentOptions = [
   {
@@ -157,7 +142,7 @@ export default component$(() => {
 
   const cookies = useCookies().value;
   const flagsStore = useStore({
-    ...defaults,
+    ...flagsDefaults,
     ...cookies,
   }, { deep: true });
 
@@ -217,14 +202,25 @@ export default component$(() => {
               </div>
             </div>
             <div>
-              <RangeInput id='memory' min={0} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
+              <RangeInput id='memory' min={1} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
                 flagsStore.memory = Number(el.value);
               }}>
-                {t('flags.memory.label@@Memory')} (GiB)
+                {t('flags.memory.label@@Memory')} ({flagsStore.memory} GiB)
               </RangeInput>
               <p class="text-lum-text-secondary text-sm mt-2">
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
               </p>
+              <div class="flex flex-col gap-1 mt-3">
+                <Toggle id="calcOverhead" checked={flagsStore.calcOverhead} onClick$={(e, el) => {
+                  flagsStore.calcOverhead = el.checked;
+                }}>
+                  <MemoryStick />
+                  {t('flags.memory.calcOverhead@@Calculate Overhead')}
+                </Toggle>
+                <p class="text-sm whitespace-pre-wrap">
+                  {t('flags.memory.calcOverhead.description@@This is recommended to avoid out-of-memory issues your server.\nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.')}
+                </p>
+              </div>
             </div>
           </div>
           <div class="flex flex-col gap-2">
@@ -270,29 +266,25 @@ export default component$(() => {
               {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
                 return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
               }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
-                <Toggle checked={flagsStore[id]} onClick$={(e, el) => {
+                <Toggle id={id} checked={flagsStore[id]} onClick$={(e, el) => {
                   flagsStore[id] = el.checked;
                 }}>
-                  <option.icon size={24} class="min-w-6 min-h-6" />
+                  <option.icon />
                   {option.label}
                 </Toggle>
-                <div class="flex gap-2">
-                  {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
-                </div>
+                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
               </div>)}
               {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
                 return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
               }).map(([id, option]) => <>
-                <Toggle key={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
+                <Toggle key={id} id={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
                   if (el.checked) flagsStore.extraFlags.push(id);
                   else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
                 }}>
-                  <option.icon size={24} class="min-w-6 min-h-6" />
+                  <option.icon />
                   {option.label}
                 </Toggle>
-                <div class="flex gap-2">
-                  {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
-                </div>
+                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
               </>)}
             </div>
           </div>
