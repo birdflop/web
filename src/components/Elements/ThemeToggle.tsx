@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
 import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
-import { Moon, Sun, Sparkles, Battery } from 'lucide-icons-qwik';
+import { Moon, Sun, Sparkles, Battery, Smile } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import { SettingsContext } from '~/routes/layout';
 import { setCookies } from '~/util/dataUtils';
@@ -78,6 +78,13 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         icon: Battery,
         description: 'Full black theme for OLED',
         gradient: 'from-black to-gray-900',
+      },
+      {
+        value: 'simplymc',
+        label: 'SimplyMC',
+        icon: Smile,
+        description: 'SimplyMC dark theme for the nostalgia',
+        gradient: 'from-purple-600 to-purple-900',
       },
     ];
 

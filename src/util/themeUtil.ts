@@ -59,6 +59,16 @@ export const themes = {
     '--color-lum-input-hover-bg': 'var(--color-neutral-800)',
     '--color-lum-accent': 'var(--color-blue-900)',
   },
+  simplymc: {
+    ...darkTheme,
+    '--lum-depth': '0',
+    '--color-bg': 'hsl(270deg, 22%, 5%)',
+    '--color-nav-bg': 'color-mix(in oklab, var(--color-violet-900), transparent 80%)',
+    '--color-lum-card-bg': 'hsl(270deg, 18%, 12%)',
+    '--color-lum-input-bg': 'hsl(270deg, 18%, 12%)',
+    '--color-lum-input-hover-bg': 'hsl(270deg, 16%, 21%)',
+    '--color-lum-accent': 'color-mix(in oklab, var(--color-luminescent-400), transparent 20%)',
+  },
   light: lightTheme,
 };
 

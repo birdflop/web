@@ -37,7 +37,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
       currentTheme: theme,
       ...(theme !== 'auto' &&
         {
-          isDark: theme === 'dark',
+          isDark: theme === 'dark' || theme === 'black' || theme === 'simplymc',
           css: themes[theme],
           cssString: getCSSString(theme),
         }
