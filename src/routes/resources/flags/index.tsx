@@ -1,6 +1,6 @@
 import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { SelectMenu, Toggle, SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle, SelectMenuRaw, RangeInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import type { flagsSchema } from '~/util/flags/generateResult';
@@ -24,6 +24,56 @@ const defaults: flagsSchema = {
   withFlags: false,
   memory: 0,
 };
+
+const environmentOptions = [
+  {
+    name: 'Linux',
+    value: 'linux',
+  },
+  {
+    name: 'Windows',
+    value: 'windows',
+  },
+  {
+    name: 'macOS',
+    value: 'macos',
+  },
+  {
+    name: 'Pterodactyl',
+    value: 'pterodactyl',
+  },
+  {
+    name: 'Command',
+    value: 'command',
+  },
+];
+
+const softwareOptions = [
+  {
+    name: 'Paper',
+    value: 'paper',
+  },
+  {
+    name: 'Purpur',
+    value: 'purpur',
+  },
+  //{
+  //  name: 'Forge',
+  //  value: 'forge',
+  //},
+  //{
+  //  name: 'Fabric',
+  //  value: 'fabric',
+  //},
+  {
+    name: 'Velocity',
+    value: 'velocity',
+  },
+  {
+    name: 'Waterfall',
+    value: 'waterfall',
+  },
+];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'parsed', url.searchParams) as {
@@ -63,56 +113,6 @@ export default component$(() => {
     {
       name: 'Etil\'s Flags',
       value: 'etils',
-    },
-  ];
-
-  const environmentOptions = [
-    {
-      name: t('flags.environment.linux@@Linux'),
-      value: 'linux',
-    },
-    {
-      name: t('flags.environment.windows@@Windows'),
-      value: 'windows',
-    },
-    {
-      name: t('flags.environment.macos@@macOS'),
-      value: 'macos',
-    },
-    {
-      name: t('flags.environment.pterodactyl@@Pterodactyl'),
-      value: 'pterodactyl',
-    },
-    {
-      name: t('flags.environment.command@@Command'),
-      value: 'command',
-    },
-  ];
-
-  const softwareOptions = [
-    {
-      name: 'Paper',
-      value: 'paper',
-    },
-    {
-      name: 'Purpur',
-      value: 'purpur',
-    },
-    //{
-    //  name: 'Forge',
-    //  value: 'forge',
-    //},
-    //{
-    //  name: 'Fabric',
-    //  value: 'fabric',
-    //},
-    {
-      name: 'Velocity',
-      value: 'velocity',
-    },
-    {
-      name: 'Waterfall',
-      value: 'waterfall',
     },
   ];
 
@@ -217,29 +217,12 @@ export default component$(() => {
               </div>
             </div>
             <div>
-              <label for="labels-range-input">
-                {t('flags.memory.label@@Memory')}
-              </label>
-              <div class="group relative w-full h-2 lum-bg-lum-input-bg hover:lum-bg-lum-card-bg/30 select-none rounded-lum my-2">
-                <div class="h-2 lum-bg-blue group-hover:lum-bg-blue rounded-lum" style={{ width: `${flagsStore.memory / 32 * 100}%` }} />
-                <div class="absolute w-full top-1 flex justify-between">
-                  <span class="text-left">|</span>
-                  <span class="text-center">|</span>
-                  <span class="text-center">|</span>
-                  <span class="text-center">|</span>
-                  <span class="text-right">|</span>
-                </div>
-                <div class="absolute -top-1 flex flex-col gap-4 items-center" style={{ left: `calc(${flagsStore.memory / 32 * 100}% - 48px)` }}>
-                  <div class="w-4 h-4 lum-bg-blue group-hover:lum-bg-blue rounded-full" />
-                  <div class="lum-bg-lum-card-bg lum-btn-p-2 text-center w-24 rounded-lum opacity-0 group-hover:opacity-100 transition-all z-50">
-                    {flagsStore.memory} GB
-                  </div>
-                </div>
-                <input id="labels-range-input" type="range" min="0" max="32" step="0.5" value={flagsStore.memory} class="absolute top-0 h-2 w-full opacity-0 cursor-pointer" onInput$={(e, el) => {
-                  flagsStore.memory = Number(el.value);
-                }} />
-              </div>
-              <p class="text-lum-text-secondary text-sm mt-6">
+              <RangeInput id='memory' min={0} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
+                flagsStore.memory = Number(el.value);
+              }}>
+                {t('flags.memory.label@@Memory')} (GB)
+              </RangeInput>
+              <p class="text-lum-text-secondary text-sm mt-2">
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
               </p>
             </div>
