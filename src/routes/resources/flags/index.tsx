@@ -220,7 +220,7 @@ export default component$(() => {
               <RangeInput id='memory' min={0} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
                 flagsStore.memory = Number(el.value);
               }}>
-                {t('flags.memory.label@@Memory')} (GB)
+                {t('flags.memory.label@@Memory')} (GiB)
               </RangeInput>
               <p class="text-lum-text-secondary text-sm mt-2">
                 {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
