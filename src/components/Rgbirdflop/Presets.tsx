@@ -104,8 +104,8 @@ export default component$(({ hidden }: {
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             await setUserData({ privatePresets: privatePresets.value });
             const notification = new Notification()
-              .setTitle(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
-              .setDescription(session.value ? await t$('rgb.presets.saved.description@@Successfully saved preset!')
+              .setTitle(await t$('rgb.presets.saved.title@@reset Saved!'))
+              .setDescription(session.value ? await t$('rgb.presets.saved.description@@The preset has been saved successfully.')
                 : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'))
               .setBgColor(session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50');
             notifications.push(notification);
