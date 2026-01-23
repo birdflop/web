@@ -78,8 +78,6 @@ export const loadAllPresets = server$(async function() {
       description: p.presets.description,
       createdAt: new Date(p.presets.createdAt).toISOString(),
       pending: p.presets.pending,
-      likes: p.presets.likes,
-      dislikes: p.presets.dislikes,
       saves: p.presets.saves,
       colorVector: p.presets.colorVector,
     }));

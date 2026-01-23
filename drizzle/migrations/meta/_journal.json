@@ -22,6 +22,13 @@
       "when": 1769147630512,
       "tag": "0002_same_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1769150020640,
+      "tag": "0003_steep_maria_hill",
+      "breakpoints": true
     }
   ]
 }

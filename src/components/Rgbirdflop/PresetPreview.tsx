@@ -1,7 +1,7 @@
 import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import { ChevronDown, ChevronUp, Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
+import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
@@ -178,24 +178,6 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           : <span class="text-green-300 flex gap-3">
             <Save size={20}  />
           </span>}
-      </button>
-
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={() => {
-        loading.value = true;
-        loading.value = false;
-      }}>
-        {!loading.value && Preset.likes}
-        {loading.value && <div class="lum-loading w-3 h-3" />}
-        <ChevronUp size={20} class="text-green-300" />
-      </button>
-
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={() => {
-        loading.value = true;
-        loading.value = false;
-      }}>
-        {!loading.value && Preset.dislikes}
-        {loading.value && <div class="lum-loading w-3 h-3" />}
-        <ChevronDown size={20} class="text-red-300" />
       </button>
 
       <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown

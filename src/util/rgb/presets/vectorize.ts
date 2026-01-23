@@ -155,8 +155,6 @@ export async function checkPresetSimilarity(
           description: existing.presets.description,
           createdAt: new Date(existing.presets.createdAt),
           pending: existing.presets.pending,
-          likes: existing.presets.likes,
-          dislikes: existing.presets.dislikes,
           saves: existing.presets.saves,
           colorVector: existing.presets.colorVector,
         });
