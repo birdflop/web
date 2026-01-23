@@ -50,38 +50,34 @@ export default component$(() => {
 
   return (
     <Layout>
-      <div class="min-h-15 w-full">
-        <div class="lum-card flex-row items-center lum-btn-p-3 lum-bg-lum-card-bg">
-          <div class="my-3! flex-1">
-            <h3 class="flex gap-4 items-center mt-0! mb-1!">
-              {session.value.user.image &&
+      <section class="flex mx-auto max-w-6xl px-6 justify-center pt-20">
+        <div class="my-3! flex-1">
+          <h3 class="flex gap-4 items-center mt-0! mb-1!">
+            {session.value.user.image &&
                 <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
-              }
-              {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
-            </h3>
-            <p>
+            }
+            {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+          </h3>
+          <p>
               Your ID is: {session.value.user.id}
-            </p>
-          </div>
-          <div class="flex items-center gap-4">
-            <ThemeToggle variant='full' />
-            <Form action={signOut} q:slot="extra-buttons">
-              <input type="hidden" name="providerId" value="discord" />
-              <input
-                type="hidden"
-                name="options.redirectTo"
-                value={loc.url.pathname + loc.url.search}
-              />
-              <button class="lum-btn lum-bg-transparent">
-                <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
-              </button>
-            </Form>
-          </div>
+          </p>
         </div>
-        <main>
-          <Slot />
-        </main>
-      </div>
+        <div class="flex items-center gap-4">
+          <ThemeToggle variant='full' />
+          <Form action={signOut} q:slot="extra-buttons">
+            <input type="hidden" name="providerId" value="discord" />
+            <input
+              type="hidden"
+              name="options.redirectTo"
+              value={loc.url.pathname + loc.url.search}
+            />
+            <button class="lum-btn lum-bg-transparent">
+              <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
+            </button>
+          </Form>
+        </div>
+      </section>
+      <Slot />
     </Layout>
   );
 });

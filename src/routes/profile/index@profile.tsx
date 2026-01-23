@@ -15,7 +15,9 @@ export default component$(() => {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
-  return <MyPrivatePresets />;
+  return <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh">
+    <MyPrivatePresets />
+  </section>;
 });
 
 export const head = generateHead({});

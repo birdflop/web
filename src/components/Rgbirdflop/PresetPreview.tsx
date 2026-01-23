@@ -1,7 +1,7 @@
 import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
+import { ChevronDown, ChevronUp, Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
@@ -168,7 +168,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
         loading.value = false;
       }}>
-        {/*{!loading.value && Preset.saves} temp disabled*/}
+        {!loading.value && Preset.saves}
         {loading.value && <div class="lum-loading w-3 h-3" />}
         {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
           || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
@@ -180,7 +180,6 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           </span>}
       </button>
 
-      {/* Like/Dislike buttons - disabled for now
       <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={() => {
         loading.value = true;
         loading.value = false;
@@ -198,7 +197,6 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         {loading.value && <div class="lum-loading w-3 h-3" />}
         <ChevronDown size={20} class="text-red-300" />
       </button>
-      */}
 
       <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
         class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-2 gap-1 text-orange-300 lum-btn-p-1': true }}>

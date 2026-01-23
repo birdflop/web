@@ -32,7 +32,7 @@ export default component$(() => {
     pending: false,
   }));
 
-  return <div class="flex flex-col justify-center">
+  return <div class="flex flex-col">
     <h3 class="flex gap-2 items-center" id="my-presets">
       <CircleUserRound size={30} />
       <span class="flex-1">

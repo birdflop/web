@@ -209,7 +209,7 @@ export default component$(() => {
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             loading.value = false;
           }}>
-            {/*{!loading.value && Preset.saves} temp disabled*/}
+            {!loading.value && presetInfo.saves}
             {loading.value && <div class="lum-loading w-3 h-3" />}
             {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
               ? <>
