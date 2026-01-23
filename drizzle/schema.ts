@@ -114,23 +114,3 @@ export const savedPresets = sqliteTable("savedPresets", {
 }, (t) => ([
   primaryKey({ columns: [t.userId, t.presetId] }),
 ]));
-
-// -------------------- Preset Reactions --------------------
-export const presetReactions = sqliteTable("presetReactions", {
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-
-  presetId: integer("presetId")
-    .notNull()
-    .references(() => presets.id, { onDelete: "cascade" }),
-
-  // 'like' | 'dislike'
-  reaction: text("reaction", { enum: ["like", "dislike"] }).notNull(),
-
-  reactedAt: integer("reactedAt", { mode: "timestamp_ms" })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-}, (t) => ([
-  primaryKey({ columns: [t.userId, t.presetId] }),
-]));
