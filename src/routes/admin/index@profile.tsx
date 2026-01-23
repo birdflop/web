@@ -8,15 +8,13 @@ import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 
-export const useAdminCheck = routeLoader$(async function({ redirect, env, sharedMap }) {
+export const useAdminCheck = routeLoader$(function({ redirect, env, sharedMap }) {
   const session = sharedMap.get('session');
   const admins = env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
 
   if (!session?.user?.id || !admins.includes(session.user.id)) {
     throw redirect(302, '/');
   }
-
-  await Promise.resolve(); // Satisfy async requirement
 
   return { isAdmin: true };
 });

@@ -1,11 +1,16 @@
 import { component$, Slot } from '@builder.io/qwik';
 
-import { useSession, useSignIn, useSignOut } from '../plugin@auth';
+import { useSession, useSignIn, useSignOut } from './plugin@auth';
 import { Form, useLocation } from '@builder.io/qwik-city';
 import { CircleUserRound, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
+
+import Layout from './layout';
+
+// Re-export route loaders used by Layout component
+export { useSettingsCookies, useAdmins } from './layout';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -16,7 +21,7 @@ export default component$(() => {
 
   if (!session.value || !session.value.user) {
     return (
-      <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
+      <Layout>
         <div class="text-red-400">
           <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
           <h1>
@@ -39,12 +44,12 @@ export default component$(() => {
             </Form>
           </div>
         </div>
-      </section>
+      </Layout>
     );
   }
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
+    <Layout>
       <div class="min-h-15 w-full">
         <div class="lum-card flex-row items-center lum-btn-p-3 lum-bg-lum-card-bg">
           <div class="my-3! flex-1">
@@ -77,6 +82,6 @@ export default component$(() => {
           <Slot />
         </main>
       </div>
-    </section>
+    </Layout>
   );
 });

@@ -115,9 +115,9 @@ export const savedPresets = sqliteTable("savedPresets", {
   savedAt: integer("savedAt", { mode: "timestamp_ms" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.userId, t.presetId] }),
-}));
+}, (t) => ([
+  primaryKey({ columns: [t.userId, t.presetId] }),
+]));
 
 // -------------------- Preset Reactions --------------------
 export const presetReactions = sqliteTable("presetReactions", {
@@ -135,6 +135,6 @@ export const presetReactions = sqliteTable("presetReactions", {
   reactedAt: integer("reactedAt", { mode: "timestamp_ms" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.userId, t.presetId] }),
-}));
+}, (t) => ([
+  primaryKey({ columns: [t.userId, t.presetId] }),
+]));
