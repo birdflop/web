@@ -94,7 +94,6 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 
     const presetsFromDB = await db.select({
       presets, user: users,
-      saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
     })
       .from(presets)
       .where(and(
@@ -115,8 +114,8 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       .offset((page - 1) * perPage)
       .then((r) => r ?? []);
 
-    publicPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
-      ...presets, user, saveCount,
+    publicPresets = presetsFromDB.map(({ user, presets }) => ({
+      ...presets, user,
     }));
 
   } catch (err) {
@@ -370,163 +369,161 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-15 w-full">
-        <h1 class='flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!'>
-          <span class="flex flex-1 gap-3 items-center">
-            <Save size={32} />
-            {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
-          </span>
-          <a href="#my-presets" class="lum-btn font-normal mr-auto">
-            <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
-          </a>
-        </h1>
-        <p class="mb-4 border-b border-lum-border/10 pb-4">
-          {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
-        </p>
-        <div class="flex flex-col gap-2">
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+      <h1 class='flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!'>
+        <span class="flex flex-1 gap-3 items-center">
+          <Save size={32} />
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+        </span>
+        <a href="#my-presets" class="lum-btn font-normal mr-auto">
+          <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
+        </a>
+      </h1>
+      <p class="mb-4 border-b border-lum-border/10 pb-4">
+        {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
+      </p>
+      <div class="flex flex-col gap-2">
+      </div>
+
+      <div class="sm:lum-card sm:flex-row sm:p-1 mt-2 sm:gap-1 sm:items-center">
+        <div class="lum-card flex-row p-1 sm:p-0 sm:lum-bg-transparent items-center gap-1 flex-1">
+          <Search size={20} class="mx-2" />
+          <input
+            class="lum-input flex-1 rounded-lum-1"
+            id="search-input"
+            placeholder="Search for a preset..."
+            value={searchTerm}
+            onInput$={(e, el) => void debouncedSearch(el.value)}
+          />
         </div>
+        <div class="flex items-center gap-1 justify-center">
+          <SelectMenuRaw value={`${sortBy}-${sortOrder}`}
+            class={{
+              'rounded-lum-1 lum-bg-transparent': true,
+            }}
+            onChange$={(e, el) => {
+              const [newSortBy, newSortOrder] = el.value.split('-');
+              void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
+            }}
+            title={t('rgb.presets.sortBy.title@@Sort by')}
+            values={[
+              {
+                name: t('rgb.presets.sortBy.newest@@Newest first'),
+                value: 'createdAt-desc',
+              },
+              {
+                name: t('rgb.presets.sortBy.oldest@@Oldest first'),
+                value: 'createdAt-asc',
+              },
+              {
+                name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
+                value: 'name-asc',
+              },
+              {
+                name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
+                value: 'name-desc',
+              },
+              {
+                name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
+                value: 'saves-desc',
+              },
+              {
+                name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
+                value: 'saves-asc',
+              },
+            ]}/>
+          <SelectMenuRaw align='right'
+            id="settings"
+            class={{
+              'p-3 rounded-lum-1 lum-bg-transparent': true,
+            }}
+            panelClass='lum-bg-lum-card-bg p-2 gap-2'
+            customDropdown
+          >
+            <Settings q:slot='dropdown' size={16} />
 
-        <div class="sm:lum-card sm:flex-row sm:p-1 mt-2 sm:gap-1 sm:items-center">
-          <div class="lum-card flex-row p-1 sm:p-0 sm:lum-bg-transparent items-center gap-1 flex-1">
-            <Search size={20} class="mx-2" />
-            <input
-              class="lum-input flex-1 rounded-lum-1"
-              id="search-input"
-              placeholder="Search for a preset..."
-              value={searchTerm}
-              onInput$={(e, el) => void debouncedSearch(el.value)}
-            />
-          </div>
-          <div class="flex items-center gap-1 justify-center">
-            <SelectMenuRaw value={`${sortBy}-${sortOrder}`}
-              class={{
-                'rounded-lum-1 lum-bg-transparent': true,
-              }}
-              onChange$={(e, el) => {
-                const [newSortBy, newSortOrder] = el.value.split('-');
-                void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
-              }}
-              title={t('rgb.presets.sortBy.title@@Sort by')}
-              values={[
-                {
-                  name: t('rgb.presets.sortBy.newest@@Newest first'),
-                  value: 'createdAt-desc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.oldest@@Oldest first'),
-                  value: 'createdAt-asc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
-                  value: 'name-asc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
-                  value: 'name-desc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
-                  value: 'saves-desc',
-                },
-                {
-                  name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
-                  value: 'saves-asc',
-                },
-              ]}/>
-            <SelectMenuRaw align='right'
-              id="settings"
-              class={{
-                'p-3 rounded-lum-1 lum-bg-transparent': true,
-              }}
-              panelClass='lum-bg-lum-card-bg p-2 gap-2'
-              customDropdown
-            >
-              <Settings q:slot='dropdown' size={16} />
+            {admin &&
+              <Toggle
+                id="showpendingpresets"
+                q:slot="extra-buttons"
+                checked={showPending && privatePresets.value.length > 0}
+                onChange$={(e, el) =>
+                  void updateURL({ showPending: el.checked, page: 1 })
+                }
+              >
+                Show pending presets
+              </Toggle>
+            }
 
-              {admin &&
-                <Toggle
-                  id="showpendingpresets"
-                  q:slot="extra-buttons"
-                  checked={showPending && privatePresets.value.length > 0}
-                  onChange$={(e, el) =>
-                    void updateURL({ showPending: el.checked, page: 1 })
-                  }
-                >
-                  Show pending presets
-                </Toggle>
-              }
-
-              {savedPresets.value.length > 0 && <div q:slot="extra-buttons">
-                <Toggle
-                  id="showsavedpresets"
-                  disabled={savedPresets.value.length === 0}
-                  checked={showSaved && savedPresets.value.length > 0}
-                  onChange$={(e, el) =>
-                    void updateURL({ showSaved: el.checked, page: 1 })
-                  }
-                >
-                  <span class="whitespace-nowrap">
-                    {t('rgb.presets.showSaved.title@@Show saved presets')}
-                  </span>
-                </Toggle>
-                <p class="text-xs text-lum-text-secondary mt-1">
-                  {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
-                </p>
-              </div>}
-              <div q:slot="extra-buttons">
-                <Toggle
-                  id="previewwithsettings"
-                  checked={presetStore.previewWithSettings}
-                  onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
-                >
-                  <span class="whitespace-nowrap">
-                    {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
-                  </span>
-                </Toggle>
-                <p class="text-xs text-lum-text-secondary mt-1">
-                  {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
-                </p>
-              </div>
-            </SelectMenuRaw>
-          </div>
-        </div>
-
-        {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
-        <div class="grid sm:grid-cols-2 gap-2">
-          {publicPresets.map((publicPreset) => (
-            <PresetPreview
-              key={`${publicPreset.name}-${publicPreset.author}`}
-              Preset={publicPreset}
-              defaults={presetStore.previewWithSettings ? rgbStore : undefined}
-            />
-          ))}
-          {publicPresets.length === 0 && (
-            <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
-              <p class="text-center text-lum-text-secondary">
-                {t('rgb.presets.noResults@@No results found.')}
-                <br />
-                {t('rgb.presets.suggestion.one@@Think something is missing?')}
-                <br />
-                {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
+            {savedPresets.value.length > 0 && <div q:slot="extra-buttons">
+              <Toggle
+                id="showsavedpresets"
+                disabled={savedPresets.value.length === 0}
+                checked={showSaved && savedPresets.value.length > 0}
+                onChange$={(e, el) =>
+                  void updateURL({ showSaved: el.checked, page: 1 })
+                }
+              >
+                <span class="whitespace-nowrap">
+                  {t('rgb.presets.showSaved.title@@Show saved presets')}
+                </span>
+              </Toggle>
+              <p class="text-xs text-lum-text-secondary mt-1">
+                {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
+              </p>
+            </div>}
+            <div q:slot="extra-buttons">
+              <Toggle
+                id="previewwithsettings"
+                checked={presetStore.previewWithSettings}
+                onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
+              >
+                <span class="whitespace-nowrap">
+                  {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
+                </span>
+              </Toggle>
+              <p class="text-xs text-lum-text-secondary mt-1">
+                {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
               </p>
             </div>
-          )}
+          </SelectMenuRaw>
         </div>
-        {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
-        <MyPrivatePresets />
+      </div>
 
-        <div class="text-sm mt-8">
-          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
-          gradient creator that generates hex formatted text. RGB Birdflop is a
-          public resource developed by Birdflop, a 501(c)(3) nonprofit providing
-          affordable and accessible hosting and public resources. If you would
-          like to support our mission, please{' '}
-          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
-            click here
-          </a>{' '}
-          to make a charitable donation, 100% tax-deductible in the US.
-        </div>
+      {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
+      <div class="grid sm:grid-cols-2 gap-2">
+        {publicPresets.map((publicPreset) => (
+          <PresetPreview
+            key={`${publicPreset.name}-${publicPreset.author}`}
+            Preset={publicPreset}
+            defaults={presetStore.previewWithSettings ? rgbStore : undefined}
+          />
+        ))}
+        {publicPresets.length === 0 && (
+          <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
+            <p class="text-center text-lum-text-secondary">
+              {t('rgb.presets.noResults@@No results found.')}
+              <br />
+              {t('rgb.presets.suggestion.one@@Think something is missing?')}
+              <br />
+              {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
+            </p>
+          </div>
+        )}
+      </div>
+      {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
+      <MyPrivatePresets />
+
+      <div class="text-sm mt-8">
+        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+        gradient creator that generates hex formatted text. RGB Birdflop is a
+        public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+        affordable and accessible hosting and public resources. If you would
+        like to support our mission, please{' '}
+        <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
+          click here
+        </a>{' '}
+        to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>
   );

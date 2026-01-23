@@ -74,19 +74,17 @@ export const presets = sqliteTable("presets", {
   description: text("description"),
   preset: text("preset", { mode: 'json' }).$type<rgbPreset>().notNull().unique(),
   colorVector: text("colorVector", { mode: 'json' }).$type<number[]>(),
-  upvotes: integer("upvotes").default(0).notNull(),
-  downvotes: integer("downvotes").default(0).notNull(),
+  saves: integer("saves").default(0).notNull(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   pending: integer("pending", { mode: "boolean" }).default(true).notNull(),
 });
 
 export type PublicPreset = typeof presets.$inferSelect;
 export interface PublicPresetWithUser extends PublicPreset {
-  user: User;
-  saveCount: number;
+  user: User | null;
 }
 export interface PresetPartial extends Omit<PublicPresetWithUser,
-  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saveCount' | 'upvotes' | 'downvotes' | 'colorVector'> {
+  'id' | 'author' | 'user' | 'userId' | 'description' | 'createdAt' | 'pending' | 'saves' | 'colorVector'> {
   id?: number;
   author?: string;
   user?: User | null;
@@ -94,9 +92,7 @@ export interface PresetPartial extends Omit<PublicPresetWithUser,
   description?: string | null;
   createdAt?: Date;
   pending?: boolean;
-  saveCount?: number;
-  upvotes?: number;
-  downvotes?: number;
+  saves?: number;
   colorVector?: number[] | null;
 }
 export type PublicPresetInsert = typeof presets.$inferInsert;
@@ -107,12 +103,14 @@ export const savedPresets = sqliteTable("savedPresets", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+
   presetId: integer("presetId")
     .notNull()
     .references(() => presets.id, { onDelete: "cascade" }),
+
   savedAt: integer("savedAt", { mode: "timestamp_ms" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.userId, t.presetId] }),
-}));
+}, (t) => ([
+  primaryKey({ columns: [t.userId, t.presetId] }),
+]));

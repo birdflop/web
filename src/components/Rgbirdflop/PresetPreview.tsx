@@ -137,6 +137,51 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         }
       </div>
       <div class="flex-1" />
+      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={async () => {
+        loading.value = true;
+
+        if (existingPreset) {
+          privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
+          if (Preset.id) {
+            savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
+            const result = await unsavePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) - 1;
+          }
+          else {
+            await setUserData({
+              privatePresets: privatePresets.value,
+            });
+          }
+        }
+        else {
+          privatePresets.value = [...privatePresets.value, Preset.preset];
+          if (Preset.id) {
+            savedPresets.value = [...savedPresets.value, Preset];
+            const result = await savePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) + 1;
+          }
+          else {
+            await setUserData({
+              privatePresets: privatePresets.value,
+            });
+          }
+        }
+
+        if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+        loading.value = false;
+      }}>
+        {!loading.value && Preset.saves}
+        {loading.value && <div class="lum-loading w-3 h-3" />}
+        {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
+          || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
+          ? <span class="text-red-300 flex gap-3">
+            <Trash size={20} />
+          </span>
+          : <span class="text-green-300 flex gap-3">
+            <Save size={20}  />
+          </span>}
+      </button>
+
       <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
         class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-2 gap-1 text-orange-300 lum-btn-p-1': true }}>
         <div q:slot="dropdown" class="flex items-center gap-3">
@@ -149,55 +194,12 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
       </SelectMenuRaw>
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={async () => {
-        loading.value = true;
 
-        if (existingPreset) {
-          privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
-          if (Preset.id) {
-            savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
-            await unsavePreset(Preset.id);
-            if (Preset.saveCount !== undefined) Preset.saveCount--;
-          }
-          else {
-            await setUserData({
-              privatePresets: privatePresets.value,
-            });
-          }
-        }
-        else {
-          privatePresets.value = [...privatePresets.value, Preset.preset];
-          if (Preset.id) {
-            savedPresets.value = [...savedPresets.value, Preset];
-            await savePreset(Preset.id);
-            if (Preset.saveCount !== undefined) Preset.saveCount++;
-          }
-          else {
-            await setUserData({
-              privatePresets: privatePresets.value,
-            });
-          }
-        }
-
-        if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-        loading.value = false;
-      }}>
-        {!loading.value && Preset.saveCount}
-        {loading.value && <div class="lum-loading w-3 h-3" />}
-        {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
-          || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
-          ? <span class="text-red-300 flex gap-3">
-            <Trash size={20} />
-          </span>
-          : <span class="text-green-300 flex gap-3">
-            <Save size={20}  />
-          </span>}
-      </button>
-      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-1" onClick$={() => {
+      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-2 lum-btn-p-1" onClick$={() => {
         publishRefs.modalRef.value?.showModal();
         publishRefs.selectedPreset.value = JSON.stringify(Preset.preset);
       }}>
-        <Send size={20} /> {t('rgb.presets.publish@@Publish')}
+        <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
       </button>}
     </div>
   </div>;
