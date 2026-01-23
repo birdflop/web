@@ -144,7 +144,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
           if (Preset.id) {
             savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
-            await unsavePreset(Preset.id);
+            const result = await unsavePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) - 1;
           }
           else {
             await setUserData({
@@ -156,7 +157,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           privatePresets.value = [...privatePresets.value, Preset.preset];
           if (Preset.id) {
             savedPresets.value = [...savedPresets.value, Preset];
-            await savePreset(Preset.id);
+            const result = await savePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) + 1;
           }
           else {
             await setUserData({
