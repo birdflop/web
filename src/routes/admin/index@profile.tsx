@@ -2,7 +2,7 @@ import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
 import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
-import { isNotNull, eq } from 'drizzle-orm';
+import { isNotNull, eq, sql } from 'drizzle-orm';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
@@ -65,7 +65,6 @@ export const loadAllPresets = server$(async function() {
       .from(presets)
       .where(isNotNull(presets.colorVector))
       .leftJoin(users, eq(users.id, presets.userId))
-      .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
       .groupBy(presets.id, users.id);
 
     const formattedPresets = allPresets.map(p => ({
@@ -94,6 +93,48 @@ export const loadAllPresets = server$(async function() {
       error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
+});
+
+const backfillPresetSaves = server$(async function() {
+  const session = this.sharedMap.get('session');
+  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
+
+  if (!session?.user?.id || !admins.includes(session.user.id)) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const db = getDB();
+    if (!db) {
+      return { success: false, error: 'Database not available' };
+    }
+
+    // Fetch all published presets with vectors
+    const allPresets = await db
+      .select({
+        id: presets.id,
+        saveCount: sql<number>`COUNT(${savedPresets.presetId})`.as('saveCount'),
+      })
+      .from(presets)
+      .where(isNotNull(presets.id))
+      .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
+      .groupBy(presets.id, savedPresets.presetId);
+
+    for (const preset of allPresets) {
+      console.log(`Updating preset ${preset.id} to have ${preset.saveCount} saves`);
+      await db.update(presets)
+        .set({ saves: preset.saveCount })
+        .where(eq(presets.id, preset.id));
+    }
+  }
+  catch (error) {
+    console.error('Error during preset saves backfill:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+  return { success: true };
 });
 
 export default component$(() => {
@@ -342,9 +383,7 @@ export default component$(() => {
 
           <div>
             <button
-              onClick$={() => {
-                alert('Not yet implemented');
-              }}
+              onClick$={() => backfillPresetSaves()}
               disabled={isRunning.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
