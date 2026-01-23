@@ -16,7 +16,7 @@ const darkTheme = {
   '--color-lime': 'var(--color-lime-900)',
   '--color-teal': 'var(--color-teal-900)',
   '--color-lum-border': '#dfdfdfaa',
-  '--color-lum-card-bg': 'var(--color-gray-900)',
+  '--color-lum-card-bg': 'var(--color-gray-850)',
   '--color-lum-input-bg': 'var(--color-gray-800)',
   '--color-lum-input-hover-bg': 'var(--color-gray-700)',
   '--color-lum-accent': 'var(--color-blue-500)',
@@ -28,7 +28,7 @@ const darkTheme = {
 const lightTheme = {
   ...darkTheme,
   '--color-bg': 'var(--color-white)',
-  '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 70%)',
+  '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 30%)',
   '--color-green': 'var(--color-green-500)',
   '--color-red': 'var(--color-red-500)',
   '--color-orange': 'var(--color-orange-500)',

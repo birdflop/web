@@ -105,7 +105,7 @@ export default component$(() => {
           {Object.keys(plans).map((planName) => {
             const plan = plans[planName as keyof typeof plans];
             const ramOptions = Object.keys(plan.ramAndId);
-            return <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out" key={planName}>
+            return <div class="lum-card transition duration-1000 hover:duration-75 ease-out" key={planName}>
               <p>
                 Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
               </p>
@@ -155,7 +155,7 @@ export default component$(() => {
           </h1>
         </Anchor>
         <div class="grid md:grid-cols-2 gap-2">
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -165,7 +165,7 @@ export default component$(() => {
               We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
             </p>
           </div>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -175,7 +175,7 @@ export default component$(() => {
               You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
             </p>
           </div>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -185,7 +185,7 @@ export default component$(() => {
               We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
             </p>
           </div>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -195,7 +195,7 @@ export default component$(() => {
               We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
             </p>
           </div>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -205,7 +205,7 @@ export default component$(() => {
               You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
             </p>
           </div>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -260,7 +260,7 @@ export default component$(() => {
         </Anchor>
         <div class="grid md:grid-cols-2 gap-2">
           <a href="https://g.co/kgs/mUU1j1G"
-            class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -271,7 +271,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -282,7 +282,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -293,7 +293,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-            class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -304,7 +304,7 @@ export default component$(() => {
             </p>
           </a>
           <a href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d"
-            class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -314,7 +314,7 @@ export default component$(() => {
               Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
             </p>
           </a>
-          <div class="lum-card lum-bg-lum-input-bg transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
             <h3 class="mt-0! mb-2! flex items-center gap-2">
