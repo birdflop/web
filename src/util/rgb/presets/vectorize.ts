@@ -1,6 +1,6 @@
 import type { rgbPreset } from '.';
-import { getDB, presets, users, savedPresets, type User } from '../../db';
-import { isNotNull, eq, sql } from 'drizzle-orm';
+import { getDB, presets, users, savedPresets, PublicPresetWithUser } from '../../db';
+import { isNotNull, eq } from 'drizzle-orm';
 import {
   hexToOklab,
   interpolateColor,
@@ -95,21 +95,8 @@ export function presetToVector(preset: rgbPreset): number[] {
   return vector;
 }
 
-export interface SimilarPreset {
-  id: number;
-  name: string;
+export interface SimilarPreset extends PublicPresetWithUser {
   distance: number;
-  preset: rgbPreset;
-  author: string;
-  userId: string | null;
-  user: User | null;
-  description: string | null;
-  createdAt: Date;
-  pending: boolean;
-  upvotes: number;
-  downvotes: number;
-  saveCount: number;
-  colorVector?: number[] | null;
 }
 
 /**
@@ -138,7 +125,6 @@ export async function checkPresetSimilarity(
       .select({
         presets,
         user: users,
-        saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
       })
       .from(presets)
       .where(isNotNull(presets.colorVector))
@@ -169,9 +155,9 @@ export async function checkPresetSimilarity(
           description: existing.presets.description,
           createdAt: new Date(existing.presets.createdAt),
           pending: existing.presets.pending,
-          upvotes: existing.presets.upvotes,
-          downvotes: existing.presets.downvotes,
-          saveCount: existing.saveCount,
+          likes: existing.presets.likes,
+          dislikes: existing.presets.dislikes,
+          saves: existing.presets.saves,
           colorVector: existing.presets.colorVector,
         });
 

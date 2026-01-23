@@ -3,7 +3,7 @@ import { routeLoader$, server$ } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
-import { isNotNull, eq, sql } from 'drizzle-orm';
+import { isNotNull, eq } from 'drizzle-orm';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
@@ -63,7 +63,6 @@ export const loadAllPresets = server$(async function() {
       .select({
         presets,
         user: users,
-        saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
       })
       .from(presets)
       .where(isNotNull(presets.colorVector))
@@ -81,9 +80,9 @@ export const loadAllPresets = server$(async function() {
       description: p.presets.description,
       createdAt: new Date(p.presets.createdAt).toISOString(),
       pending: p.presets.pending,
-      upvotes: p.presets.upvotes,
-      downvotes: p.presets.downvotes,
-      saveCount: p.saveCount,
+      likes: p.presets.likes,
+      dislikes: p.presets.dislikes,
+      saves: p.presets.saves,
       colorVector: p.presets.colorVector,
     }));
 

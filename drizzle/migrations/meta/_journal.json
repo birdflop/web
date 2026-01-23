@@ -15,6 +15,13 @@
       "when": 1766887580746,
       "tag": "0001_sharp_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1769147630512,
+      "tag": "0002_same_kingpin",
+      "breakpoints": true
     }
   ]
 }

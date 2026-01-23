@@ -14,7 +14,7 @@ import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qw
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -23,7 +23,6 @@ export const usePreset = routeLoader$(async ({ params }) => {
 
   const presetInfo = await db.select({
     presets, user: users,
-    saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
   })
     .from(presets)
     .leftJoin(users, eq(users.id, presets.userId))
@@ -37,7 +36,6 @@ export const usePreset = routeLoader$(async ({ params }) => {
   return {
     ...presetInfo.presets,
     user: presetInfo.user,
-    saveCount: presetInfo.saveCount,
   };
 });
 
@@ -197,7 +195,6 @@ export default component$(() => {
               privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
               if (presetInfo.id) {
                 savedPresets.value = savedPresets.value.filter((p) => p.id !== presetInfo.id);
-                presetInfo.saveCount--;
                 await unsavePreset(presetInfo.id);
               }
             }
@@ -205,7 +202,6 @@ export default component$(() => {
               privatePresets.value = [...privatePresets.value, presetInfo.preset];
               if (presetInfo.id) {
                 savedPresets.value = [...savedPresets.value, presetInfo];
-                presetInfo.saveCount++;
                 await savePreset(presetInfo.id);
               }
             }
@@ -213,7 +209,7 @@ export default component$(() => {
             if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
             loading.value = false;
           }}>
-            {!loading.value && presetInfo.saveCount}
+            {!loading.value && presetInfo.saves}
             {loading.value && <div class="lum-loading w-3 h-3" />}
             {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
               ? <>

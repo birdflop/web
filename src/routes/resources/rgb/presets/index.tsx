@@ -94,7 +94,6 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 
     const presetsFromDB = await db.select({
       presets, user: users,
-      saveCount: sql<number>`COUNT(${savedPresets.userId})`.as('saveCount'),
     })
       .from(presets)
       .where(and(
@@ -115,8 +114,8 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       .offset((page - 1) * perPage)
       .then((r) => r ?? []);
 
-    publicPresets = presetsFromDB.map(({ user, presets, saveCount }) => ({
-      ...presets, user, saveCount,
+    publicPresets = presetsFromDB.map(({ user, presets }) => ({
+      ...presets, user,
     }));
 
   } catch (err) {
