@@ -154,150 +154,148 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-15 w-full">
-        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
-          <Flag size={32} />
-          {t('nav.resources.flags.title@@Flags Generator')}
-        </h1>
-        <p class="mb-4 border-b border-lum-border/10 pb-4">
-          {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
-        </p>
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+        <Flag size={32} />
+        {t('nav.resources.flags.title@@Flags Generator')}
+      </h1>
+      <p class="mb-4 border-b border-lum-border/10 pb-4">
+        {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
+      </p>
 
-        <div class="flex *:flex-1 flex-wrap gap-4 justify-between my-6">
-          <div class="flex flex-col gap-2">
+      <div class="flex *:flex-1 flex-wrap gap-4 justify-between my-6">
+        <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1">
+            <label for="input">
+              {t('flags.fileName.label@@File Name')}
+            </label>
+            <input class="lum-input" id="input" value={flagsStore.fileName} placeholder="server.jar" onChange$={(e, el) => {
+              if (el.value.replace(/ /g, '') == '') return;
+              if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
+              flagsStore.fileName = el.value;
+            }}/>
+            <p class="text-lum-text-secondary text-sm">
+              {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+            </p>
+          </div>
+          <div class="flex gap-2">
             <div class="flex flex-col gap-1">
-              <label for="input">
-                {t('flags.fileName.label@@File Name')}
-              </label>
-              <input class="lum-input" id="input" value={flagsStore.fileName} placeholder="server.jar" onChange$={(e, el) => {
-                if (el.value.replace(/ /g, '') == '') return;
-                if (!el.value.endsWith('.jar')) { el.value += '.jar'; }
-                flagsStore.fileName = el.value;
-              }}/>
+              <SelectMenu id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
+                flagsStore.operatingSystem = el.value;
+              }} values={environmentOptions} value={flagsStore.operatingSystem}>
+                {t('flags.environment.label@@Environment')}
+              </SelectMenu>
               <p class="text-lum-text-secondary text-sm">
-                {t('flags.fileName.description@@The name of the file that will be used to start your server.')}
+                {t('flags.environment.description@@The operating system that the server runs on.')}
               </p>
             </div>
-            <div class="flex gap-2">
-              <div class="flex flex-col gap-1">
-                <SelectMenu id="os" class={{ 'w-full': true }} onChange$={(e, el) => {
-                  flagsStore.operatingSystem = el.value;
-                }} values={environmentOptions} value={flagsStore.operatingSystem}>
-                  {t('flags.environment.label@@Environment')}
-                </SelectMenu>
-                <p class="text-lum-text-secondary text-sm">
-                  {t('flags.environment.description@@The operating system that the server runs on.')}
-                </p>
-              </div>
-              <div class="flex flex-col gap-1">
-                <SelectMenu id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
-                  flagsStore.serverType = el.value;
-                }} values={softwareOptions} value={flagsStore.serverType}>
-                  {t('flags.software.label@@Software')}
-                </SelectMenu>
-                <p class="text-lum-text-secondary text-sm">
-                  {t('flags.software.description@@The software in which your Minecraft server will run on.')}
-                </p>
-              </div>
-            </div>
-            <div>
-              <RangeInput id='memory' min={1} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
-                flagsStore.memory = Number(el.value);
-              }}>
-                {t('flags.memory.label@@Memory')} ({flagsStore.memory} GiB)
-              </RangeInput>
-              <p class="text-lum-text-secondary text-sm mt-2">
-                {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+            <div class="flex flex-col gap-1">
+              <SelectMenu id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
+                flagsStore.serverType = el.value;
+              }} values={softwareOptions} value={flagsStore.serverType}>
+                {t('flags.software.label@@Software')}
+              </SelectMenu>
+              <p class="text-lum-text-secondary text-sm">
+                {t('flags.software.description@@The software in which your Minecraft server will run on.')}
               </p>
-              <div class="flex flex-col gap-1 mt-3">
-                <Toggle id="calcOverhead" checked={flagsStore.calcOverhead} onClick$={(e, el) => {
-                  flagsStore.calcOverhead = el.checked;
-                }}>
-                  <MemoryStick />
-                  {t('flags.memory.calcOverhead@@Calculate Overhead')}
-                </Toggle>
-                <p class="text-sm whitespace-pre-wrap">
-                  {t('flags.memory.calcOverhead.description@@This is recommended to avoid out-of-memory issues on your server.\nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.')}
-                </p>
-              </div>
             </div>
           </div>
-          <div class="flex flex-col gap-2">
-            <div class="flex flex-col gap-1 w-full">
-              <div class="flex items-end gap-2">
-                <SelectMenu id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
-                  flagsStore.flags = el.value as AvailableFlags;
-                }} values={flagOptions} value={flagsStore.flags}>
-                  {t('flags.flags.label@@Flags')}
-                </SelectMenu>
-                <SelectMenuRaw id="flagshelp" onChange$={(e, el) => {
-                  flagsStore.flags = el.value as AvailableFlags;
-                }} customDropdown>
-                  <CircleHelp size={24} q:slot='dropdown'/>
-                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
-                    {t('flags.flags.aikars@@Aikar\'s Flags')}
-                  </a>
-                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
-                    {t('flags.flags.meowice@@MeowIce\'s Flags')}
-                  </a>
-                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
-                    {t('flags.flags.benchmarked@@Benchmarked')}
-                  </a>
-                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
-                    {t('flags.flags.hillttys@@hilltty\'s Flags')}
-                  </a>
-                  <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
-                    {t('flags.flags.obyduxs@@Obydux\'s Flags')}
-                  </a>
-                </SelectMenuRaw>
-              </div>
-              <p class="text-lum-text-secondary text-sm">
-                {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
+          <div>
+            <RangeInput id='memory' min={1} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
+              flagsStore.memory = Number(el.value);
+            }}>
+              {t('flags.memory.label@@Memory')} ({flagsStore.memory} GiB)
+            </RangeInput>
+            <p class="text-lum-text-secondary text-sm mt-2">
+              {t('flags.memory.description@@The amount of memory (RAM) to allocate to your server.')}
+            </p>
+            <div class="flex flex-col gap-1 mt-3">
+              <Toggle id="calcOverhead" checked={flagsStore.calcOverhead} onClick$={(e, el) => {
+                flagsStore.calcOverhead = el.checked;
+              }}>
+                <MemoryStick />
+                {t('flags.memory.calcOverhead@@Calculate Overhead')}
+              </Toggle>
+              <p class="text-sm whitespace-pre-wrap">
+                {t('flags.memory.calcOverhead.description@@This is recommended to avoid out-of-memory issues on your server.\nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.')}
               </p>
-            </div>
-            <div class="flex flex-col gap-2">
-              <p>
-                {t('flags.config.label@@Config')}<br/>
-                <span class="text-lum-text-secondary text-sm">
-                  {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
-                </span>
-              </p>
-              {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
-                return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
-              }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
-                <Toggle id={id} checked={flagsStore[id]} onClick$={(e, el) => {
-                  flagsStore[id] = el.checked;
-                }}>
-                  <option.icon />
-                  {option.label}
-                </Toggle>
-                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
-              </div>)}
-              {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
-                return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
-              }).map(([id, option]) => <>
-                <Toggle key={id} id={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
-                  if (el.checked) flagsStore.extraFlags.push(id);
-                  else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
-                }}>
-                  <option.icon />
-                  {option.label}
-                </Toggle>
-                {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
-              </>)}
             </div>
           </div>
         </div>
-
-        <label for="Output">
-          {t('flags.script.label@@Script')}
-        </label>
-        <p class="text-lum-text-secondary text-sm mb-2">
-          {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
-        </p>
-        <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full whitespace-pre-wrap break-all': true }} id="Output" value={generateResult(flagsStore).script}/>
+        <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-1 w-full">
+            <div class="flex items-end gap-2">
+              <SelectMenu id="flags" class={{ 'w-full': true }} onChange$={(e, el) => {
+                flagsStore.flags = el.value as AvailableFlags;
+              }} values={flagOptions} value={flagsStore.flags}>
+                {t('flags.flags.label@@Flags')}
+              </SelectMenu>
+              <SelectMenuRaw id="flagshelp" onChange$={(e, el) => {
+                flagsStore.flags = el.value as AvailableFlags;
+              }} customDropdown>
+                <CircleHelp size={24} q:slot='dropdown'/>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
+                  {t('flags.flags.aikars@@Aikar\'s Flags')}
+                </a>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
+                  {t('flags.flags.meowice@@MeowIce\'s Flags')}
+                </a>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
+                  {t('flags.flags.benchmarked@@Benchmarked')}
+                </a>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
+                  {t('flags.flags.hillttys@@hilltty\'s Flags')}
+                </a>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
+                  {t('flags.flags.obyduxs@@Obydux\'s Flags')}
+                </a>
+              </SelectMenuRaw>
+            </div>
+            <p class="text-lum-text-secondary text-sm">
+              {t('flags.description@@The collection of start arguments that typically optimize the server\'s performance')}
+            </p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <p>
+              {t('flags.config.label@@Config')}<br/>
+              <span class="text-lum-text-secondary text-sm">
+                {t('flags.config.description@@The various additions and modifications that can be made to your start script.')}
+              </span>
+            </p>
+            {(Object.entries(configOptions) as [keyof typeof configOptions, typeof configOptions[keyof typeof configOptions]][]).filter(([,option]) => {
+              return !option.disable?.includes(flagsStore.operatingSystem) && !option.disable?.includes(flagsStore.serverType);
+            }).map(([id, option]) => <div key={id} class="flex flex-col gap-1">
+              <Toggle id={id} checked={flagsStore[id]} onClick$={(e, el) => {
+                flagsStore[id] = el.checked;
+              }}>
+                <option.icon />
+                {option.label}
+              </Toggle>
+              {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+            </div>)}
+            {(Object.entries(extraFlagsOptions) as [keyof typeof extraFlagsOptions, typeof extraFlagsOptions[keyof typeof extraFlagsOptions]][]).filter(([id]) => {
+              return extFlags[id].supports.includes(flagsStore.flags) && srvType[flagsStore.serverType].extraFlags?.includes(id);
+            }).map(([id, option]) => <>
+              <Toggle key={id} id={id} checked={flagsStore.extraFlags.includes(id)} onClick$={(e, el) => {
+                if (el.checked) flagsStore.extraFlags.push(id);
+                else flagsStore.extraFlags.splice(flagsStore.extraFlags.indexOf(id), 1);
+              }}>
+                <option.icon />
+                {option.label}
+              </Toggle>
+              {option.description && <p class="text-lum-text-secondary text-sm">{option.description}</p>}
+            </>)}
+          </div>
+        </div>
       </div>
+
+      <label for="Output">
+        {t('flags.script.label@@Script')}
+      </label>
+      <p class="text-lum-text-secondary text-sm mb-2">
+        {t('flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!', { fileName: flagsStore.fileName })}
+      </p>
+      <textarea class={{ 'lum-input h-96 font-mono mt-2 w-full whitespace-pre-wrap break-all': true }} id="Output" value={generateResult(flagsStore).script}/>
     </section>
   );
 });

@@ -95,36 +95,31 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-15 w-full">
-        <div class="flex items-center">
-          <h1 class="flex gap-4 items-center my-3! flex-1">
-            {userInfo.image &&
-              <img src={userInfo.image} width={70} height={70} class="rounded-full! w-17 h-17" />
-            }
-            {userInfo?.name || 'User'}
-          </h1>
-        </div>
-        <hr />
-        <main>
-          {userPresets.length > 0 && <div>
-            <h3 class="flex gap-2 items-center">
-              <Save size={30} />
-              <span class="flex-1">
-                {userInfo?.name || 'User'}'s Public RGBirdflop Presets
-              </span>
-              <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-                <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
-              </Link>
-            </h3>
-            <div class="grid sm:grid-cols-2 gap-2">
-              {userPresets.map((preset) => (
-                <PresetPreview key={preset.id} Preset={preset} />
-              ))}
-            </div>
-          </div>}
-        </main>
-      </div>
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+        {userInfo.image &&
+          <img src={userInfo.image} width={48} height={48} class="rounded-full!" />
+        }
+        {userInfo?.name || 'User'}
+      </h1>
+      <main>
+        {userPresets.length > 0 && <div>
+          <h3 class="flex gap-2 items-center">
+            <Save size={30} />
+            <span class="flex-1">
+              {userInfo?.name || 'User'}'s Public RGBirdflop Presets
+            </span>
+            <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
+              <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
+            </Link>
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-2">
+            {userPresets.map((preset) => (
+              <PresetPreview key={preset.id} Preset={preset} />
+            ))}
+          </div>
+        </div>}
+      </main>
     </section>
   );
 });

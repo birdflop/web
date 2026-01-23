@@ -1,12 +1,12 @@
 import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
 import { routeLoader$, server$ } from '@builder.io/qwik-city';
-import { useSession } from '~/routes/plugin@auth';
 import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
 import { isNotNull, eq } from 'drizzle-orm';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
+import { AppWindow } from 'lucide-icons-qwik';
 
 export const useAdminCheck = routeLoader$(function({ redirect, env, sharedMap }) {
   const session = sharedMap.get('session');
@@ -97,7 +97,6 @@ export const loadAllPresets = server$(async function() {
 });
 
 export default component$(() => {
-  const session = useSession();
   useAdminCheck();
 
   // Provide contexts for PresetPreview (empty since admin doesn't need these features)
@@ -302,11 +301,12 @@ export default component$(() => {
   });
 
   return (
-    <div class="mx-auto max-w-4xl px-4 py-12">
-      <h1 class="text-4xl font-bold mb-2">Admin Panel</h1>
-      <p class="text-gray-400 mb-8">Welcome, {session.value?.user?.name}</p>
-
-      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh">
+      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+        <AppWindow size={32} />
+        Admin Panel
+      </h1>
+      <div class="lum-card">
         <h2 class="text-2xl font-bold mb-4">Vector Backfill</h2>
         <p class="text-gray-400 mb-4">
           Generate color vectors for all existing presets that don&apos;t have them.
@@ -328,7 +328,7 @@ export default component$(() => {
         )}
       </div>
 
-      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+      <div class="lum-card">
         <h2 class="text-2xl font-bold mb-4">Find Similar Presets</h2>
         <p class="text-gray-400 mb-4">
           Check all published presets and find groups of similar gradients.
@@ -452,7 +452,7 @@ export default component$(() => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 });
 

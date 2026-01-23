@@ -194,239 +194,237 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-15 w-full">
-        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
-          <Presentation size={32} />
-          {t('nav.resources.banner.title@@Banner Generator')}
-        </h1>
-        <p class="mb-4 border-b border-lum-border/10 pb-4">
-          {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
-        </p>
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+        <Presentation size={32} />
+        {t('nav.resources.banner.title@@Banner Generator')}
+      </h1>
+      <p class="mb-4 border-b border-lum-border/10 pb-4">
+        {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
+      </p>
 
-        <div class="grid sm:grid-cols-2 gap-2">
+      <div class="grid sm:grid-cols-2 gap-2">
 
-          <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('options')
-                ? openItemsStore.items.filter(item => item !== 'options')
-                : ['options'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('options'),
-            }}>
-              <Settings />
-              {t('banner.options.title@@Options')}
-            </button>
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('command')
-                ? openItemsStore.items.filter(item => item !== 'command')
-                : ['command'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('command'),
-            }}>
-              <Terminal />
-              {t('banner.command.title@@Command')}
-            </button>
-            <button onClick$={() => {
-              openItemsStore.items = openItemsStore.items.includes('preview')
-                ? openItemsStore.items.filter(item => item !== 'preview')
-                : ['preview'];
-            }} class={{
-              'lum-bg-blue!': openItemsStore.items.includes('preview'),
-            }}>
-              <Eye />
-              {t('banner.preview@@Preview')}
-            </button>
+        <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
+          <button onClick$={() => {
+            openItemsStore.items = openItemsStore.items.includes('options')
+              ? openItemsStore.items.filter(item => item !== 'options')
+              : ['options'];
+          }} class={{
+            'lum-bg-blue!': openItemsStore.items.includes('options'),
+          }}>
+            <Settings />
+            {t('banner.options.title@@Options')}
+          </button>
+          <button onClick$={() => {
+            openItemsStore.items = openItemsStore.items.includes('command')
+              ? openItemsStore.items.filter(item => item !== 'command')
+              : ['command'];
+          }} class={{
+            'lum-bg-blue!': openItemsStore.items.includes('command'),
+          }}>
+            <Terminal />
+            {t('banner.command.title@@Command')}
+          </button>
+          <button onClick$={() => {
+            openItemsStore.items = openItemsStore.items.includes('preview')
+              ? openItemsStore.items.filter(item => item !== 'preview')
+              : ['preview'];
+          }} class={{
+            'lum-bg-blue!': openItemsStore.items.includes('preview'),
+          }}>
+            <Eye />
+            {t('banner.preview@@Preview')}
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-2" id="inputcolumn">
+          <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+            <Settings />
+            {t('banner.options.title@@Options')}
           </div>
-
-          <div class="flex flex-col gap-2" id="inputcolumn">
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Settings />
-              {t('banner.options.title@@Options')}
+          <div class={{
+            'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
+            'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
+          }}>
+            <h6 class="my-0! flex gap-3 items-center">
+              {t('banner.options.baseColor.title@@Base Color')}
+              <span class="text-lum-text-secondary text-sm font-normal">
+                {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
+              </span>
+            </h6>
+            <div class="flex flex-wrap gap-1">
+              {Object.entries(colors).map(([colorName, color]) => {
+                return (
+                  <button key={colorName} class={{
+                    'lum-btn p-2 hover:brightness-80 lum-bg': true,
+                  }} style={{
+                    '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
+                  }} onClick$={() => {
+                    bannerStore.color = colorName as keyof typeof colors;
+                  }}>
+                    <img class="w-10" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
+                      imageRendering: 'pixelated',
+                    }} />
+                  </button>
+                );
+              })}
             </div>
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
-              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
-            }}>
-              <h6 class="my-0! flex gap-3 items-center">
-                {t('banner.options.baseColor.title@@Base Color')}
-                <span class="text-lum-text-secondary text-sm font-normal">
-                  {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
-                </span>
-              </h6>
-              <div class="flex flex-wrap gap-1">
-                {Object.entries(colors).map(([colorName, color]) => {
-                  return (
-                    <button key={colorName} class={{
-                      'lum-btn p-2 hover:brightness-80 lum-bg': true,
-                    }} style={{
-                      '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
-                    }} onClick$={() => {
-                      bannerStore.color = colorName as keyof typeof colors;
-                    }}>
-                      <img class="w-10" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
-                        imageRendering: 'pixelated',
-                      }} />
-                    </button>
-                  );
-                })}
-              </div>
-              <h6 class="my-0! flex gap-3 items-center">
-                {t('banner.options.patterns@@Patterns')}
-                <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
-                  const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
-                  const pattern = patterns[Math.floor(Math.random() * patterns.length)];
-                  bannerStore.patterns = [
-                    ...bannerStore.patterns,
-                    { color, pattern },
-                  ];
-                }}>
-                  <Plus size={20} />
-                </button>
-              </h6>
+            <h6 class="my-0! flex gap-3 items-center">
+              {t('banner.options.patterns@@Patterns')}
+              <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
+                const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
+                const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+                bannerStore.patterns = [
+                  ...bannerStore.patterns,
+                  { color, pattern },
+                ];
+              }}>
+                <Plus size={20} />
+              </button>
+            </h6>
 
-              <div class="flex flex-wrap gap-2 pt-2">
-                {bannerStore.patterns.map((pattern, i) =>
-                  <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
-                    <div class="flex flex-col rounded-lum">
-                      <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
-                        <ChevronLeft size={20} />
-                      </button>
-                      <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
-                        <ChevronRight size={20} />
-                      </button>
-                      <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => {
-                        const newPatterns = bannerStore.patterns.slice(0);
-                        newPatterns.push({ ...pattern });
-                        bannerStore.patterns = newPatterns;
-                      }}>
-                        <Copy size={20} />
-                      </button>
-                      <button class="lum-btn p-1 lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
-                        const newPatterns = bannerStore.patterns.slice(0);
-                        newPatterns.splice(i, 1);
-                        bannerStore.patterns = newPatterns;
-                      }}>
-                        <Trash size={20} />
-                      </button>
-                    </div>
-                    <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
-                      onMouseUp$={() => {
-                        if (openPopup.value == i) return openPopup.value = -1;
-                        else openPopup.value = i;
-                        const abortController = new AbortController();
-                        document.addEventListener('click', (e) => {
-                          if (e.target instanceof HTMLElement && !e.target.closest(`#pattern-${i + 1}`) && !e.target.closest(`#pattern-${i + 1}-popup`)) {
-                            openPopup.value = -1;
-                            abortController.abort();
-                          }
-                        }, { signal: abortController.signal });
-                      }}
-                    >
-                      <canvas id={`canvas-preview-${i}`} style={{
-                        imageRendering: 'pixelated',
-                      }} class={{
-                        'w-full rounded-lum': true,
-                      }}/>
-                      <canvas id={`canvas-texture-${i}`} style={{
-                        imageRendering: 'pixelated',
-                      }} class={{
-                        'w-full rounded-lum hidden': true,
-                      }}/>
+            <div class="flex flex-wrap gap-2 pt-2">
+              {bannerStore.patterns.map((pattern, i) =>
+                <div key={`${i}/${bannerStore.patterns.length}`} class="flex gap-1 relative" id={`pattern-${i + 1}`}>
+                  <div class="flex flex-col rounded-lum">
+                    <button class="lum-btn p-1 border-b-transparent rounded-b-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i - 1)}>
+                      <ChevronLeft size={20} />
                     </button>
-                    <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
-                      'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2 left-0': true,
-                      'opacity-0 scale-95 pointer-events-none': openPopup.value != i,
+                    <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => bannerStore.patterns = swapItems(bannerStore.patterns, i, i + 1)}>
+                      <ChevronRight size={20} />
+                    </button>
+                    <button class="lum-btn p-1 border-y-transparent rounded-none" onClick$={() => {
+                      const newPatterns = bannerStore.patterns.slice(0);
+                      newPatterns.push({ ...pattern });
+                      bannerStore.patterns = newPatterns;
                     }}>
-                      <div class="lum-card w-92 p-4">
-                        <div class="flex flex-wrap gap-1">
-                          {Object.entries(colors).map(([colorName, color]) => {
-                            return (
-                              <button key={colorName} class={{
-                                'lum-btn p-1 hover:brightness-150 lum-bg': true,
-                              }} style={{
-                                '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
-                              }} onClick$={() => {
-                                const newPatterns = bannerStore.patterns.slice(0);
-                                newPatterns[i].color = colorName as keyof typeof colors;
-                                bannerStore.patterns = newPatterns;
-                              }}>
-                                <img class="w-7" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
-                                  imageRendering: 'pixelated',
-                                }} />
-                              </button>
-                            );
-                          })}
-                        </div>
-                        <div class="flex flex-wrap gap-1">
-                          {patterns.map((pattern) => {
-                            return (
-                              <button key={pattern} class={{
-                                'lum-btn p-0 hover:brightness-150': true,
-                              }} onClick$={() => {
-                                const newPatterns = bannerStore.patterns.slice(0);
-                                newPatterns[i].pattern = pattern;
-                                bannerStore.patterns = newPatterns;
-                              }}>
-                                <img class="w-9 rounded-lum" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
-                                  imageRendering: 'pixelated',
-                                }} />
-                              </button>
-                            );
-                          })}
-                        </div>
+                      <Copy size={20} />
+                    </button>
+                    <button class="lum-btn p-1 lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
+                      const newPatterns = bannerStore.patterns.slice(0);
+                      newPatterns.splice(i, 1);
+                      bannerStore.patterns = newPatterns;
+                    }}>
+                      <Trash size={20} />
+                    </button>
+                  </div>
+                  <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
+                    onMouseUp$={() => {
+                      if (openPopup.value == i) return openPopup.value = -1;
+                      else openPopup.value = i;
+                      const abortController = new AbortController();
+                      document.addEventListener('click', (e) => {
+                        if (e.target instanceof HTMLElement && !e.target.closest(`#pattern-${i + 1}`) && !e.target.closest(`#pattern-${i + 1}-popup`)) {
+                          openPopup.value = -1;
+                          abortController.abort();
+                        }
+                      }, { signal: abortController.signal });
+                    }}
+                  >
+                    <canvas id={`canvas-preview-${i}`} style={{
+                      imageRendering: 'pixelated',
+                    }} class={{
+                      'w-full rounded-lum': true,
+                    }}/>
+                    <canvas id={`canvas-texture-${i}`} style={{
+                      imageRendering: 'pixelated',
+                    }} class={{
+                      'w-full rounded-lum hidden': true,
+                    }}/>
+                  </button>
+                  <div id={`pattern-${i + 1}-popup`} stoppropagation:mousedown class={{
+                    'flex flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2 left-0': true,
+                    'opacity-0 scale-95 pointer-events-none': openPopup.value != i,
+                  }}>
+                    <div class="lum-card w-92 p-4">
+                      <div class="flex flex-wrap gap-1">
+                        {Object.entries(colors).map(([colorName, color]) => {
+                          return (
+                            <button key={colorName} class={{
+                              'lum-btn p-1 hover:brightness-150 lum-bg': true,
+                            }} style={{
+                              '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
+                            }} onClick$={() => {
+                              const newPatterns = bannerStore.patterns.slice(0);
+                              newPatterns[i].color = colorName as keyof typeof colors;
+                              bannerStore.patterns = newPatterns;
+                            }}>
+                              <img class="w-7" src={`/banner/dyes/${colorName}_dye.png`} alt={colorName} style={{
+                                imageRendering: 'pixelated',
+                              }} />
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div class="flex flex-wrap gap-1">
+                        {patterns.map((pattern) => {
+                          return (
+                            <button key={pattern} class={{
+                              'lum-btn p-0 hover:brightness-150': true,
+                            }} onClick$={() => {
+                              const newPatterns = bannerStore.patterns.slice(0);
+                              newPatterns[i].pattern = pattern;
+                              bannerStore.patterns = newPatterns;
+                            }}>
+                              <img class="w-9 rounded-lum" src={`/banner/patterns/previews/${pattern}.png`} alt={pattern} style={{
+                                imageRendering: 'pixelated',
+                              }} />
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
-                  </div>,
-                )}
-              </div>
+                  </div>
+                </div>,
+              )}
             </div>
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Terminal />
-              {t('banner.command.title@@Command')}
-            </div>
-            <div class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
-              'max-h-62.5 opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
-            }} id="command">
-              <textarea id="commandOutput" readOnly
-                class={{
-                  'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
-                }}
-                value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
-                onClick$={async (e, el) => {
-                  const notification = new Notification()
-                    .setTitle(await t$('banner.copied@@Copied to clipboard!'))
-                    .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
-                    .setBgColor('lum-bg-green/50');
+          </div>
+          <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+            <Terminal />
+            {t('banner.command.title@@Command')}
+          </div>
+          <div class={{
+            'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
+            'max-h-62.5 opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
+          }} id="command">
+            <textarea id="commandOutput" readOnly
+              class={{
+                'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
+              }}
+              value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
+              onClick$={async (e, el) => {
+                const notification = new Notification()
+                  .setTitle(await t$('banner.copied@@Copied to clipboard!'))
+                  .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
+                  .setBgColor('lum-bg-green/50');
 
-                  navigator.clipboard.writeText(el.value).catch(async (err) => {
-                    notification.setTitle(await t$('banner.copyFailed@@Failed to copy to clipboard!'))
-                      .setDescription(err)
-                      .setBgColor('lum-bg-red/50')
-                      .setPersist(true);
-                  });
-                  notifications.push(notification);
-                }}
-              />
-            </div>
+                navigator.clipboard.writeText(el.value).catch(async (err) => {
+                  notification.setTitle(await t$('banner.copyFailed@@Failed to copy to clipboard!'))
+                    .setDescription(err)
+                    .setBgColor('lum-bg-red/50')
+                    .setPersist(true);
+                });
+                notifications.push(notification);
+              }}
+            />
           </div>
-          <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/10 sm:pl-2" id="outputcolumn">
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Eye />
-              {t('banner.preview@@Preview')}
-            </div>
-            <canvas ref={preview} id="preview" class={{
-              'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-              'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
-              'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
-            }} />
-            <canvas ref={textureCanvas} id="texture" class="hidden" style={{
-              imageRendering: 'pixelated',
-            }}/>
+        </div>
+        <div class="flex flex-col gap-2 sm:border-l sm:border-l-lum-border/10 sm:pl-2" id="outputcolumn">
+          <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+            <Eye />
+            {t('banner.preview@@Preview')}
           </div>
+          <canvas ref={preview} id="preview" class={{
+            'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
+            'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
+          }} />
+          <canvas ref={textureCanvas} id="texture" class="hidden" style={{
+            imageRendering: 'pixelated',
+          }}/>
         </div>
       </div>
     </section>

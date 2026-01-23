@@ -32,7 +32,7 @@ export default component$(() => {
     pending: false,
   }));
 
-  return <div class="flex flex-col">
+  return <>
     <h3 class="flex gap-2 items-center" id="my-presets">
       <CircleUserRound size={30} />
       <span class="flex-1">
@@ -260,5 +260,5 @@ export default component$(() => {
       </div>
     </dialog>
 
-  </div>;
+  </>;
 });
