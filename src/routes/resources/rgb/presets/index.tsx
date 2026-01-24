@@ -34,7 +34,7 @@ import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
-import { and, count, desc, eq, like, inArray, or, sql } from 'drizzle-orm';
+import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 import { useAdmins } from '~/routes/layout';
 
@@ -82,9 +82,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
       break;
     case 'saves':
-      orderBy = sortOrder === 'desc'
-        ? desc(sql`COUNT(${savedPresets.userId})`)
-        : sql`COUNT(${savedPresets.userId})`;
+      orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
       break;
     case 'createdAt':
     default:
