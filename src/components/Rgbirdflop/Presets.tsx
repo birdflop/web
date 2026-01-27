@@ -40,7 +40,7 @@ export default component$(({ hidden }: {
         .setBgColor('lum-bg-red/50')
         .setButtons([{
           text: 'Discord',
-          href: 'https://discord.gg/9vUZ9MREVz',
+          href: 'https://discord.gg/nmgtX5z',
         }])
         .setPersist(true);
       notifications.push(notification);
