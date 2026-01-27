@@ -155,7 +155,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Flag size={32} />
         {t('nav.resources.flags.title@@Flags Generator')}
       </h1>
@@ -201,7 +201,7 @@ export default component$(() => {
             </div>
           </div>
           <div>
-            <RangeInput id='memory' min={1} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
+            <RangeInput id="memory" min={1} max={32} step={0.5} value={flagsStore.memory} onInput$={(e, el) => {
               flagsStore.memory = Number(el.value);
             }}>
               {t('flags.memory.label@@Memory')} ({flagsStore.memory} GiB)
@@ -233,20 +233,20 @@ export default component$(() => {
               <SelectMenuRaw id="flagshelp" onChange$={(e, el) => {
                 flagsStore.flags = el.value as AvailableFlags;
               }} customDropdown>
-                <CircleHelp size={24} q:slot='dropdown'/>
-                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
+                <CircleHelp size={24} q:slot="dropdown"/>
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot="extra-buttons" href="https://docs.papermc.io/paper/aikars-flags" target="_blank">
                   {t('flags.flags.aikars@@Aikar\'s Flags')}
                 </a>
-                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/MeowIce/meowice-flags" target="_blank">
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot="extra-buttons" href="https://github.com/MeowIce/meowice-flags" target="_blank">
                   {t('flags.flags.meowice@@MeowIce\'s Flags')}
                 </a>
-                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot="extra-buttons" href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks" target="_blank">
                   {t('flags.flags.benchmarked@@Benchmarked')}
                 </a>
-                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot="extra-buttons" href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md" target="_blank">
                   {t('flags.flags.hillttys@@hilltty\'s Flags')}
                 </a>
-                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot='extra-buttons' href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
+                <a class="lum-btn lum-bg-transparent rounded-lum-1" q:slot="extra-buttons" href="https://github.com/Obydux/Minecraft-GraalVM-Flags" target="_blank">
                   {t('flags.flags.obyduxs@@Obydux\'s Flags')}
                 </a>
               </SelectMenuRaw>

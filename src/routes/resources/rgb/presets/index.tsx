@@ -368,7 +368,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!'>
+      <h1 class="flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!">
         <span class="flex flex-1 gap-3 items-center">
           <Save size={32} />
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -430,15 +430,15 @@ export default component$(() => {
                 value: 'saves-asc',
               },
             ]}/>
-          <SelectMenuRaw align='right'
+          <SelectMenuRaw align="right"
             id="settings"
             class={{
               'p-3 rounded-lum-1 lum-bg-transparent': true,
             }}
-            panelClass='lum-bg-lum-card-bg p-2 gap-2'
+            panelClass="lum-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >
-            <Settings q:slot='dropdown' size={16} />
+            <Settings q:slot="dropdown" size={16} />
 
             {admin &&
               <Toggle

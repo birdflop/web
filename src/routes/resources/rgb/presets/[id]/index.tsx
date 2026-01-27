@@ -101,7 +101,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Save size={32} />
         {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
       </h1>
@@ -177,10 +177,10 @@ export default component$(() => {
           <div q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
           </div>
-          <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
             <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
           </Link>
-          <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
             <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </Link>
         </SelectMenuRaw>

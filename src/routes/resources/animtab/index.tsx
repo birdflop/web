@@ -103,11 +103,11 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={[...rgbErrors, ...animTABErrors]} output={AnimationOutput(rgbStore, animtabStore)}>
-      <h1 class='flex gap-3 text-2xl! items-center my-2!' q:slot='header'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!" q:slot="header">
         <Rainbow size={32} />
         {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot='header'>
+      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
         {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
       </p>
 
@@ -117,7 +117,7 @@ export default component$(() => {
           : ['outputformat'];
       }} class={{
         'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
-      }} q:slot='mobile-navbar'>
+      }} q:slot="mobile-navbar">
         <FileJson />
         {t('animtab.outputFormat.title@@Output Format')}
       </button>
@@ -152,7 +152,7 @@ export default component$(() => {
             const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
             const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
             i = store.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
-            return <span key={`char${i}`} q:slot='input' style={{
+            return <span key={`char${i}`} q:slot="input" style={{
               color,
               textShadow: `${shadowLength} 0 ${shadowColor};`,
             }} class={{
@@ -174,7 +174,7 @@ export default component$(() => {
             };
             const isActive = gradientType === rgbStore.gradientType;
             return (
-              <span key={gradientType} q:slot='input' class='flex items-center gap-2'>
+              <span key={gradientType} q:slot="input" class="flex items-center gap-2">
                 <span
                   class={{
                     'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
@@ -184,7 +184,7 @@ export default component$(() => {
                 >
                   {gradientType}
                 </span>
-                <span class='flex-1'>
+                <span class="flex-1">
                   {renderFrames(tempStore)}
                 </span>
               </span>
@@ -227,11 +227,11 @@ export default component$(() => {
         {t('animtab.animation.style@@Animation Style')}
       </SelectMenu>
 
-      <Accordion q:slot='column3' sectionName="outputformat" pcOnly>
+      <Accordion q:slot="column3" sectionName="outputformat" pcOnly>
         <FileJson />
         {t('animtab.outputFormat.title@@Output Format')}
       </Accordion>
-      <div q:slot='column3' class={{
+      <div q:slot="column3" class={{
         'flex flex-col gap-2 transition-all duration-200': true,
         'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('outputformat'),
         'max-h-125 opacity-100 pointer-events-auto': openItemsStore.items.includes('outputformat'),

@@ -195,7 +195,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Presentation size={32} />
         {t('nav.resources.banner.title@@Banner Generator')}
       </h1>

@@ -34,31 +34,31 @@ export default component$(() => {
   return (
     <QwikCityProvider>
       <head>
-        <meta charset='utf-8' />
-        <link rel='manifest' href='/manifest.webmanifest' />
+        <meta charset="utf-8" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         <QwikPartytown forward={['dataLayer.push']} />
         <script
           async
-          type='text/partytown'
-          src='https://www.googletagmanager.com/gtag/js?id=AW-11483620641'
+          type="text/partytown"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-11483620641"
         />
         {isBirdflop ? (
           <script
             defer
-            src='https://umami.bwmp.dev/script.js'
-            data-website-id='49e1c025-20df-48d7-9da7-82f1c2ecff88'
-            data-domains='birdflop.com,www.birdflop.com'
+            src="https://umami.bwmp.dev/script.js"
+            data-website-id="49e1c025-20df-48d7-9da7-82f1c2ecff88"
+            data-domains="birdflop.com,www.birdflop.com"
           />
         ) : (
           <script
             defer
-            src='https://umami.bwmp.dev/script.js'
-            data-website-id='b68075e9-39d9-4401-9d8f-2d3e84d76ca5'
+            src="https://umami.bwmp.dev/script.js"
+            data-website-id="b68075e9-39d9-4401-9d8f-2d3e84d76ca5"
           />
         )}
         <RouterHead />
       </head>
-      <body class='text-lum-text'>
+      <body class="text-lum-text">
         <RouterOutlet />
       </body>
     </QwikCityProvider>

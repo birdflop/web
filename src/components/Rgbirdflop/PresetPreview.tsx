@@ -187,10 +187,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         <div q:slot="dropdown" class="flex items-center gap-3">
           <MousePointer2 size={20} />
         </div>
-        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
           <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
-        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
       </SelectMenuRaw>

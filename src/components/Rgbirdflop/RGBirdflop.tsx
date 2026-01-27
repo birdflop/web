@@ -93,7 +93,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     shadowHex = rgbShadow ? rgbToHex(rgbShadow) : '';
     return (
       <span
-        q:slot='input'
+        q:slot="input"
         key={`char${i}`}
         style={{
           color: `#${hex};`,
@@ -309,11 +309,11 @@ export default component$(({ errors, output }: {
   });
 
   return (
-    <section class='relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center'>
+    <section class="relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center">
       {showAds.value && adAsset && (
-        <HostingAd variant={adAsset} position='Left' />
+        <HostingAd variant={adAsset} position="Left" />
       )}
-      <div class='min-h-15 max-w-6xl'>
+      <div class="min-h-15 max-w-6xl">
         <Slot name="header" />
 
         <Input>
@@ -335,12 +335,12 @@ export default component$(({ errors, output }: {
 
         <ColorMap />
 
-        <div class='grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1'>
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-1">
           <MobileNavbar>
             <Slot name="mobile-navbar" />
           </MobileNavbar>
 
-          <div class='flex flex-col gap-2 relative' id='column1'>
+          <div class="flex flex-col gap-2 relative" id="column1">
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Palette />
               {t('rgb.colors.title@@Colors')}
@@ -348,7 +348,7 @@ export default component$(({ errors, output }: {
             <ColorList hidden={!openItemsStore.items.includes('colors')}>
               <Slot name="color-list" />
             </ColorList>
-            <Accordion sectionName='textshadow' pcOnly>
+            <Accordion sectionName="textshadow" pcOnly>
               <Blend />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
@@ -356,8 +356,8 @@ export default component$(({ errors, output }: {
           </div>
 
           <div
-            class='flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10'
-            id='column2'
+            class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10"
+            id="column2"
           >
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Clipboard />
@@ -373,11 +373,11 @@ export default component$(({ errors, output }: {
               {t('rgb.options@@Options')}
             </div>
             <Options hidden={!openItemsStore.items.includes('options')}>
-              <Slot name='options' />
+              <Slot name="options" />
             </Options>
           </div>
 
-          <div class='mb-4 flex flex-col gap-2' id='column3'>
+          <div class="mb-4 flex flex-col gap-2" id="column3">
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Save />
               {t('rgb.presets.title@@Presets')}
@@ -385,7 +385,7 @@ export default component$(({ errors, output }: {
             <Presets hidden={!openItemsStore.items.includes('presets')} />
 
             {rgbStore.customFormat && <>
-              <Accordion sectionName='formatoptions' pcOnly>
+              <Accordion sectionName="formatoptions" pcOnly>
                 <Settings />
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
@@ -394,10 +394,10 @@ export default component$(({ errors, output }: {
               />
             </>}
 
-            <Accordion sectionName='decode' pcOnly>
+            <Accordion sectionName="decode" pcOnly>
               <Sparkles />
               {t('rgb.decode.title@@Decode')}
-              <span class='lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1'>
+              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
                 {t('rgb.decode.experimental@@experimental')}
               </span>
             </Accordion>
@@ -406,13 +406,13 @@ export default component$(({ errors, output }: {
             <Slot name="column3" />
           </div>
         </div>
-        <p class='mt-8'>
+        <p class="mt-8">
           RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
           gradient creator that generates hex formatted text. RGB Birdflop is a
           public resource developed by Birdflop, a 501(c)(3) nonprofit providing
           affordable and accessible hosting and public resources. If you would
           like to support our mission, please{' '}
-          <a href='https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U'>
+          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
             click here
           </a>{' '}
           to make a charitable donation, 100% tax-deductible in the US.
@@ -420,13 +420,13 @@ export default component$(({ errors, output }: {
         <p>
           Wanna automate generating gradients or use this in your own project?
           We have{' '}
-          <a class='text-blue-400 hover:underline' href='/docs/rgbirdflop/api'>
+          <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">
             an API!
           </a>
         </p>
       </div>
       {showAds.value && adAsset && (
-        <HostingAd variant={adAsset} position='Right' />
+        <HostingAd variant={adAsset} position="Right" />
       )}
     </section>
   );

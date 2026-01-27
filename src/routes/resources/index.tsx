@@ -10,7 +10,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Box size={32} />
         {t('nav.resources.title@@Resources')}
       </h1>
@@ -28,7 +28,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-red/10 hover:lum-bg-red/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb">
-          <Blobs color='red' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="red" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Palette />
             {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -40,7 +40,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-blue/10 hover:lum-bg-blue/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtab">
-          <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="blue" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Rainbow />
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
@@ -52,7 +52,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-green/10 hover:lum-bg-green/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb/presets">
-          <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="green" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Save />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -73,7 +73,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-yellow/10 hover:lum-bg-yellow/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/sparkprofile">
-          <Blobs color='yellow' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="yellow" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Zap />
             {t('nav.resources.sparkProfile.title@@Spark Profile')}
@@ -85,7 +85,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-pink/10 hover:lum-bg-pink/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/papertimings">
-          <Blobs color='pink' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="pink" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <LogoPaper size={24} />
             {t('nav.resources.paperTimings.title@@Paper Timings')}
@@ -97,7 +97,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-orange/10 hover:lum-bg-orange/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/flags">
-          <Blobs color='orange' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="orange" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Flag />
             {t('nav.resources.flags.title@@Flags Generator')}
@@ -118,7 +118,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-purple/10 hover:lum-bg-purple/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/banner">
-          <Blobs color='purple' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="purple" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Presentation />
             {t('nav.resources.banner.title@@Banner Generator')}
@@ -130,7 +130,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-cyan/10 hover:lum-bg-cyan/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtexture">
-          <Blobs color='cyan' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="cyan" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <GalleryHorizontalEnd />
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
@@ -142,7 +142,7 @@ export default component$(() => {
         <Link class="lum-card lum-bg-lime/10 hover:lum-bg-lime/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animpreview">
-          <Blobs color='lime' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
+          <Blobs color="lime" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="my-0! text-xl! flex gap-2 items-center">
             <Eye />
             {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}

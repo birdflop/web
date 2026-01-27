@@ -79,7 +79,7 @@ export const OnThisPage = component$(({ readOnly }: {
 
   return (
     <aside
-      class='hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-40 pt-14 sm:pt-20 px-0 sm:px-6 pb-0'
+      class="hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-40 pt-14 sm:pt-20 px-0 sm:px-6 pb-0"
     >
       {contentHeadings.length > 0 ? (
         <>
@@ -109,7 +109,7 @@ export const OnThisPage = component$(({ readOnly }: {
         <h6 class="py-3 border-b border-b-gray-700">More</h6>
         <div class="flex flex-col gap-2">
           <a
-            class='lum-btn text-ellipsis lum-bg-transparent'
+            class="lum-btn text-ellipsis lum-bg-transparent"
             href={editUrl}
             rel="noopener"
             target="_blank"
@@ -118,8 +118,8 @@ export const OnThisPage = component$(({ readOnly }: {
             <span>Edit this Page</span>
           </a>
           <a
-            class='lum-btn text-ellipsis lum-bg-transparent'
-            href='https://github.com/birdflop/web/issues/new/choose'
+            class="lum-btn text-ellipsis lum-bg-transparent"
+            href="https://github.com/birdflop/web/issues/new/choose"
             rel="noopener"
             target="_blank"
           >
@@ -127,13 +127,13 @@ export const OnThisPage = component$(({ readOnly }: {
             <span>Create an issue</span>
           </a>
           <div
-            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary'
+            class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary"
           >
             <User size={20} />
             <span>Created by: {author}</span>
           </div>
           <div
-            class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left'
+            class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left"
           >
             <Clock size={20} />
             <span>Created:<br/>{created}</span>
@@ -142,7 +142,7 @@ export const OnThisPage = component$(({ readOnly }: {
       </>}
       {updated !== 'Unknown' && updated !== created && (
         <div
-          class='lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left'
+          class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left"
         >
           <Clock size={20} />
           <span>Last Updated:<br/>{updated}</span>

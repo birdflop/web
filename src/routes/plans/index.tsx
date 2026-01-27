@@ -83,7 +83,7 @@ export default component$(() => {
 
   return <>
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <ShoppingCart size={32} />
         Order your new server
       </h1>
@@ -113,8 +113,8 @@ export default component$(() => {
                 'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
                 'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
               }}
-              data-umami-event='Plan Pick Click'
-              data-umami-event-page='plans'
+              data-umami-event="Plan Pick Click"
+              data-umami-event-page="plans"
               data-umami-event-variant={planName}
               key={planName}
               onClick$={() => {
@@ -126,7 +126,7 @@ export default component$(() => {
                   if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
                 }, 100);
               }}>
-              {plansStore.plan == planName && <Blobs color='blue' class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{
+              {plansStore.plan == planName && <Blobs color="blue" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{
                 transform: 'translateZ(-10px)',
               }}/>}
               <p>
@@ -160,7 +160,7 @@ export default component$(() => {
             <a class={{
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
-            href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target='_blank'>
+            href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target="_blank">
               <h3 class="my-0!">
                 Discord Bot Hosting*
               </h3>
@@ -182,7 +182,7 @@ export default component$(() => {
             <a class={{
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
-            href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target='_blank'>
+            href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target="_blank">
               <h3 class="my-0!">
                 US Dev/Hub*
               </h3>
@@ -204,7 +204,7 @@ export default component$(() => {
             <a class={{
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
-            href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target='_blank'>
+            href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target="_blank">
               <h3 class="my-0!">
                 US Proxy*
               </h3>
@@ -226,7 +226,7 @@ export default component$(() => {
             <a class={{
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
-            href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target='_blank'>
+            href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target="_blank">
               <h3 class="my-0!">
                 EU Dev/Hub*
               </h3>
@@ -248,7 +248,7 @@ export default component$(() => {
             <a class={{
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
-            href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target='_blank'>
+            href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target="_blank">
               <h3 class="my-0!">
                 EU Proxy*
               </h3>
@@ -292,7 +292,7 @@ export default component$(() => {
                   'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
                   'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
                 }}
-                data-umami-event='Plan RAM Click'
+                data-umami-event="Plan RAM Click"
                 data-umami-event-plan={plansStore.plan}
                 data-umami-event-amount={gb}
               >
@@ -302,7 +302,7 @@ export default component$(() => {
                 <p>
                   {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                 </p>
-                {plansStore.gb == Number(gb) && <Blobs color='green' class={{ 'absolute overflow-clip rounded-lum': true }} style={{
+                {plansStore.gb == Number(gb) && <Blobs color="green" class={{ 'absolute overflow-clip rounded-lum': true }} style={{
                   transform: 'translateZ(-10px)',
                 }}/>}
               </button>;
@@ -336,8 +336,8 @@ export default component$(() => {
                 + '&server_name=' + plansStore.name
                 + '&server_description=' + plansStore.desc
                 + '&billing_cycle=monthly'}
-              target='_blank'
-              data-umami-event='Plan AddToCart Click'
+              target="_blank"
+              data-umami-event="Plan AddToCart Click"
               data-umami-event-plan={plansStore.plan}
               data-umami-event-amount={plansStore.gb}
             >

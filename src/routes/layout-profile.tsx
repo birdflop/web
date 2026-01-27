@@ -63,7 +63,7 @@ export default component$(() => {
           </p>
         </div>
         <div class="flex items-center gap-4">
-          <ThemeToggle variant='full' />
+          <ThemeToggle variant="full" />
           <Form action={signOut} q:slot="extra-buttons">
             <input type="hidden" name="providerId" value="discord" />
             <input
