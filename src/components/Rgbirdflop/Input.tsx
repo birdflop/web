@@ -175,11 +175,8 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
 
-  return <div class={{
-    'relative lum-bg-lum-input-bg/50 rounded-lum': true,
-    'break-all font-mc': true,
-  }}
-  style={{ textShadow: '2px 2px 0 #373737' }}>
+  return <div class="relative rounded-lum break-all font-mc"
+    style={{ textShadow: '2px 2px 0 #373737' }}>
     <Background class="overflow-hidden rounded-lum" id="bg" alt="background" />
 
     <p class="text-white! absolute bottom-1 left-1 w-[calc(100%-0.5rem)] bg-black/50 h-8 px-1 py-0.5 text-2xl whitespace-nowrap overflow-auto">
