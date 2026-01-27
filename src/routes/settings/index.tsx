@@ -13,7 +13,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex gap-3 text-2xl! items-center my-2!'>
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Settings size={32} />
         {t('nav.settings.title@@Settings')}
       </h1>
@@ -22,7 +22,7 @@ export default component$(() => {
       </p>
 
       <div class="flex flex-col gap-2">
-        <SelectMenu id="lang-picker" panelClass='lum-bg-nav-bg'
+        <SelectMenu id="lang-picker" panelClass="lum-bg-nav-bg"
           values={config.supportedLocales.map(value => (
             {
               name: languages[value.lang as keyof typeof languages],

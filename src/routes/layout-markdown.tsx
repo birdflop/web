@@ -4,7 +4,7 @@ import { OnThisPage } from '~/components/docs/ThisPage';
 import Layout from './layout';
 
 // Re-export route loaders used by Layout component
-export { useSettingsCookies, useAdmins } from './layout';
+export * from './layout';
 
 export default component$(() => {
   return (

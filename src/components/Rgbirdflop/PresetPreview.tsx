@@ -3,12 +3,13 @@ import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
+import { deletePreset, savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
+import { useIsAdmin } from '~/routes/layout';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
@@ -26,6 +27,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
   const loading = useSignal(false);
+  const isAdmin = useIsAdmin().value;
 
   const searchParams = new URLSearchParams();
   const params = { ...Preset.preset };
@@ -187,10 +189,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         <div q:slot="dropdown" class="flex items-center gap-3">
           <MousePointer2 size={20} />
         </div>
-        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
           <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
-        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
       </SelectMenuRaw>
@@ -201,6 +203,15 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       }}>
         <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
       </button>}
+
+      {isAdmin && Preset.pending &&
+        <button class="lum-btn text-sm lum-bg-red/50 hover:lum-bg-red rounded-lum-2 lum-btn-p-1" onClick$={async () => {
+          if (Preset.id) await deletePreset(Preset.id);
+          window.location.reload();
+        }}>
+          <Trash size={20} />
+        </button>
+      }
     </div>
   </div>;
 });

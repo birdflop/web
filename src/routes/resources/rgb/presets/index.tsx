@@ -34,9 +34,9 @@ import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
-import { and, count, desc, eq, like, inArray, or, sql } from 'drizzle-orm';
+import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
-import { useAdmins } from '~/routes/layout';
+import { useIsAdmin } from '~/routes/layout';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;
@@ -82,9 +82,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
       break;
     case 'saves':
-      orderBy = sortOrder === 'desc'
-        ? desc(sql`COUNT(${savedPresets.userId})`)
-        : sql`COUNT(${savedPresets.userId})`;
+      orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
       break;
     case 'createdAt':
     default:
@@ -272,8 +270,7 @@ export default component$(() => {
     sortOrder,
   } = usePresets().value;
 
-  const admins = useAdmins().value;
-  const admin = session.value?.user?.id && admins?.includes(session.value.user.id);
+  const isAdmin = useIsAdmin().value;
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -370,7 +367,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class='flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!'>
+      <h1 class="flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!">
         <span class="flex flex-1 gap-3 items-center">
           <Save size={32} />
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -432,17 +429,17 @@ export default component$(() => {
                 value: 'saves-asc',
               },
             ]}/>
-          <SelectMenuRaw align='right'
+          <SelectMenuRaw align="right"
             id="settings"
             class={{
               'p-3 rounded-lum-1 lum-bg-transparent': true,
             }}
-            panelClass='lum-bg-lum-card-bg p-2 gap-2'
+            panelClass="lum-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >
-            <Settings q:slot='dropdown' size={16} />
+            <Settings q:slot="dropdown" size={16} />
 
-            {admin &&
+            {isAdmin &&
               <Toggle
                 id="showpendingpresets"
                 q:slot="extra-buttons"

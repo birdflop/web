@@ -80,6 +80,7 @@ export default defineConfig(
       '@typescript-eslint/only-throw-error': 'off',
       'indent': ['error', 2],
       'quotes': ['error', 'single'],
+      'jsx-quotes': ['error', 'prefer-double'],
       'semi': ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
       'no-trailing-spaces': ['error'],
