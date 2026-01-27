@@ -123,7 +123,8 @@ export default component$(() => {
                 })}
               </ul>
               {plan.outOfStock ?
-                <a href="https://discord.gg/nmgtX5z" target='_blank' class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4 w-min m-auto">
+                <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" target='_blank'
+                  class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4 w-min m-auto">
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
                 :
@@ -202,7 +203,7 @@ export default component$(() => {
               <Heart size={30} /> Instant Support
             </h3>
             <p>
-              You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a>.
+              You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" class="text-blue-400 hover:underline">Discord server</a>.
             </p>
           </div>
           <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
@@ -339,7 +340,7 @@ export default component$(() => {
           Still not convinced?
         </h1>
         <p>
-          Create a ticket on our <a href="https://discord.gg/nmgtX5z" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
+          Create a ticket on our <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
         </p>
       </section>
     </div>

@@ -41,6 +41,7 @@ export default component$(({ hidden }: {
         .setButtons([{
           text: 'Discord',
           href: 'https://discord.gg/nmgtX5z',
+          umamiEvent: 'discord-link',
         }])
         .setPersist(true);
       notifications.push(notification);

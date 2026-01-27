@@ -5,7 +5,11 @@ interface NotificationType {
   title?: string;
   description?: string;
   bgColor?: string;
-  buttons?: { text: string; href: string }[];
+  buttons?: {
+    text: string;
+    href: string;
+    umamiEvent?: string;
+  }[];
   action?: { text: string; onClick$: QRL<() => void> };
   persist?: boolean;
 }
@@ -15,7 +19,11 @@ export class Notification implements NotificationType {
   title?: string;
   description?: string;
   bgColor?: string;
-  buttons?: { text: string; href: string }[];
+  buttons?: {
+    text: string;
+    href: string;
+    umamiEvent?: string;
+  }[];
   action?: { text: string; onClick$: QRL<() => void> };
   persist?: boolean;
 
