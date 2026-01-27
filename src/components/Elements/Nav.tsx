@@ -212,7 +212,7 @@ export const SocialButtons = component$(() => {
     <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
       <Github size={20} />
     </a>
-    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link">
+    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link" data-umami-source="nav">
       <LogoDiscord size={20} />
     </a>
   </>;
