@@ -3,7 +3,7 @@ import { component$, createContextId, Signal, Slot, useContextProvider, useSigna
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
 import Nav from '~/components/Elements/Nav';
-import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
+import { Link, RequestEvent, routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
 import { Cookie } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
@@ -18,10 +18,19 @@ type Settings = {
   theme?: ThemeName;
 }
 
-export const useAdmins = routeLoader$(({ env }) => {
-  const adminIds = env.get('ADMINS')?.split(',').map(id => id.trim());
-  return adminIds;
+export const isAdmin = server$(function(props?: {
+  env: RequestEvent['env'];
+  sharedMap: RequestEvent['sharedMap'];
+}) {
+  const { env, sharedMap } = props || this;
+
+  const session = sharedMap.get('session');
+  const admins = env.get('ADMINS')?.split(',').map((id) => id.trim()) || [];
+
+  return admins.includes(session?.user?.id);
 });
+
+export const useIsAdmin = routeLoader$(async (props) => await isAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {

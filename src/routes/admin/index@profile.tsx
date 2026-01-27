@@ -1,5 +1,5 @@
 import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
-import { routeLoader$, server$ } from '@builder.io/qwik-city';
+import { RequestHandler, server$ } from '@builder.io/qwik-city';
 import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
 import { getDB, presets, users, savedPresets } from '~/util/db';
 import { isNotNull, eq, sql } from 'drizzle-orm';
@@ -7,26 +7,14 @@ import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { AppWindow } from 'lucide-icons-qwik';
+import { isAdmin } from '../layout';
 
-export const useAdminCheck = routeLoader$(function({ redirect, env, sharedMap }) {
-  const session = sharedMap.get('session');
-  const admins = env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
-
-  if (!session?.user?.id || !admins.includes(session.user.id)) {
-    throw redirect(302, '/');
-  }
-
-  return { isAdmin: true };
-});
+export const onGet: RequestHandler = async function(props) {
+  const admin = await isAdmin(props);
+  if (!admin) throw new Response('Unauthorized', { status: 401 });
+};
 
 export const runBackfillVectors = server$(async function() {
-  const session = this.sharedMap.get('session');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
-
-  if (!session?.user?.id || !admins.includes(session.user.id)) {
-    return { success: false, error: 'Unauthorized' };
-  }
-
   try {
     const result = await backfillColorVectors();
     return {
@@ -43,13 +31,6 @@ export const runBackfillVectors = server$(async function() {
 });
 
 export const loadAllPresets = server$(async function() {
-  const session = this.sharedMap.get('session');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
-
-  if (!session?.user?.id || !admins.includes(session.user.id)) {
-    return { success: false, error: 'Unauthorized' };
-  }
-
   try {
     const db = getDB();
     if (!db) {
@@ -96,13 +77,6 @@ export const loadAllPresets = server$(async function() {
 });
 
 const backfillPresetSaves = server$(async function() {
-  const session = this.sharedMap.get('session');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim()) || [];
-
-  if (!session?.user?.id || !admins.includes(session.user.id)) {
-    return { success: false, error: 'Unauthorized' };
-  }
-
   try {
     const db = getDB();
     if (!db) {
@@ -138,8 +112,6 @@ const backfillPresetSaves = server$(async function() {
 });
 
 export default component$(() => {
-  useAdminCheck();
-
   // Provide contexts for PresetPreview (empty since admin doesn't need these features)
   const privatePresets = useSignal([]);
   const savedPresets = useSignal([]);

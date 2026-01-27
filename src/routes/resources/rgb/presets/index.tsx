@@ -36,7 +36,7 @@ import { getCookies } from '~/util/dataUtils';
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
 import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
-import { useAdmins } from '~/routes/layout';
+import { useIsAdmin } from '~/routes/layout';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;
@@ -270,8 +270,7 @@ export default component$(() => {
     sortOrder,
   } = usePresets().value;
 
-  const admins = useAdmins().value;
-  const admin = session.value?.user?.id && admins?.includes(session.value.user.id);
+  const isAdmin = useIsAdmin().value;
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -440,7 +439,7 @@ export default component$(() => {
           >
             <Settings q:slot="dropdown" size={16} />
 
-            {admin &&
+            {isAdmin &&
               <Toggle
                 id="showpendingpresets"
                 q:slot="extra-buttons"

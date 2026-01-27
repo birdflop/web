@@ -6,7 +6,6 @@ import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
-import { useAdmins } from '~/routes/layout';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -15,6 +14,7 @@ import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dat
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq } from 'drizzle-orm';
+import { useIsAdmin } from '~/routes/layout-profile';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -48,8 +48,7 @@ export default component$(() => {
   const session = useSession();
   const presetInfo = usePreset().value;
 
-  const admins = useAdmins().value;
-  const admin = session.value?.user?.id && admins?.includes(session.value.user.id);
+  const isAdmin = useIsAdmin().value;
 
   const rgbStore = useStore({
     ...rgbDefaults,
@@ -150,7 +149,7 @@ export default component$(() => {
             day: 'numeric',
           })}
       </p>
-      {admin ?
+      {isAdmin ?
         <input type="text" class="lum-input w-full mb-4" value={presetInfo.description}
           onChange$={async (e, el) => {
             presetInfo.description = el.value;
@@ -252,7 +251,7 @@ export default component$(() => {
         <div class="text-white! font-bold lum-card lum-bg-gray-800">
           {Object.keys(presetInfo.preset).map((key) => (
             <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
-              {admin &&
+              {isAdmin &&
                 <button class="lum-btn lum-bg-transparent text-red-300 p-1 hover:lum-bg-red" onClick$={async () => {
                   delete presetInfo.preset[key as keyof typeof presetInfo.preset];
                   const updatedPreset = await updatePreset(presetInfo.id, {
@@ -270,7 +269,7 @@ export default component$(() => {
           ))}
         </div>
 
-        {admin &&
+        {isAdmin &&
           <>
             <h3 class="my-0!">
               Manage Preset
@@ -279,14 +278,14 @@ export default component$(() => {
               {presetInfo.pending &&
                 <button class="lum-btn lum-bg-green hover:bg-green" onClick$={async () => {
                   await updatePreset(presetInfo.id, { pending: false });
-                  window.location.assign('/resources/rgb/presets');
+                  window.location.assign('/resources/rgb/presets?showPending=true');
                 }}>
                   <Check size={20} /> Approve
                 </button>
               }
               <button class="lum-btn lum-bg-red hover:bg-red" onClick$={async () => {
                 await deletePreset(presetInfo.id);
-                window.location.assign('/resources/rgb/presets');
+                window.location.assign('/resources/rgb/presets?showPending=true');
               }}>
                 <Trash size={20} /> Delete
               </button>

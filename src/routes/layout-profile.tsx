@@ -1,16 +1,16 @@
 import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
-import { Form, useLocation } from '@builder.io/qwik-city';
-import { CircleUserRound, LogOut } from 'lucide-icons-qwik';
+import { Form, Link, useLocation } from '@builder.io/qwik-city';
+import { AppWindow, CircleUserRound, LogOut } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 
-import Layout from './layout';
+import Layout, { useIsAdmin } from './layout';
 
 // Re-export route loaders used by Layout component
-export { useSettingsCookies, useAdmins } from './layout';
+export * from './layout';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -18,6 +18,7 @@ export default component$(() => {
   const signIn = useSignIn();
   const signOut = useSignOut();
   const loc = useLocation();
+  const isAdmin = useIsAdmin().value;
 
   if (!session.value || !session.value.user) {
     return (
@@ -54,12 +55,18 @@ export default component$(() => {
         <div class="my-3! flex-1">
           <h3 class="flex gap-4 items-center mt-0! mb-1!">
             {session.value.user.image &&
-                <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
+              <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
             }
             {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+            {isAdmin &&
+              <Link href="/admin" class="lum-btn">
+                <AppWindow />
+                Admin Panel
+              </Link>
+            }
           </h3>
           <p>
-              Your ID is: {session.value.user.id}
+            Your ID is: {session.value.user.id}
           </p>
         </div>
         <div class="flex items-center gap-4">

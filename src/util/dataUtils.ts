@@ -5,6 +5,7 @@ import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, us
 import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
+import { isAdmin } from '~/routes/layout';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
@@ -244,8 +245,7 @@ export const updatePreset = server$(async function(presetId: number, presetData:
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
-  const admin = session.user.id && admins?.includes(session.user.id);
+  const admin = await isAdmin();
 
   try {
     // If the preset data is being updated, regenerate the colorVector
@@ -272,8 +272,7 @@ export const deletePreset = server$(async function(presetId: number) {
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
-  const admin = session.user.id && admins?.includes(session.user.id);
+  const admin = await isAdmin();
 
   try {
     await db.delete(presets)
