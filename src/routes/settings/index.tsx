@@ -21,8 +21,8 @@ export default component$(() => {
         {t('nav.settings.description@@Manage your settings and preferences here.')}
       </p>
 
-      <div class="flex flex-col gap-2">
-        <SelectMenu id="lang-picker" panelClass="lum-bg-nav-bg"
+      <div class="grid sm:grid-cols-3 gap-2">
+        <SelectMenu id="lang-picker"
           values={config.supportedLocales.map(value => (
             {
               name: languages[value.lang as keyof typeof languages],

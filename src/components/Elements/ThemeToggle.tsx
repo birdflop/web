@@ -166,21 +166,21 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && <>
-              <Moon size={20} class="hidden dark:flex" />
-              <Sun size={20} class="dark:hidden flex" />
+              <Moon size={24} class="hidden dark:flex" />
+              <Sun size={24} class="dark:hidden flex" />
             </>}
             <CurrentThemeOption.icon size={
               CurrentThemeOption.value === 'auto'
-                ? 10
-                : 20
+                ? 12
+                : 24
             }
             class={
               CurrentThemeOption.value === 'auto'
-                ? 'absolute top-2 left-7'
+                ? 'absolute top-1.5 left-8'
                 : ''
             } />
             {(variant === 'full' || showLabel) && (
-              <span class="text-sm">
+              <span>
                 {CurrentThemeOption.label}
               </span>
             )}
