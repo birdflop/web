@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8](https://github.com/birdflop/web/compare/v0.1.7...v0.1.8) (2026-01-28)
+
+
+### Bug Fixes
+
+* bruh why do you hate me npm ([2caf92e](https://github.com/birdflop/web/commit/2caf92e3b73bcd9f0612d2e38f606e96dfe4e870))
+* test publish ([dbf3257](https://github.com/birdflop/web/commit/dbf325770bd5608074db5060ba873732e08418b0))
+
 ## [0.1.7](https://github.com/birdflop/web/compare/v0.1.6...v0.1.7) (2026-01-28)
 
 
