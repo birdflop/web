@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/birdflop/web/compare/v0.1.5...v0.1.6) (2026-01-28)
+
+
+### Bug Fixes
+
+* totally a typo ([a26e77c](https://github.com/birdflop/web/commit/a26e77cfdee47c74979d42db47772bc38140ae7e))
+
 ## [0.1.5](https://github.com/birdflop/web/compare/v0.1.4...v0.1.5) (2026-01-28)
 
 
