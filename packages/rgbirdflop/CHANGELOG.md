@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/birdflop/web/compare/v0.1.1...v0.1.2) (2026-01-28)
+
+
+### Code Refactoring
+
+* add safety checks for empty colors array ([0055aac](https://github.com/birdflop/web/commit/0055aac9941d01d3fa60a887d95a53153e56b65d))
+* remove registry URL from package.json and update release workflow ([5d0a59a](https://github.com/birdflop/web/commit/5d0a59abfc5c4e51f7213c5bbee0860bbe902bd9))
+
 ## [0.1.1](https://github.com/birdflop/web/compare/v0.1.0...v0.1.1) (2026-01-06)
 
 
