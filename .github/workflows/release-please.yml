@@ -42,6 +42,7 @@ jobs:
           node-version: 24
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+          scope: '@birdflop'
 
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
