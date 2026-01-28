@@ -1,7 +1,10 @@
 {
   "name": "@birdflop/rgbirdflop",
-  "version": "0.1.1",
-  "description": "RGB gradient library for generating Minecraft text gradients.",
+  "version": "0.1.15",
+  "description": "RGBirdflop library for generating Minecraft text color gradients.",
+  "repository": {
+    "url": "https://github.com/birdflop/web"
+  },
   "main": "./lib/index.js",
   "types": "./lib-types/index.d.ts",
   "exports": {
@@ -21,14 +24,13 @@
     "lib-types"
   ],
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=24.13.0"
   },
   "license": "AGPL-3.0-or-later",
   "private": false,
   "type": "module",
   "publishConfig": {
-    "access": "public",
-    "@birdflop:registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "scripts": {
     "build": "tsc",

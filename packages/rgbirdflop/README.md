@@ -1,5 +1,42 @@
-# Birdflop Website
-The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hosting and resources.
+# RGBirdflop NPM Package
+
+This package is used to generate RGB gradient text for Minecraft without having to make API calls and is the most recommended way to use RGBirdflop in your projects.
+
+## Installation
+To install the RGBirdflop NPM package, use the following command:
+
+```bash
+npm install @birdflop/rgbirdflop
+```
+
+## Usage
+Here is a basic example of how to use the RGBirdflop NPM package:
+
+```js
+import { rgbDefaults, generateOutput } from '@birdflop/rgbirdflop';
+
+function getOutput(options: Partial<typeof rgbDefaults>) {
+  const mergedOptions = {
+    ...rgbDefaults,
+    ...options,
+  };
+
+  const output = generateOutput(mergedOptions);
+  return output;
+}
+
+const result = getOutput({
+  colors: [
+    { hex: '#ff0000', pos: 0 },
+    { hex: '#00ff00', pos: 50 },
+    { hex: '#0000ff', pos: 100 },
+  ],
+  text: 'Hello, World!',
+  bold: true,
+});
+
+console.log(result);
+```
 
 <a href="https://www.codefactor.io/repository/github/birdflop/web">
   <img src="https://www.codefactor.io/repository/github/birdflop/web/badge?style=for-the-badge" alt="CodeFactor" />
@@ -25,7 +62,7 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 #### All contributions are welcome. Birdflop is a community-project aiming to support its community.
 
 ## Setting up a Local Development Environment
-To contribute to the Birdflop website, you'll need to set up a local development environment.
+To contribute to RGBirdflop, you'll need to set up a local development environment as your testing ground.
 
 ### Prerequisites
 - **Node.js** (version 24.13.0 or higher)
@@ -34,29 +71,13 @@ To contribute to the Birdflop website, you'll need to set up a local development
 ### Steps to Set Up
 1. **Clone the Repository**: Fork the Birdflop website repository on GitHub https://github.com/birdflop/web and clone it
 2. **Install Dependencies**: Navigate to the project directory and run `pnpm install` to install all necessary dependencies.
-3. **Build the Project**: Run `pnpm build` to build the project. This is only necessary the first time you set up the project to setup the RGBirdflop package and Cloudflare worker types to avoid type errors.
+3. **Build the Project**: Run `pnpm build.pkg` to build the RGBirdflop package.
 4. **Run the Development Server**: Start the development server with `pnpm start`. The website should now be accessible at `http://localhost:5173`.
-
-### Database Setup
-The Birdflop website uses Cloudflare D1 for its database, setting up a local database may be required for contributing to the Presets and other systems that require database setup, otherwise Flopbird will give you an error while opening some pages. To set up a local database:
-1. **Migrate the Database**: Run `pnpm wrangler:migrate-local` to set up the local database schema on your machine.
-2. **Run the server**: Start the development server with `pnpm start`.
-
-### Setting up Environment Variables
-For login with Discord to work, you will need to set up a Discord application from the dev portal and set up environment variables. Create a `.env` file in the root of the project and add the following variables:
-
-```
-AUTH_SECRET=this_can_be_any_random_string
-AUTH_DISCORD_ID=the_client_id_from_your_discord_application
-AUTH_DISCORD_SECRET=the_client_secret_from_your_discord_application
-
-ADMINS=your_user_id_in_profile_page_after_you_login
-```
 
 #### Thank you to our Contributors
 [![Contributors](https://contrib.rocks/image?repo=birdflop/web)](https://github.com/birdflop/web/graphs/contributors)
 ## Forking & Licensing
-If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. <3
+If you are hosting this site or a single page from this site for your server or own project, please credit the original in some way. A link to the original GitHub is sufficient. {'<3'}
 This project is dual-licensed. For open-source usage, it is available under the AGPL-3.0 license (OSS_LICENSE.md). Additional closed-source use, both commercial and non-commercial, is permitted under the details outlined in CSS_LICENSE.md. Licensing is required to re-use the RGBirdflop / RGB Birdflop gradient creator code.
 <br /><br />
 
