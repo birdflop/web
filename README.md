@@ -16,7 +16,7 @@ The website for Birdflop, a 501(c)(3) nonprofit aiming to provide accessible hos
 To contribute to the Birdflop website, you'll need to set up a local development environment.
 
 ### Prerequisites
-- **Node.js** (version 23 or higher)
+- **Node.js** (version 24.13.0 or higher)
 - **pnpm** package manager
 
 ### Steps to Set Up

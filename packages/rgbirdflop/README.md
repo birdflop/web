@@ -38,7 +38,7 @@ console.log(result);
 To contribute to RGBirdflop, you'll need to set up a local development environment as your testing ground.
 
 ### Prerequisites
-- **Node.js** (version 23 or higher)
+- **Node.js** (version 24.13.0 or higher)
 - **pnpm** package manager
 
 ### Steps to Set Up

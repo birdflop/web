@@ -24,7 +24,7 @@
     "lib-types"
   ],
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=24.13.0"
   },
   "license": "AGPL-3.0-or-later",
   "private": false,
