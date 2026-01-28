@@ -13,13 +13,28 @@ npm install @birdflop/rgbirdflop
 Here is a basic example of how to use the RGBirdflop NPM package:
 
 ```
-import { ColorGradient } from '@birdflop/rgbirdflop';
-const colors = [
-  { rgb: [255, 0, 0], pos: 0 },
-  { rgb: [0, 0, 255], pos: 100 },
-];
-const gradient = new ColorGradient(colors);
-const result = gradient.generateOutput('RGBirdflop', false);
+import { rgbDefaults, generateOutput } from '@birdflop/rgbirdflop';
+
+function getOutput(options: Partial<typeof rgbDefaults>) {
+  const mergedOptions = {
+    ...rgbDefaults,
+    ...options,
+  };
+
+  const output = generateOutput(mergedOptions);
+  return output;
+}
+
+const result = getOutput({
+  colors: [
+    { hex: '#ff0000', pos: 0 },
+    { hex: '#00ff00', pos: 50 },
+    { hex: '#0000ff', pos: 100 },
+  ],
+  text: 'Hello, World!',
+  bold: true,
+});
+
 console.log(result);
 ```
 
