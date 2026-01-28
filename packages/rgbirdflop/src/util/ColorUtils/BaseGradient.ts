@@ -94,6 +94,9 @@ export class BaseGradient {
     this.steps = numSteps - 1;
     this.step = 0;
 
+    // If there are no colors, do nothing
+    if (!colors.length) return;
+
     // Ensure gradient starts at 0%
     if (colors[0].pos !== 0) {
       colors.unshift({ rgb: colors[0].rgb, pos: 0 });
@@ -151,7 +154,7 @@ export class BaseGradient {
 
     let color: number[];
     if (this.gradients.length < 2) {
-      color = this.gradients[0].colorAt(adjustedStep);
+      color = this.gradients[0]?.colorAt(adjustedStep);
     } else {
       const gradient = this.gradients.find(
         g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
