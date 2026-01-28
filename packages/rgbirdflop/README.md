@@ -6,7 +6,7 @@ This NPM package is used to generate RGB gradient text for Minecraft without hav
 To install the RGBirdflop NPM package, use the following command:
 
 ```bash
-npm install github:birdflop/rgbirdflop
+npm install @birdflop/rgbirdflop
 ```
 
 ## Usage
