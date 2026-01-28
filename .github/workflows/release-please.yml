@@ -39,7 +39,7 @@ jobs:
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -54,4 +54,5 @@ jobs:
       - name: Publish to npm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
-        run: npm publish --provenance --access public
+        # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
+        run: NODE_AUTH_TOKEN="" npm publish --provenance --access public
