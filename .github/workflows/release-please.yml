@@ -56,7 +56,7 @@ jobs:
         working-directory: packages/rgbirdflop
         run: pnpm build
 
-      - name: Publish to GitHub Packages
+      - name: Publish to npm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: npm publish
