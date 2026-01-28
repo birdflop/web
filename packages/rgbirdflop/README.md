@@ -12,7 +12,13 @@ npm install github:birdflop/rgbirdflop
 ## Usage
 Here is a basic example of how to use the RGBirdflop NPM package:
 
-wip
+```
+import { ColorGradient, RGBColor } from 'rgbirdflop';
+const colors = [new RGBColor(255, 0, 0), new RGBColor(0, 0, 255)];
+const gradient = new ColorGradient(colors);
+const result = gradient.generateOutput('Hello, Minecraft!', false);
+console.log(result);
+```
 
 <a href="https://www.codefactor.io/repository/github/birdflop/web"><img src="https://www.codefactor.io/repository/github/birdflop/web/badge?style=for-the-badge" alt="CodeFactor" /></a>
 <a href="https://github.com/birdflop/web/commits"> <img src="https://img.shields.io/github/last-commit/birdflop/web?style=for-the-badge"></a>
