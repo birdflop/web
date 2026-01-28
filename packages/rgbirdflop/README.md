@@ -15,8 +15,8 @@ Here is a basic example of how to use the RGBirdflop NPM package:
 ```
 import { ColorGradient } from '@birdflop/rgbirdflop';
 const colors = [
-  { rgb: [100, 0, 0], pos: 0 },
-  { rgb: [0, 0, 100], pos: 100 },
+  { rgb: [255, 0, 0], pos: 0 },
+  { rgb: [0, 0, 255], pos: 100 },
 ];
 const gradient = new ColorGradient(colors);
 const result = gradient.generateOutput('Hello, Minecraft!', false);
