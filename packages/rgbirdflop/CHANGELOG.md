@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/birdflop/web/compare/v0.1.8...v0.1.9) (2026-01-28)
+
+
+### Bug Fixes
+
+* trigger ci ([fac5159](https://github.com/birdflop/web/commit/fac5159ab8d2076bd90cd82460bc7e606754d0a1))
+
 ## [0.1.8](https://github.com/birdflop/web/compare/v0.1.7...v0.1.8) (2026-01-28)
 
 
