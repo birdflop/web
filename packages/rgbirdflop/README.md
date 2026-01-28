@@ -19,7 +19,7 @@ const colors = [
   { rgb: [0, 0, 255], pos: 100 },
 ];
 const gradient = new ColorGradient(colors);
-const result = gradient.generateOutput('Hello, Minecraft!', false);
+const result = gradient.generateOutput('RGBirdflop', false);
 console.log(result);
 ```
 
