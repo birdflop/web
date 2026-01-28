@@ -1,6 +1,6 @@
-# RGBirdflop Package
+# RGBirdflop NPM Package
 
-This NPM package is used to generate RGB gradient text for Minecraft without having to make API calls and is the most recommended way to use RGBirdflop in your projects.
+This package is used to generate RGB gradient text for Minecraft without having to make API calls and is the most recommended way to use RGBirdflop in your projects.
 
 ## Installation
 To install the RGBirdflop NPM package, use the following command:
