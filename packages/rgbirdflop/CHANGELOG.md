@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.14](https://github.com/birdflop/web/compare/v0.1.13...v0.1.14) (2026-01-28)
+
+
+### Bug Fixes
+
+* add repository field to package.json ([bd95fff](https://github.com/birdflop/web/commit/bd95fff9b644ecafff1d6c9eda0e8c149c63bd0d))
+* pls work ([9e44336](https://github.com/birdflop/web/commit/9e44336a7769a5e5d578e735e3d6a16f2b483806))
+
 ## [0.1.13](https://github.com/birdflop/web/compare/v0.1.12...v0.1.13) (2026-01-28)
 
 
