@@ -9,7 +9,8 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
-import { openItemsContext } from '~/routes/layout';
+import { openItemsContext, SettingsContext } from '~/routes/layout';
+import { setCookies } from '~/util/dataUtils';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -22,6 +23,7 @@ export default component$(() => {
   const session = useSession();
 
   const openItemsStore = useContext(openItemsContext);
+  const settingsStore = useContext(SettingsContext);
 
   return (
     <Nav fixed colorClass="lum-bg-nav-bg border-b-lum-border/10 shadow-lg">
@@ -90,8 +92,9 @@ export default component$(() => {
           value: value.lang,
         }
       ))} onChange$={(e, el) => {
-        document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
-        location.reload();
+        settingsStore.locale = el.value as keyof typeof languages;
+        setCookies('settings', settingsStore);
+        window.location.reload();
       }}>
         <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">
           {locale.lang.split('-')[0]}

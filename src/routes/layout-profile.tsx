@@ -2,7 +2,7 @@ import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import { CircleUserRound, LogOut, Settings } from 'lucide-icons-qwik';
+import { AppWindow, CircleUserRound, LogOut, Settings } from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 

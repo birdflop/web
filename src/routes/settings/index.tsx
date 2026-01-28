@@ -1,15 +1,18 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useContext } from '@builder.io/qwik';
 import { SelectMenu } from '@luminescent/ui-qwik';
 import { Settings } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';
 import { languages } from '~/speak-config';
+import { SettingsContext } from '../layout';
+import { setCookies } from '~/util/dataUtils';
 
 export default component$(() => {
   const t = inlineTranslate();
   const config = useSpeakConfig();
   const locale = useSpeakLocale();
+  const settingsStore = useContext(SettingsContext);
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
@@ -31,7 +34,8 @@ export default component$(() => {
           ))}
           value={locale.lang}
           onChange$={(e, el) => {
-            document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
+            settingsStore.locale = el.value as keyof typeof languages;
+            setCookies('settings', settingsStore);
             location.reload();
           }}>
           {t('settings.language@@Language')}

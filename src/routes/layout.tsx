@@ -12,10 +12,12 @@ import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from 
 import { Notification, NotificationContext } from '~/util/Notification';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
+import { languages } from '~/speak-config';
 
-type Settings = {
+export type Settings = {
   cookies?: boolean;
   theme?: ThemeName;
+  locale?: keyof typeof languages;
 }
 
 export const isAdmin = server$(function(props?: {
