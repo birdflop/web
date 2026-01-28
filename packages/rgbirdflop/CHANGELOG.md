@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/birdflop/web/compare/v0.1.3...v0.1.4) (2026-01-28)
+
+
+### Documentation
+
+* update import statement in usage example for RGBirdflop package ([fa41541](https://github.com/birdflop/web/commit/fa415418bf1d6971cc0c05bd7b5a871178457d3b))
+
 ## [0.1.3](https://github.com/birdflop/web/compare/v0.1.2...v0.1.3) (2026-01-28)
 
 
