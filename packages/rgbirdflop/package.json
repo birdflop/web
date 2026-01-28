@@ -27,8 +27,7 @@
   "private": false,
   "type": "module",
   "publishConfig": {
-    "access": "public",
-    "@birdflop:registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "scripts": {
     "build": "tsc",
