@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.15](https://github.com/birdflop/web/compare/v0.1.14...v0.1.15) (2026-01-28)
+
+
+### Bug Fixes
+
+* update README and documentation for RGBirdflop NPM package usage examples and formatting ([ca5d3d3](https://github.com/birdflop/web/commit/ca5d3d3e87c7b794abb85d7d506ec5bf692705ae))
+* update usage example in README.md ([3c847f7](https://github.com/birdflop/web/commit/3c847f78d768f03687a0ddb624c35a5825435026))
+
 ## [0.1.14](https://github.com/birdflop/web/compare/v0.1.13...v0.1.14) (2026-01-28)
 
 
