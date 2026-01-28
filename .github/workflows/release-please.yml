@@ -10,6 +10,7 @@ on:
       - 'release-please-config.json'
 
 permissions:
+  id-token: write  # Required for OIDC
   contents: write
   pull-requests: write
 
