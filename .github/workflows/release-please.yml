@@ -46,6 +46,7 @@ jobs:
 
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        working-directory: packages/rgbirdflop
         run: pnpm install --frozen-lockfile
 
       - name: Build package
@@ -56,5 +57,7 @@ jobs:
       - name: Publish to npm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
-        # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
-        run: NODE_AUTH_TOKEN="" npm publish --provenance --access public
+        run: npm publish --provenance --access public
+        env:
+          # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
+          NODE_AUTH_TOKEN: ""
