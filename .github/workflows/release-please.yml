@@ -41,8 +41,6 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@birdflop'
 
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
@@ -57,5 +55,3 @@ jobs:
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
