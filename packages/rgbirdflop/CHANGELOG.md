@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/birdflop/web/compare/v0.1.12...v0.1.13) (2026-01-28)
+
+
+### Bug Fixes
+
+* i hate you npm ([715c42b](https://github.com/birdflop/web/commit/715c42bcc9a5b3bffd484aaee95d9a505ce455de))
+
 ## [0.1.12](https://github.com/birdflop/web/compare/v0.1.11...v0.1.12) (2026-01-28)
 
 
