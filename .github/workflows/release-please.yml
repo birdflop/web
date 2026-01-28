@@ -13,14 +13,11 @@ permissions:
   id-token: write  # Required for OIDC
   contents: write
   pull-requests: write
+  packages: write
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      packages: write
 
     steps:
       - uses: googleapis/release-please-action@v4
@@ -42,8 +39,8 @@ jobs:
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
@@ -57,4 +54,4 @@ jobs:
       - name: Publish to npm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
-        run: npm publish
+        run: npm publish --provenance
