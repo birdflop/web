@@ -36,8 +36,6 @@ jobs:
       - name: Setup pnpm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.27.0
 
       - name: Setup Node.js
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
@@ -59,5 +57,3 @@ jobs:
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
