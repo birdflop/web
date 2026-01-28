@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/birdflop/web/compare/v0.1.2...v0.1.3) (2026-01-28)
+
+
+### Documentation
+
+* update usage example in README for RGBirdflop package ([ef0f9e8](https://github.com/birdflop/web/commit/ef0f9e8657ab6955762c7dad13126e1601879248))
+
 ## [0.1.2](https://github.com/birdflop/web/compare/v0.1.1...v0.1.2) (2026-01-28)
 
 
