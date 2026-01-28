@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/birdflop/web/compare/v0.1.11...v0.1.12) (2026-01-28)
+
+
+### Bug Fixes
+
+* update usage example in README with valid RGB values ([8da36ad](https://github.com/birdflop/web/commit/8da36adbae7022d747ec53ad7f9ce8cdbc5471aa))
+
 ## [0.1.11](https://github.com/birdflop/web/compare/v0.1.10...v0.1.11) (2026-01-28)
 
 
