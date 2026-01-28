@@ -7,6 +7,7 @@
 
 * add safety checks for empty colors array ([0055aac](https://github.com/birdflop/web/commit/0055aac9941d01d3fa60a887d95a53153e56b65d))
 * remove registry URL from package.json and update release workflow ([5d0a59a](https://github.com/birdflop/web/commit/5d0a59abfc5c4e51f7213c5bbee0860bbe902bd9))
+* update release workflow and improve README for RGBirdflop package ([14158e8](https://github.com/birdflop/web/commit/14158e83e38bd37005662fa8a51759a713212ab6))
 
 ## [0.1.1](https://github.com/birdflop/web/compare/v0.1.0...v0.1.1) (2026-01-06)
 
