@@ -10,7 +10,7 @@ import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from '~/util/themeUtil';
 
 import { Notification, NotificationContext } from '~/util/Notification';
-import { getCookies, setCookies } from '~/util/dataUtils';
+import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
 import { languages } from '~/speak-config';
 
@@ -253,15 +253,17 @@ export default component$(() => {
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
+          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={async () => {
             settingsStore.cookies = false;
             setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
           }}>
             {t('nav.cookies.optOut@@Reject')}
           </button>
-          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={async () => {
             settingsStore.cookies = true;
             setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
           }}>
             {t('nav.cookies.acknowledge@@Accept')}
           </button>

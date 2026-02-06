@@ -3,7 +3,7 @@ import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
 import { Moon, Sun, Sparkles, Battery, Smile } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import { SettingsContext } from '~/routes/layout';
-import { setCookies } from '~/util/dataUtils';
+import { setCookies, setUserData } from '~/util/dataUtils';
 
 export interface ThemeToggleProps {
   variant?: 'compact' | 'full' | 'dropdown';
@@ -92,11 +92,12 @@ export const ThemeToggle = component$<ThemeToggleProps>(
       themeOptions.find((option) => option.value === themeStore.currentTheme) ||
       themeOptions[0];
 
-    const handleThemeChange = $((newTheme: ThemeName) => {
+    const handleThemeChange = $(async (newTheme: ThemeName) => {
       // Apply theme changes directly without reload
       if (typeof document !== 'undefined') {
         settingsStore.theme = newTheme;
         setCookies('settings', settingsStore);
+        await setUserData({ settings: settingsStore });
 
         // Apply theme immediately
         const root = document.documentElement;

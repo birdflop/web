@@ -5,7 +5,7 @@ import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, us
 import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
-import { isAdmin } from '~/routes/layout';
+import { isAdmin, Settings } from '~/routes/layout';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
@@ -108,7 +108,8 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
   console.log(cookie);
 
   const settings = JSON.parse(decodeURIComponent(cookie.settings));
-  if (settings.cookies === false) return; // don't set cookies if user has opted out
+  // don't set cookies if user has opted out unless this is the settings cookie itself
+  if (settings.cookies === false && name !== 'settings') return;
 
   const cookieValue = { ...cookies };
 
@@ -129,6 +130,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
+  settings?: Settings;
 }) {
   const session = this.sharedMap.get('session');
 
@@ -138,6 +140,7 @@ export const setUserData = server$(async function(data: {
   const userData = await db.update(users)
     .set({
       privatePresets: data.privatePresets,
+      settings: data.settings,
     })
     .where(eq(users.id, session.user.id))
     .returning().get();

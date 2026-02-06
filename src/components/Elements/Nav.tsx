@@ -10,7 +10,7 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
 import { openItemsContext, SettingsContext } from '~/routes/layout';
-import { setCookies } from '~/util/dataUtils';
+import { setCookies, setUserData } from '~/util/dataUtils';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -91,9 +91,10 @@ export default component$(() => {
           name: languages[value.lang as keyof typeof languages],
           value: value.lang,
         }
-      ))} onChange$={(e, el) => {
+      ))} onChange$={async (e, el) => {
         settingsStore.locale = el.value as keyof typeof languages;
         setCookies('settings', settingsStore);
+        await setUserData({ settings: settingsStore });
         window.location.reload();
       }}>
         <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">

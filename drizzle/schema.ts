@@ -2,6 +2,7 @@ import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "@auth/qwik/adapters"
 import { sql } from "drizzle-orm/sql/sql";
 import { rgbPreset } from "~/util/rgb/presets";
+import { Settings } from "~/routes/layout";
 
 // -------------------- User --------------------
 export const users = sqliteTable("user", {
@@ -14,6 +15,7 @@ export const users = sqliteTable("user", {
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
   privatePresets: text("privatePresets", { mode: 'json' }).$type<rgbPreset[]>(),
+  settings: text("settings", { mode: 'json' }).$type<Settings>(),
   createdAt: integer("createdAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp_ms" }).default(sql`CURRENT_TIMESTAMP`).notNull(),
 });

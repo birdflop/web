@@ -1,12 +1,12 @@
 import { component$, useContext } from '@builder.io/qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { Settings } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';
 import { languages } from '~/speak-config';
 import { SettingsContext } from '../layout';
-import { setCookies } from '~/util/dataUtils';
+import { setCookies, setUserData } from '~/util/dataUtils';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -33,9 +33,10 @@ export default component$(() => {
             }
           ))}
           value={locale.lang}
-          onChange$={(e, el) => {
+          onChange$={async (e, el) => {
             settingsStore.locale = el.value as keyof typeof languages;
             setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
             location.reload();
           }}>
           {t('settings.language@@Language')}
@@ -46,6 +47,19 @@ export default component$(() => {
             {t('settings.theme@@Theme Preference')}
           </label>
           <ThemeToggle variant="full" showLabel />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <Toggle id="cookies-toggle" checked={settingsStore.cookies} onChange$={async (e, el) => {
+            settingsStore.cookies = el.checked;
+            setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
+          }}>
+            {t('settings.cookies.title@@Enable Cookies')}
+          </Toggle>
+          <p>
+            {t('settings.cookies.description@@Allow Birdflop to use cookies for personalization and improved user experience.')}
+          </p>
         </div>
       </div>
     </section>
