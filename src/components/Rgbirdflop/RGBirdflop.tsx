@@ -48,6 +48,7 @@ import { BirdLandContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
+import { donateLink } from '../Elements/Nav';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
@@ -412,7 +413,7 @@ export default component$(({ errors, output }: {
           public resource developed by Birdflop, a 501(c)(3) nonprofit providing
           affordable and accessible hosting and public resources. If you would
           like to support our mission, please{' '}
-          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
+          <a href={donateLink}>
             click here
           </a>{' '}
           to make a charitable donation, 100% tax-deductible in the US.

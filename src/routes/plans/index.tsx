@@ -3,6 +3,7 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 
 import { Blobs } from '@luminescent/ui-qwik';
 import { Package, ShoppingCart } from 'lucide-icons-qwik';
+import { discordLink } from '~/components/Elements/Nav';
 import { generateHead } from '~/root';
 
 export const plans = {
@@ -118,7 +119,7 @@ export default component$(() => {
               data-umami-event-variant={planName}
               key={planName}
               onClick$={() => {
-                if (plan.outOfStock) return window.open('https://discord.gg/nmgtX5z', '_blank')?.focus();
+                if (plan.outOfStock) return window.open(discordLink, '_blank')?.focus();
                 plansStore.plan = planName;
                 plansStore.gb = 0;
                 setTimeout(() => {

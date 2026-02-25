@@ -12,6 +12,7 @@ import { setUserData } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import Accordion from '../Elements/Accordion';
+import { discordLink } from '../Elements/Nav';
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -40,7 +41,7 @@ export default component$(({ hidden }: {
         .setBgColor('lum-bg-red/50')
         .setButtons([{
           text: 'Discord',
-          href: 'https://discord.gg/nmgtX5z',
+          href: discordLink,
           umamiEvent: 'discord-link',
         }])
         .setPersist(true);

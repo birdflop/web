@@ -37,6 +37,7 @@ import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from
 import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 import { useIsAdmin } from '~/routes/layout';
+import { donateLink } from '~/components/Elements/Nav';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;
@@ -517,7 +518,7 @@ export default component$(() => {
         public resource developed by Birdflop, a 501(c)(3) nonprofit providing
         affordable and accessible hosting and public resources. If you would
         like to support our mission, please{' '}
-        <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U">
+        <a href={donateLink}>
           click here
         </a>{' '}
         to make a charitable donation, 100% tax-deductible in the US.

@@ -12,6 +12,10 @@ import Accordion from './Accordion';
 import { openItemsContext, SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
 
+// Links used in multiple places, defined here to avoid duplication and potential inconsistencies
+export const donateLink = 'https://www.paypal.com/US/fundraiser/charity/5036975';
+export const discordLink = 'https://discord.gg/nmgtX5z';
+
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -223,7 +227,7 @@ export const SocialButtons = component$(() => {
     <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
       <Github size={20} />
     </a>
-    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link" data-umami-source="nav">
+    <a href={discordLink} title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link" data-umami-source="nav">
       <LogoDiscord size={20} />
     </a>
   </>;

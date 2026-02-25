@@ -9,6 +9,7 @@ import { plans } from './plans';
 import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
 import ExpensesChart from '~/components/home/ExpensesChart';
+import { discordLink, donateLink } from '~/components/Elements/Nav';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -68,7 +69,7 @@ export default component$(() => {
           </Link>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U"
+          <a href={donateLink}
             class="lum-btn lum-btn-p-4 text-white! lum-bg-pink-600 hover:lum-bg-pink-500"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
@@ -88,7 +89,7 @@ export default component$(() => {
             Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
             <br />
             <br />
-            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href="https://www.paypal.com/donate/?hosted_button_id=6NJAD4KW8V28U" class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
+            Birdflop goes beyond mere hosting; we actively foster a community of learning and growth, exemplified through the wealth of public resources available on our <Link href="/resources" class="text-blue-400 hover:underline">Resources</Link> page. Looking ahead, we are committed to expanding our reach, investing in initiatives that fuel a passion for computer science and technology, and making a lasting impact in shaping future innovators. If you would like to further our mission, please consider making a tax-deductible <a href={donateLink} class="text-blue-400 hover:underline">charitable donation</a>.&nbsp;
           </>}
           <button class="text-blue-400 hover:underline" onClick$={() => missionExpanded.value = !missionExpanded.value}>
             {missionExpanded.value ? 'Read less' : 'Read more'}
@@ -123,7 +124,7 @@ export default component$(() => {
                 })}
               </ul>
               {plan.outOfStock ?
-                <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" data-umami-source="plans" target="_blank"
+                <a href={discordLink} data-umami-event="discord-link" data-umami-source="plans" target="_blank"
                   class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 mt-4 w-min m-auto">
                   <AlertTriangle size={20} class="text-3xl" /> Out of stock
                 </a>
@@ -203,7 +204,7 @@ export default component$(() => {
               <Heart size={30} /> Instant Support
             </h3>
             <p>
-              You can contact support at any time through our <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" data-umami-source="support" class="text-blue-400 hover:underline">Discord server</a>.
+              You can contact support at any time through our <a href={discordLink} data-umami-event="discord-link" data-umami-source="support" class="text-blue-400 hover:underline">Discord server</a>.
             </p>
           </div>
           <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
@@ -340,7 +341,7 @@ export default component$(() => {
           Still not convinced?
         </h1>
         <p>
-          Create a ticket on our <a href="https://discord.gg/nmgtX5z" data-umami-event="discord-link" data-umami-source="trial" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
+          Create a ticket on our <a href={discordLink} data-umami-event="discord-link" data-umami-source="trial" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
         </p>
       </section>
     </div>
