@@ -1,7 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { Blobs, Hoverable, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
-import { Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Text, Zap } from 'lucide-icons-qwik';
+import { Binary, Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -177,7 +177,7 @@ export default component$(() => {
       <hr/>
       <div class="flex flex-col gap-2 mb-2">
         <h2 class="my-0! text-xl! flex gap-3 items-center">
-          <Text />
+          <Binary />
           Binflop
         </h2>
         <p>
