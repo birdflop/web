@@ -1,6 +1,6 @@
 import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults } from '@birdflop/rgbirdflop';
+import { sortColors, getRandomColor, ColorGradient, GradientType, hexToRGB, rgbToHex, getShadowColors, rgbDefaults, ColorStop, ShadowColorStop } from '@birdflop/rgbirdflop';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
 
@@ -9,7 +9,7 @@ import { Plus, Trash } from 'lucide-icons-qwik';
  * Samples the gradient at multiple points to approximate perceptually uniform gradients
  */
 function generateGradientCSS(
-  colors: { hex: string; pos: number }[],
+  colors: ColorStop[],
   gradientType: string,
   samples = 20,
 ): string {
@@ -43,11 +43,13 @@ function generateGradientCSS(
   return `linear-gradient(to right, ${sampledColors.join(', ')})`;
 }
 
+export function getColors(rgbStore: typeof rgbDefaults, id: 'text'): ColorStop[];
+export function getColors(rgbStore: typeof rgbDefaults, id: string): ShadowColorStop[];
 export function getColors(rgbStore: typeof rgbDefaults, id: string) {
-  return id == 'text' ? rgbStore.colors : getShadowColors(rgbStore);
+  return id === 'text' ? rgbStore.colors : getShadowColors(rgbStore);
 }
 
-export default component$(({ id = 'text' }: { id?: string }) => {
+export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
   const colorsKey = id == 'text' ? 'colors' : 'shadowcolors';

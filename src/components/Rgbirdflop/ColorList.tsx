@@ -188,7 +188,7 @@ export default component$(({ hidden, id = 'text' }: {
             showInput={false}
             horizontal
           />
-          <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
+          <div class="flex gap-1 lum-card p-2 flex-col items-center justify-evenly">
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
               value={Math.round(colors[opened.value]?.pos)}
@@ -215,6 +215,33 @@ export default component$(({ hidden, id = 'text' }: {
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
             >Position (%)
+            </NumberInput>
+            <NumberInput input id={`colorlist${id}-color-opacity`}
+              min={0} max={100}
+              value={Math.round(colors[opened.value]?.opacity ?? 100)}
+              onChange$={(e, el) => {
+                const newColors = colors.slice(0);
+                let newOpacity = Number(el.value);
+                if (newOpacity < 0) newOpacity = 0;
+                if (newOpacity > 100) newOpacity = 100;
+                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
+              }}
+              onIncrement$={() => {
+                const newColors = colors.slice(0);
+                let newOpacity = (newColors[opened.value].opacity ?? 100) + 1;
+                if (newOpacity > 100) newOpacity = 100;
+                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
+              }}
+              onDecrement$={() => {
+                const newColors = colors.slice(0);
+                let newOpacity = (newColors[opened.value].opacity ?? 100) - 1;
+                if (newOpacity < 0) newOpacity = 0;
+                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
+                rgbStore[colorsKey] = sortColors(newColors);
+              }}
+            >Opacity (%)
             </NumberInput>
           </div>
         </div>

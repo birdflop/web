@@ -1,4 +1,4 @@
-import { rgbDefaults } from './Defaults';
+import { ColorStop, rgbDefaults, ShadowColorStop } from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient, GradientType } from './ColorUtils';
 
@@ -49,14 +49,17 @@ function normalizeShadowRGB(rgb: number[]): number[] {
   return norm;
 }
 
-export function getShadowColors(rgbStore: typeof rgbDefaults): { hex: string; pos: number }[] {
+export function getShadowColors(rgbStore: typeof rgbDefaults) {
   if (!rgbStore.shadowcolors) {
     return rgbStore.colors.map((color) => {
       const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);
-      return { hex: `#${rgbToHex(shadowRGB)}`, pos: color.pos };
+      return {
+        ...color,
+        hex: `#${rgbToHex(shadowRGB)}`,
+      } as ShadowColorStop;
     });
   }
-  return rgbStore.shadowcolors.map((color) => ({ hex: color.hex, pos: color.pos }));
+  return rgbStore.shadowcolors;
 }
 
 type ShadowSegment = {
@@ -68,10 +71,10 @@ type ShadowSegment = {
 
 function buildShadowSegments(
   rgbStore: typeof rgbDefaults,
-  shadowColors: { hex: string; pos: number }[],
+  shadowColors: ShadowColorStop[],
 ): ShadowSegment[] {
   const segments = segmentText(rgbStore.text, rgbStore.colorlength);
-  if (!segments.length) return [];
+  if (!segments.length || !shadowColors) return [];
 
   const shadowGradient = new ColorGradient(
     shadowColors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos })),
@@ -122,7 +125,7 @@ function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end:
   return out;
 }
 
-export function disperseColors(colors: typeof rgbDefaults.colors) {
+export function disperseColors(colors: ColorStop[]) {
   if (colors.length <= 1) {
     return colors.slice(0).map((color) => ({ hex: color.hex, pos: 0 }));
   }
@@ -134,7 +137,7 @@ export function disperseColors(colors: typeof rgbDefaults.colors) {
   return newColors;
 }
 
-export function sortColors(colors: { hex: string, pos: number }[]) {
+export function sortColors(colors: ColorStop[]) {
   return [...colors].sort((a, b) => a.pos - b.pos);
 }
 
@@ -167,7 +170,7 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
 
 export function generateOutput(rgbStore: typeof rgbDefaults) {
   const colors = sortColors(rgbStore.colors);
-  const shadowColors = rgbStore.shadowcolors ? sortColors(rgbStore.shadowcolors) : undefined;
+  const shadowColors = rgbStore.shadowcolors ? sortColors(rgbStore.shadowcolors) : null;
 
   if (colors.length === 1) {
     if (rgbStore.format.color === 'MiniMessage') {
@@ -179,7 +182,7 @@ export function generateOutput(rgbStore: typeof rgbDefaults) {
     return applyWrappers(single, rgbStore);
   }
 
-  let output = '';
+  let output;
   if (rgbStore.format.color === 'MiniMessage') {
     output = renderMiniMessageGradient(colors, rgbStore, shadowColors);
   } else if (rgbStore.format.color === 'JSON') {
@@ -245,11 +248,11 @@ function renderSingleColorOutput(singleHex: string, rgbStore: typeof rgbDefaults
 }
 
 function renderMiniMessageGradient(
-  colors: { hex: string; pos: number }[],
+  colors: ColorStop[],
   rgbStore: typeof rgbDefaults,
-  shadowColors: { hex: string; pos: number }[] = [],
+  shadowColors: ShadowColorStop[] | null,
 ): string {
-  const shadowSegments = (shadowColors.length > 0)
+  const shadowSegments = (shadowColors && shadowColors.length > 0)
     ? buildShadowSegments(rgbStore, shadowColors)
     : undefined;
 
@@ -300,7 +303,7 @@ function renderMiniMessageGradient(
   return `<gradient:${hexes}>${inner}</gradient>`;
 }
 
-function renderJsonGradient(colors: { hex: string; pos: number }[], rgbStore: typeof rgbDefaults): string {
+function renderJsonGradient(colors: ColorStop[], rgbStore: typeof rgbDefaults): string {
   const newColors = colors.map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
   if (newColors.length < 1) return 'Error: Not enough colors.';
 
@@ -339,7 +342,7 @@ function renderJsonGradient(colors: { hex: string; pos: number }[], rgbStore: ty
   return JSON.stringify(jsonOutput);
 }
 
-function renderTemplateGradient(colors: { hex: string; pos: number }[], rgbStore: typeof rgbDefaults): string {
+function renderTemplateGradient(colors: ColorStop[], rgbStore: typeof rgbDefaults): string {
   const newColors = colors.map((color) => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
   if (newColors.length === 0) return 'Error: Not enough colors.';
 
