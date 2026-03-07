@@ -5,7 +5,7 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { AnimationOutput, animationStyles, animTABDefaults, generateAnimTABFrames, GRADIENT_TYPES, hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { FileJson, Rainbow } from 'lucide-icons-qwik';
+import { Braces, Rainbow } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
@@ -118,7 +118,7 @@ export default component$(() => {
       }} class={{
         'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
       }} q:slot="mobile-navbar">
-        <FileJson />
+        <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
       </button>
 
@@ -228,7 +228,7 @@ export default component$(() => {
       </SelectMenu>
 
       <Accordion q:slot="column3" sectionName="outputformat" pcOnly>
-        <FileJson />
+        <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
       </Accordion>
       <div q:slot="column3" class={{
