@@ -18,6 +18,9 @@ export type Settings = {
   cookies?: boolean;
   theme?: ThemeName;
   locale?: keyof typeof languages;
+  flopbird: {
+    toggle: boolean;
+  }
 }
 
 export const isAdmin = server$(function(props?: {
@@ -68,11 +71,13 @@ export default component$(() => {
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
   const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
 
-  // bird mascot refs
+  // bird mascot
   const birdRef = useSignal<HTMLCanvasElement>();
   const anchorElementRef = useSignal<HTMLDivElement>();
   const elementIdToLandOn = useSignal<string>();
   useContextProvider(BirdLandContext, elementIdToLandOn);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -142,16 +147,15 @@ export default component$(() => {
     }
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
-
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
 
-    <canvas ref={birdRef} class={{
-      'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
-    }}/>
+    {settingsStore.flopbird?.toggle && (
+      <canvas ref={birdRef} class={{
+        'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
+      }}/>
+    )}
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
       <Background id="bg" class={{
@@ -172,9 +176,13 @@ export default component$(() => {
     <Slot />
     <div ref={anchorElementRef} class={{
       'fixed flex flex-col gap-1 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+      'bottom-4 right-4': !settingsStore.flopbird?.toggle,
     }} id="notifications" style={{
       '--lum-border-radius': '1rem',
-      transform: 'translate(-100%, -100%)',
+
+      ...settingsStore.flopbird?.toggle ?{
+        transform: 'translate(-100%, -100%)',
+      } : {},
     }}>
       {notifications.map((notification) => {
         if (!notification) return null;

@@ -1,6 +1,6 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { Settings } from 'lucide-icons-qwik';
+import { Bird, Cookie, Settings } from 'lucide-icons-qwik';
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';
@@ -55,10 +55,28 @@ export default component$(() => {
             setCookies('settings', settingsStore);
             await setUserData({ settings: settingsStore });
           }}>
+            <Cookie />
             {t('settings.cookies.title@@Enable Cookies')}
           </Toggle>
           <p>
             {t('settings.cookies.description@@Allow Birdflop to use cookies for personalization and improved user experience.')}
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <Toggle id="flopbird-toggle" checked={settingsStore.flopbird?.toggle} onChange$={async (e, el) => {
+            settingsStore.flopbird = {
+              ...settingsStore.flopbird,
+              toggle: el.checked,
+            };
+            setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
+          }}>
+            <Bird />
+            {t('settings.flopbird.enable@@Enable Flopbird')}
+          </Toggle>
+          <p>
+            {t('settings.flopbird.description@@Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you\'re on. Experimental')}
           </p>
         </div>
       </div>
