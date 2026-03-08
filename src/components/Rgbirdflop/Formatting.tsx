@@ -24,7 +24,7 @@ export default component$(() => {
   return (
     <div class="lum-card p-1 flex-row gap-1 items-center *:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1 justify-evenly" id="formatting">
       <button type="button" id="bold" class={{
-        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.bold,
+        'lum-bg-lum-accent!': rgbStore.bold,
       }} aria-pressed={rgbStore.bold} title={t('rgb.formatting.bold@@Bold')}
       onClick$={() => { rgbStore.bold = !rgbStore.bold; }}>
         <Bold size={16} />
@@ -33,7 +33,7 @@ export default component$(() => {
         </span>
       </button>
       <button type="button" id="italic" class={{
-        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.italic,
+        'lum-bg-lum-accent!': rgbStore.italic,
       }} aria-pressed={rgbStore.italic} title={t('rgb.formatting.italic@@Italic')}
       onClick$={() => { rgbStore.italic = !rgbStore.italic; }}>
         <Italic size={16} />
@@ -42,7 +42,7 @@ export default component$(() => {
         </span>
       </button>
       <button type="button" id="underline" class={{
-        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.underline,
+        'lum-bg-lum-accent!': rgbStore.underline,
       }} aria-pressed={rgbStore.underline} title={t('rgb.formatting.underline@@Underline')}
       onClick$={() => { rgbStore.underline = !rgbStore.underline; }}>
         <Underline size={16} />
@@ -51,7 +51,7 @@ export default component$(() => {
         </span>
       </button>
       <button type="button" id="strikethrough" class={{
-        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.strikethrough,
+        'lum-bg-lum-accent!': rgbStore.strikethrough,
       }} aria-pressed={rgbStore.strikethrough} title={t('rgb.formatting.strikethrough@@Strikethrough')}
       onClick$={() => { rgbStore.strikethrough = !rgbStore.strikethrough; }}>
         <Strikethrough size={16} />
@@ -60,7 +60,7 @@ export default component$(() => {
         </span>
       </button>
       <button type="button" id="obfuscate" class={{
-        'lum-bg-blue! hover:lum-bg-blue/50!': rgbStore.obfuscate,
+        'lum-bg-lum-accent!': rgbStore.obfuscate,
       }} aria-pressed={rgbStore.obfuscate} title={t('rgb.formatting.obfuscate@@Obfuscate')}
       onClick$={() => { rgbStore.obfuscate = !rgbStore.obfuscate; }}>
         <Wand2 size={16} />
