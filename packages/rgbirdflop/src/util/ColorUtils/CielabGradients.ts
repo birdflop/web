@@ -1,5 +1,5 @@
 import { rgbToLchab, interpolateLchab, lchabToRgb, type LCHab } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
+import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * CIELAB/LCh(ab)-based gradient classes using perceptually uniform color interpolation.
@@ -13,7 +13,7 @@ import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
  * Handles hue interpolation properly (shortest path around the color wheel).
  */
 export class CielabGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, CielabTwoStopGradient);
   }
 }
@@ -44,7 +44,7 @@ class CielabTwoStopGradient extends BaseTwoStopGradient<LCHab> {
  * Industry standard quality for professional applications.
  */
 export class CielabAnimatedGradient extends CielabGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

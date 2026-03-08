@@ -3,9 +3,6 @@ import type { GradientType } from './ColorUtils';
 export type ColorStop = {
   hex: string;
   pos: number;
-};
-
-export interface ShadowColorStop extends ColorStop {
   opacity?: number;
 };
 
@@ -70,7 +67,7 @@ export const rgbDefaults = {
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ] as ColorStop[],
-  shadowcolors: null as null | Array<ShadowColorStop>,
+  shadowcolors: null as null | ColorStop[],
   colorlength: 1,
   text: 'Birdflop',
   format: formats[1],

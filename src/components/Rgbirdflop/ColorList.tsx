@@ -1,5 +1,5 @@
 import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
-import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
+import { ColorPicker, NumberInput, RangeInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
@@ -188,7 +188,15 @@ export default component$(({ hidden, id = 'text' }: {
             showInput={false}
             horizontal
           />
-          <div class="flex gap-1 lum-card p-2 flex-col items-center justify-evenly">
+          <div class="flex gap-1 lum-card p-2 flex-col justify-evenly">
+            {id == 'shadow' &&
+              <RangeInput id="memory" min={0} max={100} step={1}
+                value={colors[opened.value]?.opacity} onInput$={(e, el) => {
+                  colors[opened.value].opacity = Number(el.value);
+                }}>
+                {t('rgb.colors.opacity@@Opacity')} ({colors[opened.value]?.opacity} %)
+              </RangeInput>
+            }
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
               value={Math.round(colors[opened.value]?.pos)}
@@ -214,34 +222,7 @@ export default component$(({ hidden, id = 'text' }: {
                 newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
-            >Position (%)
-            </NumberInput>
-            <NumberInput input id={`colorlist${id}-color-opacity`}
-              min={0} max={100}
-              value={Math.round(colors[opened.value]?.opacity ?? 100)}
-              onChange$={(e, el) => {
-                const newColors = colors.slice(0);
-                let newOpacity = Number(el.value);
-                if (newOpacity < 0) newOpacity = 0;
-                if (newOpacity > 100) newOpacity = 100;
-                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
-              }}
-              onIncrement$={() => {
-                const newColors = colors.slice(0);
-                let newOpacity = (newColors[opened.value].opacity ?? 100) + 1;
-                if (newOpacity > 100) newOpacity = 100;
-                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
-              }}
-              onDecrement$={() => {
-                const newColors = colors.slice(0);
-                let newOpacity = (newColors[opened.value].opacity ?? 100) - 1;
-                if (newOpacity < 0) newOpacity = 0;
-                newColors[opened.value].opacity = Math.round(newOpacity * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
-              }}
-            >Opacity (%)
+            >{t('rgb.colors.position@@Position')} (%)
             </NumberInput>
           </div>
         </div>

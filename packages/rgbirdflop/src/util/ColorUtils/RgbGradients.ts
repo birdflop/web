@@ -1,4 +1,4 @@
-import { BaseTwoStopGradient, BaseGradient } from './BaseGradient';
+import { BaseTwoStopGradient, BaseGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * RGB-based gradient classes using linear RGB interpolation.
@@ -12,7 +12,7 @@ import { BaseTwoStopGradient, BaseGradient } from './BaseGradient';
  * Uses linear interpolation between color stops.
  */
 export class RgbGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, RgbTwoStopGradient);
   }
 }
@@ -47,7 +47,7 @@ class RgbTwoStopGradient extends BaseTwoStopGradient<number[]> {
  * Animated gradient in RGB color space with offset support.
  */
 export class RgbAnimatedGradient extends RgbGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);
