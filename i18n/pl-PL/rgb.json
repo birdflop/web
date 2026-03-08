@@ -16,8 +16,8 @@
       "format": "Format kolorów",
       "gradientType": "Gradient Type",
       "lowercase": {
-        "description": "Włącz jeśli chcesz używać małych kodów koloru.",
-        "title": "Małe kolory kodu"
+        "description": "Włącz jeśli chcesz używać małych liter w kodzie koloru.",
+        "title": "Małe litery w kodzie koloru"
       },
       "randomize": "Losuj",
       "shadow": {
