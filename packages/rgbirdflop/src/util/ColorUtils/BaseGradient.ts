@@ -140,8 +140,8 @@ export class BaseGradient {
 
       this.gradients.push(
         new this.TwoStopGradientClass(
-          currentColor.rgb,
-          nextColor.rgb,
+          currentColor.rgb.slice(0, 3),
+          nextColor.rgb.slice(0, 3),
           currentColor.rgb[3] !== undefined ? currentColor.rgb[3] / 255 : 1,
           nextColor.rgb[3] !== undefined ? nextColor.rgb[3] / 255 : 1,
           lowerRange,

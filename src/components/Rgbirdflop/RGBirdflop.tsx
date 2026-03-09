@@ -98,7 +98,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           color: rgbCSS,
           ...(shadowGradient &&
             rgbShadow && {
-            textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS};`,
+            textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
           }),
         }}
         class={{

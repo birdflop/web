@@ -40,7 +40,7 @@ export default component$(() => {
               'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600': true,
             }}>
               <LogoBirdflop size={70} fillGradient={['#54daf4', '#545eb6']} class="absolute -z-1 w-12.5 xl:w-17.5 xl:-left-1" />
-              <p class="text-transparent!">
+              <span class="text-transparent!">
                 <span>b</span>
                 <span
                   style={{
@@ -49,7 +49,7 @@ export default component$(() => {
                   }}>
                   irdflop
                 </span>
-              </p>
+              </span>
             </h1>
           </div>
           <div class={{
