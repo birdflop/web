@@ -13,6 +13,11 @@ export interface TwoStopGradient {
   colorAt(step: number): number[];
 }
 
+/**
+ * Represents a color stop in a gradient.
+ * `@property` rgb - RGB or RGBA values in 0-255 range
+ * `@property` pos - Position in gradient (0-100)
+ */
 export type RGBColorStop = {
   rgb: [number, number, number]
     | [number, number, number, number];
