@@ -18,7 +18,6 @@ import {
   disperseColors,
   sortColors,
   hexToRGB,
-  rgbToHex,
   getShadowColors,
 } from '@birdflop/rgbirdflop';
 
@@ -73,8 +72,6 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
   );
 
-  let hex = '';
-  let shadowHex = '';
   const segments = [];
   let index = 0;
   const textArray = Array.from(rgbStore.text);
@@ -89,18 +86,19 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   }
   return segments.map((segment, i) => {
     const rgb = gradient.next();
+    const rgbCSS = `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;
     const rgbShadow = shadowGradient?.next();
-    hex = rgbToHex(rgb);
-    shadowHex = rgbShadow ? rgbToHex(rgbShadow) : '';
+    const rgbShadowCSS = `rgba(${rgbShadow?.slice(0, 3).join(',')}, ${rgbShadow && rgbShadow[3] !== undefined ? rgbShadow[3] / 255 : 1})`;
+
     return (
       <span
         q:slot="input"
         key={`char${i}`}
         style={{
-          color: `#${hex};`,
+          color: rgbCSS,
           ...(shadowGradient &&
-            shadowHex && {
-            textShadow: `${shadowLength}px ${shadowLength}px 0 #${shadowHex};`,
+            rgbShadow && {
+            textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS};`,
           }),
         }}
         class={{
