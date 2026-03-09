@@ -73,6 +73,7 @@ export function getRGBColorStop(color: ColorStop): RGBColorStop {
 type ShadowSegment = {
   text: string;
   hex: string;
+  opacity: number;
   start: number;
   end: number;
 };
@@ -92,6 +93,7 @@ function buildShadowSegments(
 
   let cursor = 0;
   return segments.map((text) => {
+    const shadow = shadowGradient.next();
     const start = cursor;
     const end = cursor + text.length;
     cursor = end;
@@ -99,19 +101,21 @@ function buildShadowSegments(
       text,
       start,
       end,
-      hex: `#${rgbToHex(shadowGradient.next())}`,
+      hex: `#${rgbToHex(shadow.slice(0, 3))}`,
+      opacity: shadow[3] !== undefined ? shadow[3] / 255 : 1,
     };
   });
 }
 
 function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end: number): string {
   let currentHex: string | undefined;
+  let currentOpacity: number | undefined;
   let buffer = '';
   let out = '';
 
   const flush = () => {
     if (!buffer || !currentHex) return;
-    out += `<shadow:${currentHex}:1>${buffer}</shadow>`;
+    out += `<shadow:${currentHex}:${currentOpacity ?? 1}>${buffer}</shadow>`;
     buffer = '';
   };
 
@@ -123,9 +127,10 @@ function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end:
     const slice = seg.text.slice(sliceStart, sliceEnd);
     if (!slice) continue;
 
-    if (currentHex && currentHex !== seg.hex) flush();
+    if (currentHex && (currentHex !== seg.hex || currentOpacity !== seg.opacity)) flush();
 
     currentHex = seg.hex;
+    currentOpacity = Math.round(seg.opacity * 1000) / 1000;
     buffer += slice;
   }
 
