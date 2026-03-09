@@ -120,7 +120,7 @@ export default component$(({ hidden, id = 'text' }: {
           </div>
           <div class="flex flex-col justify-end ml-1">
             <label for={`colorlist${id}-color-${i + 1}-input`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
-            <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}-input`}
+            <input key={`colorlist${id}-color-${i + 1}`} id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
