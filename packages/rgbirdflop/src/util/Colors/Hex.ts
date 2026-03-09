@@ -57,3 +57,11 @@ export function getRandomColor() {
   }
   return color;
 }
+
+export function invertRgbColor(RGBAcolor: number[]) {
+  const invertedR = 255 - RGBAcolor[0];
+  const invertedG = 255 - RGBAcolor[1];
+  const invertedB = 255 - RGBAcolor[2];
+
+  return [invertedR, invertedG, invertedB];
+}
