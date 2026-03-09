@@ -10,6 +10,7 @@ import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
 import ExpensesChart from '~/components/home/ExpensesChart';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
+import { testimonials } from '~/components/home/testimonials';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -271,61 +272,19 @@ export default component$(() => {
         </h1>
       </Anchor>
       <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
-        <a href="https://g.co/kgs/mUU1j1G"
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <User size={30} /> Mikkel Hansen
-          </h3>
-          <p>
-            I'm happy with my subscription, providing nearly full system access at a great price point. They've proven to be reliable, trustworthy and transparent. It's clear that actual humans run this place and their support is S tier (if you don't mind the need to be part of their Discord server).
-          </p>
-        </a>
-        <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <User size={30} /> Wizzy SMP
-          </h3>
-          <p>
-            Birdflop is the best Minecraft server hosting out there! Unbeatable pricing (due to their tax-exempt 501(c)3 non-profit status), amazing support on their Discord server and great servers! We have 24/7 access to all stats that we'd need to know like in/out network speed, average CPU usage per node, and a lot more. Birdflop is my recommendation to all my friends!
-          </p>
-        </a>
-        <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <User size={30} /> Beaunation
-          </h3>
-          <p>
-            I've been using Birdflop for several months and I believe it is loads better than any other hosting company I've used. I recommend this company over any other
-          </p>
-        </a>
-        <a href="https://www.trustpilot.com/reviews/65a592b5f66c25889e859abe"
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <User size={30} /> Jmaster
-          </h3>
-          <p>
-            Amazing hosting, amazing staff, and top of the line performance. 11/10, and I recommend it to everyone. I can say with confidence, this is a valid host and has no cringe features.
-          </p>
-        </a>
-        <a href="https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d"
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <User size={30} /> Oliver Flynn
-          </h3>
-          <p>
-            Best hosting I have ever used. great owners, fast help, amazing servers. all around a good host.
-          </p>
-        </a>
+        {testimonials.map(({ name, testimonial, link }) => {
+          return <a href={link} key={name}
+            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
+            <h3 class="mt-0! mb-2! flex items-center gap-2">
+              <User size={30} /> {name}
+            </h3>
+            <p class="whitespace-normal">
+              {testimonial}
+            </p>
+          </a>;
+        })}
         <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
