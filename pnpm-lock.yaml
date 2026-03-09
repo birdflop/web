@@ -4,16 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  rgbirdflop: link:../../../.local/share/pnpm/global/5/node_modules/@birdflop/rgbirdflop
-
 importers:
 
   .:
-    dependencies:
-      rgbirdflop:
-        specifier: link:../../../.local/share/pnpm/global/5/node_modules/@birdflop/rgbirdflop
-        version: link:../../../.local/share/pnpm/global/5/node_modules/@birdflop/rgbirdflop
     devDependencies:
       '@anuragroy/tailwindcss-animate':
         specifier: ^1.0.6
