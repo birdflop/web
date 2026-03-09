@@ -2,7 +2,7 @@ import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@buil
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB, rgbToHex, invertRgbColor } from '@birdflop/rgbirdflop';
-import { ArrowRightLeft, ChevronDown, ChevronUp, Dices, Eclipse, MoveHorizontal, Shuffle, Trash } from 'lucide-icons-qwik';
+import { ArrowRightLeft, ChevronDown, ChevronUp, Combine, Copy, Dices, Eclipse, MoveHorizontal, Shuffle, Trash } from 'lucide-icons-qwik';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
@@ -86,7 +86,29 @@ export default component$(({ hidden, id = 'text' }: {
           const newColors = colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.randomize@@Randomize')}>
-          <Dices size={20} />
+          <Dices size={18} />
+        </button>
+        {id == 'shadow' &&
+          <button class={{
+            'lum-btn p-2 rounded-l-sm justify-center': true,
+            'rounded-sm': !rgbStore.disperse,
+          }} onClick$={() => {
+            rgbStore[colorsKey] = rgbStore.colors;
+          }} title={t('rgb.colors.copyFromText@@Copy from text colors')}>
+            <Combine size={18} />
+          </button>
+        }
+        <button class={{
+          'lum-btn p-2 rounded-l-sm justify-center': true,
+          'rounded-sm': !rgbStore.disperse,
+        }} disabled={colors.length >= rgbStore.text.length} onClick$={() => {
+          const newColors = [
+            ...colors,
+            ...colors,
+          ];
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.duplicate@@Duplicate')}>
+          <Copy size={18} />
         </button>
         <button class={{
           'lum-btn p-2 rounded-sm justify-center': true,
@@ -94,7 +116,7 @@ export default component$(({ hidden, id = 'text' }: {
           const newColors = colors.reverse().map(color => ({ hex: color.hex, pos: 100 - color.pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.reverse@@Reverse')}>
-          <ArrowRightLeft size={20} />
+          <ArrowRightLeft size={18} />
         </button>
         <button class={{
           'lum-btn p-2 rounded-sm justify-center': true,
@@ -103,7 +125,7 @@ export default component$(({ hidden, id = 'text' }: {
           const newColors = shuffledColors.map((color, i) => ({ hex: color.hex, pos: colors[i].pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.shuffle@@Shuffle')}>
-          <Shuffle size={20} />
+          <Shuffle size={18} />
         </button>
         <button class={{
           'lum-btn p-2 rounded-l-sm justify-center': true,
@@ -115,7 +137,7 @@ export default component$(({ hidden, id = 'text' }: {
           });
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.invert@@Invert')}>
-          <Eclipse size={20} />
+          <Eclipse size={16} />
         </button>
         {!rgbStore.disperse &&
           <button class="lum-btn p-2 rounded-l-sm justify-center" disabled={
@@ -125,7 +147,7 @@ export default component$(({ hidden, id = 'text' }: {
           onClick$={() => {
             rgbStore[colorsKey] = disperseColors(colors);
           }} title={t('rgb.colors.disperse.title@@Disperse')}>
-            <MoveHorizontal size={20} />
+            <MoveHorizontal size={18} />
           </button>
         }
       </div>
