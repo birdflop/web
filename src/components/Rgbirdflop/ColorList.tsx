@@ -81,25 +81,25 @@ export default component$(({ hidden, id = 'text' }: {
       </NumberInput>
       <div class="flex gap-1 *:w-full">
         <button class={{
-          'lum-btn p-2 rounded-r-sm justify-center': true,
+          'lum-btn p-1 rounded-r-sm justify-center': true,
         }} onClick$={() => {
           const newColors = colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.randomize@@Randomize')}>
-          <Dices size={18} />
+          <Dices size={20} />
         </button>
         {id == 'shadow' &&
           <button class={{
-            'lum-btn p-2 rounded-l-sm justify-center': true,
+            'lum-btn p-1 rounded-l-sm justify-center': true,
             'rounded-sm': !rgbStore.disperse,
           }} onClick$={() => {
             rgbStore[colorsKey] = rgbStore.colors;
           }} title={t('rgb.colors.copyFromText@@Copy from text colors')}>
-            <Combine size={18} />
+            <Combine size={20} />
           </button>
         }
         <button class={{
-          'lum-btn p-2 rounded-l-sm justify-center': true,
+          'lum-btn p-1 rounded-l-sm justify-center': true,
           'rounded-sm': !rgbStore.disperse,
         }} disabled={colors.length >= rgbStore.text.length} onClick$={() => {
           const newColors = [
@@ -108,27 +108,27 @@ export default component$(({ hidden, id = 'text' }: {
           ];
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.duplicate@@Duplicate')}>
-          <Copy size={18} />
+          <Copy size={20} />
         </button>
         <button class={{
-          'lum-btn p-2 rounded-sm justify-center': true,
+          'lum-btn p-1 rounded-sm justify-center': true,
         }} onClick$={() => {
           const newColors = colors.reverse().map(color => ({ hex: color.hex, pos: 100 - color.pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.reverse@@Reverse')}>
-          <ArrowRightLeft size={18} />
+          <ArrowRightLeft size={20} />
         </button>
         <button class={{
-          'lum-btn p-2 rounded-sm justify-center': true,
+          'lum-btn p-1 rounded-sm justify-center': true,
         }} onClick$={() => {
           const shuffledColors = colors.slice(0).sort(() => Math.random() - 0.5);
           const newColors = shuffledColors.map((color, i) => ({ hex: color.hex, pos: colors[i].pos }));
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.shuffle@@Shuffle')}>
-          <Shuffle size={18} />
+          <Shuffle size={20} />
         </button>
         <button class={{
-          'lum-btn p-2 rounded-l-sm justify-center': true,
+          'lum-btn p-1 rounded-l-sm justify-center': true,
           'rounded-sm': !rgbStore.disperse,
         }} onClick$={() => {
           const newColors = colors.map(color => {
@@ -137,17 +137,17 @@ export default component$(({ hidden, id = 'text' }: {
           });
           rgbStore[colorsKey] = newColors;
         }} title={t('rgb.colors.invert@@Invert')}>
-          <Eclipse size={16} />
+          <Eclipse size={20} />
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn p-2 rounded-l-sm justify-center" disabled={
+          <button class="lum-btn p-1 rounded-l-sm justify-center" disabled={
             !colors.find((color, i) => {
               return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
             })}
           onClick$={() => {
             rgbStore[colorsKey] = disperseColors(colors);
           }} title={t('rgb.colors.disperse.title@@Disperse')}>
-            <MoveHorizontal size={18} />
+            <MoveHorizontal size={20} />
           </button>
         }
       </div>
@@ -166,7 +166,7 @@ export default component$(({ hidden, id = 'text' }: {
               <ChevronDown size={20} />
             </button>
           </div>
-          <div class="flex flex-col justify-end ml-1">
+          <div class="flex flex-col justify-end">
             <label for={`colorlist${id}-color-${i + 1}-input`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
             <input key={`colorlist${id}-color-${i + 1}`} id={`colorlist${id}-color-${i + 1}-input`}
               class={{
