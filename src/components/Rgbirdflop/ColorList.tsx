@@ -120,7 +120,7 @@ export default component$(({ hidden, id = 'text' }: {
         </button>
         <button class={{
           'lum-btn p-1 rounded-sm justify-center': true,
-        }} onClick$={() => {
+        }} disabled={colors.length < 3} onClick$={() => {
           const shuffledColors = colors.slice(0).sort(() => Math.random() - 0.5);
           const newColors = shuffledColors.map((color, i) => ({ hex: color.hex, pos: colors[i].pos }));
           rgbStore[colorsKey] = newColors;
