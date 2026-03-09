@@ -5,6 +5,7 @@
       "character": "字符",
       "charsPer": "每种颜色的字符数",
       "color": "颜色",
+      "copyFromText": "Copy from text colors",
       "customFormat": "自定义格式",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "分散"
       },
+      "duplicate": "Duplicate",
       "format": "颜色格式",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "如果您想使用小写十六进制代码，请开启此选项。",
         "title": "小写十六进制代码"
       },
+      "position": "Position",
       "randomize": "随机化",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "文本阴影",
         "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },
+      "shuffle": "Shuffle",
       "title": "颜色",
       "trimSpaces": {
         "description": "如果您使用空的下划线/删除线，请关闭此选项",

@@ -5,6 +5,7 @@
       "character": "Znak",
       "charsPer": "Znaków na kolor",
       "color": "Kolor",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Format Własny",
       "disperse": {
         "always": {
@@ -13,19 +14,24 @@
         },
         "title": "Rozprosz"
       },
+      "duplicate": "Duplicate",
       "format": "Format kolorów",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Włącz jeśli chcesz używać małych liter w kodzie koloru.",
         "title": "Małe litery w kodzie koloru"
       },
+      "position": "Position",
       "randomize": "Losuj",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "sync": "Sychronizuj z kolorem tekstu",
         "title": "Cień tekstu",
         "warning": "Uwaga: Cień tekstu działa tylko w wypadku uzycia formatu JSON lub MiniMessage!"
       },
+      "shuffle": "Shuffle",
       "title": "Kolory",
       "trimSpaces": {
         "description": "Wyłącz, jeśli używasz pustych podkreśleń / przekreśleń",

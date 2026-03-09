@@ -5,6 +5,7 @@
       "character": "Символ",
       "charsPer": "Символов на цвет",
       "color": "цвет",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Другой формат",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "Рассеивать"
       },
+      "duplicate": "Duplicate",
       "format": "Формат цвета",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Включите это, если хотите использовать строчные шестнадцатеричные коды.",
         "title": "Строчные шестнадцатеричные коды"
       },
+      "position": "Position",
       "randomize": "Рандомизировать",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "Тень текста",
         "warning": "Предупреждение: Тень текста работает только с JSON форматированием!"
       },
+      "shuffle": "Shuffle",
       "title": "Цвета",
       "trimSpaces": {
         "description": "Отключите это, если используете пустые подчеркивания / зачеркивания",

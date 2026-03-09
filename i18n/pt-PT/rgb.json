@@ -5,6 +5,7 @@
       "character": "Carácter",
       "charsPer": "Caracteres por cor",
       "color": "Cor",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "Dispersar"
       },
+      "duplicate": "Duplicate",
       "format": "Formato de cor",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Ative isto se quiser usar códigos hexadecimais em minúsculas.",
         "title": "Códigos hexadecimais em minúsculas"
       },
+      "position": "Position",
       "randomize": "Aleatorizar",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "Sombra de texto",
         "warning": "Aviso: A sombra de texto só funciona com formatação JSON!"
       },
+      "shuffle": "Shuffle",
       "title": "Cores",
       "trimSpaces": {
         "description": "Desative isto se estiver a usar sublinhados / riscados vazios",

@@ -88,6 +88,10 @@
       },
       "title": "Kaynaklar"
     },
+    "settings": {
+      "description": "Manage your settings and preferences here.",
+      "title": "Settings"
+    },
     "termsofService": "Kullanım şartları"
   }
 }

@@ -88,6 +88,10 @@
       },
       "title": "Recursos"
     },
+    "settings": {
+      "description": "Manage your settings and preferences here.",
+      "title": "Settings"
+    },
     "termsofService": "Termos de serviço"
   }
 }

@@ -5,6 +5,7 @@
       "character": "Zeichen",
       "charsPer": "Zeichen pro Farbe",
       "color": "Farbe",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Benutzerdefiniertes Format",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "Zerstreuen"
       },
+      "duplicate": "Duplicate",
       "format": "Farbformat",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
         "title": "Kleingeschriebene Hex-Codes"
       },
+      "position": "Position",
       "randomize": "Randomisieren",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "Textschatten",
         "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },
+      "shuffle": "Shuffle",
       "title": "Farben",
       "trimSpaces": {
         "description": "Deaktivieren falls sie leere Unterstreichung/Durchstreichung nutzen.",

@@ -5,6 +5,7 @@
       "character": "문자",
       "charsPer": "색상당 문자",
       "color": "색상",
+      "copyFromText": "Copy from text colors",
       "customFormat": "사용자 정의 형식",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "분산"
       },
+      "duplicate": "Duplicate",
       "format": "색상 형식",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "소문자 16진수 코드를 사용하려면 이것을 켜세요.",
         "title": "소문자 16진수 코드"
       },
+      "position": "Position",
       "randomize": "무작위화",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "텍스트 그림자",
         "warning": "경고: 텍스트 그림자는 JSON 형식에서만 작동합니다!"
       },
+      "shuffle": "Shuffle",
       "title": "색상",
       "trimSpaces": {
         "description": "빈 밑줄/취소선을 사용하는 경우 이것을 끄세요",

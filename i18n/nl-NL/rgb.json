@@ -5,6 +5,7 @@
       "character": "Karakter",
       "charsPer": "Karakters per kleur",
       "color": "Kleur",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Aangepast formaat",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "Verspreiden"
       },
+      "duplicate": "Duplicate",
       "format": "Kleurformaat",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Zet dit aan als je kleine hexadecimale codes wilt gebruiken.",
         "title": "Kleine hexadecimale codes"
       },
+      "position": "Position",
       "randomize": "Willekeurig maken",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "Tekstschaduw",
         "warning": "Waarschuwing: Tekstschaduw werkt alleen met JSON-opmaak!"
       },
+      "shuffle": "Shuffle",
       "title": "Kleuren",
       "trimSpaces": {
         "description": "Zet dit uit als je lege onderstrepingen / doorhalingen gebruikt",

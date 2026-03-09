@@ -5,6 +5,7 @@
       "character": "Karakter",
       "charsPer": "Renk başına karakter",
       "color": "Renk",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Özel format",
       "disperse": {
         "always": {
@@ -13,18 +14,23 @@
         },
         "title": "Dağıt"
       },
+      "duplicate": "Duplicate",
       "format": "Renk formatı",
       "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Küçük harfli hex kodları kullanmak istiyorsanız bunu açın.",
         "title": "Küçük harfli hex kodları"
       },
+      "position": "Position",
       "randomize": "Rastgele yap",
+      "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
         "title": "Metin gölgesi",
         "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
+      "shuffle": "Shuffle",
       "title": "Renkler",
       "trimSpaces": {
         "description": "Boş alt çizgiler / üst çizgiler kullanıyorsanız bunu kapatın",
