@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/birdflop/web/compare/v0.1.16...v0.1.17) (2026-03-09)
+
+
+### Features
+
+* add invertRgbColor function ([1e25f81](https://github.com/birdflop/web/commit/1e25f8171b93af2a94938ad0de2e6e5dc582f102))
+
 ## [0.1.16](https://github.com/birdflop/web/compare/v0.1.15...v0.1.16) (2026-03-09)
 
 
