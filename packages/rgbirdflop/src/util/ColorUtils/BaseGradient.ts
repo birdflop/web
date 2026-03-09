@@ -14,18 +14,33 @@ export interface TwoStopGradient {
 }
 
 /**
+ * Represents a color stop in a gradient.
+ * `@property` rgb - RGB or RGBA values in 0-255 range
+ * `@property` pos - Position in gradient (0-100)
+ */
+export type RGBColorStop = {
+  rgb: [number, number, number]
+    | [number, number, number, number];
+  pos: number;
+};
+
+/**
  * Abstract base class for two-stop gradients that handles the common interpolation logic.
  * Subclasses only need to implement color space conversion and interpolation functions.
  */
 export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
   startColor: T;
   endColor: T;
+  startAlpha: number;
+  endAlpha: number;
   lowerRange: number;
   upperRange: number;
 
-  constructor(startRgb: number[], endRgb: number[], lowerRange: number, upperRange: number) {
+  constructor(startRgb: number[], endRgb: number[], startAlpha: number, endAlpha: number, lowerRange: number, upperRange: number) {
     this.startColor = this.rgbToColorSpace(startRgb);
     this.endColor = this.rgbToColorSpace(endRgb);
+    this.startAlpha = startAlpha;
+    this.endAlpha = endAlpha;
     this.lowerRange = lowerRange;
     this.upperRange = upperRange;
   }
@@ -58,8 +73,10 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
     // Interpolate in the specific color space
     const interpolated = this.interpolate(this.startColor, this.endColor, factor);
 
+    const interpolatedAlpha = this.startAlpha + (this.endAlpha - this.startAlpha) * factor;
+
     // Convert back to RGB
-    return this.colorSpaceToRgb(interpolated);
+    return [...this.colorSpaceToRgb(interpolated), Math.round(interpolatedAlpha * 255)];
   }
 }
 
@@ -69,6 +86,8 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
 type TwoStopGradientConstructor = new (
   startRgb: number[],
   endRgb: number[],
+  startAlpha: number,
+  endAlpha: number,
   lowerRange: number,
   upperRange: number,
 ) => TwoStopGradient;
@@ -79,13 +98,13 @@ type TwoStopGradientConstructor = new (
  * specific two-stop gradient class to the constructor.
  */
 export class BaseGradient {
-  protected colors: { rgb: number[], pos: number }[];
+  protected colors: RGBColorStop[];
   protected gradients: TwoStopGradient[];
   protected steps: number;
   protected step: number;
 
   constructor(
-    colors: { rgb: number[], pos: number }[],
+    colors: RGBColorStop[],
     numSteps: number,
     private TwoStopGradientClass: TwoStopGradientConstructor,
   ) {
@@ -99,11 +118,11 @@ export class BaseGradient {
 
     // Ensure gradient starts at 0%
     if (colors[0].pos !== 0) {
-      colors.unshift({ rgb: colors[0].rgb, pos: 0 });
+      colors.unshift({ ...colors[0], pos: 0 });
     }
     // Ensure gradient ends at 100%
     if (colors[colors.length - 1].pos !== 100) {
-      colors.push({ rgb: colors[colors.length - 1].rgb, pos: 100 });
+      colors.push({ ...colors[colors.length - 1], pos: 100 });
     }
 
     // Create gradient segments between each pair of color stops
@@ -126,8 +145,10 @@ export class BaseGradient {
 
       this.gradients.push(
         new this.TwoStopGradientClass(
-          currentColor.rgb,
-          nextColor.rgb,
+          currentColor.rgb.slice(0, 3),
+          nextColor.rgb.slice(0, 3),
+          currentColor.rgb[3] !== undefined ? currentColor.rgb[3] / 255 : 1,
+          nextColor.rgb[3] !== undefined ? nextColor.rgb[3] / 255 : 1,
           lowerRange,
           upperRange,
         ),

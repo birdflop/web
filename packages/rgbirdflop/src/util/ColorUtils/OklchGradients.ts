@@ -1,5 +1,5 @@
 import { rgbToOklch, interpolateOklch, oklchToRgb, type OKLCh } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
+import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * OKLCh-based gradient classes using perceptually uniform color interpolation.
@@ -15,7 +15,7 @@ import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
  * Combines OKLAB's superior perceptual uniformity with intuitive cylindrical controls.
  */
 export class OklchGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, OklchTwoStopGradient);
   }
 }
@@ -47,7 +47,7 @@ class OklchTwoStopGradient extends BaseTwoStopGradient<OKLCh> {
  * Ideal for UI animations, loading indicators, and dynamic color effects.
  */
 export class OklchAnimatedGradient extends OklchGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

@@ -68,8 +68,8 @@ export default component$(() => {
   const loc = useLocation();
 
   // Select background images
-  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
-  const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
+  const Background = Backgrounds[1];
+  const LightBackground = lightBackgrounds[1];
 
   // bird mascot
   const birdRef = useSignal<HTMLCanvasElement>();
@@ -160,7 +160,7 @@ export default component$(() => {
     {(themeStore.isDark === undefined || themeStore.isDark) &&
       <Background id="bg" class={{
         'hidden dark:flex': themeStore.isDark === undefined,
-        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
         'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
@@ -168,9 +168,9 @@ export default component$(() => {
     {(themeStore.isDark === undefined || !themeStore.isDark) &&
       <LightBackground id="bg" class={{
         'flex dark:hidden': themeStore.isDark === undefined,
-        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
-        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
+        'blur-xl! bottom-0! opacity-0 scale-150': loc.url.pathname != '/',
       }}/>
     }
     <Slot />

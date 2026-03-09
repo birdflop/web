@@ -22,16 +22,16 @@ export default component$(() => {
 
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
-      <div class="text-red-400">
+      <div>
         <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
-        <h1>
+        <h1 class="text-red-400">
           {t('nav.404.title@@404: Page not found')}
         </h1>
-        <h4 class="text-lum-text-secondary">
+        <h2 class="text-lum-text-secondary">
           {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
-        </h4>
+        </h2>
         <div class="flex mt-4">
-          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white!">
+          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue">
             <Home size={26}/> {t('nav.404.home@@Go back home')}
           </Link>
         </div>

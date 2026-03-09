@@ -4,6 +4,7 @@ import { OklabGradient, OklabAnimatedGradient } from './OklabGradients';
 import { OklchGradient, OklchAnimatedGradient } from './OklchGradients';
 import { CielabGradient, CielabAnimatedGradient } from './CielabGradients';
 import { LuvLChAnimatedGradient, LuvLChGradient } from './LuvLChGradients';
+import { RGBColorStop } from './BaseGradient';
 
 /**
  * Available gradient types as a const array.
@@ -32,7 +33,7 @@ export class ColorGradient {
    * @param type - Interpolation type: 'rgb' for linear RGB, 'hsl' for intuitive, 'oklab'/'oklch' for perceptually uniform (default: 'rgb')
    */
   constructor(
-    colors: { rgb: number[], pos: number }[],
+    colors: RGBColorStop[],
     numSteps: number,
     type: GradientType = 'rgb',
   ) {
@@ -93,7 +94,7 @@ export class ColorAnimatedGradient {
    * @param type - Interpolation type: 'rgb' for linear RGB, 'hsl' for intuitive, 'oklab'/'oklch' for perceptually uniform (default: 'rgb')
    */
   constructor(
-    colors: { rgb: number[], pos: number }[],
+    colors: RGBColorStop[],
     numSteps: number,
     offset: number,
     type: GradientType = 'rgb',

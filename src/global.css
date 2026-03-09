@@ -48,12 +48,13 @@
     --color-cyan: var(--color-cyan-500);
     --color-lime: var(--color-lime-500);
     --color-teal: var(--color-teal-500);
-    --color-lum-border: var(--color-gray-100);
-    --color-lum-card-bg: var(--color-blue-200);
-    --color-lum-input-bg: var(--color-gray-200);
-    --color-lum-input-hover-bg: var(--color-gray-100);
-    --color-lum-text: var(--color-gray-900);
-    --color-lum-text-secondary: var(--color-gray-700);
+    --color-lum-border: var(--color-neutral-500);
+    --color-lum-card-bg: var(--color-gray-200);
+    --color-lum-input-bg: var(--color-neutral-50);
+    --color-lum-input-hover-bg: var(--color-neutral-50);
+    --color-lum-accent: var(--color-nav-bg);
+    --color-lum-text: var(--color-neutral-900);
+    --color-lum-text-secondary: var(--color-neutral-700);
   }
 }
 
