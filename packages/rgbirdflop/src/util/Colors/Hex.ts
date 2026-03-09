@@ -15,22 +15,28 @@ export function trim(s: string) {
 }
 
 /**
- * Converts a hex color string to RGB values
- * @param hex - Hex color string (e.g., '#FF00AA' or 'FF00AA')
- * @returns Tuple of [R, G, B] values (0-255)
+ * Converts a hex color string to RGB(A) values
+ * @param hex - Hex color string (e.g., '#FF00AA', '#FF00AA80', 'FFF', 'FFFF')
+ * @returns Tuple of [R, G, B] or [R, G, B, A] values (0-255)
  */
-export function hexToRGB(hex: string): [number, number, number] {
+export function hexToRGB(hex: string): [number, number, number] | [number, number, number, number] {
   // Remove '#' if present
   const cleanHex = hex.replace('#', '');
 
-  // Handle 3-character hex codes (e.g., 'FFF' -> 'FFFFFF')
-  const fullHex = cleanHex.length === 3
+  // Expand shorthand (3 or 4 chars) to full 6 or 8 chars
+  const fullHex = cleanHex.length === 3 || cleanHex.length === 4
     ? cleanHex.split('').map(char => char + char).join('')
     : cleanHex;
 
   const r = parseInt(fullHex.substring(0, 2), 16);
   const g = parseInt(fullHex.substring(2, 4), 16);
   const b = parseInt(fullHex.substring(4, 6), 16);
+
+  // If alpha is present, parse it
+  if (fullHex.length === 8) {
+    const a = parseInt(fullHex.substring(6, 8), 16);
+    return [r, g, b, a];
+  }
 
   return [r, g, b];
 }

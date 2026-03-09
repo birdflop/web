@@ -26,12 +26,16 @@ export type RGBColorStop = {
 export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
   startColor: T;
   endColor: T;
+  startAlpha: number;
+  endAlpha: number;
   lowerRange: number;
   upperRange: number;
 
-  constructor(startRgb: number[], endRgb: number[], lowerRange: number, upperRange: number) {
+  constructor(startRgb: number[], endRgb: number[], startAlpha: number, endAlpha: number, lowerRange: number, upperRange: number) {
     this.startColor = this.rgbToColorSpace(startRgb);
     this.endColor = this.rgbToColorSpace(endRgb);
+    this.startAlpha = startAlpha;
+    this.endAlpha = endAlpha;
     this.lowerRange = lowerRange;
     this.upperRange = upperRange;
   }
@@ -64,8 +68,10 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
     // Interpolate in the specific color space
     const interpolated = this.interpolate(this.startColor, this.endColor, factor);
 
+    const interpolatedAlpha = this.startAlpha + (this.endAlpha - this.startAlpha) * factor;
+
     // Convert back to RGB
-    return this.colorSpaceToRgb(interpolated);
+    return [...this.colorSpaceToRgb(interpolated), Math.round(interpolatedAlpha * 255)];
   }
 }
 
@@ -75,6 +81,8 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
 type TwoStopGradientConstructor = new (
   startRgb: number[],
   endRgb: number[],
+  startAlpha: number,
+  endAlpha: number,
   lowerRange: number,
   upperRange: number,
 ) => TwoStopGradient;
@@ -134,6 +142,8 @@ export class BaseGradient {
         new this.TwoStopGradientClass(
           currentColor.rgb,
           nextColor.rgb,
+          currentColor.rgb[3] !== undefined ? currentColor.rgb[3] / 255 : 1,
+          nextColor.rgb[3] !== undefined ? nextColor.rgb[3] / 255 : 1,
           lowerRange,
           upperRange,
         ),

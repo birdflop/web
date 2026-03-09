@@ -46,7 +46,7 @@ function applyWrappers(output: string, rgbStore: typeof rgbDefaults): string {
 
 function normalizeShadowRGB(rgb: number[]): number[] {
   const norm = rgb.map(c => Math.round((c / 255) * 100) / 100);
-  norm.push(1);
+  if (norm[3] === undefined) norm.push(1);
   return norm;
 }
 
@@ -64,13 +64,8 @@ export function getShadowColors(rgbStore: typeof rgbDefaults) {
 }
 
 export function getRGBColorStop(color: ColorStop): RGBColorStop {
-  let rgb: [number, number, number] | [number, number, number, number];
-  rgb = hexToRGB(color.hex);
-  if ('opacity' in color && color.opacity !== undefined) {
-    rgb = [...rgb, color.opacity / 100 * 255];
-  }
   return {
-    rgb,
+    rgb: hexToRGB(color.hex),
     pos: color.pos,
   };
 }

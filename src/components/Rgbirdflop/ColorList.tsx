@@ -1,5 +1,5 @@
 import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
-import { ColorPicker, NumberInput, RangeInput } from '@luminescent/ui-qwik';
+import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
 import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
@@ -187,16 +187,9 @@ export default component$(({ hidden, id = 'text' }: {
             }}
             showInput={false}
             horizontal
+            opacity={id == 'shadow'}
           />
           <div class="flex gap-1 lum-card p-2 flex-col justify-evenly">
-            {id == 'shadow' &&
-              <RangeInput id="memory" min={0} max={100} step={1}
-                value={colors[opened.value]?.opacity} onInput$={(e, el) => {
-                  colors[opened.value].opacity = Number(el.value);
-                }}>
-                {t('rgb.colors.opacity@@Opacity')} ({colors[opened.value]?.opacity} %)
-              </RangeInput>
-            }
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
               value={Math.round(colors[opened.value]?.pos)}

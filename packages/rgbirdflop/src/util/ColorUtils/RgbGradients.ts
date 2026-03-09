@@ -35,11 +35,7 @@ class RgbTwoStopGradient extends BaseTwoStopGradient<number[]> {
   }
 
   protected colorSpaceToRgb(color: number[]): number[] {
-    return [
-      Math.round(color[0]),
-      Math.round(color[1]),
-      Math.round(color[2]),
-    ];
+    return color.map((c) => Math.round(c));
   }
 }
 

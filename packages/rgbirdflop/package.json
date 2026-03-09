@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "echo \"No dev script specified\" && exit 0",
+    "dev": "tsc --watch",
     "lint": "eslint \"src/**/*.ts*\"",
     "test": "echo \"No test specified\" && exit 0"
   },

@@ -49,8 +49,8 @@
     "@builder.io/qwik": "1.18.0",
     "@builder.io/qwik-city": "1.18.0",
     "@eslint/js": "^10.0.1",
-    "@luminescent/ui": "^6.6.0-2",
-    "@luminescent/ui-qwik": "^6.6.0-2",
+    "@luminescent/ui": "^6.8.2",
+    "@luminescent/ui-qwik": "^6.8.2",
     "@modular-forms/qwik": "^0.29.1",
     "@qwik.dev/partytown": "^0.11.2",
     "@shikijs/colorized-brackets": "^4.0.1",
@@ -83,5 +83,5 @@
     "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },
-  "packageManager": "pnpm@10.30.3"
+  "packageManager": "pnpm@10.31.0"
 }
