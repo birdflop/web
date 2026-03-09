@@ -2,7 +2,7 @@ import { component$, useVisibleTask$, useSignal, useOnWindow, $ } from '@builder
 import { Link } from '@builder.io/qwik-city';
 
 import { Anchor, Hoverable, LogoBirdflop } from '@luminescent/ui-qwik';
-import { ShoppingCart, HandCoins, Eye, Globe, Heart, User, Rocket, Server, Star, CheckCircle, AlertTriangle, Box, Settings, PiggyBank } from 'lucide-icons-qwik';
+import { ShoppingCart, HandCoins, Eye, Globe, Heart, Rocket, Server, CheckCircle, AlertTriangle, Box, Settings, PiggyBank } from 'lucide-icons-qwik';
 import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
@@ -10,7 +10,7 @@ import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
 import ExpensesChart from '~/components/home/ExpensesChart';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
-import { testimonials } from '~/components/home/testimonials';
+import Testimonials from '~/components/home/Testimonials';
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -265,46 +265,7 @@ export default component$(() => {
         </div>
       </div>
     </section>
-    <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
-      <Anchor id="testimonials">
-        <h1 id="testimonials" class="mr-2">
-          Testimonials
-        </h1>
-      </Anchor>
-      <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
-        {testimonials.map(({ name, testimonial, link }) => {
-          return <a href={link} key={name}
-            class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-            onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-            onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-            <h3 class="mt-0! mb-2! flex items-center gap-2">
-              <User size={30} /> {name}
-            </h3>
-            <p class="whitespace-normal">
-              {testimonial}
-            </p>
-          </a>;
-        })}
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
-            <Star size={30} /> More
-          </h3>
-          <p>
-            Check out our Trustpilot or Google page for more testimonials.
-          </p>
-          <div class="flex gap-2">
-            <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn lum-bg-blue/50 hover:lum-bg-blue">
-              Trustpilot
-            </a>
-            <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn lum-bg-blue/50 hover:lum-bg-blue">
-              Google
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <Testimonials />
     <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
       <h1>
         Still not convinced?
