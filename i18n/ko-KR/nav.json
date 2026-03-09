@@ -88,6 +88,10 @@
       },
       "title": "리소스"
     },
+    "settings": {
+      "description": "Manage your settings and preferences here.",
+      "title": "Settings"
+    },
     "termsofService": "서비스 약관"
   }
 }

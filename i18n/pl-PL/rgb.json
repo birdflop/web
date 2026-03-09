@@ -5,6 +5,7 @@
       "character": "Znak",
       "charsPer": "Znaków na kolor",
       "color": "Kolor",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Format Własny",
       "disperse": {
         "always": {
@@ -13,17 +14,24 @@
         },
         "title": "Rozprosz"
       },
+      "duplicate": "Duplicate",
       "format": "Format kolorów",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
-        "description": "Włącz jeśli chcesz używać małych kodów koloru.",
-        "title": "Małe kolory kodu"
+        "description": "Włącz jeśli chcesz używać małych liter w kodzie koloru.",
+        "title": "Małe litery w kodzie koloru"
       },
+      "position": "Position",
       "randomize": "Losuj",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "sync": "Sychronizuj z kolorem tekstu",
         "title": "Cień tekstu",
         "warning": "Uwaga: Cień tekstu działa tylko w wypadku uzycia formatu JSON lub MiniMessage!"
       },
+      "shuffle": "Shuffle",
       "title": "Kolory",
       "trimSpaces": {
         "description": "Wyłącz, jeśli używasz pustych podkreśleń / przekreśleń",
@@ -62,6 +70,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Podstawowe",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Stopka",
           "header": "Minecraft Tab Nagłówek",
@@ -71,6 +84,7 @@
       },
       "title": "Tekst Wejściowy"
     },
+    "options": "Options",
     "output": {
       "copied": "Tekst RGB został skopiowany do schowka!",
       "description": "Skopiuj to aby otrzymać swó tekst w formacie RGB!",
@@ -106,6 +120,7 @@
       "pasteHere": "Wklej tutaj",
       "pending": "Szablon wciąż czeka na weryfikację. Może on być niedostępny dla innych użytkowników.",
       "presetData": "Dane Szablonu",
+      "preview": "Preset Preview",
       "publish": "Opublikuj swój szablon!",
       "remove": "Usuń",
       "save": "Zapisz",
@@ -115,14 +130,13 @@
         "title": "Szablon zapisany!",
         "warning": "Zaloguj się aby zapisywać szablony."
       },
-      "showPending": {
-        "title": "Pokaż szablony czekające na weryfikację (NIEBEZPIECZNE)"
-      },
       "showSaved": {
         "description": "Włącz tą opcję jeśli chcesz widzieć tylko szablony zapisane przez ciebie.",
         "title": "Pokaż zapisane szablony"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Nazwa A-Z",
         "nameZA": "Nazwa Z-A",
         "newest": "Od najnowszych",

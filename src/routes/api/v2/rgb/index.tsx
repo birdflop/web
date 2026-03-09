@@ -3,7 +3,7 @@ import { parseParams } from '~/util/dataUtils';
 import { formats, rgbDefaults, generateOutput } from '@birdflop/rgbirdflop';
 
 export const onGet: RequestHandler = ({ json, query }) => {
-  let output = {};
+  let output;
   try {
     const { params } = parseParams(
       Object.fromEntries(query), 'rgb',
@@ -19,7 +19,7 @@ export const onGet: RequestHandler = ({ json, query }) => {
 };
 
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
-  let output = {};
+  let output;
   try {
     const body = await parseBody();
     output = getOutput(body);
@@ -103,10 +103,12 @@ function getOutput(body: any) {
   if (colors && colors.length && typeof colors[0] == 'string') {
     if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
   }
+  body.colors = colors;
   let shadowcolors = body?.shadowcolors;
   if (shadowcolors && shadowcolors.length && typeof shadowcolors[0] == 'string') {
     if (typeof shadowcolors[0] == 'string') shadowcolors = shadowcolors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
   }
+  body.shadowcolors = shadowcolors;
 
   const output = generateOutput({
     ...rgbDefaults,

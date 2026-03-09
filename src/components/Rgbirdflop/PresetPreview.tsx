@@ -3,12 +3,13 @@ import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
-import { savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
+import { deletePreset, savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
+import { useIsAdmin } from '~/routes/layout';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
@@ -26,6 +27,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
   const loading = useSignal(false);
+  const isAdmin = useIsAdmin().value;
 
   const searchParams = new URLSearchParams();
   const params = { ...Preset.preset };
@@ -137,18 +139,6 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         }
       </div>
       <div class="flex-1" />
-      <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
-        class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-2 gap-1 text-orange-300 lum-btn-p-1': true }}>
-        <div q:slot="dropdown" class="flex items-center gap-3">
-          <MousePointer2 size={20} />
-        </div>
-        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </Link>
-        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot='extra-buttons' class="lum-btn w-full lum-bg-transparent rounded-lum-1">
-          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
-        </Link>
-      </SelectMenuRaw>
       <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loading.value} onClick$={async () => {
         loading.value = true;
 
@@ -156,8 +146,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
           if (Preset.id) {
             savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
-            await unsavePreset(Preset.id);
-            if (Preset.saveCount !== undefined) Preset.saveCount--;
+            const result = await unsavePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) - 1;
           }
           else {
             await setUserData({
@@ -169,8 +159,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
           privatePresets.value = [...privatePresets.value, Preset.preset];
           if (Preset.id) {
             savedPresets.value = [...savedPresets.value, Preset];
-            await savePreset(Preset.id);
-            if (Preset.saveCount !== undefined) Preset.saveCount++;
+            const result = await savePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) + 1;
           }
           else {
             await setUserData({
@@ -182,7 +172,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
         loading.value = false;
       }}>
-        {!loading.value && Preset.saveCount}
+        {!loading.value && Preset.saves}
         {loading.value && <div class="lum-loading w-3 h-3" />}
         {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
           || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
@@ -193,12 +183,35 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             <Save size={20}  />
           </span>}
       </button>
-      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-1" onClick$={() => {
+
+      <SelectMenuRaw id={`use-${Preset.name}-${Preset.author}`} hover customDropdown
+        class={{ 'hidden sm:flex text-sm lum-bg-transparent rounded-lum-2 gap-1 text-orange-300 lum-btn-p-1': true }}>
+        <div q:slot="dropdown" class="flex items-center gap-3">
+          <MousePointer2 size={20} />
+        </div>
+        <Link href={`/resources/rgb?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        </Link>
+        <Link href={`/resources/animtab?${searchParams.toString()}`} q:slot="extra-buttons" class="lum-btn w-full lum-bg-transparent rounded-lum-1">
+          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        </Link>
+      </SelectMenuRaw>
+
+      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-2 lum-btn-p-1" onClick$={() => {
         publishRefs.modalRef.value?.showModal();
         publishRefs.selectedPreset.value = JSON.stringify(Preset.preset);
       }}>
-        <Send size={20} /> {t('rgb.presets.publish@@Publish')}
+        <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
       </button>}
+
+      {isAdmin && Preset.pending &&
+        <button class="lum-btn text-sm lum-bg-red/50 hover:lum-bg-red rounded-lum-2 lum-btn-p-1" onClick$={async () => {
+          if (Preset.id) await deletePreset(Preset.id);
+          window.location.reload();
+        }}>
+          <Trash size={20} />
+        </button>
+      }
     </div>
   </div>;
 });

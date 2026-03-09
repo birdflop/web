@@ -10,16 +10,15 @@ on:
       - 'release-please-config.json'
 
 permissions:
+  id-token: write  # Required for OIDC
   contents: write
   pull-requests: write
+  packages: write
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      packages: write
+
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -28,38 +27,38 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # Optional: You can add steps here to publish packages after release is created
-      # This will only run when a release is actually published
       - name: Checkout code
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: actions/checkout@v4
 
       - name: Setup pnpm
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.27.0
 
       - name: Setup Node.js
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          registry-url: 'https://npm.pkg.github.com'
+          node-version: 24
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@birdflop'
 
       - name: Install dependencies
-        if: ${{ steps.release.outputs.release_created }}
-        run: pnpm install
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        working-directory: packages/rgbirdflop
+        run: pnpm install --frozen-lockfile
 
       - name: Build package
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: pnpm build
 
-      - name: Publish to GitHub Packages
+      - name: Publish to npm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
-        run: npm publish
+        run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
+          # https://github.com/actions/setup-node/blob/633bb92bc0aabcae06e8ea93b85aecddd374c402/src/authutil.ts#L57
+          NODE_AUTH_TOKEN: ""

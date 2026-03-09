@@ -1,12 +1,12 @@
 import { ColorAnimatedGradient, GradientType } from './ColorUtils';
-import { hexToRGB, rgbToHex } from './Colors';
-import { sortColors } from './RGBUtils';
+import { rgbToHex } from './Colors';
+import { getRGBColorStop, sortColors } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
 export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   if (rgbStore.colors.length < 2) return { OutputArray: [], frames: [] };
 
-  const colors = rgbStore.colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+  const colors = rgbStore.colors.map(getRGBColorStop);
   const text = rgbStore.text ?? 'Birdflop';
 
   let loopAmount;
@@ -90,7 +90,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
           const animatedColors = [];
 
           for (let i = 0; i < rgbStore.colors.length; i++) {
-            const colors = rgbStore.colors.map(color => ({ rgb: hexToRGB(color.hex), pos: color.pos }));
+            const colors = rgbStore.colors.map(getRGBColorStop);
             const length = text.length * animtabStore.length / rgbStore.colorlength;
 
             const offset = (n + i * (length / rgbStore.colors.length)) % length;
@@ -180,7 +180,7 @@ function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabS
   if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
 
   const animatedColors = colors.map((color, i) => {
-    const colorArray = rgbStore.colors.map(c => ({ rgb: hexToRGB(c.hex), pos: c.pos }));
+    const colorArray = rgbStore.colors.map(getRGBColorStop);
     const length = text.length * animtabStore.length / rgbStore.colorlength;
     const offset = (frameIndex + i * (length / colors.length)) % length;
     const shiftedGradient = new ColorAnimatedGradient(colorArray, length, offset, rgbStore.gradientType as GradientType);
@@ -213,7 +213,7 @@ function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabS
 }
 
 export function AnimationOutput(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
-  let FinalOutput = '';
+  let FinalOutput;
 
   const AnimFrames = generateAnimTABFrames(rgbStore, animtabStore);
   let { OutputArray } = AnimFrames;

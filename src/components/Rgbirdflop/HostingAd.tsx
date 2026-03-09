@@ -61,12 +61,12 @@ export default component$<HostingAdProps>(({ variant, position }) => {
   return (
     <div class={position === 'Left' ? 'hidden 2xl:flex justify-center' : 'hidden 3xl:flex justify-center'}>
       <a
-        href='/#plans'
-        class='sticky top-24 w-96 h-144 rounded-lg bg-cover bg-center opacity-70 hover:opacity-100 transition-opacity'
+        href="/#plans"
+        class="sticky top-24 w-96 h-144 rounded-lg bg-cover bg-center opacity-70 hover:opacity-100 transition-opacity"
         style={{ backgroundImage: `url(${variant.image})` }}
-        aria-label='View Birdflop plans'
-        data-umami-event='Hosting Ad Click'
-        data-umami-event-page='RGBirdflop'
+        aria-label="View Birdflop plans"
+        data-umami-event="Hosting Ad Click"
+        data-umami-event-page="RGBirdflop"
         data-umami-event-action={`${position} Ad`}
         data-umami-event-variant={variant.label}
         data-ad-position={position}

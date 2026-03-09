@@ -119,69 +119,67 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex mx-auto max-w-6xl px-6 justify-center min-h-svh pt-20">
-      <div class="min-h-15 w-full">
-        <h1 class='flex gap-3 text-2xl! items-center my-2!'>
-          <Eye size={32} />
-          {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
-        </h1>
-        <p class="mb-4 border-b border-lum-border/10 pb-4">
-          {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
-        </p>
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+        <Eye size={32} />
+        {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
+      </h1>
+      <p class="mb-4 border-b border-lum-border/10 pb-4">
+        {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
+      </p>
 
-        <Input readOnly playerName="AnimPreview">
-          {(() => {
-            if (!animprevStore.frames[animprevStore.frame]) return '';
-            const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
-            const pattern2 = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
-            const spans = animprevStore.frames[animprevStore.frame].match(pattern);
-            let color = '#ffffff';
-            return spans?.map((string: string, i: number) => {
-              const result = string.match(pattern2);
-              if (!result) return '';
-              console.log(result);
-              color = result[2] ? `#${result[2]}` : color;
+      <Input readOnly playerName="AnimPreview">
+        {(() => {
+          if (!animprevStore.frames[animprevStore.frame]) return '';
+          const pattern = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
+          const pattern2 = /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
+          const spans = animprevStore.frames[animprevStore.frame].match(pattern);
+          let color = '#ffffff';
+          return spans?.map((string: string, i: number) => {
+            const result = string.match(pattern2);
+            if (!result) return '';
+            console.log(result);
+            color = result[2] ? `#${result[2]}` : color;
 
-              const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
-              const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
-              const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-              Object.keys(minecraftColors).forEach(key => {
-                if (result[3]?.includes(key)) color = minecraftColors[key as keyof typeof minecraftColors];
-              });
-              return (
-                <span key={`char${i}`} style={{
-                  color,
-                  textShadow: `${shadowLength} 0 ${shadowColor}`,
-                }} class={{
-                  'underline': result[3]?.includes('&n'),
-                  'strikethrough': result[3]?.includes('&m'),
-                  'underline-strikethrough': result[3]?.includes('&n') && result[3]?.includes('&m'),
-                  'font-mc-bold': result[3]?.includes('&l'),
-                  'font-mc-italic': result[3]?.includes('&o'),
-                  'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
-                }}>
-                  {result[result.length - 1]}
-                </span>
-              );
+            const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
+            const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
+            const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+            Object.keys(minecraftColors).forEach(key => {
+              if (result[3]?.includes(key)) color = minecraftColors[key as keyof typeof minecraftColors];
             });
-          })()}
-        </Input>
+            return (
+              <span key={`char${i}`} style={{
+                color,
+                textShadow: `${shadowLength} 0 ${shadowColor}`,
+              }} class={{
+                'underline': result[3]?.includes('&n'),
+                'strikethrough': result[3]?.includes('&m'),
+                'underline-strikethrough': result[3]?.includes('&n') && result[3]?.includes('&m'),
+                'font-mc-bold': result[3]?.includes('&l'),
+                'font-mc-italic': result[3]?.includes('&o'),
+                'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
+              }}>
+                {result[result.length - 1]}
+              </span>
+            );
+          });
+        })()}
+      </Input>
 
-        <div class="flex flex-col gap-1 mb-2">
-          <label for="animation">
-            {t('animtab.yamlInput@@YAML Input')}
-          </label>
-          <textarea id="animation"
-            class={{ 'lum-input h-96 font-mono': true }}
-            value={animprevStore.yaml}
-            onInput$={(e, el) => { animprevStore.yaml = el.value; }}
-          />
-        </div>
-
-        <p class="lum-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
-          {animprevStore.frames[animprevStore.frame]}
-        </p>
+      <div class="flex flex-col gap-1 mb-2">
+        <label for="animation">
+          {t('animtab.yamlInput@@YAML Input')}
+        </label>
+        <textarea id="animation"
+          class={{ 'lum-input h-96 font-mono': true }}
+          value={animprevStore.yaml}
+          onInput$={(e, el) => { animprevStore.yaml = el.value; }}
+        />
       </div>
+
+      <p class="lum-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
+        {animprevStore.frames[animprevStore.frame]}
+      </p>
     </section>
   );
 });

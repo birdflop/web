@@ -5,6 +5,7 @@
       "character": "문자",
       "charsPer": "색상당 문자",
       "color": "색상",
+      "copyFromText": "Copy from text colors",
       "customFormat": "사용자 정의 형식",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "분산"
       },
+      "duplicate": "Duplicate",
       "format": "색상 형식",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "소문자 16진수 코드를 사용하려면 이것을 켜세요.",
         "title": "소문자 16진수 코드"
       },
+      "position": "Position",
       "randomize": "무작위화",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "텍스트 그림자",
         "warning": "경고: 텍스트 그림자는 JSON 형식에서만 작동합니다!"
       },
+      "shuffle": "Shuffle",
       "title": "색상",
       "trimSpaces": {
         "description": "빈 밑줄/취소선을 사용하는 경우 이것을 끄세요",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "마인크래프트 채팅",
         "default": "기본값",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "마인크래프트 탭 푸터",
           "header": "마인크래프트 탭 헤더",
@@ -70,6 +83,7 @@
       },
       "title": "입력 텍스트"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB 텍스트가 클립보드에 성공적으로 복사되었습니다.",
       "description": "RGB 텍스트를 위해 이것을 복사하여 붙여넣으세요!",
@@ -90,7 +104,7 @@
         "title": "사전 설정을 성공적으로 가져왔습니다!"
       },
       "invalid": {
-        "description": "가져오려고 시도한 사전 설정과 함께 https://discord.gg/9vUZ9MREVz에 이것을 보고해 주세요.",
+        "description": "가져오려고 시도한 사전 설정과 함께 https://discord.gg/nmgtX5z 에 이것을 보고해 주세요.",
         "title": "잘못된 사전 설정"
       },
       "myPrivate": "내 개인 RGBirdflop 사전 설정",
@@ -105,6 +119,7 @@
       "pasteHere": "여기에 붙여넣기",
       "pending": "이 사전 설정은 검토 대기 중이며 아직 다른 사용자에게 제공되지 않을 수 있습니다.",
       "presetData": "사전 설정 데이터",
+      "preview": "Preset Preview",
       "publish": "자신만의 사전 설정 게시",
       "remove": "제거",
       "save": "저장",
@@ -114,14 +129,13 @@
         "title": "사전 설정 저장됨!",
         "warning": "사전 설정을 영구적으로 저장하려면 로그인하세요."
       },
-      "showPending": {
-        "title": "대기 중인 사전 설정 표시 (매우 위험함)"
-      },
       "showSaved": {
         "description": "저장된 사전 설정만 표시하려면 이것을 켜세요.",
         "title": "저장된 사전 설정 표시"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "이름 A-Z",
         "nameZA": "이름 Z-A",
         "newest": "최신순",

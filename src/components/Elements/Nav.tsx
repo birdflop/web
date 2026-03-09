@@ -2,15 +2,19 @@ import { component$, useContext } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow } from 'lucide-icons-qwik';
+import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow, Settings } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
 import Accordion from './Accordion';
-import { openItemsContext } from '~/routes/layout';
-import { ThemeToggle } from './ThemeToggle';
+import { openItemsContext, SettingsContext } from '~/routes/layout';
+import { setCookies, setUserData } from '~/util/dataUtils';
+
+// Links used in multiple places, defined here to avoid duplication and potential inconsistencies
+export const donateLink = 'https://www.paypal.com/US/fundraiser/charity/5036975';
+export const discordLink = 'https://discord.gg/nmgtX5z';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -23,6 +27,7 @@ export default component$(() => {
   const session = useSession();
 
   const openItemsStore = useContext(openItemsContext);
+  const settingsStore = useContext(SettingsContext);
 
   return (
     <Nav fixed colorClass="lum-bg-nav-bg border-b-lum-border/10 shadow-lg">
@@ -39,7 +44,7 @@ export default component$(() => {
       <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex">
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <SelectMenuRaw id="nav-hosting" q:slot='end' hover customDropdown panelClass='lum-bg-nav-bg'
+      <SelectMenuRaw id="nav-hosting" q:slot="end" hover customDropdown panelClass="lum-bg-nav-bg"
         class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
@@ -57,7 +62,7 @@ export default component$(() => {
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw id="nav-resources" q:slot='end' hover customDropdown panelClass='lum-bg-nav-bg'
+      <SelectMenuRaw id="nav-resources" q:slot="end" hover customDropdown panelClass="lum-bg-nav-bg"
         class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
@@ -81,33 +86,43 @@ export default component$(() => {
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw align="right" q:slot='end' class={{
+      <SelectMenuRaw align="right" q:slot="end" class={{
         'hidden': !loc.url.pathname.includes('resources'),
         'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-      }} id="lang-picker" customDropdown panelClass='lum-bg-nav-bg'
+      }} id="lang-picker" customDropdown panelClass="lum-bg-nav-bg"
       values={config.supportedLocales.map(value => (
         {
           name: languages[value.lang as keyof typeof languages],
           value: value.lang,
         }
-      ))} onChange$={(e, el) => {
-        document.cookie = `locale=${JSON.stringify(config.supportedLocales.find(locale => locale.lang == el.value))};max-age=86400;path=/`;
-        location.reload();
+      ))} onChange$={async (e, el) => {
+        settingsStore.locale = el.value as keyof typeof languages;
+        setCookies('settings', settingsStore);
+        await setUserData({ settings: settingsStore });
+        window.location.reload();
       }}>
-        <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot='dropdown'>
+        <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">
           {locale.lang.split('-')[0]}
         </span>
-        <Globe size={20} q:slot='dropdown' />
+        <Globe size={20} q:slot="dropdown" />
       </SelectMenuRaw>
-      <ThemeToggle variant="compact" q:slot='end' class="hover:lum-bg-nav-bg" />
-      <div q:slot='end' class="hidden sm:flex gap-2">
+      <Link
+        q:slot="end"
+        href="/settings"
+        class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg"
+        aria-label={t('nav.settings.title@@Settings')}
+        title={t('nav.settings.title@@Settings')}
+      >
+        <Settings size={20} aria-hidden="true" />
+      </Link>
+      <div q:slot="end" class="hidden sm:flex gap-2">
         <SocialButtons />
       </div>
       {session.value && session.value.user &&
-        <SelectMenuRaw align="right" q:slot='end' class={{
+        <SelectMenuRaw align="right" q:slot="end" class={{
           'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-        }} id="profile" customDropdown panelClass='lum-bg-nav-bg'>
-          <p q:slot='dropdown' class="flex items-center gap-2 text-lum-text">
+        }} id="profile" customDropdown panelClass="lum-bg-nav-bg">
+          <p q:slot="dropdown" class="flex items-center gap-2 text-lum-text">
             {session.value.user.image &&
               <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />
             }
@@ -130,7 +145,7 @@ export default component$(() => {
         </SelectMenuRaw>
       }
       {!session.value &&
-        <Form action={signIn} q:slot='end'>
+        <Form action={signIn} q:slot="end">
           <input type="hidden" name="providerId" value="discord" />
           <input
             type="hidden"
@@ -155,7 +170,7 @@ export default component$(() => {
         'transition-all duration-200 overflow-hidden': true,
         'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('nav-hosting'),
         'max-h-screen opacity-100 mt-1': openItemsStore.items.includes('nav-hosting'),
-      }} q:slot='mobile'>
+      }} q:slot="mobile">
         <a href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
@@ -178,7 +193,7 @@ export default component$(() => {
         'transition-all duration-200 overflow-hidden': true,
         'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('nav-resources'),
         'max-h-screen opacity-100 mt-1': openItemsStore.items.includes('nav-resources'),
-      }} q:slot='mobile'>
+      }} q:slot="mobile">
         <Link href="/resources/rgb" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
@@ -199,7 +214,7 @@ export default component$(() => {
         </Link>
       </div>
 
-      <div q:slot='mobile' class="flex justify-evenly">
+      <div q:slot="mobile" class="flex justify-evenly">
         <SocialButtons />
       </div>
 
@@ -212,7 +227,7 @@ export const SocialButtons = component$(() => {
     <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
       <Github size={20} />
     </a>
-    <a href="https://discord.gg/nmgtX5z" title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
+    <a href={discordLink} title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link" data-umami-source="nav">
       <LogoDiscord size={20} />
     </a>
   </>;

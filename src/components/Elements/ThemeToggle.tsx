@@ -1,9 +1,9 @@
 import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
 import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
-import { Moon, Sun, Sparkles, Battery } from 'lucide-icons-qwik';
+import { Moon, Sun, Sparkles, Battery, Smile } from 'lucide-icons-qwik';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import { SettingsContext } from '~/routes/layout';
-import { setCookies } from '~/util/dataUtils';
+import { setCookies, setUserData } from '~/util/dataUtils';
 
 export interface ThemeToggleProps {
   variant?: 'compact' | 'full' | 'dropdown';
@@ -79,17 +79,25 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         description: 'Full black theme for OLED',
         gradient: 'from-black to-gray-900',
       },
+      {
+        value: 'simplymc',
+        label: 'SimplyMC',
+        icon: Smile,
+        description: 'SimplyMC dark theme for the nostalgia',
+        gradient: 'from-purple-600 to-purple-900',
+      },
     ];
 
     const CurrentThemeOption =
       themeOptions.find((option) => option.value === themeStore.currentTheme) ||
       themeOptions[0];
 
-    const handleThemeChange = $((newTheme: ThemeName) => {
+    const handleThemeChange = $(async (newTheme: ThemeName) => {
       // Apply theme changes directly without reload
       if (typeof document !== 'undefined') {
         settingsStore.theme = newTheme;
         setCookies('settings', settingsStore);
+        await setUserData({ settings: settingsStore });
 
         // Apply theme immediately
         const root = document.documentElement;
@@ -159,21 +167,21 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
           <div q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && <>
-              <Moon size={20} class="hidden dark:flex" />
-              <Sun size={20} class="dark:hidden flex" />
+              <Moon size={24} class="hidden dark:flex" />
+              <Sun size={24} class="dark:hidden flex" />
             </>}
             <CurrentThemeOption.icon size={
               CurrentThemeOption.value === 'auto'
-                ? 10
-                : 20
+                ? 12
+                : 24
             }
             class={
               CurrentThemeOption.value === 'auto'
-                ? 'absolute top-2 left-7'
+                ? 'absolute top-1.5 left-8'
                 : ''
             } />
             {(variant === 'full' || showLabel) && (
-              <span class="text-sm">
+              <span>
                 {CurrentThemeOption.label}
               </span>
             )}

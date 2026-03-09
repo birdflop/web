@@ -1,5 +1,5 @@
 import { rgbToHsl, interpolateHsl, hslToRgb, type HSL } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
+import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * HSL-based gradient classes using intuitive color interpolation.
@@ -13,7 +13,7 @@ import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
  * Ideal for UI animations and when perceptual uniformity isn't critical.
  */
 export class HslGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, HslTwoStopGradient);
   }
 }
@@ -43,7 +43,7 @@ class HslTwoStopGradient extends BaseTwoStopGradient<HSL> {
  * Great for UI animations, loading indicators, and when ease of use trumps perceptual accuracy.
  */
 export class HslAnimatedGradient extends HslGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

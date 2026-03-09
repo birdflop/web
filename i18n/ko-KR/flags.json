@@ -51,6 +51,10 @@
       "label": "GUI 없음"
     },
     "memory": {
+      "calcOverhead": {
+        "description": "This is recommended to avoid out-of-memory issues on your server.nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.",
+        "title": "Calculate Overhead"
+      },
       "description": "서버에 할당할 메모리(RAM)의 양.",
       "label": "메모리"
     },

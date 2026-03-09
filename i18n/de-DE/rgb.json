@@ -5,6 +5,7 @@
       "character": "Zeichen",
       "charsPer": "Zeichen pro Farbe",
       "color": "Farbe",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Benutzerdefiniertes Format",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "Zerstreuen"
       },
+      "duplicate": "Duplicate",
       "format": "Farbformat",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
         "title": "Kleingeschriebene Hex-Codes"
       },
+      "position": "Position",
       "randomize": "Randomisieren",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Textschatten",
         "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },
+      "shuffle": "Shuffle",
       "title": "Farben",
       "trimSpaces": {
         "description": "Deaktivieren falls sie leere Unterstreichung/Durchstreichung nutzen.",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "Minecraft Chat",
         "default": "Standard",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Fußzeile",
           "header": "Minecraft Tab Kopfzeile",
@@ -108,6 +121,7 @@
       "pasteHere": "Hier einfügen",
       "pending": "Diese Voreinstellung befindet sich noch in der Überarbeitung und ist möglicherweise noch nicht für andere Benutzer verfügbar.",
       "presetData": "Voreingestellte Daten",
+      "preview": "Preset Preview",
       "publish": "Veröffentlichen Sie Ihre eigene Voreinstellung",
       "remove": "Entfernen",
       "save": "Speichern",
@@ -117,14 +131,13 @@
         "title": "Voreinstellung gespeichert!",
         "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
       },
-      "showPending": {
-        "title": "Ausstehende Voreinstellungen anzeigen (SEHR GEFÄHRLICH)"
-      },
       "showSaved": {
         "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
         "title": "Gespeicherte Voreinstellungen anzeigen"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
         "newest": "Neuestes zuerst",

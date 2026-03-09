@@ -1,7 +1,5 @@
-ignoredBuiltDependencies:
-  - '@prisma/client'
-  - '@prisma/engines'
-  - prisma
+packages:
+  - packages/*
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
@@ -9,6 +7,3 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
   - workerd
-
-packages:
-  - 'packages/*'

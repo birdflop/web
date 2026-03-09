@@ -3,25 +3,39 @@ import { component$, createContextId, Signal, Slot, useContextProvider, useSigna
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
 import Nav from '~/components/Elements/Nav';
-import { Link, routeLoader$, useLocation } from '@builder.io/qwik-city';
+import { Link, RequestEvent, routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
 import { Cookie } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from '~/util/themeUtil';
 
 import { Notification, NotificationContext } from '~/util/Notification';
-import { getCookies, setCookies } from '~/util/dataUtils';
+import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
+import { languages } from '~/speak-config';
 
-type Settings = {
+export type Settings = {
   cookies?: boolean;
   theme?: ThemeName;
+  locale?: keyof typeof languages;
+  flopbird: {
+    toggle: boolean;
+  }
 }
 
-export const useAdmins = routeLoader$(({ env }) => {
-  const adminIds = env.get('ADMINS')?.split(',').map(id => id.trim());
-  return adminIds;
+export const isAdmin = server$(function(props?: {
+  env: RequestEvent['env'];
+  sharedMap: RequestEvent['sharedMap'];
+}) {
+  const { env, sharedMap } = props || this;
+
+  const session = sharedMap.get('session');
+  const admins = env.get('ADMINS')?.split(',').map((id) => id.trim()) || [];
+
+  return admins.includes(session?.user?.id);
 });
+
+export const useIsAdmin = routeLoader$(async (props) => await isAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {
@@ -37,7 +51,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
       currentTheme: theme,
       ...(theme !== 'auto' &&
         {
-          isDark: theme === 'dark',
+          isDark: theme === 'dark' || theme === 'black' || theme === 'simplymc',
           css: themes[theme],
           cssString: getCSSString(theme),
         }
@@ -54,14 +68,16 @@ export default component$(() => {
   const loc = useLocation();
 
   // Select background images
-  const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
-  const LightBackground = lightBackgrounds[Math.floor(Math.random() * lightBackgrounds.length)];
+  const Background = Backgrounds[1];
+  const LightBackground = lightBackgrounds[1];
 
-  // bird mascot refs
+  // bird mascot
   const birdRef = useSignal<HTMLCanvasElement>();
   const anchorElementRef = useSignal<HTMLDivElement>();
   const elementIdToLandOn = useSignal<string>();
   useContextProvider(BirdLandContext, elementIdToLandOn);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
 
   // Notification store
   const notifications = useStore([] as Notification[]);
@@ -131,21 +147,20 @@ export default component$(() => {
     }
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
-
   return <>
     <style dangerouslySetInnerHTML={`:root { ${themeStore.cssString} }`}></style>
     <Nav />
 
-    <canvas ref={birdRef} class={{
-      'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
-    }}/>
+    {settingsStore.flopbird?.toggle && (
+      <canvas ref={birdRef} class={{
+        'fixed inset-0 blur-none overflow-hidden z-10 pointer-events-none': true,
+      }}/>
+    )}
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
       <Background id="bg" class={{
         'hidden dark:flex': themeStore.isDark === undefined,
-        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
         'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
       }}/>
@@ -153,17 +168,21 @@ export default component$(() => {
     {(themeStore.isDark === undefined || !themeStore.isDark) &&
       <LightBackground id="bg" class={{
         'flex dark:hidden': themeStore.isDark === undefined,
-        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover brightness-50': true,
+        'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
-        'blur-xl! bottom-0! opacity-5 scale-150': loc.url.pathname != '/',
+        'blur-xl! bottom-0! opacity-0 scale-150': loc.url.pathname != '/',
       }}/>
     }
     <Slot />
     <div ref={anchorElementRef} class={{
       'fixed flex flex-col gap-1 max-w-full md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+      'bottom-4 right-4': !settingsStore.flopbird?.toggle,
     }} id="notifications" style={{
       '--lum-border-radius': '1rem',
-      transform: 'translate(-100%, -100%)',
+
+      ...settingsStore.flopbird?.toggle ?{
+        transform: 'translate(-100%, -100%)',
+      } : {},
     }}>
       {notifications.map((notification) => {
         if (!notification) return null;
@@ -242,15 +261,17 @@ export default component$(() => {
           </Link>
         </div>
         <div class="flex flex-wrap items-center justify-end gap-2">
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={() => {
+          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2" onClick$={async () => {
             settingsStore.cookies = false;
             setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
           }}>
             {t('nav.cookies.optOut@@Reject')}
           </button>
-          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={() => {
+          <button class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2" onClick$={async () => {
             settingsStore.cookies = true;
             setCookies('settings', settingsStore);
+            await setUserData({ settings: settingsStore });
           }}>
             {t('nav.cookies.acknowledge@@Accept')}
           </button>

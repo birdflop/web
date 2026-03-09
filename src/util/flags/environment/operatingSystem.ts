@@ -28,10 +28,13 @@ function getMemory(memory: number, isContainer = false) {
 }
 
 function getJava(config: Record<AvailableConfig | 'existingFlags', any>): string {
+  let ram = config.calcOverhead ? Math.ceil((11 * config.memory / 12 - 1200) / 100) * 100 : config.memory;
+  if (ram < 512) ram = 512;
+
   const base = [
     'java',
-    `-Xms${config.memory}M`,
-    `-Xmx${config.memory}M`,
+    `-Xms${ram}M`,
+    `-Xmx${ram}M`,
     ...config.existingFlags,
     '-jar',
     config.fileName,

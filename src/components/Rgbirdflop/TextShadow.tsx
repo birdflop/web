@@ -43,7 +43,7 @@ export default component$(({ hidden }: {
         <div class="py-2 px-4">
           <ColorMap id="shadow"/>
         </div>
-        <ColorList id="shadow" hidden={hidden}/>
+        <ColorList id="shadow"/>
       </div>
     </div>
   );

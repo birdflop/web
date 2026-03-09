@@ -1,5 +1,11 @@
 import type { GradientType } from './ColorUtils';
 
+export type ColorStop = {
+  hex: string;
+  pos: number;
+  opacity?: number;
+};
+
 export interface format {
   color: string;
   char?: string;
@@ -60,8 +66,8 @@ export const rgbDefaults = {
   colors: [
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
-  ],
-  shadowcolors: null as null | Array<{ hex: string; pos: number }>,
+  ] as ColorStop[],
+  shadowcolors: null as null | ColorStop[],
   colorlength: 1,
   text: 'Birdflop',
   format: formats[1],

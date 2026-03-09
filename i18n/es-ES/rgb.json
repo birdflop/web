@@ -5,6 +5,7 @@
       "character": "Carácter",
       "charsPer": "Caracteres por color",
       "color": "Color",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "Dispersar"
       },
+      "duplicate": "Duplicate",
       "format": "Formato de color",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Active esta opción si desea utilizar códigos hexadecimales en minúsculas.",
         "title": "Códigos hexadecimales en minúsculas"
       },
+      "position": "Position",
       "randomize": "Aleatorizar",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Sombra de texto",
         "warning": "Advertencia: La sombra de texto sólo funciona con formato JSON o MiniMessage."
       },
+      "shuffle": "Shuffle",
       "title": "Colores",
       "trimSpaces": {
         "description": "Desactívalo si utilizas subrayados / tachados vacíos.",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "Chat Minecraft",
         "default": "Por defecto",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Pie de pestaña Minecraft",
           "header": "Minecraft Tab Header",
@@ -70,6 +83,7 @@
       },
       "title": "Texto de entrada"
     },
+    "options": "Options",
     "output": {
       "copied": "El texto RGB se ha copiado correctamente en el portapapeles.",
       "description": "Copie y pegue esto para texto RGB",
@@ -105,6 +119,7 @@
       "pasteHere": "Pegar aquí",
       "pending": "Este preajuste está pendiente de revisión y puede que aún no esté disponible para otros usuarios.",
       "presetData": "Datos preestablecidos",
+      "preview": "Preset Preview",
       "publish": "Publique su propio preajuste",
       "remove": "Eliminar",
       "save": "Guardar",
@@ -114,14 +129,13 @@
         "title": "¡Preajuste guardado!",
         "warning": "Inicia sesión para guardar los preajustes de forma permanente."
       },
-      "showPending": {
-        "title": "Mostrar preselecciones pendientes (MUY PELIGROSO)"
-      },
       "showSaved": {
         "description": "Actívalo para mostrar sólo los preajustes guardados.",
         "title": "Mostrar preajustes guardados"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Nombre A-Z",
         "nameZA": "Nombre Z-A",
         "newest": "Lo más nuevo primero",

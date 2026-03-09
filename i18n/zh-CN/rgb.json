@@ -5,6 +5,7 @@
       "character": "字符",
       "charsPer": "每种颜色的字符数",
       "color": "颜色",
+      "copyFromText": "Copy from text colors",
       "customFormat": "自定义格式",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "分散"
       },
+      "duplicate": "Duplicate",
       "format": "颜色格式",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "如果您想使用小写十六进制代码，请开启此选项。",
         "title": "小写十六进制代码"
       },
+      "position": "Position",
       "randomize": "随机化",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "文本阴影",
         "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },
+      "shuffle": "Shuffle",
       "title": "颜色",
       "trimSpaces": {
         "description": "如果您使用空的下划线/删除线，请关闭此选项",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "Minecraft 聊天",
         "default": "默认",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab 页脚",
           "header": "Minecraft Tab 页眉",
@@ -70,6 +83,7 @@
       },
       "title": "输入文本"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB 文本已成功复制到您的剪贴板。",
       "description": "复制粘贴此内容以获得 RGB 文本！",
@@ -90,7 +104,7 @@
         "title": "预设导入成功！"
       },
       "invalid": {
-        "description": "请将此问题报告给 https://discord.gg/9vUZ9MREVz，并附上您尝试导入的预设。",
+        "description": "请将此问题报告给 https://discord.gg/nmgtX5z",
         "title": "无效预设"
       },
       "myPrivate": "我的私人 RGBirdflop 预设",
@@ -105,6 +119,7 @@
       "pasteHere": "在此粘贴",
       "pending": "此预设正在等待审核，可能尚未对其他用户可用。",
       "presetData": "预设数据",
+      "preview": "Preset Preview",
       "publish": "发布您自己的预设",
       "remove": "删除",
       "save": "保存",
@@ -114,14 +129,13 @@
         "title": "预设已保存！",
         "warning": "请登录以永久保存预设。"
       },
-      "showPending": {
-        "title": "显示待审核的预设（非常危险）"
-      },
       "showSaved": {
         "description": "开启此选项以仅显示您已保存的预设。",
         "title": "显示已保存的预设"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "名称 A-Z",
         "nameZA": "名称 Z-A",
         "newest": "最新优先",

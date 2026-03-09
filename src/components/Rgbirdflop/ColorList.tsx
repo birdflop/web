@@ -1,8 +1,8 @@
 import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
-import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
+import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB, rgbToHex, invertRgbColor } from '@birdflop/rgbirdflop';
+import { ArrowRightLeft, ChevronDown, ChevronUp, Combine, Copy, Dices, Eclipse, MoveHorizontal, Shuffle, Trash } from 'lucide-icons-qwik';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
@@ -79,27 +79,75 @@ export default component$(({ hidden, id = 'text' }: {
       >
         {t('rgb.colors.amount@@Color Amount')}
       </NumberInput>
-      <div class="flex gap-1">
+      <div class="flex gap-1 *:w-full">
         <button class={{
-          'lum-btn p-2 rounded-r-sm': true,
-          'w-full': rgbStore.disperse,
+          'lum-btn p-1 rounded-r-sm justify-center': true,
         }} onClick$={() => {
           const newColors = colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           rgbStore[colorsKey] = newColors;
-        }}>
-          <Dices size={20} /> {rgbStore.disperse && <span>
-            {t('rgb.colors.randomize@@Randomize')}
-          </span>}
+        }} title={t('rgb.colors.randomize@@Randomize')}>
+          <Dices size={20} />
+        </button>
+        {id == 'shadow' &&
+          <button class={{
+            'lum-btn p-1 rounded-l-sm justify-center': true,
+            'rounded-sm': !rgbStore.disperse,
+          }} onClick$={() => {
+            rgbStore[colorsKey] = rgbStore.colors;
+          }} title={t('rgb.colors.copyFromText@@Copy from text colors')}>
+            <Combine size={20} />
+          </button>
+        }
+        <button class={{
+          'lum-btn p-1 rounded-l-sm justify-center': true,
+          'rounded-sm': !rgbStore.disperse,
+        }} disabled={colors.length >= rgbStore.text.length} onClick$={() => {
+          const newColors = [
+            ...colors,
+            ...colors,
+          ];
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.duplicate@@Duplicate')}>
+          <Copy size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-1 rounded-sm justify-center': true,
+        }} onClick$={() => {
+          const newColors = colors.reverse().map(color => ({ hex: color.hex, pos: 100 - color.pos }));
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.reverse@@Reverse')}>
+          <ArrowRightLeft size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-1 rounded-sm justify-center': true,
+        }} disabled={colors.length < 3} onClick$={() => {
+          const shuffledColors = colors.slice(0).sort(() => Math.random() - 0.5);
+          const newColors = shuffledColors.map((color, i) => ({ hex: color.hex, pos: colors[i].pos }));
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.shuffle@@Shuffle')}>
+          <Shuffle size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-1 rounded-l-sm justify-center': true,
+          'rounded-sm': !rgbStore.disperse,
+        }} onClick$={() => {
+          const newColors = colors.map(color => {
+            const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
+            return { ...color, hex: `#${invertedHex}` };
+          });
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.invert@@Invert')}>
+          <Eclipse size={20} />
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={
+          <button class="lum-btn p-1 rounded-l-sm justify-center" disabled={
             !colors.find((color, i) => {
               return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
             })}
           onClick$={() => {
             rgbStore[colorsKey] = disperseColors(colors);
-          }}>
-            <Ellipsis size={20} /> {t('rgb.colors.disperse.title@@Disperse')}
+          }} title={t('rgb.colors.disperse.title@@Disperse')}>
+            <MoveHorizontal size={20} />
           </button>
         }
       </div>
@@ -118,9 +166,9 @@ export default component$(({ hidden, id = 'text' }: {
               <ChevronDown size={20} />
             </button>
           </div>
-          <div class="flex flex-col justify-end ml-1">
+          <div class="flex flex-col justify-end">
             <label for={`colorlist${id}-color-${i + 1}-input`}>{t('rgb.colors.color@@Color')} {i + 1}</label>
-            <input key={`colorlist${id}-color-${i + 1}-${color.hex}`} id={`colorlist${id}-color-${i + 1}-input`}
+            <input key={`colorlist${id}-color-${i + 1}`} id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
@@ -187,8 +235,9 @@ export default component$(({ hidden, id = 'text' }: {
             }}
             showInput={false}
             horizontal
+            opacity={id == 'shadow'}
           />
-          <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
+          <div class="flex gap-1 lum-card p-2 flex-col justify-evenly">
             <NumberInput input id={`colorlist${id}-color-pos`}
               min={0} max={100}
               value={Math.round(colors[opened.value]?.pos)}
@@ -214,7 +263,7 @@ export default component$(({ hidden, id = 'text' }: {
                 newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 rgbStore[colorsKey] = sortColors(newColors);
               }}
-            >Position (%)
+            >{t('rgb.colors.position@@Position')} (%)
             </NumberInput>
           </div>
         </div>

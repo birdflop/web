@@ -1,5 +1,5 @@
 import { rgbToLch, interpolateLch, lchToRgb, type LuvLCh } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
+import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * LuvLCh (CIELCh(uv))-based gradient classes using perceptually uniform color interpolation.
@@ -14,7 +14,7 @@ import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
  * Ideal for gradients with significant hue changes.
  */
 export class LuvLChGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, LuvLChTwoStopGradient);
   }
 }
@@ -44,7 +44,7 @@ class LuvLChTwoStopGradient extends BaseTwoStopGradient<LuvLCh> {
  * with natural hue transitions.
  */
 export class LuvLChAnimatedGradient extends LuvLChGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

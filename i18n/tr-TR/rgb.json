@@ -5,6 +5,7 @@
       "character": "Karakter",
       "charsPer": "Renk başına karakter",
       "color": "Renk",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Özel format",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "Dağıt"
       },
+      "duplicate": "Duplicate",
       "format": "Renk formatı",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Küçük harfli hex kodları kullanmak istiyorsanız bunu açın.",
         "title": "Küçük harfli hex kodları"
       },
+      "position": "Position",
       "randomize": "Rastgele yap",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Metin gölgesi",
         "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
+      "shuffle": "Shuffle",
       "title": "Renkler",
       "trimSpaces": {
         "description": "Boş alt çizgiler / üst çizgiler kullanıyorsanız bunu kapatın",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "Minecraft Sohbet",
         "default": "Varsayılan",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab Alt bilgi",
           "header": "Minecraft Tab Üst bilgi",
@@ -70,6 +83,7 @@
       },
       "title": "Giriş metni"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB metni başarıyla panonuza kopyalandı.",
       "description": "RGB metni için bunu kopyalayıp yapıştırın!",
@@ -90,7 +104,7 @@
         "title": "Ön ayar başarıyla içe aktarıldı!"
       },
       "invalid": {
-        "description": "Lütfen bunu https://discord.gg/9vUZ9MREVz adresine içe aktarmaya çalıştığınız ön ayarla birlikte bildirin.",
+        "description": "Lütfen bunu https://discord.gg/nmgtX5z adresine içe aktarmaya çalıştığınız ön ayarla birlikte bildirin.",
         "title": "Geçersiz ön ayar"
       },
       "myPrivate": "Benim özel RGBirdflop ön ayarlarım",
@@ -105,6 +119,7 @@
       "pasteHere": "Buraya yapıştır",
       "pending": "Bu ön ayar inceleme bekliyor ve henüz diğer kullanıcılar için kullanılabilir olmayabilir.",
       "presetData": "Ön ayar verisi",
+      "preview": "Preset Preview",
       "publish": "Kendi ön ayarınızı yayınlayın",
       "remove": "Kaldır",
       "save": "Kaydet",
@@ -114,14 +129,13 @@
         "title": "Ön ayar kaydedildi!",
         "warning": "Lütfen ön ayarları kalıcı olarak kaydetmek için giriş yapın."
       },
-      "showPending": {
-        "title": "Bekleyen ön ayarları göster (ÇOK TEHLİKELİ)"
-      },
       "showSaved": {
         "description": "Sadece kaydedilen ön ayarlarınızı göstermek için bunu açın.",
         "title": "Kaydedilen ön ayarları göster"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Ad A-Z",
         "nameZA": "Ad Z-A",
         "newest": "En yeni önce",

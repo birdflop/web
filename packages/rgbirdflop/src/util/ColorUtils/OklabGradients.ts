@@ -1,5 +1,5 @@
 import { rgbToOklab, interpolateColor, oklabToLinearSrgb, linearToSrgb, type OKLAB } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
+import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
 
 /**
  * OKLAB-based gradient classes using perceptually uniform color interpolation.
@@ -12,7 +12,7 @@ import { BaseGradient, BaseTwoStopGradient } from './BaseGradient';
  * and natural to the human eye, avoiding muddy colors in the middle of gradients.
  */
 export class OklabGradient extends BaseGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number) {
+  constructor(colors: RGBColorStop[], numSteps: number) {
     super(colors, numSteps, OklabTwoStopGradient);
   }
 }
@@ -45,7 +45,7 @@ class OklabTwoStopGradient extends BaseTwoStopGradient<OKLAB> {
  * Perfect for creating smooth, perceptually uniform animated color effects.
  */
 export class OklabAnimatedGradient extends OklabGradient {
-  constructor(colors: { rgb: number[], pos: number }[], numSteps: number, offset: number) {
+  constructor(colors: RGBColorStop[], numSteps: number, offset: number) {
     if (numSteps < 2) numSteps = 2;
     if (offset < 0) offset = 0;
     super(colors, numSteps);

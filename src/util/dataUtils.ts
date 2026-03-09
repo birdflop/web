@@ -2,9 +2,10 @@ import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import { animTABDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { getDB, PresetPartial, presets, PublicPresetSubmission, savedPresets, users } from './db';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
+import { isAdmin, Settings } from '~/routes/layout';
 
 type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
@@ -107,7 +108,8 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
   console.log(cookie);
 
   const settings = JSON.parse(decodeURIComponent(cookie.settings));
-  if (settings.cookies === false) return; // don't set cookies if user has opted out
+  // don't set cookies if user has opted out unless this is the settings cookie itself
+  if (settings.cookies === false && name !== 'settings') return;
 
   const cookieValue = { ...cookies };
 
@@ -128,6 +130,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
 
 export const setUserData = server$(async function(data: {
   privatePresets?: rgbPreset[];
+  settings?: Settings;
 }) {
   const session = this.sharedMap.get('session');
 
@@ -137,6 +140,7 @@ export const setUserData = server$(async function(data: {
   const userData = await db.update(users)
     .set({
       privatePresets: data.privatePresets,
+      settings: data.settings,
     })
     .where(eq(users.id, session.user.id))
     .returning().get();
@@ -144,42 +148,58 @@ export const setUserData = server$(async function(data: {
   return userData;
 });
 
-export const savePreset = server$(async function(presetId: number) {
+export const savePreset = server$(async function (presetId: number) {
   const session = this.sharedMap.get('session');
-
   const db = getDB();
-  if (!session || !db || !session.user.id) return console.warn('No session or database client');
 
-  try {
-    const userData = await db.insert(savedPresets)
-      .values({
-        userId: session.user.id,
-        presetId,
-      });
-    return userData;
-  } catch (error) {
-    console.error('Error saving preset:', error);
-    throw error;
+  if (!session?.user?.id || !db) return {
+    success: false,
+    error: 'No session or database client',
+  };
+
+  const insert = await db.insert(savedPresets)
+    .values({
+      userId: session.user.id,
+      presetId,
+    })
+    .run();
+
+  // Only increment if this user actually saved it
+  if (insert.success) {
+    await db.update(presets)
+      .set({ saves: sql`${presets.saves} + 1` })
+      .where(eq(presets.id, presetId))
+      .run();
   }
+
+  return insert;
 });
 
-export const unsavePreset = server$(async function(presetId: number) {
+export const unsavePreset = server$(async function (presetId: number) {
   const session = this.sharedMap.get('session');
-
   const db = getDB();
-  if (!session || !db || !session.user.id) return console.warn('No session or database client');
 
-  try {
-    const userData = await db.delete(savedPresets)
-      .where(and(
-        eq(savedPresets.userId, session.user.id),
-        eq(savedPresets.presetId, presetId),
-      ));
-    return userData;
-  } catch (error) {
-    console.error('Error unsaving preset:', error);
-    throw error;
+  if (!session?.user?.id || !db) return {
+    success: false,
+    error: 'No session or database client',
+  };
+
+  const unsave = await db.delete(savedPresets)
+    .where(and(
+      eq(savedPresets.userId, session.user.id),
+      eq(savedPresets.presetId, presetId),
+    ))
+    .run();
+
+  // Only decrement if this user actually unsaved it
+  if (unsave.success) {
+    await db.update(presets)
+      .set({ saves: sql`${presets.saves} - 1` })
+      .where(eq(presets.id, presetId))
+      .run();
   }
+
+  return unsave;
 });
 
 export const publishPreset = server$(async function(submission: PublicPresetSubmission) {
@@ -228,8 +248,7 @@ export const updatePreset = server$(async function(presetId: number, presetData:
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
-  const admin = session.user.id && admins?.includes(session.user.id);
+  const admin = await isAdmin();
 
   try {
     // If the preset data is being updated, regenerate the colorVector
@@ -256,8 +275,7 @@ export const deletePreset = server$(async function(presetId: number) {
 
   const db = getDB();
   if (!session || !db || !session.user.id) return console.warn('No session or database client');
-  const admins = this.env.get('ADMINS')?.split(',').map(id => id.trim());
-  const admin = session.user.id && admins?.includes(session.user.id);
+  const admin = await isAdmin();
 
   try {
     await db.delete(presets)

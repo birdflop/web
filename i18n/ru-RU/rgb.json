@@ -5,6 +5,7 @@
       "character": "Символ",
       "charsPer": "Символов на цвет",
       "color": "цвет",
+      "copyFromText": "Copy from text colors",
       "customFormat": "Другой формат",
       "disperse": {
         "always": {
@@ -13,16 +14,23 @@
         },
         "title": "Рассеивать"
       },
+      "duplicate": "Duplicate",
       "format": "Формат цвета",
+      "gradientType": "Gradient Type",
+      "invert": "Invert",
       "lowercase": {
         "description": "Включите это, если хотите использовать строчные шестнадцатеричные коды.",
         "title": "Строчные шестнадцатеричные коды"
       },
+      "position": "Position",
       "randomize": "Рандомизировать",
+      "reverse": "Reverse",
       "shadow": {
+        "enable": "Custom Text Shadow",
         "title": "Тень текста",
         "warning": "Предупреждение: Тень текста работает только с JSON форматированием!"
       },
+      "shuffle": "Shuffle",
       "title": "Цвета",
       "trimSpaces": {
         "description": "Отключите это, если используете пустые подчеркивания / зачеркивания",
@@ -61,6 +69,11 @@
       "preview": {
         "chat": "Minecraft чат",
         "default": "По умолчанию",
+        "gui": {
+          "chest": "Minecraft GUI Chest",
+          "item": "Minecraft GUI Item Name",
+          "lore": "Minecraft GUI Item Lore"
+        },
         "tab": {
           "footer": "Minecraft Tab подвал",
           "header": "Minecraft Tab заголовок",
@@ -70,6 +83,7 @@
       },
       "title": "Ваш текст"
     },
+    "options": "Options",
     "output": {
       "copied": "RGB текст был успешно скопирован в ваш буфер обмена.",
       "description": "Скопируйте и вставьте это для RGB текста!",
@@ -90,7 +104,7 @@
         "title": "Настройки успешно импортированы!"
       },
       "invalid": {
-        "description": "Пожалуйста, сообщите об этом на https://discord.gg/9vUZ9MREVz с пресетом, который вы пытались импортировать.",
+        "description": "Пожалуйста, сообщите об этом на https://discord.gg/nmgtX5z с пресетом, который вы пытались импортировать.",
         "title": "Неверный пресет"
       },
       "myPrivate": "Мои приватные RGBirdflop пресеты",
@@ -105,6 +119,7 @@
       "pasteHere": "Вставить сюда",
       "pending": "Этот пресет ожидает проверки и может быть недоступен для других пользователей.",
       "presetData": "Данные пресета",
+      "preview": "Preset Preview",
       "publish": "Опубликовать свой собственный пресет",
       "remove": "Удалить",
       "save": "Сохранить",
@@ -114,14 +129,13 @@
         "title": "Пресет сохранен!",
         "warning": "Пожалуйста, войдите в систему, чтобы сохранить пресеты навсегда."
       },
-      "showPending": {
-        "title": "Показать ожидающие пресеты (ОЧЕНЬ ОПАСНО)"
-      },
       "showSaved": {
         "description": "Включите это, чтобы показать только ваши сохраненные пресеты.",
         "title": "Показать сохраненные пресеты"
       },
       "sortBy": {
+        "leastSaved": "Least saved",
+        "mostSaved": "Most saved",
         "nameAZ": "Имя А-Я",
         "nameZA": "Имя Я-А",
         "newest": "Сначала новые",
