@@ -1,8 +1,8 @@
 import { $, component$, Slot, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB } from '@birdflop/rgbirdflop';
-import { ChevronDown, ChevronUp, Dices, Ellipsis, Trash } from 'lucide-icons-qwik';
+import { disperseColors, swapItems, sortColors, getBrightness, getRandomColor, hexToRGB, rgbToHex, invertRgbColor } from '@birdflop/rgbirdflop';
+import { ArrowRightLeft, ChevronDown, ChevronUp, Dices, Eclipse, MoveHorizontal, Shuffle, Trash } from 'lucide-icons-qwik';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
@@ -79,27 +79,53 @@ export default component$(({ hidden, id = 'text' }: {
       >
         {t('rgb.colors.amount@@Color Amount')}
       </NumberInput>
-      <div class="flex gap-1">
+      <div class="flex gap-1 *:w-full">
         <button class={{
-          'lum-btn p-2 rounded-r-sm': true,
-          'w-full': rgbStore.disperse,
+          'lum-btn p-2 rounded-r-sm justify-center': true,
         }} onClick$={() => {
           const newColors = colors.map(color => ({ hex: getRandomColor(), pos: color.pos }));
           rgbStore[colorsKey] = newColors;
-        }}>
-          <Dices size={20} /> {rgbStore.disperse && <span>
-            {t('rgb.colors.randomize@@Randomize')}
-          </span>}
+        }} title={t('rgb.colors.randomize@@Randomize')}>
+          <Dices size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-2 rounded-sm justify-center': true,
+        }} onClick$={() => {
+          const newColors = colors.reverse().map(color => ({ hex: color.hex, pos: 100 - color.pos }));
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.reverse@@Reverse')}>
+          <ArrowRightLeft size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-2 rounded-sm justify-center': true,
+        }} onClick$={() => {
+          const shuffledColors = colors.slice(0).sort(() => Math.random() - 0.5);
+          const newColors = shuffledColors.map((color, i) => ({ hex: color.hex, pos: colors[i].pos }));
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.shuffle@@Shuffle')}>
+          <Shuffle size={20} />
+        </button>
+        <button class={{
+          'lum-btn p-2 rounded-l-sm justify-center': true,
+          'rounded-sm': !rgbStore.disperse,
+        }} onClick$={() => {
+          const newColors = colors.map(color => {
+            const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
+            return { ...color, hex: `#${invertedHex}` };
+          });
+          rgbStore[colorsKey] = newColors;
+        }} title={t('rgb.colors.invert@@Invert')}>
+          <Eclipse size={20} />
         </button>
         {!rgbStore.disperse &&
-          <button class="lum-btn lum-btn-p-1 w-full rounded-l-sm" disabled={
+          <button class="lum-btn p-2 rounded-l-sm justify-center" disabled={
             !colors.find((color, i) => {
               return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
             })}
           onClick$={() => {
             rgbStore[colorsKey] = disperseColors(colors);
-          }}>
-            <Ellipsis size={20} /> {t('rgb.colors.disperse.title@@Disperse')}
+          }} title={t('rgb.colors.disperse.title@@Disperse')}>
+            <MoveHorizontal size={20} />
           </button>
         }
       </div>
