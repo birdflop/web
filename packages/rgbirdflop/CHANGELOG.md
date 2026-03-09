@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.16](https://github.com/birdflop/web/compare/v0.1.15...v0.1.16) (2026-03-09)
+
+
+### Features
+
+* enhance shadow color handling by adding opacity support and updating related components ([b1d9b23](https://github.com/birdflop/web/commit/b1d9b2339536328cd472c0bd692ac39f81a69b2f))
+* enhance shadow segment handling by adding opacity support in buildShadowSegments and buildShadowContent ([d34e65a](https://github.com/birdflop/web/commit/d34e65af36b1eeb9b5d822ee05569e739dc884ca))
+* refactor color handling to use RGBColorStop type and improve opacity management in gradients ([0bdbf24](https://github.com/birdflop/web/commit/0bdbf24e21620eab8bb987addd1ee7d0d3658818))
+
+
+### Code Refactoring
+
+* enhance documentation for RGBColorStop type to clarify properties ([152bf1b](https://github.com/birdflop/web/commit/152bf1b2e6bda44687af978b18c88c412e99b544))
+* update gradient color handling to ensure RGB values are correctly sliced ([686e99b](https://github.com/birdflop/web/commit/686e99be2e1770c852004e1c0aacfa29c9c78af9))
+
 ## [0.1.15](https://github.com/birdflop/web/compare/v0.1.14...v0.1.15) (2026-01-28)
 
 
