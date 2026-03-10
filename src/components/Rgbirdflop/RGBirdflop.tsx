@@ -6,7 +6,6 @@ import {
   useTask$,
   useVisibleTask$,
   isBrowser,
-  $,
   Slot,
   Signal,
 } from '@builder.io/qwik';
@@ -43,7 +42,7 @@ import Decode from '~/components/Rgbirdflop/Decode';
 import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
 import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
-import { BirdLandContext, openItemsContext } from '~/routes/layout';
+import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
@@ -237,8 +236,11 @@ export default component$(({ errors, output }: {
   const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
 
   // Flopbird guide
-  const elementIdToLandOn = useContext(BirdLandContext);
+  const birdStore = useContext(birdStoreContext);
   const flopBirdTrack = [
+    {
+      description: 'Hi! I\'m here to help you create RGB gradients!',
+    },
     {
       id: 'input',
       description: 'First, type something into the text box I\'m on top of!',
@@ -298,37 +300,7 @@ export default component$(({ errors, output }: {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const notification = new Notification()
-      .setTitle('Flopbird:')
-      .setDescription('Hi! I\'m here to help you create RGB gradients!')
-      .setBgColor('lum-bg-cyan/50')
-      .setPersist(true).toJSON();
-
-    notification.action = {
-      text: 'Click to continue',
-      onClick$: $(() => {
-        let nextStep = flopBirdTrack.shift();
-        if (!nextStep) return;
-
-        while (nextStep.id && !document.getElementById(nextStep.id)) {
-          nextStep = flopBirdTrack.shift();
-          if (!nextStep) return;
-        }
-
-        elementIdToLandOn.value = nextStep.id;
-        if (nextStep.openItem && !openItemsStore.items.includes(nextStep.openItem)) {
-          openItemsStore.items = [nextStep.openItem];
-        }
-
-        const nextNotification = new Notification(notification)
-          .setDescription(nextStep.description);
-        notifications.push(nextNotification);
-      }),
-    };
-
-    notifications.push(
-      notification,
-    );
+    birdStore.track = flopBirdTrack;
   });
 
   return (

@@ -1,4 +1,4 @@
-import { component$, createContextId, Signal, Slot, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
@@ -9,7 +9,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import { getCSSString, ThemeContext, ThemeContextType, ThemeName, themes } from '~/util/themeUtil';
 
-import { Notification, NotificationContext } from '~/util/Notification';
+import { Notification, NotificationContext, NotificationType } from '~/util/Notification';
 import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
 import { languages } from '~/speak-config';
@@ -21,6 +21,17 @@ export type Settings = {
   flopbird: {
     toggle: boolean;
   }
+}
+
+export type FlopbirdStore = {
+  ref?: string;
+  track?: {
+    id?: string;
+    ref?: string;
+    nextStep?: string;
+    description: string;
+    openItem?: string;
+  }[];
 }
 
 export const isAdmin = server$(function(props?: {
@@ -60,7 +71,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   };
 });
 
-export const BirdLandContext = createContextId<Signal<string | undefined>>('birdland-context');
+export const birdStoreContext = createContextId<FlopbirdStore>('birdstore-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
@@ -71,31 +82,16 @@ export default component$(() => {
   const Background = Backgrounds[1];
   const LightBackground = lightBackgrounds[1];
 
-  // bird mascot
-  const birdRef = useSignal<HTMLCanvasElement>();
-  const anchorElementRef = useSignal<HTMLDivElement>();
-  const elementIdToLandOn = useSignal<string>();
-  useContextProvider(BirdLandContext, elementIdToLandOn);
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, elementIdToLandOn));
-
-  // Notification store
-  const notifications = useStore([] as Notification[]);
-  useContextProvider(NotificationContext, notifications);
-
-  // Settings store
+  /* Settings store */
   const { cookies: settingsCookies, theme: serverThemeData } = useSettingsCookies().value;
-  const settingsStore = useStore({
+  const settingsStore = useStore<Settings>({
     ...settingsCookies,
-  } as Settings);
+  });
   useContextProvider(SettingsContext, settingsStore);
 
-  // Theme store
-  const themeStore = useStore<ThemeContextType>(serverThemeData);
-  useContextProvider(ThemeContext, themeStore);
-
-  // Show cookie consent notification if not already accepted/opted out
-  const showCookieConsent = useSignal(false);
+  /* Notification store */
+  const notifications = useStore<NotificationType[]>([]);
+  useContextProvider(NotificationContext, notifications);
 
   // Open items store
   const openItemsStore = useStore({
@@ -103,19 +99,61 @@ export default component$(() => {
   });
   useContextProvider(openItemsContext, openItemsStore);
 
+  /* Flopbird */
+  const birdRef = useSignal<HTMLCanvasElement>();
+  const anchorElementRef = useSignal<HTMLDivElement>();
+  const birdStore = useStore<FlopbirdStore>({});
+  useContextProvider(birdStoreContext, birdStore);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, birdStore));
+
+  useTask$(({ track }) => {
+    if (!settingsStore.flopbird.toggle) return;
+    track(() => birdStore.track);
+    if (!birdStore.track || birdStore.track.length === 0) return;
+
+    const notification = new Notification()
+      .setTitle('Flopbird:')
+      .setDescription(birdStore.track[0].description)
+      .setBgColor('lum-bg-cyan/50')
+      .setPersist(true).toJSON();
+
+    notification.action = {
+      text: 'Click to continue',
+      onClick$: $(() => {
+        if (!birdStore.track || birdStore.track.length === 0) return;
+        let nextStep = birdStore.track.shift();
+        if (!nextStep) return;
+
+        while (nextStep.id && !document.getElementById(nextStep.id)) {
+          nextStep = birdStore.track.shift();
+          if (!nextStep) return;
+        }
+
+        birdStore.track = [...birdStore.track]; // Trigger reactivity
+
+        birdStore.ref = nextStep.id;
+        if (nextStep.openItem && !openItemsStore.items.includes(nextStep.openItem)) {
+          openItemsStore.items = [nextStep.openItem];
+        }
+      }),
+    };
+
+    notifications.push(
+      notification,
+    );
+  });
+
+  /* Theme store */
+  const themeStore = useStore<ThemeContextType>(serverThemeData);
+  useContextProvider(ThemeContext, themeStore);
+
+  /* Cookie Consent */
+  const showCookieConsent = useSignal(false);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    // If the theme is not set, check the user's preference
-    if (themeStore.isDark === undefined) {
-      themeStore.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-
-    // Load open items from localStorage
-    const savedOpenItems = await loadOpenItems();
-    if (savedOpenItems && savedOpenItems.length > 0) {
-      openItemsStore.items = savedOpenItems;
-    }
-
     // check if cookies have been accepted or opted out
     if (settingsStore.cookies !== undefined) return;
     try {
@@ -144,6 +182,21 @@ export default component$(() => {
       // Fallback to showing consent for everyone if geolocation fails
       console.error('Error determining user location:', error);
       showCookieConsent.value = true;
+    }
+  });
+
+  /* Misc */
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    // If the theme is not set, check the user's preference
+    if (themeStore.isDark === undefined) {
+      themeStore.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+
+    // Load open items from localStorage
+    const savedOpenItems = await loadOpenItems();
+    if (savedOpenItems && savedOpenItems.length > 0) {
+      openItemsStore.items = savedOpenItems;
     }
   });
 

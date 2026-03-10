@@ -1,7 +1,8 @@
 import { Signal } from '@builder.io/qwik';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Notification } from './Notification';
+import { NotificationType } from './Notification';
+import { FlopbirdStore } from '~/routes/layout';
 
 function targetElement(id?: string) {
   const oldEl = document.querySelector('.bird-target');
@@ -21,8 +22,8 @@ function targetElement(id?: string) {
 
 export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>,
   anchorElementRef: Signal<HTMLDivElement | undefined>,
-  notifications: Notification[],
-  elementIdToLandOn: Signal<string | undefined>) {
+  notifications: NotificationType[],
+  birdStore: FlopbirdStore) {
   // check if birdRef is defined
   if (!birdRef.value) return console.warn('birdRef is undefined in birdThreeJS');
 
@@ -300,7 +301,7 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
 
     emote = notifications.length > 0 ? 'waving' : undefined;
 
-    const pos = targetElement(elementIdToLandOn.value);
+    const pos = targetElement(birdStore.ref);
     if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
     else targetPos = defaultTargetPos;
 
