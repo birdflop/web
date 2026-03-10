@@ -109,7 +109,7 @@ export default component$(() => {
   useVisibleTask$(() => birdThreeJS(birdRef, anchorElementRef, notifications, birdStore));
 
   useTask$(({ track }) => {
-    if (!settingsStore.flopbird.toggle) return;
+    if (!settingsStore.flopbird?.toggle) return;
     track(() => birdStore.track);
     if (!birdStore.track || birdStore.track.length === 0) return;
 
