@@ -6,7 +6,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "birdflop-com",
 	"main": "./dist/_worker.js",
-	"compatibility_date": "2025-11-17",
+	"compatibility_date": "2026-03-16",
 	"compatibility_flags": [
 		"nodejs_compat",
 		"global_fetch_strictly_public"

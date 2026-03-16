@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "ES2017",
+    "target": "ES2020",
     "module": "ES2022",
     "lib": ["es2022", "DOM", "WebWorker", "DOM.Iterable"],
     "jsx": "react-jsx",
@@ -9,18 +9,18 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "incremental": true,
     "isolatedModules": true,
     "outDir": "tmp",
     "noEmit": true,
-    "types": ["node", "eslint", "vite/client"],
     "paths": {
       "~/*": ["./src/*"]
-    }
+    },
+    /* if you do not use CSS modules, remove this line and delete the typescript-plugin-css-modules module from package.json */
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "files": ["eslint.config.js"],
-  "include": ["src", "./*.d.ts", "./*.js"],
+  "include": ["src", "./*.d.ts", "./*.config.ts", "vite.config.ts"]
 }

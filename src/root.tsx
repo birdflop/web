@@ -1,5 +1,6 @@
 import {
   component$,
+  isDev,
   useServerData,
 } from '@builder.io/qwik';
 import {
@@ -21,7 +22,7 @@ export default component$(() => {
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
    * immediately followed by the document's <head> and <body>.
    *
-   * Dont remove the `<head>` and `<body>` elements.
+   * Don't remove the `<head>` and `<body>` elements.
    */
   /**
    * Init Qwik Speak
@@ -31,6 +32,7 @@ export default component$(() => {
   const url = new URL(serverDataUrl || 'http://unknown');
   const isBirdflop =
     url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com';
+
   return (
     <QwikCityProvider>
       <head>
@@ -54,6 +56,12 @@ export default component$(() => {
             defer
             src="https://umami.bwmp.dev/script.js"
             data-website-id="b68075e9-39d9-4401-9d8f-2d3e84d76ca5"
+          />
+        )}
+        {!isDev && (
+          <link
+            rel="manifest"
+            href={`${import.meta.env.BASE_URL}manifest.json`}
           />
         )}
         <RouterHead />

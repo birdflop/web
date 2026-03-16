@@ -1,9 +1,9 @@
-import { $, component$, createContextId, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, isBrowser, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
 import Nav from '~/components/Elements/Nav';
-import { Link, RequestEvent, routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
+import { Link, RequestEventBase, routeLoader$, server$, useLocation } from '@builder.io/qwik-city';
 import { Cookie } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
@@ -34,19 +34,20 @@ export type FlopbirdStore = {
   }[];
 }
 
-export const isAdmin = server$(function(props?: {
-  env: RequestEvent['env'];
-  sharedMap: RequestEvent['sharedMap'];
-}) {
-  const { env, sharedMap } = props || this;
+
+export const checkAdmin = function(props: RequestEventBase) {
+  const { env, sharedMap } = props;
 
   const session = sharedMap.get('session');
   const admins = env.get('ADMINS')?.split(',').map((id) => id.trim()) || [];
 
   return admins.includes(session?.user?.id);
-});
+};
 
-export const useIsAdmin = routeLoader$(async (props) => await isAdmin(props));
+export const isAdmin = server$(function() {
+  return checkAdmin(this);
+});
+export const useIsAdmin = routeLoader$((props) => checkAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
   const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {

@@ -1,9 +1,8 @@
-// eslint.config.mjs
-import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import { qwikEslint9Plugin } from 'eslint-plugin-qwik';
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import { defineConfig, globalIgnores } from "eslint/config";
+import { qwikEslint9Plugin } from "eslint-plugin-qwik";
 
 const ignores = [
   "**/*.log",
@@ -53,18 +52,20 @@ export default defineConfig(
   tseslint.configs.recommendedTypeChecked,
   qwikEslint9Plugin.configs.recommended,
   {
-    files: ['src/**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
     languageOptions: {
       globals: {
-        ...globals.serviceworker,
         ...globals.browser,
         ...globals.node,
+        ...globals.es2021,
+        ...globals.serviceworker,
       },
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
+  },
+  {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
