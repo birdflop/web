@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core";
-import type { AdapterAccountType } from "@auth/qwik/adapters"
+import type { AdapterAccountType } from "@auth/qwik/adapters";
 import { sql } from "drizzle-orm/sql/sql";
 import { rgbPreset } from "~/util/rgb/presets";
 import { Settings } from "~/routes/layout";
@@ -62,9 +62,6 @@ export const verificationTokens = sqliteTable("verificationToken", {
     columns: [verificationToken.identifier, verificationToken.token],
   }),
 }));
-
-
-
 
 // -------------------- Presets --------------------
 export const presets = sqliteTable("presets", {

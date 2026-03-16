@@ -34,7 +34,6 @@ export type FlopbirdStore = {
   }[];
 }
 
-
 export const checkAdmin = function(props: RequestEventBase) {
   const { env, sharedMap } = props;
 
