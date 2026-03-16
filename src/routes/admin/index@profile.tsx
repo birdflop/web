@@ -7,10 +7,10 @@ import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { AppWindow } from 'lucide-icons-qwik';
-import { isAdmin } from '../layout';
+import { checkAdmin } from '../layout';
 
-export const onGet: RequestHandler = async function(props) {
-  const admin = await isAdmin(props);
+export const onGet: RequestHandler = function(props) {
+  const admin = checkAdmin(props);
   if (!admin) throw new Response('Unauthorized', { status: 401 });
 };
 

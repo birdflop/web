@@ -1,6 +1,6 @@
 import { Signal } from '@builder.io/qwik';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { NotificationType } from './Notification';
 import { FlopbirdStore } from '~/routes/layout';
 
