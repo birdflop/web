@@ -25,7 +25,7 @@ export default component$(() => {
         {t('nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2">
-        <Link class="lum-card lum-bg-red/10 hover:lum-bg-red/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-red/10 hover:lum-bg-red/30 duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb">
           <Blobs color="red" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -37,7 +37,7 @@ export default component$(() => {
             {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-blue/10 hover:lum-bg-blue/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-blue/10 hover:lum-bg-blue/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtab">
           <Blobs color="blue" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -49,7 +49,7 @@ export default component$(() => {
             {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-green/10 hover:lum-bg-green/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-green/10 hover:lum-bg-green/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb/presets">
           <Blobs color="green" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -70,7 +70,7 @@ export default component$(() => {
         {t('nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2">
-        <Link class="lum-card lum-bg-yellow/10 hover:lum-bg-yellow/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-yellow/10 hover:lum-bg-yellow/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/sparkprofile">
           <Blobs color="yellow" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -82,7 +82,7 @@ export default component$(() => {
             {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-pink/10 hover:lum-bg-pink/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-pink/10 hover:lum-bg-pink/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/papertimings">
           <Blobs color="pink" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -94,7 +94,7 @@ export default component$(() => {
             {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-orange/10 hover:lum-bg-orange/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-orange/10 hover:lum-bg-orange/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/flags">
           <Blobs color="orange" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -115,7 +115,7 @@ export default component$(() => {
         {t('nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2 mb-2">
-        <Link class="lum-card lum-bg-purple/10 hover:lum-bg-purple/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-purple/10 hover:lum-bg-purple/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/banner">
           <Blobs color="purple" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -127,7 +127,7 @@ export default component$(() => {
             {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-cyan/10 hover:lum-bg-cyan/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-cyan/10 hover:lum-bg-cyan/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtexture">
           <Blobs color="cyan" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
@@ -139,7 +139,7 @@ export default component$(() => {
             {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
           </p>
         </Link>
-        <Link class="lum-card lum-bg-lime/10 hover:lum-bg-lime/30 transition duration-1000 hover:duration-75 ease-out relative lum-hoverable"
+        <Link class="lum-card lum-bg-lime/10 hover:lum-bg-lime/30 transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animpreview">
           <Blobs color="lime" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>

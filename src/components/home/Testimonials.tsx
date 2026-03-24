@@ -147,7 +147,7 @@ export default component$(() => {
     <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
       {fiveTestimonials.map(({ name, image, title, description, link }) => {
         return <a href={link} key={name}
-          class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+          class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -164,7 +164,7 @@ export default component$(() => {
           </p>
         </a>;
       })}
-      <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+      <div class="lum-card transition-all duration-200!"
         onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
         <h3 class="mt-0! mb-2! flex items-center gap-2">
