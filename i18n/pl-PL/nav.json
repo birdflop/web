@@ -5,6 +5,13 @@
       "home": "Powrót na stronę główną",
       "title": "404: Strona nie znaleziona"
     },
+    "clickToDismiss": "Click to dismiss",
+    "cookies": {
+      "acknowledge": "Accept",
+      "description": "We use cookies to automatically save and load your preferences.",
+      "optOut": "Reject",
+      "title": "Cookies"
+    },
     "docs": "Dokumentacja",
     "hosting": {
       "billing": "Rozliczenia",

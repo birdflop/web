@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "El comando ha sido copiado a su portapapeles exitosamente.",
+      "copied": {
+        "description": "El comando ha sido copiado a su portapapeles exitosamente.",
+        "title": "Command Copied!"
+      },
       "title": "Comando"
     },
-    "copied": "¡Copiado al portapapeles!",
     "copyFailed": "¡Error al copiar al portapapeles!",
     "options": {
       "baseColor": {

@@ -10,13 +10,8 @@
     },
     "description": "通常优化服务器性能的启动参数集合",
     "environment": {
-      "command": "命令",
       "description": "服务器运行的操作系统。",
-      "label": "环境",
-      "linux": "利纳克斯",
-      "macos": "MacOS",
-      "pterodactyl": "翼手龙",
-      "windows": "视窗"
+      "label": "环境"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar 标志",
       "benchmarked": "基准",
-      "etils": "Etil 标志",
       "hillttys": "hilltty 标志",
       "label": "标志",
       "meowice": "MeowIce 标志",
@@ -61,14 +55,6 @@
     "script": {
       "description": "可用于启动服务器的结果脚本。将此文件放在与 {{fileName}} 相同的位置，然后执行它！",
       "label": "脚本"
-    },
-    "serverType": {
-      "fabric": "织物",
-      "forge": "锻造",
-      "paper": "纸张",
-      "purpur": "普尔布尔",
-      "velocity": "速度",
-      "waterfall": "瀑布"
     },
     "software": {
       "description": "您的 Minecraft 服务器将在其上运行的软件。",

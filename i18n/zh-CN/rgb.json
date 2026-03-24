@@ -37,7 +37,6 @@
         "title": "从空格中修剪颜色"
       }
     },
-    "copied": "已复制到剪贴板！",
     "copyFailed": "复制到剪贴板失败！",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "RGB 文本已成功复制到您的剪贴板。",
+      "copied": {
+        "description": "RGB 文本已成功复制到您的剪贴板。",
+        "title": "已复制到剪贴板！"
+      },
       "description": "复制粘贴此内容以获得 RGB 文本！",
       "title": "输出"
     },
     "prefixsuffix": "前缀/后缀",
     "presets": {
       "back": "返回预设",
-      "copied": "预设已成功复制到剪贴板！",
+      "copied": {
+        "description": "预设已成功复制到剪贴板！",
+        "title": "Preset Copied!"
+      },
       "copy": "复制",
       "createNew": "创建新预设",
       "createdAt": "创建于",

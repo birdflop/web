@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "The command has been copied to your clipboard successfully.",
+      "copied": {
+        "description": "The banner command has been copied to your clipboard!",
+        "title": "Command Copied!"
+      },
       "title": "Command"
     },
-    "copied": "Copied to clipboard!",
     "copyFailed": "Failed to copy to clipboard!",
     "options": {
       "baseColor": {

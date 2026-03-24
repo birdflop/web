@@ -1,63 +1,67 @@
 import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { SelectMenu, Toggle, SelectMenuRaw, RangeInput } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle, SelectMenuRaw, RangeInput, LogoPaper, LogoPurpur, LogoWaterfall } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { flagsDefaults, generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
-import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag, MemoryStick } from 'lucide-icons-qwik';
+import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag, MemoryStick, Computer, Terminal } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
+import { SiApple, SiLinux, SiPterodactyl, SiVelocity } from 'simple-icons-qwik';
+
+const Linux = component$(() => <span class="flex items-center gap-2">
+  <SiLinux class="fill-current" size={20} /> Linux
+</span>);
+
+const Windows = component$(() => <span class="flex items-center gap-2">
+  <Computer size={20} /> Windows
+</span>);
+
+const MacOS = component$(() => <span class="flex items-center gap-2">
+  <SiApple class="fill-current" size={20} /> MacOS
+</span>);
+
+const Pterodactyl = component$(() => <span class="flex items-center gap-2">
+  <SiPterodactyl class="fill-current" size={20} /> Pterodactyl
+</span>);
+
+const Command = component$(() => <span class="flex items-center gap-2">
+  <Terminal size={20} /> Command
+</span>);
 
 const environmentOptions = [
-  {
-    name: 'Linux',
-    value: 'linux',
-  },
-  {
-    name: 'Windows',
-    value: 'windows',
-  },
-  {
-    name: 'macOS',
-    value: 'macos',
-  },
-  {
-    name: 'Pterodactyl',
-    value: 'pterodactyl',
-  },
-  {
-    name: 'Command',
-    value: 'command',
-  },
+  { name: <Linux />, value: 'linux' },
+  { name: <Windows />, value: 'windows' },
+  { name: <MacOS />, value: 'macos' },
+  { name: <Pterodactyl />, value: 'pterodactyl' },
+  { name: <Command />, value: 'command' },
 ];
 
+const Paper = component$(() => <span class="flex items-center gap-2">
+  <LogoPaper size={20} /> Paper
+</span>);
+
+const Purpur = component$(() => <span class="flex items-center gap-2">
+  <LogoPurpur size={20} /> Purpur
+</span>);
+
+const Velocity = component$(() => <span class="flex items-center gap-2">
+  <SiVelocity class="fill-current" size={20} /> Velocity
+</span>);
+
+const Waterfall = component$(() => <span class="flex items-center gap-2">
+  <LogoWaterfall size={20} /> Waterfall
+</span>);
+
 const softwareOptions = [
-  {
-    name: 'Paper',
-    value: 'paper',
-  },
-  {
-    name: 'Purpur',
-    value: 'purpur',
-  },
-  //{
-  //  name: 'Forge',
-  //  value: 'forge',
-  //},
-  //{
-  //  name: 'Fabric',
-  //  value: 'fabric',
-  //},
-  {
-    name: 'Velocity',
-    value: 'velocity',
-  },
-  {
-    name: 'Waterfall',
-    value: 'waterfall',
-  },
+  { name: <Paper />, value: 'paper' },
+  { name: <Purpur />, value: 'purpur' },
+  // { name: <Forge />, value: 'forge' },
+  // { name: <Fabric />, value: 'fabric' },
+  { name: <Velocity />, value: 'velocity' },
+  { name: <Waterfall />, value: 'waterfall' },
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {

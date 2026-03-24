@@ -85,9 +85,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
       include: [
         'yaml',
         'gifuct-js',
-        'three/examples/jsm/loaders/OBJLoader',
-        'three/examples/jsm/controls/OrbitControls',
-        'three/examples/jsm/loaders/GLTFLoader',
+        'three/examples/jsm/loaders/OBJLoader.js',
+        'three/examples/jsm/controls/OrbitControls.js',
+        'three/examples/jsm/loaders/GLTFLoader.js',
         'three',
         '@auth/drizzle-adapter',
         'drizzle-orm/sqlite-core',

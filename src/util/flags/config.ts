@@ -1,5 +1,4 @@
-import type { ZodType } from 'zod';
-import { z } from 'zod';
+import * as v from 'valibot';
 import { defaultOperatingSystem } from './environment/operatingSystem';
 import { defaultServerType, serverType } from './environment/serverType';
 import { extraFlags, flags } from './flags';
@@ -8,45 +7,43 @@ export type AvailableConfig = keyof typeof config;
 
 export interface Config {
   [key: string]: {
-    'isAdvanced'?: boolean,
-    'type': ZodType,
-    'default'?: any
-  }
+    isAdvanced?: boolean;
+    type: any; // Valibot schema
+    default?: any;
+  };
 }
 
 type DefaultConfig = {
-  [key in AvailableConfig]: any
-}
+  [key in AvailableConfig]: any;
+};
 
 export const config: Config = {
-  'fileName': {
-    'type': z.string().min(1).max(25),
-    'default': 'server.jar',
+  fileName: {
+    type: v.pipe(v.string(), v.minLength(1), v.maxLength(25)),
+    default: 'server.jar',
   },
-  'flags': {
-    //@ts-ignore
-    'type': z.nativeEnum(Object.keys(flags)), // todo: types
+  flags: {
+    type: v.picklist(Object.keys(flags)),
   },
-  'extraFlags': {
-    //@ts-ignore
-    'type': z.array(z.nativeEnum(Object.keys(extraFlags))), // todo: types
+  extraFlags: {
+    type: v.array(v.picklist(Object.keys(extraFlags))),
   },
-  'memory': {
-    'type': z.number().min(2).max(16),
-    'default': 4,
+  memory: {
+    type: v.pipe(v.number(), v.minValue(2), v.maxValue(16)),
+    default: 4,
   },
-  'gui': {
-    'type': z.boolean(),
-    'default': false,
+  gui: {
+    type: v.boolean(),
+    default: false,
   },
-  'autoRestart': {
-    'type': z.boolean(),
-    'default': false,
+  autoRestart: {
+    type: v.boolean(),
+    default: false,
   },
-  'variables': {
-    'type': z.boolean(),
-    'isAdvanced': true,
-    'default': false,
+  variables: {
+    type: v.boolean(),
+    isAdvanced: true,
+    default: false,
   },
 };
 

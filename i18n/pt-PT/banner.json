@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "O comando foi copiado para a sua área de transferência com sucesso.",
+      "copied": {
+        "description": "O comando foi copiado para a sua área de transferência com sucesso.",
+        "title": "Command Copied!"
+      },
       "title": "Comando"
     },
-    "copied": "Copiado para a área de transferência!",
     "copyFailed": "Falha ao copiar para a área de transferência!",
     "options": {
       "baseColor": {

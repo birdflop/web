@@ -10,13 +10,8 @@
     },
     "description": "일반적으로 서버 성능을 최적화하는 시작 인수 모음",
     "environment": {
-      "command": "명령",
       "description": "서버가 실행되는 운영 체제.",
-      "label": "환경",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "익룡",
-      "windows": "Windows"
+      "label": "환경"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar의 플래그",
       "benchmarked": "벤치마킹",
-      "etils": "Etil의 플래그",
       "hillttys": "hilltty의 플래그",
       "label": "플래그",
       "meowice": "MeowIce의 플래그",
@@ -61,14 +55,6 @@
     "script": {
       "description": "서버를 시작하는 데 사용할 수 있는 결과 스크립트. 이 파일을 {{fileName}}과 같은 위치에 배치한 다음 실행하세요!",
       "label": "스크립트"
-    },
-    "serverType": {
-      "fabric": "패브릭",
-      "forge": "Forge",
-      "paper": "종이",
-      "purpur": "Purpur",
-      "velocity": "속도",
-      "waterfall": "워터폴"
     },
     "software": {
       "description": "Minecraft 서버가 실행될 소프트웨어.",

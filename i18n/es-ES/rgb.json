@@ -37,7 +37,6 @@
         "title": "Recortar colores de los espacios"
       }
     },
-    "copied": "Copiado al portapapeles.",
     "copyFailed": "No se ha podido copiar en el portapapeles.",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "El texto RGB se ha copiado correctamente en el portapapeles.",
+      "copied": {
+        "description": "El texto RGB se ha copiado correctamente en el portapapeles.",
+        "title": "Copiado al portapapeles!"
+      },
       "description": "Copie y pegue esto para texto RGB",
       "title": "Salida"
     },
     "prefixsuffix": "Prefijo/Sufijo",
     "presets": {
       "back": "Volver a los preajustes",
-      "copied": "Preajuste copiado con éxito en el portapapeles.",
+      "copied": {
+        "description": "Preajuste copiado con éxito en el portapapeles.",
+        "title": "Preset Copied!"
+      },
       "copy": "Copia",
       "createNew": "Crear un nuevo preajuste",
       "createdAt": "Creado en",

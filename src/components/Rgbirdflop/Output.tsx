@@ -1,4 +1,4 @@
-import { $, component$, useContext } from '@builder.io/qwik';
+import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 
@@ -7,7 +7,10 @@ export default component$(({ hidden, value }: {
   value: string;
 }) => {
   const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
+  const copiedTitle = t('rgb.output.copied.title@@Copied to clipboard!');
+  const copiedDescription = t('rgb.output.copied.description@@The RGB text has been copied to your clipboard successfully.');
+  const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
+
   const notifications = useContext(NotificationContext);
 
   return (
@@ -24,13 +27,13 @@ export default component$(({ hidden, value }: {
           'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
         }}
         value={value}
-        onClick$={async () => {
+        onClick$={() => {
           const notification = new Notification()
-            .setTitle(await t$('rgb.output.copied@@Copied to clipboard!'))
-            .setDescription(await t$('rgb.output.copied.description@@The RGB text has been copied to your clipboard successfully.'))
+            .setTitle(copiedTitle)
+            .setDescription(copiedDescription)
             .setBgColor('lum-bg-green/50');
-          navigator.clipboard.writeText(value).catch(async (err) => {
-            notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+          navigator.clipboard.writeText(value).catch((err) => {
+            notification.setTitle(copyFailedTitle)
               .setDescription(err)
               .setBgColor('lum-bg-red/50')
               .setPersist(true);

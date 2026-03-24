@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "Das Kommando wurde in die Zwischenablage kopiert.",
+      "copied": {
+        "description": "Das Kommando wurde in die Zwischenablage kopiert.",
+        "title": "Command Copied!"
+      },
       "title": "Kommando"
     },
-    "copied": "In die Zwischenablage kopiert!",
     "copyFailed": "Konnte nicht kopiert werden!",
     "options": {
       "baseColor": {

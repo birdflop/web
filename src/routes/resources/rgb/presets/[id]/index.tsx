@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
@@ -42,7 +42,10 @@ export const usePreset = routeLoader$(async ({ params }) => {
 
 export default component$(() => {
   const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
+  const presetCopiedTitle = t('rgb.presets.copied.title@@Preset Copied!');
+  const presetCopiedDescription = t('rgb.presets.copied.description@@Successfully copied preset to clipboard!');
+  const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
+
   const notifications = useContext(NotificationContext);
   const loading = useSignal(false);
 
@@ -219,14 +222,14 @@ export default component$(() => {
               <Save size={20}  /> {t('rgb.presets.save@@Save')}
             </>}
         </button>
-        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={async () => {
+        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={() => {
           const notification = new Notification()
-            .setTitle(await t$('rgb.copied@@Copied to clipboard!'))
-            .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
+            .setTitle(presetCopiedTitle)
+            .setDescription(presetCopiedDescription)
             .setBgColor('lum-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))
-            .catch(async (err) => {
-              notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+            .catch((err) => {
+              notification.setTitle(copyFailedTitle)
                 .setDescription('Error: ' + err)
                 .setBgColor('lum-bg-red/50')
                 .setPersist(true);

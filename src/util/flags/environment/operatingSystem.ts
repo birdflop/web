@@ -2,7 +2,7 @@ import type { EnvironmentOptions } from '~/util/flags/types/environment/Environm
 import type { OperatingSystemOption } from '~/util/flags/types/environment/OperatingSystemOption';
 import type { AvailableConfig } from '~/util/flags/config';
 
-export type AvailableOperatingSystem = keyof typeof operatingSystem;
+export type AvailableOperatingSystem = 'linux' | 'windows' | 'macos' | 'pterodactyl' | 'command';
 
 const sharedConfig: AvailableConfig[] = [
   'fileName',
@@ -106,38 +106,36 @@ const nixScript: NixScript = (config) => {
 };
 
 export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
-  'linux': {
-    'icon': 'IconBrandDebian',
-    'file': {
-      'name': 'Bash Script',
-      'mime': 'text/plain',
-      'extension': '.sh',
+  linux: {
+    file: {
+      name: 'Bash Script',
+      mime: 'text/plain',
+      extension: '.sh',
     },
-    'config': [
+    config: [
       ...sharedConfig,
       ...sharedScriptConfig,
     ],
-    'generate': config => {
+    generate: config => {
       const nix = nixScript(config);
 
       return {
-        'script': nix.script.join('\n'),
-        'flags': nix.flags,
+        script: nix.script.join('\n'),
+        flags: nix.flags,
       };
     },
   },
-  'windows': {
-    'icon': 'IconBrandWindows',
-    'file': {
-      'name': 'Batch Script',
-      'mime': 'text/plain',
-      'extension': '.bat',
+  windows: {
+    file: {
+      name: 'Batch Script',
+      mime: 'text/plain',
+      extension: '.bat',
     },
-    'config': [
+    config: [
       ...sharedConfig,
       ...sharedScriptConfig,
     ],
-    'generate': config => {
+    generate: config => {
       const base = [];
 
       let fileName = config.fileName;
@@ -175,42 +173,40 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       }
 
       return {
-        'script': base.join('\n'),
-        'flags': config.existingFlags,
+        script: base.join('\n'),
+        flags: config.existingFlags,
       };
     },
   },
-  'macos': {
-    'icon': 'IconBrandApple',
-    'file': {
-      'name': 'Command Script',
-      'mime': 'text/plain',
-      'extension': '.command',
+  macos: {
+    file: {
+      name: 'Command Script',
+      mime: 'text/plain',
+      extension: '.command',
     },
-    'config': [
+    config: [
       ...sharedConfig,
       ...sharedScriptConfig,
     ],
-    'generate': config => {
+    generate: config => {
       const nix = nixScript(config);
 
       // First line of *nix files should contain shebang
       nix.script.splice(1, 0, 'cd "`dirname $0`"');
 
       return {
-        'script': nix.script.join('\n'),
-        'flags': nix.flags,
+        script: nix.script.join('\n'),
+        flags: nix.flags,
       };
     },
   },
-  'pterodactyl': {
-    'icon': 'IconServer',
-    'file': false,
-    'config': [
+  pterodactyl: {
+    file: false,
+    config: [
       ...sharedConfig,
       'variables',
     ],
-    'generate': config => {
+    generate: config => {
       const base = [];
 
       let fileName = config.fileName;
@@ -237,30 +233,29 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       base.push(java);
 
       return {
-        'script': base.join('\n'),
+        script: base.join('\n'),
         flags,
       };
     },
   },
-  'command': {
-    'icon': 'IconTerminal',
-    'file': false,
-    'config': [
+  command: {
+    file: false,
+    config: [
       ...sharedConfig,
     ],
-    'generate': config => {
+    generate: config => {
       const base = [];
 
       const java = getJava({
         ...config,
-        'memory': getMemory(config.memory),
+        memory: getMemory(config.memory),
       });
 
       base.push(java);
 
       return {
-        'script': base.join('\n'),
-        'flags': config.existingFlags,
+        script: base.join('\n'),
+        flags: config.existingFlags,
       };
     },
   },

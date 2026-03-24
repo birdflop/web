@@ -1,4 +1,4 @@
-import { $, component$, createContextId, isBrowser, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
@@ -75,7 +75,7 @@ export const birdStoreContext = createContextId<FlopbirdStore>('birdstore-contex
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
 export default component$(() => {
-  const t = (string: string) => inlineTranslate()(string);
+  const t = inlineTranslate();
   const loc = useLocation();
 
   // Select background images

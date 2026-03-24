@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "Het commando is succesvol naar je klembord gekopieerd.",
+      "copied": {
+        "description": "Het commando is succesvol naar je klembord gekopieerd.",
+        "title": "Command Copied!"
+      },
       "title": "Commando"
     },
-    "copied": "Gekopieerd naar klembord!",
     "copyFailed": "Kon niet naar klembord kopiëren!",
     "options": {
       "baseColor": {

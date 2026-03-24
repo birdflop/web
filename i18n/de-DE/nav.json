@@ -5,6 +5,7 @@
       "home": "Zurück zum Start.",
       "title": "404: Seite nicht gefunden."
     },
+    "clickToDismiss": "Click to dismiss",
     "cookies": {
       "acknowledge": "Accept",
       "description": "Wir nutzen Cookies um deine Einstellungen zu speichern und zu laden.",
@@ -60,10 +61,6 @@
       "hexGradient": {
         "description": "Hex-Farbverlauf Text Generator, angetrieben by Birdflop, ein 501(c)(3) gemeinnütziger Minecraft host.",
         "title": "RGBirdflop"
-      },
-      "hexGradientAPIDocs": {
-        "description": "Dokumentation für die RGBirdflop API.",
-        "title": "RGBirdflop API Dokumentation"
       },
       "hexGradientPresets": {
         "description": "Hier können sie Voreinstellungen für RGBirdflop finden und speichern, kopieren oder sofort nutzen.",

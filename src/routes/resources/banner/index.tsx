@@ -1,5 +1,5 @@
 /* eslint-disable qwik/jsx-img */
-import { $, component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
+import { component$, noSerialize, useContext, useSignal, useStore, useVisibleTask$, type Signal } from '@builder.io/qwik';
 import type { NoSerialize } from '@builder.io/qwik';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -24,7 +24,10 @@ const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, rej
 
 export default component$(() => {
   const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
+  const bannerCommandCopiedTitle = t('banner.command.copied.title@@Command Copied!');
+  const bannerCommandCopiedDescription = t('banner.command.copied.description@@The banner command has been copied to your clipboard!');
+  const copyFailedTitle = t('banner.copyFailed@@Failed to copy to clipboard!');
+
   const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
   const textureCanvas = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
@@ -395,14 +398,14 @@ export default component$(() => {
                 'lum-input h-32 w-full font-mc whitespace-pre-wrap': true,
               }}
               value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
-              onClick$={async (e, el) => {
+              onClick$={(e, el) => {
                 const notification = new Notification()
-                  .setTitle(await t$('banner.copied@@Copied to clipboard!'))
-                  .setDescription(await t$('banner.command.copied@@The command has been copied to your clipboard successfully.'))
+                  .setTitle(bannerCommandCopiedTitle)
+                  .setDescription(bannerCommandCopiedDescription)
                   .setBgColor('lum-bg-green/50');
 
-                navigator.clipboard.writeText(el.value).catch(async (err) => {
-                  notification.setTitle(await t$('banner.copyFailed@@Failed to copy to clipboard!'))
+                navigator.clipboard.writeText(el.value).catch((err) => {
+                  notification.setTitle(copyFailedTitle)
                     .setDescription(err)
                     .setBgColor('lum-bg-red/50')
                     .setPersist(true);

@@ -37,7 +37,6 @@
         "title": "공백에서 색상 자르기"
       }
     },
-    "copied": "클립보드에 복사되었습니다!",
     "copyFailed": "클립보드에 복사하지 못했습니다!",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "RGB 텍스트가 클립보드에 성공적으로 복사되었습니다.",
+      "copied": {
+        "description": "RGB 텍스트가 클립보드에 성공적으로 복사되었습니다.",
+        "title": "클립보드에 복사되었습니다!"
+      },
       "description": "RGB 텍스트를 위해 이것을 복사하여 붙여넣으세요!",
       "title": "출력"
     },
     "prefixsuffix": "접두사/접미사",
     "presets": {
       "back": "사전 설정으로 돌아가기",
-      "copied": "사전 설정이 클립보드에 성공적으로 복사되었습니다!",
+      "copied": {
+        "description": "사전 설정이 클립보드에 성공적으로 복사되었습니다!",
+        "title": "Preset Copied!"
+      },
       "copy": "복사",
       "createNew": "새 사전 설정 만들기",
       "createdAt": "생성됨",

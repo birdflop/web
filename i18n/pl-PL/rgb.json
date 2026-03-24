@@ -27,7 +27,6 @@
       "reverse": "Reverse",
       "shadow": {
         "enable": "Custom Text Shadow",
-        "sync": "Sychronizuj z kolorem tekstu",
         "title": "Cień tekstu",
         "warning": "Uwaga: Cień tekstu działa tylko w wypadku uzycia formatu JSON lub MiniMessage!"
       },
@@ -38,7 +37,6 @@
         "title": "Usuwaj kolory ze spacji"
       }
     },
-    "copied": "Skopiowano do schowska!",
     "copyFailed": "Nie udało się skopiować!",
     "decode": {
       "decoded": {
@@ -86,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "Tekst RGB został skopiowany do schowka!",
+      "copied": {
+        "description": "Tekst RGB został skopiowany do schowka!",
+        "title": "Skopiowano do schowska!"
+      },
       "description": "Skopiuj to aby otrzymać swó tekst w formacie RGB!",
       "title": "Wyjście"
     },
     "prefixsuffix": "Prefix/Suffix",
     "presets": {
       "back": "Powrót do szablonów",
-      "copied": "Skopiowano szablon do schowka!",
+      "copied": {
+        "description": "Skopiowano szablon do schowka!",
+        "title": "Preset Copied!"
+      },
       "copy": "Kopiuj",
       "createNew": "Stwórz szablon",
       "createdAt": "Stworzono w",

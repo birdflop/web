@@ -37,7 +37,6 @@
         "title": "Cortar cores dos espaços"
       }
     },
-    "copied": "Copiado para a área de transferência!",
     "copyFailed": "Falha ao copiar para a área de transferência!",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "O texto RGB foi copiado para a sua área de transferência com sucesso.",
+      "copied": {
+        "description": "O texto RGB foi copiado para a sua área de transferência com sucesso.",
+        "title": "Copiado para a área de transferência!"
+      },
       "description": "Copie e cole isto para texto RGB!",
       "title": "Saída"
     },
     "prefixsuffix": "Prefixo/Sufixo",
     "presets": {
       "back": "Voltar às predefinições",
-      "copied": "Predefinição copiada para a área de transferência com sucesso!",
+      "copied": {
+        "description": "Predefinição copiada para a área de transferência com sucesso!",
+        "title": "Preset Copied!"
+      },
       "copy": "Copiar",
       "createNew": "Criar uma nova predefinição",
       "createdAt": "Criado em",

@@ -37,7 +37,6 @@
         "title": "Boşluklardan renkleri kırp"
       }
     },
-    "copied": "Panoya kopyalandı!",
     "copyFailed": "Panoya kopyalanamadı!",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "RGB metni başarıyla panonuza kopyalandı.",
+      "copied": {
+        "description": "RGB metni başarıyla panonuza kopyalandı.",
+        "title": "Panoya kopyalandı!"
+      },
       "description": "RGB metni için bunu kopyalayıp yapıştırın!",
       "title": "Çıktı"
     },
     "prefixsuffix": "Ön ek/Son ek",
     "presets": {
       "back": "Ön ayarlara geri dön",
-      "copied": "Ön ayar başarıyla panoya kopyalandı!",
+      "copied": {
+        "description": "Ön ayar başarıyla panoya kopyalandı!",
+        "title": "Preset Copied!"
+      },
       "copy": "Kopyala",
       "createNew": "Yeni bir ön ayar oluştur",
       "createdAt": "Oluşturuldu",

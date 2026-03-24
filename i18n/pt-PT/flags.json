@@ -10,13 +10,8 @@
     },
     "description": "A coleção de argumentos de início que tipicamente otimizam o desempenho do servidor",
     "environment": {
-      "command": "Comando",
       "description": "O sistema operativo em que o servidor corre.",
-      "label": "Ambiente",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodáctilo",
-      "windows": "Janelas"
+      "label": "Ambiente"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Bandeiras de Aikar",
       "benchmarked": "Avaliação comparativa",
-      "etils": "Bandeiras de Etil",
       "hillttys": "Bandeiras de hilltty",
       "label": "Bandeiras",
       "meowice": "Bandeiras de MeowIce",
@@ -61,14 +55,6 @@
     "script": {
       "description": "O script resultante que pode ser usado para iniciar o seu servidor. Coloque este ficheiro na mesma localização que {{fileName}}, depois execute-o!",
       "label": "Script"
-    },
-    "serverType": {
-      "fabric": "Tecido",
-      "forge": "Forja",
-      "paper": "Papel",
-      "purpur": "Purpur",
-      "velocity": "Velocidade",
-      "waterfall": "Cascata"
     },
     "software": {
       "description": "O software em que o seu servidor Minecraft irá correr.",

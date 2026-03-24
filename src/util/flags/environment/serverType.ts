@@ -3,7 +3,7 @@ import type { ServerTypeOption } from '~/util/flags/types/environment/ServerType
 import type { AvailableConfig } from '~/util/flags/config';
 import type { AvailableExtraFlags, AvailableFlags } from '~/util/flags/flags';
 
-export type AvailableServerType = keyof typeof serverType;
+export type AvailableServerType = 'paper' | 'purpur' | 'velocity' | 'waterfall';
 
 interface SharedFlags<T = AvailableFlags> {
   [key: string]: T[]
@@ -28,7 +28,6 @@ const sharedExtraFlags: SharedFlags<AvailableExtraFlags> = {
 
 export const serverType: EnvironmentOptions<ServerTypeOption> = {
   'paper': {
-    'icon': 'IconBucket',
     'flags': [
       ...sharedFlags.bukkit,
     ],
@@ -44,7 +43,6 @@ export const serverType: EnvironmentOptions<ServerTypeOption> = {
     ],
   },
   'purpur': {
-    'icon': 'IconBucket',
     'flags': [
       ...sharedFlags.bukkit,
     ],
@@ -63,7 +61,6 @@ export const serverType: EnvironmentOptions<ServerTypeOption> = {
     ],
   },
   'velocity': {
-    'icon': 'IconNetwork',
     'flags': [
       ...sharedFlags.proxy,
     ],
@@ -75,7 +72,6 @@ export const serverType: EnvironmentOptions<ServerTypeOption> = {
     ],
   },
   'waterfall': {
-    'icon': 'IconNetwork',
     'default': {
       'flags': 'proxy',
     },

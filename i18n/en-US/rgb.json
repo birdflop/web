@@ -37,7 +37,6 @@
         "title": "Trim colors from spaces"
       }
     },
-    "copied": "Copied to clipboard!",
     "copyFailed": "Failed to copy to clipboard!",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "The RGB text has been copied to your clipboard successfully.",
+      "copied": {
+        "description": "The RGB text has been copied to your clipboard successfully.",
+        "title": "Copied to clipboard!"
+      },
       "description": "Copy-paste this for RGB text!",
       "title": "Output"
     },
     "prefixsuffix": "Prefix/Suffix",
     "presets": {
       "back": "Back to presets",
-      "copied": "Successfully copied preset to clipboard!",
+      "copied": {
+        "description": "Successfully copied preset to clipboard!",
+        "title": "Preset Copied!"
+      },
       "copy": "Copy",
       "createNew": "Create a new preset",
       "createdAt": "Created at",

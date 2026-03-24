@@ -37,7 +37,6 @@
         "title": "Farben von Leerzeichen trennen"
       }
     },
-    "copied": "In die Zwischenablage kopiert!",
     "copyFailed": "Konnte nicht kopiert werden!",
     "decode": {
       "decoded": {
@@ -79,22 +78,26 @@
           "header": "Minecraft Tab Kopfzeile",
           "player": "Minecraft Tab Spieler"
         },
-        "title": "Vorschau des Styls",
         "typeHere": "hier schreiben!"
       },
       "title": "Eingabetext"
     },
     "options": "Optionen",
     "output": {
-      "copied": "Der RGB Text wurde erfolgreich in die Zwischenablage kopiert.",
+      "copied": {
+        "description": "Der RGB Text wurde erfolgreich in die Zwischenablage kopiert.",
+        "title": "In die Zwischenablage kopiert!"
+      },
       "description": "Fügen sie dies für einen RGB Text ein.",
       "title": "Ausgabe"
     },
     "prefixsuffix": "Präfix/Suffix",
     "presets": {
       "back": "Zurück zu den Voreinstellungen",
-      "browse": "Suchen",
-      "copied": "Voreinstellung in die Zwischenablage kopiert!",
+      "copied": {
+        "description": "Voreinstellung in die Zwischenablage kopiert!",
+        "title": "Preset Copied!"
+      },
       "copy": "Kopieren",
       "createNew": "Eine neue Voreinstellung erstellen",
       "createdAt": "Erstellt am",

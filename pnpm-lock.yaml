@@ -38,6 +38,9 @@ importers:
       '@luminescent/ui-qwik':
         specifier: ^6.8.2
         version: 6.8.2(@luminescent/ui@6.8.2)
+      '@modular-forms/qwik':
+        specifier: ^0.29.1
+        version: 0.29.1(@builder.io/qwik-city@1.19.2(@types/node@25.5.0)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0)(rollup@4.59.0)(sass@1.98.0)(stylus@0.62.0)(typescript@5.9.3)(yaml@2.8.2))(@builder.io/qwik@1.19.2(vite@8.0.0(@types/node@25.5.0)(esbuild@0.25.12)(jiti@2.6.1)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(yaml@2.8.2)))(typescript@5.9.3)
       '@qwik.dev/partytown':
         specifier: ^0.11.2
         version: 0.11.2
@@ -107,6 +110,9 @@ importers:
       shiki:
         specifier: ^4.0.1
         version: 4.0.2
+      simple-icons-qwik:
+        specifier: ^16.10.0
+        version: 16.10.0
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1
@@ -1145,6 +1151,12 @@ packages:
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
 
+  '@modular-forms/qwik@0.29.1':
+    resolution: {integrity: sha512-xJb8wZXHEL0ioM5TlDpHUrXE4VKDf5OZbSoMtzmew9aHUGMDfsIGzSim408LaHHXa233YB76RhQZZAmO5Pgitg==}
+    peerDependencies:
+      '@builder.io/qwik': ^1.9.0 || ^2.0.0
+      '@builder.io/qwik-city': ^1.9.0 || ^2.0.0
+
   '@napi-rs/wasm-runtime@1.1.1':
     resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
 
@@ -1995,6 +2007,9 @@ packages:
     peerDependenciesMeta:
       supports-color:
         optional: true
+
+  decode-formdata@0.8.0:
+    resolution: {integrity: sha512-iUzDgnWsw5ToSkFY7VPFA5Gfph6ROoOxOB7Ybna4miUSzLZ4KaSJk6IAB2AdW6+C9vCVWhjjNA4gjT6wF3eZHQ==}
 
   decode-named-character-reference@1.3.0:
     resolution: {integrity: sha512-GtpQYB283KrPp6nRw50q3U9/VfOutZOe103qlN7BPP6Ad27xYnOIWv4lPzo8HCAL+mMZofJ9KEy30fq6MfaK6Q==}
@@ -3490,6 +3505,10 @@ packages:
   simple-get@4.0.1:
     resolution: {integrity: sha512-brv7p5WgH0jmQJr1ZDDfKDOSeWWg+OVypG99A/5vYGPqJ6pxiaHLy8nxtFjBA7oMa01ebA9gfh1uMCFqOuXxvA==}
 
+  simple-icons-qwik@16.10.0:
+    resolution: {integrity: sha512-SBx4Pf3oXGwZaI30jES6fMf7kl32Vq8wiFy9sU4fD/HWzqnK8PWnzlXhs9BwD84cU8fLwvclZmOgNfdyHQYkwA==}
+    engines: {node: '>=16.8.0 <18.0.0 || >=18.11', npm: please-use-pnpm, pnpm: '>=8.6.12', yarn: please-use-pnpm}
+
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -4571,6 +4590,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@modular-forms/qwik@0.29.1(@builder.io/qwik-city@1.19.2(@types/node@25.5.0)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0)(rollup@4.59.0)(sass@1.98.0)(stylus@0.62.0)(typescript@5.9.3)(yaml@2.8.2))(@builder.io/qwik@1.19.2(vite@8.0.0(@types/node@25.5.0)(esbuild@0.25.12)(jiti@2.6.1)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(yaml@2.8.2)))(typescript@5.9.3)':
+    dependencies:
+      '@builder.io/qwik': 1.19.2(vite@8.0.0(@types/node@25.5.0)(esbuild@0.25.12)(jiti@2.6.1)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(yaml@2.8.2))
+      '@builder.io/qwik-city': 1.19.2(@types/node@25.5.0)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0)(rollup@4.59.0)(sass@1.98.0)(stylus@0.62.0)(typescript@5.9.3)(yaml@2.8.2)
+      decode-formdata: 0.8.0
+      valibot: 1.2.0(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
+
   '@napi-rs/wasm-runtime@1.1.1':
     dependencies:
       '@emnapi/core': 1.9.0
@@ -5394,6 +5422,8 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
+
+  decode-formdata@0.8.0: {}
 
   decode-named-character-reference@1.3.0:
     dependencies:
@@ -7299,6 +7329,8 @@ snapshots:
       decompress-response: 6.0.0
       once: 1.4.0
       simple-concat: 1.0.1
+
+  simple-icons-qwik@16.10.0: {}
 
   source-map-js@1.2.1: {}
 

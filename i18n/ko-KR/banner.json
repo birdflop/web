@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "명령이 클립보드에 성공적으로 복사되었습니다.",
+      "copied": {
+        "description": "명령이 클립보드에 성공적으로 복사되었습니다.",
+        "title": "Command Copied!"
+      },
       "title": "명령"
     },
-    "copied": "클립보드에 복사되었습니다!",
     "copyFailed": "클립보드에 복사하지 못했습니다!",
     "options": {
       "baseColor": {

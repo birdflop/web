@@ -37,7 +37,6 @@
         "title": "Kleuren van spaties afkappen"
       }
     },
-    "copied": "Gekopieerd naar klembord!",
     "copyFailed": "Kon niet naar klembord kopiëren!",
     "decode": {
       "decoded": {
@@ -85,14 +84,20 @@
     },
     "options": "Options",
     "output": {
-      "copied": "De RGB-tekst is succesvol naar je klembord gekopieerd.",
+      "copied": {
+        "description": "De RGB-tekst is succesvol naar je klembord gekopieerd.",
+        "title": "Gekopieerd naar klembord!"
+      },
       "description": "Kopieer en plak dit voor RGB-tekst!",
       "title": "Uitvoer"
     },
     "prefixsuffix": "Voorvoegsel/Achtervoegsel",
     "presets": {
       "back": "Terug naar voorinstellingen",
-      "copied": "Voorinstelling succesvol naar klembord gekopieerd!",
+      "copied": {
+        "description": "Voorinstelling succesvol naar klembord gekopieerd!",
+        "title": "Preset Copied!"
+      },
       "copy": "Kopiëren",
       "createNew": "Maak een nieuwe voorinstelling",
       "createdAt": "Gemaakt op",

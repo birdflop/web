@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "命令已成功复制到您的剪贴板。",
+      "copied": {
+        "description": "命令已成功复制到您的剪贴板。",
+        "title": "Command Copied!"
+      },
       "title": "命令"
     },
-    "copied": "已复制到剪贴板！",
     "copyFailed": "复制到剪贴板失败！",
     "options": {
       "baseColor": {

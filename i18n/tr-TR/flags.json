@@ -10,13 +10,8 @@
     },
     "description": "Genellikle sunucunun performansını optimize eden başlangıç argümanlarının topluluğu",
     "environment": {
-      "command": "Komut",
       "description": "Sunucunun çalıştığı işletim sistemi.",
-      "label": "Ortam",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Pencereler"
+      "label": "Ortam"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar'ın bayrakları",
       "benchmarked": "Benchmarked",
-      "etils": "Etil'in bayrakları",
       "hillttys": "hilltty'nin bayrakları",
       "label": "Bayraklar",
       "meowice": "MeowIce'in bayrakları",
@@ -61,14 +55,6 @@
     "script": {
       "description": "Sunucunuzu başlatmak için kullanılabilecek sonuç betiği. Bu dosyayı {{fileName}} ile aynı konuma yerleştirin, sonra çalıştırın!",
       "label": "Betik"
-    },
-    "serverType": {
-      "fabric": "Kumaş",
-      "forge": "Forge",
-      "paper": "Kağıt",
-      "purpur": "Purpur",
-      "velocity": "Hız",
-      "waterfall": "Şelale"
     },
     "software": {
       "description": "Minecraft sunucunuzun çalışacağı yazılım.",

@@ -18,16 +18,28 @@ export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
+  const importedPresetTitle = t('rgb.presets.imported.title@@Successfully imported preset!');
+  const importedPresetDescription = t('rgb.presets.imported.description@@The preset has been imported successfully.');
+  const invalidPresetTitle = t('rgb.presets.invalid.title@@Invalid Preset');
+  const invalidPresetDescription = t('rgb.presets.invalid.description@@Please report this to the Discord server with the preset you tried to import.');
+  const savedPresetTitle = t('rgb.presets.saved.title@@Preset Saved!');
+  const savedPresetDescription = t('rgb.presets.saved.description@@The preset has been saved successfully.');
+  const savedPresetWarning = t('rgb.presets.saved.warning@@Please login to save presets permanently.');
+  const presetCopiedTitle = t('rgb.presets.copied.title@@Preset Copied!');
+  const presetCopiedDescription = t('rgb.presets.copied.description@@Successfully copied preset to clipboard!');
+  const presetUrlTitle = t('rgb.presets.url.title@@URL Updated!');
+  const presetUrlDescription = t('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)');
+  const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
+
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const loc = useLocation();
   const session = useSession();
 
-  const loadPresetJSON = $(async (presetJSON: string) => {
+  const loadPresetJSON = $((presetJSON: string) => {
     const notification = new Notification()
-      .setTitle(await t$('rgb.presets.imported.title@@Successfully imported preset!'))
-      .setDescription(await t$('rgb.presets.imported.description@@The preset has been imported successfully.'))
+      .setTitle(importedPresetTitle)
+      .setDescription(importedPresetDescription)
       .setBgColor('lum-bg-green/50');
     let json: rgbPreset | undefined;
     try {
@@ -36,8 +48,8 @@ export default component$(({ hidden }: {
         ...preset,
       };
     } catch (err) {
-      notification.setTitle(await t$('rgb.presets.invalid.title@@Invalid Preset'))
-        .setDescription(`Error: ${err}\n${await t$('rgb.presets.invalid.description@@Please report this to the Discord server with the preset you tried to import.')}`)
+      notification.setTitle(invalidPresetTitle)
+        .setDescription(`Error: ${err}\n${invalidPresetDescription}`)
         .setBgColor('lum-bg-red/50')
         .setButtons([{
           text: 'Discord',
@@ -104,10 +116,10 @@ export default component$(({ hidden }: {
           }
           if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
           await setUserData({ privatePresets: privatePresets.value });
+
           const notification = new Notification()
-            .setTitle(await t$('rgb.presets.saved.title@@Preset Saved!'))
-            .setDescription(session.value ? await t$('rgb.presets.saved.description@@The preset has been saved successfully.')
-              : await t$('rgb.presets.saved.warning@@Please login to save presets permanently.'))
+            .setTitle(savedPresetTitle)
+            .setDescription(session.value ? savedPresetDescription : savedPresetWarning)
             .setBgColor(session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50');
           notifications.push(notification);
         }}>
@@ -151,17 +163,17 @@ export default component$(({ hidden }: {
       <div class="flex flex-wrap gap-1">
         <button class={{
           'lum-btn rounded-r-sm flex-1': true,
-        }} id="copy" onClick$={async () => {
+        }} id="copy" onClick$={() => {
           const preset: rgbPreset = { ...rgbStore };
           (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(key => {
             if (key != 'version' && JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key])) delete preset[key];
           });
           const notification = new Notification()
-            .setTitle(await t$('rgb.copied@@Copied to clipboard!'))
-            .setDescription(await t$('rgb.presets.copied@@Successfully copied preset to clipboard!'))
+            .setTitle(presetCopiedTitle)
+            .setDescription(presetCopiedDescription)
             .setBgColor('lum-bg-green/50');
-          navigator.clipboard.writeText(JSON.stringify(preset)).catch(async (err) => {
-            notification.setTitle(await t$('rgb.copyFailed@@Failed to copy to clipboard!'))
+          navigator.clipboard.writeText(JSON.stringify(preset)).catch((err) => {
+            notification.setTitle(copyFailedTitle)
               .setDescription('Error: ' + err)
               .setBgColor('lum-bg-red/50')
               .setPersist(true);
@@ -172,7 +184,7 @@ export default component$(({ hidden }: {
         </button>
         <button class={{
           'lum-btn rounded-l-sm flex-1': true,
-        }} id="createurl" onClick$={async () => {
+        }} id="createurl" onClick$={() => {
           const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
           const url = new URL(base_url);
           const params: rgbPreset = { ...rgbStore };
@@ -186,8 +198,8 @@ export default component$(({ hidden }: {
           });
           window.history.pushState({}, '', url.href);
           const notification = new Notification()
-            .setTitle(await t$('rgb.presets.url.title@@URL Updated!'))
-            .setDescription(await t$('rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'))
+            .setTitle(presetUrlTitle)
+            .setDescription(presetUrlDescription)
             .setBgColor('lum-bg-green/50');
           notifications.push(notification);
         }}>

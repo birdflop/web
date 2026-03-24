@@ -10,13 +10,8 @@
     },
     "description": "De verzameling startargumenten die doorgaans de prestaties van de server optimaliseren",
     "environment": {
-      "command": "Commando",
       "description": "Het besturingssysteem waarop de server draait.",
-      "label": "Omgeving",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "label": "Omgeving"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar's vlaggen",
       "benchmarked": "Benchmark",
-      "etils": "Etil's vlaggen",
       "hillttys": "hilltty's vlaggen",
       "label": "Vlaggen",
       "meowice": "MeowIce's vlaggen",
@@ -61,14 +55,6 @@
     "script": {
       "description": "Het resulterende script dat kan worden gebruikt om je server te starten. Plaats dit bestand op dezelfde locatie als {{fileName}}, voer het dan uit!",
       "label": "Script"
-    },
-    "serverType": {
-      "fabric": "Stof",
-      "forge": "Smederij",
-      "paper": "Papier",
-      "purpur": "Purpur",
-      "velocity": "Snelheid",
-      "waterfall": "Waterval"
     },
     "software": {
       "description": "De software waarop je Minecraft-server zal draaien.",

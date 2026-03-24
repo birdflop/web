@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "Komenda została skopiowana do schowka.",
+      "copied": {
+        "description": "Komenda została skopiowana do schowka.",
+        "title": "Command Copied!"
+      },
       "title": "Komenda"
     },
-    "copied": "Skopiowano do schowka!",
     "copyFailed": "Nie udało się skopiować!",
     "options": {
       "baseColor": {

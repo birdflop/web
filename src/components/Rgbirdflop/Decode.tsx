@@ -10,12 +10,14 @@ export default component$(({ hidden }: {
   hidden: boolean;
 }) => {
   const t = inlineTranslate();
-  const t$ = $((string: string) => inlineTranslate()(string));
+  const textDecodedTitle = t('rgb.decode.decoded.title@@RGB Text Decoded!');
+  const textDecodedDescription = t('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.');
+
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
   const threshold = useSignal(50);
 
-  const decodeText = $(async (rgbtext: string, threshold: number) => {
+  const decodeText = $((rgbtext: string, threshold: number) => {
     const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
     const spans = rgbtext.match(new RegExp(pattern, 'g'));
     if (!spans) return;
@@ -44,8 +46,8 @@ export default component$(({ hidden }: {
     });
     rgbStore.colors = newColors;
     const notification = new Notification()
-      .setTitle(await t$('rgb.decode.decoded.title@@RGB Text Decoded!'))
-      .setDescription(await t$('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'))
+      .setTitle(textDecodedTitle)
+      .setDescription(textDecodedDescription)
       .setBgColor('lum-bg-green/50');
     notifications.push(notification);
   });

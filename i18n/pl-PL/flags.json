@@ -10,13 +10,8 @@
     },
     "description": "Zbiór argumentów startowych optymalizujących działanie serwera.",
     "environment": {
-      "command": "Command",
       "description": "System operacyjny, którego używa serwer",
-      "label": "Środowisko",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "label": "Środowisko"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar's Flags",
       "benchmarked": "Benchmarked",
-      "etils": "Etil's Flags",
       "hillttys": "hilltty's Flags",
       "label": "Flags",
       "meowice": "MeowIce's Flags",
@@ -61,14 +55,6 @@
     "script": {
       "description": "Skrypt, który zostanie użyty aby uruchomić serwer. Umieść ten plik w tym samym folderze co {{fileName}} a następnie uruchom.",
       "label": "Skrypt"
-    },
-    "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
-      "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
     },
     "software": {
       "description": "Silnik jakiego będzie używał twój serwer.",

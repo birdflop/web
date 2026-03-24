@@ -10,13 +10,8 @@
     },
     "description": "Die Sammlung an Startargumenten die typisch Serverleistung optimieren.",
     "environment": {
-      "command": "Kommando",
       "description": "Das Betriebssystem auf dem der Server läuft.",
-      "label": "Umgebung",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodaktylus",
-      "windows": "Windows"
+      "label": "Umgebung"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar's Kennzeichnungen",
       "benchmarked": "Benchmarking",
-      "etils": "Etil's Kennzeichnungen",
       "hillttys": "hilltty's Kennzeichnungen",
       "label": "Kennzeichnungen",
       "meowice": "MeowIce's Kennzeichnungen",
@@ -61,14 +55,6 @@
     "script": {
       "description": "Das ergebende Script welches für den Serverstart genutzt wird. Platzieren sie es im selben Pfad wie {{fileName}} und führen sie es aus!",
       "label": "Drehbuch"
-    },
-    "serverType": {
-      "fabric": "Stoff",
-      "forge": "Schmiede",
-      "paper": "Papier",
-      "purpur": "Purpur",
-      "velocity": "Geschwindigkeit",
-      "waterfall": "Wasserfall"
     },
     "software": {
       "description": "Die Software in der der Minecraft-Server laufen wird.",

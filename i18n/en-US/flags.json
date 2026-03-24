@@ -10,13 +10,8 @@
     },
     "description": "The collection of start arguments that typically optimize the server's performance",
     "environment": {
-      "command": "Command",
       "description": "The operating system that the server runs on.",
-      "label": "Environment",
-      "linux": "Linux",
-      "macos": "macOS",
-      "pterodactyl": "Pterodactyl",
-      "windows": "Windows"
+      "label": "Environment"
     },
     "extraFlags": {
       "benchmarkedGraalVM": {
@@ -39,7 +34,6 @@
     "flags": {
       "aikars": "Aikar's Flags",
       "benchmarked": "Benchmarked",
-      "etils": "Etil's Flags",
       "hillttys": "hilltty's Flags",
       "label": "Flags",
       "meowice": "MeowIce's Flags",
@@ -61,14 +55,6 @@
     "script": {
       "description": "The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!",
       "label": "Script"
-    },
-    "serverType": {
-      "fabric": "Fabric",
-      "forge": "Forge",
-      "paper": "Paper",
-      "purpur": "Purpur",
-      "velocity": "Velocity",
-      "waterfall": "Waterfall"
     },
     "software": {
       "description": "The software in which your Minecraft server will run on.",

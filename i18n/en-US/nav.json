@@ -5,6 +5,13 @@
       "home": "Go back home",
       "title": "404: Page not found"
     },
+    "clickToDismiss": "Click to dismiss",
+    "cookies": {
+      "acknowledge": "Accept",
+      "description": "We use cookies to automatically save and load your preferences.",
+      "optOut": "Reject",
+      "title": "Cookies"
+    },
     "docs": "Docs",
     "hosting": {
       "billing": "Billing",

@@ -1,10 +1,12 @@
 {
   "banner": {
     "command": {
-      "copied": "Komut başarıyla panonuza kopyalandı.",
+      "copied": {
+        "description": "Komut başarıyla panonuza kopyalandı.",
+        "title": "Command Copied!"
+      },
       "title": "Komut"
     },
-    "copied": "Panoya kopyalandı!",
     "copyFailed": "Panoya kopyalanamadı!",
     "options": {
       "baseColor": {
