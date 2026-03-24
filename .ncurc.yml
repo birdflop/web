@@ -1,2 +1,0 @@
-reject:
-  - "typescript" # lint broken on 5.9
