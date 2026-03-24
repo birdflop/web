@@ -11,12 +11,12 @@ export type AvailableFlags = keyof typeof flags;
 export type AvailableExtraFlags = keyof typeof extraFlags;
 
 interface FlagOption {
-  'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType>
+  'generate': Generate<AvailableConfig | AvailableOperatingSystem | AvailableServerType>
 }
 
 interface FlagExtraOption extends FlagOption {
   'supports': AvailableFlags[],
-  'generate': Generate<AvailableConfig & AvailableOperatingSystem & AvailableServerType | 'existingFlags'>
+  'generate': Generate<AvailableConfig | AvailableOperatingSystem | AvailableServerType | 'existingFlags'>
 }
 
 const baseAikar = [
