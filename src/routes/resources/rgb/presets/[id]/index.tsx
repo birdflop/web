@@ -2,7 +2,7 @@ import { component$, isBrowser, useContext, useContextProvider, useSignal, useSt
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import { Check, ChevronLeft, Copy, Github, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { Check, ChevronLeft, Copy, Github, Minus, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
@@ -15,7 +15,7 @@ import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { useIsAdmin } from '~/routes/layout-profile';
-import { donateLink } from '~/components/Elements/Nav';
+import { discordLink, donateLink } from '~/components/Elements/Nav';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -52,6 +52,7 @@ export default component$(() => {
   const session = useSession();
   const presetInfo = usePreset().value;
 
+  const isOwner = session.value?.user?.id === presetInfo.userId;
   const isAdmin = useIsAdmin().value;
 
   const rgbStore = useStore({
@@ -118,6 +119,12 @@ export default component$(() => {
         </Link>
       </div>
 
+      {presetInfo.pending &&
+        <p class="text-yellow-500! my-5 font-bold text-2xl">
+          {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
+        </p>
+      }
+
       <h6 class={{
         'flex items-center gap-2 mb-0!': true,
         'text-blue-300/80!': !presetInfo.user,
@@ -134,13 +141,13 @@ export default component$(() => {
         }
         { presetInfo.author && !presetInfo.user && <>
           {presetInfo.author == 'RGBirdflop' &&
-              <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+            <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
           }
           {presetInfo.author == 'SimplyMC' &&
-              <LogoLuminescent size={32} class="text-luminescent-300" />
+            <LogoLuminescent size={32} class="text-luminescent-300" />
           }
           {presetInfo.author.includes('GitHub') &&
-              <Github size={32} />
+            <Github size={32} />
           }
           {presetInfo.author}
         </>}
@@ -165,12 +172,6 @@ export default component$(() => {
         :
         <p class="text-white! mb-5">
           {presetInfo.description}
-        </p>
-      }
-
-      {presetInfo.pending &&
-        <p class="lum-card text-white! my-5 font-bold text-2xl lum-bg-orange">
-          {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
         </p>
       }
 
@@ -273,18 +274,33 @@ export default component$(() => {
           ))}
         </div>
 
-        {isAdmin &&
-          <>
+        {(isAdmin || (isOwner && presetInfo.pending)) &&
+          <div class="lum-card lum-bg-red/20">
             <h3 class="my-0!">
               Manage Preset
             </h3>
+            {isOwner && presetInfo.pending &&
+              <p class="mb-2 text-yellow-500!">
+                This preset is pending review. You can either delete it or wait for an admin to review and approve it.
+                Once approved, it will not be able to be deleted. If you want to delete this preset after it's approved,
+                please contact us on <a href={discordLink} target="_blank" class="text-blue-500 hover:underline">Discord</a>.
+              </p>
+            }
             <div class="flex items-center gap-1">
-              {presetInfo.pending &&
+              {isAdmin && presetInfo.pending &&
                 <button class="lum-btn lum-bg-green hover:bg-green" onClick$={async () => {
                   await updatePreset(presetInfo.id, { pending: false });
                   window.location.assign('/resources/rgb/presets?showPending=true');
                 }}>
                   <Check size={20} /> Approve
+                </button>
+              }
+              {isAdmin && !presetInfo.pending &&
+                <button class="lum-btn lum-bg-yellow hover:bg-yellow" onClick$={async () => {
+                  await updatePreset(presetInfo.id, { pending: true });
+                  window.location.assign('/resources/rgb/presets?showPending=true');
+                }}>
+                  <Minus size={20} /> Unapprove
                 </button>
               }
               <button class="lum-btn lum-bg-red hover:bg-red" onClick$={async () => {
@@ -294,12 +310,12 @@ export default component$(() => {
                 <Trash size={20} /> Delete
               </button>
             </div>
-          </>
+          </div>
         }
       </div>
 
       <div class="text-sm mt-8">
-          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href={donateLink}>click here</a> to make a charitable donation, 100% tax-deductible in the US.
+        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href={donateLink}>click here</a> to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>
   );
