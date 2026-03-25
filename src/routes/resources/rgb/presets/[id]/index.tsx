@@ -160,7 +160,7 @@ export default component$(() => {
             day: 'numeric',
           })}
       </p>
-      {isAdmin ?
+      {(isAdmin || isOwner) ?
         <input type="text" class="lum-input w-full mb-4" value={presetInfo.description}
           onChange$={async (e, el) => {
             presetInfo.description = el.value;
