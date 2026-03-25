@@ -29,7 +29,10 @@ export default component$(() => {
   }));
 
   return <>
-    <section class="min-h-svh flex justify-center relative overflow-hidden">
+    <section class="min-h-svh flex justify-center relative overflow-hidden"
+      style={{
+        '--lum-border-radius': '1.5rem',
+      }}>
       <div id="hero" class="flex flex-col md:flex-row text-gray-100 px-20 items-center justify-center md:justify-between pt-18 max-w-5xl xl:max-w-6xl 2xl:max-w-7xl w-full">
         <div class="relative flex flex-col gap-4 xl:gap-8">
           <div class={{
@@ -70,10 +73,7 @@ export default component$(() => {
             </h2>
           </div>
         </div>
-        <div class="flex flex-col gap-2 mt-8"
-          style={{
-            '--lum-border-radius': '1rem',
-          }}>
+        <div class="flex flex-col gap-2 mt-8">
           <a href="#plans"
             class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600">
             <Server size={32} /> Hosting
@@ -107,7 +107,10 @@ export default component$(() => {
         </button>
       </p>
     </section>
-    <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
+    <section class="flex flex-col w-full bg-bg p-10 items-center justify-center"
+      style={{
+        '--lum-border-radius': '1.5rem',
+      }}>
       <Anchor id="plans">
         <h1 id="plans" class="mr-2">
           Plans
@@ -161,7 +164,10 @@ export default component$(() => {
         </p>
       </div>
     </section>
-    <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
+    <section class="flex flex-col w-full bg-bg p-10 items-center justify-center"
+      style={{
+        '--lum-border-radius': '1.5rem',
+      }}>
       <Anchor id="features">
         <h1 id="features" class="mr-2">
           Features
