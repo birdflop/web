@@ -1,4 +1,8 @@
 {
-  "recommendations": ["dbaeumer.vscode-eslint", "unifiedjs.vscode-mdx"],
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "unifiedjs.vscode-mdx",
+    "VoidZero.vite-plus-extension-pack"
+  ],
   "unwantedRecommendations": []
 }
