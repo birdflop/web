@@ -1,11 +1,21 @@
-import { component$, useContextProvider, useSignal } from '@builder.io/qwik';
+import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 
 import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
 import { useSession } from '~/routes/plugin@auth';
 import { generateHead } from '~/root';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
+import UsersPublicPresets, { getUsersPresets } from '~/components/Rgbirdflop/UsersPublicPresets';
+import { routeLoader$ } from '@builder.io/qwik-city';
+import { Notification, NotificationContext } from '~/util/Notification';
+
+export const useUser = routeLoader$(async ({ sharedMap }) => {
+  const session = sharedMap.get('session') as { user: { id: string } } | null;
+  if (!session) throw new Error('No session found');
+  return getUsersPresets(session.user.id);
+});
 
 export default component$(() => {
+  const notifications = useContext(NotificationContext);
 
   const session = useSession();
 
@@ -15,7 +25,23 @@ export default component$(() => {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
+  const { userInfo, userPresets, errors } = useUser().value;
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (errors.length > 0) {
+      errors.forEach((error) => {
+        const notification = new Notification()
+          .setTitle('Error fetching user data')
+          .setDescription(`Error: ${error}`)
+          .setBgColor('lum-bg-red/50')
+          .setPersist(true);
+        notifications.push(notification);
+      });
+    }
+  });
+
   return <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+    <UsersPublicPresets userInfo={userInfo} userPresets={userPresets} errors={errors} />
     <MyPrivatePresets />
   </section>;
 });

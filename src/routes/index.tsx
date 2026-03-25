@@ -150,7 +150,7 @@ export default component$(() => {
           </div>;
         })}
       </div>
-      <div class="lum-card lum-bg-green/60 transition duration-1000 hover:duration-75 ease-out max-w-xl mx-auto mt-3 lum-hoverable"
+      <div class="lum-card lum-bg-green/60 transition-all duration-200! max-w-xl mt-5"
         onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
         <h4 class="my-0! flex items-center gap-2">
@@ -168,7 +168,7 @@ export default component$(() => {
         </h1>
       </Anchor>
       <div class="grid md:grid-cols-2 gap-2 max-w-5xl">
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -178,7 +178,7 @@ export default component$(() => {
             We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
           </p>
         </div>
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -188,7 +188,7 @@ export default component$(() => {
             You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
           </p>
         </div>
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -198,7 +198,7 @@ export default component$(() => {
             We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
           </p>
         </div>
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -208,7 +208,7 @@ export default component$(() => {
             We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
           </p>
         </div>
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
@@ -218,7 +218,7 @@ export default component$(() => {
             You can contact support at any time through our <a href={discordLink} data-umami-event="discord-link" data-umami-source="support" class="text-blue-400 hover:underline">Discord server</a>.
           </p>
         </div>
-        <div class="lum-card transition duration-1000 hover:duration-75 ease-out lum-hoverable"
+        <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h3 class="mt-0! mb-2! flex items-center gap-2">
