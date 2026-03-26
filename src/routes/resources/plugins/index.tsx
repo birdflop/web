@@ -3,9 +3,9 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Eye, Loader2 } from 'lucide-icons-qwik';
+import { Blocks, Check, Download, Eye, Loader2 } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SiGithub, SiSpigotmc } from 'simple-icons-qwik';
+import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'plugins', url.searchParams);
@@ -13,13 +13,36 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
 
 export type Plugin = {
   name: string;
-  version?: string;
+  version?: any;
   type?: 'spigot';
   id?: string;
 };
 
+type PluginData = {
+  name: string;
+  external?: boolean;
+  tag?: string;
+  iconUrl?: string;
+  releaseDate?: number;
+  updateDate?: number;
+  file?: {
+    type: string;
+    size: number;
+    sizeUnit: string;
+    url: string;
+    externalUrl?: string;
+  };
+  testedVersions?: string[];
+  latestVersion?: {
+    id: string;
+    name: string;
+    releaseDate: number;
+  };
+  sourceCodeLink?: string;
+}
+
 type PluginWithData = Plugin & {
-  data?: any;
+  data?: PluginData;
 };
 
 export default component$(() => {
@@ -42,7 +65,9 @@ export default component$(() => {
   const pluginsStore = useStore<{
     openServer: string | null;
     servers: { [key: string]: PluginWithData[] };
+    showDebug: boolean;
   }>({
+    showDebug: false,
     openServer: 'Example Server',
     servers: {
       ...cookies,
@@ -57,12 +82,38 @@ export default component$(() => {
       for (const plugin of plugins) {
         if (plugin.data || !plugin.id) return;
         try {
-          const response = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
-          const data = await response.json() as any;
-          // delete unneeded data to reduce memory usage
-          delete data.description;
-          delete data.icon.data;
-          plugin.data = data;
+          const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
+          const data = await res.json() as any;
+
+          const pluginData: PluginData = {
+            external: data.external,
+            name: data.name,
+            tag: data.tag,
+            iconUrl: data.icon?.url,
+            releaseDate: data.releaseDate,
+            updateDate: data.updateDate,
+            file: data.file ? {
+              type: data.file.type,
+              size: data.file.size,
+              sizeUnit: data.file.sizeUnit,
+              url: data.file.url,
+              externalUrl: data.file.externalUrl,
+            } : undefined,
+            testedVersions: data.testedVersions?.length
+              ? data.testedVersions : undefined,
+            sourceCodeLink: data.sourceCodeLink,
+          };
+          // fetch latest version
+          const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
+          const latestVersion = await latestVerResponse.json() as any;
+          console.log(latestVersion);
+          pluginData.latestVersion = {
+            id: latestVersion.id,
+            name: latestVersion.name,
+            releaseDate: latestVersion.releaseDate,
+          };
+
+          plugin.data = pluginData;
         }
         catch (err) {
           console.error(`Failed to fetch plugin data for ${plugin.name}:`, err);
@@ -76,6 +127,9 @@ export default component$(() => {
       <h1 class="flex gap-3 text-2xl! items-center my-2!">
         <Blocks size={32} />
         {t('nav.resources.plugins.title@@Plugin Updater')}
+        <span class="text-sm bg-yellow/50 text-yellow-800 px-1 rounded">
+          beta
+        </span>
       </h1>
       <p class="mb-4 border-b border-lum-border/10 pb-4">
         {t('nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.')}
@@ -102,49 +156,102 @@ export default component$(() => {
         )}
       </div>
 
-      {pluginsStore.openServer && (
-        <div class="grid grid-cols-2 gap-2 my-12">
-          {pluginsStore.servers[pluginsStore.openServer]?.map((plugin) => (
-            <div key={plugin.name} class="lum-card flex-1">
-              <p class="flex items-center gap-2 text-lg! text-lum-text!">
-                {(plugin.type === 'spigot' && !plugin.data?.icon?.url)
-                  && <SiSpigotmc class="fill-yellow" />}
-                {plugin.data?.icon?.url &&
-                  <img src={'https://spigotmc.org/' + plugin.data.icon.url} alt={`${plugin.name} icon`}
-                    width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}
-                {plugin.name}
-                {plugin.data?.testedVersions?.length > 0 && <span class="text-sm text-lum-text/50">{plugin.data.testedVersions[0]} - {plugin.data.testedVersions[plugin.data.testedVersions.length - 1]}</span>}
-                {!plugin.data && <Loader2 class="animate-spin" />}
-              </p>
-              <p class="text-sm">
-                {JSON.stringify(plugin.version) ?? 'No version set'}
-              </p>
-              <textarea value={JSON.stringify(plugin.data, null, 2)} readOnly class="w-full h-32 mt-2 font-mono text-sm" />
-              <div class="flex mt-2 gap-1">
-                <button class="lum-btn" onClick$={async () => {
-                  const data = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
-                  const json = await data.json() as any;
+      <div class="flex gap-2 mt-4">
+        <button class="lum-btn text-sm" onClick$={() => {
+          if (!pluginsStore.openServer) return;
+          const plugins = pluginsStore.servers[pluginsStore.openServer];
+          plugins.forEach((plugin) => {
+            if (plugin.data?.latestVersion) {
+              plugin.version = plugin.data.latestVersion;
+            }
+          });
+        }}>
+          <Check size={16} />
+          Mark all as updated
+        </button>
+      </div>
 
-                  plugin.version = json.name;
-                }}>
-                  <Check /> Mark updated
-                </button>
-                <div class="flex-1"/>
-                {plugin.data?.sourceCodeLink && (
-                  <a href={plugin.data.sourceCodeLink} target="_blank" class="lum-btn p-2">
-                    <SiGithub class="fill-current" />
-                  </a>
-                )}
-                {plugin.type === 'spigot' && (
-                  <a href={`https://www.spigotmc.org/resources/${plugin.id}`} target="_blank" class="lum-btn p-2 lum-bg-yellow">
-                    <SiSpigotmc class="fill-current" />
-                  </a>
-                )}
-              </div>
+      <div class="grid gap-2 my-12">
+        {pluginsStore.openServer && pluginsStore.servers[pluginsStore.openServer]?.map((plugin) => (
+          <div key={plugin.name} class="lum-card flex-1 relative lum-bg-lum-card-bg/80 overflow-clip">
+
+            {plugin.data?.iconUrl &&
+              <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+                width={720} height={720} class="absolute w-full h-full inset-0 object-cover -z-1 blur-3xl scale-250 brightness-25 saturate-200" />}
+
+            <p class="flex items-center gap-2">
+              {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
+                && <SiSpigotmc class="fill-yellow" />}
+              {plugin.data?.iconUrl &&
+                <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+                  width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}
+              <span class="text-lg! text-lum-text!">
+                {plugin.name}
+              </span>
+              {plugin.data?.testedVersions && <span class="text-sm">{plugin.data.testedVersions[0]} - {plugin.data.testedVersions[plugin.data.testedVersions.length - 1]}</span>}
+              {!plugin.data && <Loader2 class="animate-spin" />}
+              {plugin.data?.latestVersion?.name &&
+                <span class="text-sm">
+                  {plugin.data?.latestVersion?.name}
+                </span>
+              }
+              {plugin.version &&
+                <span class="text-sm flex-1 text-right">
+                  Current: {plugin.version.name}
+                </span>
+              }
+            </p>
+
+            <p class="flex-1">
+              {plugin.data?.tag}
+            </p>
+
+            {plugin.data?.latestVersion?.releaseDate && plugin.version?.releaseDate
+              && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate
+                && <p class="text-green-500! text-xs">
+                  Update available as of {
+                    new Date(plugin.data.latestVersion.releaseDate * 1000)
+                      .toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+                  }
+                </p>}
+
+            <div class="flex mt-2 gap-1">
+              <a class={{
+                'lum-btn text-sm': true,
+                'lum-bg-blue/50 hover:lum-bg-blue/80': plugin.data?.latestVersion?.releaseDate && plugin.version?.releaseDate
+              && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate,
+              }} href={plugin.data?.file?.url} target="_blank">
+                <Download size={16} /> Download latest
+              </a>
+              <button class="lum-btn text-sm lum-bg-transparent" onClick$={() => {
+                plugin.version = plugin.data?.latestVersion;
+              }}>
+                <Check size={16} /> Mark updated
+              </button>
+              <div class="flex-1"/>
+              {plugin.data?.sourceCodeLink && (
+                <a href={plugin.data.sourceCodeLink} target="_blank" class="lum-btn p-2">
+                  <SiGithub size={16} class="fill-current" />
+                </a>
+              )}
+              {plugin.data?.file?.externalUrl?.includes('modrinth') && (
+                <a href={plugin.data?.file?.externalUrl} target="_blank" class="lum-btn p-2 lum-bg-green">
+                  <SiModrinth size={16} class="fill-current" />
+                </a>
+              )}
+              {plugin.type === 'spigot' && (
+                <a href={`https://www.spigotmc.org/resources/${plugin.id}`} target="_blank" class="lum-btn p-2 lum-bg-yellow">
+                  <SiSpigotmc size={16} class="fill-current" />
+                </a>
+              )}
             </div>
-          ))}
-        </div>
-      )}
+
+            {pluginsStore.showDebug &&
+              <textarea value={JSON.stringify(plugin.data, null, 2)} readOnly class="lum-input w-full mt-2 font-mono text-sm" />
+            }
+          </div>
+        ))}
+      </div>
 
     </section>
   );
