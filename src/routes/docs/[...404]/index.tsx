@@ -16,7 +16,6 @@ export const onGet: RequestHandler = ({ json, request }) => {
 export default component$(() => {
   const t = inlineTranslate();
 
-  // Keeping below unloading in case we mess up navbar in future
   return (
     <section>
       <div>

@@ -1,4 +1,4 @@
-import { component$, isBrowser, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
 
 import { inlineTranslate } from 'qwik-speak';
 
@@ -9,6 +9,7 @@ import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { loadingItemsContext } from '~/routes/layout-profile';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -35,9 +36,10 @@ export default component$(() => {
   const previewStyle = useSignal('chat');
   useContextProvider(previewStyleContext, previewStyle);
 
+  const loadingItemsStore = useContext(loadingItemsContext);
+
   const animtextureStore = useStore({
     textureName: 'animtexture',
-    loading: false,
     width: 16,
     height: 16,
     lockdimensions: true,
@@ -59,7 +61,6 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     (Object.keys(animtextureStore) as Array<keyof typeof animtextureStore>).forEach((key) => {
-      if (key == 'loading') return;
       track(() => animtextureStore[key]);
     });
     track(() => animtextureFrames.value);
@@ -139,7 +140,7 @@ export default component$(() => {
             </label>
             <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
               const files = Array.from(el.files ?? []);
-              animtextureStore.loading = true;
+              loadingItemsStore.items = [...loadingItemsStore.items, 'fileInput'];
               for (const f of files) {
                 const e = await readFileAsDataURL(f);
                 if (!e.target?.result) return;
@@ -178,7 +179,7 @@ export default component$(() => {
 
                 animtextureFrames.value = frames;
               }
-              animtextureStore.loading = false;
+              loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== 'fileInput');
             }} />
             <label for="urlInput" class="mt-2">
               {t('animtexture.pasteUrl@@Paste GIF or image URL')}
@@ -189,7 +190,7 @@ export default component$(() => {
                 let url = el.value;
                 if (!url) return;
 
-                animtextureStore.loading = true;
+                loadingItemsStore.items = [...loadingItemsStore.items, 'urlInput'];
 
                 // if the url is a discord emoji, you can replace .webp with .gif
                 if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
@@ -236,7 +237,7 @@ export default component$(() => {
 
                 animtextureFrames.value = frames;
 
-                animtextureStore.loading = false;
+                loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== 'urlInput');
               }} />
             <Toggle id="accumulate" checked={animtextureStore.accumulate}
               onChange$={(e, el) => { animtextureStore.accumulate = el.checked; }}>
