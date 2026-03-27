@@ -254,7 +254,7 @@ export default component$(() => {
             id="publish-preset"
             disabled={isSubmitting.value}
           >
-            <Save size={20} /> {isSubmitting.value ? 'Validating...' : 'Publish'}
+            <Save size={20} /> Publish {isSubmitting.value ? 'Validating...' : 'Publish'}
           </button>
         </div>
       </div>

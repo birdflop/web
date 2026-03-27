@@ -74,7 +74,6 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
 export const birdStoreContext = createContextId<FlopbirdStore>('birdstore-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
-export const loadingItemsContext = createContextId<{ items: string[] }>('loadingitems-context');
 export default component$(() => {
   const t = inlineTranslate();
   const loc = useLocation();
@@ -93,12 +92,6 @@ export default component$(() => {
   /* Notification store */
   const notifications = useStore<NotificationType[]>([]);
   useContextProvider(NotificationContext, notifications);
-
-  // Loading items store
-  const loadingItemsStore = useStore({
-    items: [] as string[],
-  });
-  useContextProvider(loadingItemsContext, loadingItemsStore);
 
   // Open items store
   const openItemsStore = useStore({

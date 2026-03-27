@@ -1,4 +1,4 @@
-import { component$, isBrowser, Signal, useContext } from '@builder.io/qwik';
+import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
@@ -9,7 +9,7 @@ import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/r
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
-import { loadingItemsContext, useIsAdmin } from '~/routes/layout';
+import { useIsAdmin } from '~/routes/layout';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
@@ -26,7 +26,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
   const t = inlineTranslate();
   const privatePresets = useContext(privatePresetsContext);
   const savedPresets = useContext(savedPresetsContext);
-  const loadingItemsStore = useContext(loadingItemsContext);
+  const isLoading = useSignal(false);
   const isAdmin = useIsAdmin().value;
 
   const searchParams = new URLSearchParams();
@@ -139,8 +139,8 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         }
       </div>
       <div class="flex-1" />
-      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={loadingItemsStore.items.includes(Preset.name)} onClick$={async () => {
-        loadingItemsStore.items = [...loadingItemsStore.items, Preset.name];
+      <button class="lum-btn text-sm lum-bg-transparent rounded-lum-2 lum-btn-p-1" disabled={isLoading.value} onClick$={async () => {
+        isLoading.value = true;
 
         if (existingPreset) {
           privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
@@ -170,10 +170,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         }
 
         if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-        loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== Preset.name);
+        isLoading.value = false;
       }}>
-        {!loadingItemsStore.items.includes(Preset.name) && Preset.saves}
-        {loadingItemsStore.items.includes(Preset.name) && <div class="lum-loading w-3 h-3" />}
+        {!isLoading.value && Preset.saves}
+        {isLoading.value && <div class="lum-loading w-3 h-3" />}
         {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
           || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
           ? <span class="text-red-300 flex gap-3">

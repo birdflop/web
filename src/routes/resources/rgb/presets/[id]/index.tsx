@@ -14,7 +14,7 @@ import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dat
 import { privatePresetsContext, savedPresetsContext } from '..';
 import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq } from 'drizzle-orm';
-import { loadingItemsContext, useIsAdmin } from '~/routes/layout-profile';
+import { useIsAdmin } from '~/routes/layout-profile';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
 
 export const usePreset = routeLoader$(async ({ params }) => {
@@ -47,7 +47,7 @@ export default component$(() => {
   const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
 
   const notifications = useContext(NotificationContext);
-  const loadingItemsStore = useContext(loadingItemsContext);
+  const isLoading = useSignal(false);
 
   const session = useSession();
   const presetInfo = usePreset().value;
@@ -192,8 +192,8 @@ export default component$(() => {
           'lum-btn text-sm': true,
           'lum-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
           'lum-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
-        }} disabled={loadingItemsStore.items.includes(presetInfo.name)} onClick$={async () => {
-          loadingItemsStore.items = [...loadingItemsStore.items, presetInfo.name];
+        }} disabled={isLoading.value} onClick$={async () => {
+          isLoading.value = true;
 
           if (existingPreset) {
             privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
@@ -211,10 +211,10 @@ export default component$(() => {
           }
 
           if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-          loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== presetInfo.name);
+          isLoading.value = false;
         }}>
-          {!loadingItemsStore.items.includes(presetInfo.name) && presetInfo.saves}
-          {loadingItemsStore.items.includes(presetInfo.name) && <div class="lum-loading w-3 h-3" />}
+          {!isLoading.value && presetInfo.saves}
+          {isLoading.value && <div class="lum-loading w-3 h-3" />}
           {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
             ? <>
               <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
@@ -223,7 +223,7 @@ export default component$(() => {
               <Save size={20}  /> {t('rgb.presets.save@@Save')}
             </>}
         </button>
-        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loadingItemsStore.items.includes(presetInfo.name)} onClick$={() => {
+        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={isLoading.value} onClick$={() => {
           const notification = new Notification()
             .setTitle(presetCopiedTitle)
             .setDescription(presetCopiedDescription)

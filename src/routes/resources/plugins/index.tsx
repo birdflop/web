@@ -1,4 +1,4 @@
-import { $, component$, isBrowser, useComputed$, useContext, useStore, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, isBrowser, useComputed$, useContext, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
@@ -7,7 +7,6 @@ import { Blocks, Check, Download, Loader2, Plus, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 import { Toggle } from '@luminescent/ui-qwik';
-import { loadingItemsContext } from '~/routes/layout';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'plugins', url.searchParams);
@@ -55,7 +54,7 @@ export default component$(() => {
   const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
 
-  const loadingItemsStore = useContext(loadingItemsContext);
+  const isLoading = useSignal([] as string[]);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -351,7 +350,7 @@ export default component$(() => {
             <button class="lum-btn lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
               if (!pluginsStore.openServer) return;
 
-              loadingItemsStore.items = [...loadingItemsStore.items, 'downloadAll'];
+              isLoading.value = [...isLoading.value, 'downloadAll'];
 
               const plugins = pluginsStore.servers[pluginsStore.openServer];
               for (const plugin of plugins) {
@@ -367,8 +366,8 @@ export default component$(() => {
                 plugin.version = plugin.data?.latestVersion;
               }
 
-              loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== 'downloadAll');
-            }} disabled={loadingItemsStore.items.includes('downloadAll')}>
+              isLoading.value = isLoading.value.filter((item) => item !== 'downloadAll');
+            }} disabled={isLoading.value.includes('downloadAll')}>
               <Download size={16} />
               Download all out of date ({outdatedPlugins.value})
               {outdatedPlugins.value > 10 &&
@@ -376,7 +375,7 @@ export default component$(() => {
                   Spigot limits downloads to 10 per minute, so some of these may not open immediately.
                 </span>
               }
-              {loadingItemsStore.items.includes('downloadAll') && <div class="lum-loading ml-2 w-4 h-4" />}
+              {isLoading.value.includes('downloadAll') && <div class="lum-loading ml-2 w-4 h-4" />}
             </button>
           }
 
@@ -459,15 +458,15 @@ export default component$(() => {
                 'lum-btn text-sm': true,
               }} onClick$={async () => {
                 if (!plugin.data?.file?.url) return;
-                loadingItemsStore.items = [...loadingItemsStore.items, `download-${plugin.id}`];
+                isLoading.value = [...isLoading.value, `download-${plugin.id}`];
 
                 if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin);
                 else window.open(plugin.data.file.url, '_blank');
 
                 plugin.version = plugin.data?.latestVersion;
-                loadingItemsStore.items = loadingItemsStore.items.filter((item) => item !== `download-${plugin.id}`);
+                isLoading.value = isLoading.value.filter((item) => item !== `download-${plugin.id}`);
               }} disabled={!plugin.data?.file?.url
-                || loadingItemsStore.items.includes(`download-${plugin.id}`)}>
+                || isLoading.value.includes(`download-${plugin.id}`)}>
                 <Download size={16} /> Download latest
                 {!!plugin.data?.file?.size &&
                   <span class="text-xs text-lum-text-secondary">
@@ -479,7 +478,7 @@ export default component$(() => {
                     external
                   </span>
                 }
-                {loadingItemsStore.items.includes(`download-${plugin.id}`)
+                {isLoading.value.includes(`download-${plugin.id}`)
                   && <div class="lum-loading ml-2 w-4 h-4" />}
               </button>
               <button class="lum-btn text-sm lum-bg-transparent" onClick$={() => {
