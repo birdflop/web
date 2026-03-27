@@ -393,7 +393,7 @@ export default component$(({ errors, output }: {
               <Sparkles />
               {t('rgb.decode.title@@Decode')}
               <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-                {t('rgb.decode.experimental@@experimental')}
+                {t('nav.experimental@@experimental')}
               </span>
             </Accordion>
             <Decode hidden={!openItemsStore.items.includes('decode')} />
