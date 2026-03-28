@@ -32,8 +32,8 @@ export default component$(() => {
     pending: false,
   }));
 
-  return <>
-    <h3 class="flex gap-2 items-center" id="my-presets">
+  return <div class="mt-4">
+    <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl" id="my-presets">
       <CircleUserRound size={30} />
       <span class="flex-1">
         {t('rgb.presets.myPrivate@@My Private RGBirdflop Presets')}
@@ -41,7 +41,7 @@ export default component$(() => {
       <Link href="/resources/rgb" class="lum-btn lum-bg-transparent">
         <Plus size={20} /> {t('rgb.presets.createNew@@Create a new preset')}
       </Link>
-    </h3>
+    </h2>
 
     {privatePresetsParsed.length > 0 &&
       <div class="grid sm:grid-cols-2 gap-2">
@@ -67,7 +67,7 @@ export default component$(() => {
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
       }}>
       <div class="flex flex-col">
-        <h3 class="mt-0!">
+        <h3>
           Publish a preset
         </h3>
         <p>
@@ -260,5 +260,5 @@ export default component$(() => {
       </div>
     </dialog>
 
-  </>;
+  </div>;
 });

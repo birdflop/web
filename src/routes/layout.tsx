@@ -211,7 +211,7 @@ export default component$(() => {
     )}
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
-      <Background id="bg" class={{
+      <Background id="bg" alt="Background" class={{
         'hidden dark:flex': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
@@ -219,7 +219,7 @@ export default component$(() => {
       }}/>
     }
     {(themeStore.isDark === undefined || !themeStore.isDark) &&
-      <LightBackground id="bg" class={{
+      <LightBackground id="bg" alt="Background" class={{
         'flex dark:hidden': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
@@ -263,7 +263,7 @@ export default component$(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 300);
         }}>
-          <h5 class="flex gap-1 items-center my-0!">
+          <h5 class="flex gap-1 items-center">
             <span class="flex gap-2 items-center flex-1">
               {notification.title}
             </span>
@@ -303,7 +303,7 @@ export default component$(() => {
         '--lum-border-radius': '1rem',
       }}>
         <div>
-          <h5 class="flex gap-1 items-center my-0!">
+          <h5 class="flex gap-1 items-center">
             <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
           </h5>
           <p>

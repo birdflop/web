@@ -144,9 +144,9 @@ export default component$(() => {
       '--lum-border-radius': '1.5rem',
     }}>
     <Anchor id="testimonials">
-      <h1 id="testimonials" class="mr-2">
+      <h3 id="testimonials" class="font-extrabold text-5xl my-6 mr-2">
         Testimonials
-      </h1>
+      </h3>
     </Anchor>
     <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
       {sixTestimonials.map(({ name, image, title, description, link }) => {
@@ -154,28 +154,28 @@ export default component$(() => {
           class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             {image ?
               <img src={image} alt={name} class="rounded-full object-cover" width={30} height={30} />
               : <CircleUser size={30} />}
             {name}
-          </h3>
+          </h4>
           {title && <p class="font-bold">
             {title}
           </p>}
-          <p class="whitespace-normal">
+          <p class="whitespace-normal text-lum-text-secondary">
             {description}
           </p>
         </a>;
       })}
     </div>
-    <div class="lum-card lum-bg-blue/20 transition-all duration-200! justify-center px-6 mt-2"
+    <div class="lum-card transition-all duration-200! justify-center px-6 mt-2"
       onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
       onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-      <h3 class="mt-0! mb-2! flex items-center gap-2">
+      <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
         <Star size={30} /> More
-      </h3>
-      <p class="">
+      </h4>
+      <p class="text-lum-text-secondary">
         Check out our Trustpilot or Google page for more testimonials.
       </p>
       <div class="flex gap-2">

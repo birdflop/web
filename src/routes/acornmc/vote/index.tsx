@@ -12,7 +12,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col gap-3 mx-auto max-w-7xl px-6 items-center justify-center min-h-svh pt-20">
-      <h1>
+      <h1  class="font-extrabold text-5xl my-6">
         AcornMC Vote
       </h1>
       <p>

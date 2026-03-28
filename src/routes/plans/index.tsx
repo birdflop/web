@@ -84,7 +84,7 @@ export default component$(() => {
 
   return <>
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <ShoppingCart size={32} />
         Order your new server
       </h1>
@@ -133,10 +133,10 @@ export default component$(() => {
               <p>
                 Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
               </p>
-              <h3 class="my-0!">
+              <h3>
                 {planName}
               </h3>
-              <p class="my-0!">
+              <p>
                 {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -162,10 +162,10 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target="_blank">
-              <h3 class="my-0!">
+              <h3>
                 Discord Bot Hosting*
               </h3>
-              <p class="my-0!">
+              <p>
                 $3/mo - 1GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -184,10 +184,10 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target="_blank">
-              <h3 class="my-0!">
+              <h3>
                 US Dev/Hub*
               </h3>
-              <p class="my-0!">
+              <p>
                 $6/mo - 2GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -206,10 +206,10 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target="_blank">
-              <h3 class="my-0!">
+              <h3>
                 US Proxy*
               </h3>
-              <p class="my-0!">
+              <p>
                 $6/mo - 2GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -228,10 +228,10 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target="_blank">
-              <h3 class="my-0!">
+              <h3>
                 EU Dev/Hub*
               </h3>
-              <p class="my-0!">
+              <p>
                 $4/mo - 2GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -250,10 +250,10 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target="_blank">
-              <h3 class="my-0!">
+              <h3>
                 EU Proxy*
               </h3>
-              <p class="my-0!">
+              <p>
                 $4/mo - 2GB
               </p>
               <ul class="list-disc ml-4! h-full">
@@ -297,7 +297,7 @@ export default component$(() => {
                 data-umami-event-plan={plansStore.plan}
                 data-umami-event-amount={gb}
               >
-                <h3 class="my-0!">
+                <h3>
                   {gb} GB
                 </h3>
                 <p>

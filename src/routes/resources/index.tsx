@@ -13,19 +13,19 @@ export default component$(() => {
       style={{
         '--lum-border-radius': '1.2rem',
       }}>
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Box size={32} />
         {t('nav.resources.title@@Resources')}
       </h1>
-      <p class="mb-8 border-b border-lum-border/10 pb-4">
+      <p class="mb-8 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.description@@Here you can find all of Birdflop\'s public resources.')}
       </p>
 
-      <h2 class="my-0! text-xl! flex items-center gap-2">
-        <Palette />
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Palette size={30} />
         {t('nav.resources.gradientTools.title@@Gradient Tools')}
       </h2>
-      <p class="mb-4 mt-1">
+      <p class="mb-4 mt-1 text-lum-text-secondary">
         {t('nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2">
@@ -33,11 +33,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb">
           <Blobs color="red" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Palette />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Palette size={30} />
             {t('nav.resources.hexGradient.title@@RGBirdflop')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
           </p>
         </Link>
@@ -45,11 +45,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtab">
           <Blobs color="blue" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Rainbow />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Rainbow size={30} />
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
           </p>
         </Link>
@@ -57,21 +57,21 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/rgb/presets">
           <Blobs color="green" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Save />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Save size={30} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
           </p>
         </Link>
       </div>
       <hr/>
-      <h2 class="my-0! text-xl! flex items-center gap-2">
-        <Server />
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Server size={30} />
         {t('nav.resources.serverTools.title@@Server Tools')}
       </h2>
-      <p class="mb-4 mt-1">
+      <p class="mb-4 mt-1 text-lum-text-secondary">
         {t('nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2">
@@ -79,11 +79,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/sparkprofile">
           <Blobs color="yellow" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Zap />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Zap size={30} />
             {t('nav.resources.sparkProfile.title@@Spark Profile')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
           </p>
         </Link>
@@ -91,11 +91,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/papertimings">
           <Blobs color="pink" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <LogoPaper size={24} />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <LogoPaper size={30} />
             {t('nav.resources.paperTimings.title@@Paper Timings')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
           </p>
         </Link>
@@ -103,11 +103,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/flags">
           <Blobs color="orange" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Flag />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Flag size={30} />
             {t('nav.resources.flags.title@@Flags Generator')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
           </p>
         </Link>
@@ -115,21 +115,21 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/plugins">
           <Blobs color="violet" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Blocks />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Blocks size={30} />
             {t('nav.resources.plugins.title@@Plugin Updater')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.')}
           </p>
         </Link>
       </div>
       <hr/>
-      <h2 class="my-0! text-xl! flex items-center gap-2">
-        <Wrench />
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Wrench size={30} />
         {t('nav.resources.miscellaneousTools.title@@Miscellaneous Tools')}
       </h2>
-      <p class="mb-4 mt-1">
+      <p class="mb-4 mt-1 text-lum-text-secondary">
         {t('nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.')}
       </p>
       <div class="flex *:flex-1 flex-wrap gap-2 mb-2">
@@ -137,11 +137,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/banner">
           <Blobs color="purple" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Presentation />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Presentation size={30} />
             {t('nav.resources.banner.title@@Banner Generator')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
           </p>
         </Link>
@@ -149,11 +149,11 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animtexture">
           <Blobs color="cyan" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <GalleryHorizontalEnd />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <GalleryHorizontalEnd size={30} />
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations')}
           </p>
         </Link>
@@ -161,46 +161,47 @@ export default component$(() => {
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/animpreview">
           <Blobs color="lime" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="my-0! text-xl! flex gap-2 items-center">
-            <Eye />
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+            <Eye size={30} />
             {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
           </h3>
-          <p>
+          <p class="text-lum-text-secondary">
             {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
           </p>
         </Link>
       </div>
       <hr/>
-      <div class="flex flex-col gap-2 mb-2">
-        <h2 class="my-0! text-xl! flex gap-3 items-center">
-          <Bot />
-          Botflop
-        </h2>
-        <p>
-          A Discord bot that watches chat to chime in and provide suggestions. Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
-        </p>
-        <div class="flex gap-2">
-          <a class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
-            href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
-            <LogoDiscord size={20} />
-            Invite
-          </a>
-          <a class="lum-btn lum-bg-transparent"
-            href="https://github.com/birdflop/botflop">
-            <Github size={20} />
-            Learn More
-          </a>
-        </div>
+
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Bot size={30} />
+        Botflop
+      </h2>
+      <p class="text-lum-text-secondary">
+        A Discord bot that watches chat to chime in and provide suggestions. Botflop responds to timings reports by viewing the server's configuration and suggesting potential optimizations. These optimizations will be unique to each timings report and each server. Botflop also uploads all text files to a paste bin for easier readability. No more having to download a config.yml, message.txt, or latest.log.
+      </p>
+      <div class="flex gap-2 mt-2">
+        <a class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
+          href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot">
+          <LogoDiscord size={20} />
+          Invite
+        </a>
+        <a class="lum-btn lum-bg-transparent"
+          href="https://github.com/birdflop/botflop">
+          <Github size={20} />
+          Learn More
+        </a>
       </div>
+
       <hr/>
-      <h2 class="my-0! text-xl! flex gap-3 items-center">
-        <Binary />
+
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Binary size={30} />
         Binflop
       </h2>
-      <p>
+      <p class="text-lum-text-secondary">
         Birdflop's spinoff of the original hastebin.com. Binflop improves upon Hastebin through the following methods:
       </p>
-      <ul>
+      <ul class="list-disc ml-6 text-lum-text-secondary space-y-2 my-6">
         <li>
           Ctrl + A, Ctrl + C no longer copies button text nor line numbers.
         </li>
@@ -223,21 +224,23 @@ export default component$(() => {
           Expanded REST API.
         </li>
       </ul>
-      <div class="flex gap-2">
+      <div class="flex gap-2 mt-2">
         <a class="lum-btn lum-bg-lime/50 hover:lum-bg-lime"
           href="https://bin.birdflop.com/">
           <LinkIcon size={20} /> Visit
         </a>
       </div>
+
       <hr/>
-      <h2 class="my-0! text-xl! flex gap-3 items-center">
-        <Bot />
+
+      <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Bot size={30} />
         BirdTickets
       </h2>
-      <p>
+      <p class="text-lum-text-secondary">
         A Discord ticket bot which provides premium features without a premium cost.
       </p>
-      <ul>
+      <ul class="list-disc ml-6 text-lum-text-secondary space-y-2 my-6">
         <li>
           Create tickets through commands and/or reactions.
         </li>
@@ -263,7 +266,7 @@ export default component$(() => {
           And more...
         </li>
       </ul>
-      <div class="flex gap-2">
+      <div class="flex gap-2 mt-2">
         <a class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan"
           href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot">
           <LogoDiscord size={20} />
@@ -275,7 +278,9 @@ export default component$(() => {
           Learn More
         </a>
       </div>
+
       <hr/>
+
     </section>
   );
 });

@@ -69,7 +69,7 @@ export default component$(() => {
   return (
     <div class="flex gap-12 xl:gap-20 items-stretch lg:pl-0 xl:pr-0 min-h-dvh">
       <DocsSidebar />
-      <main class="contents">
+      <main class="contents markdown">
         <div class="w-full mt-48 sm:mt-30 min-w-48">
           <Breadcrumbs />
           <article class="px-4">

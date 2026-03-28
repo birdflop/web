@@ -253,7 +253,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Blocks size={32} />
         {t('nav.resources.plugins.title@@Plugin Updater')}
         <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
@@ -399,7 +399,7 @@ export default component$(() => {
           'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
         }}>
         <div class="flex flex-col">
-          <h3 class="mt-0!">
+          <h3>
             Add plugin
           </h3>
 

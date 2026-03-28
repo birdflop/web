@@ -103,7 +103,7 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={[...rgbErrors, ...animTABErrors]} output={AnimationOutput(rgbStore, animtabStore)}>
-      <h1 class="flex gap-3 text-2xl! items-center my-2!" q:slot="header">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
         <Rainbow size={32} />
         {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </h1>

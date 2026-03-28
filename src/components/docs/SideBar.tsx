@@ -67,7 +67,7 @@ export const DocsSidebar = component$(() => {
       <nav id="docs-sidebar" class="invisible min-h-full relative">
         <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
           <Book class="ml-2 lg:ml-0" />
-          <h5 class="flex flex-1 my-0!">
+          <h5 class="flex flex-1">
             Documentation
           </h5>
 

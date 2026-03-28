@@ -53,7 +53,7 @@ export default component$(() => {
 
   return <>
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Activity size={32} />
         {t('nav.hosting.nodeStats.title@@Node Stats')}
       </h1>
@@ -75,7 +75,7 @@ export default component$(() => {
             key={node.name}
           >
             <Blobs color={node.color as keyof typeof Blobs} class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-            <h3 class="my-0!">
+            <h3>
               {node.name}
             </h3>
             <p>

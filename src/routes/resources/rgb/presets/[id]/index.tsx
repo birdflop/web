@@ -105,7 +105,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Save size={32} />
         {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
       </h1>
@@ -126,7 +126,7 @@ export default component$(() => {
       }
 
       <h6 class={{
-        'flex items-center gap-2 mb-0!': true,
+        'flex items-center gap-2': true,
         'text-blue-300/80!': !presetInfo.user,
         'text-orange-300/80!': !!presetInfo.user,
       }}>
@@ -242,7 +242,7 @@ export default component$(() => {
       </div>
       <div class="flex flex-col gap-4 mt-6">
         <div>
-          <h3 class="my-0!">
+          <h3>
             {t('rgb.presets.preview@@Preset Preview')}
           </h3>
           <Input noLabel>
@@ -250,7 +250,7 @@ export default component$(() => {
           </Input>
         </div>
 
-        <h3 class="my-0!">
+        <h3>
           {t('rgb.presets.presetData@@Preset Data')}
         </h3>
         <div class="text-white! font-bold lum-card lum-bg-gray-800">
@@ -276,7 +276,7 @@ export default component$(() => {
 
         {(isAdmin || (isOwner && (presetInfo.pending || presetInfo.saves < 1))) &&
           <div class="lum-card lum-bg-red/20">
-            <h3 class="my-0!">
+            <h3>
               Manage Preset
             </h3>
             {isOwner && <p class="mb-2">

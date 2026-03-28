@@ -40,7 +40,7 @@ export default component$(() => {
           }}>
             <div class="absolute -inset-4 blur-lg backdrop-blur-md rounded-4xl" />
             <h1 class={{
-              'my-0! text-7xl! xl:text-8xl! relative flex items-center drop-shadow-lg text-transparent bg-clip-text': true,
+              'text-7xl xl:text-8xl font-extrabold relative flex items-center drop-shadow-lg text-transparent bg-clip-text': true,
               'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600': true,
             }}>
               <LogoBirdflop size={70} fillGradient={['#54daf4', '#545eb6']} class="absolute -z-1 w-12.5 xl:w-17.5 xl:-left-1" />
@@ -60,7 +60,7 @@ export default component$(() => {
             'relative mr-auto': true,
           }}>
             <div class="absolute -inset-2 blur-lg backdrop-blur-md rounded-2xl" />
-            <h2 class="my-0! text-xl! md:text-2xl! xl:text-3xl! animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800 drop-shadow-md">
+            <h2 class="text-xl! md:text-2xl! xl:text-3xl! font-bold animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800 drop-shadow-md">
               The only 501(c)(3) nonprofit server host <br class="hidden sm:block"/> dedicated to <br class="sm:hidden"/><span
                 class="typer"
                 id="main"
@@ -91,9 +91,9 @@ export default component$(() => {
     </section>
     <div class="bg-linear-to-b from-transparent to-bg h-20" />
     <section class="flex flex-col w-full p-10 bg-bg items-center justify-center">
-      <h1>
+      <h3 class="font-extrabold text-5xl my-6">
         Our Nonprofit Mission
-      </h1>
+      </h3>
       <p class="max-w-3xl">
         At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
         {missionExpanded.value && <>
@@ -112,25 +112,25 @@ export default component$(() => {
         '--lum-border-radius': '1.5rem',
       }}>
       <Anchor id="plans">
-        <h1 id="plans" class="mr-2">
+        <h3 id="plans" class="font-extrabold text-5xl my-6 mr-2">
           Plans
-        </h1>
+        </h3>
       </Anchor>
       <div class="grid md:grid-cols-3 gap-2 max-w-4xl">
         {Object.keys(plans).map((planName) => {
           const plan = plans[planName as keyof typeof plans];
           const ramOptions = Object.keys(plan.ramAndId);
-          return <div class="lum-card transition duration-1000 hover:duration-75 ease-out" key={planName}>
-            <p>
+          return <div class="lum-card" key={planName}>
+            <p class="text-lum-text-secondary">
               Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
             </p>
-            <h3 class="my-0!">
+            <h4 class="font-bold text-2xl flex items-center gap-2 mb-2">
               {planName}
-            </h3>
-            <p class="my-0!">
+            </h4>
+            <p class="text-lum-text-secondary">
               {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
             </p>
-            <ul class="list-disc ml-4! h-full">
+            <ul class="list-disc ml-4 text-lum-text-secondary">
               {plan.features.map((feature) => {
                 return <li key={feature}>
                   {feature}
@@ -156,7 +156,7 @@ export default component$(() => {
       <div class="lum-card lum-bg-green/60 transition-all duration-200! max-w-xl mt-5"
         onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-        <h4 class="my-0! flex items-center gap-2">
+        <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           <CheckCircle size={30} /> Benefits Galore
         </h4>
         <p>
@@ -169,17 +169,17 @@ export default component$(() => {
         '--lum-border-radius': '1.5rem',
       }}>
       <Anchor id="features">
-        <h1 id="features" class="mr-2">
+        <h3 id="features" class="font-extrabold text-5xl my-6 mr-2">
           Features
-        </h1>
+        </h3>
       </Anchor>
       <div class="grid md:grid-cols-2 gap-2 max-w-5xl">
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Rocket size={30} /> Sheer Performance
-          </h3>
+          </h4>
           <p>
             We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
           </p>
@@ -187,9 +187,9 @@ export default component$(() => {
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Settings size={30} /> Fully Configurable
-          </h3>
+          </h4>
           <p>
             You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
           </p>
@@ -197,9 +197,9 @@ export default component$(() => {
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Eye size={30} /> Transparent
-          </h3>
+          </h4>
           <p>
             We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
           </p>
@@ -207,9 +207,9 @@ export default component$(() => {
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Globe size={30} /> Price Matching
-          </h3>
+          </h4>
           <p>
             We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
           </p>
@@ -217,9 +217,9 @@ export default component$(() => {
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Heart size={30} /> Instant Support
-          </h3>
+          </h4>
           <p>
             You can contact support at any time through our <a href={discordLink} data-umami-event="discord-link" data-umami-source="support" class="text-blue-400 hover:underline">Discord server</a>.
           </p>
@@ -227,9 +227,9 @@ export default component$(() => {
         <div class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <HandCoins size={30} /> Nonprofit
-          </h3>
+          </h4>
           <p>
             Our nonprofit status helps us keep our services affordable and accessible. Clients receive periodic reimbursements for excess profit.
           </p>
@@ -237,9 +237,9 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
-      <h1>
+      <h3 class="font-extrabold text-5xl my-6">
         How do reimbursements work?
-      </h1>
+      </h3>
       <p class="max-w-4xl">
         As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 26% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.48/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.&nbsp;
       </p>
@@ -251,9 +251,9 @@ export default component$(() => {
       </div>
     </section>
     <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
-      <h1>
+      <h3 class="font-extrabold text-5xl my-6">
         Where do my payments go?
-      </h1>
+      </h3>
       <div class="grid md:grid-cols-2 gap-10 max-w-5xl">
         <div>
           <ExpensesChart />
@@ -273,9 +273,9 @@ export default component$(() => {
     </section>
     <Testimonials />
     <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
-      <h1>
+      <h3 class="font-extrabold text-5xl my-6">
         Still not convinced?
-      </h1>
+      </h3>
       <p class="max-w-4xl">
         Create a ticket on our <a href={discordLink} data-umami-event="discord-link" data-umami-source="trial" class="text-blue-400 hover:underline">Discord server</a> to ask for more information or request a free trial. All plans include a 3-day refund guarantee if you're not satisfied for any reason. On the Discord, you'll also find several more happy clients who can tell you about their experiences with Birdflop.
       </p>

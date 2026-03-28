@@ -242,7 +242,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         <Formatting/>
       }
     </div>
-    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
+    <label for="input" class="flex flex-col items-start mt-2 mb-4 relative">
       {previewStyle.value != 'default' && <MCPreviewInput readOnly={readOnly}
         chatInput={chatInput}
         playerName={playerName}>

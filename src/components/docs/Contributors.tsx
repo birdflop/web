@@ -18,7 +18,7 @@ export default component$(() => {
       </p>
       <div class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
         {contributors.map((contributor: string) => (
-          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn lum-bg-lum-card-bg p-2 pr-3 gap-2 font-bold">
+          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn p-2 pr-3 gap-2 font-bold">
             <img
               loading="lazy"
               src={`https://github.com/${contributor}.png?size=80`}

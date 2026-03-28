@@ -24,7 +24,7 @@ export default component$(() => {
       <Layout>
         <div class="text-red-400">
           <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
-          <h1>
+          <h1 class="font-extrabold text-5xl my-6">
             {t('nav.profile.notLoggedIn.title@@You are not logged in!')}
           </h1>
           <h4 class="text-lum-text-secondary">
@@ -50,9 +50,9 @@ export default component$(() => {
 
   return (
     <Layout>
-      <section class="flex mx-auto max-w-6xl px-6 justify-center pt-20">
-        <div class="my-3! flex-1">
-          <h3 class="flex gap-4 items-center mt-0! mb-1!">
+      <section class="flex mx-auto max-w-6xl px-6 justify-center pt-20 border-b border-lum-border/10 pb-6">
+        <div class="flex-1">
+          <h1 class="font-extrabold text-3xl mb-2 flex items-center gap-4">
             {session.value.user.image &&
               <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
             }
@@ -63,8 +63,8 @@ export default component$(() => {
                 Admin Panel
               </Link>
             }
-          </h3>
-          <p>
+          </h1>
+          <p class="text-lum-text-secondary">
             Your ID is: {session.value.user.id}
           </p>
         </div>

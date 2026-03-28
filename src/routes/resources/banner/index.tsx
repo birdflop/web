@@ -198,7 +198,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Presentation size={32} />
         {t('nav.resources.banner.title@@Banner Generator')}
       </h1>
@@ -251,7 +251,7 @@ export default component$(() => {
             'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
             'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
           }}>
-            <h6 class="my-0! flex gap-3 items-center">
+            <h6 class="flex gap-3 items-center">
               {t('banner.options.baseColor.title@@Base Color')}
               <span class="text-lum-text-secondary text-sm font-normal">
                 {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
@@ -274,7 +274,7 @@ export default component$(() => {
                 );
               })}
             </div>
-            <h6 class="my-0! flex gap-3 items-center">
+            <h6 class="flex gap-3 items-center">
               {t('banner.options.patterns@@Patterns')}
               <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                 const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;

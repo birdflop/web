@@ -3,7 +3,10 @@
 @import "tailwindcss";
 
 @import "@luminescent/ui";
-@import "@luminescent/ui/formatting";
+
+.markdown {
+  @import "@luminescent/ui/formatting";
+}
 
 @plugin "@anuragroy/tailwindcss-animate";
 
@@ -138,6 +141,10 @@ html {
   background-color: var(--color-bg);
 }
 
+hr {
+  @apply my-6 border-lum-border/10;
+}
+
 .font-mc {
   font-family: MinecraftRegular, MinecraftOfficial, MinecraftRegularAlt, MinecraftRus;
 }
@@ -191,14 +198,4 @@ html {
 
 *::-webkit-scrollbar-corner {
   background-color: transparent;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-top: max(0.7em, 18px);
-  margin-bottom: max(0.7em, 18px);
 }

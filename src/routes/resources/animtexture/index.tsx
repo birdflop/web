@@ -118,7 +118,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <GalleryHorizontalEnd size={32} />
         {t('nav.resources.animatedTextures.title@@Animated Textures')}
       </h1>
@@ -128,7 +128,7 @@ export default component$(() => {
 
       <div class="flex gap-4">
         <div class="flex-1">
-          <h3 class="mt-0!">
+          <h3>
             Input Image(s)
           </h3>
           <div class="flex flex-col gap-1 mb-5">
