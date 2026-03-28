@@ -3,56 +3,58 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Download, Loader2, Plus, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Download, Plus, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import PluginCard, { PluginData, PluginWithData } from '~/components/plugins/PluginCard';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'plugins', url.searchParams);
 });
 
-export type Plugin = {
-  name: string;
-  version?: any;
-  type?: 'spigot';
-  id?: string;
-};
-
-type PluginData = {
-  name: string;
-  external?: boolean;
-  tag?: string;
-  iconUrl?: string;
-  releaseDate?: number;
-  updateDate?: number;
-  file?: {
-    type: string;
-    size: number;
-    sizeUnit: string;
-    url: string;
-    externalUrl?: string;
-  };
-  testedVersions?: string[];
-  latestVersion?: {
-    id: string;
-    name: string;
-    releaseDate: number;
-  };
-  sourceCodeLink?: string;
-}
-
-type PluginWithData = Plugin & {
-  data?: PluginData;
-};
-
 const debug = true;
+
+export const downloadSpigotPlugin = $(async (
+  plugin: PluginWithData,
+  spigotRateLimit?: { downloadCount: number, resetTime: number },
+  notifications?: Notification[],
+) => {
+  // if the plugin has an external url, open that instead of spigot to avoid rate limits
+  if (plugin.data?.file?.externalUrl) {
+    window.open(plugin.data.file.externalUrl, '_blank');
+    return;
+  }
+
+  // spigot rate limits downloads to 10 per minute
+  if (spigotRateLimit && spigotRateLimit.downloadCount >= 10 && Date.now() < spigotRateLimit.resetTime) {
+    if (notifications) {
+      const notification = new Notification()
+        .setTitle('Spigot Download Rate Limit Reached')
+        .setDescription(`Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`)
+        .setBgColor('lum-bg-yellow/50')
+        .setPersist(true);
+      notifications.push(notification);
+    }
+    await new Promise((resolve) => setTimeout(resolve, spigotRateLimit.resetTime - Date.now()));
+    spigotRateLimit.downloadCount = 0;
+  }
+
+  // open the plugin file url in a new tab to trigger the download
+  window.open(`https://www.spigotmc.org/${plugin.data?.file?.url}`, '_blank');
+
+  if (!spigotRateLimit) return;
+  spigotRateLimit.downloadCount++;
+  // set the reset time to 1 minute from now
+  if (spigotRateLimit.resetTime < Date.now())
+    spigotRateLimit.resetTime = Date.now() + 60 * 1000;
+});
 
 export default component$(() => {
   const t = inlineTranslate();
 
   const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
+  const modalRef = useSignal<HTMLDialogElement>();
 
   const isLoading = useSignal([] as string[]);
 
@@ -73,6 +75,12 @@ export default component$(() => {
     downloadCount: 0,
     resetTime: 0,
   });
+
+  const resolvedPlugin = useStore<{
+    plugin?: PluginWithData;
+  }>({
+    plugin: undefined,
+  }, { deep: true });
 
   const pluginsStore = useStore<{
     openServer?: string;
@@ -218,7 +226,6 @@ export default component$(() => {
           // fetch latest version
           const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
           const latestVersion = await latestVerResponse.json() as any;
-          console.log(latestVersion);
           pluginData.latestVersion = {
             id: latestVersion.id,
             name: latestVersion.name,
@@ -244,34 +251,6 @@ export default component$(() => {
     }).length;
   });
 
-  const downloadSpigotPlugin = $(async (plugin: PluginWithData) => {
-    // if the plugin has an external url, open that instead of spigot to avoid rate limits
-    if (plugin.data?.file?.externalUrl) {
-      window.open(plugin.data.file.externalUrl, '_blank');
-      return;
-    }
-
-    // spigot rate limits downloads to 10 per minute
-    if (spigotRateLimit.downloadCount >= 10 && Date.now() < spigotRateLimit.resetTime) {
-      const notification = new Notification()
-        .setTitle('Spigot Download Rate Limit Reached')
-        .setDescription(`Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`)
-        .setBgColor('lum-bg-yellow/50')
-        .setPersist(true);
-      notifications.push(notification);
-      await new Promise((resolve) => setTimeout(resolve, spigotRateLimit.resetTime - Date.now()));
-      spigotRateLimit.downloadCount = 0;
-    }
-
-    // open the plugin file url in a new tab to trigger the download
-    window.open(`https://www.spigotmc.org/${plugin.data?.file?.url}`, '_blank');
-
-    spigotRateLimit.downloadCount++;
-    // set the reset time to 1 minute from now
-    if (spigotRateLimit.resetTime < Date.now())
-      spigotRateLimit.resetTime = Date.now() + 60 * 1000;
-  });
-
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
       <h1 class="flex gap-3 text-2xl! items-center my-2!">
@@ -286,7 +265,9 @@ export default component$(() => {
       </p>
 
       <div class="lum-card p-1 gap-1 flex-row">
-        <button class="lum-btn lum-bg-transparent rounded-lum-1">
+        <button class="lum-btn lum-bg-transparent rounded-lum-1" onClick$={() => {
+          pluginsStore.servers['Server ' + (Object.keys(pluginsStore.servers).length + 1)] = [];
+        }}>
           <Plus size={16} />
           Add server
         </button>
@@ -307,7 +288,9 @@ export default component$(() => {
       </div>
       {pluginsStore.openServer &&
         <div class="lum-card p-1 gap-1 flex-row mt-4">
-          <button class="lum-btn lum-bg-transparent rounded-lum-1">
+          <button class="lum-btn lum-bg-transparent rounded-lum-1" onClick$={() => {
+            modalRef.value?.showModal();
+          }}>
             <Plus size={16} />
             Add plugin
           </button>
@@ -360,7 +343,7 @@ export default component$(() => {
 
                 if (!updateAvailable || !plugin.data?.file?.url) return;
 
-                if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin);
+                if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
                 else window.open(plugin.data.file.url, '_blank');
 
                 plugin.version = plugin.data?.latestVersion;
@@ -401,121 +384,156 @@ export default component$(() => {
             return null;
           }
 
-          return <div key={plugin.name} class={{
-            'lum-card flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
-            'border-green': updateAvailable,
-          }}>
-            {plugin.data?.iconUrl &&
-              <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
-                width={720} height={720} class="absolute w-full h-full inset-0 object-cover -z-1 blur-xl scale-250 saturate-200" />}
-
-            <div class="flex items-center gap-2">
-              <div class="flex-1 flex-col items-center">
-                <p class="flex items-center gap-2">
-                  {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
-                    && <SiSpigotmc class="fill-yellow" />}
-                  {plugin.data?.iconUrl &&
-                    <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
-                      width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}
-
-                  <span class="text-lg! text-lum-text!">
-                    {plugin.name}
-                  </span>
-                  {plugin.data?.testedVersions &&
-                    <span class="text-sm">
-                      {plugin.data.testedVersions[0]} - {plugin.data.testedVersions[plugin.data.testedVersions.length - 1]}
-                    </span>
-                  }
-                </p>
-
-                {plugin.data?.tag &&
-                  <p class="text-sm mt-1">
-                    {plugin.data?.tag}
-                  </p>
-                }
-              </div>
-
-              <div class="flex-1 flex-col gap-2 items-center">
-                {plugin.version && <p class="text-sm flex-1 text-right">
-                  Current: <span class={{
-                    'text-red-500': updateAvailable,
-                    'text-blue-500': !updateAvailable,
-                  }}>
-                    {plugin.version.name}
-                  </span>
-                </p>}
-                {plugin.data?.latestVersion && <p class="text-sm flex-1 text-right">
-                  Latest: <span class="text-green-500">
-                    {plugin.data.latestVersion.name}
-                  </span>
-                </p>}
-                {!plugin.data && <Loader2 class="animate-spin" />}
-              </div>
-            </div>
-
-            <div class="flex items-center mt-2 gap-1">
-              <button class={{
-                'lum-btn text-sm': true,
-              }} onClick$={async () => {
-                if (!plugin.data?.file?.url) return;
-                isLoading.value = [...isLoading.value, `download-${plugin.id}`];
-
-                if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin);
-                else window.open(plugin.data.file.url, '_blank');
-
-                plugin.version = plugin.data?.latestVersion;
-                isLoading.value = isLoading.value.filter((item) => item !== `download-${plugin.id}`);
-              }} disabled={!plugin.data?.file?.url
-                || isLoading.value.includes(`download-${plugin.id}`)}>
-                <Download size={16} /> Download latest
-                {!!plugin.data?.file?.size &&
-                  <span class="text-xs text-lum-text-secondary">
-                    {plugin.data?.file?.size} {plugin.data?.file?.sizeUnit}
-                  </span>
-                }
-                {!!plugin.data?.external &&
-                  <span class="text-xs text-lum-text-secondary">
-                    external
-                  </span>
-                }
-                {isLoading.value.includes(`download-${plugin.id}`)
-                  && <div class="lum-loading ml-2 w-4 h-4" />}
-              </button>
-              <button class="lum-btn text-sm lum-bg-transparent" onClick$={() => {
-                plugin.version = plugin.data?.latestVersion;
-              }}>
-                <Check size={16} /> Mark updated
-              </button>
-              {plugin.data?.latestVersion && updateAvailable && <p class="text-green-500! text-xs">
-                Update available as of {
-                  new Date(plugin.data.latestVersion.releaseDate * 1000)
-                    .toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-                }
-              </p>}
-              <div class="flex-1"/>
-              {plugin.data?.sourceCodeLink && (
-                <a href={plugin.data.sourceCodeLink} target="_blank" class="lum-btn p-2">
-                  <SiGithub size={16} class="fill-current" />
-                </a>
-              )}
-              {plugin.data?.file?.externalUrl?.includes('modrinth') && (
-                <a href={plugin.data?.file?.externalUrl} target="_blank" class="lum-btn p-2 lum-bg-green">
-                  <SiModrinth size={16} class="fill-current" />
-                </a>
-              )}
-              {plugin.type === 'spigot' && (
-                <a href={`https://www.spigotmc.org/resources/${plugin.id}`} target="_blank" class="lum-btn p-2 lum-bg-yellow">
-                  <SiSpigotmc size={16} class="fill-current" />
-                </a>
-              )}
-            </div>
-
-            {debug &&
-              <textarea value={JSON.stringify(plugin.data, null, 2)} readOnly class="lum-input w-full mt-2 font-mono text-sm" />
-            }
-          </div>;
+          return <PluginCard key={plugin.name}
+            plugin={plugin}
+            updateAvailable={updateAvailable}
+            spigotRateLimit={spigotRateLimit} />;
         })}
       </div>
+
+      <dialog ref={modalRef}
+        class={{
+          'm-auto hidden open:flex text-lum-text': true,
+          'lum-card drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
+          'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
+          'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
+        }}>
+        <div class="flex flex-col">
+          <h3 class="mt-0!">
+            Add plugin
+          </h3>
+
+          <hr/>
+
+          <div class="flex flex-col gap-1 mb-2">
+            <label for="plugin-link">
+              Enter the plugin link. Supported links:<br />
+              - Spigot: https://www.spigotmc.org/resources/...
+            </label>
+            <input type="text" class="lum-input" placeholder="https://www.spigotmc.org/resources/..." id="plugin-link"
+              onInput$={async (e, el) => {
+                const value = el.value;
+                const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
+                if (spigotMatch) {
+                  const pluginId = spigotMatch[2];
+                  // check if the plugin is already added
+                  const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id === pluginId);
+                  if (existingPlugin) {
+                    const notification = new Notification()
+                      .setTitle('Plugin already added')
+                      .setDescription(`The plugin ${existingPlugin.name} is already added.`)
+                      .setBgColor('lum-bg-yellow/50');
+                    notifications.push(notification);
+                    return;
+                  }
+
+                  const res = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
+                  const data = await res.json() as any;
+
+                  const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+                  const versionsData = await versionsRes.json() as any;
+
+                  console.log(versionsData);
+
+                  const newPlugin: PluginWithData = {
+                    id: pluginId,
+                    name: data.name,
+                    type: 'spigot',
+                    data: {
+                      external: data.external,
+                      name: data.name,
+                      tag: data.tag,
+                      iconUrl: data.icon?.url,
+                      releaseDate: data.releaseDate,
+                      updateDate: data.updateDate,
+                      file: data.file ? {
+                        type: data.file.type,
+                        size: data.file.size,
+                        sizeUnit: data.file.sizeUnit,
+                        url: data.file.url,
+                        externalUrl: data.file.externalUrl,
+                      } : undefined,
+                      testedVersions: data.testedVersions?.length
+                        ? data.testedVersions : undefined,
+                      sourceCodeLink: data.sourceCodeLink,
+                      versions: versionsData.map((version: any) => version),
+                    },
+                  };
+
+                  resolvedPlugin.plugin = newPlugin;
+                } else {
+                  const notification = new Notification()
+                    .setTitle('Invalid link')
+                    .setDescription('Please enter a valid plugin link.')
+                    .setBgColor('lum-bg-red/50');
+                  notifications.push(notification);
+                }
+              }}
+            />
+          </div>
+
+          {resolvedPlugin.plugin && <>
+            <SelectMenu id="add-plugin-options" values={
+              resolvedPlugin.plugin.data?.versions?.map((version) => ({
+                name: <>
+                  <span class="flex-1 font-mono text-left">
+                    {version.name}
+                  </span>
+                  <span class="text-xs text-lum-text-secondary ml-1 text-right">
+                    {new Date(version.releaseDate * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </span>
+                </>,
+                value: version.id,
+              })) || []
+            } onChange$={(e, el) => {
+              const versionId = el.value;
+              const selectedVersion = resolvedPlugin.plugin?.data?.versions?.find((version) => version.id === versionId);
+              if (selectedVersion) {
+                resolvedPlugin.plugin!.version = {
+                  id: selectedVersion.id,
+                  name: selectedVersion.name,
+                  releaseDate: selectedVersion.releaseDate,
+                };
+              }
+            }} customDropdown>
+              {resolvedPlugin.plugin.version &&
+                <span q:slot="dropdown" class="flex items-center gap-2">
+                  <span class="flex-1 font-mono text-left">
+                    {resolvedPlugin.plugin.version.name}
+                  </span>
+                  <span class="text-xs text-lum-text-secondary ml-1 text-right">
+                    {new Date(resolvedPlugin.plugin.version.releaseDate * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                  </span>
+                </span>
+              }
+              Which version are you currently using?
+            </SelectMenu>
+          </>}
+
+          <hr/>
+
+          {resolvedPlugin.plugin && <>
+            <PluginCard
+              plugin={resolvedPlugin.plugin}
+              spigotRateLimit={spigotRateLimit}
+              noActions />
+            <hr/>
+          </>}
+
+          <div class="flex gap-2 justify-end">
+            <button class="lum-btn" onClick$={() => {
+              modalRef.value?.close();
+            }}>
+              <X size={20} /> Cancel
+            </button>
+            <button
+              class="lum-btn lum-bg-green/50 hover:lum-bg-green disabled:bg-gray-600 disabled:cursor-not-allowed"
+            >
+              <Plus size={20} /> Add
+            </button>
+          </div>
+        </div>
+      </dialog>
 
     </section>
   );
