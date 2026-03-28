@@ -124,7 +124,7 @@ export default component$(() => {
         <Eye size={32} />
         {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
       </p>
 

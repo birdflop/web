@@ -40,7 +40,7 @@ export default component$(() => {
         <Palette size={32} />
         {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
       </p>
       {showAllGradients.value

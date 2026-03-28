@@ -109,7 +109,7 @@ export default component$(() => {
         <Save size={32} />
         {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
       </p>
 

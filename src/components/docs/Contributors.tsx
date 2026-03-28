@@ -10,7 +10,7 @@ export default component$(() => {
 
   return (
     <div class="lum-card my-12">
-      <h2 class="my-0!">
+      <h2>
         Contributors
       </h2>
       <p>

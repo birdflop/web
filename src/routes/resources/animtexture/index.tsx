@@ -122,7 +122,7 @@ export default component$(() => {
         <GalleryHorizontalEnd size={32} />
         {t('nav.resources.animatedTextures.title@@Animated Textures')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
       </p>
 

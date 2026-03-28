@@ -319,7 +319,7 @@ export default component$(() => {
         <AppWindow size={32} />
         Admin Panel
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         Manage backend tasks and data for Birdflop.
       </p>
       <div class="grid sm:grid-cols-2 gap-1">

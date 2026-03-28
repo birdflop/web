@@ -107,7 +107,7 @@ export default component$(() => {
         <Rainbow size={32} />
         {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
       </p>
 

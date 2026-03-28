@@ -14,7 +14,7 @@ export default component$(() => {
         <LogoPaper size={32} />
         {t('nav.resources.paperTimings.title@@Paper Timings')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
       </p>
 

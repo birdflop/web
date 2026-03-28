@@ -83,19 +83,22 @@ export default component$(() => {
   });
 
   return <>
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
+    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20"
+      style={{
+        '--lum-border-radius': '1.5rem',
+      }}>
       <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <ShoppingCart size={32} />
         Order your new server
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         Birdflop is a registered 501(c)(3) nonprofit Minecraft host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.
       </p>
       <div class="flex flex-col">
-        <h2>
+        <h2 class="font-extrabold text-2xl mb-2">
           Pick your plan
-          <br/>
-          <button class="text-blue-400 hover:underline text-sm font-normal" onClick$={() => plansStore.showMiscPlans = !plansStore.showMiscPlans}>
+          <button class="text-blue-400 hover:underline text-sm font-normal ml-2"
+            onClick$={() => plansStore.showMiscPlans = !plansStore.showMiscPlans}>
             {plansStore.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
           </button>
         </h2>
@@ -103,7 +106,7 @@ export default component$(() => {
           This will be the tier and location of your new server. All plans come with 3 off-site backups, DDoS protection, dedicated IPs on 8+ GB plans, an improved Pterodactyl Panel for server management, and a 3-day satisfaction guarantee.
         </p>
 
-        <div class="grid md:grid-cols-3 gap-2 mt-2">
+        <div class="grid md:grid-cols-3 gap-2 mt-4">
           {(Object.keys(plans) as Array<keyof typeof plans>).map((planName) => {
             const plan = plans[planName];
             const ramOptions = Object.keys(plan.ramAndId);
@@ -130,16 +133,16 @@ export default component$(() => {
               {plansStore.plan == planName && <Blobs color="blue" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{
                 transform: 'translateZ(-10px)',
               }}/>}
-              <p>
+              <p class="text-lum-text-secondary">
                 Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
               </p>
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 {planName}
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 {plan.features.map((feature) => {
                   return <li key={feature}>
                     {feature}
@@ -150,10 +153,10 @@ export default component$(() => {
           })}
         </div>
         {plansStore.showMiscPlans && <>
-          <h2>
+          <h2 class="font-extrabold text-2xl mb-2">
             Misc Plans
           </h2>
-          <p>
+          <p class="text-lum-text-secondary">
             Here lies dragons! You most likely will not receive support for these plans. Only proceed if you know what you're doing!
           </p>
 
@@ -162,13 +165,13 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/main/packages/discord/?group_id=12" target="_blank">
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 Discord Bot Hosting*
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 $3/mo - 1GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 <li>
                   Falkenstein, Germany
                 </li>
@@ -184,13 +187,13 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15" target="_blank">
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 US Dev/Hub*
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 $6/mo - 2GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 <li>
                   US East (NYC / Ashburn VA)
                 </li>
@@ -206,13 +209,13 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7" target="_blank">
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 US Proxy*
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 $6/mo - 2GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 <li>
                   US East (NYC / Ashburn VA)
                 </li>
@@ -228,13 +231,13 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16" target="_blank">
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 EU Dev/Hub*
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 $4/mo - 2GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 <li>
                   Falkenstein, Germany
                 </li>
@@ -250,13 +253,13 @@ export default component$(() => {
               'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
             }}
             href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14" target="_blank">
-              <h3>
+              <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                 EU Proxy*
               </h3>
-              <p>
+              <p class="text-lum-text-secondary">
                 $4/mo - 2GB
               </p>
-              <ul class="list-disc ml-4! h-full">
+              <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
                 <li>
                   Falkenstein, Germany
                 </li>
@@ -272,10 +275,10 @@ export default component$(() => {
         </>}
 
         {plansStore.plan && isNaN(Number(plansStore.plan)) && <>
-          <h2 id="ram" class="pt-16">
+          <h2 class="font-extrabold text-2xl mb-2 mt-6" id="ram">
             Configure your RAM amount
           </h2>
-          <p>
+          <p class="text-lum-text-secondary">
             This will be the amount of RAM in your new server.
           </p>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
@@ -297,10 +300,10 @@ export default component$(() => {
                 data-umami-event-plan={plansStore.plan}
                 data-umami-event-amount={gb}
               >
-                <h3>
+                <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
                   {gb} GB
                 </h3>
-                <p>
+                <p class="text-lum-text-secondary">
                   {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                 </p>
                 {plansStore.gb == Number(gb) && <Blobs color="green" class={{ 'absolute overflow-clip rounded-lum': true }} style={{
@@ -314,12 +317,16 @@ export default component$(() => {
         {!!plansStore.gb && <div id="summary" class="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-2 mt-16">
           <Package size={72} class="sm:mx-5 flex" />
           <div class="flex-1">
-            <h2>
+            <h3 class="font-bold text-2xl flex items-center gap-2 mb-2">
               Order Summary
-            </h2>
-            <p>{plansStore.plan} {plansStore.gb} GB</p>
-            <p>Capped at ${(plansStore.gb * plans[plansStore.plan]?.$PerGB).toFixed(2)}/mo.</p>
-            <p>~${(plansStore.gb * plans[plansStore.plan]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.</p>
+            </h3>
+            <p class="text-lum-text-secondary">
+              {plansStore.plan} {plansStore.gb} GB
+              <br />
+              Capped at ${(plansStore.gb * plans[plansStore.plan]?.$PerGB).toFixed(2)}/mo.
+              <br />
+              ~${(plansStore.gb * plans[plansStore.plan]?.$PerGBReimbursed).toFixed(2)}/mo after reimbursements.
+            </p>
           </div>
           <div class="flex-1 space-y-2">
             <label for="server_name">Server Name</label>

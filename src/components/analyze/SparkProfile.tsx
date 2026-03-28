@@ -14,7 +14,7 @@ export default component$(() => {
         <Zap size={32} />
         {t('nav.resources.sparkProfile.title@@Spark Profile')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
       </p>
 

@@ -260,7 +260,7 @@ export default component$(() => {
           {t('nav.experimental@@experimental')}
         </span>
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.')}
       </p>
 

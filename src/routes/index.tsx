@@ -130,7 +130,7 @@ export default component$(() => {
             <p class="text-lum-text-secondary">
               {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans<br/>capped at ${plan.$PerGB}/GB
             </p>
-            <ul class="list-disc ml-4 text-lum-text-secondary">
+            <ul class="list-disc ml-4 text-lum-text-secondary flex-1">
               {plan.features.map((feature) => {
                 return <li key={feature}>
                   {feature}

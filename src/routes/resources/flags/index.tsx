@@ -163,7 +163,7 @@ export default component$(() => {
         <Flag size={32} />
         {t('nav.resources.flags.title@@Flags Generator')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
       </p>
 
