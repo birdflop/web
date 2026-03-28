@@ -263,7 +263,7 @@ export default component$(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 300);
         }}>
-          <h5 class="flex gap-1 items-center">
+          <h5 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <span class="flex gap-2 items-center flex-1">
               {notification.title}
             </span>
@@ -303,7 +303,7 @@ export default component$(() => {
         '--lum-border-radius': '1rem',
       }}>
         <div>
-          <h5 class="flex gap-1 items-center">
+          <h5 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
           </h5>
           <p>

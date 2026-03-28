@@ -415,6 +415,10 @@ export default component$(({ errors, output }: {
         <p>
           Wanna automate generating gradients or use this in your own project?
           We have{' '}
+          <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/npm_package">
+            an NPM package
+          </a>
+          {' '}and{' '}
           <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">
             an API!
           </a>

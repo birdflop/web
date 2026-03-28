@@ -128,7 +128,7 @@ export default component$(() => {
 
       <div class="flex gap-4">
         <div class="flex-1">
-          <h3>
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             Input Image(s)
           </h3>
           <div class="flex flex-col gap-1 mb-5">

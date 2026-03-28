@@ -67,7 +67,7 @@ export default component$(() => {
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
       }}>
       <div class="flex flex-col">
-        <h3>
+        <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           Publish a preset
         </h3>
         <p>

@@ -242,7 +242,7 @@ export default component$(() => {
       </div>
       <div class="flex flex-col gap-4 mt-6">
         <div>
-          <h3>
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             {t('rgb.presets.preview@@Preset Preview')}
           </h3>
           <Input noLabel>
@@ -250,7 +250,7 @@ export default component$(() => {
           </Input>
         </div>
 
-        <h3>
+        <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           {t('rgb.presets.presetData@@Preset Data')}
         </h3>
         <div class="text-white! font-bold lum-card lum-bg-gray-800">
@@ -276,7 +276,7 @@ export default component$(() => {
 
         {(isAdmin || (isOwner && (presetInfo.pending || presetInfo.saves < 1))) &&
           <div class="lum-card lum-bg-red/20">
-            <h3>
+            <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
               Manage Preset
             </h3>
             {isOwner && <p class="mb-2">
@@ -319,7 +319,15 @@ export default component$(() => {
       </div>
 
       <div class="text-sm mt-8">
-        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href={donateLink}>click here</a> to make a charitable donation, 100% tax-deductible in the US.
+        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+        gradient creator that generates hex formatted text. RGB Birdflop is a
+        public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+        affordable and accessible hosting and public resources. If you would
+        like to support our mission, please{' '}
+        <a href={donateLink}>
+          click here
+        </a>{' '}
+        to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>
   );

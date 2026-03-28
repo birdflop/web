@@ -368,7 +368,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <span class="flex flex-1 gap-3 items-center">
           <Save size={32} />
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -498,15 +498,13 @@ export default component$(() => {
           />
         ))}
         {publicPresets.length === 0 && (
-          <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
-            <p class="text-center text-lum-text-secondary">
-              {t('rgb.presets.noResults@@No results found.')}
-              <br />
-              {t('rgb.presets.suggestion.one@@Think something is missing?')}
-              <br />
-              {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
-            </p>
-          </div>
+          <p class="text-center text-lum-text-secondary col-span-full my-6">
+            {t('rgb.presets.noResults@@No results found.')}
+            <br />
+            {t('rgb.presets.suggestion.one@@Think something is missing?')}
+            <br />
+            {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
+          </p>
         )}
       </div>
       {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}

@@ -26,7 +26,7 @@ export function parseParams(params: { [key: string]: any }, name: names) {
       if (!Object.keys(getDefaults(name)).includes(key)) {
         delete params[key];
       }
-      if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
+      if ((key == 'format' || key == 'colors' || key == 'shadowcolors') && params[key]) {
         params[key] = JSON.parse(params[key]);
       }
       else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
