@@ -5,8 +5,9 @@ import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Blocks, Check, Download, Plus, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Toggle } from '@luminescent/ui-qwik';
 import PluginCard, { PluginData, PluginWithData } from '~/components/plugins/PluginCard';
+import { SelectList } from '~/components/Elements/SelectList';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'plugins', url.searchParams);
@@ -473,7 +474,11 @@ export default component$(() => {
           </div>
 
           {resolvedPlugin.plugin && <>
-            <SelectMenu id="add-plugin-options" values={
+            <label>
+              Which version are you currently using?
+            </label>
+
+            <SelectList id="add-plugin-options" values={
               resolvedPlugin.plugin.data?.versions?.map((version) => ({
                 name: <>
                   <span class="flex-1 font-mono text-left">
@@ -487,27 +492,12 @@ export default component$(() => {
               })) || []
             } onChange$={(e, el) => {
               const versionId = el.value;
-              const selectedVersion = resolvedPlugin.plugin?.data?.versions?.find((version) => version.id === versionId);
+              if (!resolvedPlugin.plugin) return;
+              const selectedVersion = resolvedPlugin.plugin.data?.versions?.find((version) => version.id == versionId);
               if (selectedVersion) {
-                resolvedPlugin.plugin!.version = {
-                  id: selectedVersion.id,
-                  name: selectedVersion.name,
-                  releaseDate: selectedVersion.releaseDate,
-                };
+                resolvedPlugin.plugin.version = selectedVersion;
               }
-            }} customDropdown>
-              {resolvedPlugin.plugin.version &&
-                <span q:slot="dropdown" class="flex items-center gap-2">
-                  <span class="flex-1 font-mono text-left">
-                    {resolvedPlugin.plugin.version.name}
-                  </span>
-                  <span class="text-xs text-lum-text-secondary ml-1 text-right">
-                    {new Date(resolvedPlugin.plugin.version.releaseDate * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                  </span>
-                </span>
-              }
-              Which version are you currently using?
-            </SelectMenu>
+            }}/>
           </>}
 
           <hr/>

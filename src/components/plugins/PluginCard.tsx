@@ -54,14 +54,17 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
   const isLoading = useSignal(false);
 
   return <div key={plugin.name} class={{
-    'lum-card flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
+    'lum-card p-4 flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
     'border-green': updateAvailable,
+  }}
+  style={{
+    '--lum-border-radius': '1rem',
   }}>
     {plugin.data?.iconUrl &&
       <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
         width={720} height={720} class="absolute w-full h-full inset-0 object-cover -z-1 blur-xl scale-250 saturate-200" />}
 
-    <div class="flex items-center gap-2">
+    <div class="flex gap-2">
       <div class="flex-1 flex-col items-center">
         <p class="flex items-center gap-2">
           {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
@@ -74,42 +77,39 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
             {plugin.name}
           </span>
           {plugin.data?.testedVersions &&
-            <span class="text-sm">
+            <span class="text-sm text-lum-text-secondary">
               {plugin.data.testedVersions[0]} - {plugin.data.testedVersions[plugin.data.testedVersions.length - 1]}
             </span>
           }
         </p>
 
-        {plugin.data?.tag &&
-          <p class="text-sm mt-1">
-            {plugin.data?.tag}
-          </p>
-        }
+        <p class="text-sm text-lum-text-secondary">
+          {plugin.data ? plugin.data?.tag : 'Loading...'}
+        </p>
       </div>
 
-      {!noActions &&
-        <div class="flex-1 flex-col gap-2 items-center">
-          {plugin.version && <p class="text-sm flex-1 text-right">
-            Current: <span class={{
-              'text-red-500': updateAvailable,
-              'text-blue-500': !updateAvailable,
-            }}>
-              {plugin.version.name}
-            </span>
-          </p>}
-          {plugin.data?.latestVersion && <p class="text-sm flex-1 text-right">
-            Latest: <span class="text-green-500">
-              {plugin.data.latestVersion.name}
-            </span>
-          </p>}
-          {!plugin.data && <Loader2 class="animate-spin" />}
-        </div>
-      }
+      <div class="flex-1 flex-col gap-2 items-center">
+        {plugin.version && <p class="text-sm text-lum-text-secondary flex-1 text-right">
+          Current: <span class={{
+            'font-mono': true,
+            'text-red-500': updateAvailable,
+            'text-blue-500': !updateAvailable,
+          }}>
+            {plugin.version.name}
+          </span>
+        </p>}
+        {plugin.data?.latestVersion && <p class="text-sm text-lum-text-secondary flex-1 text-right">
+          Latest: <span class="text-green-500 font-mono">
+            {plugin.data.latestVersion.name}
+          </span>
+        </p>}
+        {!plugin.data && <Loader2 class="animate-spin" />}
+      </div>
     </div>
 
-    {!noActions && <div class="flex items-center mt-2 gap-1">
+    {!noActions && <div class="flex items-center gap-1">
       <button class={{
-        'lum-btn text-sm': true,
+        'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
       }} onClick$={async () => {
         if (!plugin.data?.file?.url) return;
         isLoading.value = true;
@@ -133,7 +133,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
         }
         {isLoading.value && <div class="lum-loading ml-2 w-4 h-4" />}
       </button>
-      <button class="lum-btn text-sm lum-bg-transparent" onClick$={() => {
+      <button class="lum-btn rounded-lum-2 text-sm lum-bg-transparent" onClick$={() => {
         plugin.version = plugin.data?.latestVersion;
       }}>
         <Check size={16} /> Mark updated
@@ -146,17 +146,20 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
       </p>}
       <div class="flex-1"/>
       {plugin.data?.sourceCodeLink && (
-        <a href={plugin.data.sourceCodeLink} target="_blank" class="lum-btn p-2">
+        <a href={plugin.data.sourceCodeLink}
+          target="_blank" class="lum-btn rounded-lum-2 p-2">
           <SiGithub size={16} class="fill-current" />
         </a>
       )}
       {plugin.data?.file?.externalUrl?.includes('modrinth') && (
-        <a href={plugin.data?.file?.externalUrl} target="_blank" class="lum-btn p-2 lum-bg-green">
+        <a href={plugin.data?.file?.externalUrl}
+          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
           <SiModrinth size={16} class="fill-current" />
         </a>
       )}
       {plugin.type === 'spigot' && (
-        <a href={`https://www.spigotmc.org/resources/${plugin.id}`} target="_blank" class="lum-btn p-2 lum-bg-yellow">
+        <a href={`https://www.spigotmc.org/resources/${plugin.id}`}
+          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-yellow">
           <SiSpigotmc size={16} class="fill-current" />
         </a>
       )}
