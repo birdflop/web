@@ -1,14 +1,20 @@
-import { component$, useSignal } from '@builder.io/qwik';
+import { component$, isBrowser, Slot, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { LinkProps } from '@builder.io/qwik-city';
 import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 import { Check, Download, Loader2 } from 'lucide-icons-qwik';
 import { downloadSpigotPlugin } from '~/routes/resources/plugins';
 
-export type Plugin = {
+type PluginVersion = {
+  id: number;
   name: string;
-  version?: any;
-  type?: 'spigot';
+  releaseDate: number;
+}
+
+export type PluginType = {
   id?: string;
+  name: string;
+  version?: PluginVersion;
+  type?: 'spigot';
 };
 
 export type PluginData = {
@@ -26,20 +32,12 @@ export type PluginData = {
     externalUrl?: string;
   };
   testedVersions?: string[];
-  latestVersion?: {
-    id: string;
-    name: string;
-    releaseDate: number;
-  };
+  latestVersion?: PluginVersion;
   sourceCodeLink?: string;
-  versions?: {
-    id: string;
-    name: string;
-    releaseDate: number;
-  }[];
+  versions?: PluginVersion[];
 }
 
-export type PluginWithData = Plugin & {
+export type PluginWithData = PluginType & {
   data?: PluginData;
 };
 
@@ -52,6 +50,48 @@ export interface PluginCardProps extends Omit<LinkProps, 'class'> {
 
 export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable, spigotRateLimit }) => {
   const isLoading = useSignal(false);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    if (!isBrowser) return; // dont request plugin data on the server
+    if (plugin.data || !plugin.id) return;
+    try {
+      const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
+      const data = await res.json() as any;
+
+      const pluginData: PluginData = {
+        external: data.external,
+        name: data.name,
+        tag: data.tag,
+        iconUrl: data.icon?.url,
+        releaseDate: data.releaseDate,
+        updateDate: data.updateDate,
+        file: data.file ? {
+          type: data.file.type,
+          size: data.file.size,
+          sizeUnit: data.file.sizeUnit,
+          url: data.file.url,
+          externalUrl: data.file.externalUrl,
+        } : undefined,
+        testedVersions: data.testedVersions?.length
+          ? data.testedVersions : undefined,
+        sourceCodeLink: data.sourceCodeLink,
+      };
+      // fetch latest version
+      const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
+      const latestVersion = await latestVerResponse.json() as any;
+      pluginData.latestVersion = {
+        id: latestVersion.id,
+        name: latestVersion.name,
+        releaseDate: latestVersion.releaseDate,
+      };
+
+      plugin.data = pluginData;
+    }
+    catch (err) {
+      console.error(`Failed to fetch plugin data for ${plugin.name}:`, err);
+    }
+  });
 
   return <div key={plugin.name} class={{
     'lum-card p-4 flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
@@ -163,6 +203,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           <SiSpigotmc size={16} class="fill-current" />
         </a>
       )}
+      <Slot name="extra-actions" />
     </div>}
   </div>;
 });

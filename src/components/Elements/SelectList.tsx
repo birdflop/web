@@ -50,7 +50,7 @@ export const SelectList = component$<SelectListProps>(({
           <button type="button"
             class={{
               'lum-btn rounded-lum-1': true,
-              'lum-bg-lum-card-bg hover:lum-bg-lum-card-bg/20': selected.value == value,
+              'lum-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50': selected.value == value,
               [btnClass]: true,
             }}
             key={i}
