@@ -11,7 +11,7 @@ type PluginVersion = {
 }
 
 export type PluginType = {
-  id?: string;
+  id?: number;
   name: string;
   version?: PluginVersion;
   type?: 'spigot';
@@ -42,13 +42,16 @@ export type PluginWithData = PluginType & {
 };
 
 export interface PluginCardProps extends Omit<LinkProps, 'class'> {
+  class?: {
+    [key: string]: boolean;
+  };
   plugin: PluginWithData;
   updateAvailable?: boolean;
   noActions?: boolean;
   spigotRateLimit?: { downloadCount: number, resetTime: number };
 }
 
-export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable, spigotRateLimit }) => {
+export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable, spigotRateLimit, class: cardClass }) => {
   const isLoading = useSignal(false);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -96,6 +99,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
   return <div key={plugin.name} class={{
     'lum-card p-4 flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
     'border-green': updateAvailable,
+    ...cardClass,
   }}
   style={{
     '--lum-border-radius': '1rem',

@@ -82,9 +82,8 @@ export default component$(() => {
 
   const resolvedPlugin = useStore<{
     plugin?: PluginWithData;
-  }>({
-    plugin: undefined,
-  }, { deep: true });
+    plugins?: PluginWithData[];
+  }>({}, { deep: true });
 
   const pluginsStore = useStore<{
     servers: {
@@ -340,25 +339,18 @@ export default component$(() => {
 
           <div class="flex flex-col gap-1 mb-2">
             <label for="plugin-link">
-              Enter the plugin link.
+              Search or paste the link of the plugin you want to add.
             </label>
-            <input type="text" class="lum-input" placeholder="https://www.spigotmc.org/resources/..." id="plugin-link"
+            <input type="text" class="lum-input" placeholder="Plugin name or https://www.spigotmc.org/resources/..." id="plugin-link"
               onInput$={async (e, el) => {
                 const value = el.value;
                 const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
 
-                if (!spigotMatch) {
-                  const notification = new Notification()
-                    .setTitle('Invalid link')
-                    .setDescription('Please enter a valid plugin link.')
-                    .setBgColor('lum-bg-red/50');
-                  notifications.push(notification);
-                  return;
-                }
+                if (!spigotMatch) return;
 
-                const pluginId = spigotMatch[2];
+                const pluginId = Number(spigotMatch[2]);
                 // check if the plugin is already added
-                const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id === pluginId);
+                const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id == pluginId);
                 if (existingPlugin) {
                   const notification = new Notification()
                     .setTitle('Plugin already added')
@@ -374,10 +366,8 @@ export default component$(() => {
                 const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
                 const versionsData = await versionsRes.json() as any;
 
-                console.log(versionsData);
-
                 const newPlugin: PluginWithData = {
-                  id: pluginId,
+                  id: data.id,
                   name: data.name,
                   type: 'spigot',
                   data: {
@@ -403,10 +393,86 @@ export default component$(() => {
 
                 resolvedPlugin.plugin = newPlugin;
               }}
+              onChange$={async (e, el) => {
+                const value = el.value;
+                const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
+                if (spigotMatch) return;
+
+                console.log('Searching for plugin:', value);
+
+                const searchRes = await fetch(`https://api.spiget.org/v2/search/resources/${encodeURIComponent(value)}?size=5`);
+                const searchData: any[] = await searchRes.json();
+
+                if (searchData.length === 0) {
+                  const notification = new Notification()
+                    .setTitle('No results found')
+                    .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
+                    .setBgColor('lum-bg-yellow/50');
+                  notifications.push(notification);
+                  return;
+                }
+
+                resolvedPlugin.plugins = searchData.map((result: any) => ({
+                  id: result.id,
+                  name: result.name,
+                  type: 'spigot',
+                  data: {
+                    external: result.external,
+                    name: result.name,
+                    tag: result.tag,
+                    iconUrl: result.icon?.url,
+                    releaseDate: result.releaseDate,
+                    updateDate: result.updateDate,
+                    file: result.file ? {
+                      type: result.file.type,
+                      size: result.file.size,
+                      sizeUnit: result.file.sizeUnit,
+                      url: result.file.url,
+                      externalUrl: result.file.externalUrl,
+                    } : undefined,
+                    testedVersions: result.testedVersions?.length
+                      ? result.testedVersions : undefined,
+                    sourceCodeLink: result.sourceCodeLink,
+                  },
+                }));
+              }}
             />
           </div>
 
-          {resolvedPlugin.plugin && <>
+          {resolvedPlugin.plugins && <>
+            <label>
+              Search results:
+            </label>
+            <SelectList id="add-plugin-options" values={
+              resolvedPlugin.plugins.map((plugin) => ({
+                name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
+                  <span class="flex items-center gap-2">
+                    {plugin.data?.iconUrl &&
+                      <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+                        width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
+                    {plugin.name}
+                  </span>
+                  <span class="text-xs text-lum-text-secondary">
+                    {plugin.data?.tag}
+                  </span>
+                </span>,
+                value: plugin.id!,
+              }))
+            } onChange$={async (e, el) => {
+              const pluginId = Number(el.value);
+              const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
+              if (!selectedPlugin || !selectedPlugin.data) return;
+
+              const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+              const versionsData = await versionsRes.json() as any;
+              selectedPlugin.data.versions = versionsData.map((version: any) => version);
+
+              resolvedPlugin.plugin = selectedPlugin;
+              resolvedPlugin.plugins = undefined;
+            }}/>
+          </>}
+
+          {resolvedPlugin.plugin?.data?.versions && <>
             <label>
               Which version are you currently using?
             </label>
