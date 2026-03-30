@@ -47,6 +47,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 import { donateLink } from '../Elements/Nav';
+import { deepTrack } from '~/util/misc';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
@@ -170,9 +171,7 @@ export default component$(({ errors, output }: {
     }
 
     // track all rgbStore properties
-    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
-      track(() => rgbStore[key]);
-    });
+    deepTrack(track, rgbStore);
   });
 
   // Obfuscate effect

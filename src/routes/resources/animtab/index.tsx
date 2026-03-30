@@ -10,6 +10,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
+import { deepTrack } from '~/util/misc';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -55,18 +56,12 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('animtab', { version: rgbStore.version, ...animtabStore });
-    (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
-      track(() => animtabStore[key]);
-    });
+    deepTrack(track, rgbStore);
   });
 
   useTask$(({ track }) => {
-    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
-      track(() => rgbStore[key]);
-    });
-    (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
-      track(() => animtabStore[key]);
-    });
+    deepTrack(track, animtabStore);
+    deepTrack(track, rgbStore);
 
     const { frames: newFrames } = generateAnimTABFrames({ ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' }, animtabStore);
 

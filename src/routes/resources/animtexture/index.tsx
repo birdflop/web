@@ -9,6 +9,7 @@ import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { deepTrack } from '~/util/misc';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -57,9 +58,7 @@ export default component$(() => {
   const textureCanvasRef = useSignal<HTMLCanvasElement>();
 
   useTask$(({ track }) => {
-    (Object.keys(animtextureStore) as Array<keyof typeof animtextureStore>).forEach((key) => {
-      track(() => animtextureStore[key]);
-    });
+    deepTrack(track, animtextureStore);
     track(() => animtextureFrames.value);
     track(() => animCanvasRef.value);
     track(() => textureCanvasRef.value);
