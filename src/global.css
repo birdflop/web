@@ -58,6 +58,7 @@
     --color-lum-accent: var(--color-nav-bg);
     --color-lum-text: var(--color-neutral-900);
     --color-lum-text-secondary: var(--color-neutral-700);
+    --lum-depth: 0;
   }
 }
 
