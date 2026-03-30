@@ -7,7 +7,7 @@ import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
 
-type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings' | 'plugins';
+type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
 const getDefaults = (name: names) => {
   switch (name) {

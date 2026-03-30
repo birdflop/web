@@ -1,6 +1,4 @@
 import { $, component$, isBrowser, useComputed$, useContext, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
-import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Blocks, Check, Download, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
@@ -8,13 +6,6 @@ import { defaultDescription, generateHead } from '~/root';
 import { Toggle } from '@luminescent/ui-qwik';
 import PluginCard, { PluginType, PluginWithData } from '~/components/plugins/PluginCard';
 import { SelectList } from '~/components/Elements/SelectList';
-
-export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'plugins', url.searchParams) as {
-    cookies: any,
-    errors: string[]
-  };
-});
 
 const debug = true;
 
@@ -56,23 +47,10 @@ export const downloadSpigotPlugin = $(async (
 export default component$(() => {
   const t = inlineTranslate();
 
-  const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
 
   const isLoading = useSignal([] as string[]);
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    errors.forEach((error) => {
-      const notification = new Notification()
-        .setTitle('Error loading cookies')
-        .setDescription(`${error}`)
-        .setBgColor('lum-bg-red/50')
-        .setPersist(true);
-      notifications.push(notification);
-    });
-  });
 
   // spigot only allows 10 downloads per minute
   const spigotRateLimit = useStore({
@@ -93,15 +71,36 @@ export default component$(() => {
     showOnlyOutdated?: boolean;
   }>({
     servers: {},
-    ...cookies,
   }, { deep: true });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!isBrowser) return; // dont load plugins on the server
+    const savedPlugins = localStorage.getItem('plugins');
+    if (savedPlugins) {
+      try {
+        const parsed = JSON.parse(savedPlugins);
+        pluginsStore.servers = parsed.servers || {};
+        pluginsStore.openServer = parsed.openServer;
+        pluginsStore.showOnlyOutdated = parsed.showOnlyOutdated;
+      } catch (e) {
+        const notification = new Notification()
+          .setTitle('Error loading plugins')
+          .setDescription(`There was an error loading your saved plugins: ${e}.`)
+          .setBgColor('lum-bg-red/50');
+        notifications.push(notification);
+      }
+    }
+  });
 
   useTask$(({ track }) => {
     (Object.keys(pluginsStore) as Array<keyof typeof pluginsStore>).forEach((key) => {
       track(() => pluginsStore[key]);
     });
 
-    // strip all plugin data before saving to cookies - will add localstorage to cache plugin data later
+    if (!isBrowser) return;
+
+    // strip all plugin data before saving
     const pluginsToSave = {
       ...pluginsStore,
       servers: Object.fromEntries(
@@ -117,7 +116,15 @@ export default component$(() => {
       ),
     };
 
-    if (isBrowser) setCookies('plugins', pluginsToSave);
+    try {
+      localStorage.setItem('plugins', JSON.stringify(pluginsToSave));
+    } catch (e) {
+      const notification = new Notification()
+        .setTitle('Error saving plugins')
+        .setDescription(`There was an error saving your plugins: ${e}.`)
+        .setBgColor('lum-bg-red/50');
+      notifications.push(notification);
+    }
   });
 
   const outdatedPlugins = useComputed$(() => {
