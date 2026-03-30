@@ -156,7 +156,7 @@ export default component$(() => {
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
       <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Blocks size={32} />
-        {t('nav.resources.plugins.title@@Plugin Updater')}
+        {t('nav.resources.plugins.title@@Plugin Updates')}
         <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
           {t('nav.experimental@@experimental')}
         </span>
@@ -462,6 +462,6 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Plugin Updater - Birdflop',
+  title: 'Plugin Updates - Birdflop',
   description: 'Keep track of plugin updates without checking every plugin page for updates. ' + defaultDescription,
 });

@@ -105,7 +105,7 @@ export default component$(() => {
           <Blobs color="violet" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Blocks size={30} />
-            {t('nav.resources.plugins.title@@Plugin Updater')}
+            {t('nav.resources.plugins.title@@Plugin Updates')}
           </h3>
           <p class="text-lum-text-secondary">
             {t('nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.')}
