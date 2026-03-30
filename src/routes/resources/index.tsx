@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { Blobs, Hoverable, LogoDiscord, LogoPaper } from '@luminescent/ui-qwik';
+import { Blobs, Hoverable, LogoDiscord } from '@luminescent/ui-qwik';
 import { Binary, Blocks, Bot, Box, Eye, Flag, GalleryHorizontalEnd, Github, Link as LinkIcon, Palette, Presentation, Rainbow, Save, Server, Wrench, Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
@@ -77,26 +77,14 @@ export default component$(() => {
       <div class="flex *:flex-1 flex-wrap gap-2">
         <Link class="lum-card lum-bg-lum-card-bg/30 hover:lum-bg-yellow transition-all duration-200! relative"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/sparkprofile">
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/analyze">
           <Blobs color="yellow" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
           <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Zap size={30} />
-            {t('nav.resources.sparkProfile.title@@Spark Profile')}
+            {t('nav.resources.analyze.title@@Analyze')}
           </h3>
           <p class="text-lum-text-secondary">
-            {t('nav.resources.sparkProfile.description@@Analyze a Spark Profile and get possible optimizations')}
-          </p>
-        </Link>
-        <Link class="lum-card lum-bg-lum-card-bg/30 hover:lum-bg-pink transition-all duration-200! relative"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)} href="/resources/papertimings">
-          <Blobs color="pink" class={{ 'absolute overflow-clip rounded-lum -z-10': true }} style={{ transform: 'translateZ(-10px)' }}/>
-          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
-            <LogoPaper size={30} />
-            {t('nav.resources.paperTimings.title@@Paper Timings')}
-          </h3>
-          <p class="text-lum-text-secondary">
-            {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
+            {t('nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations')}
           </p>
         </Link>
         <Link class="lum-card lum-bg-lum-card-bg/30 hover:lum-bg-orange transition-all duration-200! relative"

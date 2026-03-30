@@ -1,6 +1,6 @@
 import { Slot, component$, useSignal } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
-import { LogoPaper } from '@luminescent/ui-qwik';
+import { Zap } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
@@ -11,11 +11,11 @@ export default component$(() => {
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
       <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
-        <LogoPaper size={32} />
-        {t('nav.resources.paperTimings.title@@Paper Timings')}
+        <Zap size={32} />
+        {t('nav.resources.analyze.title@@Analyze')}
       </h1>
       <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
-        {t('nav.resources.paperTimings.description@@Analyze Paper Timings and get possible optimizations')}
+        {t('nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations')}
       </p>
 
       <p>
@@ -25,24 +25,24 @@ export default component$(() => {
 
       <Slot />
 
-      <label for="link">Paste the timings report link here</label>
+      <label for="link">Paste the Spark profile or Paper timings link here</label>
       <input class="lum-input mt-1 w-full" id="link" onInput$={(e, el) => {
         const link = el.value;
         redirect.value = '';
-        if (link.startsWith('https://spark.lucko.me')) {
-          error.value = '⚠️ This is a Spark Profile. Use the Spark Profile Analysis for this type of report.';
-        }
-        else if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
+        let code;
+        if (link.startsWith('https://www.spigotmc.org/go/timings?url=') || link.startsWith('https://spigotmc.org/go/timings?url=')) {
           error.value = '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
         }
-        else if (!link.startsWith('https://timin') || !link.includes('?id=')) {
-          error.value = '❌ This is an Invalid Timings Link.';
+        else if (link.startsWith('https://spark.lucko.me')) {
+          code = link.replace('https://spark.lucko.me/', '');
+        }
+        else if (link.startsWith('https://timin')) {
+          code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
         }
         else {
-          error.value = '';
-          const code = link.replace('/d=', '/?id=').replace('timin.gs', 'timings.aikar.co').split('#')[0].split('\n')[0].split('/?id=')[1];
-          redirect.value = `/resources/papertimings/${code}`;
+          error.value = '❌ This is an invalid link.';
         }
+        if (code) redirect.value = `/resources/analyze/${code}`;
       }}/>
 
       <p class={{
@@ -59,9 +59,10 @@ export default component$(() => {
       </div>
 
       <p class="my-12">
-        You can also copy the code into a link<br />
-        <span class="text-lum-text-secondary">https://birdflop.com/resources/papertimings/[code]</span><br />
-        Powered by <a href="https://github.com/Pemigrade/botflop" class="text-blue-400 hover:underline">botflop</a>
+        You can also copy the timings or profile id into a link<br />
+        <span class="text-lum-text-secondary">https://birdflop.com/resources/analyze/[id]</span><br />
+        <span class="text-lum-text-secondary">https://birdflop.com/resources/analyze/[id]</span><br />
+        Powered by <a href="https://github.com/birdflop/botflop" class="text-blue-400 hover:underline">botflop</a>
       </p>
     </section>
   );

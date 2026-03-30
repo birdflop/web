@@ -73,8 +73,8 @@ export default component$(() => {
         <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/sparkprofile" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-          <Zap size={20} /> {t('nav.resources.sparkProfile.title@@Spark Profile')}
+        <Link q:slot="extra-buttons" href="/resources/analyze" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+          <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
@@ -200,8 +200,8 @@ export default component$(() => {
         <Link href="/resources/animtab" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
-        <Link href="/resources/sparkprofile" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
-          <Zap size={20} /> {t('nav.resources.sparkProfile.title@@Spark Profile')}
+        <Link href="/resources/analyze" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+          <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link href="/resources/flags" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
