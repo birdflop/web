@@ -105,7 +105,6 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
     const pairsplit = pair.split(/\s*=\s*/);
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
-  console.log(cookie);
 
   const settings = JSON.parse(decodeURIComponent(cookie.settings));
   // don't set cookies if user has opted out unless this is the settings cookie itself

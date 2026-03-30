@@ -1,24 +1,30 @@
-import { component$, isBrowser, Slot, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, Slot, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { LinkProps } from '@builder.io/qwik-city';
 import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { Check, Download, Loader2 } from 'lucide-icons-qwik';
+import { Check, Download, Link } from 'lucide-icons-qwik';
 import { downloadSpigotPlugin } from '~/routes/resources/plugins';
+import { Notification, NotificationContext } from '~/util/Notification';
 
-type PluginVersion = {
+export type PluginVersion = {
   id: number;
   name: string;
   releaseDate: number;
 }
 
+export type PluginSource = 'spigot' | 'misc';
+
 export type PluginType = {
   id?: number;
-  name: string;
+  url?: string;
+  iconUrl?: string;
+  name?: string;
+  updateDate?: number;
   version?: PluginVersion;
-  type?: 'spigot';
+  type?: PluginSource;
 };
 
 export type PluginData = {
-  name: string;
+  name?: string
   external?: boolean;
   tag?: string;
   iconUrl?: string;
@@ -53,48 +59,60 @@ export interface PluginCardProps extends Omit<LinkProps, 'class'> {
 
 export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable, spigotRateLimit, class: cardClass }) => {
   const isLoading = useSignal(false);
+  const notifications = useContext(NotificationContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     if (!isBrowser) return; // dont request plugin data on the server
     if (plugin.data || !plugin.id) return;
     try {
-      const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
-      const data = await res.json() as any;
+      if (plugin.type === 'spigot') {
+        const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
+        const data = await res.json() as any;
 
-      const pluginData: PluginData = {
-        external: data.external,
-        name: data.name,
-        tag: data.tag,
-        iconUrl: data.icon?.url,
-        releaseDate: data.releaseDate,
-        updateDate: data.updateDate,
-        file: data.file ? {
-          type: data.file.type,
-          size: data.file.size,
-          sizeUnit: data.file.sizeUnit,
-          url: data.file.url,
-          externalUrl: data.file.externalUrl,
-        } : undefined,
-        testedVersions: data.testedVersions?.length
-          ? data.testedVersions : undefined,
-        sourceCodeLink: data.sourceCodeLink,
-      };
-      // fetch latest version
-      const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
-      const latestVersion = await latestVerResponse.json() as any;
-      pluginData.latestVersion = {
-        id: latestVersion.id,
-        name: latestVersion.name,
-        releaseDate: latestVersion.releaseDate,
-      };
+        const pluginData: PluginData = {
+          external: data.external,
+          name: data.name,
+          tag: data.tag,
+          iconUrl: data.icon?.url,
+          releaseDate: data.releaseDate,
+          updateDate: data.updateDate,
+          file: data.file ? {
+            type: data.file.type,
+            size: data.file.size,
+            sizeUnit: data.file.sizeUnit,
+            url: data.file.url,
+            externalUrl: data.file.externalUrl,
+          } : undefined,
+          testedVersions: data.testedVersions?.length
+            ? data.testedVersions : undefined,
+          sourceCodeLink: data.sourceCodeLink,
+        };
+        // fetch latest version
+        const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
+        const latestVersion = await latestVerResponse.json() as any;
+        pluginData.latestVersion = {
+          id: latestVersion.id,
+          name: latestVersion.name,
+          releaseDate: latestVersion.releaseDate,
+        };
 
-      plugin.data = pluginData;
+        plugin.data = pluginData;
+      }
     }
     catch (err) {
-      console.error(`Failed to fetch plugin data for ${plugin.name}:`, err);
+      const notification = new Notification()
+        .setTitle('Error fetching plugin data')
+        .setDescription(`There was an error fetching data for ${plugin.name}: ${err}`)
+        .setBgColor('lum-bg-red/50');
+      notifications.push(notification);
     }
   });
+
+  const iconUrl = plugin.iconUrl ?? plugin.data?.iconUrl;
+  const iconUrlWithLink = plugin.type === 'spigot'
+    ? 'https://spigotmc.org/' + iconUrl
+    : iconUrl;
 
   return <div key={plugin.name} class={{
     'lum-card p-4 flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
@@ -104,17 +122,23 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
   style={{
     '--lum-border-radius': '1rem',
   }}>
-    {plugin.data?.iconUrl &&
-      <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+    {iconUrlWithLink &&
+      <img src={iconUrlWithLink} alt={`${plugin.name} icon`}
         width={720} height={720} class="absolute w-full h-full inset-0 object-cover -z-1 blur-xl scale-250 saturate-200" />}
 
     <div class="flex gap-2">
       <div class="flex-1 flex-col items-center">
+        {plugin.data?.latestVersion && updateAvailable && <p class="text-green-500! text-xs mb-2">
+          Update available as of {
+            new Date(plugin.data.latestVersion.releaseDate * 1000)
+              .toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+          }
+        </p>}
         <p class="flex items-center gap-2">
           {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
             && <SiSpigotmc class="fill-yellow" />}
-          {plugin.data?.iconUrl &&
-            <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+          {iconUrlWithLink &&
+            <img src={iconUrlWithLink} alt={`${plugin.name} icon`}
               width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}
 
           <span class="text-lg! text-lum-text!">
@@ -127,12 +151,18 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           }
         </p>
 
-        <p class="text-sm text-lum-text-secondary">
-          {plugin.data ? plugin.data?.tag : 'Loading...'}
-        </p>
+        {plugin.type !== 'misc' &&
+          <p class="text-sm text-lum-text-secondary">
+            {plugin.data ? plugin.data?.tag : 'Loading...'}
+          </p>
+        }
       </div>
 
       <div class="flex-1 flex-col gap-2 items-center">
+        {plugin.updateDate && <p class="text-sm text-lum-text-secondary flex-1 text-right">
+          Last Updated {new Date(plugin.updateDate).toLocaleDateString(undefined,
+            { year: 'numeric', month: 'short', day: 'numeric' })}
+        </p>}
         {plugin.version && <p class="text-sm text-lum-text-secondary flex-1 text-right">
           Current: <span class={{
             'font-mono': true,
@@ -147,47 +177,57 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
             {plugin.data.latestVersion.name}
           </span>
         </p>}
-        {!plugin.data && <Loader2 class="animate-spin" />}
+        {plugin.type !== 'misc' && !plugin.data && <div class="lum-loading ml-2 w-4 h-4" />}
       </div>
     </div>
 
     {!noActions && <div class="flex items-center gap-1">
-      <button class={{
-        'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
-      }} onClick$={async () => {
-        if (!plugin.data?.file?.url) return;
-        isLoading.value = true;
+      {plugin.data?.file?.url &&
+        <button class={{
+          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
+        }} onClick$={async () => {
+          if (!plugin.data?.file?.url) return;
+          isLoading.value = true;
 
-        if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
-        else window.open(plugin.data.file.url, '_blank');
+          if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
+          else window.open(plugin.data.file.url, '_blank');
 
-        plugin.version = plugin.data?.latestVersion;
-        isLoading.value = false;
-      }} disabled={!plugin.data?.file?.url || isLoading.value}>
-        <Download size={16} /> Download latest
-        {!!plugin.data?.file?.size &&
-          <span class="text-xs text-lum-text-secondary">
-            {plugin.data?.file?.size} {plugin.data?.file?.sizeUnit}
-          </span>
-        }
-        {!!plugin.data?.external &&
-          <span class="text-xs text-lum-text-secondary">
-            external
-          </span>
-        }
-        {isLoading.value && <div class="lum-loading ml-2 w-4 h-4" />}
-      </button>
-      <button class="lum-btn rounded-lum-2 text-sm lum-bg-transparent" onClick$={() => {
-        plugin.version = plugin.data?.latestVersion;
-      }}>
-        <Check size={16} /> Mark updated
-      </button>
-      {plugin.data?.latestVersion && updateAvailable && <p class="text-green-500! text-xs">
-        Update available as of {
-          new Date(plugin.data.latestVersion.releaseDate * 1000)
-            .toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-        }
-      </p>}
+          plugin.version = plugin.data?.latestVersion;
+          isLoading.value = false;
+        }} disabled={isLoading.value}>
+          <Download size={16} /> Download latest
+          {!!plugin.data?.file?.size &&
+            <span class="text-xs text-lum-text-secondary">
+              {plugin.data?.file?.size} {plugin.data?.file?.sizeUnit}
+            </span>
+          }
+          {!!plugin.data?.external &&
+            <span class="text-xs text-lum-text-secondary">
+              external
+            </span>
+          }
+          {isLoading.value && <div class="lum-loading ml-2 w-4 h-4" />}
+        </button>
+      }
+
+      {plugin.url &&
+        <a class={{
+          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
+        }} href={plugin.url} target="_blank" onClick$={() => {
+          plugin.updateDate = Date.now();
+        }}>
+          <Link size={16} /> View plugin
+        </a>
+      }
+
+      {updateAvailable &&
+        <button class="lum-btn rounded-lum-2 text-sm lum-bg-transparent" onClick$={() => {
+          plugin.version = plugin.data?.latestVersion;
+          plugin.updateDate = Date.now();
+        }}>
+          <Check size={16} /> Mark updated
+        </button>
+      }
       <div class="flex-1"/>
       {plugin.data?.sourceCodeLink && (
         <a href={plugin.data.sourceCodeLink}

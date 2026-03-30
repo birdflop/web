@@ -1,11 +1,13 @@
-import { $, component$, isBrowser, useComputed$, useContext, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Download, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { Toggle } from '@luminescent/ui-qwik';
-import PluginCard, { PluginType, PluginWithData } from '~/components/plugins/PluginCard';
-import { SelectList } from '~/components/Elements/SelectList';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
+import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
+import AddMiscDialog from '~/components/plugins/AddMiscDialog';
+import { deepTrack } from '~/util/misc';
 
 const debug = true;
 
@@ -44,6 +46,22 @@ export const downloadSpigotPlugin = $(async (
     spigotRateLimit.resetTime = Date.now() + 60 * 1000;
 });
 
+type ResolvedPluginType = {
+  type: PluginSource;
+  plugin?: PluginWithData;
+  plugins?: PluginWithData[];
+};
+
+type PluginsStoreType = {
+  servers: {
+    [serverName: string]: PluginWithData[];
+  }
+  openServer?: string;
+  showOnlyOutdated?: boolean;
+}
+
+export const resolvedPluginContext = createContextId<ResolvedPluginType>('resolve-plugin');
+export const pluginsStoreContext = createContextId<PluginsStoreType>('plugins-store');
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -58,20 +76,15 @@ export default component$(() => {
     resetTime: 0,
   });
 
-  const resolvedPlugin = useStore<{
-    plugin?: PluginWithData;
-    plugins?: PluginWithData[];
-  }>({}, { deep: true });
+  const resolvedPlugin = useStore<ResolvedPluginType>({
+    type: 'spigot',
+  }, { deep: true });
+  useContextProvider(resolvedPluginContext, resolvedPlugin);
 
-  const pluginsStore = useStore<{
-    servers: {
-      [serverName: string]: PluginWithData[];
-    }
-    openServer?: string;
-    showOnlyOutdated?: boolean;
-  }>({
+  const pluginsStore = useStore<PluginsStoreType>({
     servers: {},
   }, { deep: true });
+  useContextProvider(pluginsStoreContext, pluginsStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -94,9 +107,8 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    (Object.keys(pluginsStore) as Array<keyof typeof pluginsStore>).forEach((key) => {
-      track(() => pluginsStore[key]);
-    });
+    deepTrack(track, pluginsStore);
+    console.log(Date.now());
 
     if (!isBrowser) return;
 
@@ -108,9 +120,12 @@ export default component$(() => {
           serverName,
           plugins.map((plugin) => ({
             id: plugin.id,
+            iconUrl: plugin.iconUrl,
+            url: plugin.url,
             name: plugin.name,
             version: plugin.version,
             type: plugin.type,
+            updateDate: plugin.updateDate,
           })),
         ]),
       ),
@@ -168,10 +183,7 @@ export default component$(() => {
               alert('A server with that name already exists.');
               return;
             }
-            pluginsStore.servers = {
-              ...pluginsStore.servers,
-              [serverName]: [],
-            };
+            pluginsStore.servers[serverName] = [];
             pluginsStore.openServer = serverName;
           }
         }} title="Add server">
@@ -200,10 +212,7 @@ export default component$(() => {
                 return;
               }
               delete pluginsStore.servers[pluginsStore.openServer];
-              pluginsStore.servers = {
-                ...pluginsStore.servers,
-                [newName]: pluginsStore.servers[pluginsStore.openServer],
-              };
+              pluginsStore.servers[newName] = pluginsStore.servers[pluginsStore.openServer];
               pluginsStore.openServer = newName;
             }
           }} title="Rename server">
@@ -214,14 +223,39 @@ export default component$(() => {
             if (!pluginsStore.openServer) return;
             if (confirm(`Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`)) {
               delete pluginsStore.servers[pluginsStore.openServer];
-              pluginsStore.servers = {
-                ...pluginsStore.servers,
-              };
               pluginsStore.openServer = undefined;
             }
           }} title="Delete server">
             <Trash size={16} />
           </button>
+          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
+            if (!pluginsStore.openServer) return;
+            const plugins = pluginsStore.servers[pluginsStore.openServer];
+
+            const notification = new Notification()
+              .setTitle('Plugins copied to clipboard')
+              .setDescription(`The plugins for server "${pluginsStore.openServer}" have been copied to your clipboard as JSON.`)
+              .setBgColor('lum-bg-green/50');
+            navigator.clipboard.writeText(JSON.stringify(plugins)).catch((err) => {
+              notification.setTitle('Failed to copy plugins to clipboard')
+                .setDescription(err)
+                .setBgColor('lum-bg-red/50')
+                .setPersist(true);
+            });
+            notifications.push(notification);
+          }} title="Export server plugins as JSON">
+            <Copy size={16} />
+          </button>
+          <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
+            onInput$={(e, el) => {
+              if (!pluginsStore.openServer) return;
+              try {
+                const importedPlugins = JSON.parse(el.value) as PluginWithData[];
+                pluginsStore.servers[pluginsStore.openServer].push(...importedPlugins);
+              } catch (err) {
+                console.error('Failed to parse imported plugins:', err);
+              }
+            }}/>
 
           <div class="flex-1" />
 
@@ -246,9 +280,8 @@ export default component$(() => {
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const plugins = pluginsStore.servers[pluginsStore.openServer!];
               plugins.forEach((plugin) => {
-                if (plugin.data?.latestVersion) {
-                  plugin.version = plugin.data.latestVersion;
-                }
+                if (plugin.data?.latestVersion) plugin.version = plugin.data.latestVersion;
+                plugin.updateDate = Date.now();
               });
             }}>
               <Check size={16} />
@@ -257,7 +290,7 @@ export default component$(() => {
           </>}
 
           {!!outdatedPlugins.value &&
-            <button class="lum-btn lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
+            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
 
               isLoading.value = [...isLoading.value, 'downloadAll'];
 
@@ -344,178 +377,46 @@ export default component$(() => {
             </h3>
           </div>
 
-          <div class="flex flex-col gap-1 mb-2">
-            <label for="plugin-link">
-              Search or paste the link of the plugin you want to add.
-            </label>
-            <input type="text" class="lum-input" placeholder="Plugin name or https://www.spigotmc.org/resources/..." id="plugin-link"
-              onInput$={async (e, el) => {
-                const value = el.value;
-                const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
+          <SelectMenu id="add-plugin-type" onChange$={(e, el) => {
+            resolvedPlugin.type = el.value as PluginSource;
+            resolvedPlugin.plugin = undefined;
+          }} values={[
+            { name: <span class="text-left max-w-72">
+              SpigotMC.org<br/>
+              <span class="text-xs text-lum-text-secondary text-wrap">
+                Most popular plugin platform<br/>
+                but a lot of plugin devs are moving to Modrinth.
+              </span>
+            </span>, value: 'spigot' },
+            // { name: 'CurseForge', value: 'curseforge' },
+            // { name: 'Modrinth', value: 'modrinth' },
+            // { name: 'Hangar', value: 'hangar' },
+            // { name: 'GitHub', value: 'github' },
+            { name: <span class="text-left max-w-72">
+              Misc<br/>
+              <span class="text-xs text-lum-text-secondary text-wrap">
+                For plugins that aren't on the above platforms,<br/>
+                you can manually check for updates in one place.
+              </span>
+            </span>, value: 'misc' },
+          ]}>
+            Plugin source
+          </SelectMenu>
 
-                if (!spigotMatch) return;
+          <hr/>
 
-                const pluginId = Number(spigotMatch[2]);
-                // check if the plugin is already added
-                const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id == pluginId);
-                if (existingPlugin) {
-                  const notification = new Notification()
-                    .setTitle('Plugin already added')
-                    .setDescription(`The plugin ${existingPlugin.name} is already added.`)
-                    .setBgColor('lum-bg-yellow/50');
-                  notifications.push(notification);
-                  return;
-                }
-
-                const res = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
-                const data = await res.json() as any;
-
-                const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
-                const versionsData = await versionsRes.json() as any;
-
-                const newPlugin: PluginWithData = {
-                  id: data.id,
-                  name: data.name,
-                  type: 'spigot',
-                  data: {
-                    external: data.external,
-                    name: data.name,
-                    tag: data.tag,
-                    iconUrl: data.icon?.url,
-                    releaseDate: data.releaseDate,
-                    updateDate: data.updateDate,
-                    file: data.file ? {
-                      type: data.file.type,
-                      size: data.file.size,
-                      sizeUnit: data.file.sizeUnit,
-                      url: data.file.url,
-                      externalUrl: data.file.externalUrl,
-                    } : undefined,
-                    testedVersions: data.testedVersions?.length
-                      ? data.testedVersions : undefined,
-                    sourceCodeLink: data.sourceCodeLink,
-                    versions: versionsData.map((version: any) => version),
-                  },
-                };
-
-                resolvedPlugin.plugin = newPlugin;
-              }}
-              onChange$={async (e, el) => {
-                const value = el.value;
-                const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
-                if (spigotMatch) return;
-
-                console.log('Searching for plugin:', value);
-
-                const searchRes = await fetch(`https://api.spiget.org/v2/search/resources/${encodeURIComponent(value)}?size=5`);
-                const searchData: any[] = await searchRes.json();
-
-                if (searchData.length === 0) {
-                  const notification = new Notification()
-                    .setTitle('No results found')
-                    .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
-                    .setBgColor('lum-bg-yellow/50');
-                  notifications.push(notification);
-                  return;
-                }
-
-                resolvedPlugin.plugins = searchData.map((result: any) => ({
-                  id: result.id,
-                  name: result.name,
-                  type: 'spigot',
-                  data: {
-                    external: result.external,
-                    name: result.name,
-                    tag: result.tag,
-                    iconUrl: result.icon?.url,
-                    releaseDate: result.releaseDate,
-                    updateDate: result.updateDate,
-                    file: result.file ? {
-                      type: result.file.type,
-                      size: result.file.size,
-                      sizeUnit: result.file.sizeUnit,
-                      url: result.file.url,
-                      externalUrl: result.file.externalUrl,
-                    } : undefined,
-                    testedVersions: result.testedVersions?.length
-                      ? result.testedVersions : undefined,
-                    sourceCodeLink: result.sourceCodeLink,
-                  },
-                }));
-              }}
-            />
-          </div>
-
-          {resolvedPlugin.plugins && <>
-            <label>
-              Search results:
-            </label>
-            <SelectList id="add-plugin-options" values={
-              resolvedPlugin.plugins.map((plugin) => ({
-                name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
-                  <span class="flex items-center gap-2">
-                    {plugin.data?.iconUrl &&
-                      <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
-                        width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
-                    {plugin.name}
-                  </span>
-                  <span class="text-xs text-lum-text-secondary">
-                    {plugin.data?.tag}
-                  </span>
-                </span>,
-                value: plugin.id!,
-              }))
-            } onChange$={async (e, el) => {
-              const pluginId = Number(el.value);
-              const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
-              if (!selectedPlugin || !selectedPlugin.data) return;
-
-              const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
-              const versionsData = await versionsRes.json() as any;
-              selectedPlugin.data.versions = versionsData.map((version: any) => version);
-
-              resolvedPlugin.plugin = selectedPlugin;
-              resolvedPlugin.plugins = undefined;
-            }}/>
-          </>}
-
-          {resolvedPlugin.plugin?.data?.versions && <>
-            <label>
-              Which version are you currently using?
-            </label>
-
-            <SelectList id="add-plugin-options" values={
-              resolvedPlugin.plugin.data?.versions?.map((version) => ({
-                name: <>
-                  <span class="flex-1 font-mono text-left">
-                    {version.name}
-                  </span>
-                  <span class="text-xs text-lum-text-secondary ml-1 text-right">
-                    {new Date(version.releaseDate * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
-                  </span>
-                </>,
-                value: version.id,
-              })) || []
-            } onChange$={(e, el) => {
-              const versionId = Number(el.value);
-              if (!resolvedPlugin.plugin) return;
-              const selectedVersion = resolvedPlugin.plugin.data?.versions
-                ?.find((version) => version.id == versionId);
-              if (selectedVersion) {
-                resolvedPlugin.plugin.version = selectedVersion;
-              }
-            }}/>
-          </>}
+          {resolvedPlugin.type === 'spigot' && <AddSpigotDialog />}
+          {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>
             <hr/>
             <PluginCard
               plugin={resolvedPlugin.plugin}
               spigotRateLimit={spigotRateLimit}
-              noActions />
+            />
           </>}
 
-          {resolvedPlugin.plugin?.version &&
+          {(resolvedPlugin.type === 'misc' || resolvedPlugin.plugin?.version) &&
             <div class={{
               'flex transition-all duration-300 gap-1 justify-end border-t border-lum-border/10 mt-4 pt-4': true,
               'animate-in fade-in slide-in-from-top-8 anim-duration-300': true,
@@ -526,14 +427,16 @@ export default component$(() => {
                   if (!pluginsStore.openServer || !resolvedPlugin.plugin) return;
 
                   const plugin: PluginType = {
+                    type: resolvedPlugin.type,
                     id: resolvedPlugin.plugin.id,
                     name: resolvedPlugin.plugin.name,
+                    url: resolvedPlugin.plugin.url,
+                    iconUrl: resolvedPlugin.plugin.data?.iconUrl,
                     version: resolvedPlugin.plugin.version ? {
                       id: resolvedPlugin.plugin.version.id,
                       name: resolvedPlugin.plugin.version.name,
                       releaseDate: resolvedPlugin.plugin.version.releaseDate,
                     } : undefined,
-                    type: resolvedPlugin.plugin.type,
                   };
 
                   pluginsStore.servers = {
