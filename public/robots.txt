@@ -3,3 +3,5 @@ Disallow: /acornmc/
 Disallow: /terms/
 Disallow: /privacy/
 Disallow: /resources/rgb/?*
+
+Sitemap: https://birdflop.com/sitemap.xml
