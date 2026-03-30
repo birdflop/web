@@ -15,14 +15,14 @@ export default component$(() => {
       <label for="plugin-link">
         Search or paste the link of the plugin you want to add.
       </label>
-      <input type="text" class="lum-input" placeholder="Plugin name or https://www.spigotmc.org/resources/..." id="plugin-link"
+      <input type="text" class="lum-input" placeholder="Plugin name or https://modrinth.com/plugin/..." id="plugin-link"
         onInput$={async (e, el) => {
           const value = el.value;
-          const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
+          const modrinthMatch = value.match(/modrinth\.com\/plugin\/(.+)/);
 
-          if (!spigotMatch) return;
+          if (!modrinthMatch) return;
 
-          const pluginId = Number(spigotMatch[2]);
+          const pluginId = modrinthMatch[1];
           // check if the plugin is already added
           const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id == pluginId);
           if (existingPlugin) {
@@ -34,23 +34,23 @@ export default component$(() => {
             return;
           }
 
-          const res = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
+          const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
           const data = await res.json() as any;
+          console.log(data);
 
-          const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version`);
           const versionsData = await versionsRes.json() as any;
 
           const newPlugin: PluginWithData = {
-            id: data.id,
-            name: data.name,
-            type: 'spigot',
+            id: data.slug,
+            name: data.title,
+            type: 'modrinth',
             data: {
-              external: data.external,
-              name: data.name,
-              tag: data.tag,
-              iconUrl: data.icon?.url,
-              releaseDate: data.releaseDate,
-              updateDate: data.updateDate,
+              name: data.title,
+              tag: data.description,
+              iconUrl: data.icon_url,
+              releaseDate: Number(new Date(data.published)) / 1000,
+              updateDate: Number(new Date(data.updated)) / 1000,
               file: data.file ? {
                 type: data.file.type,
                 size: data.file.size,
@@ -58,25 +58,32 @@ export default component$(() => {
                 url: data.file.url,
                 externalUrl: data.file.externalUrl,
               } : undefined,
-              testedVersions: data.testedVersions,
-              sourceCodeLink: data.sourceCodeLink,
-              versions: versionsData,
+              testedVersions: data.game_versions,
+              sourceCodeLink: data.source_url,
+              versions: versionsData.map((version: any) => ({
+                id: version.id,
+                name: version.name,
+                releaseDate: Number(new Date(version.date_published)) / 1000,
+              })),
             },
           };
+          console.log(newPlugin);
 
           resolvedPlugin.plugin = newPlugin;
         }}
         onChange$={async (e, el) => {
           const value = el.value;
-          const spigotMatch = value.match(/spigotmc\.org\/resources\/(.+)\.(\d+)/);
-          if (spigotMatch) return;
+          const modrinthMatch = value.match(/modrinth\.com\/plugin\/(.+)/);
+          if (modrinthMatch) return;
 
           console.log('Searching for plugin:', value);
 
-          const searchRes = await fetch(`https://api.spiget.org/v2/search/resources/${encodeURIComponent(value)}?size=5`);
-          const searchData: any[] = await searchRes.json();
+          const searchRes = await fetch(`https://api.modrinth.com/v2/search?query=${encodeURIComponent(value)}`);
+          const searchData: {
+            hits: any[];
+          } = await searchRes.json();
 
-          if (searchData.length === 0) {
+          if (searchData.hits.length === 0) {
             const notification = new Notification()
               .setTitle('No results found')
               .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
@@ -85,17 +92,16 @@ export default component$(() => {
             return;
           }
 
-          resolvedPlugin.plugins = searchData.map((data: any) => ({
-            id: data.id,
-            name: data.name,
-            type: 'spigot',
+          resolvedPlugin.plugins = searchData.hits.map((data: any) => ({
+            id: data.slug,
+            name: data.title,
+            type: 'modrinth',
             data: {
-              external: data.external,
-              name: data.name,
-              tag: data.tag,
-              iconUrl: data.icon?.url,
-              releaseDate: data.releaseDate,
-              updateDate: data.updateDate,
+              name: data.title,
+              tag: data.description,
+              iconUrl: data.icon_url,
+              releaseDate: Number(new Date(data.published)) / 1000,
+              updateDate: Number(new Date(data.updated)) / 1000,
               file: data.file ? {
                 type: data.file.type,
                 size: data.file.size,
@@ -103,9 +109,8 @@ export default component$(() => {
                 url: data.file.url,
                 externalUrl: data.file.externalUrl,
               } : undefined,
-              testedVersions: data.testedVersions?.length
-                ? data.testedVersions : undefined,
-              sourceCodeLink: data.sourceCodeLink,
+              testedVersions: data.game_versions,
+              sourceCodeLink: data.source_url,
             },
           }));
         }}
@@ -121,7 +126,7 @@ export default component$(() => {
           name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
             <span class="flex items-center gap-2">
               {plugin.data?.iconUrl &&
-                <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+                <img src={plugin.data.iconUrl} alt={`${plugin.name} icon`}
                   width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
               {plugin.name}
             </span>
@@ -132,13 +137,17 @@ export default component$(() => {
           value: plugin.id!,
         }))
       } onChange$={async (e, el) => {
-        const pluginId = Number(el.value);
+        const pluginId = el.value;
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
         if (!selectedPlugin || !selectedPlugin.data) return;
 
-        const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version`);
         const versionsData = await versionsRes.json() as any;
-        selectedPlugin.data.versions = versionsData;
+        selectedPlugin.data.versions = versionsData.map((version: any) => ({
+          id: version.id,
+          name: version.name,
+          releaseDate: Number(new Date(version.date_published)) / 1000,
+        }));
 
         resolvedPlugin.plugin = selectedPlugin;
         resolvedPlugin.plugins = undefined;
@@ -148,6 +157,8 @@ export default component$(() => {
     {resolvedPlugin.plugin?.data?.versions && <>
       <label>
         Which version are you currently using?
+
+        WIP USE SPIGOT FOR NOW
       </label>
 
       <SelectList id="add-plugin-options" values={

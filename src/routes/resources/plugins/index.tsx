@@ -6,6 +6,7 @@ import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
 import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
+import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 
@@ -77,7 +78,7 @@ export default component$(() => {
   });
 
   const resolvedPlugin = useStore<ResolvedPluginType>({
-    type: 'spigot',
+    type: 'modrinth',
   }, { deep: true });
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
@@ -382,23 +383,35 @@ export default component$(() => {
             resolvedPlugin.plugin = undefined;
           }} values={[
             { name: <span class="text-left max-w-72">
-              SpigotMC.org<br/>
-              <span class="text-xs text-lum-text-secondary text-wrap">
-                Most popular plugin platform<br/>
-                but a lot of plugin devs are moving to Modrinth.
+              Modrinth<br/>
+              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
+                {`Newer plugin platform that's gaining popularity.
+                Many plugins are primarily releasing on Modrinth now,
+                so check here first when adding a plugin.`}
               </span>
-            </span>, value: 'spigot' },
+            </span>,
+            value: 'modrinth' },
+            { name: <span class="text-left max-w-72">
+              SpigotMC.org<br/>
+              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
+                {`Most popular plugin platform.
+                Many plugins are moving to Modrinth,
+                use this if the plugin isn't on Modrinth yet.`}
+              </span>
+            </span>,
+            value: 'spigot' },
             // { name: 'CurseForge', value: 'curseforge' },
             // { name: 'Modrinth', value: 'modrinth' },
             // { name: 'Hangar', value: 'hangar' },
             // { name: 'GitHub', value: 'github' },
             { name: <span class="text-left max-w-72">
               Misc<br/>
-              <span class="text-xs text-lum-text-secondary text-wrap">
-                For plugins that aren't on the above platforms,<br/>
-                you can manually check for updates in one place.
+              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
+                {`For plugins that aren't on the above platforms,
+                you can manually check for updates in one place.`}
               </span>
-            </span>, value: 'misc' },
+            </span>,
+            value: 'misc' },
           ]}>
             Plugin source
           </SelectMenu>
@@ -406,6 +419,7 @@ export default component$(() => {
           <hr/>
 
           {resolvedPlugin.type === 'spigot' && <AddSpigotDialog />}
+          {resolvedPlugin.type === 'modrinth' && <AddModrinthDialog />}
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>

@@ -11,10 +11,10 @@ export type PluginVersion = {
   releaseDate: number;
 }
 
-export type PluginSource = 'spigot' | 'misc';
+export type PluginSource = 'spigot' | 'misc' | 'modrinth'; // | 'curseforge' | 'github';
 
 export type PluginType = {
-  id?: number;
+  id?: number | string;
   url?: string;
   iconUrl?: string;
   name?: string;
@@ -84,8 +84,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
             url: data.file.url,
             externalUrl: data.file.externalUrl,
           } : undefined,
-          testedVersions: data.testedVersions?.length
-            ? data.testedVersions : undefined,
+          testedVersions: data.testedVersions,
           sourceCodeLink: data.sourceCodeLink,
         };
         // fetch latest version
@@ -137,6 +136,8 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
         <p class="flex items-center gap-2">
           {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
             && <SiSpigotmc class="fill-yellow" />}
+          {(plugin.type === 'modrinth' && !plugin.data?.iconUrl)
+            && <SiSpigotmc class="fill-green" />}
           {iconUrlWithLink &&
             <img src={iconUrlWithLink} alt={`${plugin.name} icon`}
               width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}
@@ -235,18 +236,24 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           <SiGithub size={16} class="fill-current" />
         </a>
       )}
-      {plugin.data?.file?.externalUrl?.includes('modrinth') && (
-        <a href={plugin.data?.file?.externalUrl}
-          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
-          <SiModrinth size={16} class="fill-current" />
-        </a>
-      )}
-      {plugin.type === 'spigot' && (
+      {plugin.type === 'spigot' && <>
+        {plugin.data?.file?.externalUrl?.includes('modrinth') && (
+          <a href={plugin.data?.file?.externalUrl}
+            target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
+            <SiModrinth size={16} class="fill-current" />
+          </a>
+        )}
         <a href={`https://www.spigotmc.org/resources/${plugin.id}`}
           target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-yellow">
           <SiSpigotmc size={16} class="fill-current" />
         </a>
-      )}
+      </>}
+      {plugin.type === 'modrinth' && <>
+        <a href={`https://modrinth.com/plugin/${plugin.id}`}
+          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
+          <SiModrinth size={16} class="fill-current" />
+        </a>
+      </>}
       <Slot name="extra-actions" />
     </div>}
   </div>;
