@@ -24,7 +24,7 @@ export default component$(() => {
 
           const pluginId = modrinthMatch[1];
           // check if the plugin is already added
-          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].find((p) => p.id == pluginId);
+          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins?.find((p) => p.id == pluginId);
           if (existingPlugin) {
             const notification = new Notification()
               .setTitle('Plugin already added')
@@ -38,7 +38,7 @@ export default component$(() => {
           const data = await res.json() as any;
           console.log(data);
 
-          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version`);
+          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${pluginsStore.servers[pluginsStore.openServer!].software}`);
           const versionsData = await versionsRes.json() as any;
 
           const newPlugin: PluginWithData = {
@@ -141,7 +141,8 @@ export default component$(() => {
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
         if (!selectedPlugin || !selectedPlugin.data) return;
 
-        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version`);
+        console.log(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=["${pluginsStore.servers[pluginsStore.openServer!].software}"]`);
+        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=["${pluginsStore.servers[pluginsStore.openServer!].software}"]`);
         const versionsData = await versionsRes.json() as any;
         selectedPlugin.data.versions = versionsData.map((version: any) => ({
           id: version.id,

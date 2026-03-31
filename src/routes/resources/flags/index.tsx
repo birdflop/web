@@ -1,6 +1,6 @@
 import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { SelectMenu, Toggle, SelectMenuRaw, RangeInput, LogoPaper, LogoPurpur, LogoWaterfall } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle, SelectMenuRaw, RangeInput, LogoPaper, LogoPurpur, LogoWaterfall, LogoForge, LogoFabric } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { flagsDefaults, generateResult } from '~/util/flags/generateResult';
@@ -56,13 +56,25 @@ const Waterfall = component$(() => <span class="flex items-center gap-2">
   <LogoWaterfall size={20} /> Waterfall
 </span>);
 
-const softwareOptions = [
+const Forge = component$(() => <span class="flex items-center gap-2">
+  <LogoForge size={20} /> Forge
+</span>);
+
+const Fabric = component$(() => <span class="flex items-center gap-2">
+  <LogoFabric size={20} /> Fabric
+</span>);
+
+const softwareOptionsFlags = [
   { name: <Paper />, value: 'paper' },
   { name: <Purpur />, value: 'purpur' },
-  // { name: <Forge />, value: 'forge' },
-  // { name: <Fabric />, value: 'fabric' },
   { name: <Velocity />, value: 'velocity' },
   { name: <Waterfall />, value: 'waterfall' },
+];
+
+export const softwareOptions = [
+  ...softwareOptionsFlags,
+  { name: <Forge />, value: 'forge' },
+  { name: <Fabric />, value: 'fabric' },
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
@@ -195,7 +207,7 @@ export default component$(() => {
             <div class="flex flex-col gap-1">
               <SelectMenu id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
                 flagsStore.serverType = el.value;
-              }} values={softwareOptions} value={flagsStore.serverType}>
+              }} values={softwareOptionsFlags} value={flagsStore.serverType}>
                 {t('flags.software.label@@Software')}
               </SelectMenu>
               <p class="text-lum-text-secondary text-sm">
