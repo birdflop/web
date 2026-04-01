@@ -6,7 +6,7 @@ import { downloadSpigotPlugin } from '~/routes/resources/plugins';
 import { Notification, NotificationContext } from '~/util/Notification';
 
 export type PluginVersion = {
-  id: number;
+  id: number | string;
   name: string;
   releaseDate: number;
 }
@@ -134,10 +134,10 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           }
         </p>}
         <p class="flex items-center gap-2">
-          {(plugin.type === 'spigot' && !plugin.data?.iconUrl)
+          {(plugin.type === 'spigot' && !iconUrlWithLink)
             && <SiSpigotmc class="fill-yellow" />}
-          {(plugin.type === 'modrinth' && !plugin.data?.iconUrl)
-            && <SiSpigotmc class="fill-green" />}
+          {(plugin.type === 'modrinth' && !iconUrlWithLink)
+            && <SiModrinth class="fill-green" />}
           {iconUrlWithLink &&
             <img src={iconUrlWithLink} alt={`${plugin.name} icon`}
               width={24} height={24} class="w-6 h-6 rounded-lum-2! object-cover" />}

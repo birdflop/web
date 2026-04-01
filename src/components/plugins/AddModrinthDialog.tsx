@@ -1,13 +1,38 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useComputed$, useContext } from '@builder.io/qwik';
 import { PluginWithData } from './PluginCard';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
 
+function getLoaders(software: string) {
+  let loaders;
+  switch (software) {
+  case 'purpur':
+    loaders = ['purpur', 'paper', 'spigot', 'bukkit'];
+    break;
+  case 'paper':
+    loaders = ['paper', 'spigot', 'bukkit'];
+    break;
+  case 'spigot':
+    loaders = ['spigot', 'bukkit'];
+    break;
+  case 'bukkit':
+    loaders = ['bukkit'];
+    break;
+  default:
+    loaders = [software];
+  }
+
+  return loaders;
+}
+
 export default component$(() => {
   const pluginsStore = useContext(pluginsStoreContext);
   const resolvedPlugin = useContext(resolvedPluginContext);
   const notifications = useContext(NotificationContext);
+  const loaders = useComputed$(() => pluginsStore.servers[pluginsStore.openServer!]
+    ? getLoaders(pluginsStore.servers[pluginsStore.openServer!].software)
+    : []);
 
   return <>
     <div class="flex flex-col gap-1 mb-2">
@@ -24,7 +49,7 @@ export default component$(() => {
 
           const pluginId = modrinthMatch[1];
           // check if the plugin is already added
-          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins?.find((p) => p.id == pluginId);
+          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins.find((p) => p.id == pluginId);
           if (existingPlugin) {
             const notification = new Notification()
               .setTitle('Plugin already added')
@@ -38,7 +63,7 @@ export default component$(() => {
           const data = await res.json() as any;
           console.log(data);
 
-          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${pluginsStore.servers[pluginsStore.openServer!].software}`);
+          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
           const versionsData = await versionsRes.json() as any;
 
           const newPlugin: PluginWithData = {
@@ -78,7 +103,14 @@ export default component$(() => {
 
           console.log('Searching for plugin:', value);
 
-          const searchRes = await fetch(`https://api.modrinth.com/v2/search?query=${encodeURIComponent(value)}`);
+          const searchUrl = 'https://api.modrinth.com/v2/search';
+          const searchParams = new URLSearchParams({
+            query: value,
+            facets: JSON.stringify([loaders.value.map((loader) => `categories:${loader}`)]),
+          });
+          console.log([loaders.value.map((loader) => `categories:${loader}`)]);
+
+          const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
           const searchData: {
             hits: any[];
           } = await searchRes.json();
@@ -141,8 +173,8 @@ export default component$(() => {
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
         if (!selectedPlugin || !selectedPlugin.data) return;
 
-        console.log(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=["${pluginsStore.servers[pluginsStore.openServer!].software}"]`);
-        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=["${pluginsStore.servers[pluginsStore.openServer!].software}"]`);
+        console.log(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
+        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
         const versionsData = await versionsRes.json() as any;
         selectedPlugin.data.versions = versionsData.map((version: any) => ({
           id: version.id,
@@ -175,7 +207,7 @@ export default component$(() => {
           value: version.id,
         })) || []
       } onChange$={(e, el) => {
-        const versionId = Number(el.value);
+        const versionId = el.value;
         if (!resolvedPlugin.plugin) return;
         const selectedVersion = resolvedPlugin.plugin.data?.versions
           ?.find((version) => version.id == versionId);

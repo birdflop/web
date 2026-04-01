@@ -1,7 +1,7 @@
 import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
@@ -10,6 +10,7 @@ import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
+import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 
 const debug = true;
 
@@ -71,6 +72,51 @@ const serverDefaults: ServerType = {
   software: 'paper',
   plugins: [],
 };
+
+const Modrinth = component$(() => <span class="text-left">
+  <span class="flex items-center gap-2">
+    <SiModrinth class="fill-current" size={20} />
+    Modrinth<br/>
+  </span>
+  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+    {`Newer plugin platform that's gaining popularity.
+    Many plugins are primarily releasing on Modrinth now,
+    so check here first when adding a plugin.`}
+  </span>
+</span>);
+
+const SpigotMC = component$(() => <span class="text-left">
+  <span class="flex items-center gap-2">
+    <SiSpigotmc class="fill-current" size={20} />
+    SpigotMC<br/>
+  </span>
+  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+    {`Most popular plugin platform.
+    Many plugins are moving to Modrinth,
+    use this if the plugin isn't on Modrinth yet.`}
+  </span>
+</span>);
+
+const Misc = component$(() => <span class="text-left">
+  <span class="flex items-center gap-2">
+    <Ellipsis size={20} />
+    Misc<br/>
+  </span>
+  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+    {`For plugins that aren't on the above platforms,
+    you can manually check for updates in one place.`}
+  </span>
+</span>);
+
+const pluginSources = [
+  { name: <Modrinth />, value: 'modrinth' },
+  { name: <SpigotMC />, value: 'spigot' },
+  // { name: 'CurseForge', value: 'curseforge' },
+  // { name: 'Modrinth', value: 'modrinth' },
+  // { name: 'Hangar', value: 'hangar' },
+  // { name: 'GitHub', value: 'github' },
+  { name: <Misc />, value: 'misc' },
+];
 
 export const resolvedPluginContext = createContextId<ResolvedPluginType>('resolve-plugin');
 export const pluginsStoreContext = createContextId<PluginsStoreType>('plugins-store');
@@ -395,38 +441,7 @@ export default component$(() => {
           <SelectMenu id="add-plugin-type" onChange$={(e, el) => {
             resolvedPlugin.type = el.value as PluginSource;
             resolvedPlugin.plugin = undefined;
-          }} values={[
-            { name: <span class="text-left max-w-72">
-              Modrinth<br/>
-              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
-                {`Newer plugin platform that's gaining popularity.
-                Many plugins are primarily releasing on Modrinth now,
-                so check here first when adding a plugin.`}
-              </span>
-            </span>,
-            value: 'modrinth' },
-            { name: <span class="text-left max-w-72">
-              SpigotMC.org<br/>
-              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
-                {`Most popular plugin platform.
-                Many plugins are moving to Modrinth,
-                use this if the plugin isn't on Modrinth yet.`}
-              </span>
-            </span>,
-            value: 'spigot' },
-            // { name: 'CurseForge', value: 'curseforge' },
-            // { name: 'Modrinth', value: 'modrinth' },
-            // { name: 'Hangar', value: 'hangar' },
-            // { name: 'GitHub', value: 'github' },
-            { name: <span class="text-left max-w-72">
-              Misc<br/>
-              <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line">
-                {`For plugins that aren't on the above platforms,
-                you can manually check for updates in one place.`}
-              </span>
-            </span>,
-            value: 'misc' },
-          ]}>
+          }} values={pluginSources}>
             Plugin source
           </SelectMenu>
 

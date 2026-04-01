@@ -38,9 +38,9 @@ export const SelectList = component$<SelectListProps>(({
           ref={selectRef}
           class="hidden"
         >
-          {values.map((value, i) => {
+          {values.map((value) => {
             return (
-              <option key={i} value={value.value}>{`${value.value}`}</option>
+              <option key={value.value} value={value.value}>{`${value.value}`}</option>
             );
           })}
         </select>

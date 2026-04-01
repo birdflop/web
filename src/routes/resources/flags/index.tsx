@@ -9,7 +9,7 @@ import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag, MemoryStick, Computer, Terminal } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SiApple, SiLinux, SiPterodactyl, SiVelocity } from 'simple-icons-qwik';
+import { SiApple, SiLinux, SiPterodactyl, SiSpigotmc, SiVelocity } from 'simple-icons-qwik';
 import { deepTrack } from '~/util/misc';
 
 const Linux = component$(() => <span class="flex items-center gap-2">
@@ -40,6 +40,10 @@ const environmentOptions = [
   { name: <Command />, value: 'command' },
 ];
 
+const Spigot = component$(() => <span class="flex items-center gap-2">
+  <SiSpigotmc class="fill-current" size={20} /> Spigot
+</span>);
+
 const Paper = component$(() => <span class="flex items-center gap-2">
   <LogoPaper size={20} /> Paper
 </span>);
@@ -65,6 +69,7 @@ const Fabric = component$(() => <span class="flex items-center gap-2">
 </span>);
 
 const softwareOptionsFlags = [
+  { name: <Spigot />, value: 'spigot' },
   { name: <Paper />, value: 'paper' },
   { name: <Purpur />, value: 'purpur' },
   { name: <Velocity />, value: 'velocity' },
