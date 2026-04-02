@@ -66,11 +66,12 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
     if (!isBrowser) return; // dont request plugin data on the server
     if (plugin.data || !plugin.id) return;
     try {
-      if (plugin.type === 'spigot') {
+      switch (plugin.type) {
+      case 'spigot': {
         const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
         const data = await res.json() as any;
 
-        const pluginData: PluginData = {
+        plugin.data = {
           external: data.external,
           name: data.name,
           tag: data.tag,
@@ -87,16 +88,51 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           testedVersions: data.testedVersions,
           sourceCodeLink: data.sourceCodeLink,
         };
+
         // fetch latest version
         const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
         const latestVersion = await latestVerResponse.json() as any;
-        pluginData.latestVersion = {
+        plugin.data.latestVersion = {
           id: latestVersion.id,
           name: latestVersion.name,
           releaseDate: latestVersion.releaseDate,
         };
 
-        plugin.data = pluginData;
+        break;
+      }
+      case 'modrinth': {
+        const res = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}`);
+        const data = await res.json() as any;
+
+        plugin.data = {
+          name: data.title,
+          tag: data.description,
+          iconUrl: data.icon_url,
+          releaseDate: Number(new Date(data.published)) / 1000,
+          updateDate: Number(new Date(data.updated)) / 1000,
+          file: data.file ? {
+            type: data.file.type,
+            size: data.file.size,
+            sizeUnit: data.file.sizeUnit,
+            url: data.file.url,
+            externalUrl: data.file.externalUrl,
+          } : undefined,
+          testedVersions: data.game_versions,
+          sourceCodeLink: data.source_url,
+        };
+
+        // fetch latest version
+        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}/version`);
+        const versionsData = await versionsRes.json() as any;
+        plugin.data.versions = versionsData.map((version: any) => ({
+          id: version.id,
+          name: version.name,
+          releaseDate: Number(new Date(version.date_published)) / 1000,
+        }));
+        plugin.data.latestVersion = plugin.data.versions?.[0];
+
+        break;
+      }
       }
     }
     catch (err) {
