@@ -96,13 +96,6 @@ export default component$(() => {
               iconUrl: data.icon?.url,
               releaseDate: data.releaseDate,
               updateDate: data.updateDate,
-              file: data.file ? {
-                type: data.file.type,
-                size: data.file.size,
-                sizeUnit: data.file.sizeUnit,
-                url: data.file.url,
-                externalUrl: data.file.externalUrl,
-              } : undefined,
               testedVersions: data.testedVersions?.length
                 ? data.testedVersions : undefined,
               sourceCodeLink: data.sourceCodeLink,

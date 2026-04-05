@@ -249,7 +249,7 @@ export default component$(() => {
             </div>
           ))
         )}
-        <button class="lum-btn p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
+        <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
           const serverName = prompt('Enter server name');
           if (serverName) {
             if (pluginsStore.servers[serverName]) {
@@ -260,7 +260,7 @@ export default component$(() => {
             pluginsStore.openServer = serverName;
           }
         }} title="Add server">
-          <Plus />
+          <Plus size={16} />
         </button>
         {Object.keys(pluginsStore.servers).length < 1 && <p class="text-sm text-lum-text-secondary mx-2">
           {t('nav.resources.plugins.noServers@@No servers added yet. Get started by adding a server and some plugins!')}
@@ -268,140 +268,141 @@ export default component$(() => {
       </div>
 
       {(pluginsStore.openServer && pluginsStore.servers[pluginsStore.openServer].plugins) && <>
-        <div class="lum-card p-1 gap-1 flex-row mt-4">
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-            modalRef.value?.showModal();
-          }}>
-            <Plus size={16} />
-            Add plugin
-          </button>
+        <div class="lum-card p-1 gap-1 mt-4 lum-grad-bg-lum-card-bg">
+          <div class="flex items-center gap-1">
+            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
+              modalRef.value?.showModal();
+            }}>
+              <Plus size={16} />
+              Add plugin
+            </button>
 
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-            const newName = prompt('Enter new server name', `${pluginsStore.openServer}`);
-            if (newName && newName !== pluginsStore.openServer) {
-              if (pluginsStore.servers[newName]) {
-                alert('A server with that name already exists.');
-                return;
+            <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
+              const newName = prompt('Enter new server name', `${pluginsStore.openServer}`);
+              if (newName && newName !== pluginsStore.openServer) {
+                if (pluginsStore.servers[newName]) {
+                  alert('A server with that name already exists.');
+                  return;
+                }
+                delete pluginsStore.servers[pluginsStore.openServer!];
+                pluginsStore.servers[newName] = pluginsStore.servers[pluginsStore.openServer!];
+                pluginsStore.openServer = newName;
               }
-              delete pluginsStore.servers[pluginsStore.openServer!];
-              pluginsStore.servers[newName] = pluginsStore.servers[pluginsStore.openServer!];
-              pluginsStore.openServer = newName;
-            }
-          }} title="Rename server">
-            <Pencil size={16} />
-          </button>
-          <SelectMenuRaw id="software" onChange$={(e, el) => {
-            pluginsStore.servers[pluginsStore.openServer!].software = el.value;
-          }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
-          class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
-
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent hover:lum-bg-red rounded-lum-1" onClick$={() => {
-            if (confirm(`Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`)) {
-              delete pluginsStore.servers[pluginsStore.openServer!];
-              pluginsStore.openServer = undefined;
-            }
-          }} title="Delete server">
-            <Trash size={16} />
-          </button>
-          <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-            const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-
-            const notification = new Notification()
-              .setTitle('Plugins copied to clipboard')
-              .setDescription(`The plugins for server "${pluginsStore.openServer}" have been copied to your clipboard as JSON.`)
-              .setBgColor('lum-bg-green/50');
-            navigator.clipboard.writeText(JSON.stringify(plugins)).catch((err) => {
-              notification.setTitle('Failed to copy plugins to clipboard')
-                .setDescription(err)
-                .setBgColor('lum-bg-red/50')
-                .setPersist(true);
-            });
-            notifications.push(notification);
-          }} title="Export server plugins as JSON">
-            <Copy size={16} />
-          </button>
-          <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
-            onInput$={(e, el) => {
-              try {
-                const importedPlugins = JSON.parse(el.value) as PluginWithData[];
-                pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
-              } catch (err) {
-                console.error('Failed to parse imported plugins:', err);
+            }} title="Rename server">
+              <Pencil size={16} />
+            </button>
+            <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-red rounded-lum-1" onClick$={() => {
+              if (confirm(`Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`)) {
+                delete pluginsStore.servers[pluginsStore.openServer!];
+                pluginsStore.openServer = undefined;
               }
-            }}/>
+            }} title="Delete server">
+              <Trash size={16} />
+            </button>
 
-          <div class="flex-1" />
+            <SelectMenuRaw id="software" onChange$={(e, el) => {
+              pluginsStore.servers[pluginsStore.openServer!].software = el.value;
+            }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
+            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
 
-          {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 && <>
-            {debug && (
+            <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
+              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+
+              const notification = new Notification()
+                .setTitle('Plugins copied to clipboard')
+                .setDescription(`The plugins for server "${pluginsStore.openServer}" have been copied to your clipboard as JSON.`)
+                .setBgColor('lum-bg-green/50');
+              navigator.clipboard.writeText(JSON.stringify(plugins)).catch((err) => {
+                notification.setTitle('Failed to copy plugins to clipboard')
+                  .setDescription(err)
+                  .setBgColor('lum-bg-red/50')
+                  .setPersist(true);
+              });
+              notifications.push(notification);
+            }} title="Export server plugins as JSON">
+              <Copy size={16} />
+            </button>
+
+            <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
+              onInput$={(e, el) => {
+                try {
+                  const importedPlugins = JSON.parse(el.value) as PluginWithData[];
+                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
+                } catch (err) {
+                  console.error('Failed to parse imported plugins:', err);
+                }
+              }}/>
+            <div class="px-2 flex items-center">
+              <Toggle id="show-only-outdated" checked={pluginsStore.showOnlyOutdated} onChange$={(e, el) => {
+                pluginsStore.showOnlyOutdated = el.checked;
+              }}>
+                Only show out of date
+              </Toggle>
+            </div>
+          </div>
+
+          <div class="flex gap-1 items-center mx-auto">
+            {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 && <>
+              {debug && (
+                <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
+                  const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+                  plugins.forEach((plugin) => {
+                    if (plugin.data?.latestVersion) {
+                      plugin.version = {
+                        id: 0,
+                        name: '0.0.0',
+                        releaseDate: 1,
+                      };
+                    }
+                  });
+                }}>
+                  <X size={16} />
+                  Mark all out of date
+                </button>
+              )}
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
                 plugins.forEach((plugin) => {
-                  if (plugin.data?.latestVersion) {
-                    plugin.version = {
-                      id: 0,
-                      name: '0.0.0',
-                      releaseDate: 1,
-                    };
-                  }
+                  if (plugin.data?.latestVersion) plugin.version = plugin.data.latestVersion;
+                  plugin.updateDate = Date.now();
                 });
               }}>
-                <X size={16} />
-                Mark all out of date
+                <Check size={16} />
+                Mark all updated
               </button>
-            )}
-            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-              plugins.forEach((plugin) => {
-                if (plugin.data?.latestVersion) plugin.version = plugin.data.latestVersion;
-                plugin.updateDate = Date.now();
-              });
-            }}>
-              <Check size={16} />
-              Mark all updated
-            </button>
-          </>}
+            </>}
 
-          {!!outdatedPlugins.value &&
-            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
+            {!!outdatedPlugins.value &&
+              <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
 
-              isLoading.value = [...isLoading.value, 'downloadAll'];
+                isLoading.value = [...isLoading.value, 'downloadAll'];
 
-              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-              for (const plugin of plugins) {
-                const updateAvailable = plugin.data?.latestVersion?.releaseDate !== undefined
-                  && plugin.version?.releaseDate !== undefined
-                  && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
+                const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+                for (const plugin of plugins) {
+                  const updateAvailable = plugin.data?.latestVersion?.releaseDate !== undefined
+                    && plugin.version?.releaseDate !== undefined
+                    && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
 
-                if (!updateAvailable || !plugin.data?.file?.url) return;
+                  if (!updateAvailable || !plugin.data?.file?.url) return;
 
-                if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
-                else window.open(plugin.data.file.url, '_blank');
+                  if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
+                  else window.open(plugin.data.file.url, '_blank');
 
-                plugin.version = plugin.data?.latestVersion;
-              }
+                  plugin.version = plugin.data?.latestVersion;
+                }
 
-              isLoading.value = isLoading.value.filter((item) => item !== 'downloadAll');
-            }} disabled={isLoading.value.includes('downloadAll')}>
-              <Download size={16} />
-              Download all out of date ({outdatedPlugins.value})
-              {outdatedPlugins.value > 10 &&
-                <span class="lum-card p-2 absolute bottom-full left-0 w-full text-xs mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  Spigot limits downloads to 10 per minute, so some of these may not open immediately.
-                </span>
-              }
-              {isLoading.value.includes('downloadAll') && <div class="lum-loading ml-2 w-4 h-4" />}
-            </button>
-          }
-
-          <div class="flex-1" />
-
-          <div class="px-4 flex items-center">
-            <Toggle id="show-only-outdated" checked={pluginsStore.showOnlyOutdated} onChange$={(e, el) => {
-              pluginsStore.showOnlyOutdated = el.checked;
-            }}>
-              Only show out of date
-            </Toggle>
+                isLoading.value = isLoading.value.filter((item) => item !== 'downloadAll');
+              }} disabled={isLoading.value.includes('downloadAll')}>
+                <Download size={16} />
+                Download all out of date ({outdatedPlugins.value})
+                {outdatedPlugins.value > 10 &&
+                  <span class="lum-card p-2 absolute bottom-full left-0 w-full text-xs mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Spigot limits downloads to 10 per minute, so some of these may not open immediately.
+                  </span>
+                }
+                {isLoading.value.includes('downloadAll') && <div class="lum-loading ml-2 w-4 h-4" />}
+              </button>
+            }
           </div>
         </div>
         <div class="grid gap-2 my-4">

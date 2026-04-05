@@ -61,10 +61,10 @@ export default component$(() => {
 
           const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
           const data = await res.json() as any;
-          console.log(data);
 
           const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
           const versionsData = await versionsRes.json() as any;
+          const latestVersion = versionsData[0];
 
           const newPlugin: PluginWithData = {
             id: data.slug,
@@ -76,12 +76,12 @@ export default component$(() => {
               iconUrl: data.icon_url,
               releaseDate: Number(new Date(data.published)) / 1000,
               updateDate: Number(new Date(data.updated)) / 1000,
-              file: data.file ? {
-                type: data.file.type,
-                size: data.file.size,
-                sizeUnit: data.file.sizeUnit,
-                url: data.file.url,
-                externalUrl: data.file.externalUrl,
+              file: latestVersion.files?.length ? {
+                name: latestVersion.files[0].filename,
+                type: latestVersion.files[0].file_type,
+                size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
+                sizeUnit: 'MB',
+                url: latestVersion.files[0].url,
               } : undefined,
               testedVersions: data.game_versions,
               sourceCodeLink: data.source_url,
@@ -92,7 +92,6 @@ export default component$(() => {
               })),
             },
           };
-          console.log(newPlugin);
 
           resolvedPlugin.plugin = newPlugin;
         }}
@@ -134,13 +133,6 @@ export default component$(() => {
               iconUrl: data.icon_url,
               releaseDate: Number(new Date(data.published)) / 1000,
               updateDate: Number(new Date(data.updated)) / 1000,
-              file: data.file ? {
-                type: data.file.type,
-                size: data.file.size,
-                sizeUnit: data.file.sizeUnit,
-                url: data.file.url,
-                externalUrl: data.file.externalUrl,
-              } : undefined,
               testedVersions: data.game_versions,
               sourceCodeLink: data.source_url,
             },

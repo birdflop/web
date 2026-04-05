@@ -31,6 +31,7 @@ export type PluginData = {
   releaseDate?: number;
   updateDate?: number;
   file?: {
+    name?: string;
     type: string;
     size: number;
     sizeUnit: string;
@@ -110,13 +111,6 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           iconUrl: data.icon_url,
           releaseDate: Number(new Date(data.published)) / 1000,
           updateDate: Number(new Date(data.updated)) / 1000,
-          file: data.file ? {
-            type: data.file.type,
-            size: data.file.size,
-            sizeUnit: data.file.sizeUnit,
-            url: data.file.url,
-            externalUrl: data.file.externalUrl,
-          } : undefined,
           testedVersions: data.game_versions,
           sourceCodeLink: data.source_url,
         };
@@ -129,6 +123,16 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           name: version.name,
           releaseDate: Number(new Date(version.date_published)) / 1000,
         }));
+
+        const latestVersion = versionsData[0];
+        plugin.data.file = latestVersion.files?.length ? {
+          name: latestVersion.files[0].filename,
+          type: latestVersion.files[0].file_type,
+          size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
+          sizeUnit: 'MB',
+          url: latestVersion.files[0].url,
+        } : undefined;
+
         plugin.data.latestVersion = plugin.data.versions?.[0];
 
         break;
@@ -232,7 +236,10 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
           plugin.version = plugin.data?.latestVersion;
           isLoading.value = false;
         }} disabled={isLoading.value}>
-          <Download size={16} /> Download latest
+          <Download size={16} /> Download
+          <span class="text-xs text-lum-text-secondary">
+            {plugin.data?.file?.name ?? plugin.data?.latestVersion?.name ?? 'latest'}
+          </span>
           {!!plugin.data?.file?.size &&
             <span class="text-xs text-lum-text-secondary">
               {plugin.data?.file?.size} {plugin.data?.file?.sizeUnit}
