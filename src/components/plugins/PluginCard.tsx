@@ -116,7 +116,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
         };
 
         // fetch latest version
-        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}/version`);
+        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}/version?loaders=["paper"]`);
         const versionsData = await versionsRes.json() as any;
         plugin.data.versions = versionsData.map((version: any) => ({
           id: version.id,
