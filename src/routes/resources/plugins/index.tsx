@@ -408,7 +408,7 @@ export default component$(() => {
                     && plugin.version?.releaseDate !== undefined
                     && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
 
-                  if (!updateAvailable || !plugin.data?.file?.url) return;
+                  if (!updateAvailable || !plugin.data?.file?.url) continue;
 
                   if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
                   else window.open(plugin.data.file.url, '_blank');

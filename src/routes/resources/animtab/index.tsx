@@ -56,7 +56,7 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('animtab', { version: rgbStore.version, ...animtabStore });
-    deepTrack(track, rgbStore);
+    deepTrack(track, animtabStore);
   });
 
   useTask$(({ track }) => {
