@@ -69,7 +69,6 @@ const Fabric = component$(() => <span class="flex items-center gap-2">
 </span>);
 
 const softwareOptionsFlags = [
-  { name: <Spigot />, value: 'spigot' },
   { name: <Paper />, value: 'paper' },
   { name: <Purpur />, value: 'purpur' },
   { name: <Velocity />, value: 'velocity' },
@@ -78,6 +77,7 @@ const softwareOptionsFlags = [
 
 export const softwareOptions = [
   ...softwareOptionsFlags,
+  { name: <Spigot />, value: 'spigot' },
   { name: <Forge />, value: 'forge' },
   { name: <Fabric />, value: 'fabric' },
 ];

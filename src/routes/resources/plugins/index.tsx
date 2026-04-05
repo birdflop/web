@@ -268,7 +268,7 @@ export default component$(() => {
               alert('A server with that name already exists.');
               return;
             }
-            pluginsStore.servers[serverName] = serverDefaults;
+            pluginsStore.servers[serverName] = { ...serverDefaults };
             pluginsStore.openServer = serverName;
           }
         }} title="Add server">
