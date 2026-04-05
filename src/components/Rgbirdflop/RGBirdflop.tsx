@@ -47,6 +47,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 import { donateLink } from '../Elements/Nav';
+import { deepTrack } from '~/util/misc';
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   if (!rgbStore.text) return '\u00A0';
@@ -142,7 +143,7 @@ export default component$(({ errors, output }: {
       const notification = new Notification()
         .setTitle('Error loading cookies')
         .setDescription(`${error}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     });
@@ -170,9 +171,7 @@ export default component$(({ errors, output }: {
     }
 
     // track all rgbStore properties
-    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
-      track(() => rgbStore[key]);
-    });
+    deepTrack(track, rgbStore);
   });
 
   // Obfuscate effect
@@ -316,7 +315,7 @@ export default component$(({ errors, output }: {
           {previewStyle.value != 'default' && (
             <button q:slot="extra-buttons"
               class={{
-                'p-1 rounded-lum-1 lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
+                'p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
                 'text-lum-primary': showAllGradients.value,
                 'text-lum-text-secondary': !showAllGradients.value,
               }}
@@ -392,8 +391,8 @@ export default component$(({ errors, output }: {
             <Accordion sectionName="decode" pcOnly>
               <Sparkles />
               {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-                {t('rgb.decode.experimental@@experimental')}
+              <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+                {t('nav.experimental@@experimental')}
               </span>
             </Accordion>
             <Decode hidden={!openItemsStore.items.includes('decode')} />
@@ -415,6 +414,10 @@ export default component$(({ errors, output }: {
         <p>
           Wanna automate generating gradients or use this in your own project?
           We have{' '}
+          <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/npm_package">
+            an NPM package
+          </a>
+          {' '}and{' '}
           <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">
             an API!
           </a>

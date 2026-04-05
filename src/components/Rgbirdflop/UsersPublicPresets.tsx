@@ -77,7 +77,7 @@ export default component$(({ userInfo, userPresets, errors }: {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -90,7 +90,7 @@ export default component$(({ userInfo, userPresets, errors }: {
         const notification = new Notification()
           .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -99,8 +99,8 @@ export default component$(({ userInfo, userPresets, errors }: {
 
   return (
     <>
-      {userPresets.length > 0 && <div>
-        <h3 class="flex gap-2 items-center">
+      {userPresets.length > 0 && <div class="mt-4">
+        <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           <Save size={30} />
           <span class="flex-1">
             {userInfo?.name || 'User'}'s Public RGBirdflop Presets
@@ -108,7 +108,7 @@ export default component$(({ userInfo, userPresets, errors }: {
           <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
             <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
           </Link>
-        </h3>
+        </h2>
         <div class="grid sm:grid-cols-2 gap-2">
           {userPresets.map((preset) => (
             <PresetPreview key={preset.id} Preset={preset} />

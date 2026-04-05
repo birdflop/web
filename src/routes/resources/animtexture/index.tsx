@@ -9,6 +9,7 @@ import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { deepTrack } from '~/util/misc';
 
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
@@ -37,7 +38,6 @@ export default component$(() => {
 
   const animtextureStore = useStore({
     textureName: 'animtexture',
-    loading: false,
     width: 16,
     height: 16,
     lockdimensions: true,
@@ -58,10 +58,7 @@ export default component$(() => {
   const textureCanvasRef = useSignal<HTMLCanvasElement>();
 
   useTask$(({ track }) => {
-    (Object.keys(animtextureStore) as Array<keyof typeof animtextureStore>).forEach((key) => {
-      if (key == 'loading') return;
-      track(() => animtextureStore[key]);
-    });
+    deepTrack(track, animtextureStore);
     track(() => animtextureFrames.value);
     track(() => animCanvasRef.value);
     track(() => textureCanvasRef.value);
@@ -120,26 +117,25 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <GalleryHorizontalEnd size={32} />
         {t('nav.resources.animatedTextures.title@@Animated Textures')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
       </p>
 
       <div class="flex gap-4">
         <div class="flex-1">
-          <h3 class="mt-0!">
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             Input Image(s)
           </h3>
           <div class="flex flex-col gap-1 mb-5">
             <label for="fileInput">
               {t('animtexture.selectFrames@@Select GIF or image from your device')}
             </label>
-            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
+            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-grad-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
               const files = Array.from(el.files ?? []);
-              animtextureStore.loading = true;
               for (const f of files) {
                 const e = await readFileAsDataURL(f);
                 if (!e.target?.result) return;
@@ -178,7 +174,6 @@ export default component$(() => {
 
                 animtextureFrames.value = frames;
               }
-              animtextureStore.loading = false;
             }} />
             <label for="urlInput" class="mt-2">
               {t('animtexture.pasteUrl@@Paste GIF or image URL')}
@@ -188,8 +183,6 @@ export default component$(() => {
               onChange$={async (event, el) => {
                 let url = el.value;
                 if (!url) return;
-
-                animtextureStore.loading = true;
 
                 // if the url is a discord emoji, you can replace .webp with .gif
                 if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
@@ -235,8 +228,6 @@ export default component$(() => {
                 }
 
                 animtextureFrames.value = frames;
-
-                animtextureStore.loading = false;
               }} />
             <Toggle id="accumulate" checked={animtextureStore.accumulate}
               onChange$={(e, el) => { animtextureStore.accumulate = el.checked; }}>
@@ -378,7 +369,7 @@ export default component$(() => {
                         onInput$={(e, el) => {
                           animtextureFrames.value[i].delay = Number(el.value);
                         }}
-                        class="lum-input lum-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
+                        class="lum-input lum-grad-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
                     </>}
                   </div>
                 ))}

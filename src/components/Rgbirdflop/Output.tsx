@@ -31,11 +31,11 @@ export default component$(({ hidden, value }: {
           const notification = new Notification()
             .setTitle(copiedTitle)
             .setDescription(copiedDescription)
-            .setBgColor('lum-bg-green/50');
+            .setBgColor('lum-grad-bg-green/50');
           navigator.clipboard.writeText(value).catch((err) => {
             notification.setTitle(copyFailedTitle)
               .setDescription(err)
-              .setBgColor('lum-bg-red/50')
+              .setBgColor('lum-grad-bg-red/50')
               .setPersist(true);
           });
           notifications.push(notification);

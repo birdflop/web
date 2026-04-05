@@ -315,16 +315,16 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <AppWindow size={32} />
         Admin Panel
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         Manage backend tasks and data for Birdflop.
       </p>
       <div class="grid sm:grid-cols-2 gap-1">
         <div class="lum-card">
-          <h2 class="text-xl! my-0!">Vector Backfill</h2>
+          <h2 class="text-xl!">Vector Backfill</h2>
           <p>
             Generate color vectors for all existing presets that don't have them.
             This is needed after adding the colorVector column to enable similarity detection.
@@ -348,7 +348,7 @@ export default component$(() => {
         </div>
 
         <div class="lum-card">
-          <h2 class="text-xl! my-0!">Preset Saves Backfill</h2>
+          <h2 class="text-xl!">Preset Saves Backfill</h2>
           <p>
             Update all presets to have accurate save counts based on saved_presets table.
           </p>
@@ -371,7 +371,7 @@ export default component$(() => {
         </div>
 
         <div class="lum-card">
-          <h2 class="text-xl! my-0!">Find Similar Presets</h2>
+          <h2 class="text-xl!">Find Similar Presets</h2>
           <p>
             Check all published presets and find groups of similar gradients.
             Presets are grouped together if they&apos;re within the threshold distance.

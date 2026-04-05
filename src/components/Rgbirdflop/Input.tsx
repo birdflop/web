@@ -242,7 +242,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         <Formatting/>
       }
     </div>
-    <label for="input" class="flex flex-col items-start flex-1 mt-2 mb-4 relative">
+    <label for="input" class="flex flex-col items-start mt-2 mb-4 relative">
       {previewStyle.value != 'default' && <MCPreviewInput readOnly={readOnly}
         chatInput={chatInput}
         playerName={playerName}>
@@ -294,7 +294,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
             name: t('rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore'),
             value: 'gui-item-lore',
           },
-        ]} customDropdown class={{ 'p-1 gap-1 lum-bg-lum-card-bg/75 rounded-lum-1': true }}>
+        ]} customDropdown class={{ 'p-1 gap-1 lum-grad-bg-lum-card-bg/75 rounded-lum-1': true }}>
           <Eye size={20} class="text-lum-text-secondary" q:slot="dropdown" />
         </SelectMenuRaw>
       </div>

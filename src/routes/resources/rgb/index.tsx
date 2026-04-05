@@ -36,11 +36,11 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
-      <h1 class="flex gap-3 text-2xl! items-center my-2!" q:slot="header">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
         <Palette size={32} />
         {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
       </p>
       {showAllGradients.value
@@ -54,7 +54,7 @@ export default component$(() => {
             <span key={gradientType} class="flex items-center gap-2" q:slot="input">
               <span
                 class={{
-                  'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                  'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
                   'text-lum-text': isActive,
                   'text-gray-400': !isActive,
                 }}
@@ -80,7 +80,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'textshadow')
           : ['textshadow'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('textshadow'),
       }} q:slot="mobile-navbar">
         <Blend />
         {t('rgb.colors.shadow.title@@Text Shadow')}

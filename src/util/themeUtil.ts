@@ -2,6 +2,7 @@ import { createContextId } from '@builder.io/qwik';
 export type ThemeName = keyof typeof themes | 'auto';
 
 const darkTheme = {
+  '--lum-depth': '1',
   '--color-bg': 'var(--color-gray-900)',
   '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
   '--color-green': 'var(--color-green-900)',
@@ -27,7 +28,9 @@ const darkTheme = {
 
 const lightTheme = {
   ...darkTheme,
+  '--lum-depth': '0',
   '--color-bg': 'var(--color-white)',
+  '--color-lum-gradient': 'var(--color-gray-200)',
   '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 30%)',
   '--color-green': 'var(--color-green-500)',
   '--color-red': 'var(--color-red-500)',

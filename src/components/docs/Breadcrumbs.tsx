@@ -36,7 +36,7 @@ export const Breadcrumbs = component$(() => {
             class={{
               'lum-btn lum-btn-p-1 rounded-full text-sm': true,
               'lum-bg-transparent': index < breadcrumbs.length - 1,
-              'lum-bg-blue-400/30 hover:lum-bg-blue-400/30': index === breadcrumbs.length - 1,
+              'lum-grad-bg-blue-400/30 hover:lum-bg-blue-400/30': index === breadcrumbs.length - 1,
             }}
           >
             {crumb.text}

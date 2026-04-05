@@ -198,11 +198,11 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Presentation size={32} />
         {t('nav.resources.banner.title@@Banner Generator')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.banner.description@@Easily generate banner designs for Minecraft.')}
       </p>
 
@@ -214,7 +214,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'options')
               : ['options'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('options'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('options'),
           }}>
             <Settings />
             {t('banner.options.title@@Options')}
@@ -224,7 +224,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'command')
               : ['command'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('command'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('command'),
           }}>
             <Terminal />
             {t('banner.command.title@@Command')}
@@ -234,7 +234,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'preview')
               : ['preview'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('preview'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('preview'),
           }}>
             <Eye />
             {t('banner.preview@@Preview')}
@@ -251,7 +251,7 @@ export default component$(() => {
             'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
             'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
           }}>
-            <h6 class="my-0! flex gap-3 items-center">
+            <h6 class="flex gap-3 items-center">
               {t('banner.options.baseColor.title@@Base Color')}
               <span class="text-lum-text-secondary text-sm font-normal">
                 {t('banner.options.baseColor.description@@This is the base color of the banner to start with.')}
@@ -261,7 +261,7 @@ export default component$(() => {
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button key={colorName} class={{
-                    'lum-btn p-2 hover:brightness-80 lum-bg': true,
+                    'lum-btn p-2 hover:brightness-80 lum-grad-bg': true,
                   }} style={{
                     '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                   }} onClick$={() => {
@@ -274,9 +274,9 @@ export default component$(() => {
                 );
               })}
             </div>
-            <h6 class="my-0! flex gap-3 items-center">
+            <h6 class="flex gap-3 items-center">
               {t('banner.options.patterns@@Patterns')}
-              <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
+              <button class="lum-btn p-2 lum-grad-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                 const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
                 const pattern = patterns[Math.floor(Math.random() * patterns.length)];
                 bannerStore.patterns = [
@@ -305,7 +305,7 @@ export default component$(() => {
                     }}>
                       <Copy size={20} />
                     </button>
-                    <button class="lum-btn p-1 lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
+                    <button class="lum-btn p-1 lum-grad-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
                       const newPatterns = bannerStore.patterns.slice(0);
                       newPatterns.splice(i, 1);
                       bannerStore.patterns = newPatterns;
@@ -313,7 +313,7 @@ export default component$(() => {
                       <Trash size={20} />
                     </button>
                   </div>
-                  <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
+                  <button class="lum-btn p-0 w-17.5 lum-grad-bg-lum-card-bg"
                     onMouseUp$={() => {
                       if (openPopup.value == i) return openPopup.value = -1;
                       else openPopup.value = i;
@@ -346,7 +346,7 @@ export default component$(() => {
                         {Object.entries(colors).map(([colorName, color]) => {
                           return (
                             <button key={colorName} class={{
-                              'lum-btn p-1 hover:brightness-150 lum-bg': true,
+                              'lum-btn p-1 hover:brightness-150 lum-grad-bg': true,
                             }} style={{
                               '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                             }} onClick$={() => {
@@ -402,12 +402,12 @@ export default component$(() => {
                 const notification = new Notification()
                   .setTitle(bannerCommandCopiedTitle)
                   .setDescription(bannerCommandCopiedDescription)
-                  .setBgColor('lum-bg-green/50');
+                  .setBgColor('lum-grad-bg-green/50');
 
                 navigator.clipboard.writeText(el.value).catch((err) => {
                   notification.setTitle(copyFailedTitle)
                     .setDescription(err)
-                    .setBgColor('lum-bg-red/50')
+                    .setBgColor('lum-grad-bg-red/50')
                     .setPersist(true);
                 });
                 notifications.push(notification);

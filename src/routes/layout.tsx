@@ -116,7 +116,7 @@ export default component$(() => {
     const notification = new Notification()
       .setTitle('Flopbird:')
       .setDescription(birdStore.track[0].description)
-      .setBgColor('lum-bg-cyan/50')
+      .setBgColor('lum-grad-bg-cyan/50')
       .setPersist(true).toJSON();
 
     notification.action = {
@@ -211,7 +211,7 @@ export default component$(() => {
     )}
 
     {(themeStore.isDark === undefined || themeStore.isDark) &&
-      <Background id="bg" class={{
+      <Background id="bg" alt="Background" class={{
         'hidden dark:flex': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
@@ -219,7 +219,7 @@ export default component$(() => {
       }}/>
     }
     {(themeStore.isDark === undefined || !themeStore.isDark) &&
-      <LightBackground id="bg" class={{
+      <LightBackground id="bg" alt="Background" class={{
         'flex dark:hidden': themeStore.isDark === undefined,
         'fixed scale-120 bottom-0 blur-none overflow-hidden -z-10 w-lvw h-lvh object-cover': true,
         'transition-all duration-1000': loc.isNavigating,
@@ -253,7 +253,7 @@ export default component$(() => {
         }
 
         return <button id={notification.id} class={{
-          [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
+          [notification.bgColor ?? 'lum-grad-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left max-w-lg': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id} onClick$={async (e, el) => {
@@ -263,7 +263,7 @@ export default component$(() => {
             notifications.splice(notifications.findIndex((n) => n?.id === id), 1);
           }, 300);
         }}>
-          <h5 class="flex gap-1 items-center my-0!">
+          <h5 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <span class="flex gap-2 items-center flex-1">
               {notification.title}
             </span>
@@ -295,7 +295,7 @@ export default component$(() => {
     </div>
     {showCookieConsent.value && settingsStore.cookies === undefined &&
       <div class={{
-        'fixed bottom-4 left-4 lum-bg-lum-input-bg/60': true,
+        'fixed bottom-4 left-4 lum-grad-bg-lum-input-bg/60': true,
         'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
         'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 anim-duration-500': true,
       }}
@@ -303,7 +303,7 @@ export default component$(() => {
         '--lum-border-radius': '1rem',
       }}>
         <div>
-          <h5 class="flex gap-1 items-center my-0!">
+          <h5 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
           </h5>
           <p>

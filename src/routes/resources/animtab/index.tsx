@@ -10,6 +10,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
+import { deepTrack } from '~/util/misc';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams) as {
@@ -55,18 +56,12 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('animtab', { version: rgbStore.version, ...animtabStore });
-    (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
-      track(() => animtabStore[key]);
-    });
+    deepTrack(track, animtabStore);
   });
 
   useTask$(({ track }) => {
-    (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
-      track(() => rgbStore[key]);
-    });
-    (Object.keys(animtabStore) as Array<keyof typeof animtabStore>).forEach((key) => {
-      track(() => animtabStore[key]);
-    });
+    deepTrack(track, animtabStore);
+    deepTrack(track, rgbStore);
 
     const { frames: newFrames } = generateAnimTABFrames({ ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' }, animtabStore);
 
@@ -103,11 +98,11 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={[...rgbErrors, ...animTABErrors]} output={AnimationOutput(rgbStore, animtabStore)}>
-      <h1 class="flex gap-3 text-2xl! items-center my-2!" q:slot="header">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
         <Rainbow size={32} />
         {t('nav.resources.animatedTAB.title@@Animated TAB')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.animatedTAB.description@@TAB plugin gradient animation creator')}
       </p>
 
@@ -116,7 +111,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'outputformat')
           : ['outputformat'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('outputformat'),
       }} q:slot="mobile-navbar">
         <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
@@ -177,7 +172,7 @@ export default component$(() => {
               <span key={gradientType} q:slot="input" class="flex items-center gap-2">
                 <span
                   class={{
-                    'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                    'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
                     'text-lum-text': isActive,
                     'text-gray-400': !isActive,
                   }}

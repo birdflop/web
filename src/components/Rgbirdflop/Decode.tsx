@@ -48,7 +48,7 @@ export default component$(({ hidden }: {
     const notification = new Notification()
       .setTitle(textDecodedTitle)
       .setDescription(textDecodedDescription)
-      .setBgColor('lum-bg-green/50');
+      .setBgColor('lum-grad-bg-green/50');
     notifications.push(notification);
   });
 

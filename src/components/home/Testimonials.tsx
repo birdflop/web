@@ -3,6 +3,7 @@ import { component$, useOnWindow, $ } from '@builder.io/qwik';
 import { Anchor, Hoverable } from '@luminescent/ui-qwik';
 import { generateHead } from '~/root';
 import { CircleUser, Star } from 'lucide-icons-qwik';
+import { SiGoogle, SiTrustpilot } from 'simple-icons-qwik';
 
 const testimonials = [
   {
@@ -135,52 +136,57 @@ export default component$(() => {
     hero.style.transform = `translateY(${window.scrollY / 2}px)`;
   }));
 
-  // pick random 5 testimonials to show
-  const fiveTestimonials = testimonials.sort(() => 0.5 - Math.random()).slice(0, 5);
+  // pick random 6 testimonials to show
+  const sixTestimonials = testimonials.sort(() => 0.5 - Math.random()).slice(0, 6);
 
-  return <section class="flex flex-col w-full bg-bg p-10 items-center justify-center">
+  return <section class="flex flex-col w-full bg-bg p-10 items-center justify-center"
+    style={{
+      '--lum-border-radius': '1.5rem',
+    }}>
     <Anchor id="testimonials">
-      <h1 id="testimonials" class="mr-2">
+      <h3 id="testimonials" class="font-extrabold text-5xl my-6 mr-2">
         Testimonials
-      </h1>
+      </h3>
     </Anchor>
     <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
-      {fiveTestimonials.map(({ name, image, title, description, link }) => {
+      {sixTestimonials.map(({ name, image, title, description, link }) => {
         return <a href={link} key={name}
           class="lum-card transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h3 class="mt-0! mb-2! flex items-center gap-2">
+          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             {image ?
               <img src={image} alt={name} class="rounded-full object-cover" width={30} height={30} />
               : <CircleUser size={30} />}
             {name}
-          </h3>
+          </h4>
           {title && <p class="font-bold">
             {title}
           </p>}
-          <p class="whitespace-normal">
+          <p class="whitespace-normal text-lum-text-secondary">
             {description}
           </p>
         </a>;
       })}
-      <div class="lum-card transition-all duration-200!"
-        onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-        onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-        <h3 class="mt-0! mb-2! flex items-center gap-2">
-          <Star size={30} /> More
-        </h3>
-        <p>
-          Check out our Trustpilot or Google page for more testimonials.
-        </p>
-        <div class="flex gap-2">
-          <a href="https://www.trustpilot.com/review/birdflop.com" class="lum-btn">
-            Trustpilot
-          </a>
-          <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="lum-btn">
-            Google
-          </a>
-        </div>
+    </div>
+    <div class="lum-card transition-all duration-200! justify-center px-6 mt-2"
+      onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+      onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
+      <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
+        <Star size={30} /> More
+      </h4>
+      <p class="text-lum-text-secondary">
+        Check out our Trustpilot or Google page for more testimonials.
+      </p>
+      <div class="flex gap-2">
+        <a href="https://www.trustpilot.com/review/birdflop.com" class="flex-1 lum-btn lum-btn-p-3 rounded-lum-3">
+          <SiTrustpilot class="fill-current" />
+          Trustpilot
+        </a>
+        <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="flex-1 lum-btn lum-btn-p-3 rounded-lum-3">
+          <SiGoogle class="fill-current" />
+          Google
+        </a>
       </div>
     </div>
   </section>;

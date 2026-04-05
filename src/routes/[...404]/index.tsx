@@ -18,8 +18,6 @@ export const onGet: RequestHandler = ({ json, request }) => {
 export default component$(() => {
   const t = inlineTranslate();
 
-  // Keeping below unloading in case we mess up navbar in future
-
   return (
     <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
       <div>
@@ -31,7 +29,7 @@ export default component$(() => {
           {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
         </h2>
         <div class="flex mt-4">
-          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue">
+          <Link href="/" class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue">
             <Home size={26}/> {t('nav.404.home@@Go back home')}
           </Link>
         </div>

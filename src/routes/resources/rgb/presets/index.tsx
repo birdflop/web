@@ -152,7 +152,7 @@ const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCou
 }) => {
   const t = inlineTranslate();
 
-  return <div class="lum-card lum-bg-transparent sm:lum-bg-lum-card-bg p-1 grid sm:grid-cols-3 items-center gap-2 my-2 relative">
+  return <div class="lum-card lum-bg-transparent sm:lum-grad-bg-lum-card-bg p-1 grid sm:grid-cols-3 items-center gap-2 my-2 relative">
     <p class="text-xs text-lum-text-secondary lum-btn-p-1 text-center sm:text-left">
       {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
       {totalPages > 1 &&
@@ -187,7 +187,7 @@ const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCou
               key={pageNum}
               class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
                 pageNum === page
-                  ? 'lum-bg-lum-accent/20'
+                  ? 'lum-grad-bg-lum-accent/20'
                   : 'lum-bg-transparent'
               }`}
               onClick$={() => {
@@ -281,7 +281,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error fetching presets')
           .setDescription(`${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -311,7 +311,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -368,7 +368,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex flex-col sm:flex-row gap-3 text-2xl! sm:items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <span class="flex flex-1 gap-3 items-center">
           <Save size={32} />
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -377,7 +377,7 @@ export default component$(() => {
           <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
         </a>
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
       </p>
       <div class="flex flex-col gap-2">
@@ -435,7 +435,7 @@ export default component$(() => {
             class={{
               'p-3 rounded-lum-1 lum-bg-transparent': true,
             }}
-            panelClass="lum-bg-lum-card-bg p-2 gap-2"
+            panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >
             <Settings q:slot="dropdown" size={16} />
@@ -498,15 +498,13 @@ export default component$(() => {
           />
         ))}
         {publicPresets.length === 0 && (
-          <div class="lum-card col-span-2 lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg w-full transition duration-1000 hover:duration-75 ease-out">
-            <p class="text-center text-lum-text-secondary">
-              {t('rgb.presets.noResults@@No results found.')}
-              <br />
-              {t('rgb.presets.suggestion.one@@Think something is missing?')}
-              <br />
-              {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
-            </p>
-          </div>
+          <p class="text-center text-lum-text-secondary col-span-full my-6">
+            {t('rgb.presets.noResults@@No results found.')}
+            <br />
+            {t('rgb.presets.suggestion.one@@Think something is missing?')}
+            <br />
+            {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
+          </p>
         )}
       </div>
       {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}

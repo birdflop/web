@@ -26,7 +26,7 @@ export function parseParams(params: { [key: string]: any }, name: names) {
       if (!Object.keys(getDefaults(name)).includes(key)) {
         delete params[key];
       }
-      if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
+      if ((key == 'format' || key == 'colors' || key == 'shadowcolors') && params[key]) {
         params[key] = JSON.parse(params[key]);
       }
       else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
@@ -105,7 +105,6 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
     const pairsplit = pair.split(/\s*=\s*/);
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
-  console.log(cookie);
 
   const settings = JSON.parse(decodeURIComponent(cookie.settings));
   // don't set cookies if user has opted out unless this is the settings cookie itself

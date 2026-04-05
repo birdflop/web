@@ -44,7 +44,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading cookies')
         .setDescription(`${error}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     });
@@ -108,7 +108,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error parsing YAML')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -120,11 +120,11 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Eye size={32} />
         {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game')}
       </p>
 
@@ -177,7 +177,7 @@ export default component$(() => {
         />
       </div>
 
-      <p class="lum-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
+      <p class="lum-grad-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
         {animprevStore.frames[animprevStore.frame]}
       </p>
     </section>

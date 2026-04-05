@@ -165,7 +165,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     return (
       <div class={`relative ${className}`}>
         <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
-          <div q:slot="dropdown" class="flex items-center gap-2">
+          <span q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && <>
               <Moon size={24} class="hidden dark:flex" />
               <Sun size={24} class="dark:hidden flex" />
@@ -185,7 +185,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
                 {CurrentThemeOption.label}
               </span>
             )}
-          </div>
+          </span>
           {themeOptions.map((option) => {
             const IconComponent = option.icon;
             const isActive = themeStore.currentTheme === option.value;
@@ -196,27 +196,27 @@ export const ThemeToggle = component$<ThemeToggleProps>(
                 key={value}
                 onClick$={() => handleThemeChange(value)}
                 class={{
-                  'lum-btn lum-bg-transparent text-left rounded-lum-1 p-2 pr-4': true,
-                  'bg-linear-to-br from-theme-accent-primary to-theme-accent-secondary border-theme-accent-primary/40 border': isActive,
-                  'hover:bg-white/10': !isActive,
+                  'lum-btn text-left rounded-lum-1 p-2 pr-4': true,
+                  [`bg-linear-to-br ${option.gradient} border-lum-accent border`]: isActive,
+                  'lum-bg-transparent': !isActive,
                 }}
               >
-                <div
-                  class={`rounded-lum-1 p-2 bg-linear-to-r ${option.gradient} flex items-center justify-center`}
+                <span
+                  class={{
+                    'rounded-lum-1 p-2 flex items-center justify-center': true,
+                    [`bg-linear-to-r ${option.gradient}`]: !isActive,
+                  }}
                 >
                   <IconComponent class="h-4 w-4 text-white" />
-                </div>
-                <div class="flex-1">
-                  <div class="text-theme-text-primary text-sm font-medium">
+                </span>
+                <span class="flex flex-col">
+                  <span class="text-theme-text-primary text-sm font-medium">
                     {option.label}
-                    {isActive && (
-                      <span class="text-theme-accent-primary ml-2 text-xs">✓</span>
-                    )}
-                  </div>
-                  <div class="text-theme-text-muted text-xs">
+                  </span>
+                  <span class="text-theme-text-muted text-xs text-lum-text-secondary">
                     {option.description}
-                  </div>
-                </div>
+                  </span>
+                </span>
               </button>
             );
           })}

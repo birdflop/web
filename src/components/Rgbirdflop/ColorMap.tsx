@@ -113,7 +113,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       <div
         id={`colormap${id}-add-button`}
         class={{
-          'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full lum-bg-lum-card-bg opacity-0 pointer-events-none':
+          'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full lum-grad-bg-lum-card-bg opacity-0 pointer-events-none':
             true,
         }}
       >
@@ -227,7 +227,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
             }}
           >Position (%)
           </NumberInput>
-          <button class="lum-btn p-2 lum-bg-red hover:lum-bg-red" onClick$={() => {
+          <button class="lum-btn p-2 lum-grad-bg-red hover:lum-bg-red" onClick$={() => {
             const newColors = colors.slice(0);
             newColors.splice(opened.value, 1);
             rgbStore[colorsKey] = newColors;

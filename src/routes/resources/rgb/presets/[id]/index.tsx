@@ -47,7 +47,7 @@ export default component$(() => {
   const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
 
   const notifications = useContext(NotificationContext);
-  const loading = useSignal(false);
+  const isLoading = useSignal(false);
 
   const session = useSession();
   const presetInfo = usePreset().value;
@@ -97,7 +97,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error parsing saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -105,11 +105,11 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Save size={32} />
         {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
       </p>
 
@@ -126,7 +126,7 @@ export default component$(() => {
       }
 
       <h6 class={{
-        'flex items-center gap-2 mb-0!': true,
+        'flex items-center gap-2': true,
         'text-blue-300/80!': !presetInfo.user,
         'text-orange-300/80!': !!presetInfo.user,
       }}>
@@ -177,7 +177,7 @@ export default component$(() => {
 
       <div class="flex gap-2">
         <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-          class={{ 'hidden sm:flex text-sm gap-1 lum-bg-orange hover:bg-orange': true }}>
+          class={{ 'hidden sm:flex text-sm gap-1 lum-grad-bg-orange hover:bg-orange': true }}>
           <div q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
           </div>
@@ -190,10 +190,10 @@ export default component$(() => {
         </SelectMenuRaw>
         <button class={{
           'lum-btn text-sm': true,
-          'lum-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
-          'lum-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
-        }} disabled={loading.value} onClick$={async () => {
-          loading.value = true;
+          'lum-grad-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+          'lum-grad-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+        }} disabled={isLoading.value} onClick$={async () => {
+          isLoading.value = true;
 
           if (existingPreset) {
             privatePresets.value = privatePresets.value.filter((p) => p !== existingPreset);
@@ -211,10 +211,10 @@ export default component$(() => {
           }
 
           if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
-          loading.value = false;
+          isLoading.value = false;
         }}>
-          {!loading.value && presetInfo.saves}
-          {loading.value && <div class="lum-loading w-3 h-3" />}
+          {!isLoading.value && presetInfo.saves}
+          {isLoading.value && <div class="lum-loading w-3 h-3" />}
           {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
             ? <>
               <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
@@ -223,16 +223,16 @@ export default component$(() => {
               <Save size={20}  /> {t('rgb.presets.save@@Save')}
             </>}
         </button>
-        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={loading.value} onClick$={() => {
+        <button class="lum-btn text-sm lum-grad-bg-purple hover:bg-purple" disabled={isLoading.value} onClick$={() => {
           const notification = new Notification()
             .setTitle(presetCopiedTitle)
             .setDescription(presetCopiedDescription)
-            .setBgColor('lum-bg-green/50');
+            .setBgColor('lum-grad-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))
             .catch((err) => {
               notification.setTitle(copyFailedTitle)
                 .setDescription('Error: ' + err)
-                .setBgColor('lum-bg-red/50')
+                .setBgColor('lum-grad-bg-red/50')
                 .setPersist(true);
             });
           notifications.push(notification);
@@ -242,7 +242,7 @@ export default component$(() => {
       </div>
       <div class="flex flex-col gap-4 mt-6">
         <div>
-          <h3 class="my-0!">
+          <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
             {t('rgb.presets.preview@@Preset Preview')}
           </h3>
           <Input noLabel>
@@ -250,10 +250,10 @@ export default component$(() => {
           </Input>
         </div>
 
-        <h3 class="my-0!">
+        <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           {t('rgb.presets.presetData@@Preset Data')}
         </h3>
-        <div class="text-white! font-bold lum-card lum-bg-gray-800">
+        <div class="text-white! font-bold lum-card lum-grad-bg-gray-800">
           {Object.keys(presetInfo.preset).map((key) => (
             <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
               {isAdmin &&
@@ -275,8 +275,8 @@ export default component$(() => {
         </div>
 
         {(isAdmin || (isOwner && (presetInfo.pending || presetInfo.saves < 1))) &&
-          <div class="lum-card lum-bg-red/20">
-            <h3 class="my-0!">
+          <div class="lum-card lum-grad-bg-red/20">
+            <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
               Manage Preset
             </h3>
             {isOwner && <p class="mb-2">
@@ -319,7 +319,15 @@ export default component$(() => {
       </div>
 
       <div class="text-sm mt-8">
-        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB gradient creator that generates hex formatted text. RGB Birdflop is a public resource developed by Birdflop, a 501(c)(3) nonprofit providing affordable and accessible hosting and public resources. If you would like to support our mission, please <a href={donateLink}>click here</a> to make a charitable donation, 100% tax-deductible in the US.
+        RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+        gradient creator that generates hex formatted text. RGB Birdflop is a
+        public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+        affordable and accessible hosting and public resources. If you would
+        like to support our mission, please{' '}
+        <a href={donateLink}>
+          click here
+        </a>{' '}
+        to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>
   );

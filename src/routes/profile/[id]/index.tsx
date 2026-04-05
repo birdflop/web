@@ -34,7 +34,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -48,7 +48,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -57,7 +57,7 @@ export default component$(() => {
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         {userInfo.image &&
           <img src={userInfo.image} width={48} height={48} class="rounded-full!" />
         }

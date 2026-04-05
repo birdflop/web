@@ -1,6 +1,6 @@
 import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
-import { SelectMenu, Toggle, SelectMenuRaw, RangeInput, LogoPaper, LogoPurpur, LogoWaterfall } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle, SelectMenuRaw, RangeInput, LogoPaper, LogoPurpur, LogoWaterfall, LogoForge, LogoFabric } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { flagsDefaults, generateResult } from '~/util/flags/generateResult';
@@ -9,7 +9,8 @@ import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
 import { Box, Code, CircleHelp, RefreshCw, SquareTerminal, Flag, MemoryStick, Computer, Terminal } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SiApple, SiLinux, SiPterodactyl, SiVelocity } from 'simple-icons-qwik';
+import { SiApple, SiLinux, SiPterodactyl, SiSpigotmc, SiVelocity } from 'simple-icons-qwik';
+import { deepTrack } from '~/util/misc';
 
 const Linux = component$(() => <span class="flex items-center gap-2">
   <SiLinux class="fill-current" size={20} /> Linux
@@ -39,6 +40,10 @@ const environmentOptions = [
   { name: <Command />, value: 'command' },
 ];
 
+const Spigot = component$(() => <span class="flex items-center gap-2">
+  <SiSpigotmc class="fill-current" size={20} /> Spigot
+</span>);
+
 const Paper = component$(() => <span class="flex items-center gap-2">
   <LogoPaper size={20} /> Paper
 </span>);
@@ -55,13 +60,26 @@ const Waterfall = component$(() => <span class="flex items-center gap-2">
   <LogoWaterfall size={20} /> Waterfall
 </span>);
 
-const softwareOptions = [
+const Forge = component$(() => <span class="flex items-center gap-2">
+  <LogoForge size={20} /> Forge
+</span>);
+
+const Fabric = component$(() => <span class="flex items-center gap-2">
+  <LogoFabric size={20} /> Fabric
+</span>);
+
+const softwareOptionsFlags = [
   { name: <Paper />, value: 'paper' },
   { name: <Purpur />, value: 'purpur' },
-  // { name: <Forge />, value: 'forge' },
-  // { name: <Fabric />, value: 'fabric' },
   { name: <Velocity />, value: 'velocity' },
   { name: <Waterfall />, value: 'waterfall' },
+];
+
+export const softwareOptions = [
+  ...softwareOptionsFlags,
+  { name: <Spigot />, value: 'spigot' },
+  { name: <Forge />, value: 'forge' },
+  { name: <Fabric />, value: 'fabric' },
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
@@ -152,18 +170,16 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     if (isBrowser) setCookies('parsed', flagsStore);
-    (Object.keys(flagsStore) as Array<keyof typeof flagsStore>).forEach((key) => {
-      track(() => flagsStore[key]);
-    });
+    deepTrack(track, flagsStore);
   });
 
   return (
     <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Flag size={32} />
         {t('nav.resources.flags.title@@Flags Generator')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
+      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags')}
       </p>
 
@@ -196,7 +212,7 @@ export default component$(() => {
             <div class="flex flex-col gap-1">
               <SelectMenu id="software" class={{ 'w-full': true }} onChange$={(e, el) => {
                 flagsStore.serverType = el.value;
-              }} values={softwareOptions} value={flagsStore.serverType}>
+              }} values={softwareOptionsFlags} value={flagsStore.serverType}>
                 {t('flags.software.label@@Software')}
               </SelectMenu>
               <p class="text-lum-text-secondary text-sm">
