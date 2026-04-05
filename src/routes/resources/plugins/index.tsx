@@ -320,7 +320,7 @@ export default component$(() => {
               });
               notifications.push(notification);
             }} title="Export server plugins as JSON">
-              <Copy size={16} />
+              <Copy size={16} /> Export (Recommended for backup for now.)
             </button>
 
             <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
