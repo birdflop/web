@@ -1,9 +1,9 @@
 import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Ellipsis, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Filter, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
 import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
 import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
 import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
@@ -66,7 +66,7 @@ type PluginsStoreType = {
     [serverName: string]: ServerType;
   };
   openServer?: string;
-  showOnlyOutdated?: boolean;
+  filter?: 'outdated' | PluginSource;
 };
 
 const serverDefaults: ServerType = {
@@ -74,60 +74,72 @@ const serverDefaults: ServerType = {
   plugins: [],
 };
 
-const Modrinth = component$(() => <span class="text-left">
+type PluginSourceComponent = {
+  noDescription?: boolean;
+}
+
+const Modrinth = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiModrinth class="fill-current" size={20} />
     Modrinth<br/>
   </span>
-  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
-    {`Newer plugin platform that's gaining popularity.
-    Many plugins are primarily releasing on Modrinth now,
-    so check here first when adding a plugin.`}
-  </span>
+  {!noDescription
+    && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+      {`Newer plugin platform that's gaining popularity.
+      Many plugins are primarily releasing on Modrinth now,
+      so check here first when adding a plugin.`}
+    </span>
+  }
 </span>);
 
-const SpigotMC = component$(() => <span class="text-left">
+const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiSpigotmc class="fill-current" size={20} />
     SpigotMC<br/>
   </span>
-  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
-    {`Most popular plugin platform.
-    Many plugins are moving to Modrinth,
-    use this if the plugin isn't on Modrinth yet.`}
-  </span>
+  {!noDescription
+    && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+      {`Most popular plugin platform.
+      Many plugins are moving to Modrinth,
+      use this if the plugin isn't on Modrinth yet.`}
+    </span>
+  }
 </span>);
 
-const GitHub = component$(() => <span class="text-left">
+const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiGithub class="fill-current" size={20} />
     GitHub<br/>
   </span>
-  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
-    {`For plugins that release on GitHub without using a plugin platform.
-    Search by plugin name or paste the GitHub link of the plugin.`}
-  </span>
+  {!noDescription
+    && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+      {`For plugins that release on GitHub without using a plugin platform.
+      Search by plugin name or paste the GitHub link of the plugin.`}
+    </span>
+  }
 </span>);
 
-const Misc = component$(() => <span class="text-left">
+const Misc = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <Ellipsis size={20} />
     Misc<br/>
   </span>
-  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
-    {`For plugins that aren't on the above platforms,
-    you can manually check for updates in one place.`}
-  </span>
+  {!noDescription
+    && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+      {`For plugins that aren't on the above platforms,
+      you can manually check for updates in one place.`}
+    </span>
+  }
 </span>);
 
 const pluginSources = [
-  { name: <Modrinth />, value: 'modrinth' },
-  { name: <SpigotMC />, value: 'spigot' },
-  // { name: 'CurseForge', value: 'curseforge' },
-  // { name: 'Modrinth', value: 'modrinth' },
-  // { name: 'Hangar', value: 'hangar' },
-  { name: <GitHub />, value: 'github' },
-  { name: <Misc />, value: 'misc' },
+  { component: Modrinth, value: 'modrinth' },
+  { component: SpigotMC, value: 'spigot' },
+  // { component: CurseForge, value: 'curseforge' },
+  // { component: Modrinth, value: 'modrinth' },
+  // { component: Hangar, value: 'hangar' },
+  { component: GitHub, value: 'github' },
+  { component: Misc, value: 'misc' },
 ];
 
 export const resolvedPluginContext = createContextId<ResolvedPluginType>('resolve-plugin');
@@ -165,7 +177,7 @@ export default component$(() => {
         const parsed = JSON.parse(savedPlugins);
         pluginsStore.servers = parsed.servers || {};
         pluginsStore.openServer = parsed.openServer;
-        pluginsStore.showOnlyOutdated = parsed.showOnlyOutdated;
+        pluginsStore.filter = parsed.filter;
       } catch (e) {
         const notification = new Notification()
           .setTitle('Error loading plugins')
@@ -305,7 +317,7 @@ export default component$(() => {
             }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
             class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
 
-            <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
+            <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
 
               const notification = new Notification()
@@ -332,13 +344,20 @@ export default component$(() => {
                   console.error('Failed to parse imported plugins:', err);
                 }
               }}/>
-            <div class="px-2 flex items-center">
-              <Toggle id="show-only-outdated" checked={pluginsStore.showOnlyOutdated} onChange$={(e, el) => {
-                pluginsStore.showOnlyOutdated = el.checked;
-              }}>
-                Only show out of date
-              </Toggle>
-            </div>
+            <SelectMenuRaw id="filter" onChange$={(e, el) => {
+              if (el.value === 'all') pluginsStore.filter = undefined;
+              pluginsStore.filter = el.value as 'outdated' | PluginSource;
+            }} values={[
+              { name: 'All', value: 'all' },
+              { name: 'Outdated', value: 'outdated' },
+              ...pluginSources.map((Source) => ({ name: <Source.component noDescription />, value: Source.value })),
+            ]} value={pluginsStore.filter} customDropdown
+            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
+              <span class="flex items-center gap-2" q:slot="dropdown">
+                <Filter size={16} />
+                Filter
+              </span>
+            </SelectMenuRaw>
           </div>
 
           <div class="flex gap-1 items-center mx-auto">
@@ -411,7 +430,8 @@ export default component$(() => {
               && plugin.version?.releaseDate !== undefined
               && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
 
-            if ((pluginsStore.showOnlyOutdated && !updateAvailable)) return;
+            if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
+            if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
 
             return <PluginCard key={plugin.name}
               plugin={plugin}
@@ -454,7 +474,7 @@ export default component$(() => {
           <SelectMenu id="add-plugin-type" onChange$={(e, el) => {
             resolvedPlugin.type = el.value as PluginSource;
             resolvedPlugin.plugin = undefined;
-          }} values={pluginSources}>
+          }} values={pluginSources.map((Source) => ({ name: <Source.component />, value: Source.value }))}>
             Plugin source
           </SelectMenu>
 
