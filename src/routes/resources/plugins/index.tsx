@@ -20,11 +20,17 @@ export const downloadSpigotPlugin = $(async (
   spigotRateLimit?: { downloadCount: number, resetTime: number },
   notifications?: Notification[],
 ) => {
+  const targetUrl = plugin.data?.file?.url;
+
   // if the plugin has an external url, open that instead of spigot to avoid rate limits
   if (plugin.data?.file?.externalUrl) {
     window.open(plugin.data.file.externalUrl, '_blank');
     return;
   }
+
+  if (!targetUrl) return;
+
+  const downloadWindow = window.open('about:blank', '_blank');
 
   // spigot rate limits downloads to 10 per minute
   if (spigotRateLimit && spigotRateLimit.downloadCount >= 10 && Date.now() < spigotRateLimit.resetTime) {
@@ -41,7 +47,7 @@ export const downloadSpigotPlugin = $(async (
   }
 
   // open the plugin file url in a new tab to trigger the download
-  window.open(`https://www.spigotmc.org/${plugin.data?.file?.url}`, '_blank');
+  downloadWindow?.location.replace(`https://www.spigotmc.org/${targetUrl}`);
 
   if (!spigotRateLimit) return;
   spigotRateLimit.downloadCount++;
