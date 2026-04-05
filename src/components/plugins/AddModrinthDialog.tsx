@@ -190,8 +190,6 @@ export default component$(() => {
     {resolvedPlugin.plugin?.data?.versions && <>
       <label>
         Which version are you currently using?
-
-        WIP USE SPIGOT FOR NOW
       </label>
 
       <SelectList id="add-plugin-options" values={

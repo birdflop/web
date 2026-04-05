@@ -11,7 +11,7 @@ export type PluginVersion = {
   releaseDate: number;
 }
 
-export type PluginSource = 'spigot' | 'misc' | 'modrinth'; // | 'curseforge' | 'github';
+export type PluginSource = 'spigot' | 'misc' | 'modrinth' | 'github'; // | 'curseforge';
 
 export type PluginType = {
   id?: number | string;

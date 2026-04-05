@@ -7,10 +7,11 @@ import { SelectMenu, SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
 import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
 import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
+import AddGitHubDialog from '~/components/plugins/AddGitHubDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
-import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
+import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 
 const debug = true;
 
@@ -97,6 +98,17 @@ const SpigotMC = component$(() => <span class="text-left">
   </span>
 </span>);
 
+const GitHub = component$(() => <span class="text-left">
+  <span class="flex items-center gap-2">
+    <SiGithub class="fill-current" size={20} />
+    GitHub<br/>
+  </span>
+  <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
+    {`For plugins that release on GitHub without using a plugin platform.
+    Search by plugin name or paste the GitHub link of the plugin.`}
+  </span>
+</span>);
+
 const Misc = component$(() => <span class="text-left">
   <span class="flex items-center gap-2">
     <Ellipsis size={20} />
@@ -114,7 +126,7 @@ const pluginSources = [
   // { name: 'CurseForge', value: 'curseforge' },
   // { name: 'Modrinth', value: 'modrinth' },
   // { name: 'Hangar', value: 'hangar' },
-  // { name: 'GitHub', value: 'github' },
+  { name: <GitHub />, value: 'github' },
   { name: <Misc />, value: 'misc' },
 ];
 
@@ -449,6 +461,7 @@ export default component$(() => {
 
           {resolvedPlugin.type === 'spigot' && <AddSpigotDialog />}
           {resolvedPlugin.type === 'modrinth' && <AddModrinthDialog />}
+          {resolvedPlugin.type === 'github' && <AddGitHubDialog />}
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>
