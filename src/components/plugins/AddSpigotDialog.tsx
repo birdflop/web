@@ -35,9 +35,25 @@ export default component$(() => {
           }
 
           const res = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
+          if (!res.ok) {
+            const notification = new Notification()
+              .setTitle('Error fetching plugin data')
+              .setDescription(`Error: ${res.status} ${res.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const data = await res.json() as any;
 
           const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+          if (!versionsRes.ok) {
+            const notification = new Notification()
+              .setTitle('Error fetching plugin versions')
+              .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const versionsData = await versionsRes.json() as any;
 
           const newPlugin: PluginWithData = {
@@ -74,6 +90,14 @@ export default component$(() => {
           console.log('Searching for plugin:', value);
 
           const searchRes = await fetch(`https://api.spiget.org/v2/search/resources/${encodeURIComponent(value)}?size=5`);
+          if (!searchRes.ok) {
+            const notification = new Notification()
+              .setTitle('Error searching for plugin')
+              .setDescription(`Error: ${searchRes.status} ${searchRes.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const searchData: any[] = await searchRes.json();
 
           if (searchData.length === 0) {
@@ -130,6 +154,14 @@ export default component$(() => {
         if (!selectedPlugin || !selectedPlugin.data) return;
 
         const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
+        if (!versionsRes.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching plugin versions')
+            .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const versionsData = await versionsRes.json() as any;
         selectedPlugin.data.versions = versionsData;
 

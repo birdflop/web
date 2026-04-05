@@ -34,14 +34,17 @@ export default component$(() => {
 
           console.log(`${searchUrl}?${searchParams.toString()}`);
           const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
+          if (!searchRes.ok) {
+            const notification = new Notification()
+              .setTitle('Error searching for plugin')
+              .setDescription(`Error: ${searchRes.status} ${searchRes.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const searchData: {
             items: any[];
           } = await searchRes.json();
-
-          // if there are no results, check if the user put in the full repo link
-          if (searchData.items.length === 0) {
-
-          }
 
           if (searchData.items.length === 0) {
             const notification = new Notification()

@@ -60,9 +60,25 @@ export default component$(() => {
           }
 
           const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
+          if (!res.ok) {
+            const notification = new Notification()
+              .setTitle('Error fetching plugin data')
+              .setDescription(`Error: ${res.status} ${res.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const data = await res.json() as any;
 
           const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
+          if (!versionsRes.ok) {
+            const notification = new Notification()
+              .setTitle('Error fetching plugin versions')
+              .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const versionsData = await versionsRes.json() as any;
           const latestVersion = versionsData[0];
 
@@ -110,6 +126,14 @@ export default component$(() => {
           console.log([loaders.value.map((loader) => `categories:${loader}`)]);
 
           const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
+          if (!searchRes.ok) {
+            const notification = new Notification()
+              .setTitle('Error searching for plugin')
+              .setDescription(`Error: ${searchRes.status} ${searchRes.statusText}`)
+              .setBgColor('lum-grad-bg-red/50');
+            notifications.push(notification);
+            return;
+          }
           const searchData: {
             hits: any[];
           } = await searchRes.json();
@@ -167,6 +191,14 @@ export default component$(() => {
 
         console.log(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
         const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
+        if (!versionsRes.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching plugin versions')
+            .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const versionsData = await versionsRes.json() as any;
         selectedPlugin.data.versions = versionsData.map((version: any) => ({
           id: version.id,

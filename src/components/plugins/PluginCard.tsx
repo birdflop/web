@@ -70,6 +70,14 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
       switch (plugin.type) {
       case 'spigot': {
         const res = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}`);
+        if (!res.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching plugin data')
+            .setDescription(`Error: ${res.status} ${res.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const data = await res.json() as any;
 
         plugin.data = {
@@ -92,6 +100,14 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
 
         // fetch latest version
         const latestVerResponse = await fetch(`https://api.spiget.org/v2/resources/${plugin.id}/versions/latest`);
+        if (!latestVerResponse.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching latest plugin version')
+            .setDescription(`Error: ${latestVerResponse.status} ${latestVerResponse.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const latestVersion = await latestVerResponse.json() as any;
         plugin.data.latestVersion = {
           id: latestVersion.id,
@@ -103,6 +119,14 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
       }
       case 'modrinth': {
         const res = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}`);
+        if (!res.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching plugin data')
+            .setDescription(`Error: ${res.status} ${res.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const data = await res.json() as any;
 
         plugin.data = {
@@ -117,6 +141,14 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
 
         // fetch latest version
         const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${plugin.id}/version?loaders=["paper"]`);
+        if (!versionsRes.ok) {
+          const notification = new Notification()
+            .setTitle('Error fetching plugin versions')
+            .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification);
+          return;
+        }
         const versionsData = await versionsRes.json() as any;
         plugin.data.versions = versionsData.map((version: any) => ({
           id: version.id,
