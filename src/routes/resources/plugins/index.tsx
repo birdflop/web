@@ -254,6 +254,7 @@ export default component$(() => {
       </h1>
       <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
         {t('nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.')}
+        Warning: this tool is in an alpha state and may have bugs that cause it to not detect updates correctly, or in rare cases mark up to date plugins as out of date. Always double check for updates manually before updating your plugins, and report any bugs you find to help improve the tool.
       </p>
 
       <div class="lum-card p-1 gap-1 flex-row items-center overflow-x-scroll">
