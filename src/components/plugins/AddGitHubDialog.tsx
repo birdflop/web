@@ -38,7 +38,7 @@ export default component$(() => {
             items: any[];
           } = await searchRes.json();
 
-          // if there are no results, check if the user put in the full repo link 
+          // if there are no results, check if the user put in the full repo link
           if (searchData.items.length === 0) {
 
           }
