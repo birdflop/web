@@ -116,7 +116,7 @@ export default component$(() => {
     const notification = new Notification()
       .setTitle('Flopbird:')
       .setDescription(birdStore.track[0].description)
-      .setBgColor('lum-bg-cyan/50')
+      .setBgColor('lum-grad-bg-cyan/50')
       .setPersist(true).toJSON();
 
     notification.action = {
@@ -253,7 +253,7 @@ export default component$(() => {
         }
 
         return <button id={notification.id} class={{
-          [notification.bgColor ?? 'lum-bg-lum-input-bg/60']: true,
+          [notification.bgColor ?? 'lum-grad-bg-lum-input-bg/60']: true,
           'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left max-w-lg': true,
           'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
         }} key={notification.id} onClick$={async (e, el) => {
@@ -295,7 +295,7 @@ export default component$(() => {
     </div>
     {showCookieConsent.value && settingsStore.cookies === undefined &&
       <div class={{
-        'fixed bottom-4 left-4 lum-bg-lum-input-bg/60': true,
+        'fixed bottom-4 left-4 lum-grad-bg-lum-input-bg/60': true,
         'backdrop-blur-xl lum-card gap-0 p-4 sm:rounded-lum min-w-84 text-left': true,
         'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 anim-duration-500': true,
       }}

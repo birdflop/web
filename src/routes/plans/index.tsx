@@ -114,8 +114,8 @@ export default component$(() => {
               class={{
                 'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
                 'opacity-50': plan.outOfStock,
-                'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
-                'lum-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
+                'lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.plan != planName,
+                'lum-grad-bg-blue-500/30 hover:lum-bg-blue-500/30 ': plansStore.plan == planName,
               }}
               data-umami-event="Plan Pick Click"
               data-umami-event-page="plans"
@@ -293,8 +293,8 @@ export default component$(() => {
                 }}
                 class={{
                   'lum-card transition duration-300 hover:duration-75 ease-out text-left relative': true,
-                  'lum-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
-                  'lum-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
+                  'lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70': plansStore.gb != Number(gb),
+                  'lum-grad-bg-green-500/30 hover:lum-bg-green-500/30 ': plansStore.gb == Number(gb),
                 }}
                 data-umami-event="Plan RAM Click"
                 data-umami-event-plan={plansStore.plan}
@@ -335,7 +335,7 @@ export default component$(() => {
             <input id="server_description" placeholder="This is my Minecraft server!" class="lum-input" onChange$={(e, el) => plansStore.desc = el.value} />
           </div>
           <div>
-            <a class="lum-btn lum-btn-p-4 text-lg lum-bg-blue/80 hover:lum-bg-blue gap-4 mt-auto"
+            <a class="lum-btn lum-btn-p-4 text-lg lum-grad-bg-blue/80 hover:lum-bg-blue gap-4 mt-auto"
               href={'https://client.birdflop.com/order/config/index/'
                 + plans[plansStore.plan]?.id
                 + '/?group_id=' + plans[plansStore.plan]?.groupId

@@ -53,7 +53,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       })`,
     }}>
     { Preset.author &&
-      <div class="flex lum-btn-p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1 border-none">
+      <div class="flex lum-btn-p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1">
         <div class={{
           'flex flex-1 items-center gap-2': true,
           'text-blue-300/80!': !Preset.user,
@@ -130,10 +130,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       { Preset.preset.gradientType && <div class="lum-bg-blue lum-btn-p-1 rounded-lum-2 text-xs my-1 ml-1">
         {Preset.preset.gradientType}
       </div> }
-      <div class="flex gap-1 my-1 ml-1">
+      <div class="flex gap-1 my-1 ml-2">
         { Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (
-            <span key={index} class="p-2 rounded-lum-3 lum-bg"
+            <span key={index} class="p-1.5 rounded-lum-3 lum-bg"
               style={{ '--bg-color': color.hex }} />
           ))
         }
@@ -197,7 +197,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         </Link>
       </SelectMenuRaw>
 
-      {publishRefs && <button class="lum-btn text-sm lum-bg-green/50 hover:lum-bg-green rounded-lum-2 lum-btn-p-1" onClick$={() => {
+      {publishRefs && <button class="lum-btn text-sm lum-grad-bg-green/50 hover:lum-bg-green rounded-lum-2 lum-btn-p-1" onClick$={() => {
         publishRefs.modalRef.value?.showModal();
         publishRefs.selectedPreset.value = JSON.stringify(Preset.preset);
       }}>
@@ -205,7 +205,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       </button>}
 
       {isAdmin && Preset.pending &&
-        <button class="lum-btn text-sm lum-bg-red/50 hover:lum-bg-red rounded-lum-2 lum-btn-p-1" onClick$={async () => {
+        <button class="lum-btn text-sm lum-grad-bg-red/50 hover:lum-bg-red rounded-lum-2 lum-btn-p-1" onClick$={async () => {
           if (Preset.id) await deletePreset(Preset.id);
           window.location.reload();
         }}>

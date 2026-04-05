@@ -41,7 +41,7 @@ export default component$(({ hidden }: {
     const notification = new Notification()
       .setTitle(importedPresetTitle)
       .setDescription(importedPresetDescription)
-      .setBgColor('lum-bg-green/50');
+      .setBgColor('lum-grad-bg-green/50');
     let json: rgbPreset | undefined;
     try {
       const preset = loadPreset(presetJSON);
@@ -51,7 +51,7 @@ export default component$(({ hidden }: {
     } catch (err) {
       notification.setTitle(invalidPresetTitle)
         .setDescription(`Error: ${err}\n${invalidPresetDescription}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setButtons([{
           text: 'Discord',
           href: discordLink,
@@ -95,7 +95,7 @@ export default component$(({ hidden }: {
             const notification = new Notification()
               .setTitle('Error loading saved presets')
               .setDescription(`Error: ${err}`)
-              .setBgColor('lum-bg-red/50')
+              .setBgColor('lum-grad-bg-red/50')
               .setPersist(true);
             notifications.push(notification);
           }
@@ -121,7 +121,7 @@ export default component$(({ hidden }: {
           const notification = new Notification()
             .setTitle(savedPresetTitle)
             .setDescription(session.value ? savedPresetDescription : savedPresetWarning)
-            .setBgColor(session.value ? 'lum-bg-green/50' : 'lum-bg-orange/50');
+            .setBgColor(session.value ? 'lum-grad-bg-green/50' : 'lum-grad-bg-orange/50');
           notifications.push(notification);
         }}>
           <Save size={20} /> {t('rgb.presets.save@@Save')}
@@ -172,11 +172,11 @@ export default component$(({ hidden }: {
           const notification = new Notification()
             .setTitle(presetCopiedTitle)
             .setDescription(presetCopiedDescription)
-            .setBgColor('lum-bg-green/50');
+            .setBgColor('lum-grad-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(preset)).catch((err) => {
             notification.setTitle(copyFailedTitle)
               .setDescription('Error: ' + err)
-              .setBgColor('lum-bg-red/50')
+              .setBgColor('lum-grad-bg-red/50')
               .setPersist(true);
           });
           notifications.push(notification);
@@ -202,7 +202,7 @@ export default component$(({ hidden }: {
           const notification = new Notification()
             .setTitle(presetUrlTitle)
             .setDescription(presetUrlDescription)
-            .setBgColor('lum-bg-green/50');
+            .setBgColor('lum-grad-bg-green/50');
           notifications.push(notification);
         }}>
           <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}

@@ -62,7 +62,7 @@ export default component$(() => {
     <dialog ref={modalRef}
       class={{
         'm-auto hidden open:flex text-lum-text': true,
-        'lum-card lum-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
+        'lum-card lum-grad-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
       }}>
@@ -136,20 +136,20 @@ export default component$(() => {
           new Notification()
             .setTitle('Preset Submitted!')
             .setDescription('Your preset has been submitted for review. It may take a few days for it to be reviewed and published.')
-            .setBgColor('lum-bg-green/50')
+            .setBgColor('lum-grad-bg-green/50')
             .setButtons([
               { text: 'View Preset', href: `/resources/rgb/presets/${result.result?.[0]?.id}` },
             ]) :
           new Notification()
             .setTitle('Preset Submission Failed')
             .setDescription('Your preset failed to submit. Is there already a preset with the same configuration?')
-            .setBgColor('lum-bg-yellow/50')
+            .setBgColor('lum-grad-bg-yellow/50')
             .setPersist(true);
 
         if (!result.success) {
           const errorMsg = typeof result.error === 'string' ? result.error : 'Unknown error';
           notification.setDescription(`Your preset failed to submit: ${errorMsg}`)
-            .setBgColor('lum-bg-red/50')
+            .setBgColor('lum-grad-bg-red/50')
             .setPersist(true);
 
           if (result.validationErrors) {

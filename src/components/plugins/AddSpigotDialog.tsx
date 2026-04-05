@@ -29,7 +29,7 @@ export default component$(() => {
             const notification = new Notification()
               .setTitle('Plugin already added')
               .setDescription(`The plugin ${existingPlugin.name} is already added.`)
-              .setBgColor('lum-bg-yellow/50');
+              .setBgColor('lum-grad-bg-yellow/50');
             notifications.push(notification);
             return;
           }
@@ -80,7 +80,7 @@ export default component$(() => {
             const notification = new Notification()
               .setTitle('No results found')
               .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
-              .setBgColor('lum-bg-yellow/50');
+              .setBgColor('lum-grad-bg-yellow/50');
             notifications.push(notification);
             return;
           }

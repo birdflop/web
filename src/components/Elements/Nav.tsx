@@ -30,7 +30,7 @@ export default component$(() => {
   const settingsStore = useContext(SettingsContext);
 
   return (
-    <Nav fixed colorClass="lum-bg-nav-bg border-b-lum-border/10 shadow-lg">
+    <Nav fixed colorClass="lum-grad-bg-nav-bg border-b-lum-border/10 shadow-lg">
       <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2">
         <LogoBirdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
         <span class="font-semibold -ml-1">Birdflop</span>
@@ -44,7 +44,7 @@ export default component$(() => {
       <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex">
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <SelectMenuRaw id="nav-hosting" q:slot="end" hover customDropdown panelClass="lum-bg-nav-bg"
+      <SelectMenuRaw id="nav-hosting" q:slot="end" hover customDropdown panelClass="lum-grad-bg-nav-bg"
         class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
@@ -62,7 +62,7 @@ export default component$(() => {
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw id="nav-resources" q:slot="end" hover customDropdown panelClass="lum-bg-nav-bg"
+      <SelectMenuRaw id="nav-resources" q:slot="end" hover customDropdown panelClass="lum-grad-bg-nav-bg"
         class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
@@ -89,7 +89,7 @@ export default component$(() => {
       <SelectMenuRaw align="right" q:slot="end" class={{
         'hidden': !loc.url.pathname.includes('resources'),
         'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-      }} id="lang-picker" customDropdown panelClass="lum-bg-nav-bg"
+      }} id="lang-picker" customDropdown panelClass="lum-grad-bg-nav-bg"
       values={config.supportedLocales.map(value => (
         {
           name: languages[value.lang as keyof typeof languages],
@@ -101,7 +101,7 @@ export default component$(() => {
         await setUserData({ settings: settingsStore });
         window.location.reload();
       }}>
-        <span class="absolute top-0 left-5 text-[10px] lum-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">
+        <span class="absolute top-0 left-5 text-[10px] lum-grad-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">
           {locale.lang.split('-')[0]}
         </span>
         <Globe size={20} q:slot="dropdown" />
@@ -121,7 +121,7 @@ export default component$(() => {
       {session.value && session.value.user &&
         <SelectMenuRaw align="right" q:slot="end" class={{
           'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-        }} id="profile" customDropdown panelClass="lum-bg-nav-bg">
+        }} id="profile" customDropdown panelClass="lum-grad-bg-nav-bg">
           <p q:slot="dropdown" class="flex items-center gap-2 text-lum-text">
             {session.value.user.image &&
               <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />

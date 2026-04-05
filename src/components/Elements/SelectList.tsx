@@ -24,7 +24,7 @@ export const SelectList = component$<SelectListProps>(({
   return (
     <div
       class={{
-        'max-h-64 relative touch-manipulation overflow-auto lum-card lum-bg-lum-input-bg p-1 gap-1': true,
+        'max-h-64 relative touch-manipulation overflow-auto lum-card lum-grad-bg-lum-input-bg p-1 gap-1': true,
         ...Class,
       }}
     >
@@ -50,7 +50,7 @@ export const SelectList = component$<SelectListProps>(({
           <button type="button"
             class={{
               'lum-btn rounded-lum-1': true,
-              'lum-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50': selected.value == value,
+              'lum-grad-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50': selected.value == value,
               [btnClass]: true,
             }}
             key={i}

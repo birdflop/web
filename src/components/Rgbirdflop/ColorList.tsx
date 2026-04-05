@@ -172,7 +172,7 @@ export default component$(({ hidden, id = 'text' }: {
               class={{
                 'text-gray-400 hover:text-gray-400': getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700': getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input w-full lum-btn-p-1 rounded-r-sm lum-bg': true,
+                'lum-input w-full lum-btn-p-1 rounded-r-sm lum-grad-bg': true,
               }}
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
@@ -202,7 +202,7 @@ export default component$(({ hidden, id = 'text' }: {
             />
           </div>
           <div class="flex flex-col justify-end">
-            <button class="lum-btn p-1.5 lum-bg-red hover:lum-bg-red rounded-l-sm" onClick$={() => {
+            <button class="lum-btn p-1.5 lum-grad-bg-red hover:lum-bg-red rounded-l-sm" onClick$={() => {
               const newColors = colors.slice(0);
               newColors.splice(i, 1);
               rgbStore[colorsKey] = newColors;

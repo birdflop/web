@@ -77,7 +77,7 @@ export default component$(({ userInfo, userPresets, errors }: {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -90,7 +90,7 @@ export default component$(({ userInfo, userPresets, errors }: {
         const notification = new Notification()
           .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });

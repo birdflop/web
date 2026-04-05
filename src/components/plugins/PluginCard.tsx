@@ -143,7 +143,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
       const notification = new Notification()
         .setTitle('Error fetching plugin data')
         .setDescription(`There was an error fetching data for ${plugin.name}: ${err}`)
-        .setBgColor('lum-bg-red/50');
+        .setBgColor('lum-grad-bg-red/50');
       notifications.push(notification);
     }
   });
@@ -154,7 +154,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
     : iconUrl;
 
   return <div key={plugin.name} class={{
-    'lum-card p-4 flex-1 relative lum-bg-lum-card-bg/90 overflow-clip': true,
+    'lum-card p-4 flex-1 relative lum-grad-bg-lum-card-bg/90 overflow-clip': true,
     'border-green': updateAvailable,
     ...cardClass,
   }}
@@ -225,7 +225,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
     {!noActions && <div class="flex items-center gap-1">
       {plugin.data?.file?.url &&
         <button class={{
-          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
+          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-grad-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
         }} onClick$={async () => {
           if (!plugin.data?.file?.url) return;
           isLoading.value = true;
@@ -256,7 +256,7 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
 
       {plugin.url &&
         <a class={{
-          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
+          'lum-btn rounded-lum-2 text-sm cursor-pointer lum-grad-bg-gray-900/0 hover:lum-bg-blue backdrop-saturate-200 backdrop-contrast-80': true,
         }} href={plugin.url} target="_blank" onClick$={() => {
           plugin.updateDate = Date.now();
         }}>
@@ -282,18 +282,18 @@ export default component$<PluginCardProps>(({ plugin, noActions, updateAvailable
       {plugin.type === 'spigot' && <>
         {plugin.data?.file?.externalUrl?.includes('modrinth') && (
           <a href={plugin.data?.file?.externalUrl}
-            target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
+            target="_blank" class="lum-btn rounded-lum-2 p-2 lum-grad-bg-green">
             <SiModrinth size={16} class="fill-current" />
           </a>
         )}
         <a href={`https://www.spigotmc.org/resources/${plugin.id}`}
-          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-yellow">
+          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-grad-bg-yellow">
           <SiSpigotmc size={16} class="fill-current" />
         </a>
       </>}
       {plugin.type === 'modrinth' && <>
         <a href={`https://modrinth.com/plugin/${plugin.id}`}
-          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-bg-green">
+          target="_blank" class="lum-btn rounded-lum-2 p-2 lum-grad-bg-green">
           <SiModrinth size={16} class="fill-current" />
         </a>
       </>}

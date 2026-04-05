@@ -16,7 +16,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'colors')
           : ['colors'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('colors'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('colors'),
       }}>
         <Palette />
         {t('rgb.colors.title@@Colors')}
@@ -26,7 +26,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'output')
           : ['output'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('output'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('output'),
       }}>
         <Clipboard />
         {t('rgb.output.title@@Output')}
@@ -36,7 +36,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'options')
           : ['options'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('options'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('options'),
       }}>
         <Settings />
         {t('rgb.options@@Options')}
@@ -46,7 +46,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'presets')
           : ['presets'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('presets'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('presets'),
       }}>
         <Save />
         {t('rgb.presets.title@@Presets')}
@@ -57,7 +57,7 @@ export default component$(() => {
             ? openItemsStore.items.filter(item => item !== 'formatoptions')
             : ['formatoptions'];
         }} class={{
-          'lum-bg-blue!': openItemsStore.items.includes('formatoptions'),
+          'lum-grad-bg-blue!': openItemsStore.items.includes('formatoptions'),
         }}>
           <Settings />
           {t('rgb.formatting.options@@Format Options')}
@@ -69,11 +69,11 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'decode')
           : ['decode'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('decode'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('decode'),
       }}>
         <Sparkles />
         {t('rgb.decode.title@@Decode')}
-        <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+        <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
           {t('rgb.decode.experimental@@experimental')}
         </span>
       </button>

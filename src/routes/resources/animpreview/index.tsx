@@ -44,7 +44,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading cookies')
         .setDescription(`${error}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     });
@@ -108,7 +108,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error parsing YAML')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -177,7 +177,7 @@ export default component$(() => {
         />
       </div>
 
-      <p class="lum-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
+      <p class="lum-grad-bg-lum-input-bg font-mono lum-btn-p-2 rounded-lum">
         {animprevStore.frames[animprevStore.frame]}
       </p>
     </section>

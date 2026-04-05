@@ -32,7 +32,7 @@ export const downloadSpigotPlugin = $(async (
       const notification = new Notification()
         .setTitle('Spigot Download Rate Limit Reached')
         .setDescription(`Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`)
-        .setBgColor('lum-bg-yellow/50')
+        .setBgColor('lum-grad-bg-yellow/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -170,7 +170,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error loading plugins')
           .setDescription(`There was an error loading your saved plugins: ${e}.`)
-          .setBgColor('lum-bg-red/50');
+          .setBgColor('lum-grad-bg-red/50');
         notifications.push(notification);
       }
     }
@@ -210,7 +210,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error saving plugins')
         .setDescription(`There was an error saving your plugins: ${e}.`)
-        .setBgColor('lum-bg-red/50');
+        .setBgColor('lum-grad-bg-red/50');
       notifications.push(notification);
     }
   });
@@ -230,7 +230,7 @@ export default component$(() => {
       <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
         <Blocks size={32} />
         {t('nav.resources.plugins.title@@Plugin Updates')}
-        <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+        <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
           {t('nav.experimental@@experimental')}
         </span>
       </h1>
@@ -243,7 +243,7 @@ export default component$(() => {
           Object.keys(pluginsStore.servers).map((server) => (
             <div key={server} class={{
               'lum-btn lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
-              'lum-bg-blue/50 hover:lum-bg-blue/80': pluginsStore.openServer === server,
+              'lum-grad-bg-blue/50 hover:lum-bg-blue/80': pluginsStore.openServer === server,
             }} onClick$={() => pluginsStore.openServer = pluginsStore.openServer === server ? undefined : server}>
               {server}
             </div>
@@ -311,11 +311,11 @@ export default component$(() => {
               const notification = new Notification()
                 .setTitle('Plugins copied to clipboard')
                 .setDescription(`The plugins for server "${pluginsStore.openServer}" have been copied to your clipboard as JSON.`)
-                .setBgColor('lum-bg-green/50');
+                .setBgColor('lum-grad-bg-green/50');
               navigator.clipboard.writeText(JSON.stringify(plugins)).catch((err) => {
                 notification.setTitle('Failed to copy plugins to clipboard')
                   .setDescription(err)
-                  .setBgColor('lum-bg-red/50')
+                  .setBgColor('lum-grad-bg-red/50')
                   .setPersist(true);
               });
               notifications.push(notification);
@@ -434,7 +434,7 @@ export default component$(() => {
       <dialog ref={modalRef}
         class={{
           'm-auto hidden open:flex text-lum-text': true,
-          'lum-card lum-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
+          'lum-card lum-grad-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
           'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
           'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
         }}>

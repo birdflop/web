@@ -38,7 +38,7 @@ export default component$(() => {
                 name="options.redirectTo"
                 value={loc.url.pathname + loc.url.search}
               />
-              <button class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue text-white">
+              <button class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue text-white">
                 <CircleUserRound size={20} /> {t('nav.profile.login@@Login')}
               </button>
             </Form>

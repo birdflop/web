@@ -152,7 +152,7 @@ const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCou
 }) => {
   const t = inlineTranslate();
 
-  return <div class="lum-card lum-bg-transparent sm:lum-bg-lum-card-bg p-1 grid sm:grid-cols-3 items-center gap-2 my-2 relative">
+  return <div class="lum-card lum-bg-transparent sm:lum-grad-bg-lum-card-bg p-1 grid sm:grid-cols-3 items-center gap-2 my-2 relative">
     <p class="text-xs text-lum-text-secondary lum-btn-p-1 text-center sm:text-left">
       {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
       {totalPages > 1 &&
@@ -187,7 +187,7 @@ const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCou
               key={pageNum}
               class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
                 pageNum === page
-                  ? 'lum-bg-lum-accent/20'
+                  ? 'lum-grad-bg-lum-accent/20'
                   : 'lum-bg-transparent'
               }`}
               onClick$={() => {
@@ -281,7 +281,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error fetching presets')
           .setDescription(`${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -311,7 +311,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -435,7 +435,7 @@ export default component$(() => {
             class={{
               'p-3 rounded-lum-1 lum-bg-transparent': true,
             }}
-            panelClass="lum-bg-lum-card-bg p-2 gap-2"
+            panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >
             <Settings q:slot="dropdown" size={16} />

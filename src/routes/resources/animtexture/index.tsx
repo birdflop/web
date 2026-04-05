@@ -134,7 +134,7 @@ export default component$(() => {
             <label for="fileInput">
               {t('animtexture.selectFrames@@Select GIF or image from your device')}
             </label>
-            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
+            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-grad-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
               const files = Array.from(el.files ?? []);
               for (const f of files) {
                 const e = await readFileAsDataURL(f);
@@ -369,7 +369,7 @@ export default component$(() => {
                         onInput$={(e, el) => {
                           animtextureFrames.value[i].delay = Number(el.value);
                         }}
-                        class="lum-input lum-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
+                        class="lum-input lum-grad-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
                     </>}
                   </div>
                 ))}

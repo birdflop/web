@@ -143,7 +143,7 @@ export default component$(({ errors, output }: {
       const notification = new Notification()
         .setTitle('Error loading cookies')
         .setDescription(`${error}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     });
@@ -315,7 +315,7 @@ export default component$(({ errors, output }: {
           {previewStyle.value != 'default' && (
             <button q:slot="extra-buttons"
               class={{
-                'p-1 rounded-lum-1 lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
+                'p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors': true,
                 'text-lum-primary': showAllGradients.value,
                 'text-lum-text-secondary': !showAllGradients.value,
               }}
@@ -391,7 +391,7 @@ export default component$(({ errors, output }: {
             <Accordion sectionName="decode" pcOnly>
               <Sparkles />
               {t('rgb.decode.title@@Decode')}
-              <span class="lum-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
+              <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
                 {t('nav.experimental@@experimental')}
               </span>
             </Accordion>

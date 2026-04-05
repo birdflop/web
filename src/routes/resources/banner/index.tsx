@@ -214,7 +214,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'options')
               : ['options'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('options'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('options'),
           }}>
             <Settings />
             {t('banner.options.title@@Options')}
@@ -224,7 +224,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'command')
               : ['command'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('command'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('command'),
           }}>
             <Terminal />
             {t('banner.command.title@@Command')}
@@ -234,7 +234,7 @@ export default component$(() => {
               ? openItemsStore.items.filter(item => item !== 'preview')
               : ['preview'];
           }} class={{
-            'lum-bg-blue!': openItemsStore.items.includes('preview'),
+            'lum-grad-bg-blue!': openItemsStore.items.includes('preview'),
           }}>
             <Eye />
             {t('banner.preview@@Preview')}
@@ -261,7 +261,7 @@ export default component$(() => {
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button key={colorName} class={{
-                    'lum-btn p-2 hover:brightness-80 lum-bg': true,
+                    'lum-btn p-2 hover:brightness-80 lum-grad-bg': true,
                   }} style={{
                     '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                   }} onClick$={() => {
@@ -276,7 +276,7 @@ export default component$(() => {
             </div>
             <h6 class="flex gap-3 items-center">
               {t('banner.options.patterns@@Patterns')}
-              <button class="lum-btn p-2 lum-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
+              <button class="lum-btn p-2 lum-grad-bg-green-700 hover:lum-bg-green-600" onClick$={() => {
                 const color = Object.keys(colors)[Math.floor(Math.random() * Object.keys(colors).length)] as keyof typeof colors;
                 const pattern = patterns[Math.floor(Math.random() * patterns.length)];
                 bannerStore.patterns = [
@@ -305,7 +305,7 @@ export default component$(() => {
                     }}>
                       <Copy size={20} />
                     </button>
-                    <button class="lum-btn p-1 lum-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
+                    <button class="lum-btn p-1 lum-grad-bg-red-700 hover:lum-bg-red-600 border-t-transparent rounded-t-none" disabled={bannerStore.patterns.length <= 0} onClick$={() => {
                       const newPatterns = bannerStore.patterns.slice(0);
                       newPatterns.splice(i, 1);
                       bannerStore.patterns = newPatterns;
@@ -313,7 +313,7 @@ export default component$(() => {
                       <Trash size={20} />
                     </button>
                   </div>
-                  <button class="lum-btn p-0 w-17.5 lum-bg-lum-card-bg"
+                  <button class="lum-btn p-0 w-17.5 lum-grad-bg-lum-card-bg"
                     onMouseUp$={() => {
                       if (openPopup.value == i) return openPopup.value = -1;
                       else openPopup.value = i;
@@ -346,7 +346,7 @@ export default component$(() => {
                         {Object.entries(colors).map(([colorName, color]) => {
                           return (
                             <button key={colorName} class={{
-                              'lum-btn p-1 hover:brightness-150 lum-bg': true,
+                              'lum-btn p-1 hover:brightness-150 lum-grad-bg': true,
                             }} style={{
                               '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                             }} onClick$={() => {
@@ -402,12 +402,12 @@ export default component$(() => {
                 const notification = new Notification()
                   .setTitle(bannerCommandCopiedTitle)
                   .setDescription(bannerCommandCopiedDescription)
-                  .setBgColor('lum-bg-green/50');
+                  .setBgColor('lum-grad-bg-green/50');
 
                 navigator.clipboard.writeText(el.value).catch((err) => {
                   notification.setTitle(copyFailedTitle)
                     .setDescription(err)
-                    .setBgColor('lum-bg-red/50')
+                    .setBgColor('lum-grad-bg-red/50')
                     .setPersist(true);
                 });
                 notifications.push(notification);

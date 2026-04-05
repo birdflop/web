@@ -39,6 +39,7 @@
 @media (prefers-color-scheme: light) {
   :root {
     --color-bg: var(--color-white);
+    --color-lum-gradient: var(--color-gray-200);
     --color-nav-bg: --alpha(var(--color-blue-300) / 70%);
     --color-green: var(--color-green-500);
     --color-red: var(--color-red-500);

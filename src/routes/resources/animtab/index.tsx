@@ -111,7 +111,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'outputformat')
           : ['outputformat'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('outputformat'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('outputformat'),
       }} q:slot="mobile-navbar">
         <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
@@ -172,7 +172,7 @@ export default component$(() => {
               <span key={gradientType} q:slot="input" class="flex items-center gap-2">
                 <span
                   class={{
-                    'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                    'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
                     'text-lum-text': isActive,
                     'text-gray-400': !isActive,
                   }}

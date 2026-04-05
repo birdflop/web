@@ -75,7 +75,7 @@ export default component$(() => {
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
         {nodes.map((node) => (
-          <a class="lum-card lum-bg-lum-card-bg/30 hover:lum-bg-lum-card-bg/50 duration-200! relative"
+          <a class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-lum-card-bg/50 duration-200! relative"
             href={`https://telemetry.birdflop.com/d/stats/public-statistics?var-node=${node.name.toLowerCase()}.birdflop.com:9100&orgId=1`}
             key={node.name}
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}

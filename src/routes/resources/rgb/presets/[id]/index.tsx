@@ -97,7 +97,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error parsing saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -177,7 +177,7 @@ export default component$(() => {
 
       <div class="flex gap-2">
         <SelectMenuRaw id={`use-${presetInfo.name}-${presetInfo.author}`} hover customDropdown
-          class={{ 'hidden sm:flex text-sm gap-1 lum-bg-orange hover:bg-orange': true }}>
+          class={{ 'hidden sm:flex text-sm gap-1 lum-grad-bg-orange hover:bg-orange': true }}>
           <div q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
           </div>
@@ -190,8 +190,8 @@ export default component$(() => {
         </SelectMenuRaw>
         <button class={{
           'lum-btn text-sm': true,
-          'lum-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
-          'lum-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+          'lum-grad-bg-green hover:bg-green': !privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
+          'lum-grad-bg-red hover:bg-red': !!privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)),
         }} disabled={isLoading.value} onClick$={async () => {
           isLoading.value = true;
 
@@ -223,16 +223,16 @@ export default component$(() => {
               <Save size={20}  /> {t('rgb.presets.save@@Save')}
             </>}
         </button>
-        <button class="lum-btn text-sm lum-bg-purple hover:bg-purple" disabled={isLoading.value} onClick$={() => {
+        <button class="lum-btn text-sm lum-grad-bg-purple hover:bg-purple" disabled={isLoading.value} onClick$={() => {
           const notification = new Notification()
             .setTitle(presetCopiedTitle)
             .setDescription(presetCopiedDescription)
-            .setBgColor('lum-bg-green/50');
+            .setBgColor('lum-grad-bg-green/50');
           navigator.clipboard.writeText(JSON.stringify(presetInfo.preset))
             .catch((err) => {
               notification.setTitle(copyFailedTitle)
                 .setDescription('Error: ' + err)
-                .setBgColor('lum-bg-red/50')
+                .setBgColor('lum-grad-bg-red/50')
                 .setPersist(true);
             });
           notifications.push(notification);
@@ -253,7 +253,7 @@ export default component$(() => {
         <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
           {t('rgb.presets.presetData@@Preset Data')}
         </h3>
-        <div class="text-white! font-bold lum-card lum-bg-gray-800">
+        <div class="text-white! font-bold lum-card lum-grad-bg-gray-800">
           {Object.keys(presetInfo.preset).map((key) => (
             <div key={key} class="flex gap-2 hover:bg-gray-900/50 lum-card flex-row p-0 lum-bg-transparent transition-colors">
               {isAdmin &&
@@ -275,7 +275,7 @@ export default component$(() => {
         </div>
 
         {(isAdmin || (isOwner && (presetInfo.pending || presetInfo.saves < 1))) &&
-          <div class="lum-card lum-bg-red/20">
+          <div class="lum-card lum-grad-bg-red/20">
             <h3 class="mb-2 flex items-center gap-2 font-bold text-2xl">
               Manage Preset
             </h3>

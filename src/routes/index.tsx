@@ -75,15 +75,15 @@ export default component$(() => {
         </div>
         <div class="flex flex-col gap-2 mt-8">
           <a href="#plans"
-            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600">
+            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-grad-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600">
             <Server size={32} /> Hosting
           </a>
           <Link href="/resources"
-            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800">
+            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-grad-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800">
             <Box size={32}  /> Resources
           </Link>
           <a href={donateLink}
-            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-1000">
+            class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 backdrop-blur-sm text-xl lum-grad-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-1000">
             <PiggyBank size={32} /> Donate Today
           </a>
         </div>
@@ -153,7 +153,7 @@ export default component$(() => {
           </div>;
         })}
       </div>
-      <div class="lum-card lum-bg-green/60 transition-all duration-200! max-w-xl mt-5"
+      <div class="lum-card lum-grad-bg-green/60 transition-all duration-200! max-w-xl mt-5"
         onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
         <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">

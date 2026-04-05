@@ -54,7 +54,7 @@ export default component$(() => {
             <span key={gradientType} class="flex items-center gap-2" q:slot="input">
               <span
                 class={{
-                  'lum-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                  'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
                   'text-lum-text': isActive,
                   'text-gray-400': !isActive,
                 }}
@@ -80,7 +80,7 @@ export default component$(() => {
           ? openItemsStore.items.filter(item => item !== 'textshadow')
           : ['textshadow'];
       }} class={{
-        'lum-bg-blue!': openItemsStore.items.includes('textshadow'),
+        'lum-grad-bg-blue!': openItemsStore.items.includes('textshadow'),
       }} q:slot="mobile-navbar">
         <Blend />
         {t('rgb.colors.shadow.title@@Text Shadow')}
