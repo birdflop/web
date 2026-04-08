@@ -4,6 +4,7 @@ export type ThemeName = keyof typeof themes | 'auto';
 const darkTheme = {
   '--lum-depth': '1',
   '--color-bg': 'var(--color-gray-900)',
+  '--color-lum-gradient': 'var(--color-gray-950)',
   '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
   '--color-green': 'var(--color-green-900)',
   '--color-red': 'var(--color-red-900)',
