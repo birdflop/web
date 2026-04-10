@@ -1,4 +1,5 @@
 import { component$, useVisibleTask$ } from '@builder.io/qwik';
+import { Loader2 } from 'lucide-icons-qwik';
 import { generateHead } from '~/root';
 
 export default component$(() => {
@@ -18,7 +19,7 @@ export default component$(() => {
       <p>
         Opening Links
       </p>
-      <div class={{ 'lum-loading ml-2 w-6 h-6': true }} />
+      <Loader2 class="animate-spin" />
     </section>
   );
 });

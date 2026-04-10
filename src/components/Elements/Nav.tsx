@@ -2,7 +2,7 @@ import { component$, useContext } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
 import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
 
-import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow, Settings } from 'lucide-icons-qwik';
+import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow, Settings, Loader2 } from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -38,7 +38,7 @@ export default component$(() => {
           'transition-all': true,
           '-ml-6 opacity-0': !loc.isNavigating,
         }}>
-          <div class="lum-loading w-4 h-4" />
+          <Loader2 size={16} class="animate-spin" />
         </div>
       </Link>
       <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex">

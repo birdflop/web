@@ -1,30 +1,30 @@
 import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Ellipsis, Filter, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
-import PluginCard, { PluginSource, PluginType, PluginWithData } from '~/components/plugins/PluginCard';
+import PluginCard from '~/components/plugins/PluginCard';
 import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
 import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
-import AddGitHubDialog from '~/components/plugins/AddGitHubDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
-import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
+import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
+import { PluginSource, PluginType } from '~/util/plugins/ServerPlugin';
 
 const debug = true;
 
 export const downloadSpigotPlugin = $(async (
-  plugin: PluginWithData,
+  plugin: PluginType,
   spigotRateLimit?: { downloadCount: number, resetTime: number },
   notifications?: Notification[],
 ) => {
-  const targetUrl = plugin.data?.file?.url;
+  const targetUrl = plugin.file?.url;
 
   // if the plugin has an external url, open that instead of spigot to avoid rate limits
-  if (plugin.data?.file?.externalUrl) {
-    window.open(plugin.data.file.externalUrl, '_blank');
+  if (plugin.file?.externalUrl) {
+    window.open(plugin.file.externalUrl, '_blank');
     return;
   }
 
@@ -58,13 +58,13 @@ export const downloadSpigotPlugin = $(async (
 
 type ResolvedPluginType = {
   type: PluginSource;
-  plugin?: PluginWithData;
-  plugins?: PluginWithData[];
+  plugin?: PluginType;
+  plugins?: PluginType[];
 };
 
 type ServerType = {
   software: string;
-  plugins: PluginWithData[];
+  plugins: PluginType[];
 };
 
 type PluginsStoreType = {
@@ -78,6 +78,13 @@ type PluginsStoreType = {
 const serverDefaults: ServerType = {
   software: 'paper',
   plugins: [],
+};
+
+const pluginsDefaults: PluginsStoreType = {
+  servers: {
+    'My Server': serverDefaults,
+  },
+  openServer: 'My Server',
 };
 
 type PluginSourceComponent = {
@@ -112,6 +119,7 @@ const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => <span 
   }
 </span>);
 
+/*
 const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiGithub class="fill-current" size={20} />
@@ -124,6 +132,7 @@ const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span cl
     </span>
   }
 </span>);
+*/
 
 const Misc = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
@@ -144,7 +153,7 @@ const pluginSources = [
   // { component: CurseForge, value: 'curseforge' },
   // { component: Modrinth, value: 'modrinth' },
   // { component: Hangar, value: 'hangar' },
-  { component: GitHub, value: 'github' },
+  // { component: GitHub, value: 'github' },
   { component: Misc, value: 'misc' },
 ];
 
@@ -169,9 +178,7 @@ export default component$(() => {
   }, { deep: true });
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
-  const pluginsStore = useStore<PluginsStoreType>({
-    servers: {},
-  }, { deep: true });
+  const pluginsStore = useStore<PluginsStoreType>(pluginsDefaults, { deep: true });
   useContextProvider(pluginsStoreContext, pluginsStore);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -213,7 +220,7 @@ export default component$(() => {
               iconUrl: plugin.iconUrl,
               url: plugin.url,
               name: plugin.name,
-              version: plugin.version,
+              currentVersion: plugin.currentVersion,
               type: plugin.type,
               updateDate: plugin.updateDate,
             })),
@@ -236,10 +243,10 @@ export default component$(() => {
   const outdatedPlugins = useComputed$(() => {
     if (!pluginsStore.openServer || !pluginsStore.servers[pluginsStore.openServer].plugins) return;
     return pluginsStore.servers[pluginsStore.openServer].plugins.filter((plugin) => {
-      const updateAvailable = plugin.data?.latestVersion?.releaseDate !== undefined
-        && plugin.version?.releaseDate !== undefined
-        && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
-      return updateAvailable && plugin.data?.file?.url;
+      const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
+        && plugin.currentVersion?.releaseDate !== undefined
+        && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+      return updateAvailable && plugin.file?.url;
     }).length;
   });
 
@@ -345,7 +352,7 @@ export default component$(() => {
             <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
               onInput$={(e, el) => {
                 try {
-                  const importedPlugins = JSON.parse(el.value) as PluginWithData[];
+                  const importedPlugins = JSON.parse(el.value) as PluginType[];
                   pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
                 } catch (err) {
                   console.error('Failed to parse imported plugins:', err);
@@ -367,17 +374,17 @@ export default component$(() => {
             </SelectMenuRaw>
           </div>
 
-          <div class="flex gap-1 items-center mx-auto">
-            {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 && <>
+          {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 &&
+            <div class="flex gap-1 items-center mx-auto">
               {debug && (
                 <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
                   plugins.forEach((plugin) => {
-                    if (plugin.data?.latestVersion) {
-                      plugin.version = {
+                    if (plugin.latestVersion) {
+                      plugin.currentVersion = {
                         id: 0,
                         name: '0.0.0',
-                        releaseDate: 1,
+                        releaseDate: new Date(0),
                       };
                     }
                   });
@@ -389,59 +396,59 @@ export default component$(() => {
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
                 plugins.forEach((plugin) => {
-                  if (plugin.data?.latestVersion) plugin.version = plugin.data.latestVersion;
-                  plugin.updateDate = Date.now();
+                  if (plugin.latestVersion) plugin.currentVersion = plugin.latestVersion;
+                  plugin.updateDate = new Date();
                 });
               }}>
                 <Check size={16} />
                 Mark all updated
               </button>
-            </>}
 
-            {!!outdatedPlugins.value &&
-              <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
+              {!!outdatedPlugins.value &&
+                <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1 group" onClick$={async () => {
 
-                isLoading.value = [...isLoading.value, 'downloadAll'];
+                  isLoading.value = [...isLoading.value, 'downloadAll'];
 
-                const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                for (const plugin of plugins) {
-                  const updateAvailable = plugin.data?.latestVersion?.releaseDate !== undefined
-                    && plugin.version?.releaseDate !== undefined
-                    && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
+                  const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+                  for (const plugin of plugins) {
+                    const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
+                      && plugin.currentVersion?.releaseDate !== undefined
+                      && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
 
-                  if (!updateAvailable || !plugin.data?.file?.url) continue;
+                    if (!updateAvailable || !plugin.file?.url) continue;
 
-                  if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
-                  else window.open(plugin.data.file.url, '_blank');
+                    if (plugin.type === 'spigot') await downloadSpigotPlugin(plugin, spigotRateLimit);
+                    else window.open(plugin.file.url, '_blank');
 
-                  plugin.version = plugin.data?.latestVersion;
-                }
+                    plugin.currentVersion = plugin.latestVersion;
+                  }
 
-                isLoading.value = isLoading.value.filter((item) => item !== 'downloadAll');
-              }} disabled={isLoading.value.includes('downloadAll')}>
-                <Download size={16} />
-                Download all out of date ({outdatedPlugins.value})
-                {outdatedPlugins.value > 10 &&
-                  <span class="lum-card p-2 absolute bottom-full left-0 w-full text-xs mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    Spigot limits downloads to 10 per minute, so some of these may not open immediately.
-                  </span>
-                }
-                {isLoading.value.includes('downloadAll') && <div class="lum-loading ml-2 w-4 h-4" />}
-              </button>
-            }
-          </div>
+                  isLoading.value = isLoading.value.filter((item) => item !== 'downloadAll');
+                }} disabled={isLoading.value.includes('downloadAll')}>
+                  <Download size={16} />
+                  Download all out of date ({outdatedPlugins.value})
+                  {outdatedPlugins.value > 10 &&
+                    <span class="lum-card p-2 absolute bottom-full left-0 w-full text-xs mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Spigot limits downloads to 10 per minute, so some of these may not open immediately.
+                    </span>
+                  }
+                  {isLoading.value.includes('downloadAll') && <Loader2 size={16} class="animate-spin" />}
+                </button>
+              }
+            </div>
+          }
         </div>
         <div class="grid gap-2 my-4">
           {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin) => {
-            const updateAvailable = plugin.data?.latestVersion?.releaseDate !== undefined
-              && plugin.version?.releaseDate !== undefined
-              && plugin.data.latestVersion.releaseDate > plugin.version.releaseDate;
+            const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
+              && plugin.currentVersion?.releaseDate !== undefined
+              && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
 
             if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
 
-            return <PluginCard key={plugin.name}
-              plugin={plugin}
+            return <PluginCard key={plugin.id}
+              pluginJSON={plugin}
               updateAvailable={updateAvailable}
               spigotRateLimit={spigotRateLimit}>
               <button class="lum-btn rounded-lum-2 p-2 lum-bg-transparent hover:lum-bg-red" q:slot="extra-actions" onClick$={() => {
@@ -460,7 +467,7 @@ export default component$(() => {
 
       <dialog ref={modalRef}
         class={{
-          'm-auto hidden open:flex text-lum-text': true,
+          'm-auto hidden open:flex text-lum-text overflow-visible': true,
           'lum-card lum-grad-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
           'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
           'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
@@ -475,6 +482,7 @@ export default component$(() => {
               }}>
                 <X size={20} />
               </button>
+              {isLoading.value.includes('add-plugin') && <Loader2 size={16} class="animate-spin" />}
             </h3>
           </div>
 
@@ -485,22 +493,20 @@ export default component$(() => {
             Plugin source
           </SelectMenu>
 
-          <hr/>
-
           {resolvedPlugin.type === 'spigot' && <AddSpigotDialog />}
           {resolvedPlugin.type === 'modrinth' && <AddModrinthDialog />}
-          {resolvedPlugin.type === 'github' && <AddGitHubDialog />}
+          {/*resolvedPlugin.type === 'github' && <AddGitHubDialog />*/}
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>
             <hr/>
             <PluginCard
-              plugin={resolvedPlugin.plugin}
+              pluginJSON={resolvedPlugin.plugin}
               spigotRateLimit={spigotRateLimit}
             />
           </>}
 
-          {(resolvedPlugin.type === 'misc' || resolvedPlugin.plugin?.version) &&
+          {(resolvedPlugin.type === 'misc' || resolvedPlugin.plugin?.currentVersion) &&
             <div class={{
               'flex transition-all duration-300 gap-1 justify-end border-t border-lum-border/10 mt-4 pt-4': true,
               'animate-in fade-in slide-in-from-top-8 anim-duration-300': true,
@@ -515,11 +521,11 @@ export default component$(() => {
                     id: resolvedPlugin.plugin.id,
                     name: resolvedPlugin.plugin.name,
                     url: resolvedPlugin.plugin.url,
-                    iconUrl: resolvedPlugin.plugin.data?.iconUrl,
-                    version: resolvedPlugin.plugin.version ? {
-                      id: resolvedPlugin.plugin.version.id,
-                      name: resolvedPlugin.plugin.version.name,
-                      releaseDate: resolvedPlugin.plugin.version.releaseDate,
+                    iconUrl: resolvedPlugin.plugin.iconUrl,
+                    currentVersion: resolvedPlugin.plugin.currentVersion ? {
+                      id: resolvedPlugin.plugin.currentVersion.id,
+                      name: resolvedPlugin.plugin.currentVersion.name,
+                      releaseDate: resolvedPlugin.plugin.currentVersion.releaseDate,
                     } : undefined,
                   };
 

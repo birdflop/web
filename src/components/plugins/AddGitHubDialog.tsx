@@ -79,21 +79,21 @@ export default component$(() => {
         resolvedPlugin.plugins.map((plugin) => ({
           name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
             <span class="flex items-center gap-2">
-              {plugin.data?.iconUrl &&
-                <img src={plugin.data.iconUrl} alt={`${plugin.name} icon`}
+              {plugin.iconUrl &&
+                <img src={plugin.iconUrl} alt={`${plugin.name} icon`}
                   width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
               {plugin.id}
             </span>
             <span class="text-xs text-lum-text-secondary">
-              {plugin.data?.tag}
+              {plugin.description}
             </span>
           </span>,
-          value: plugin.id!,
+          value: plugin.id,
         }))
       } onChange$={(e, el) => {
         const pluginId = el.value;
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
-        if (!selectedPlugin || !selectedPlugin.data) return;
+        if (!selectedPlugin) return;
       }}/>
     </>}
 

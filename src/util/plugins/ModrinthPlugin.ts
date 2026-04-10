@@ -1,0 +1,93 @@
+import { ServerPlugin, PluginVersion, PluginType } from './ServerPlugin';
+
+export class ModrinthPlugin implements ServerPlugin {
+  id: number | string;
+  type = 'modrinth' as const;
+  name?: string;
+  description?: string;
+  url?: string;
+  iconUrl?: string;
+  updateDate?: Date;
+  versions?: PluginVersion[];
+  currentVersion?: PluginVersion;
+  latestVersion?: PluginVersion;
+  file?: {
+    name?: string;
+    type: string;
+    size: number;
+    sizeUnit: string;
+    url: string;
+    externalUrl?: string;
+  };
+
+  constructor(plugin: PluginType) {
+    this.id = plugin.id;
+    Object.assign(this, plugin);
+  }
+
+  async get() {
+    await this.fetch();
+    return this;
+  }
+
+  async fetch() {
+    await this.fetchData();
+    await this.fetchVersions();
+    return this;
+  }
+
+  async fetchData() {
+    const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
+    const data = await res.json() as any;
+
+    Object.assign(this, {
+      name: data.title,
+      description: data.description,
+      url: data.url,
+      iconUrl: data.icon_url,
+      updateDate: new Date(data.updated),
+    });
+
+    return this;
+  }
+
+  async fetchVersions() {
+    const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}/version?loaders=["paper"]`);
+    const versions = await res.json() as any;
+
+    this.versions = versions.map((version: any) => ({
+      id: version.id,
+      name: version.name,
+      releaseDate: new Date(version.date_published),
+    }));
+
+    const latestVersion = versions[0];
+    this.latestVersion = latestVersion;
+
+    this.file = latestVersion.files?.length ? {
+      name: latestVersion.files[0].filename,
+      type: latestVersion.files[0].file_type,
+      size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
+      sizeUnit: 'MB',
+      url: latestVersion.files[0].url,
+    } : undefined;
+
+    return this;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      type: this.type,
+      name: this.name,
+      description: this.description,
+      url: this.url,
+      iconUrl: this.iconUrl,
+      updateDate: this.updateDate,
+      versions: this.versions,
+      currentVersion: this.currentVersion,
+      latestVersion: this.latestVersion,
+      file: this.file,
+    };
+  }
+}

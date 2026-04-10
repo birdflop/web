@@ -1,8 +1,8 @@
 import { component$, useContext } from '@builder.io/qwik';
-import { PluginWithData } from './PluginCard';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
+import { PluginType } from '~/util/plugins/ServerPlugin';
 
 export default component$(() => {
   const pluginsStore = useContext(pluginsStoreContext);
@@ -56,7 +56,7 @@ export default component$(() => {
           }
           const versionsData = await versionsRes.json() as any;
 
-          const newPlugin: PluginWithData = {
+          const newPlugin: PluginType = {
             id: data.id,
             name: data.name,
             type: 'spigot',
@@ -137,21 +137,21 @@ export default component$(() => {
         resolvedPlugin.plugins.map((plugin) => ({
           name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
             <span class="flex items-center gap-2">
-              {plugin.data?.iconUrl &&
-                <img src={'https://spigotmc.org/' + plugin.data.iconUrl} alt={`${plugin.name} icon`}
+              {plugin.iconUrl &&
+                <img src={'https://spigotmc.org/' + plugin.iconUrl} alt={`${plugin.name} icon`}
                   width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
               {plugin.name}
             </span>
             <span class="text-xs text-lum-text-secondary">
-              {plugin.data?.tag}
+              {plugin.description}
             </span>
           </span>,
-          value: plugin.id!,
+          value: plugin.id,
         }))
       } onChange$={async (e, el) => {
         const pluginId = Number(el.value);
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
-        if (!selectedPlugin || !selectedPlugin.data) return;
+        if (!selectedPlugin) return;
 
         const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
         if (!versionsRes.ok) {
@@ -163,20 +163,20 @@ export default component$(() => {
           return;
         }
         const versionsData = await versionsRes.json() as any;
-        selectedPlugin.data.versions = versionsData;
+        selectedPlugin.versions = versionsData;
 
         resolvedPlugin.plugin = selectedPlugin;
         resolvedPlugin.plugins = undefined;
       }}/>
     </>}
 
-    {resolvedPlugin.plugin?.data?.versions && <>
+    {resolvedPlugin.plugin?.versions && <>
       <label>
         Which version are you currently using?
       </label>
 
       <SelectList id="add-plugin-options" values={
-        resolvedPlugin.plugin.data?.versions?.map((version) => ({
+        resolvedPlugin.plugin.versions?.map((version: any) => ({
           name: <>
             <span class="flex-1 font-mono text-left">
               {version.name}
@@ -190,10 +190,10 @@ export default component$(() => {
       } onChange$={(e, el) => {
         const versionId = Number(el.value);
         if (!resolvedPlugin.plugin) return;
-        const selectedVersion = resolvedPlugin.plugin.data?.versions
-          ?.find((version) => version.id == versionId);
+        const selectedVersion = resolvedPlugin.plugin.versions
+          ?.find((version: any) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin.version = selectedVersion;
+          resolvedPlugin.plugin.currentVersion = selectedVersion;
         }
       }}/>
     </>}

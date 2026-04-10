@@ -1,8 +1,10 @@
-import { component$, useComputed$, useContext } from '@builder.io/qwik';
-import { PluginWithData } from './PluginCard';
+import { component$, useComputed$, useContext, useSignal } from '@builder.io/qwik';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
+import { SiModrinth } from 'simple-icons-qwik';
+import { Loader2 } from 'lucide-icons-qwik';
+import { PluginType } from '~/util/plugins/ServerPlugin';
 
 function getLoaders(software: string) {
   let loaders;
@@ -33,9 +35,17 @@ export default component$(() => {
   const loaders = useComputed$(() => pluginsStore.servers[pluginsStore.openServer!]
     ? getLoaders(pluginsStore.servers[pluginsStore.openServer!].software)
     : []);
+  const isLoading = useSignal<boolean>(false);
 
   return <>
-    <div class="flex flex-col gap-1 mb-2">
+    <div class="flex flex-col gap-1 mt-6">
+      <div class="flex flex-col border-b border-lum-border/10 pb-4 mb-4">
+        <h4 class="flex items-center gap-2 font-bold text-xl fill-current">
+          <SiModrinth size={28} />
+          Modrinth
+          {isLoading.value && <Loader2 size={16} class="animate-spin" />}
+        </h4>
+      </div>
 
       <label for="plugin-link">
         Search or paste the link of the plugin you want to add.
@@ -59,57 +69,52 @@ export default component$(() => {
             return;
           }
 
-          const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
-          if (!res.ok) {
+          try {
+            isLoading.value = true;
+            const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
+            const data = await res.json() as any;
+
+            const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
+            const versionsData = await versionsRes.json() as any;
+            const latestVersion = versionsData[0];
+
+            const newPlugin: PluginType = {
+              id: data.slug,
+              name: data.title,
+              type: 'modrinth',
+              data: {
+                name: data.title,
+                tag: data.description,
+                iconUrl: data.icon_url,
+                releaseDate: Number(new Date(data.published)) / 1000,
+                updateDate: Number(new Date(data.updated)) / 1000,
+                file: latestVersion.files?.length ? {
+                  name: latestVersion.files[0].filename,
+                  type: latestVersion.files[0].file_type,
+                  size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
+                  sizeUnit: 'MB',
+                  url: latestVersion.files[0].url,
+                } : undefined,
+                testedVersions: data.game_versions,
+                sourceCodeLink: data.source_url,
+                versions: versionsData.map((version: any) => ({
+                  id: version.id,
+                  name: version.name,
+                  releaseDate: Number(new Date(version.date_published)) / 1000,
+                })),
+              },
+            };
+
+            resolvedPlugin.plugin = newPlugin;
+          } catch (error) {
+            console.error('Error fetching plugin data:', error);
             const notification = new Notification()
               .setTitle('Error fetching plugin data')
-              .setDescription(`Error: ${res.status} ${res.statusText}`)
+              .setDescription(`An error occurred while fetching plugin data. ${error}`)
               .setBgColor('lum-grad-bg-red/50');
             notifications.push(notification);
-            return;
           }
-          const data = await res.json() as any;
-
-          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
-          if (!versionsRes.ok) {
-            const notification = new Notification()
-              .setTitle('Error fetching plugin versions')
-              .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
-              .setBgColor('lum-grad-bg-red/50');
-            notifications.push(notification);
-            return;
-          }
-          const versionsData = await versionsRes.json() as any;
-          const latestVersion = versionsData[0];
-
-          const newPlugin: PluginWithData = {
-            id: data.slug,
-            name: data.title,
-            type: 'modrinth',
-            data: {
-              name: data.title,
-              tag: data.description,
-              iconUrl: data.icon_url,
-              releaseDate: Number(new Date(data.published)) / 1000,
-              updateDate: Number(new Date(data.updated)) / 1000,
-              file: latestVersion.files?.length ? {
-                name: latestVersion.files[0].filename,
-                type: latestVersion.files[0].file_type,
-                size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
-                sizeUnit: 'MB',
-                url: latestVersion.files[0].url,
-              } : undefined,
-              testedVersions: data.game_versions,
-              sourceCodeLink: data.source_url,
-              versions: versionsData.map((version: any) => ({
-                id: version.id,
-                name: version.name,
-                releaseDate: Number(new Date(version.date_published)) / 1000,
-              })),
-            },
-          };
-
-          resolvedPlugin.plugin = newPlugin;
+          isLoading.value = false;
         }}
         onChange$={async (e, el) => {
           const value = el.value;
@@ -124,106 +129,111 @@ export default component$(() => {
             facets: JSON.stringify([loaders.value.map((loader) => `categories:${loader}`)]),
           });
           console.log([loaders.value.map((loader) => `categories:${loader}`)]);
+          try {
+            isLoading.value = true;
+            const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
+            const searchData: {
+              hits: any[];
+            } = await searchRes.json();
 
-          const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
-          if (!searchRes.ok) {
+            if (searchData.hits.length === 0) {
+              const notification = new Notification()
+                .setTitle('No results found')
+                .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
+                .setBgColor('lum-grad-bg-yellow/50');
+              notifications.push(notification);
+              isLoading.value = false;
+              return;
+            }
+
+            resolvedPlugin.plugins = searchData.hits.map((data: any) => ({
+              id: data.slug,
+              name: data.title,
+              type: 'modrinth',
+              data: {
+                name: data.title,
+                tag: data.description,
+                iconUrl: data.icon_url,
+                releaseDate: Number(new Date(data.published)) / 1000,
+                updateDate: Number(new Date(data.updated)) / 1000,
+                testedVersions: data.game_versions,
+                sourceCodeLink: data.source_url,
+              },
+            }));
+          } catch (error) {
+            console.error('Error searching for plugins:', error);
             const notification = new Notification()
-              .setTitle('Error searching for plugin')
-              .setDescription(`Error: ${searchRes.status} ${searchRes.statusText}`)
+              .setTitle('Error searching for plugins')
+              .setDescription(`An error occurred while searching for plugins. ${error}`)
               .setBgColor('lum-grad-bg-red/50');
             notifications.push(notification);
-            return;
           }
-          const searchData: {
-            hits: any[];
-          } = await searchRes.json();
-
-          if (searchData.hits.length === 0) {
-            const notification = new Notification()
-              .setTitle('No results found')
-              .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
-              .setBgColor('lum-grad-bg-yellow/50');
-            notifications.push(notification);
-            return;
-          }
-
-          resolvedPlugin.plugins = searchData.hits.map((data: any) => ({
-            id: data.slug,
-            name: data.title,
-            type: 'modrinth',
-            data: {
-              name: data.title,
-              tag: data.description,
-              iconUrl: data.icon_url,
-              releaseDate: Number(new Date(data.published)) / 1000,
-              updateDate: Number(new Date(data.updated)) / 1000,
-              testedVersions: data.game_versions,
-              sourceCodeLink: data.source_url,
-            },
-          }));
+          isLoading.value = false;
         }}
       />
     </div>
 
     {resolvedPlugin.plugins && <>
-      <label>
+      <label for="add-plugin-options">
         Search results:
       </label>
       <SelectList id="add-plugin-options" values={
         resolvedPlugin.plugins.map((plugin) => ({
           name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
             <span class="flex items-center gap-2">
-              {plugin.data?.iconUrl &&
-                <img src={plugin.data.iconUrl} alt={`${plugin.name} icon`}
+              {plugin.iconUrl &&
+                <img src={plugin.iconUrl} alt={`${plugin.name} icon`}
                   width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
               {plugin.name}
             </span>
             <span class="text-xs text-lum-text-secondary">
-              {plugin.data?.tag}
+              {plugin.description}
             </span>
           </span>,
-          value: plugin.id!,
+          value: plugin.id,
         }))
       } onChange$={async (e, el) => {
         const pluginId = el.value;
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
-        if (!selectedPlugin || !selectedPlugin.data) return;
+        if (!selectedPlugin) return;
 
-        console.log(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
-        const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
-        if (!versionsRes.ok) {
+        isLoading.value = true;
+        try {
+          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
+          const versionsData = await versionsRes.json() as any;
+          selectedPlugin.versions = versionsData.map((version: any) => ({
+            id: version.id,
+            name: version.name,
+            releaseDate: Number(new Date(version.date_published)) / 1000,
+          }));
+
+          resolvedPlugin.plugin = selectedPlugin;
+          resolvedPlugin.plugins = undefined;
+        } catch (error) {
+          console.error('Error fetching plugin versions:', error);
           const notification = new Notification()
             .setTitle('Error fetching plugin versions')
-            .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+            .setDescription(`An error occurred while fetching plugin versions. ${error}`)
             .setBgColor('lum-grad-bg-red/50');
           notifications.push(notification);
-          return;
         }
-        const versionsData = await versionsRes.json() as any;
-        selectedPlugin.data.versions = versionsData.map((version: any) => ({
-          id: version.id,
-          name: version.name,
-          releaseDate: Number(new Date(version.date_published)) / 1000,
-        }));
-
-        resolvedPlugin.plugin = selectedPlugin;
-        resolvedPlugin.plugins = undefined;
+        isLoading.value = false;
       }}/>
     </>}
 
-    {resolvedPlugin.plugin?.data?.versions && <>
-      <label>
+    {resolvedPlugin.plugin?.versions && <>
+      <label for="add-plugin-options">
         Which version are you currently using?
       </label>
 
       <SelectList id="add-plugin-options" values={
-        resolvedPlugin.plugin.data?.versions?.map((version) => ({
+        resolvedPlugin.plugin.versions?.map((version) => ({
           name: <>
             <span class="flex-1 font-mono text-left">
               {version.name}
             </span>
             <span class="text-xs text-lum-text-secondary ml-1 text-right">
-              {new Date(version.releaseDate * 1000).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+              {version.releaseDate.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
             </span>
           </>,
           value: version.id,
@@ -231,10 +241,10 @@ export default component$(() => {
       } onChange$={(e, el) => {
         const versionId = el.value;
         if (!resolvedPlugin.plugin) return;
-        const selectedVersion = resolvedPlugin.plugin.data?.versions
+        const selectedVersion = resolvedPlugin.plugin.versions
           ?.find((version) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin.version = selectedVersion;
+          resolvedPlugin.plugin.currentVersion = selectedVersion;
         }
       }}/>
     </>}

@@ -151,7 +151,7 @@ export default component$(() => {
     <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
       {sixTestimonials.map(({ name, image, title, description, link }) => {
         return <a href={link} key={name}
-          class="lum-card transition-all duration-200!"
+          class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -169,7 +169,7 @@ export default component$(() => {
         </a>;
       })}
     </div>
-    <div class="lum-card transition-all duration-200! justify-center px-6 mt-2"
+    <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200! justify-center px-6 mt-2"
       onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
       onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
       <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">

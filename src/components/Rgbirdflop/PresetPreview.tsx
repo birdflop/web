@@ -1,7 +1,7 @@
 import { component$, isBrowser, Signal, useContext, useSignal } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import { Github, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
+import { Github, Loader2, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { deletePreset, savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
 import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
@@ -173,7 +173,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         isLoading.value = false;
       }}>
         {!isLoading.value && Preset.saves}
-        {isLoading.value && <div class="lum-loading w-3 h-3" />}
+        {isLoading.value && <Loader2 size={12} class="animate-spin" />}
         {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(Preset.preset))
           || savedPresets.value.find((savedPreset) => savedPreset.id === Preset.id)
           ? <span class="text-red-300 flex gap-3">

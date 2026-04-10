@@ -2,7 +2,7 @@ import { component$, isBrowser, useContext, useContextProvider, useSignal, useSt
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import { Check, ChevronLeft, Copy, Github, Minus, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
+import { Check, ChevronLeft, Copy, Github, Loader2, Minus, MousePointer2, Palette, Rainbow, Save, Trash } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
@@ -214,7 +214,7 @@ export default component$(() => {
           isLoading.value = false;
         }}>
           {!isLoading.value && presetInfo.saves}
-          {isLoading.value && <div class="lum-loading w-3 h-3" />}
+          {isLoading.value && <Loader2 size={12} class="animate-spin" />}
           {privatePresets.value.find((savedPreset) => JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset))
             ? <>
               <Trash size={20} /> {t('rgb.presets.remove@@Remove')}

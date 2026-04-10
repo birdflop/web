@@ -94,7 +94,7 @@ export default component$(() => {
       <h3 class="font-extrabold text-5xl my-6">
         Our Nonprofit Mission
       </h3>
-      <p class="max-w-3xl">
+      <p class="max-w-3xl text-lum-text-secondary">
         At the heart of our mission, we are dedicated to igniting and nurturing a passion for technology and computer science. We uniquely approach our mission by offering affordable and accessible hosting resources, not just as a service, but as a catalyst for technological curiosity.&nbsp;
         {missionExpanded.value && <>
           Our belief is rooted in the idea that the hands-on experience of creating and managing a game server can be a gateway to a lifelong interest in technology and computer science. By ensuring this journey is engaging and frustration-free, we significantly enhance the likelihood of sparking a deeper interest in technological fields.
@@ -120,7 +120,7 @@ export default component$(() => {
         {Object.keys(plans).map((planName) => {
           const plan = plans[planName as keyof typeof plans];
           const ramOptions = Object.keys(plan.ramAndId);
-          return <div class="lum-card" key={planName}>
+          return <div class="lum-card lum-grad-bg-lum-card-bg" key={planName}>
             <p class="text-lum-text-secondary">
               Last quarter, clients paid <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after reimbursements.
             </p>
@@ -174,7 +174,7 @@ export default component$(() => {
         </h3>
       </Anchor>
       <div class="grid md:grid-cols-2 gap-2 max-w-5xl">
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -184,7 +184,7 @@ export default component$(() => {
             We don't make compromises. Choose from our blazing fast Ryzen 9 processors and NVMe SSDs. All plans include a satisfaction guarantee.
           </p>
         </div>
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -194,7 +194,7 @@ export default component$(() => {
             You'll have full access to your server. You can set your startup flags, change your java version, upload custom jars, and create reverse proxies.
           </p>
         </div>
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -204,7 +204,7 @@ export default component$(() => {
             We don't oversell, and we're transparent about that. View our public <Link href="/node-stats" class="text-blue-400 hover:underline">detailed server statistics</Link> or financial breakdown.
           </p>
         </div>
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -214,7 +214,7 @@ export default component$(() => {
             We're confident that we have the best plans available. If you locate a similar plan at a lower price, ask us about our price matching.
           </p>
         </div>
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -224,7 +224,7 @@ export default component$(() => {
             You can contact support at any time through our <a href={discordLink} data-umami-event="discord-link" data-umami-source="support" class="text-blue-400 hover:underline">Discord server</a>.
           </p>
         </div>
-        <div class="lum-card transition-all duration-200!"
+        <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
           <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
@@ -240,11 +240,14 @@ export default component$(() => {
       <h3 class="font-extrabold text-5xl my-6">
         How do reimbursements work?
       </h3>
-      <p class="max-w-4xl">
+      <p class="max-w-4xl text-lum-text-secondary">
         As a nonprofit, Birdflop periodically reimburses clients based on excess profit. At the end of each reimbursement period, active clients receive a reimbursement for excess profit from their plan. These reimbursements are dependent on usage, maximally lowering prices at high service utilization. Last quarter, US clients received a 33.7% reimbursement and EU clients received a 26% reimbursement, effectively lowering prices to $1.99/GB RAM and $1.48/GB RAM for the US and EU, respectively. Not good enough? Find a competitor with similar specifications and inquire about our price matching.&nbsp;
       </p>
-      <div class="mt-4">
-        <h4>
+      <div class="mt-12 lum-card lum-grad-bg-lum-card-bg"
+        style={{
+          '--lum-border-radius': '1.5rem',
+        }}>
+        <h4 class="font-bold text-2xl mb-2">
           Historical Reimbursement Rates for US and EU Clients
         </h4>
         <HistoricLinePlot />
@@ -254,18 +257,21 @@ export default component$(() => {
       <h3 class="font-extrabold text-5xl my-6">
         Where do my payments go?
       </h3>
-      <div class="grid md:grid-cols-2 gap-10 max-w-5xl">
-        <div>
+      <div class="grid md:grid-cols-2 gap-10 max-w-5xl mt-12">
+        <div class="lum-card lum-grad-bg-lum-card-bg"
+          style={{
+            '--lum-border-radius': '1.5rem',
+          }}>
           <ExpensesChart />
           <p class="text-lum-text-secondary text-center py-2 text-sm">
             Plot shows revenue (inner ring) and expenditures (outer ring) for Q1 2025. Some numbers may be approximations, and categories may be simplified. US Hosting Expenses includes depreciation.
           </p>
         </div>
         <div class="flex flex-col gap-4">
-          <p>
+          <p class="text-lum-text-secondary">
             Birdflop is a 501(c)(3) nonprofit organization. As such, all profit generated is reinvested into improving our services and accomplishing our mission. Your service fees are used for covering our server costs, including building new servers, colocation fees, server rental fees, and software licensing fees. Our quarterly financial report is proudly displayed on the left.
           </p>
-          <p>
+          <p class="text-lum-text-secondary">
             Your payments get you the best possible rate while contributing to the development of our <Link href="/resources" class="text-blue-400 hover:underline">free public resources</Link>. We reimburse clients based on excess profit, and we never overload our servers. View our server statistics on the <Link href="/node-stats" class="text-blue-400 hover:underline">Node Stats</Link> page.
           </p>
         </div>

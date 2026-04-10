@@ -61,7 +61,7 @@ export default component$(() => {
 
     <dialog ref={modalRef}
       class={{
-        'm-auto hidden open:flex text-lum-text': true,
+        'm-auto hidden open:flex text-lum-text overflow-visible': true,
         'lum-card lum-grad-bg-lum-card-bg/50 drop-shadow-2xl backdrop-blur-xl min-w-1/4': true,
         'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
         'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,

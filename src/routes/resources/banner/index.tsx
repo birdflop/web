@@ -421,7 +421,7 @@ export default component$(() => {
             {t('banner.preview@@Preview')}
           </div>
           <canvas ref={preview} id="preview" class={{
-            'lum-card p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
+            'lum-card lum-grad-bg-lum-card-bg p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
             'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
             'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
           }} />
