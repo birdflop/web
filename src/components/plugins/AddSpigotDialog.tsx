@@ -1,16 +1,26 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext, useSignal } from '@builder.io/qwik';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
-import { PluginType } from '~/util/plugins/ServerPlugin';
+import { SiSpigotmc } from 'simple-icons-qwik';
+import { Loader2 } from 'lucide-icons-qwik';
+import { SpigotPlugin } from '~/util/plugins/SpigotPlugin';
 
 export default component$(() => {
   const pluginsStore = useContext(pluginsStoreContext);
   const resolvedPlugin = useContext(resolvedPluginContext);
   const notifications = useContext(NotificationContext);
+  const isLoading = useSignal<boolean>(false);
 
   return <>
-    <div class="flex flex-col gap-1 mb-2">
+    <div class="flex flex-col gap-1 mt-6">
+      <div class="flex flex-col border-b border-lum-border/10 pb-4 mb-4">
+        <h4 class="flex items-center gap-2 font-bold text-xl fill-current">
+          <SiSpigotmc size={28} />
+          SpigotMC
+          {isLoading.value && <Loader2 size={16} class="animate-spin" />}
+        </h4>
+      </div>
 
       <label for="plugin-link">
         Search or paste the link of the plugin you want to add.
@@ -34,53 +44,22 @@ export default component$(() => {
             return;
           }
 
-          const res = await fetch(`https://api.spiget.org/v2/resources/${pluginId}`);
-          if (!res.ok) {
+          try {
+            isLoading.value = true;
+
+            const newPlugin = new SpigotPlugin({ id: pluginId });
+            await newPlugin.fetch();
+
+            resolvedPlugin.plugin = newPlugin;
+          } catch (error) {
+            console.error('Error fetching plugin data:', error);
             const notification = new Notification()
               .setTitle('Error fetching plugin data')
-              .setDescription(`Error: ${res.status} ${res.statusText}`)
+              .setDescription(`An error occurred while fetching plugin data. ${error}`)
               .setBgColor('lum-grad-bg-red/50');
             notifications.push(notification);
-            return;
           }
-          const data = await res.json() as any;
-
-          const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
-          if (!versionsRes.ok) {
-            const notification = new Notification()
-              .setTitle('Error fetching plugin versions')
-              .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
-              .setBgColor('lum-grad-bg-red/50');
-            notifications.push(notification);
-            return;
-          }
-          const versionsData = await versionsRes.json() as any;
-
-          const newPlugin: PluginType = {
-            id: data.id,
-            name: data.name,
-            type: 'spigot',
-            data: {
-              external: data.external,
-              name: data.name,
-              tag: data.tag,
-              iconUrl: data.icon?.url,
-              releaseDate: data.releaseDate,
-              updateDate: data.updateDate,
-              file: data.file ? {
-                type: data.file.type,
-                size: data.file.size,
-                sizeUnit: data.file.sizeUnit,
-                url: data.file.url,
-                externalUrl: data.file.externalUrl,
-              } : undefined,
-              testedVersions: data.testedVersions,
-              sourceCodeLink: data.sourceCodeLink,
-              versions: versionsData,
-            },
-          };
-
-          resolvedPlugin.plugin = newPlugin;
+          isLoading.value = false;
         }}
         onChange$={async (e, el) => {
           const value = el.value;
@@ -89,42 +68,54 @@ export default component$(() => {
 
           console.log('Searching for plugin:', value);
 
-          const searchRes = await fetch(`https://api.spiget.org/v2/search/resources/${encodeURIComponent(value)}?size=5`);
-          if (!searchRes.ok) {
+          const searchUrl = 'https://api.spiget.org/v2/search/resources/';
+          const searchParams = new URLSearchParams({
+            size: '5',
+          });
+
+          try {
+            isLoading.value = true;
+            const searchRes = await fetch(`${searchUrl}${encodeURIComponent(value)}?${searchParams.toString()}`);
+            const searchData: any[] = await searchRes.json();
+
+            if (searchData.length === 0) {
+              const notification = new Notification()
+                .setTitle('No results found')
+                .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
+                .setBgColor('lum-grad-bg-yellow/50');
+              notifications.push(notification);
+              isLoading.value = false;
+              return;
+            }
+
+            resolvedPlugin.plugins = searchData.map((data: any) => (new SpigotPlugin({
+              id: data.id,
+              name: data.name,
+              description: data.tag,
+              url: data.url,
+              iconUrl: data.icon?.url ? 'https://spigotmc.org/' + data.icon.url : undefined,
+              mcVersions: data.testedVersions,
+              releaseDate: new Date(data.releaseDate),
+              updateDate: new Date(data.updateDate),
+              file: data.file ? {
+                type: data.file.type,
+                size: data.file.size,
+                sizeUnit: data.file.sizeUnit,
+                url: data.file.url,
+                externalUrl: data.file.externalUrl,
+              } : undefined,
+              sourceCodeLink: data.sourceCodeLink,
+            })));
+          } catch (error) {
+            console.error('Error searching for plugins:', error);
             const notification = new Notification()
-              .setTitle('Error searching for plugin')
-              .setDescription(`Error: ${searchRes.status} ${searchRes.statusText}`)
+              .setTitle('Error searching for plugins')
+              .setDescription(`An error occurred while searching for plugins. ${error}`)
               .setBgColor('lum-grad-bg-red/50');
             notifications.push(notification);
-            return;
           }
-          const searchData: any[] = await searchRes.json();
+          isLoading.value = false;
 
-          if (searchData.length === 0) {
-            const notification = new Notification()
-              .setTitle('No results found')
-              .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
-              .setBgColor('lum-grad-bg-yellow/50');
-            notifications.push(notification);
-            return;
-          }
-
-          resolvedPlugin.plugins = searchData.map((data: any) => ({
-            id: data.id,
-            name: data.name,
-            type: 'spigot',
-            data: {
-              external: data.external,
-              name: data.name,
-              tag: data.tag,
-              iconUrl: data.icon?.url,
-              releaseDate: data.releaseDate,
-              updateDate: data.updateDate,
-              testedVersions: data.testedVersions?.length
-                ? data.testedVersions : undefined,
-              sourceCodeLink: data.sourceCodeLink,
-            },
-          }));
         }}
       />
     </div>
@@ -138,7 +129,7 @@ export default component$(() => {
           name: <span key={plugin.id} class="flex flex-col gap-2 text-left">
             <span class="flex items-center gap-2">
               {plugin.iconUrl &&
-                <img src={'https://spigotmc.org/' + plugin.iconUrl} alt={`${plugin.name} icon`}
+                <img src={plugin.iconUrl} alt={`${plugin.name} icon`}
                   width={24} height={24} class="w-6 h-6 rounded-lum-1" />}
               {plugin.name}
             </span>
@@ -153,20 +144,19 @@ export default component$(() => {
         const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
         if (!selectedPlugin) return;
 
-        const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${pluginId}/versions?size=100&sort=-releaseDate`);
-        if (!versionsRes.ok) {
+        isLoading.value = true;
+        try {
+          resolvedPlugin.plugin = await selectedPlugin.fetchVersions();
+          resolvedPlugin.plugins = undefined;
+        } catch (error) {
+          console.error('Error fetching plugin versions:', error);
           const notification = new Notification()
             .setTitle('Error fetching plugin versions')
-            .setDescription(`Error: ${versionsRes.status} ${versionsRes.statusText}`)
+            .setDescription(`An error occurred while fetching plugin versions. ${error}`)
             .setBgColor('lum-grad-bg-red/50');
           notifications.push(notification);
-          return;
         }
-        const versionsData = await versionsRes.json() as any;
-        selectedPlugin.versions = versionsData;
-
-        resolvedPlugin.plugin = selectedPlugin;
-        resolvedPlugin.plugins = undefined;
+        isLoading.value = false;
       }}/>
     </>}
 
@@ -191,9 +181,9 @@ export default component$(() => {
         const versionId = Number(el.value);
         if (!resolvedPlugin.plugin) return;
         const selectedVersion = resolvedPlugin.plugin.versions
-          ?.find((version: any) => version.id == versionId);
+          ?.find((version) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin.currentVersion = selectedVersion;
+          resolvedPlugin.plugin = resolvedPlugin.plugin.setCurrentVersion(selectedVersion).clone();
         }
       }}/>
     </>}

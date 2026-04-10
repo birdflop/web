@@ -21,7 +21,7 @@ export default component$<PluginCardProps>(({ pluginJSON, noActions, updateAvail
   const notifications = useContext(NotificationContext);
 
   const serverPlugin = useComputed$(async () => {
-    if (!isBrowser) return; // dont request plugin data on the server
+    if (!isBrowser || !pluginJSON) return; // dont request plugin data on the server
     try {
       const serverPlugin = getPlugin(pluginJSON);
       return await serverPlugin.fetch();
@@ -67,9 +67,9 @@ export default component$<PluginCardProps>(({ pluginJSON, noActions, updateAvail
           <span class="text-lg! text-lum-text!">
             {serverPlugin.value?.name}
           </span>
-          {serverPlugin.value?.testedVersions &&
+          {serverPlugin.value?.mcVersions &&
             <span class="text-sm text-lum-text-secondary">
-              {serverPlugin.value.testedVersions[0]} - {serverPlugin.value.testedVersions[serverPlugin.value.testedVersions.length - 1]}
+              {serverPlugin.value.mcVersions[0]} - {serverPlugin.value.mcVersions[serverPlugin.value.mcVersions.length - 1]}
             </span>
           }
         </p>

@@ -7,6 +7,8 @@ export class ModrinthPlugin implements ServerPlugin {
   description?: string;
   url?: string;
   iconUrl?: string;
+  mcVersions?: string[];
+  releaseDate?: Date;
   updateDate?: Date;
   versions?: PluginVersion[];
   currentVersion?: PluginVersion;
@@ -19,6 +21,7 @@ export class ModrinthPlugin implements ServerPlugin {
     url: string;
     externalUrl?: string;
   };
+  sourceCodeLink?: string;
 
   constructor(plugin: PluginType) {
     this.id = plugin.id;
@@ -45,7 +48,10 @@ export class ModrinthPlugin implements ServerPlugin {
       description: data.description,
       url: data.url,
       iconUrl: data.icon_url,
+      mcVersions: data.game_versions,
+      releaseDate: new Date(data.published),
       updateDate: new Date(data.updated),
+      sourceCodeLink: data.source_url,
     });
 
     return this;
@@ -75,6 +81,11 @@ export class ModrinthPlugin implements ServerPlugin {
     return this;
   }
 
+  setCurrentVersion(version: PluginVersion) {
+    this.currentVersion = version;
+    return this;
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -83,11 +94,18 @@ export class ModrinthPlugin implements ServerPlugin {
       description: this.description,
       url: this.url,
       iconUrl: this.iconUrl,
+      mcVersions: this.mcVersions,
+      releaseDate: this.releaseDate,
       updateDate: this.updateDate,
       versions: this.versions,
       currentVersion: this.currentVersion,
       latestVersion: this.latestVersion,
       file: this.file,
+      sourceCodeLink: this.sourceCodeLink,
     };
+  }
+
+  clone() {
+    return new ModrinthPlugin(this.toJSON());
   }
 }

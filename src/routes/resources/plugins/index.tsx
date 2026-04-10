@@ -11,7 +11,7 @@ import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
 import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { PluginSource, PluginType } from '~/util/plugins/ServerPlugin';
+import { getPlugin, PluginSource, PluginType, ServerPlugin } from '~/util/plugins/ServerPlugin';
 
 const debug = true;
 
@@ -58,13 +58,13 @@ export const downloadSpigotPlugin = $(async (
 
 type ResolvedPluginType = {
   type: PluginSource;
-  plugin?: PluginType;
-  plugins?: PluginType[];
+  plugin?: ServerPlugin;
+  plugins?: ServerPlugin[];
 };
 
 type ServerType = {
   software: string;
-  plugins: PluginType[];
+  plugins: ServerPlugin[];
 };
 
 type PluginsStoreType = {
@@ -188,6 +188,9 @@ export default component$(() => {
     if (savedPlugins) {
       try {
         const parsed = JSON.parse(savedPlugins);
+        Object.keys(parsed.servers).forEach((server) => {
+          parsed.servers[server].plugins = parsed.servers[server].plugins.map((plugin: any) => getPlugin(plugin));
+        });
         pluginsStore.servers = parsed.servers || {};
         pluginsStore.openServer = parsed.openServer;
         pluginsStore.filter = parsed.filter;
@@ -207,30 +210,8 @@ export default component$(() => {
 
     if (!isBrowser) return;
 
-    // strip all plugin data before saving
-    const pluginsToSave = {
-      ...pluginsStore,
-      servers: Object.fromEntries(
-        Object.entries(pluginsStore.servers).map(([serverName, { plugins, ...rest }]) => [
-          serverName,
-          {
-            ...rest,
-            plugins: plugins.map((plugin) => ({
-              id: plugin.id,
-              iconUrl: plugin.iconUrl,
-              url: plugin.url,
-              name: plugin.name,
-              currentVersion: plugin.currentVersion,
-              type: plugin.type,
-              updateDate: plugin.updateDate,
-            })),
-          },
-        ]),
-      ),
-    };
-
     try {
-      localStorage.setItem('plugins', JSON.stringify(pluginsToSave));
+      localStorage.setItem('plugins', JSON.stringify(pluginsStore));
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -352,7 +333,7 @@ export default component$(() => {
             <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
               onInput$={(e, el) => {
                 try {
-                  const importedPlugins = JSON.parse(el.value) as PluginType[];
+                  const importedPlugins = JSON.parse(el.value).map((plugin: any) => getPlugin(plugin));
                   pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
                 } catch (err) {
                   console.error('Failed to parse imported plugins:', err);
@@ -446,14 +427,17 @@ export default component$(() => {
 
             if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
+            console.log(plugin);
+
+            const pluginJSON = plugin.toJSON();
 
             return <PluginCard key={plugin.id}
-              pluginJSON={plugin}
+              pluginJSON={pluginJSON}
               updateAvailable={updateAvailable}
               spigotRateLimit={spigotRateLimit}>
               <button class="lum-btn rounded-lum-2 p-2 lum-bg-transparent hover:lum-bg-red" q:slot="extra-actions" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                const index = plugins.findIndex((p) => p.name === plugin.name);
+                const index = plugins.findIndex((p) => p.name === pluginJSON.name);
                 if (index !== -1) {
                   plugins.splice(index, 1);
                 }
@@ -516,21 +500,7 @@ export default component$(() => {
                 onClick$={() => {
                   if (!resolvedPlugin.plugin) return;
 
-                  const plugin: PluginType = {
-                    type: resolvedPlugin.type,
-                    id: resolvedPlugin.plugin.id,
-                    name: resolvedPlugin.plugin.name,
-                    url: resolvedPlugin.plugin.url,
-                    iconUrl: resolvedPlugin.plugin.iconUrl,
-                    currentVersion: resolvedPlugin.plugin.currentVersion ? {
-                      id: resolvedPlugin.plugin.currentVersion.id,
-                      name: resolvedPlugin.plugin.currentVersion.name,
-                      releaseDate: resolvedPlugin.plugin.currentVersion.releaseDate,
-                    } : undefined,
-                  };
-
-                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(plugin);
-
+                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(resolvedPlugin.plugin);
                   resolvedPlugin.plugin = undefined;
                   modalRef.value?.close();
                 }}

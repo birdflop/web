@@ -51,6 +51,8 @@ export type PluginType = {
   description?: string;
   url?: string;
   iconUrl?: string;
+  mcVersions?: string[];
+  releaseDate?: Date;
   updateDate?: Date;
   versions?: PluginVersion[];
   currentVersion?: PluginVersion;
@@ -63,6 +65,7 @@ export type PluginType = {
     url: string;
     externalUrl?: string;
   }
+  sourceCodeLink?: string;
 }
 
 export function getPlugin(plugin: PluginType): ServerPlugin {
@@ -82,5 +85,8 @@ export interface ServerPlugin extends PluginType {
   fetchData(): Promise<this>;
   fetchVersions(): Promise<this>;
 
+  setCurrentVersion(version: PluginVersion): this;
+
   toJSON(): PluginType;
+  clone(): ServerPlugin;
 }

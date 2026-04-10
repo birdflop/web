@@ -7,6 +7,8 @@ export class SpigotPlugin implements ServerPlugin {
   description?: string;
   url?: string;
   iconUrl?: string;
+  mcVersions?: string[];
+  releaseDate?: Date;
   updateDate?: Date;
   versions?: PluginVersion[];
   currentVersion?: PluginVersion;
@@ -19,6 +21,7 @@ export class SpigotPlugin implements ServerPlugin {
     url: string;
     externalUrl?: string;
   };
+  sourceCodeLink?: string;
 
   constructor(plugin: PluginType) {
     this.id = plugin.id;
@@ -44,7 +47,9 @@ export class SpigotPlugin implements ServerPlugin {
       name: data.name,
       description: data.tag,
       url: data.url,
-      iconUrl: data.icon?.url,
+      iconUrl: data.icon?.url ? 'https://spigotmc.org/' + data.icon.url : undefined,
+      mcVersions: data.testedVersions,
+      releaseDate: new Date(data.releaseDate),
       updateDate: new Date(data.updateDate),
       file: data.file ? {
         type: data.file.type,
@@ -53,21 +58,29 @@ export class SpigotPlugin implements ServerPlugin {
         url: data.file.url,
         externalUrl: data.file.externalUrl,
       } : undefined,
+      sourceCodeLink: data.sourceCodeLink,
     });
 
     return this;
   }
 
   async fetchVersions() {
-    const res = await fetch(`https://api.spiget.org/v2/resources/${this.id}/versions/latest`);
-    const latestVersion = await res.json() as any;
+    const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`);
+    const versionsData = await versionsRes.json() as any[];
 
-    this.latestVersion = {
-      id: latestVersion.id,
-      name: latestVersion.name,
-      releaseDate: new Date(latestVersion.releaseDate),
-    };
+    this.versions = versionsData.map((version) => ({
+      id: version.id,
+      name: version.name,
+      releaseDate: new Date(version.releaseDate),
+    }));
 
+    this.latestVersion = this.versions[0];
+
+    return this;
+  }
+
+  setCurrentVersion(version: PluginVersion): this {
+    this.currentVersion = version;
     return this;
   }
 
@@ -79,11 +92,18 @@ export class SpigotPlugin implements ServerPlugin {
       description: this.description,
       url: this.url,
       iconUrl: this.iconUrl,
+      mcVersions: this.mcVersions,
+      releaseDate: this.releaseDate,
       updateDate: this.updateDate,
       versions: this.versions,
       currentVersion: this.currentVersion,
       latestVersion: this.latestVersion,
       file: this.file,
+      sourceCodeLink: this.sourceCodeLink,
     };
+  }
+
+  clone(): SpigotPlugin {
+    return new SpigotPlugin(this.toJSON());
   }
 }

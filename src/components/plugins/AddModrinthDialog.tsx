@@ -4,7 +4,7 @@ import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/p
 import { SelectList } from '../Elements/SelectList';
 import { SiModrinth } from 'simple-icons-qwik';
 import { Loader2 } from 'lucide-icons-qwik';
-import { PluginType } from '~/util/plugins/ServerPlugin';
+import { ModrinthPlugin } from '~/util/plugins/ModrinthPlugin';
 
 function getLoaders(software: string) {
   let loaders;
@@ -71,39 +71,9 @@ export default component$(() => {
 
           try {
             isLoading.value = true;
-            const res = await fetch(`https://api.modrinth.com/v2/project/${pluginId}`);
-            const data = await res.json() as any;
 
-            const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
-            const versionsData = await versionsRes.json() as any;
-            const latestVersion = versionsData[0];
-
-            const newPlugin: PluginType = {
-              id: data.slug,
-              name: data.title,
-              type: 'modrinth',
-              data: {
-                name: data.title,
-                tag: data.description,
-                iconUrl: data.icon_url,
-                releaseDate: Number(new Date(data.published)) / 1000,
-                updateDate: Number(new Date(data.updated)) / 1000,
-                file: latestVersion.files?.length ? {
-                  name: latestVersion.files[0].filename,
-                  type: latestVersion.files[0].file_type,
-                  size: Math.round(latestVersion.files[0].size / (1024 * 1024) * 100) / 100,
-                  sizeUnit: 'MB',
-                  url: latestVersion.files[0].url,
-                } : undefined,
-                testedVersions: data.game_versions,
-                sourceCodeLink: data.source_url,
-                versions: versionsData.map((version: any) => ({
-                  id: version.id,
-                  name: version.name,
-                  releaseDate: Number(new Date(version.date_published)) / 1000,
-                })),
-              },
-            };
+            const newPlugin = new ModrinthPlugin({ id: pluginId });
+            await newPlugin.fetch();
 
             resolvedPlugin.plugin = newPlugin;
           } catch (error) {
@@ -146,20 +116,16 @@ export default component$(() => {
               return;
             }
 
-            resolvedPlugin.plugins = searchData.hits.map((data: any) => ({
+            resolvedPlugin.plugins = searchData.hits.map((data: any) => (new ModrinthPlugin({
               id: data.slug,
               name: data.title,
-              type: 'modrinth',
-              data: {
-                name: data.title,
-                tag: data.description,
-                iconUrl: data.icon_url,
-                releaseDate: Number(new Date(data.published)) / 1000,
-                updateDate: Number(new Date(data.updated)) / 1000,
-                testedVersions: data.game_versions,
-                sourceCodeLink: data.source_url,
-              },
-            }));
+              description: data.description,
+              iconUrl: data.icon_url,
+              releaseDate: new Date(data.date_created),
+              updateDate: new Date(data.date_modified),
+              mcVersions: data.versions,
+              sourceCodeLink: data.source_url,
+            })));
           } catch (error) {
             console.error('Error searching for plugins:', error);
             const notification = new Notification()
@@ -199,15 +165,7 @@ export default component$(() => {
 
         isLoading.value = true;
         try {
-          const versionsRes = await fetch(`https://api.modrinth.com/v2/project/${pluginId}/version?loaders=${JSON.stringify(loaders.value)}`);
-          const versionsData = await versionsRes.json() as any;
-          selectedPlugin.versions = versionsData.map((version: any) => ({
-            id: version.id,
-            name: version.name,
-            releaseDate: Number(new Date(version.date_published)) / 1000,
-          }));
-
-          resolvedPlugin.plugin = selectedPlugin;
+          resolvedPlugin.plugin = await selectedPlugin.fetchVersions();
           resolvedPlugin.plugins = undefined;
         } catch (error) {
           console.error('Error fetching plugin versions:', error);
@@ -244,7 +202,7 @@ export default component$(() => {
         const selectedVersion = resolvedPlugin.plugin.versions
           ?.find((version) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin.currentVersion = selectedVersion;
+          resolvedPlugin.plugin = resolvedPlugin.plugin.setCurrentVersion(selectedVersion).clone();
         }
       }}/>
     </>}
