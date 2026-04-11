@@ -1,6 +1,19 @@
 import { ServerPlugin, PluginVersion, PluginType } from './ServerPlugin';
 
 export class ModrinthPlugin implements ServerPlugin {
+  static async search(query: string, loaders?: string[]): Promise<any[]> {
+    const searchUrl = 'https://api.modrinth.com/v2/search';
+    const searchParams = new URLSearchParams({
+      query: query,
+      ...loaders ? {
+        facets: JSON.stringify([loaders.map((loader) => `categories:${loader}`)]),
+      } : {},
+    });
+
+    const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
+    const searchData: { hits: any[]; } = await searchRes.json();
+    return searchData.hits;
+  }
   id: number | string;
   type = 'modrinth' as const;
   name?: string;

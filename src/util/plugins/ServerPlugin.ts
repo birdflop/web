@@ -7,7 +7,7 @@ export type PluginVersion = {
   releaseDate: Date;
 }
 
-export type PluginSource = 'spigot' | 'misc' | 'modrinth'; // | 'github' | 'curseforge';
+export type PluginSource = 'spigot' | 'modrinth' | 'misc';
 
 export type PluginType3 = {
   type?: PluginSource;
@@ -76,6 +76,17 @@ export function getPlugin(plugin: PluginType): ServerPlugin {
     return new ModrinthPlugin(plugin);
   default:
     throw new Error(`Unsupported plugin type: ${plugin.type}`);
+  }
+}
+
+export function searchPlugins(type: PluginSource, query: string, loaders?: string[]) {
+  switch (type) {
+  case 'spigot':
+    return SpigotPlugin.search(query);
+  case 'modrinth':
+    return ModrinthPlugin.search(query, loaders);
+  default:
+    throw new Error(`Unsupported plugin type: ${type}`);
   }
 }
 

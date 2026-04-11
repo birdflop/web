@@ -2,10 +2,9 @@ import { component$, useComputed$, useContext, useSignal } from '@builder.io/qwi
 import { Notification, NotificationContext } from '~/util/Notification';
 import { pluginsStoreContext, resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
-import { SiModrinth } from 'simple-icons-qwik';
+import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 import { Loader2 } from 'lucide-icons-qwik';
-import { ModrinthPlugin } from '~/util/plugins/ModrinthPlugin';
-import { getPlugin } from '~/util/plugins/ServerPlugin';
+import { getPlugin, PluginSource, searchPlugins } from '~/util/plugins/ServerPlugin';
 
 function getLoaders(software: string) {
   let loaders;
@@ -29,7 +28,21 @@ function getLoaders(software: string) {
   return loaders;
 }
 
-export default component$(() => {
+const urlRegex = {
+  modrinth: /modrinth\.com\/plugin\/(.+)/,
+  spigot: /spigotmc\.org\/resources\/(.+)\.(\d+)/,
+};
+
+const urls = {
+  modrinth: 'https://modrinth.com/plugin/',
+  spigot: 'https://www.spigotmc.org/resources/',
+};
+
+export default component$(({
+  type = 'modrinth',
+}: {
+  type?: Exclude<PluginSource, 'misc'>;
+}) => {
   const pluginsStore = useContext(pluginsStoreContext);
   const resolvedPlugin = useContext(resolvedPluginContext);
   const notifications = useContext(NotificationContext);
@@ -42,8 +55,14 @@ export default component$(() => {
     <div class="flex flex-col gap-1 mt-6">
       <div class="flex flex-col border-b border-lum-border/10 pb-4 mb-4">
         <h4 class="flex items-center gap-2 font-bold text-xl fill-current">
-          <SiModrinth size={28} />
-          Modrinth
+          {type === 'modrinth' && <>
+            <SiModrinth size={28} />
+            Modrinth
+          </>}
+          {type === 'spigot' && <>
+            <SiSpigotmc size={28} />
+            SpigotMC
+          </>}
           {isLoading.value && <Loader2 size={16} class="animate-spin" />}
         </h4>
       </div>
@@ -51,14 +70,15 @@ export default component$(() => {
       <label for="plugin-link">
         Search or paste the link of the plugin you want to add.
       </label>
-      <input type="text" class="lum-input" placeholder="Plugin name or https://modrinth.com/plugin/..." id="plugin-link"
+      <input type="text" class="lum-input" id="plugin-link"
+        placeholder={`Plugin name or ${urls[type]}...`}
         onInput$={async (e, el) => {
           const value = el.value;
-          const modrinthMatch = value.match(/modrinth\.com\/plugin\/(.+)/);
+          const match = value.match(urlRegex[type]);
 
-          if (!modrinthMatch) return;
+          if (!match) return;
 
-          const pluginId = modrinthMatch[1];
+          const pluginId = match[1];
           // check if the plugin is already added
           const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins.find((p) => p.id == pluginId);
           if (existingPlugin) {
@@ -73,7 +93,10 @@ export default component$(() => {
           try {
             isLoading.value = true;
 
-            const newPlugin = new ModrinthPlugin({ id: pluginId });
+            const newPlugin = getPlugin({
+              type: type,
+              id: pluginId,
+            });
             await newPlugin.fetch();
 
             resolvedPlugin.plugin = newPlugin;
@@ -89,25 +112,15 @@ export default component$(() => {
         }}
         onChange$={async (e, el) => {
           const value = el.value;
-          const modrinthMatch = value.match(/modrinth\.com\/plugin\/(.+)/);
-          if (modrinthMatch) return;
+          const match = value.match(urlRegex[type]);
+          if (match) return;
 
           console.log('Searching for plugin:', value);
-
-          const searchUrl = 'https://api.modrinth.com/v2/search';
-          const searchParams = new URLSearchParams({
-            query: value,
-            facets: JSON.stringify([loaders.value.map((loader) => `categories:${loader}`)]),
-          });
-          console.log([loaders.value.map((loader) => `categories:${loader}`)]);
           try {
             isLoading.value = true;
-            const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
-            const searchData: {
-              hits: any[];
-            } = await searchRes.json();
+            const searchData = await searchPlugins(type, value, loaders.value);
 
-            if (searchData.hits.length === 0) {
+            if (searchData.length === 0) {
               const notification = new Notification()
                 .setTitle('No results found')
                 .setDescription(`No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`)
@@ -117,9 +130,10 @@ export default component$(() => {
               return;
             }
 
-            resolvedPlugin.plugins = searchData.hits.map((data: any) =>
-              new ModrinthPlugin({
-                id: data.slug,
+            resolvedPlugin.plugins = searchData.map((data: any) =>
+              getPlugin({
+                type: type,
+                id: data.id,
               }).fromData(data),
             );
           } catch (error) {

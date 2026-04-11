@@ -1,60 +1,19 @@
-import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
-import AddSpigotDialog from '~/components/plugins/AddSpigotDialog';
-import AddModrinthDialog from '~/components/plugins/AddModrinthDialog';
+import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
 import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
 import { getPlugin, PluginSource, PluginType } from '~/util/plugins/ServerPlugin';
+import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 
 const debug = true;
-
-export const downloadSpigotPlugin = $(async (
-  plugin: PluginType,
-  spigotRateLimit?: { downloadCount: number, resetTime: number },
-  notifications?: Notification[],
-) => {
-  const targetUrl = plugin.file?.url;
-
-  // if the plugin has an external url, open that instead of spigot to avoid rate limits
-  if (plugin.file?.externalUrl) {
-    window.open(plugin.file.externalUrl, '_blank');
-    return;
-  }
-
-  if (!targetUrl) return;
-
-  const downloadWindow = window.open('about:blank', '_blank');
-
-  // spigot rate limits downloads to 10 per minute
-  if (spigotRateLimit && spigotRateLimit.downloadCount >= 10 && Date.now() < spigotRateLimit.resetTime) {
-    if (notifications) {
-      const notification = new Notification()
-        .setTitle('Spigot Download Rate Limit Reached')
-        .setDescription(`Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`)
-        .setBgColor('lum-grad-bg-yellow/50')
-        .setPersist(true);
-      notifications.push(notification);
-    }
-    await new Promise((resolve) => setTimeout(resolve, spigotRateLimit.resetTime - Date.now()));
-    spigotRateLimit.downloadCount = 0;
-  }
-
-  // open the plugin file url in a new tab to trigger the download
-  downloadWindow?.location.replace(`https://www.spigotmc.org/${targetUrl}`);
-
-  if (!spigotRateLimit) return;
-  spigotRateLimit.downloadCount++;
-  // set the reset time to 1 minute from now
-  if (spigotRateLimit.resetTime < Date.now())
-    spigotRateLimit.resetTime = Date.now() + 60 * 1000;
-});
 
 type ResolvedPluginType = {
   type: PluginSource;
@@ -493,8 +452,7 @@ export default component$(() => {
             Plugin source
           </SelectMenu>
 
-          {resolvedPlugin.type === 'spigot' && <AddSpigotDialog />}
-          {resolvedPlugin.type === 'modrinth' && <AddModrinthDialog />}
+          {resolvedPlugin.type !== 'misc' && <AddPluginDialog type={resolvedPlugin.type} />}
           {/*resolvedPlugin.type === 'github' && <AddGitHubDialog />*/}
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
