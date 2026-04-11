@@ -13,43 +13,36 @@ export default component$(() => {
       <input type="text" class="lum-input" placeholder="Plugin name" id="plugin-name"
         onInput$={(e, el) => {
           const value = el.value;
-          resolvedPlugin.plugin = {
-            ...resolvedPlugin.plugin,
-            type: 'misc',
-            name: value,
-          };
+          if (!resolvedPlugin.plugin) {
+            resolvedPlugin.plugin = {
+              id: Math.random().toString(36).substring(2, 15),
+              type: 'misc',
+            };
+          }
+          resolvedPlugin.plugin.name = value;
         }}
       />
-      <label for="plugin-link">
-        Plugin link
-      </label>
-      <input type="text" class="lum-input" placeholder="https://example.com/plugin" id="plugin-link"
-        onInput$={(e, el) => {
-          const value = el.value;
-          resolvedPlugin.plugin = {
-            ...resolvedPlugin.plugin,
-            type: 'misc',
-            name: resolvedPlugin.plugin?.name ?? value.split('/').pop(),
-            url: value,
-          };
-        }}
-      />
-      <label for="plugin-icon">
-        Plugin icon URL (optional)
-      </label>
-      <input type="text" class="lum-input" placeholder="https://example.com/icon.png" id="plugin-icon"
-        onInput$={(e, el) => {
-          const value = el.value;
-          resolvedPlugin.plugin = {
-            ...resolvedPlugin.plugin,
-            type: 'misc',
-            data: {
-              ...resolvedPlugin.plugin?.data,
-              iconUrl: value,
-            },
-          };
-        }}
-      />
+
+      {resolvedPlugin.plugin && <>
+        <label for="plugin-link">
+          Plugin link
+        </label>
+        <input type="text" class="lum-input" placeholder="https://example.com/plugin" id="plugin-link"
+          onInput$={(e, el) => {
+            const value = el.value;
+            resolvedPlugin.plugin!.url = value;
+          }}
+        />
+        <label for="plugin-icon">
+          Plugin icon URL (optional)
+        </label>
+        <input type="text" class="lum-input" placeholder="https://example.com/icon.png" id="plugin-icon"
+          onInput$={(e, el) => {
+            const value = el.value;
+            resolvedPlugin.plugin!.iconUrl = value;
+          }}
+        />
+      </>}
 
     </div>
   </>;

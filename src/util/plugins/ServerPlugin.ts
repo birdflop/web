@@ -82,10 +82,9 @@ export function getPlugin(plugin: PluginType): ServerPlugin {
 export interface ServerPlugin extends PluginType {
   get(): Promise<this>;
   fetch(): Promise<this>;
+  fromData(data: any): this;
   fetchData(): Promise<this>;
   fetchVersions(): Promise<this>;
-
-  setCurrentVersion(version: PluginVersion): this;
 
   toJSON(): PluginType;
   clone(): ServerPlugin;

@@ -39,10 +39,7 @@ export class ModrinthPlugin implements ServerPlugin {
     return this;
   }
 
-  async fetchData() {
-    const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
-    const data = await res.json() as any;
-
+  fromData(data: any) {
     Object.assign(this, {
       name: data.title,
       description: data.description,
@@ -57,19 +54,26 @@ export class ModrinthPlugin implements ServerPlugin {
     return this;
   }
 
+  async fetchData() {
+    const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
+    const data = await res.json() as any;
+
+    return this.fromData(data);
+  }
+
   async fetchVersions() {
     const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}/version?loaders=["paper"]`);
     const versions = await res.json() as any;
+    console.log('Fetched versions for plugin', this.name, versions);
 
     this.versions = versions.map((version: any) => ({
       id: version.id,
       name: version.name,
       releaseDate: new Date(version.date_published),
     }));
+    this.latestVersion = this.versions?.[0];
 
     const latestVersion = versions[0];
-    this.latestVersion = latestVersion;
-
     this.file = latestVersion.files?.length ? {
       name: latestVersion.files[0].filename,
       type: latestVersion.files[0].file_type,
@@ -78,11 +82,6 @@ export class ModrinthPlugin implements ServerPlugin {
       url: latestVersion.files[0].url,
     } : undefined;
 
-    return this;
-  }
-
-  setCurrentVersion(version: PluginVersion) {
-    this.currentVersion = version;
     return this;
   }
 

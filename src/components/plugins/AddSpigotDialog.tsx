@@ -5,6 +5,7 @@ import { SelectList } from '../Elements/SelectList';
 import { SiSpigotmc } from 'simple-icons-qwik';
 import { Loader2 } from 'lucide-icons-qwik';
 import { SpigotPlugin } from '~/util/plugins/SpigotPlugin';
+import { getPlugin } from '~/util/plugins/ServerPlugin';
 
 export default component$(() => {
   const pluginsStore = useContext(pluginsStoreContext);
@@ -47,10 +48,8 @@ export default component$(() => {
           try {
             isLoading.value = true;
 
-            const newPlugin = new SpigotPlugin({ id: pluginId });
-            await newPlugin.fetch();
-
-            resolvedPlugin.plugin = newPlugin;
+            const newPlugin = await new SpigotPlugin({ id: pluginId }).fetch();
+            resolvedPlugin.plugin = newPlugin.toJSON();
           } catch (error) {
             console.error('Error fetching plugin data:', error);
             const notification = new Notification()
@@ -88,24 +87,11 @@ export default component$(() => {
               return;
             }
 
-            resolvedPlugin.plugins = searchData.map((data: any) => (new SpigotPlugin({
-              id: data.id,
-              name: data.name,
-              description: data.tag,
-              url: data.url,
-              iconUrl: data.icon?.url ? 'https://spigotmc.org/' + data.icon.url : undefined,
-              mcVersions: data.testedVersions,
-              releaseDate: new Date(data.releaseDate),
-              updateDate: new Date(data.updateDate),
-              file: data.file ? {
-                type: data.file.type,
-                size: data.file.size,
-                sizeUnit: data.file.sizeUnit,
-                url: data.file.url,
-                externalUrl: data.file.externalUrl,
-              } : undefined,
-              sourceCodeLink: data.sourceCodeLink,
-            })));
+            resolvedPlugin.plugins = searchData.map((data: any) =>
+              new SpigotPlugin({
+                id: data.id,
+              }).fromData(data),
+            );
           } catch (error) {
             console.error('Error searching for plugins:', error);
             const notification = new Notification()
@@ -146,7 +132,8 @@ export default component$(() => {
 
         isLoading.value = true;
         try {
-          resolvedPlugin.plugin = await selectedPlugin.fetchVersions();
+          const plugin = await getPlugin(selectedPlugin).fetchVersions();
+          resolvedPlugin.plugin = plugin.toJSON();
           resolvedPlugin.plugins = undefined;
         } catch (error) {
           console.error('Error fetching plugin versions:', error);
@@ -183,7 +170,7 @@ export default component$(() => {
         const selectedVersion = resolvedPlugin.plugin.versions
           ?.find((version) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin = resolvedPlugin.plugin.setCurrentVersion(selectedVersion).clone();
+          resolvedPlugin.plugin.currentVersion = selectedVersion;
         }
       }}/>
     </>}

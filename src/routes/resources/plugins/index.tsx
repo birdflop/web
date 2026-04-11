@@ -1,7 +1,7 @@
 import { $, component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -11,7 +11,7 @@ import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/misc';
 import { softwareOptions } from '../flags';
 import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { getPlugin, PluginSource, PluginType, ServerPlugin } from '~/util/plugins/ServerPlugin';
+import { getPlugin, PluginSource, PluginType } from '~/util/plugins/ServerPlugin';
 
 const debug = true;
 
@@ -58,13 +58,13 @@ export const downloadSpigotPlugin = $(async (
 
 type ResolvedPluginType = {
   type: PluginSource;
-  plugin?: ServerPlugin;
-  plugins?: ServerPlugin[];
+  plugin?: PluginType;
+  plugins?: PluginType[];
 };
 
 type ServerType = {
   software: string;
-  plugins: ServerPlugin[];
+  plugins: PluginType[];
 };
 
 type PluginsStoreType = {
@@ -188,9 +188,6 @@ export default component$(() => {
     if (savedPlugins) {
       try {
         const parsed = JSON.parse(savedPlugins);
-        Object.keys(parsed.servers).forEach((server) => {
-          parsed.servers[server].plugins = parsed.servers[server].plugins.map((plugin: any) => getPlugin(plugin));
-        });
         pluginsStore.servers = parsed.servers || {};
         pluginsStore.openServer = parsed.openServer;
         pluginsStore.filter = parsed.filter;
@@ -361,13 +358,11 @@ export default component$(() => {
                 <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
                   plugins.forEach((plugin) => {
-                    if (plugin.latestVersion) {
-                      plugin.currentVersion = {
-                        id: 0,
-                        name: '0.0.0',
-                        releaseDate: new Date(0),
-                      };
-                    }
+                    plugin.currentVersion = {
+                      id: 'outdated',
+                      name: 'Outdated',
+                      releaseDate: new Date(0),
+                    };
                   });
                 }}>
                   <X size={16} />
@@ -383,6 +378,15 @@ export default component$(() => {
               }}>
                 <Check size={16} />
                 Mark all updated
+              </button>
+              <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={async () => {
+                const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+                for (const plugin of plugins) {
+                  Object.assign(plugin, await getPlugin(plugin).fetchVersions());
+                }
+              }}>
+                <RefreshCw size={16} />
+                Check all for updates
               </button>
 
               {!!outdatedPlugins.value &&
@@ -420,7 +424,7 @@ export default component$(() => {
           }
         </div>
         <div class="grid gap-2 my-4">
-          {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin) => {
+          {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin, i) => {
             const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
               && plugin.currentVersion?.releaseDate !== undefined
               && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
@@ -429,15 +433,27 @@ export default component$(() => {
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
             console.log(plugin);
 
-            const pluginJSON = plugin.toJSON();
-
             return <PluginCard key={plugin.id}
-              pluginJSON={pluginJSON}
+              plugin={plugin}
               updateAvailable={updateAvailable}
               spigotRateLimit={spigotRateLimit}>
+              <button class="lum-btn rounded-lum-2 p-2 text-sm lum-bg-transparent" q:slot="extra-actions" onClick$={async () => {
+                try {
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[i] = await getPlugin(plugin).fetchVersions();
+                } catch (error) {
+                  console.error('Error fetching plugin versions:', error);
+                  const notification = new Notification()
+                    .setTitle('Error fetching plugin versions')
+                    .setDescription(`An error occurred while fetching plugin versions. ${error}`)
+                    .setBgColor('lum-grad-bg-red/50');
+                  notifications.push(notification);
+                }
+              }}>
+                <RefreshCw size={16} />
+              </button>
               <button class="lum-btn rounded-lum-2 p-2 lum-bg-transparent hover:lum-bg-red" q:slot="extra-actions" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                const index = plugins.findIndex((p) => p.name === pluginJSON.name);
+                const index = plugins.findIndex((p) => p.name === plugin.name);
                 if (index !== -1) {
                   plugins.splice(index, 1);
                 }
@@ -485,7 +501,7 @@ export default component$(() => {
           {resolvedPlugin.plugin && <>
             <hr/>
             <PluginCard
-              pluginJSON={resolvedPlugin.plugin}
+              plugin={resolvedPlugin.plugin}
               spigotRateLimit={spigotRateLimit}
             />
           </>}

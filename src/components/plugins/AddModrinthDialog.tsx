@@ -5,6 +5,7 @@ import { SelectList } from '../Elements/SelectList';
 import { SiModrinth } from 'simple-icons-qwik';
 import { Loader2 } from 'lucide-icons-qwik';
 import { ModrinthPlugin } from '~/util/plugins/ModrinthPlugin';
+import { getPlugin } from '~/util/plugins/ServerPlugin';
 
 function getLoaders(software: string) {
   let loaders;
@@ -116,16 +117,11 @@ export default component$(() => {
               return;
             }
 
-            resolvedPlugin.plugins = searchData.hits.map((data: any) => (new ModrinthPlugin({
-              id: data.slug,
-              name: data.title,
-              description: data.description,
-              iconUrl: data.icon_url,
-              releaseDate: new Date(data.date_created),
-              updateDate: new Date(data.date_modified),
-              mcVersions: data.versions,
-              sourceCodeLink: data.source_url,
-            })));
+            resolvedPlugin.plugins = searchData.hits.map((data: any) =>
+              new ModrinthPlugin({
+                id: data.slug,
+              }).fromData(data),
+            );
           } catch (error) {
             console.error('Error searching for plugins:', error);
             const notification = new Notification()
@@ -165,7 +161,8 @@ export default component$(() => {
 
         isLoading.value = true;
         try {
-          resolvedPlugin.plugin = await selectedPlugin.fetchVersions();
+          const plugin = await getPlugin(selectedPlugin).fetchVersions();
+          resolvedPlugin.plugin = plugin.toJSON();
           resolvedPlugin.plugins = undefined;
         } catch (error) {
           console.error('Error fetching plugin versions:', error);
@@ -202,7 +199,7 @@ export default component$(() => {
         const selectedVersion = resolvedPlugin.plugin.versions
           ?.find((version) => version.id == versionId);
         if (selectedVersion) {
-          resolvedPlugin.plugin = resolvedPlugin.plugin.setCurrentVersion(selectedVersion).clone();
+          resolvedPlugin.plugin.currentVersion = selectedVersion;
         }
       }}/>
     </>}

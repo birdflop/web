@@ -39,10 +39,7 @@ export class SpigotPlugin implements ServerPlugin {
     return this;
   }
 
-  async fetchData() {
-    const res = await fetch(`https://api.spiget.org/v2/resources/${this.id}`);
-    const data = await res.json() as any;
-
+  fromData(data: any) {
     Object.assign(this, {
       name: data.name,
       description: data.tag,
@@ -64,9 +61,16 @@ export class SpigotPlugin implements ServerPlugin {
     return this;
   }
 
+  async fetchData() {
+    const res = await fetch(`https://api.spiget.org/v2/resources/${this.id}`);
+    const data = await res.json() as any;
+
+    return this.fromData(data);;
+  }
+
   async fetchVersions() {
     const versionsRes = await fetch(`https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`);
-    const versionsData = await versionsRes.json() as any[];
+    const versionsData: any[] = await versionsRes.json();
 
     this.versions = versionsData.map((version) => ({
       id: version.id,
@@ -76,11 +80,6 @@ export class SpigotPlugin implements ServerPlugin {
 
     this.latestVersion = this.versions[0];
 
-    return this;
-  }
-
-  setCurrentVersion(version: PluginVersion): this {
-    this.currentVersion = version;
     return this;
   }
 
