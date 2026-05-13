@@ -5,14 +5,14 @@
       "home": "Возвращайтесь домой",
       "title": "404: Страница не найдена"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Закрыть",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "Принять",
+      "description": "Мы используем файлы cookie, чтобы автоматически сохранять и загружать ваши настройки.",
+      "optOut": "Отклонить",
+      "title": "Файлы cookie"
     },
-    "docs": "Docs",
+    "docs": "Документация",
     "hosting": {
       "billing": "Выставление счетов",
       "nodeStats": {
@@ -72,11 +72,11 @@
       },
       "more": "Дополнительные ресурсы",
       "paperTimings": {
-        "description": "Проанализируйте расписания и получите возможную оптимизацию",
-        "title": "Расписание работы"
+        "description": "Проанализируйте timings и получите возможные рекомендации по оптимизации.",
+        "title": "Анализ timings"
       },
       "serverTools": {
-        "description": "Инструменты для настройки и установки серверов minecraft.",
+        "description": "Инструменты для настройки и установки серверов Minecraft.",
         "title": "Серверные инструменты"
       },
       "sparkProfile": {
@@ -90,8 +90,8 @@
       "title": "Ресурсы"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Управляйте вашими настройками и предпочтениями здесь.",
+      "title": "Настройки"
     },
     "termsofService": "Условия предоставления услуг"
   }
