@@ -174,7 +174,7 @@ export default component$(({ hidden }: {
           [`${Preset.preset.format?.class}`]: Preset.preset.format?.class,
         }}>
           <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}>
-            {renderPreview({ ...rgbDefaults, ...Preset.preset }, 1)}
+            {renderPreview({ ...rgbDefaults, text: Preset.name, ...Preset.preset }, 1)}
           </button>
           <button class="lum-btn lum-bg-transparent hover:lum-bg-transparent hover:text-red-500 p-1.5 mr-1.5 rounded-lum-1 cursor-pointer" onClick$={async () => {
             savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
