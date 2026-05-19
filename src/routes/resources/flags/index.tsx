@@ -83,10 +83,11 @@ export const softwareOptions = [
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'parsed', url.searchParams) as {
+  const cookies: {
     cookies: any,
     errors: string[]
-  };
+  } = getCookies(cookie, 'parsed', url.searchParams);
+  return cookies;
 });
 
 export default component$(() => {

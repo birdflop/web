@@ -137,10 +137,10 @@ export function initiateTyper() {
   function TyperSetup() {
     const typers: any = {};
     for (const e of document.getElementsByClassName('typer')) {
-      typers[e.id] = new (Typer as any)(e as typerElement);
+      typers[e.id] = new (Typer as any)(e);
     }
     for (const e of document.getElementsByClassName('cursor')) {
-      const t = new (Cursor as any)(e as typerElement);
+      const t = new (Cursor as any)(e);
       t.owner = typers[(e as any).dataset.owner];
       t.owner.cursor = t;
     }

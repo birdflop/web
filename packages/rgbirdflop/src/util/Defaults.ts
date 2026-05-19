@@ -81,7 +81,7 @@ export const rgbDefaults = {
   underline: false,
   strikethrough: false,
   obfuscate: false,
-  gradientType: 'rgb' satisfies GradientType,
+  gradientType: 'rgb' as GradientType,
 };
 
 export const animTABDefaults = {

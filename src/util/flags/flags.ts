@@ -118,7 +118,7 @@ const baseEtil = [
 
 export const flags = {
   aikars: {
-    generate: ({ memory }) => {
+    generate: ({ memory }: { memory: number }) => {
       return [
         ...baseAikar,
         ...(memory < 12 ? [
@@ -134,7 +134,7 @@ export const flags = {
         ]),
       ];
     },
-  } as FlagOption,
+  },
   meowice: {
     generate: () => {
       return [
@@ -321,7 +321,7 @@ export const flags = {
     },
   } as FlagOption,
   etils: {
-    generate: ({ memory }) => {
+    generate: ({ memory }: { memory: number }) => {
       return [
         ...baseEtil,
         ...(memory < 12 ? [
@@ -339,7 +339,7 @@ export const flags = {
         ]),
       ];
     },
-  } as FlagOption,
+  },
   proxy: {
     generate: () => {
       return [

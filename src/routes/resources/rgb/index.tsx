@@ -10,10 +10,11 @@ import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as {
+  const cookies: {
     cookies: Partial<typeof rgbDefaults>
     errors: string[]
-  };
+  } = getCookies(cookie, 'rgb', url.searchParams);
+  return cookies;
 });
 
 export default component$(() => {

@@ -13,7 +13,6 @@ import {
 import {
   rgbDefaults,
   ColorGradient,
-  GradientType,
   disperseColors,
   sortColors,
   hexToRGB,
@@ -65,7 +64,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   const gradient = new ColorGradient(
     colorsRGB,
     Math.ceil(rgbStore.text.length / rgbStore.colorlength),
-    rgbStore.gradientType as GradientType,
+    rgbStore.gradientType,
   );
   const shadowGradient = new ColorGradient(
     shadowColorsRGB,

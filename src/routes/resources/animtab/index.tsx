@@ -13,17 +13,19 @@ import Accordion from '~/components/Elements/Accordion';
 import { deepTrack } from '~/util/misc';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as {
+  const cookies: {
     cookies: Partial<typeof rgbDefaults>
     errors: string[]
-  };
+  } = getCookies(cookie, 'rgb', url.searchParams);
+  return cookies;
 });
 
 export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'animtab', url.searchParams) as {
+  const cookies: {
     cookies: Partial<typeof animTABDefaults>
     errors: string[]
-  };
+  } = getCookies(cookie, 'animtab', url.searchParams);
+  return cookies;
 });
 
 export default component$(() => {

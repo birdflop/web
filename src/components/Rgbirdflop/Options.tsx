@@ -57,7 +57,8 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           value={rgbStore.gradientType}
           class={{ 'w-full': true }}
           onChange$={(e, el) => {
-            rgbStore.gradientType = el.value as GradientType;
+            const value = el.value as GradientType;
+            rgbStore.gradientType = value;
           }}
           values={GRADIENT_TYPES.map(type => ({
             name: type,

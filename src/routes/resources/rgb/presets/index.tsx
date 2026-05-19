@@ -136,10 +136,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 });
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams) as {
+  const cookies: {
     cookies: Partial<typeof rgbDefaults>;
     errors: string[];
-  };
+  } = getCookies(cookie, 'rgb', url.searchParams);
+  return cookies;
 });
 
 const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCount, presetsLength }: {
