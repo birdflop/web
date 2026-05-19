@@ -59,6 +59,7 @@ export default component$(() => {
       </p>
     }
 
+    { /* todo: modal component */ }
     <dialog ref={modalRef}
       class={{
         'm-auto hidden open:flex text-lum-text overflow-visible': true,
@@ -176,7 +177,7 @@ export default component$(() => {
         <div class="grid sm:grid-cols-2 gap-2">
           <div class="flex flex-col gap-1">
             <label for="publish-preset-name">
-                Preset name
+              Preset name
             </label>
             <input type="text" class="lum-input" placeholder="My Preset" id="publish-preset-name" />
           </div>
@@ -202,12 +203,12 @@ export default component$(() => {
         </div>
 
         <label for="publish-preset-description" class="-mb-1">
-            Preset description
+          Preset description
         </label>
         <textarea class="lum-input" placeholder="This is my preset" id="publish-preset-description" />
 
         <Toggle id="publish-preset-includetext" >
-            Include preset input text (You usually do not need to enable this.)
+          Include preset input text (You usually do not need to enable this.)
         </Toggle>
 
         {validationErrors.value.length > 0 && (
@@ -227,7 +228,7 @@ export default component$(() => {
                     <div key={similar.id} class="relative">
                       <PresetPreview Preset={similar} />
                       <div class="absolute top-2 right-2 bg-red-500/90 text-white px-2 py-1 rounded text-xs font-semibold">
-                          Distance: {similar.distance}
+                        Distance: {similar.distance}
                       </div>
                     </div>
                   ))}

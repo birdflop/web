@@ -1,5 +1,5 @@
-import { $, component$, isBrowser, useContext, useContextProvider, useSignal } from '@builder.io/qwik';
-import { Save, Link as LinkIcon, Copy, Globe } from 'lucide-icons-qwik';
+import { $, component$, isBrowser, useContext, useContextProvider, useSignal, useTask$ } from '@builder.io/qwik';
+import { Save, Link as LinkIcon, Copy, Globe, Trash } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
@@ -8,7 +8,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
-import { setUserData } from '~/util/dataUtils';
+import { setUserData, unsavePreset } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import Accordion from '../Elements/Accordion';
@@ -77,6 +77,26 @@ export default component$(({ hidden }: {
 
   const openItemsStore = useContext(openItemsContext);
 
+  useTask$(({ track }) => {
+    track(() => openItemsStore.items);
+    if (!openItemsStore.items.includes('saved-presets')) return;
+
+    // If privatePresets is empty, load presets from localStorage
+    if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
+
+    try {
+      const localStoragePresets = getPresets();
+      privatePresets.value = privatePresets.value.concat(localStoragePresets);
+    } catch (err) {
+      const notification = new Notification()
+        .setTitle('Error loading saved presets')
+        .setDescription(`Error: ${err}`)
+        .setBgColor('lum-grad-bg-red/50')
+        .setPersist(true);
+      notifications.push(notification.toJSON());
+    }
+  });
+
   return (
     <div class={{
       'flex flex-col gap-1 sm:opacity-100 sm:pointer-events-auto sm:h-auto': true,
@@ -84,24 +104,9 @@ export default component$(({ hidden }: {
       'opacity-100 pointer-events-auto': !hidden,
     }} id="presets">
       <div class="flex gap-1">
-        <Accordion onClick$={() => {
-          // If privatePresets is empty, load presets from localStorage
-          if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
-
-          try {
-            const localStoragePresets = getPresets();
-            privatePresets.value = privatePresets.value.concat(localStoragePresets);
-          } catch (err) {
-            const notification = new Notification()
-              .setTitle('Error loading saved presets')
-              .setDescription(`Error: ${err}`)
-              .setBgColor('lum-grad-bg-red/50')
-              .setPersist(true);
-            notifications.push(notification);
-          }
-        }}
-        sectionName="saved-presets"
-        class={{ 'flex-1 rounded-r-sm': true }}
+        <Accordion
+          sectionName="saved-presets"
+          class={{ 'flex-1 rounded-r-sm': true }}
         >
           {t('rgb.presets.saved.presets@@Saved Presets')}
         </Accordion>
@@ -128,23 +133,58 @@ export default component$(({ hidden }: {
         </button>
       </div>
 
+      {/* todo: make this look better, publish preset function */}
       <SelectList class={{
         'transition-all': true,
         'p-0! max-h-0! opacity-0 pointer-events-none -mt-1': !openItemsStore.items.includes('saved-presets'),
         'opacity-100 p-1': openItemsStore.items.includes('saved-presets'),
       }}>
-        {privatePresets.value.concat(savedPresets.value.map((preset) => ({
-          text: preset.name ?? rgbStore.text,
-          ...preset.preset,
-        }))).map((preset, i) => <button q:slot="extra-buttons" key={i} class={{
-          'lum-btn lum-bg-transparent rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
+        {privatePresets.value.length && <p q:slot="extra-buttons" class="text-lum-text-secondary border-b border-lum-border/10 my-1 px-2 pb-2">
+          {t('rgb.presets.personalPresets@@Personal Presets')}
+        </p>}
+        {privatePresets.value.map((preset, i) => <div q:slot="extra-buttons" key={i} class={{
+          'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
           'font-mc-bold': preset.bold,
           'font-mc-italic': preset.italic,
           'font-mc-bold-italic': preset.bold && preset.italic,
           [`${preset.format?.class}`]: preset.format?.class,
-        }} onClick$={() => loadPresetJSON(JSON.stringify(preset))}>
-          {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
-        </button>)}
+        }}>
+          <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(preset))}>
+            {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
+          </button>
+          <button class="lum-btn lum-bg-transparent hover:lum-bg-transparent hover:text-red-500 p-1.5 mr-1.5 rounded-lum-1 cursor-pointer" onClick$={async () => {
+            privatePresets.value = privatePresets.value.filter((p) => p !== preset);
+            await setUserData({
+              privatePresets: privatePresets.value,
+            });
+            if (isBrowser) localStorage.setItem('privatePresets', JSON.stringify(privatePresets.value));
+          }}>
+            <Trash size={20} />
+          </button>
+        </div>)}
+
+        {savedPresets.value.length && <p q:slot="extra-buttons" class="text-lum-text-secondary border-b border-lum-border/10 my-1 px-2 pb-2">
+          {t('rgb.presets.savedPresets@@Saved Presets')}
+        </p>}
+        {savedPresets.value.map((Preset, i) => <div q:slot="extra-buttons" key={i} class={{
+          'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
+          'font-mc-bold': Preset.preset.bold,
+          'font-mc-italic': Preset.preset.italic,
+          'font-mc-bold-italic': Preset.preset.bold && Preset.preset.italic,
+          [`${Preset.preset.format?.class}`]: Preset.preset.format?.class,
+        }}>
+          <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}>
+            {renderPreview({ ...rgbDefaults, ...Preset.preset }, 1)}
+          </button>
+          <button class="lum-btn lum-bg-transparent hover:lum-bg-transparent hover:text-red-500 p-1.5 mr-1.5 rounded-lum-1 cursor-pointer" onClick$={async () => {
+            savedPresets.value = savedPresets.value.filter((p) => p.id !== Preset.id);
+            const result = await unsavePreset(Preset.id);
+            if (result.success) Preset.saves = (Preset.saves || 0) - 1;
+          }}>
+            <Trash size={20} />
+          </button>
+        </div>)}
+
       </SelectList>
 
       <Link class={{
