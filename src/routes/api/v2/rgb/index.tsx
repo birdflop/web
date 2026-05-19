@@ -101,12 +101,14 @@ function getOutput(body: any) {
   // make string[] a valid color array
   let colors = body?.colors;
   if (colors && colors.length && typeof colors[0] == 'string') {
-    if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
+    if (typeof colors[0] == 'string') colors = colors.map((color: string, i: number) =>
+      ({ hex: color, pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000 }));
   }
   body.colors = colors;
   let shadowcolors = body?.shadowcolors;
   if (shadowcolors && shadowcolors.length && typeof shadowcolors[0] == 'string') {
-    if (typeof shadowcolors[0] == 'string') shadowcolors = shadowcolors.map((color: string, i: number) => ({ hex: color, pos: (100 / (colors.length - 1)) * i }));
+    if (typeof shadowcolors[0] == 'string') shadowcolors = shadowcolors.map((color: string, i: number) =>
+      ({ hex: color, pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000 }));
   }
   body.shadowcolors = shadowcolors;
 

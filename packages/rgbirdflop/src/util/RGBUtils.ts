@@ -142,10 +142,9 @@ export function disperseColors(colors: ColorStop[]) {
   if (colors.length <= 1) {
     return colors.slice(0).map((color) => ({ ...color, pos: 0 }));
   }
-  const pos = 100 / (colors.length - 1);
   const newColors = colors.slice(0).map((color, i) => ({
     ...color,
-    pos: Math.round(pos * i * 1000) / 1000,
+    pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
   }));
   return newColors;
 }
@@ -275,8 +274,11 @@ function renderMiniMessageGradient(
   };
 
   const renderUnevenGradient = (text: string) => {
-    const uneven = colors.find((color, i) => color.pos != (100 / (colors.length - 1)) * i);
-    if (!uneven) return null;
+    // todo: make an iseven function to avoid math.random issues
+    const even = !colors.find((color, i) => {
+      return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
+    });
+    if (even) return null;
 
     const copy = [...colors];
     if (copy[0].pos !== 0) copy.unshift({ ...copy[0], pos: 0 });
