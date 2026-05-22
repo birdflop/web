@@ -163,7 +163,7 @@ export class BaseGradient {
   next(): number[] {
     if (this.steps < 1) {
       // Single color, just return it
-      return this.colors[0].rgb;
+      return this.colors[0]?.rgb;
     }
 
     // Apply easing function for smooth transitions
@@ -181,7 +181,7 @@ export class BaseGradient {
         g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
       );
       if (!gradient) {
-        return this.colors[0].rgb;
+        return this.colors[0]?.rgb;
       }
       color = gradient.colorAt(adjustedStep);
     }

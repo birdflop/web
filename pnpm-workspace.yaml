@@ -7,3 +7,7 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+
+onlyBuiltDependencies:
+  - better-sqlite3
+  - workerd
