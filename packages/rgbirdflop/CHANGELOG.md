@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.18](https://github.com/birdflop/web/compare/v0.1.17...v0.1.18) (2026-05-22)
+
+
+### Bug Fixes
+
+* handle potential undefined rgb values in BaseGradient class ([f259f0e](https://github.com/birdflop/web/commit/f259f0e37de7fca1bc533126fab1a693651d30f4))
+* improve color position calculation for disperseColors and getOutput functions ([b1feab6](https://github.com/birdflop/web/commit/b1feab641ef70d1d750c2bf554bcd3e6b0b9deee))
+* make typescript shut up ([f31d300](https://github.com/birdflop/web/commit/f31d300297e96b5c53642a8c058d803ca08a5a6a))
+
 ## [0.1.17](https://github.com/birdflop/web/compare/v0.1.16...v0.1.17) (2026-03-09)
 
 
