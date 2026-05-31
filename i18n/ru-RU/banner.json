@@ -3,14 +3,14 @@
     "command": {
       "copied": {
         "description": "Команда была скопирована в буфер обмена.",
-        "title": "Command Copied!"
+        "title": "Команда скопирована!"
       },
       "title": "Команда"
     },
     "copyFailed": "Не удалось скопировать в буфер обмена!",
     "options": {
       "baseColor": {
-        "description": "Ета базовый цвет баннер.",
+        "description": "Это базовый цвет баннера.",
         "title": "Базовый цвет"
       },
       "patterns": "Узоры",
