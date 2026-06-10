@@ -1,5 +1,5 @@
 import { combinedDefaults } from '@birdflop/rgbirdflop';
-import { migrateFromV2, migrateFromV3, migratePresetsFromCookies } from './migrate';
+import { migrateBetweenVersions, migratePresetsFromCookies } from './migrate';
 
 export type rgbPreset = Partial<typeof combinedDefaults>;
 
@@ -16,10 +16,9 @@ export function loadPreset(p: string): rgbPreset {
   if (preset.version === combinedDefaults.version || !preset.version) return preset;
 
   // if version is not current, migrate the preset
-  const migratedFromV2 = migrateFromV2(preset);
-  if (migratedFromV2) newPreset = migratedFromV2;
-  const migratedFromV3 = migrateFromV3(preset);
-  if (migratedFromV3) newPreset = migratedFromV3;
+  const migratedPreset = migrateBetweenVersions(preset);
+  if (migratedPreset) newPreset = migratedPreset;
+
   newPreset.version = combinedDefaults.version;
 
   // remove any properties that are the same as the defaults

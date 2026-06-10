@@ -6,7 +6,6 @@ import { deepTrack } from '~/util/misc';
 import { setCookies } from '~/util/dataUtils';
 import Output from '~/components/Rgbirdflop/Output';
 import { donateLink } from '~/components/Elements/Nav';
-import { advancedStoreContext } from './context';
 import { generateAdvancedOutput } from './output';
 import AdvancedInput from './AdvancedInput';
 import StylePanel from './StylePanel';

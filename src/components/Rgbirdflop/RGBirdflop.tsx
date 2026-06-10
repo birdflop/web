@@ -63,12 +63,12 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
 
   const gradient = new ColorGradient(
     colorsRGB,
-    Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+    Math.ceil(rgbStore.text.length / rgbStore.colorLength),
     rgbStore.gradientType,
   );
   const shadowGradient = new ColorGradient(
     shadowColorsRGB,
-    Math.ceil(rgbStore.text.length / rgbStore.colorlength),
+    Math.ceil(rgbStore.text.length / rgbStore.colorLength),
   );
 
   const segments = [];
@@ -76,12 +76,12 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   const textArray = Array.from(rgbStore.text);
   while (index < textArray.length) {
     // check if colorlength is set and valid
-    if (!rgbStore.colorlength || rgbStore.colorlength < 1)
-      rgbStore.colorlength = 1;
+    if (!rgbStore.colorLength || rgbStore.colorLength < 1)
+      rgbStore.colorLength = 1;
     segments.push(
-      textArray.slice(index, index + rgbStore.colorlength).join(''),
+      textArray.slice(index, index + rgbStore.colorLength).join(''),
     );
-    index += rgbStore.colorlength;
+    index += rgbStore.colorLength;
   }
   return segments.map((segment, i) => {
     const rgb = gradient.next();
@@ -101,11 +101,14 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           }),
         }}
         class={{
-          underline: rgbStore.underline,
-          strikethrough: rgbStore.strikethrough,
+          'font-mc-bold': rgbStore.defaultFormatting.bold,
+          'font-mc-italic': rgbStore.defaultFormatting.italic,
+          'font-mc-bold-italic': rgbStore.defaultFormatting.bold && rgbStore.defaultFormatting.italic,
+          underline: rgbStore.defaultFormatting.underline,
+          strikethrough: rgbStore.defaultFormatting.strikethrough,
           'underline-strikethrough':
-            rgbStore.underline && rgbStore.strikethrough,
-          obfuscate: rgbStore.obfuscate,
+            rgbStore.defaultFormatting.underline && rgbStore.defaultFormatting.strikethrough,
+          obfuscate: rgbStore.defaultFormatting.obfuscate,
         }}
       >
         {segment}
@@ -163,8 +166,8 @@ export default component$(({ errors, output }: {
     if (rgbStore.disperse) rgbStore.colors = disperseColors(rgbStore.colors);
 
     // update characters per color if over max
-    if (rgbStore.colorlength > rgbStore.text.length / rgbStore.colors.length) {
-      rgbStore.colorlength = Math.max(1,
+    if (rgbStore.colorLength > rgbStore.text.length / rgbStore.colors.length) {
+      rgbStore.colorLength = Math.max(1,
         Math.floor(rgbStore.text.length / rgbStore.colors.length),
       );
     }
@@ -181,7 +184,7 @@ export default component$(({ errors, output }: {
     const text = document.querySelectorAll('span.obfuscate');
     function obfuscate() {
       text.forEach((el, i) => {
-        if (!rgbStore.obfuscate) return el.textContent = rgbStore.text[i];
+        if (!rgbStore.defaultFormatting.obfuscate) return el.textContent = rgbStore.text[i];
         el.textContent = Math.random()
           .toString(36)
           .substring(1, 3)
@@ -189,8 +192,8 @@ export default component$(({ errors, output }: {
       });
       requestAnimationFrame(obfuscate);
     }
-    if (rgbStore.obfuscate) obfuscate();
-    track(() => rgbStore.obfuscate);
+    if (rgbStore.defaultFormatting.obfuscate) obfuscate();
+    track(() => rgbStore.defaultFormatting.obfuscate);
     track(() => rgbStore.text);
   });
 

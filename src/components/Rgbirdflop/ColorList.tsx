@@ -13,7 +13,7 @@ export default component$(({ hidden, id = 'text' }: {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
-  const colorsKey = id == 'text' ? 'colors' : 'shadowcolors';
+  const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const colors = getColors(rgbStore, id);
 
   useOnDocument('click', $((e) => {
@@ -31,13 +31,13 @@ export default component$(({ hidden, id = 'text' }: {
       'opacity-100 pointer-events-auto': !hidden,
     }} id={'colorlist' + id}>
       <Slot />
-      {rgbStore.format.color != 'MiniMessage' && id == 'text' &&
+      {rgbStore.colorFormat.color != 'MiniMessage' && id == 'text' &&
         <NumberInput input disabled id="colorlength"
           min={1} max={rgbStore.text.length / colors.length}
-          value={rgbStore.colorlength}
+          value={rgbStore.colorLength}
           class={{ 'w-full opacity-100!': true }}
-          onIncrement$={() => rgbStore.colorlength++}
-          onDecrement$={() => rgbStore.colorlength--}
+          onIncrement$={() => rgbStore.colorLength++}
+          onDecrement$={() => rgbStore.colorLength--}
         >
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
@@ -151,7 +151,7 @@ export default component$(({ hidden, id = 'text' }: {
           </button>
         }
       </div>
-      <div class="flex flex-col gap-2 relative" id={'colorlistcolors' + id}>
+      <div class="flex flex-col gap-2 relative" id={`#colorlistcolors${id}`}>
         {colors.map((color, i) => <div
           key={`${i}/${colors.length}`}
           id={`colorlist${id}-color-${i + 1}`}

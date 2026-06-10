@@ -4,7 +4,7 @@ import RGBirdflop, { renderPreview, rgbStoreContext, showAllGradientsContext } f
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
-import { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
 import { Blend, Palette, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
@@ -28,6 +28,8 @@ export default component$(() => {
   }, { deep: true });
   useContextProvider(rgbStoreContext, rgbStore);
 
+  const selection = useSignal<Selection>();
+  useContextProvider(selectionContext, selection);
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);

@@ -1,7 +1,6 @@
 import { component$, useComputed$, useContext } from '@builder.io/qwik';
 import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { advancedStoreContext, selectionContext } from './context';
 import { selectionFlags, toggleFormat, type FormatFlag } from './model';
 import { restoreSelection } from './dom';
 

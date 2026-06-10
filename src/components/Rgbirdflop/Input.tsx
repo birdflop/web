@@ -1,4 +1,4 @@
-import { component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
 import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
@@ -6,6 +6,13 @@ import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from './Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
+
+export interface Selection {
+  start: number;
+  end: number;
+};
+
+export const selectionContext = createContextId<Signal<Selection | undefined>>('advanced-rgb-selection');
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
@@ -20,14 +27,28 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   readOnly?: boolean;
 }) => {
   const rgbStore = useContext(rgbStoreContext);
+
+  const selection = useContext(selectionContext);
+  const syncSelection = $((el: HTMLTextAreaElement) => {
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? start;
+    if (start === end) {
+      // If there's no selection, unset it
+      selection.value = undefined;
+      return;
+    }
+    selection.value = {
+      start,
+      end,
+    };
+    console.log('Selection updated:', selection.value);
+  });
+
   return (
     <div class={{
       'relative focus-within:border-lum-accent break-all caret-white': true,
       [`${className}`]: className,
-      'font-mc-bold': rgbStore.bold,
-      'font-mc-italic': rgbStore.italic,
-      'font-mc-bold-italic': rgbStore.bold && rgbStore.italic,
-      [`${rgbStore.format.class}`]: rgbStore.format.class,
+      [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
     }}>
       <p class={{
         'pointer-events-none whitespace-pre-wrap': true,
@@ -41,7 +62,10 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
           [`${inputClass}`]: inputClass,
         }}
         value={rgbStore.text} spellcheck={false} id="input"
-        onInput$={(e, el) => { rgbStore.text = el.value; }}/>
+        onInput$={(e, el) => { rgbStore.text = el.value; }}
+        onSelect$={(e, el) => syncSelection(el)}
+        onKeyUp$={(e, el) => syncSelection(el)}
+        onMouseUp$={(e, el) => syncSelection(el)}/>
       }
     </div>
   );

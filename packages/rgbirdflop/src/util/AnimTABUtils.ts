@@ -1,16 +1,16 @@
-import { ColorAnimatedGradient, GradientType } from './ColorUtils';
+import { ColorAnimatedGradient } from './ColorUtils';
 import { rgbToHex } from './Colors';
 import { getRGBColorStop, sortColors } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
-export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
-  if (rgbStore.colors.length < 2) return { OutputArray: [], frames: [] };
+export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
+  if (rgbOptions.colors.length < 2) return { OutputArray: [], frames: [] };
 
-  const colors = rgbStore.colors.map(getRGBColorStop);
-  const text = rgbStore.text ?? 'Birdflop';
+  const colors = rgbOptions.colors.map(getRGBColorStop);
+  const text = rgbOptions.text ?? 'Birdflop';
 
   let loopAmount;
-  const length = text.length * animtabStore.length / rgbStore.colorlength;
+  const length = text.length * animtabStore.length / rgbOptions.colorLength;
   switch (Number(animtabStore.type)) {
   case 3:
     loopAmount = length;
@@ -25,11 +25,11 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
 
   for (let n = 0; n < loopAmount; n++) {
     const frameColors = [];
-    const gradient = new ColorAnimatedGradient(colors, length, n, rgbStore.gradientType as GradientType);
+    const gradient = new ColorAnimatedGradient(colors, length, n, rgbOptions.gradientType);
 
     if (animtabStore.type === 4) {
       let hex = rgbToHex(gradient.next());
-      if (rgbStore.lowercase) hex = hex.toLowerCase();
+      if (rgbOptions.lowercase) hex = hex.toLowerCase();
       frameColors.push(hex);
       textFrames.push({ type: 'solid', text, colors: [hex] });
     } else {
@@ -39,21 +39,21 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
 
       while (index < textArray.length) {
         // check if colorlength is set and valid
-        if (!rgbStore.colorlength || rgbStore.colorlength < 1) rgbStore.colorlength = 1;
-        segments.push(textArray.slice(index, index + rgbStore.colorlength).join(''));
-        index += rgbStore.colorlength;
+        if (!rgbOptions.colorLength || rgbOptions.colorLength < 1) rgbOptions.colorLength = 1;
+        segments.push(textArray.slice(index, index + rgbOptions.colorLength).join(''));
+        index += rgbOptions.colorLength;
       }
 
       const segmentColors = [];
 
       for (const segment of segments) {
-        if (rgbStore.trimspaces && segment.match(/^\s+$/)) {
+        if (rgbOptions.trimSpaces && segment.match(/^\s+$/)) {
           segmentColors.push(null);
           continue;
         }
 
         let hex = rgbToHex(gradient.next());
-        if (rgbStore.lowercase) hex = hex.toLowerCase();
+        if (rgbOptions.lowercase) hex = hex.toLowerCase();
         segmentColors.push(hex);
         frameColors.push(hex);
       }
@@ -64,37 +64,37 @@ export function generateAnimTABFrames(rgbStore: typeof rgbDefaults, animtabStore
     colorFrames.push(frameColors);
   }
 
-  const OutputArray = formatFrames({ colorFrames, textFrames }, rgbStore, animtabStore);
+  const OutputArray = formatFrames({ colorFrames, textFrames }, rgbOptions, animtabStore);
 
   return { OutputArray, frames: colorFrames };
 }
 
-function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
+function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   const { textFrames } = frames;
   const OutputArray = [];
-  const text = rgbStore.text ?? 'Birdflop';
+  const text = rgbOptions.text ?? 'Birdflop';
 
   for (let n = 0; n < textFrames.length; n++) {
     const frame = textFrames[n];
     let output = '';
 
-    if (rgbStore.format.color === 'MiniMessage') {
+    if (rgbOptions.colorFormat.color === 'MiniMessage') {
       if (frame.type === 'solid') {
 
         const hex = frame.colors[0];
         output = `<color:#${hex}>${text}</color>`;
       } else if (frame.type === 'segments') {
-        if (rgbStore.colors.find((color, i) => color.pos != (100 / (rgbStore.colors.length - 1)) * i)) {
-          output = formatMiniMessageCustomPositions(rgbStore, animtabStore, n);
+        if (rgbOptions.colors.find((color, i) => color.pos != (100 / (rgbOptions.colors.length - 1)) * i)) {
+          output = formatMiniMessageCustomPositions(rgbOptions, animtabStore, n);
         } else {
           const animatedColors = [];
 
-          for (let i = 0; i < rgbStore.colors.length; i++) {
-            const colors = rgbStore.colors.map(getRGBColorStop);
-            const length = text.length * animtabStore.length / rgbStore.colorlength;
+          for (let i = 0; i < rgbOptions.colors.length; i++) {
+            const colors = rgbOptions.colors.map(getRGBColorStop);
+            const length = text.length * animtabStore.length / rgbOptions.colorLength;
 
-            const offset = (n + i * (length / rgbStore.colors.length)) % length;
-            const shiftedGradient = new ColorAnimatedGradient(colors, length, offset, rgbStore.gradientType as GradientType);
+            const offset = (n + i * (length / rgbOptions.colors.length)) % length;
+            const shiftedGradient = new ColorAnimatedGradient(colors, length, offset, rgbOptions.gradientType);
             const color = rgbToHex(shiftedGradient.next());
             animatedColors.push('#' + color);
           }
@@ -107,7 +107,7 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         }
       }
     } else if (frame.type === 'solid') {
-      let hexOutput = rgbStore.format.color;
+      let hexOutput = rgbOptions.colorFormat.color;
       const hex = frame.colors[0];
 
       for (let i = 1; i <= 6; i++) {
@@ -115,19 +115,20 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
       }
 
       let formatCodes = '';
-      if (rgbStore.format.color.includes('$f')) {
-        if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
-        if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
-        if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
-        if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
-        if (rgbStore.obfuscate) formatCodes += rgbStore.format.char + 'k';
+      if (rgbOptions.colorFormat.color.includes('$f')) {
+        // find the global formatting
+        if (rgbOptions.defaultFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
+        if (rgbOptions.defaultFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
+        if (rgbOptions.defaultFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
+        if (rgbOptions.defaultFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
+        if (rgbOptions.defaultFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
       hexOutput = hexOutput.replace('$c', text);
 
-      if (rgbStore.prefixsuffix) {
-        hexOutput = rgbStore.prefixsuffix.replace(/\$t/g, hexOutput);
+      if (rgbOptions.prefixSuffix) {
+        hexOutput = rgbOptions.prefixSuffix.replace(/\$t/g, hexOutput);
       }
 
       output = hexOutput;
@@ -141,18 +142,19 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
           continue;
         }
 
-        let hexOutput = rgbStore.format.color;
+        let hexOutput = rgbOptions.colorFormat.color;
         for (let j = 1; j <= 6; j++) {
           hexOutput = hexOutput.replace(`$${j}`, hex.charAt(j - 1));
         }
 
         let formatCodes = '';
-        if (rgbStore.format.color.includes('$f')) {
-          if (rgbStore.bold) formatCodes += rgbStore.format.char + 'l';
-          if (rgbStore.italic) formatCodes += rgbStore.format.char + 'o';
-          if (rgbStore.underline) formatCodes += rgbStore.format.char + 'n';
-          if (rgbStore.strikethrough) formatCodes += rgbStore.format.char + 'm';
-          if (rgbStore.obfuscate) formatCodes += rgbStore.format.char + 'k';
+        if (rgbOptions.colorFormat.color.includes('$f')) {
+          // find the global formatting
+          if (rgbOptions.defaultFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
+          if (rgbOptions.defaultFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
+          if (rgbOptions.defaultFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
+          if (rgbOptions.defaultFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
+          if (rgbOptions.defaultFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
@@ -160,8 +162,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         output += hexOutput;
       }
 
-      if (rgbStore.prefixsuffix) {
-        output = rgbStore.prefixsuffix.replace(/\$t/g, output);
+      if (rgbOptions.prefixSuffix) {
+        output = rgbOptions.prefixSuffix.replace(/\$t/g, output);
       }
     }
 
@@ -171,19 +173,19 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
   return OutputArray;
 }
 
-function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults, frameIndex: number) {
-  const text = rgbStore.text ?? 'Birdflop';
-  const colors = sortColors(rgbStore.colors);
+function formatMiniMessageCustomPositions(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults, frameIndex: number) {
+  const text = rgbOptions.text ?? 'Birdflop';
+  const colors = sortColors(rgbOptions.colors);
   let output = '';
 
   if (colors[0].pos !== 0) colors.unshift({ hex: colors[0].hex, pos: 0 });
   if (colors[colors.length - 1].pos !== 100) colors.push({ hex: colors[colors.length - 1].hex, pos: 100 });
 
   const animatedColors = colors.map((color, i) => {
-    const colorArray = rgbStore.colors.map(getRGBColorStop);
-    const length = text.length * animtabStore.length / rgbStore.colorlength;
+    const colorArray = rgbOptions.colors.map(getRGBColorStop);
+    const length = text.length * animtabStore.length / rgbOptions.colorLength;
     const offset = (frameIndex + i * (length / colors.length)) % length;
-    const shiftedGradient = new ColorAnimatedGradient(colorArray, length, offset, rgbStore.gradientType as GradientType);
+    const shiftedGradient = new ColorAnimatedGradient(colorArray, length, offset, rgbOptions.gradientType);
     return {
       hex: rgbToHex(shiftedGradient.next()),
       pos: color.pos,
@@ -212,10 +214,10 @@ function formatMiniMessageCustomPositions(rgbStore: typeof rgbDefaults, animtabS
   return output;
 }
 
-export function AnimationOutput(rgbStore: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
+export function AnimationOutput(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
   let FinalOutput;
 
-  const AnimFrames = generateAnimTABFrames(rgbStore, animtabStore);
+  const AnimFrames = generateAnimTABFrames(rgbOptions, animtabStore);
   let { OutputArray } = AnimFrames;
 
   const format = animtabStore.outputFormat;

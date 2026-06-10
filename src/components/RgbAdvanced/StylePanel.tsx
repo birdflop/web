@@ -1,7 +1,6 @@
 import { $, component$, useComputed$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { MousePointerClick, Palette, Type } from 'lucide-icons-qwik';
-import { advancedStoreContext, selectionContext } from './context';
 import { combinedText } from './model';
 import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';

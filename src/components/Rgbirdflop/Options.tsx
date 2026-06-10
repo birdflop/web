@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { formats, GRADIENT_TYPES, type GradientType } from '@birdflop/rgbirdflop';
+import { colorFormats, GRADIENT_TYPES, type GradientType } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
@@ -16,35 +16,35 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     }}>
       <div class="flex flex-col md:grid grid-cols-2 gap-2">
         <Slot />
-        <SelectMenu id="format" value={rgbStore.customFormat ? 'custom' : JSON.stringify(rgbStore.format)} class={{ 'w-full': true }} onChange$={
+        <SelectMenu id="format" value={rgbStore.customFormat ? 'custom' : JSON.stringify(rgbStore.colorFormat)} class={{ 'w-full': true }} onChange$={
           (e, el) => {
             if (el.value == 'custom') {
               rgbStore.customFormat = true;
             }
             else {
               rgbStore.customFormat = false;
-              rgbStore.format = JSON.parse(el.value);
+              rgbStore.colorFormat = JSON.parse(el.value);
             }
           }
         } values={[
-          ...!rgbStore.customFormat && !formats.find((format) => format.color == rgbStore.format.color) ? [{
-            name: rgbStore.format.color
+          ...!rgbStore.customFormat && !colorFormats.find((format) => format.color == rgbStore.colorFormat.color) ? [{
+            name: rgbStore.colorFormat.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}${rgbStore.obfuscate ? rgbStore.format.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', ''),
-            value: JSON.stringify(rgbStore.format),
+            value: JSON.stringify(rgbStore.colorFormat),
           }] : [],
-          ...formats.map(format => ({
+          ...colorFormats.map(format => ({
             name: format.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}${rgbStore.obfuscate ? rgbStore.format.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', ''),
             value: JSON.stringify(format),
           })),
           {
-            name: rgbStore.customFormat ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.format.color
+            name: rgbStore.customFormat ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.bold ? rgbStore.format.char + 'l' : ''}${rgbStore.italic ? rgbStore.format.char + 'o' : ''}${rgbStore.underline ? rgbStore.format.char + 'n' : ''}${rgbStore.strikethrough ? rgbStore.format.char + 'm' : ''}${rgbStore.obfuscate ? rgbStore.format.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', '')}`
               : t('rgb.colors.customFormat@@Custom Format'),
             value: 'custom',
@@ -71,7 +71,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <label for="prefixsuffix">
             {t('rgb.prefixsuffix@@Prefix/Suffix')}
           </label>
-          <input class="lum-input" id="prefixsuffix" value={rgbStore.prefixsuffix} placeholder={'/nick $t'} onInput$={(e, el) => { rgbStore.prefixsuffix = el.value; }} />
+          <input class="lum-input" id="prefixsuffix" value={rgbStore.prefixSuffix} placeholder={'/nick $t'} onInput$={(e, el) => { rgbStore.prefixSuffix = el.value; }} />
         </div>
         {
           rgbStore.customFormat && <>
@@ -81,7 +81,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               <label for="customformat">
                 {t('rgb.colors.customFormat@@Custom Format')}
               </label>
-              <input class="lum-input" id="customformat" value={rgbStore.format.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.format.color = el.value; }} />
+              <input class="lum-input" id="customformat" value={rgbStore.colorFormat.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.colorFormat.color = el.value; }} />
               <div class="font-mono text-sm">
                 <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
                 <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
@@ -90,7 +90,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                 <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
                 <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
                 <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                {rgbStore.format.char && <p>$f = {t('rgb.formatting.title@@Formatting')}</p>}
+                {rgbStore.colorFormat.char && <p>$f = {t('rgb.formatting.title@@Formatting')}</p>}
                 <p>$c = {t('rgb.colors.character@@Character')}</p>
               </div>
             </div>
@@ -105,10 +105,10 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             {t('rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.')}
           </p>
         </div>
-        {rgbStore.format.color != 'MiniMessage' &&
+        {rgbStore.colorFormat.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
-            <Toggle id="trimspaces" checked={rgbStore.trimspaces}
-              onChange$={(e, el) => { rgbStore.trimspaces = el.checked; }}>
+            <Toggle id="trimspaces" checked={rgbStore.trimSpaces}
+              onChange$={(e, el) => { rgbStore.trimSpaces = el.checked; }}>
               {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
             </Toggle>
             <p class="text-xs text-lum-text-secondary">
@@ -116,7 +116,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             </p>
           </div>
         }
-        {rgbStore.format.color != 'MiniMessage' &&
+        {rgbStore.colorFormat.color != 'MiniMessage' &&
           <div class="flex flex-col gap-1">
             <Toggle id="lowercase" checked={rgbStore.lowercase}
               onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}>

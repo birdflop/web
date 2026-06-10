@@ -144,10 +144,10 @@ export default component$(({ hidden }: {
         </p>}
         {privatePresets.value.map((preset, i) => <div q:slot="extra-buttons" key={i} class={{
           'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
-          'font-mc-bold': preset.bold,
-          'font-mc-italic': preset.italic,
-          'font-mc-bold-italic': preset.bold && preset.italic,
-          [`${preset.format?.class}`]: preset.format?.class,
+          'font-mc-bold': preset.defaultFormatting?.bold,
+          'font-mc-italic': preset.defaultFormatting?.italic,
+          'font-mc-bold-italic': preset.defaultFormatting?.bold && preset.defaultFormatting?.italic,
+          [`${preset.colorFormat?.class}`]: preset.colorFormat?.class,
         }}>
           <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(preset))}>
             {renderPreview({ ...rgbDefaults, text: rgbStore.text, ...preset }, 1)}
@@ -168,10 +168,10 @@ export default component$(({ hidden }: {
         </p>}
         {savedPresets.value.map((Preset, i) => <div q:slot="extra-buttons" key={i} class={{
           'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
-          'font-mc-bold': Preset.preset.bold,
-          'font-mc-italic': Preset.preset.italic,
-          'font-mc-bold-italic': Preset.preset.bold && Preset.preset.italic,
-          [`${Preset.preset.format?.class}`]: Preset.preset.format?.class,
+          'font-mc-bold': Preset.preset.defaultFormatting?.bold,
+          'font-mc-italic': Preset.preset.defaultFormatting?.italic,
+          'font-mc-bold-italic': Preset.preset.defaultFormatting?.bold && Preset.preset.defaultFormatting?.italic,
+          [`${Preset.preset.colorFormat?.class}`]: Preset.preset.colorFormat?.class,
         }}>
           <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}>
             {renderPreview({ ...rgbDefaults, text: Preset.name, ...Preset.preset }, 1)}
@@ -231,7 +231,7 @@ export default component$(({ hidden }: {
           const url = new URL(base_url);
           const params: rgbPreset = { ...rgbStore };
           (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
-            if (key == 'format' || key == 'colors' || key == 'shadowcolors') {
+            if (key == 'defaultFormatting' || key == 'colors' || key == 'shadowColors') {
               value = JSON.stringify(value);
               if (value === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) return;
             }

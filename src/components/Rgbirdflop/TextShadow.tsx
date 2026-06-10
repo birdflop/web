@@ -10,7 +10,7 @@ export default component$(({ hidden }: {
 }) => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
-  const enabled = useSignal(!!rgbStore.shadowcolors);
+  const enabled = useSignal(!!rgbStore.shadowColors);
 
   return (
     <div class={{
@@ -18,16 +18,16 @@ export default component$(({ hidden }: {
       'h-0 opacity-0 pointer-events-none': hidden,
       'opacity-100 pointer-events-auto': !hidden,
     }} id="decode">
-      {rgbStore.format.color != 'JSON' && rgbStore.format.color != 'MiniMessage' &&
+      {rgbStore.colorFormat.color != 'JSON' && rgbStore.colorFormat.color != 'MiniMessage' &&
         <p class="text-red-500!">
           {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON or MiniMessage formatting!')}
         </p>
       }
       <Toggle id="textshadowtoggle"
-        checked={!!rgbStore.shadowcolors}
+        checked={!!rgbStore.shadowColors}
         onChange$={(e, el) => {
           if (!el.checked) {
-            rgbStore.shadowcolors = null;
+            rgbStore.shadowColors = null;
             enabled.value = false;
           } else {
             enabled.value = true;
@@ -38,7 +38,7 @@ export default component$(({ hidden }: {
       </Toggle>
       <div class={{
         'transition-all duration-300': true,
-        'opacity-50': !rgbStore.shadowcolors && !enabled.value,
+        'opacity-50': !rgbStore.shadowColors && !enabled.value,
       }}>
         <div class="py-2 px-4">
           <ColorMap id="shadow"/>

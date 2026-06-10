@@ -3,7 +3,6 @@ import { Eye } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
-import { advancedStoreContext, advPreviewStyleContext, selectionContext } from './context';
 import { applyTextDiff, combinedText, segmentIndexAtChar } from './model';
 import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';

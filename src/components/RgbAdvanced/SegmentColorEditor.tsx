@@ -14,7 +14,6 @@ import {
   type GradientType,
 } from '@birdflop/rgbirdflop';
 import { ArrowRightLeft, Ban, ChevronDown, ChevronUp, Dices, Droplet, Palette, Plus, Trash } from 'lucide-icons-qwik';
-import { advancedStoreContext, selectionContext } from './context';
 import { applyStyleToRange, defaultStyle, styleAtChar, type CharStyle } from './model';
 import { restoreSelection } from './dom';
 

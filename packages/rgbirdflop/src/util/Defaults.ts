@@ -6,7 +6,20 @@ export type ColorStop = {
   opacity?: number;
 };
 
-export interface format {
+export interface Formatting {
+  bold?: boolean,
+  italic?: boolean,
+  underline?: boolean,
+  strikethrough?: boolean,
+  obfuscate?: boolean,
+}
+
+export interface FormatSegment extends Formatting {
+  start: number;
+  end: number;
+};
+
+export interface ColorFormat {
   color: string;
   char?: string;
   class?: string;
@@ -17,7 +30,7 @@ export interface format {
   obfuscate?: string;
 }
 
-export const formats: format[] = [
+export const colorFormats: ColorFormat[] = [
   {
     color: 'MiniMessage',
     bold: '<b>$t</b>',
@@ -62,25 +75,22 @@ export const animationStyles = [
 ];
 
 export const rgbDefaults = {
-  version: 4,
+  version: 5,
   colors: [
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ] as ColorStop[],
-  shadowcolors: null as null | ColorStop[],
-  colorlength: 1,
+  shadowColors: null as null | ColorStop[],
+  colorFormat: colorFormats[1],
+  colorLength: 1,
+  formatting: [] as FormatSegment[],
+  defaultFormatting: {} as Formatting,
   text: 'Birdflop',
-  format: formats[1],
-  prefixsuffix: '',
+  prefixSuffix: '',
   customFormat: false,
-  trimspaces: true,
+  trimSpaces: true,
   disperse: false,
   lowercase: false,
-  bold: false,
-  italic: false,
-  underline: false,
-  strikethrough: false,
-  obfuscate: false,
   gradientType: 'rgb' as GradientType,
 };
 

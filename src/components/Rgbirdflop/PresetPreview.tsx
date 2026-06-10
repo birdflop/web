@@ -32,7 +32,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
   const searchParams = new URLSearchParams();
   const params = { ...Preset.preset };
   (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
-    if (key == 'format' || key == 'colors' || key == 'shadowcolors') value = JSON.stringify(value);
+    if (key == 'defaultFormatting' || key == 'colors' || key == 'shadowColors') value = JSON.stringify(value);
     searchParams.set(key, String(value));
   });
 
@@ -96,10 +96,10 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
       prefetch={false}>
       <p class={{
         'text-2xl sm:text-3xl break-all max-w-7xl font-mc tracking-tight': true,
-        'font-mc-bold': Preset.preset.bold || defaults?.bold,
-        'font-mc-italic': Preset.preset.italic || defaults?.italic,
-        'font-mc-bold-italic': (Preset.preset.bold && Preset.preset.italic) || (defaults?.bold && defaults?.italic),
-        [`${Preset.preset.format?.class || defaults?.format?.class}`]: Preset.preset.format?.class || defaults?.format?.class,
+        'font-mc-bold': Preset.preset.defaultFormatting?.bold || defaults?.defaultFormatting?.bold,
+        'font-mc-italic': Preset.preset.defaultFormatting?.italic || defaults?.defaultFormatting?.italic,
+        'font-mc-bold-italic': (Preset.preset.defaultFormatting?.bold && Preset.preset.defaultFormatting?.italic) || (defaults?.defaultFormatting?.bold && defaults?.defaultFormatting?.italic),
+        [`${Preset.preset.colorFormat?.class || defaults?.colorFormat?.class}`]: Preset.preset.colorFormat?.class || defaults?.colorFormat?.class,
       }}>
         {renderPreview({
           ...rgbDefaults,

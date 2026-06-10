@@ -2,7 +2,6 @@ import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { sortColors } from '@birdflop/rgbirdflop';
 import { ChevronLeft, ChevronRight, Layers, Trash } from 'lucide-icons-qwik';
-import { advancedStoreContext, selectionContext } from './context';
 import { deleteSegment, segmentRange, swapSegments, type AdvancedSegment } from './model';
 import { restoreSelection } from './dom';
 

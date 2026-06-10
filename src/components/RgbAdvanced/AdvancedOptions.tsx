@@ -1,8 +1,7 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { formats } from '@birdflop/rgbirdflop';
+import { colorFormats } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { advancedStoreContext } from './context';
 
 export default component$(({ hidden }: { hidden?: boolean }) => {
   const t = inlineTranslate();
@@ -31,10 +30,10 @@ export default component$(({ hidden }: { hidden?: boolean }) => {
             }
           }}
           values={[
-            ...(!store.customFormat && !formats.find((f) => f.color == store.format.color)
+            ...(!store.customFormat && !colorFormats.find((f) => f.color == store.format.color)
               ? [{ name: formatName(store.format.color), value: JSON.stringify(store.format) }]
               : []),
-            ...formats.map((format) => ({ name: formatName(format.color), value: JSON.stringify(format) })),
+            ...colorFormats.map((format) => ({ name: formatName(format.color), value: JSON.stringify(format) })),
             {
               name: store.customFormat
                 ? `${t('rgb.colors.customFormat@@Custom Format')}: ${formatName(store.format.color)}`

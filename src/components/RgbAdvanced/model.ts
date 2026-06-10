@@ -1,8 +1,8 @@
-import { formats, rgbDefaults, sortColors } from '@birdflop/rgbirdflop';
+import { colorFormats, rgbDefaults, sortColors } from '@birdflop/rgbirdflop';
 import type { ColorStop, GradientType } from '@birdflop/rgbirdflop';
 
 /** The output format object shape (e.g. MiniMessage, &#$1$2..$c, §x..). */
-export type Fmt = (typeof formats)[number];
+export type Fmt = (typeof colorFormats)[number];
 
 export type ColorMode = 'gradient' | 'solid' | 'none';
 
@@ -62,7 +62,7 @@ export function defaultStyle(): CharStyle {
 export const advancedDefaults: AdvancedStore = {
   version: ADVANCED_VERSION,
   segments: [{ ...defaultStyle(), text: 'Birdflop' }],
-  format: formats[1],
+  format: colorFormats[1],
   prefixsuffix: '',
   customFormat: false,
   trimspaces: true,

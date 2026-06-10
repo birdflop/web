@@ -1,23 +1,60 @@
 import { rgbPreset } from '.';
-import { formats } from '@birdflop/rgbirdflop';
+import { colorFormats } from '@birdflop/rgbirdflop';
 
-export function migrateFromV2(preset: any) {
+export function migrateBetweenVersions(preset: any) {
+  return migrateFromV2(preset) || migrateFromV3(preset) || migrateFromV4(preset) || undefined;
+}
+
+function migrateFromV2(preset: any) {
   if (preset.version != 2) return;
   const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length } = preset;
-  return { name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length,
-    format: formats.find((f) => f.color === preset.format) || {
+  return migrateFromV3({
+    version: 3,
+    name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length,
+    format: colorFormats.find((f) => f.color === preset.format) || {
       color: preset.format,
       char: preset.formatchar,
     },
     prefixsuffix: preset.prefix ? `${preset.prefix}$t` : '',
-  };
+  });
 }
 
-export function migrateFromV3(preset: any) {
+function migrateFromV3(preset: any) {
   if (preset.version != 3) return;
-  return {
+  return migrateFromV4({
+    version: 4,
     ...preset,
     colors: preset.colors ? preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })) : undefined,
+  });
+}
+
+function migrateFromV4(preset: any) {
+  if (preset.version != 4) return;
+
+  const {
+    bold, italic, underline, strikethrough, obfuscate,
+    shadowcolors: shadowColors,
+    format: colorFormat,
+    colorlength: colorLength,
+    prefixsuffix: prefixSuffix,
+    trimspaces: trimSpaces,
+    ...rest
+  } = preset;
+
+  // move formatting
+  const defaultFormatting = {
+    bold, italic, underline, strikethrough, obfuscate,
+  };
+
+  return {
+    version: 5,
+    ...rest,
+    shadowColors,
+    colorFormat,
+    colorLength,
+    defaultFormatting,
+    prefixSuffix,
+    trimSpaces,
   };
 }
 

@@ -47,7 +47,7 @@ export function getColors(rgbStore: typeof rgbDefaults, id: string) {
 export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
-  const colorsKey = id == 'text' ? 'colors' : 'shadowcolors';
+  const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const colors = getColors(rgbStore, id);
 
   useOnDocument('click', $((e) => {
