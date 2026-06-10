@@ -1,11 +1,11 @@
 import { component$, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
 import RGBirdflop, { renderPreview, rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { Blend, Palette } from 'lucide-icons-qwik';
+import { Blend, Palette, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 
@@ -41,9 +41,18 @@ export default component$(() => {
         <Palette size={32} />
         {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary" q:slot="header">
+      <p class="mb-2 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
       </p>
+      <div class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
+        <Link href="/resources/rgb/beta" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit">
+          <Sparkles size={18} />
+          {t('rgb.beta.tryAdvanced@@Try the Advanced editor (multiple gradients & per-character styles)')}
+          <span class="lum-grad-bg-blue/50 text-xs py-0.5 px-2 rounded-lum-1">
+            {t('nav.experimental@@experimental')}
+          </span>
+        </Link>
+      </div>
       {showAllGradients.value
         ? GRADIENT_TYPES.map((gradientType) => {
           const tempStore = {

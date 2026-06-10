@@ -6,13 +6,16 @@ import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
+import { advancedDefaults } from '~/components/RgbAdvanced/model';
 
-type names = 'rgb' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
+type names = 'rgb' | 'rgbadvanced' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
 const getDefaults = (name: names) => {
   switch (name) {
   case 'rgb':
     return rgbDefaults;
+  case 'rgbadvanced':
+    return advancedDefaults;
   case 'animtab':
     return animTABDefaults;
   }
@@ -26,7 +29,7 @@ export function parseParams(params: { [key: string]: any }, name: names) {
       if (!Object.keys(getDefaults(name)).includes(key)) {
         delete params[key];
       }
-      if ((key == 'format' || key == 'colors' || key == 'shadowcolors') && params[key]) {
+      if ((key == 'format' || key == 'colors' || key == 'shadowcolors' || key == 'segments') && params[key]) {
         params[key] = JSON.parse(params[key]);
       }
       else if (params[key] === 'true' || params[key] === 'false') params[key] = params[key] === 'true';
@@ -68,8 +71,8 @@ export function getCookies(cookie: Cookie, name: names, urlParams?: URLSearchPar
   }
 
   try {
-    // Migrate between versions
-    if (cookies.version != rgbDefaults.version) {
+    // Migrate between versions (only the classic 'rgb' store uses preset migration)
+    if (name === 'rgb' && cookies.version != rgbDefaults.version) {
       cookies = loadPreset(JSON.stringify(cookies));
       cookie.set(name, JSON.stringify(cookies), {
         path: '/',
@@ -106,7 +109,15 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
 
-  const settings = JSON.parse(decodeURIComponent(cookie.settings));
+  // Settings cookie may not exist yet (e.g. a fresh browser); default to allowing cookies.
+  let settings: { cookies?: boolean } = {};
+  if (cookie.settings) {
+    try {
+      settings = JSON.parse(decodeURIComponent(cookie.settings));
+    } catch {
+      settings = {};
+    }
+  }
   // don't set cookies if user has opted out unless this is the settings cookie itself
   if (settings.cookies === false && name !== 'settings') return;
 
