@@ -84,7 +84,7 @@ export const rgbDefaults = {
   colorFormat: colorFormats[1],
   colorLength: 1,
   formatting: [] as FormatSegment[],
-  defaultFormatting: {} as Formatting,
+  baseFormatting: {} as Formatting,
   text: 'Birdflop',
   prefixSuffix: '',
   customFormat: false,

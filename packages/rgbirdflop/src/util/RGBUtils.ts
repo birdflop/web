@@ -15,11 +15,11 @@ function segmentText(text: string, colorlength?: number): string[] {
 function buildFormatCodes(rgbOptions: typeof rgbDefaults): string {
   let codes = '';
   if (rgbOptions.colorFormat.color.includes('$f') && rgbOptions.colorFormat.char) {
-    if (rgbOptions.defaultFormatting.bold) codes += rgbOptions.colorFormat.char + 'l';
-    if (rgbOptions.defaultFormatting.italic) codes += rgbOptions.colorFormat.char + 'o';
-    if (rgbOptions.defaultFormatting.underline) codes += rgbOptions.colorFormat.char + 'n';
-    if (rgbOptions.defaultFormatting.strikethrough) codes += rgbOptions.colorFormat.char + 'm';
-    if (rgbOptions.defaultFormatting.obfuscate) codes += rgbOptions.colorFormat.char + 'k';
+    if (rgbOptions.baseFormatting.bold) codes += rgbOptions.colorFormat.char + 'l';
+    if (rgbOptions.baseFormatting.italic) codes += rgbOptions.colorFormat.char + 'o';
+    if (rgbOptions.baseFormatting.underline) codes += rgbOptions.colorFormat.char + 'n';
+    if (rgbOptions.baseFormatting.strikethrough) codes += rgbOptions.colorFormat.char + 'm';
+    if (rgbOptions.baseFormatting.obfuscate) codes += rgbOptions.colorFormat.char + 'k';
   }
   return codes;
 }
@@ -35,11 +35,11 @@ function renderTemplateSegment(hexWithoutHash: string, text: string, rgbOptions:
 
 function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
   let out = output;
-  if (rgbOptions.colorFormat.bold && rgbOptions.defaultFormatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
-  if (rgbOptions.colorFormat.italic && rgbOptions.defaultFormatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
-  if (rgbOptions.colorFormat.underline && rgbOptions.defaultFormatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
-  if (rgbOptions.colorFormat.strikethrough && rgbOptions.defaultFormatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
-  if (rgbOptions.colorFormat.obfuscate && rgbOptions.defaultFormatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+  if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
+  if (rgbOptions.colorFormat.italic && rgbOptions.baseFormatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
+  if (rgbOptions.colorFormat.underline && rgbOptions.baseFormatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
+  if (rgbOptions.colorFormat.strikethrough && rgbOptions.baseFormatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
+  if (rgbOptions.colorFormat.obfuscate && rgbOptions.baseFormatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
   if (rgbOptions.prefixSuffix) out = rgbOptions.prefixSuffix.replace(/\$t/g, out);
   return out;
 }
@@ -392,11 +392,11 @@ function buildJsonFormatting(
     text: segment,
     color: colorHexWithHash,
   };
-  if (rgbOptions.defaultFormatting.bold) charFormatting.bold = true;
-  if (rgbOptions.defaultFormatting.italic) charFormatting.italic = true;
-  if (rgbOptions.defaultFormatting.underline) charFormatting.underlined = true;
-  if (rgbOptions.defaultFormatting.strikethrough) charFormatting.strikethrough = true;
-  if (rgbOptions.defaultFormatting.obfuscate) charFormatting.obfuscated = true;
+  if (rgbOptions.baseFormatting.bold) charFormatting.bold = true;
+  if (rgbOptions.baseFormatting.italic) charFormatting.italic = true;
+  if (rgbOptions.baseFormatting.underline) charFormatting.underlined = true;
+  if (rgbOptions.baseFormatting.strikethrough) charFormatting.strikethrough = true;
+  if (rgbOptions.baseFormatting.obfuscate) charFormatting.obfuscated = true;
   if (rgbShadow) charFormatting.shadow_color = normalizeShadowRGB(rgbShadow);
   return charFormatting;
 }

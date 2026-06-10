@@ -144,9 +144,9 @@ export default component$(({ hidden }: {
         </p>}
         {privatePresets.value.map((preset, i) => <div q:slot="extra-buttons" key={i} class={{
           'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
-          'font-mc-bold': preset.defaultFormatting?.bold,
-          'font-mc-italic': preset.defaultFormatting?.italic,
-          'font-mc-bold-italic': preset.defaultFormatting?.bold && preset.defaultFormatting?.italic,
+          'font-mc-bold': preset.baseFormatting?.bold,
+          'font-mc-italic': preset.baseFormatting?.italic,
+          'font-mc-bold-italic': preset.baseFormatting?.bold && preset.baseFormatting?.italic,
           [`${preset.colorFormat?.class}`]: preset.colorFormat?.class,
         }}>
           <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(preset))}>
@@ -168,9 +168,9 @@ export default component$(({ hidden }: {
         </p>}
         {savedPresets.value.map((Preset, i) => <div q:slot="extra-buttons" key={i} class={{
           'lum-btn lum-bg-transparent p-0 rounded-lum-1 gap-0 w-full break-all font-mc tracking-tight': true,
-          'font-mc-bold': Preset.preset.defaultFormatting?.bold,
-          'font-mc-italic': Preset.preset.defaultFormatting?.italic,
-          'font-mc-bold-italic': Preset.preset.defaultFormatting?.bold && Preset.preset.defaultFormatting?.italic,
+          'font-mc-bold': Preset.preset.baseFormatting?.bold,
+          'font-mc-italic': Preset.preset.baseFormatting?.italic,
+          'font-mc-bold-italic': Preset.preset.baseFormatting?.bold && Preset.preset.baseFormatting?.italic,
           [`${Preset.preset.colorFormat?.class}`]: Preset.preset.colorFormat?.class,
         }}>
           <button class="p-1.5 pl-3 flex-1 text-left" onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}>
@@ -231,7 +231,7 @@ export default component$(({ hidden }: {
           const url = new URL(base_url);
           const params: rgbPreset = { ...rgbStore };
           (Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>).forEach(([key, value]) => {
-            if (key == 'defaultFormatting' || key == 'colors' || key == 'shadowColors') {
+            if (key == 'baseFormatting' || key == 'colors' || key == 'shadowColors') {
               value = JSON.stringify(value);
               if (value === JSON.stringify(combinedDefaults[key as keyof typeof combinedDefaults])) return;
             }

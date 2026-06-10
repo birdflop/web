@@ -27,7 +27,7 @@ export default component$(() => {
 
   const computeSelectionFormatting = () => {
     const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-    if (!selection.value) return rgbStore.defaultFormatting;
+    if (!selection.value) return rgbStore.baseFormatting;
 
     const { start, end } = selection.value;
     const boundaries = new Set([start, end]);
@@ -45,12 +45,12 @@ export default component$(() => {
       if (b <= start || a >= end) continue; // outside selection
 
       const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
-      const fmt = covering ? { ...rgbStore.defaultFormatting, ...covering } : { ...rgbStore.defaultFormatting };
+      const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
       intervals.push(fmt);
     }
 
     const result: Formatting = {};
-    const defaultFmt = rgbStore.defaultFormatting;
+    const defaultFmt = rgbStore.baseFormatting;
 
     for (const k of keys) {
       if (intervals.length === 0) {
@@ -70,7 +70,7 @@ export default component$(() => {
 
     if (!selection.value) {
       // No selection -> toggle global default formatting
-      rgbStore.defaultFormatting[flag] = !rgbStore.defaultFormatting[flag];
+      rgbStore.baseFormatting[flag] = !rgbStore.baseFormatting[flag];
       return;
     }
 
@@ -93,7 +93,7 @@ export default component$(() => {
 
       // find a segment that fully covers [a,b)
       const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
-      const fmt = covering ? { ...rgbStore.defaultFormatting, ...covering } : { ...rgbStore.defaultFormatting };
+      const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
 
       // if this interval is inside selection, toggle the flag
       if (a < end && b > start) {
@@ -101,7 +101,7 @@ export default component$(() => {
       }
 
       // if resulting formatting equals default, skip (no segment)
-      const defaultNorm = rgbStore.defaultFormatting;
+      const defaultNorm = rgbStore.baseFormatting;
       const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
         newSegments.push({ start: a, end: b, ...fmt });

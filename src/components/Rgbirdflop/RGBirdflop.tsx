@@ -101,14 +101,14 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           }),
         }}
         class={{
-          'font-mc-bold': rgbStore.defaultFormatting.bold,
-          'font-mc-italic': rgbStore.defaultFormatting.italic,
-          'font-mc-bold-italic': rgbStore.defaultFormatting.bold && rgbStore.defaultFormatting.italic,
-          underline: rgbStore.defaultFormatting.underline,
-          strikethrough: rgbStore.defaultFormatting.strikethrough,
+          'font-mc-bold': rgbStore.baseFormatting.bold,
+          'font-mc-italic': rgbStore.baseFormatting.italic,
+          'font-mc-bold-italic': rgbStore.baseFormatting.bold && rgbStore.baseFormatting.italic,
+          underline: rgbStore.baseFormatting.underline,
+          strikethrough: rgbStore.baseFormatting.strikethrough,
           'underline-strikethrough':
-            rgbStore.defaultFormatting.underline && rgbStore.defaultFormatting.strikethrough,
-          obfuscate: rgbStore.defaultFormatting.obfuscate,
+            rgbStore.baseFormatting.underline && rgbStore.baseFormatting.strikethrough,
+          obfuscate: rgbStore.baseFormatting.obfuscate,
         }}
       >
         {segment}
@@ -184,7 +184,7 @@ export default component$(({ errors, output }: {
     const text = document.querySelectorAll('span.obfuscate');
     function obfuscate() {
       text.forEach((el, i) => {
-        if (!rgbStore.defaultFormatting.obfuscate) return el.textContent = rgbStore.text[i];
+        if (!rgbStore.baseFormatting.obfuscate) return el.textContent = rgbStore.text[i];
         el.textContent = Math.random()
           .toString(36)
           .substring(1, 3)
@@ -192,8 +192,8 @@ export default component$(({ errors, output }: {
       });
       requestAnimationFrame(obfuscate);
     }
-    if (rgbStore.defaultFormatting.obfuscate) obfuscate();
-    track(() => rgbStore.defaultFormatting.obfuscate);
+    if (rgbStore.baseFormatting.obfuscate) obfuscate();
+    track(() => rgbStore.baseFormatting.obfuscate);
     track(() => rgbStore.text);
   });
 

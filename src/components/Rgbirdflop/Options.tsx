@@ -30,21 +30,21 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           ...!rgbStore.customFormat && !colorFormats.find((format) => format.color == rgbStore.colorFormat.color) ? [{
             name: rgbStore.colorFormat.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', ''),
             value: JSON.stringify(rgbStore.colorFormat),
           }] : [],
           ...colorFormats.map(format => ({
             name: format.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', ''),
             value: JSON.stringify(format),
           })),
           {
             name: rgbStore.customFormat ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
               .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.defaultFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.defaultFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.defaultFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.defaultFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.defaultFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
+              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
               .replace('$c', '')}`
               : t('rgb.colors.customFormat@@Custom Format'),
             value: 'custom',

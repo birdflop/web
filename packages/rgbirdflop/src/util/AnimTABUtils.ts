@@ -117,11 +117,11 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
       let formatCodes = '';
       if (rgbOptions.colorFormat.color.includes('$f')) {
         // find the global formatting
-        if (rgbOptions.defaultFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
-        if (rgbOptions.defaultFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
-        if (rgbOptions.defaultFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
-        if (rgbOptions.defaultFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
-        if (rgbOptions.defaultFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
+        if (rgbOptions.baseFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
+        if (rgbOptions.baseFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
+        if (rgbOptions.baseFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
+        if (rgbOptions.baseFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
+        if (rgbOptions.baseFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
       }
 
       hexOutput = hexOutput.replace('$f', formatCodes);
@@ -150,11 +150,11 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         let formatCodes = '';
         if (rgbOptions.colorFormat.color.includes('$f')) {
           // find the global formatting
-          if (rgbOptions.defaultFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
-          if (rgbOptions.defaultFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
-          if (rgbOptions.defaultFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
-          if (rgbOptions.defaultFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
-          if (rgbOptions.defaultFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
+          if (rgbOptions.baseFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
+          if (rgbOptions.baseFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
+          if (rgbOptions.baseFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
+          if (rgbOptions.baseFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
+          if (rgbOptions.baseFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);

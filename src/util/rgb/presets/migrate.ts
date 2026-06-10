@@ -42,7 +42,7 @@ function migrateFromV4(preset: any) {
   } = preset;
 
   // move formatting
-  const defaultFormatting = {
+  const baseFormatting = {
     bold, italic, underline, strikethrough, obfuscate,
   };
 
@@ -52,7 +52,7 @@ function migrateFromV4(preset: any) {
     shadowColors,
     colorFormat,
     colorLength,
-    defaultFormatting,
+    baseFormatting,
     prefixSuffix,
     trimSpaces,
   };

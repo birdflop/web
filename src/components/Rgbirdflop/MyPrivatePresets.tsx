@@ -187,9 +187,9 @@ export default component$(() => {
                 privatePresets.value.map((preset) => ({
                   name: <span class={{
                     'break-all font-mc tracking-tight': true,
-                    'font-mc-bold': preset.defaultFormatting?.bold,
-                    'font-mc-italic': preset.defaultFormatting?.italic,
-                    'font-mc-bold-italic': preset.defaultFormatting?.bold && preset.defaultFormatting?.italic,
+                    'font-mc-bold': preset.baseFormatting?.bold,
+                    'font-mc-italic': preset.baseFormatting?.italic,
+                    'font-mc-bold-italic': preset.baseFormatting?.bold && preset.baseFormatting?.italic,
                     [`${preset.colorFormat?.class}`]: preset.colorFormat?.class,
                   }}>
                     {renderPreview({ ...rgbDefaults, ...preset }, 1)}
