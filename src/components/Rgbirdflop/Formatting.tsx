@@ -1,21 +1,23 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { $, component$, useContext } from '@builder.io/qwik';
 import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { selectionContext } from './Input';
+import { FormatSegment, Formatting } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const selection = useContext(selectionContext);
+  type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
 
-  const getFormatLabel = (formatType: 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate') => {
+  const getFormatLabel = (FormatKey: FormatKey) => {
     if (rgbStore.colorFormat.char) {
       const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm', obfuscate: 'k' };
-      return ` - ${rgbStore.colorFormat.char}${formatMap[formatType]}`;
+      return ` - ${rgbStore.colorFormat.char}${formatMap[FormatKey]}`;
     }
 
-    const formatValue = rgbStore.colorFormat[formatType];
+    const formatValue = rgbStore.colorFormat[FormatKey];
     if (formatValue) {
       return ` - ${formatValue.replace('$t', '')}`;
     }
@@ -23,8 +25,102 @@ export default component$(() => {
     return '';
   };
 
-  const selectedFormatting = rgbStore.formatting.find((f) => f.start == selection.value?.start && f.end == selection.value?.end);
-  const formatting = selectedFormatting || rgbStore.defaultFormatting;
+  const computeSelectionFormatting = () => {
+    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+    if (!selection.value) return rgbStore.defaultFormatting;
+
+    const { start, end } = selection.value;
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const intervals: (FormatSegment | Formatting)[] = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b) continue;
+      if (b <= start || a >= end) continue; // outside selection
+
+      const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
+      const fmt = covering ? { ...rgbStore.defaultFormatting, ...covering } : { ...rgbStore.defaultFormatting };
+      intervals.push(fmt);
+    }
+
+    const result: Formatting = {};
+    const defaultFmt = rgbStore.defaultFormatting;
+
+    for (const k of keys) {
+      if (intervals.length === 0) {
+        result[k] = defaultFmt[k];
+      } else {
+        result[k] = intervals.every((iv) => iv[k]);
+      }
+    }
+
+    return result;
+  };
+
+  const formatting = computeSelectionFormatting();
+
+  const toggleFlag = $((flag: FormatKey) => {
+    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+
+    if (!selection.value) {
+      // No selection -> toggle global default formatting
+      rgbStore.defaultFormatting[flag] = !rgbStore.defaultFormatting[flag];
+      return;
+    }
+
+    // Selection exists -> apply toggle to the selected range, splitting/merging as needed
+    const { start, end } = selection.value;
+
+    // Collect all boundaries
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const newSegments = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b) continue;
+
+      // find a segment that fully covers [a,b)
+      const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
+      const fmt = covering ? { ...rgbStore.defaultFormatting, ...covering } : { ...rgbStore.defaultFormatting };
+
+      // if this interval is inside selection, toggle the flag
+      if (a < end && b > start) {
+        fmt[flag] = !fmt[flag];
+      }
+
+      // if resulting formatting equals default, skip (no segment)
+      const defaultNorm = rgbStore.defaultFormatting;
+      const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
+      if (!isDefault) {
+        newSegments.push({ start: a, end: b, ...fmt });
+      }
+    }
+
+    // Merge adjacent segments with identical formatting
+    const merged = [];
+    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
+      const last = merged[merged.length - 1];
+      if (last && last.end === seg.start && keys.every((k) => last[k] === seg[k])) {
+        last.end = seg.end;
+      } else {
+        merged.push({ ...seg });
+      }
+    }
+
+    rgbStore.formatting = merged;
+  });
 
   return (
     <div class={{
@@ -38,12 +134,7 @@ export default component$(() => {
           'lum-grad-bg-lum-accent/100!': formatting.bold,
         }}
         aria-pressed={formatting.bold} title={t('rgb.formatting.bold@@Bold')}
-        onClick$={() => {
-          if (selection.value && !selectedFormatting) {
-            rgbStore.formatting.push({ start: selection.value.start, end: selection.value.end, ...formatting });
-          }
-          formatting.bold = !formatting.bold;
-        }}
+        onClick$={() => toggleFlag('bold')}
       >
         <Bold size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
@@ -55,12 +146,7 @@ export default component$(() => {
           'lum-grad-bg-lum-accent/100!': formatting.italic,
         }}
         aria-pressed={formatting.italic} title={t('rgb.formatting.italic@@Italic')}
-        onClick$={() => {
-          if (selection.value && !selectedFormatting) {
-            rgbStore.formatting.push({ start: selection.value.start, end: selection.value.end, ...formatting });
-          }
-          formatting.italic = !formatting.italic;
-        }}>
+        onClick$={() => toggleFlag('italic')}>
         <Italic size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.italic@@Italic')}{getFormatLabel('italic')}
@@ -71,12 +157,7 @@ export default component$(() => {
           'lum-grad-bg-lum-accent/100!': formatting.underline,
         }}
         aria-pressed={formatting.underline} title={t('rgb.formatting.underline@@Underline')}
-        onClick$={() => {
-          if (selection.value && !selectedFormatting) {
-            rgbStore.formatting.push({ start: selection.value.start, end: selection.value.end, ...formatting });
-          }
-          formatting.underline = !formatting.underline;
-        }}>
+        onClick$={() => toggleFlag('underline')}>
         <Underline size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.underline@@Underline')}{getFormatLabel('underline')}
@@ -87,12 +168,7 @@ export default component$(() => {
           'lum-grad-bg-lum-accent/100!': formatting.strikethrough,
         }}
         aria-pressed={formatting.strikethrough} title={t('rgb.formatting.strikethrough@@Strikethrough')}
-        onClick$={() => {
-          if (selection.value && !selectedFormatting) {
-            rgbStore.formatting.push({ start: selection.value.start, end: selection.value.end, ...formatting });
-          }
-          formatting.strikethrough = !formatting.strikethrough;
-        }}>
+        onClick$={() => toggleFlag('strikethrough')}>
         <Strikethrough size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.strikethrough@@Strikethrough')}{getFormatLabel('strikethrough')}
@@ -103,12 +179,7 @@ export default component$(() => {
           'lum-grad-bg-lum-accent/100!': formatting.obfuscate,
         }}
         aria-pressed={formatting.obfuscate} title={t('rgb.formatting.obfuscate@@Obfuscate')}
-        onClick$={() => {
-          if (selection.value && !selectedFormatting) {
-            rgbStore.formatting.push({ start: selection.value.start, end: selection.value.end, ...formatting });
-          }
-          formatting.obfuscate = !formatting.obfuscate;
-        }}>
+        onClick$={() => toggleFlag('obfuscate')}>
         <Wand2 size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.obfuscate@@Obfuscate')}{getFormatLabel('obfuscate')}
