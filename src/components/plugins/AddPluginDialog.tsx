@@ -130,12 +130,7 @@ export default component$(({
               return;
             }
 
-            resolvedPlugin.plugins = searchData.map((data: any) =>
-              getPlugin({
-                type: type,
-                id: data.id,
-              }).fromData(data),
-            );
+            resolvedPlugin.plugins = searchData;
           } catch (error) {
             console.error('Error searching for plugins:', error);
             const notification = new Notification()
@@ -170,7 +165,7 @@ export default component$(({
         }))
       } onChange$={async (e, el) => {
         const pluginId = el.value;
-        const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id === pluginId);
+        const selectedPlugin = resolvedPlugin.plugins?.find((plugin) => plugin.id == pluginId);
         if (!selectedPlugin) return;
 
         isLoading.value = true;

@@ -162,7 +162,6 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     deepTrack(track, pluginsStore);
-    console.log(Date.now());
 
     if (!isBrowser) return;
 
