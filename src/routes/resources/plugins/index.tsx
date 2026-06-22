@@ -1,7 +1,7 @@
 import { component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -143,13 +143,13 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
-    const savedPlugins = localStorage.getItem('plugins');
-    if (savedPlugins) {
+    const pluginsData = localStorage.getItem('plugins');
+    if (pluginsData) {
       try {
-        const parsed = JSON.parse(savedPlugins);
-        pluginsStore.servers = parsed.servers || {};
-        pluginsStore.openServer = parsed.openServer;
-        pluginsStore.filter = parsed.filter;
+        const savedPluginsStore = JSON.parse(pluginsData);
+        pluginsStore.servers = savedPluginsStore.servers || {};
+        pluginsStore.openServer = savedPluginsStore.openServer;
+        pluginsStore.filter = savedPluginsStore.filter;
       } catch (e) {
         const notification = new Notification()
           .setTitle('Error loading plugins')
@@ -160,13 +160,32 @@ export default component$(() => {
     }
   });
 
-  useTask$(({ track }) => {
+  useTask$(async ({ track }) => {
     deepTrack(track, pluginsStore);
 
     if (!isBrowser) return;
+    if (pluginsStore.openServer && pluginsStore.servers[pluginsStore.openServer]) {
+      // check if any plugins are not fetched, and fetch them if so
+      const plugins = pluginsStore.servers[pluginsStore.openServer].plugins;
+      for (const plugin of plugins) {
+        if (!plugin.versions) Object.assign(plugin, await getPlugin(plugin).fetch());
+      }
+    }
+    else {
+      pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
+    }
 
     try {
-      localStorage.setItem('plugins', JSON.stringify(pluginsStore));
+      const exportedPluginsStore: PluginsStoreType = JSON.parse(JSON.stringify(pluginsStore));
+      Object.keys(exportedPluginsStore.servers).forEach((server) => {
+        exportedPluginsStore.servers[server].plugins = exportedPluginsStore.servers[server].plugins
+          .map((plugin) => ({
+            id: plugin.id,
+            type: plugin.type,
+            currentVersion: plugin.currentVersion,
+          }));
+      });
+      localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -241,17 +260,16 @@ export default component$(() => {
 
             <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const newName = prompt('Enter new server name', `${pluginsStore.openServer}`);
-              if (newName && newName !== pluginsStore.openServer) {
+              if (newName && newName !== pluginsStore.openServer && pluginsStore.openServer) {
                 if (pluginsStore.servers[newName]) {
                   alert('A server with that name already exists.');
                   return;
                 }
-                delete pluginsStore.servers[pluginsStore.openServer!];
-                pluginsStore.servers[newName] = pluginsStore.servers[pluginsStore.openServer!];
+                pluginsStore.servers[newName] = JSON.parse(JSON.stringify(pluginsStore.servers[pluginsStore.openServer]));
                 pluginsStore.openServer = newName;
               }
-            }} title="Rename server">
-              <Pencil size={16} />
+            }} title="Duplicate server">
+              <Copy size={16} />
             </button>
             <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-red rounded-lum-1" onClick$={() => {
               if (confirm(`Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`)) {
@@ -268,7 +286,11 @@ export default component$(() => {
             class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
 
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins.map((plugin) => ({
+                id: plugin.id,
+                type: plugin.type,
+                currentVersion: plugin.currentVersion,
+              }));
 
               const notification = new Notification()
                 .setTitle('Plugins copied to clipboard')
@@ -282,14 +304,22 @@ export default component$(() => {
               });
               notifications.push(notification);
             }} title="Export server plugins as JSON">
-              <Copy size={16} /> Export (Recommended for backup for now.)
+              <Copy size={16} /> Export (Keep this safe)
             </button>
 
             <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
-              onInput$={(e, el) => {
+              onInput$={async (e, el) => {
                 try {
-                  const importedPlugins = JSON.parse(el.value).map((plugin: any) => getPlugin(plugin));
-                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
+                  const importJSON = JSON.parse(el.value);
+                  await Promise.all(
+                    importJSON.map(async (plugin: any) => {
+                      if (!plugin.id || !plugin.type) {
+                        throw new Error(`Invalid plugin data: ${JSON.stringify(plugin)}`);
+                      }
+                      const fetchedPlugin = await getPlugin(plugin).fetch();
+                      pluginsStore.servers[pluginsStore.openServer!].plugins.push(fetchedPlugin);
+                    }),
+                  );
                 } catch (err) {
                   console.error('Failed to parse imported plugins:', err);
                 }
@@ -389,7 +419,6 @@ export default component$(() => {
 
             if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
-            console.log(plugin);
 
             return <PluginCard key={plugin.id}
               plugin={plugin}
@@ -397,7 +426,7 @@ export default component$(() => {
               spigotRateLimit={spigotRateLimit}>
               <button class="lum-btn rounded-lum-2 p-2 text-sm lum-bg-transparent" q:slot="extra-actions" onClick$={async () => {
                 try {
-                  pluginsStore.servers[pluginsStore.openServer!].plugins[i] = await getPlugin(plugin).fetchVersions();
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[i] = await getPlugin(plugin).fetch();
                 } catch (error) {
                   console.error('Error fetching plugin versions:', error);
                   const notification = new Notification()

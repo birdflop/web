@@ -54,7 +54,7 @@ export class ModrinthPlugin implements ServerPlugin {
 
   fromData(data: any) {
     Object.assign(this, {
-      id: data.project_id,
+      id: data.id ?? data.project_id,
       name: data.title,
       description: data.description,
       url: data.url,
