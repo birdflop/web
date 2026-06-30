@@ -200,7 +200,7 @@ export default component$(() => {
     return pluginsStore.servers[pluginsStore.openServer].plugins.filter((plugin) => {
       const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
         && plugin.currentVersion?.releaseDate !== undefined
-        && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+        && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
       return updateAvailable && plugin.file?.url;
     }).length;
   });
@@ -386,7 +386,7 @@ export default component$(() => {
                   for (const plugin of plugins) {
                     const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
                       && plugin.currentVersion?.releaseDate !== undefined
-                      && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+                      && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
 
                     if (!updateAvailable || !plugin.file?.url) continue;
 
@@ -415,7 +415,7 @@ export default component$(() => {
           {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin, i) => {
             const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
               && plugin.currentVersion?.releaseDate !== undefined
-              && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+              && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
 
             if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
