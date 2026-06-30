@@ -23,7 +23,7 @@ type ResolvedPluginType = {
 
 type ServerType = {
   software: string;
-  plugins: PluginType[];
+  plugins: { [id: string]: PluginType };
 };
 
 type PluginsStoreType = {
@@ -36,12 +36,15 @@ type PluginsStoreType = {
 
 const serverDefaults: ServerType = {
   software: 'paper',
-  plugins: [],
+  plugins: {},
 };
 
 const pluginsDefaults: PluginsStoreType = {
   servers: {
-    'My Server': serverDefaults,
+    'My Server': {
+      software: 'paper',
+      plugins: {},
+    },
   },
   openServer: 'My Server',
 };
@@ -167,7 +170,8 @@ export default component$(() => {
     if (pluginsStore.openServer && pluginsStore.servers[pluginsStore.openServer]) {
       // check if any plugins are not fetched, and fetch them if so
       const plugins = pluginsStore.servers[pluginsStore.openServer].plugins;
-      for (const plugin of plugins) {
+      for (const pluginId in plugins) {
+        const plugin = plugins[pluginId];
         if (!plugin.versions) Object.assign(plugin, await getPlugin(plugin).fetch());
       }
     }
@@ -178,12 +182,17 @@ export default component$(() => {
     try {
       const exportedPluginsStore: PluginsStoreType = JSON.parse(JSON.stringify(pluginsStore));
       Object.keys(exportedPluginsStore.servers).forEach((server) => {
-        exportedPluginsStore.servers[server].plugins = exportedPluginsStore.servers[server].plugins
-          .map((plugin) => ({
+        const serverPlugins = exportedPluginsStore.servers[server].plugins;
+        const mappedPlugins: { [id: string]: PluginType } = {};
+        Object.keys(serverPlugins).forEach((id) => {
+          const plugin = serverPlugins[id];
+          mappedPlugins[id] = {
             id: plugin.id,
             type: plugin.type,
             currentVersion: plugin.currentVersion,
-          }));
+          };
+        });
+        exportedPluginsStore.servers[server].plugins = mappedPlugins;
       });
       localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
     } catch (e) {
@@ -197,7 +206,7 @@ export default component$(() => {
 
   const outdatedPlugins = useComputed$(() => {
     if (!pluginsStore.openServer || !pluginsStore.servers[pluginsStore.openServer].plugins) return;
-    return pluginsStore.servers[pluginsStore.openServer].plugins.filter((plugin) => {
+    return Object.values(pluginsStore.servers[pluginsStore.openServer].plugins).filter((plugin) => {
       const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
         && plugin.currentVersion?.releaseDate !== undefined
         && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
@@ -286,11 +295,16 @@ export default component$(() => {
             class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
 
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins.map((plugin) => ({
-                id: plugin.id,
-                type: plugin.type,
-                currentVersion: plugin.currentVersion,
-              }));
+              const plugins: { [id: string]: Partial<PluginType> } = {};
+              const serverPlugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+              Object.keys(serverPlugins).forEach((id) => {
+                const plugin = serverPlugins[id];
+                plugins[id] = {
+                  id: plugin.id,
+                  type: plugin.type,
+                  currentVersion: plugin.currentVersion,
+                };
+              });
 
               const notification = new Notification()
                 .setTitle('Plugins copied to clipboard')
@@ -312,20 +326,12 @@ export default component$(() => {
                 try {
                   const importJSON = JSON.parse(el.value);
                   await Promise.all(
-                    importJSON.map(async (plugin: any) => {
+                    Object.values(importJSON).map(async (plugin: any) => {
                       if (!plugin.id || !plugin.type) {
                         throw new Error(`Invalid plugin data: ${JSON.stringify(plugin)}`);
                       }
                       const fetchedPlugin = await getPlugin(plugin).fetch();
-                      const serverPlugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                      const existingIndex = serverPlugins.findIndex(
-                        (p) => String(p.id) === String(fetchedPlugin.id) && p.type === fetchedPlugin.type
-                      );
-                      if (existingIndex !== -1) {
-                        serverPlugins[existingIndex] = fetchedPlugin;
-                      } else {
-                        serverPlugins.push(fetchedPlugin);
-                      }
+                      pluginsStore.servers[pluginsStore.openServer!].plugins[fetchedPlugin.id] = fetchedPlugin;
                     }),
                   );
                 } catch (err) {
@@ -348,12 +354,12 @@ export default component$(() => {
             </SelectMenuRaw>
           </div>
 
-          {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 &&
+          {Object.keys(pluginsStore.servers[pluginsStore.openServer].plugins).length > 0 &&
             <div class="flex gap-1 items-center mx-auto">
               {debug && (
                 <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                  plugins.forEach((plugin) => {
+                  Object.values(plugins).forEach((plugin) => {
                     plugin.currentVersion = {
                       id: 'outdated',
                       name: 'Outdated',
@@ -367,7 +373,7 @@ export default component$(() => {
               )}
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                plugins.forEach((plugin) => {
+                Object.values(plugins).forEach((plugin) => {
                   if (plugin.latestVersion) plugin.currentVersion = plugin.latestVersion;
                   plugin.updateDate = new Date();
                 });
@@ -377,7 +383,8 @@ export default component$(() => {
               </button>
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={async () => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                for (const plugin of plugins) {
+                for (const pluginId in plugins) {
+                  const plugin = plugins[pluginId];
                   Object.assign(plugin, await getPlugin(plugin).fetchVersions());
                 }
               }}>
@@ -391,7 +398,8 @@ export default component$(() => {
                   isLoading.value = [...isLoading.value, 'downloadAll'];
 
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                  for (const plugin of plugins) {
+                  for (const pluginId in plugins) {
+                    const plugin = plugins[pluginId];
                     const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
                       && plugin.currentVersion?.releaseDate !== undefined
                       && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
@@ -420,7 +428,7 @@ export default component$(() => {
           }
         </div>
         <div class="grid gap-2 my-4">
-          {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin, i) => {
+          {Object.values(pluginsStore.servers[pluginsStore.openServer].plugins).map((plugin) => {
             const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
               && plugin.currentVersion?.releaseDate !== undefined
               && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
@@ -434,7 +442,7 @@ export default component$(() => {
               spigotRateLimit={spigotRateLimit}>
               <button class="lum-btn rounded-lum-2 p-2 text-sm lum-bg-transparent" q:slot="extra-actions" onClick$={async () => {
                 try {
-                  pluginsStore.servers[pluginsStore.openServer!].plugins[i] = await getPlugin(plugin).fetch();
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[plugin.id] = await getPlugin(plugin).fetch();
                 } catch (error) {
                   console.error('Error fetching plugin versions:', error);
                   const notification = new Notification()
@@ -447,11 +455,7 @@ export default component$(() => {
                 <RefreshCw size={16} />
               </button>
               <button class="lum-btn rounded-lum-2 p-2 lum-bg-transparent hover:lum-bg-red" q:slot="extra-actions" onClick$={() => {
-                const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                const index = plugins.findIndex((p) => p.name === plugin.name);
-                if (index !== -1) {
-                  plugins.splice(index, 1);
-                }
+                delete pluginsStore.servers[pluginsStore.openServer!].plugins[plugin.id];
               }}>
                 <Trash size={16} />
               </button>
@@ -510,7 +514,7 @@ export default component$(() => {
                 onClick$={() => {
                   if (!resolvedPlugin.plugin) return;
 
-                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(resolvedPlugin.plugin);
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[resolvedPlugin.plugin.id] = resolvedPlugin.plugin;
                   resolvedPlugin.plugin = undefined;
                   modalRef.value?.close();
                 }}

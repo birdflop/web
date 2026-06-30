@@ -80,7 +80,7 @@ export default component$(({
 
           const pluginId = match[1];
           // check if the plugin is already added
-          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins.find((p) => p.id == pluginId);
+          const existingPlugin = pluginsStore.servers[pluginsStore.openServer!].plugins[pluginId];
           if (existingPlugin) {
             const notification = new Notification()
               .setTitle('Plugin already added')
