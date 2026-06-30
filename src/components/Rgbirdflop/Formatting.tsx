@@ -1,5 +1,5 @@
 import { $, component$, useContext } from '@builder.io/qwik';
-import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
+import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { selectionContext } from './Input';
@@ -122,6 +122,64 @@ export default component$(() => {
     rgbStore.formatting = merged;
   });
 
+  const clearFormatting = $(() => {
+    if (!selection.value) {
+      rgbStore.baseFormatting = {
+        bold: false,
+        italic: false,
+        underline: false,
+        strikethrough: false,
+        obfuscate: false,
+      };
+      rgbStore.formatting = [];
+      return;
+    }
+
+    const { start, end } = selection.value;
+    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const newSegments = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b) continue;
+
+      const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
+      const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
+
+      if (a < end && b > start) {
+        for (const k of keys) {
+          fmt[k] = false;
+        }
+      }
+
+      const defaultNorm = rgbStore.baseFormatting;
+      const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
+      if (!isDefault) {
+        newSegments.push({ ...fmt, start: a, end: b });
+      }
+    }
+
+    const merged = [];
+    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
+      const last = merged[merged.length - 1];
+      if (last && last.end === seg.start && keys.every((k) => last[k] === seg[k])) {
+        last.end = seg.end;
+      } else {
+        merged.push({ ...seg });
+      }
+    }
+
+    rgbStore.formatting = merged;
+  });
+
   return (
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
@@ -183,6 +241,14 @@ export default component$(() => {
         <Wand2 size={16} />
         <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
           {t('rgb.formatting.obfuscate@@Obfuscate')}{getFormatLabel('obfuscate')}
+        </span>
+      </button>
+      <button type="button" id="clear"
+        title={t('rgb.formatting.clear@@Clear Formatting')}
+        onClick$={clearFormatting}>
+        <Eraser size={16} />
+        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
+          {t('rgb.formatting.clear@@Clear Formatting')}
         </span>
       </button>
     </div>

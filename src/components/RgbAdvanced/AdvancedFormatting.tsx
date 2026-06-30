@@ -1,7 +1,7 @@
 import { component$, useComputed$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
-import { selectionFlags, toggleFormat, type FormatFlag } from './model';
+import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
+import { selectionFlags, toggleFormat, applyStyleToRange, combinedText, type FormatFlag } from './model';
 import { restoreSelection } from './dom';
 import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
@@ -46,6 +46,26 @@ export default component$(() => {
           <span class="hidden sm:inline">{label}</span>
         </button>
       ))}
+      <button type="button" title={t('rgb.formatting.clear@@Clear Formatting')}
+        class="lum-btn rounded-lum-1 px-3 py-2 gap-2 text-sm lum-bg-lum-input-bg hover:lum-bg-lum-card-bg"
+        onClick$={() => {
+          const keys: FormatFlag[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+          if (!selection.value) {
+            store.segments = applyStyleToRange(store.segments, 0, combinedText(store.segments).length, (st) => {
+              for (const k of keys) st[k] = false;
+            });
+            return;
+          }
+          const { start, end } = selection.value;
+          if (end <= start) return;
+          store.segments = applyStyleToRange(store.segments, start, end, (st) => {
+            for (const k of keys) st[k] = false;
+          });
+          void restoreSelection(start, end);
+        }}>
+        <Eraser size={16} />
+        <span class="hidden sm:inline">{t('rgb.formatting.clear@@Clear Formatting')}</span>
+      </button>
     </div>
   );
 });

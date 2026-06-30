@@ -46,13 +46,6 @@ export default component$(() => {
       <p class="mb-2 text-lum-text-secondary" q:slot="header">
         {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
       </p>
-      {rgbStore.formatting.map((fmt, index) => (
-        <div key={index} q:slot="header">
-          <span class="lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center">
-            {JSON.stringify(fmt, null, 2)}
-          </span>
-        </div>
-      ))}
       <div class="mb-4 border-b border-lum-border/10 pb-4" q:slot="header">
         <Link href="/resources/rgb/beta" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit">
           <Sparkles size={18} />
