@@ -161,6 +161,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           }),
         }}
         class={getFormattingClasses(segment.formatting)}
+        data-text={segment.text}
       >
         {segment.text}
       </span>
@@ -229,23 +230,48 @@ export default component$(({ errors, output }: {
 
   // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track }) => {
+  useVisibleTask$(({ track, cleanup }) => {
     if (!isBrowser) return;
-    console.log('Starting obfuscate task');
-    const text = document.querySelectorAll('span.obfuscate');
-    function obfuscate() {
-      text.forEach((el, i) => {
-        if (!rgbStore.baseFormatting.obfuscate) return el.textContent = rgbStore.text[i];
-        el.textContent = Math.random()
-          .toString(36)
-          .substring(1, 3)
-          .replace('.', '');
-      });
-      requestAnimationFrame(obfuscate);
-    }
-    if (rgbStore.baseFormatting.obfuscate) obfuscate();
+
     track(() => rgbStore.baseFormatting.obfuscate);
+    track(() => rgbStore.formatting);
     track(() => rgbStore.text);
+
+    const spans = () => document.querySelectorAll<HTMLElement>('label[for="input"] span[data-text]');
+    const restore = (el: HTMLElement) => {
+      const dt = el.getAttribute('data-text') ?? '';
+      if (el.textContent !== dt) el.textContent = dt;
+    };
+
+    const hasObfuscate = rgbStore.baseFormatting.obfuscate || rgbStore.formatting.some(s => s.obfuscate);
+
+    if (!hasObfuscate) {
+      spans().forEach(restore);
+      return;
+    }
+
+    let raf = 0;
+    let active = true;
+    const tick = () => {
+      if (!active) return;
+      spans().forEach((el) => {
+        if (el.classList.contains('obfuscate')) {
+          const dt = el.getAttribute('data-text') ?? '';
+          el.textContent = Array.from({ length: dt.length }, () =>
+            Math.random().toString(36).charAt(2)
+          ).join('');
+        } else {
+          restore(el);
+        }
+      });
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+
+    cleanup(() => {
+      active = false;
+      if (raf) cancelAnimationFrame(raf);
+    });
   });
 
   // Ads
