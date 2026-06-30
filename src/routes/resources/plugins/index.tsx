@@ -56,7 +56,7 @@ type PluginSourceComponent = {
 const Modrinth = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiModrinth class="fill-current" size={20} />
-    Modrinth<br/>
+    Modrinth<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -70,7 +70,7 @@ const Modrinth = component$(({ noDescription }: PluginSourceComponent) => <span 
 const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiSpigotmc class="fill-current" size={20} />
-    SpigotMC<br/>
+    SpigotMC<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -99,7 +99,7 @@ const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span cl
 const Misc = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <Ellipsis size={20} />
-    Misc<br/>
+    Misc<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -292,7 +292,7 @@ export default component$(() => {
             <SelectMenuRaw id="software" onChange$={(e, el) => {
               pluginsStore.servers[pluginsStore.openServer!].software = el.value;
             }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
-            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
+              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }} />
 
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const plugins: { [id: string]: Partial<PluginType> } = {};
@@ -334,10 +334,21 @@ export default component$(() => {
                       pluginsStore.servers[pluginsStore.openServer!].plugins[fetchedPlugin.id] = fetchedPlugin;
                     }),
                   );
+                  el.value = '';
+                  const notification = new Notification()
+                    .setTitle('Plugins imported successfully')
+                    .setDescription(`The plugins have been imported successfully.`)
+                    .setBgColor('lum-grad-bg-green/50');
+                  notifications.push(notification);
                 } catch (err) {
                   console.error('Failed to parse imported plugins:', err);
+                  const notification = new Notification()
+                    .setTitle('Failed to parse imported plugins')
+                    .setDescription(`An error occurred while parsing imported plugins. ${err}`)
+                    .setBgColor('lum-grad-bg-red/50');
+                  notifications.push(notification);
                 }
-              }}/>
+              }} />
             <SelectMenuRaw id="filter" onChange$={(e, el) => {
               if (el.value === 'all') pluginsStore.filter = undefined;
               pluginsStore.filter = el.value as 'outdated' | PluginSource;
@@ -346,7 +357,7 @@ export default component$(() => {
               { name: 'Outdated', value: 'outdated' },
               ...pluginSources.map((Source) => ({ name: <Source.component noDescription />, value: Source.value })),
             ]} value={pluginsStore.filter} customDropdown
-            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
+              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
               <span class="flex items-center gap-2" q:slot="dropdown">
                 <Filter size={16} />
                 Filter
@@ -497,7 +508,7 @@ export default component$(() => {
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>
-            <hr/>
+            <hr />
             <PluginCard
               plugin={resolvedPlugin.plugin}
               spigotRateLimit={spigotRateLimit}
