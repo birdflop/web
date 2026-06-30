@@ -1,4 +1,4 @@
-import { ColorStop, rgbDefaults } from './Defaults';
+import { ColorStop, rgbDefaults, Formatting } from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
@@ -12,34 +12,51 @@ function segmentText(text: string, colorlength?: number): string[] {
   return out;
 }
 
-function buildFormatCodes(rgbOptions: typeof rgbDefaults): string {
+function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
   let codes = '';
   if (rgbOptions.colorFormat.color.includes('$f') && rgbOptions.colorFormat.char) {
-    if (rgbOptions.baseFormatting.bold) codes += rgbOptions.colorFormat.char + 'l';
-    if (rgbOptions.baseFormatting.italic) codes += rgbOptions.colorFormat.char + 'o';
-    if (rgbOptions.baseFormatting.underline) codes += rgbOptions.colorFormat.char + 'n';
-    if (rgbOptions.baseFormatting.strikethrough) codes += rgbOptions.colorFormat.char + 'm';
-    if (rgbOptions.baseFormatting.obfuscate) codes += rgbOptions.colorFormat.char + 'k';
+    if (formatting.bold) codes += rgbOptions.colorFormat.char + 'l';
+    if (formatting.italic) codes += rgbOptions.colorFormat.char + 'o';
+    if (formatting.underline) codes += rgbOptions.colorFormat.char + 'n';
+    if (formatting.strikethrough) codes += rgbOptions.colorFormat.char + 'm';
+    if (formatting.obfuscate) codes += rgbOptions.colorFormat.char + 'k';
   }
   return codes;
 }
 
-function renderTemplateSegment(hexWithoutHash: string, text: string, rgbOptions: typeof rgbDefaults): string {
+function renderTemplateSegment(
+  hexWithoutHash: string,
+  text: string,
+  formatting: Formatting,
+  rgbOptions: typeof rgbDefaults,
+): string {
   let out = rgbOptions.colorFormat.color;
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
-  out = out.replace('$f', buildFormatCodes(rgbOptions));
+  out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
   out = out.replace('$c', text);
+
+  // Apply wrappers to this segment if formatting has it, ONLY when selective formatting is active
+  if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
+    if (rgbOptions.colorFormat.bold && formatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
+    if (rgbOptions.colorFormat.italic && formatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
+    if (rgbOptions.colorFormat.underline && formatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
+    if (rgbOptions.colorFormat.strikethrough && formatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
+    if (rgbOptions.colorFormat.obfuscate && formatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+  }
+
   return out;
 }
 
 function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
   let out = output;
-  if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
-  if (rgbOptions.colorFormat.italic && rgbOptions.baseFormatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
-  if (rgbOptions.colorFormat.underline && rgbOptions.baseFormatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
-  if (rgbOptions.colorFormat.strikethrough && rgbOptions.baseFormatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
-  if (rgbOptions.colorFormat.obfuscate && rgbOptions.baseFormatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+  if (!rgbOptions.formatting || rgbOptions.formatting.length === 0) {
+    if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
+    if (rgbOptions.colorFormat.italic && rgbOptions.baseFormatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
+    if (rgbOptions.colorFormat.underline && rgbOptions.baseFormatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
+    if (rgbOptions.colorFormat.strikethrough && rgbOptions.baseFormatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
+    if (rgbOptions.colorFormat.obfuscate && rgbOptions.baseFormatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+  }
   if (rgbOptions.prefixSuffix) out = rgbOptions.prefixSuffix.replace(/\$t/g, out);
   return out;
 }
@@ -107,15 +124,66 @@ function buildShadowSegments(
   });
 }
 
-function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end: number): string {
-  let currentHex: string | undefined;
-  let currentOpacity: number | undefined;
+function applySelectiveFormattingToText(text: string, offset: number, rgbOptions: typeof rgbDefaults): string {
+  const chars = Array.from(text);
+  let currentFmt: Formatting | undefined;
   let buffer = '';
   let out = '';
 
   const flush = () => {
+    if (!buffer) return;
+    if (!currentFmt) {
+      out += buffer;
+      buffer = '';
+      return;
+    }
+    let formatted = buffer;
+    if (rgbOptions.colorFormat.color === 'MiniMessage') {
+      if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
+      if (currentFmt.italic) formatted = `<i>${formatted}</i>`;
+      if (currentFmt.underline) formatted = `<u>${formatted}</u>`;
+      if (currentFmt.strikethrough) formatted = `<st>${formatted}</st>`;
+      if (currentFmt.obfuscate) formatted = `<obf>${formatted}</obf>`;
+    }
+    out += formatted;
+    buffer = '';
+  };
+
+  let charOffset = offset;
+  for (const ch of chars) {
+    const covering = rgbOptions.formatting?.find((s) => s.start <= charOffset && s.end > charOffset);
+    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+
+    const keys: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+    const fmtChanged = !currentFmt || keys.some((k) => currentFmt![k] !== fmt[k]);
+
+    if (fmtChanged) {
+      flush();
+      currentFmt = fmt;
+    }
+    buffer += ch;
+    charOffset += ch.length;
+  }
+  flush();
+  return out;
+}
+
+function buildShadowContent(
+  shadowSegments: ShadowSegment[],
+  start: number,
+  end: number,
+  rgbOptions: typeof rgbDefaults,
+): string {
+  let currentHex: string | undefined;
+  let currentOpacity: number | undefined;
+  let buffer = '';
+  let out = '';
+  let bufferStartOffset = 0;
+
+  const flush = () => {
     if (!buffer || !currentHex) return;
-    out += `<shadow:${currentHex}:${currentOpacity ?? 1}>${buffer}</shadow>`;
+    const formatted = applySelectiveFormattingToText(buffer, bufferStartOffset, rgbOptions);
+    out += `<shadow:${currentHex}:${currentOpacity ?? 1}>${formatted}</shadow>`;
     buffer = '';
   };
 
@@ -127,8 +195,15 @@ function buildShadowContent(shadowSegments: ShadowSegment[], start: number, end:
     const slice = seg.text.slice(sliceStart, sliceEnd);
     if (!slice) continue;
 
-    if (currentHex && (currentHex !== seg.hex || currentOpacity !== seg.opacity)) flush();
+    const sliceGlobalStart = Math.max(start, seg.start);
 
+    if (currentHex && (currentHex !== seg.hex || currentOpacity !== seg.opacity)) {
+      flush();
+    }
+
+    if (!buffer) {
+      bufferStartOffset = sliceGlobalStart;
+    }
     currentHex = seg.hex;
     currentOpacity = Math.round(seg.opacity * 1000) / 1000;
     buffer += slice;
@@ -224,7 +299,8 @@ type JsonOutput = {
 
 function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaults): string {
   if (rgbOptions.colorFormat.color === 'MiniMessage') {
-    return `<color:${singleHex}>${rgbOptions.text}</color>`;
+    const shadowColors = rgbOptions.shadowColors ? sortColors(rgbOptions.shadowColors) : null;
+    return renderMiniMessageGradient([{ hex: singleHex, pos: 0 }], rgbOptions, shadowColors);
   }
 
   if (rgbOptions.colorFormat.color === 'JSON') {
@@ -241,22 +317,32 @@ function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaul
     }
 
     const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
+    let charIndex = 0;
     for (const segment of segments) {
       if (rgbOptions.trimSpaces && segment.trim() === '') {
         jsonOutput.extra.push({ text: segment });
+        charIndex += segment.length;
         continue;
       }
 
-      const jsonExtra = buildJsonFormatting(segment, singleHex, rgbOptions, shadowGradient?.next());
+      const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
+      const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+
+      const jsonExtra = buildJsonFormatting(segment, singleHex, fmt, rgbOptions, shadowGradient?.next());
       jsonOutput.extra.push(jsonExtra);
+      charIndex += segment.length;
     }
 
     return JSON.stringify(jsonOutput);
   }
 
+  if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
+    return renderTemplateGradient([{ hex: singleHex, pos: 0 }], rgbOptions);
+  }
+
   if (rgbOptions.trimSpaces && rgbOptions.text.trim() === '') return rgbOptions.text;
   const hex = singleHex.replace(/^#/, '');
-  return renderTemplateSegment(hex, rgbOptions.text, rgbOptions);
+  return renderTemplateSegment(hex, rgbOptions.text, rgbOptions.baseFormatting, rgbOptions);
 }
 
 function renderMiniMessageGradient(
@@ -269,8 +355,10 @@ function renderMiniMessageGradient(
     : undefined;
 
   const buildShadowRange = (start: number, end: number) => {
-    if (!shadowSegments || !shadowSegments.length) return rgbOptions.text.substring(start, end);
-    return buildShadowContent(shadowSegments, start, end) || rgbOptions.text.substring(start, end);
+    if (!shadowSegments || !shadowSegments.length) {
+      return applySelectiveFormattingToText(rgbOptions.text.substring(start, end), start, rgbOptions);
+    }
+    return buildShadowContent(shadowSegments, start, end, rgbOptions) || applySelectiveFormattingToText(rgbOptions.text.substring(start, end), start, rgbOptions);
   };
 
   const renderUnevenGradient = (text: string) => {
@@ -339,6 +427,7 @@ function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults)
 
   const jsonOutput: JsonOutput = { text: '', extra: [] };
   const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
+  let charIndex = 0;
 
   for (const segment of segments) {
     const rgb = gradient.next();
@@ -346,12 +435,17 @@ function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults)
 
     if (rgbOptions.trimSpaces && segment.trim() === '') {
       jsonOutput.extra.push({ text: segment });
+      charIndex += segment.length;
       continue;
     }
 
     const colorHexWithHash = '#' + rgbToHex(rgb);
-    const jsonExtra = buildJsonFormatting(segment, colorHexWithHash, rgbOptions, rgbShadow);
+    const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
+    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+
+    const jsonExtra = buildJsonFormatting(segment, colorHexWithHash, fmt, rgbOptions, rgbShadow);
     jsonOutput.extra.push(jsonExtra);
+    charIndex += segment.length;
   }
 
   return JSON.stringify(jsonOutput);
@@ -367,17 +461,23 @@ function renderTemplateGradient(colors: ColorStop[], rgbOptions: typeof rgbDefau
     rgbOptions.gradientType,
   );
   const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
+  let charIndex = 0;
 
   let out = '';
   for (const segment of segments) {
     if (rgbOptions.trimSpaces && segment.trim() === '') {
       out += segment;
       gradient.next();
+      charIndex += segment.length;
       continue;
     }
 
     const hex = rgbToHex(gradient.next());
-    out += renderTemplateSegment(hex, segment, rgbOptions);
+    const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
+    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+
+    out += renderTemplateSegment(hex, segment, fmt, rgbOptions);
+    charIndex += segment.length;
   }
   return out;
 }
@@ -385,6 +485,7 @@ function renderTemplateGradient(colors: ColorStop[], rgbOptions: typeof rgbDefau
 function buildJsonFormatting(
   segment: string,
   colorHexWithHash: string,
+  formatting: Formatting,
   rgbOptions: typeof rgbDefaults,
   rgbShadow?: number[],
 ): JsonExtra {
@@ -392,11 +493,11 @@ function buildJsonFormatting(
     text: segment,
     color: colorHexWithHash,
   };
-  if (rgbOptions.baseFormatting.bold) charFormatting.bold = true;
-  if (rgbOptions.baseFormatting.italic) charFormatting.italic = true;
-  if (rgbOptions.baseFormatting.underline) charFormatting.underlined = true;
-  if (rgbOptions.baseFormatting.strikethrough) charFormatting.strikethrough = true;
-  if (rgbOptions.baseFormatting.obfuscate) charFormatting.obfuscated = true;
+  if (formatting.bold) charFormatting.bold = true;
+  if (formatting.italic) charFormatting.italic = true;
+  if (formatting.underline) charFormatting.underlined = true;
+  if (formatting.strikethrough) charFormatting.strikethrough = true;
+  if (formatting.obfuscate) charFormatting.obfuscated = true;
   if (rgbShadow) charFormatting.shadow_color = normalizeShadowRGB(rgbShadow);
   return charFormatting;
 }
