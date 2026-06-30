@@ -42,13 +42,9 @@ export function renderAdvancedPreview(store: AdvancedStore) {
           data-text={chunk}
           style={{
             color,
-            // Faux-bold via text-shadow (how Minecraft itself draws bold). The real
-            // `font-mc-bold` is ~20% wider, which would desync the editable textarea
-            // overlay and offset the selection highlight; this keeps the advance width.
-            ...(seg.bold ? { textShadow: '0.06em 0 0 currentColor' } : {}),
           }}
           class={{
-            // Italic font is width-identical to regular, so it's safe to use directly.
+            'font-mc-bold': seg.bold,
             'font-mc-italic': seg.italic,
             underline: seg.underline,
             strikethrough: seg.strikethrough,

@@ -116,7 +116,7 @@ export default component$(() => {
       }
 
       {mode === 'solid' &&
-        <div class="lum-card p-2">
+        <div class="p-2">
           <ColorPicker
             id="adv-solid-picker"
             value={colors[0]?.hex ?? '#ffffff'}

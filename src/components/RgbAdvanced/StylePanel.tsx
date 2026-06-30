@@ -29,7 +29,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="lum-card p-4 sm:p-5 flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
       {/* Contextual header: what you're styling + select-all shortcut */}
       <div class="flex items-center justify-between gap-3 flex-wrap">
         {hasSel.value
@@ -57,13 +57,27 @@ export default component$(() => {
           </h4>
           <SegmentColorEditor />
         </div>
+      </>}
+    </div>
+  );
+});
+
+export const FormattingPanel = component$(() => {
+  const t = inlineTranslate();
+  const selection = useContext(selectionContext);
+
+  const hasSel = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
+
+  return (
+    <div class="flex flex-col gap-4">
+      {hasSel.value && (
         <div class="flex flex-col gap-2">
           <h4 class="flex items-center gap-2 text-xs font-bold text-lum-text-secondary uppercase tracking-wider">
             <Type size={15} /> {t('rgb.beta.formatting@@Formatting')}
           </h4>
           <AdvancedFormatting />
         </div>
-      </>}
+      )}
 
       <SegmentInspector />
     </div>

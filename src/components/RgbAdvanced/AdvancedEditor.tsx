@@ -1,35 +1,18 @@
-import { component$, isBrowser, Slot, useContext, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, isBrowser, useContext, useSignal, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { inlineTranslate } from 'qwik-speak';
-import { ArrowLeft, Clipboard, Palette, Settings, Type, Wand2 } from 'lucide-icons-qwik';
+import { ArrowLeft, Clipboard, Palette, Settings, Type } from 'lucide-icons-qwik';
 import { deepTrack } from '~/util/misc';
 import { setCookies } from '~/util/dataUtils';
 import Output from '~/components/Rgbirdflop/Output';
+import HostingAd from '~/components/Rgbirdflop/HostingAd';
+import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
 import { donateLink } from '~/components/Elements/Nav';
 import { generateAdvancedOutput } from './output';
 import AdvancedInput from './AdvancedInput';
-import StylePanel from './StylePanel';
+import StylePanel, { FormattingPanel } from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
 import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
-
-interface StepProps {
-  n: number;
-  title: string;
-  hint?: string;
-}
-
-const Step = component$<StepProps>(({ n, title, hint }) => (
-  <div class="flex items-center gap-2.5">
-    <span class="flex items-center justify-center w-6 h-6 rounded-full lum-grad-bg-blue/40 text-xs font-bold shrink-0">
-      {n}
-    </span>
-    <span class="text-lum-text-secondary shrink-0 flex">
-      <Slot />
-    </span>
-    <h3 class="text-lg font-bold">{title}</h3>
-    {hint && <span class="text-sm text-lum-text-secondary font-normal hidden sm:inline">{hint}</span>}
-  </div>
-));
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -80,13 +63,56 @@ export default component$(() => {
     });
   });
 
+  const showAds = useSignal(false);
+  const adVariant = useSignal<AdVariantKey | null>(null);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!isBrowser) return;
+
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const stored = localStorage.getItem(
+        AD_VARIANT_STORAGE_KEY,
+      ) as AdVariantKey | null;
+
+      const usPreferredRegions = [
+        'America/', // North/Central/South America
+        'Pacific/Honolulu', // Hawaii
+        'Pacific/Guam', // US territories
+        'Atlantic/Bermuda', // Close to US
+      ];
+      const shouldShowAds = !usPreferredRegions.some((region) =>
+        tz.startsWith(region),
+      );
+
+      if (shouldShowAds) {
+        showAds.value = true;
+        if (stored && AD_VARIANTS[stored]) {
+          adVariant.value = stored;
+        } else {
+          const keys = Object.keys(AD_VARIANTS) as AdVariantKey[];
+          const chosen = keys[Math.floor(Math.random() * keys.length)];
+          adVariant.value = chosen;
+          localStorage.setItem(AD_VARIANT_STORAGE_KEY, chosen);
+        }
+      }
+    } catch (err) {
+      console.warn('Ad region detection failed', err);
+    }
+  });
+
+  const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
   const output = generateAdvancedOutput(store);
 
   return (
-    <section class="relative flex mx-auto w-full px-6 min-h-svh pt-20 justify-center">
-      <div class="w-full max-w-3xl flex flex-col gap-6">
+    <section class="relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center">
+      {showAds.value && adAsset && (
+        <HostingAd variant={adAsset} position="Left" />
+      )}
+      <div class="min-h-15 max-w-6xl w-full">
         {/* Header */}
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2 mb-4">
           <div class="flex flex-wrap items-center gap-3">
             <h1 class="flex gap-3 text-2xl font-extrabold items-center flex-1">
               <Palette size={30} />
@@ -105,49 +131,74 @@ export default component$(() => {
           </p>
         </div>
 
-        {/* 1. Text */}
-        <div class="flex flex-col gap-3">
-          <Step n={1} title={t('rgb.beta.step.text@@Your text')}
-            hint={t('rgb.beta.step.textHint@@type below, and drag to highlight a part')}>
-            <Type size={18} />
-          </Step>
-          <AdvancedInput />
-        </div>
+        {/* Input */}
+        <AdvancedInput />
 
-        {/* 2. Style */}
-        <div class="flex flex-col gap-3">
-          <Step n={2} title={t('rgb.beta.step.style@@Style it')}
-            hint={t('rgb.beta.step.styleHint@@color & format whatever you highlighted')}>
-            <Wand2 size={18} />
-          </Step>
-          <StylePanel />
-        </div>
+        {/* Grid Layout (matching regular rgb columns) */}
+        <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-4">
+          
+          {/* Column 1: Styling / Editor Panel */}
+          <div class="flex flex-col gap-2 relative" id="column1">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Palette />
+              {t('rgb.colors.title@@Colors')}
+            </div>
+            <StylePanel />
+          </div>
 
-        {/* 3. Result */}
-        <div class="flex flex-col gap-3">
-          <Step n={3} title={t('rgb.beta.step.result@@Copy the result')}
-            hint={t('rgb.beta.step.resultHint@@click the box to copy, then paste in Minecraft')}>
-            <Clipboard size={18} />
-          </Step>
-          <Output hidden={false} value={output} />
-        </div>
+          {/* Column 2-3: Output & Options */}
+          <div class="flex flex-col gap-1 md:col-span-2 sm:px-2 sm:border-x border-lum-border/10" id="column2">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Clipboard />
+              {t('rgb.output.title@@Output')}
+            </div>
+            <Output hidden={false} value={output} />
 
-        {/* Advanced options */}
-        <details class="lum-card rounded-lum overflow-hidden p-0">
-          <summary class="flex items-center gap-2 p-4 cursor-pointer font-semibold select-none">
-            <Settings size={18} />
-            {t('rgb.beta.advancedOptions@@Output format & advanced options')}
-          </summary>
-          <div class="px-4 pb-4">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold mt-4">
+              <Settings />
+              {t('rgb.options@@Options')}
+            </div>
             <AdvancedOptions hidden={false} />
           </div>
-        </details>
 
-        <p class="text-sm text-lum-text-secondary">
-          {t('rgb.beta.footer@@This is an experimental editor. Found a bug? Let us know.')}{' '}
-          <a href={donateLink}>{t('rgb.beta.donate@@Support our nonprofit mission')}</a>.
+          {/* Column 4: Custom formats, decode, hosting ads, etc. */}
+          <div class="mb-4 flex flex-col gap-2" id="column3">
+            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+              <Type />
+              {t('rgb.formatting.title@@Formatting')}
+            </div>
+            <FormattingPanel />
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <p class="mt-8">
+          RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+          gradient creator that generates hex formatted text. RGB Birdflop is a
+          public resource developed by Birdflop, a 501(c)(3) nonprofit providing
+          affordable and accessible hosting and public resources. If you would
+          like to support our mission, please{' '}
+          <a href={donateLink}>
+            click here
+          </a>{' '}
+          to make a charitable donation, 100% tax-deductible in the US.
+        </p>
+        <p>
+          Wanna automate generating gradients or use this in your own project?
+          We have{' '}
+          <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/npm_package">
+            an NPM package
+          </a>
+          {' '}and{' '}
+          <a class="text-blue-400 hover:underline" href="/docs/rgbirdflop/api">
+            an API!
+          </a>
         </p>
       </div>
+      {showAds.value && adAsset && (
+        <HostingAd variant={adAsset} position="Right" />
+      )}
     </section>
   );
 });

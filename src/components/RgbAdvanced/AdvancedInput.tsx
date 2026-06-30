@@ -48,9 +48,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
       </p>
       {!readOnly &&
         <textarea class={{
-          // Keep textarea glyphs transparent even while selected, so they don't double-expose
-          // ("ghost") over the styled preview text underneath; selection shows via the bg highlight only.
-          'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-transparent': true,
+          'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
         value={combinedText(store.segments)} spellcheck={false} id={ADVANCED_INPUT_ID}
