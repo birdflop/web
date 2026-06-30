@@ -317,7 +317,15 @@ export default component$(() => {
                         throw new Error(`Invalid plugin data: ${JSON.stringify(plugin)}`);
                       }
                       const fetchedPlugin = await getPlugin(plugin).fetch();
-                      pluginsStore.servers[pluginsStore.openServer!].plugins.push(fetchedPlugin);
+                      const serverPlugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+                      const existingIndex = serverPlugins.findIndex(
+                        (p) => String(p.id) === String(fetchedPlugin.id) && p.type === fetchedPlugin.type
+                      );
+                      if (existingIndex !== -1) {
+                        serverPlugins[existingIndex] = fetchedPlugin;
+                      } else {
+                        serverPlugins.push(fetchedPlugin);
+                      }
                     }),
                   );
                 } catch (err) {
