@@ -6,14 +6,17 @@ import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';
 import AdvancedFormatting from './AdvancedFormatting';
 import SegmentInspector from './SegmentInspector';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 export default component$(() => {
   const t = inlineTranslate();
   const store = useContext(advancedStoreContext);
   const selection = useContext(selectionContext);
 
-  const hasSel = useComputed$(() => selection.value.end > selection.value.start);
+  const hasSel = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
   const selText = useComputed$(() => {
+    if (!selection.value) return '';
     const txt = combinedText(store.segments).slice(selection.value.start, selection.value.end);
     return txt.length > 24 ? txt.slice(0, 24) + '…' : txt;
   });

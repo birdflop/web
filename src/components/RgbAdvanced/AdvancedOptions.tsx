@@ -2,6 +2,7 @@ import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { colorFormats } from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
 
 export default component$(({ hidden }: { hidden?: boolean }) => {
   const t = inlineTranslate();

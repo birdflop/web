@@ -16,6 +16,8 @@ import {
 import { ArrowRightLeft, Ban, ChevronDown, ChevronUp, Dices, Droplet, Palette, Plus, Trash } from 'lucide-icons-qwik';
 import { applyStyleToRange, defaultStyle, styleAtChar, type CharStyle } from './model';
 import { restoreSelection } from './dom';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function gradientCSS(colors: ColorStop[], gradientType: string, samples = 20): string {
   if (colors.length < 2) return colors[0]?.hex ?? 'transparent';
@@ -47,10 +49,12 @@ export default component$(() => {
   const selection = useContext(selectionContext);
   const opened = useSignal(-1);
 
-  const hasSelection = useComputed$(() => selection.value.end > selection.value.start);
-  const current = useComputed$<CharStyle>(
-    () => styleAtChar(store.segments, selection.value.start) ?? defaultStyle(),
-  );
+  const hasSelection = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
+
+  const current = useComputed$<CharStyle>(() => {
+    if (!selection.value) return defaultStyle();
+    return styleAtChar(store.segments, selection.value.start) ?? defaultStyle();
+  });
 
   useOnDocument('click', $((e) => {
     if (e.target instanceof HTMLElement
@@ -63,6 +67,7 @@ export default component$(() => {
   // Writes a uniform color config over the whole selection (formatting flags untouched).
   // The payload is plain serializable data, computed once by the caller.
   const writeConfig = $((partial: Partial<CharStyle>) => {
+    if (!selection.value) return;
     const { start, end } = selection.value;
     if (end <= start) return;
     const base = styleAtChar(store.segments, start) ?? defaultStyle();
@@ -84,7 +89,7 @@ export default component$(() => {
 
   const mode = current.value.colorMode;
   const colors = current.value.colors;
-  const selLength = selection.value.end - selection.value.start;
+  const selLength = selection.value ? (selection.value.end - selection.value.start) : 0;
 
   return (
     <div class="flex flex-col gap-2">

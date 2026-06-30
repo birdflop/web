@@ -180,10 +180,10 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
   }
 
   // Validate format if present
-  if (preset.format) {
-    if (!preset.format.color) {
+  if (preset.colorFormat) {
+    if (!preset.colorFormat.color) {
       errors.push({
-        field: 'preset.format',
+        field: 'preset.colorFormat',
         message: 'Format must have a color property',
       });
     }

@@ -10,6 +10,7 @@ import { generateAdvancedOutput } from './output';
 import AdvancedInput from './AdvancedInput';
 import StylePanel from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
 
 interface StepProps {
   n: number;

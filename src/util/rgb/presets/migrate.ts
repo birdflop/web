@@ -11,7 +11,7 @@ function migrateFromV2(preset: any) {
   return migrateFromV3({
     version: 3,
     name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length,
-    format: colorFormats.find((f) => f.color === preset.format) || {
+    format: colorFormats.find((f: any) => f.color === preset.format) || {
       color: preset.format,
       char: preset.formatchar,
     },

@@ -7,6 +7,8 @@ import { applyTextDiff, combinedText, segmentIndexAtChar } from './model';
 import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
+import { advancedStoreContext, advPreviewStyleContext } from '~/routes/resources/rgb/beta/index';
+import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgItem = '/banner/dyes/cyan_dye.png';

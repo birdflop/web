@@ -10,6 +10,7 @@ import { generateOutput } from '@birdflop/rgbirdflop';
 export interface Selection {
   start: number;
   end: number;
+  segmentIndex?: number;
 };
 
 export const selectionContext = createContextId<Signal<Selection | undefined>>('advanced-rgb-selection');

@@ -141,22 +141,22 @@ export default component$(() => {
           const colors = processedFrames[frames.current % processedFrames.length];
           if (!colors) return '\u00A0';
 
-          const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorlength}}`, 'g'))];
+          const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorLength}}`, 'g'))];
           let i = 0;
           return segments.map((segment) => {
             const color = `#${colors[i]}`;
             const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
             const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
             const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-            i = store.trimspaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
+            i = store.trimSpaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
             return <span key={`char${i}`} q:slot="input" style={{
               color,
               textShadow: `${shadowLength} 0 ${shadowColor};`,
             }} class={{
-              'underline': store.underline,
-              'strikethrough': store.strikethrough,
-              'underline-strikethrough': store.underline && store.strikethrough,
-              'obfuscate': store.obfuscate,
+              'underline': store.baseFormatting.underline,
+              'strikethrough': store.baseFormatting.strikethrough,
+              'underline-strikethrough': store.baseFormatting.underline && store.baseFormatting.strikethrough,
+              'obfuscate': store.baseFormatting.obfuscate,
             }}>
               {segment[0]}
             </span>;

@@ -4,6 +4,8 @@ import { sortColors } from '@birdflop/rgbirdflop';
 import { ChevronLeft, ChevronRight, Layers, Trash } from 'lucide-icons-qwik';
 import { deleteSegment, segmentRange, swapSegments, type AdvancedSegment } from './model';
 import { restoreSelection } from './dom';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function swatchStyle(seg: AdvancedSegment): string {
   if (seg.colorMode === 'none' || seg.colors.length === 0) {
@@ -40,7 +42,7 @@ export default component$(() => {
       <div class="flex flex-wrap gap-2">
         {store.segments.map((seg, i) => {
           const range = segmentRange(store.segments, i);
-          const active = selection.value.start === range.start && selection.value.end === range.end;
+          const active = selection.value ? (selection.value.start === range.start && selection.value.end === range.end) : false;
           return (
             <div key={`part-${i}`} class={{
               'flex items-center rounded-lum-1 border transition-colors overflow-hidden': true,

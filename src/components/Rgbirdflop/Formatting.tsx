@@ -104,7 +104,7 @@ export default component$(() => {
       const defaultNorm = rgbStore.baseFormatting;
       const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
-        newSegments.push({ start: a, end: b, ...fmt });
+        newSegments.push({ ...fmt, start: a, end: b });
       }
     }
 

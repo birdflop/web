@@ -1,17 +1,22 @@
 import { component$, useComputed$, useContext } from '@builder.io/qwik';
-import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { Bold, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { selectionFlags, toggleFormat, type FormatFlag } from './model';
 import { restoreSelection } from './dom';
+import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 export default component$(() => {
   const t = inlineTranslate();
   const store = useContext(advancedStoreContext);
   const selection = useContext(selectionContext);
 
-  const flags = useComputed$(() =>
-    selectionFlags(store.segments, selection.value.start, selection.value.end),
-  );
+  const flags = useComputed$(() => {
+    if (!selection.value) {
+      return { bold: false, italic: false, underline: false, strikethrough: false, obfuscate: false };
+    }
+    return selectionFlags(store.segments, selection.value.start, selection.value.end);
+  });
 
   const buttons: { flag: FormatFlag; label: string; icon: typeof Bold }[] = [
     { flag: 'bold', label: t('rgb.formatting.bold@@Bold'), icon: Bold },
@@ -31,6 +36,7 @@ export default component$(() => {
             'lum-bg-lum-input-bg hover:lum-bg-lum-card-bg': !flags.value[flag],
           }}
           onClick$={() => {
+            if (!selection.value) return;
             const { start, end } = selection.value;
             if (end <= start) return;
             store.segments = toggleFormat(store.segments, start, end, flag);
