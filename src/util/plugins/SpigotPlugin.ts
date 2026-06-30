@@ -11,7 +11,7 @@ export class SpigotPlugin implements ServerPlugin {
 
     const searchRes = await fetch(`${searchUrl}${encodeURIComponent(query)}?${searchParams.toString()}`);
     const searchData: any[] = await searchRes.json();
-    return searchData;
+    return searchData.map((data) => new SpigotPlugin({ id: data.id }).fromData(data));
   }
   id: number | string;
   type = 'spigot' as const;
@@ -53,13 +53,14 @@ export class SpigotPlugin implements ServerPlugin {
 
   fromData(data: any) {
     Object.assign(this, {
+      id: data.id,
       name: data.name,
       description: data.tag,
       url: data.url,
       iconUrl: data.icon?.url ? 'https://spigotmc.org/' + data.icon.url : undefined,
       mcVersions: data.testedVersions,
-      releaseDate: new Date(data.releaseDate),
-      updateDate: new Date(data.updateDate),
+      releaseDate: new Date(data.releaseDate * 1000),
+      updateDate: new Date(data.updateDate * 1000),
       file: data.file ? {
         type: data.file.type,
         size: data.file.size,
@@ -87,7 +88,7 @@ export class SpigotPlugin implements ServerPlugin {
     this.versions = versionsData.map((version) => ({
       id: version.id,
       name: version.name,
-      releaseDate: new Date(version.releaseDate),
+      releaseDate: new Date(version.releaseDate * 1000),
     }));
 
     this.latestVersion = this.versions[0];

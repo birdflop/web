@@ -1,7 +1,7 @@
 import { component$, createContextId, isBrowser, useComputed$, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Pencil, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
+import { Blocks, Check, Copy, Download, Ellipsis, Filter, Loader2, Plus, RefreshCw, Trash, X } from 'lucide-icons-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -23,7 +23,7 @@ type ResolvedPluginType = {
 
 type ServerType = {
   software: string;
-  plugins: PluginType[];
+  plugins: { [id: string]: PluginType };
 };
 
 type PluginsStoreType = {
@@ -36,12 +36,15 @@ type PluginsStoreType = {
 
 const serverDefaults: ServerType = {
   software: 'paper',
-  plugins: [],
+  plugins: {},
 };
 
 const pluginsDefaults: PluginsStoreType = {
   servers: {
-    'My Server': serverDefaults,
+    'My Server': {
+      software: 'paper',
+      plugins: {},
+    },
   },
   openServer: 'My Server',
 };
@@ -53,7 +56,7 @@ type PluginSourceComponent = {
 const Modrinth = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiModrinth class="fill-current" size={20} />
-    Modrinth<br/>
+    Modrinth<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -67,7 +70,7 @@ const Modrinth = component$(({ noDescription }: PluginSourceComponent) => <span 
 const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <SiSpigotmc class="fill-current" size={20} />
-    SpigotMC<br/>
+    SpigotMC<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -96,7 +99,7 @@ const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span cl
 const Misc = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
   <span class="flex items-center gap-2">
     <Ellipsis size={20} />
-    Misc<br/>
+    Misc<br />
   </span>
   {!noDescription
     && <span class="text-xs flex text-lum-text-secondary text-wrap whitespace-pre-line mt-2">
@@ -143,13 +146,13 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
-    const savedPlugins = localStorage.getItem('plugins');
-    if (savedPlugins) {
+    const pluginsData = localStorage.getItem('plugins');
+    if (pluginsData) {
       try {
-        const parsed = JSON.parse(savedPlugins);
-        pluginsStore.servers = parsed.servers || {};
-        pluginsStore.openServer = parsed.openServer;
-        pluginsStore.filter = parsed.filter;
+        const savedPluginsStore = JSON.parse(pluginsData);
+        pluginsStore.servers = savedPluginsStore.servers || {};
+        pluginsStore.openServer = savedPluginsStore.openServer;
+        pluginsStore.filter = savedPluginsStore.filter;
       } catch (e) {
         const notification = new Notification()
           .setTitle('Error loading plugins')
@@ -160,14 +163,38 @@ export default component$(() => {
     }
   });
 
-  useTask$(({ track }) => {
+  useTask$(async ({ track }) => {
     deepTrack(track, pluginsStore);
-    console.log(Date.now());
 
     if (!isBrowser) return;
+    if (pluginsStore.openServer && pluginsStore.servers[pluginsStore.openServer]) {
+      // check if any plugins are not fetched, and fetch them if so
+      const plugins = pluginsStore.servers[pluginsStore.openServer].plugins;
+      for (const pluginId in plugins) {
+        const plugin = plugins[pluginId];
+        if (!plugin.versions) Object.assign(plugin, await getPlugin(plugin).fetch());
+      }
+    }
+    else {
+      pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
+    }
 
     try {
-      localStorage.setItem('plugins', JSON.stringify(pluginsStore));
+      const exportedPluginsStore: PluginsStoreType = JSON.parse(JSON.stringify(pluginsStore));
+      Object.keys(exportedPluginsStore.servers).forEach((server) => {
+        const serverPlugins = exportedPluginsStore.servers[server].plugins;
+        const mappedPlugins: { [id: string]: PluginType } = {};
+        Object.keys(serverPlugins).forEach((id) => {
+          const plugin = serverPlugins[id];
+          mappedPlugins[id] = {
+            id: plugin.id,
+            type: plugin.type,
+            currentVersion: plugin.currentVersion,
+          };
+        });
+        exportedPluginsStore.servers[server].plugins = mappedPlugins;
+      });
+      localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -179,10 +206,10 @@ export default component$(() => {
 
   const outdatedPlugins = useComputed$(() => {
     if (!pluginsStore.openServer || !pluginsStore.servers[pluginsStore.openServer].plugins) return;
-    return pluginsStore.servers[pluginsStore.openServer].plugins.filter((plugin) => {
+    return Object.values(pluginsStore.servers[pluginsStore.openServer].plugins).filter((plugin) => {
       const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
         && plugin.currentVersion?.releaseDate !== undefined
-        && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+        && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
       return updateAvailable && plugin.file?.url;
     }).length;
   });
@@ -242,17 +269,16 @@ export default component$(() => {
 
             <button class="lum-btn p-2 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const newName = prompt('Enter new server name', `${pluginsStore.openServer}`);
-              if (newName && newName !== pluginsStore.openServer) {
+              if (newName && newName !== pluginsStore.openServer && pluginsStore.openServer) {
                 if (pluginsStore.servers[newName]) {
                   alert('A server with that name already exists.');
                   return;
                 }
-                delete pluginsStore.servers[pluginsStore.openServer!];
-                pluginsStore.servers[newName] = pluginsStore.servers[pluginsStore.openServer!];
+                pluginsStore.servers[newName] = JSON.parse(JSON.stringify(pluginsStore.servers[pluginsStore.openServer]));
                 pluginsStore.openServer = newName;
               }
-            }} title="Rename server">
-              <Pencil size={16} />
+            }} title="Duplicate server">
+              <Copy size={16} />
             </button>
             <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-red rounded-lum-1" onClick$={() => {
               if (confirm(`Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`)) {
@@ -266,10 +292,19 @@ export default component$(() => {
             <SelectMenuRaw id="software" onChange$={(e, el) => {
               pluginsStore.servers[pluginsStore.openServer!].software = el.value;
             }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
-            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}/>
+              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }} />
 
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
-              const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+              const plugins: { [id: string]: Partial<PluginType> } = {};
+              const serverPlugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
+              Object.keys(serverPlugins).forEach((id) => {
+                const plugin = serverPlugins[id];
+                plugins[id] = {
+                  id: plugin.id,
+                  type: plugin.type,
+                  currentVersion: plugin.currentVersion,
+                };
+              });
 
               const notification = new Notification()
                 .setTitle('Plugins copied to clipboard')
@@ -283,18 +318,37 @@ export default component$(() => {
               });
               notifications.push(notification);
             }} title="Export server plugins as JSON">
-              <Copy size={16} /> Export (Recommended for backup for now.)
+              <Copy size={16} /> Export (Keep this safe)
             </button>
 
             <input class="lum-input lum-input-p-1 rounded-lum-1 lum-bg-transparent flex-1" id="import" name="import" placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
-              onInput$={(e, el) => {
+              onInput$={async (e, el) => {
                 try {
-                  const importedPlugins = JSON.parse(el.value).map((plugin: any) => getPlugin(plugin));
-                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(...importedPlugins);
+                  const importJSON = JSON.parse(el.value);
+                  await Promise.all(
+                    Object.values(importJSON).map(async (plugin: any) => {
+                      if (!plugin.id || !plugin.type) {
+                        throw new Error(`Invalid plugin data: ${JSON.stringify(plugin)}`);
+                      }
+                      const fetchedPlugin = await getPlugin(plugin).fetch();
+                      pluginsStore.servers[pluginsStore.openServer!].plugins[fetchedPlugin.id] = fetchedPlugin;
+                    }),
+                  );
+                  el.value = '';
+                  const notification = new Notification()
+                    .setTitle('Plugins imported successfully')
+                    .setDescription(`The plugins have been imported successfully.`)
+                    .setBgColor('lum-grad-bg-green/50');
+                  notifications.push(notification);
                 } catch (err) {
                   console.error('Failed to parse imported plugins:', err);
+                  const notification = new Notification()
+                    .setTitle('Failed to parse imported plugins')
+                    .setDescription(`An error occurred while parsing imported plugins. ${err}`)
+                    .setBgColor('lum-grad-bg-red/50');
+                  notifications.push(notification);
                 }
-              }}/>
+              }} />
             <SelectMenuRaw id="filter" onChange$={(e, el) => {
               if (el.value === 'all') pluginsStore.filter = undefined;
               pluginsStore.filter = el.value as 'outdated' | PluginSource;
@@ -303,7 +357,7 @@ export default component$(() => {
               { name: 'Outdated', value: 'outdated' },
               ...pluginSources.map((Source) => ({ name: <Source.component noDescription />, value: Source.value })),
             ]} value={pluginsStore.filter} customDropdown
-            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
+              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
               <span class="flex items-center gap-2" q:slot="dropdown">
                 <Filter size={16} />
                 Filter
@@ -311,12 +365,12 @@ export default component$(() => {
             </SelectMenuRaw>
           </div>
 
-          {pluginsStore.servers[pluginsStore.openServer].plugins.length > 0 &&
+          {Object.keys(pluginsStore.servers[pluginsStore.openServer].plugins).length > 0 &&
             <div class="flex gap-1 items-center mx-auto">
               {debug && (
                 <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                  plugins.forEach((plugin) => {
+                  Object.values(plugins).forEach((plugin) => {
                     plugin.currentVersion = {
                       id: 'outdated',
                       name: 'Outdated',
@@ -330,7 +384,7 @@ export default component$(() => {
               )}
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                plugins.forEach((plugin) => {
+                Object.values(plugins).forEach((plugin) => {
                   if (plugin.latestVersion) plugin.currentVersion = plugin.latestVersion;
                   plugin.updateDate = new Date();
                 });
@@ -340,7 +394,8 @@ export default component$(() => {
               </button>
               <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={async () => {
                 const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                for (const plugin of plugins) {
+                for (const pluginId in plugins) {
+                  const plugin = plugins[pluginId];
                   Object.assign(plugin, await getPlugin(plugin).fetchVersions());
                 }
               }}>
@@ -354,10 +409,11 @@ export default component$(() => {
                   isLoading.value = [...isLoading.value, 'downloadAll'];
 
                   const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                  for (const plugin of plugins) {
+                  for (const pluginId in plugins) {
+                    const plugin = plugins[pluginId];
                     const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
                       && plugin.currentVersion?.releaseDate !== undefined
-                      && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+                      && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
 
                     if (!updateAvailable || !plugin.file?.url) continue;
 
@@ -383,14 +439,13 @@ export default component$(() => {
           }
         </div>
         <div class="grid gap-2 my-4">
-          {pluginsStore.servers[pluginsStore.openServer].plugins.map((plugin, i) => {
+          {Object.values(pluginsStore.servers[pluginsStore.openServer].plugins).map((plugin) => {
             const updateAvailable = plugin.latestVersion?.releaseDate !== undefined
               && plugin.currentVersion?.releaseDate !== undefined
-              && plugin.latestVersion.releaseDate > plugin.currentVersion.releaseDate;
+              && new Date(plugin.latestVersion.releaseDate).getTime() > new Date(plugin.currentVersion.releaseDate).getTime();
 
             if (pluginsStore.filter === 'outdated' && !updateAvailable) return null;
             if (pluginsStore.filter && pluginsStore.filter !== 'outdated' && plugin.type !== pluginsStore.filter) return null;
-            console.log(plugin);
 
             return <PluginCard key={plugin.id}
               plugin={plugin}
@@ -398,7 +453,7 @@ export default component$(() => {
               spigotRateLimit={spigotRateLimit}>
               <button class="lum-btn rounded-lum-2 p-2 text-sm lum-bg-transparent" q:slot="extra-actions" onClick$={async () => {
                 try {
-                  pluginsStore.servers[pluginsStore.openServer!].plugins[i] = await getPlugin(plugin).fetchVersions();
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[plugin.id] = await getPlugin(plugin).fetch();
                 } catch (error) {
                   console.error('Error fetching plugin versions:', error);
                   const notification = new Notification()
@@ -411,11 +466,7 @@ export default component$(() => {
                 <RefreshCw size={16} />
               </button>
               <button class="lum-btn rounded-lum-2 p-2 lum-bg-transparent hover:lum-bg-red" q:slot="extra-actions" onClick$={() => {
-                const plugins = pluginsStore.servers[pluginsStore.openServer!].plugins;
-                const index = plugins.findIndex((p) => p.name === plugin.name);
-                if (index !== -1) {
-                  plugins.splice(index, 1);
-                }
+                delete pluginsStore.servers[pluginsStore.openServer!].plugins[plugin.id];
               }}>
                 <Trash size={16} />
               </button>
@@ -457,7 +508,7 @@ export default component$(() => {
           {resolvedPlugin.type === 'misc' && <AddMiscDialog />}
 
           {resolvedPlugin.plugin && <>
-            <hr/>
+            <hr />
             <PluginCard
               plugin={resolvedPlugin.plugin}
               spigotRateLimit={spigotRateLimit}
@@ -474,7 +525,7 @@ export default component$(() => {
                 onClick$={() => {
                   if (!resolvedPlugin.plugin) return;
 
-                  pluginsStore.servers[pluginsStore.openServer!].plugins.push(resolvedPlugin.plugin);
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[resolvedPlugin.plugin.id] = resolvedPlugin.plugin;
                   resolvedPlugin.plugin = undefined;
                   modalRef.value?.close();
                 }}

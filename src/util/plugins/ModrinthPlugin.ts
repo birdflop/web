@@ -12,7 +12,7 @@ export class ModrinthPlugin implements ServerPlugin {
 
     const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
     const searchData: { hits: any[]; } = await searchRes.json();
-    return searchData.hits;
+    return searchData.hits.map((data) => new ModrinthPlugin({ id: data.project_id }).fromData(data));
   }
   id: number | string;
   type = 'modrinth' as const;
@@ -54,6 +54,7 @@ export class ModrinthPlugin implements ServerPlugin {
 
   fromData(data: any) {
     Object.assign(this, {
+      id: data.id ?? data.project_id,
       name: data.title,
       description: data.description,
       url: data.url,
