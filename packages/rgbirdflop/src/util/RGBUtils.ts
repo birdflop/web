@@ -304,36 +304,15 @@ function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaul
   }
 
   if (rgbOptions.colorFormat.color === 'JSON') {
-    const jsonOutput: JsonOutput = { text: '', extra: [] };
-
-    let shadowGradient: ColorGradient | undefined;
-    if (rgbOptions.shadowColors) {
-      const shadowColors = rgbOptions.shadowColors.map(getRGBColorStop);
-      shadowGradient = new ColorGradient(
-        shadowColors,
-        rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
-        rgbOptions.gradientType,
-      );
-    }
-
+    const shadowGradient = buildShadowGradient(rgbOptions);
     const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
-    let charIndex = 0;
-    for (const segment of segments) {
-      if (rgbOptions.trimSpaces && segment.trim() === '') {
-        jsonOutput.extra.push({ text: segment });
-        charIndex += segment.length;
-        continue;
-      }
-
-      const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
-      const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
-
-      const jsonExtra = buildJsonFormatting(segment, singleHex, fmt, rgbOptions, shadowGradient?.next());
-      jsonOutput.extra.push(jsonExtra);
-      charIndex += segment.length;
-    }
-
-    return JSON.stringify(jsonOutput);
+    const extra = buildJsonExtraList(
+      segments,
+      () => singleHex,
+      () => shadowGradient?.next(),
+      rgbOptions
+    );
+    return JSON.stringify({ text: '', extra });
   }
 
   if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
@@ -406,6 +385,47 @@ function renderMiniMessageGradient(
   return `<gradient:${hexes}>${inner}</gradient>`;
 }
 
+function getFormattingAtOffset(charIndex: number, rgbOptions: typeof rgbDefaults): Formatting {
+  const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
+  return covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+}
+
+function buildShadowGradient(rgbOptions: typeof rgbDefaults): ColorGradient | undefined {
+  if (!rgbOptions.shadowColors) return undefined;
+  const shadowColors = rgbOptions.shadowColors.map(getRGBColorStop);
+  return new ColorGradient(
+    shadowColors,
+    rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
+    rgbOptions.gradientType,
+  );
+}
+
+function buildJsonExtraList(
+  segments: string[],
+  colorProvider: () => string,
+  shadowProvider: () => number[] | undefined,
+  rgbOptions: typeof rgbDefaults,
+): JsonExtra[] {
+  const extra: JsonExtra[] = [];
+  let charIndex = 0;
+  for (const segment of segments) {
+    const color = colorProvider();
+    const shadow = shadowProvider();
+
+    if (rgbOptions.trimSpaces && segment.trim() === '') {
+      extra.push({ text: segment });
+      charIndex += segment.length;
+      continue;
+    }
+
+    const fmt = getFormattingAtOffset(charIndex, rgbOptions);
+    const jsonExtra = buildJsonFormatting(segment, color, fmt, rgbOptions, shadow);
+    extra.push(jsonExtra);
+    charIndex += segment.length;
+  }
+  return extra;
+}
+
 function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults): string {
   const newColors = colors.map(getRGBColorStop);
   if (newColors.length < 1) return 'Error: Not enough colors.';
@@ -415,40 +435,17 @@ function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults)
     rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
     rgbOptions.gradientType,
   );
-  let shadowGradient: ColorGradient | undefined;
-  if (rgbOptions.shadowColors) {
-    const shadowColors = rgbOptions.shadowColors.map(getRGBColorStop);
-    shadowGradient = new ColorGradient(
-      shadowColors,
-      rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
-      rgbOptions.gradientType,
-    );
-  }
+  const shadowGradient = buildShadowGradient(rgbOptions);
 
-  const jsonOutput: JsonOutput = { text: '', extra: [] };
   const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
-  let charIndex = 0;
+  const extra = buildJsonExtraList(
+    segments,
+    () => '#' + rgbToHex(gradient.next()),
+    () => shadowGradient ? shadowGradient.next() : undefined,
+    rgbOptions
+  );
 
-  for (const segment of segments) {
-    const rgb = gradient.next();
-    const rgbShadow = shadowGradient ? shadowGradient.next() : undefined;
-
-    if (rgbOptions.trimSpaces && segment.trim() === '') {
-      jsonOutput.extra.push({ text: segment });
-      charIndex += segment.length;
-      continue;
-    }
-
-    const colorHexWithHash = '#' + rgbToHex(rgb);
-    const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
-    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
-
-    const jsonExtra = buildJsonFormatting(segment, colorHexWithHash, fmt, rgbOptions, rgbShadow);
-    jsonOutput.extra.push(jsonExtra);
-    charIndex += segment.length;
-  }
-
-  return JSON.stringify(jsonOutput);
+  return JSON.stringify({ text: '', extra });
 }
 
 function renderTemplateGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults): string {
@@ -473,9 +470,7 @@ function renderTemplateGradient(colors: ColorStop[], rgbOptions: typeof rgbDefau
     }
 
     const hex = rgbToHex(gradient.next());
-    const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
-    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
-
+    const fmt = getFormattingAtOffset(charIndex, rgbOptions);
     out += renderTemplateSegment(hex, segment, fmt, rgbOptions);
     charIndex += segment.length;
   }
