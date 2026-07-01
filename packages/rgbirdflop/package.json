@@ -1,6 +1,6 @@
 {
   "name": "@birdflop/rgbirdflop",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "RGBirdflop library for generating Minecraft text color gradients.",
   "repository": {
     "url": "https://github.com/birdflop/web"
