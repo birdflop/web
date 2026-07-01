@@ -136,7 +136,7 @@ export default component$(() => {
 
         {/* Grid Layout (matching regular rgb columns) */}
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-4">
-          
+
           {/* Column 1: Styling / Editor Panel */}
           <div class="flex flex-col gap-2 relative" id="column1">
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
