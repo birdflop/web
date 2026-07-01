@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/birdflop/web/compare/v0.1.20...v0.2.0) (2026-07-01)
+
+
+### Features
+
+* version bump ([0e871b8](https://github.com/birdflop/web/commit/0e871b8482baf43cfcd192c9f8c8ea4cc15679a7))
+* version bump? ([f3a131e](https://github.com/birdflop/web/commit/f3a131e492fb9f4370b94014cd1c03c3157d5991))
+
 ## [0.1.20](https://github.com/birdflop/web/compare/v0.1.19...v0.1.20) (2026-07-01)
 
 
