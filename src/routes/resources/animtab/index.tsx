@@ -4,7 +4,7 @@ import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/componen
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { AnimationOutput, animationStyles, animTABDefaults, generateAnimTABFrames, GRADIENT_TYPES, hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
-import { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
 import { Braces, Rainbow } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
@@ -44,6 +44,8 @@ export default component$(() => {
     ...animTABCookies,
   }, { deep: true });
 
+  const selection = useSignal<Selection>();
+  useContextProvider(selectionContext, selection);
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);
@@ -153,6 +155,9 @@ export default component$(() => {
               color,
               textShadow: `${shadowLength} 0 ${shadowColor};`,
             }} class={{
+              'font-mc-bold': store.baseFormatting.bold,
+              'font-mc-italic': store.baseFormatting.italic,
+              'font-mc-bold-italic': store.baseFormatting.bold && store.baseFormatting.italic,
               'underline': store.baseFormatting.underline,
               'strikethrough': store.baseFormatting.strikethrough,
               'underline-strikethrough': store.baseFormatting.underline && store.baseFormatting.strikethrough,
