@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.20](https://github.com/birdflop/web/compare/v0.1.19...v0.1.20) (2026-07-01)
+
+
+### Features
+
+* enhance formatting capabilities in AnimTAB and share formatting utils properly ([c4296bf](https://github.com/birdflop/web/commit/c4296bf8cdba32628702e7655f0cef9aa2a1f111))
+
 ## [0.1.19](https://github.com/birdflop/web/compare/v0.1.18...v0.1.19) (2026-07-01)
 
 
