@@ -151,7 +151,7 @@ export default component$(({ hidden, id = 'text' }: {
           </button>
         }
       </div>
-      <div class="flex flex-col gap-2 relative" id={`#colorlistcolors${id}`}>
+      <div class="flex flex-col gap-2 relative" id={`colorlistcolors${id}`}>
         {colors.map((color, i) => <div
           key={`${i}/${colors.length}`}
           id={`colorlist${id}-color-${i + 1}`}
@@ -215,6 +215,7 @@ export default component$(({ hidden, id = 'text' }: {
         <div
           id={`colorlist${id}-color-popup`}
           stoppropagation:mousedown
+          stoppropagation:click
           class={{
             'flex': opened.value > -1,
             'hidden': opened.value < 0,

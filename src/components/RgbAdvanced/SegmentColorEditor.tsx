@@ -243,6 +243,7 @@ export default component$(() => {
               </div>
               {opened.value === i &&
                 <div id="adv-color-popup" stoppropagation:mousedown
+                  stoppropagation:click
                   class="flex flex-col gap-2 absolute top-full left-0 z-10 mt-1 animate-in fade-in slide-in-from-top-2"
                   style={{ '--lum-border-radius': '1rem' }}>
                   <ColorPicker id={`adv-stop-picker-${i}`} value={color.hex}

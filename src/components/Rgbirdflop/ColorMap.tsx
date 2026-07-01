@@ -187,6 +187,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       <div
         id={`colormap${id}-color-popup`}
         stoppropagation:mousedown
+        stoppropagation:click
         class={{
           'hidden': true,
           'sm:flex': opened.value > -1,
