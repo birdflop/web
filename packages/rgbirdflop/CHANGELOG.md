@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.19](https://github.com/birdflop/web/compare/v0.1.18...v0.1.19) (2026-07-01)
+
+
+### Features
+
+* implement selective character-level formatting for templates, MiniMessage, and JSON outputs ([14ced97](https://github.com/birdflop/web/commit/14ced97cdf3fd415519e72e9da4ae3dc2fbaf21d))
+* rename defaultFormatting to baseFormatting ([1933580](https://github.com/birdflop/web/commit/1933580aeb5bd80341be1006ce6dcbd67192dc69))
+* update formatting to work on selection ([32afe89](https://github.com/birdflop/web/commit/32afe890e36e2f18617abfc959bf7939b861245f))
+
+
+### Code Refactoring
+
+* extract JSON generation logic into reusable helper functions in RGBUtils ([3a88375](https://github.com/birdflop/web/commit/3a88375683f7bca843d37ac3a8ccf46bffcdb963))
+
 ## [0.1.18](https://github.com/birdflop/web/compare/v0.1.17...v0.1.18) (2026-05-22)
 
 
