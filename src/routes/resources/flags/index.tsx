@@ -107,8 +107,12 @@ export default component$(() => {
       value: 'meowice',
     },
     {
-      name: 'Benchmarked',
-      value: 'benchmarked',
+      name: 'Benchmarked (G1GC)',
+      value: 'benchmarkedG1GC',
+    },
+    {
+      name: 'Benchmarked (ZGC, Java 25+)',
+      value: 'benchmarkedZGC',
     },
     {
       name: 'hilltty\'s Flags',
