@@ -129,7 +129,7 @@ function getOutput(body: any) {
       ({ hex: color, pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000 }));
   }
   body.colors = colors;
-  
+
   let shadowColors = body?.shadowColors ?? body?.shadowcolors;
   if (shadowColors && shadowColors.length && typeof shadowColors[0] == 'string') {
     if (typeof shadowColors[0] == 'string') shadowColors = shadowColors.map((color: string, i: number) =>

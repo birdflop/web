@@ -230,7 +230,7 @@ export default component$(({ errors, output }: {
 
   // Obfuscate effect
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track, cleanup }) => {
+  useVisibleTask$(({ track }) => {
     if (!isBrowser) return;
 
     track(() => rgbStore.baseFormatting.obfuscate);
@@ -250,28 +250,20 @@ export default component$(({ errors, output }: {
       return;
     }
 
-    let raf = 0;
-    let active = true;
     const tick = () => {
-      if (!active) return;
       spans().forEach((el) => {
         if (el.classList.contains('obfuscate')) {
           const dt = el.getAttribute('data-text') ?? '';
           el.textContent = Array.from({ length: dt.length }, () =>
-            Math.random().toString(36).charAt(2)
+            Math.random().toString(36).charAt(2),
           ).join('');
         } else {
           restore(el);
         }
       });
-      raf = requestAnimationFrame(tick);
+      requestAnimationFrame(tick);
     };
     tick();
-
-    cleanup(() => {
-      active = false;
-      if (raf) cancelAnimationFrame(raf);
-    });
   });
 
   // Ads

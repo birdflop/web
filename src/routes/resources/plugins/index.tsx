@@ -292,7 +292,7 @@ export default component$(() => {
             <SelectMenuRaw id="software" onChange$={(e, el) => {
               pluginsStore.servers[pluginsStore.openServer!].software = el.value;
             }} values={softwareOptions} value={pluginsStore.servers[pluginsStore.openServer].software}
-              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }} />
+            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }} />
 
             <button class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1" onClick$={() => {
               const plugins: { [id: string]: Partial<PluginType> } = {};
@@ -337,7 +337,7 @@ export default component$(() => {
                   el.value = '';
                   const notification = new Notification()
                     .setTitle('Plugins imported successfully')
-                    .setDescription(`The plugins have been imported successfully.`)
+                    .setDescription('The plugins have been imported successfully.')
                     .setBgColor('lum-grad-bg-green/50');
                   notifications.push(notification);
                 } catch (err) {
@@ -357,7 +357,7 @@ export default component$(() => {
               { name: 'Outdated', value: 'outdated' },
               ...pluginSources.map((Source) => ({ name: <Source.component noDescription />, value: Source.value })),
             ]} value={pluginsStore.filter} customDropdown
-              class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
+            class={{ 'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true }}>
               <span class="flex items-center gap-2" q:slot="dropdown">
                 <Filter size={16} />
                 Filter
