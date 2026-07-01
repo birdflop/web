@@ -1,25 +1,11 @@
 # Changelog
 
-## [0.2.0](https://github.com/birdflop/web/compare/v0.1.20...v0.2.0) (2026-07-01)
-
-
-### Features
-
-* version bump ([0e871b8](https://github.com/birdflop/web/commit/0e871b8482baf43cfcd192c9f8c8ea4cc15679a7))
-* version bump? ([f3a131e](https://github.com/birdflop/web/commit/f3a131e492fb9f4370b94014cd1c03c3157d5991))
-
-## [0.1.20](https://github.com/birdflop/web/compare/v0.1.19...v0.1.20) (2026-07-01)
+## [0.2.0](https://github.com/birdflop/web/compare/v0.1.17...v0.2.0) (2026-07-01)
 
 
 ### Features
 
 * enhance formatting capabilities in AnimTAB and share formatting utils properly ([c4296bf](https://github.com/birdflop/web/commit/c4296bf8cdba32628702e7655f0cef9aa2a1f111))
-
-## [0.1.19](https://github.com/birdflop/web/compare/v0.1.18...v0.1.19) (2026-07-01)
-
-
-### Features
-
 * implement selective character-level formatting for templates, MiniMessage, and JSON outputs ([14ced97](https://github.com/birdflop/web/commit/14ced97cdf3fd415519e72e9da4ae3dc2fbaf21d))
 * rename defaultFormatting to baseFormatting ([1933580](https://github.com/birdflop/web/commit/1933580aeb5bd80341be1006ce6dcbd67192dc69))
 * update formatting to work on selection ([32afe89](https://github.com/birdflop/web/commit/32afe890e36e2f18617abfc959bf7939b861245f))
@@ -28,9 +14,6 @@
 ### Code Refactoring
 
 * extract JSON generation logic into reusable helper functions in RGBUtils ([3a88375](https://github.com/birdflop/web/commit/3a88375683f7bca843d37ac3a8ccf46bffcdb963))
-
-## [0.1.18](https://github.com/birdflop/web/compare/v0.1.17...v0.1.18) (2026-05-22)
-
 
 ### Bug Fixes
 
