@@ -13,6 +13,7 @@ import AdvancedInput from './AdvancedInput';
 import StylePanel, { FormattingPanel } from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
 import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { obfuscateText } from '~/util/rgb/obfuscator';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -48,7 +49,8 @@ export default component$(() => {
       if (!active) return;
       spans().forEach((el) => {
         if (el.classList.contains('obfuscate')) {
-          el.textContent = Math.random().toString(36).substring(1, 3).replace('.', '');
+          const dt = el.getAttribute('data-text') ?? '';
+          el.textContent = obfuscateText(dt);
         } else {
           restore(el);
         }

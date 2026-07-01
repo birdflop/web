@@ -33,6 +33,7 @@ import {
   Sparkles,
 } from 'lucide-icons-qwik';
 import HostingAd from '~/components/Rgbirdflop/HostingAd';
+import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import ColorMap from '~/components/Rgbirdflop/ColorMap';
 import ColorList from '~/components/Rgbirdflop/ColorList';
@@ -254,9 +255,7 @@ export default component$(({ errors, output }: {
       spans().forEach((el) => {
         if (el.classList.contains('obfuscate')) {
           const dt = el.getAttribute('data-text') ?? '';
-          el.textContent = Array.from({ length: dt.length }, () =>
-            Math.random().toString(36).charAt(2),
-          ).join('');
+          el.textContent = obfuscateText(dt);
         } else {
           restore(el);
         }
