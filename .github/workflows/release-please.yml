@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,15 +29,15 @@ jobs:
 
       - name: Checkout code
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup pnpm
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: 'pnpm'
