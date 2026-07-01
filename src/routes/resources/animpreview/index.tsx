@@ -4,7 +4,7 @@ import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { getFormattingClasses, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -151,14 +151,13 @@ export default component$(() => {
               <span key={`char${i}`} style={{
                 color,
                 textShadow: `${shadowLength} 0 ${shadowColor}`,
-              }} class={{
-                'underline': result[3]?.includes('&n'),
-                'strikethrough': result[3]?.includes('&m'),
-                'underline-strikethrough': result[3]?.includes('&n') && result[3]?.includes('&m'),
-                'font-mc-bold': result[3]?.includes('&l'),
-                'font-mc-italic': result[3]?.includes('&o'),
-                'font-mc-bold-italic': result[3]?.includes('&l') && result[3]?.includes('&o'),
-              }}>
+              }} class={getFormattingClasses({
+                underline: result[3]?.includes('&n'),
+                strikethrough: result[3]?.includes('&m'),
+                bold: result[3]?.includes('&l'),
+                italic: result[3]?.includes('&o'),
+                obfuscate: result[3]?.includes('&k'),
+              })}>
                 {result[result.length - 1]}
               </span>
             );

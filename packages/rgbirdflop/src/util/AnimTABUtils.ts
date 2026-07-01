@@ -1,6 +1,6 @@
 import { ColorAnimatedGradient } from './ColorUtils';
 import { rgbToHex } from './Colors';
-import { getRGBColorStop, sortColors } from './RGBUtils';
+import { applyMiniMessageFormatting, buildFormatCodes, getFormattingAtOffset, getRGBColorStop, sortColors } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
 export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
@@ -82,7 +82,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
       if (frame.type === 'solid') {
 
         const hex = frame.colors[0];
-        output = `<color:#${hex}>${text}</color>`;
+        const formatting = getFormattingAtOffset(0, rgbOptions);
+        output = `<color:#${hex}>${applyMiniMessageFormatting(text, formatting, rgbOptions)}</color>`;
       } else if (frame.type === 'segments') {
         if (rgbOptions.colors.find((color, i) => color.pos != (100 / (rgbOptions.colors.length - 1)) * i)) {
           output = formatMiniMessageCustomPositions(rgbOptions, animtabStore, n);
@@ -103,7 +104,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
             animatedColors.push('#' + animatedColors[0]);
           }
 
-          output = `<gradient:${animatedColors.join(':')}>${text}</gradient>`;
+          const formatting = getFormattingAtOffset(0, rgbOptions);
+          output = `<gradient:${animatedColors.join(':')}>${applyMiniMessageFormatting(text, formatting, rgbOptions)}</gradient>`;
         }
       }
     } else if (frame.type === 'solid') {
@@ -133,12 +135,14 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
 
       output = hexOutput;
     } else if (frame.type === 'segments') {
+      let charIndex = 0;
       for (let i = 0; i < frame.segments.length; i++) {
         const segment = frame.segments[i];
         const hex = frame.colors[i];
 
         if (hex === null) {
           output += segment;
+          charIndex += segment.length;
           continue;
         }
 
@@ -149,17 +153,14 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
 
         let formatCodes = '';
         if (rgbOptions.colorFormat.color.includes('$f')) {
-          // find the global formatting
-          if (rgbOptions.baseFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
-          if (rgbOptions.baseFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
-          if (rgbOptions.baseFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
-          if (rgbOptions.baseFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
-          if (rgbOptions.baseFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
+          const formatting = getFormattingAtOffset(charIndex, rgbOptions);
+          formatCodes = buildFormatCodes(formatting, rgbOptions);
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
         hexOutput = hexOutput.replace('$c', segment);
         output += hexOutput;
+        charIndex += segment.length;
       }
 
       if (rgbOptions.prefixSuffix) {
@@ -208,7 +209,9 @@ function formatMiniMessageCustomPositions(rgbOptions: typeof rgbDefaults, animta
 
     if (lowerRange === upperRange) continue;
 
-    output += `<gradient:#${currentColor.hex}:#${nextColor.hex}>${text.substring(lowerRange, upperRange)}</gradient>`;
+    const formatting = getFormattingAtOffset(lowerRange, rgbOptions);
+    const innerText = applyMiniMessageFormatting(text.substring(lowerRange, upperRange), formatting, rgbOptions);
+    output += `<gradient:#${currentColor.hex}:#${nextColor.hex}>${innerText}</gradient>`;
   }
 
   return output;

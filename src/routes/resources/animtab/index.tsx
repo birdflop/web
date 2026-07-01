@@ -1,6 +1,6 @@
 import { component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import RGBirdflop, { getEffectiveFormatting, getFormattingClasses, rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { AnimationOutput, animationStyles, animTABDefaults, generateAnimTABFrames, GRADIENT_TYPES, hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -144,27 +144,31 @@ export default component$(() => {
           if (!colors) return '\u00A0';
 
           const segments = [...store.text.matchAll(new RegExp(`.{1,${store.colorLength}}`, 'g'))];
-          let i = 0;
-          return segments.map((segment) => {
-            const color = `#${colors[i]}`;
+          let charIndex = 0;
+          return segments.map((segment, segmentIndex) => {
+            const segmentText = segment[0];
+            const segmentStart = charIndex;
+            charIndex += segmentText.length;
+            const color = `#${colors[segmentIndex]}`;
             const shadowLength = previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
             const shadowRGB = hexToRGB(color).map(c => Math.round(c * 0.25));
             const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-            i = store.trimSpaces && segment[0] != ' ' && colors[i + 1] ? i + 1 : i;
-            return <span key={`char${i}`} q:slot="input" style={{
-              color,
-              textShadow: `${shadowLength} 0 ${shadowColor};`,
-            }} class={{
-              'font-mc-bold': store.baseFormatting.bold,
-              'font-mc-italic': store.baseFormatting.italic,
-              'font-mc-bold-italic': store.baseFormatting.bold && store.baseFormatting.italic,
-              'underline': store.baseFormatting.underline,
-              'strikethrough': store.baseFormatting.strikethrough,
-              'underline-strikethrough': store.baseFormatting.underline && store.baseFormatting.strikethrough,
-              'obfuscate': store.baseFormatting.obfuscate,
-            }}>
-              {segment[0]}
-            </span>;
+            const output = Array.from(segmentText).map((char, offset) => {
+              const formatting = getEffectiveFormatting(rgbStore, segmentStart + offset);
+              return (
+                <span
+                  key={`char${segmentStart + offset}`}
+                  style={{
+                    color,
+                    textShadow: `${shadowLength} 0 ${shadowColor};`,
+                  }}
+                  class={getFormattingClasses(formatting)}
+                >
+                  {char}
+                </span>
+              );
+            });
+            return <span key={`segment-${segmentStart}`} q:slot="input">{output}</span>;
           });
         };
 

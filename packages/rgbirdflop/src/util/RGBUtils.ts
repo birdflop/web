@@ -12,7 +12,7 @@ function segmentText(text: string, colorlength?: number): string[] {
   return out;
 }
 
-function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
+export function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
   let codes = '';
   if (rgbOptions.colorFormat.color.includes('$f') && rgbOptions.colorFormat.char) {
     if (formatting.bold) codes += rgbOptions.colorFormat.char + 'l';
@@ -22,6 +22,18 @@ function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults
     if (formatting.obfuscate) codes += rgbOptions.colorFormat.char + 'k';
   }
   return codes;
+}
+
+export function applyMiniMessageFormatting(text: string, formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
+  if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
+
+  let output = text;
+  if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate) output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
+  if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough) output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
+  if (formatting.underline && rgbOptions.colorFormat.underline) output = rgbOptions.colorFormat.underline.replace('$t', output);
+  if (formatting.italic && rgbOptions.colorFormat.italic) output = rgbOptions.colorFormat.italic.replace('$t', output);
+  if (formatting.bold && rgbOptions.colorFormat.bold) output = rgbOptions.colorFormat.bold.replace('$t', output);
+  return output;
 }
 
 function renderTemplateSegment(
@@ -292,11 +304,6 @@ type JsonExtra = {
   obfuscated?: boolean;
 };
 
-type JsonOutput = {
-  text: string;
-  extra: JsonExtra[];
-};
-
 function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaults): string {
   if (rgbOptions.colorFormat.color === 'MiniMessage') {
     const shadowColors = rgbOptions.shadowColors ? sortColors(rgbOptions.shadowColors) : null;
@@ -310,7 +317,7 @@ function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaul
       segments,
       () => singleHex,
       () => shadowGradient?.next(),
-      rgbOptions
+      rgbOptions,
     );
     return JSON.stringify({ text: '', extra });
   }
@@ -385,7 +392,7 @@ function renderMiniMessageGradient(
   return `<gradient:${hexes}>${inner}</gradient>`;
 }
 
-function getFormattingAtOffset(charIndex: number, rgbOptions: typeof rgbDefaults): Formatting {
+export function getFormattingAtOffset(charIndex: number, rgbOptions: typeof rgbDefaults): Formatting {
   const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
   return covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
 }
@@ -442,7 +449,7 @@ function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults)
     segments,
     () => '#' + rgbToHex(gradient.next()),
     () => shadowGradient ? shadowGradient.next() : undefined,
-    rgbOptions
+    rgbOptions,
   );
 
   return JSON.stringify({ text: '', extra });

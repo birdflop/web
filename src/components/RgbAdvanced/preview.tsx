@@ -1,6 +1,7 @@
 import { ColorGradient, getRGBColorStop, hexToRGB, sortColors } from '@birdflop/rgbirdflop';
 import type { AdvancedStore } from './model';
 import { chunkText, combinedText } from './model';
+import { getFormattingClasses } from '../Rgbirdflop/RGBirdflop';
 
 function toCSS(rgb: number[]): string {
   return `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;
@@ -43,14 +44,7 @@ export function renderAdvancedPreview(store: AdvancedStore) {
           style={{
             color,
           }}
-          class={{
-            'font-mc-bold': seg.bold,
-            'font-mc-italic': seg.italic,
-            underline: seg.underline,
-            strikethrough: seg.strikethrough,
-            'underline-strikethrough': seg.underline && seg.strikethrough,
-            obfuscate: seg.obfuscate,
-          }}
+          class={getFormattingClasses(seg)}
         >
           {chunk}
         </span>

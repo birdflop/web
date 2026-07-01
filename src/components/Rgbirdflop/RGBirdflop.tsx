@@ -58,7 +58,7 @@ function getFormattingSignature(formatting: Formatting) {
   return FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('');
 }
 
-function getFormattingClasses(formatting: Formatting) {
+export function getFormattingClasses(formatting: Formatting) {
   return {
     'font-mc-bold': !!formatting.bold,
     'font-mc-italic': !!formatting.italic,
@@ -68,6 +68,22 @@ function getFormattingClasses(formatting: Formatting) {
     'underline-strikethrough': !!formatting.underline && !!formatting.strikethrough,
     obfuscate: !!formatting.obfuscate,
   };
+}
+
+export function getEffectiveFormatting(rgbStore: typeof rgbDefaults, index: number) {
+  const formatting: Formatting = { ...rgbStore.baseFormatting };
+
+  for (const segment of rgbStore.formatting) {
+    if (segment.start <= index && index < segment.end) {
+      for (const key of FORMAT_KEYS) {
+        if (segment[key] !== undefined) {
+          formatting[key] = segment[key];
+        }
+      }
+    }
+  }
+
+  return formatting;
 }
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
@@ -100,22 +116,6 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   const gradientColors = Array.from({ length: bucketCount }, () => gradient.next());
   const shadowColors = Array.from({ length: bucketCount }, () => shadowGradient.next());
 
-  const getEffectiveFormatting = (index: number) => {
-    const formatting: Formatting = { ...rgbStore.baseFormatting };
-
-    for (const segment of rgbStore.formatting) {
-      if (segment.start <= index && index < segment.end) {
-        for (const key of FORMAT_KEYS) {
-          if (segment[key] !== undefined) {
-            formatting[key] = segment[key];
-          }
-        }
-      }
-    }
-
-    return formatting;
-  };
-
   const segments: Array<{
     text: string;
     bucketIndex: number;
@@ -126,7 +126,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
 
   for (let index = 0; index < textArray.length; index++) {
     const bucketIndex = Math.min(Math.floor(index / colorLength), bucketCount - 1);
-    const formatting = getEffectiveFormatting(index);
+    const formatting = getEffectiveFormatting(rgbStore, index);
     const signature = `${bucketIndex}:${getFormattingSignature(formatting)}`;
     const currentSignature = currentSegment
       ? `${currentSegment.bucketIndex}:${getFormattingSignature(currentSegment.formatting)}`
