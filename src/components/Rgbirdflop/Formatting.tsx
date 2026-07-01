@@ -1,14 +1,14 @@
-import { $, component$, useContext } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { selectionContext } from './Input';
+import { rgbStoreContext } from './RGBirdflop';
+import { Selection, selectionContext } from './Input';
 import { FormatSegment, Formatting } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
-  const selection = useContext(selectionContext);
+  const selection = useContext(selectionContext, useSignal<Selection>());
   type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
 
   const getFormatLabel = (FormatKey: FormatKey) => {

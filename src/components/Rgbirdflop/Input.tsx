@@ -1,4 +1,4 @@
-import { $, component$, createContextId, Signal, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, Signal, Slot, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Eye, Terminal } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
@@ -29,7 +29,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
 }) => {
   const rgbStore = useContext(rgbStoreContext);
 
-  const selection = useContext(selectionContext);
+  const selection = useContext(selectionContext, useSignal<Selection>());
   const syncSelection = $((el: HTMLTextAreaElement) => {
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? start;
