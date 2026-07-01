@@ -8,7 +8,6 @@ on:
       - 'packages/rgbirdflop/**'
       - '.release-please-manifest.json'
       - 'release-please-config.json'
-      - 'workflows/release-please.yml'
 
 permissions:
   id-token: write  # Required for OIDC
