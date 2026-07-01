@@ -7,15 +7,15 @@ export function migrateBetweenVersions(preset: any) {
 
 function migrateFromV2(preset: any) {
   if (preset.version != 2) return;
-  const { name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length } = preset;
+  const { prefix, format, formatchar, ...rest } = preset;
   return migrateFromV3({
     version: 3,
-    name, text, speed, type, customFormat, bold, italic, underline, strikethrough, colors, length,
-    format: colorFormats.find((f: any) => f.color === preset.format) || {
-      color: preset.format,
-      char: preset.formatchar,
+    ...rest,
+    format: colorFormats.find((f: any) => f.color === format) || {
+      color: format,
+      char: formatchar,
     },
-    prefixsuffix: preset.prefix ? `${preset.prefix}$t` : '',
+    prefixsuffix: prefix ? `${prefix}$t` : '',
   });
 }
 
@@ -24,7 +24,10 @@ function migrateFromV3(preset: any) {
   return migrateFromV4({
     version: 4,
     ...preset,
-    colors: preset.colors ? preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i })) : undefined,
+    colors: preset.colors
+      ? preset.colors.map((color: string, i: number) => (
+        { hex: color, pos: (100 / (preset.colors.length - 1)) * i }
+      )) : undefined,
   });
 }
 
@@ -42,19 +45,25 @@ function migrateFromV4(preset: any) {
   } = preset;
 
   // move formatting
-  const baseFormatting = {
-    bold, italic, underline, strikethrough, obfuscate,
-  };
+  const baseFormatting = bold || italic || underline || strikethrough || obfuscate ? {
+    ...bold ? { bold } : {},
+    ...italic ? { italic } : {},
+    ...underline ? { underline } : {},
+    ...strikethrough ? { strikethrough } : {},
+    ...obfuscate ? { obfuscate } : {},
+  } : undefined;
+
+  console.log(baseFormatting);
 
   return {
     version: 5,
     ...rest,
-    shadowColors,
-    colorFormat,
-    colorLength,
-    baseFormatting,
-    prefixSuffix,
-    trimSpaces,
+    ...shadowColors ? { shadowColors } : {},
+    ...colorFormat ? { colorFormat } : {},
+    ...colorLength ? { colorLength } : {},
+    ...baseFormatting ? { baseFormatting } : {},
+    ...prefixSuffix ? { prefixSuffix } : {},
+    ...trimSpaces ? { trimSpaces } : {},
   };
 }
 
