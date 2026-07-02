@@ -62,11 +62,11 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
           'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
-          value={rgbStore.text} spellcheck={false} id="input"
-          onInput$={(e, el) => { rgbStore.text = el.value; }}
-          onSelect$={(e, el) => syncSelection(el)}
-          onKeyUp$={(e, el) => syncSelection(el)}
-          onMouseUp$={(e, el) => syncSelection(el)} />
+        value={rgbStore.text} spellcheck={false} id="input"
+        onInput$={(e, el) => { rgbStore.text = el.value; }}
+        onSelect$={(e, el) => syncSelection(el)}
+        onKeyUp$={(e, el) => syncSelection(el)}
+        onMouseUp$={(e, el) => syncSelection(el)} />
       }
     </div>
   );

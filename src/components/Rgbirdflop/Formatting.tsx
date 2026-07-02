@@ -182,7 +182,7 @@ export default component$(() => {
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-      id="font">
+    id="font">
       <button type="button" id="smalltext"
         class={{
           'lum-grad-bg-lum-accent/100!': formatting.smalltext,
@@ -201,7 +201,7 @@ export default component$(() => {
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-      id="formatting">
+    id="formatting">
       <button type="button" id="bold"
         class={{
           'lum-grad-bg-lum-accent/100!': formatting.bold,
