@@ -7,8 +7,8 @@ import { applyTextDiff, combinedText, segmentIndexAtChar } from './model';
 import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
-import { segmentsStoreContext, advPreviewStyleContext } from '~/routes/resources/rgb/beta/index';
-import { selectionContext } from '~/components/Rgbirdflop/Input';
+import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { previewStyleContext, selectionContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
@@ -53,23 +53,23 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
           'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
-          value={combinedText(store.segments)} spellcheck={false} id={ADVANCED_INPUT_ID}
-          onInput$={(e, el) => {
-            if (e.isComposing) return;
-            const caret = el.selectionStart ?? el.value.length;
-            store.segments = applyTextDiff(store.segments, el.value);
-            requestAnimationFrame(() => {
-              try { el.setSelectionRange(caret, caret); } catch { /* noop */ }
-            });
-            selection.value = {
-              start: caret,
-              end: caret,
-              segmentIndex: segmentIndexAtChar(store.segments, Math.max(0, caret - 1)),
-            };
-          }}
-          onSelect$={(e, el) => syncSelection(el)}
-          onKeyUp$={(e, el) => syncSelection(el)}
-          onMouseUp$={(e, el) => syncSelection(el)}
+        value={combinedText(store.segments)} spellcheck={false} id={ADVANCED_INPUT_ID}
+        onInput$={(e, el) => {
+          if (e.isComposing) return;
+          const caret = el.selectionStart ?? el.value.length;
+          store.segments = applyTextDiff(store.segments, el.value);
+          requestAnimationFrame(() => {
+            try { el.setSelectionRange(caret, caret); } catch { /* noop */ }
+          });
+          selection.value = {
+            start: caret,
+            end: caret,
+            segmentIndex: segmentIndexAtChar(store.segments, Math.max(0, caret - 1)),
+          };
+        }}
+        onSelect$={(e, el) => syncSelection(el)}
+        onKeyUp$={(e, el) => syncSelection(el)}
+        onMouseUp$={(e, el) => syncSelection(el)}
         />
       }
     </div>
@@ -85,7 +85,7 @@ const DefaultInput = component$(({ readOnly }: { readOnly?: boolean }) => {
 });
 
 const MCPreviewTabSection = component$(({ readOnly }: { readOnly?: boolean }) => {
-  const previewStyle = useContext(advPreviewStyleContext);
+  const previewStyle = useContext(previewStyleContext);
 
   return <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto">
     {previewStyle.value == 'tab-header' &&
@@ -140,7 +140,7 @@ const MCPreviewChatSection = component$(({ readOnly, playerName = 'RGBirdflop' }
 });
 
 const MCPreviewGUISection = component$(({ readOnly }: { readOnly?: boolean }) => {
-  const previewStyle = useContext(advPreviewStyleContext);
+  const previewStyle = useContext(previewStyleContext);
 
   return <div class="absolute inset-0 bg-black/70 backdrop-blur-xs flex justify-center items-center p-4">
     <div class="w-2/5 relative">
@@ -196,7 +196,7 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
 }) => {
   const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
   const Background = Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
-  const previewStyle = useContext(advPreviewStyleContext);
+  const previewStyle = useContext(previewStyleContext);
 
   return <div class="relative rounded-lum break-all font-mc"
     style={{ textShadow: '2px 2px 0 #373737' }}>
@@ -234,7 +234,7 @@ export default component$(({ readOnly }: { readOnly?: boolean }) => {
   const t = inlineTranslate();
   const store = useContext(segmentsStoreContext);
   const rgbStore = useContext(rgbStoreContext);
-  const previewStyle = useContext(advPreviewStyleContext);
+  const previewStyle = useContext(previewStyleContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {

@@ -1,9 +1,9 @@
-import { component$, createContextId, Signal, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { component$, createContextId, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { defaultDescription, generateHead } from '~/root';
 import { getCookies } from '~/util/dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { Selection, selectionContext } from '~/components/Rgbirdflop/Input';
+import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import {
   seedFromClassic,
@@ -31,7 +31,6 @@ export const useAdvancedCookies = routeLoader$(({ cookie, url }) => {
 });
 
 export const segmentsStoreContext = createContextId<SegmentsStore>('segmentsstore-context');
-export const advPreviewStyleContext = createContextId<Signal<string>>('advanced-rgb-previewstyle');
 
 export default component$(() => {
   const rgbCookiesVal = useRGBCookies().value;
@@ -52,7 +51,7 @@ export default component$(() => {
   useContextProvider(selectionContext, selection);
 
   const previewStyle = useSignal('default');
-  useContextProvider(advPreviewStyleContext, previewStyle);
+  useContextProvider(previewStyleContext, previewStyle);
 
   return <AdvancedEditor />;
 });

@@ -187,14 +187,13 @@ export default component$(() => {
     { key: 'smalltext', label: t('rgb.formatting.smalltext@@Small Text'), icon: CaseUpper },
   ];
 
-
   return <>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-      id="font">
+    id="font">
       {fontButtons.map(({ key, label, icon: Icon }) => (
         <button key={key} type="button" aria-pressed={formatting[key]} title={label}
           class={{
@@ -214,7 +213,7 @@ export default component$(() => {
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-      id="formatting">
+    id="formatting">
       {formattingButtons.map(({ key, label, icon: Icon }) => (
         <button key={key} type="button" aria-pressed={formatting[key]} title={label}
           class={{
