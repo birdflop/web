@@ -1,17 +1,17 @@
 import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
+import { Bold, CaseUpper, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from './RGBirdflop';
 import { Selection, selectionContext } from './Input';
-import { FormatSegment, Formatting } from '@birdflop/rgbirdflop';
+import { FormatSegment, Formatting, FormattingWithoutFont } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const selection = useContext(selectionContext, useSignal<Selection>());
-  type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
+  const keys: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate', 'smalltext'];
 
-  const getFormatLabel = (FormatKey: FormatKey) => {
+  const getFormatLabel = (FormatKey: keyof FormattingWithoutFont) => {
     if (rgbStore.colorFormat.char) {
       const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm', obfuscate: 'k' };
       return ` - ${rgbStore.colorFormat.char}${formatMap[FormatKey]}`;
@@ -26,7 +26,6 @@ export default component$(() => {
   };
 
   const computeSelectionFormatting = () => {
-    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
     if (!selection.value) return rgbStore.baseFormatting;
 
     const { start, end } = selection.value;
@@ -65,9 +64,7 @@ export default component$(() => {
 
   const formatting = computeSelectionFormatting();
 
-  const toggleFlag = $((flag: FormatKey) => {
-    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-
+  const toggleFlag = $((flag: keyof Formatting) => {
     if (!selection.value) {
       // No selection -> toggle global default formatting
       rgbStore.baseFormatting[flag] = !rgbStore.baseFormatting[flag];
@@ -136,7 +133,6 @@ export default component$(() => {
     }
 
     const { start, end } = selection.value;
-    const keys: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
 
     const boundaries = new Set([start, end]);
     for (const s of rgbStore.formatting) {
@@ -180,7 +176,26 @@ export default component$(() => {
     rgbStore.formatting = merged;
   });
 
-  return (
+  return <>
+    <div class={{
+      'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
+      '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
+      'lum-bg-blue/20': !!selection.value,
+    }}
+    id="font">
+      <button type="button" id="smalltext"
+        class={{
+          'lum-grad-bg-lum-accent/100!': formatting.smalltext,
+        }}
+        aria-pressed={formatting.smalltext} title={t('rgb.formatting.smalltext@@Small Text')}
+        onClick$={() => toggleFlag('smalltext')}
+      >
+        <CaseUpper size={16} />
+        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
+          {t('rgb.formatting.smalltext@@Small Text')}
+        </span>
+      </button>
+    </div>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
@@ -252,5 +267,5 @@ export default component$(() => {
         </span>
       </button>
     </div>
-  );
+  </>;
 });
