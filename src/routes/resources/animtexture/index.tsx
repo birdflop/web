@@ -29,6 +29,84 @@ const readFileAsDataURL = (file: Blob) => new Promise<ProgressEvent<FileReader>>
   f.onerror = reject;
 });
 
+const loadImageFromCanvas = (canvas: HTMLCanvasElement) => new Promise<HTMLImageElement>((resolve, reject) => {
+  const img = new Image();
+  img.onload = () => resolve(img);
+  img.onerror = reject;
+  img.src = canvas.toDataURL();
+});
+
+const drawGifFramePatch = (ctx: CanvasRenderingContext2D, frame: { dims: { width: number; height: number; top: number; left: number }; patch: Uint8ClampedArray }) => {
+  const patchCanvas = document.createElement('canvas');
+  patchCanvas.width = frame.dims.width;
+  patchCanvas.height = frame.dims.height;
+
+  const patchCtx = patchCanvas.getContext('2d')!;
+  const frameImageData = patchCtx.createImageData(frame.dims.width, frame.dims.height);
+  frameImageData.data.set(frame.patch);
+  patchCtx.putImageData(frameImageData, 0, 0);
+
+  ctx.drawImage(patchCanvas, frame.dims.left, frame.dims.top);
+};
+
+const getGifBackgroundColor = (parsedGif: { gct: [number, number, number][]; lsd: { backgroundColorIndex: number; width: number; height: number } }) => {
+  const backgroundColor = parsedGif.gct[parsedGif.lsd.backgroundColorIndex];
+  return backgroundColor ? `rgb(${backgroundColor[0]}, ${backgroundColor[1]}, ${backgroundColor[2]})` : null;
+};
+
+const loadGifFrames = async (arrayBuffer: ArrayBuffer) => {
+  const parsedGif = parseGIF(arrayBuffer);
+  const gifFrames = decompressFrames(parsedGif, true);
+  const canvas = document.createElement('canvas');
+  canvas.width = parsedGif.lsd.width;
+  canvas.height = parsedGif.lsd.height;
+  const ctx = canvas.getContext('2d')!;
+  const backgroundColor = getGifBackgroundColor(parsedGif);
+
+  const resetCanvas = (left: number, top: number, width: number, height: number) => {
+    if (backgroundColor) {
+      ctx.fillStyle = backgroundColor;
+      ctx.fillRect(left, top, width, height);
+    }
+    else {
+      ctx.clearRect(left, top, width, height);
+    }
+  };
+
+  resetCanvas(0, 0, canvas.width, canvas.height);
+
+  const frames: { img: HTMLImageElement; delay: number }[] = [];
+  let previousFrame: { dims: { width: number; height: number; top: number; left: number }; disposalType: number } | null = null;
+  let restoreImageData: ImageData | null = null;
+
+  for (const frame of gifFrames) {
+    if (previousFrame) {
+      if (previousFrame.disposalType === 2) {
+        resetCanvas(previousFrame.dims.left, previousFrame.dims.top, previousFrame.dims.width, previousFrame.dims.height);
+      }
+      else if (previousFrame.disposalType === 3 && restoreImageData) {
+        ctx.putImageData(restoreImageData, 0, 0);
+      }
+    }
+
+    restoreImageData = frame.disposalType === 3 ? ctx.getImageData(0, 0, canvas.width, canvas.height) : null;
+    drawGifFramePatch(ctx, frame);
+
+    const img = await loadImageFromCanvas(canvas);
+    frames.push({
+      img,
+      delay: Math.ceil(frame.delay / 100),
+    });
+
+    previousFrame = {
+      dims: frame.dims,
+      disposalType: frame.disposalType,
+    };
+  }
+
+  return frames;
+};
+
 export default component$(() => {
   const t = inlineTranslate();
   useContextProvider(rgbStoreContext, rgbDefaults);
@@ -143,25 +221,7 @@ export default component$(() => {
                 const frames = animtextureStore.accumulate ? animtextureFrames.value : [];
                 const file = await base64ToFile(e.target.result.toString());
                 if (file.mime == 'image/gif') {
-                  const parsedGif = parseGIF(file.buffer);
-                  const gifFrames = decompressFrames(parsedGif, true);
-                  gifFrames.forEach((frame) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = frame.dims.width;
-                    canvas.height = frame.dims.height;
-                    const ctx = canvas.getContext('2d')!;
-                    const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                    frameImageData.data.set(frame.patch);
-                    ctx.putImageData(frameImageData, 0, 0);
-                    const img = new Image();
-                    img.src = canvas.toDataURL();
-                    img.onload = () => {
-                      frames.push({
-                        img,
-                        delay: Math.ceil(frame.delay / 100),
-                      });
-                    };
-                  });
+                  frames.push(...await loadGifFrames(file.buffer));
                 }
                 else {
                   const img = new Image();
@@ -198,25 +258,7 @@ export default component$(() => {
                 const frames = animtextureStore.accumulate ? animtextureFrames.value : [];
                 const file = await base64ToFile(e.target.result.toString());
                 if (file.mime == 'image/gif') {
-                  const parsedGif = parseGIF(file.buffer);
-                  const gifFrames = decompressFrames(parsedGif, true);
-                  gifFrames.forEach((frame) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = frame.dims.width;
-                    canvas.height = frame.dims.height;
-                    const ctx = canvas.getContext('2d')!;
-                    const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                    frameImageData.data.set(frame.patch);
-                    ctx.putImageData(frameImageData, 0, 0);
-                    const img = new Image();
-                    img.src = canvas.toDataURL();
-                    img.onload = () => {
-                      frames.push({
-                        img,
-                        delay: Math.ceil(frame.delay / 100),
-                      });
-                    };
-                  });
+                  frames.push(...await loadGifFrames(file.buffer));
                 }
                 else {
                   const img = new Image();
@@ -247,7 +289,7 @@ export default component$(() => {
                 <input id="textureName" class={{ 'lum-input': true }} value={animtextureStore.textureName} onInput$={(e, el) => { animtextureStore.textureName = el.value; }}/>
               </div>
               <p class="lum-btn p-2">
-                    .png
+                .png
               </p>
             </div>
             <NumberInput input min={1} step={16} value={animtextureStore.width} id="width" class={{ 'w-full': true }}
@@ -321,7 +363,7 @@ export default component$(() => {
           { animtextureStore.showChatPreview &&
             <Input readOnly
               noFormatRow
-              chatInput={`this is so funny <sprite:item/${animtextureStore.textureName}>`}
+              chatInput={`this is so funny <sprite:"birdflop:gifs":"birdflop:gif"/${animtextureStore.textureName}>`}
               playerName="AnimatedTexture">
               <span class="text-white! items-center gap-2">
                 this is so funny
