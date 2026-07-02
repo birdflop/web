@@ -8,16 +8,16 @@ import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
 import { advancedDefaults } from '~/components/RgbAdvanced/model';
 
-type names = 'rgb' | 'rgbadvanced' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
+type names = 'rgb' | 'rgbsegments' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
 const getDefaults = (name: names) => {
   switch (name) {
-  case 'rgb':
-    return rgbDefaults;
-  case 'rgbadvanced':
-    return advancedDefaults;
-  case 'animtab':
-    return animTABDefaults;
+    case 'rgb':
+      return rgbDefaults;
+    case 'rgbsegments':
+      return advancedDefaults;
+    case 'animtab':
+      return animTABDefaults;
   }
   return {};
 };
@@ -138,7 +138,7 @@ export function setCookies(name: names, cookies: { [key: string]: any }) {
   document.cookie = `${name}=${encodedValue}; path=/; expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
 }
 
-export const setUserData = server$(async function(data: {
+export const setUserData = server$(async function (data: {
   privatePresets?: rgbPreset[];
   settings?: Settings;
 }) {
@@ -212,7 +212,7 @@ export const unsavePreset = server$(async function (presetId: number) {
   return unsave;
 });
 
-export const publishPreset = server$(async function(submission: PublicPresetSubmission) {
+export const publishPreset = server$(async function (submission: PublicPresetSubmission) {
   const session = this.sharedMap.get('session');
 
   const db = getDB();
@@ -253,7 +253,7 @@ export const publishPreset = server$(async function(submission: PublicPresetSubm
   }
 });
 
-export const updatePreset = server$(async function(presetId: number, presetData: Partial<PresetPartial>) {
+export const updatePreset = server$(async function (presetId: number, presetData: Partial<PresetPartial>) {
   const session = this.sharedMap.get('session');
 
   const db = getDB();
@@ -280,7 +280,7 @@ export const updatePreset = server$(async function(presetId: number, presetData:
   }
 });
 
-export const deletePreset = server$(async function(presetId: number) {
+export const deletePreset = server$(async function (presetId: number) {
   const session = this.sharedMap.get('session');
 
   const db = getDB();

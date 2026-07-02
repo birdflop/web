@@ -2,30 +2,23 @@ import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { sortColors } from '@birdflop/rgbirdflop';
 import { ChevronLeft, ChevronRight, Layers, Trash } from 'lucide-icons-qwik';
-import { deleteSegment, segmentRange, swapSegments, type AdvancedSegment } from './model';
+import { deleteSegment, segmentRange, swapSegments, type SegmentType } from './model';
 import { restoreSelection } from './dom';
-import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
-function swatchStyle(seg: AdvancedSegment): string {
+function swatchStyle(seg: SegmentType): string {
   if (seg.colorMode === 'none' || seg.colors.length === 0) {
     return 'repeating-linear-gradient(45deg, #888 0 4px, #555 4px 8px)';
   }
   if (seg.colorMode === 'solid') return seg.colors[0].hex;
-  return `linear-gradient(to right, ${sortColors(seg.colors).map((c) => `${c.hex} ${c.pos}%`).join(', ')})`;
+  const stops = sortColors(seg.colors).map((c) => c.hex + ' ' + c.pos + '%').join(', ');
+  return 'linear-gradient(to right, ' + stops + ')';
 }
-
-const BADGES: { flag: keyof AdvancedSegment; label: string }[] = [
-  { flag: 'bold', label: 'B' },
-  { flag: 'italic', label: 'I' },
-  { flag: 'underline', label: 'U' },
-  { flag: 'strikethrough', label: 'S' },
-  { flag: 'obfuscate', label: 'K' },
-];
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(advancedStoreContext);
+  const store = useContext(segmentsStoreContext);
   const selection = useContext(selectionContext);
 
   // Only one part means nothing meaningful to manage yet — keep the UI uncluttered.
@@ -58,11 +51,6 @@ export default component$(() => {
                 <span class="w-4 h-4 rounded-sm shrink-0 border border-lum-border/20" style={`background: ${swatchStyle(seg)};`} />
                 <span class="font-mc truncate max-w-32">
                   {seg.text.trim() === '' ? '␣'.repeat(Math.min(seg.text.length, 4)) : seg.text}
-                </span>
-                <span class="flex gap-0.5 shrink-0">
-                  {BADGES.filter((b) => seg[b.flag]).map((b) => (
-                    <span key={b.label} class="text-[9px] font-bold text-lum-text-secondary">{b.label}</span>
-                  ))}
                 </span>
               </button>
               {active &&

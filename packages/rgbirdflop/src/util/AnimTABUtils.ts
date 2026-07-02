@@ -12,12 +12,12 @@ export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabSto
   let loopAmount;
   const length = text.length * animtabStore.length / rgbOptions.colorLength;
   switch (Number(animtabStore.type)) {
-  case 3:
-    loopAmount = length;
-    break;
-  default:
-    loopAmount = length * 2 - 2;
-    break;
+    case 3:
+      loopAmount = length;
+      break;
+    default:
+      loopAmount = length * 2 - 2;
+      break;
   }
 
   const colorFrames = [];
@@ -38,7 +38,7 @@ export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabSto
       let index = 0;
 
       while (index < textArray.length) {
-        // check if colorlength is set and valid
+        // check if colorLength is set and valid
         if (!rgbOptions.colorLength || rgbOptions.colorLength < 1) rgbOptions.colorLength = 1;
         segments.push(textArray.slice(index, index + rgbOptions.colorLength).join(''));
         index += rgbOptions.colorLength;

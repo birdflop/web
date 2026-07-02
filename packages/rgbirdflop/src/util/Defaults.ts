@@ -1,5 +1,6 @@
 import type { GradientType } from './ColorUtils';
 
+export type ColorMode = 'gradient' | 'solid' | 'none';
 export type ColorStop = {
   hex: string;
   pos: number;
@@ -12,6 +13,7 @@ export interface Formatting {
   underline?: boolean,
   strikethrough?: boolean,
   obfuscate?: boolean,
+  smalltext?: boolean,
 }
 
 export interface FormatSegment extends Formatting {
@@ -74,24 +76,37 @@ export const animationStyles = [
   { name: 'Full Text Cycle', value: 4 },
 ];
 
-export const rgbDefaults = {
-  version: 5,
+export const version = 5;
+export const rgbColorDefaults = {
+  version,
+  text: 'Birdflop',
   colors: [
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ] as ColorStop[],
   shadowColors: null as null | ColorStop[],
-  colorFormat: colorFormats[1],
   colorLength: 1,
+  gradientType: 'rgb' as GradientType,
+}
+export const rgbColorDefaultsWithColorMode = {
+  ...rgbColorDefaults,
+  colorMode: 'gradient' as ColorMode,
+};
+export const rgbOptionDefaults = {
+  version,
+  colorFormat: colorFormats[1],
   formatting: [] as FormatSegment[],
   baseFormatting: {} as Formatting,
-  text: 'Birdflop',
   prefixSuffix: '',
   customFormat: false,
   trimSpaces: true,
   disperse: false,
   lowercase: false,
-  gradientType: 'rgb' as GradientType,
+};
+
+export const rgbDefaults = {
+  ...rgbColorDefaults,
+  ...rgbOptionDefaults,
 };
 
 export const animTABDefaults = {

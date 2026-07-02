@@ -1,5 +1,5 @@
-import { ColorGradient, getRGBColorStop, hexToRGB, sortColors } from '@birdflop/rgbirdflop';
-import type { AdvancedStore } from './model';
+import { ColorGradient, getRGBColorStop, hexToRGB, sortColors, getFormattingAtOffset, rgbDefaults } from '@birdflop/rgbirdflop';
+import type { SegmentType } from './model';
 import { chunkText, combinedText } from './model';
 import { getFormattingClasses } from '../Rgbirdflop/RGBirdflop';
 
@@ -12,16 +12,17 @@ function toCSS(rgb: number[]): string {
  * RGBirdflop.tsx, but per-segment with per-character bold/italic). Each
  * obfuscated span carries data-text so the animation can restore the glyph.
  */
-export function renderAdvancedPreview(store: AdvancedStore) {
-  const text = combinedText(store.segments);
+export function renderAdvancedPreview(segments: SegmentType[], options: typeof rgbDefaults) {
+  const text = combinedText(segments);
   if (!text) return ' ';
 
-  return store.segments.flatMap((seg, si) => {
+  let charOffset = 0;
+  return segments.flatMap((seg, si) => {
     if (!seg.text) return [];
 
     let gradient: ColorGradient | null = null;
     if (seg.colorMode === 'gradient' && seg.colors.length > 0) {
-      const len = !seg.colorlength || seg.colorlength < 1 ? 1 : seg.colorlength;
+      const len = !seg.colorLength || seg.colorLength < 1 ? 1 : seg.colorLength;
       gradient = new ColorGradient(
         sortColors(seg.colors).map(getRGBColorStop),
         Math.max(1, Math.ceil(Array.from(seg.text).length / len)),
@@ -29,13 +30,17 @@ export function renderAdvancedPreview(store: AdvancedStore) {
       );
     }
 
-    return chunkText(seg.text, seg.colorlength).map((chunk, ci) => {
+    let rel = 0;
+    const chunkSpans = chunkText(seg.text, seg.colorLength).map((chunk, ci) => {
       let color = 'inherit';
       if (seg.colorMode === 'solid' && seg.colors.length > 0) {
         color = toCSS(hexToRGB(seg.colors[0].hex));
       } else if (gradient) {
         color = toCSS(gradient.next());
       }
+
+      const fmt = getFormattingAtOffset(charOffset + rel, options);
+      rel += chunk.length;
 
       return (
         <span
@@ -44,11 +49,14 @@ export function renderAdvancedPreview(store: AdvancedStore) {
           style={{
             color,
           }}
-          class={getFormattingClasses(seg)}
+          class={getFormattingClasses(fmt)}
         >
           {chunk}
         </span>
       );
     });
+
+    charOffset += seg.text.length;
+    return chunkSpans;
   });
 }

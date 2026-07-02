@@ -3,14 +3,19 @@ import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
 
-function segmentText(text: string, colorlength?: number): string[] {
-  let len = colorlength ?? 1;
+function segmentText(text: string, colorLength?: number): string[] {
+  let len = colorLength ?? 1;
   if (!len || len < 1) len = 1;
   const out: string[] = [];
   const arr = Array.from(text);
   for (let i = 0; i < arr.length; i += len) out.push(arr.slice(i, i + len).join(''));
   return out;
 }
+
+export type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
+export type FontKey = 'smalltext';
+export const FORMAT_KEYS: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+export const FONT_KEYS: FontKey[] = ['smalltext'];
 
 export function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
   let codes = '';
@@ -166,8 +171,7 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
     const covering = rgbOptions.formatting?.find((s) => s.start <= charOffset && s.end > charOffset);
     const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
 
-    const keys: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-    const fmtChanged = !currentFmt || keys.some((k) => currentFmt![k] !== fmt[k]);
+    const fmtChanged = !currentFmt || FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]);
 
     if (fmtChanged) {
       flush();

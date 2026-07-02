@@ -38,7 +38,7 @@ function migrateFromV4(preset: any) {
     bold, italic, underline, strikethrough, obfuscate,
     shadowcolors: shadowColors,
     format: colorFormat,
-    colorlength: colorLength,
+    colorLength: colorLength,
     prefixsuffix: prefixSuffix,
     trimspaces: trimSpaces,
     ...rest

@@ -3,15 +3,14 @@ import { Bold, CaseUpper, Eraser, Italic, Strikethrough, Underline, Wand2 } from
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from './RGBirdflop';
 import { Selection, selectionContext } from './Input';
-import { FormatSegment, Formatting, FormattingWithoutFont } from '@birdflop/rgbirdflop';
+import { FormatSegment, Formatting, FORMAT_KEYS, FormatKey, FontKey } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const selection = useContext(selectionContext, useSignal<Selection>());
-  const keys: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate', 'smalltext'];
 
-  const getFormatLabel = (FormatKey: keyof FormattingWithoutFont) => {
+  const getFormatLabel = (FormatKey: FormatKey) => {
     if (rgbStore.colorFormat.char) {
       const formatMap = { bold: 'l', italic: 'o', underline: 'n', strikethrough: 'm', obfuscate: 'k' };
       return ` - ${rgbStore.colorFormat.char}${formatMap[FormatKey]}`;
@@ -51,7 +50,7 @@ export default component$(() => {
     const result: Formatting = {};
     const defaultFmt = rgbStore.baseFormatting;
 
-    for (const k of keys) {
+    for (const k of FORMAT_KEYS) {
       if (intervals.length === 0) {
         result[k] = defaultFmt[k];
       } else {
@@ -99,7 +98,7 @@ export default component$(() => {
 
       // if resulting formatting equals default, skip (no segment)
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -109,7 +108,7 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && keys.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && FORMAT_KEYS.every((k) => last[k] === seg[k])) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });
@@ -151,13 +150,13 @@ export default component$(() => {
       const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
 
       if (a < end && b > start) {
-        for (const k of keys) {
+        for (const k of FORMAT_KEYS) {
           fmt[k] = false;
         }
       }
 
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = keys.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -166,7 +165,7 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && keys.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && FORMAT_KEYS.every((k) => last[k] === seg[k])) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });
@@ -176,88 +175,59 @@ export default component$(() => {
     rgbStore.formatting = merged;
   });
 
+  const formattingButtons: { key: FormatKey; label: string; icon: typeof Bold }[] = [
+    { key: 'bold', label: t('rgb.formatting.bold@@Bold'), icon: Bold },
+    { key: 'italic', label: t('rgb.formatting.italic@@Italic'), icon: Italic },
+    { key: 'underline', label: t('rgb.formatting.underline@@Underline'), icon: Underline },
+    { key: 'strikethrough', label: t('rgb.formatting.strikethrough@@Strikethrough'), icon: Strikethrough },
+    { key: 'obfuscate', label: t('rgb.formatting.obfuscate@@Obfuscate'), icon: Wand2 },
+  ];
+
+  const fontButtons: { key: FontKey; label: string; icon: typeof CaseUpper }[] = [
+    { key: 'smalltext', label: t('rgb.formatting.smalltext@@Small Text'), icon: CaseUpper },
+  ];
+
+
   return <>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-    id="font">
-      <button type="button" id="smalltext"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.smalltext,
-        }}
-        aria-pressed={formatting.smalltext} title={t('rgb.formatting.smalltext@@Small Text')}
-        onClick$={() => toggleFlag('smalltext')}
-      >
-        <CaseUpper size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.smalltext@@Small Text')}
-        </span>
-      </button>
+      id="font">
+      {fontButtons.map(({ key, label, icon: Icon }) => (
+        <button key={key} type="button" aria-pressed={formatting[key]} title={label}
+          class={{
+            'lum-grad-bg-lum-accent/100!': formatting[key],
+          }}
+          onClick$={() => toggleFlag(key)}
+        >
+          <Icon size={16} />
+          <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
+            {label}
+          </span>
+        </button>
+      ))}
     </div>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-    id="formatting">
-      <button type="button" id="bold"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.bold,
-        }}
-        aria-pressed={formatting.bold} title={t('rgb.formatting.bold@@Bold')}
-        onClick$={() => toggleFlag('bold')}
-      >
-        <Bold size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.bold@@Bold')}{getFormatLabel('bold')}
-        </span>
-      </button>
-      <button type="button" id="italic"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.italic,
-        }}
-        aria-pressed={formatting.italic} title={t('rgb.formatting.italic@@Italic')}
-        onClick$={() => toggleFlag('italic')}>
-        <Italic size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.italic@@Italic')}{getFormatLabel('italic')}
-        </span>
-      </button>
-      <button type="button" id="underline"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.underline,
-        }}
-        aria-pressed={formatting.underline} title={t('rgb.formatting.underline@@Underline')}
-        onClick$={() => toggleFlag('underline')}>
-        <Underline size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.underline@@Underline')}{getFormatLabel('underline')}
-        </span>
-      </button>
-      <button type="button" id="strikethrough"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.strikethrough,
-        }}
-        aria-pressed={formatting.strikethrough} title={t('rgb.formatting.strikethrough@@Strikethrough')}
-        onClick$={() => toggleFlag('strikethrough')}>
-        <Strikethrough size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.strikethrough@@Strikethrough')}{getFormatLabel('strikethrough')}
-        </span>
-      </button>
-      <button type="button" id="obfuscate"
-        class={{
-          'lum-grad-bg-lum-accent/100!': formatting.obfuscate,
-        }}
-        aria-pressed={formatting.obfuscate} title={t('rgb.formatting.obfuscate@@Obfuscate')}
-        onClick$={() => toggleFlag('obfuscate')}>
-        <Wand2 size={16} />
-        <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-          {t('rgb.formatting.obfuscate@@Obfuscate')}{getFormatLabel('obfuscate')}
-        </span>
-      </button>
+      id="formatting">
+      {formattingButtons.map(({ key, label, icon: Icon }) => (
+        <button key={key} type="button" aria-pressed={formatting[key]} title={label}
+          class={{
+            'lum-grad-bg-lum-accent/100!': formatting[key],
+          }}
+          onClick$={() => toggleFlag(key)}
+        >
+          <Icon size={16} />
+          <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
+            {label} {getFormatLabel(key)}
+          </span>
+        </button>
+      ))}
     </div>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,

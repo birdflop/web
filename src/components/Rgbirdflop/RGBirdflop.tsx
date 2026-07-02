@@ -11,6 +11,7 @@ import {
 } from '@builder.io/qwik';
 
 import {
+  FORMAT_KEYS,
   rgbDefaults,
   ColorGradient,
   disperseColors,
@@ -49,10 +50,6 @@ import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 import { donateLink } from '../Elements/Nav';
 import { deepTrack } from '~/util/misc';
-
-type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
-
-const FORMAT_KEYS: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
 
 function getFormattingSignature(formatting: Formatting) {
   return FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('');

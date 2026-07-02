@@ -4,14 +4,14 @@ import { MousePointerClick, Palette, Type } from 'lucide-icons-qwik';
 import { combinedText } from './model';
 import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';
-import AdvancedFormatting from './AdvancedFormatting';
+import Formatting from '~/components/Rgbirdflop/Formatting';
 import SegmentInspector from './SegmentInspector';
-import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(advancedStoreContext);
+  const store = useContext(segmentsStoreContext);
   const selection = useContext(selectionContext);
 
   const hasSel = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
@@ -75,7 +75,7 @@ export const FormattingPanel = component$(() => {
           <h4 class="flex items-center gap-2 text-xs font-bold text-lum-text-secondary uppercase tracking-wider">
             <Type size={15} /> {t('rgb.beta.formatting@@Formatting')}
           </h4>
-          <AdvancedFormatting />
+          <Formatting />
         </div>
       )}
 

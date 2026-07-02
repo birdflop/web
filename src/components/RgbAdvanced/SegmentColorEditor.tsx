@@ -10,13 +10,14 @@ import {
   hexToRGB,
   rgbToHex,
   sortColors,
+  rgbColorDefaultsWithColorMode,
   type ColorStop,
   type GradientType,
 } from '@birdflop/rgbirdflop';
 import { ArrowRightLeft, Ban, ChevronDown, ChevronUp, Dices, Droplet, Palette, Plus, Trash } from 'lucide-icons-qwik';
-import { applyStyleToRange, defaultStyle, styleAtChar, type CharStyle } from './model';
+import { applyStyleToRange, styleAtChar, type SegmentType } from './model';
 import { restoreSelection } from './dom';
-import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
+import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function gradientCSS(colors: ColorStop[], gradientType: string, samples = 20): string {
@@ -45,15 +46,15 @@ function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(advancedStoreContext);
+  const store = useContext(segmentsStoreContext);
   const selection = useContext(selectionContext);
   const opened = useSignal(-1);
 
   const hasSelection = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
 
-  const current = useComputed$<CharStyle>(() => {
-    if (!selection.value) return defaultStyle();
-    return styleAtChar(store.segments, selection.value.start) ?? defaultStyle();
+  const current = useComputed$<SegmentType>(() => {
+    if (!selection.value) return rgbColorDefaultsWithColorMode;
+    return styleAtChar(store.segments, selection.value.start) ?? rgbColorDefaultsWithColorMode;
   });
 
   useOnDocument('click', $((e) => {
@@ -66,20 +67,20 @@ export default component$(() => {
 
   // Writes a uniform color config over the whole selection (formatting flags untouched).
   // The payload is plain serializable data, computed once by the caller.
-  const writeConfig = $((partial: Partial<CharStyle>) => {
+  const writeConfig = $((partial: Partial<SegmentType>) => {
     if (!selection.value) return;
     const { start, end } = selection.value;
     if (end <= start) return;
-    const base = styleAtChar(store.segments, start) ?? defaultStyle();
+    const base = styleAtChar(store.segments, start) ?? rgbColorDefaultsWithColorMode;
     const colorMode = partial.colorMode ?? base.colorMode;
     const colors = (partial.colors ?? base.colors).map((c) => ({ ...c }));
     const gradientType = partial.gradientType ?? base.gradientType;
-    const colorlength = partial.colorlength ?? base.colorlength;
+    const colorLength = partial.colorLength ?? base.colorLength;
     store.segments = applyStyleToRange(store.segments, start, end, (s) => {
       s.colorMode = colorMode;
       s.colors = colors.map((c) => ({ ...c }));
       s.gradientType = gradientType;
-      s.colorlength = colorlength;
+      s.colorLength = colorLength;
     });
     void restoreSelection(start, end);
   });
@@ -134,13 +135,13 @@ export default component$(() => {
             values={GRADIENT_TYPES.map((type) => ({ name: type, value: type }))}>
             {t('rgb.colors.gradientType@@Gradient Type')}
           </SelectMenu>
-          <NumberInput input id="adv-colorlength"
+          <NumberInput input id="adv-colorLength"
             min={1} max={Math.max(1, selLength)}
-            value={current.value.colorlength}
+            value={current.value.colorLength}
             class={{ 'w-full': true }}
-            onChange$={(e, el) => { let v = Number(el.value); if (v < 1) v = 1; void writeConfig({ colorlength: v }); }}
-            onIncrement$={() => writeConfig({ colorlength: Math.min(Math.max(1, selLength), current.value.colorlength + 1) })}
-            onDecrement$={() => writeConfig({ colorlength: Math.max(1, current.value.colorlength - 1) })}>
+            onChange$={(e, el) => { let v = Number(el.value); if (v < 1) v = 1; void writeConfig({ colorLength: v }); }}
+            onIncrement$={() => writeConfig({ colorLength: Math.min(Math.max(1, selLength), current.value.colorLength + 1) })}
+            onDecrement$={() => writeConfig({ colorLength: Math.max(1, current.value.colorLength - 1) })}>
             {t('rgb.colors.charsPer@@Characters per color')}
           </NumberInput>
         </div>

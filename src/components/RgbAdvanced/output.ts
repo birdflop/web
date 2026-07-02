@@ -3,54 +3,84 @@ import {
   getRGBColorStop,
   rgbToHex,
   sortColors,
+  buildFormatCodes,
+  getFormattingAtOffset,
+  FORMAT_KEYS,
+  rgbDefaults,
+  type ColorFormat,
+  type Formatting,
 } from '@birdflop/rgbirdflop';
 import {
-  AdvancedSegment,
-  AdvancedStore,
-  Fmt,
-  StyleFlags,
-  chunkText,
+  chunkText, SegmentType
 } from './model';
-
-// ---------------------------------------------------------------------------
-// Small helpers replicated from packages/rgbirdflop/src/util/RGBUtils.ts
-// (those functions are module-private there and cannot be imported).
-// ---------------------------------------------------------------------------
-
-function buildFormatCodes(format: Fmt, style: StyleFlags): string {
-  let codes = '';
-  if (format.color.includes('$f') && format.char) {
-    if (style.bold) codes += format.char + 'l';
-    if (style.italic) codes += format.char + 'o';
-    if (style.underline) codes += format.char + 'n';
-    if (style.strikethrough) codes += format.char + 'm';
-    if (style.obfuscate) codes += format.char + 'k';
-  }
-  return codes;
-}
 
 function renderTemplateSegment(
   hexWithoutHash: string,
   text: string,
-  format: Fmt,
-  style: StyleFlags,
-  lowercase: boolean,
+  fmt: Formatting,
+  options: typeof rgbDefaults,
 ): string {
-  let out = format.color;
+  let out = options.colorFormat.color;
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
-  out = out.replace('$f', buildFormatCodes(format, style));
-  if (lowercase) out = out.toLowerCase();
+  out = out.replace('$f', buildFormatCodes(fmt, options));
+  if (options.lowercase) out = out.toLowerCase();
   out = out.replace('$c', text);
+
+  // Apply wrappers to this segment if formatting has it
+  out = applyFormatWrappers(out, options.colorFormat, fmt);
+
   return out;
 }
 
-function applyFormatWrappers(output: string, format: Fmt, style: StyleFlags): string {
+function applyFormatWrappers(output: string, format: ColorFormat, style: Formatting): string {
   let out = output;
   if (format.bold && style.bold) out = format.bold.replace('$t', out);
   if (format.italic && style.italic) out = format.italic.replace('$t', out);
   if (format.underline && style.underline) out = format.underline.replace('$t', out);
   if (format.strikethrough && style.strikethrough) out = format.strikethrough.replace('$t', out);
   if (format.obfuscate && style.obfuscate) out = format.obfuscate.replace('$t', out);
+  return out;
+}
+
+function applySelectiveFormatting(text: string, offset: number, options: typeof rgbDefaults): string {
+  const chars = Array.from(text);
+  let currentFmt: Formatting | undefined;
+  let buffer = '';
+  let out = '';
+
+  const flush = () => {
+    if (!buffer) return;
+    if (!currentFmt) {
+      out += buffer;
+      buffer = '';
+      return;
+    }
+    let formatted = buffer;
+    if (options.colorFormat.color === 'MiniMessage') {
+      if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
+      if (currentFmt.italic) formatted = `<i>${formatted}</i>`;
+      if (currentFmt.underline) formatted = `<u>${formatted}</u>`;
+      if (currentFmt.strikethrough) formatted = `<st>${formatted}</st>`;
+      if (currentFmt.obfuscate) formatted = `<obf>${formatted}</obf>`;
+    }
+    out += formatted;
+    buffer = '';
+  };
+
+  let charOffset = offset;
+  for (const ch of chars) {
+    const fmt = getFormattingAtOffset(charOffset, options);
+
+    const fmtChanged = !currentFmt || FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]);
+
+    if (fmtChanged) {
+      flush();
+      currentFmt = fmt;
+    }
+    buffer += ch;
+    charOffset += ch.length;
+  }
+  flush();
   return out;
 }
 
@@ -64,14 +94,14 @@ function applyPrefixSuffix(output: string, prefixsuffix: string): string {
  * segment, or null when the segment is uncolored. A fresh ColorGradient is
  * created per segment so each gradient is independent.
  */
-function segmentHexProvider(seg: AdvancedSegment): (() => string) | null {
+function segmentHexProvider(seg: SegmentType): (() => string) | null {
   if (seg.colorMode === 'none' || seg.colors.length === 0) return null;
   if (seg.colorMode === 'solid') {
     // Uppercase to match gradient output (rgbToHex); the `lowercase` toggle then governs case uniformly.
     const hex = seg.colors[0].hex.replace(/^#/, '').toUpperCase();
     return () => hex;
   }
-  let len = seg.colorlength;
+  let len = seg.colorLength;
   if (!len || len < 1) len = 1;
   const numChunks = Math.max(1, Math.ceil(Array.from(seg.text).length / len));
   const gradient = new ColorGradient(
@@ -86,29 +116,41 @@ function segmentHexProvider(seg: AdvancedSegment): (() => string) | null {
 // Format-family renderers
 // ---------------------------------------------------------------------------
 
-function renderTemplate(store: AdvancedStore): string {
+function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): string {
   let out = '';
-  for (const seg of store.segments) {
+  let charOffset = 0;
+  for (const seg of segments) {
     if (!seg.text) continue;
     const nextHex = segmentHexProvider(seg);
     let segOut: string;
 
     if (nextHex === null) {
       // Uncolored: formatting codes + raw text, no hex template.
-      segOut = buildFormatCodes(store.format, seg) + seg.text;
+      segOut = '';
+      let rel = 0;
+      for (const ch of Array.from(seg.text)) {
+        const fmt = getFormattingAtOffset(charOffset + rel, options);
+        segOut += buildFormatCodes(fmt, options) + ch;
+        rel += ch.length;
+      }
     } else {
       segOut = '';
-      for (const chunk of chunkText(seg.text, seg.colorlength)) {
-        if (store.trimspaces && chunk.trim() === '') {
+      let rel = 0;
+      for (const chunk of chunkText(seg.text, seg.colorLength)) {
+        if (options.trimSpaces && chunk.trim() === '') {
           segOut += chunk;
           nextHex();
+          rel += chunk.length;
           continue;
         }
-        segOut += renderTemplateSegment(nextHex(), chunk, store.format, seg, store.lowercase);
+        const fmt = getFormattingAtOffset(charOffset + rel, options);
+        segOut += renderTemplateSegment(nextHex(), chunk, fmt, options);
+        rel += chunk.length;
       }
     }
 
-    out += applyFormatWrappers(segOut, store.format, seg);
+    out += segOut;
+    charOffset += seg.text.length;
   }
   return out;
 }
@@ -126,7 +168,7 @@ interface JsonExtra {
 function buildJsonExtra(
   text: string,
   colorHexWithHash: string | undefined,
-  style: StyleFlags,
+  style: Formatting,
 ): JsonExtra {
   const e: JsonExtra = { text };
   if (colorHexWithHash) e.color = colorHexWithHash;
@@ -138,32 +180,47 @@ function buildJsonExtra(
   return e;
 }
 
-function renderJson(store: AdvancedStore): string {
+function renderJson(segments: SegmentType[], options: typeof rgbDefaults): string {
   const json: { text: string; extra: JsonExtra[] } = { text: '', extra: [] };
-  for (const seg of store.segments) {
+  let charOffset = 0;
+  for (const seg of segments) {
     if (!seg.text) continue;
     const nextHex = segmentHexProvider(seg);
 
     if (nextHex === null) {
-      // Uncolored: one extra for the whole segment, no color.
-      if (store.trimspaces && seg.text.trim() === '') json.extra.push({ text: seg.text });
-      else json.extra.push(buildJsonExtra(seg.text, undefined, seg));
+      // Uncolored: one extra per character, no color.
+      let rel = 0;
+      for (const ch of Array.from(seg.text)) {
+        if (options.trimSpaces && ch.trim() === '') {
+          json.extra.push({ text: ch });
+        } else {
+          const fmt = getFormattingAtOffset(charOffset + rel, options);
+          json.extra.push(buildJsonExtra(ch, undefined, fmt));
+        }
+        rel += ch.length;
+      }
+      charOffset += seg.text.length;
       continue;
     }
 
-    for (const chunk of chunkText(seg.text, seg.colorlength)) {
-      if (store.trimspaces && chunk.trim() === '') {
+    let rel = 0;
+    for (const chunk of chunkText(seg.text, seg.colorLength)) {
+      if (options.trimSpaces && chunk.trim() === '') {
         json.extra.push({ text: chunk });
         nextHex();
+        rel += chunk.length;
         continue;
       }
-      json.extra.push(buildJsonExtra(chunk, '#' + nextHex(), seg));
+      const fmt = getFormattingAtOffset(charOffset + rel, options);
+      json.extra.push(buildJsonExtra(chunk, '#' + nextHex(), fmt));
+      rel += chunk.length;
     }
+    charOffset += seg.text.length;
   }
   return JSON.stringify(json);
 }
 
-function miniMessageGradientBody(seg: AdvancedSegment): string {
+function miniMessageGradientBody(seg: SegmentType, charOffset: number, options: typeof rgbDefaults): string {
   const colors = sortColors(seg.colors);
   const text = seg.text;
 
@@ -171,7 +228,8 @@ function miniMessageGradientBody(seg: AdvancedSegment): string {
     (color, i) => color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
   );
   if (even) {
-    return `<gradient:${colors.map((c) => c.hex).join(':')}>${text}</gradient>`;
+    const inner = applySelectiveFormatting(text, charOffset, options);
+    return `<gradient:${colors.map((c) => c.hex).join(':')}>${inner}</gradient>`;
   }
 
   const copy = [...colors];
@@ -191,25 +249,31 @@ function miniMessageGradientBody(seg: AdvancedSegment): string {
     const lower = Math.round((copy[i].pos / 100) * n);
     const upper = Math.round((copy[i + 1].pos / 100) * n);
     if (lower === upper) continue;
-    body += `<gradient:${cur.hex}:${nxt.hex}>${text.substring(lower, upper)}</gradient>`;
+
+    const slice = text.substring(lower, upper);
+    const inner = applySelectiveFormatting(slice, charOffset + lower, options);
+    body += `<gradient:${cur.hex}:${nxt.hex}>${inner}</gradient>`;
   }
   return body;
 }
 
-function renderMiniMessage(store: AdvancedStore): string {
+function renderMiniMessage(segments: SegmentType[], options: typeof rgbDefaults): string {
   let out = '';
-  for (const seg of store.segments) {
+  let charOffset = 0;
+  for (const seg of segments) {
     if (!seg.text) continue;
     const colored = seg.colorMode !== 'none' && seg.colors.length > 0;
     let body: string;
     if (!colored) {
-      body = seg.text;
+      body = applySelectiveFormatting(seg.text, charOffset, options);
     } else if (seg.colorMode === 'solid' || seg.colors.length === 1) {
-      body = `<color:${seg.colors[0].hex}>${seg.text}</color>`;
+      const inner = applySelectiveFormatting(seg.text, charOffset, options);
+      body = `<color:${seg.colors[0].hex}>${inner}</color>`;
     } else {
-      body = miniMessageGradientBody(seg);
+      body = miniMessageGradientBody(seg, charOffset, options);
     }
-    out += applyFormatWrappers(body, store.format, seg);
+    out += body;
+    charOffset += seg.text.length;
   }
   return out;
 }
@@ -219,11 +283,11 @@ function renderMiniMessage(store: AdvancedStore): string {
  * Equivalent to concatenating each segment's rendered output, with prefix/suffix
  * applied once at the end. Pure & deterministic.
  */
-export function generateAdvancedOutput(store: AdvancedStore): string {
-  const c = store.format.color;
+export function generateAdvancedOutput(segments: SegmentType[], options: typeof rgbDefaults): string {
+  const c = options.colorFormat.color;
   let combined: string;
-  if (c === 'MiniMessage') combined = renderMiniMessage(store);
-  else if (c === 'JSON') combined = renderJson(store);
-  else combined = renderTemplate(store);
-  return applyPrefixSuffix(combined, store.prefixsuffix);
+  if (c === 'MiniMessage') combined = renderMiniMessage(segments, options);
+  else if (c === 'JSON') combined = renderJson(segments, options);
+  else combined = renderTemplate(segments, options);
+  return applyPrefixSuffix(combined, options.prefixSuffix);
 }

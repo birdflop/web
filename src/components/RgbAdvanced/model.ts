@@ -1,95 +1,26 @@
-import { colorFormats, rgbDefaults, sortColors } from '@birdflop/rgbirdflop';
-import type { ColorStop, GradientType } from '@birdflop/rgbirdflop';
+import { rgbDefaults, sortColors, rgbColorDefaultsWithColorMode, ColorMode } from '@birdflop/rgbirdflop';
 
-/** The output format object shape (e.g. MiniMessage, &#$1$2..$c, §x..). */
-export type Fmt = (typeof colorFormats)[number];
+export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
-export type ColorMode = 'gradient' | 'solid' | 'none';
-
-export type FormatFlag = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
-
-/** Per-character style. A run of characters sharing the same style becomes one segment. */
-export interface CharStyle {
-  colorMode: ColorMode;
-  colors: ColorStop[];
-  gradientType: GradientType;
-  colorlength: number;
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  strikethrough: boolean;
-  obfuscate: boolean;
-}
-
-export type StyleFlags = Pick<CharStyle, FormatFlag>;
-
-export type AdvancedSegment = CharStyle & { text: string };
-
-export interface AdvancedStore {
-  version: number;
-  segments: AdvancedSegment[];
-  format: Fmt;
-  prefixsuffix: string;
-  customFormat: boolean;
-  trimspaces: boolean;
-  lowercase: boolean;
+export interface SegmentsStore {
+  segments: SegmentType[];
 }
 
 export interface FlatChar {
   ch: string;
-  style: CharStyle;
+  style: SegmentType;
 }
 
-export const ADVANCED_VERSION = 1;
-
-export function defaultStyle(): CharStyle {
+export function cloneStyle(s: SegmentType): SegmentType {
   return {
-    colorMode: 'gradient',
-    colors: [
-      { hex: '#54daf4', pos: 0 },
-      { hex: '#545eb6', pos: 100 },
-    ],
-    gradientType: 'rgb',
-    colorlength: 1,
-    bold: false,
-    italic: false,
-    underline: false,
-    strikethrough: false,
-    obfuscate: false,
+    ...s,
+    colors: [...s.colors],
   };
 }
 
-export const advancedDefaults: AdvancedStore = {
-  version: ADVANCED_VERSION,
-  segments: [{ ...defaultStyle(), text: 'Birdflop' }],
-  format: colorFormats[1],
-  prefixsuffix: '',
-  customFormat: false,
-  trimspaces: true,
-  lowercase: false,
-};
-
-export function cloneStyle(s: CharStyle): CharStyle {
-  return {
-    colorMode: s.colorMode,
-    colors: s.colors.map((c) => ({ ...c })),
-    gradientType: s.gradientType,
-    colorlength: s.colorlength,
-    bold: s.bold,
-    italic: s.italic,
-    underline: s.underline,
-    strikethrough: s.strikethrough,
-    obfuscate: s.obfuscate,
-  };
-}
-
-function extractStyle(seg: AdvancedSegment): CharStyle {
-  return cloneStyle(seg);
-}
-
-/** Split text into chunks of `colorlength` codepoints (surrogate-safe). */
-export function chunkText(text: string, colorlength?: number): string[] {
-  let len = colorlength ?? 1;
+/** Split text into chunks of `colorLength` codepoints (surrogate-safe). */
+export function chunkText(text: string, colorLength?: number): string[] {
+  let len = colorLength ?? 1;
   if (!len || len < 1) len = 1;
   const out: string[] = [];
   const arr = Array.from(text);
@@ -103,7 +34,7 @@ export function chunkText(text: string, colorlength?: number): string[] {
  * (sorted, rounded, lowercased) so representation differences don't fragment
  * segments; uncolored ignores color data entirely; solid keys only the first stop.
  */
-export function styleKey(s: CharStyle): string {
+export function styleKey(s: SegmentType): string {
   let colorPart: string;
   if (s.colorMode === 'none' || s.colors.length === 0) {
     colorPart = 'none';
@@ -113,16 +44,16 @@ export function styleKey(s: CharStyle): string {
     const cols = sortColors(s.colors).map(
       (c) => `${c.hex.toLowerCase()}@${Math.round(c.pos * 1000) / 1000}`,
     );
-    colorPart = `grad:${s.gradientType}:${s.colorlength}:${cols.join(',')}`;
+    colorPart = `grad:${s.gradientType}:${s.colorLength}:${cols.join(',')}`;
   }
-  return `${colorPart}|${+s.bold}${+s.italic}${+s.underline}${+s.strikethrough}${+s.obfuscate}`;
+  return colorPart;
 }
 
 /** Flatten segments to per-(UTF-16)-char entries. Style refs are shared per source segment. */
-export function flatten(segments: AdvancedSegment[]): FlatChar[] {
+export function flatten(segments: SegmentType[]): FlatChar[] {
   const out: FlatChar[] = [];
   for (const seg of segments) {
-    const style = extractStyle(seg);
+    const style = cloneStyle(seg);
     for (let i = 0; i < seg.text.length; i++) {
       out.push({ ch: seg.text[i], style });
     }
@@ -131,11 +62,11 @@ export function flatten(segments: AdvancedSegment[]): FlatChar[] {
 }
 
 /** Coalesce consecutive equal-key chars back into segments. Idempotent normalization. */
-export function regroup(chars: FlatChar[]): AdvancedSegment[] {
+export function regroup(chars: FlatChar[]): SegmentType[] {
   if (chars.length === 0) return [];
-  const segs: AdvancedSegment[] = [];
+  const segs: SegmentType[] = [];
   let curKey: string | null = null;
-  let cur: AdvancedSegment | null = null;
+  let cur: SegmentType | null = null;
   for (const { ch, style } of chars) {
     const k = styleKey(style);
     if (cur === null || k !== curKey) {
@@ -148,11 +79,11 @@ export function regroup(chars: FlatChar[]): AdvancedSegment[] {
   return segs;
 }
 
-export function normalizeSegments(segments: AdvancedSegment[]): AdvancedSegment[] {
+export function normalizeSegments(segments: SegmentType[]): SegmentType[] {
   return regroup(flatten(segments));
 }
 
-export function combinedText(segments: AdvancedSegment[]): string {
+export function combinedText(segments: SegmentType[]): string {
   return segments.map((s) => s.text).join('');
 }
 
@@ -161,7 +92,7 @@ export function combinedText(segments: AdvancedSegment[]): string {
  * Uses a common prefix/suffix diff on UTF-16 strings (matching textarea offsets).
  * Inserted chars inherit the style of the char before the edit (or after, or default).
  */
-export function applyTextDiff(segments: AdvancedSegment[], newText: string): AdvancedSegment[] {
+export function applyTextDiff(segments: SegmentType[], newText: string): SegmentType[] {
   const oldChars = flatten(segments);
   const oldText = oldChars.map((c) => c.ch).join('');
   if (newText === oldText) return segments;
@@ -189,7 +120,7 @@ export function applyTextDiff(segments: AdvancedSegment[], newText: string): Adv
       ? cloneStyle(oldChars[p - 1].style)
       : oldChars.length > p
         ? cloneStyle(oldChars[p].style)
-        : defaultStyle();
+        : rgbColorDefaultsWithColorMode;
 
   const insertedChars: FlatChar[] = [];
   for (let i = 0; i < inserted.length; i++) {
@@ -206,11 +137,11 @@ export function applyTextDiff(segments: AdvancedSegment[], newText: string): Adv
 
 /** Apply a style mutation to every char in [start, end). Clones on write. */
 export function applyStyleToRange(
-  segments: AdvancedSegment[],
+  segments: SegmentType[],
   start: number,
   end: number,
-  mutate: (style: CharStyle) => void,
-): AdvancedSegment[] {
+  mutate: (style: SegmentType) => void,
+): SegmentType[] {
   if (start >= end) return segments;
   const chars = flatten(segments);
   const lo = Math.max(0, start);
@@ -224,56 +155,9 @@ export function applyStyleToRange(
   return regroup(chars);
 }
 
-/** Tri-state toggle of a format flag over a selection: ON if any char lacks it, else OFF. */
-export function toggleFormat(
-  segments: AdvancedSegment[],
-  start: number,
-  end: number,
-  flag: FormatFlag,
-): AdvancedSegment[] {
-  if (start >= end) return segments;
-  const chars = flatten(segments);
-  const lo = Math.max(0, start);
-  const hi = Math.min(chars.length, end);
-  let anyOff = false;
-  for (let i = lo; i < hi; i++) {
-    if (!chars[i].style[flag]) {
-      anyOff = true;
-      break;
-    }
-  }
-  return applyStyleToRange(segments, start, end, (st) => {
-    st[flag] = anyOff;
-  });
-}
-
-/** Which format flags are active across the ENTIRE selection (all chars have them). */
-export function selectionFlags(
-  segments: AdvancedSegment[],
-  start: number,
-  end: number,
-): Record<FormatFlag, boolean> {
-  const chars = flatten(segments);
-  const lo = Math.max(0, start);
-  const hi = Math.min(chars.length, end);
-  const flags: FormatFlag[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-  const res = {} as Record<FormatFlag, boolean>;
-  for (const f of flags) {
-    let all = hi > lo;
-    for (let i = lo; i < hi; i++) {
-      if (!chars[i].style[f]) {
-        all = false;
-        break;
-      }
-    }
-    res[f] = all;
-  }
-  return res;
-}
-
 /** The char range [start, end) occupied by segment `index`. */
 export function segmentRange(
-  segments: AdvancedSegment[],
+  segments: SegmentType[],
   index: number,
 ): { start: number; end: number } {
   let start = 0;
@@ -283,7 +167,7 @@ export function segmentRange(
 }
 
 /** Index of the segment containing flat char `charIndex`. */
-export function segmentIndexAtChar(segments: AdvancedSegment[], charIndex: number): number {
+export function segmentIndexAtChar(segments: SegmentType[], charIndex: number): number {
   let acc = 0;
   for (let i = 0; i < segments.length; i++) {
     acc += segments[i].text.length;
@@ -293,14 +177,14 @@ export function segmentIndexAtChar(segments: AdvancedSegment[], charIndex: numbe
 }
 
 /** A clone of the style at flat char `charIndex` (or null). */
-export function styleAtChar(segments: AdvancedSegment[], charIndex: number): CharStyle | null {
+export function styleAtChar(segments: SegmentType[], charIndex: number): SegmentType | null {
   const chars = flatten(segments);
   const c = chars[Math.max(0, Math.min(chars.length - 1, charIndex))];
   return c ? cloneStyle(c.style) : null;
 }
 
 /** Swap two segments (reorders the text), then normalize. */
-export function swapSegments(segments: AdvancedSegment[], i: number, j: number): AdvancedSegment[] {
+export function swapSegments(segments: SegmentType[], i: number, j: number): SegmentType[] {
   if (i < 0 || j < 0 || i >= segments.length || j >= segments.length || i === j) return segments;
   const arr = segments.map((seg) => ({ ...cloneStyle(seg), text: seg.text }));
   [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -308,7 +192,7 @@ export function swapSegments(segments: AdvancedSegment[], i: number, j: number):
 }
 
 /** Remove a segment's characters entirely. */
-export function deleteSegment(segments: AdvancedSegment[], index: number): AdvancedSegment[] {
+export function deleteSegment(segments: SegmentType[], index: number): SegmentType[] {
   if (index < 0 || index >= segments.length) return segments;
   const { start, end } = segmentRange(segments, index);
   const chars = flatten(segments);
@@ -318,10 +202,10 @@ export function deleteSegment(segments: AdvancedSegment[], index: number): Advan
 
 /** Merge a segment with its neighbor by adopting the neighbor's style (then coalesce). */
 export function mergeWithNeighbor(
-  segments: AdvancedSegment[],
+  segments: SegmentType[],
   index: number,
   direction: -1 | 1,
-): AdvancedSegment[] {
+): SegmentType[] {
   const neighbor = index + direction;
   if (neighbor < 0 || neighbor >= segments.length) return segments;
   const styleSrc = cloneStyle(segments[neighbor]);
@@ -332,33 +216,24 @@ export function mergeWithNeighbor(
 }
 
 /** Seed a one-segment advanced store from the classic `rgb` cookie/state. */
-export function seedFromClassic(rgb: Partial<typeof rgbDefaults>): AdvancedStore {
-  const merged = { ...rgbDefaults, ...rgb };
-  const colorCount = merged.colors?.length ?? 0;
+export function seedFromClassic(rgb: Partial<typeof rgbDefaults>): (typeof rgbColorDefaultsWithColorMode)[] {
+  const colorCount = rgb.colors?.length ?? 0;
   const colorMode: ColorMode = colorCount >= 2 ? 'gradient' : colorCount === 1 ? 'solid' : 'none';
-  return {
-    version: ADVANCED_VERSION,
-    segments: [
-      {
-        text: merged.text || 'Birdflop',
-        colorMode,
-        colors:
-          merged.colors && merged.colors.length
-            ? merged.colors.map((c) => ({ ...c }))
-            : defaultStyle().colors,
-        gradientType: merged.gradientType ?? 'rgb',
-        colorlength: merged.colorLength ?? 1,
-        bold: !!merged.baseFormatting?.bold,
-        italic: !!merged.baseFormatting?.italic,
-        underline: !!merged.baseFormatting?.underline,
-        strikethrough: !!merged.baseFormatting?.strikethrough,
-        obfuscate: !!merged.baseFormatting?.obfuscate,
-      },
-    ],
-    format: merged.colorFormat ?? colorFormats[1],
-    prefixsuffix: merged.prefixSuffix ?? '',
-    customFormat: !!merged.customFormat,
-    trimspaces: merged.trimSpaces ?? true,
-    lowercase: !!merged.lowercase,
-  };
+  return [
+    {
+      ...rgbColorDefaultsWithColorMode,
+      text: rgb.text || 'Birdflop',
+      colorMode,
+      colors:
+        rgb.colors && rgb.colors.length
+          ? rgb.colors.map((c) => ({ ...c }))
+          : rgbColorDefaultsWithColorMode.colors,
+      gradientType: rgb.gradientType ?? 'rgb',
+      colorLength: rgb.colorLength ?? 1,
+    },
+  ];
 }
+
+export const advancedDefaults: SegmentsStore = {
+  segments: seedFromClassic({}),
+};

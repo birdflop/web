@@ -6,22 +6,23 @@ import { deepTrack } from '~/util/misc';
 import { setCookies } from '~/util/dataUtils';
 import Output from '~/components/Rgbirdflop/Output';
 import HostingAd from '~/components/Rgbirdflop/HostingAd';
-import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
+import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
 import { donateLink } from '~/components/Elements/Nav';
 import { generateAdvancedOutput } from './output';
-import AdvancedInput from './AdvancedInput';
 import StylePanel, { FormattingPanel } from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
-import { advancedStoreContext } from '~/routes/resources/rgb/beta/index';
 import { obfuscateText } from '~/util/rgb/obfuscator';
+import Input from '../Rgbirdflop/Input';
+import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(advancedStoreContext);
+  const store = useContext(segmentsStoreContext);
+  const rgbStore = useContext(rgbStoreContext);
 
   useTask$(({ track }) => {
     deepTrack(track, store);
-    if (isBrowser) setCookies('rgbadvanced', store);
+    if (isBrowser) setCookies('rgbsegments', store);
   });
 
   // Obfuscate animation. Spans are mutated imperatively (Qwik won't rewrite a text
@@ -38,7 +39,8 @@ export default component$(() => {
       if (el.textContent !== dt) el.textContent = dt;
     };
 
-    if (!store.segments.some((s) => s.obfuscate)) {
+    const isObfuscated = rgbStore.baseFormatting.obfuscate || rgbStore.formatting.some((s) => s.obfuscate);
+    if (!isObfuscated) {
       spans().forEach(restore);
       return;
     }
@@ -105,7 +107,7 @@ export default component$(() => {
   });
 
   const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
-  const output = generateAdvancedOutput(store);
+  const output = generateAdvancedOutput(store.segments, rgbStore);
 
   return (
     <section class="relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center">
@@ -134,7 +136,7 @@ export default component$(() => {
         </div>
 
         {/* Input */}
-        <AdvancedInput />
+        <Input />
 
         {/* Grid Layout (matching regular rgb columns) */}
         <div class="grid sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-2 mt-4">
