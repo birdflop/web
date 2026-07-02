@@ -5,6 +5,47 @@ import { generateOutput } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { getSignificantPoints } from '~/util/rgb/Decode';
+import { decodeMiniMessage } from '~/util/rgb/MiniMessageDecode';
+
+function decodeLegacy(rgbtext: string) {
+  const colorCodeRegex = /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|&#[0-9A-Fa-f]{6})/g;
+  const matches = [...rgbtext.matchAll(colorCodeRegex)];
+  if (matches.length === 0) return null;
+
+  const colors: Array<{ hex: string; pos: number }> = [];
+  let plainText = '';
+
+  for (let i = 0; i < matches.length; i++) {
+    const match = matches[i];
+    const codeStr = match[0];
+    let hex: string;
+    if (codeStr.startsWith('&#')) {
+      hex = '#' + codeStr.slice(2);
+    } else {
+      const hexDigits = codeStr.replace(/(?:[&§]|\\u00a7|x)/g, '');
+      hex = '#' + hexDigits;
+    }
+
+    const startIdx = match.index + codeStr.length;
+    const endIdx = (i + 1 < matches.length) ? matches[i + 1].index : rgbtext.length;
+    const textSegment = rgbtext.substring(startIdx, endIdx);
+
+    for (let c = 0; c < textSegment.length; c++) {
+      colors.push({
+        hex: hex.toLowerCase(),
+        pos: 0,
+      });
+    }
+    plainText += textSegment;
+  }
+
+  const totalLength = colors.length;
+  for (let i = 0; i < totalLength; i++) {
+    colors[i].pos = totalLength > 1 ? (100 / (totalLength - 1)) * i : 0;
+  }
+
+  return { plainText, colors };
+}
 
 export default component$(({ hidden }: {
   hidden: boolean;
@@ -18,25 +59,21 @@ export default component$(({ hidden }: {
   const threshold = useSignal(50);
 
   const decodeText = $((rgbtext: string, threshold: number) => {
-    const pattern = /(?:(?:[&§]|\\u00a7)x((?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6})|&#([0-9A-Fa-f]{6}))((?:(?!\\u00a7)[^§&#])*)/;
-    const spans = rgbtext.match(new RegExp(pattern, 'g'));
-    if (!spans) return;
-    let color = '#ffffff';
-    const colors = spans.map((string: string, i: number) => {
-      const result = string.match(pattern);
-      if (!result) return { hex: color, pos: 0 };
-      color = result[1]
-        ? `#${result[1].replace(/(?:[&§]|\\u00a7)/g, '')}`
-        : result[2]
-          ? `#${result[2]}`
-          : result[0];
-      return { hex: color, pos: (100 / (spans.length - 1)) * i };
-    });
-    const text = spans.map((string: string) => {
-      const result = string.match(pattern);
-      if (!result) return '';
-      return result[result.length - 1];
-    }).join('');
+    const miniMessageResult = decodeMiniMessage(rgbtext);
+    let text: string;
+    let colors: Array<{ hex: string; pos: number }> = [];
+
+    if (miniMessageResult) {
+      text = miniMessageResult.plainText;
+      colors = miniMessageResult.charColors;
+    } else {
+      const legacyResult = decodeLegacy(rgbtext);
+      if (!legacyResult) return;
+      text = legacyResult.plainText;
+      colors = legacyResult.colors;
+    }
+
+    if (colors.length === 0) return;
     rgbStore.text = text ?? '';
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
