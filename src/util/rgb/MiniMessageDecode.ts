@@ -113,7 +113,8 @@ function parseMiniMessage(tokens: Array<{ type: 'tag' | 'text'; value: string }>
       stack[stack.length - 1].children.push(textNode);
     } else if (token.type === 'tag') {
       const content = token.value.trim();
-      if (content.startsWith('/')) {
+      const isClosing = content.startsWith('/') || content.startsWith('!');
+      if (isClosing) {
         const tagName = content.slice(1).toLowerCase();
         let foundIndex = -1;
         if (tagName === '') {
@@ -189,11 +190,11 @@ export function decodeMiniMessage(input: string) {
   const hasColorTags = tokens.some(t => {
     if (t.type !== 'tag') return false;
     const content = t.value.trim();
-    if (content.startsWith('/')) return true;
+    if (content.startsWith('/') || content.startsWith('!')) return true;
     const parts = content.split(':').map(p => p.trim());
     const rawTagName = parts[0].toLowerCase();
     if (isColor(rawTagName)) return true;
-    if (['color', 'colour', 'c', 'gradient', 'g'].includes(rawTagName)) return true;
+    if (['color', 'colour', 'c', 'gradient', 'g', 'bold', 'b', 'italic', 'em', 'i', 'underlined', 'underline', 'u', 'strikethrough', 'st', 'obfuscated', 'obf'].includes(rawTagName)) return true;
     return false;
   });
 
@@ -240,6 +241,13 @@ export function decodeMiniMessage(input: string) {
   }
 
   const charColors: Array<{ hex: string; pos: number }> = [];
+  const charFormattings: Array<{
+    bold?: boolean;
+    italic?: boolean;
+    underline?: boolean;
+    strikethrough?: boolean;
+    obfuscate?: boolean;
+  }> = [];
 
   for (let i = 0; i < totalLength; i++) {
     const span = spansWithIndices.find(s => i >= s.start && i < s.end);
@@ -290,7 +298,26 @@ export function decodeMiniMessage(input: string) {
       hex: resolvedHex,
       pos: totalLength > 1 ? (100 / (totalLength - 1)) * i : 0,
     });
+
+    const activeFmts: {
+      bold?: boolean;
+      italic?: boolean;
+      underline?: boolean;
+      strikethrough?: boolean;
+      obfuscate?: boolean;
+    } = {};
+
+    for (const tag of span.activeTags) {
+      const name = tag.tagName;
+      if (name === 'bold' || name === 'b') activeFmts.bold = true;
+      if (name === 'italic' || name === 'em' || name === 'i') activeFmts.italic = true;
+      if (name === 'underlined' || name === 'underline' || name === 'u') activeFmts.underline = true;
+      if (name === 'strikethrough' || name === 'st') activeFmts.strikethrough = true;
+      if (name === 'obfuscated' || name === 'obf') activeFmts.obfuscate = true;
+    }
+
+    charFormattings.push(activeFmts);
   }
 
-  return { plainText, charColors };
+  return { plainText, charColors, charFormattings };
 }

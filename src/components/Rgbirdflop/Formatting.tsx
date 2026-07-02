@@ -182,7 +182,7 @@ export default component$(() => {
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-    id="font">
+      id="font">
       <button type="button" id="smalltext"
         class={{
           'lum-grad-bg-lum-accent/100!': formatting.smalltext,
@@ -201,7 +201,7 @@ export default component$(() => {
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-    id="formatting">
+      id="formatting">
       <button type="button" id="bold"
         class={{
           'lum-grad-bg-lum-accent/100!': formatting.bold,
@@ -258,6 +258,11 @@ export default component$(() => {
           {t('rgb.formatting.obfuscate@@Obfuscate')}{getFormatLabel('obfuscate')}
         </span>
       </button>
+    </div>
+    <div class={{
+      'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
+      '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
+    }} id="clear-formatting">
       <button type="button" id="clear"
         title={t('rgb.formatting.clear@@Clear Formatting')}
         onClick$={clearFormatting}>

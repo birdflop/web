@@ -62,11 +62,11 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
           'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
-        value={rgbStore.text} spellcheck={false} id="input"
-        onInput$={(e, el) => { rgbStore.text = el.value; }}
-        onSelect$={(e, el) => syncSelection(el)}
-        onKeyUp$={(e, el) => syncSelection(el)}
-        onMouseUp$={(e, el) => syncSelection(el)}/>
+          value={rgbStore.text} spellcheck={false} id="input"
+          onInput$={(e, el) => { rgbStore.text = el.value; }}
+          onSelect$={(e, el) => syncSelection(el)}
+          onKeyUp$={(e, el) => syncSelection(el)}
+          onMouseUp$={(e, el) => syncSelection(el)} />
       }
     </div>
   );
@@ -86,7 +86,7 @@ const MCPreviewTabSection = component$(({ readOnly }: { readOnly: boolean | unde
   const previewStyle = useContext(previewStyleContext);
 
   return <div class="bg-black/50 min-h-8 py-0.5 pl-0.5 text-2xl max-h-64 wrap-break-word overflow-auto">
-    { previewStyle.value == 'tab-header' &&
+    {previewStyle.value == 'tab-header' &&
       <InputField readOnly={readOnly} inputClass="text-center">
         <Slot />
       </InputField>
@@ -96,7 +96,7 @@ const MCPreviewTabSection = component$(({ readOnly }: { readOnly: boolean | unde
       <p class="text-white! -my-0.5 flex-1">RGBirdflop</p>
       <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
     </div>
-    { previewStyle.value == 'tab-player' &&
+    {previewStyle.value == 'tab-player' &&
       <div class="bg-[#aaaaaa]/20 text-2xl overflow-hidden text-left flex gap-0.5 pr-0.5 mx-auto">
         <img width={24} height={24} class="rounded-none!" src={ImgPwaIcon8x8} alt="RGBirdflop" style="image-rendering: pixelated;" />
         <InputField readOnly={readOnly} class="flex-1 -my-1">
@@ -105,7 +105,7 @@ const MCPreviewTabSection = component$(({ readOnly }: { readOnly: boolean | unde
         <img width={24} height={24} class="rounded-none!" src={ImgMcPing5} alt="RGBirdflop" style="image-rendering: pixelated;" />
       </div>
     }
-    { previewStyle.value == 'tab-footer' &&
+    {previewStyle.value == 'tab-footer' &&
       <InputField readOnly={readOnly} inputClass="text-center">
         <Slot />
       </InputField>
@@ -171,16 +171,16 @@ const MCPreviewGUISection = component$(({ readOnly }: { readOnly: boolean | unde
               <Slot />
             </InputField>
             <div class="*:absolute *:bg-[#100010]/95">
-              <div class="left-0 top-full w-full h-0.5"/>
-              <div class="left-0 bottom-full w-full h-0.5"/>
-              <div class="left-full top-0 h-full w-0.5"/>
-              <div class="right-full top-0 h-full w-0.5"/>
+              <div class="left-0 top-full w-full h-0.5" />
+              <div class="left-0 bottom-full w-full h-0.5" />
+              <div class="left-full top-0 h-full w-0.5" />
+              <div class="right-full top-0 h-full w-0.5" />
             </div>
             <div class="*:absolute">
-              <div class="bg-[#28007f]/50 left-0.5 top-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5"/>
-              <div class="bg-[#5000ff]/50 left-0.5 bottom-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5"/>
-              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 left-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5"/>
-              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 right-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5"/>
+              <div class="bg-[#28007f]/50 left-0.5 top-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5" />
+              <div class="bg-[#5000ff]/50 left-0.5 bottom-[calc(100%-2px)] w-[calc(100%-4px)] h-0.5" />
+              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 left-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5" />
+              <div class="bg-linear-to-b from-[#5000ff]/50 to-[#28007f]/50 right-[calc(100%-2px)] top-0.5 h-[calc(100%-4px)] w-0.5" />
             </div>
           </div>
         }
@@ -253,7 +253,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   });
 
   return <>
-    <div class="sm:flex">
+    <div class="sm:flex gap-1">
       {!readOnly && !noLabel &&
         <h5 class="my-2! flex flex-1 md:text-lg xl:text-xl font-semibold gap-3 items-center">
           <Terminal />
@@ -264,7 +264,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         </h5>
       }
       {!noFormatRow &&
-        <Formatting/>
+        <Formatting />
       }
     </div>
     <label for="input" class="flex flex-col items-start mt-2 mb-4 relative">
@@ -278,7 +278,8 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         <Slot />
         <Slot name="input" />
       </DefaultInput>}
-      <div class={{ 'flex gap-1': true,
+      <div class={{
+        'flex gap-1': true,
         'absolute top-1 right-1': true,
       }}>
         <Slot name="extra-buttons" />
