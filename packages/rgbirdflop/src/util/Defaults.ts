@@ -87,7 +87,7 @@ export const rgbColorDefaults = {
   shadowColors: null as null | ColorStop[],
   colorLength: 1,
   gradientType: 'rgb' as GradientType,
-}
+};
 export const rgbColorDefaultsWithColorMode = {
   ...rgbColorDefaults,
   colorMode: 'gradient' as ColorMode,
