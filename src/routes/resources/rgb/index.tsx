@@ -5,7 +5,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import { Blend, Palette, Sparkles } from 'lucide-icons-qwik';
+import { Blend, Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 
@@ -39,20 +39,21 @@ export default component$(() => {
 
   return (
     <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
-      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
-        <Palette size={32} />
-        {t('nav.resources.hexGradient.title@@RGBirdflop')}
-      </h1>
-      <p class="mb-2 text-lum-text-secondary" q:slot="header">
-        {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-      </p>
-      <Link href="/resources/rgb/beta" q:slot="column3" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
-        <Sparkles size={18} class="min-w-4 min-h-4" />
-        {t('rgb.beta.tryAdvanced@@Try the Advanced editor (multiple gradients & per-character styles)')}
-        <span class="lum-grad-bg-blue/50 text-xs py-0.5 px-2 rounded-lum-1">
-          {t('nav.experimental@@experimental')}
-        </span>
-      </Link>
+      <div class="flex items-start gap-2" q:slot="header">
+        <div class="flex flex-col gap-1 flex-1">
+          <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
+            <Palette size={32} />
+            {t('nav.resources.hexGradient.title@@RGBirdflop')}
+          </h1>
+          <p class="mb-2 text-lum-text-secondary" q:slot="header">
+            {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
+          </p>
+        </div>
+        <Link href="/resources/rgb/beta" q:slot="column3" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
+          <TestTube2 size={18} class="min-w-4 min-h-4" />
+          {t('rgb.beta.tryAdvanced@@Try the Advanced editor with segment-based gradients')}
+        </Link>
+      </div>
       {showAllGradients.value
         ? GRADIENT_TYPES.map((gradientType) => {
           const tempStore = {

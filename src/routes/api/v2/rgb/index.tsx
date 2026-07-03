@@ -74,11 +74,6 @@ export const rgbOptions = (Object.keys(rgbDefaults) as (keyof typeof rgbDefaults
   }, {});
 
 function getOutput(body: any) {
-  // Map lowercase parameters to camelCase for generateOutput
-  if (body?.colorLength !== undefined) body.colorLength = body.colorLength;
-  if (body?.trimspaces !== undefined) body.trimSpaces = body.trimspaces;
-  if (body?.prefixsuffix !== undefined) body.prefixSuffix = body.prefixsuffix;
-
   // Map flat formatting flags to baseFormatting object
   const baseFormatting = {
     bold: body?.bold,

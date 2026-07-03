@@ -11,7 +11,7 @@ import {
   type Formatting,
 } from '@birdflop/rgbirdflop';
 import {
-  chunkText, SegmentType
+  chunkText, SegmentType,
 } from './model';
 
 function renderTemplateSegment(

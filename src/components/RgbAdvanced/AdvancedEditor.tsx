@@ -9,11 +9,12 @@ import HostingAd from '~/components/Rgbirdflop/HostingAd';
 import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
 import { donateLink } from '~/components/Elements/Nav';
 import { generateAdvancedOutput } from './output';
-import StylePanel, { FormattingPanel } from './StylePanel';
+import StylePanel from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input from '../Rgbirdflop/Input';
 import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import SegmentInspector from './SegmentInspector';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -169,9 +170,9 @@ export default component$(() => {
           <div class="mb-4 flex flex-col gap-2" id="column3">
             <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
               <Type />
-              {t('rgb.formatting.title@@Formatting')}
+              {t('rgb.segments.title@@Segments')}
             </div>
-            <FormattingPanel />
+            <SegmentInspector />
           </div>
 
         </div>

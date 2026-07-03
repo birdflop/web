@@ -12,12 +12,12 @@ type names = 'rgb' | 'rgbsegments' | 'animtab' | 'parsed' | 'animpreview' | 'set
 
 const getDefaults = (name: names) => {
   switch (name) {
-    case 'rgb':
-      return rgbDefaults;
-    case 'rgbsegments':
-      return advancedDefaults;
-    case 'animtab':
-      return animTABDefaults;
+  case 'rgb':
+    return rgbDefaults;
+  case 'rgbsegments':
+    return advancedDefaults;
+  case 'animtab':
+    return animTABDefaults;
   }
   return {};
 };

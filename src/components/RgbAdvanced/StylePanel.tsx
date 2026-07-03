@@ -1,11 +1,9 @@
 import { $, component$, useComputed$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { MousePointerClick, Palette, Type } from 'lucide-icons-qwik';
+import { MousePointerClick, Palette } from 'lucide-icons-qwik';
 import { combinedText } from './model';
 import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';
-import Formatting from '~/components/Rgbirdflop/Formatting';
-import SegmentInspector from './SegmentInspector';
 import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
@@ -58,28 +56,6 @@ export default component$(() => {
           <SegmentColorEditor />
         </div>
       </>}
-    </div>
-  );
-});
-
-export const FormattingPanel = component$(() => {
-  const t = inlineTranslate();
-  const selection = useContext(selectionContext);
-
-  const hasSel = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
-
-  return (
-    <div class="flex flex-col gap-4">
-      {hasSel.value && (
-        <div class="flex flex-col gap-2">
-          <h4 class="flex items-center gap-2 text-xs font-bold text-lum-text-secondary uppercase tracking-wider">
-            <Type size={15} /> {t('rgb.beta.formatting@@Formatting')}
-          </h4>
-          <Formatting />
-        </div>
-      )}
-
-      <SegmentInspector />
     </div>
   );
 });

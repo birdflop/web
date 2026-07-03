@@ -144,9 +144,9 @@ export default component$(({ hidden, id = 'text' }: {
             !colors.find((color, i) => {
               return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
             })}
-            onClick$={() => {
-              rgbStore[colorsKey] = disperseColors(colors);
-            }} title={t('rgb.colors.disperse.title@@Disperse')}>
+          onClick$={() => {
+            rgbStore[colorsKey] = disperseColors(colors);
+          }} title={t('rgb.colors.disperse.title@@Disperse')}>
             <MoveHorizontal size={20} />
           </button>
         }
