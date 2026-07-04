@@ -35,7 +35,7 @@ export default component$(() => {
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
 
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
 
   return (
     <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
@@ -87,11 +87,11 @@ export default component$(() => {
         )}
 
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('textshadow')
-          ? openItemsStore.items.filter(item => item !== 'textshadow')
+        openItems.value = openItems.value.includes('textshadow')
+          ? openItems.value.filter(item => item !== 'textshadow')
           : ['textshadow'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('textshadow'),
+        'lum-grad-bg-blue!': openItems.value.includes('textshadow'),
       }} q:slot="mobile-navbar">
         <Blend />
         {t('rgb.colors.shadow.title@@Text Shadow')}

@@ -94,20 +94,20 @@ function applyPrefixSuffix(output: string, prefixsuffix: string): string {
  * segment, or null when the segment is uncolored. A fresh ColorGradient is
  * created per segment so each gradient is independent.
  */
-function segmentHexProvider(seg: SegmentType): (() => string) | null {
-  if (seg.colorMode === 'none' || seg.colors.length === 0) return null;
-  if (seg.colorMode === 'solid') {
+function segmentHexProvider(segment: SegmentType): (() => string) | null {
+  if (segment.colorMode === 'none' || segment.colors.length === 0) return null;
+  if (segment.colorMode === 'solid') {
     // Uppercase to match gradient output (rgbToHex); the `lowercase` toggle then governs case uniformly.
-    const hex = seg.colors[0].hex.replace(/^#/, '').toUpperCase();
+    const hex = segment.colors[0].hex.replace(/^#/, '').toUpperCase();
     return () => hex;
   }
-  let len = seg.colorLength;
+  let len = segment.colorLength;
   if (!len || len < 1) len = 1;
-  const numChunks = Math.max(1, Math.ceil(Array.from(seg.text).length / len));
+  const numChunks = Math.max(1, Math.ceil(Array.from(segment.text).length / len));
   const gradient = new ColorGradient(
-    sortColors(seg.colors).map(getRGBColorStop),
+    sortColors(segment.colors).map(getRGBColorStop),
     numChunks,
-    seg.gradientType,
+    segment.gradientType,
   );
   return () => rgbToHex(gradient.next());
 }
@@ -119,24 +119,24 @@ function segmentHexProvider(seg: SegmentType): (() => string) | null {
 function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): string {
   let out = '';
   let charOffset = 0;
-  for (const seg of segments) {
-    if (!seg.text) continue;
-    const nextHex = segmentHexProvider(seg);
+  for (const segment of segments) {
+    if (!segment.text) continue;
+    const nextHex = segmentHexProvider(segment);
     let segOut: string;
 
     if (nextHex === null) {
       // Uncolored: formatting codes + raw text, no hex template.
       segOut = '';
       let rel = 0;
-      for (const ch of Array.from(seg.text)) {
+      for (const ch of Array.from(segment.text)) {
         const fmt = getFormattingAtOffset(charOffset + rel, options);
-        segOut += buildFormatCodes(fmt, options) + ch;
+        segOut += buildFormatCodes(fmt, options) + String(ch);
         rel += ch.length;
       }
     } else {
       segOut = '';
       let rel = 0;
-      for (const chunk of chunkText(seg.text, seg.colorLength)) {
+      for (const chunk of chunkText(segment.text, segment.colorLength)) {
         if (options.trimSpaces && chunk.trim() === '') {
           segOut += chunk;
           nextHex();
@@ -150,7 +150,7 @@ function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): s
     }
 
     out += segOut;
-    charOffset += seg.text.length;
+    charOffset += segment.text.length;
   }
   return out;
 }
@@ -183,14 +183,14 @@ function buildJsonExtra(
 function renderJson(segments: SegmentType[], options: typeof rgbDefaults): string {
   const json: { text: string; extra: JsonExtra[] } = { text: '', extra: [] };
   let charOffset = 0;
-  for (const seg of segments) {
-    if (!seg.text) continue;
-    const nextHex = segmentHexProvider(seg);
+  for (const segment of segments) {
+    if (!segment.text) continue;
+    const nextHex = segmentHexProvider(segment);
 
     if (nextHex === null) {
       // Uncolored: one extra per character, no color.
       let rel = 0;
-      for (const ch of Array.from(seg.text)) {
+      for (const ch of Array.from(segment.text)) {
         if (options.trimSpaces && ch.trim() === '') {
           json.extra.push({ text: ch });
         } else {
@@ -199,12 +199,12 @@ function renderJson(segments: SegmentType[], options: typeof rgbDefaults): strin
         }
         rel += ch.length;
       }
-      charOffset += seg.text.length;
+      charOffset += segment.text.length;
       continue;
     }
 
     let rel = 0;
-    for (const chunk of chunkText(seg.text, seg.colorLength)) {
+    for (const chunk of chunkText(segment.text, segment.colorLength)) {
       if (options.trimSpaces && chunk.trim() === '') {
         json.extra.push({ text: chunk });
         nextHex();
@@ -215,14 +215,14 @@ function renderJson(segments: SegmentType[], options: typeof rgbDefaults): strin
       json.extra.push(buildJsonExtra(chunk, '#' + nextHex(), fmt));
       rel += chunk.length;
     }
-    charOffset += seg.text.length;
+    charOffset += segment.text.length;
   }
   return JSON.stringify(json);
 }
 
-function miniMessageGradientBody(seg: SegmentType, charOffset: number, options: typeof rgbDefaults): string {
-  const colors = sortColors(seg.colors);
-  const text = seg.text;
+function miniMessageGradientBody(segment: SegmentType, charOffset: number, options: typeof rgbDefaults): string {
+  const colors = sortColors(segment.colors);
+  const text = segment.text;
 
   const even = !colors.find(
     (color, i) => color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,

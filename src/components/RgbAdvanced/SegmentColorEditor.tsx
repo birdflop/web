@@ -17,7 +17,7 @@ import {
 import { ArrowRightLeft, Ban, ChevronDown, ChevronUp, Dices, Droplet, Palette, Plus, Trash } from 'lucide-icons-qwik';
 import { applyStyleToRange, styleAtChar, type SegmentType } from './model';
 import { restoreSelection } from './dom';
-import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function gradientCSS(colors: ColorStop[], gradientType: string, samples = 20): string {
@@ -46,7 +46,7 @@ function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
   const opened = useSignal(-1);
 
@@ -54,7 +54,7 @@ export default component$(() => {
 
   const current = useComputed$<SegmentType>(() => {
     if (!selection.value) return rgbColorDefaultsWithColorMode;
-    return styleAtChar(store.segments, selection.value.start) ?? rgbColorDefaultsWithColorMode;
+    return styleAtChar(rgbSegments.value, selection.value.start) ?? rgbColorDefaultsWithColorMode;
   });
 
   useOnDocument('click', $((e) => {
@@ -71,12 +71,12 @@ export default component$(() => {
     if (!selection.value) return;
     const { start, end } = selection.value;
     if (end <= start) return;
-    const base = styleAtChar(store.segments, start) ?? rgbColorDefaultsWithColorMode;
+    const base = styleAtChar(rgbSegments.value, start) ?? rgbColorDefaultsWithColorMode;
     const colorMode = partial.colorMode ?? base.colorMode;
     const colors = (partial.colors ?? base.colors).map((c) => ({ ...c }));
     const gradientType = partial.gradientType ?? base.gradientType;
     const colorLength = partial.colorLength ?? base.colorLength;
-    store.segments = applyStyleToRange(store.segments, start, end, (s) => {
+    rgbSegments.value = applyStyleToRange(rgbSegments.value, start, end, (s) => {
       s.colorMode = colorMode;
       s.colors = colors.map((c) => ({ ...c }));
       s.gradientType = gradientType;

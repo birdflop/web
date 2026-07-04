@@ -51,7 +51,7 @@ export default component$(() => {
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
 
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
 
   const frames = useStore({
     list: [] as (string | null)[][],
@@ -111,11 +111,11 @@ export default component$(() => {
       </p>
 
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('outputformat')
-          ? openItemsStore.items.filter(item => item !== 'outputformat')
+        openItems.value = openItems.value.includes('outputformat')
+          ? openItems.value.filter(item => item !== 'outputformat')
           : ['outputformat'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('outputformat'),
+        'lum-grad-bg-blue!': openItems.value.includes('outputformat'),
       }} q:slot="mobile-navbar">
         <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
@@ -239,8 +239,8 @@ export default component$(() => {
       </Accordion>
       <div q:slot="column3" class={{
         'flex flex-col gap-2 transition-all duration-200': true,
-        'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('outputformat'),
-        'max-h-125 opacity-100 pointer-events-auto': openItemsStore.items.includes('outputformat'),
+        'max-h-0 opacity-0 pointer-events-none': !openItems.value.includes('outputformat'),
+        'max-h-125 opacity-100 pointer-events-auto': openItems.value.includes('outputformat'),
       }}>
         <label for="outputformat" class="text-lum-text-secondary">
           {t('animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.')}

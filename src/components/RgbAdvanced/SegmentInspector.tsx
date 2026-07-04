@@ -1,10 +1,10 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { sortColors } from '@birdflop/rgbirdflop';
-import { ChevronLeft, ChevronRight, Layers, Trash } from 'lucide-icons-qwik';
+import { ChevronLeft, ChevronRight, Trash } from 'lucide-icons-qwik';
 import { deleteSegment, segmentRange, swapSegments, type SegmentType } from './model';
 import { restoreSelection } from './dom';
-import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function swatchStyle(seg: SegmentType): string {
@@ -18,23 +18,17 @@ function swatchStyle(seg: SegmentType): string {
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
 
   // Only one part means nothing meaningful to manage yet — keep the UI uncluttered.
-  if (store.segments.length <= 1) return null;
+  if (rgbSegments.value.length <= 1) return null;
 
   return (
     <div class="flex flex-col gap-2 border-t border-lum-border/10 pt-4">
-      <h4 class="flex items-center gap-2 text-xs font-bold text-lum-text-secondary uppercase tracking-wider">
-        <Layers size={15} /> {t('rgb.beta.parts@@Styled parts')}
-        <span class="font-normal normal-case tracking-normal text-xs lowercase">
-          {t('rgb.beta.partsHint@@— click one to edit it')}
-        </span>
-      </h4>
       <div class="flex flex-wrap gap-2">
-        {store.segments.map((seg, i) => {
-          const range = segmentRange(store.segments, i);
+        {rgbSegments.value.map((seg, i) => {
+          const range = segmentRange(rgbSegments.value, i);
           const active = selection.value ? (selection.value.start === range.start && selection.value.end === range.end) : false;
           return (
             <div key={`part-${i}`} class={{
@@ -56,15 +50,15 @@ export default component$(() => {
               {active &&
                 <div class="flex items-center gap-0.5 pr-1 border-l border-lum-border/20 pl-1">
                   <button class="lum-btn p-1 rounded-sm" disabled={i === 0} title={t('rgb.beta.moveLeft@@Move left')}
-                    onClick$={() => { store.segments = swapSegments(store.segments, i, i - 1); }}>
+                    onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i - 1); }}>
                     <ChevronLeft size={14} />
                   </button>
-                  <button class="lum-btn p-1 rounded-sm" disabled={i >= store.segments.length - 1} title={t('rgb.beta.moveRight@@Move right')}
-                    onClick$={() => { store.segments = swapSegments(store.segments, i, i + 1); }}>
+                  <button class="lum-btn p-1 rounded-sm" disabled={i >= rgbSegments.value.length - 1} title={t('rgb.beta.moveRight@@Move right')}
+                    onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i + 1); }}>
                     <ChevronRight size={14} />
                   </button>
                   <button class="lum-btn p-1 rounded-sm hover:lum-bg-red" title={t('rgb.beta.deleteSegment@@Delete this part')}
-                    onClick$={() => { store.segments = deleteSegment(store.segments, i); }}>
+                    onClick$={() => { rgbSegments.value = deleteSegment(rgbSegments.value, i); }}>
                     <Trash size={14} />
                   </button>
                 </div>

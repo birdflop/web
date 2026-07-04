@@ -6,58 +6,58 @@ import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
   const rgbStore = useContext(rgbStoreContext);
 
   return (
     <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('colors')
-          ? openItemsStore.items.filter(item => item !== 'colors')
+        openItems.value = openItems.value.includes('colors')
+          ? openItems.value.filter(item => item !== 'colors')
           : ['colors'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('colors'),
+        'lum-grad-bg-blue!': openItems.value.includes('colors'),
       }}>
         <Palette />
         {t('rgb.colors.title@@Colors')}
       </button>
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('output')
-          ? openItemsStore.items.filter(item => item !== 'output')
+        openItems.value = openItems.value.includes('output')
+          ? openItems.value.filter(item => item !== 'output')
           : ['output'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('output'),
+        'lum-grad-bg-blue!': openItems.value.includes('output'),
       }}>
         <Clipboard />
         {t('rgb.output.title@@Output')}
       </button>
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('options')
-          ? openItemsStore.items.filter(item => item !== 'options')
+        openItems.value = openItems.value.includes('options')
+          ? openItems.value.filter(item => item !== 'options')
           : ['options'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('options'),
+        'lum-grad-bg-blue!': openItems.value.includes('options'),
       }}>
         <Settings />
         {t('rgb.options@@Options')}
       </button>
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('presets')
-          ? openItemsStore.items.filter(item => item !== 'presets')
+        openItems.value = openItems.value.includes('presets')
+          ? openItems.value.filter(item => item !== 'presets')
           : ['presets'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('presets'),
+        'lum-grad-bg-blue!': openItems.value.includes('presets'),
       }}>
         <Save />
         {t('rgb.presets.title@@Presets')}
       </button>
       {rgbStore.customFormat && (
         <button onClick$={() => {
-          openItemsStore.items = openItemsStore.items.includes('formatoptions')
-            ? openItemsStore.items.filter(item => item !== 'formatoptions')
+          openItems.value = openItems.value.includes('formatoptions')
+            ? openItems.value.filter(item => item !== 'formatoptions')
             : ['formatoptions'];
         }} class={{
-          'lum-grad-bg-blue!': openItemsStore.items.includes('formatoptions'),
+          'lum-grad-bg-blue!': openItems.value.includes('formatoptions'),
         }}>
           <Settings />
           {t('rgb.formatting.options@@Format Options')}
@@ -65,11 +65,11 @@ export default component$(() => {
       )}
       <Slot />
       <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('decode')
-          ? openItemsStore.items.filter(item => item !== 'decode')
+        openItems.value = openItems.value.includes('decode')
+          ? openItems.value.filter(item => item !== 'decode')
           : ['decode'];
       }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('decode'),
+        'lum-grad-bg-blue!': openItems.value.includes('decode'),
       }}>
         <Sparkles />
         {t('rgb.decode.title@@Decode')}

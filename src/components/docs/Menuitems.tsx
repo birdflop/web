@@ -47,7 +47,7 @@ export const MenuItems = component$(
     const { items, pathname, markdownItems, onClick$ } = props;
     const level = props.level || 0;
 
-    const openItemsStore = useContext(openItemsContext);
+    const openItems = useContext(openItemsContext);
 
     const isActiveOrParent = (item: ContentMenu): boolean => {
       if (item.href === pathname) return true;
@@ -77,8 +77,8 @@ export const MenuItems = component$(
                   </Accordion>
                   <div class={{
                     'transition-all duration-200 overflow-hidden': true,
-                    'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes(item.text || `docs-item-${i}`),
-                    'max-h-screen opacity-100 mt-1': openItemsStore.items.includes(item.text || `docs-item-${i}`),
+                    'max-h-0 opacity-0 scale-98': !openItems.value.includes(item.text || `docs-item-${i}`),
+                    'max-h-screen opacity-100 mt-1': openItems.value.includes(item.text || `docs-item-${i}`),
                     'pl-1': level > 0,
                   }}>
                     {item.items && item.items.length > 0 && (

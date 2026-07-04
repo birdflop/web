@@ -32,7 +32,7 @@ export default component$(() => {
   const textureCanvas = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
 
   const openPopup = useSignal(-1);
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
   const notifications = useContext(NotificationContext);
   const bannerTexture = useSignal<NoSerialize<THREE.CanvasTexture>>();
 
@@ -210,31 +210,31 @@ export default component$(() => {
 
         <div class="sm:hidden lum-card flex-row gap-1 *:lum-btn *:rounded-lum-1 p-1 my-2 min-w-0 w-full overflow-auto">
           <button onClick$={() => {
-            openItemsStore.items = openItemsStore.items.includes('options')
-              ? openItemsStore.items.filter(item => item !== 'options')
+            openItems.value = openItems.value.includes('options')
+              ? openItems.value.filter(item => item !== 'options')
               : ['options'];
           }} class={{
-            'lum-grad-bg-blue!': openItemsStore.items.includes('options'),
+            'lum-grad-bg-blue!': openItems.value.includes('options'),
           }}>
             <Settings />
             {t('banner.options.title@@Options')}
           </button>
           <button onClick$={() => {
-            openItemsStore.items = openItemsStore.items.includes('command')
-              ? openItemsStore.items.filter(item => item !== 'command')
+            openItems.value = openItems.value.includes('command')
+              ? openItems.value.filter(item => item !== 'command')
               : ['command'];
           }} class={{
-            'lum-grad-bg-blue!': openItemsStore.items.includes('command'),
+            'lum-grad-bg-blue!': openItems.value.includes('command'),
           }}>
             <Terminal />
             {t('banner.command.title@@Command')}
           </button>
           <button onClick$={() => {
-            openItemsStore.items = openItemsStore.items.includes('preview')
-              ? openItemsStore.items.filter(item => item !== 'preview')
+            openItems.value = openItems.value.includes('preview')
+              ? openItems.value.filter(item => item !== 'preview')
               : ['preview'];
           }} class={{
-            'lum-grad-bg-blue!': openItemsStore.items.includes('preview'),
+            'lum-grad-bg-blue!': openItems.value.includes('preview'),
           }}>
             <Eye />
             {t('banner.preview@@Preview')}
@@ -248,8 +248,8 @@ export default component$(() => {
           </div>
           <div class={{
             'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('options'),
-            'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('options'),
+            'max-h-0 opacity-0 pointer-events-none': !openItems.value.includes('options'),
+            'max-h-auto opacity-100 pointer-events-auto': openItems.value.includes('options'),
           }}>
             <h6 class="flex gap-3 items-center">
               {t('banner.options.baseColor.title@@Base Color')}
@@ -390,8 +390,8 @@ export default component$(() => {
           </div>
           <div class={{
             'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('command'),
-            'max-h-62.5 opacity-100 pointer-events-auto': openItemsStore.items.includes('command'),
+            'max-h-0 opacity-0 pointer-events-none': !openItems.value.includes('command'),
+            'max-h-62.5 opacity-100 pointer-events-auto': openItems.value.includes('command'),
           }} id="command">
             <textarea id="commandOutput" readOnly
               class={{
@@ -422,8 +422,8 @@ export default component$(() => {
           </div>
           <canvas ref={preview} id="preview" class={{
             'lum-card lum-grad-bg-lum-card-bg p-0 flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-            'max-h-0 opacity-0 pointer-events-none': !openItemsStore.items.includes('preview'),
-            'max-h-auto opacity-100 pointer-events-auto': openItemsStore.items.includes('preview'),
+            'max-h-0 opacity-0 pointer-events-none': !openItems.value.includes('preview'),
+            'max-h-auto opacity-100 pointer-events-auto': openItems.value.includes('preview'),
           }} />
           <canvas ref={textureCanvas} id="texture" class="hidden" style={{
             imageRendering: 'pixelated',

@@ -13,17 +13,17 @@ import StylePanel from './StylePanel';
 import AdvancedOptions from './AdvancedOptions';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input from '../Rgbirdflop/Input';
-import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import SegmentInspector from './SegmentInspector';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const rgbStore = useContext(rgbStoreContext);
 
   useTask$(({ track }) => {
-    deepTrack(track, store);
-    if (isBrowser) setCookies('rgbsegments', store);
+    deepTrack(track, rgbSegments);
+    if (isBrowser) setCookies('rgbsegments', rgbSegments);
   });
 
   // Obfuscate animation. Spans are mutated imperatively (Qwik won't rewrite a text
@@ -32,7 +32,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$((ctx) => {
     if (!isBrowser) return;
-    ctx.track(() => store.segments);
+    ctx.track(() => rgbSegments);
 
     const spans = () => document.querySelectorAll<HTMLElement>('label[for="advanced-input"] span[data-text]');
     const restore = (el: HTMLElement) => {
@@ -108,7 +108,7 @@ export default component$(() => {
   });
 
   const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
-  const output = generateAdvancedOutput(store.segments, rgbStore);
+  const output = generateAdvancedOutput(rgbSegments.value, rgbStore);
 
   return (
     <section class="relative flex mx-auto w-full px-6 min-h-svh pt-20 gap-8 justify-center">

@@ -1,4 +1,4 @@
-import { $, component$, createContextId, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
+import { $, component$, createContextId, Signal, Slot, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 
 import Backgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import Footer from '~/components/Elements/Footer';
@@ -73,7 +73,7 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
 
 export const birdStoreContext = createContextId<FlopbirdStore>('birdstore-context');
 export const SettingsContext = createContextId<Settings>('settings-context');
-export const openItemsContext = createContextId<{ items: string[] }>('openitems-context');
+export const openItemsContext = createContextId<Signal<string[]>>('openitems-context');
 export default component$(() => {
   const t = inlineTranslate();
   const loc = useLocation();
@@ -94,10 +94,8 @@ export default component$(() => {
   useContextProvider(NotificationContext, notifications);
 
   // Open items store
-  const openItemsStore = useStore({
-    items: [] as string[],
-  });
-  useContextProvider(openItemsContext, openItemsStore);
+  const openItems = useSignal([] as string[]);
+  useContextProvider(openItemsContext, openItems);
 
   /* Flopbird */
   const birdRef = useSignal<HTMLCanvasElement>();
@@ -134,8 +132,8 @@ export default component$(() => {
         birdStore.track = [...birdStore.track]; // Trigger reactivity
 
         birdStore.ref = nextStep.id;
-        if (nextStep.openItem && !openItemsStore.items.includes(nextStep.openItem)) {
-          openItemsStore.items = [nextStep.openItem];
+        if (nextStep.openItem && !openItems.value.includes(nextStep.openItem)) {
+          openItems.value = [nextStep.openItem];
         }
       }),
     };
@@ -196,7 +194,7 @@ export default component$(() => {
     // Load open items from localStorage
     const savedOpenItems = await loadOpenItems();
     if (savedOpenItems && savedOpenItems.length > 0) {
-      openItemsStore.items = savedOpenItems;
+      openItems.value = savedOpenItems;
     }
   });
 

@@ -2,10 +2,6 @@ import { rgbDefaults, sortColors, rgbColorDefaultsWithColorMode, ColorMode } fro
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
-export interface SegmentsStore {
-  segments: SegmentType[];
-}
-
 export interface FlatChar {
   ch: string;
   style: SegmentType;
@@ -234,6 +230,4 @@ export function seedFromClassic(rgb: Partial<typeof rgbDefaults>): (typeof rgbCo
   ];
 }
 
-export const advancedDefaults: SegmentsStore = {
-  segments: seedFromClassic({}),
-};
+export const advancedDefaults: SegmentType[] = seedFromClassic({});

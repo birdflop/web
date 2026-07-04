@@ -42,16 +42,16 @@ interface AccordionProps extends PropsOf<'button'> {
 }
 
 export default component$(({ sectionName, pcOnly, class: className, onClick$, ...props }: AccordionProps) => {
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
 
   return (
     <Dropdown class={{
       'hidden sm:flex': !!pcOnly,
       ...className,
-    }} opened={openItemsStore.items.includes(sectionName) && !pcOnly} { ...props }
+    }} opened={openItems.value.includes(sectionName) && !pcOnly} { ...props }
     onClick$={async () => {
       await onClick$?.();
-      openItemsStore.items = await toggleAccordion(sectionName, openItemsStore.items);
+      openItems.value = await toggleAccordion(sectionName, openItems.value);
     }}>
       <div class="flex items-center gap-2">
         <Slot />

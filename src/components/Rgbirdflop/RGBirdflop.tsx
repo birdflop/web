@@ -202,7 +202,7 @@ export default component$(({ errors, output }: {
   });
 
   const rgbStore = useContext(rgbStoreContext);
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
   const previewStyle = useContext(previewStyleContext);
   const showAllGradients = useContext(showAllGradientsContext);
 
@@ -406,14 +406,14 @@ export default component$(({ errors, output }: {
               <Palette />
               {t('rgb.colors.title@@Colors')}
             </div>
-            <ColorList hidden={!openItemsStore.items.includes('colors')}>
+            <ColorList hidden={!openItems.value.includes('colors')}>
               <Slot name="color-list" />
             </ColorList>
             <Accordion sectionName="textshadow" pcOnly>
               <Blend />
               {t('rgb.colors.shadow.title@@Text Shadow')}
             </Accordion>
-            <TextShadow hidden={!openItemsStore.items.includes('textshadow')} />
+            <TextShadow hidden={!openItems.value.includes('textshadow')} />
           </div>
 
           <div
@@ -425,7 +425,7 @@ export default component$(({ errors, output }: {
               {t('rgb.output.title@@Output')}
             </div>
             <Output
-              hidden={!openItemsStore.items.includes('output')}
+              hidden={!openItems.value.includes('output')}
               value={output}
             />
 
@@ -433,7 +433,7 @@ export default component$(({ errors, output }: {
               <Settings />
               {t('rgb.options@@Options')}
             </div>
-            <Options hidden={!openItemsStore.items.includes('options')}>
+            <Options hidden={!openItems.value.includes('options')}>
               <Slot name="options" />
             </Options>
           </div>
@@ -443,7 +443,7 @@ export default component$(({ errors, output }: {
               <Save />
               {t('rgb.presets.title@@Presets')}
             </div>
-            <Presets hidden={!openItemsStore.items.includes('presets')} />
+            <Presets hidden={!openItems.value.includes('presets')} />
 
             {rgbStore.customFormat && <>
               <Accordion sectionName="formatoptions" pcOnly>
@@ -451,7 +451,7 @@ export default component$(({ errors, output }: {
                 {t('rgb.formatting.options@@Format Options')}
               </Accordion>
               <FormatOptions
-                hidden={!openItemsStore.items.includes('formatoptions')}
+                hidden={!openItems.value.includes('formatoptions')}
               />
             </>}
 
@@ -462,7 +462,7 @@ export default component$(({ errors, output }: {
                 {t('nav.experimental@@experimental')}
               </span>
             </Accordion>
-            <Decode hidden={!openItemsStore.items.includes('decode')} />
+            <Decode hidden={!openItems.value.includes('decode')} />
 
             <Slot name="column3" />
           </div>

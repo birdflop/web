@@ -4,23 +4,23 @@ import { MousePointerClick, Palette } from 'lucide-icons-qwik';
 import { combinedText } from './model';
 import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';
-import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 export default component$(() => {
   const t = inlineTranslate();
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
 
   const hasSel = useComputed$(() => !!selection.value && selection.value.end > selection.value.start);
   const selText = useComputed$(() => {
     if (!selection.value) return '';
-    const txt = combinedText(store.segments).slice(selection.value.start, selection.value.end);
+    const txt = combinedText(rgbSegments.value).slice(selection.value.start, selection.value.end);
     return txt.length > 24 ? txt.slice(0, 24) + '…' : txt;
   });
 
   const selectAll = $(() => {
-    const len = combinedText(store.segments).length;
+    const len = combinedText(rgbSegments.value).length;
     if (!len) return;
     selection.value = { start: 0, end: len, segmentIndex: 0 };
     void restoreSelection(0, len);

@@ -26,7 +26,7 @@ export default component$(() => {
   const signOut = useSignOut();
   const session = useSession();
 
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
   const settingsStore = useContext(SettingsContext);
 
   return (
@@ -168,8 +168,8 @@ export default component$(() => {
       </Accordion>
       <div class={{
         'transition-all duration-200 overflow-hidden': true,
-        'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('nav-hosting'),
-        'max-h-screen opacity-100 mt-1': openItemsStore.items.includes('nav-hosting'),
+        'max-h-0 opacity-0 scale-98': !openItems.value.includes('nav-hosting'),
+        'max-h-screen opacity-100 mt-1': openItems.value.includes('nav-hosting'),
       }} q:slot="mobile">
         <a href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
@@ -191,8 +191,8 @@ export default component$(() => {
       </Accordion>
       <div class={{
         'transition-all duration-200 overflow-hidden': true,
-        'max-h-0 opacity-0 scale-98': !openItemsStore.items.includes('nav-resources'),
-        'max-h-screen opacity-100 mt-1': openItemsStore.items.includes('nav-resources'),
+        'max-h-0 opacity-0 scale-98': !openItems.value.includes('nav-resources'),
+        'max-h-screen opacity-100 mt-1': openItems.value.includes('nav-resources'),
       }} q:slot="mobile">
         <Link href="/resources/rgb" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
           <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}

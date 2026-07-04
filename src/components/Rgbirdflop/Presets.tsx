@@ -75,11 +75,11 @@ export default component$(({ hidden }: {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
-  const openItemsStore = useContext(openItemsContext);
+  const openItems = useContext(openItemsContext);
 
   useTask$(({ track }) => {
-    track(() => openItemsStore.items);
-    if (!openItemsStore.items.includes('saved-presets')) return;
+    track(() => openItems.value);
+    if (!openItems.value.includes('saved-presets')) return;
 
     // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0 || savedPresets.value.length != 0) return;
@@ -136,8 +136,8 @@ export default component$(({ hidden }: {
       {/* todo: make this look better, publish preset function */}
       <SelectList class={{
         'transition-all': true,
-        'p-0! max-h-0! opacity-0 pointer-events-none -mt-1': !openItemsStore.items.includes('saved-presets'),
-        'opacity-100 p-1': openItemsStore.items.includes('saved-presets'),
+        'p-0! max-h-0! opacity-0 pointer-events-none -mt-1': !openItems.value.includes('saved-presets'),
+        'opacity-100 p-1': openItems.value.includes('saved-presets'),
       }}>
         {privatePresets.value.length && <p q:slot="extra-buttons" class="text-lum-text-secondary border-b border-lum-border/10 my-1 px-2 pb-2">
           {t('rgb.presets.personalPresets@@Personal Presets')}

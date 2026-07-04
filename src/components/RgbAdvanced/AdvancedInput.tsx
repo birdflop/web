@@ -7,7 +7,7 @@ import { applyTextDiff, combinedText, segmentIndexAtChar } from './model';
 import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
-import { segmentsStoreContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { previewStyleContext, selectionContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
@@ -22,7 +22,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   inputClass?: string;
   readOnly?: boolean;
 }) => {
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
   const rgbStore = useContext(rgbStoreContext);
 
@@ -32,7 +32,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
     selection.value = {
       start,
       end,
-      segmentIndex: segmentIndexAtChar(store.segments, Math.max(0, Math.min(start, end > start ? start : start - 1))),
+      segmentIndex: segmentIndexAtChar(rgbSegments.value, Math.max(0, Math.min(start, end > start ? start : start - 1))),
     };
   });
 
@@ -53,18 +53,18 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
           'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
           [`${inputClass}`]: inputClass,
         }}
-        value={combinedText(store.segments)} spellcheck={false} id={ADVANCED_INPUT_ID}
+        value={combinedText(rgbSegments.value)} spellcheck={false} id={ADVANCED_INPUT_ID}
         onInput$={(e, el) => {
           if (e.isComposing) return;
           const caret = el.selectionStart ?? el.value.length;
-          store.segments = applyTextDiff(store.segments, el.value);
+          rgbSegments.value = applyTextDiff(rgbSegments.value, el.value);
           requestAnimationFrame(() => {
             try { el.setSelectionRange(caret, caret); } catch { /* noop */ }
           });
           selection.value = {
             start: caret,
             end: caret,
-            segmentIndex: segmentIndexAtChar(store.segments, Math.max(0, caret - 1)),
+            segmentIndex: segmentIndexAtChar(rgbSegments.value, Math.max(0, caret - 1)),
           };
         }}
         onSelect$={(e, el) => syncSelection(el)}
@@ -232,7 +232,7 @@ const MCPreviewInput = component$(({ readOnly, chatInput, playerName = 'RGBirdfl
 
 export default component$(({ readOnly }: { readOnly?: boolean }) => {
   const t = inlineTranslate();
-  const store = useContext(segmentsStoreContext);
+  const rgbSegments = useContext(rgbSegmentsContext);
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
 
@@ -241,16 +241,16 @@ export default component$(({ readOnly }: { readOnly?: boolean }) => {
     const input = document.getElementById(ADVANCED_INPUT_ID) as HTMLTextAreaElement | null;
     if (!input) return;
     input.focus();
-    const len = combinedText(store.segments).length;
+    const len = combinedText(rgbSegments.value).length;
     input.setSelectionRange(len, len);
   });
 
-  const preview = renderAdvancedPreview(store.segments, rgbStore);
+  const preview = renderAdvancedPreview(rgbSegments.value, rgbStore);
 
   return (
     <label for={ADVANCED_INPUT_ID} class="flex flex-col items-start relative">
       {previewStyle.value != 'default' &&
-        <MCPreviewInput readOnly={readOnly} chatInput={generateAdvancedOutput(store.segments, rgbStore)}>
+        <MCPreviewInput readOnly={readOnly} chatInput={generateAdvancedOutput(rgbSegments.value, rgbStore)}>
           {preview}
         </MCPreviewInput>
       }
