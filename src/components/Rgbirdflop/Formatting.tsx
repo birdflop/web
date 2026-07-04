@@ -243,24 +243,24 @@ export default component$(() => {
   ];
 
   return <>
-    <div class={{
-      'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
+    <SelectMenuRaw class={{
+      'lum-btn-p-2': true,
       'lum-bg-blue/20': !!selection.value,
     }}
-    id="font">
-      <SelectMenuRaw
-        id="font-select"
-        value={formatting.font || 'default'}
-        onChange$={(e, el) => {
-          const val = el.value === 'default' ? undefined : el.value;
-          void setFont(val);
-        }}
-        values={Object.entries(FONT_LABELS).map(([key, label]) => ({
-          name: label,
-          value: key,
-        }))}
-      />
-    </div>
+    id="font-select"
+    value={formatting.font || 'default'}
+    onChange$={(e, el) => {
+      const val = el.value === 'default' ? undefined : el.value;
+      void setFont(val);
+    }}
+    values={Object.entries(FONT_LABELS).map(([key, label]) => ({
+      name: <span>
+
+        {label}
+      </span>,
+      value: key,
+    }))}
+    />
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
       '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,

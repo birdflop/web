@@ -264,7 +264,7 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   });
 
   return <>
-    <div class="sm:flex gap-1">
+    <div class="sm:flex items-center gap-1">
       {!readOnly && !noLabel &&
         <h5 class="my-2! flex flex-1 md:text-lg xl:text-xl font-semibold gap-3 items-center">
           <Terminal />
