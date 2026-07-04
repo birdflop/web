@@ -1,5 +1,5 @@
-import { $, component$, createContextId, Signal, Slot, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
-import { Eye, Terminal } from 'lucide-icons-qwik';
+import { $, component$, createContextId, Signal, Slot, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { Eye, Terminal, Pencil } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
@@ -15,6 +15,7 @@ export interface Selection {
 
 export const selectionContext = createContextId<Signal<Selection | undefined>>('advanced-rgb-selection');
 export const previewStyleContext = createContextId<Signal<string>>('previewstyle-context');
+export const rawEditModeContext = createContextId<Signal<boolean>>('raw-edit-mode');
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgItem = '/banner/dyes/cyan_dye.png';
@@ -30,6 +31,8 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   const rgbStore = useContext(rgbStoreContext);
 
   const selection = useContext(selectionContext, useSignal<Selection>());
+  const rawEdit = useSignal(false);
+
   const syncSelection = $((el: HTMLTextAreaElement) => {
     const start = el.selectionStart ?? 0;
     const end = el.selectionEnd ?? start;
@@ -51,15 +54,20 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
       [`${className}`]: className,
       [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
     }}>
-      <p class={{
-        'pointer-events-none whitespace-pre-wrap': true,
-        [`${inputClass}`]: inputClass,
-      }}>
+      <p
+        class={{
+          'pointer-events-none whitespace-pre-wrap': true,
+          [`${inputClass}`]: inputClass,
+        }}
+        style={{ visibility: rawEdit.value ? 'hidden' : 'visible' }}
+      >
         <Slot />
       </p>
       {!readOnly &&
         <textarea class={{
-          'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          'absolute inset-0 whitespace-pre-wrap rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          'text-transparent bg-transparent outline-none border-none resize-none': !rawEdit.value,
+          'text-white bg-transparent outline-none border-none resize-none': rawEdit.value,
           [`${inputClass}`]: inputClass,
         }}
         value={rgbStore.text} spellcheck={false} id="input"
@@ -244,6 +252,9 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
 
+  const rawEditMode = useSignal(false);
+  useContextProvider(rawEditModeContext, rawEditMode);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const input = document.getElementById('input') as HTMLTextAreaElement;
@@ -279,9 +290,23 @@ export default component$(({ readOnly, noLabel, noFormatRow, chatInput, playerNa
         <Slot name="input" />
       </DefaultInput>}
       <div class={{
-        'flex gap-1': true,
+        'flex gap-1 items-center': true,
         'absolute top-1 right-1': true,
       }}>
+        {!readOnly && (
+          <button
+            type="button"
+            class={{
+              'p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors flex items-center justify-center': true,
+              'text-lum-primary-active!': rawEditMode.value,
+              'text-lum-text-secondary': !rawEditMode.value,
+            }}
+            onClick$={() => rawEditMode.value = !rawEditMode.value}
+            title={rawEditMode.value ? t('rgb.input.viewFormatted@@View Formatted Preview') : t('rgb.input.rawEdit@@Raw Edit Mode')}
+          >
+            {rawEditMode.value ? <Eye size={20} /> : <Pencil size={20} />}
+          </button>
+        )}
         <Slot name="extra-buttons" />
         <SelectMenuRaw align="right" id="previewstyle" value={previewStyle.value} onChange$={
           (e, el) => {

@@ -1,5 +1,5 @@
-import { $, component$, Slot, useContext, useVisibleTask$ } from '@builder.io/qwik';
-import { Eye } from 'lucide-icons-qwik';
+import { $, component$, Slot, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { Eye, Pencil } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
@@ -8,7 +8,7 @@ import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
 import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
-import { previewStyleContext, selectionContext } from '~/components/Rgbirdflop/Input';
+import { previewStyleContext, selectionContext, rawEditModeContext } from '~/components/Rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
@@ -25,6 +25,7 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
   const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
   const rgbStore = useContext(rgbStoreContext);
+  const rawEdit = useSignal(false);
 
   const syncSelection = $((el: HTMLTextAreaElement) => {
     const start = el.selectionStart ?? 0;
@@ -38,19 +39,24 @@ const InputField = component$(({ class: className, inputClass, readOnly }: {
 
   return (
     <div class={{
-      'relative focus-within:border-lum-accent break-all caret-white': true,
+      'relative focus-within:border-lum-accent break-all': true,
       [`${className}`]: className,
       [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
     }}>
-      <p class={{
-        'pointer-events-none whitespace-pre-wrap': true,
-        [`${inputClass}`]: inputClass,
-      }}>
+      <p
+        class={{
+          'pointer-events-none whitespace-pre-wrap': true,
+          [`${inputClass}`]: inputClass,
+        }}
+        style={{ visibility: rawEdit.value ? 'hidden' : 'visible' }}
+      >
         <Slot />
       </p>
       {!readOnly &&
         <textarea class={{
-          'absolute inset-0 whitespace-pre-wrap text-transparent rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          'absolute inset-0 whitespace-pre-wrap rounded-lum outline-0 selection:bg-blue/50 selection:text-lum-text/80': true,
+          'text-transparent bg-transparent outline-none border-none resize-none': !rawEdit.value,
+          'text-white bg-transparent outline-none border-none resize-none': rawEdit.value,
           [`${inputClass}`]: inputClass,
         }}
         value={combinedText(rgbSegments.value)} spellcheck={false} id={ADVANCED_INPUT_ID}
@@ -236,6 +242,9 @@ export default component$(({ readOnly }: { readOnly?: boolean }) => {
   const rgbStore = useContext(rgbStoreContext);
   const previewStyle = useContext(previewStyleContext);
 
+  const rawEditMode = useSignal(false);
+  useContextProvider(rawEditModeContext, rawEditMode);
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const input = document.getElementById(ADVANCED_INPUT_ID) as HTMLTextAreaElement | null;
@@ -259,7 +268,21 @@ export default component$(({ readOnly }: { readOnly?: boolean }) => {
           {preview}
         </DefaultInput>
       }
-      <div class="flex gap-1 absolute top-1 right-1">
+      <div class="flex gap-1 items-center absolute top-1 right-1">
+        {!readOnly && (
+          <button
+            type="button"
+            class={{
+              'p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg transition-colors flex items-center justify-center': true,
+              'text-lum-primary-active!': rawEditMode.value,
+              'text-lum-text-secondary': !rawEditMode.value,
+            }}
+            onClick$={() => rawEditMode.value = !rawEditMode.value}
+            title={rawEditMode.value ? t('rgb.input.viewFormatted@@View Formatted Preview') : t('rgb.input.rawEdit@@Raw Edit Mode')}
+          >
+            {rawEditMode.value ? <Eye size={20} /> : <Pencil size={20} />}
+          </button>
+        )}
         <SelectMenuRaw align="right" id="adv-previewstyle" value={previewStyle.value} onChange$={
           (e, el) => { previewStyle.value = el.value; }
         } values={[
