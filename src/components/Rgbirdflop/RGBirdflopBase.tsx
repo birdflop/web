@@ -19,11 +19,8 @@ import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
 import {
-  Blend,
   Clipboard,
   Grid2X2,
-  Palette,
-  Save,
   Settings,
   Sparkles,
 } from 'lucide-icons-qwik';
@@ -31,16 +28,11 @@ import HostingAd from '~/components/Rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
 import ColorMap from '~/components/Rgbirdflop/ColorMap';
-import ColorList from '~/components/Rgbirdflop/ColorList';
 import Output from '~/components/Rgbirdflop/Output';
-import Presets from '~/components/Rgbirdflop/Presets';
 import Decode from '~/components/Rgbirdflop/Decode';
-import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
-import Options from '~/components/Rgbirdflop/Options';
 import Accordion from '~/components/Elements/Accordion';
 import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 import { donateLink } from '../Elements/Nav';
 import { deepTrack } from '~/util/misc';
@@ -280,18 +272,7 @@ export default component$(({ errors, output }: {
           </MobileNavbar>
 
           <div class="flex flex-col gap-2 relative" id="column1">
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Palette />
-              {t('rgb.colors.title@@Colors')}
-            </div>
-            <ColorList hidden={!openItems.value.includes('colors')}>
-              <Slot name="color-list" />
-            </ColorList>
-            <Accordion sectionName="textshadow" pcOnly>
-              <Blend />
-              {t('rgb.colors.shadow.title@@Text Shadow')}
-            </Accordion>
-            <TextShadow hidden={!openItems.value.includes('textshadow')} />
+            <Slot name="column1" />
           </div>
 
           <div
@@ -311,27 +292,11 @@ export default component$(({ errors, output }: {
               <Settings />
               {t('rgb.options@@Options')}
             </div>
-            <Options hidden={!openItems.value.includes('options')}>
-              <Slot name="options" />
-            </Options>
+            <Slot name="options" />
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
-              <Save />
-              {t('rgb.presets.title@@Presets')}
-            </div>
-            <Presets hidden={!openItems.value.includes('presets')} />
-
-            {rgbStore.customFormat && <>
-              <Accordion sectionName="formatoptions" pcOnly>
-                <Settings />
-                {t('rgb.formatting.options@@Format Options')}
-              </Accordion>
-              <FormatOptions
-                hidden={!openItems.value.includes('formatoptions')}
-              />
-            </>}
+            <Slot name="column3" />
 
             <Accordion sectionName="decode" pcOnly>
               <Sparkles />
@@ -341,8 +306,6 @@ export default component$(({ errors, output }: {
               </span>
             </Accordion>
             <Decode hidden={!openItems.value.includes('decode')} />
-
-            <Slot name="column3" />
           </div>
         </div>
         <p class="mt-8">

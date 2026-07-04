@@ -1,6 +1,6 @@
 import { component$, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop, { renderPreview, rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -8,6 +8,7 @@ import { previewStyleContext, Selection, selectionContext } from '~/components/R
 import { Blend, Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
+import { renderPreview } from '~/components/Rgbirdflop/preview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
@@ -49,7 +50,7 @@ export default component$(() => {
             {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
           </p>
         </div>
-        <Link href="/resources/rgb/beta" q:slot="column3" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
+        <Link href="/resources/rgb/beta" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
           <TestTube2 size={18} class="min-w-4 min-h-4" />
           {t('rgb.beta.tryAdvanced@@Try the Advanced editor with segment-based gradients')}
         </Link>

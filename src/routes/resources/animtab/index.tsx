@@ -1,6 +1,6 @@
 import { component$, isBrowser, useContext, useContextProvider, useSignal, useStore, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop, { getEffectiveFormatting, getFormattingClasses, rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { AnimationOutput, animationStyles, animTABDefaults, generateAnimTABFrames, GRADIENT_TYPES, hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -11,6 +11,7 @@ import { openItemsContext } from '~/routes/layout';
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { deepTrack } from '~/util/misc';
+import { getEffectiveFormatting, getFormattingClasses } from '~/components/Rgbirdflop/preview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {

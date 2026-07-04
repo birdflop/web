@@ -1,9 +1,9 @@
 import { component$, createContextId, Signal, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
-import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import {
   SegmentType,
   normalizeSegments,
@@ -13,6 +13,10 @@ import { defaultDescription, generateHead } from '~/root';
 import { ArrowLeft, TestTube2, Type } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
+import RGBirdflopBase from '~/components/Rgbirdflop/RGBirdflopBase';
+import { renderAdvancedPreview } from '~/components/RgbAdvanced/preview';
+import SegmentColorEditor from '~/components/RgbAdvanced/SegmentColorEditor';
+import AdvancedOptions from '~/components/RgbAdvanced/AdvancedOptions';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams);
@@ -47,7 +51,7 @@ export default component$(() => {
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
 
-  return <RGBirdflop output={generateAdvancedOutput(rgbSegments.value, rgbStore)} errors={[...rgbErrors, ...segmentsErrors]}>;
+  return <RGBirdflopBase output={generateAdvancedOutput(rgbSegments.value, rgbStore)} errors={[...rgbErrors, ...segmentsErrors]}>;
     <div class="flex items-start gap-2" q:slot="header">
       <div class="flex flex-col gap-1 flex-1">
         <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
@@ -61,20 +65,60 @@ export default component$(() => {
           {t('rgb.beta.howItWorks@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.')}
         </p>
       </div>
-      <Link href="/resources/rgb" q:slot="column3" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
+      <Link href="/resources/rgb" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
         <ArrowLeft size={18} />
         {t('rgb.beta.backToClassic@@Classic editor')}
       </Link>
     </div>
+    {showAllGradients.value
+      ? GRADIENT_TYPES.map((gradientType) => {
+        const tempStore = {
+          ...rgbStore,
+          gradientType: gradientType,
+        };
+        const isActive = gradientType === rgbStore.gradientType;
+        return (
+          <span key={gradientType} class="flex items-center gap-2" q:slot="input">
+            <span
+              class={{
+                'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
+                'text-lum-text': isActive,
+                'text-gray-400': !isActive,
+              }}
+            >
+              {gradientType}
+            </span>
+            <span class="flex-1">
+              {renderAdvancedPreview(
+                rgbSegments.value,
+                tempStore,
+              )}
+            </span>
+          </span>
+        );
+      })
+      : renderAdvancedPreview(
+        rgbSegments.value,
+        rgbStore,
+      )}
 
-    <div class="mb-4 flex flex-col gap-2" id="column3">
+    <AdvancedOptions q:slot="options" />
+
+    <div class="mb-4 flex flex-col gap-2" q:slot="column1">
+      <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
+        <Type />
+        {t('rgb.segmentColorEditor.title@@Segment Color Editor')}
+      </div>
+      <SegmentColorEditor />
+    </div>
+    <div class="mb-4 flex flex-col gap-2" q:slot="column3">
       <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">
         <Type />
         {t('rgb.segments.title@@Segments')}
       </div>
       <SegmentInspector />
     </div>
-  </RGBirdflop>;
+  </RGBirdflopBase>;
 });
 
 export const head = generateHead({
