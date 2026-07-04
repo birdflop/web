@@ -1,4 +1,4 @@
-import { ColorGradient, getRGBColorStop, hexToRGB, sortColors, getFormattingAtOffset, rgbDefaults, toSmallText } from '@birdflop/rgbirdflop';
+import { ColorGradient, getRGBColorStop, hexToRGB, sortColors, getFormattingAtOffset, rgbDefaults, applyFont } from '@birdflop/rgbirdflop';
 import type { SegmentType } from './model';
 import { chunkText, combinedText } from './model';
 import { getFormattingClasses } from '../Rgbirdflop/RGBirdflop';
@@ -42,7 +42,10 @@ export function renderAdvancedPreview(segments: SegmentType[], options: typeof r
       const fmt = getFormattingAtOffset(charOffset + rel, options);
       rel += chunk.length;
 
-      const chunkTextVal = fmt.smalltext ? toSmallText(chunk) : chunk;
+      let chunkTextVal = chunk;
+      if (fmt.font) {
+        chunkTextVal = applyFont(chunkTextVal, fmt.font);
+      }
 
       return (
         <span

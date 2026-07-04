@@ -1,6 +1,6 @@
 import { ColorAnimatedGradient } from './ColorUtils';
 import { rgbToHex } from './Colors';
-import { applyMiniMessageFormatting, buildFormatCodes, getFormattingAtOffset, getRGBColorStop, sortColors, toSmallText } from './RGBUtils';
+import { applyMiniMessageFormatting, buildFormatCodes, getFormattingAtOffset, getRGBColorStop, sortColors, applyFont } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
 export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
@@ -12,12 +12,12 @@ export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabSto
   let loopAmount;
   const length = text.length * animtabStore.length / rgbOptions.colorLength;
   switch (Number(animtabStore.type)) {
-    case 3:
-      loopAmount = length;
-      break;
-    default:
-      loopAmount = length * 2 - 2;
-      break;
+  case 3:
+    loopAmount = length;
+    break;
+  default:
+    loopAmount = length * 2 - 2;
+    break;
   }
 
   const colorFrames = [];
@@ -116,19 +116,9 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         hexOutput = hexOutput.replace(`$${i}`, hex.charAt(i - 1));
       }
 
-      let formatCodes = '';
-      if (rgbOptions.colorFormat.color.includes('$f')) {
-        // find the global formatting
-        if (rgbOptions.baseFormatting.bold) formatCodes += rgbOptions.colorFormat.char + 'l';
-        if (rgbOptions.baseFormatting.italic) formatCodes += rgbOptions.colorFormat.char + 'o';
-        if (rgbOptions.baseFormatting.underline) formatCodes += rgbOptions.colorFormat.char + 'n';
-        if (rgbOptions.baseFormatting.strikethrough) formatCodes += rgbOptions.colorFormat.char + 'm';
-        if (rgbOptions.baseFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
-      }
-
       let segText = text;
-      if (rgbOptions.baseFormatting.smalltext) {
-        segText = toSmallText(segText);
+      if (rgbOptions.baseFormatting.font) {
+        segText = applyFont(segText, rgbOptions.baseFormatting.font);
       }
       hexOutput = hexOutput.replace('$c', segText);
 
@@ -145,7 +135,11 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
 
         if (hex === null) {
           const formatting = getFormattingAtOffset(charIndex, rgbOptions);
-          output += formatting.smalltext ? toSmallText(segment) : segment;
+          let segText = segment;
+          if (formatting.font) {
+            segText = applyFont(segText, formatting.font);
+          }
+          output += segText;
           charIndex += segment.length;
           continue;
         }
@@ -163,8 +157,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
 
         hexOutput = hexOutput.replace('$f', formatCodes);
         let segText = segment;
-        if (formatting.smalltext) {
-          segText = toSmallText(segText);
+        if (formatting.font) {
+          segText = applyFont(segText, formatting.font);
         }
         hexOutput = hexOutput.replace('$c', segText);
         output += hexOutput;

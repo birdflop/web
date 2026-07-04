@@ -13,7 +13,7 @@ export interface Formatting {
   underline?: boolean,
   strikethrough?: boolean,
   obfuscate?: boolean,
-  smalltext?: boolean,
+  font?: string,
 }
 
 export interface FormatSegment extends Formatting {

@@ -12,7 +12,7 @@ import {
 
 import {
   ALL_FORMATTING_KEYS,
-  toSmallText,
+  applyFont,
   rgbDefaults,
   ColorGradient,
   disperseColors,
@@ -53,7 +53,7 @@ import { donateLink } from '../Elements/Nav';
 import { deepTrack } from '~/util/misc';
 
 function getFormattingSignature(formatting: Formatting) {
-  return ALL_FORMATTING_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('');
+  return ALL_FORMATTING_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('') + ':' + (formatting.font || '');
 }
 
 export function getFormattingClasses(formatting: Formatting) {
@@ -75,8 +75,11 @@ export function getEffectiveFormatting(rgbStore: typeof rgbDefaults, index: numb
     if (segment.start <= index && index < segment.end) {
       for (const key of ALL_FORMATTING_KEYS) {
         if (segment[key] !== undefined) {
-          formatting[key] = segment[key];
+          (formatting as any)[key] = segment[key];
         }
+      }
+      if (segment.font !== undefined) {
+        formatting.font = segment.font;
       }
     }
   }
@@ -149,7 +152,10 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     const rgbShadow = shadowColors[segment.bucketIndex];
     const rgbShadowCSS = `rgba(${rgbShadow?.slice(0, 3).join(',')}, ${rgbShadow && rgbShadow[3] !== undefined ? rgbShadow[3] / 255 : 1})`;
 
-    const segmentText = segment.formatting.smalltext ? toSmallText(segment.text) : segment.text;
+    let segmentText = segment.text;
+    if (segment.formatting.font) {
+      segmentText = applyFont(segmentText, segment.formatting.font);
+    }
 
     return (
       <span

@@ -6,7 +6,7 @@ import {
   buildFormatCodes,
   getFormattingAtOffset,
   ALL_FORMATTING_KEYS,
-  toSmallText,
+  applyFont,
   rgbDefaults,
   type ColorFormat,
   type Formatting,
@@ -27,8 +27,8 @@ function renderTemplateSegment(
   if (options.lowercase) out = out.toLowerCase();
 
   let segText = text;
-  if (fmt.smalltext) {
-    segText = toSmallText(segText);
+  if (fmt.font) {
+    segText = applyFont(segText, fmt.font);
   }
   out = out.replace('$c', segText);
 
@@ -62,8 +62,8 @@ function applySelectiveFormatting(text: string, offset: number, options: typeof 
       return;
     }
     let formatted = buffer;
-    if (currentFmt.smalltext) {
-      formatted = toSmallText(formatted);
+    if (currentFmt.font) {
+      formatted = applyFont(formatted, currentFmt.font);
     }
     if (options.colorFormat.color === 'MiniMessage') {
       if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
@@ -80,7 +80,7 @@ function applySelectiveFormatting(text: string, offset: number, options: typeof 
   for (const ch of chars) {
     const fmt = getFormattingAtOffset(charOffset, options);
 
-    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]);
+    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) || currentFmt.font !== fmt.font;
 
     if (fmtChanged) {
       flush();
@@ -139,7 +139,10 @@ function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): s
       let rel = 0;
       for (const ch of Array.from(segment.text)) {
         const fmt = getFormattingAtOffset(charOffset + rel, options);
-        const translatedCh = fmt.smalltext ? toSmallText(String(ch)) : String(ch);
+        let translatedCh = String(ch);
+        if (fmt.font) {
+          translatedCh = applyFont(translatedCh, fmt.font);
+        }
         segOut += buildFormatCodes(fmt, options) + translatedCh;
         rel += ch.length;
       }
@@ -180,7 +183,10 @@ function buildJsonExtra(
   colorHexWithHash: string | undefined,
   style: Formatting,
 ): JsonExtra {
-  const translatedText = style.smalltext ? toSmallText(text) : text;
+  let translatedText = text;
+  if (style.font) {
+    translatedText = applyFont(translatedText, style.font);
+  }
   const e: JsonExtra = { text: translatedText };
   if (colorHexWithHash) e.color = colorHexWithHash;
   if (style.bold) e.bold = true;

@@ -2,6 +2,7 @@ import { ColorStop, rgbDefaults, Formatting } from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
+import { FONT_MAPPINGS } from './Fonts';
 
 function segmentText(text: string, colorLength?: number): string[] {
   let len = colorLength ?? 1;
@@ -13,34 +14,15 @@ function segmentText(text: string, colorLength?: number): string[] {
 }
 
 export type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
-export type FontKey = 'smalltext';
 export const FORMAT_KEYS: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-export const FONT_KEYS: FontKey[] = ['smalltext'];
-export const ALL_FORMATTING_KEYS: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate', 'smalltext'];
+export type FormattingBooleanKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
+export const ALL_FORMATTING_KEYS: FormattingBooleanKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
 
-export function toSmallText(text: string): string {
-  const map: Record<string, string> = {
-    a: 'ᴀ', b: 'ʙ', c: 'ᴄ', d: 'ᴅ', e: 'ᴇ', f: 'ꜰ', g: 'ɢ', h: 'ʜ', i: 'ɪ', j: 'ᴊ', k: 'ᴋ', l: 'ʟ', m: 'ᴍ',
-    n: 'ɴ', o: 'ᴏ', p: 'ᴘ', q: 'ǫ', r: 'ʀ', s: 'ѕ', t: 'ᴛ', u: 'ᴜ', v: 'ᴠ', w: 'ᴡ', x: 'x', y: 'ʏ', z: 'ᴢ',
-    A: 'ᴀ', B: 'ʙ', C: 'ᴄ', D: 'ᴅ', E: 'ᴇ', F: 'ꜰ', G: 'ɢ', H: 'ʜ', I: 'ɪ', J: 'ᴊ', K: 'ᴋ', L: 'ʟ', M: 'ᴍ',
-    N: 'ɴ', O: 'ᴏ', P: 'ᴘ', Q: 'ǫ', R: 'ʀ', S: 'ѕ', T: 'ᴛ', U: 'ᴜ', V: 'ᴠ', W: 'ᴡ', X: 'x', Y: 'ʏ', Z: 'ᴢ',
-    
-    // Turkish characters mapping
-    ğ: 'ğ', Ğ: 'ğ',
-    ş: 'ş', Ş: 'ş',
-    ç: 'ç', Ç: 'ç',
-    ü: 'ü', Ü: 'ü',
-    ö: 'ö', Ö: 'ö',
-    ı: 'ı', İ: 'i',
-    
-    // Polish characters mapping
-    ć: 'ᴄ́', Ć: 'ᴄ́',
-    ł: 'ᴌ', Ł: 'ᴌ',
-    ś: 'ś', Ś: 'ś',
-    ó: 'ᴏ́', Ó: 'ᴏ́',
-    ż: 'ᴢ̇', Ż: 'ᴢ̇',
-    ź: 'ᴢ́', Ź: 'ᴢ́',
-  };
+export function applyFont(text: string, fontName: string | undefined): string {
+  if (!fontName) return text;
+  const map = FONT_MAPPINGS[fontName];
+  if (!map) return text;
+
   return Array.from(text)
     .map((char) => map[char] ?? char)
     .join('');
@@ -62,7 +44,9 @@ export function applyMiniMessageFormatting(text: string, formatting: Formatting,
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
   let output = text;
-  if (formatting.smalltext) output = toSmallText(output);
+  if (formatting.font) {
+    output = applyFont(output, formatting.font);
+  }
   if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate) output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
   if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough) output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
   if (formatting.underline && rgbOptions.colorFormat.underline) output = rgbOptions.colorFormat.underline.replace('$t', output);
@@ -81,10 +65,10 @@ function renderTemplateSegment(
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
-  
+
   let segText = text;
-  if (formatting.smalltext) {
-    segText = toSmallText(segText);
+  if (formatting.font) {
+    segText = applyFont(segText, formatting.font);
   }
   out = out.replace('$c', segText);
 
@@ -190,8 +174,8 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
       return;
     }
     let formatted = buffer;
-    if (currentFmt.smalltext) {
-      formatted = toSmallText(formatted);
+    if (currentFmt.font) {
+      formatted = applyFont(formatted, currentFmt.font);
     }
     if (rgbOptions.colorFormat.color === 'MiniMessage') {
       if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
@@ -209,7 +193,7 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
     const covering = rgbOptions.formatting?.find((s) => s.start <= charOffset && s.end > charOffset);
     const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
 
-    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]);
+    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) || currentFmt.font !== fmt.font;
 
     if (fmtChanged) {
       flush();
@@ -533,8 +517,12 @@ function buildJsonFormatting(
   rgbOptions: typeof rgbDefaults,
   rgbShadow?: number[],
 ): JsonExtra {
+  let textVal = segment;
+  if (formatting.font) {
+    textVal = applyFont(textVal, formatting.font);
+  }
   const charFormatting: JsonExtra = {
-    text: formatting.smalltext ? toSmallText(segment) : segment,
+    text: textVal,
     color: colorHexWithHash,
   };
   if (formatting.bold) charFormatting.bold = true;

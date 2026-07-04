@@ -1,9 +1,10 @@
 import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import { Bold, CaseUpper, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
+import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from './RGBirdflop';
 import { Selection, selectionContext } from './Input';
-import { FormatSegment, Formatting, ALL_FORMATTING_KEYS, FormatKey, FontKey } from '@birdflop/rgbirdflop';
+import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { FormatSegment, Formatting, ALL_FORMATTING_KEYS, FONT_LABELS, FormatKey, FormattingBooleanKey } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -52,10 +53,18 @@ export default component$(() => {
 
     for (const k of ALL_FORMATTING_KEYS) {
       if (intervals.length === 0) {
-        result[k] = defaultFmt[k];
+        (result as any)[k] = defaultFmt[k];
       } else {
-        result[k] = intervals.every((iv) => iv[k]);
+        (result as any)[k] = intervals.every((iv) => iv[k]);
       }
+    }
+
+    if (intervals.length === 0) {
+      result.font = defaultFmt.font;
+    } else {
+      const firstFont = intervals[0].font;
+      const allSame = intervals.every((iv) => iv.font === firstFont);
+      result.font = allSame ? firstFont : undefined;
     }
 
     return result;
@@ -63,10 +72,10 @@ export default component$(() => {
 
   const formatting = computeSelectionFormatting();
 
-  const toggleFlag = $((flag: keyof Formatting) => {
+  const toggleFlag = $((flag: FormattingBooleanKey) => {
     if (!selection.value) {
       // No selection -> toggle global default formatting
-      rgbStore.baseFormatting[flag] = !rgbStore.baseFormatting[flag];
+      (rgbStore.baseFormatting as any)[flag] = !(rgbStore.baseFormatting as any)[flag];
       return;
     }
 
@@ -93,12 +102,12 @@ export default component$(() => {
 
       // if this interval is inside selection, toggle the flag
       if (a < end && b > start) {
-        fmt[flag] = !fmt[flag];
+        (fmt as any)[flag] = !(fmt as any)[flag];
       }
 
       // if resulting formatting equals default, skip (no segment)
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) && fmt.font === defaultNorm.font;
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -108,7 +117,55 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) && last.font === seg.font) {
+        last.end = seg.end;
+      } else {
+        merged.push({ ...seg });
+      }
+    }
+
+    rgbStore.formatting = merged;
+  });
+
+  const setFont = $((fontVal: string | undefined) => {
+    if (!selection.value) {
+      rgbStore.baseFormatting.font = fontVal;
+      return;
+    }
+
+    const { start, end } = selection.value;
+
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const newSegments = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b) continue;
+
+      const covering = rgbStore.formatting.find((s) => s.start <= a && s.end >= b);
+      const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
+
+      if (a < end && b > start) {
+        fmt.font = fontVal;
+      }
+
+      const defaultNorm = rgbStore.baseFormatting;
+      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) && fmt.font === defaultNorm.font;
+      if (!isDefault) {
+        newSegments.push({ ...fmt, start: a, end: b });
+      }
+    }
+
+    const merged = [];
+    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
+      const last = merged[merged.length - 1];
+      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) && last.font === seg.font) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });
@@ -126,7 +183,7 @@ export default component$(() => {
         underline: false,
         strikethrough: false,
         obfuscate: false,
-        smalltext: false,
+        font: undefined,
       };
       rgbStore.formatting = [];
       return;
@@ -152,12 +209,13 @@ export default component$(() => {
 
       if (a < end && b > start) {
         for (const k of ALL_FORMATTING_KEYS) {
-          fmt[k] = false;
+          (fmt as any)[k] = false;
         }
+        fmt.font = undefined;
       }
 
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) && fmt.font === defaultNorm.font;
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -166,7 +224,7 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) && last.font === seg.font) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });
@@ -184,30 +242,24 @@ export default component$(() => {
     { key: 'obfuscate', label: t('rgb.formatting.obfuscate@@Obfuscate'), icon: Wand2 },
   ];
 
-  const fontButtons: { key: FontKey; label: string; icon: typeof CaseUpper }[] = [
-    { key: 'smalltext', label: t('rgb.formatting.smalltext@@Small Text'), icon: CaseUpper },
-  ];
-
   return <>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
-      '*:lum-btn *:lum-bg-transparent *:p-2 *:group *:rounded-lum-1': true,
       'lum-bg-blue/20': !!selection.value,
     }}
     id="font">
-      {fontButtons.map(({ key, label, icon: Icon }) => (
-        <button key={key} type="button" aria-pressed={formatting[key]} title={label}
-          class={{
-            'lum-grad-bg-lum-accent/100!': formatting[key],
-          }}
-          onClick$={() => toggleFlag(key)}
-        >
-          <Icon size={16} />
-          <span class="absolute left-1/2 -translate-x-1/2 top-[-105%] transition-all duration-200 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 lum-card/100 lum-btn-p-1 whitespace-nowrap z-50">
-            {label}
-          </span>
-        </button>
-      ))}
+      <SelectMenuRaw
+        id="font-select"
+        value={formatting.font || 'default'}
+        onChange$={(e, el) => {
+          const val = el.value === 'default' ? undefined : el.value;
+          void setFont(val);
+        }}
+        values={Object.entries(FONT_LABELS).map(([key, label]) => ({
+          name: label,
+          value: key,
+        }))}
+      />
     </div>
     <div class={{
       'lum-card p-1 flex-row gap-1 items-center justify-evenly transition-colors duration-200': true,
