@@ -3,7 +3,7 @@ import { Bold, CaseUpper, Eraser, Italic, Strikethrough, Underline, Wand2 } from
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from './RGBirdflop';
 import { Selection, selectionContext } from './Input';
-import { FormatSegment, Formatting, FORMAT_KEYS, FormatKey, FontKey } from '@birdflop/rgbirdflop';
+import { FormatSegment, Formatting, ALL_FORMATTING_KEYS, FormatKey, FontKey } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -50,7 +50,7 @@ export default component$(() => {
     const result: Formatting = {};
     const defaultFmt = rgbStore.baseFormatting;
 
-    for (const k of FORMAT_KEYS) {
+    for (const k of ALL_FORMATTING_KEYS) {
       if (intervals.length === 0) {
         result[k] = defaultFmt[k];
       } else {
@@ -98,7 +98,7 @@ export default component$(() => {
 
       // if resulting formatting equals default, skip (no segment)
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -108,7 +108,7 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && FORMAT_KEYS.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k])) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });
@@ -126,6 +126,7 @@ export default component$(() => {
         underline: false,
         strikethrough: false,
         obfuscate: false,
+        smalltext: false,
       };
       rgbStore.formatting = [];
       return;
@@ -150,13 +151,13 @@ export default component$(() => {
       const fmt = covering ? { ...rgbStore.baseFormatting, ...covering } : { ...rgbStore.baseFormatting };
 
       if (a < end && b > start) {
-        for (const k of FORMAT_KEYS) {
+        for (const k of ALL_FORMATTING_KEYS) {
           fmt[k] = false;
         }
       }
 
       const defaultNorm = rgbStore.baseFormatting;
-      const isDefault = FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]);
+      const isDefault = ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]);
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
       }
@@ -165,7 +166,7 @@ export default component$(() => {
     const merged = [];
     for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
       const last = merged[merged.length - 1];
-      if (last && last.end === seg.start && FORMAT_KEYS.every((k) => last[k] === seg[k])) {
+      if (last && last.end === seg.start && ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k])) {
         last.end = seg.end;
       } else {
         merged.push({ ...seg });

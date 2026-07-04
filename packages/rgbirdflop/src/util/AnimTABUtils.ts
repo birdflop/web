@@ -1,6 +1,6 @@
 import { ColorAnimatedGradient } from './ColorUtils';
 import { rgbToHex } from './Colors';
-import { applyMiniMessageFormatting, buildFormatCodes, getFormattingAtOffset, getRGBColorStop, sortColors } from './RGBUtils';
+import { applyMiniMessageFormatting, buildFormatCodes, getFormattingAtOffset, getRGBColorStop, sortColors, toSmallText } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
 export function generateAnimTABFrames(rgbOptions: typeof rgbDefaults, animtabStore: typeof animTABDefaults) {
@@ -126,8 +126,11 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         if (rgbOptions.baseFormatting.obfuscate) formatCodes += rgbOptions.colorFormat.char + 'k';
       }
 
-      hexOutput = hexOutput.replace('$f', formatCodes);
-      hexOutput = hexOutput.replace('$c', text);
+      let segText = text;
+      if (rgbOptions.baseFormatting.smalltext) {
+        segText = toSmallText(segText);
+      }
+      hexOutput = hexOutput.replace('$c', segText);
 
       if (rgbOptions.prefixSuffix) {
         hexOutput = rgbOptions.prefixSuffix.replace(/\$t/g, hexOutput);
@@ -141,7 +144,8 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         const hex = frame.colors[i];
 
         if (hex === null) {
-          output += segment;
+          const formatting = getFormattingAtOffset(charIndex, rgbOptions);
+          output += formatting.smalltext ? toSmallText(segment) : segment;
           charIndex += segment.length;
           continue;
         }
@@ -152,13 +156,17 @@ function formatFrames(frames: { colorFrames?: string[][]; textFrames: any; }, rg
         }
 
         let formatCodes = '';
+        const formatting = getFormattingAtOffset(charIndex, rgbOptions);
         if (rgbOptions.colorFormat.color.includes('$f')) {
-          const formatting = getFormattingAtOffset(charIndex, rgbOptions);
           formatCodes = buildFormatCodes(formatting, rgbOptions);
         }
 
         hexOutput = hexOutput.replace('$f', formatCodes);
-        hexOutput = hexOutput.replace('$c', segment);
+        let segText = segment;
+        if (formatting.smalltext) {
+          segText = toSmallText(segText);
+        }
+        hexOutput = hexOutput.replace('$c', segText);
         output += hexOutput;
         charIndex += segment.length;
       }

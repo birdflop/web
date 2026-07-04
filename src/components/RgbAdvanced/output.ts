@@ -5,7 +5,8 @@ import {
   sortColors,
   buildFormatCodes,
   getFormattingAtOffset,
-  FORMAT_KEYS,
+  ALL_FORMATTING_KEYS,
+  toSmallText,
   rgbDefaults,
   type ColorFormat,
   type Formatting,
@@ -24,7 +25,12 @@ function renderTemplateSegment(
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(fmt, options));
   if (options.lowercase) out = out.toLowerCase();
-  out = out.replace('$c', text);
+
+  let segText = text;
+  if (fmt.smalltext) {
+    segText = toSmallText(segText);
+  }
+  out = out.replace('$c', segText);
 
   // Apply wrappers to this segment if formatting has it
   out = applyFormatWrappers(out, options.colorFormat, fmt);
@@ -56,6 +62,9 @@ function applySelectiveFormatting(text: string, offset: number, options: typeof 
       return;
     }
     let formatted = buffer;
+    if (currentFmt.smalltext) {
+      formatted = toSmallText(formatted);
+    }
     if (options.colorFormat.color === 'MiniMessage') {
       if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
       if (currentFmt.italic) formatted = `<i>${formatted}</i>`;
@@ -71,7 +80,7 @@ function applySelectiveFormatting(text: string, offset: number, options: typeof 
   for (const ch of chars) {
     const fmt = getFormattingAtOffset(charOffset, options);
 
-    const fmtChanged = !currentFmt || FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]);
+    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]);
 
     if (fmtChanged) {
       flush();
@@ -130,7 +139,8 @@ function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): s
       let rel = 0;
       for (const ch of Array.from(segment.text)) {
         const fmt = getFormattingAtOffset(charOffset + rel, options);
-        segOut += buildFormatCodes(fmt, options) + String(ch);
+        const translatedCh = fmt.smalltext ? toSmallText(String(ch)) : String(ch);
+        segOut += buildFormatCodes(fmt, options) + translatedCh;
         rel += ch.length;
       }
     } else {
@@ -170,7 +180,8 @@ function buildJsonExtra(
   colorHexWithHash: string | undefined,
   style: Formatting,
 ): JsonExtra {
-  const e: JsonExtra = { text };
+  const translatedText = style.smalltext ? toSmallText(text) : text;
+  const e: JsonExtra = { text: translatedText };
   if (colorHexWithHash) e.color = colorHexWithHash;
   if (style.bold) e.bold = true;
   if (style.italic) e.italic = true;

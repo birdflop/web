@@ -16,6 +16,35 @@ export type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obf
 export type FontKey = 'smalltext';
 export const FORMAT_KEYS: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
 export const FONT_KEYS: FontKey[] = ['smalltext'];
+export const ALL_FORMATTING_KEYS: (keyof Formatting)[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate', 'smalltext'];
+
+export function toSmallText(text: string): string {
+  const map: Record<string, string> = {
+    a: 'ᴀ', b: 'ʙ', c: 'ᴄ', d: 'ᴅ', e: 'ᴇ', f: 'ꜰ', g: 'ɢ', h: 'ʜ', i: 'ɪ', j: 'ᴊ', k: 'ᴋ', l: 'ʟ', m: 'ᴍ',
+    n: 'ɴ', o: 'ᴏ', p: 'ᴘ', q: 'ǫ', r: 'ʀ', s: 'ѕ', t: 'ᴛ', u: 'ᴜ', v: 'ᴠ', w: 'ᴡ', x: 'x', y: 'ʏ', z: 'ᴢ',
+    A: 'ᴀ', B: 'ʙ', C: 'ᴄ', D: 'ᴅ', E: 'ᴇ', F: 'ꜰ', G: 'ɢ', H: 'ʜ', I: 'ɪ', J: 'ᴊ', K: 'ᴋ', L: 'ʟ', M: 'ᴍ',
+    N: 'ɴ', O: 'ᴏ', P: 'ᴘ', Q: 'ǫ', R: 'ʀ', S: 'ѕ', T: 'ᴛ', U: 'ᴜ', V: 'ᴠ', W: 'ᴡ', X: 'x', Y: 'ʏ', Z: 'ᴢ',
+    
+    // Turkish characters mapping
+    ğ: 'ğ', Ğ: 'ğ',
+    ş: 'ş', Ş: 'ş',
+    ç: 'ç', Ç: 'ç',
+    ü: 'ü', Ü: 'ü',
+    ö: 'ö', Ö: 'ö',
+    ı: 'ı', İ: 'i',
+    
+    // Polish characters mapping
+    ć: 'ᴄ́', Ć: 'ᴄ́',
+    ł: 'ᴌ', Ł: 'ᴌ',
+    ś: 'ś', Ś: 'ś',
+    ó: 'ᴏ́', Ó: 'ᴏ́',
+    ż: 'ᴢ̇', Ż: 'ᴢ̇',
+    ź: 'ᴢ́', Ź: 'ᴢ́',
+  };
+  return Array.from(text)
+    .map((char) => map[char] ?? char)
+    .join('');
+}
 
 export function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
   let codes = '';
@@ -33,6 +62,7 @@ export function applyMiniMessageFormatting(text: string, formatting: Formatting,
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
   let output = text;
+  if (formatting.smalltext) output = toSmallText(output);
   if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate) output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
   if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough) output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
   if (formatting.underline && rgbOptions.colorFormat.underline) output = rgbOptions.colorFormat.underline.replace('$t', output);
@@ -51,7 +81,12 @@ function renderTemplateSegment(
   for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
-  out = out.replace('$c', text);
+  
+  let segText = text;
+  if (formatting.smalltext) {
+    segText = toSmallText(segText);
+  }
+  out = out.replace('$c', segText);
 
   // Apply wrappers to this segment if formatting has it, ONLY when selective formatting is active
   if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
@@ -155,6 +190,9 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
       return;
     }
     let formatted = buffer;
+    if (currentFmt.smalltext) {
+      formatted = toSmallText(formatted);
+    }
     if (rgbOptions.colorFormat.color === 'MiniMessage') {
       if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
       if (currentFmt.italic) formatted = `<i>${formatted}</i>`;
@@ -171,7 +209,7 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
     const covering = rgbOptions.formatting?.find((s) => s.start <= charOffset && s.end > charOffset);
     const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
 
-    const fmtChanged = !currentFmt || FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]);
+    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]);
 
     if (fmtChanged) {
       flush();
@@ -496,7 +534,7 @@ function buildJsonFormatting(
   rgbShadow?: number[],
 ): JsonExtra {
   const charFormatting: JsonExtra = {
-    text: segment,
+    text: formatting.smalltext ? toSmallText(segment) : segment,
     color: colorHexWithHash,
   };
   if (formatting.bold) charFormatting.bold = true;

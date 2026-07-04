@@ -11,7 +11,8 @@ import {
 } from '@builder.io/qwik';
 
 import {
-  FORMAT_KEYS,
+  ALL_FORMATTING_KEYS,
+  toSmallText,
   rgbDefaults,
   ColorGradient,
   disperseColors,
@@ -52,7 +53,7 @@ import { donateLink } from '../Elements/Nav';
 import { deepTrack } from '~/util/misc';
 
 function getFormattingSignature(formatting: Formatting) {
-  return FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('');
+  return ALL_FORMATTING_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('');
 }
 
 export function getFormattingClasses(formatting: Formatting) {
@@ -72,7 +73,7 @@ export function getEffectiveFormatting(rgbStore: typeof rgbDefaults, index: numb
 
   for (const segment of rgbStore.formatting) {
     if (segment.start <= index && index < segment.end) {
-      for (const key of FORMAT_KEYS) {
+      for (const key of ALL_FORMATTING_KEYS) {
         if (segment[key] !== undefined) {
           formatting[key] = segment[key];
         }
@@ -148,6 +149,8 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     const rgbShadow = shadowColors[segment.bucketIndex];
     const rgbShadowCSS = `rgba(${rgbShadow?.slice(0, 3).join(',')}, ${rgbShadow && rgbShadow[3] !== undefined ? rgbShadow[3] / 255 : 1})`;
 
+    const segmentText = segment.formatting.smalltext ? toSmallText(segment.text) : segment.text;
+
     return (
       <span
         q:slot="input"
@@ -159,9 +162,9 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
           }),
         }}
         class={getFormattingClasses(segment.formatting)}
-        data-text={segment.text}
+        data-text={segmentText}
       >
-        {segment.text}
+        {segmentText}
       </span>
     );
   });
