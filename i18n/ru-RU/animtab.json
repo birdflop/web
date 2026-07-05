@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Интервал анимации",
       "name": "Название анимации",
-      "style": "Стиль анимации"
+      "style": {
+        "BOUNCING": "Bouncing",
+        "FULL_TEXT_CYCLE": "Full Text Cycle",
+        "LEFT_TO_RIGHT": "Left to Right",
+        "RIGHT_TO_LEFT": "Right to Left",
+        "title": "Стиль анимации"
+      }
     },
     "length": "Длина градиента",
     "outputFormat": {

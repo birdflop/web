@@ -3,7 +3,13 @@
     "animation": {
       "interval": "애니메이션 간격",
       "name": "애니메이션 이름",
-      "style": "애니메이션 스타일"
+      "style": {
+        "BOUNCING": "Bouncing",
+        "FULL_TEXT_CYCLE": "Full Text Cycle",
+        "LEFT_TO_RIGHT": "Left to Right",
+        "RIGHT_TO_LEFT": "Right to Left",
+        "title": "애니메이션 스타일"
+      }
     },
     "length": "그라데이션 길이",
     "outputFormat": {

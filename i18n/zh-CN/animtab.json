@@ -3,7 +3,13 @@
     "animation": {
       "interval": "动画间隔",
       "name": "动画名称",
-      "style": "动画样式"
+      "style": {
+        "BOUNCING": "Bouncing",
+        "FULL_TEXT_CYCLE": "Full Text Cycle",
+        "LEFT_TO_RIGHT": "Left to Right",
+        "RIGHT_TO_LEFT": "Right to Left",
+        "title": "动画样式"
+      }
     },
     "length": "渐变长度",
     "outputFormat": {
