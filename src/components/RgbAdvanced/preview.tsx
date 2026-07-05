@@ -48,12 +48,10 @@ export function renderAdvancedPreview(segments: SegmentType[], options: typeof r
       }
 
       return (
-        <span
+        <span q:slot="input"
           key={`s${si}-c${ci}`}
           data-text={chunkTextVal}
-          style={{
-            color,
-          }}
+          style={{ color }}
           class={getFormattingClasses(fmt)}
         >
           {chunkTextVal}

@@ -3,7 +3,7 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import {
   SegmentType,
   normalizeSegments,
@@ -12,7 +12,7 @@ import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
 import { defaultDescription, generateHead } from '~/root';
 import { ArrowLeft, TestTube2, Type } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import RGBirdflopBase from '~/components/Rgbirdflop/RGBirdflopBase';
+import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
 import Options from '~/components/Rgbirdflop/Options';
 import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
 import { renderAdvancedPreview } from '~/components/RgbAdvanced/preview';
@@ -53,7 +53,10 @@ export default component$(() => {
   useContextProvider(showAllGradientsContext, showAllGradients);
   const openItems = useContext(openItemsContext);
 
-  return <RGBirdflopBase output={generateAdvancedOutput(rgbSegments.value, rgbStore)} errors={[...rgbErrors, ...segmentsErrors]}>;
+  return <RGBirdflop advanced
+    output={generateAdvancedOutput(rgbSegments.value, rgbStore)}
+    errors={[...rgbErrors, ...segmentsErrors]}
+  >
     <div class="flex items-start gap-2" q:slot="header">
       <div class="flex flex-col gap-1 flex-1">
         <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
@@ -121,7 +124,7 @@ export default component$(() => {
       </div>
       <SegmentInspector />
     </div>
-  </RGBirdflopBase>;
+  </RGBirdflop>;
 });
 
 export const head = generateHead({

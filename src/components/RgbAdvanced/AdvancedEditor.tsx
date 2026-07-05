@@ -6,7 +6,7 @@ import { deepTrack } from '~/util/misc';
 import { setCookies } from '~/util/dataUtils';
 import Output from '~/components/Rgbirdflop/Output';
 import HostingAd from '~/components/Rgbirdflop/HostingAd';
-import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflopBase';
+import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
 import { donateLink } from '~/components/Elements/Nav';
 import { generateAdvancedOutput } from './output';
 import StylePanel from './StylePanel';

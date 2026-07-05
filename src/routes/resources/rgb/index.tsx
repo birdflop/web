@@ -1,6 +1,5 @@
 import { component$, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -8,7 +7,7 @@ import { previewStyleContext, Selection, selectionContext } from '~/components/R
 import { Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { renderPreview } from '~/components/Rgbirdflop/preview';
-import RGBirdflopBase, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
@@ -37,9 +36,10 @@ export default component$(() => {
   useContextProvider(showAllGradientsContext, showAllGradients);
 
   return (
-    <RGBirdflopBase errors={errors} output={generateOutput(rgbStore)}>
-      <RGBirdflop />
-
+    <RGBirdflop
+      errors={errors}
+      output={generateOutput(rgbStore)}
+    >
       <div class="flex items-start gap-2" q:slot="header">
         <div class="flex flex-col gap-1 flex-1">
           <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
@@ -86,7 +86,7 @@ export default component$(() => {
           rgbStore,
           previewStyle.value == 'default' ? 4 : 2,
         )}
-    </RGBirdflopBase>
+    </RGBirdflop>
   );
 });
 

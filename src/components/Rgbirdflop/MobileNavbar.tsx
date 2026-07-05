@@ -2,7 +2,7 @@ import { component$, Slot, useContext } from '@builder.io/qwik';
 import { Clipboard, Palette, Save, Settings, Sparkles } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();
