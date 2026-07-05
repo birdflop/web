@@ -1,4 +1,9 @@
-import { rgbDefaults, sortColors, rgbColorDefaultsWithColorMode, ColorMode } from '@birdflop/rgbirdflop';
+import {
+  rgbDefaults,
+  sortColors,
+  rgbColorDefaultsWithColorMode,
+  ColorMode,
+} from '@birdflop/rgbirdflop';
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
@@ -20,7 +25,8 @@ export function chunkText(text: string, colorLength?: number): string[] {
   if (!len || len < 1) len = 1;
   const out: string[] = [];
   const arr = Array.from(text);
-  for (let i = 0; i < arr.length; i += len) out.push(arr.slice(i, i + len).join(''));
+  for (let i = 0; i < arr.length; i += len)
+    out.push(arr.slice(i, i + len).join(''));
   return out;
 }
 
@@ -88,7 +94,10 @@ export function combinedText(segments: SegmentType[]): string {
  * Uses a common prefix/suffix diff on UTF-16 strings (matching textarea offsets).
  * Inserted chars inherit the style of the char before the edit (or after, or default).
  */
-export function applyTextDiff(segments: SegmentType[], newText: string): SegmentType[] {
+export function applyTextDiff(
+  segments: SegmentType[],
+  newText: string,
+): SegmentType[] {
   const oldChars = flatten(segments);
   const oldText = oldChars.map((c) => c.ch).join('');
   if (newText === oldText) return segments;
@@ -157,13 +166,17 @@ export function segmentRange(
   index: number,
 ): { start: number; end: number } {
   let start = 0;
-  for (let i = 0; i < index && i < segments.length; i++) start += segments[i].text.length;
+  for (let i = 0; i < index && i < segments.length; i++)
+    start += segments[i].text.length;
   const end = start + (segments[index]?.text.length ?? 0);
   return { start, end };
 }
 
 /** Index of the segment containing flat char `charIndex`. */
-export function segmentIndexAtChar(segments: SegmentType[], charIndex: number): number {
+export function segmentIndexAtChar(
+  segments: SegmentType[],
+  charIndex: number,
+): number {
   let acc = 0;
   for (let i = 0; i < segments.length; i++) {
     acc += segments[i].text.length;
@@ -173,22 +186,33 @@ export function segmentIndexAtChar(segments: SegmentType[], charIndex: number): 
 }
 
 /** A clone of the style at flat char `charIndex` (or null). */
-export function styleAtChar(segments: SegmentType[], charIndex: number): SegmentType | null {
+export function styleAtChar(
+  segments: SegmentType[],
+  charIndex: number,
+): SegmentType | null {
   const chars = flatten(segments);
   const c = chars[Math.max(0, Math.min(chars.length - 1, charIndex))];
   return c ? cloneStyle(c.style) : null;
 }
 
 /** Swap two segments (reorders the text), then normalize. */
-export function swapSegments(segments: SegmentType[], i: number, j: number): SegmentType[] {
-  if (i < 0 || j < 0 || i >= segments.length || j >= segments.length || i === j) return segments;
+export function swapSegments(
+  segments: SegmentType[],
+  i: number,
+  j: number,
+): SegmentType[] {
+  if (i < 0 || j < 0 || i >= segments.length || j >= segments.length || i === j)
+    return segments;
   const arr = segments.map((seg) => ({ ...cloneStyle(seg), text: seg.text }));
   [arr[i], arr[j]] = [arr[j], arr[i]];
   return normalizeSegments(arr);
 }
 
 /** Remove a segment's characters entirely. */
-export function deleteSegment(segments: SegmentType[], index: number): SegmentType[] {
+export function deleteSegment(
+  segments: SegmentType[],
+  index: number,
+): SegmentType[] {
   if (index < 0 || index >= segments.length) return segments;
   const { start, end } = segmentRange(segments, index);
   const chars = flatten(segments);
@@ -212,9 +236,12 @@ export function mergeWithNeighbor(
 }
 
 /** Seed a one-segment advanced store from the classic `rgb` cookie/state. */
-export function seedFromClassic(rgb: Partial<typeof rgbDefaults>): (typeof rgbColorDefaultsWithColorMode)[] {
+export function seedFromClassic(
+  rgb: Partial<typeof rgbDefaults>,
+): (typeof rgbColorDefaultsWithColorMode)[] {
   const colorCount = rgb.colors?.length ?? 0;
-  const colorMode: ColorMode = colorCount >= 2 ? 'gradient' : colorCount === 1 ? 'solid' : 'none';
+  const colorMode: ColorMode =
+    colorCount >= 2 ? 'gradient' : colorCount === 1 ? 'solid' : 'none';
   return [
     {
       ...rgbColorDefaultsWithColorMode,

@@ -46,8 +46,8 @@
     },
     "memory": {
       "calcOverhead": {
-        "description": "This is recommended to avoid out-of-memory issues on your server.nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.",
-        "title": "Calculate Overhead"
+        "description": "建议开启此选项以避免服务器发生内存溢出问题。\n使用的公式为 11x ÷ 12 - 1200，其中 x 为内存（RAM）大小。",
+        "title": "计算预留开销"
       },
       "description": "分配给服务器的内存 (RAM) 量。",
       "label": "内存"

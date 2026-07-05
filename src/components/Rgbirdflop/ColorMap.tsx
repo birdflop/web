@@ -1,6 +1,22 @@
-import { $, component$, useContext, useOnDocument, useSignal } from '@builder.io/qwik';
+import {
+  $,
+  component$,
+  useContext,
+  useOnDocument,
+  useSignal,
+} from '@builder.io/qwik';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { sortColors, getRandomColor, ColorGradient, GradientType, getRGBColorStop, rgbToHex, getShadowColors, rgbDefaults, ColorStop } from '@birdflop/rgbirdflop';
+import {
+  sortColors,
+  getRandomColor,
+  ColorGradient,
+  GradientType,
+  getRGBColorStop,
+  rgbToHex,
+  getShadowColors,
+  rgbDefaults,
+  ColorStop,
+} from '@birdflop/rgbirdflop';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
 
@@ -27,7 +43,11 @@ function generateGradientCSS(
   // For OKLAB, OKLCh, LuvLCh - sample the gradient to approximate perceptually uniform interpolation
   const colorsRGB = sortColors(colors).map(getRGBColorStop);
 
-  const gradient = new ColorGradient(colorsRGB, samples, gradientType as GradientType);
+  const gradient = new ColorGradient(
+    colorsRGB,
+    samples,
+    gradientType as GradientType,
+  );
   const sampledColors: string[] = [];
 
   for (let i = 0; i < samples; i++) {
@@ -50,24 +70,30 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const colors = getColors(rgbStore, id);
 
-  useOnDocument('click', $((e) => {
-    if (e.target instanceof HTMLElement
-      && !e.target.closest(`#colormap${id}-color-popup`)
-      && !e.target.closest(`#colormap${id}`)) {
-      opened.value = -1;
-    }
-  }));
+  useOnDocument(
+    'click',
+    $((e) => {
+      if (
+        e.target instanceof HTMLElement &&
+        !e.target.closest(`#colormap${id}-color-popup`) &&
+        !e.target.closest(`#colormap${id}`)
+      ) {
+        opened.value = -1;
+      }
+    }),
+  );
 
   return (
     <div
       class={{
-        'w-full h-2 my-2 rounded-full items-center relative': true,
+        'relative my-2 h-2 w-full items-center rounded-full': true,
         hidden: rgbStore.disperse,
       }}
       id={'colormap' + id}
-      style={`background: ${
-        generateGradientCSS(colors, rgbStore.gradientType)
-      };`}
+      style={`background: ${generateGradientCSS(
+        colors,
+        rgbStore.gradientType,
+      )};`}
       onMouseDown$={(e, el) => {
         if (e.target != el) return;
         const rect = el.getBoundingClientRect();
@@ -113,8 +139,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       <div
         id={`colormap${id}-add-button`}
         class={{
-          'absolute -mt-1.5 -ml-3 w-5 h-5 rounded-full lum-grad-bg-lum-card-bg opacity-0 pointer-events-none':
-            true,
+          'lum-grad-bg-lum-card-bg pointer-events-none absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full opacity-0': true,
         }}
       >
         <Plus size={18} />
@@ -124,7 +149,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
           key={`${i}/${colors.length}`}
           id={`colormap${id}-color-${i + 1}`}
           class={{
-            'absolute -mt-1.5 -ml-3 w-5 h-5 hover:scale-125 rounded-full lum-bg drop-shadow-md transition-transform': true,
+            'lum-bg absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full drop-shadow-md transition-transform hover:scale-125': true,
           }}
           style={{
             '--bg-color': color.hex,
@@ -165,7 +190,9 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
             if (opened.value == i) return (opened.value = -1);
             else opened.value = i;
 
-            const picker = document.getElementById(`colormap${id}-color-picker`);
+            const picker = document.getElementById(
+              `colormap${id}-color-picker`,
+            );
             const popup = document.getElementById(`colormap${id}-color-popup`);
             if (!picker || !popup) return;
 
@@ -189,20 +216,29 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
         stoppropagation:mousedown
         stoppropagation:click
         class={{
-          'hidden': true,
+          hidden: true,
           'sm:flex': opened.value > -1,
-          'flex-col gap-2 motion-safe:transition-all absolute top-full z-1000 mt-2': true,
+          'absolute top-full z-1000 mt-2 flex-col gap-2 motion-safe:transition-all': true,
           'animate-in fade-in slide-in-from-top-2': true,
         }}
         style={{
           '--lum-border-radius': '1rem',
-          left: colors[opened.value]?.pos < 50 ? `${colors[opened.value]?.pos}%` : 'auto',
-          right: colors[opened.value]?.pos >= 50 ? `${100 - colors[opened.value]?.pos}%` : 'auto',
+          left:
+            colors[opened.value]?.pos < 50
+              ? `${colors[opened.value]?.pos}%`
+              : 'auto',
+          right:
+            colors[opened.value]?.pos >= 50
+              ? `${100 - colors[opened.value]?.pos}%`
+              : 'auto',
         }}
       >
-        <div class="flex gap-1 lum-card p-2 flex-row items-end justify-evenly">
-          <NumberInput input id={`colorlist${id}-color-pos`}
-            min={0} max={100}
+        <div class="lum-card flex flex-row items-end justify-evenly gap-1 p-2">
+          <NumberInput
+            input
+            id={`colorlist${id}-color-pos`}
+            min={0}
+            max={100}
             value={Math.round(colors[opened.value]?.pos)}
             onChange$={(e, el) => {
               const newColors = colors.slice(0);
@@ -226,13 +262,17 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
               newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
               rgbStore[colorsKey] = sortColors(newColors);
             }}
-          >Position (%)
+          >
+            Position (%)
           </NumberInput>
-          <button class="lum-btn p-2 lum-grad-bg-red hover:lum-bg-red" onClick$={() => {
-            const newColors = colors.slice(0);
-            newColors.splice(opened.value, 1);
-            rgbStore[colorsKey] = newColors;
-          }}>
+          <button
+            class="lum-btn lum-grad-bg-red hover:lum-bg-red p-2"
+            onClick$={() => {
+              const newColors = colors.slice(0);
+              newColors.splice(opened.value, 1);
+              rgbStore[colorsKey] = newColors;
+            }}
+          >
             <Trash size={20} />
           </button>
         </div>

@@ -1,6 +1,6 @@
 {
   "plugins": {
-    "import": "Import",
-    "pasteHere": "Paste here"
+    "import": "导入",
+    "pasteHere": "粘贴在此处"
   }
 }

@@ -5,7 +5,8 @@ const darkTheme = {
   '--lum-depth': '1',
   '--color-bg': 'var(--color-gray-900)',
   '--color-lum-gradient': 'var(--color-gray-950)',
-  '--color-nav-bg': 'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
+  '--color-nav-bg':
+    'color-mix(in oklab, var(--color-sky-950), transparent 30%)',
   '--color-green': 'var(--color-green-900)',
   '--color-red': 'var(--color-red-900)',
   '--color-orange': 'var(--color-orange-900)',
@@ -32,7 +33,8 @@ const lightTheme = {
   '--lum-depth': '0',
   '--color-bg': 'var(--color-white)',
   '--color-lum-gradient': 'var(--color-gray-200)',
-  '--color-nav-bg': 'color-mix(in oklab, var(--color-blue-300), transparent 30%)',
+  '--color-nav-bg':
+    'color-mix(in oklab, var(--color-blue-300), transparent 30%)',
   '--color-green': 'var(--color-green-500)',
   '--color-red': 'var(--color-red-500)',
   '--color-orange': 'var(--color-orange-500)',
@@ -58,7 +60,8 @@ export const themes = {
   black: {
     ...darkTheme,
     '--color-bg': 'var(--color-black)',
-    '--color-nav-bg': 'color-mix(in oklab, var(--color-black), transparent 30%)',
+    '--color-nav-bg':
+      'color-mix(in oklab, var(--color-black), transparent 30%)',
     '--color-lum-card-bg': 'var(--color-black)',
     '--color-lum-input-bg': 'var(--color-neutral-900)',
     '--color-lum-input-hover-bg': 'var(--color-neutral-800)',
@@ -68,11 +71,13 @@ export const themes = {
     ...darkTheme,
     '--lum-depth': '0',
     '--color-bg': 'hsl(270deg, 22%, 5%)',
-    '--color-nav-bg': 'color-mix(in oklab, var(--color-violet-900), transparent 80%)',
+    '--color-nav-bg':
+      'color-mix(in oklab, var(--color-violet-900), transparent 80%)',
     '--color-lum-card-bg': 'hsl(270deg, 18%, 12%)',
     '--color-lum-input-bg': 'hsl(270deg, 18%, 12%)',
     '--color-lum-input-hover-bg': 'hsl(270deg, 16%, 21%)',
-    '--color-lum-accent': 'color-mix(in oklab, var(--color-luminescent-400), transparent 20%)',
+    '--color-lum-accent':
+      'color-mix(in oklab, var(--color-luminescent-400), transparent 20%)',
   },
   light: lightTheme,
 };
@@ -82,7 +87,7 @@ export interface ThemeContextType {
   isDark?: boolean;
   css?: {
     [key: string]: string;
-  }
+  };
   cssString?: string;
 }
 
@@ -112,7 +117,9 @@ export function getCSSString(themeName: Exclude<ThemeName, 'auto'>): string {
  * @param userAgent - Optional user agent string for auto theme detection
  * @returns The effective theme name ('dark' or 'light' etc.)
  */
-export function getEffectiveTheme(themeName: ThemeName): Exclude<ThemeName, 'auto'> {
+export function getEffectiveTheme(
+  themeName: ThemeName,
+): Exclude<ThemeName, 'auto'> {
   if (themeName === 'auto') {
     // Server-side auto theme detection fallback
     return 'dark'; // Default fallback

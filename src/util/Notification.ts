@@ -61,7 +61,7 @@ export class Notification implements NotificationType {
     return this;
   }
 
-  setAction(action : typeof this.action) {
+  setAction(action: typeof this.action) {
     this.action = action;
     return this;
   }
@@ -84,4 +84,6 @@ export class Notification implements NotificationType {
   }
 }
 
-export const NotificationContext = createContextId<NotificationType[]>('notification-context');
+export const NotificationContext = createContextId<NotificationType[]>(
+  'notification-context',
+);

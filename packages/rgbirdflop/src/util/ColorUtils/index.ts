@@ -10,20 +10,33 @@ import { RGBColorStop } from './BaseGradient';
  * Available gradient types as a const array.
  * This is the single source of truth for gradient type values.
  */
-export const GRADIENT_TYPES = ['rgb', 'hsl', 'oklab', 'oklch', 'cielab', 'luvLch'] as const;
+export const GRADIENT_TYPES = [
+  'rgb',
+  'hsl',
+  'oklab',
+  'oklch',
+  'cielab',
+  'luvLch',
+] as const;
 
 /**
  * Union type of all available gradient types.
  * Automatically derived from GRADIENT_TYPES array.
  */
-export type GradientType = typeof GRADIENT_TYPES[number];
+export type GradientType = (typeof GRADIENT_TYPES)[number];
 
 /**
  * Unified gradient interface that can switch between RGB and OKLAB interpolation.
  * Provides a consistent API regardless of the underlying color space.
  */
 export class ColorGradient {
-  private gradient: RgbGradient | HslGradient | OklabGradient | OklchGradient | CielabGradient | LuvLChGradient;
+  private gradient:
+    | RgbGradient
+    | HslGradient
+    | OklabGradient
+    | OklchGradient
+    | CielabGradient
+    | LuvLChGradient;
   private type: GradientType;
 
   /**
@@ -83,7 +96,13 @@ export class ColorGradient {
  * Includes offset support for animation effects.
  */
 export class ColorAnimatedGradient {
-  private gradient: RgbAnimatedGradient | HslAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | CielabAnimatedGradient | LuvLChAnimatedGradient;
+  private gradient:
+    | RgbAnimatedGradient
+    | HslAnimatedGradient
+    | OklabAnimatedGradient
+    | OklchAnimatedGradient
+    | CielabAnimatedGradient
+    | LuvLChAnimatedGradient;
   private type: GradientType;
 
   /**

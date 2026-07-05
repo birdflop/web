@@ -1,14 +1,14 @@
 {
   "settings": {
     "cookies": {
-      "description": "Allow Birdflop to use cookies for personalization and improved user experience.",
-      "title": "Enable Cookies"
+      "description": "Zezwól Birdflop na używanie plików cookie w celu personalizacji i ulepszenia doświadczenia użytkownika.",
+      "title": "Włącz ciasteczka"
     },
     "flopbird": {
-      "description": "Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you're on. Experimental",
-      "enable": "Enable Flopbird"
+      "description": "Nasza urocza maskotka siedząca w rogu ekranu, która prowadzi Cię, udzielając pomocnych informacji o stronie, na której się znajdujesz. Eksperymentalne",
+      "enable": "Włącz Flopbird"
     },
-    "language": "Language",
-    "theme": "Theme Preference"
+    "language": "Język",
+    "theme": "Preferencje motywu"
   }
 }

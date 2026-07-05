@@ -1,8 +1,33 @@
 import { component$, useContext } from '@builder.io/qwik';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import { LogoBirdflop, LogoDiscord, Nav, SelectMenuRaw } from '@luminescent/ui-qwik';
+import {
+  LogoBirdflop,
+  LogoDiscord,
+  Nav,
+  SelectMenuRaw,
+} from '@luminescent/ui-qwik';
 
-import { Box, Globe, Github, Server, Book, LogOut, User, Palette, Rainbow, Zap, Flag, Presentation, Ellipsis, ShoppingCart, DollarSign, Activity, AppWindow, Settings, Loader2 } from 'lucide-icons-qwik';
+import {
+  Box,
+  Globe,
+  Github,
+  Server,
+  Book,
+  LogOut,
+  User,
+  Palette,
+  Rainbow,
+  Zap,
+  Flag,
+  Presentation,
+  Ellipsis,
+  ShoppingCart,
+  DollarSign,
+  Activity,
+  AppWindow,
+  Settings,
+  Loader2,
+} from 'lucide-icons-qwik';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -13,7 +38,8 @@ import { openItemsContext, SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
 
 // Links used in multiple places, defined here to avoid duplication and potential inconsistencies
-export const donateLink = 'https://www.paypal.com/US/fundraiser/charity/5036975';
+export const donateLink =
+  'https://www.paypal.com/US/fundraiser/charity/5036975';
 export const discordLink = 'https://discord.gg/nmgtX5z';
 
 export default component$(() => {
@@ -31,77 +57,155 @@ export default component$(() => {
 
   return (
     <Nav fixed colorClass="lum-grad-bg-nav-bg border-b-lum-border/10 shadow-lg">
-      <Link q:slot="start" href="/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2">
+      <Link
+        q:slot="start"
+        href="/"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
+      >
         <LogoBirdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
-        <span class="font-semibold -ml-1">Birdflop</span>
-        <div class={{
-          'transition-all': true,
-          '-ml-6 opacity-0': !loc.isNavigating,
-        }}>
+        <span class="-ml-1 font-semibold">Birdflop</span>
+        <div
+          class={{
+            'transition-all': true,
+            '-ml-6 opacity-0': !loc.isNavigating,
+          }}
+        >
           <Loader2 size={16} class="animate-spin" />
         </div>
       </Link>
-      <Link q:slot="end" href="/docs" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex">
+      <Link
+        q:slot="end"
+        href="/docs"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
+      >
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <SelectMenuRaw id="nav-hosting" q:slot="end" hover customDropdown panelClass="lum-grad-bg-nav-bg"
-        class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
+      <SelectMenuRaw
+        id="nav-hosting"
+        q:slot="end"
+        hover
+        customDropdown
+        panelClass="lum-grad-bg-nav-bg"
+        class={{
+          'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
+        }}
+      >
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
         </div>
-        <a q:slot="extra-buttons" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1" href="https://panel.birdflop.com/">
+        <a
+          q:slot="extra-buttons"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+          href="https://panel.birdflop.com/"
+        >
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
-        <Link q:slot="extra-buttons" href="/plans" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <Link
+          q:slot="extra-buttons"
+          href="/plans"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
-        <a q:slot="extra-buttons" href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <a
+          q:slot="extra-buttons"
+          href="https://client.birdflop.com/"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
-        <Link q:slot="extra-buttons" href="/node-stats" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <Link
+          q:slot="extra-buttons"
+          href="/node-stats"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw id="nav-resources" q:slot="end" hover customDropdown panelClass="lum-grad-bg-nav-bg"
-        class={{ 'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true }}>
+      <SelectMenuRaw
+        id="nav-resources"
+        q:slot="end"
+        hover
+        customDropdown
+        panelClass="lum-grad-bg-nav-bg"
+        class={{
+          'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
+        }}
+      >
         <div q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
         </div>
-        <Link q:slot="extra-buttons" href="/resources/rgb" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        <Link
+          q:slot="extra-buttons"
+          href="/resources/rgb"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <Palette size={20} />{' '}
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/animtab" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        <Link
+          q:slot="extra-buttons"
+          href="/resources/animtab"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <Rainbow size={20} />{' '}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/analyze" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <Link
+          q:slot="extra-buttons"
+          href="/resources/analyze"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/flags" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <Link
+          q:slot="extra-buttons"
+          href="/resources/flags"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources/banner" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-          <Presentation size={20} /> {t('nav.resources.banner.title@@Banner Generator')}
+        <Link
+          q:slot="extra-buttons"
+          href="/resources/banner"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <Presentation size={20} />{' '}
+          {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
-        <Link q:slot="extra-buttons" href="/resources" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+        <Link
+          q:slot="extra-buttons"
+          href="/resources"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </SelectMenuRaw>
-      <SelectMenuRaw align="right" q:slot="end" class={{
-        'hidden': !loc.url.pathname.includes('resources'),
-        'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-      }} id="lang-picker" customDropdown panelClass="lum-grad-bg-nav-bg"
-      values={config.supportedLocales.map(value => (
-        {
+      <SelectMenuRaw
+        align="right"
+        q:slot="end"
+        class={{
+          hidden: !loc.url.pathname.includes('resources'),
+          'lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2': true,
+        }}
+        id="lang-picker"
+        customDropdown
+        panelClass="lum-grad-bg-nav-bg"
+        values={config.supportedLocales.map((value) => ({
           name: languages[value.lang as keyof typeof languages],
           value: value.lang,
-        }
-      ))} onChange$={async (e, el) => {
-        settingsStore.locale = el.value as keyof typeof languages;
-        setCookies('settings', settingsStore);
-        await setUserData({ settings: settingsStore });
-        window.location.reload();
-      }}>
-        <span class="absolute top-0 left-5 text-[10px] lum-grad-bg-nav-bg rounded-sm px-0.5" q:slot="dropdown">
+        }))}
+        onChange$={async (e, el) => {
+          settingsStore.locale = el.value as keyof typeof languages;
+          setCookies('settings', settingsStore);
+          await setUserData({ settings: settingsStore });
+          window.location.reload();
+        }}
+      >
+        <span
+          class="lum-grad-bg-nav-bg absolute top-0 left-5 rounded-sm px-0.5 text-[10px]"
+          q:slot="dropdown"
+        >
           {locale.lang.split('-')[0]}
         </span>
         <Globe size={20} q:slot="dropdown" />
@@ -109,26 +213,42 @@ export default component$(() => {
       <Link
         q:slot="end"
         href="/settings"
-        class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
         aria-label={t('nav.settings.title@@Settings')}
         title={t('nav.settings.title@@Settings')}
       >
         <Settings size={20} aria-hidden="true" />
       </Link>
-      <div q:slot="end" class="hidden sm:flex gap-2">
+      <div q:slot="end" class="hidden gap-2 sm:flex">
         <SocialButtons />
       </div>
-      {session.value && session.value.user &&
-        <SelectMenuRaw align="right" q:slot="end" class={{
-          'p-2 lum-bg-transparent hover:lum-bg-nav-bg gap-1': true,
-        }} id="profile" customDropdown panelClass="lum-grad-bg-nav-bg">
-          <p q:slot="dropdown" class="flex items-center gap-2 text-lum-text">
-            {session.value.user.image &&
-              <img src={session.value.user.image} width={20} height={20} class="rounded-full! min-w-5 h-5" />
-            }
+      {session.value && session.value.user && (
+        <SelectMenuRaw
+          align="right"
+          q:slot="end"
+          class={{
+            'lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2': true,
+          }}
+          id="profile"
+          customDropdown
+          panelClass="lum-grad-bg-nav-bg"
+        >
+          <p q:slot="dropdown" class="text-lum-text flex items-center gap-2">
+            {session.value.user.image && (
+              <img
+                src={session.value.user.image}
+                width={20}
+                height={20}
+                class="h-5 min-w-5 rounded-full!"
+              />
+            )}
             {session.value.user?.name || 'User'}
           </p>
-          <Link q:slot="extra-buttons" href="/profile" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+          <Link
+            q:slot="extra-buttons"
+            href="/profile"
+            class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+          >
             <User size={20} /> {t('nav.profile.title@@Profile')}
           </Link>
           <Form action={signOut} q:slot="extra-buttons">
@@ -143,8 +263,8 @@ export default component$(() => {
             </button>
           </Form>
         </SelectMenuRaw>
-      }
-      {!session.value &&
+      )}
+      {!session.value && (
         <Form action={signIn} q:slot="end">
           <input type="hidden" name="providerId" value="discord" />
           <input
@@ -152,64 +272,119 @@ export default component$(() => {
             name="options.redirectTo"
             value={loc.url.pathname + loc.url.search}
           />
-          <button class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
+          <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2">
             {t('nav.profile.login@@Login')}
           </button>
         </Form>
-      }
+      )}
 
-      <Link q:slot="mobile" href="/docs" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+      <Link
+        q:slot="mobile"
+        href="/docs"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+      >
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <Accordion q:slot="mobile" sectionName="nav-hosting" class={{
-        'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
-      }}>
+      <Accordion
+        q:slot="mobile"
+        sectionName="nav-hosting"
+        class={{
+          'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
+        }}
+      >
         <Server size={20} /> {t('nav.hosting.title@@Hosting')}
       </Accordion>
-      <div class={{
-        'transition-all duration-200 overflow-hidden': true,
-        'max-h-0 opacity-0 scale-98': !openItems.value.includes('nav-hosting'),
-        'max-h-screen opacity-100 mt-1': openItems.value.includes('nav-hosting'),
-      }} q:slot="mobile">
-        <a href="https://panel.birdflop.com/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+      <div
+        class={{
+          'overflow-hidden transition-all duration-200': true,
+          'max-h-0 scale-98 opacity-0':
+            !openItems.value.includes('nav-hosting'),
+          'mt-1 max-h-screen opacity-100':
+            openItems.value.includes('nav-hosting'),
+        }}
+        q:slot="mobile"
+      >
+        <a
+          href="https://panel.birdflop.com/"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
-        <Link href="/plans" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <Link
+          href="/plans"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
-        <a href="https://client.birdflop.com/" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <a
+          href="https://client.birdflop.com/"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
-        <Link href="/node-stats" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <Link
+          href="/node-stats"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </div>
-      <Accordion q:slot="mobile" sectionName="nav-resources" class={{
-        'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
-      }}>
+      <Accordion
+        q:slot="mobile"
+        sectionName="nav-resources"
+        class={{
+          'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
+        }}
+      >
         <Box size={20} /> {t('nav.resources.title@@Resources')}
       </Accordion>
-      <div class={{
-        'transition-all duration-200 overflow-hidden': true,
-        'max-h-0 opacity-0 scale-98': !openItems.value.includes('nav-resources'),
-        'max-h-screen opacity-100 mt-1': openItems.value.includes('nav-resources'),
-      }} q:slot="mobile">
-        <Link href="/resources/rgb" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
-          <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+      <div
+        class={{
+          'overflow-hidden transition-all duration-200': true,
+          'max-h-0 scale-98 opacity-0':
+            !openItems.value.includes('nav-resources'),
+          'mt-1 max-h-screen opacity-100':
+            openItems.value.includes('nav-resources'),
+        }}
+        q:slot="mobile"
+      >
+        <Link
+          href="/resources/rgb"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
+          <Palette size={20} />{' '}
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
-        <Link href="/resources/animtab" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
-          <Rainbow size={20} /> {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        <Link
+          href="/resources/animtab"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
+          <Rainbow size={20} />{' '}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
-        <Link href="/resources/analyze" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <Link
+          href="/resources/analyze"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
-        <Link href="/resources/flags" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <Link
+          href="/resources/flags"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
-        <Link href="/resources/banner" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
-          <Presentation size={20} /> {t('nav.resources.banner.title@@Banner Generator')}
+        <Link
+          href="/resources/banner"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
+          <Presentation size={20} />{' '}
+          {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
-        <Link href="/resources" class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg">
+        <Link
+          href="/resources"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+        >
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </div>
@@ -217,18 +392,29 @@ export default component$(() => {
       <div q:slot="mobile" class="flex justify-evenly">
         <SocialButtons />
       </div>
-
     </Nav>
   );
 });
 
 export const SocialButtons = component$(() => {
-  return <>
-    <a href="https://github.com/birdflop/web" title="GitHub" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg">
-      <Github size={20} />
-    </a>
-    <a href={discordLink} title="Discord" class="lum-btn p-2 lum-bg-transparent hover:lum-bg-nav-bg" data-umami-event="discord-link" data-umami-source="nav">
-      <LogoDiscord size={20} />
-    </a>
-  </>;
+  return (
+    <>
+      <a
+        href="https://github.com/birdflop/web"
+        title="GitHub"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
+      >
+        <Github size={20} />
+      </a>
+      <a
+        href={discordLink}
+        title="Discord"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
+        data-umami-event="discord-link"
+        data-umami-source="nav"
+      >
+        <LogoDiscord size={20} />
+      </a>
+    </>
+  );
 });

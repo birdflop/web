@@ -1,4 +1,12 @@
-import { ColorGradient, getRGBColorStop, hexToRGB, sortColors, getFormattingAtOffset, rgbDefaults, applyFont } from '@birdflop/rgbirdflop';
+import {
+  ColorGradient,
+  getRGBColorStop,
+  hexToRGB,
+  sortColors,
+  getFormattingAtOffset,
+  rgbDefaults,
+  applyFont,
+} from '@birdflop/rgbirdflop';
 import type { SegmentType } from './model';
 import { chunkText, combinedText } from './model';
 import { getFormattingClasses } from '../Rgbirdflop/preview';
@@ -12,7 +20,10 @@ function toCSS(rgb: number[]): string {
  * RGBirdflop.tsx, but per-segment with per-character bold/italic). Each
  * obfuscated span carries data-text so the animation can restore the glyph.
  */
-export function renderAdvancedPreview(segments: SegmentType[], options: typeof rgbDefaults) {
+export function renderAdvancedPreview(
+  segments: SegmentType[],
+  options: typeof rgbDefaults,
+) {
   const text = combinedText(segments);
   if (!text) return ' ';
 
@@ -48,7 +59,8 @@ export function renderAdvancedPreview(segments: SegmentType[], options: typeof r
       }
 
       return (
-        <span q:slot="input"
+        <span
+          q:slot="input"
           key={`s${si}-c${ci}`}
           data-text={chunkTextVal}
           style={{ color }}

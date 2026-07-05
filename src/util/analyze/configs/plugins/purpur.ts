@@ -1,16 +1,19 @@
 export default function getConfig() {
   return {
-    'SilkSpawners': {
+    SilkSpawners: {
       prefix: '❌',
-      value: 'You probably don\'t need SilkSpawners as Purpur already has its features.',
+      value:
+        'You probably don\'t need SilkSpawners as Purpur already has its features.',
     },
-    'MineableSpawners': {
+    MineableSpawners: {
       prefix: '❌',
-      value: 'You probably don\'t need MineableSpawners as Purpur already has its features.',
+      value:
+        'You probably don\'t need MineableSpawners as Purpur already has its features.',
     },
-    'VillagerLobotomizatornator': {
+    VillagerLobotomizatornator: {
       prefix: '❌',
-      value: 'You probably don\'t need VillagerLobotomizatornator as Purpur already adds its features.\nEnable villager.lobotomize.enabled in purpur.yml.',
+      value:
+        'You probably don\'t need VillagerLobotomizatornator as Purpur already adds its features.\nEnable villager.lobotomize.enabled in purpur.yml.',
     },
   };
 }

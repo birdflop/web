@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "命令已成功复制到您的剪贴板。",
-        "title": "Command Copied!"
+        "title": "命令已复制！"
       },
       "title": "命令"
     },

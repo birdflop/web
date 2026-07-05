@@ -4,10 +4,10 @@
       "interval": "애니메이션 간격",
       "name": "애니메이션 이름",
       "style": {
-        "BOUNCING": "Bouncing",
-        "FULL_TEXT_CYCLE": "Full Text Cycle",
-        "LEFT_TO_RIGHT": "Left to Right",
-        "RIGHT_TO_LEFT": "Right to Left",
+        "BOUNCING": "바운싱",
+        "FULL_TEXT_CYCLE": "전체 텍스트 순환",
+        "LEFT_TO_RIGHT": "왼쪽에서 오른쪽으로",
+        "RIGHT_TO_LEFT": "오른쪽에서 왼쪽으로",
         "title": "애니메이션 스타일"
       }
     },

@@ -1,6 +1,18 @@
 // data/historicPrices.ts
 export const historicPrices = {
-  labels: ['Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025', 'Q1 2026'],
+  labels: [
+    'Q3 2023',
+    'Q4 2023',
+    'Q1 2024',
+    'Q2 2024',
+    'Q3 2024',
+    'Q4 2024',
+    'Q1 2025',
+    'Q2 2025',
+    'Q3 2025',
+    'Q4 2025',
+    'Q1 2026',
+  ],
   datasets: [
     {
       label: 'US Reimbursements (%)',

@@ -5,12 +5,12 @@ on:
     branches:
       - birdflop
     paths:
-      - 'packages/rgbirdflop/**'
-      - '.release-please-manifest.json'
-      - 'release-please-config.json'
+      - "packages/rgbirdflop/**"
+      - ".release-please-manifest.json"
+      - "release-please-config.json"
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: write
   pull-requests: write
   packages: write
@@ -40,9 +40,9 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@birdflop'
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@birdflop"
 
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}

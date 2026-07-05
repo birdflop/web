@@ -8,7 +8,8 @@ import { getSignificantPoints } from '~/util/rgb/Decode';
 import { decodeMiniMessage } from '~/util/rgb/MiniMessageDecode';
 
 function decodeLegacy(rgbtext: string) {
-  const legacyCodeRegex = /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|&#[0-9A-Fa-f]{6}|(?:[&§]|\\u00a7)[l-orL-ORkK])/g;
+  const legacyCodeRegex =
+    /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|&#[0-9A-Fa-f]{6}|(?:[&§]|\\u00a7)[l-orL-ORkK])/g;
   const matches = [...rgbtext.matchAll(legacyCodeRegex)];
   if (matches.length === 0) return null;
 
@@ -70,7 +71,8 @@ function decodeLegacy(rgbtext: string) {
     }
 
     const startIdx = match.index + codeStr.length;
-    const endIdx = (i + 1 < matches.length) ? matches[i + 1].index : rgbtext.length;
+    const endIdx =
+      i + 1 < matches.length ? matches[i + 1].index : rgbtext.length;
     const textSegment = rgbtext.substring(startIdx, endIdx);
 
     for (let c = 0; c < textSegment.length; c++) {
@@ -91,13 +93,15 @@ function decodeLegacy(rgbtext: string) {
   return { plainText, colors, charFormattings };
 }
 
-function buildFormatSegments(charFormattings: Array<{
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-  strikethrough?: boolean;
-  obfuscate?: boolean;
-}>) {
+function buildFormatSegments(
+  charFormattings: Array<{
+    bold?: boolean;
+    italic?: boolean;
+    underline?: boolean;
+    strikethrough?: boolean;
+    obfuscate?: boolean;
+  }>,
+) {
   const segments: Array<{
     start: number;
     end: number;
@@ -107,12 +111,13 @@ function buildFormatSegments(charFormattings: Array<{
     strikethrough?: boolean;
     obfuscate?: boolean;
   }> = [];
-  let currentFmt: typeof charFormattings[0] | null = null;
+  let currentFmt: (typeof charFormattings)[0] | null = null;
   let startIdx = -1;
 
   for (let i = 0; i < charFormattings.length; i++) {
     const fmt = charFormattings[i];
-    const isSame = currentFmt &&
+    const isSame =
+      currentFmt &&
       !!currentFmt.bold === !!fmt.bold &&
       !!currentFmt.italic === !!fmt.italic &&
       !!currentFmt.underline === !!fmt.underline &&
@@ -120,7 +125,14 @@ function buildFormatSegments(charFormattings: Array<{
       !!currentFmt.obfuscate === !!fmt.obfuscate;
 
     if (!isSame) {
-      if (currentFmt && (currentFmt.bold || currentFmt.italic || currentFmt.underline || currentFmt.strikethrough || currentFmt.obfuscate)) {
+      if (
+        currentFmt &&
+        (currentFmt.bold ||
+          currentFmt.italic ||
+          currentFmt.underline ||
+          currentFmt.strikethrough ||
+          currentFmt.obfuscate)
+      ) {
         segments.push({
           start: startIdx,
           end: i,
@@ -136,7 +148,14 @@ function buildFormatSegments(charFormattings: Array<{
     }
   }
 
-  if (currentFmt && (currentFmt.bold || currentFmt.italic || currentFmt.underline || currentFmt.strikethrough || currentFmt.obfuscate)) {
+  if (
+    currentFmt &&
+    (currentFmt.bold ||
+      currentFmt.italic ||
+      currentFmt.underline ||
+      currentFmt.strikethrough ||
+      currentFmt.obfuscate)
+  ) {
     segments.push({
       start: startIdx,
       end: charFormattings.length,
@@ -151,12 +170,12 @@ function buildFormatSegments(charFormattings: Array<{
   return segments;
 }
 
-export default component$(({ hidden }: {
-  hidden: boolean;
-}) => {
+export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
   const textDecodedTitle = t('rgb.decode.decoded.title@@RGB Text Decoded!');
-  const textDecodedDescription = t('rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.');
+  const textDecodedDescription = t(
+    'rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.',
+  );
 
   const notifications = useContext(NotificationContext);
   const rgbStore = useContext(rgbStoreContext);
@@ -191,7 +210,7 @@ export default component$(({ hidden }: {
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
     const newColors = significantPoints.map((color) => {
-      const pos = colors.find(c => c.hex == color)?.pos ?? 0;
+      const pos = colors.find((c) => c.hex == color)?.pos ?? 0;
       return { hex: color, pos };
     });
     rgbStore.colors = newColors;
@@ -214,24 +233,42 @@ export default component$(({ hidden }: {
   });
 
   return (
-    <div class={{
-      'flex flex-col gap-2 transition-all duration-300': true,
-      'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-100 opacity-100 pointer-events-auto': !hidden,
-    }} id="decode">
+    <div
+      class={{
+        'flex flex-col gap-2 transition-all duration-300': true,
+        'pointer-events-none max-h-0 opacity-0': hidden,
+        'pointer-events-auto max-h-100 opacity-100': !hidden,
+      }}
+      id="decode"
+    >
       <label for="decode">
         {t('rgb.decode.title@@Decode')}
-        <span class="text-lum-text-secondary"> - {t('rgb.decode.description@@Copy-paste an existing RGB text here to edit it')}</span>
+        <span class="text-lum-text-secondary">
+          {' '}
+          -{' '}
+          {t(
+            'rgb.decode.description@@Copy-paste an existing RGB text here to edit it',
+          )}
+        </span>
       </label>
-      <textarea id="decode" class={{
-        'lum-input h-16 w-full font-mc whitespace-pre-wrap': true,
-      }} placeholder={generateOutput(rgbStore)}
-      onInput$={async (e, el) => {
-        const threshold = document.getElementById('threshold') as HTMLInputElement;
-        await decodeText(el.value, Number(threshold.value));
-      }}
+      <textarea
+        id="decode"
+        class={{
+          'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
+        }}
+        placeholder={generateOutput(rgbStore)}
+        onInput$={async (e, el) => {
+          const threshold = document.getElementById(
+            'threshold',
+          ) as HTMLInputElement;
+          await decodeText(el.value, Number(threshold.value));
+        }}
       />
-      <NumberInput input value={threshold.value} id="threshold" class={{ 'w-full': true }}
+      <NumberInput
+        input
+        value={threshold.value}
+        id="threshold"
+        class={{ 'w-full': true }}
         onInput$={async (e, el) => {
           threshold.value = Number(el.value);
           const decode = document.getElementById('decode') as HTMLInputElement;
@@ -249,9 +286,19 @@ export default component$(({ hidden }: {
         }}
       >
         {t('rgb.decode.threshold.title@@Threshold')}
-        <span class="text-lum-text-secondary"> - {t('rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors')}</span>
+        <span class="text-lum-text-secondary">
+          {' '}
+          -{' '}
+          {t(
+            'rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors',
+          )}
+        </span>
       </NumberInput>
-      <p class="text-sm">{t('rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.')}</p>
+      <p class="text-sm">
+        {t(
+          'rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.',
+        )}
+      </p>
     </div>
   );
 });

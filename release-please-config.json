@@ -11,7 +11,7 @@
     "packages/rgbirdflop": {
       "package-name": "RGBirdflop",
       "component": "rgbirdflop",
-      "extra-files": [ "package.json" ]
+      "extra-files": ["package.json"]
     }
   },
   "changelog-sections": [

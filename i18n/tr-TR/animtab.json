@@ -4,10 +4,10 @@
       "interval": "Animasyon Aralığı",
       "name": "Animasyon Adı",
       "style": {
-        "BOUNCING": "Bouncing",
-        "FULL_TEXT_CYCLE": "Full Text Cycle",
-        "LEFT_TO_RIGHT": "Left to Right",
-        "RIGHT_TO_LEFT": "Right to Left",
+        "BOUNCING": "Sıçrama",
+        "FULL_TEXT_CYCLE": "Tam Metin Döngüsü",
+        "LEFT_TO_RIGHT": "Soldan Sağa",
+        "RIGHT_TO_LEFT": "Sağdan Sola",
         "title": "Animasyon Stili"
       }
     },

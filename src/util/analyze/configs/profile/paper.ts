@@ -5,13 +5,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['chunks']['max-auto-save-chunks-per-tick']) >= 24;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['chunks'][
+                    'max-auto-save-chunks-per-tick'
+                  ],
+                ) >= 24
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 6.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 6.',
       },
     ],
     'environment.optimize-explosions': [
@@ -19,7 +26,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['environment']['optimize-explosions'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['environment'][
+                  'optimize-explosions'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -33,13 +44,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['tick-rates']['mob-spawner']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['tick-rates'][
+                    'mob-spawner'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Increase this in config/paper-world-defaults.yml.\nRecommended: 2.',
+        value:
+          'Increase this in config/paper-world-defaults.yml.\nRecommended: 2.',
       },
     ],
     'entities.behavior.disable-chest-cat-detection': [
@@ -47,7 +65,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['behavior']['disable-chest-cat-detection'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'behavior'
+                ]['disable-chest-cat-detection'] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -61,13 +83,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['tick-rates']['container-update']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['tick-rates'][
+                    'container-update'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Increase this in config/paper-world-defaults.yml.\nRecommended: 3.',
+        value:
+          'Increase this in config/paper-world-defaults.yml.\nRecommended: 3.',
       },
     ],
     'tick-rates.grass-spread': [
@@ -75,13 +104,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['tick-rates']['grass-spread']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['tick-rates'][
+                    'grass-spread'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Increase this in config/paper-world-defaults.yml.\nRecommended: 4.',
+        value:
+          'Increase this in config/paper-world-defaults.yml.\nRecommended: 4.',
       },
     ],
     'entities.spawning.despawn-ranges.ambient.soft': [
@@ -89,13 +125,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['ambient']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['ambient']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.ambient.hard': [
@@ -103,13 +146,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['ambient']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['ambient']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.axolotls.soft': [
@@ -117,13 +167,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['axolotls']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['axolotls']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.axolotls.hard': [
@@ -131,13 +188,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['axolotls']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['axolotls']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.creature.soft': [
@@ -145,13 +209,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['creature']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['creature']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.creature.hard': [
@@ -159,13 +230,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['creature']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['creature']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.misc.soft': [
@@ -173,13 +251,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['misc']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['misc']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.misc.hard': [
@@ -187,13 +272,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['misc']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['misc']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.monster.soft': [
@@ -201,13 +293,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['monster']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['monster']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.monster.hard': [
@@ -215,13 +314,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['monster']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['monster']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.underground_water_creature.soft': [
@@ -229,13 +335,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['underground_water_creature']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['underground_water_creature']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.underground_water_creature.hard': [
@@ -243,13 +356,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['underground_water_creature']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['underground_water_creature']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.water_ambient.soft': [
@@ -257,13 +377,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['water_ambient']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['water_ambient']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.water_ambient.hard': [
@@ -271,13 +398,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['water_ambient']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['water_ambient']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'entities.spawning.despawn-ranges.water_creature.soft': [
@@ -285,13 +419,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['water_creature']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['water_creature']['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 28.',
       },
     ],
     'entities.spawning.despawn-ranges.water_creature.hard': [
@@ -299,13 +440,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['despawn-ranges']['water_creature']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['despawn-ranges']['water_creature']['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
+        value:
+          'Decrease this in config/paper-world-defaults.yml.\nRecommended: 96.',
       },
     ],
     'hopper.disable-move-event': [
@@ -313,7 +461,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['hopper']['disable-move-event'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['hopper'][
+                  'disable-move-event'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -327,13 +479,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['non-player-arrow-despawn-rate']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['non-player-arrow-despawn-rate'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 60',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 60',
       },
     ],
     'entities.spawning.creative-arrow-despawn-rate': [
@@ -341,13 +500,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['creative-arrow-despawn-rate']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['entities'][
+                    'spawning'
+                  ]['creative-arrow-despawn-rate'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 60',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 60',
       },
     ],
     'chunks.prevent-moving-into-unloaded-chunks': [
@@ -355,7 +521,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['chunks']['prevent-moving-into-unloaded-chunks'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['chunks'][
+                  'prevent-moving-into-unloaded-chunks'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -369,13 +539,18 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['misc']['redstone-implementation'] != 'ALTERNATE_CURRENT';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['misc'][
+                  'redstone-implementation'
+                ] != 'ALTERNATE_CURRENT'
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set this to "ALTERNATE_CURRENT" in config/paper-world-defaults.yml.',
+        value:
+          'Set this to "ALTERNATE_CURRENT" in config/paper-world-defaults.yml.',
       },
     ],
     'collisions.fix-climbing-bypassing-cramming-rule': [
@@ -383,7 +558,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['collisions']['fix-climbing-bypassing-cramming-rule'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['collisions'][
+                  'fix-climbing-bypassing-cramming-rule'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -397,7 +576,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['armor-stands']['do-collision-entity-lookups'] == 'true';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'armor-stands'
+                ]['do-collision-entity-lookups'] == 'true'
+              );
             },
             vars: ['paper'],
           },
@@ -411,25 +594,41 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['armor-stands']['tick'] == 'true';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'armor-stands'
+                ]['tick'] == 'true'
+              );
             },
             vars: ['paper'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'PetBlocks') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'PetBlocks',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'BlockBalls') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'BlockBalls',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'ArmorStandTools') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'ArmorStandTools',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
@@ -443,7 +642,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['per-player-mob-spawns'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'spawning'
+                ]['per-player-mob-spawns'] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -457,7 +660,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['alt-item-despawn-rate']['enabled'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'spawning'
+                ]['alt-item-despawn-rate']['enabled'] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -471,13 +678,18 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-defaults.yml']['entities']['spawning']['alt-item-despawn-rate']['enabled'] == 'false';
+              return (
+                dict_of_vars.paper['world-defaults.yml']['entities'][
+                  'spawning'
+                ]['alt-item-despawn-rate']['enabled'] == 'false'
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
       },
     ],
     'chunks.entity-per-chunk-save-limit.snowball': [
@@ -485,13 +697,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['chunks']['entity-per-chunk-save-limit']['snowball']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['chunks'][
+                    'entity-per-chunk-save-limit'
+                  ]['snowball'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
       },
     ],
     'chunks.entity-per-chunk-save-limit.ender_pearl': [
@@ -499,13 +718,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['chunks']['entity-per-chunk-save-limit']['ender_pearl']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['chunks'][
+                    'entity-per-chunk-save-limit'
+                  ]['ender_pearl'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
       },
     ],
     'chunks.entity-per-chunk-save-limit.arrow': [
@@ -513,13 +739,20 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-defaults.yml']['chunks']['entity-per-chunk-save-limit']['arrow']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-defaults.yml']['chunks'][
+                    'entity-per-chunk-save-limit'
+                  ]['arrow'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
         ],
         prefix: '❌',
-        value: 'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
+        value:
+          'Set a value in config/paper-world-defaults.yml.\nRecommended: 16.',
       },
     ],
   };

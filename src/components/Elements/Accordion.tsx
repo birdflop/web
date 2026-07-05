@@ -1,4 +1,11 @@
-import { $, component$, PropsOf, QRL, Slot, useContext } from '@builder.io/qwik';
+import {
+  $,
+  component$,
+  PropsOf,
+  QRL,
+  Slot,
+  useContext,
+} from '@builder.io/qwik';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
@@ -38,24 +45,36 @@ interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
   pcOnly?: boolean;
   onClick$?: QRL<() => void>;
-  class?: { [key: string]: boolean; }
+  class?: { [key: string]: boolean };
 }
 
-export default component$(({ sectionName, pcOnly, class: className, onClick$, ...props }: AccordionProps) => {
-  const openItems = useContext(openItemsContext);
+export default component$(
+  ({
+    sectionName,
+    pcOnly,
+    class: className,
+    onClick$,
+    ...props
+  }: AccordionProps) => {
+    const openItems = useContext(openItemsContext);
 
-  return (
-    <Dropdown class={{
-      'hidden sm:flex': !!pcOnly,
-      ...className,
-    }} opened={openItems.value.includes(sectionName) && !pcOnly} { ...props }
-    onClick$={async () => {
-      await onClick$?.();
-      openItems.value = await toggleAccordion(sectionName, openItems.value);
-    }}>
-      <div class="flex items-center gap-2">
-        <Slot />
-      </div>
-    </Dropdown>
-  );
-});
+    return (
+      <Dropdown
+        class={{
+          'hidden sm:flex': !!pcOnly,
+          ...className,
+        }}
+        opened={openItems.value.includes(sectionName) && !pcOnly}
+        {...props}
+        onClick$={async () => {
+          await onClick$?.();
+          openItems.value = await toggleAccordion(sectionName, openItems.value);
+        }}
+      >
+        <div class="flex items-center gap-2">
+          <Slot />
+        </div>
+      </Dropdown>
+    );
+  },
+);

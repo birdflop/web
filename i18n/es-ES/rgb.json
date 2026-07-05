@@ -1,25 +1,25 @@
 {
   "rgb": {
     "advanced": {
-      "addColor": "Add color",
-      "backToClassic": "Classic editor",
-      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "addColor": "Añadir color",
+      "backToClassic": "Editor clásico",
+      "highlightHint": "Resalta letras en el cuadro de arriba para colorear y dar formato a esa parte.",
       "mode": {
-        "gradient": "Gradient",
-        "none": "Uncolored",
-        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
-        "solid": "Solid"
+        "gradient": "Degradado",
+        "none": "Sin color",
+        "noneDescription": "Estos caracteres mantienen el color por defecto de Minecraft (solo se aplica formato).",
+        "solid": "Sólido"
       },
-      "selectAll": "Select all",
-      "styling": "Styling",
-      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+      "selectAll": "Seleccionar todo",
+      "styling": "Estilo",
+      "tryAdvanced": "Prueba el editor Avanzado con degradados basados en segmentos"
     },
     "colors": {
       "amount": "Color Cantidad",
       "character": "Carácter",
       "charsPer": "Caracteres por color",
       "color": "Color",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "Copiar de los colores del texto",
       "customFormat": "Formato personalizado",
       "disperse": {
         "always": {
@@ -28,23 +28,23 @@
         },
         "title": "Dispersar"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "Duplicar",
       "format": "Formato de color",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "Tipo de degradado",
+      "invert": "Invertir",
       "lowercase": {
         "description": "Active esta opción si desea utilizar códigos hexadecimales en minúsculas.",
         "title": "Códigos hexadecimales en minúsculas"
       },
-      "position": "Position",
+      "position": "Posición",
       "randomize": "Aleatorizar",
-      "reverse": "Reverse",
+      "reverse": "Invertir dirección",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "Sombra de texto personalizada",
         "title": "Sombra de texto",
         "warning": "Advertencia: La sombra de texto sólo funciona con formato JSON o MiniMessage."
       },
-      "shuffle": "Shuffle",
+      "shuffle": "Aleatorizar",
       "title": "Colores",
       "trimSpaces": {
         "description": "Desactívalo si utilizas subrayados / tachados vacíos.",
@@ -69,7 +69,7 @@
     "formatting": {
       "bold": "Negrita",
       "character": "Formato Carácter",
-      "clear": "Clear Formatting",
+      "clear": "Limpiar formato",
       "italic": "Cursiva",
       "obfuscate": "Ofuscar",
       "options": "Opciones de formato",
@@ -84,22 +84,22 @@
         "chat": "Chat Minecraft",
         "default": "Por defecto",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "Cofre de la GUI de Minecraft",
+          "item": "Nombre del objeto de la GUI",
+          "lore": "Descripción del objeto de la GUI"
         },
         "tab": {
           "footer": "Pie de pestaña Minecraft",
-          "header": "Minecraft Tab Header",
-          "player": "Minecraft Tab Player"
+          "header": "Encabezado de pestaña de Minecraft",
+          "player": "Jugador en pestaña de Minecraft"
         },
         "typeHere": "¡Escriba aquí!"
       },
-      "rawEdit": "Raw Edit Mode",
+      "rawEdit": "Modo de edición simple",
       "title": "Texto de entrada",
-      "viewFormatted": "View Formatted Preview"
+      "viewFormatted": "Ver vista previa formateada"
     },
-    "options": "Options",
+    "options": "Opciones",
     "output": {
       "copied": {
         "description": "El texto RGB se ha copiado correctamente en el portapapeles.",
@@ -113,7 +113,7 @@
       "back": "Volver a los preajustes",
       "copied": {
         "description": "Preajuste copiado con éxito en el portapapeles.",
-        "title": "Preset Copied!"
+        "title": "¡Preset copiado!"
       },
       "copy": "Copia",
       "createNew": "Crear un nuevo preajuste",
@@ -140,9 +140,9 @@
       },
       "pasteHere": "Pegar aquí",
       "pending": "Este preajuste está pendiente de revisión y puede que aún no esté disponible para otros usuarios.",
-      "personalPresets": "Personal Presets",
+      "personalPresets": "Presets personales",
       "presetData": "Datos preestablecidos",
-      "preview": "Preset Preview",
+      "preview": "Vista previa de preset",
       "publish": "Publique su propio preajuste",
       "remove": "Eliminar",
       "save": "Guardar",
@@ -152,14 +152,14 @@
         "title": "¡Preajuste guardado!",
         "warning": "Inicia sesión para guardar los preajustes de forma permanente."
       },
-      "savedPresets": "Saved Presets",
+      "savedPresets": "Presets guardados",
       "showSaved": {
         "description": "Actívalo para mostrar sólo los preajustes guardados.",
         "title": "Mostrar preajustes guardados"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "Menos guardados",
+        "mostSaved": "Más guardados",
         "nameAZ": "Nombre A-Z",
         "nameZA": "Nombre Z-A",
         "newest": "Lo más nuevo primero",
@@ -184,10 +184,10 @@
       }
     },
     "segmentColorEditor": {
-      "title": "Segment Color Editor"
+      "title": "Editor de color de segmento"
     },
     "segments": {
-      "title": "Segments"
+      "title": "Segmentos"
     }
   }
 }

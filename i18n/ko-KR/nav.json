@@ -5,15 +5,15 @@
       "home": "홈으로 돌아가기",
       "title": "404: 페이지를 찾을 수 없습니다"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "클릭하여 닫기",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "수락",
+      "description": "사용자의 설정을 자동으로 저장하고 불러오기 위해 쿠키를 사용합니다.",
+      "optOut": "거부",
+      "title": "쿠키"
     },
     "docs": "문서",
-    "experimental": "experimental",
+    "experimental": "실험적",
     "hosting": {
       "billing": "청구",
       "nodeStats": {
@@ -39,8 +39,8 @@
     },
     "resources": {
       "analyze": {
-        "description": "Analyze a Spark Profile or Paper Timings and get possible optimizations",
-        "title": "Analyze"
+        "description": "Spark 프로필 또는 Paper Timings를 분석하여 적용 가능한 최적화 방안을 제안합니다.",
+        "title": "분석"
       },
       "animatedTAB": {
         "description": "TAB 플러그인 그라데이션 애니메이션 생성기",
@@ -65,8 +65,8 @@
       },
       "hexGradient": {
         "advanced": {
-          "description": "Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.",
-          "title": "RGBirdflop Advanced"
+          "description": "텍스트를 입력한 다음 일부분을 강조 표시하여 해당 부분에만 고유한 색상과 서식을 지정할 수 있습니다. 원하는 만큼 다양한 그라데이션, 단색, 스타일을 조합해 보세요.",
+          "title": "RGBirdflop 고급"
         },
         "description": "16진수 그라데이션 텍스트 생성기, 501(c)(3) 비영리 Minecraft 호스트인 Birdflop에서 제공.",
         "title": "RGB버드플롭"
@@ -85,9 +85,9 @@
         "title": "종이 타이밍"
       },
       "plugins": {
-        "description": "Keep track of plugin updates without checking every plugin page for updates.",
-        "noServers": "No servers added yet. Get started by adding a server and some plugins!",
-        "title": "Plugin Updates"
+        "description": "각 플러그인 페이지를 직접 확인하지 않고도 플러그인 업데이트를 계속 추적할 수 있습니다.",
+        "noServers": "아직 추가된 서버가 없습니다. 서버와 플러그인을 추가하여 시작해 보세요!",
+        "title": "플러그인 업데이트"
       },
       "serverTools": {
         "description": "Minecraft 서버 구성 및 설정을 돕는 도구.",
@@ -104,8 +104,8 @@
       "title": "리소스"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "여기에서 설정 및 설정을 관리합니다.",
+      "title": "설정"
     },
     "termsofService": "서비스 약관"
   }

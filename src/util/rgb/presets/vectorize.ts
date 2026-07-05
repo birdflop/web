@@ -1,5 +1,11 @@
 import type { rgbPreset } from '.';
-import { getDB, presets, users, savedPresets, PublicPresetWithUser } from '../../db';
+import {
+  getDB,
+  presets,
+  users,
+  savedPresets,
+  PublicPresetWithUser,
+} from '../../db';
 import { isNotNull, eq } from 'drizzle-orm';
 import {
   hexToOklab,
@@ -109,7 +115,11 @@ export interface SimilarPreset extends PublicPresetWithUser {
 export async function checkPresetSimilarity(
   newPreset: rgbPreset,
   threshold: number = 2.0,
-): Promise<{ isSimilar: boolean; similarPresets: SimilarPreset[]; closestDistance?: number }> {
+): Promise<{
+  isSimilar: boolean;
+  similarPresets: SimilarPreset[];
+  closestDistance?: number;
+}> {
   try {
     const db = getDB();
     if (!db) {
@@ -137,7 +147,10 @@ export async function checkPresetSimilarity(
     let closestDistance: number | undefined;
 
     for (const existing of existingPresets) {
-      if (!existing.presets.colorVector || !Array.isArray(existing.presets.colorVector)) {
+      if (
+        !existing.presets.colorVector ||
+        !Array.isArray(existing.presets.colorVector)
+      ) {
         continue;
       }
 

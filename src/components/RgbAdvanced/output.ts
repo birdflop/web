@@ -11,9 +11,7 @@ import {
   type ColorFormat,
   type Formatting,
 } from '@birdflop/rgbirdflop';
-import {
-  chunkText, SegmentType,
-} from './model';
+import { chunkText, SegmentType } from './model';
 
 function renderTemplateSegment(
   hexWithoutHash: string,
@@ -22,7 +20,8 @@ function renderTemplateSegment(
   options: typeof rgbDefaults,
 ): string {
   let out = options.colorFormat.color;
-  for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
+  for (let n = 1; n <= 6; n++)
+    out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(fmt, options));
   if (options.lowercase) out = out.toLowerCase();
 
@@ -38,17 +37,28 @@ function renderTemplateSegment(
   return out;
 }
 
-function applyFormatWrappers(output: string, format: ColorFormat, style: Formatting): string {
+function applyFormatWrappers(
+  output: string,
+  format: ColorFormat,
+  style: Formatting,
+): string {
   let out = output;
   if (format.bold && style.bold) out = format.bold.replace('$t', out);
   if (format.italic && style.italic) out = format.italic.replace('$t', out);
-  if (format.underline && style.underline) out = format.underline.replace('$t', out);
-  if (format.strikethrough && style.strikethrough) out = format.strikethrough.replace('$t', out);
-  if (format.obfuscate && style.obfuscate) out = format.obfuscate.replace('$t', out);
+  if (format.underline && style.underline)
+    out = format.underline.replace('$t', out);
+  if (format.strikethrough && style.strikethrough)
+    out = format.strikethrough.replace('$t', out);
+  if (format.obfuscate && style.obfuscate)
+    out = format.obfuscate.replace('$t', out);
   return out;
 }
 
-function applySelectiveFormatting(text: string, offset: number, options: typeof rgbDefaults): string {
+function applySelectiveFormatting(
+  text: string,
+  offset: number,
+  options: typeof rgbDefaults,
+): string {
   const chars = Array.from(text);
   let currentFmt: Formatting | undefined;
   let buffer = '';
@@ -80,7 +90,10 @@ function applySelectiveFormatting(text: string, offset: number, options: typeof 
   for (const ch of chars) {
     const fmt = getFormattingAtOffset(charOffset, options);
 
-    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) || currentFmt.font !== fmt.font;
+    const fmtChanged =
+      !currentFmt ||
+      ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
+      currentFmt.font !== fmt.font;
 
     if (fmtChanged) {
       flush();
@@ -112,7 +125,10 @@ function segmentHexProvider(segment: SegmentType): (() => string) | null {
   }
   let len = segment.colorLength;
   if (!len || len < 1) len = 1;
-  const numChunks = Math.max(1, Math.ceil(Array.from(segment.text).length / len));
+  const numChunks = Math.max(
+    1,
+    Math.ceil(Array.from(segment.text).length / len),
+  );
   const gradient = new ColorGradient(
     sortColors(segment.colors).map(getRGBColorStop),
     numChunks,
@@ -125,7 +141,10 @@ function segmentHexProvider(segment: SegmentType): (() => string) | null {
 // Format-family renderers
 // ---------------------------------------------------------------------------
 
-function renderTemplate(segments: SegmentType[], options: typeof rgbDefaults): string {
+function renderTemplate(
+  segments: SegmentType[],
+  options: typeof rgbDefaults,
+): string {
   let out = '';
   let charOffset = 0;
   for (const segment of segments) {
@@ -197,7 +216,10 @@ function buildJsonExtra(
   return e;
 }
 
-function renderJson(segments: SegmentType[], options: typeof rgbDefaults): string {
+function renderJson(
+  segments: SegmentType[],
+  options: typeof rgbDefaults,
+): string {
   const json: { text: string; extra: JsonExtra[] } = { text: '', extra: [] };
   let charOffset = 0;
   for (const segment of segments) {
@@ -237,12 +259,17 @@ function renderJson(segments: SegmentType[], options: typeof rgbDefaults): strin
   return JSON.stringify(json);
 }
 
-function miniMessageGradientBody(segment: SegmentType, charOffset: number, options: typeof rgbDefaults): string {
+function miniMessageGradientBody(
+  segment: SegmentType,
+  charOffset: number,
+  options: typeof rgbDefaults,
+): string {
   const colors = sortColors(segment.colors);
   const text = segment.text;
 
   const even = !colors.find(
-    (color, i) => color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
+    (color, i) =>
+      color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
   );
   if (even) {
     const inner = applySelectiveFormatting(text, charOffset, options);
@@ -251,7 +278,8 @@ function miniMessageGradientBody(segment: SegmentType, charOffset: number, optio
 
   const copy = [...colors];
   if (copy[0].pos !== 0) copy.unshift({ ...copy[0], pos: 0 });
-  if (copy[copy.length - 1].pos !== 100) copy.push({ ...copy[copy.length - 1], pos: 100 });
+  if (copy[copy.length - 1].pos !== 100)
+    copy.push({ ...copy[copy.length - 1], pos: 100 });
 
   let body = '';
   const n = text.length;
@@ -274,7 +302,10 @@ function miniMessageGradientBody(segment: SegmentType, charOffset: number, optio
   return body;
 }
 
-function renderMiniMessage(segments: SegmentType[], options: typeof rgbDefaults): string {
+function renderMiniMessage(
+  segments: SegmentType[],
+  options: typeof rgbDefaults,
+): string {
   let out = '';
   let charOffset = 0;
   for (const seg of segments) {
@@ -300,7 +331,10 @@ function renderMiniMessage(segments: SegmentType[], options: typeof rgbDefaults)
  * Equivalent to concatenating each segment's rendered output, with prefix/suffix
  * applied once at the end. Pure & deterministic.
  */
-export function generateAdvancedOutput(segments: SegmentType[], options: typeof rgbDefaults): string {
+export function generateAdvancedOutput(
+  segments: SegmentType[],
+  options: typeof rgbDefaults,
+): string {
   const c = options.colorFormat.color;
   let combined: string;
   if (c === 'MiniMessage') combined = renderMiniMessage(segments, options);

@@ -4,10 +4,10 @@
       "interval": "Intervalo da animação",
       "name": "Nome da Animação",
       "style": {
-        "BOUNCING": "Bouncing",
-        "FULL_TEXT_CYCLE": "Full Text Cycle",
-        "LEFT_TO_RIGHT": "Left to Right",
-        "RIGHT_TO_LEFT": "Right to Left",
+        "BOUNCING": "Ressaltando",
+        "FULL_TEXT_CYCLE": "Ciclo completo de texto",
+        "LEFT_TO_RIGHT": "Esquerda para a direita",
+        "RIGHT_TO_LEFT": "Direita para a esquerda",
         "title": "Estilo da animação"
       }
     },

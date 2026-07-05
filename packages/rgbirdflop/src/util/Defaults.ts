@@ -8,18 +8,18 @@ export type ColorStop = {
 };
 
 export interface Formatting {
-  bold?: boolean,
-  italic?: boolean,
-  underline?: boolean,
-  strikethrough?: boolean,
-  obfuscate?: boolean,
-  font?: string,
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+  obfuscate?: boolean;
+  font?: string;
 }
 
 export interface FormatSegment extends Formatting {
   start: number;
   end: number;
-};
+}
 
 export interface ColorFormat {
   color: string;
@@ -114,9 +114,11 @@ export const animTABDefaults = {
   type: ANIMATION_STYLES.LEFT_TO_RIGHT,
   speed: 50,
   length: 1,
-  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
+  outputFormat:
+    '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
 };
 
 export const combinedDefaults = {
-  ...rgbDefaults, ...animTABDefaults,
+  ...rgbDefaults,
+  ...animTABDefaults,
 };

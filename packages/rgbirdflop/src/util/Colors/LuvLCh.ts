@@ -40,7 +40,7 @@ export interface LuvLCh {
  */
 const D65_WHITE_POINT = {
   X: 0.95047,
-  Y: 1.00000,
+  Y: 1.0,
   Z: 1.08883,
 };
 
@@ -55,8 +55,8 @@ export function linearRgbToXyz(linear: LinearRGB): XYZ {
 
   return {
     X: r * 0.4124564 + g * 0.3575761 + b * 0.1804375,
-    Y: r * 0.2126729 + g * 0.7151522 + b * 0.0721750,
-    Z: r * 0.0193339 + g * 0.1191920 + b * 0.9503041,
+    Y: r * 0.2126729 + g * 0.7151522 + b * 0.072175,
+    Z: r * 0.0193339 + g * 0.119192 + b * 0.9503041,
   };
 }
 
@@ -71,7 +71,7 @@ export function xyzToLinearRgb(xyz: XYZ): LinearRGB {
 
   return {
     r: X * 3.2404542 + Y * -1.5371385 + Z * -0.4985314,
-    g: X * -0.9692660 + Y * 1.8760108 + Z * 0.0415560,
+    g: X * -0.969266 + Y * 1.8760108 + Z * 0.041556,
     b: X * 0.0556434 + Y * -0.2040259 + Z * 1.0572252,
   };
 }
@@ -126,12 +126,13 @@ export function luvToXyz(luv: CIELUV, whitePoint = D65_WHITE_POINT): XYZ {
   const u_prime = luv.u / (13 * luv.L) + ur_prime;
   const v_prime = luv.v / (13 * luv.L) + vr_prime;
 
-  const Y = luv.L > kappa * epsilon
-    ? Math.pow((luv.L + 16) / 116, 3) * whitePoint.Y
-    : luv.L / kappa * whitePoint.Y;
+  const Y =
+    luv.L > kappa * epsilon
+      ? Math.pow((luv.L + 16) / 116, 3) * whitePoint.Y
+      : (luv.L / kappa) * whitePoint.Y;
 
-  const X = Y * 9 * u_prime / (4 * v_prime);
-  const Z = Y * (12 - 3 * u_prime - 20 * v_prime) / (4 * v_prime);
+  const X = (Y * 9 * u_prime) / (4 * v_prime);
+  const Z = (Y * (12 - 3 * u_prime - 20 * v_prime)) / (4 * v_prime);
 
   return { X, Y, Z };
 }

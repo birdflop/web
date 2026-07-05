@@ -4,10 +4,10 @@
       "interval": "Odstęp Pomiędzy Animacjami",
       "name": "Nazwa Animacji",
       "style": {
-        "BOUNCING": "Bouncing",
-        "FULL_TEXT_CYCLE": "Full Text Cycle",
-        "LEFT_TO_RIGHT": "Left to Right",
-        "RIGHT_TO_LEFT": "Right to Left",
+        "BOUNCING": "Odbijanie",
+        "FULL_TEXT_CYCLE": "Pełny cykl tekstu",
+        "LEFT_TO_RIGHT": "Od lewej do prawej",
+        "RIGHT_TO_LEFT": "Od prawej do lewej",
         "title": "Styl Animacji"
       }
     },

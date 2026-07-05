@@ -6,7 +6,7 @@ import type { AvailableExtraFlags, AvailableFlags } from '~/util/flags/flags';
 export type AvailableServerType = 'paper' | 'purpur' | 'velocity' | 'waterfall';
 
 interface SharedFlags<T = AvailableFlags> {
-  [key: string]: T[]
+  [key: string]: T[];
 }
 
 const sharedConfig: AvailableConfig[] = [
@@ -18,69 +18,54 @@ const sharedConfig: AvailableConfig[] = [
 ];
 
 const sharedFlags: SharedFlags = {
-  'bukkit': ['none', 'aikars', 'benchmarkedG1GC', 'benchmarkedZGC', 'benchmarkedShenandoah', 'hillttys', 'obyduxs', 'etils'],
-  'proxy': ['none', 'proxy'],
+  bukkit: [
+    'none',
+    'aikars',
+    'benchmarkedG1GC',
+    'benchmarkedZGC',
+    'benchmarkedShenandoah',
+    'hillttys',
+    'obyduxs',
+    'etils',
+  ],
+  proxy: ['none', 'proxy'],
 };
 
 const sharedExtraFlags: SharedFlags<AvailableExtraFlags> = {
-  'bukkit': ['benchmarkedGraalVM', 'meowiceGraalVM'],
+  bukkit: ['benchmarkedGraalVM', 'meowiceGraalVM'],
 };
 
 export const serverType: EnvironmentOptions<ServerTypeOption> = {
-  'paper': {
-    'flags': [
-      ...sharedFlags.bukkit,
-    ],
-    'extraFlags': [
-      ...sharedExtraFlags.bukkit,
-    ],
-    'default': {
-      'flags': 'aikars',
+  paper: {
+    flags: [...sharedFlags.bukkit],
+    extraFlags: [...sharedExtraFlags.bukkit],
+    default: {
+      flags: 'aikars',
     },
-    'config': [
-      ...sharedConfig,
-      'gui',
-    ],
+    config: [...sharedConfig, 'gui'],
   },
-  'purpur': {
-    'flags': [
-      ...sharedFlags.bukkit,
-    ],
-    'extraFlags': [
-      ...sharedExtraFlags.bukkit,
-      'vectors',
-    ],
-    'default': {
-      'flags': 'aikars',
-      'extraFlags': ['vectors'],
+  purpur: {
+    flags: [...sharedFlags.bukkit],
+    extraFlags: [...sharedExtraFlags.bukkit, 'vectors'],
+    default: {
+      flags: 'aikars',
+      extraFlags: ['vectors'],
     },
-    'config': [
-      ...sharedConfig,
-      'extraFlags',
-      'gui',
-    ],
+    config: [...sharedConfig, 'extraFlags', 'gui'],
   },
-  'velocity': {
-    'flags': [
-      ...sharedFlags.proxy,
-    ],
-    'default': {
-      'flags': 'proxy',
+  velocity: {
+    flags: [...sharedFlags.proxy],
+    default: {
+      flags: 'proxy',
     },
-    'config': [
-      ...sharedConfig,
-    ],
+    config: [...sharedConfig],
   },
-  'waterfall': {
-    'default': {
-      'flags': 'proxy',
+  waterfall: {
+    default: {
+      flags: 'proxy',
     },
-    'flags': [
-      ...sharedFlags.proxy,
-    ],
-    'config': [
-      ...sharedConfig,
-    ],
+    flags: [...sharedFlags.proxy],
+    config: [...sharedConfig],
   },
 };
 

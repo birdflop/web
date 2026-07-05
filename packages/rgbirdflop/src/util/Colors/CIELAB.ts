@@ -34,7 +34,7 @@ export interface LCHab {
  */
 const D65_WHITE_POINT = {
   X: 0.95047,
-  Y: 1.00000,
+  Y: 1.0,
   Z: 1.08883,
 };
 
@@ -45,7 +45,7 @@ const D65_WHITE_POINT = {
  */
 export function xyzToLab(xyz: XYZ, whitePoint = D65_WHITE_POINT): CIELAB {
   const epsilon = 216 / 24389; // 6^3 / 29^3
-  const kappa = 24389 / 27;    // 29^3 / 3^3
+  const kappa = 24389 / 27; // 29^3 / 3^3
 
   const xr = xyz.X / whitePoint.X;
   const yr = xyz.Y / whitePoint.Y;
@@ -314,7 +314,9 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
   const C2 = Math.sqrt(a2 * a2 + b2 * b2);
   const Cab = (C1 + C2) / 2;
 
-  const G = 0.5 * (1 - Math.sqrt(Math.pow(Cab, 7) / (Math.pow(Cab, 7) + Math.pow(25, 7))));
+  const G =
+    0.5 *
+    (1 - Math.sqrt(Math.pow(Cab, 7) / (Math.pow(Cab, 7) + Math.pow(25, 7))));
 
   const a1p = a1 * (1 + G);
   const a2p = a2 * (1 + G);
@@ -322,8 +324,8 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
   const C1p = Math.sqrt(a1p * a1p + b1 * b1);
   const C2p = Math.sqrt(a2p * a2p + b2 * b2);
 
-  const h1p = a1p === 0 && b1 === 0 ? 0 : Math.atan2(b1, a1p) * 180 / Math.PI;
-  const h2p = a2p === 0 && b2 === 0 ? 0 : Math.atan2(b2, a2p) * 180 / Math.PI;
+  const h1p = a1p === 0 && b1 === 0 ? 0 : (Math.atan2(b1, a1p) * 180) / Math.PI;
+  const h2p = a2p === 0 && b2 === 0 ? 0 : (Math.atan2(b2, a2p) * 180) / Math.PI;
 
   const h1pAdj = h1p >= 0 ? h1p : h1p + 360;
   const h2pAdj = h2p >= 0 ? h2p : h2p + 360;
@@ -342,7 +344,7 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
     dhp = h2pAdj - h1pAdj + 360;
   }
 
-  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin((dhp * Math.PI / 180) / 2);
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin((dhp * Math.PI) / 180 / 2);
 
   const Lbarp = (L1 + L2) / 2;
   const Cbarp = (C1p + C2p) / 2;
@@ -358,20 +360,25 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
     Hbarp = (h1pAdj + h2pAdj - 360) / 2;
   }
 
-  const T = 1 - 0.17 * Math.cos((Hbarp - 30) * Math.PI / 180) +
-    0.24 * Math.cos(2 * Hbarp * Math.PI / 180) +
-    0.32 * Math.cos((3 * Hbarp + 6) * Math.PI / 180) -
-    0.20 * Math.cos((4 * Hbarp - 63) * Math.PI / 180);
+  const T =
+    1 -
+    0.17 * Math.cos(((Hbarp - 30) * Math.PI) / 180) +
+    0.24 * Math.cos((2 * Hbarp * Math.PI) / 180) +
+    0.32 * Math.cos(((3 * Hbarp + 6) * Math.PI) / 180) -
+    0.2 * Math.cos(((4 * Hbarp - 63) * Math.PI) / 180);
 
   const dTheta = 30 * Math.exp(-Math.pow((Hbarp - 275) / 25, 2));
 
-  const Rc = 2 * Math.sqrt(Math.pow(Cbarp, 7) / (Math.pow(Cbarp, 7) + Math.pow(25, 7)));
+  const Rc =
+    2 * Math.sqrt(Math.pow(Cbarp, 7) / (Math.pow(Cbarp, 7) + Math.pow(25, 7)));
 
-  const Sl = 1 + (0.015 * Math.pow(Lbarp - 50, 2)) / Math.sqrt(20 + Math.pow(Lbarp - 50, 2));
+  const Sl =
+    1 +
+    (0.015 * Math.pow(Lbarp - 50, 2)) / Math.sqrt(20 + Math.pow(Lbarp - 50, 2));
   const Sc = 1 + 0.045 * Cbarp;
   const Sh = 1 + 0.015 * Cbarp * T;
 
-  const Rt = -Math.sin(2 * dTheta * Math.PI / 180) * Rc;
+  const Rt = -Math.sin((2 * dTheta * Math.PI) / 180) * Rc;
 
   const kL = 1;
   const kC = 1;
@@ -379,9 +386,9 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
 
   const dE = Math.sqrt(
     Math.pow(dLp / (kL * Sl), 2) +
-    Math.pow(dCp / (kC * Sc), 2) +
-    Math.pow(dHp / (kH * Sh), 2) +
-    Rt * (dCp / (kC * Sc)) * (dHp / (kH * Sh)),
+      Math.pow(dCp / (kC * Sc), 2) +
+      Math.pow(dHp / (kH * Sh), 2) +
+      Rt * (dCp / (kC * Sc)) * (dHp / (kH * Sh)),
   );
 
   return dE;

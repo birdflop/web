@@ -1,25 +1,25 @@
 {
   "rgb": {
     "advanced": {
-      "addColor": "Add color",
-      "backToClassic": "Classic editor",
-      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "addColor": "Dodaj kolor",
+      "backToClassic": "Klasyczny edytor",
+      "highlightHint": "Zaznacz litery w polu powyżej, aby zmienić kolor i formatowanie tylko tej części.",
       "mode": {
         "gradient": "Gradient",
-        "none": "Uncolored",
-        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
-        "solid": "Solid"
+        "none": "Bez koloru",
+        "noneDescription": "Te znaki zachowują domyślny kolor Minecraft (stosowane jest tylko formatowanie).",
+        "solid": "Jednolity"
       },
-      "selectAll": "Select all",
-      "styling": "Styling",
-      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+      "selectAll": "Zaznacz wszystko",
+      "styling": "Stylizowanie",
+      "tryAdvanced": "Wypróbuj Zaawansowany edytor z gradientami segmentowymi"
     },
     "colors": {
       "amount": "Ilość kolorów",
       "character": "Znak",
       "charsPer": "Znaków na kolor",
       "color": "Kolor",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "Kopiuj z kolorów tekstu",
       "customFormat": "Format Własny",
       "disperse": {
         "always": {
@@ -28,23 +28,23 @@
         },
         "title": "Rozprosz"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "Duplikuj",
       "format": "Format kolorów",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "Typ gradientu",
+      "invert": "Odwróć",
       "lowercase": {
         "description": "Włącz jeśli chcesz używać małych liter w kodzie koloru.",
         "title": "Małe litery w kodzie koloru"
       },
-      "position": "Position",
+      "position": "Pozycja",
       "randomize": "Losuj",
-      "reverse": "Reverse",
+      "reverse": "Odwróć kolejność",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "Niestandardowy cień tekstu",
         "title": "Cień tekstu",
         "warning": "Uwaga: Cień tekstu działa tylko w wypadku uzycia formatu JSON lub MiniMessage!"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "Losuj",
       "title": "Kolory",
       "trimSpaces": {
         "description": "Wyłącz, jeśli używasz pustych podkreśleń / przekreśleń",
@@ -69,7 +69,7 @@
     "formatting": {
       "bold": "Pogrubienie",
       "character": "Styl Formatowania ",
-      "clear": "Clear Formatting",
+      "clear": "Wyczyść formatowanie",
       "italic": "Kursywa",
       "obfuscate": "Zaciemnienie",
       "options": "Opcje Formatowania",
@@ -84,9 +84,9 @@
         "chat": "Minecraft Chat",
         "default": "Podstawowe",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "Skrzynia GUI Minecraft",
+          "item": "Nazwa przedmiotu GUI Minecraft",
+          "lore": "Opis przedmiotu GUI Minecraft"
         },
         "tab": {
           "footer": "Minecraft Tab Stopka",
@@ -95,11 +95,11 @@
         },
         "typeHere": "Wpisz tutaj!"
       },
-      "rawEdit": "Raw Edit Mode",
+      "rawEdit": "Tryb edycji surowej",
       "title": "Tekst Wejściowy",
-      "viewFormatted": "View Formatted Preview"
+      "viewFormatted": "Zobacz sformatowany podgląd"
     },
-    "options": "Options",
+    "options": "Opciones",
     "output": {
       "copied": {
         "description": "Tekst RGB został skopiowany do schowka!",
@@ -113,7 +113,7 @@
       "back": "Powrót do szablonów",
       "copied": {
         "description": "Skopiowano szablon do schowka!",
-        "title": "Preset Copied!"
+        "title": "Skopiowano preset!"
       },
       "copy": "Kopiuj",
       "createNew": "Stwórz szablon",
@@ -140,9 +140,9 @@
       },
       "pasteHere": "Wklej tutaj",
       "pending": "Szablon wciąż czeka na weryfikację. Może on być niedostępny dla innych użytkowników.",
-      "personalPresets": "Personal Presets",
+      "personalPresets": "Własne presety",
       "presetData": "Dane Szablonu",
-      "preview": "Preset Preview",
+      "preview": "Podgląd presetu",
       "publish": "Opublikuj swój szablon!",
       "remove": "Usuń",
       "save": "Zapisz",
@@ -152,14 +152,14 @@
         "title": "Szablon zapisany!",
         "warning": "Zaloguj się aby zapisywać szablony."
       },
-      "savedPresets": "Saved Presets",
+      "savedPresets": "Zapisane presety",
       "showSaved": {
         "description": "Włącz tą opcję jeśli chcesz widzieć tylko szablony zapisane przez ciebie.",
         "title": "Pokaż zapisane szablony"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "Najmniej zapisywane",
+        "mostSaved": "Najczęściej zapisywane",
         "nameAZ": "Nazwa A-Z",
         "nameZA": "Nazwa Z-A",
         "newest": "Od najnowszych",
@@ -184,10 +184,10 @@
       }
     },
     "segmentColorEditor": {
-      "title": "Segment Color Editor"
+      "title": "Edytor kolorów segmentu"
     },
     "segments": {
-      "title": "Segments"
+      "title": "Segmenty"
     }
   }
 }

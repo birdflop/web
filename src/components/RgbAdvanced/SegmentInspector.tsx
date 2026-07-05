@@ -2,7 +2,12 @@ import { component$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { sortColors } from '@birdflop/rgbirdflop';
 import { ChevronLeft, ChevronRight, Trash } from 'lucide-icons-qwik';
-import { deleteSegment, segmentRange, swapSegments, type SegmentType } from './model';
+import {
+  deleteSegment,
+  segmentRange,
+  swapSegments,
+  type SegmentType,
+} from './model';
 import { restoreSelection } from './dom';
 import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
@@ -12,7 +17,9 @@ function swatchStyle(seg: SegmentType): string {
     return 'repeating-linear-gradient(45deg, #888 0 4px, #555 4px 8px)';
   }
   if (seg.colorMode === 'solid') return seg.colors[0].hex;
-  const stops = sortColors(seg.colors).map((c) => c.hex + ' ' + c.pos + '%').join(', ');
+  const stops = sortColors(seg.colors)
+    .map((c) => c.hex + ' ' + c.pos + '%')
+    .join(', ');
   return 'linear-gradient(to right, ' + stops + ')';
 }
 
@@ -25,44 +32,86 @@ export default component$(() => {
   if (rgbSegments.value.length <= 1) return null;
 
   return (
-    <div class="flex flex-col gap-2 border-t border-lum-border/10 pt-4">
+    <div class="border-lum-border/10 flex flex-col gap-2 border-t pt-4">
       <div class="flex flex-wrap gap-2">
         {rgbSegments.value.map((seg, i) => {
           const range = segmentRange(rgbSegments.value, i);
-          const active = selection.value ? (selection.value.start === range.start && selection.value.end === range.end) : false;
+          const active = selection.value
+            ? selection.value.start === range.start &&
+              selection.value.end === range.end
+            : false;
           return (
-            <div key={`part-${i}`} class={{
-              'flex items-center rounded-lum-1 border transition-colors overflow-hidden': true,
-              'border-lum-accent lum-grad-bg-lum-accent/15': active,
-              'border-lum-border/20 hover:border-lum-border/40': !active,
-            }}>
-              <button class="flex items-center gap-1.5 pl-2 pr-2.5 py-1.5 min-w-0"
+            <div
+              key={`part-${i}`}
+              class={{
+                'rounded-lum-1 flex items-center overflow-hidden border transition-colors': true,
+                'border-lum-accent lum-grad-bg-lum-accent/15': active,
+                'border-lum-border/20 hover:border-lum-border/40': !active,
+              }}
+            >
+              <button
+                class="flex min-w-0 items-center gap-1.5 py-1.5 pr-2.5 pl-2"
                 title={t('rgb.advanced.selectSegment@@Click to edit this part')}
                 onClick$={() => {
-                  selection.value = { start: range.start, end: range.end, segmentIndex: i };
+                  selection.value = {
+                    start: range.start,
+                    end: range.end,
+                    segmentIndex: i,
+                  };
                   void restoreSelection(range.start, range.end);
-                }}>
-                <span class="w-4 h-4 rounded-sm shrink-0 border border-lum-border/20" style={`background: ${swatchStyle(seg)};`} />
-                <span class="font-mc truncate max-w-32">
-                  {seg.text.trim() === '' ? '␣'.repeat(Math.min(seg.text.length, 4)) : seg.text}
+                }}
+              >
+                <span
+                  class="border-lum-border/20 h-4 w-4 shrink-0 rounded-sm border"
+                  style={`background: ${swatchStyle(seg)};`}
+                />
+                <span class="font-mc max-w-32 truncate">
+                  {seg.text.trim() === ''
+                    ? '␣'.repeat(Math.min(seg.text.length, 4))
+                    : seg.text}
                 </span>
               </button>
-              {active &&
-                <div class="flex items-center gap-0.5 pr-1 border-l border-lum-border/20 pl-1">
-                  <button class="lum-btn p-1 rounded-sm" disabled={i === 0} title={t('rgb.advanced.moveLeft@@Move left')}
-                    onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i - 1); }}>
+              {active && (
+                <div class="border-lum-border/20 flex items-center gap-0.5 border-l pr-1 pl-1">
+                  <button
+                    class="lum-btn rounded-sm p-1"
+                    disabled={i === 0}
+                    title={t('rgb.advanced.moveLeft@@Move left')}
+                    onClick$={() => {
+                      rgbSegments.value = swapSegments(
+                        rgbSegments.value,
+                        i,
+                        i - 1,
+                      );
+                    }}
+                  >
                     <ChevronLeft size={14} />
                   </button>
-                  <button class="lum-btn p-1 rounded-sm" disabled={i >= rgbSegments.value.length - 1} title={t('rgb.advanced.moveRight@@Move right')}
-                    onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i + 1); }}>
+                  <button
+                    class="lum-btn rounded-sm p-1"
+                    disabled={i >= rgbSegments.value.length - 1}
+                    title={t('rgb.advanced.moveRight@@Move right')}
+                    onClick$={() => {
+                      rgbSegments.value = swapSegments(
+                        rgbSegments.value,
+                        i,
+                        i + 1,
+                      );
+                    }}
+                  >
                     <ChevronRight size={14} />
                   </button>
-                  <button class="lum-btn p-1 rounded-sm hover:lum-bg-red" title={t('rgb.advanced.deleteSegment@@Delete this part')}
-                    onClick$={() => { rgbSegments.value = deleteSegment(rgbSegments.value, i); }}>
+                  <button
+                    class="lum-btn hover:lum-bg-red rounded-sm p-1"
+                    title={t('rgb.advanced.deleteSegment@@Delete this part')}
+                    onClick$={() => {
+                      rgbSegments.value = deleteSegment(rgbSegments.value, i);
+                    }}
+                  >
                     <Trash size={14} />
                   </button>
                 </div>
-              }
+              )}
             </div>
           );
         })}

@@ -1,25 +1,25 @@
 {
   "rgb": {
     "advanced": {
-      "addColor": "Add color",
-      "backToClassic": "Classic editor",
-      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "addColor": "Renk ekle",
+      "backToClassic": "Klasik editör",
+      "highlightHint": "Sadece o kısmı renklendirmek ve biçimlendirmek için yukarıdaki kutudaki harfleri vurgulayın.",
       "mode": {
-        "gradient": "Gradient",
-        "none": "Uncolored",
-        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
-        "solid": "Solid"
+        "gradient": "Gradyan",
+        "none": "Renksiz",
+        "noneDescription": "Bu karakterler Minecraft'ın varsayılan rengini korur (sadece biçimlendirme uygulanır).",
+        "solid": "Düz"
       },
-      "selectAll": "Select all",
-      "styling": "Styling",
-      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+      "selectAll": "Tümünü seç",
+      "styling": "Biçimlendirme",
+      "tryAdvanced": "Bölüm tabanlı gradyanlar ile Gelişmiş editörü deneyin"
     },
     "colors": {
       "amount": "Renk miktarı",
       "character": "Karakter",
       "charsPer": "Renk başına karakter",
       "color": "Renk",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "Metin renklerinden kopyala",
       "customFormat": "Özel format",
       "disperse": {
         "always": {
@@ -28,23 +28,23 @@
         },
         "title": "Dağıt"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "Çoğalt",
       "format": "Renk formatı",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "Gradyan Türü",
+      "invert": "Tersine çevir",
       "lowercase": {
         "description": "Küçük harfli hex kodları kullanmak istiyorsanız bunu açın.",
         "title": "Küçük harfli hex kodları"
       },
-      "position": "Position",
+      "position": "Konum",
       "randomize": "Rastgele yap",
-      "reverse": "Reverse",
+      "reverse": "Ters çevir",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "Özel Metin Gölgesi",
         "title": "Metin gölgesi",
         "warning": "Uyarı: Metin gölgesi sadece JSON formatında çalışır!"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "Karıştır",
       "title": "Renkler",
       "trimSpaces": {
         "description": "Boş alt çizgiler / üst çizgiler kullanıyorsanız bunu kapatın",
@@ -69,7 +69,7 @@
     "formatting": {
       "bold": "Kalın",
       "character": "Format karakteri",
-      "clear": "Clear Formatting",
+      "clear": "Biçimlendirmeyi Temizle",
       "italic": "İtalik",
       "obfuscate": "Karıştır",
       "options": "Format seçenekleri",
@@ -84,9 +84,9 @@
         "chat": "Minecraft Sohbet",
         "default": "Varsayılan",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "Minecraft Arayüz Sandığı",
+          "item": "Minecraft Arayüz Eşya Adı",
+          "lore": "Minecraft Arayüz Eşya Açıklaması"
         },
         "tab": {
           "footer": "Minecraft Tab Alt bilgi",
@@ -95,11 +95,11 @@
         },
         "typeHere": "Buraya yazın!"
       },
-      "rawEdit": "Raw Edit Mode",
+      "rawEdit": "Ham Düzenleme Modu",
       "title": "Giriş metni",
-      "viewFormatted": "View Formatted Preview"
+      "viewFormatted": "Biçimlendirilmiş Önizlemeyi Görüntüle"
     },
-    "options": "Options",
+    "options": "Seçenekler",
     "output": {
       "copied": {
         "description": "RGB metni başarıyla panonuza kopyalandı.",
@@ -113,7 +113,7 @@
       "back": "Ön ayarlara geri dön",
       "copied": {
         "description": "Ön ayar başarıyla panoya kopyalandı!",
-        "title": "Preset Copied!"
+        "title": "Preset Kopyalandı!"
       },
       "copy": "Kopyala",
       "createNew": "Yeni bir ön ayar oluştur",
@@ -140,9 +140,9 @@
       },
       "pasteHere": "Buraya yapıştır",
       "pending": "Bu ön ayar inceleme bekliyor ve henüz diğer kullanıcılar için kullanılabilir olmayabilir.",
-      "personalPresets": "Personal Presets",
+      "personalPresets": "Kişisel Presetler",
       "presetData": "Ön ayar verisi",
-      "preview": "Preset Preview",
+      "preview": "Preset Önizlemesi",
       "publish": "Kendi ön ayarınızı yayınlayın",
       "remove": "Kaldır",
       "save": "Kaydet",
@@ -152,14 +152,14 @@
         "title": "Ön ayar kaydedildi!",
         "warning": "Lütfen ön ayarları kalıcı olarak kaydetmek için giriş yapın."
       },
-      "savedPresets": "Saved Presets",
+      "savedPresets": "Kaydedilen Presetler",
       "showSaved": {
         "description": "Sadece kaydedilen ön ayarlarınızı göstermek için bunu açın.",
         "title": "Kaydedilen ön ayarları göster"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "En az kaydedilen",
+        "mostSaved": "En çok kaydedilen",
         "nameAZ": "Ad A-Z",
         "nameZA": "Ad Z-A",
         "newest": "En yeni önce",
@@ -184,10 +184,10 @@
       }
     },
     "segmentColorEditor": {
-      "title": "Segment Color Editor"
+      "title": "Bölüm Rengi Editörü"
     },
     "segments": {
-      "title": "Segments"
+      "title": "Bölümler"
     }
   }
 }

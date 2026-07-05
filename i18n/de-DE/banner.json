@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "Das Kommando wurde in die Zwischenablage kopiert.",
-        "title": "Command Copied!"
+        "title": "Befehl kopiert!"
       },
       "title": "Kommando"
     },

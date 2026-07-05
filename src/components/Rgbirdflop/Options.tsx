@@ -1,7 +1,11 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { colorFormats, GRADIENT_TYPES, type GradientType } from '@birdflop/rgbirdflop';
+import {
+  colorFormats,
+  GRADIENT_TYPES,
+  type GradientType,
+} from '@birdflop/rgbirdflop';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
@@ -9,47 +13,88 @@ export default component$(({ hidden }: { hidden: boolean }) => {
   const rgbStore = useContext(rgbStoreContext);
 
   return (
-    <div class={{
-      'flex flex-col gap-2 transition-all duration-200 sm:opacity-100 sm:pointer-events-auto sm:max-h-full': true,
-      'max-h-0 opacity-0 pointer-events-none': hidden,
-      'max-h-120 opacity-100 pointer-events-auto': !hidden,
-    }}>
-      <div class="flex flex-col md:grid grid-cols-2 gap-2">
+    <div
+      class={{
+        'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
+        'pointer-events-none max-h-0 opacity-0': hidden,
+        'pointer-events-auto max-h-120 opacity-100': !hidden,
+      }}
+    >
+      <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
-        <SelectMenu id="format" value={rgbStore.customFormat ? 'custom' : JSON.stringify(rgbStore.colorFormat)} class={{ 'w-full': true }} onChange$={
-          (e, el) => {
+        <SelectMenu
+          id="format"
+          value={
+            rgbStore.customFormat
+              ? 'custom'
+              : JSON.stringify(rgbStore.colorFormat)
+          }
+          class={{ 'w-full': true }}
+          onChange$={(e, el) => {
             if (el.value == 'custom') {
               rgbStore.customFormat = true;
-            }
-            else {
+            } else {
               rgbStore.customFormat = false;
               rgbStore.colorFormat = JSON.parse(el.value);
             }
-          }
-        } values={[
-          ...!rgbStore.customFormat && !colorFormats.find((format) => format.color == rgbStore.colorFormat.color) ? [{
-            name: rgbStore.colorFormat.color
-              .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
-              .replace('$c', ''),
-            value: JSON.stringify(rgbStore.colorFormat),
-          }] : [],
-          ...colorFormats.map(format => ({
-            name: format.color
-              .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
-              .replace('$c', ''),
-            value: JSON.stringify(format),
-          })),
-          {
-            name: rgbStore.customFormat ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
-              .replace('$1', 'r').replace('$2', 'r').replace('$3', 'g').replace('$4', 'g').replace('$5', 'b').replace('$6', 'b')
-              .replace('$f', `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`)
-              .replace('$c', '')}`
-              : t('rgb.colors.customFormat@@Custom Format'),
-            value: 'custom',
-          },
-        ]}>
+          }}
+          values={[
+            ...(!rgbStore.customFormat &&
+            !colorFormats.find(
+              (format) => format.color == rgbStore.colorFormat.color,
+            )
+              ? [
+                {
+                  name: rgbStore.colorFormat.color
+                    .replace('$1', 'r')
+                    .replace('$2', 'r')
+                    .replace('$3', 'g')
+                    .replace('$4', 'g')
+                    .replace('$5', 'b')
+                    .replace('$6', 'b')
+                    .replace(
+                      '$f',
+                      `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                    )
+                    .replace('$c', ''),
+                  value: JSON.stringify(rgbStore.colorFormat),
+                },
+              ]
+              : []),
+            ...colorFormats.map((format) => ({
+              name: format.color
+                .replace('$1', 'r')
+                .replace('$2', 'r')
+                .replace('$3', 'g')
+                .replace('$4', 'g')
+                .replace('$5', 'b')
+                .replace('$6', 'b')
+                .replace(
+                  '$f',
+                  `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                )
+                .replace('$c', ''),
+              value: JSON.stringify(format),
+            })),
+            {
+              name: rgbStore.customFormat
+                ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
+                  .replace('$1', 'r')
+                  .replace('$2', 'r')
+                  .replace('$3', 'g')
+                  .replace('$4', 'g')
+                  .replace('$5', 'b')
+                  .replace('$6', 'b')
+                  .replace(
+                    '$f',
+                    `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                  )
+                  .replace('$c', '')}`
+                : t('rgb.colors.customFormat@@Custom Format'),
+              value: 'custom',
+            },
+          ]}
+        >
           {t('rgb.colors.format@@Color Format')}
         </SelectMenu>
         <SelectMenu
@@ -60,7 +105,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             const value = el.value as GradientType;
             rgbStore.gradientType = value;
           }}
-          values={GRADIENT_TYPES.map(type => ({
+          values={GRADIENT_TYPES.map((type) => ({
             name: type,
             value: type,
           }))}
@@ -71,62 +116,116 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <label for="prefixsuffix">
             {t('rgb.prefixsuffix@@Prefix/Suffix')}
           </label>
-          <input class="lum-input" id="prefixsuffix" value={rgbStore.prefixSuffix} placeholder={'/nick $t'} onInput$={(e, el) => { rgbStore.prefixSuffix = el.value; }} />
+          <input
+            class="lum-input"
+            id="prefixsuffix"
+            value={rgbStore.prefixSuffix}
+            placeholder={'/nick $t'}
+            onInput$={(e, el) => {
+              rgbStore.prefixSuffix = el.value;
+            }}
+          />
         </div>
-        {
-          rgbStore.customFormat && <>
-            <div id="customformat" class={{
-              'flex flex-col gap-2 col-span-2': true,
-            }}>
+        {rgbStore.customFormat && (
+          <>
+            <div
+              id="customformat"
+              class={{
+                'col-span-2 flex flex-col gap-2': true,
+              }}
+            >
               <label for="customformat">
                 {t('rgb.colors.customFormat@@Custom Format')}
               </label>
-              <input class="lum-input" id="customformat" value={rgbStore.colorFormat.color} placeholder="&#$1$2$3$4$5$6$f$c" onInput$={(e, el) => { rgbStore.colorFormat.color = el.value; }} />
+              <input
+                class="lum-input"
+                id="customformat"
+                value={rgbStore.colorFormat.color}
+                placeholder="&#$1$2$3$4$5$6$f$c"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.color = el.value;
+                }}
+              />
               <div class="font-mono text-sm">
                 <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
-                <p>$1 = <strong class="text-red-400">R</strong>RGGBB</p>
-                <p>$2 = R<strong class="text-red-400">R</strong>GGBB</p>
-                <p>$3 = RR<strong class="text-green-400">G</strong>GBB</p>
-                <p>$4 = RRG<strong class="text-green-400">G</strong>BB</p>
-                <p>$5 = RRGG<strong class="text-blue-400">B</strong>B</p>
-                <p>$6 = RRGGB<strong class="text-blue-400">B</strong></p>
-                {rgbStore.colorFormat.char && <p>$f = {t('rgb.formatting.title@@Formatting')}</p>}
+                <p>
+                  $1 = <strong class="text-red-400">R</strong>RGGBB
+                </p>
+                <p>
+                  $2 = R<strong class="text-red-400">R</strong>GGBB
+                </p>
+                <p>
+                  $3 = RR<strong class="text-green-400">G</strong>GBB
+                </p>
+                <p>
+                  $4 = RRG<strong class="text-green-400">G</strong>BB
+                </p>
+                <p>
+                  $5 = RRGG<strong class="text-blue-400">B</strong>B
+                </p>
+                <p>
+                  $6 = RRGGB<strong class="text-blue-400">B</strong>
+                </p>
+                {rgbStore.colorFormat.char && (
+                  <p>$f = {t('rgb.formatting.title@@Formatting')}</p>
+                )}
                 <p>$c = {t('rgb.colors.character@@Character')}</p>
               </div>
             </div>
           </>
-        }
+        )}
         <div class="flex flex-col gap-1">
-          <Toggle id="disperse" checked={rgbStore.disperse}
-            onChange$={(e, el) => { rgbStore.disperse = el.checked; }}>
+          <Toggle
+            id="disperse"
+            checked={rgbStore.disperse}
+            onChange$={(e, el) => {
+              rgbStore.disperse = el.checked;
+            }}
+          >
             {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
           </Toggle>
-          <p class="text-xs text-lum-text-secondary">
-            {t('rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.')}
+          <p class="text-lum-text-secondary text-xs">
+            {t(
+              'rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.',
+            )}
           </p>
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' &&
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
           <div class="flex flex-col gap-1">
-            <Toggle id="trimspaces" checked={rgbStore.trimSpaces}
-              onChange$={(e, el) => { rgbStore.trimSpaces = el.checked; }}>
+            <Toggle
+              id="trimspaces"
+              checked={rgbStore.trimSpaces}
+              onChange$={(e, el) => {
+                rgbStore.trimSpaces = el.checked;
+              }}
+            >
               {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
             </Toggle>
-            <p class="text-xs text-lum-text-secondary">
-              {t('rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs')}
+            <p class="text-lum-text-secondary text-xs">
+              {t(
+                'rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs',
+              )}
             </p>
           </div>
-        }
-        {rgbStore.colorFormat.color != 'MiniMessage' &&
+        )}
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
           <div class="flex flex-col gap-1">
-            <Toggle id="lowercase" checked={rgbStore.lowercase}
-              onChange$={(e, el) => { rgbStore.lowercase = el.checked; }}>
+            <Toggle
+              id="lowercase"
+              checked={rgbStore.lowercase}
+              onChange$={(e, el) => {
+                rgbStore.lowercase = el.checked;
+              }}
+            >
               {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
             </Toggle>
-            <p class="text-xs text-lum-text-secondary">
-              {t('rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.')}
+            <p class="text-lum-text-secondary text-xs">
+              {t(
+                'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.',
+              )}
             </p>
           </div>
-        }
+        )}
       </div>
     </div>
   );

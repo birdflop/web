@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "El comando ha sido copiado a su portapapeles exitosamente.",
-        "title": "Command Copied!"
+        "title": "¡Comando copiado!"
       },
       "title": "Comando"
     },

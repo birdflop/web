@@ -9,14 +9,37 @@ function segmentText(text: string, colorLength?: number): string[] {
   if (!len || len < 1) len = 1;
   const out: string[] = [];
   const arr = Array.from(text);
-  for (let i = 0; i < arr.length; i += len) out.push(arr.slice(i, i + len).join(''));
+  for (let i = 0; i < arr.length; i += len)
+    out.push(arr.slice(i, i + len).join(''));
   return out;
 }
 
-export type FormatKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
-export const FORMAT_KEYS: FormatKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
-export type FormattingBooleanKey = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'obfuscate';
-export const ALL_FORMATTING_KEYS: FormattingBooleanKey[] = ['bold', 'italic', 'underline', 'strikethrough', 'obfuscate'];
+export type FormatKey =
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'strikethrough'
+  | 'obfuscate';
+export const FORMAT_KEYS: FormatKey[] = [
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
+  'obfuscate',
+];
+export type FormattingBooleanKey =
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'strikethrough'
+  | 'obfuscate';
+export const ALL_FORMATTING_KEYS: FormattingBooleanKey[] = [
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
+  'obfuscate',
+];
 
 export function applyFont(text: string, fontName: string | undefined): string {
   if (!fontName) return text;
@@ -28,9 +51,15 @@ export function applyFont(text: string, fontName: string | undefined): string {
     .join('');
 }
 
-export function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
+export function buildFormatCodes(
+  formatting: Formatting,
+  rgbOptions: typeof rgbDefaults,
+): string {
   let codes = '';
-  if (rgbOptions.colorFormat.color.includes('$f') && rgbOptions.colorFormat.char) {
+  if (
+    rgbOptions.colorFormat.color.includes('$f') &&
+    rgbOptions.colorFormat.char
+  ) {
     if (formatting.bold) codes += rgbOptions.colorFormat.char + 'l';
     if (formatting.italic) codes += rgbOptions.colorFormat.char + 'o';
     if (formatting.underline) codes += rgbOptions.colorFormat.char + 'n';
@@ -40,18 +69,27 @@ export function buildFormatCodes(formatting: Formatting, rgbOptions: typeof rgbD
   return codes;
 }
 
-export function applyMiniMessageFormatting(text: string, formatting: Formatting, rgbOptions: typeof rgbDefaults): string {
+export function applyMiniMessageFormatting(
+  text: string,
+  formatting: Formatting,
+  rgbOptions: typeof rgbDefaults,
+): string {
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
   let output = text;
   if (formatting.font) {
     output = applyFont(output, formatting.font);
   }
-  if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate) output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
-  if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough) output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
-  if (formatting.underline && rgbOptions.colorFormat.underline) output = rgbOptions.colorFormat.underline.replace('$t', output);
-  if (formatting.italic && rgbOptions.colorFormat.italic) output = rgbOptions.colorFormat.italic.replace('$t', output);
-  if (formatting.bold && rgbOptions.colorFormat.bold) output = rgbOptions.colorFormat.bold.replace('$t', output);
+  if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate)
+    output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
+  if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough)
+    output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
+  if (formatting.underline && rgbOptions.colorFormat.underline)
+    output = rgbOptions.colorFormat.underline.replace('$t', output);
+  if (formatting.italic && rgbOptions.colorFormat.italic)
+    output = rgbOptions.colorFormat.italic.replace('$t', output);
+  if (formatting.bold && rgbOptions.colorFormat.bold)
+    output = rgbOptions.colorFormat.bold.replace('$t', output);
   return output;
 }
 
@@ -62,7 +100,8 @@ function renderTemplateSegment(
   rgbOptions: typeof rgbDefaults,
 ): string {
   let out = rgbOptions.colorFormat.color;
-  for (let n = 1; n <= 6; n++) out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
+  for (let n = 1; n <= 6; n++)
+    out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
 
@@ -74,11 +113,16 @@ function renderTemplateSegment(
 
   // Apply wrappers to this segment if formatting has it, ONLY when selective formatting is active
   if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
-    if (rgbOptions.colorFormat.bold && formatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
-    if (rgbOptions.colorFormat.italic && formatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
-    if (rgbOptions.colorFormat.underline && formatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
-    if (rgbOptions.colorFormat.strikethrough && formatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
-    if (rgbOptions.colorFormat.obfuscate && formatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+    if (rgbOptions.colorFormat.bold && formatting.bold)
+      out = rgbOptions.colorFormat.bold.replace('$t', out);
+    if (rgbOptions.colorFormat.italic && formatting.italic)
+      out = rgbOptions.colorFormat.italic.replace('$t', out);
+    if (rgbOptions.colorFormat.underline && formatting.underline)
+      out = rgbOptions.colorFormat.underline.replace('$t', out);
+    if (rgbOptions.colorFormat.strikethrough && formatting.strikethrough)
+      out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
+    if (rgbOptions.colorFormat.obfuscate && formatting.obfuscate)
+      out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
   }
 
   return out;
@@ -87,18 +131,27 @@ function renderTemplateSegment(
 function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
   let out = output;
   if (!rgbOptions.formatting || rgbOptions.formatting.length === 0) {
-    if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold) out = rgbOptions.colorFormat.bold.replace('$t', out);
-    if (rgbOptions.colorFormat.italic && rgbOptions.baseFormatting.italic) out = rgbOptions.colorFormat.italic.replace('$t', out);
-    if (rgbOptions.colorFormat.underline && rgbOptions.baseFormatting.underline) out = rgbOptions.colorFormat.underline.replace('$t', out);
-    if (rgbOptions.colorFormat.strikethrough && rgbOptions.baseFormatting.strikethrough) out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
-    if (rgbOptions.colorFormat.obfuscate && rgbOptions.baseFormatting.obfuscate) out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
+    if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold)
+      out = rgbOptions.colorFormat.bold.replace('$t', out);
+    if (rgbOptions.colorFormat.italic && rgbOptions.baseFormatting.italic)
+      out = rgbOptions.colorFormat.italic.replace('$t', out);
+    if (rgbOptions.colorFormat.underline && rgbOptions.baseFormatting.underline)
+      out = rgbOptions.colorFormat.underline.replace('$t', out);
+    if (
+      rgbOptions.colorFormat.strikethrough &&
+      rgbOptions.baseFormatting.strikethrough
+    )
+      out = rgbOptions.colorFormat.strikethrough.replace('$t', out);
+    if (rgbOptions.colorFormat.obfuscate && rgbOptions.baseFormatting.obfuscate)
+      out = rgbOptions.colorFormat.obfuscate.replace('$t', out);
   }
-  if (rgbOptions.prefixSuffix) out = rgbOptions.prefixSuffix.replace(/\$t/g, out);
+  if (rgbOptions.prefixSuffix)
+    out = rgbOptions.prefixSuffix.replace(/\$t/g, out);
   return out;
 }
 
 function normalizeShadowRGB(rgb: number[]): number[] {
-  const norm = rgb.map(c => Math.round((c / 255) * 100) / 100);
+  const norm = rgb.map((c) => Math.round((c / 255) * 100) / 100);
   if (norm[3] === undefined) norm.push(1);
   return norm;
 }
@@ -160,7 +213,11 @@ function buildShadowSegments(
   });
 }
 
-function applySelectiveFormattingToText(text: string, offset: number, rgbOptions: typeof rgbDefaults): string {
+function applySelectiveFormattingToText(
+  text: string,
+  offset: number,
+  rgbOptions: typeof rgbDefaults,
+): string {
   const chars = Array.from(text);
   let currentFmt: Formatting | undefined;
   let buffer = '';
@@ -190,10 +247,17 @@ function applySelectiveFormattingToText(text: string, offset: number, rgbOptions
 
   let charOffset = offset;
   for (const ch of chars) {
-    const covering = rgbOptions.formatting?.find((s) => s.start <= charOffset && s.end > charOffset);
-    const fmt = covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+    const covering = rgbOptions.formatting?.find(
+      (s) => s.start <= charOffset && s.end > charOffset,
+    );
+    const fmt = covering
+      ? { ...rgbOptions.baseFormatting, ...covering }
+      : { ...rgbOptions.baseFormatting };
 
-    const fmtChanged = !currentFmt || ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) || currentFmt.font !== fmt.font;
+    const fmtChanged =
+      !currentFmt ||
+      ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
+      currentFmt.font !== fmt.font;
 
     if (fmtChanged) {
       flush();
@@ -220,7 +284,11 @@ function buildShadowContent(
 
   const flush = () => {
     if (!buffer || !currentHex) return;
-    const formatted = applySelectiveFormattingToText(buffer, bufferStartOffset, rgbOptions);
+    const formatted = applySelectiveFormattingToText(
+      buffer,
+      bufferStartOffset,
+      rgbOptions,
+    );
     out += `<shadow:${currentHex}:${currentOpacity ?? 1}>${formatted}</shadow>`;
     buffer = '';
   };
@@ -235,7 +303,10 @@ function buildShadowContent(
 
     const sliceGlobalStart = Math.max(start, seg.start);
 
-    if (currentHex && (currentHex !== seg.hex || currentOpacity !== seg.opacity)) {
+    if (
+      currentHex &&
+      (currentHex !== seg.hex || currentOpacity !== seg.opacity)
+    ) {
       flush();
     }
 
@@ -295,11 +366,17 @@ export function swapItems(array: any[], indexA: number, indexB: number) {
 
 export function generateOutput(rgbOptions: typeof rgbDefaults) {
   const colors = sortColors(rgbOptions.colors);
-  const shadowColors = rgbOptions.shadowColors ? sortColors(rgbOptions.shadowColors) : null;
+  const shadowColors = rgbOptions.shadowColors
+    ? sortColors(rgbOptions.shadowColors)
+    : null;
 
   if (colors.length === 1) {
     if (rgbOptions.colorFormat.color === 'MiniMessage') {
-      const single = renderMiniMessageGradient(colors, rgbOptions, shadowColors);
+      const single = renderMiniMessageGradient(
+        colors,
+        rgbOptions,
+        shadowColors,
+      );
       return applyWrappers(single, rgbOptions);
     }
 
@@ -330,10 +407,19 @@ type JsonExtra = {
   obfuscated?: boolean;
 };
 
-function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaults): string {
+function renderSingleColorOutput(
+  singleHex: string,
+  rgbOptions: typeof rgbDefaults,
+): string {
   if (rgbOptions.colorFormat.color === 'MiniMessage') {
-    const shadowColors = rgbOptions.shadowColors ? sortColors(rgbOptions.shadowColors) : null;
-    return renderMiniMessageGradient([{ hex: singleHex, pos: 0 }], rgbOptions, shadowColors);
+    const shadowColors = rgbOptions.shadowColors
+      ? sortColors(rgbOptions.shadowColors)
+      : null;
+    return renderMiniMessageGradient(
+      [{ hex: singleHex, pos: 0 }],
+      rgbOptions,
+      shadowColors,
+    );
   }
 
   if (rgbOptions.colorFormat.color === 'JSON') {
@@ -352,9 +438,15 @@ function renderSingleColorOutput(singleHex: string, rgbOptions: typeof rgbDefaul
     return renderTemplateGradient([{ hex: singleHex, pos: 0 }], rgbOptions);
   }
 
-  if (rgbOptions.trimSpaces && rgbOptions.text.trim() === '') return rgbOptions.text;
+  if (rgbOptions.trimSpaces && rgbOptions.text.trim() === '')
+    return rgbOptions.text;
   const hex = singleHex.replace(/^#/, '');
-  return renderTemplateSegment(hex, rgbOptions.text, rgbOptions.baseFormatting, rgbOptions);
+  return renderTemplateSegment(
+    hex,
+    rgbOptions.text,
+    rgbOptions.baseFormatting,
+    rgbOptions,
+  );
 }
 
 function renderMiniMessageGradient(
@@ -362,27 +454,42 @@ function renderMiniMessageGradient(
   rgbOptions: typeof rgbDefaults,
   shadowColors: ColorStop[] | null,
 ): string {
-  const shadowSegments = (shadowColors && shadowColors.length > 0)
-    ? buildShadowSegments(rgbOptions, shadowColors)
-    : undefined;
+  const shadowSegments =
+    shadowColors && shadowColors.length > 0
+      ? buildShadowSegments(rgbOptions, shadowColors)
+      : undefined;
 
   const buildShadowRange = (start: number, end: number) => {
     if (!shadowSegments || !shadowSegments.length) {
-      return applySelectiveFormattingToText(rgbOptions.text.substring(start, end), start, rgbOptions);
+      return applySelectiveFormattingToText(
+        rgbOptions.text.substring(start, end),
+        start,
+        rgbOptions,
+      );
     }
-    return buildShadowContent(shadowSegments, start, end, rgbOptions) || applySelectiveFormattingToText(rgbOptions.text.substring(start, end), start, rgbOptions);
+    return (
+      buildShadowContent(shadowSegments, start, end, rgbOptions) ||
+      applySelectiveFormattingToText(
+        rgbOptions.text.substring(start, end),
+        start,
+        rgbOptions,
+      )
+    );
   };
 
   const renderUnevenGradient = (text: string) => {
     // todo: make an iseven function to avoid math.random issues
     const even = !colors.find((color, i) => {
-      return color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000;
+      return (
+        color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
+      );
     });
     if (even) return null;
 
     const copy = [...colors];
     if (copy[0].pos !== 0) copy.unshift({ ...copy[0], pos: 0 });
-    if (copy[copy.length - 1].pos !== 100) copy.push({ ...copy[copy.length - 1], pos: 100 });
+    if (copy[copy.length - 1].pos !== 100)
+      copy.push({ ...copy[copy.length - 1], pos: 100 });
 
     let out = '';
     for (let i = 0; i < copy.length - 1; i++) {
@@ -413,17 +520,26 @@ function renderMiniMessageGradient(
   const unevenOut = renderUnevenGradient(rgbOptions.text);
   if (unevenOut !== null) return unevenOut;
 
-  const hexes = colors.map(c => c.hex).join(':');
+  const hexes = colors.map((c) => c.hex).join(':');
   const inner = buildShadowRange(0, rgbOptions.text.length);
   return `<gradient:${hexes}>${inner}</gradient>`;
 }
 
-export function getFormattingAtOffset(charIndex: number, rgbOptions: typeof rgbDefaults): Formatting {
-  const covering = rgbOptions.formatting?.find((s) => s.start <= charIndex && s.end > charIndex);
-  return covering ? { ...rgbOptions.baseFormatting, ...covering } : { ...rgbOptions.baseFormatting };
+export function getFormattingAtOffset(
+  charIndex: number,
+  rgbOptions: typeof rgbDefaults,
+): Formatting {
+  const covering = rgbOptions.formatting?.find(
+    (s) => s.start <= charIndex && s.end > charIndex,
+  );
+  return covering
+    ? { ...rgbOptions.baseFormatting, ...covering }
+    : { ...rgbOptions.baseFormatting };
 }
 
-function buildShadowGradient(rgbOptions: typeof rgbDefaults): ColorGradient | undefined {
+function buildShadowGradient(
+  rgbOptions: typeof rgbDefaults,
+): ColorGradient | undefined {
   if (!rgbOptions.shadowColors) return undefined;
   const shadowColors = rgbOptions.shadowColors.map(getRGBColorStop);
   return new ColorGradient(
@@ -452,14 +568,23 @@ function buildJsonExtraList(
     }
 
     const fmt = getFormattingAtOffset(charIndex, rgbOptions);
-    const jsonExtra = buildJsonFormatting(segment, color, fmt, rgbOptions, shadow);
+    const jsonExtra = buildJsonFormatting(
+      segment,
+      color,
+      fmt,
+      rgbOptions,
+      shadow,
+    );
     extra.push(jsonExtra);
     charIndex += segment.length;
   }
   return extra;
 }
 
-function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults): string {
+function renderJsonGradient(
+  colors: ColorStop[],
+  rgbOptions: typeof rgbDefaults,
+): string {
   const newColors = colors.map(getRGBColorStop);
   if (newColors.length < 1) return 'Error: Not enough colors.';
 
@@ -474,14 +599,17 @@ function renderJsonGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults)
   const extra = buildJsonExtraList(
     segments,
     () => '#' + rgbToHex(gradient.next()),
-    () => shadowGradient ? shadowGradient.next() : undefined,
+    () => (shadowGradient ? shadowGradient.next() : undefined),
     rgbOptions,
   );
 
   return JSON.stringify({ text: '', extra });
 }
 
-function renderTemplateGradient(colors: ColorStop[], rgbOptions: typeof rgbDefaults): string {
+function renderTemplateGradient(
+  colors: ColorStop[],
+  rgbOptions: typeof rgbDefaults,
+): string {
   const newColors = colors.map(getRGBColorStop);
   if (newColors.length === 0) return 'Error: Not enough colors.';
 

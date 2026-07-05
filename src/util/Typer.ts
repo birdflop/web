@@ -15,26 +15,37 @@ declare interface typerElement extends Element {
 }
 
 export function initiateTyper() {
-  function Typer(this: {
-    element: typerElement;
-    words: string[];
-    delay: string | number;
-    loop: string | number;
-    deleteDelay: string | number;
-    progress: { word: number; char: number; building: boolean; looped: number };
-    typing: boolean;
-    colors: string[];
-    colorIndex: number;
-    doTyping: () => void;
-  }, element: typerElement) {
+  function Typer(
+    this: {
+      element: typerElement;
+      words: string[];
+      delay: string | number;
+      loop: string | number;
+      deleteDelay: string | number;
+      progress: {
+        word: number;
+        char: number;
+        building: boolean;
+        looped: number;
+      };
+      typing: boolean;
+      colors: string[];
+      colorIndex: number;
+      doTyping: () => void;
+    },
+    element: typerElement,
+  ) {
     this.element = element;
     const delim = element.dataset.delim || ',';
     const words = element.dataset.words || 'override these,sample typing';
     this.words = words.split(delim).filter((v) => v); // non empty words
     this.delay = element.dataset.delay || 200;
     this.loop = element.dataset.loop || 'true';
-    if (this.loop === 'false') { this.loop = 1; }
-    this.deleteDelay = element.dataset.deletedelay || element.dataset.deleteDelay || 800;
+    if (this.loop === 'false') {
+      this.loop = 1;
+    }
+    this.deleteDelay =
+      element.dataset.deletedelay || element.dataset.deleteDelay || 800;
 
     this.progress = { word: 0, char: 0, building: true, looped: 0 };
     this.typing = true;
@@ -51,7 +62,12 @@ export function initiateTyper() {
     element: typerElement;
     progress: { word: number; char: number; building: boolean; looped: number };
     words: string[];
-    cursor: { element: typerElement; on: boolean; interval: any; updateBlinkState: () => void };
+    cursor: {
+      element: typerElement;
+      on: boolean;
+      interval: any;
+      updateBlinkState: () => void;
+    };
     typing: boolean;
     colorIndex: number;
     colors: string[];
@@ -70,7 +86,10 @@ export function initiateTyper() {
       this.cursor.element.style.opacity = '1';
       this.cursor.on = true;
       clearInterval(this.cursor.interval);
-      this.cursor.interval = setInterval(() => this.cursor.updateBlinkState(), 400);
+      this.cursor.interval = setInterval(
+        () => this.cursor.updateBlinkState(),
+        400,
+      );
     }
 
     e.innerHTML = currentDisplay;
@@ -101,20 +120,29 @@ export function initiateTyper() {
       this.typing = false;
     }
 
-    setTimeout(() => {
-      if (this.typing) { this.doTyping(); }
-    }, atWordEnd ? this.deleteDelay : this.delay);
+    setTimeout(
+      () => {
+        if (this.typing) {
+          this.doTyping();
+        }
+      },
+      atWordEnd ? this.deleteDelay : this.delay,
+    );
   };
 
-  const Cursor = function (this: {
-    element: typerElement;
-    cursorDisplay: string;
-    on: boolean;
-    interval: any;
-    updateBlinkState: () => void;
-  }, element: typerElement) {
+  const Cursor = function (
+    this: {
+      element: typerElement;
+      cursorDisplay: string;
+      on: boolean;
+      interval: any;
+      updateBlinkState: () => void;
+    },
+    element: typerElement,
+  ) {
     this.element = element;
-    this.cursorDisplay = element.dataset.cursordisplay || element.dataset.cursorDisplay || '_';
+    this.cursorDisplay =
+      element.dataset.cursordisplay || element.dataset.cursorDisplay || '_';
     element.innerHTML = this.cursorDisplay;
     this.on = true;
     element.style.transition = 'all 0.1s';

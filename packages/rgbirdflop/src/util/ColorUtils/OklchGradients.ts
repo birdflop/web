@@ -1,5 +1,14 @@
-import { rgbToOklch, interpolateOklch, oklchToRgb, type OKLCh } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
+import {
+  rgbToOklch,
+  interpolateOklch,
+  oklchToRgb,
+  type OKLCh,
+} from '../Colors';
+import {
+  BaseGradient,
+  BaseTwoStopGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * OKLCh-based gradient classes using perceptually uniform color interpolation.

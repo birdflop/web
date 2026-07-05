@@ -1,14 +1,14 @@
 {
   "settings": {
     "cookies": {
-      "description": "Allow Birdflop to use cookies for personalization and improved user experience.",
-      "title": "Enable Cookies"
+      "description": "Kişiselleştirme ve gelişmiş kullanıcı deneyimi için Birdflop'un çerezleri kullanmasına izin verin.",
+      "title": "Çerezleri Etkinleştir"
     },
     "flopbird": {
-      "description": "Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you're on. Experimental",
-      "enable": "Enable Flopbird"
+      "description": "Ekranın köşesinde oturan ve bulunduğunuz sayfa hakkında yararlı bilgilerle size rehberlik eden sevimli küçük maskotumuz. Deneysel",
+      "enable": "Flopbird'ü Etkinleştir"
     },
-    "language": "Language",
-    "theme": "Theme Preference"
+    "language": "Dil",
+    "theme": "Tema Tercihi"
   }
 }

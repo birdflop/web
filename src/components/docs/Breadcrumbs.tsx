@@ -23,20 +23,24 @@ export const Breadcrumbs = component$(() => {
   }
 
   return (
-    <nav class="fixed top-31 sm:top-20 text-sm mb-6 lum-card gap-1 flex-row items-center w-full sm:w-auto backdrop-blur-lg rounded-none sm:rounded-full sm:border lum-btn-p-2 sm:p-2 z-20" aria-label="Breadcrumb">
-      <a href="/docs/" class="lum-btn p-1 rounded-full lum-bg-transparent">
+    <nav
+      class="lum-card lum-btn-p-2 fixed top-31 z-20 mb-6 w-full flex-row items-center gap-1 rounded-none text-sm backdrop-blur-lg sm:top-20 sm:w-auto sm:rounded-full sm:border sm:p-2"
+      aria-label="Breadcrumb"
+    >
+      <a href="/docs/" class="lum-btn lum-bg-transparent rounded-full p-1">
         <Home size={19} />
       </a>
 
       {breadcrumbs.map((crumb, index) => (
         <div class="flex items-center gap-1" key={index}>
-          <ChevronRight class="w-4 h-4 text-gray-400" />
+          <ChevronRight class="h-4 w-4 text-gray-400" />
           <Link
             href={crumb.href}
             class={{
               'lum-btn lum-btn-p-1 rounded-full text-sm': true,
               'lum-bg-transparent': index < breadcrumbs.length - 1,
-              'lum-grad-bg-blue-400/30 hover:lum-bg-blue-400/30': index === breadcrumbs.length - 1,
+              'lum-grad-bg-blue-400/30 hover:lum-bg-blue-400/30':
+                index === breadcrumbs.length - 1,
             }}
           >
             {crumb.text}

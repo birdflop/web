@@ -97,11 +97,7 @@ export function hslToRgb(hsl: HSL): number[] {
     b = hue2rgb(p, q, h - 1 / 3);
   }
 
-  return [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),
-  ];
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 /**
@@ -132,11 +128,7 @@ export function hslToHex(hsl: HSL): string {
  * @param factor - Interpolation factor (0 = color1, 1 = color2)
  * @returns Interpolated HSL color
  */
-export function interpolateHsl(
-  color1: HSL,
-  color2: HSL,
-  factor: number,
-): HSL {
+export function interpolateHsl(color1: HSL, color2: HSL, factor: number): HSL {
   // Interpolate S and L linearly
   const s = color1.s + (color2.s - color1.s) * factor;
   const l = color1.l + (color2.l - color1.l) * factor;
@@ -223,32 +215,40 @@ export function hsvToRgb(hsv: HSV): number[] {
 
   switch (i % 6) {
   case 0:
-    r = v; g = t; b = p;
+    r = v;
+    g = t;
+    b = p;
     break;
   case 1:
-    r = q; g = v; b = p;
+    r = q;
+    g = v;
+    b = p;
     break;
   case 2:
-    r = p; g = v; b = t;
+    r = p;
+    g = v;
+    b = t;
     break;
   case 3:
-    r = p; g = q; b = v;
+    r = p;
+    g = q;
+    b = v;
     break;
   case 4:
-    r = t; g = p; b = v;
+    r = t;
+    g = p;
+    b = v;
     break;
   case 5:
-    r = v; g = p; b = q;
+    r = v;
+    g = p;
+    b = q;
     break;
   default:
     r = g = b = 0;
   }
 
-  return [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),
-  ];
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 /**
@@ -279,11 +279,7 @@ export function hsvToHex(hsv: HSV): string {
  * @param factor - Interpolation factor (0 = color1, 1 = color2)
  * @returns Interpolated HSV color
  */
-export function interpolateHsv(
-  color1: HSV,
-  color2: HSV,
-  factor: number,
-): HSV {
+export function interpolateHsv(color1: HSV, color2: HSV, factor: number): HSV {
   // Interpolate S and V linearly
   const s = color1.s + (color2.s - color1.s) * factor;
   const v = color1.v + (color2.v - color1.v) * factor;

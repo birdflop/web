@@ -1,25 +1,25 @@
 {
   "rgb": {
     "advanced": {
-      "addColor": "Add color",
-      "backToClassic": "Classic editor",
-      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "addColor": "Добавить цвет",
+      "backToClassic": "Классический редактор",
+      "highlightHint": "Выделите буквы в поле выше, чтобы настроить цвет и формат только для этой части.",
       "mode": {
-        "gradient": "Gradient",
-        "none": "Uncolored",
-        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
-        "solid": "Solid"
+        "gradient": "Градиент",
+        "none": "Без цвета",
+        "noneDescription": "Эти символы сохраняют стандартный цвет Minecraft (применяется только форматирование).",
+        "solid": "Сплошной"
       },
-      "selectAll": "Select all",
-      "styling": "Styling",
-      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+      "selectAll": "Выделить всё",
+      "styling": "Форматирование",
+      "tryAdvanced": "Попробуйте расширенный редактор с градиентами на основе сегментов"
     },
     "colors": {
       "amount": "Количество цветов",
       "character": "Символ",
       "charsPer": "Символов на цвет",
       "color": "цвет",
-      "copyFromText": "Скопировать цвета текста",
+      "copyFromText": "Скопировать из цветов текста",
       "customFormat": "Другой формат",
       "disperse": {
         "always": {
@@ -36,11 +36,11 @@
         "description": "Включите это, если хотите использовать строчные шестнадцатеричные коды.",
         "title": "Строчные шестнадцатеричные коды"
       },
-      "position": "Позиция",
+      "position": "Положение",
       "randomize": "Рандомизировать",
       "reverse": "Развернуть",
       "shadow": {
-        "enable": "Пользовательская тень текста",
+        "enable": "Кастомная тень текста",
         "title": "Тень текста",
         "warning": "Предупреждение: тень текста работает только с JSON-форматированием!"
       },
@@ -69,7 +69,7 @@
     "formatting": {
       "bold": "Жирный",
       "character": "Символ формата",
-      "clear": "Clear Formatting",
+      "clear": "Очистить форматирование",
       "italic": "Курсив",
       "obfuscate": "Обфускация",
       "options": "Опции форматирования",
@@ -84,9 +84,9 @@
         "chat": "Чат Minecraft",
         "default": "По умолчанию",
         "gui": {
-          "chest": "Сундук в интерфейсе Minecraft",
-          "item": "Название предмета в интерфейсе Minecraft",
-          "lore": "Описание предмета в интерфейсе Minecraft"
+          "chest": "Сундук GUI Minecraft",
+          "item": "Название предмета GUI Minecraft",
+          "lore": "Описание предмета GUI Minecraft"
         },
         "tab": {
           "footer": "Нижняя часть TAB в Minecraft",
@@ -95,11 +95,11 @@
         },
         "typeHere": "Введите здесь!"
       },
-      "rawEdit": "Raw Edit Mode",
+      "rawEdit": "Режим простого текста",
       "title": "Исходный текст",
-      "viewFormatted": "View Formatted Preview"
+      "viewFormatted": "Показать форматированный предпросмотр"
     },
-    "options": "Настройки",
+    "options": "Параметры",
     "output": {
       "copied": {
         "description": "RGB-текст был успешно скопирован в буфер обмена.",
@@ -140,7 +140,7 @@
       },
       "pasteHere": "Вставить сюда",
       "pending": "Этот пресет ожидает проверки и может быть недоступен для других пользователей.",
-      "personalPresets": "Personal Presets",
+      "personalPresets": "Личные пресеты",
       "presetData": "Данные пресета",
       "preview": "Предпросмотр пресета",
       "publish": "Опубликовать свой собственный пресет",
@@ -152,14 +152,14 @@
         "title": "Пресет сохранён!",
         "warning": "Пожалуйста, войдите в систему, чтобы сохранить пресеты навсегда."
       },
-      "savedPresets": "Saved Presets",
+      "savedPresets": "Сохраненные пресеты",
       "showSaved": {
         "description": "Включите это, чтобы показать только ваши сохраненные пресеты.",
         "title": "Показать сохраненные пресеты"
       },
       "sortBy": {
-        "leastSaved": "Меньше сохранений",
-        "mostSaved": "Больше сохранений",
+        "leastSaved": "Редкие сохраненные",
+        "mostSaved": "Частые сохраненные",
         "nameAZ": "Имя А-Я",
         "nameZA": "Имя Я-А",
         "newest": "Сначала новые",
@@ -184,10 +184,10 @@
       }
     },
     "segmentColorEditor": {
-      "title": "Segment Color Editor"
+      "title": "Редактор цвета сегмента"
     },
     "segments": {
-      "title": "Segments"
+      "title": "Сегменты"
     }
   }
 }

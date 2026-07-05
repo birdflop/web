@@ -5,7 +5,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['animals']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['animals'],
+                ) >= 32
+              );
             },
             vars: ['spigot'],
           },
@@ -19,7 +25,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['monsters']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['monsters'],
+                ) >= 32
+              );
             },
             vars: ['spigot'],
           },
@@ -33,7 +45,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['misc']) >= 16;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['misc'],
+                ) >= 16
+              );
             },
             vars: ['spigot'],
           },
@@ -47,7 +65,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['water']) >= 16;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['water'],
+                ) >= 16
+              );
             },
             vars: ['spigot'],
           },
@@ -61,7 +85,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['villagers']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['villagers'],
+                ) >= 32
+              );
             },
             vars: ['spigot'],
           },
@@ -75,7 +105,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['tick-inactive-villagers'] == 'true';
+              return (
+                dict_of_vars.spigot['world-settings']['default'][
+                  'entity-activation-range'
+                ]['tick-inactive-villagers'] == 'true'
+              );
             },
             vars: ['spigot'],
           },
@@ -89,13 +123,25 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['villagers-max-per-tick']) >= 1;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['villagers-max-per-tick'],
+                ) >= 1
+              );
             },
             vars: ['spigot'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['villagers-for']) >= 100;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['villagers-for'],
+                ) >= 100
+              );
             },
             vars: ['spigot'],
           },
@@ -109,13 +155,25 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['flying-monsters-max-per-tick']) >= 1;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['flying-monsters-max-per-tick'],
+                ) >= 1
+              );
             },
             vars: ['spigot'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['flying-monsters-for']) >= 100;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['flying-monsters-for'],
+                ) >= 100
+              );
             },
             vars: ['spigot'],
           },
@@ -129,7 +187,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['villagers-max-per-tick']) >= 4;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['villagers-max-per-tick'],
+                ) >= 4
+              );
             },
             vars: ['spigot'],
           },
@@ -143,13 +207,25 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['animals-max-per-tick']) >= 1;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['animals-max-per-tick'],
+                ) >= 1
+              );
             },
             vars: ['spigot'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['animals-for']) >= 100;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['animals-for'],
+                ) >= 100
+              );
             },
             vars: ['spigot'],
           },
@@ -163,7 +239,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['monsters-max-per-tick']) >= 8;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['monsters-max-per-tick'],
+                ) >= 8
+              );
             },
             vars: ['spigot'],
           },
@@ -177,7 +259,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['flying-monsters-max-per-tick']) >= 8;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['flying-monsters-max-per-tick'],
+                ) >= 8
+              );
             },
             vars: ['spigot'],
           },
@@ -191,7 +279,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['animals-max-per-tick']) >= 4;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['animals-max-per-tick'],
+                ) >= 4
+              );
             },
             vars: ['spigot'],
           },
@@ -205,13 +299,25 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['monsters-max-per-tick']) >= 1;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['monsters-max-per-tick'],
+                ) >= 1
+              );
             },
             vars: ['spigot'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['entity-activation-range']['wake-up-inactive']['monsters-for']) >= 100;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'entity-activation-range'
+                  ]['wake-up-inactive']['monsters-for'],
+                ) >= 100
+              );
             },
             vars: ['spigot'],
           },
@@ -225,7 +331,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['arrow-despawn-rate']) >= 1200;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'arrow-despawn-rate'
+                  ],
+                ) >= 1200
+              );
             },
             vars: ['spigot'],
           },
@@ -239,7 +351,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseFloat(dict_of_vars.spigot['world-settings']['default']['merge-radius']['item']) <= 2.5;
+              return (
+                parseFloat(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'merge-radius'
+                  ]['item'],
+                ) <= 2.5
+              );
             },
             vars: ['spigot'],
           },
@@ -253,7 +371,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseFloat(dict_of_vars.spigot['world-settings']['default']['merge-radius']['exp']) <= 3.0;
+              return (
+                parseFloat(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'merge-radius'
+                  ]['exp'],
+                ) <= 3.0
+              );
             },
             vars: ['spigot'],
           },
@@ -267,7 +391,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.spigot['world-settings']['default']['max-entity-collisions']) >= 8;
+              return (
+                parseInt(
+                  dict_of_vars.spigot['world-settings']['default'][
+                    'max-entity-collisions'
+                  ],
+                ) >= 8
+              );
             },
             vars: ['spigot'],
           },

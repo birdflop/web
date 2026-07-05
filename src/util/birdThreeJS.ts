@@ -6,13 +6,19 @@ import { FlopbirdStore } from '~/routes/layout';
 
 function targetElement(id?: string) {
   const oldEl = document.querySelector('.bird-target');
-  if (oldEl) oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
+  if (oldEl)
+    oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
 
   if (!id) return;
   const el = document.getElementById(id);
   if (!el) return;
 
-  el.classList.add('outline-3', 'outline-lum-accent', 'bird-target', 'rounded-lum');
+  el.classList.add(
+    'outline-3',
+    'outline-lum-accent',
+    'bird-target',
+    'rounded-lum',
+  );
   const rect = el.getBoundingClientRect();
   return {
     x: rect.left + rect.width / 2,
@@ -20,12 +26,15 @@ function targetElement(id?: string) {
   };
 }
 
-export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | undefined>,
+export default async function birdThreeJS(
+  birdRef: Signal<HTMLCanvasElement | undefined>,
   anchorElementRef: Signal<HTMLDivElement | undefined>,
   notifications: NotificationType[],
-  birdStore: FlopbirdStore) {
+  birdStore: FlopbirdStore,
+) {
   // check if birdRef is defined
-  if (!birdRef.value) return console.warn('birdRef is undefined in birdThreeJS');
+  if (!birdRef.value)
+    return console.warn('birdRef is undefined in birdThreeJS');
 
   // Scene
   const scene = new THREE.Scene();
@@ -39,9 +48,12 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
 
   // Camera
   const camera = new THREE.OrthographicCamera(
-    -viewSize * aspect, viewSize * aspect, // left, right
-    viewSize, -viewSize,                   // top, bottom
-    0.1, 1000,               // near, far
+    -viewSize * aspect,
+    viewSize * aspect, // left, right
+    viewSize,
+    -viewSize, // top, bottom
+    0.1,
+    1000, // near, far
   );
   camera.position.z = 6;
 
@@ -107,7 +119,7 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
   // Position bird near bottom-right corner
   const margin = 0.25;
   bird.position.set(
-    camera.right - margin,  // near right edge
+    camera.right - margin, // near right edge
     camera.bottom + margin, // near bottom edge (negative number + positive margin = near bottom)
     0,
   );
@@ -180,7 +192,11 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
 
     // Smooth interpolation
     head.rotation.y = THREE.MathUtils.lerp(head.rotation.y, clampedYaw, 0.12);
-    head.rotation.x = THREE.MathUtils.lerp(head.rotation.x, clampedPitch + idle, 0.12);
+    head.rotation.x = THREE.MathUtils.lerp(
+      head.rotation.x,
+      clampedPitch + idle,
+      0.12,
+    );
 
     // Kill roll
     head.rotation.z = 0;
@@ -196,17 +212,21 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     };
   }
 
-  function screenToWorld(x: number, y: number, camera: THREE.OrthographicCamera) {
+  function screenToWorld(
+    x: number,
+    y: number,
+    camera: THREE.OrthographicCamera,
+  ) {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
     // Normalized device coordinates (NDC) from -1 to 1
     const ndcX = (x / width) * 2 - 1;
-    const ndcY = - (y / height) * 2 + 1;
+    const ndcY = -(y / height) * 2 + 1;
 
     // Map NDC to world coordinates using camera frustum size
-    const worldX = ndcX * camera.right;  // since right = positive max X
-    const worldY = ndcY * camera.top;    // since top = positive max Y
+    const worldX = ndcX * camera.right; // since right = positive max X
+    const worldY = ndcY * camera.top; // since top = positive max Y
 
     return new THREE.Vector3(worldX, worldY, 0);
   }
@@ -263,7 +283,11 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     if (!wing || !otherWing || !body) return;
     wing.rotation.x = -Math.sin(time / 60) * 0.4;
     wing.rotation.z = bird.rotation.y < Math.PI ? 2.5 : -2.5;
-    body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-20), 0.05);
+    body.rotation.x = THREE.MathUtils.lerp(
+      body.rotation.x,
+      THREE.MathUtils.degToRad(-20),
+      0.05,
+    );
     otherWing.rotation.z = Math.sin(time / 500) * 0.05;
   }
 
@@ -271,7 +295,11 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     if (!legL || !legR || !body || !wingL || !wingR || !tail) return;
     legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0.45, 0.05);
     legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0.45, 0.05);
-    body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-28), 0.05);
+    body.rotation.x = THREE.MathUtils.lerp(
+      body.rotation.x,
+      THREE.MathUtils.degToRad(-28),
+      0.05,
+    );
     wingL.rotation.z = Math.sin(time / 500) * 0.05;
     wingR.rotation.z = -Math.sin(time / 500) * 0.05;
     tail.rotation.x = -Math.sin(time / 500) * 0.05;
@@ -281,7 +309,11 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     if (!legL || !legR || !body || !wingL || !wingR || !tail) return;
     legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0, 0.05);
     legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0, 0.05);
-    body.rotation.x = THREE.MathUtils.lerp(body.rotation.x, THREE.MathUtils.degToRad(-36), 0.05);
+    body.rotation.x = THREE.MathUtils.lerp(
+      body.rotation.x,
+      THREE.MathUtils.degToRad(-36),
+      0.05,
+    );
     bird.position.y += Math.sin(time / 25) * 0.003;
     wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
     wingR.rotation.z = -Math.sin(time / 25) * 0.5 + 0.5;
@@ -291,7 +323,11 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
   const moveSpeed = 2; // world units per second
   const idleRotation = 2.5;
   let lastTime = 0;
-  const defaultTargetPos = new THREE.Vector3(camera.right - margin, camera.bottom + margin, 0);
+  const defaultTargetPos = new THREE.Vector3(
+    camera.right - margin,
+    camera.bottom + margin,
+    0,
+  );
   const animate = (time: number) => {
     const deltaTime = (time - lastTime) / 1000; // seconds
     lastTime = time;
@@ -306,14 +342,21 @@ export default async function birdThreeJS(birdRef: Signal<HTMLCanvasElement | un
     else targetPos = defaultTargetPos;
 
     if (targetPos) {
-      const direction = new THREE.Vector3().subVectors(targetPos, bird.position);
+      const direction = new THREE.Vector3().subVectors(
+        targetPos,
+        bird.position,
+      );
       const distance = direction.length();
 
       // Calculate blended rotation
       const targetRotation = Math.atan2(direction.x, direction.z) + Math.PI;
       const cameraRotation = getCameraRotation(bird.position, camera);
       const blendFactor = 0.25;
-      const desiredRotation = THREE.MathUtils.lerp(targetRotation, cameraRotation, blendFactor);
+      const desiredRotation = THREE.MathUtils.lerp(
+        targetRotation,
+        cameraRotation,
+        blendFactor,
+      );
 
       updateRotationTowards(bird, desiredRotation, deltaTime);
 

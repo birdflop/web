@@ -47,9 +47,11 @@ Before you begin, ensure you have the following:
    ```
 3. Click the second link that contains the device code
 4. Once authorized, run the final command to save your authentication:
+
    ```
    /auth persistence Encrypted
    ```
+
    > **Note:** This will save your authentication for future restarts.
 
 5. Restart your server by clicking the **Restart** button in the control panel

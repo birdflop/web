@@ -1,5 +1,9 @@
 import { rgbToLch, interpolateLch, lchToRgb, type LuvLCh } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
+import {
+  BaseGradient,
+  BaseTwoStopGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * LuvLCh (CIELCh(uv))-based gradient classes using perceptually uniform color interpolation.

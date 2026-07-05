@@ -17,8 +17,8 @@
     "incremental": true,
     "isolatedModules": true,
     "paths": {
-      "~/*": ["./src/*"],
-    },
+      "~/*": ["./src/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src"]
 }

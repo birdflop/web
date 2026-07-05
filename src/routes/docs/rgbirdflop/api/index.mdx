@@ -8,7 +8,7 @@ contributors:
   - saboooor
 ---
 
-import { Endpoints } from './layout.tsx';
+import { Endpoints } from "./layout.tsx";
 
 # Get Started
 
@@ -18,7 +18,7 @@ NPM package is recommended for most use cases and is more updated than the API.
 
 ## Endpoints
 
-<Endpoints/>
+<Endpoints />
 
 ## Types
 
@@ -33,35 +33,35 @@ type RegularFormatting = {
   // $6 = #rrggb(b)
   // $f = format tags
   // $c = character
-  color: string,
+  color: string;
   // The character to use before format tags (default: "&")
-  char?: string,
-}
+  char?: string;
+};
 ```
 
 ```ts
 type MiniMessageFormatting = {
-  color: "MiniMessage",
+  color: "MiniMessage";
   // $t is the output text
-  bold?: string,         // default: "<b>$t</b>"
-  italic?: string,       // default: "<i>$t</i>"
-  underline?: string,    // default: "<u>$t</u>"
-  strikethrough?: string,// default: "<st>$t</st>"
-  obfuscate?: string,    // default: "<obf>$t</obf>"
-}
+  bold?: string; // default: "<b>$t</b>"
+  italic?: string; // default: "<i>$t</i>"
+  underline?: string; // default: "<u>$t</u>"
+  strikethrough?: string; // default: "<st>$t</st>"
+  obfuscate?: string; // default: "<obf>$t</obf>"
+};
 ```
 
 ```ts
 type JSONFormatting = {
-  color: "JSON",
-}
+  color: "JSON";
+};
 ```
 
 ```ts
 type Color = {
   // example: #54daf4
-  hex: string,
+  hex: string;
   // example: 50 for 50%
-  pos: number,
-}
+  pos: number;
+};
 ```

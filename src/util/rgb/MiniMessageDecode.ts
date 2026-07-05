@@ -43,7 +43,10 @@ function resolveColor(str: string): string | null {
   if (hexMatch) {
     let hex = hexMatch[1];
     if (hex.length === 3) {
-      hex = hex.split('').map(char => char + char).join('');
+      hex = hex
+        .split('')
+        .map((char) => char + char)
+        .join('');
     }
     return `#${hex.toLowerCase()}`;
   }
@@ -102,14 +105,25 @@ function tokenize(input: string) {
 
 let nodeIdCounter = 0;
 
-function parseMiniMessage(tokens: Array<{ type: 'tag' | 'text'; value: string }>): MiniMessageNode {
+function parseMiniMessage(
+  tokens: Array<{ type: 'tag' | 'text'; value: string }>,
+): MiniMessageNode {
   nodeIdCounter = 0;
-  const root: MiniMessageNode = { type: 'root', id: nodeIdCounter++, children: [] };
+  const root: MiniMessageNode = {
+    type: 'root',
+    id: nodeIdCounter++,
+    children: [],
+  };
   const stack: MiniMessageNode[] = [root];
 
   for (const token of tokens) {
     if (token.type === 'text') {
-      const textNode: MiniMessageNode = { type: 'text', id: nodeIdCounter++, value: token.value, children: [] };
+      const textNode: MiniMessageNode = {
+        type: 'text',
+        id: nodeIdCounter++,
+        value: token.value,
+        children: [],
+      };
       stack[stack.length - 1].children.push(textNode);
     } else if (token.type === 'tag') {
       const content = token.value.trim();
@@ -124,11 +138,17 @@ function parseMiniMessage(tokens: Array<{ type: 'tag' | 'text'; value: string }>
         } else {
           for (let i = stack.length - 1; i >= 1; i--) {
             const currentTag = stack[i].tagName || '';
-            const match = currentTag === tagName ||
-              ((tagName === 'color' || tagName === 'colour' || tagName === 'c' || isColor(tagName)) &&
-               (currentTag === 'color' || currentTag === 'colour' || currentTag === 'c')) ||
+            const match =
+              currentTag === tagName ||
+              ((tagName === 'color' ||
+                tagName === 'colour' ||
+                tagName === 'c' ||
+                isColor(tagName)) &&
+                (currentTag === 'color' ||
+                  currentTag === 'colour' ||
+                  currentTag === 'c')) ||
               ((tagName === 'gradient' || tagName === 'g') &&
-               (currentTag === 'gradient' || currentTag === 'g'));
+                (currentTag === 'gradient' || currentTag === 'g'));
             if (match) {
               foundIndex = i;
               break;
@@ -139,7 +159,7 @@ function parseMiniMessage(tokens: Array<{ type: 'tag' | 'text'; value: string }>
           stack.splice(foundIndex);
         }
       } else {
-        const parts = content.split(':').map(p => p.trim());
+        const parts = content.split(':').map((p) => p.trim());
         const rawTagName = parts[0].toLowerCase();
         let tagName = rawTagName;
         let params = parts.slice(1);
@@ -168,15 +188,28 @@ function parseMiniMessage(tokens: Array<{ type: 'tag' | 'text'; value: string }>
 function hexToRgb(hex: string): [number, number, number] {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
-    ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
+    ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
     : [255, 255, 255];
 }
 
 function rgbToHex(r: number, g: number, b: number): string {
-  return '#' + ((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b)).toString(16).slice(1);
+  return (
+    '#' +
+    ((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b))
+      .toString(16)
+      .slice(1)
+  );
 }
 
-function interpolateColor(c1: [number, number, number], c2: [number, number, number], ratio: number): [number, number, number] {
+function interpolateColor(
+  c1: [number, number, number],
+  c2: [number, number, number],
+  ratio: number,
+): [number, number, number] {
   return [
     c1[0] + (c2[0] - c1[0]) * ratio,
     c1[1] + (c2[1] - c1[1]) * ratio,
@@ -187,14 +220,35 @@ function interpolateColor(c1: [number, number, number], c2: [number, number, num
 export function decodeMiniMessage(input: string) {
   const tokens = tokenize(input);
 
-  const hasColorTags = tokens.some(t => {
+  const hasColorTags = tokens.some((t) => {
     if (t.type !== 'tag') return false;
     const content = t.value.trim();
     if (content.startsWith('/') || content.startsWith('!')) return true;
-    const parts = content.split(':').map(p => p.trim());
+    const parts = content.split(':').map((p) => p.trim());
     const rawTagName = parts[0].toLowerCase();
     if (isColor(rawTagName)) return true;
-    if (['color', 'colour', 'c', 'gradient', 'g', 'bold', 'b', 'italic', 'em', 'i', 'underlined', 'underline', 'u', 'strikethrough', 'st', 'obfuscated', 'obf'].includes(rawTagName)) return true;
+    if (
+      [
+        'color',
+        'colour',
+        'c',
+        'gradient',
+        'g',
+        'bold',
+        'b',
+        'italic',
+        'em',
+        'i',
+        'underlined',
+        'underline',
+        'u',
+        'strikethrough',
+        'st',
+        'obfuscated',
+        'obf',
+      ].includes(rawTagName)
+    )
+      return true;
     return false;
   });
 
@@ -209,7 +263,8 @@ export function decodeMiniMessage(input: string) {
     if (node.type === 'text' && node.value) {
       spans.push({ text: node.value, activeTags });
     } else if (node.type === 'tag' || node.type === 'root') {
-      const nextActive = node.type === 'tag' ? [...activeTags, node] : activeTags;
+      const nextActive =
+        node.type === 'tag' ? [...activeTags, node] : activeTags;
       for (const child of node.children) {
         dfs(child, nextActive);
       }
@@ -218,7 +273,7 @@ export function decodeMiniMessage(input: string) {
   dfs(root, []);
 
   let currentIndex = 0;
-  const spansWithIndices = spans.map(span => {
+  const spansWithIndices = spans.map((span) => {
     const start = currentIndex;
     const end = currentIndex + span.text.length;
     currentIndex = end;
@@ -226,7 +281,7 @@ export function decodeMiniMessage(input: string) {
   });
 
   const totalLength = currentIndex;
-  const plainText = spans.map(s => s.text).join('');
+  const plainText = spans.map((s) => s.text).join('');
 
   const tagRanges = new Map<number, { start: number; end: number }>();
   for (const span of spansWithIndices) {
@@ -250,22 +305,29 @@ export function decodeMiniMessage(input: string) {
   }> = [];
 
   for (let i = 0; i < totalLength; i++) {
-    const span = spansWithIndices.find(s => i >= s.start && i < s.end);
+    const span = spansWithIndices.find((s) => i >= s.start && i < s.end);
     if (!span) continue;
 
     let resolvedHex = '#ffffff';
 
     for (let tIdx = span.activeTags.length - 1; tIdx >= 0; tIdx--) {
       const tag = span.activeTags[tIdx];
-      if (tag.tagName === 'color' || tag.tagName === 'colour' || tag.tagName === 'c') {
-        const hex = tag.params && tag.params[0] ? resolveColor(tag.params[0]) : null;
+      if (
+        tag.tagName === 'color' ||
+        tag.tagName === 'colour' ||
+        tag.tagName === 'c'
+      ) {
+        const hex =
+          tag.params && tag.params[0] ? resolveColor(tag.params[0]) : null;
         if (hex) {
           resolvedHex = hex;
           break;
         }
       } else if (tag.tagName === 'gradient' || tag.tagName === 'g') {
         const gColors = tag.params
-          ? tag.params.map(p => resolveColor(p)).filter((c): c is string => c !== null)
+          ? tag.params
+            .map((p) => resolveColor(p))
+            .filter((c): c is string => c !== null)
           : [];
         if (gColors.length > 0) {
           if (gColors.length === 1) {
@@ -286,7 +348,11 @@ export function decodeMiniMessage(input: string) {
               const c1 = hexToRgb(gColors[low]);
               const c2 = hexToRgb(gColors[high]);
               const interpolated = interpolateColor(c1, c2, ratio);
-              resolvedHex = rgbToHex(interpolated[0], interpolated[1], interpolated[2]);
+              resolvedHex = rgbToHex(
+                interpolated[0],
+                interpolated[1],
+                interpolated[2],
+              );
             }
           }
           break;
@@ -310,9 +376,12 @@ export function decodeMiniMessage(input: string) {
     for (const tag of span.activeTags) {
       const name = tag.tagName;
       if (name === 'bold' || name === 'b') activeFmts.bold = true;
-      if (name === 'italic' || name === 'em' || name === 'i') activeFmts.italic = true;
-      if (name === 'underlined' || name === 'underline' || name === 'u') activeFmts.underline = true;
-      if (name === 'strikethrough' || name === 'st') activeFmts.strikethrough = true;
+      if (name === 'italic' || name === 'em' || name === 'i')
+        activeFmts.italic = true;
+      if (name === 'underlined' || name === 'underline' || name === 'u')
+        activeFmts.underline = true;
+      if (name === 'strikethrough' || name === 'st')
+        activeFmts.strikethrough = true;
       if (name === 'obfuscated' || name === 'obf') activeFmts.obfuscate = true;
     }
 

@@ -2,7 +2,12 @@ import { component$, Slot } from '@builder.io/qwik';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
 import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import { AppWindow, CircleUserRound, LogOut, Settings } from 'lucide-icons-qwik';
+import {
+  AppWindow,
+  CircleUserRound,
+  LogOut,
+  Settings,
+} from 'lucide-icons-qwik';
 import { LogoBirdflop } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
@@ -23,14 +28,18 @@ export default component$(() => {
     return (
       <Layout>
         <div class="text-red-400">
-          <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
-          <h1 class="font-extrabold text-5xl my-6">
+          <LogoBirdflop
+            confused
+            size={100}
+            fillGradient={['#54daf4', '#545eb6']}
+          />
+          <h1 class="my-6 text-5xl font-extrabold">
             {t('nav.profile.notLoggedIn.title@@You are not logged in!')}
           </h1>
           <h4 class="text-lum-text-secondary">
             {t('nav.profile.notLoggedIn.description@@Click below to login')}
           </h4>
-          <div class="flex mt-4">
+          <div class="mt-4 flex">
             <Form action={signIn}>
               <input type="hidden" name="providerId" value="discord" />
               <input
@@ -50,19 +59,24 @@ export default component$(() => {
 
   return (
     <Layout>
-      <section class="flex mx-auto max-w-6xl px-6 justify-center pt-20 border-b border-lum-border/10 pb-6">
+      <section class="border-lum-border/10 mx-auto flex max-w-6xl justify-center border-b px-6 pt-20 pb-6">
         <div class="flex-1">
-          <h1 class="font-extrabold text-3xl mb-2 flex items-center gap-4">
-            {session.value.user.image &&
-              <img src={session.value.user.image} width={36} height={36} class="rounded-full! w-9 h-9" />
-            }
+          <h1 class="mb-2 flex items-center gap-4 text-3xl font-extrabold">
+            {session.value.user.image && (
+              <img
+                src={session.value.user.image}
+                width={36}
+                height={36}
+                class="h-9 w-9 rounded-full!"
+              />
+            )}
             {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
-            {isAdmin &&
+            {isAdmin && (
               <Link href="/admin" class="lum-btn">
                 <AppWindow />
                 Admin Panel
               </Link>
-            }
+            )}
           </h1>
           <p class="text-lum-text-secondary">
             Your ID is: {session.value.user.id}
@@ -70,7 +84,7 @@ export default component$(() => {
         </div>
         <div class="flex items-center gap-4">
           <Link href="/settings" class="lum-btn lum-bg-transparent">
-            <Settings/>
+            <Settings />
             {t('nav.settings.title@@Settings')}
           </Link>
           <Form action={signOut} q:slot="extra-buttons">

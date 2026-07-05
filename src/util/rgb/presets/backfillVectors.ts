@@ -44,13 +44,16 @@ export async function backfillColorVectors(): Promise<{
         updated++;
         console.log(`Updated preset ${preset.id} (${preset.name})`);
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
         console.error(`Error processing preset ${preset.id}:`, errorMessage);
         errors.push({ id: preset.id, error: errorMessage });
       }
     }
 
-    console.log(`\nBackfill complete: ${updated} presets updated, ${errors.length} errors`);
+    console.log(
+      `\nBackfill complete: ${updated} presets updated, ${errors.length} errors`,
+    );
 
     return { updated, errors };
   } catch (error) {
@@ -66,7 +69,9 @@ export async function backfillColorVectors(): Promise<{
  * @param presetId - ID of the preset to update
  * @returns True if successful, false otherwise
  */
-export async function regeneratePresetVector(presetId: number): Promise<boolean> {
+export async function regeneratePresetVector(
+  presetId: number,
+): Promise<boolean> {
   const db = getDB();
   if (!db) {
     throw new Error('Database not available');

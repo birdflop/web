@@ -5,16 +5,19 @@ import { getDB, presets, users, savedPresets } from '~/util/db';
 import { isNotNull, eq, sql } from 'drizzle-orm';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
-import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
+import {
+  privatePresetsContext,
+  savedPresetsContext,
+} from '~/routes/resources/rgb/presets';
 import { AppWindow } from 'lucide-icons-qwik';
 import { checkAdmin } from '../layout';
 
-export const onGet: RequestHandler = function(props) {
+export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
   if (!admin) throw new Response('Unauthorized', { status: 401 });
 };
 
-export const runBackfillVectors = server$(async function() {
+export const runBackfillVectors = server$(async function () {
   try {
     const result = await backfillColorVectors();
     return {
@@ -30,7 +33,7 @@ export const runBackfillVectors = server$(async function() {
   }
 });
 
-export const loadAllPresets = server$(async function() {
+export const loadAllPresets = server$(async function () {
   try {
     const db = getDB();
     if (!db) {
@@ -48,7 +51,7 @@ export const loadAllPresets = server$(async function() {
       .leftJoin(users, eq(users.id, presets.userId))
       .groupBy(presets.id, users.id);
 
-    const formattedPresets = allPresets.map(p => ({
+    const formattedPresets = allPresets.map((p) => ({
       id: p.presets.id,
       name: p.presets.name,
       preset: p.presets.preset,
@@ -76,7 +79,7 @@ export const loadAllPresets = server$(async function() {
   }
 });
 
-const backfillPresetSaves = server$(async function() {
+const backfillPresetSaves = server$(async function () {
   try {
     const db = getDB();
     if (!db) {
@@ -95,13 +98,15 @@ const backfillPresetSaves = server$(async function() {
       .groupBy(presets.id, savedPresets.presetId);
 
     for (const preset of allPresets) {
-      console.log(`Updating preset ${preset.id} to have ${preset.saveCount} saves`);
-      await db.update(presets)
+      console.log(
+        `Updating preset ${preset.id} to have ${preset.saveCount} saves`,
+      );
+      await db
+        .update(presets)
         .set({ saves: preset.saveCount })
         .where(eq(presets.id, preset.id));
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Error during preset saves backfill:', error);
     return {
       success: false,
@@ -139,7 +144,7 @@ export default component$(() => {
         result.value = `Success! Updated ${response.updated} presets.`;
         if (response.errors && response.errors.length > 0) {
           result.value += `\n\nErrors (${response.errors.length}):\n`;
-          response.errors.forEach(err => {
+          response.errors.forEach((err) => {
             result.value += `  - Preset ${err.id}: ${err.error}\n`;
           });
         }
@@ -167,7 +172,9 @@ export default component$(() => {
         alert(`Error: ${response.error}`);
       }
     } catch (error) {
-      alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isLoadingPresets.value = false;
@@ -193,7 +200,7 @@ export default component$(() => {
     isCheckingSimilar.value = true;
 
     // Small delay to ensure UI clears
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     try {
       const threshold = similarThreshold.value;
@@ -211,10 +218,15 @@ export default component$(() => {
           const preset2 = allPresets[j];
 
           if (preset1.colorVector && preset2.colorVector) {
-            const distance = vectorDistance(preset1.colorVector, preset2.colorVector);
+            const distance = vectorDistance(
+              preset1.colorVector,
+              preset2.colorVector,
+            );
             pairsChecked++;
             if (distance <= threshold) {
-              console.log(`Found similar: ${preset1.name} and ${preset2.name} (distance: ${distance.toFixed(3)})`);
+              console.log(
+                `Found similar: ${preset1.name} and ${preset2.name} (distance: ${distance.toFixed(3)})`,
+              );
               similarPairs.push({
                 id1: preset1.id,
                 id2: preset2.id,
@@ -225,7 +237,9 @@ export default component$(() => {
           }
         }
       }
-      console.log(`Checked ${pairsChecked} pairs, found ${pairsGrouped} similar pairs with threshold ${threshold}`);
+      console.log(
+        `Checked ${pairsChecked} pairs, found ${pairsGrouped} similar pairs with threshold ${threshold}`,
+      );
 
       // Build groups where ALL presets are within threshold of each other (cliques)
       const groups: Set<number>[] = [];
@@ -239,18 +253,20 @@ export default component$(() => {
           const group = groups[g];
 
           // Check if both presets are compatible with all members of this group
-          const id1Compatible = Array.from(group).every(existingId => {
-            const hasPair = similarPairs.some(p =>
-              (p.id1 === id1 && p.id2 === existingId) ||
-              (p.id2 === id1 && p.id1 === existingId),
+          const id1Compatible = Array.from(group).every((existingId) => {
+            const hasPair = similarPairs.some(
+              (p) =>
+                (p.id1 === id1 && p.id2 === existingId) ||
+                (p.id2 === id1 && p.id1 === existingId),
             );
             return hasPair || existingId === id1;
           });
 
-          const id2Compatible = Array.from(group).every(existingId => {
-            const hasPair = similarPairs.some(p =>
-              (p.id1 === id2 && p.id2 === existingId) ||
-              (p.id2 === id2 && p.id1 === existingId),
+          const id2Compatible = Array.from(group).every((existingId) => {
+            const hasPair = similarPairs.some(
+              (p) =>
+                (p.id1 === id2 && p.id2 === existingId) ||
+                (p.id2 === id2 && p.id1 === existingId),
             );
             return hasPair || existingId === id2;
           });
@@ -271,13 +287,16 @@ export default component$(() => {
 
       // Format groups for display
       const similarGroups = groups
-        .filter(group => group.size > 1)
-        .map(groupIds => {
-          const groupPresets = allPresets.filter((p: any) => groupIds.has(p.id));
+        .filter((group) => group.size > 1)
+        .map((groupIds) => {
+          const groupPresets = allPresets.filter((p: any) =>
+            groupIds.has(p.id),
+          );
 
           // Get distances for this group (only pairs within threshold)
-          const distances: { from: number; to: number; distance: number }[] = [];
-          similarPairs.forEach(pair => {
+          const distances: { from: number; to: number; distance: number }[] =
+            [];
+          similarPairs.forEach((pair) => {
             if (groupIds.has(pair.id1) && groupIds.has(pair.id2)) {
               distances.push({
                 from: pair.id1,
@@ -307,27 +326,30 @@ export default component$(() => {
         pairsGrouped: pairsGrouped,
       };
     } catch (error) {
-      alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isCheckingSimilar.value = false;
   });
 
   return (
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh">
-      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6">
+      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <AppWindow size={32} />
         Admin Panel
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
+      <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         Manage backend tasks and data for Birdflop.
       </p>
-      <div class="grid sm:grid-cols-2 gap-1">
+      <div class="grid gap-1 sm:grid-cols-2">
         <div class="lum-card">
           <h2 class="text-xl!">Vector Backfill</h2>
           <p>
-            Generate color vectors for all existing presets that don't have them.
-            This is needed after adding the colorVector column to enable similarity detection.
+            Generate color vectors for all existing presets that don't have
+            them. This is needed after adding the colorVector column to enable
+            similarity detection.
           </p>
 
           <div>
@@ -341,8 +363,8 @@ export default component$(() => {
           </div>
 
           {result.value && (
-            <div class="mt-4 p-4 bg-gray-900 rounded-lg">
-              <pre class="whitespace-pre-wrap text-sm">{result.value}</pre>
+            <div class="mt-4 rounded-lg bg-gray-900 p-4">
+              <pre class="text-sm whitespace-pre-wrap">{result.value}</pre>
             </div>
           )}
         </div>
@@ -350,7 +372,8 @@ export default component$(() => {
         <div class="lum-card">
           <h2 class="text-xl!">Preset Saves Backfill</h2>
           <p>
-            Update all presets to have accurate save counts based on saved_presets table.
+            Update all presets to have accurate save counts based on
+            saved_presets table.
           </p>
 
           <div>
@@ -364,8 +387,8 @@ export default component$(() => {
           </div>
 
           {result.value && (
-            <div class="mt-4 p-4 bg-gray-900 rounded-lg">
-              <pre class="whitespace-pre-wrap text-sm">{result.value}</pre>
+            <div class="mt-4 rounded-lg bg-gray-900 p-4">
+              <pre class="text-sm whitespace-pre-wrap">{result.value}</pre>
             </div>
           )}
         </div>
@@ -374,7 +397,8 @@ export default component$(() => {
           <h2 class="text-xl!">Find Similar Presets</h2>
           <p>
             Check all published presets and find groups of similar gradients.
-            Presets are grouped together if they&apos;re within the threshold distance.
+            Presets are grouped together if they&apos;re within the threshold
+            distance.
           </p>
 
           <div class="mb-4">
@@ -383,14 +407,19 @@ export default component$(() => {
               disabled={isLoadingPresets.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
-              {isLoadingPresets.value ? 'Loading Presets...' : 'Load All Presets'}
+              {isLoadingPresets.value
+                ? 'Loading Presets...'
+                : 'Load All Presets'}
             </button>
             {loadedPresets.value.length > 0 && (
-              <div class="mt-3 p-3 bg-gray-900 rounded-lg">
-                <span class="text-green-400 font-semibold">✓ Loaded:</span>{' '}
-                <span class="text-white font-bold">{loadedPresets.value.length}</span> presets
+              <div class="mt-3 rounded-lg bg-gray-900 p-3">
+                <span class="font-semibold text-green-400">✓ Loaded:</span>{' '}
+                <span class="font-bold text-white">
+                  {loadedPresets.value.length}
+                </span>{' '}
+                presets
                 {loadedAt.value && (
-                  <span class="text-gray-400 ml-3 text-sm">
+                  <span class="ml-3 text-sm text-gray-400">
                     (at {loadedAt.value.toLocaleTimeString()})
                   </span>
                 )}
@@ -399,7 +428,10 @@ export default component$(() => {
           </div>
 
           <div class="flex flex-col">
-            <label for="similarity-threshold" class="block text-sm font-medium mb-2">
+            <label
+              for="similarity-threshold"
+              class="mb-2 block text-sm font-medium"
+            >
               Similarity Threshold (lower = stricter)
             </label>
             <input
@@ -415,76 +447,110 @@ export default component$(() => {
               step="0.01"
               class="lum-input max-w-50"
             />
-            <p class="text-xs text-gray-500 mt-1">
-              Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current: {similarThreshold.value}
+            <p class="mt-1 text-xs text-gray-500">
+              Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current:{' '}
+              {similarThreshold.value}
             </p>
           </div>
 
           <button
             onClick$={handleFindSimilar}
-            disabled={isCheckingSimilar.value || loadedPresets.value.length === 0}
-            class="max-w-50 lum-btn lum-bg-purple hover:lum-bg-purple/50"
+            disabled={
+              isCheckingSimilar.value || loadedPresets.value.length === 0
+            }
+            class="lum-btn lum-bg-purple hover:lum-bg-purple/50 max-w-50"
           >
             {isCheckingSimilar.value ? 'Checking...' : 'Find Similar'}
           </button>
 
           {similarResults.value && similarResults.value.groupCount > 0 && (
             <div class="mt-6">
-              <div class="bg-gray-900 rounded-lg p-4 mb-4">
-                <h3 class="font-bold text-lg mb-2">Results Summary</h3>
-                <p class="text-gray-300 mb-2">
-                  Found <span class="text-yellow-400 font-bold">{similarResults.value.groupCount}</span> groups
-                  of similar presets out of <span class="text-blue-400 font-bold">{similarResults.value.totalPresets}</span> total presets.
+              <div class="mb-4 rounded-lg bg-gray-900 p-4">
+                <h3 class="mb-2 text-lg font-bold">Results Summary</h3>
+                <p class="mb-2 text-gray-300">
+                  Found{' '}
+                  <span class="font-bold text-yellow-400">
+                    {similarResults.value.groupCount}
+                  </span>{' '}
+                  groups of similar presets out of{' '}
+                  <span class="font-bold text-blue-400">
+                    {similarResults.value.totalPresets}
+                  </span>{' '}
+                  total presets.
                 </p>
-                <p class="text-gray-400 text-sm">
-                  Threshold used: <span class="text-blue-400 font-semibold">{similarResults.value.threshold}</span> |
-                  Pairs checked: <span class="text-gray-300">{similarResults.value.pairsChecked}</span> |
-                  Pairs grouped: <span class="text-green-400 font-semibold">{similarResults.value.pairsGrouped}</span>
+                <p class="text-sm text-gray-400">
+                  Threshold used:{' '}
+                  <span class="font-semibold text-blue-400">
+                    {similarResults.value.threshold}
+                  </span>{' '}
+                  | Pairs checked:{' '}
+                  <span class="text-gray-300">
+                    {similarResults.value.pairsChecked}
+                  </span>{' '}
+                  | Pairs grouped:{' '}
+                  <span class="font-semibold text-green-400">
+                    {similarResults.value.pairsGrouped}
+                  </span>
                 </p>
               </div>
 
-              {similarResults.value.groups.map((group: any, groupIndex: number) => (
-                <div key={groupIndex} class="bg-gray-900 rounded-lg p-4 mb-4">
-                  <h3 class="font-bold text-lg mb-3 text-yellow-400">
-                    Group {groupIndex + 1} - {group.presets.length} Similar Presets
-                  </h3>
+              {similarResults.value.groups.map(
+                (group: any, groupIndex: number) => (
+                  <div key={groupIndex} class="mb-4 rounded-lg bg-gray-900 p-4">
+                    <h3 class="mb-3 text-lg font-bold text-yellow-400">
+                      Group {groupIndex + 1} - {group.presets.length} Similar
+                      Presets
+                    </h3>
 
-                  {/* Distance matrix */}
-                  <div class="mb-4 p-3 bg-gray-800 rounded">
-                    <p class="text-sm font-semibold mb-2 text-gray-400">Distances (OKLAB space):</p>
-                    <div class="flex flex-wrap gap-2 text-xs">
-                      {group.distances.map((dist: any, i: number) => {
-                        const fromPreset = group.presets.find((p: any) => p.id === dist.from);
-                        const toPreset = group.presets.find((p: any) => p.id === dist.to);
-                        // Ensure distance is treated as a float
-                        const distValue = Number(dist.distance);
-                        return (
-                          <span key={i} class="bg-gray-700 px-2 py-1 rounded">
-                            <span class="text-gray-400">{fromPreset?.name}</span>
-                            {' ↔ '}
-                            <span class="text-gray-400">{toPreset?.name}</span>
-                            {': '}
-                            <span class="text-yellow-300 font-semibold">{distValue.toFixed(3)}</span>
-                          </span>
-                        );
-                      })}
+                    {/* Distance matrix */}
+                    <div class="mb-4 rounded bg-gray-800 p-3">
+                      <p class="mb-2 text-sm font-semibold text-gray-400">
+                        Distances (OKLAB space):
+                      </p>
+                      <div class="flex flex-wrap gap-2 text-xs">
+                        {group.distances.map((dist: any, i: number) => {
+                          const fromPreset = group.presets.find(
+                            (p: any) => p.id === dist.from,
+                          );
+                          const toPreset = group.presets.find(
+                            (p: any) => p.id === dist.to,
+                          );
+                          // Ensure distance is treated as a float
+                          const distValue = Number(dist.distance);
+                          return (
+                            <span key={i} class="rounded bg-gray-700 px-2 py-1">
+                              <span class="text-gray-400">
+                                {fromPreset?.name}
+                              </span>
+                              {' ↔ '}
+                              <span class="text-gray-400">
+                                {toPreset?.name}
+                              </span>
+                              {': '}
+                              <span class="font-semibold text-yellow-300">
+                                {distValue.toFixed(3)}
+                              </span>
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Preset previews */}
+                    <div class="grid gap-3 sm:grid-cols-2">
+                      {group.presets.map((preset: any) => (
+                        <div key={preset.id} class="relative">
+                          <PresetPreview Preset={preset} />
+                        </div>
+                      ))}
                     </div>
                   </div>
-
-                  {/* Preset previews */}
-                  <div class="grid sm:grid-cols-2 gap-3">
-                    {group.presets.map((preset: any) => (
-                      <div key={preset.id} class="relative">
-                        <PresetPreview Preset={preset} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                ),
+              )}
 
               {similarResults.value.groupCount === 0 && (
-                <div class="bg-green-500/20 border border-green-500/50 rounded-lg p-4 text-center">
-                  <p class="text-green-400 font-semibold">
+                <div class="rounded-lg border border-green-500/50 bg-green-500/20 p-4 text-center">
+                  <p class="font-semibold text-green-400">
                     ✓ No similar presets found at this threshold!
                   </p>
                 </div>

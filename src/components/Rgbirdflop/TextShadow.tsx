@@ -5,25 +5,30 @@ import ColorList from '~/components/Rgbirdflop/ColorList';
 import { inlineTranslate } from 'qwik-speak';
 import { Toggle } from '@luminescent/ui-qwik';
 
-export default component$(({ hidden }: {
-  hidden: boolean;
-}) => {
+export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const enabled = useSignal(!!rgbStore.shadowColors);
 
   return (
-    <div class={{
-      'flex flex-col gap-2 transition-all duration-300': true,
-      'h-0 opacity-0 pointer-events-none': hidden,
-      'opacity-100 pointer-events-auto': !hidden,
-    }} id="decode">
-      {rgbStore.colorFormat.color != 'JSON' && rgbStore.colorFormat.color != 'MiniMessage' &&
+    <div
+      class={{
+        'flex flex-col gap-2 transition-all duration-300': true,
+        'pointer-events-none h-0 opacity-0': hidden,
+        'pointer-events-auto opacity-100': !hidden,
+      }}
+      id="decode"
+    >
+      {rgbStore.colorFormat.color != 'JSON' &&
+        rgbStore.colorFormat.color != 'MiniMessage' && (
         <p class="text-red-500!">
-          {t('rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON or MiniMessage formatting!')}
+          {t(
+            'rgb.colors.shadow.warning@@Warning: Text shadow only works with JSON or MiniMessage formatting!',
+          )}
         </p>
-      }
-      <Toggle id="textshadowtoggle"
+      )}
+      <Toggle
+        id="textshadowtoggle"
         checked={!!rgbStore.shadowColors}
         onChange$={(e, el) => {
           if (!el.checked) {
@@ -36,14 +41,16 @@ export default component$(({ hidden }: {
       >
         {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
       </Toggle>
-      <div class={{
-        'transition-all duration-300': true,
-        'opacity-50': !rgbStore.shadowColors && !enabled.value,
-      }}>
-        <div class="py-2 px-4">
-          <ColorMap id="shadow"/>
+      <div
+        class={{
+          'transition-all duration-300': true,
+          'opacity-50': !rgbStore.shadowColors && !enabled.value,
+        }}
+      >
+        <div class="px-4 py-2">
+          <ColorMap id="shadow" />
         </div>
-        <ColorList id="shadow"/>
+        <ColorList id="shadow" />
       </div>
     </div>
   );

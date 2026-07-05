@@ -1,25 +1,25 @@
 {
   "rgb": {
     "advanced": {
-      "addColor": "Add color",
-      "backToClassic": "Classic editor",
-      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "addColor": "색상 추가",
+      "backToClassic": "클래식 에디터",
+      "highlightHint": "위 상자에서 글자를 드래그하여 강조하면 해당 부분의 색상과 서식만 편집할 수 있습니다.",
       "mode": {
-        "gradient": "Gradient",
-        "none": "Uncolored",
-        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
-        "solid": "Solid"
+        "gradient": "그라데이션",
+        "none": "색상 없음",
+        "noneDescription": "이 문자들은 마인크래프트 기본 색상을 유지합니다(서식만 적용됨).",
+        "solid": "단색"
       },
-      "selectAll": "Select all",
-      "styling": "Styling",
-      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+      "selectAll": "전체 선택",
+      "styling": "서식 설정",
+      "tryAdvanced": "세그먼트 기반 그라데이션을 지원하는 고급 에디터 사용해보기"
     },
     "colors": {
       "amount": "색상 수량",
       "character": "문자",
       "charsPer": "색상당 문자",
       "color": "색상",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "텍스트 색상에서 복사",
       "customFormat": "사용자 정의 형식",
       "disperse": {
         "always": {
@@ -28,23 +28,23 @@
         },
         "title": "분산"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "복제",
       "format": "색상 형식",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "그라데이션 유형",
+      "invert": "반전",
       "lowercase": {
         "description": "소문자 16진수 코드를 사용하려면 이것을 켜세요.",
         "title": "소문자 16진수 코드"
       },
-      "position": "Position",
+      "position": "위치",
       "randomize": "무작위화",
-      "reverse": "Reverse",
+      "reverse": "뒤집기",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "사용자 지정 텍스트 그림자",
         "title": "텍스트 그림자",
         "warning": "경고: 텍스트 그림자는 JSON 형식에서만 작동합니다!"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "무작위 섞기",
       "title": "색상",
       "trimSpaces": {
         "description": "빈 밑줄/취소선을 사용하는 경우 이것을 끄세요",
@@ -69,7 +69,7 @@
     "formatting": {
       "bold": "굵게",
       "character": "형식 문자",
-      "clear": "Clear Formatting",
+      "clear": "서식 지우기",
       "italic": "기울임꼴",
       "obfuscate": "난독화",
       "options": "형식 옵션",
@@ -84,9 +84,9 @@
         "chat": "마인크래프트 채팅",
         "default": "기본값",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "마인크래프트 GUI 상자",
+          "item": "마인크래프트 GUI 아이템 이름",
+          "lore": "마인크래프트 GUI 아이템 설명"
         },
         "tab": {
           "footer": "마인크래프트 탭 푸터",
@@ -95,11 +95,11 @@
         },
         "typeHere": "여기에 입력하세요!"
       },
-      "rawEdit": "Raw Edit Mode",
+      "rawEdit": "원래 텍스트 편집 모드",
       "title": "입력 텍스트",
-      "viewFormatted": "View Formatted Preview"
+      "viewFormatted": "서식 적용된 미리보기"
     },
-    "options": "Options",
+    "options": "옵션",
     "output": {
       "copied": {
         "description": "RGB 텍스트가 클립보드에 성공적으로 복사되었습니다.",
@@ -113,7 +113,7 @@
       "back": "사전 설정으로 돌아가기",
       "copied": {
         "description": "사전 설정이 클립보드에 성공적으로 복사되었습니다!",
-        "title": "Preset Copied!"
+        "title": "프리셋 복사 완료!"
       },
       "copy": "복사",
       "createNew": "새 사전 설정 만들기",
@@ -140,9 +140,9 @@
       },
       "pasteHere": "여기에 붙여넣기",
       "pending": "이 사전 설정은 검토 대기 중이며 아직 다른 사용자에게 제공되지 않을 수 있습니다.",
-      "personalPresets": "Personal Presets",
+      "personalPresets": "개인 프리셋",
       "presetData": "사전 설정 데이터",
-      "preview": "Preset Preview",
+      "preview": "프리셋 미리보기",
       "publish": "자신만의 사전 설정 게시",
       "remove": "제거",
       "save": "저장",
@@ -152,14 +152,14 @@
         "title": "사전 설정 저장됨!",
         "warning": "사전 설정을 영구적으로 저장하려면 로그인하세요."
       },
-      "savedPresets": "Saved Presets",
+      "savedPresets": "저장된 프리셋",
       "showSaved": {
         "description": "저장된 사전 설정만 표시하려면 이것을 켜세요.",
         "title": "저장된 사전 설정 표시"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "적게 저장된 순",
+        "mostSaved": "많이 저장된 순",
         "nameAZ": "이름 A-Z",
         "nameZA": "이름 Z-A",
         "newest": "최신순",
@@ -184,10 +184,10 @@
       }
     },
     "segmentColorEditor": {
-      "title": "Segment Color Editor"
+      "title": "세그먼트 색상 에디터"
     },
     "segments": {
-      "title": "Segments"
+      "title": "세그먼트"
     }
   }
 }

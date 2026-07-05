@@ -5,15 +5,15 @@
       "home": "Ana sayfaya dön",
       "title": "404: Sayfa bulunamadı"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Kapatmak için tıklayın",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "Kabul Et",
+      "description": "Tercihlerinizi otomatik olarak kaydetmek ve yüklemek için çerezleri kullanıyoruz.",
+      "optOut": "Reddet",
+      "title": "Çerezler"
     },
     "docs": "Belgeler",
-    "experimental": "experimental",
+    "experimental": "deneysel",
     "hosting": {
       "billing": "Faturalama",
       "nodeStats": {
@@ -39,8 +39,8 @@
     },
     "resources": {
       "analyze": {
-        "description": "Analyze a Spark Profile or Paper Timings and get possible optimizations",
-        "title": "Analyze"
+        "description": "Bir Spark Profilini veya Paper Timings'i analiz edin ve olası optimizasyonları alın",
+        "title": "Analiz Et"
       },
       "animatedTAB": {
         "description": "TAB eklentisi gradyan animasyon oluşturucu",
@@ -65,8 +65,8 @@
       },
       "hexGradient": {
         "advanced": {
-          "description": "Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.",
-          "title": "RGBirdflop Advanced"
+          "description": "Metninizi yazın, herhangi bir bölümünü vurgulayın, ardından o bölüme kendi rengini ve biçimlendirmesini verin. İstediğiniz kadar gradyan, düz renk ve stil karıştırın.",
+          "title": "RGBirdflop Gelişmiş"
         },
         "description": "Hex gradyan metin oluşturucu, 501(c)(3) kar amacı gütmeyen Minecraft barındırıcısı Birdflop tarafından desteklenmektedir.",
         "title": "RGBirdflop"
@@ -85,9 +85,9 @@
         "title": "Kağıt Zamanlamaları"
       },
       "plugins": {
-        "description": "Keep track of plugin updates without checking every plugin page for updates.",
-        "noServers": "No servers added yet. Get started by adding a server and some plugins!",
-        "title": "Plugin Updates"
+        "description": "Eklenti güncellemelerini, her eklenti sayfasını tek tek kontrol etmeden takip edin.",
+        "noServers": "Henüz sunucu eklenmedi. Bir sunucu ve birkaç eklenti ekleyerek başlayın!",
+        "title": "Eklenti Güncellemeleri"
       },
       "serverTools": {
         "description": "Minecraft sunucularını yapılandırmanıza ve kurmanıza yardımcı olan araçlar.",
@@ -104,8 +104,8 @@
       "title": "Kaynaklar"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Ayarlarınızı ve tercihlerinizi buradan yönetin.",
+      "title": "Ayarlar"
     },
     "termsofService": "Kullanım şartları"
   }

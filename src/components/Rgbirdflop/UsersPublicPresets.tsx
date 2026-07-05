@@ -1,11 +1,20 @@
-import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  useContext,
+  useContextProvider,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { Link, server$ } from '@builder.io/qwik-city';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
+import {
+  privatePresetsContext,
+  savedPresetsContext,
+} from '~/routes/resources/rgb/presets';
 import { ChevronLeft, Save } from 'lucide-icons-qwik';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -16,7 +25,8 @@ export const getUsersPresets = server$(async (userId: string) => {
   const db = getDB();
   if (!db) throw new Error('No database connection');
 
-  const userInfo = await db.select()
+  const userInfo = await db
+    .select()
     .from(users)
     .where(eq(users.id, userId))
     .get();
@@ -24,21 +34,21 @@ export const getUsersPresets = server$(async (userId: string) => {
   if (!userInfo) throw new Error('User not found');
 
   let presetsFromDB: {
-    user: typeof userInfo,
-    preset: PublicPreset,
+    user: typeof userInfo;
+    preset: PublicPreset;
   }[] = [];
   const errors: string[] = [];
   try {
-    presetsFromDB = await db.select({
-      user: users,
-      preset: presets,
-    })
+    presetsFromDB = await db
+      .select({
+        user: users,
+        preset: presets,
+      })
       .from(presets)
       .where(eq(presets.userId, userInfo.id))
       .innerJoin(users, eq(users.id, presets.userId))
       .then((r) => r ?? []);
-  }
-  catch (err) {
+  } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
   }
 
@@ -50,73 +60,85 @@ export const getUsersPresets = server$(async (userId: string) => {
   return { userInfo, userPresets, errors };
 });
 
-export default component$(({ userInfo, userPresets, errors }: {
-  userInfo: User;
-  userPresets: PublicPreset[];
-  errors: string[];
-}) => {
-  const notifications = useContext(NotificationContext);
-  const t = inlineTranslate();
+export default component$(
+  ({
+    userInfo,
+    userPresets,
+    errors,
+  }: {
+    userInfo: User;
+    userPresets: PublicPreset[];
+    errors: string[];
+  }) => {
+    const notifications = useContext(NotificationContext);
+    const t = inlineTranslate();
 
-  const session = useSession();
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
-  useContextProvider(privatePresetsContext, privatePresets);
+    const session = useSession();
+    const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+    useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
-  useContextProvider(savedPresetsContext, savedPresets);
+    const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+    useContextProvider(savedPresetsContext, savedPresets);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    // If privatePresets is empty, load presets from localStorage
-    if (privatePresets.value.length != 0) return;
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(() => {
+      // If privatePresets is empty, load presets from localStorage
+      if (privatePresets.value.length != 0) return;
 
-    try {
-      const localStoragePresets = getPresets();
-      privatePresets.value = privatePresets.value.concat(localStoragePresets);
-    } catch (err) {
-      const notification = new Notification()
-        .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err}`)
-        .setBgColor('lum-grad-bg-red/50')
-        .setPersist(true);
-      notifications.push(notification);
-    }
-  });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    if (errors.length > 0) {
-      errors.forEach((error) => {
+      try {
+        const localStoragePresets = getPresets();
+        privatePresets.value = privatePresets.value.concat(localStoragePresets);
+      } catch (err) {
         const notification = new Notification()
-          .setTitle('Error fetching user data')
-          .setDescription(`Error: ${error}`)
+          .setTitle('Error loading saved presets')
+          .setDescription(`Error: ${err}`)
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
-      });
-    }
-  });
+      }
+    });
 
-  return (
-    <>
-      {userPresets.length > 0 && <div class="mt-4">
-        <h2 class="mb-2 flex items-center gap-2 font-bold text-2xl">
-          <Save size={30} />
-          <span class="flex-1">
-            {userInfo?.name || 'User'}'s Public RGBirdflop Presets
-          </span>
-          <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-            <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
-          </Link>
-        </h2>
-        <div class="grid sm:grid-cols-2 gap-2">
-          {userPresets.map((preset) => (
-            <PresetPreview key={preset.id} Preset={preset} />
-          ))}
-        </div>
-      </div>}
-    </>
-  );
-});
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(() => {
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          const notification = new Notification()
+            .setTitle('Error fetching user data')
+            .setDescription(`Error: ${error}`)
+            .setBgColor('lum-grad-bg-red/50')
+            .setPersist(true);
+          notifications.push(notification);
+        });
+      }
+    });
+
+    return (
+      <>
+        {userPresets.length > 0 && (
+          <div class="mt-4">
+            <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+              <Save size={30} />
+              <span class="flex-1">
+                {userInfo?.name || 'User'}'s Public RGBirdflop Presets
+              </span>
+              <Link
+                href="/resources/rgb/presets"
+                class="lum-btn lum-bg-transparent"
+              >
+                <ChevronLeft size={20} />{' '}
+                {t('rgb.presets.back@@Back to presets')}
+              </Link>
+            </h2>
+            <div class="grid gap-2 sm:grid-cols-2">
+              {userPresets.map((preset) => (
+                <PresetPreview key={preset.id} Preset={preset} />
+              ))}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  },
+);
 
 export const head = generateHead({});

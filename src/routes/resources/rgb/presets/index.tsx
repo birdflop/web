@@ -12,10 +12,7 @@ import {
 } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
-import {
-  getPresets,
-  rgbPreset,
-} from '~/util/rgb/presets';
+import { getPresets, rgbPreset } from '~/util/rgb/presets';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import {
@@ -32,7 +29,14 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { getCookies } from '~/util/dataUtils';
 
-import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
+import {
+  getDB,
+  PresetPartial,
+  presets,
+  PublicPreset,
+  savedPresets,
+  users,
+} from '~/util/db';
 import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 import { useIsAdmin } from '~/routes/layout';
@@ -55,7 +59,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const showPending = searchParams.get('showPending') === 'true';
   const showSaved = searchParams.get('showSaved') === 'true';
   const savedPresetIds =
-    searchParams.get('savedPresetIds')?.split(',').filter(Boolean).map((id) => parseInt(id)) || [];
+    searchParams
+      .get('savedPresetIds')
+      ?.split(',')
+      .filter(Boolean)
+      .map((id) => parseInt(id)) || [];
   const sortBy = searchParams.get('sortBy') || 'createdAt';
   const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc';
 
@@ -63,17 +71,20 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
     const db = getDB();
     if (!db) throw new Error('No database client');
 
-    presetCount = await db.select({
-      count: count(),
-    })
+    presetCount = await db
+      .select({
+        count: count(),
+      })
       .from(presets)
-      .where(and(
-        eq(presets.pending, showPending),
-        searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
-        showSaved && savedPresetIds.length > 0
-          ? inArray(presets.id, savedPresetIds)
-          : undefined,
-      ))
+      .where(
+        and(
+          eq(presets.pending, showPending),
+          searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
+          showSaved && savedPresetIds.length > 0
+            ? inArray(presets.id, savedPresetIds)
+            : undefined,
+        ),
+      )
       .get()
       .then((r) => r?.count ?? 0);
 
@@ -87,24 +98,31 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       break;
     case 'createdAt':
     default:
-      orderBy = sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
+      orderBy =
+          sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
       break;
     }
 
-    const presetsFromDB = await db.select({
-      presets, user: users,
-    })
+    const presetsFromDB = await db
+      .select({
+        presets,
+        user: users,
+      })
       .from(presets)
-      .where(and(
-        or(
-          eq(presets.pending, showPending),
-          session?.user?.id ? eq(presets.userId, session?.user?.id) : undefined,
+      .where(
+        and(
+          or(
+            eq(presets.pending, showPending),
+            session?.user?.id
+              ? eq(presets.userId, session?.user?.id)
+              : undefined,
+          ),
+          searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
+          showSaved && savedPresetIds.length > 0
+            ? inArray(presets.id, savedPresetIds)
+            : undefined,
         ),
-        searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
-        showSaved && savedPresetIds.length > 0
-          ? inArray(presets.id, savedPresetIds)
-          : undefined,
-      ))
+      )
       .leftJoin(users, eq(users.id, presets.userId))
       .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
       .groupBy(presets.id, users.id)
@@ -114,9 +132,9 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       .then((r) => r ?? []);
 
     publicPresets = presetsFromDB.map(({ user, presets }) => ({
-      ...presets, user,
+      ...presets,
+      user,
     }));
-
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
     console.error('Error fetching presets:', err);
@@ -143,98 +161,108 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
   return cookies;
 });
 
-const Pagination = component$(({ page, perPage, totalPages, updateURL, presetCount, presetsLength }: {
-  page: number;
-  perPage: number;
-  totalPages: number;
-  updateURL: QRL<(params: Record<string, string | number | boolean>) => void>;
-  presetCount: number;
-  presetsLength: number;
-}) => {
-  const t = inlineTranslate();
+const Pagination = component$(
+  ({
+    page,
+    perPage,
+    totalPages,
+    updateURL,
+    presetCount,
+    presetsLength,
+  }: {
+    page: number;
+    perPage: number;
+    totalPages: number;
+    updateURL: QRL<(params: Record<string, string | number | boolean>) => void>;
+    presetCount: number;
+    presetsLength: number;
+  }) => {
+    const t = inlineTranslate();
 
-  return <div class="lum-card lum-bg-transparent sm:lum-grad-bg-lum-card-bg p-1 grid sm:grid-cols-3 items-center gap-2 my-2 relative">
-    <p class="text-xs text-lum-text-secondary lum-btn-p-1 text-center sm:text-left">
-      {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
-      {totalPages > 1 &&
-      ` - ${t('rgb.presets.pageInfo@@Page ')}${page} ${t('rgb.presets.pageInfo.of@@of')} ${totalPages}`
-      }
-    </p>
-    <div class="flex justify-center items-center gap-2 flex-1">
-      <button
-        class="lum-btn p-1 rounded-lum-1"
-        disabled={page === 1}
-        title={t('rgb.presets.pagination.previous@@Previous')}
-        onClick$={() => {
-          void updateURL({ page: Math.max(1, page - 1) });
-        }}
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <div class="lum-card flex-row p-1 sm:lum-bg-transparent sm:p-0 gap-1">
-        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-          let pageNum: number;
-          if (totalPages <= 5) {
-            pageNum = i + 1;
-          } else if (page <= 3) {
-            pageNum = i + 1;
-          } else if (page >= totalPages - 2) {
-            pageNum = totalPages - 4 + i;
-          } else {
-            pageNum = page - 2 + i;
-          }
-          return (
-            <button
-              key={pageNum}
-              class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
-                pageNum === page
-                  ? 'lum-grad-bg-lum-accent/20'
-                  : 'lum-bg-transparent'
-              }`}
-              onClick$={() => {
-                void updateURL({ page: pageNum });
-              }}
-            >
-              {pageNum}
-            </button>
-          );
-        })}
+    return (
+      <div class="lum-card lum-bg-transparent sm:lum-grad-bg-lum-card-bg relative my-2 grid items-center gap-2 p-1 sm:grid-cols-3">
+        <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
+          {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
+          {totalPages > 1 &&
+            ` - ${t('rgb.presets.pageInfo@@Page ')}${page} ${t('rgb.presets.pageInfo.of@@of')} ${totalPages}`}
+        </p>
+        <div class="flex flex-1 items-center justify-center gap-2">
+          <button
+            class="lum-btn rounded-lum-1 p-1"
+            disabled={page === 1}
+            title={t('rgb.presets.pagination.previous@@Previous')}
+            onClick$={() => {
+              void updateURL({ page: Math.max(1, page - 1) });
+            }}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div class="lum-card sm:lum-bg-transparent flex-row gap-1 p-1 sm:p-0">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum: number;
+              if (totalPages <= 5) {
+                pageNum = i + 1;
+              } else if (page <= 3) {
+                pageNum = i + 1;
+              } else if (page >= totalPages - 2) {
+                pageNum = totalPages - 4 + i;
+              } else {
+                pageNum = page - 2 + i;
+              }
+              return (
+                <button
+                  key={pageNum}
+                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
+                    pageNum === page
+                      ? 'lum-grad-bg-lum-accent/20'
+                      : 'lum-bg-transparent'
+                  }`}
+                  onClick$={() => {
+                    void updateURL({ page: pageNum });
+                  }}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            class="lum-btn rounded-lum-1 p-1"
+            disabled={page === totalPages}
+            onClick$={() => {
+              void updateURL({ page: Math.min(totalPages, page + 1) });
+            }}
+            title={t('rgb.presets.pagination.next@@Next')}
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+        <div class="flex items-center justify-center gap-2 sm:justify-end">
+          <p class="whitespace-nowrap">
+            {t('rgb.presets.pagination.perPage@@Per page:')}
+          </p>
+          <SelectMenuRaw
+            class={{
+              'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
+            }}
+            value={perPage}
+            onChange$={(e, el) => {
+              const newPerPage = parseInt(el.value, 10);
+              void updateURL({ perPage: newPerPage, page: 1 });
+            }}
+            title="Items per page"
+            values={[
+              { name: '10', value: '10' },
+              { name: '20', value: '20' },
+              { name: '50', value: '50' },
+              { name: '100', value: '100' },
+            ]}
+          />
+        </div>
       </div>
-      <button
-        class="lum-btn p-1 rounded-lum-1"
-        disabled={page === totalPages}
-        onClick$={() => {
-          void updateURL({ page: Math.min(totalPages, page + 1) });
-        }}
-        title={t('rgb.presets.pagination.next@@Next')}
-      >
-        <ChevronRight size={20} />
-      </button>
-    </div>
-    <div class="flex gap-2 items-center justify-center sm:justify-end">
-      <p class="whitespace-nowrap">
-        {t('rgb.presets.pagination.perPage@@Per page:')}
-      </p>
-      <SelectMenuRaw
-        class={{
-          'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
-        }}
-        value={perPage}
-        onChange$={(e, el) => {
-          const newPerPage = parseInt(el.value, 10);
-          void updateURL({ perPage: newPerPage, page: 1 });
-        }}
-        title="Items per page"
-        values={[
-          { name: '10', value: '10' },
-          { name: '20', value: '20' },
-          { name: '50', value: '50' },
-          { name: '100', value: '100' },
-        ]}
-      />
-    </div>
-  </div>;
-});
+    );
+  },
+);
 
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context',
@@ -368,41 +396,47 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
-        <span class="flex flex-1 gap-3 items-center">
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
+      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
+        <span class="flex flex-1 items-center gap-3">
           <Save size={32} />
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </span>
-        <a href="#my-presets" class="lum-btn font-normal mr-auto">
+        <a href="#my-presets" class="lum-btn mr-auto font-normal">
           <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
         </a>
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
-        {t('nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.')}
+      <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
+        {t(
+          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+        )}
       </p>
-      <div class="flex flex-col gap-2">
-      </div>
+      <div class="flex flex-col gap-2"></div>
 
-      <div class="sm:lum-card sm:flex-row sm:p-1 mt-2 sm:gap-1 sm:items-center">
-        <div class="lum-card flex-row p-1 sm:p-0 sm:lum-bg-transparent items-center gap-1 flex-1">
+      <div class="sm:lum-card mt-2 sm:flex-row sm:items-center sm:gap-1 sm:p-1">
+        <div class="lum-card sm:lum-bg-transparent flex-1 flex-row items-center gap-1 p-1 sm:p-0">
           <Search size={20} class="mx-2" />
           <input
-            class="lum-input flex-1 rounded-lum-1"
+            class="lum-input rounded-lum-1 flex-1"
             id="search-input"
             placeholder="Search for a preset..."
             value={searchTerm}
             onInput$={(e, el) => void debouncedSearch(el.value)}
           />
         </div>
-        <div class="flex items-center gap-1 justify-center">
-          <SelectMenuRaw value={`${sortBy}-${sortOrder}`}
+        <div class="flex items-center justify-center gap-1">
+          <SelectMenuRaw
+            value={`${sortBy}-${sortOrder}`}
             class={{
               'rounded-lum-1 lum-bg-transparent': true,
             }}
             onChange$={(e, el) => {
               const [newSortBy, newSortOrder] = el.value.split('-');
-              void updateURL({ sortBy: newSortBy, sortOrder: newSortOrder, page: 1 });
+              void updateURL({
+                sortBy: newSortBy,
+                sortOrder: newSortOrder,
+                page: 1,
+              });
             }}
             title={t('rgb.presets.sortBy.title@@Sort by')}
             values={[
@@ -430,18 +464,20 @@ export default component$(() => {
                 name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
                 value: 'saves-asc',
               },
-            ]}/>
-          <SelectMenuRaw align="right"
+            ]}
+          />
+          <SelectMenuRaw
+            align="right"
             id="settings"
             class={{
-              'p-3 rounded-lum-1 lum-bg-transparent': true,
+              'rounded-lum-1 lum-bg-transparent p-3': true,
             }}
             panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >
             <Settings q:slot="dropdown" size={16} />
 
-            {isAdmin &&
+            {isAdmin && (
               <Toggle
                 id="showpendingpresets"
                 q:slot="extra-buttons"
@@ -452,45 +488,64 @@ export default component$(() => {
               >
                 Show pending presets
               </Toggle>
-            }
+            )}
 
-            {savedPresets.value.length > 0 && <div q:slot="extra-buttons">
-              <Toggle
-                id="showsavedpresets"
-                disabled={savedPresets.value.length === 0}
-                checked={showSaved && savedPresets.value.length > 0}
-                onChange$={(e, el) =>
-                  void updateURL({ showSaved: el.checked, page: 1 })
-                }
-              >
-                <span class="whitespace-nowrap">
-                  {t('rgb.presets.showSaved.title@@Show saved presets')}
-                </span>
-              </Toggle>
-              <p class="text-xs text-lum-text-secondary mt-1">
-                {t('rgb.presets.showSaved.description@@Turn this on to show only your saved presets.')}
-              </p>
-            </div>}
+            {savedPresets.value.length > 0 && (
+              <div q:slot="extra-buttons">
+                <Toggle
+                  id="showsavedpresets"
+                  disabled={savedPresets.value.length === 0}
+                  checked={showSaved && savedPresets.value.length > 0}
+                  onChange$={(e, el) =>
+                    void updateURL({ showSaved: el.checked, page: 1 })
+                  }
+                >
+                  <span class="whitespace-nowrap">
+                    {t('rgb.presets.showSaved.title@@Show saved presets')}
+                  </span>
+                </Toggle>
+                <p class="text-lum-text-secondary mt-1 text-xs">
+                  {t(
+                    'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
+                  )}
+                </p>
+              </div>
+            )}
             <div q:slot="extra-buttons">
               <Toggle
                 id="previewwithsettings"
                 checked={presetStore.previewWithSettings}
-                onChange$={(e, el) => (presetStore.previewWithSettings = el.checked)}
+                onChange$={(e, el) =>
+                  (presetStore.previewWithSettings = el.checked)
+                }
               >
                 <span class="whitespace-nowrap">
-                  {t('rgb.presets.withCurrentOptions.title@@Show preview with current options')}
+                  {t(
+                    'rgb.presets.withCurrentOptions.title@@Show preview with current options',
+                  )}
                 </span>
               </Toggle>
-              <p class="text-xs text-lum-text-secondary mt-1">
-                {t('rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.')}
+              <p class="text-lum-text-secondary mt-1 text-xs">
+                {t(
+                  'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.',
+                )}
               </p>
             </div>
           </SelectMenuRaw>
         </div>
       </div>
 
-      {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
-      <div class="grid sm:grid-cols-2 gap-2">
+      {totalPages > 1 && (
+        <Pagination
+          page={page}
+          perPage={perPage}
+          totalPages={totalPages}
+          updateURL={updateURL}
+          presetCount={presetCount}
+          presetsLength={publicPresets.length}
+        />
+      )}
+      <div class="grid gap-2 sm:grid-cols-2">
         {publicPresets.map((publicPreset) => (
           <PresetPreview
             key={`${publicPreset.name}-${publicPreset.author}`}
@@ -499,27 +554,35 @@ export default component$(() => {
           />
         ))}
         {publicPresets.length === 0 && (
-          <p class="text-center text-lum-text-secondary col-span-full my-6">
+          <p class="text-lum-text-secondary col-span-full my-6 text-center">
             {t('rgb.presets.noResults@@No results found.')}
             <br />
             {t('rgb.presets.suggestion.one@@Think something is missing?')}
             <br />
-            {t('rgb.presets.suggestion.two@@publish your own preset at your profile page!')}
+            {t(
+              'rgb.presets.suggestion.two@@publish your own preset at your profile page!',
+            )}
           </p>
         )}
       </div>
-      {totalPages > 1 && <Pagination page={page} perPage={perPage} totalPages={totalPages} updateURL={updateURL} presetCount={presetCount} presetsLength={publicPresets.length} />}
+      {totalPages > 1 && (
+        <Pagination
+          page={page}
+          perPage={perPage}
+          totalPages={totalPages}
+          updateURL={updateURL}
+          presetCount={presetCount}
+          presetsLength={publicPresets.length}
+        />
+      )}
       <MyPrivatePresets />
 
-      <div class="text-sm mt-8">
+      <div class="mt-8 text-sm">
         RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
         gradient creator that generates hex formatted text. RGB Birdflop is a
         public resource developed by Birdflop, a 501(c)(3) nonprofit providing
         affordable and accessible hosting and public resources. If you would
-        like to support our mission, please{' '}
-        <a href={donateLink}>
-          click here
-        </a>{' '}
+        like to support our mission, please <a href={donateLink}>click here</a>{' '}
         to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>

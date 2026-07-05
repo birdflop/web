@@ -1,6 +1,6 @@
 {
   "plugins": {
-    "import": "Import",
-    "pasteHere": "Paste here"
+    "import": "Importar",
+    "pasteHere": "Colar aqui"
   }
 }

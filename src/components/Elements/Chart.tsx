@@ -9,16 +9,24 @@ export interface ChartProps {
     options?: any;
   };
 }
-const dollarLabel = (context: { parsed: number | bigint | null | undefined }) => {
-  if (context.parsed === null || context.parsed === undefined || isNaN(Number(context.parsed))) {
+const dollarLabel = (context: {
+  parsed: number | bigint | null | undefined;
+}) => {
+  if (
+    context.parsed === null ||
+    context.parsed === undefined ||
+    isNaN(Number(context.parsed))
+  ) {
     return ' N/A';
   }
-  const label = ' ' + new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(context.parsed));
+  const label =
+    ' ' +
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(context.parsed));
   return label;
 };
 
@@ -35,14 +43,22 @@ export default component$<ChartProps>((props) => {
       // find css variables in the config and replace them with their values
       const jsonString = JSON.stringify(providedConfig);
       const cssVarRegex = /var\(--(.*?)\)/g;
-      const replacedString = jsonString.replace(cssVarRegex, (match, varName) => {
-        const value = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`).trim();
-        return value ? value : match; // Return the original match if the variable is not found
-      });
+      const replacedString = jsonString.replace(
+        cssVarRegex,
+        (match, varName) => {
+          const value = getComputedStyle(document.documentElement)
+            .getPropertyValue(`--${varName}`)
+            .trim();
+          return value ? value : match; // Return the original match if the variable is not found
+        },
+      );
       providedConfig = JSON.parse(replacedString);
 
       // small workaround for functions in the config
-      if (providedConfig.options?.plugins?.tooltip?.callbacks?.label === 'dollarLabel') {
+      if (
+        providedConfig.options?.plugins?.tooltip?.callbacks?.label ===
+        'dollarLabel'
+      ) {
         providedConfig.options.plugins.tooltip.callbacks.label = dollarLabel;
       }
 

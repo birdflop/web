@@ -4,10 +4,10 @@
       "interval": "动画间隔",
       "name": "动画名称",
       "style": {
-        "BOUNCING": "Bouncing",
-        "FULL_TEXT_CYCLE": "Full Text Cycle",
-        "LEFT_TO_RIGHT": "Left to Right",
-        "RIGHT_TO_LEFT": "Right to Left",
+        "BOUNCING": "弹跳",
+        "FULL_TEXT_CYCLE": "完整文本循环",
+        "LEFT_TO_RIGHT": "从左到右",
+        "RIGHT_TO_LEFT": "从右到左",
         "title": "动画样式"
       }
     },
