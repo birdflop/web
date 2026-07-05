@@ -1,16 +1,15 @@
 import { component$, isBrowser, useContext, useSignal, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 import { inlineTranslate } from 'qwik-speak';
-import { ArrowLeft, Clipboard, Palette, Settings, Type } from 'lucide-icons-qwik';
+import { ArrowLeft, Clipboard, Palette, Type } from 'lucide-icons-qwik';
 import { deepTrack } from '~/util/misc';
 import { setCookies } from '~/util/dataUtils';
 import Output from '~/components/Rgbirdflop/Output';
 import HostingAd from '~/components/Rgbirdflop/HostingAd';
-import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflop';
+import { AD_VARIANTS, AD_VARIANT_STORAGE_KEY, rgbStoreContext, type AdVariantKey } from '~/components/Rgbirdflop/RGBirdflopBase';
 import { donateLink } from '~/components/Elements/Nav';
 import { generateAdvancedOutput } from './output';
 import StylePanel from './StylePanel';
-import AdvancedOptions from './AdvancedOptions';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input from '../Rgbirdflop/Input';
 import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
@@ -158,12 +157,6 @@ export default component$(() => {
               {t('rgb.output.title@@Output')}
             </div>
             <Output hidden={false} value={output} />
-
-            <div class="hidden sm:flex items-center p-2 gap-2 font-semibold mt-4">
-              <Settings />
-              {t('rgb.options@@Options')}
-            </div>
-            <AdvancedOptions hidden={false} />
           </div>
 
           {/* Column 4: Custom formats, decode, hosting ads, etc. */}

@@ -34,7 +34,7 @@ import Accordion from '~/components/Elements/Accordion';
 import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
-import { donateLink } from '../Elements/Nav';
+import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/misc';
 
 export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');

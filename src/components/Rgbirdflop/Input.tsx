@@ -2,9 +2,9 @@ import { $, component$, createContextId, Signal, Slot, useContext, useContextPro
 import { Eye, Terminal, Pencil } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, { lightBackgrounds } from '~/components/Elements/Background';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
-import Formatting from './Formatting';
+import Formatting from '~/components/Rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
 
 export interface Selection {

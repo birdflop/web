@@ -30,7 +30,6 @@ import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getCookies } from '~/util/dataUtils';
 
 import { getDB, PresetPartial, presets, PublicPreset, savedPresets, users } from '~/util/db';
@@ -38,6 +37,7 @@ import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
 import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
 import { useIsAdmin } from '~/routes/layout';
 import { donateLink } from '~/components/Elements/Nav';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;

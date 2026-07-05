@@ -1,9 +1,9 @@
-import { component$, createContextId, Signal, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { component$, createContextId, Signal, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 import {
   SegmentType,
   normalizeSegments,
@@ -12,11 +12,12 @@ import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
 import { defaultDescription, generateHead } from '~/root';
 import { ArrowLeft, TestTube2, Type } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
 import RGBirdflopBase from '~/components/Rgbirdflop/RGBirdflopBase';
+import Options from '~/components/Rgbirdflop/Options';
+import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
 import { renderAdvancedPreview } from '~/components/RgbAdvanced/preview';
 import SegmentColorEditor from '~/components/RgbAdvanced/SegmentColorEditor';
-import AdvancedOptions from '~/components/RgbAdvanced/AdvancedOptions';
+import { openItemsContext } from '~/routes/layout-profile';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgb', url.searchParams);
@@ -50,6 +51,7 @@ export default component$(() => {
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
+  const openItems = useContext(openItemsContext);
 
   return <RGBirdflopBase output={generateAdvancedOutput(rgbSegments.value, rgbStore)} errors={[...rgbErrors, ...segmentsErrors]}>;
     <div class="flex items-start gap-2" q:slot="header">
@@ -70,6 +72,7 @@ export default component$(() => {
         {t('rgb.beta.backToClassic@@Classic editor')}
       </Link>
     </div>
+
     {showAllGradients.value
       ? GRADIENT_TYPES.map((gradientType) => {
         const tempStore = {
@@ -102,7 +105,7 @@ export default component$(() => {
         rgbStore,
       )}
 
-    <AdvancedOptions q:slot="options" />
+    <Options q:slot="options" hidden={!openItems.value.includes('options')} />
 
     <div class="mb-4 flex flex-col gap-2" q:slot="column1">
       <div class="hidden sm:flex items-center p-2 gap-2 font-semibold">

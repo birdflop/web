@@ -1,8 +1,8 @@
 import { $, component$, useContext, useSignal } from '@builder.io/qwik';
 import { Bold, Eraser, Italic, Strikethrough, Underline, Wand2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from './RGBirdflop';
-import { Selection, selectionContext } from './Input';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+import { Selection, selectionContext } from '~/components/Rgbirdflop/Input';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import { FormatSegment, Formatting, ALL_FORMATTING_KEYS, FONT_LABELS, FormatKey, FormattingBooleanKey } from '@birdflop/rgbirdflop';
 

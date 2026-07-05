@@ -5,16 +5,16 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 import { renderPreview } from '~/components/Rgbirdflop/preview';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
-import Accordion from '../Elements/Accordion';
-import { discordLink } from '../Elements/Nav';
-import { SelectList } from '../Elements/SelectList';
+import Accordion from '~/components/Elements/Accordion';
+import { discordLink } from '~/components/Elements/Nav';
+import { SelectList } from '~/components/Elements/SelectList';
 
 export default component$(({ hidden }: {
   hidden: boolean;

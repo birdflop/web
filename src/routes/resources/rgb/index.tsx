@@ -1,14 +1,14 @@
-import { component$, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import { component$, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
 import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import { Blend, Palette, TestTube2 } from 'lucide-icons-qwik';
+import { Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { openItemsContext } from '~/routes/layout';
 import { renderPreview } from '~/components/Rgbirdflop/preview';
+import RGBirdflopBase, { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
@@ -36,10 +36,10 @@ export default component$(() => {
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
 
-  const openItems = useContext(openItemsContext);
-
   return (
-    <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
+    <RGBirdflopBase errors={errors} output={generateOutput(rgbStore)}>
+      <RGBirdflop />
+
       <div class="flex items-start gap-2" q:slot="header">
         <div class="flex flex-col gap-1 flex-1">
           <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
@@ -86,18 +86,7 @@ export default component$(() => {
           rgbStore,
           previewStyle.value == 'default' ? 4 : 2,
         )}
-
-      <button onClick$={() => {
-        openItems.value = openItems.value.includes('textshadow')
-          ? openItems.value.filter(item => item !== 'textshadow')
-          : ['textshadow'];
-      }} class={{
-        'lum-grad-bg-blue!': openItems.value.includes('textshadow'),
-      }} q:slot="mobile-navbar">
-        <Blend />
-        {t('rgb.colors.shadow.title@@Text Shadow')}
-      </button>
-    </RGBirdflop>
+    </RGBirdflopBase>
   );
 });
 

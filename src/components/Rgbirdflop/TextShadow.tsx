@@ -1,7 +1,7 @@
 import { component$, useContext, useSignal } from '@builder.io/qwik';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import ColorMap from './ColorMap';
-import ColorList from './ColorList';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+import ColorMap from '~/components/Rgbirdflop/ColorMap';
+import ColorList from '~/components/Rgbirdflop/ColorList';
 import { inlineTranslate } from 'qwik-speak';
 import { Toggle } from '@luminescent/ui-qwik';
 

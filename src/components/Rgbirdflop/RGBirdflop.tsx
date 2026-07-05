@@ -1,54 +1,29 @@
 import {
   component$,
-  createContextId,
-  Signal,
   Slot,
   useContext,
 } from '@builder.io/qwik';
 
-import {
-  rgbDefaults,
-} from '@birdflop/rgbirdflop';
-
-import RGBirdflopBase from './RGBirdflopBase';
 import { Blend, Palette, Save } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
-import ColorList from './ColorList';
-import Accordion from '../Elements/Accordion';
-import TextShadow from './TextShadow';
-import Options from './Options';
+
+import ColorList from '~/components/Rgbirdflop/ColorList';
+import TextShadow from '~/components/Rgbirdflop/TextShadow';
+import Options from '~/components/Rgbirdflop/Options';
+import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
+import Presets from '~/components/Rgbirdflop/Presets';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
+
+import Accordion from '~/components/Elements/Accordion';
 import Settings from '~/routes/settings';
-import FormatOptions from './FormatOptions';
-import Presets from './Presets';
 
-export const rgbStoreContext = createContextId<typeof rgbDefaults>('rgbstore-context');
-export const showAllGradientsContext = createContextId<Signal<boolean>>('showallgradients-context');
-
-export const AD_VARIANTS = {
-  'ai-generated': {
-    image: '/ad-ai.png',
-    label: 'AI Generated',
-  },
-  'pemi-handmade': {
-    image: '/ad-pemi.png',
-    label: 'Handmade by Pemi',
-  },
-} as const;
-export type AdVariantKey = keyof typeof AD_VARIANTS;
-export const AD_VARIANT_STORAGE_KEY = 'rgb-ad-variant';
-
-export default component$(({ errors, output }: {
-  errors: string[];
-  output: string;
-}) => {
+export default component$(() => {
   const t = inlineTranslate();
   const openItems = useContext(openItemsContext);
   const rgbStore = useContext(rgbStoreContext);
 
-  return <RGBirdflopBase errors={errors} output={output}>
-    <Slot q:slot="header" name="header" />
-
+  return <>
     <div q:slot="column1" class="hidden sm:flex items-center p-2 gap-2 font-semibold">
       <Palette />
       {t('rgb.colors.title@@Colors')}
@@ -56,6 +31,17 @@ export default component$(({ errors, output }: {
     <ColorList q:slot="column1" hidden={!openItems.value.includes('colors')}>
       <Slot name="color-list" />
     </ColorList>
+
+    <button onClick$={() => {
+      openItems.value = openItems.value.includes('textshadow')
+        ? openItems.value.filter(item => item !== 'textshadow')
+        : ['textshadow'];
+    }} class={{
+      'lum-grad-bg-blue!': openItems.value.includes('textshadow'),
+    }} q:slot="mobile-navbar">
+      <Blend />
+      {t('rgb.colors.shadow.title@@Text Shadow')}
+    </button>
     <Accordion q:slot="column1" sectionName="textshadow" pcOnly>
       <Blend />
       {t('rgb.colors.shadow.title@@Text Shadow')}
@@ -63,13 +49,13 @@ export default component$(({ errors, output }: {
     <TextShadow q:slot="column1" hidden={!openItems.value.includes('textshadow')} />
 
     <Options q:slot="options" hidden={!openItems.value.includes('options')} />
-    <Slot q:slot="options" name="options" />
 
     <div q:slot="column3" class="hidden sm:flex items-center p-2 gap-2 font-semibold">
       <Save />
       {t('rgb.presets.title@@Presets')}
     </div>
     <Presets q:slot="column3" hidden={!openItems.value.includes('presets')} />
+
     {rgbStore.customFormat && <>
       <Accordion q:slot="column3" sectionName="formatoptions" pcOnly>
         <Settings />
@@ -79,6 +65,5 @@ export default component$(({ errors, output }: {
         hidden={!openItems.value.includes('formatoptions')}
       />
     </>}
-
-  </RGBirdflopBase>;
+  </>;
 });

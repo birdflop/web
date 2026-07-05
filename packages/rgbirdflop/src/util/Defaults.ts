@@ -69,12 +69,12 @@ export const colorFormats: ColorFormat[] = [
   },
 ];
 
-export const animationStyles = [
-  { name: 'Normal (Left -> Right)', value: 1 },
-  { name: 'Reversed (Right -> Left)', value: 2 },
-  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
-  { name: 'Full Text Cycle', value: 4 },
-];
+export const ANIMATION_STYLES = {
+  LEFT_TO_RIGHT: 1,
+  RIGHT_TO_LEFT: 2,
+  BOUNCING: 3,
+  FULL_TEXT_CYCLE: 4,
+};
 
 export const version = 5;
 export const rgbColorDefaults = {
@@ -111,7 +111,7 @@ export const rgbDefaults = {
 
 export const animTABDefaults = {
   name: 'logo',
-  type: 1,
+  type: ANIMATION_STYLES.LEFT_TO_RIGHT,
   speed: 50,
   length: 1,
   outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',

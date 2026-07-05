@@ -9,7 +9,7 @@ import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
 import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { previewStyleContext, selectionContext, rawEditModeContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflopBase';
 
 const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
 const ImgItem = '/banner/dyes/cyan_dye.png';
