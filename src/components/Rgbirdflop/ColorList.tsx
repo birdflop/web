@@ -33,6 +33,9 @@ import {
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
+const hexRegex = /^#?[0-9A-F]{0,8}$/i;
+const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
+
 export default component$(
   ({ hidden, id = 'text' }: { hidden?: boolean; id?: string }) => {
     const t = inlineTranslate();
@@ -280,7 +283,21 @@ export default component$(
                   style={`--bg-color: ${color.hex};`}
                   value={color.hex}
                   onInput$={(e, el) => {
+                    let hex = el.value.trim();
+                    if (!hex.startsWith('#')) hex = '#' + hex;
+                    // lightly check if valid hex color
+                    const validRegex = id == 'shadow' ? hexRegex : hexRegexNoOpacity;
+                    if (!validRegex.test(hex)) {
+                      el.value = color.hex;
+                      return;
+                    }
+                    // update the color
+                    const newColors = colors.slice(0);
+                    newColors[i].hex = hex;
+                    rgbStore[colorsKey] = sortColors(newColors);
+
                     // set the color picker's value and trigger input to update color picker
+                    if (opened.value != i) return;
                     const picker = document.getElementById(
                       `colorlist${id}-color-picker`,
                     )!;
