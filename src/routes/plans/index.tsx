@@ -389,8 +389,8 @@ export default component$(() => {
                     plans[plansStore.plan]?.id +
                     '/?group_id=' +
                     plans[plansStore.plan]?.groupId +
-                    // @ts-expect-error type wont work with how this works
                     '&pricing_id=' +
+                    // @ts-expect-error type wont work with how this works
                     plans[plansStore.plan]?.ramAndId[plansStore.gb] +
                     '&server_name=' +
                     plansStore.name +
