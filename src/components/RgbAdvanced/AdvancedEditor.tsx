@@ -120,18 +120,18 @@ export default component$(() => {
           <div class="flex flex-wrap items-center gap-3">
             <h1 class="flex gap-3 text-2xl font-extrabold items-center flex-1">
               <Palette size={30} />
-              {t('rgb.beta.title@@RGBirdflop Advanced')}
+              {t('nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced')}
               <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1 self-center">
                 {t('nav.experimental@@experimental')}
               </span>
             </h1>
             <Link href="/resources/rgb" class="lum-btn lum-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg rounded-lum p-2 gap-2 text-sm">
               <ArrowLeft size={18} />
-              {t('rgb.beta.backToClassic@@Classic editor')}
+              {t('rgb.advanced.backToClassic@@Classic editor')}
             </Link>
           </div>
           <p class="text-lum-text-secondary">
-            {t('rgb.beta.howItWorks@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.')}
+            {t('nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.')}
           </p>
         </div>
 

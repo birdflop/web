@@ -278,7 +278,7 @@ export default component$(({ readOnly }: { readOnly?: boolean }) => {
               'text-lum-text-secondary': !rawEditMode.value,
             }}
             onClick$={() => rawEditMode.value = !rawEditMode.value}
-            title={rawEditMode.value ? t('rgb.input.viewFormatted@@View Formatted Preview') : t('rgb.input.rawEdit@@Raw Edit Mode')}
+            title={rawEditMode.value ? t('rgb.inputText.viewFormatted@@View Formatted Preview') : t('rgb.inputText.rawEdit@@Raw Edit Mode')}
           >
             {rawEditMode.value ? <Eye size={20} /> : <Pencil size={20} />}
           </button>

@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "Anzahl an Farben",
       "character": "Zeichen",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Fett",
       "character": "Formattierungszeichen",
+      "clear": "Clear Formatting",
       "italic": "Kursiv",
       "obfuscate": "Obfuskiert",
       "options": "Formattierungsoptionen",
@@ -80,7 +95,9 @@
         },
         "typeHere": "hier schreiben!"
       },
-      "title": "Eingabetext"
+      "rawEdit": "Raw Edit Mode",
+      "title": "Eingabetext",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Optionen",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "Hier einfügen",
       "pending": "Diese Voreinstellung befindet sich noch in der Überarbeitung und ist möglicherweise noch nicht für andere Benutzer verfügbar.",
+      "personalPresets": "Personal Presets",
       "presetData": "Voreingestellte Daten",
       "preview": "Preset Preview",
       "publish": "Veröffentlichen Sie Ihre eigene Voreinstellung",
@@ -134,6 +152,7 @@
         "title": "Voreinstellung gespeichert!",
         "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
         "title": "Gespeicherte Voreinstellungen anzeigen"
@@ -163,6 +182,12 @@
         "description": "Aktivieren Sie diese Option, um die Vorschauen mit den aktuellen Optionen anzuzeigen.",
         "title": "Vorschau mit aktuellen Optionen anzeigen"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

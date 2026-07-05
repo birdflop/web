@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "Color Amount",
       "character": "Character",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Bold",
       "character": "Format Character",
+      "clear": "Clear Formatting",
       "italic": "Italic",
       "obfuscate": "Obfuscate",
       "options": "Format Options",
@@ -80,7 +95,9 @@
         },
         "typeHere": "Type here!"
       },
-      "title": "Input Text"
+      "rawEdit": "Raw Edit Mode",
+      "title": "Input Text",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Options",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "Paste here",
       "pending": "This preset is pending review and may not be available to other users yet.",
+      "personalPresets": "Personal Presets",
       "presetData": "Preset Data",
       "preview": "Preset Preview",
       "publish": "Publish your own preset",
@@ -134,6 +152,7 @@
         "title": "Preset Saved!",
         "warning": "Please login to save presets permanently."
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "Turn this on to show only your saved presets.",
         "title": "Show saved presets"
@@ -163,6 +182,12 @@
         "description": "Turn this on to show the previews with the current options applied.",
         "title": "Show preview with current options"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

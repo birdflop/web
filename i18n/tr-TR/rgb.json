@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "Renk miktarı",
       "character": "Karakter",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Kalın",
       "character": "Format karakteri",
+      "clear": "Clear Formatting",
       "italic": "İtalik",
       "obfuscate": "Karıştır",
       "options": "Format seçenekleri",
@@ -80,7 +95,9 @@
         },
         "typeHere": "Buraya yazın!"
       },
-      "title": "Giriş metni"
+      "rawEdit": "Raw Edit Mode",
+      "title": "Giriş metni",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Options",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "Buraya yapıştır",
       "pending": "Bu ön ayar inceleme bekliyor ve henüz diğer kullanıcılar için kullanılabilir olmayabilir.",
+      "personalPresets": "Personal Presets",
       "presetData": "Ön ayar verisi",
       "preview": "Preset Preview",
       "publish": "Kendi ön ayarınızı yayınlayın",
@@ -134,6 +152,7 @@
         "title": "Ön ayar kaydedildi!",
         "warning": "Lütfen ön ayarları kalıcı olarak kaydetmek için giriş yapın."
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "Sadece kaydedilen ön ayarlarınızı göstermek için bunu açın.",
         "title": "Kaydedilen ön ayarları göster"
@@ -163,6 +182,12 @@
         "description": "Mevcut seçeneklerle uygulanan önizlemeleri göstermek için bunu açın.",
         "title": "Mevcut seçeneklerle önizleme göster"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

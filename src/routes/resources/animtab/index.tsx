@@ -216,7 +216,7 @@ export default component$(() => {
       </NumberInput>
       <SelectMenu q:slot="options" id="type" class={{ 'w-full': true }} onChange$={(e, el) => { animtabStore.type = Number(el.value); }}
         values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
-          name: t(`animtab.animation.style.${key}`),
+          name: t(`animtab.animation.style.${key}@@${key}`),
           value: String(value),
         }))}
         value={animtabStore.type}>

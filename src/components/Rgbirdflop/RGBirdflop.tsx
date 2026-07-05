@@ -327,8 +327,10 @@ export default component$(({ errors, output, advanced }: {
               <Settings />
               {t('rgb.options@@Options')}
             </div>
-            {!advanced && <Options hidden={!openItems.value.includes('options')} /> }
-            <Slot name="options" />
+            {!advanced && <Options hidden={!openItems.value.includes('options')}>
+              <Slot name="options" />
+            </Options>}
+            {advanced && <Slot name="options" />}
           </div>
 
           <div class="mb-4 flex flex-col gap-2" id="column3">

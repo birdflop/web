@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "Количество цветов",
       "character": "Символ",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Жирный",
       "character": "Символ формата",
+      "clear": "Clear Formatting",
       "italic": "Курсив",
       "obfuscate": "Обфускация",
       "options": "Опции форматирования",
@@ -80,7 +95,9 @@
         },
         "typeHere": "Введите здесь!"
       },
-      "title": "Исходный текст"
+      "rawEdit": "Raw Edit Mode",
+      "title": "Исходный текст",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Настройки",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "Вставить сюда",
       "pending": "Этот пресет ожидает проверки и может быть недоступен для других пользователей.",
+      "personalPresets": "Personal Presets",
       "presetData": "Данные пресета",
       "preview": "Предпросмотр пресета",
       "publish": "Опубликовать свой собственный пресет",
@@ -134,6 +152,7 @@
         "title": "Пресет сохранён!",
         "warning": "Пожалуйста, войдите в систему, чтобы сохранить пресеты навсегда."
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "Включите это, чтобы показать только ваши сохраненные пресеты.",
         "title": "Показать сохраненные пресеты"
@@ -163,6 +182,12 @@
         "description": "Включите это, чтобы показывать предпросмотр с применёнными текущими параметрами.",
         "title": "Показывать предпросмотр с текущими параметрами"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

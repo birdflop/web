@@ -74,7 +74,7 @@ export default component$(() => {
         <Sparkles />
         {t('rgb.decode.title@@Decode')}
         <span class="lum-grad-bg-blue/50 text-xs py-1 px-2 rounded-lum-1">
-          {t('rgb.decode.experimental@@experimental')}
+          {t('nav.experimental@@experimental')}
         </span>
       </button>
     </div>

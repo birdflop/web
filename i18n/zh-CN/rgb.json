@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "颜色数量",
       "character": "字符",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "粗体",
       "character": "格式字符",
+      "clear": "Clear Formatting",
       "italic": "斜体",
       "obfuscate": "混淆",
       "options": "格式选项",
@@ -80,7 +95,9 @@
         },
         "typeHere": "在此输入！"
       },
-      "title": "输入文本"
+      "rawEdit": "Raw Edit Mode",
+      "title": "输入文本",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Options",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "在此粘贴",
       "pending": "此预设正在等待审核，可能尚未对其他用户可用。",
+      "personalPresets": "Personal Presets",
       "presetData": "预设数据",
       "preview": "Preset Preview",
       "publish": "发布您自己的预设",
@@ -134,6 +152,7 @@
         "title": "预设已保存！",
         "warning": "请登录以永久保存预设。"
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "开启此选项以仅显示您已保存的预设。",
         "title": "显示已保存的预设"
@@ -163,6 +182,12 @@
         "description": "开启此选项以显示应用了当前选项的预览。",
         "title": "使用当前选项显示预览"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

@@ -1,5 +1,19 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Add color",
+      "backToClassic": "Classic editor",
+      "highlightHint": "Highlight letters in the box above to color & format just that part.",
+      "mode": {
+        "gradient": "Gradient",
+        "none": "Uncolored",
+        "noneDescription": "These characters keep Minecraft's default color (only formatting is applied).",
+        "solid": "Solid"
+      },
+      "selectAll": "Select all",
+      "styling": "Styling",
+      "tryAdvanced": "Try the Advanced editor with segment-based gradients"
+    },
     "colors": {
       "amount": "Aantal kleuren",
       "character": "Karakter",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Vet",
       "character": "Opmaak karakter",
+      "clear": "Clear Formatting",
       "italic": "Cursief",
       "obfuscate": "Verduisteren",
       "options": "Opmaak opties",
@@ -80,7 +95,9 @@
         },
         "typeHere": "Typ hier!"
       },
-      "title": "Invoertekst"
+      "rawEdit": "Raw Edit Mode",
+      "title": "Invoertekst",
+      "viewFormatted": "View Formatted Preview"
     },
     "options": "Options",
     "output": {
@@ -123,6 +140,7 @@
       },
       "pasteHere": "Plak hier",
       "pending": "Deze voorinstelling wacht op beoordeling en is mogelijk nog niet beschikbaar voor andere gebruikers.",
+      "personalPresets": "Personal Presets",
       "presetData": "Voorinstelling gegevens",
       "preview": "Preset Preview",
       "publish": "Publiceer je eigen voorinstelling",
@@ -134,6 +152,7 @@
         "title": "Voorinstelling opgeslagen!",
         "warning": "Log in om voorinstellingen permanent op te slaan."
       },
+      "savedPresets": "Saved Presets",
       "showSaved": {
         "description": "Zet dit aan om alleen je opgeslagen voorinstellingen te tonen.",
         "title": "Toon opgeslagen voorinstellingen"
@@ -163,6 +182,12 @@
         "description": "Zet dit aan om de voorvertoningen te tonen met de huidige opties toegepast.",
         "title": "Toon voorvertoning met huidige opties"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segment Color Editor"
+    },
+    "segments": {
+      "title": "Segments"
     }
   }
 }

@@ -52,7 +52,7 @@ export default component$(() => {
         </div>
         <Link href="/resources/rgb/beta" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
           <TestTube2 size={18} class="min-w-4 min-h-4" />
-          {t('rgb.beta.tryAdvanced@@Try the Advanced editor with segment-based gradients')}
+          {t('rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients')}
         </Link>
       </div>
       {showAllGradients.value

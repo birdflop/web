@@ -98,21 +98,21 @@ export default component$(() => {
       <div class="flex gap-1 *:flex-1">
         <button class={{ 'lum-btn p-2 rounded-sm justify-center gap-2': true, 'lum-grad-bg-lum-accent!': mode === 'gradient' }}
           onClick$={() => writeConfig({ colorMode: 'gradient', colors: ensureGradientColors(current.value.colors) })}>
-          <Palette size={18} /> {t('rgb.beta.mode.gradient@@Gradient')}
+          <Palette size={18} /> {t('rgb.advanced.mode.gradient@@Gradient')}
         </button>
         <button class={{ 'lum-btn p-2 rounded-sm justify-center gap-2': true, 'lum-grad-bg-lum-accent!': mode === 'solid' }}
           onClick$={() => writeConfig({ colorMode: 'solid', colors: [{ hex: current.value.colors[0]?.hex ?? getRandomColor(), pos: 0 }] })}>
-          <Droplet size={18} /> {t('rgb.beta.mode.solid@@Solid')}
+          <Droplet size={18} /> {t('rgb.advanced.mode.solid@@Solid')}
         </button>
         <button class={{ 'lum-btn p-2 rounded-sm justify-center gap-2': true, 'lum-grad-bg-lum-accent!': mode === 'none' }}
           onClick$={() => writeConfig({ colorMode: 'none' })}>
-          <Ban size={18} /> {t('rgb.beta.mode.none@@Uncolored')}
+          <Ban size={18} /> {t('rgb.advanced.mode.none@@Uncolored')}
         </button>
       </div>
 
       {mode === 'none' &&
         <p class="text-xs text-lum-text-secondary px-1">
-          {t('rgb.beta.mode.noneDescription@@These characters keep Minecraft\'s default color (only formatting is applied).')}
+          {t('rgb.advanced.mode.noneDescription@@These characters keep Minecraft\'s default color (only formatting is applied).')}
         </p>
       }
 
@@ -160,7 +160,7 @@ export default component$(() => {
             <ArrowRightLeft size={20} />
           </button>
           <button class="lum-btn p-1 rounded-sm justify-center" disabled={colors.length >= selLength}
-            title={t('rgb.beta.addColor@@Add color')}
+            title={t('rgb.advanced.addColor@@Add color')}
             onClick$={() => {
               const next = [...current.value.colors, { hex: getRandomColor(), pos: 100 }];
               void writeConfig({ colors: next.map((c, i) => ({ hex: c.hex, pos: Math.round((100 / (next.length - 1)) * i * 1000) / 1000 })) });

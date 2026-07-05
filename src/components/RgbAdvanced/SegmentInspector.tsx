@@ -37,7 +37,7 @@ export default component$(() => {
               'border-lum-border/20 hover:border-lum-border/40': !active,
             }}>
               <button class="flex items-center gap-1.5 pl-2 pr-2.5 py-1.5 min-w-0"
-                title={t('rgb.beta.selectSegment@@Click to edit this part')}
+                title={t('rgb.advanced.selectSegment@@Click to edit this part')}
                 onClick$={() => {
                   selection.value = { start: range.start, end: range.end, segmentIndex: i };
                   void restoreSelection(range.start, range.end);
@@ -49,15 +49,15 @@ export default component$(() => {
               </button>
               {active &&
                 <div class="flex items-center gap-0.5 pr-1 border-l border-lum-border/20 pl-1">
-                  <button class="lum-btn p-1 rounded-sm" disabled={i === 0} title={t('rgb.beta.moveLeft@@Move left')}
+                  <button class="lum-btn p-1 rounded-sm" disabled={i === 0} title={t('rgb.advanced.moveLeft@@Move left')}
                     onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i - 1); }}>
                     <ChevronLeft size={14} />
                   </button>
-                  <button class="lum-btn p-1 rounded-sm" disabled={i >= rgbSegments.value.length - 1} title={t('rgb.beta.moveRight@@Move right')}
+                  <button class="lum-btn p-1 rounded-sm" disabled={i >= rgbSegments.value.length - 1} title={t('rgb.advanced.moveRight@@Move right')}
                     onClick$={() => { rgbSegments.value = swapSegments(rgbSegments.value, i, i + 1); }}>
                     <ChevronRight size={14} />
                   </button>
-                  <button class="lum-btn p-1 rounded-sm hover:lum-bg-red" title={t('rgb.beta.deleteSegment@@Delete this part')}
+                  <button class="lum-btn p-1 rounded-sm hover:lum-bg-red" title={t('rgb.advanced.deleteSegment@@Delete this part')}
                     onClick$={() => { rgbSegments.value = deleteSegment(rgbSegments.value, i); }}>
                     <Trash size={14} />
                   </button>
