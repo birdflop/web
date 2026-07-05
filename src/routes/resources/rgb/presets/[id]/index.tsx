@@ -7,7 +7,8 @@ import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
 import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/Rgbirdflop/preview';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { savePreset, unsavePreset, updatePreset, deletePreset } from '~/util/dataUtils';
@@ -74,9 +75,9 @@ export default component$(() => {
   const existingPreset = savedPresets.value.find((savedPreset) => {
     return savedPreset.id === presetInfo.id;
   })?.preset
-  || privatePresets.value.find((savedPreset) => {
-    return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
-  });
+    || privatePresets.value.find((savedPreset) => {
+      return JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset);
+    });
 
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
@@ -130,7 +131,7 @@ export default component$(() => {
         'text-blue-300/80!': !presetInfo.user,
         'text-orange-300/80!': !!presetInfo.user,
       }}>
-        { presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
+        {presetInfo.user && <Link href={`/profile/${presetInfo.user.id}`}
           class="lum-btn lum-bg-transparent p-1 -ml-1 cursor-pointer font-semibold text-inherit! text-xl">
           {presetInfo.user.image && presetInfo.user.name && (
             <img src={presetInfo.user.image} alt={presetInfo.user.name}
@@ -139,7 +140,7 @@ export default component$(() => {
           {presetInfo.user.name}
         </Link>
         }
-        { presetInfo.author && !presetInfo.user && <>
+        {presetInfo.author && !presetInfo.user && <>
           {presetInfo.author == 'RGBirdflop' &&
             <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
           }
@@ -220,7 +221,7 @@ export default component$(() => {
               <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
             </>
             : <>
-              <Save size={20}  /> {t('rgb.presets.save@@Save')}
+              <Save size={20} /> {t('rgb.presets.save@@Save')}
             </>}
         </button>
         <button class="lum-btn text-sm lum-grad-bg-purple hover:bg-purple" disabled={isLoading.value} onClick$={() => {

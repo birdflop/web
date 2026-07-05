@@ -4,7 +4,7 @@ import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { Github, Loader2, MousePointer2, Palette, Rainbow, Save, Send, Trash } from 'lucide-icons-qwik';
 import { LogoBirdflop, LogoLuminescent, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { deletePreset, savePreset, setUserData, unsavePreset } from '~/util/dataUtils';
-import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/Rgbirdflop/preview';
 import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
 import { Link, LinkProps } from '@builder.io/qwik-city';
 import { rgbPreset } from '~/util/rgb/presets';
@@ -39,26 +39,25 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
   const existingPreset = savedPresets.value.find((savedPreset) => {
     return savedPreset.id === Preset.id;
   })?.preset
-  || privatePresets.value.find((savedPreset) => {
-    return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
-  });
+    || privatePresets.value.find((savedPreset) => {
+      return JSON.stringify(savedPreset) === JSON.stringify(Preset.preset);
+    });
 
   return <div class="lum-card p-0 gap-0 lum-bg transition duration-1000 hover:duration-75 ease-out border-none"
     style={{
       '--bg-color': (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + '10',
       '--lum-border-radius': '1rem',
-      background: `linear-gradient(to bottom right, ${
-        (Preset.preset.colors ?? defaults?.colors)
-          ?.map((color) => `${color.hex}10 ${color.pos}%`).join(', ')
+      background: `linear-gradient(to bottom right, ${(Preset.preset.colors ?? defaults?.colors)
+        ?.map((color) => `${color.hex}10 ${color.pos}%`).join(', ')
       })`,
     }}>
-    { Preset.author &&
+    {Preset.author &&
       <div class="flex lum-btn-p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1">
         <div class={{
           'flex flex-1 items-center gap-2': true,
           'text-blue-300/80!': !Preset.user,
         }}>
-          { Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-2 lum-btn-p-1 gap-2 cursor-pointer font-semibold -ml-1">
+          {Preset.user && <Link href={`/profile/${Preset.user?.id}`} class="lum-btn lum-bg-transparent rounded-lum-2 lum-btn-p-1 gap-2 cursor-pointer font-semibold -ml-1">
             {Preset.user.image && Preset.user.name && (
               <object data={Preset.user.image} class="w-6 h-6 rounded-full! text-white normal">
                 <img src={fallbackpfp} alt={Preset.user.name} width="100" height="100" />
@@ -67,7 +66,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             {Preset.user.name}
           </Link>
           }
-          { Preset.author && !Preset.user && <>
+          {Preset.author && !Preset.user && <>
             {Preset.author == 'RGBirdflop' &&
               <LogoBirdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
             }
@@ -109,29 +108,29 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
         }, 3)}
       </p>
 
-      { Preset.description &&
+      {Preset.description &&
         <p class="text-lum-text-secondary text-sm pt-2">
           {Preset.description}
         </p>
       }
 
-      { Preset.preset.text &&
+      {Preset.preset.text &&
         <p class="text-sm text-yellow-400/80! pt-2">
           This preset will change your current input to "{Preset.preset.text}"
         </p>
       }
-      { Preset.pending &&
+      {Preset.pending &&
         <p class="text-sm text-red-400/80! pt-2">
           {t('rgb.presets.pending@@This preset is pending review and may not be available to other users yet.')}
         </p>
       }
     </Link>
     <div class="flex p-1 items-center lum-bg-bg/50 rounded-lum-1 m-1 gap-1">
-      { Preset.preset.gradientType && <div class="lum-bg-blue lum-btn-p-1 rounded-lum-2 text-xs my-1 ml-1">
+      {Preset.preset.gradientType && <div class="lum-bg-blue lum-btn-p-1 rounded-lum-2 text-xs my-1 ml-1">
         {Preset.preset.gradientType}
-      </div> }
+      </div>}
       <div class="flex gap-1 my-1 ml-2">
-        { Preset.preset.colors && Preset.preset.colors.length > 0 &&
+        {Preset.preset.colors && Preset.preset.colors.length > 0 &&
           Preset.preset.colors.map((color, index) => (
             <span key={index} class="p-1.5 rounded-lum-3 lum-bg"
               style={{ '--bg-color': color.hex }} />
@@ -180,7 +179,7 @@ export default component$<PresetPreviewProps>(({ Preset, defaults, publishRefs, 
             <Trash size={20} />
           </span>
           : <span class="text-green-300 flex gap-3">
-            <Save size={20}  />
+            <Save size={20} />
           </span>}
       </button>
 

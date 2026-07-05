@@ -5,7 +5,8 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { renderPreview, rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/Rgbirdflop/preview';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
@@ -199,7 +200,7 @@ export default component$(({ hidden }: {
       </label>
 
       <input class="lum-input" id="import" name="import" placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
-        onInput$={async (e, el) => loadPresetJSON(el.value)}/>
+        onInput$={async (e, el) => loadPresetJSON(el.value)} />
 
       <div class="flex flex-wrap gap-1">
         <button class={{

@@ -4,7 +4,7 @@ import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import { CircleUserRound, Palette, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '~/components/Rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/Rgbirdflop/preview';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -59,7 +59,7 @@ export default component$(() => {
       </p>
     }
 
-    { /* todo: modal component */ }
+    { /* todo: modal component */}
     <dialog ref={modalRef}
       class={{
         'm-auto hidden open:flex text-lum-text overflow-visible': true,
@@ -74,7 +74,7 @@ export default component$(() => {
         </h3>
         <p class="text-lum-text-secondary">
           To publish a preset to the RGBirdflop presets repository, please fill out the form below.
-          <br/>
+          <br />
           Your preset will be reviewed by the Birdflop team before being published.
         </p>
       </div>
@@ -197,7 +197,7 @@ export default component$(() => {
                   value: JSON.stringify(preset),
                 }))
               } value={selectedPreset.value}>
-                Select a preset to publish
+              Select a preset to publish
             </SelectMenu>
           )}
         </div>
