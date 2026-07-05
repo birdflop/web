@@ -7,9 +7,9 @@ import {
   segmentRange,
   swapSegments,
   type SegmentType,
+  rgbSegmentsContext,
 } from './model';
 import { restoreSelection } from './dom';
-import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function swatchStyle(seg: SegmentType): string {

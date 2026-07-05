@@ -18,6 +18,14 @@ import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import Formatting from '~/components/Rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
+import {
+  applyTextDiff,
+  combinedText,
+  segmentIndexAtChar,
+  rgbSegmentsContext,
+} from '~/components/RgbAdvanced/model';
+import { ADVANCED_INPUT_ID } from '~/components/RgbAdvanced/dom';
+import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
 
 export interface Selection {
   start: number;
@@ -45,12 +53,15 @@ const InputField = component$(
     class: className,
     inputClass,
     readOnly,
+    advanced,
   }: {
     class?: string;
     inputClass?: string;
     readOnly?: boolean;
+    advanced?: boolean;
   }) => {
     const rgbStore = useContext(rgbStoreContext);
+    const rgbSegments = useContext(rgbSegmentsContext, null);
 
     const selection = useContext(selectionContext, useSignal<Selection>());
     const rawEdit = useSignal(false);
@@ -58,15 +69,26 @@ const InputField = component$(
     const syncSelection = $((el: HTMLTextAreaElement) => {
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? start;
-      if (start === end) {
-        // If there's no selection, unset it
-        selection.value = undefined;
-        return;
+      if (advanced && rgbSegments) {
+        selection.value = {
+          start,
+          end,
+          segmentIndex: segmentIndexAtChar(
+            rgbSegments.value,
+            Math.max(0, Math.min(start, end > start ? start : start - 1)),
+          ),
+        };
+      } else {
+        if (start === end) {
+          // If there's no selection, unset it
+          selection.value = undefined;
+          return;
+        }
+        selection.value = {
+          start,
+          end,
+        };
       }
-      selection.value = {
-        start,
-        end,
-      };
       console.log('Selection updated:', selection.value);
     });
 
@@ -97,11 +119,32 @@ const InputField = component$(
                 rawEdit.value,
               [`${inputClass}`]: inputClass,
             }}
-            value={rgbStore.text}
+            value={advanced && rgbSegments ? combinedText(rgbSegments.value) : rgbStore.text}
             spellcheck={false}
-            id="input"
+            id={advanced ? ADVANCED_INPUT_ID : 'input'}
             onInput$={(e, el) => {
-              rgbStore.text = el.value;
+              if (advanced && rgbSegments) {
+                if (e.isComposing) return;
+                const caret = el.selectionStart ?? el.value.length;
+                rgbSegments.value = applyTextDiff(rgbSegments.value, el.value);
+                requestAnimationFrame(() => {
+                  try {
+                    el.setSelectionRange(caret, caret);
+                  } catch {
+                    /* noop */
+                  }
+                });
+                selection.value = {
+                  start: caret,
+                  end: caret,
+                  segmentIndex: segmentIndexAtChar(
+                    rgbSegments.value,
+                    Math.max(0, caret - 1),
+                  ),
+                };
+              } else {
+                rgbStore.text = el.value;
+              }
             }}
             onSelect$={(e, el) => syncSelection(el)}
             onKeyUp$={(e, el) => syncSelection(el)}
@@ -115,10 +158,11 @@ const InputField = component$(
 
 // The default input field style
 const DefaultInput = component$(
-  ({ readOnly }: { readOnly: boolean | undefined }) => {
+  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
     return (
       <InputField
         readOnly={readOnly}
+        advanced={advanced}
         class="lum-input font-mc w-full p-0 text-3xl md:text-4xl xl:text-5xl"
         inputClass="lum-btn-p-2"
       >
@@ -130,13 +174,13 @@ const DefaultInput = component$(
 
 // The default input field style
 const MCPreviewTabSection = component$(
-  ({ readOnly }: { readOnly: boolean | undefined }) => {
+  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
     const previewStyle = useContext(previewStyleContext);
 
     return (
       <div class="max-h-64 min-h-8 overflow-auto bg-black/50 py-0.5 pl-0.5 text-2xl wrap-break-word">
         {previewStyle.value == 'tab-header' && (
-          <InputField readOnly={readOnly} inputClass="text-center">
+          <InputField readOnly={readOnly} advanced={advanced} inputClass="text-center">
             <Slot />
           </InputField>
         )}
@@ -169,7 +213,7 @@ const MCPreviewTabSection = component$(
               alt="RGBirdflop"
               style="image-rendering: pixelated;"
             />
-            <InputField readOnly={readOnly} class="-my-1 flex-1">
+            <InputField readOnly={readOnly} advanced={advanced} class="-my-1 flex-1">
               <Slot />
             </InputField>
             <img
@@ -183,7 +227,7 @@ const MCPreviewTabSection = component$(
           </div>
         )}
         {previewStyle.value == 'tab-footer' && (
-          <InputField readOnly={readOnly} inputClass="text-center">
+          <InputField readOnly={readOnly} advanced={advanced} inputClass="text-center">
             <Slot />
           </InputField>
         )}
@@ -197,9 +241,11 @@ const MCPreviewChatSection = component$(
   ({
     readOnly,
     playerName = 'RGBirdflop',
+    advanced,
   }: {
     readOnly: boolean | undefined;
     playerName?: string;
+    advanced?: boolean;
   }) => {
     const t = inlineTranslate();
 
@@ -214,7 +260,7 @@ const MCPreviewChatSection = component$(
             {t('rgb.inputText.preview.typeHere@@Type here!')}
           </p>
         )}
-        <InputField readOnly={readOnly}>
+        <InputField readOnly={readOnly} advanced={advanced}>
           {readOnly && (
             <span class="mr-2 text-white!">{`<${playerName}>`}</span>
           )}
@@ -227,7 +273,7 @@ const MCPreviewChatSection = component$(
 
 // The default input field style
 const MCPreviewGUISection = component$(
-  ({ readOnly }: { readOnly: boolean | undefined }) => {
+  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
     const previewStyle = useContext(previewStyleContext);
 
     return (
@@ -245,6 +291,7 @@ const MCPreviewGUISection = component$(
             {previewStyle.value == 'gui-chest' && (
               <InputField
                 readOnly={readOnly}
+                advanced={advanced}
                 inputClass="*:text-shadow-none!"
                 class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] w-[calc(160/176*100%)]"
               >
@@ -274,6 +321,7 @@ const MCPreviewGUISection = component$(
                 )}
                 <InputField
                   readOnly={readOnly}
+                  advanced={advanced}
                   inputClass="*:text-shadow-none!"
                 >
                   <Slot />
@@ -305,10 +353,12 @@ const MCPreviewInput = component$(
     readOnly,
     chatInput,
     playerName = 'RGBirdflop',
+    advanced,
   }: {
     readOnly: boolean | undefined;
     chatInput?: string;
     playerName?: string;
+    advanced?: boolean;
   }) => {
     const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
     const Background =
@@ -342,17 +392,17 @@ const MCPreviewInput = component$(
           }}
         >
           {previewStyle.value.includes('tab') && (
-            <MCPreviewTabSection readOnly={readOnly}>
+            <MCPreviewTabSection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewTabSection>
           )}
           {previewStyle.value == 'chat' && (
-            <MCPreviewChatSection readOnly={readOnly} playerName={playerName}>
+            <MCPreviewChatSection readOnly={readOnly} playerName={playerName} advanced={advanced}>
               <Slot />
             </MCPreviewChatSection>
           )}
           {previewStyle.value.includes('gui') && (
-            <MCPreviewGUISection readOnly={readOnly}>
+            <MCPreviewGUISection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewGUISection>
           )}
@@ -370,26 +420,31 @@ export default component$(
     noFormatRow,
     chatInput,
     playerName,
+    advanced,
   }: {
     readOnly?: boolean;
     noLabel?: boolean;
     noFormatRow?: boolean;
     chatInput?: string;
     playerName?: string;
+    advanced?: boolean;
   }) => {
     const t = inlineTranslate();
     const rgbStore = useContext(rgbStoreContext);
     const previewStyle = useContext(previewStyleContext);
+    const rgbSegments = useContext(rgbSegmentsContext, null);
 
     const rawEditMode = useSignal(false);
     useContextProvider(rawEditModeContext, rawEditMode);
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
-      const input = document.getElementById('input') as HTMLTextAreaElement;
+      const id = advanced ? ADVANCED_INPUT_ID : 'input';
+      const input = document.getElementById(id) as HTMLTextAreaElement;
       if (!input) return;
       input.focus();
-      input.setSelectionRange(rgbStore.text.length, rgbStore.text.length);
+      const len = advanced && rgbSegments ? combinedText(rgbSegments.value).length : rgbStore.text.length;
+      input.setSelectionRange(len, len);
     });
 
     return (
@@ -408,19 +463,20 @@ export default component$(
           )}
           {!noFormatRow && <Formatting />}
         </div>
-        <label for="input" class="relative mt-2 mb-4 flex flex-col items-start">
+        <label for={advanced ? ADVANCED_INPUT_ID : 'input'} class="relative mt-2 mb-4 flex flex-col items-start">
           {previewStyle.value != 'default' && (
             <MCPreviewInput
               readOnly={readOnly}
-              chatInput={chatInput}
+              chatInput={advanced && rgbSegments ? generateAdvancedOutput(rgbSegments.value, rgbStore) : chatInput}
               playerName={playerName}
+              advanced={advanced}
             >
               <Slot />
               <Slot name="input" />
             </MCPreviewInput>
           )}
           {previewStyle.value == 'default' && (
-            <DefaultInput readOnly={readOnly}>
+            <DefaultInput readOnly={readOnly} advanced={advanced}>
               <Slot />
               <Slot name="input" />
             </DefaultInput>

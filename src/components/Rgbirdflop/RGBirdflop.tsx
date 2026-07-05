@@ -282,7 +282,7 @@ export default component$(
         <div class="min-h-15 max-w-6xl">
           <Slot name="header" />
 
-          <Input>
+          <Input advanced={advanced}>
             <Slot name="input" />
             {previewStyle.value != 'default' && (
               <button

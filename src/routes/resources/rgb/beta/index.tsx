@@ -1,7 +1,5 @@
 import {
   component$,
-  createContextId,
-  Signal,
   useContext,
   useContextProvider,
   useSignal,
@@ -19,7 +17,11 @@ import {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/Rgbirdflop/RGBirdflop';
-import { SegmentType, normalizeSegments } from '~/components/RgbAdvanced/model';
+import {
+  SegmentType,
+  normalizeSegments,
+  rgbSegmentsContext,
+} from '~/components/RgbAdvanced/model';
 import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
 import { defaultDescription, generateHead } from '~/root';
 import { ArrowLeft, TestTube2, Type } from 'lucide-icons-qwik';
@@ -38,11 +40,6 @@ export const useRGBCookies = routeLoader$(({ cookie, url }) => {
 export const useSegmentsCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'rgbsegments', url.searchParams);
 });
-
-export const rgbSegmentsContext = createContextId<Signal<SegmentType[]>>(
-  'rgbsegments-context',
-);
-
 export default component$(() => {
   const t = inlineTranslate();
   const { cookies: rgbCookies, errors: rgbErrors } = useRGBCookies().value;

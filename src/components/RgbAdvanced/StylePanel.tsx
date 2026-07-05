@@ -1,10 +1,9 @@
 import { $, component$, useComputed$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { MousePointerClick, Palette } from 'lucide-icons-qwik';
-import { combinedText } from './model';
+import { combinedText, rgbSegmentsContext } from './model';
 import { restoreSelection } from './dom';
 import SegmentColorEditor from './SegmentColorEditor';
-import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 export default component$(() => {

@@ -13,11 +13,10 @@ import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
-import { applyTextDiff, combinedText, segmentIndexAtChar } from './model';
+import { applyTextDiff, combinedText, segmentIndexAtChar, rgbSegmentsContext } from './model';
 import { generateAdvancedOutput } from './output';
 import { renderAdvancedPreview } from './preview';
 import { ADVANCED_INPUT_ID } from './dom';
-import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import {
   previewStyleContext,
   selectionContext,

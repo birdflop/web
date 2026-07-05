@@ -24,7 +24,7 @@ import { generateAdvancedOutput } from './output';
 import StylePanel from './StylePanel';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 import Input from '../Rgbirdflop/Input';
-import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
+import { rgbSegmentsContext } from './model';
 import SegmentInspector from './SegmentInspector';
 
 export default component$(() => {

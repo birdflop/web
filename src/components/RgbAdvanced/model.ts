@@ -4,6 +4,7 @@ import {
   rgbColorDefaultsWithColorMode,
   ColorMode,
 } from '@birdflop/rgbirdflop';
+import { createContextId, Signal } from '@builder.io/qwik';
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
@@ -258,3 +259,7 @@ export function seedFromClassic(
 }
 
 export const advancedDefaults: SegmentType[] = seedFromClassic({});
+
+export const rgbSegmentsContext = createContextId<Signal<SegmentType[]>>(
+  'rgbsegments-context',
+);

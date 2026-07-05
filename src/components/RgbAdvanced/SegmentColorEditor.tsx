@@ -32,9 +32,8 @@ import {
   Plus,
   Trash,
 } from 'lucide-icons-qwik';
-import { applyStyleToRange, styleAtChar, type SegmentType } from './model';
+import { applyStyleToRange, styleAtChar, type SegmentType, rgbSegmentsContext } from './model';
 import { restoreSelection } from './dom';
-import { rgbSegmentsContext } from '~/routes/resources/rgb/beta/index';
 import { selectionContext } from '~/components/Rgbirdflop/Input';
 
 function gradientCSS(
