@@ -24,12 +24,12 @@ export function generateAnimTABFrames(
   let loopAmount;
   const length = (text.length * animtabStore.length) / rgbOptions.colorLength;
   switch (Number(animtabStore.type)) {
-  case 3:
-    loopAmount = length;
-    break;
-  default:
-    loopAmount = length * 2 - 2;
-    break;
+    case 3:
+      loopAmount = length;
+      break;
+    default:
+      loopAmount = length * 2 - 2;
+      break;
   }
 
   const colorFrames = [];

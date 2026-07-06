@@ -15,9 +15,11 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="customformat"
     >
-      <div class={{
-        'flex flex-col gap-2': true,
-      }}>
+      <div
+        class={{
+          'flex flex-col gap-2': true,
+        }}
+      >
         <label for="customformat">
           {t('rgb.colors.customFormat@@Custom Format')}
         </label>
@@ -56,9 +58,11 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <p>$c = {t('rgb.colors.character@@Character')}</p>
         </div>
       </div>
-      <div class={{
-        'flex flex-col gap-2': true,
-      }}>
+      <div
+        class={{
+          'flex flex-col gap-2': true,
+        }}
+      >
         {rgbStore.colorFormat.char != undefined &&
           !rgbStore.colorFormat.bold &&
           !rgbStore.colorFormat.italic &&
@@ -141,9 +145,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             />
             <div class="font-mono text-sm">
               <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
-              <p>
-                $t = Output Text
-              </p>
+              <p>$t = Output Text</p>
             </div>
           </>
         )}

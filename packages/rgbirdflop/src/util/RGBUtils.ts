@@ -1,4 +1,9 @@
-import { ColorStop, rgbDefaults, Formatting, rgbColorDefaults } from './Defaults';
+import {
+  ColorStop,
+  rgbDefaults,
+  Formatting,
+  rgbColorDefaults,
+} from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
@@ -115,7 +120,10 @@ export function renderTemplateSegment(
   return out;
 }
 
-export function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
+export function applyWrappers(
+  output: string,
+  rgbOptions: typeof rgbDefaults,
+): string {
   let out = output;
   if (!rgbOptions.formatting || rgbOptions.formatting.length === 0) {
     if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold)

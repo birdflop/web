@@ -7,11 +7,7 @@ export function renderAllGradientsPreview(
   return GRADIENT_TYPES.map((gradientType) => {
     const isActive = gradientType === activeGradientType;
     return (
-      <span
-        key={gradientType}
-        class="flex items-center gap-2"
-        q:slot="input"
-      >
+      <span key={gradientType} class="flex items-center gap-2" q:slot="input">
         <span
           class={{
             'lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
@@ -21,10 +17,8 @@ export function renderAllGradientsPreview(
         >
           {gradientType}
         </span>
-        <span class="flex-1">
-          {renderPreview(gradientType)}
-        </span>
+        <span class="flex-1">{renderPreview(gradientType)}</span>
       </span>
     );
   });
-};
+}

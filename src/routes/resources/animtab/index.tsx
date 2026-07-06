@@ -204,17 +204,18 @@ export default component$(() => {
         )}
       </p>
 
-      {showAllGradients.value ?
-        renderAllGradientsPreview(
-          (gradientType) => renderFrames(
-            { ...rgbStore, gradientType },
-            animtabStore,
-            framesStore.current,
-            previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
-          ),
+      {showAllGradients.value
+        ? renderAllGradientsPreview(
+          (gradientType) =>
+            renderFrames(
+              { ...rgbStore, gradientType },
+              animtabStore,
+              framesStore.current,
+              previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
+            ),
           rgbStore.gradientType,
-        ) :
-        renderFrames(
+        )
+        : renderFrames(
           rgbStore,
           animtabStore,
           framesStore.current,

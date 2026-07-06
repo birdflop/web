@@ -10,17 +10,16 @@ import {
   Signal,
 } from '@builder.io/qwik';
 
-import { rgbDefaults, disperseColors, colorFormats } from '@birdflop/rgbirdflop';
+import {
+  rgbDefaults,
+  disperseColors,
+  colorFormats,
+} from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
-import {
-  Blend,
-  Save,
-  Settings,
-  Sparkles,
-} from 'lucide-icons-qwik';
+import { Blend, Save, Settings, Sparkles } from 'lucide-icons-qwik';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
@@ -326,11 +325,12 @@ export default component$(
               id="column2"
             >
               <Output
-                class="h-32 font-mc"
+                class="font-mc h-32"
                 hidden={!openItems.value.includes('output')}
                 value={output}
               >
-                <SelectMenuRaw q:slot="label"
+                <SelectMenuRaw
+                  q:slot="label"
                   title={t('rgb.colors.format@@Color Format')}
                   id="format"
                   value={
@@ -349,9 +349,9 @@ export default component$(
                   }}
                   values={[
                     ...(!rgbStore.customFormat &&
-                      !colorFormats.find(
-                        (format) => format.color == rgbStore.colorFormat.color,
-                      )
+                    !colorFormats.find(
+                      (format) => format.color == rgbStore.colorFormat.color,
+                    )
                       ? [
                         {
                           name: rgbStore.colorFormat.color
@@ -419,10 +419,7 @@ export default component$(
 
               {rgbStore.customFormat && (
                 <>
-                  <Accordion
-                    sectionName="formatoptions"
-                    pcOnly
-                  >
+                  <Accordion sectionName="formatoptions" pcOnly>
                     <Settings />
                     {t('rgb.formatting.options@@Format Options')}
                   </Accordion>
@@ -434,15 +431,11 @@ export default component$(
             </div>
 
             <div class="mb-4 flex flex-col gap-2" id="column3">
-              <div
-                class="hidden items-center gap-2 p-2 font-semibold sm:flex"
-              >
+              <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
                 <Save />
                 {t('rgb.presets.title@@Presets')}
               </div>
-              <Presets
-                hidden={!openItems.value.includes('presets')}
-              />
+              <Presets hidden={!openItems.value.includes('presets')} />
 
               <Slot name="column3" />
 

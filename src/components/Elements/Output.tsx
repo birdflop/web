@@ -3,7 +3,7 @@ import { Clipboard } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 
-export default component$<{ hidden?: boolean; value: string, class?: string }>(
+export default component$<{ hidden?: boolean; value: string; class?: string }>(
   ({ hidden, value, class: className }) => {
     const t = inlineTranslate();
     const copiedTitle = t('nav.copied.title@@Copied to clipboard!');
@@ -18,15 +18,17 @@ export default component$<{ hidden?: boolean; value: string, class?: string }>(
       <div
         class={{
           'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-          ...(hidden === undefined) ? {} : {
-            'pointer-events-none max-h-0 opacity-0': hidden,
-            'pointer-events-auto max-h-62.5 opacity-100': !hidden,
-          },
+          ...(hidden === undefined
+            ? {}
+            : {
+              'pointer-events-none max-h-0 opacity-0': hidden,
+              'pointer-events-auto max-h-62.5 opacity-100': !hidden,
+            }),
         }}
         id="outputcontainer"
       >
         <label for="output" class="flex items-center gap-2 p-2 font-semibold">
-          <span class="flex items-center gap-2 flex-1">
+          <span class="flex flex-1 items-center gap-2">
             <Clipboard />
             {t('rgb.output.title@@Output')}
           </span>

@@ -394,29 +394,29 @@ export default component$(() => {
           (isOwner && (presetInfo.pending || presetInfo.saves < 1))) && (
           <div class="lum-card lum-grad-bg-red/20">
             <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-                Manage Preset
+              Manage Preset
             </h3>
             {isOwner && (
               <p class="mb-2">
-                  You are the owner of this preset.
+                You are the owner of this preset.
                 {presetInfo.saves < 1 &&
-                    ' Since this preset has no saves, you can safely delete it if you no longer want it to be available.'}
+                  ' Since this preset has no saves, you can safely delete it if you no longer want it to be available.'}
               </p>
             )}
             {isOwner && presetInfo.pending && (
               <p class="mb-2 text-yellow-500!">
-                  This preset is pending review. You can either delete it or wait
-                  for an admin to review and approve it. Once approved and the
-                  preset has saves, it will not be able to be deleted. If you want
-                  to delete this preset after it's approved, please contact us on{' '}
+                This preset is pending review. You can either delete it or wait
+                for an admin to review and approve it. Once approved and the
+                preset has saves, it will not be able to be deleted. If you want
+                to delete this preset after it's approved, please contact us on{' '}
                 <a
                   href={discordLink}
                   target="_blank"
                   class="text-blue-500 hover:underline"
                 >
-                    Discord
+                  Discord
                 </a>
-                  .
+                .
               </p>
             )}
             <div class="flex items-center gap-1">

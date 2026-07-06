@@ -4,7 +4,12 @@
  */
 
 const config = {
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: ['prettier-plugin-tailwindcss'],
+  singleQuote: true,
+  jsxSingleQuote: false,
+  semi: true,
+  tabWidth: 2,
+  trailingComma: 'all',
 };
 
 export default config;

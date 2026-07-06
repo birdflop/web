@@ -36,7 +36,10 @@ import {
   Shuffle,
   Trash,
 } from 'lucide-icons-qwik';
-import { rgbStoreContext, showAllGradientsContext } from '~/components/rgbirdflop/RGBirdflop';
+import {
+  rgbStoreContext,
+  showAllGradientsContext,
+} from '~/components/rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
@@ -54,11 +57,7 @@ type ColorListProps = {
 };
 
 export default component$<ColorListProps>((props) => {
-  const {
-    hidden,
-    id = 'text',
-    hideHeader = false,
-  } = props;
+  const { hidden, id = 'text', hideHeader = false } = props;
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
@@ -84,8 +83,8 @@ export default component$<ColorListProps>((props) => {
     $((e) => {
       if (
         e.target instanceof HTMLElement &&
-          !e.target.closest(`#colorlist${id}-color-popup`) &&
-          !e.target.closest(`#colorlistcolors${id}`)
+        !e.target.closest(`#colorlist${id}-color-popup`) &&
+        !e.target.closest(`#colorlistcolors${id}`)
       ) {
         opened.value = -1;
       }
@@ -103,7 +102,7 @@ export default component$<ColorListProps>((props) => {
     >
       {!hideHeader && (
         <div class="flex items-center gap-1 py-2 font-semibold">
-          <span class="flex items-center gap-2 flex-1">
+          <span class="flex flex-1 items-center gap-2">
             <Palette />
             {t('rgb.colors.title@@Colors')}
           </span>
@@ -111,7 +110,7 @@ export default component$<ColorListProps>((props) => {
             title={t('rgb.colors.gradientType@@Gradient Type')}
             id="gradientType"
             value={resolvedGradientType}
-            class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
+            class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
             onChange$={async (e, el) => {
               const value = el.value as GradientType;
               if (props.onGradientTypeChange$) {
@@ -128,13 +127,11 @@ export default component$<ColorListProps>((props) => {
           <button
             q:slot="extra-buttons"
             class={{
-              'lum-btn p-1 transition-colors rounded-l-sm': true,
+              'lum-btn rounded-l-sm p-1 transition-colors': true,
               'text-lum-primary': showAllGradients.value,
               'text-lum-text-secondary': !showAllGradients.value,
             }}
-            onClick$={() =>
-              (showAllGradients.value = !showAllGradients.value)
-            }
+            onClick$={() => (showAllGradients.value = !showAllGradients.value)}
             title={
               showAllGradients.value
                 ? 'Show only selected gradient'
@@ -291,9 +288,7 @@ export default component$<ColorListProps>((props) => {
           }}
           onClick$={() => {
             const newColors = colors.map((color) => {
-              const invertedHex = rgbToHex(
-                invertRgbColor(hexToRGB(color.hex)),
-              );
+              const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
               return { ...color, hex: `#${invertedHex}` };
             });
             void setColors(newColors);
@@ -309,7 +304,7 @@ export default component$<ColorListProps>((props) => {
               !colors.find((color, i) => {
                 return (
                   color.pos !=
-                    Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
+                  Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
                 );
               })
             }
@@ -332,17 +327,13 @@ export default component$<ColorListProps>((props) => {
             <div class="flex flex-col gap-1">
               <button
                 class="lum-btn rounded-b-sm p-1"
-                onClick$={() =>
-                  void setColors(swapItems(colors, i, i - 1))
-                }
+                onClick$={() => void setColors(swapItems(colors, i, i - 1))}
               >
                 <ChevronUp size={20} />
               </button>
               <button
                 class="lum-btn rounded-t-sm p-1"
-                onClick$={() =>
-                  void setColors(swapItems(colors, i, i + 1))
-                }
+                onClick$={() => void setColors(swapItems(colors, i, i + 1))}
               >
                 <ChevronDown size={20} />
               </button>
@@ -356,9 +347,9 @@ export default component$<ColorListProps>((props) => {
                 id={`colorlist${id}-color-${i + 1}-input`}
                 class={{
                   'text-gray-400 hover:text-gray-400':
-                      getBrightness(hexToRGB(color.hex)) < 126,
+                    getBrightness(hexToRGB(color.hex)) < 126,
                   'text-gray-700 hover:text-gray-700':
-                      getBrightness(hexToRGB(color.hex)) > 126,
+                    getBrightness(hexToRGB(color.hex)) > 126,
                   'lum-input lum-btn-p-1 lum-grad-bg w-full rounded-r-sm': true,
                 }}
                 style={`--bg-color: ${color.hex};`}
@@ -367,7 +358,8 @@ export default component$<ColorListProps>((props) => {
                   let hex = el.value.trim();
                   if (!hex.startsWith('#')) hex = '#' + hex;
                   // lightly check if valid hex color
-                  const validRegex = id == 'shadow' ? hexRegex : hexRegexNoOpacity;
+                  const validRegex =
+                    id == 'shadow' ? hexRegex : hexRegexNoOpacity;
                   if (!validRegex.test(hex)) {
                     el.value = color.hex;
                     return;
@@ -462,24 +454,21 @@ export default component$<ColorListProps>((props) => {
                 let newPos = Number(el.value);
                 if (newPos < 0) newPos = 0;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos =
-                    Math.round(newPos * 1000) / 1000;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 void setColors(sortColors(newColors));
               }}
               onIncrement$={() => {
                 const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos + 1;
                 if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos =
-                    Math.round(newPos * 1000) / 1000;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 void setColors(sortColors(newColors));
               }}
               onDecrement$={() => {
                 const newColors = colors.slice(0);
                 let newPos = newColors[opened.value].pos - 1;
                 if (newPos < 0) newPos = 0;
-                newColors[opened.value].pos =
-                    Math.round(newPos * 1000) / 1000;
+                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 void setColors(sortColors(newColors));
               }}
             >
@@ -490,5 +479,4 @@ export default component$<ColorListProps>((props) => {
       </div>
     </div>
   );
-},
-);
+});

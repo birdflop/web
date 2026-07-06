@@ -9,7 +9,11 @@ import {
 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { restoreSelection, Selection, selectionContext } from '~/components/rgbirdflop/Input';
+import {
+  restoreSelection,
+  Selection,
+  selectionContext,
+} from '~/components/rgbirdflop/Input';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import {
   FormatSegment,

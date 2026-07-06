@@ -15,14 +15,17 @@ import {
   type GradientType,
   GRADIENT_TYPES,
 } from '@birdflop/rgbirdflop';
+import { Ban, Droplet, Eye, Palette } from 'lucide-icons-qwik';
 import {
-  Ban,
-  Droplet,
-  Eye,
-  Palette,
-} from 'lucide-icons-qwik';
-import { applyStyleToRange, styleAtChar, type SegmentType, rgbSegmentsContext } from './rgbSegments';
-import { restoreSelection, selectionContext } from '~/components/rgbirdflop/Input';
+  applyStyleToRange,
+  styleAtChar,
+  type SegmentType,
+  rgbSegmentsContext,
+} from './rgbSegments';
+import {
+  restoreSelection,
+  selectionContext,
+} from '~/components/rgbirdflop/Input';
 import { showAllGradientsContext } from '../RGBirdflop';
 import ColorList from '../ColorList';
 
@@ -110,7 +113,7 @@ export default component$(
         id={'colorlist' + id}
       >
         <div class="flex items-center gap-1 py-2 font-semibold">
-          <span class="flex items-center gap-2 flex-1">
+          <span class="flex flex-1 items-center gap-2">
             <Palette />
             {t('rgb.colors.title@@Colors')}
           </span>
@@ -118,7 +121,7 @@ export default component$(
             title={t('rgb.colors.gradientType@@Gradient Type')}
             id="gradientType"
             value={current.value.gradientType}
-            class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
+            class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
             onChange$={(e, el) => {
               const value = el.value as GradientType;
               void writeConfig({ gradientType: value });
@@ -131,13 +134,11 @@ export default component$(
           <button
             q:slot="extra-buttons"
             class={{
-              'lum-btn p-1 transition-colors rounded-l-sm': true,
+              'lum-btn rounded-l-sm p-1 transition-colors': true,
               'text-lum-primary': showAllGradients.value,
               'text-lum-text-secondary': !showAllGradients.value,
             }}
-            onClick$={() =>
-              (showAllGradients.value = !showAllGradients.value)
-            }
+            onClick$={() => (showAllGradients.value = !showAllGradients.value)}
             title={
               showAllGradients.value
                 ? 'Show only selected gradient'
@@ -219,7 +220,9 @@ export default component$(
             id={id}
             colors={current.value.colors}
             gradientType={current.value.gradientType}
-            textLength={selection.value ? selection.value.end - selection.value.start : 1}
+            textLength={
+              selection.value ? selection.value.end - selection.value.start : 1
+            }
             onColorsChange$={$(async (newColors) => {
               await writeConfig({ colors: newColors });
             })}

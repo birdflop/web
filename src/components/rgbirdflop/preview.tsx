@@ -9,9 +9,11 @@ import {
   type Formatting,
 } from '@birdflop/rgbirdflop';
 
-export const EmptyPreview = <span class="text-lum-text-secondary/25" q:slot="input">
-  Birdflop
-</span>;
+export const EmptyPreview = (
+  <span class="text-lum-text-secondary/25" q:slot="input">
+    Birdflop
+  </span>
+);
 
 function getFormattingSignature(formatting: Formatting) {
   return (

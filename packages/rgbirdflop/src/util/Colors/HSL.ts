@@ -46,15 +46,15 @@ export function rgbToHsl(rgb: number[]): HSL {
     s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
 
     switch (max) {
-    case r:
-      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
-      break;
-    case g:
-      h = ((b - r) / delta + 2) / 6;
-      break;
-    case b:
-      h = ((r - g) / delta + 4) / 6;
-      break;
+      case r:
+        h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / delta + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / delta + 4) / 6;
+        break;
     }
   }
 
@@ -176,15 +176,15 @@ export function rgbToHsv(rgb: number[]): HSV {
 
   if (delta !== 0) {
     switch (max) {
-    case r:
-      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
-      break;
-    case g:
-      h = ((b - r) / delta + 2) / 6;
-      break;
-    case b:
-      h = ((r - g) / delta + 4) / 6;
-      break;
+      case r:
+        h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / delta + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / delta + 4) / 6;
+        break;
     }
   }
 
@@ -214,38 +214,38 @@ export function hsvToRgb(hsv: HSV): number[] {
   let r: number, g: number, b: number;
 
   switch (i % 6) {
-  case 0:
-    r = v;
-    g = t;
-    b = p;
-    break;
-  case 1:
-    r = q;
-    g = v;
-    b = p;
-    break;
-  case 2:
-    r = p;
-    g = v;
-    b = t;
-    break;
-  case 3:
-    r = p;
-    g = q;
-    b = v;
-    break;
-  case 4:
-    r = t;
-    g = p;
-    b = v;
-    break;
-  case 5:
-    r = v;
-    g = p;
-    b = q;
-    break;
-  default:
-    r = g = b = 0;
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
+    default:
+      r = g = b = 0;
   }
 
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];

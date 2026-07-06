@@ -90,17 +90,17 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 
     let orderBy;
     switch (sortBy) {
-      case 'name':
-        orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
-        break;
-      case 'saves':
-        orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
-        break;
-      case 'createdAt':
-      default:
-        orderBy =
+    case 'name':
+      orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
+      break;
+    case 'saves':
+      orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
+      break;
+    case 'createdAt':
+    default:
+      orderBy =
           sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
-        break;
+      break;
     }
 
     const presetsFromDB = await db
@@ -212,10 +212,11 @@ const Pagination = component$(
               return (
                 <button
                   key={pageNum}
-                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${pageNum === page
+                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
+                    pageNum === page
                       ? 'lum-grad-bg-lum-accent/20'
                       : 'lum-bg-transparent'
-                    }`}
+                  }`}
                   onClick$={() => {
                     void updateURL({ page: pageNum });
                   }}

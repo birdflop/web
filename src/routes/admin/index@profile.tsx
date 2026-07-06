@@ -67,7 +67,10 @@ export default component$(() => {
         await addLog('Version Migration', errorMsg);
       }
     } catch (error) {
-      await addLog('Version Migration', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog(
+        'Version Migration',
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isMigrating.value = false;
@@ -90,7 +93,10 @@ export default component$(() => {
         await addLog('Vector Backfill', errorMsg);
       }
     } catch (error) {
-      await addLog('Vector Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog(
+        'Vector Backfill',
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isRunning.value = false;
@@ -113,7 +119,10 @@ export default component$(() => {
         await addLog('Saves Backfill', errorMsg);
       }
     } catch (error) {
-      await addLog('Saves Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog(
+        'Saves Backfill',
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isRunning.value = false;
@@ -130,12 +139,21 @@ export default component$(() => {
       if (response.success && response.presets) {
         loadedPresets.value = response.presets;
         loadedAt.value = new Date();
-        await addLog('Find Similar', `Loaded ${response.presets.length} presets.`);
+        await addLog(
+          'Find Similar',
+          `Loaded ${response.presets.length} presets.`,
+        );
       } else {
-        await addLog('Find Similar', `Error loading presets: ${response.error}`);
+        await addLog(
+          'Find Similar',
+          `Error loading presets: ${response.error}`,
+        );
       }
     } catch (error) {
-      await addLog('Find Similar', `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog(
+        'Find Similar',
+        `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isLoadingPresets.value = false;
@@ -291,7 +309,10 @@ export default component$(() => {
       msg += `Threshold: ${threshold} | Pairs checked: ${pairsChecked} | Pairs grouped: ${pairsGrouped}`;
       await addLog('Find Similar', msg);
     } catch (error) {
-      await addLog('Find Similar', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog(
+        'Find Similar',
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
 
     isCheckingSimilar.value = false;
@@ -531,7 +552,7 @@ export default component$(() => {
 
       {/* Console Output Log */}
       <div class="lum-card mt-6 flex flex-col">
-        <div class="flex items-center justify-between mb-2">
+        <div class="mb-2 flex items-center justify-between">
           <h2 class="text-xl! font-bold">Console Output</h2>
           {consoleLogs.value.length > 0 && (
             <button
@@ -544,18 +565,27 @@ export default component$(() => {
             </button>
           )}
         </div>
-        <div class="rounded-lg bg-gray-950 p-4 font-mono text-sm max-h-96 overflow-y-auto border border-lum-border/10">
+        <div class="border-lum-border/10 max-h-96 overflow-y-auto rounded-lg border bg-gray-950 p-4 font-mono text-sm">
           {consoleLogs.value.length === 0 ? (
-            <span class="text-gray-500">No output yet. Run an action above to see results.</span>
+            <span class="text-gray-500">
+              No output yet. Run an action above to see results.
+            </span>
           ) : (
             <div class="flex flex-col gap-4">
               {consoleLogs.value.map((log, index) => (
-                <div key={index} class="border-b border-lum-border/10 pb-3 last:border-b-0 last:pb-0">
-                  <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                <div
+                  key={index}
+                  class="border-lum-border/10 border-b pb-3 last:border-b-0 last:pb-0"
+                >
+                  <div class="mb-1 flex items-center gap-2 text-xs text-gray-400">
                     <span class="font-bold text-gray-500">[{log.time}]</span>
-                    <span class="uppercase font-semibold px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 text-[10px]">{log.action}</span>
+                    <span class="rounded bg-gray-800 px-1.5 py-0.5 text-[10px] font-semibold text-gray-300 uppercase">
+                      {log.action}
+                    </span>
                   </div>
-                  <pre class="whitespace-pre-wrap text-white font-mono">{log.message}</pre>
+                  <pre class="font-mono whitespace-pre-wrap text-white">
+                    {log.message}
+                  </pre>
                 </div>
               ))}
             </div>

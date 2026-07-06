@@ -510,7 +510,8 @@ export default component$(() => {
         </div>
       </div>
 
-      <Output class="h-96 font-mono break-all"
+      <Output
+        class="h-96 font-mono break-all"
         value={generateResult(flagsStore).script ?? ''}
       >
         <span q:slot="label" class="text-lum-text-secondary text-sm">
@@ -520,7 +521,6 @@ export default component$(() => {
           )}
         </span>
       </Output>
-
     </section>
   );
 });

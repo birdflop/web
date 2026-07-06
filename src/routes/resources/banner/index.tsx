@@ -519,13 +519,12 @@ export default component$(() => {
               ))}
             </div>
           </div>
-          <Output class="font-mc"
+          <Output
+            class="font-mc"
             value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
           >
             <span q:slot="label" class="text-lum-text-secondary text-sm">
-              {t(
-                'banner.command.title@@Command',
-              )}
+              {t('banner.command.title@@Command')}
             </span>
           </Output>
         </div>

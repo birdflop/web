@@ -28,9 +28,7 @@ import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output'
 
 /** Re-applies the textarea selection after a store mutation (Qwik may reset the caret). */
 export const restoreSelection = $((start: number, end: number) => {
-  const el = document.getElementById(
-    'input',
-  ) as HTMLTextAreaElement | null;
+  const el = document.getElementById('input') as HTMLTextAreaElement | null;
   if (!el) return;
   requestAnimationFrame(() => {
     try {
@@ -134,7 +132,11 @@ const InputField = component$(
                 rawEdit.value,
               [`${inputClass}`]: inputClass,
             }}
-            value={advanced && rgbSegments ? combinedText(rgbSegments.value) : rgbStore.text}
+            value={
+              advanced && rgbSegments
+                ? combinedText(rgbSegments.value)
+                : rgbStore.text
+            }
             spellcheck={false}
             id={'input'}
             onInput$={(e, el) => {
@@ -173,7 +175,13 @@ const InputField = component$(
 
 // The default input field style
 const DefaultInput = component$(
-  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
+  ({
+    readOnly,
+    advanced,
+  }: {
+    readOnly: boolean | undefined;
+    advanced?: boolean;
+  }) => {
     return (
       <InputField
         readOnly={readOnly}
@@ -189,13 +197,23 @@ const DefaultInput = component$(
 
 // The default input field style
 const MCPreviewTabSection = component$(
-  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
+  ({
+    readOnly,
+    advanced,
+  }: {
+    readOnly: boolean | undefined;
+    advanced?: boolean;
+  }) => {
     const previewStyle = useContext(previewStyleContext);
 
     return (
       <div class="max-h-64 min-h-8 overflow-auto bg-black/50 py-0.5 pl-0.5 text-2xl wrap-break-word">
         {previewStyle.value == 'tab-header' && (
-          <InputField readOnly={readOnly} advanced={advanced} inputClass="text-center">
+          <InputField
+            readOnly={readOnly}
+            advanced={advanced}
+            inputClass="text-center"
+          >
             <Slot />
           </InputField>
         )}
@@ -228,7 +246,11 @@ const MCPreviewTabSection = component$(
               alt="RGBirdflop"
               style="image-rendering: pixelated;"
             />
-            <InputField readOnly={readOnly} advanced={advanced} class="-my-1 flex-1">
+            <InputField
+              readOnly={readOnly}
+              advanced={advanced}
+              class="-my-1 flex-1"
+            >
               <Slot />
             </InputField>
             <img
@@ -242,7 +264,11 @@ const MCPreviewTabSection = component$(
           </div>
         )}
         {previewStyle.value == 'tab-footer' && (
-          <InputField readOnly={readOnly} advanced={advanced} inputClass="text-center">
+          <InputField
+            readOnly={readOnly}
+            advanced={advanced}
+            inputClass="text-center"
+          >
             <Slot />
           </InputField>
         )}
@@ -288,7 +314,13 @@ const MCPreviewChatSection = component$(
 
 // The default input field style
 const MCPreviewGUISection = component$(
-  ({ readOnly, advanced }: { readOnly: boolean | undefined; advanced?: boolean }) => {
+  ({
+    readOnly,
+    advanced,
+  }: {
+    readOnly: boolean | undefined;
+    advanced?: boolean;
+  }) => {
     const previewStyle = useContext(previewStyleContext);
 
     return (
@@ -412,7 +444,11 @@ const MCPreviewInput = component$(
             </MCPreviewTabSection>
           )}
           {previewStyle.value == 'chat' && (
-            <MCPreviewChatSection readOnly={readOnly} playerName={playerName} advanced={advanced}>
+            <MCPreviewChatSection
+              readOnly={readOnly}
+              playerName={playerName}
+              advanced={advanced}
+            >
               <Slot />
             </MCPreviewChatSection>
           )}
@@ -457,7 +493,10 @@ export default component$(
       const input = document.getElementById('input') as HTMLTextAreaElement;
       if (!input) return;
       input.focus();
-      const len = advanced && rgbSegments ? combinedText(rgbSegments.value).length : rgbStore.text.length;
+      const len =
+        advanced && rgbSegments
+          ? combinedText(rgbSegments.value).length
+          : rgbStore.text.length;
       input.setSelectionRange(len, len);
     });
 
@@ -481,7 +520,11 @@ export default component$(
           {previewStyle.value != 'default' && (
             <MCPreviewInput
               readOnly={readOnly}
-              chatInput={advanced && rgbSegments ? generateAdvancedOutput(rgbSegments.value, rgbStore) : chatInput}
+              chatInput={
+                advanced && rgbSegments
+                  ? generateAdvancedOutput(rgbSegments.value, rgbStore)
+                  : chatInput
+              }
               playerName={playerName}
               advanced={advanced}
             >

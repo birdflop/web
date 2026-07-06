@@ -104,20 +104,16 @@ export default component$(() => {
         </Link>
       </div>
 
-      {showAllGradients.value ?
-        renderAllGradientsPreview(
+      {showAllGradients.value
+        ? renderAllGradientsPreview(
           (gradientType) =>
-            renderAdvancedPreview(
-              rgbSegments.value,
-              { ...rgbStore, gradientType },
-            ),
+            renderAdvancedPreview(rgbSegments.value, {
+              ...rgbStore,
+              gradientType,
+            }),
           rgbStore.gradientType,
-        ) :
-        renderAdvancedPreview(
-          rgbSegments.value,
-          rgbStore,
         )
-      }
+        : renderAdvancedPreview(rgbSegments.value, rgbStore)}
 
       <SegmentInspector q:slot="input-extra" />
 

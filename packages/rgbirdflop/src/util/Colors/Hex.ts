@@ -31,9 +31,9 @@ export function hexToRGB(
   const fullHex =
     cleanHex.length === 3 || cleanHex.length === 4
       ? cleanHex
-        .split('')
-        .map((char) => char + char)
-        .join('')
+          .split('')
+          .map((char) => char + char)
+          .join('')
       : cleanHex;
 
   const r = parseInt(fullHex.substring(0, 2), 16);

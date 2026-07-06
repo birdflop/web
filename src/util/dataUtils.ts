@@ -1,6 +1,10 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
-import { animTABDefaults, rgbColorDefaultsWithColorMode, rgbDefaults } from '@birdflop/rgbirdflop';
+import {
+  animTABDefaults,
+  rgbColorDefaultsWithColorMode,
+  rgbDefaults,
+} from '@birdflop/rgbirdflop';
 import {
   getDB,
   PresetPartial,

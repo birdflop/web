@@ -7,10 +7,7 @@ import {
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
-import {
-  generateOutput,
-  rgbDefaults,
-} from '@birdflop/rgbirdflop';
+import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   previewStyleContext,
   Selection,
@@ -81,19 +78,16 @@ export default component$(() => {
           )}
         </Link>
       </div>
-      {showAllGradients.value ?
-        renderAllGradientsPreview(
-          (gradientType) => renderPreview(
-            { ...rgbStore, gradientType },
-            previewStyle.value == 'default' ? 4 : 2,
-          ),
+      {showAllGradients.value
+        ? renderAllGradientsPreview(
+          (gradientType) =>
+            renderPreview(
+              { ...rgbStore, gradientType },
+              previewStyle.value == 'default' ? 4 : 2,
+            ),
           rgbStore.gradientType,
-        ) :
-        renderPreview(
-          rgbStore,
-          previewStyle.value == 'default' ? 4 : 2,
         )
-      }
+        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
     </RGBirdflop>
   );
 });
