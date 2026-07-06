@@ -52,22 +52,22 @@ export default component$(() => {
 
   const handleMigratePresets = $(async () => {
     isMigrating.value = true;
-    addLog('Version Migration', 'Running migration...');
+    await addLog('Version Migration', 'Running migration...');
 
     try {
       const response = await runMigratePresets();
 
       if (response.success) {
-        addLog('Version Migration', response.logs.join('\n'));
+        await addLog('Version Migration', response.logs.join('\n'));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
           errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
         }
-        addLog('Version Migration', errorMsg);
+        await addLog('Version Migration', errorMsg);
       }
     } catch (error) {
-      addLog('Version Migration', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog('Version Migration', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isMigrating.value = false;
@@ -75,22 +75,22 @@ export default component$(() => {
 
   const handleBackfill = $(async () => {
     isRunning.value = true;
-    addLog('Vector Backfill', 'Running backfill...');
+    await addLog('Vector Backfill', 'Running backfill...');
 
     try {
       const response = await backfillColorVectors();
 
       if (response.success) {
-        addLog('Vector Backfill', response.logs.join('\n'));
+        await addLog('Vector Backfill', response.logs.join('\n'));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
           errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
         }
-        addLog('Vector Backfill', errorMsg);
+        await addLog('Vector Backfill', errorMsg);
       }
     } catch (error) {
-      addLog('Vector Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog('Vector Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isRunning.value = false;
@@ -98,22 +98,22 @@ export default component$(() => {
 
   const handleSavesBackfill = $(async () => {
     isRunning.value = true;
-    addLog('Saves Backfill', 'Running saves backfill...');
+    await addLog('Saves Backfill', 'Running saves backfill...');
 
     try {
       const response = await backfillPresetSaves();
 
       if (response.success) {
-        addLog('Saves Backfill', response.logs.join('\n'));
+        await addLog('Saves Backfill', response.logs.join('\n'));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
           errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
         }
-        addLog('Saves Backfill', errorMsg);
+        await addLog('Saves Backfill', errorMsg);
       }
     } catch (error) {
-      addLog('Saves Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog('Saves Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isRunning.value = false;
@@ -122,7 +122,7 @@ export default component$(() => {
   const handleLoadPresets = $(async () => {
     isLoadingPresets.value = true;
     similarResults.value = null;
-    addLog('Find Similar', 'Loading all published presets...');
+    await addLog('Find Similar', 'Loading all published presets...');
 
     try {
       const response = await loadAllPresets();
@@ -130,12 +130,12 @@ export default component$(() => {
       if (response.success && response.presets) {
         loadedPresets.value = response.presets;
         loadedAt.value = new Date();
-        addLog('Find Similar', `Loaded ${response.presets.length} presets.`);
+        await addLog('Find Similar', `Loaded ${response.presets.length} presets.`);
       } else {
-        addLog('Find Similar', `Error loading presets: ${response.error}`);
+        await addLog('Find Similar', `Error loading presets: ${response.error}`);
       }
     } catch (error) {
-      addLog('Find Similar', `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog('Find Similar', `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isLoadingPresets.value = false;
@@ -289,9 +289,9 @@ export default component$(() => {
 
       let msg = `Completed similarity check!\nFound ${similarGroups.length} groups of similar presets out of ${allPresets.length} total presets.\n`;
       msg += `Threshold: ${threshold} | Pairs checked: ${pairsChecked} | Pairs grouped: ${pairsGrouped}`;
-      addLog('Find Similar', msg);
+      await addLog('Find Similar', msg);
     } catch (error) {
-      addLog('Find Similar', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      await addLog('Find Similar', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isCheckingSimilar.value = false;
