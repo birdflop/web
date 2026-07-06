@@ -1,6 +1,7 @@
 import {
   $,
   component$,
+  PropFunction,
   Slot,
   useContext,
   useOnDocument,
@@ -18,7 +19,7 @@ import {
   invertRgbColor,
   GradientType,
   GRADIENT_TYPES,
-  rgbColorDefaults,
+  ColorStop,
 } from '@birdflop/rgbirdflop';
 import {
   ArrowRightLeft,
@@ -35,7 +36,6 @@ import {
 } from 'lucide-icons-qwik';
 import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
-import { rgbSegmentsContext } from '../RgbAdvanced/model';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
@@ -43,20 +43,39 @@ const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
 type ColorListProps = {
   hidden?: boolean;
   id?: string;
-  rgbStore?: typeof rgbColorDefaults;
+  colors?: ColorStop[];
+  gradientType?: GradientType;
+  textLength?: number;
+  onColorsChange$?: PropFunction<(colors: ColorStop[]) => void>;
+  onGradientTypeChange$?: PropFunction<(gradientType: GradientType) => void>;
+  hideHeader?: boolean;
 };
 
-export default component$<ColorListProps>(({
-  hidden,
-  id = 'text',
-}) => {
+export default component$<ColorListProps>((props) => {
+  const {
+    hidden,
+    id = 'text',
+    hideHeader = false,
+  } = props;
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
-  const rgbSegments = useContext(rgbSegmentsContext, undefined);
   const opened = useSignal(-1);
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
-  const colors = getColors(rgbStore, id);
   const showAllGradients = useContext(showAllGradientsContext);
+
+  const resolvedColors = props.colors ?? getColors(rgbStore, id);
+  const resolvedGradientType = props.gradientType ?? rgbStore.gradientType;
+  const resolvedTextLength = props.textLength ?? rgbStore.text.length;
+
+  const colors = resolvedColors;
+
+  const setColors = $(async (newColors: ColorStop[]) => {
+    if (props.onColorsChange$) {
+      await props.onColorsChange$(newColors);
+    } else {
+      rgbStore[colorsKey] = newColors;
+    }
+  });
 
   useOnDocument(
     'click',
@@ -80,44 +99,50 @@ export default component$<ColorListProps>(({
       }}
       id={'colorlist' + id}
     >
-      <div class="flex items-center gap-1 py-2 font-semibold">
-        <span class="flex items-center gap-2 flex-1">
-          <Palette />
-          {t('rgb.colors.title@@Colors')}
-        </span>
-        <SelectMenuRaw
-          title={t('rgb.colors.gradientType@@Gradient Type')}
-          id="gradientType"
-          value={rgbStore.gradientType}
-          class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
-          onChange$={(e, el) => {
-            const value = el.value as GradientType;
-            rgbStore.gradientType = value;
-          }}
-          values={GRADIENT_TYPES.map((type) => ({
-            name: type,
-            value: type,
-          }))}
-        />
-        <button
-          q:slot="extra-buttons"
-          class={{
-            'lum-btn p-1 transition-colors rounded-l-sm': true,
-            'text-lum-primary': showAllGradients.value,
-            'text-lum-text-secondary': !showAllGradients.value,
-          }}
-          onClick$={() =>
-            (showAllGradients.value = !showAllGradients.value)
-          }
-          title={
-            showAllGradients.value
-              ? 'Show only selected gradient'
-              : 'Show all gradients'
-          }
-        >
-          <Eye size={20} />
-        </button>
-      </div>
+      {!hideHeader && (
+        <div class="flex items-center gap-1 py-2 font-semibold">
+          <span class="flex items-center gap-2 flex-1">
+            <Palette />
+            {t('rgb.colors.title@@Colors')}
+          </span>
+          <SelectMenuRaw
+            title={t('rgb.colors.gradientType@@Gradient Type')}
+            id="gradientType"
+            value={resolvedGradientType}
+            class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
+            onChange$={async (e, el) => {
+              const value = el.value as GradientType;
+              if (props.onGradientTypeChange$) {
+                await props.onGradientTypeChange$(value);
+              } else {
+                rgbStore.gradientType = value;
+              }
+            }}
+            values={GRADIENT_TYPES.map((type) => ({
+              name: type,
+              value: type,
+            }))}
+          />
+          <button
+            q:slot="extra-buttons"
+            class={{
+              'lum-btn p-1 transition-colors rounded-l-sm': true,
+              'text-lum-primary': showAllGradients.value,
+              'text-lum-text-secondary': !showAllGradients.value,
+            }}
+            onClick$={() =>
+              (showAllGradients.value = !showAllGradients.value)
+            }
+            title={
+              showAllGradients.value
+                ? 'Show only selected gradient'
+                : 'Show all gradients'
+            }
+          >
+            <Eye size={20} />
+          </button>
+        </div>
+      )}
 
       <Slot />
       {/*
@@ -127,7 +152,7 @@ export default component$<ColorListProps>(({
           disabled
           id="colorLength"
           min={1}
-          max={rgbStore.text.length / colors.length}
+          max={resolvedTextLength / colors.length}
           value={rgbStore.colorLength}
           class={{ 'w-full opacity-100!': true }}
           onIncrement$={() => rgbStore.colorLength++}
@@ -141,22 +166,23 @@ export default component$<ColorListProps>(({
         input
         id={`colorlist${id}-amount`}
         min={1}
-        max={rgbStore.text.length}
-        value={rgbStore[colorsKey]?.length}
+        max={resolvedTextLength}
+        value={colors.length}
         class={{ 'w-full': true }}
         onChange$={(e, el) => {
           let colorAmount = Number(el.value);
-          if (colorAmount > rgbStore.text.length)
-            colorAmount = rgbStore.text.length;
+          if (colorAmount > resolvedTextLength)
+            colorAmount = resolvedTextLength;
           const newColors = [];
           for (let i = 0; i < colorAmount; i++) {
             if (colors[i]) newColors.push(colors[i]);
             else newColors.push({ hex: getRandomColor() });
           }
-          rgbStore[colorsKey] = newColors.map((color, i) => ({
+          const mappedColors = newColors.map((color, i) => ({
             hex: color.hex,
             pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
+          void setColors(mappedColors);
         }}
         onIncrement$={() => {
           const newColors = [
@@ -165,18 +191,20 @@ export default component$<ColorListProps>(({
               hex: getRandomColor(),
             },
           ];
-          rgbStore[colorsKey] = newColors.map((color, i) => ({
+          const mappedColors = newColors.map((color, i) => ({
             hex: color.hex,
             pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
+          void setColors(mappedColors);
         }}
         onDecrement$={() => {
           const newColors = colors.slice(0);
           newColors.pop();
-          rgbStore[colorsKey] = newColors.map((color, i) => ({
+          const mappedColors = newColors.map((color, i) => ({
             hex: color.hex,
             pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
           }));
+          void setColors(mappedColors);
         }}
       >
         {t('rgb.colors.amount@@Color Amount')}
@@ -191,7 +219,7 @@ export default component$<ColorListProps>(({
               hex: getRandomColor(),
               pos: color.pos,
             }));
-            rgbStore[colorsKey] = newColors;
+            void setColors(newColors);
           }}
           title={t('rgb.colors.randomize@@Randomize')}
         >
@@ -203,7 +231,7 @@ export default component$<ColorListProps>(({
               'lum-btn justify-center rounded-l-sm p-1': true,
             }}
             onClick$={() => {
-              rgbStore[colorsKey] = rgbStore.colors;
+              void setColors(rgbStore.colors);
             }}
             title={t('rgb.colors.copyFromText@@Copy from text colors')}
           >
@@ -214,10 +242,10 @@ export default component$<ColorListProps>(({
           class={{
             'lum-btn justify-center rounded-l-sm p-1': true,
           }}
-          disabled={colors.length >= rgbStore.text.length}
+          disabled={colors.length >= resolvedTextLength}
           onClick$={() => {
             const newColors = [...colors, ...colors];
-            rgbStore[colorsKey] = newColors;
+            void setColors(newColors);
           }}
           title={t('rgb.colors.duplicate@@Duplicate')}
         >
@@ -229,9 +257,10 @@ export default component$<ColorListProps>(({
           }}
           onClick$={() => {
             const newColors = colors
+              .slice()
               .reverse()
               .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
-            rgbStore[colorsKey] = newColors;
+            void setColors(newColors);
           }}
           title={t('rgb.colors.reverse@@Reverse')}
         >
@@ -250,7 +279,7 @@ export default component$<ColorListProps>(({
               hex: color.hex,
               pos: colors[i].pos,
             }));
-            rgbStore[colorsKey] = newColors;
+            void setColors(newColors);
           }}
           title={t('rgb.colors.shuffle@@Shuffle')}
         >
@@ -267,7 +296,7 @@ export default component$<ColorListProps>(({
               );
               return { ...color, hex: `#${invertedHex}` };
             });
-            rgbStore[colorsKey] = newColors;
+            void setColors(newColors);
           }}
           title={t('rgb.colors.invert@@Invert')}
         >
@@ -286,7 +315,7 @@ export default component$<ColorListProps>(({
               })
             }
             onClick$={() => {
-              rgbStore[colorsKey] = disperseColors(colors);
+              void setColors(disperseColors(colors));
             }}
             title={t('rgb.colors.disperse.title@@Disperse')}
           >
@@ -306,7 +335,7 @@ export default component$<ColorListProps>(({
               <button
                 class="lum-btn rounded-b-sm p-1"
                 onClick$={() =>
-                  (rgbStore[colorsKey] = swapItems(colors, i, i - 1))
+                  void setColors(swapItems(colors, i, i - 1))
                 }
               >
                 <ChevronUp size={20} />
@@ -314,7 +343,7 @@ export default component$<ColorListProps>(({
               <button
                 class="lum-btn rounded-t-sm p-1"
                 onClick$={() =>
-                  (rgbStore[colorsKey] = swapItems(colors, i, i + 1))
+                  void setColors(swapItems(colors, i, i + 1))
                 }
               >
                 <ChevronDown size={20} />
@@ -348,7 +377,7 @@ export default component$<ColorListProps>(({
                   // update the color
                   const newColors = colors.slice(0);
                   newColors[i].hex = hex;
-                  rgbStore[colorsKey] = sortColors(newColors);
+                  void setColors(sortColors(newColors));
 
                   // set the color picker's value and trigger input to update color picker
                   if (opened.value != i) return;
@@ -389,7 +418,7 @@ export default component$<ColorListProps>(({
                 onClick$={() => {
                   const newColors = colors.slice(0);
                   newColors.splice(i, 1);
-                  rgbStore[colorsKey] = newColors;
+                  void setColors(newColors);
                 }}
               >
                 <Trash size={20} />
@@ -417,7 +446,7 @@ export default component$<ColorListProps>(({
             onInput$={(newColor) => {
               const newColors = colors.slice(0);
               newColors[opened.value].hex = newColor;
-              rgbStore[colorsKey] = sortColors(newColors);
+              void setColors(sortColors(newColors));
             }}
             showInput={false}
             horizontal
@@ -437,7 +466,7 @@ export default component$<ColorListProps>(({
                 if (newPos > 100) newPos = 100;
                 newColors[opened.value].pos =
                     Math.round(newPos * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
+                void setColors(sortColors(newColors));
               }}
               onIncrement$={() => {
                 const newColors = colors.slice(0);
@@ -445,7 +474,7 @@ export default component$<ColorListProps>(({
                 if (newPos > 100) newPos = 100;
                 newColors[opened.value].pos =
                     Math.round(newPos * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
+                void setColors(sortColors(newColors));
               }}
               onDecrement$={() => {
                 const newColors = colors.slice(0);
@@ -453,7 +482,7 @@ export default component$<ColorListProps>(({
                 if (newPos < 0) newPos = 0;
                 newColors[opened.value].pos =
                     Math.round(newPos * 1000) / 1000;
-                rgbStore[colorsKey] = sortColors(newColors);
+                void setColors(sortColors(newColors));
               }}
             >
               {t('rgb.colors.position@@Position')} (%)

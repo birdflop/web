@@ -122,7 +122,7 @@ export default component$(
             class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
             onChange$={(e, el) => {
               const value = el.value as GradientType;
-              current.value.gradientType = value;
+              void writeConfig({ gradientType: value });
             }}
             values={GRADIENT_TYPES.map((type) => ({
               name: type,
@@ -215,7 +215,21 @@ export default component$(
           </div>
         )}
 
-        {mode === 'gradient' && <ColorList id={id} />}
+        {mode === 'gradient' && (
+          <ColorList
+            id={id}
+            colors={current.value.colors}
+            gradientType={current.value.gradientType}
+            textLength={selection.value ? selection.value.end - selection.value.start : 1}
+            onColorsChange$={$(async (newColors) => {
+              await writeConfig({ colors: newColors });
+            })}
+            onGradientTypeChange$={$(async (newGradientType) => {
+              await writeConfig({ gradientType: newGradientType });
+            })}
+            hideHeader
+          />
+        )}
       </div>
     );
   },
