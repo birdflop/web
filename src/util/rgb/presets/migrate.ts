@@ -1,5 +1,6 @@
 import { rgbPreset } from '.';
 import { colorFormats } from '@birdflop/rgbirdflop';
+import { getClientCookies } from '~/util/dataUtils';
 
 export function migrateBetweenVersions(preset: any) {
   return (
@@ -82,11 +83,7 @@ function migrateFromV4(preset: any) {
 }
 
 export function migratePresetsFromCookies(savedPresets: rgbPreset[]) {
-  const cookie: { [key: string]: string } = {};
-  document.cookie.split(/\s*;\s*/).forEach(function (pair) {
-    const pairsplit = pair.split(/\s*=\s*/);
-    cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
-  });
+  const cookie = getClientCookies();
   if (cookie['presets']) {
     const cookiePresets = decodeURIComponent(cookie['presets']);
     const privatePresetsFromCookie =

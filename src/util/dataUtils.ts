@@ -37,18 +37,19 @@ const getDefaults = (name: names) => {
 
 export function parseParams(params: { [key: string]: any }, name: names) {
   const errors: string[] = [];
+  const defaults = getDefaults(name);
   for (const key in params) {
     try {
-      if (!Object.keys(getDefaults(name)).includes(key)) {
+      const isSegmentsKey = name === 'rgbsegments' && key === 'segments';
+      if (!isSegmentsKey && !Object.keys(defaults).includes(key)) {
         delete params[key];
+        continue;
       }
-      if (
-        (key == 'format' ||
-          key == 'colors' ||
-          key == 'shadowcolors' ||
-          key == 'segments') &&
-        params[key]
-      ) {
+      const defaultValue = defaults[key as keyof typeof defaults];
+      const isJsonObject =
+        isSegmentsKey ||
+        (defaultValue !== undefined && typeof defaultValue === 'object');
+      if (isJsonObject && params[key]) {
         params[key] = JSON.parse(params[key]);
       } else if (params[key] === 'true' || params[key] === 'false')
         params[key] = params[key] === 'true';
@@ -124,14 +125,20 @@ export function getCookies(
   return { cookies, errors };
 }
 
-export function setCookies(name: names, cookies: { [key: string]: any }) {
-  console.debug('cookie', name, JSON.stringify(cookies));
-
+export function getClientCookies(): { [key: string]: string } {
   const cookie: { [key: string]: string } = {};
+  if (typeof document === 'undefined') return cookie;
   document.cookie.split(/\s*;\s*/).forEach(function (pair) {
     const pairsplit = pair.split(/\s*=\s*/);
     cookie[pairsplit[0]] = pairsplit.splice(1).join('=');
   });
+  return cookie;
+}
+
+export function setCookies(name: names, cookies: { [key: string]: any }) {
+  console.debug('cookie', name, JSON.stringify(cookies));
+
+  const cookie = getClientCookies();
 
   // Settings cookie may not exist yet (e.g. a fresh browser); default to allowing cookies.
   let settings: { cookies?: boolean } = {};

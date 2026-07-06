@@ -2,11 +2,13 @@ import { ColorAnimatedGradient } from './ColorUtils';
 import { rgbToHex } from './Colors';
 import {
   applyMiniMessageFormatting,
-  buildFormatCodes,
   getFormattingAtOffset,
   getRGBColorStop,
   sortColors,
   applyFont,
+  renderTemplateSegment,
+  applyWrappers,
+  segmentText,
 } from './RGBUtils';
 import { animTABDefaults, rgbDefaults } from './Defaults';
 
@@ -48,19 +50,7 @@ export function generateAnimTABFrames(
       frameColors.push(hex);
       textFrames.push({ type: 'solid', text, colors: [hex] });
     } else {
-      const textArray = Array.from(text);
-      const segments = [];
-      let index = 0;
-
-      while (index < textArray.length) {
-        // check if colorLength is set and valid
-        if (!rgbOptions.colorLength || rgbOptions.colorLength < 1)
-          rgbOptions.colorLength = 1;
-        segments.push(
-          textArray.slice(index, index + rgbOptions.colorLength).join(''),
-        );
-        index += rgbOptions.colorLength;
-      }
+      const segments = segmentText(text, rgbOptions.colorLength);
 
       const segmentColors = [];
 
@@ -88,7 +78,20 @@ export function generateAnimTABFrames(
     animtabStore,
   );
 
-  return { OutputArray, frames: colorFrames };
+  let processedOutputArray = OutputArray;
+  let processedFrames = colorFrames;
+
+  if (Number(animtabStore.type) === 1) {
+    processedOutputArray = [...OutputArray].reverse();
+    processedFrames = [...colorFrames].reverse();
+  } else if (Number(animtabStore.type) === 3) {
+    const OutputArray2 = OutputArray.slice();
+    processedOutputArray = [...OutputArray].reverse().concat(OutputArray2);
+    const colorFrames2 = colorFrames.slice();
+    processedFrames = [...colorFrames].reverse().concat(colorFrames2);
+  }
+
+  return { OutputArray: processedOutputArray, frames: processedFrames };
 }
 
 function formatFrames(
@@ -150,24 +153,9 @@ function formatFrames(
         }
       }
     } else if (frame.type === 'solid') {
-      let hexOutput = rgbOptions.colorFormat.color;
       const hex = frame.colors[0];
-
-      for (let i = 1; i <= 6; i++) {
-        hexOutput = hexOutput.replace(`$${i}`, hex.charAt(i - 1));
-      }
-
-      let segText = text;
-      if (rgbOptions.baseFormatting.font) {
-        segText = applyFont(segText, rgbOptions.baseFormatting.font);
-      }
-      hexOutput = hexOutput.replace('$c', segText);
-
-      if (rgbOptions.prefixSuffix) {
-        hexOutput = rgbOptions.prefixSuffix.replace(/\$t/g, hexOutput);
-      }
-
-      output = hexOutput;
+      const formatting = getFormattingAtOffset(0, rgbOptions);
+      output = renderTemplateSegment(hex, text, formatting, rgbOptions);
     } else if (frame.type === 'segments') {
       let charIndex = 0;
       for (let i = 0; i < frame.segments.length; i++) {
@@ -185,32 +173,13 @@ function formatFrames(
           continue;
         }
 
-        let hexOutput = rgbOptions.colorFormat.color;
-        for (let j = 1; j <= 6; j++) {
-          hexOutput = hexOutput.replace(`$${j}`, hex.charAt(j - 1));
-        }
-
-        let formatCodes = '';
         const formatting = getFormattingAtOffset(charIndex, rgbOptions);
-        if (rgbOptions.colorFormat.color.includes('$f')) {
-          formatCodes = buildFormatCodes(formatting, rgbOptions);
-        }
-
-        hexOutput = hexOutput.replace('$f', formatCodes);
-        let segText = segment;
-        if (formatting.font) {
-          segText = applyFont(segText, formatting.font);
-        }
-        hexOutput = hexOutput.replace('$c', segText);
-        output += hexOutput;
+        output += renderTemplateSegment(hex, segment, formatting, rgbOptions);
         charIndex += segment.length;
-      }
-
-      if (rgbOptions.prefixSuffix) {
-        output = rgbOptions.prefixSuffix.replace(/\$t/g, output);
       }
     }
 
+    output = applyWrappers(output, rgbOptions);
     OutputArray.push(output);
   }
 
@@ -286,12 +255,6 @@ export function AnimationOutput(
   const format = animtabStore.outputFormat;
   FinalOutput = format.replace('%name%', animtabStore.name);
   FinalOutput = FinalOutput.replace('%speed%', `${animtabStore.speed}`);
-  if (animtabStore.type == 1) {
-    OutputArray.reverse();
-  } else if (animtabStore.type == 3) {
-    const OutputArray2 = OutputArray.slice();
-    OutputArray = OutputArray.reverse().concat(OutputArray2);
-  }
 
   const outputFormat = FinalOutput.match(/%output:{(.*\$t.*)}%/);
   if (outputFormat)

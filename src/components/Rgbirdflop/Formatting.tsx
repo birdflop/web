@@ -14,10 +14,9 @@ import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import {
   FormatSegment,
   Formatting,
-  ALL_FORMATTING_KEYS,
+  FORMAT_KEYS,
   FONT_LABELS,
   FormatKey,
-  FormattingBooleanKey,
 } from '@birdflop/rgbirdflop';
 
 export default component$(() => {
@@ -75,7 +74,7 @@ export default component$(() => {
     const result: Formatting = {};
     const defaultFmt = rgbStore.baseFormatting;
 
-    for (const k of ALL_FORMATTING_KEYS) {
+    for (const k of FORMAT_KEYS) {
       if (intervals.length === 0) {
         (result as any)[k] = defaultFmt[k];
       } else {
@@ -96,7 +95,7 @@ export default component$(() => {
 
   const formatting = computeSelectionFormatting();
 
-  const toggleFlag = $((flag: FormattingBooleanKey) => {
+  const toggleFlag = $((flag: FormatKey) => {
     if (!selection.value) {
       // No selection -> toggle global default formatting
       (rgbStore.baseFormatting as any)[flag] = !(
@@ -138,7 +137,7 @@ export default component$(() => {
       // if resulting formatting equals default, skip (no segment)
       const defaultNorm = rgbStore.baseFormatting;
       const isDefault =
-        ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
+        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
         fmt.font === defaultNorm.font;
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
@@ -152,7 +151,7 @@ export default component$(() => {
       if (
         last &&
         last.end === seg.start &&
-        ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) &&
+        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
         last.font === seg.font
       ) {
         last.end = seg.end;
@@ -198,7 +197,7 @@ export default component$(() => {
 
       const defaultNorm = rgbStore.baseFormatting;
       const isDefault =
-        ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
+        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
         fmt.font === defaultNorm.font;
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
@@ -211,7 +210,7 @@ export default component$(() => {
       if (
         last &&
         last.end === seg.start &&
-        ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) &&
+        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
         last.font === seg.font
       ) {
         last.end = seg.end;
@@ -260,7 +259,7 @@ export default component$(() => {
         : { ...rgbStore.baseFormatting };
 
       if (a < end && b > start) {
-        for (const k of ALL_FORMATTING_KEYS) {
+        for (const k of FORMAT_KEYS) {
           (fmt as any)[k] = false;
         }
         fmt.font = undefined;
@@ -268,7 +267,7 @@ export default component$(() => {
 
       const defaultNorm = rgbStore.baseFormatting;
       const isDefault =
-        ALL_FORMATTING_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
+        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
         fmt.font === defaultNorm.font;
       if (!isDefault) {
         newSegments.push({ ...fmt, start: a, end: b });
@@ -281,7 +280,7 @@ export default component$(() => {
       if (
         last &&
         last.end === seg.start &&
-        ALL_FORMATTING_KEYS.every((k) => last[k] === seg[k]) &&
+        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
         last.font === seg.font
       ) {
         last.end = seg.end;

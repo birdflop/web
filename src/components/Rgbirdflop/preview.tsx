@@ -1,5 +1,5 @@
 import {
-  ALL_FORMATTING_KEYS,
+  FORMAT_KEYS,
   applyFont,
   rgbDefaults,
   ColorGradient,
@@ -11,7 +11,7 @@ import {
 
 function getFormattingSignature(formatting: Formatting) {
   return (
-    ALL_FORMATTING_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('') +
+    FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('') +
     ':' +
     (formatting.font || '')
   );
@@ -25,7 +25,7 @@ export function getEffectiveFormatting(
 
   for (const segment of rgbStore.formatting) {
     if (segment.start <= index && index < segment.end) {
-      for (const key of ALL_FORMATTING_KEYS) {
+      for (const key of FORMAT_KEYS) {
         if (segment[key] !== undefined) {
           (formatting as any)[key] = segment[key];
         }

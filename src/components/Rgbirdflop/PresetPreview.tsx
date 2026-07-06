@@ -62,7 +62,7 @@ export default component$<PresetPreviewProps>(
     (
       Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
     ).forEach(([key, value]) => {
-      if (key == 'baseFormatting' || key == 'colors' || key == 'shadowColors')
+      if (typeof value === 'object' && value !== null)
         value = JSON.stringify(value);
       searchParams.set(key, String(value));
     });

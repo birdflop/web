@@ -375,21 +375,13 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                 [keyof typeof combinedDefaults, any]
               >
             ).forEach(([key, value]) => {
-              if (
-                key == 'baseFormatting' ||
-                key == 'colors' ||
-                key == 'shadowColors'
-              ) {
+              const defaultValue = combinedDefaults[key];
+              if (typeof value === 'object' && value !== null) {
                 value = JSON.stringify(value);
-                if (
-                  value ===
-                  JSON.stringify(
-                    combinedDefaults[key as keyof typeof combinedDefaults],
-                  )
-                )
+                if (value === JSON.stringify(defaultValue))
                   return;
               }
-              if (value === combinedDefaults[key]) return;
+              if (value === defaultValue) return;
               url.searchParams.set(key, String(value));
             });
             window.history.pushState({}, '', url.href);

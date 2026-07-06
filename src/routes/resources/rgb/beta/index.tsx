@@ -7,7 +7,7 @@ import {
 } from '@builder.io/qwik';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
-import { GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   previewStyleContext,
   Selection,
@@ -30,6 +30,7 @@ import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
 import Options from '~/components/Rgbirdflop/Options';
 import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
 import { renderAdvancedPreview } from '~/components/RgbAdvanced/preview';
+import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
 import SegmentColorEditor from '~/components/RgbAdvanced/SegmentColorEditor';
 import { openItemsContext } from '~/routes/layout-profile';
 
@@ -103,35 +104,20 @@ export default component$(() => {
         </Link>
       </div>
 
-      {showAllGradients.value
-        ? GRADIENT_TYPES.map((gradientType) => {
-          const tempStore = {
-            ...rgbStore,
-            gradientType: gradientType,
-          };
-          const isActive = gradientType === rgbStore.gradientType;
-          return (
-            <span
-              key={gradientType}
-              class="flex items-center gap-2"
-              q:slot="input"
-            >
-              <span
-                class={{
-                  'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
-                  'text-lum-text': isActive,
-                  'text-gray-400': !isActive,
-                }}
-              >
-                {gradientType}
-              </span>
-              <span class="flex-1">
-                {renderAdvancedPreview(rgbSegments.value, tempStore)}
-              </span>
-            </span>
-          );
-        })
-        : renderAdvancedPreview(rgbSegments.value, rgbStore)}
+      {showAllGradients.value ?
+        renderAllGradientsPreview(
+          (gradientType) =>
+            renderAdvancedPreview(
+              rgbSegments.value,
+              { ...rgbStore, gradientType },
+            ),
+          rgbStore.gradientType,
+        ) :
+        renderAdvancedPreview(
+          rgbSegments.value,
+          rgbStore,
+        )
+      }
 
       <Options q:slot="options" hidden={!openItems.value.includes('options')} />
 

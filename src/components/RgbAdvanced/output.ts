@@ -5,7 +5,7 @@ import {
   sortColors,
   buildFormatCodes,
   getFormattingAtOffset,
-  ALL_FORMATTING_KEYS,
+  FORMAT_KEYS,
   applyFont,
   rgbDefaults,
   type ColorFormat,
@@ -92,7 +92,7 @@ function applySelectiveFormatting(
 
     const fmtChanged =
       !currentFmt ||
-      ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
+      FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
       currentFmt.font !== fmt.font;
 
     if (fmtChanged) {

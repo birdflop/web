@@ -4,7 +4,7 @@ import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
 import { FONT_MAPPINGS } from './Fonts';
 
-function segmentText(text: string, colorLength?: number): string[] {
+export function segmentText(text: string, colorLength?: number): string[] {
   let len = colorLength ?? 1;
   if (!len || len < 1) len = 1;
   const out: string[] = [];
@@ -21,19 +21,6 @@ export type FormatKey =
   | 'strikethrough'
   | 'obfuscate';
 export const FORMAT_KEYS: FormatKey[] = [
-  'bold',
-  'italic',
-  'underline',
-  'strikethrough',
-  'obfuscate',
-];
-export type FormattingBooleanKey =
-  | 'bold'
-  | 'italic'
-  | 'underline'
-  | 'strikethrough'
-  | 'obfuscate';
-export const ALL_FORMATTING_KEYS: FormattingBooleanKey[] = [
   'bold',
   'italic',
   'underline',
@@ -93,7 +80,7 @@ export function applyMiniMessageFormatting(
   return output;
 }
 
-function renderTemplateSegment(
+export function renderTemplateSegment(
   hexWithoutHash: string,
   text: string,
   formatting: Formatting,
@@ -128,7 +115,7 @@ function renderTemplateSegment(
   return out;
 }
 
-function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
+export function applyWrappers(output: string, rgbOptions: typeof rgbDefaults): string {
   let out = output;
   if (!rgbOptions.formatting || rgbOptions.formatting.length === 0) {
     if (rgbOptions.colorFormat.bold && rgbOptions.baseFormatting.bold)
@@ -256,7 +243,7 @@ function applySelectiveFormattingToText(
 
     const fmtChanged =
       !currentFmt ||
-      ALL_FORMATTING_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
+      FORMAT_KEYS.some((k) => currentFmt![k] !== fmt[k]) ||
       currentFmt.font !== fmt.font;
 
     if (fmtChanged) {

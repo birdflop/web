@@ -9,7 +9,6 @@ import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
 import {
   generateOutput,
-  GRADIENT_TYPES,
   rgbDefaults,
 } from '@birdflop/rgbirdflop';
 import {
@@ -20,6 +19,7 @@ import {
 import { Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { renderPreview } from '~/components/Rgbirdflop/preview';
+import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
@@ -81,38 +81,19 @@ export default component$(() => {
           )}
         </Link>
       </div>
-      {showAllGradients.value
-        ? GRADIENT_TYPES.map((gradientType) => {
-          const tempStore = {
-            ...rgbStore,
-            gradientType: gradientType,
-          };
-          const isActive = gradientType === rgbStore.gradientType;
-          return (
-            <span
-              key={gradientType}
-              class="flex items-center gap-2"
-              q:slot="input"
-            >
-              <span
-                class={{
-                  'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
-                  'text-lum-text': isActive,
-                  'text-gray-400': !isActive,
-                }}
-              >
-                {gradientType}
-              </span>
-              <span class="flex-1">
-                {renderPreview(
-                  tempStore,
-                  previewStyle.value == 'default' ? 4 : 2,
-                )}
-              </span>
-            </span>
-          );
-        })
-        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+      {showAllGradients.value ?
+        renderAllGradientsPreview(
+          (gradientType) => renderPreview(
+            { ...rgbStore, gradientType },
+            previewStyle.value == 'default' ? 4 : 2,
+          ),
+          rgbStore.gradientType,
+        ) :
+        renderPreview(
+          rgbStore,
+          previewStyle.value == 'default' ? 4 : 2,
+        )
+      }
     </RGBirdflop>
   );
 });

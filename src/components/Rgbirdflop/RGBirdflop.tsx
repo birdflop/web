@@ -27,7 +27,7 @@ import {
 import HostingAd from '~/components/Rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
-import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
+import Input from '~/components/Rgbirdflop/Input';
 import ColorMap from '~/components/Rgbirdflop/ColorMap';
 import ColorList from '~/components/Rgbirdflop/ColorList';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
@@ -89,7 +89,6 @@ export default component$(
 
     const rgbStore = useContext(rgbStoreContext);
     const openItems = useContext(openItemsContext);
-    const previewStyle = useContext(previewStyleContext);
     const showAllGradients = useContext(showAllGradientsContext);
 
     const showAds = useSignal(false);
@@ -284,26 +283,24 @@ export default component$(
 
           <Input advanced={advanced}>
             <Slot name="input" />
-            {previewStyle.value != 'default' && (
-              <button
-                q:slot="extra-buttons"
-                class={{
-                  'rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg p-1 transition-colors': true,
-                  'text-lum-primary': showAllGradients.value,
-                  'text-lum-text-secondary': !showAllGradients.value,
-                }}
-                onClick$={() =>
-                  (showAllGradients.value = !showAllGradients.value)
-                }
-                title={
-                  showAllGradients.value
-                    ? 'Show only selected gradient'
-                    : 'Show all gradients'
-                }
-              >
-                <Grid2X2 size={20} />
-              </button>
-            )}
+            <button
+              q:slot="extra-buttons"
+              class={{
+                'rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg p-1 transition-colors': true,
+                'text-lum-primary': showAllGradients.value,
+                'text-lum-text-secondary': !showAllGradients.value,
+              }}
+              onClick$={() =>
+                (showAllGradients.value = !showAllGradients.value)
+              }
+              title={
+                showAllGradients.value
+                  ? 'Show only selected gradient'
+                  : 'Show all gradients'
+              }
+            >
+              <Grid2X2 size={20} />
+            </button>
           </Input>
 
           <ColorMap />

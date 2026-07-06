@@ -16,7 +16,6 @@ import {
   AnimationOutput,
   animTABDefaults,
   generateAnimTABFrames,
-  GRADIENT_TYPES,
   hexToRGB,
   rgbDefaults,
 } from '@birdflop/rgbirdflop';
@@ -39,6 +38,7 @@ import RGBirdflop, {
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
+import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
@@ -62,19 +62,12 @@ function renderFrames(
   currentFrameIndex: number,
   shadowLength: string = '4px 4px',
 ) {
+  if (!rgbStore.text) return '\u00A0';
   // Generate frames for this specific gradient type
   const { frames: framesList } = generateAnimTABFrames(rgbStore, animtabStore);
 
-  let processedFrames = framesList;
-  if (animtabStore.type == 1) {
-    processedFrames = [...framesList].reverse();
-  } else if (animtabStore.type == 3) {
-    const frames2 = framesList.slice();
-    processedFrames = [...framesList].reverse().concat(frames2);
-  }
-
-  if (!processedFrames[0]) return '\u00A0';
-  const colors = processedFrames[currentFrameIndex % processedFrames.length];
+  if (!framesList[0]) return '\u00A0';
+  const colors = framesList[currentFrameIndex % framesList.length];
   if (!colors) return '\u00A0';
 
   const segments = [
@@ -168,20 +161,7 @@ export default component$(() => {
       animtabStore,
     );
 
-    switch (animtabStore.type) {
-    case 1:
-      // Reverse
-      framesStore.list = newFrames.reverse();
-      break;
-    case 3: {
-      // Ping Pong
-      const frames2 = newFrames.slice();
-      framesStore.list = newFrames.reverse().concat(frames2);
-      break;
-    }
-    default:
-      framesStore.list = newFrames;
-    }
+    framesStore.list = newFrames;
   });
 
   // Animtab frames updater
@@ -223,51 +203,22 @@ export default component$(() => {
         )}
       </p>
 
-      {(() => {
-        if (!rgbStore.text) return '\u00A0';
-
-        if (showAllGradients.value && previewStyle.value != 'default') {
-          return GRADIENT_TYPES.map((gradientType) => {
-            const tempStore = {
-              ...rgbStore,
-              gradientType: gradientType,
-            };
-            const isActive = gradientType === rgbStore.gradientType;
-            return (
-              <span
-                key={gradientType}
-                q:slot="input"
-                class="flex items-center gap-2"
-              >
-                <span
-                  class={{
-                    'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
-                    'text-lum-text': isActive,
-                    'text-gray-400': !isActive,
-                  }}
-                >
-                  {gradientType}
-                </span>
-                <span class="flex-1">
-                  {renderFrames(
-                    tempStore,
-                    animtabStore,
-                    framesStore.current,
-                    previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
-                  )}
-                </span>
-              </span>
-            );
-          });
-        }
-
-        return renderFrames(
+      {showAllGradients.value ?
+        renderAllGradientsPreview(
+          (gradientType) => renderFrames(
+            { ...rgbStore, gradientType },
+            animtabStore,
+            framesStore.current,
+            previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
+          ),
+          rgbStore.gradientType,
+        ) :
+        renderFrames(
           rgbStore,
           animtabStore,
           framesStore.current,
           previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
-        );
-      })()}
+        )}
 
       <NumberInput
         id="length"
