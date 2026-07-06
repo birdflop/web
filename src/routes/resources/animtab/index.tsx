@@ -23,7 +23,7 @@ import {
   previewStyleContext,
   Selection,
   selectionContext,
-} from '~/components/Rgbirdflop/Input';
+} from '~/components/rgbirdflop/Input';
 import { Rainbow, Braces } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { deepTrack } from '~/util/misc';
@@ -31,15 +31,15 @@ import {
   EmptyPreview,
   getEffectiveFormatting,
   getFormattingClasses,
-} from '~/components/Rgbirdflop/preview';
+} from '~/components/rgbirdflop/preview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
-} from '~/components/Rgbirdflop/RGBirdflop';
+} from '~/components/rgbirdflop/RGBirdflop';
 import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
-import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
+import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {

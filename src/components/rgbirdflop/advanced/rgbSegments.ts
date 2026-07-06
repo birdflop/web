@@ -1,19 +1,17 @@
 import {
-  rgbDefaults,
   sortColors,
   rgbColorDefaultsWithColorMode,
-  ColorMode,
 } from '@birdflop/rgbirdflop';
 import { createContextId, Signal } from '@builder.io/qwik';
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
-export interface FlatChar {
+interface FlatChar {
   ch: string;
   style: SegmentType;
 }
 
-export function cloneStyle(s: SegmentType): SegmentType {
+function cloneStyle(s: SegmentType): SegmentType {
   return {
     ...s,
     colors: [...s.colors],
@@ -37,7 +35,7 @@ export function chunkText(text: string, colorLength?: number): string[] {
  * (sorted, rounded, lowercased) so representation differences don't fragment
  * segments; uncolored ignores color data entirely; solid keys only the first stop.
  */
-export function styleKey(s: SegmentType): string {
+function styleKey(s: SegmentType): string {
   let colorPart: string;
   if (s.colorMode === 'none' || s.colors.length === 0) {
     colorPart = 'none';
@@ -53,7 +51,7 @@ export function styleKey(s: SegmentType): string {
 }
 
 /** Flatten segments to per-(UTF-16)-char entries. Style refs are shared per source segment. */
-export function flatten(segments: SegmentType[]): FlatChar[] {
+function flatten(segments: SegmentType[]): FlatChar[] {
   const out: FlatChar[] = [];
   for (const seg of segments) {
     const style = cloneStyle(seg);
@@ -65,7 +63,7 @@ export function flatten(segments: SegmentType[]): FlatChar[] {
 }
 
 /** Coalesce consecutive equal-key chars back into segments. Idempotent normalization. */
-export function regroup(chars: FlatChar[]): SegmentType[] {
+function regroup(chars: FlatChar[]): SegmentType[] {
   if (chars.length === 0) return [];
   const segs: SegmentType[] = [];
   let curKey: string | null = null;
@@ -220,45 +218,6 @@ export function deleteSegment(
   chars.splice(start, end - start);
   return regroup(chars);
 }
-
-/** Merge a segment with its neighbor by adopting the neighbor's style (then coalesce). */
-export function mergeWithNeighbor(
-  segments: SegmentType[],
-  index: number,
-  direction: -1 | 1,
-): SegmentType[] {
-  const neighbor = index + direction;
-  if (neighbor < 0 || neighbor >= segments.length) return segments;
-  const styleSrc = cloneStyle(segments[neighbor]);
-  const { start, end } = segmentRange(segments, index);
-  return applyStyleToRange(segments, start, end, (st) => {
-    Object.assign(st, cloneStyle(styleSrc));
-  });
-}
-
-/** Seed a one-segment advanced store from the classic `rgb` cookie/state. */
-export function seedFromClassic(
-  rgb: Partial<typeof rgbDefaults>,
-): (typeof rgbColorDefaultsWithColorMode)[] {
-  const colorCount = rgb.colors?.length ?? 0;
-  const colorMode: ColorMode =
-    colorCount >= 2 ? 'gradient' : colorCount === 1 ? 'solid' : 'none';
-  return [
-    {
-      ...rgbColorDefaultsWithColorMode,
-      text: rgb.text || 'Birdflop',
-      colorMode,
-      colors:
-        rgb.colors && rgb.colors.length
-          ? rgb.colors.map((c) => ({ ...c }))
-          : rgbColorDefaultsWithColorMode.colors,
-      gradientType: rgb.gradientType ?? 'rgb',
-      colorLength: rgb.colorLength ?? 1,
-    },
-  ];
-}
-
-export const advancedDefaults: SegmentType[] = seedFromClassic({});
 
 export const rgbSegmentsContext = createContextId<Signal<SegmentType[]>>(
   'rgbsegments-context',

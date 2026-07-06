@@ -12,26 +12,26 @@ import {
   previewStyleContext,
   Selection,
   selectionContext,
-} from '~/components/Rgbirdflop/Input';
+} from '~/components/rgbirdflop/Input';
 import {
   rgbStoreContext,
   showAllGradientsContext,
-} from '~/components/Rgbirdflop/RGBirdflop';
+} from '~/components/rgbirdflop/RGBirdflop';
 import {
   SegmentType,
   normalizeSegments,
   rgbSegmentsContext,
-} from '~/components/RgbAdvanced/model';
-import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
+} from '~/components/rgbirdflop/advanced/rgbSegments';
+import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
 import { defaultDescription, generateHead } from '~/root';
 import { ArrowLeft, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
-import Options from '~/components/Rgbirdflop/Options';
-import SegmentInspector from '~/components/RgbAdvanced/SegmentInspector';
-import { renderAdvancedPreview } from '~/components/RgbAdvanced/preview';
-import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
-import SegmentColorEditor from '~/components/RgbAdvanced/SegmentColorEditor';
+import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
+import Options from '~/components/rgbirdflop/Options';
+import SegmentInspector from '~/components/rgbirdflop/advanced/SegmentInspector';
+import { renderAdvancedPreview } from '~/components/rgbirdflop/advanced/preview';
+import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEditor';
 import { openItemsContext } from '~/routes/layout-profile';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {

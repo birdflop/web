@@ -13,8 +13,8 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/Rgbirdflop/preview';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/rgbirdflop/preview';
 import { Link, useLocation } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';

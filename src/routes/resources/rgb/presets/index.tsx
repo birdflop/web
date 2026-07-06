@@ -14,7 +14,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets, rgbPreset } from '~/util/rgb/presets';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
-import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import {
   ChevronLeft,
   ChevronRight,
@@ -38,10 +38,10 @@ import {
   users,
 } from '~/util/db';
 import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
-import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
+import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
 import { useIsAdmin } from '~/routes/layout';
 import { donateLink } from '~/components/Elements/Nav';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;
@@ -90,17 +90,17 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 
     let orderBy;
     switch (sortBy) {
-    case 'name':
-      orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
-      break;
-    case 'saves':
-      orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
-      break;
-    case 'createdAt':
-    default:
-      orderBy =
+      case 'name':
+        orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
+        break;
+      case 'saves':
+        orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
+        break;
+      case 'createdAt':
+      default:
+        orderBy =
           sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
-      break;
+        break;
     }
 
     const presetsFromDB = await db
@@ -212,11 +212,10 @@ const Pagination = component$(
               return (
                 <button
                   key={pageNum}
-                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
-                    pageNum === page
+                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${pageNum === page
                       ? 'lum-grad-bg-lum-accent/20'
                       : 'lum-bg-transparent'
-                  }`}
+                    }`}
                   onClick$={() => {
                     void updateURL({ page: pageNum });
                   }}

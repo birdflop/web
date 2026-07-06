@@ -15,15 +15,15 @@ import {
   previewStyleContext,
   Selection,
   selectionContext,
-} from '~/components/Rgbirdflop/Input';
+} from '~/components/rgbirdflop/Input';
 import { Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { renderPreview } from '~/components/Rgbirdflop/preview';
-import { renderAllGradientsPreview } from '~/components/Rgbirdflop/AllGradientsPreview';
+import { renderPreview } from '~/components/rgbirdflop/preview';
+import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
-} from '~/components/Rgbirdflop/RGBirdflop';
+} from '~/components/rgbirdflop/RGBirdflop';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {

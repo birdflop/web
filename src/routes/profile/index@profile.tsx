@@ -12,10 +12,10 @@ import {
 } from '../resources/rgb/presets';
 import { useSession } from '~/routes/plugin@auth';
 import { generateHead } from '~/root';
-import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
+import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
 import UsersPublicPresets, {
   getUsersPresets,
-} from '~/components/Rgbirdflop/UsersPublicPresets';
+} from '~/components/rgbirdflop/presets/UsersPublicPresets';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
 

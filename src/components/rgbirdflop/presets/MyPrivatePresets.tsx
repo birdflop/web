@@ -1,10 +1,10 @@
 import { component$, useContext, useSignal } from '@builder.io/qwik';
 
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
-import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import { CircleUserRound, Palette, Plus, Save, X } from 'lucide-icons-qwik';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '~/components/Rgbirdflop/preview';
+import { renderPreview } from '~/components/rgbirdflop/preview';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';

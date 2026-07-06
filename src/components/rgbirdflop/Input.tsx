@@ -14,18 +14,33 @@ import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
-import Formatting from '~/components/Rgbirdflop/Formatting';
+import Formatting from '~/components/rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
 import {
   applyTextDiff,
   combinedText,
   segmentIndexAtChar,
   rgbSegmentsContext,
-} from '~/components/RgbAdvanced/model';
-import { ADVANCED_INPUT_ID } from '~/components/RgbAdvanced/dom';
-import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
+} from '~/components/rgbirdflop/advanced/rgbSegments';
+import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
+
+/** Re-applies the textarea selection after a store mutation (Qwik may reset the caret). */
+export const restoreSelection = $((start: number, end: number) => {
+  const el = document.getElementById(
+    'input',
+  ) as HTMLTextAreaElement | null;
+  if (!el) return;
+  requestAnimationFrame(() => {
+    try {
+      el.focus();
+      el.setSelectionRange(start, end);
+    } catch {
+      /* noop */
+    }
+  });
+});
 
 export interface Selection {
   start: number;
@@ -112,7 +127,7 @@ const InputField = component$(
         {!readOnly && (
           <textarea
             class={{
-              'rounded-lum selection:bg-blue/50 selection:text-lum-text/80 absolute inset-0 whitespace-pre-wrap outline-0': true,
+              'rounded-lum selection:bg-blue/50 selection:text-lum-text-secondary/60 absolute inset-0 whitespace-pre-wrap outline-0': true,
               'resize-none border-none bg-transparent text-transparent outline-none':
                 !rawEdit.value,
               'resize-none border-none bg-transparent text-white outline-none':
@@ -121,7 +136,7 @@ const InputField = component$(
             }}
             value={advanced && rgbSegments ? combinedText(rgbSegments.value) : rgbStore.text}
             spellcheck={false}
-            id={advanced ? ADVANCED_INPUT_ID : 'input'}
+            id={'input'}
             onInput$={(e, el) => {
               if (advanced && rgbSegments) {
                 if (e.isComposing) return;
@@ -439,8 +454,7 @@ export default component$(
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
-      const id = advanced ? ADVANCED_INPUT_ID : 'input';
-      const input = document.getElementById(id) as HTMLTextAreaElement;
+      const input = document.getElementById('input') as HTMLTextAreaElement;
       if (!input) return;
       input.focus();
       const len = advanced && rgbSegments ? combinedText(rgbSegments.value).length : rgbStore.text.length;
@@ -463,7 +477,7 @@ export default component$(
           )}
           {!noFormatRow && <Formatting />}
         </div>
-        <label for={advanced ? ADVANCED_INPUT_ID : 'input'} class="relative mt-2 mb-4 flex flex-col items-start">
+        <label for="input" class="relative mt-2 mb-4 flex flex-col items-start">
           {previewStyle.value != 'default' && (
             <MCPreviewInput
               readOnly={readOnly}

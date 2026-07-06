@@ -18,8 +18,8 @@ import {
 } from 'lucide-icons-qwik';
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { deepTrack } from '~/util/misc';
 

@@ -7,9 +7,9 @@ import {
   rgbDefaults,
   applyFont,
 } from '@birdflop/rgbirdflop';
-import type { SegmentType } from './model';
-import { chunkText, combinedText } from './model';
-import { EmptyPreview, getFormattingClasses } from '../Rgbirdflop/preview';
+import type { SegmentType } from './rgbSegments';
+import { chunkText, combinedText } from './rgbSegments';
+import { EmptyPreview, getFormattingClasses } from '../preview';
 
 function toCSS(rgb: number[]): string {
   return `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;

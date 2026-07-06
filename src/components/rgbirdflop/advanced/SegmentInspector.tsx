@@ -8,9 +8,8 @@ import {
   swapSegments,
   type SegmentType,
   rgbSegmentsContext,
-} from './model';
-import { restoreSelection } from './dom';
-import { selectionContext } from '~/components/Rgbirdflop/Input';
+} from './rgbSegments';
+import { selectionContext } from '~/components/rgbirdflop/Input';
 
 function swatchStyle(seg: SegmentType): string {
   if (seg.colorMode === 'none' || seg.colors.length === 0) {
@@ -58,7 +57,6 @@ export default component$(() => {
                     end: range.end,
                     segmentIndex: i,
                   };
-                  void restoreSelection(range.start, range.end);
                 }}
               >
                 <span

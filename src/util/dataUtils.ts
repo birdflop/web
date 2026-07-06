@@ -1,6 +1,6 @@
 import { server$, type Cookie } from '@builder.io/qwik-city';
 import { loadPreset, rgbPreset } from './rgb/presets';
-import { animTABDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
+import { animTABDefaults, rgbColorDefaultsWithColorMode, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   getDB,
   PresetPartial,
@@ -13,7 +13,6 @@ import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
-import { advancedDefaults } from '~/components/RgbAdvanced/model';
 
 type names =
   | 'rgb'
@@ -28,7 +27,7 @@ const getDefaults = (name: names) => {
   case 'rgb':
     return rgbDefaults;
   case 'rgbsegments':
-    return advancedDefaults;
+    return [rgbColorDefaultsWithColorMode];
   case 'animtab':
     return animTABDefaults;
   }

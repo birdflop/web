@@ -28,7 +28,7 @@ import {
   setUserData,
   unsavePreset,
 } from '~/util/dataUtils';
-import { renderPreview } from '~/components/Rgbirdflop/preview';
+import { renderPreview } from '~/components/rgbirdflop/preview';
 import {
   privatePresetsContext,
   savedPresetsContext,

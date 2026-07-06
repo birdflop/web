@@ -17,7 +17,7 @@ import {
 
 import UsersPublicPresets, {
   getUsersPresets,
-} from '~/components/Rgbirdflop/UsersPublicPresets';
+} from '~/components/rgbirdflop/presets/UsersPublicPresets';
 
 export const useUser = routeLoader$(async ({ params }) => {
   return getUsersPresets(params.id);

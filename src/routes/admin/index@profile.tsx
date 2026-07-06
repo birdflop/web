@@ -1,7 +1,7 @@
 import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
 import { RequestHandler } from '@builder.io/qwik-city';
 import { vectorDistance } from '@birdflop/rgbirdflop';
-import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import {
   privatePresetsContext,
   savedPresetsContext,

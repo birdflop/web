@@ -8,7 +8,7 @@ import {
 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 
 export default component$(() => {
   const t = inlineTranslate();

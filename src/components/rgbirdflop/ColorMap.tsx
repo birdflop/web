@@ -5,7 +5,7 @@ import {
   useOnDocument,
   useSignal,
 } from '@builder.io/qwik';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
   sortColors,
   getRandomColor,

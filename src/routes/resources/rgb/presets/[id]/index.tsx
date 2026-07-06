@@ -26,9 +26,9 @@ import {
 import { defaultDescription, generateHead } from '~/root';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { NotificationContext, Notification } from '~/util/Notification';
-import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/Rgbirdflop/preview';
+import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { renderPreview } from '~/components/rgbirdflop/preview';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   LogoBirdflop,

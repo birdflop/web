@@ -21,23 +21,23 @@ import {
   Settings,
   Sparkles,
 } from 'lucide-icons-qwik';
-import HostingAd from '~/components/Rgbirdflop/HostingAd';
+import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
-import Input from '~/components/Rgbirdflop/Input';
-import ColorMap from '~/components/Rgbirdflop/ColorMap';
-import ColorList from '~/components/Rgbirdflop/ColorList';
-import TextShadow from '~/components/Rgbirdflop/TextShadow';
-import Options from '~/components/Rgbirdflop/Options';
-import Presets from '~/components/Rgbirdflop/Presets';
-import CustomFormat from '~/components/Rgbirdflop/CustomFormat';
+import Input from '~/components/rgbirdflop/Input';
+import ColorMap from '~/components/rgbirdflop/ColorMap';
+import ColorList from '~/components/rgbirdflop/ColorList';
+import TextShadow from '~/components/rgbirdflop/TextShadow';
+import Options from '~/components/rgbirdflop/Options';
+import Presets from '~/components/rgbirdflop/presets/Presets';
+import CustomFormat from '~/components/rgbirdflop/CustomFormat';
 import Output from '~/components/Elements/Output';
-import Decode from '~/components/Rgbirdflop/Decode';
+import Decode from '~/components/rgbirdflop/Decode';
 import Accordion from '~/components/Elements/Accordion';
 
 import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
-import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
+import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/misc';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';

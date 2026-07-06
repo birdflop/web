@@ -11,7 +11,7 @@ import {
   type ColorFormat,
   type Formatting,
 } from '@birdflop/rgbirdflop';
-import { chunkText, SegmentType } from './model';
+import { chunkText, SegmentType } from './rgbSegments';
 
 function renderTemplateSegment(
   hexWithoutHash: string,

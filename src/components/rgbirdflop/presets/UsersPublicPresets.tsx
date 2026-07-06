@@ -7,7 +7,7 @@ import {
 } from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { Link, server$ } from '@builder.io/qwik-city';
-import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';

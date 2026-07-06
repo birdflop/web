@@ -8,8 +8,8 @@ import {
   Wand2,
 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import { Selection, selectionContext } from '~/components/Rgbirdflop/Input';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { restoreSelection, Selection, selectionContext } from '~/components/rgbirdflop/Input';
 import { SelectMenuRaw } from '@luminescent/ui-qwik';
 import {
   FormatSegment,
@@ -161,6 +161,7 @@ export default component$(() => {
     }
 
     rgbStore.formatting = merged;
+    void restoreSelection(start, end);
   });
 
   const setFont = $((fontVal: string | undefined) => {
@@ -220,6 +221,7 @@ export default component$(() => {
     }
 
     rgbStore.formatting = merged;
+    void restoreSelection(start, end);
   });
 
   const clearFormatting = $(() => {
@@ -290,6 +292,7 @@ export default component$(() => {
     }
 
     rgbStore.formatting = merged;
+    void restoreSelection(start, end);
   });
 
   const formattingButtons: {

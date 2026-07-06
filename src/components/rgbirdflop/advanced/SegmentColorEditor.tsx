@@ -21,11 +21,10 @@ import {
   Eye,
   Palette,
 } from 'lucide-icons-qwik';
-import { applyStyleToRange, styleAtChar, type SegmentType, rgbSegmentsContext } from './model';
-import { restoreSelection } from './dom';
-import { selectionContext } from '~/components/Rgbirdflop/Input';
-import { showAllGradientsContext } from '../Rgbirdflop/RGBirdflop';
-import ColorList from '../Rgbirdflop/ColorList';
+import { applyStyleToRange, styleAtChar, type SegmentType, rgbSegmentsContext } from './rgbSegments';
+import { restoreSelection, selectionContext } from '~/components/rgbirdflop/Input';
+import { showAllGradientsContext } from '../RGBirdflop';
+import ColorList from '../ColorList';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
   if (colors.length >= 2) return colors.map((c) => ({ ...c }));

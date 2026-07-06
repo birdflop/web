@@ -1,10 +1,9 @@
 import { $, component$, useComputed$, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { MousePointerClick, Palette } from 'lucide-icons-qwik';
-import { combinedText, rgbSegmentsContext } from './model';
-import { restoreSelection } from './dom';
+import { combinedText, rgbSegmentsContext } from './rgbSegments';
 import SegmentColorEditor from './SegmentColorEditor';
-import { selectionContext } from '~/components/Rgbirdflop/Input';
+import { selectionContext } from '~/components/rgbirdflop/Input';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -27,7 +26,6 @@ export default component$(() => {
     const len = combinedText(rgbSegments.value).length;
     if (!len) return;
     selection.value = { start: 0, end: len, segmentIndex: 0 };
-    void restoreSelection(0, len);
   });
 
   return (

@@ -12,13 +12,13 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
-import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { Eye } from 'lucide-icons-qwik';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
-import { getFormattingClasses } from '~/components/Rgbirdflop/preview';
+import { getFormattingClasses } from '~/components/rgbirdflop/preview';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies(cookie, 'animpreview', url.searchParams);

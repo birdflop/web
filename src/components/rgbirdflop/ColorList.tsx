@@ -36,7 +36,7 @@ import {
   Shuffle,
   Trash,
 } from 'lucide-icons-qwik';
-import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext, showAllGradientsContext } from '~/components/rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
