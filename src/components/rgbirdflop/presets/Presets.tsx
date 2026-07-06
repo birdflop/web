@@ -7,7 +7,7 @@ import {
   useSignal,
   useTask$,
 } from '@builder.io/qwik';
-import { Save, Link as LinkIcon, Copy, Globe, Trash } from 'lucide-icons-qwik';
+import { Save, Link as LinkIcon, Copy, Globe, Trash, ExternalLink } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
@@ -230,7 +230,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               )}
             </button>
             <button
-              class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 mr-1.5 cursor-pointer p-1.5 hover:text-red-500"
+              class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 mr-1.5 cursor-pointer p-1.5 text-lum-text-secondary hover:text-red-500"
               onClick$={async () => {
                 privatePresets.value = privatePresets.value.filter(
                   (p) => p !== preset,
@@ -245,7 +245,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                   );
               }}
             >
-              <Trash size={20} />
+              <Trash size={16} />
             </button>
           </div>
         ))}
@@ -282,8 +282,13 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                 1,
               )}
             </button>
+            <a href={`presets/${Preset.id}`} target="_blank" rel="noopener noreferrer"
+              class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 cursor-pointer p-1.5 text-lum-text-secondary!"
+            >
+              <ExternalLink size={16} />
+            </a>
             <button
-              class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 mr-1.5 cursor-pointer p-1.5 hover:text-red-500"
+              class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 cursor-pointer p-1.5 text-lum-text-secondary hover:text-red-500"
               onClick$={async () => {
                 savedPresets.value = savedPresets.value.filter(
                   (p) => p.id !== Preset.id,
@@ -292,7 +297,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                 if (result.success) Preset.saves = (Preset.saves || 0) - 1;
               }}
             >
-              <Trash size={20} />
+              <Trash size={16} />
             </button>
           </div>
         ))}
