@@ -22,11 +22,16 @@ import {
   FONT_LABELS,
   FormatKey,
 } from '@birdflop/rgbirdflop';
+import {
+  combinedText,
+  rgbSegmentsContext,
+} from '~/components/rgbirdflop/advanced/rgbSegments';
 
 export default component$(() => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const selection = useContext(selectionContext, useSignal<Selection>());
+  const rgbSegments = useContext(rgbSegmentsContext, null);
 
   const getFormatLabel = (FormatKey: FormatKey) => {
     if (rgbStore.colorFormat.char) {
@@ -49,7 +54,16 @@ export default component$(() => {
   };
 
   const computeSelectionFormatting = () => {
-    if (!selection.value) return rgbStore.baseFormatting;
+    const textLength = rgbSegments?.value
+      ? combinedText(rgbSegments.value).length
+      : rgbStore.text.length;
+
+    const isEntireSelected =
+      selection.value &&
+      selection.value.start === 0 &&
+      selection.value.end === textLength;
+
+    if (!selection.value || isEntireSelected) return rgbStore.baseFormatting;
 
     const { start, end } = selection.value;
     const boundaries = new Set([start, end]);
@@ -99,12 +113,32 @@ export default component$(() => {
 
   const formatting = computeSelectionFormatting();
 
+  const textLength = rgbSegments?.value
+    ? combinedText(rgbSegments.value).length
+    : rgbStore.text.length;
+
+  const isSelectionActive =
+    selection.value &&
+    (selection.value.start !== 0 || selection.value.end !== textLength);
+
   const toggleFlag = $((flag: FormatKey) => {
-    if (!selection.value) {
+    const textLength = rgbSegments?.value
+      ? combinedText(rgbSegments.value).length
+      : rgbStore.text.length;
+
+    const isEntireSelected =
+      selection.value &&
+      selection.value.start === 0 &&
+      selection.value.end === textLength;
+
+    if (!selection.value || isEntireSelected) {
       // No selection -> toggle global default formatting
       (rgbStore.baseFormatting as any)[flag] = !(
         rgbStore.baseFormatting as any
       )[flag];
+      if (selection.value) {
+        void restoreSelection(selection.value.start, selection.value.end);
+      }
       return;
     }
 
@@ -169,8 +203,20 @@ export default component$(() => {
   });
 
   const setFont = $((fontVal: string | undefined) => {
-    if (!selection.value) {
+    const textLength = rgbSegments?.value
+      ? combinedText(rgbSegments.value).length
+      : rgbStore.text.length;
+
+    const isEntireSelected =
+      selection.value &&
+      selection.value.start === 0 &&
+      selection.value.end === textLength;
+
+    if (!selection.value || isEntireSelected) {
       rgbStore.baseFormatting.font = fontVal;
+      if (selection.value) {
+        void restoreSelection(selection.value.start, selection.value.end);
+      }
       return;
     }
 
@@ -229,7 +275,16 @@ export default component$(() => {
   });
 
   const clearFormatting = $(() => {
-    if (!selection.value) {
+    const textLength = rgbSegments?.value
+      ? combinedText(rgbSegments.value).length
+      : rgbStore.text.length;
+
+    const isEntireSelected =
+      selection.value &&
+      selection.value.start === 0 &&
+      selection.value.end === textLength;
+
+    if (!selection.value || isEntireSelected) {
       rgbStore.baseFormatting = {
         bold: false,
         italic: false,
@@ -239,6 +294,9 @@ export default component$(() => {
         font: undefined,
       };
       rgbStore.formatting = [];
+      if (selection.value) {
+        void restoreSelection(selection.value.start, selection.value.end);
+      }
       return;
     }
 
@@ -328,7 +386,7 @@ export default component$(() => {
       <SelectMenuRaw
         class={{
           'lum-btn-p-2': true,
-          'lum-bg-blue/20': !!selection.value,
+          'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="font-select"
         value={formatting.font || 'default'}
@@ -345,7 +403,7 @@ export default component$(() => {
         class={{
           'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
           '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:p-2': true,
-          'lum-bg-blue/20': !!selection.value,
+          'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="formatting"
       >
