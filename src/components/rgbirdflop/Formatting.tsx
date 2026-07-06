@@ -53,6 +53,107 @@ export default component$(() => {
     return '';
   };
 
+  const getIntervalsInRange = (start: number, end: number) => {
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const intervals: (FormatSegment | Formatting)[] = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b || b <= start || a >= end) continue;
+
+      const covering = rgbStore.formatting.find(
+        (s) => s.start <= a && s.end >= b,
+      );
+      intervals.push(
+        covering
+          ? { ...rgbStore.baseFormatting, ...covering }
+          : { ...rgbStore.baseFormatting },
+      );
+    }
+    return intervals;
+  };
+
+  const updateSelectionFormatting = $((transform: (fmt: Formatting) => void, clearAllIfEntire: boolean = false) => {
+    const textLength = rgbSegments?.value
+      ? combinedText(rgbSegments.value).length
+      : rgbStore.text.length;
+
+    const isEntireSelected =
+      selection.value &&
+      selection.value.start === 0 &&
+      selection.value.end === textLength;
+
+    if (!selection.value || isEntireSelected) {
+      transform(rgbStore.baseFormatting);
+      if (clearAllIfEntire) {
+        rgbStore.formatting = [];
+      }
+      if (selection.value) {
+        void restoreSelection(selection.value.start, selection.value.end);
+      }
+      return;
+    }
+
+    const { start, end } = selection.value;
+
+    const boundaries = new Set([start, end]);
+    for (const s of rgbStore.formatting) {
+      boundaries.add(s.start);
+      boundaries.add(s.end);
+    }
+    const points = Array.from(boundaries).sort((a, b) => a - b);
+
+    const newSegments = [];
+    for (let i = 0; i < points.length - 1; i++) {
+      const a = points[i];
+      const b = points[i + 1];
+      if (a >= b) continue;
+
+      const covering = rgbStore.formatting.find(
+        (s) => s.start <= a && s.end >= b,
+      );
+      const fmt = covering
+        ? { ...rgbStore.baseFormatting, ...covering }
+        : { ...rgbStore.baseFormatting };
+
+      if (a < end && b > start) {
+        transform(fmt);
+      }
+
+      const defaultNorm = rgbStore.baseFormatting;
+      const isDefault =
+        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
+        fmt.font === defaultNorm.font;
+      if (!isDefault) {
+        newSegments.push({ ...fmt, start: a, end: b });
+      }
+    }
+
+    const merged: any[] = [];
+    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
+      const last = merged[merged.length - 1];
+      if (
+        last &&
+        last.end === seg.start &&
+        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
+        last.font === seg.font
+      ) {
+        last.end = seg.end;
+      } else {
+        merged.push({ ...seg });
+      }
+    }
+
+    rgbStore.formatting = merged;
+    void restoreSelection(start, end);
+  });
+
   const computeSelectionFormatting = () => {
     const textLength = rgbSegments?.value
       ? combinedText(rgbSegments.value).length
@@ -66,47 +167,17 @@ export default component$(() => {
     if (!selection.value || isEntireSelected) return rgbStore.baseFormatting;
 
     const { start, end } = selection.value;
-    const boundaries = new Set([start, end]);
-    for (const s of rgbStore.formatting) {
-      boundaries.add(s.start);
-      boundaries.add(s.end);
-    }
-    const points = Array.from(boundaries).sort((a, b) => a - b);
-
-    const intervals: (FormatSegment | Formatting)[] = [];
-    for (let i = 0; i < points.length - 1; i++) {
-      const a = points[i];
-      const b = points[i + 1];
-      if (a >= b) continue;
-      if (b <= start || a >= end) continue; // outside selection
-
-      const covering = rgbStore.formatting.find(
-        (s) => s.start <= a && s.end >= b,
-      );
-      const fmt = covering
-        ? { ...rgbStore.baseFormatting, ...covering }
-        : { ...rgbStore.baseFormatting };
-      intervals.push(fmt);
-    }
+    const intervals = getIntervalsInRange(start, end);
 
     const result: Formatting = {};
     const defaultFmt = rgbStore.baseFormatting;
 
     for (const k of FORMAT_KEYS) {
-      if (intervals.length === 0) {
-        (result as any)[k] = defaultFmt[k];
-      } else {
-        (result as any)[k] = intervals.every((iv) => iv[k]);
-      }
+      result[k] = intervals.length === 0 ? defaultFmt[k] : intervals.every((iv) => iv[k]);
     }
 
-    if (intervals.length === 0) {
-      result.font = defaultFmt.font;
-    } else {
-      const firstFont = intervals[0].font;
-      const allSame = intervals.every((iv) => iv.font === firstFont);
-      result.font = allSame ? firstFont : undefined;
-    }
+    const firstFont = intervals[0]?.font;
+    result.font = intervals.every((iv) => iv.font === firstFont) ? firstFont : undefined;
 
     return result;
   };
@@ -122,239 +193,24 @@ export default component$(() => {
     (selection.value.start !== 0 || selection.value.end !== textLength);
 
   const toggleFlag = $((flag: FormatKey) => {
-    const textLength = rgbSegments?.value
-      ? combinedText(rgbSegments.value).length
-      : rgbStore.text.length;
-
-    const isEntireSelected =
-      selection.value &&
-      selection.value.start === 0 &&
-      selection.value.end === textLength;
-
-    if (!selection.value || isEntireSelected) {
-      // No selection -> toggle global default formatting
-      (rgbStore.baseFormatting as any)[flag] = !(
-        rgbStore.baseFormatting as any
-      )[flag];
-      if (selection.value) {
-        void restoreSelection(selection.value.start, selection.value.end);
-      }
-      return;
-    }
-
-    // Selection exists -> apply toggle to the selected range, splitting/merging as needed
-    const { start, end } = selection.value;
-
-    // Collect all boundaries
-    const boundaries = new Set([start, end]);
-    for (const s of rgbStore.formatting) {
-      boundaries.add(s.start);
-      boundaries.add(s.end);
-    }
-    const points = Array.from(boundaries).sort((a, b) => a - b);
-
-    const newSegments = [];
-    for (let i = 0; i < points.length - 1; i++) {
-      const a = points[i];
-      const b = points[i + 1];
-      if (a >= b) continue;
-
-      // find a segment that fully covers [a,b)
-      const covering = rgbStore.formatting.find(
-        (s) => s.start <= a && s.end >= b,
-      );
-      const fmt = covering
-        ? { ...rgbStore.baseFormatting, ...covering }
-        : { ...rgbStore.baseFormatting };
-
-      // if this interval is inside selection, toggle the flag
-      if (a < end && b > start) {
-        (fmt as any)[flag] = !(fmt as any)[flag];
-      }
-
-      // if resulting formatting equals default, skip (no segment)
-      const defaultNorm = rgbStore.baseFormatting;
-      const isDefault =
-        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
-        fmt.font === defaultNorm.font;
-      if (!isDefault) {
-        newSegments.push({ ...fmt, start: a, end: b });
-      }
-    }
-
-    // Merge adjacent segments with identical formatting
-    const merged = [];
-    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
-      const last = merged[merged.length - 1];
-      if (
-        last &&
-        last.end === seg.start &&
-        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
-        last.font === seg.font
-      ) {
-        last.end = seg.end;
-      } else {
-        merged.push({ ...seg });
-      }
-    }
-
-    rgbStore.formatting = merged;
-    void restoreSelection(start, end);
+    void updateSelectionFormatting((fmt) => {
+      (fmt as any)[flag] = !(fmt as any)[flag];
+    });
   });
 
   const setFont = $((fontVal: string | undefined) => {
-    const textLength = rgbSegments?.value
-      ? combinedText(rgbSegments.value).length
-      : rgbStore.text.length;
-
-    const isEntireSelected =
-      selection.value &&
-      selection.value.start === 0 &&
-      selection.value.end === textLength;
-
-    if (!selection.value || isEntireSelected) {
-      rgbStore.baseFormatting.font = fontVal;
-      if (selection.value) {
-        void restoreSelection(selection.value.start, selection.value.end);
-      }
-      return;
-    }
-
-    const { start, end } = selection.value;
-
-    const boundaries = new Set([start, end]);
-    for (const s of rgbStore.formatting) {
-      boundaries.add(s.start);
-      boundaries.add(s.end);
-    }
-    const points = Array.from(boundaries).sort((a, b) => a - b);
-
-    const newSegments = [];
-    for (let i = 0; i < points.length - 1; i++) {
-      const a = points[i];
-      const b = points[i + 1];
-      if (a >= b) continue;
-
-      const covering = rgbStore.formatting.find(
-        (s) => s.start <= a && s.end >= b,
-      );
-      const fmt = covering
-        ? { ...rgbStore.baseFormatting, ...covering }
-        : { ...rgbStore.baseFormatting };
-
-      if (a < end && b > start) {
-        fmt.font = fontVal;
-      }
-
-      const defaultNorm = rgbStore.baseFormatting;
-      const isDefault =
-        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
-        fmt.font === defaultNorm.font;
-      if (!isDefault) {
-        newSegments.push({ ...fmt, start: a, end: b });
-      }
-    }
-
-    const merged = [];
-    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
-      const last = merged[merged.length - 1];
-      if (
-        last &&
-        last.end === seg.start &&
-        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
-        last.font === seg.font
-      ) {
-        last.end = seg.end;
-      } else {
-        merged.push({ ...seg });
-      }
-    }
-
-    rgbStore.formatting = merged;
-    void restoreSelection(start, end);
+    void updateSelectionFormatting((fmt) => {
+      fmt.font = fontVal;
+    });
   });
 
   const clearFormatting = $(() => {
-    const textLength = rgbSegments?.value
-      ? combinedText(rgbSegments.value).length
-      : rgbStore.text.length;
-
-    const isEntireSelected =
-      selection.value &&
-      selection.value.start === 0 &&
-      selection.value.end === textLength;
-
-    if (!selection.value || isEntireSelected) {
-      rgbStore.baseFormatting = {
-        bold: false,
-        italic: false,
-        underline: false,
-        strikethrough: false,
-        obfuscate: false,
-        font: undefined,
-      };
-      rgbStore.formatting = [];
-      if (selection.value) {
-        void restoreSelection(selection.value.start, selection.value.end);
+    void updateSelectionFormatting((fmt) => {
+      for (const k of FORMAT_KEYS) {
+        (fmt as any)[k] = false;
       }
-      return;
-    }
-
-    const { start, end } = selection.value;
-
-    const boundaries = new Set([start, end]);
-    for (const s of rgbStore.formatting) {
-      boundaries.add(s.start);
-      boundaries.add(s.end);
-    }
-    const points = Array.from(boundaries).sort((a, b) => a - b);
-
-    const newSegments = [];
-    for (let i = 0; i < points.length - 1; i++) {
-      const a = points[i];
-      const b = points[i + 1];
-      if (a >= b) continue;
-
-      const covering = rgbStore.formatting.find(
-        (s) => s.start <= a && s.end >= b,
-      );
-      const fmt = covering
-        ? { ...rgbStore.baseFormatting, ...covering }
-        : { ...rgbStore.baseFormatting };
-
-      if (a < end && b > start) {
-        for (const k of FORMAT_KEYS) {
-          (fmt as any)[k] = false;
-        }
-        fmt.font = undefined;
-      }
-
-      const defaultNorm = rgbStore.baseFormatting;
-      const isDefault =
-        FORMAT_KEYS.every((k) => fmt[k] === defaultNorm[k]) &&
-        fmt.font === defaultNorm.font;
-      if (!isDefault) {
-        newSegments.push({ ...fmt, start: a, end: b });
-      }
-    }
-
-    const merged = [];
-    for (const seg of newSegments.sort((x: any, y: any) => x.start - y.start)) {
-      const last = merged[merged.length - 1];
-      if (
-        last &&
-        last.end === seg.start &&
-        FORMAT_KEYS.every((k) => last[k] === seg[k]) &&
-        last.font === seg.font
-      ) {
-        last.end = seg.end;
-      } else {
-        merged.push({ ...seg });
-      }
-    }
-
-    rgbStore.formatting = merged;
-    void restoreSelection(start, end);
+      fmt.font = undefined;
+    }, true);
   });
 
   const formattingButtons: {

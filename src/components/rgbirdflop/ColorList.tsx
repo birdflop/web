@@ -9,6 +9,7 @@ import {
 } from '@builder.io/qwik';
 import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { ShowAllGradientsButton } from './ShowAllGradientsButton';
 import {
   swapItems,
   sortColors,
@@ -30,7 +31,6 @@ import {
   Copy,
   Dices,
   Eclipse,
-  Eye,
   MoveHorizontal,
   Palette,
   Shuffle,
@@ -124,22 +124,7 @@ export default component$<ColorListProps>((props) => {
               value: type,
             }))}
           />
-          <button
-            q:slot="extra-buttons"
-            class={{
-              'lum-btn rounded-l-sm p-1 transition-colors': true,
-              'text-lum-primary': showAllGradients.value,
-              'text-lum-text-secondary': !showAllGradients.value,
-            }}
-            onClick$={() => (showAllGradients.value = !showAllGradients.value)}
-            title={
-              showAllGradients.value
-                ? 'Show only selected gradient'
-                : 'Show all gradients'
-            }
-          >
-            <Eye size={20} />
-          </button>
+          <ShowAllGradientsButton showAllGradients={showAllGradients} />
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import createField from './createField';
 import evalField from './evalField';
+import { analyzeJvmFlags } from './jvmFlags';
 
 import config_bukkit from '~/util/analyze/configs/bukkit';
 import plugins_paper from '~/util/analyze/configs/plugins/paper';
@@ -116,117 +117,22 @@ export default async function analyzeTimings(id: string) {
 
   const flags = request.timingsMaster.system.flags;
   const jvm_version = request.timingsMaster.system.jvmversion;
-  if (flags.includes('-XX:+UseZGC') && flags.includes('-Xmx')) {
-    const flaglist: string[] = flags.split(' ');
-    flaglist.forEach((flag) => {
-      if (flag.startsWith('-Xmx')) {
-        let max_mem = flag.split('-Xmx')[1].toLowerCase();
-        max_mem = max_mem.replace('g', '000');
-        max_mem = max_mem.replace('m', '');
-        if (parseInt(max_mem) < 10000)
-          fields.push({
-            name: '❌ Low Memory',
-            value: 'ZGC is only good with a lot of memory.',
-            buttons: [
-              {
-                text: 'Learn More',
-                url: 'https://developers.redhat.com/articles/2021/11/02/how-choose-best-java-garbage-collector#z_garbage_collector__zgc_',
-              },
-            ],
-          });
-      }
-    });
-  } else if (flags.includes('-Daikars.new.flags=true')) {
-    if (!flags.includes('-XX:+PerfDisableSharedMem'))
-      fields.push({
-        name: '❌ Outdated Flags',
-        value: 'Add `-XX:+PerfDisableSharedMem` to flags.',
-      });
-    if (!flags.includes('-XX:G1MixedGCCountTarget=4'))
-      fields.push({
-        name: '❌ Outdated Flags',
-        value: 'Add `XX:G1MixedGCCountTarget=4` to flags.',
-      });
-    if (!flags.includes('-XX:+UseG1GC') && jvm_version.startsWith('1.8.'))
-      fields.push({
-        name: '❌ Aikar\'s Flags',
-        value: 'You must use G1GC when using Aikar\'s flags.',
-      });
-    if (flags.includes('-Xmx')) {
-      let max_mem = 0;
-      const flaglist: string[] = flags.split(' ');
-      flaglist.forEach((flag) => {
-        if (flag.startsWith('-Xmx')) {
-          flag = flag.split('-Xmx')[1].toLowerCase();
-          flag = flag.replace('g', '000');
-          flag = flag.replace('m', '');
-          max_mem = parseInt(flag);
-        }
-      });
-      if (max_mem < 5400)
-        fields.push({
-          name: '❌ Low Memory',
-          value:
-            'Allocate at least 6-10GB of ram to your server if you can afford it.',
-        });
-      let index = 0;
-      let max_online_players = 0;
-      while (index < request.timingsMaster.data.length) {
-        const timed_ticks =
-          request.timingsMaster.data[index].minuteReports[0].ticks.timedTicks;
-        const player_ticks =
-          request.timingsMaster.data[index].minuteReports[0].ticks.playerTicks;
-        const players = player_ticks / timed_ticks;
-        max_online_players = Math.max(players, max_online_players);
-        index = index + 1;
-      }
-      if ((1000 * max_online_players) / max_mem > 6 && max_mem < 10000)
-        fields.push({
-          name: '❌ Low Memory',
-          value: 'You should be using more RAM with this many players.',
-        });
-      if (flags.includes('-Xms')) {
-        let min_mem = 0;
-        flaglist.forEach((flag) => {
-          if (flag.startsWith('-Xms')) {
-            flag = flag.split('-Xms')[1].toLowerCase();
-            flag = flag.replace('g', '000');
-            flag = flag.replace('m', '');
-            min_mem = parseInt(flag);
-          }
-        });
-        if (min_mem != max_mem)
-          fields.push({
-            name: '❌ Aikar\'s Flags',
-            value:
-              'Your Xmx and Xms values should be equal when using Aikar\'s flags.',
-          });
-      }
+
+  let index = 0;
+  let max_online_players = 0;
+  if (request.timingsMaster.data) {
+    while (index < request.timingsMaster.data.length) {
+      const timed_ticks =
+        request.timingsMaster.data[index].minuteReports[0].ticks.timedTicks;
+      const player_ticks =
+        request.timingsMaster.data[index].minuteReports[0].ticks.playerTicks;
+      const players = player_ticks / timed_ticks;
+      max_online_players = Math.max(players, max_online_players);
+      index = index + 1;
     }
-  } else if (flags.includes('-Dusing.aikars.flags=mcflags.emc.gs')) {
-    fields.push({
-      name: '❌ Outdated Flags',
-      value: 'Your flags are outdated.',
-      buttons: [
-        {
-          text: 'Update Aikar\'s Flags',
-          url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
-        },
-      ],
-    });
-  } else {
-    fields.push({
-      name: '❌ Aikar\'s Flags',
-      value:
-        'Aikar\'s Flags add some optimizations to the java garbage collector.',
-      buttons: [
-        {
-          text: 'Use Aikar\'s Flags',
-          url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
-        },
-      ],
-    });
   }
+
+  fields.push(...analyzeJvmFlags(flags, jvm_version, max_online_players));
 
   const cpu = parseInt(request.timingsMaster.system.cpu);
   if (cpu <= 2)

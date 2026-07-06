@@ -8,6 +8,7 @@ import {
 } from '@builder.io/qwik';
 import { ColorPicker, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
+import { ShowAllGradientsButton } from '../ShowAllGradientsButton';
 import {
   getRandomColor,
   rgbColorDefaultsWithColorMode,
@@ -15,7 +16,7 @@ import {
   type GradientType,
   GRADIENT_TYPES,
 } from '@birdflop/rgbirdflop';
-import { Ban, Droplet, Eye, Palette } from 'lucide-icons-qwik';
+import { Ban, Droplet, Palette } from 'lucide-icons-qwik';
 import {
   applyStyleToRange,
   styleAtChar,
@@ -131,22 +132,7 @@ export default component$(
               value: type,
             }))}
           />
-          <button
-            q:slot="extra-buttons"
-            class={{
-              'lum-btn rounded-l-sm p-1 transition-colors': true,
-              'text-lum-primary': showAllGradients.value,
-              'text-lum-text-secondary': !showAllGradients.value,
-            }}
-            onClick$={() => (showAllGradients.value = !showAllGradients.value)}
-            title={
-              showAllGradients.value
-                ? 'Show only selected gradient'
-                : 'Show all gradients'
-            }
-          >
-            <Eye size={20} />
-          </button>
+          <ShowAllGradientsButton showAllGradients={showAllGradients} />
         </div>
         {/* Color mode switch */}
         <div class="flex gap-1 *:flex-1">

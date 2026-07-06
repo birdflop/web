@@ -1,8 +1,9 @@
 import { $ } from '@builder.io/qwik';
-import { ServerPlugin, PluginVersion, PluginType } from './ServerPlugin';
+import { BasePlugin } from './BasePlugin';
+import { PluginType } from './ServerPlugin';
 import { Notification } from '../Notification';
 
-export class SpigotPlugin implements ServerPlugin {
+export class SpigotPlugin extends BasePlugin {
   static async search(query: string): Promise<any[]> {
     const searchUrl = 'https://api.spiget.org/v2/search/resources/';
     const searchParams = new URLSearchParams({
@@ -17,43 +18,7 @@ export class SpigotPlugin implements ServerPlugin {
       new SpigotPlugin({ id: data.id }).fromData(data),
     );
   }
-  id: number | string;
   type = 'spigot' as const;
-  name?: string;
-  description?: string;
-  url?: string;
-  iconUrl?: string;
-  mcVersions?: string[];
-  releaseDate?: Date;
-  updateDate?: Date;
-  versions?: PluginVersion[];
-  currentVersion?: PluginVersion;
-  latestVersion?: PluginVersion;
-  file?: {
-    name?: string;
-    type: string;
-    size: number;
-    sizeUnit: string;
-    url: string;
-    externalUrl?: string;
-  };
-  sourceCodeLink?: string;
-
-  constructor(plugin: PluginType) {
-    this.id = plugin.id;
-    Object.assign(this, plugin);
-  }
-
-  async get() {
-    await this.fetch();
-    return this;
-  }
-
-  async fetch() {
-    await this.fetchData();
-    await this.fetchVersions();
-    return this;
-  }
 
   fromData(data: any) {
     Object.assign(this, {

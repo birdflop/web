@@ -1,6 +1,6 @@
-import { ServerPlugin, PluginVersion, PluginType } from './ServerPlugin';
+import { BasePlugin } from './BasePlugin';
 
-export class ModrinthPlugin implements ServerPlugin {
+export class ModrinthPlugin extends BasePlugin {
   static async search(query: string, loaders?: string[]): Promise<any[]> {
     const searchUrl = 'https://api.modrinth.com/v2/search';
     const searchParams = new URLSearchParams({
@@ -20,43 +20,7 @@ export class ModrinthPlugin implements ServerPlugin {
       new ModrinthPlugin({ id: data.project_id }).fromData(data),
     );
   }
-  id: number | string;
   type = 'modrinth' as const;
-  name?: string;
-  description?: string;
-  url?: string;
-  iconUrl?: string;
-  mcVersions?: string[];
-  releaseDate?: Date;
-  updateDate?: Date;
-  versions?: PluginVersion[];
-  currentVersion?: PluginVersion;
-  latestVersion?: PluginVersion;
-  file?: {
-    name?: string;
-    type: string;
-    size: number;
-    sizeUnit: string;
-    url: string;
-    externalUrl?: string;
-  };
-  sourceCodeLink?: string;
-
-  constructor(plugin: PluginType) {
-    this.id = plugin.id;
-    Object.assign(this, plugin);
-  }
-
-  async get() {
-    await this.fetch();
-    return this;
-  }
-
-  async fetch() {
-    await this.fetchData();
-    await this.fetchVersions();
-    return this;
-  }
 
   fromData(data: any) {
     Object.assign(this, {
