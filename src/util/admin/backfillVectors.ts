@@ -1,5 +1,6 @@
-import { getDB, presets } from '../../db';
-import { presetToVector } from './vectorize';
+import { server$ } from '@builder.io/qwik-city';
+import { getDB, presets } from '../db';
+import { presetToVector } from '../rgb/presets/vectorize';
 import { eq } from 'drizzle-orm';
 
 /**
@@ -9,23 +10,23 @@ import { eq } from 'drizzle-orm';
  *
  * @returns Object with success count and any errors encountered
  */
-export async function backfillColorVectors(): Promise<{
-  updated: number;
-  errors: Array<{ id: number; error: string }>;
-}> {
-  const db = getDB();
-  if (!db) {
-    throw new Error('Database not available');
-  }
-
-  const errors: Array<{ id: number; error: string }> = [];
-  let updated = 0;
-
+export const backfillColorVectors = server$(async function () {
+  const logs: string[] = [];
   try {
+    const db = getDB();
+    if (!db) {
+      return { success: false, error: 'Database not available', logs };
+    }
+
+    const errors: Array<{ id: number; error: string }> = [];
+    let updated = 0;
+
     // Fetch all presets
     const allPresets = await db.select().from(presets);
 
-    console.log(`Found ${allPresets.length} presets to process`);
+    const startMsg = `Found ${allPresets.length} presets to process`;
+    console.log(startMsg);
+    logs.push(startMsg);
 
     // Process each preset
     for (const preset of allPresets) {
@@ -42,25 +43,38 @@ export async function backfillColorVectors(): Promise<{
           .where(eq(presets.id, preset.id));
 
         updated++;
-        console.log(`Updated preset ${preset.id} (${preset.name})`);
+        const logMsg = `Updated preset ${preset.id} (${preset.name})`;
+        console.log(logMsg);
+        logs.push(logMsg);
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
-        console.error(`Error processing preset ${preset.id}:`, errorMessage);
+        const errLog = `Error processing preset ${preset.id}: ${errorMessage}`;
+        console.error(errLog);
+        logs.push(errLog);
         errors.push({ id: preset.id, error: errorMessage });
       }
     }
 
-    console.log(
-      `\nBackfill complete: ${updated} presets updated, ${errors.length} errors`,
-    );
+    const summaryMsg = `Backfill complete: ${updated} presets updated, ${errors.length} errors`;
+    console.log(`\n${summaryMsg}`);
+    logs.push(summaryMsg);
 
-    return { updated, errors };
+    return {
+      success: true,
+      updated,
+      errors,
+      logs,
+    };
   } catch (error) {
     console.error('Fatal error during backfill:', error);
-    throw error;
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      logs,
+    };
   }
-}
+});
 
 /**
  * Regenerates the colorVector for a single preset

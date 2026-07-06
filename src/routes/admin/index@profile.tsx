@@ -1,8 +1,5 @@
 import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
-import { RequestHandler, server$ } from '@builder.io/qwik-city';
-import { backfillColorVectors } from '~/util/rgb/presets/backfillVectors';
-import { getDB, presets, users, savedPresets } from '~/util/db';
-import { isNotNull, eq, sql } from 'drizzle-orm';
+import { RequestHandler } from '@builder.io/qwik-city';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/Rgbirdflop/PresetPreview';
 import {
@@ -11,110 +8,17 @@ import {
 } from '~/routes/resources/rgb/presets';
 import { AppWindow } from 'lucide-icons-qwik';
 import { checkAdmin } from '../layout';
+import {
+  loadAllPresets,
+  backfillPresetSaves,
+  runMigratePresets,
+  backfillColorVectors,
+} from '~/util/admin';
 
 export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
   if (!admin) throw new Response('Unauthorized', { status: 401 });
 };
-
-export const runBackfillVectors = server$(async function () {
-  try {
-    const result = await backfillColorVectors();
-    return {
-      success: true,
-      updated: result.updated,
-      errors: result.errors,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
-  }
-});
-
-export const loadAllPresets = server$(async function () {
-  try {
-    const db = getDB();
-    if (!db) {
-      return { success: false, error: 'Database not available' };
-    }
-
-    // Fetch all published presets with vectors
-    const allPresets = await db
-      .select({
-        presets,
-        user: users,
-      })
-      .from(presets)
-      .where(isNotNull(presets.colorVector))
-      .leftJoin(users, eq(users.id, presets.userId))
-      .groupBy(presets.id, users.id);
-
-    const formattedPresets = allPresets.map((p) => ({
-      id: p.presets.id,
-      name: p.presets.name,
-      preset: p.presets.preset,
-      author: p.presets.author,
-      userId: p.presets.userId,
-      user: p.user,
-      description: p.presets.description,
-      createdAt: new Date(p.presets.createdAt).toISOString(),
-      pending: p.presets.pending,
-      saves: p.presets.saves,
-      colorVector: p.presets.colorVector,
-    }));
-
-    return {
-      success: true,
-      presets: formattedPresets,
-      count: formattedPresets.length,
-    };
-  } catch (error) {
-    console.error('Error loading presets:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
-  }
-});
-
-const backfillPresetSaves = server$(async function () {
-  try {
-    const db = getDB();
-    if (!db) {
-      return { success: false, error: 'Database not available' };
-    }
-
-    // Fetch all published presets with vectors
-    const allPresets = await db
-      .select({
-        id: presets.id,
-        saveCount: sql<number>`COUNT(${savedPresets.presetId})`.as('saveCount'),
-      })
-      .from(presets)
-      .where(isNotNull(presets.id))
-      .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
-      .groupBy(presets.id, savedPresets.presetId);
-
-    for (const preset of allPresets) {
-      console.log(
-        `Updating preset ${preset.id} to have ${preset.saveCount} saves`,
-      );
-      await db
-        .update(presets)
-        .set({ saves: preset.saveCount })
-        .where(eq(presets.id, preset.id));
-    }
-  } catch (error) {
-    console.error('Error during preset saves backfill:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
-  }
-  return { success: true };
-});
 
 export default component$(() => {
   // Provide contexts for PresetPreview (empty since admin doesn't need these features)
@@ -124,7 +28,6 @@ export default component$(() => {
   useContextProvider(savedPresetsContext, savedPresets);
 
   const isRunning = useSignal(false);
-  const result = useSignal<string>('');
 
   const isCheckingSimilar = useSignal(false);
   const similarThreshold = useSignal(2.0);
@@ -133,26 +36,84 @@ export default component$(() => {
   const isLoadingPresets = useSignal(false);
   const loadedAt = useSignal<Date | null>(null);
 
-  const handleBackfill = $(async () => {
-    isRunning.value = true;
-    result.value = 'Running backfill...';
+  const isMigrating = useSignal(false);
+
+  interface LogEntry {
+    time: string;
+    action: string;
+    message: string;
+  }
+  const consoleLogs = useSignal<LogEntry[]>([]);
+
+  const addLog = $((action: string, message: string) => {
+    const time = new Date().toLocaleTimeString();
+    consoleLogs.value = [{ time, action, message }, ...consoleLogs.value];
+  });
+
+  const handleMigratePresets = $(async () => {
+    isMigrating.value = true;
+    addLog('Version Migration', 'Running migration...');
 
     try {
-      const response = await runBackfillVectors();
+      const response = await runMigratePresets();
 
       if (response.success) {
-        result.value = `Success! Updated ${response.updated} presets.`;
-        if (response.errors && response.errors.length > 0) {
-          result.value += `\n\nErrors (${response.errors.length}):\n`;
-          response.errors.forEach((err) => {
-            result.value += `  - Preset ${err.id}: ${err.error}\n`;
-          });
-        }
+        addLog('Version Migration', response.logs.join('\n'));
       } else {
-        result.value = `Error: ${response.error}`;
+        let errorMsg = `Error: ${response.error}`;
+        if (response.logs && response.logs.length > 0) {
+          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+        }
+        addLog('Version Migration', errorMsg);
       }
     } catch (error) {
-      result.value = `Error: ${error instanceof Error ? error.message : 'Unknown error'}`;
+      addLog('Version Migration', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    isMigrating.value = false;
+  });
+
+  const handleBackfill = $(async () => {
+    isRunning.value = true;
+    addLog('Vector Backfill', 'Running backfill...');
+
+    try {
+      const response = await backfillColorVectors();
+
+      if (response.success) {
+        addLog('Vector Backfill', response.logs.join('\n'));
+      } else {
+        let errorMsg = `Error: ${response.error}`;
+        if (response.logs && response.logs.length > 0) {
+          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+        }
+        addLog('Vector Backfill', errorMsg);
+      }
+    } catch (error) {
+      addLog('Vector Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+
+    isRunning.value = false;
+  });
+
+  const handleSavesBackfill = $(async () => {
+    isRunning.value = true;
+    addLog('Saves Backfill', 'Running saves backfill...');
+
+    try {
+      const response = await backfillPresetSaves();
+
+      if (response.success) {
+        addLog('Saves Backfill', response.logs.join('\n'));
+      } else {
+        let errorMsg = `Error: ${response.error}`;
+        if (response.logs && response.logs.length > 0) {
+          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+        }
+        addLog('Saves Backfill', errorMsg);
+      }
+    } catch (error) {
+      addLog('Saves Backfill', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isRunning.value = false;
@@ -161,6 +122,7 @@ export default component$(() => {
   const handleLoadPresets = $(async () => {
     isLoadingPresets.value = true;
     similarResults.value = null;
+    addLog('Find Similar', 'Loading all published presets...');
 
     try {
       const response = await loadAllPresets();
@@ -168,13 +130,12 @@ export default component$(() => {
       if (response.success && response.presets) {
         loadedPresets.value = response.presets;
         loadedAt.value = new Date();
+        addLog('Find Similar', `Loaded ${response.presets.length} presets.`);
       } else {
-        alert(`Error: ${response.error}`);
+        addLog('Find Similar', `Error loading presets: ${response.error}`);
       }
     } catch (error) {
-      alert(
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      addLog('Find Similar', `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isLoadingPresets.value = false;
@@ -325,10 +286,12 @@ export default component$(() => {
         pairsChecked: pairsChecked,
         pairsGrouped: pairsGrouped,
       };
+
+      let msg = `Completed similarity check!\nFound ${similarGroups.length} groups of similar presets out of ${allPresets.length} total presets.\n`;
+      msg += `Threshold: ${threshold} | Pairs checked: ${pairsChecked} | Pairs grouped: ${pairsGrouped}`;
+      addLog('Find Similar', msg);
     } catch (error) {
-      alert(
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      );
+      addLog('Find Similar', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     isCheckingSimilar.value = false;
@@ -361,12 +324,6 @@ export default component$(() => {
               {isRunning.value ? 'Running...' : 'Run Backfill'}
             </button>
           </div>
-
-          {result.value && (
-            <div class="mt-4 rounded-lg bg-gray-900 p-4">
-              <pre class="text-sm whitespace-pre-wrap">{result.value}</pre>
-            </div>
-          )}
         </div>
 
         <div class="lum-card">
@@ -378,19 +335,31 @@ export default component$(() => {
 
           <div>
             <button
-              onClick$={() => backfillPresetSaves()}
+              onClick$={handleSavesBackfill}
               disabled={isRunning.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
               {isRunning.value ? 'Running...' : 'Run Backfill'}
             </button>
           </div>
+        </div>
 
-          {result.value && (
-            <div class="mt-4 rounded-lg bg-gray-900 p-4">
-              <pre class="text-sm whitespace-pre-wrap">{result.value}</pre>
-            </div>
-          )}
+        <div class="lum-card">
+          <h2 class="text-xl!">Preset Version Migration</h2>
+          <p>
+            Migrate all published presets in the database to the current version
+            using the version migrator rules.
+          </p>
+
+          <div>
+            <button
+              onClick$={handleMigratePresets}
+              disabled={isMigrating.value}
+              class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
+            >
+              {isMigrating.value ? 'Migrating...' : 'Run Migration'}
+            </button>
+          </div>
         </div>
 
         <div class="lum-card">
@@ -555,6 +524,40 @@ export default component$(() => {
                   </p>
                 </div>
               )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Console Output Log */}
+      <div class="lum-card mt-6 flex flex-col">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-xl! font-bold">Console Output</h2>
+          {consoleLogs.value.length > 0 && (
+            <button
+              onClick$={() => {
+                consoleLogs.value = [];
+              }}
+              class="lum-btn lum-bg-red/20 hover:lum-bg-red/30 px-3 py-1 text-xs"
+            >
+              Clear Logs
+            </button>
+          )}
+        </div>
+        <div class="rounded-lg bg-gray-950 p-4 font-mono text-sm max-h-96 overflow-y-auto border border-lum-border/10">
+          {consoleLogs.value.length === 0 ? (
+            <span class="text-gray-500">No output yet. Run an action above to see results.</span>
+          ) : (
+            <div class="flex flex-col gap-4">
+              {consoleLogs.value.map((log, index) => (
+                <div key={index} class="border-b border-lum-border/10 pb-3 last:border-b-0 last:pb-0">
+                  <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                    <span class="font-bold text-gray-500">[{log.time}]</span>
+                    <span class="uppercase font-semibold px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 text-[10px]">{log.action}</span>
+                  </div>
+                  <pre class="whitespace-pre-wrap text-white font-mono">{log.message}</pre>
+                </div>
+              ))}
             </div>
           )}
         </div>

@@ -14,8 +14,8 @@ export function renderAllGradientsPreview(
       >
         <span
           class={{
-            'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
-            'text-lum-text': isActive,
+            'lum-btn-p-1 rounded-lum min-w-15 text-center text-[10px]': true,
+            'text-lum-text lum-grad-bg-lum-input-bg': isActive,
             'text-gray-400': !isActive,
           }}
         >
