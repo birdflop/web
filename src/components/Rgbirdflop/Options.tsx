@@ -1,14 +1,9 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
-import {
-  colorFormats,
-  GRADIENT_TYPES,
-  type GradientType,
-} from '@birdflop/rgbirdflop';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Toggle } from '@luminescent/ui-qwik';
 
-export default component$(({ hidden }: { hidden: boolean }) => {
+export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
 
@@ -22,96 +17,6 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     >
       <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
-        <SelectMenu
-          id="format"
-          value={
-            rgbStore.customFormat
-              ? 'custom'
-              : JSON.stringify(rgbStore.colorFormat)
-          }
-          class={{ 'w-full': true }}
-          onChange$={(e, el) => {
-            if (el.value == 'custom') {
-              rgbStore.customFormat = true;
-            } else {
-              rgbStore.customFormat = false;
-              rgbStore.colorFormat = JSON.parse(el.value);
-            }
-          }}
-          values={[
-            ...(!rgbStore.customFormat &&
-            !colorFormats.find(
-              (format) => format.color == rgbStore.colorFormat.color,
-            )
-              ? [
-                {
-                  name: rgbStore.colorFormat.color
-                    .replace('$1', 'r')
-                    .replace('$2', 'r')
-                    .replace('$3', 'g')
-                    .replace('$4', 'g')
-                    .replace('$5', 'b')
-                    .replace('$6', 'b')
-                    .replace(
-                      '$f',
-                      `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
-                    )
-                    .replace('$c', ''),
-                  value: JSON.stringify(rgbStore.colorFormat),
-                },
-              ]
-              : []),
-            ...colorFormats.map((format) => ({
-              name: format.color
-                .replace('$1', 'r')
-                .replace('$2', 'r')
-                .replace('$3', 'g')
-                .replace('$4', 'g')
-                .replace('$5', 'b')
-                .replace('$6', 'b')
-                .replace(
-                  '$f',
-                  `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
-                )
-                .replace('$c', ''),
-              value: JSON.stringify(format),
-            })),
-            {
-              name: rgbStore.customFormat
-                ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
-                  .replace('$1', 'r')
-                  .replace('$2', 'r')
-                  .replace('$3', 'g')
-                  .replace('$4', 'g')
-                  .replace('$5', 'b')
-                  .replace('$6', 'b')
-                  .replace(
-                    '$f',
-                    `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
-                  )
-                  .replace('$c', '')}`
-                : t('rgb.colors.customFormat@@Custom Format'),
-              value: 'custom',
-            },
-          ]}
-        >
-          {t('rgb.colors.format@@Color Format')}
-        </SelectMenu>
-        <SelectMenu
-          id="gradientType"
-          value={rgbStore.gradientType}
-          class={{ 'w-full': true }}
-          onChange$={(e, el) => {
-            const value = el.value as GradientType;
-            rgbStore.gradientType = value;
-          }}
-          values={GRADIENT_TYPES.map((type) => ({
-            name: type,
-            value: type,
-          }))}
-        >
-          {t('rgb.colors.gradientType@@Gradient Type')}
-        </SelectMenu>
         <div class="flex flex-col gap-1">
           <label for="prefixsuffix">
             {t('rgb.prefixsuffix@@Prefix/Suffix')}
@@ -126,54 +31,6 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             }}
           />
         </div>
-        {rgbStore.customFormat && (
-          <>
-            <div
-              id="customformat"
-              class={{
-                'col-span-2 flex flex-col gap-2': true,
-              }}
-            >
-              <label for="customformat">
-                {t('rgb.colors.customFormat@@Custom Format')}
-              </label>
-              <input
-                class="lum-input"
-                id="customformat"
-                value={rgbStore.colorFormat.color}
-                placeholder="&#$1$2$3$4$5$6$f$c"
-                onInput$={(e, el) => {
-                  rgbStore.colorFormat.color = el.value;
-                }}
-              />
-              <div class="font-mono text-sm">
-                <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
-                <p>
-                  $1 = <strong class="text-red-400">R</strong>RGGBB
-                </p>
-                <p>
-                  $2 = R<strong class="text-red-400">R</strong>GGBB
-                </p>
-                <p>
-                  $3 = RR<strong class="text-green-400">G</strong>GBB
-                </p>
-                <p>
-                  $4 = RRG<strong class="text-green-400">G</strong>BB
-                </p>
-                <p>
-                  $5 = RRGG<strong class="text-blue-400">B</strong>B
-                </p>
-                <p>
-                  $6 = RRGGB<strong class="text-blue-400">B</strong>
-                </p>
-                {rgbStore.colorFormat.char && (
-                  <p>$f = {t('rgb.formatting.title@@Formatting')}</p>
-                )}
-                <p>$c = {t('rgb.colors.character@@Character')}</p>
-              </div>
-            </div>
-          </>
-        )}
         <div class="flex flex-col gap-1">
           <Toggle
             id="disperse"

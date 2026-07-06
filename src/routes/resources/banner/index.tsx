@@ -28,10 +28,10 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { openItemsContext } from '~/routes/layout';
-import { Notification, NotificationContext } from '~/util/Notification';
 import { colors, patterns } from '~/util/banner';
 import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
+import Output from '~/components/Elements/Output';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -43,13 +43,6 @@ const createImage = (src: string) =>
 
 export default component$(() => {
   const t = inlineTranslate();
-  const bannerCommandCopiedTitle = t(
-    'banner.command.copied.title@@Command Copied!',
-  );
-  const bannerCommandCopiedDescription = t(
-    'banner.command.copied.description@@The banner command has been copied to your clipboard!',
-  );
-  const copyFailedTitle = t('banner.copyFailed@@Failed to copy to clipboard!');
 
   const preview = useSignal<HTMLCanvasElement>() as Signal<HTMLCanvasElement>;
   const textureCanvas =
@@ -57,7 +50,6 @@ export default component$(() => {
 
   const openPopup = useSignal(-1);
   const openItems = useContext(openItemsContext);
-  const notifications = useContext(NotificationContext);
   const bannerTexture = useSignal<NoSerialize<THREE.CanvasTexture>>();
 
   const bannerStore: {
@@ -527,44 +519,15 @@ export default component$(() => {
               ))}
             </div>
           </div>
-          <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-            <Terminal />
-            {t('banner.command.title@@Command')}
-          </div>
-          <div
-            class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-              'pointer-events-none max-h-0 opacity-0':
-                !openItems.value.includes('command'),
-              'pointer-events-auto max-h-62.5 opacity-100':
-                openItems.value.includes('command'),
-            }}
-            id="command"
+          <Output class="font-mc"
+            value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
           >
-            <textarea
-              id="commandOutput"
-              readOnly
-              class={{
-                'lum-input font-mc h-32 w-full whitespace-pre-wrap': true,
-              }}
-              value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
-              onClick$={(e, el) => {
-                const notification = new Notification()
-                  .setTitle(bannerCommandCopiedTitle)
-                  .setDescription(bannerCommandCopiedDescription)
-                  .setBgColor('lum-grad-bg-green/50');
-
-                navigator.clipboard.writeText(el.value).catch((err) => {
-                  notification
-                    .setTitle(copyFailedTitle)
-                    .setDescription(err)
-                    .setBgColor('lum-grad-bg-red/50')
-                    .setPersist(true);
-                });
-                notifications.push(notification);
-              }}
-            />
-          </div>
+            <span q:slot="label" class="text-lum-text-secondary text-sm">
+              {t(
+                'banner.command.title@@Command',
+              )}
+            </span>
+          </Output>
         </div>
         <div
           class="sm:border-l-lum-border/10 flex flex-col gap-2 sm:border-l sm:pl-2"

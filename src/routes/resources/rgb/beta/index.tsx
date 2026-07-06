@@ -119,6 +119,8 @@ export default component$(() => {
         )
       }
 
+      <SegmentInspector q:slot="input-extra" />
+
       <Options q:slot="options" hidden={!openItems.value.includes('options')} />
 
       <div class="mb-4 flex flex-col gap-2" q:slot="column1">
@@ -127,13 +129,6 @@ export default component$(() => {
           {t('rgb.segmentColorEditor.title@@Segment Color Editor')}
         </div>
         <SegmentColorEditor />
-      </div>
-      <div class="mb-4 flex flex-col gap-2" q:slot="column3">
-        <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-          <Type />
-          {t('rgb.segments.title@@Segments')}
-        </div>
-        <SegmentInspector />
       </div>
     </RGBirdflop>
   );

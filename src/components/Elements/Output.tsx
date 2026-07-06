@@ -1,15 +1,16 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, Slot, useContext } from '@builder.io/qwik';
+import { Clipboard } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 
-export default component$(
-  ({ hidden, value }: { hidden: boolean; value: string }) => {
+export default component$<{ hidden?: boolean; value: string, class?: string }>(
+  ({ hidden, value, class: className }) => {
     const t = inlineTranslate();
-    const copiedTitle = t('rgb.output.copied.title@@Copied to clipboard!');
+    const copiedTitle = t('nav.copied.title@@Copied to clipboard!');
     const copiedDescription = t(
-      'rgb.output.copied.description@@The RGB text has been copied to your clipboard successfully.',
+      'nav.copied.description@@The text has been copied to your clipboard successfully.',
     );
-    const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
+    const copyFailedTitle = t('nav.copyFailed@@Failed to copy to clipboard!');
 
     const notifications = useContext(NotificationContext);
 
@@ -17,19 +18,26 @@ export default component$(
       <div
         class={{
           'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-          'pointer-events-none max-h-0 opacity-0': hidden,
-          'pointer-events-auto max-h-62.5 opacity-100': !hidden,
+          ...(hidden === undefined) ? {} : {
+            'pointer-events-none max-h-0 opacity-0': hidden,
+            'pointer-events-auto max-h-62.5 opacity-100': !hidden,
+          },
         }}
         id="outputcontainer"
       >
-        <label for="output" class="text-lum-text-secondary">
-          {t('rgb.output.description@@Copy-paste this for RGB text!')}
+        <label for="output" class="flex items-center gap-2 p-2 font-semibold">
+          <span class="flex items-center gap-2 flex-1">
+            <Clipboard />
+            {t('rgb.output.title@@Output')}
+          </span>
+          <Slot name="label" />
         </label>
         <textarea
           id="output"
           readOnly
           class={{
-            'lum-input font-mc h-32 w-full whitespace-pre-wrap': true,
+            'lum-input w-full whitespace-pre-wrap': true,
+            [className ?? '']: className !== undefined,
           }}
           value={value}
           onClick$={() => {

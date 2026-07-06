@@ -37,6 +37,7 @@ import {
   SiVelocity,
 } from 'simple-icons-qwik';
 import { deepTrack } from '~/util/misc';
+import Output from '~/components/Elements/Output';
 
 const Linux = component$(() => (
   <span class="flex items-center gap-2">
@@ -509,20 +510,17 @@ export default component$(() => {
         </div>
       </div>
 
-      <label for="Output">{t('flags.script.label@@Script')}</label>
-      <p class="text-lum-text-secondary mb-2 text-sm">
-        {t(
-          'flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!',
-          { fileName: flagsStore.fileName },
-        )}
-      </p>
-      <textarea
-        class={{
-          'lum-input mt-2 h-96 w-full font-mono break-all whitespace-pre-wrap': true,
-        }}
-        id="Output"
-        value={generateResult(flagsStore).script}
-      />
+      <Output class="h-96 font-mono break-all"
+        value={generateResult(flagsStore).script ?? ''}
+      >
+        <span q:slot="label" class="text-lum-text-secondary text-sm">
+          {t(
+            'flags.script.description@@The resulting script that can be used to start your server. Place this file in the same location as {{fileName}}, then execute it!',
+            { fileName: flagsStore.fileName },
+          )}
+        </span>
+      </Output>
+
     </section>
   );
 });

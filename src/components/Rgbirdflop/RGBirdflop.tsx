@@ -10,16 +10,13 @@ import {
   Signal,
 } from '@builder.io/qwik';
 
-import { rgbDefaults, disperseColors } from '@birdflop/rgbirdflop';
+import { rgbDefaults, disperseColors, colorFormats } from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
 import {
   Blend,
-  Clipboard,
-  Grid2X2,
-  Palette,
   Save,
   Settings,
   Sparkles,
@@ -33,8 +30,8 @@ import ColorList from '~/components/Rgbirdflop/ColorList';
 import TextShadow from '~/components/Rgbirdflop/TextShadow';
 import Options from '~/components/Rgbirdflop/Options';
 import Presets from '~/components/Rgbirdflop/Presets';
-import FormatOptions from '~/components/Rgbirdflop/FormatOptions';
-import Output from '~/components/Rgbirdflop/Output';
+import CustomFormat from '~/components/Rgbirdflop/CustomFormat';
+import Output from '~/components/Elements/Output';
 import Decode from '~/components/Rgbirdflop/Decode';
 import Accordion from '~/components/Elements/Accordion';
 
@@ -43,6 +40,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/Rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/misc';
+import { SelectMenuRaw } from '@luminescent/ui-qwik';
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
@@ -89,7 +87,6 @@ export default component$(
 
     const rgbStore = useContext(rgbStoreContext);
     const openItems = useContext(openItemsContext);
-    const showAllGradients = useContext(showAllGradientsContext);
 
     const showAds = useSignal(false);
     const adVariant = useSignal<AdVariantKey | null>(null);
@@ -283,27 +280,10 @@ export default component$(
 
           <Input advanced={advanced}>
             <Slot name="input" />
-            <button
-              q:slot="extra-buttons"
-              class={{
-                'rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg p-1 transition-colors': true,
-                'text-lum-primary': showAllGradients.value,
-                'text-lum-text-secondary': !showAllGradients.value,
-              }}
-              onClick$={() =>
-                (showAllGradients.value = !showAllGradients.value)
-              }
-              title={
-                showAllGradients.value
-                  ? 'Show only selected gradient'
-                  : 'Show all gradients'
-              }
-            >
-              <Grid2X2 size={20} />
-            </button>
           </Input>
 
-          <ColorMap />
+          <Slot name="input-extra" />
+          {!advanced && <ColorMap />}
 
           <div class="mt-1 grid gap-2 sm:grid-cols-3 sm:gap-2 md:grid-cols-4">
             <MobileNavbar>
@@ -317,7 +297,6 @@ export default component$(
                   class={{
                     'lum-grad-bg-blue!': openItems.value.includes('textshadow'),
                   }}
-                  q:slot="mobile-navbar"
                 >
                   <Blend />
                   {t('rgb.colors.shadow.title@@Text Shadow')}
@@ -329,10 +308,6 @@ export default component$(
             <div class="relative flex flex-col gap-2" id="column1">
               {!advanced && (
                 <>
-                  <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-                    <Palette />
-                    {t('rgb.colors.title@@Colors')}
-                  </div>
                   <ColorList hidden={!openItems.value.includes('colors')} />
                   <Accordion sectionName="textshadow" pcOnly>
                     <Blend />
@@ -350,14 +325,86 @@ export default component$(
               class="border-lum-border/10 flex flex-col gap-1 sm:border-x sm:px-2 md:col-span-2"
               id="column2"
             >
-              <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-                <Clipboard />
-                {t('rgb.output.title@@Output')}
-              </div>
               <Output
+                class="h-32 font-mc"
                 hidden={!openItems.value.includes('output')}
                 value={output}
-              />
+              >
+                <SelectMenuRaw q:slot="label"
+                  title={t('rgb.colors.format@@Color Format')}
+                  id="format"
+                  value={
+                    rgbStore.customFormat
+                      ? 'custom'
+                      : JSON.stringify(rgbStore.colorFormat)
+                  }
+                  class={{ 'lum-btn-p-1 text-sm': true }}
+                  onChange$={(e, el) => {
+                    if (el.value == 'custom') {
+                      rgbStore.customFormat = true;
+                    } else {
+                      rgbStore.customFormat = false;
+                      rgbStore.colorFormat = JSON.parse(el.value);
+                    }
+                  }}
+                  values={[
+                    ...(!rgbStore.customFormat &&
+                      !colorFormats.find(
+                        (format) => format.color == rgbStore.colorFormat.color,
+                      )
+                      ? [
+                        {
+                          name: rgbStore.colorFormat.color
+                            .replace('$1', 'r')
+                            .replace('$2', 'r')
+                            .replace('$3', 'g')
+                            .replace('$4', 'g')
+                            .replace('$5', 'b')
+                            .replace('$6', 'b')
+                            .replace(
+                              '$f',
+                              `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                            )
+                            .replace('$c', ''),
+                          value: JSON.stringify(rgbStore.colorFormat),
+                        },
+                      ]
+                      : []),
+                    ...colorFormats.map((format) => ({
+                      name: format.color
+                        .replace('$1', 'r')
+                        .replace('$2', 'r')
+                        .replace('$3', 'g')
+                        .replace('$4', 'g')
+                        .replace('$5', 'b')
+                        .replace('$6', 'b')
+                        .replace(
+                          '$f',
+                          `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                        )
+                        .replace('$c', ''),
+                      value: JSON.stringify(format),
+                    })),
+                    {
+                      name: rgbStore.customFormat
+                        ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
+                          .replace('$1', 'r')
+                          .replace('$2', 'r')
+                          .replace('$3', 'g')
+                          .replace('$4', 'g')
+                          .replace('$5', 'b')
+                          .replace('$6', 'b')
+                          .replace(
+                            '$f',
+                            `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                          )
+                          .replace('$c', '')}`
+                        : t('rgb.colors.customFormat@@Custom Format'),
+                      value: 'custom',
+                    },
+                  ]}
+                />
+              </Output>
 
               <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
                 <Settings />
@@ -369,41 +416,33 @@ export default component$(
                 </Options>
               )}
               {advanced && <Slot name="options" />}
+
+              {rgbStore.customFormat && (
+                <>
+                  <Accordion
+                    sectionName="formatoptions"
+                    pcOnly
+                  >
+                    <Settings />
+                    {t('rgb.formatting.options@@Format Options')}
+                  </Accordion>
+                  <CustomFormat
+                    hidden={!openItems.value.includes('formatoptions')}
+                  />
+                </>
+              )}
             </div>
 
             <div class="mb-4 flex flex-col gap-2" id="column3">
-              {!advanced && (
-                <>
-                  <div
-                    q:slot="column3"
-                    class="hidden items-center gap-2 p-2 font-semibold sm:flex"
-                  >
-                    <Save />
-                    {t('rgb.presets.title@@Presets')}
-                  </div>
-                  <Presets
-                    q:slot="column3"
-                    hidden={!openItems.value.includes('presets')}
-                  />
-
-                  {rgbStore.customFormat && (
-                    <>
-                      <Accordion
-                        q:slot="column3"
-                        sectionName="formatoptions"
-                        pcOnly
-                      >
-                        <Settings />
-                        {t('rgb.formatting.options@@Format Options')}
-                      </Accordion>
-                      <FormatOptions
-                        q:slot="column3"
-                        hidden={!openItems.value.includes('formatoptions')}
-                      />
-                    </>
-                  )}
-                </>
-              )}
+              <div
+                class="hidden items-center gap-2 p-2 font-semibold sm:flex"
+              >
+                <Save />
+                {t('rgb.presets.title@@Presets')}
+              </div>
+              <Presets
+                hidden={!openItems.value.includes('presets')}
+              />
 
               <Slot name="column3" />
 

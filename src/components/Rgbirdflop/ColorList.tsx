@@ -6,7 +6,7 @@ import {
   useOnDocument,
   useSignal,
 } from '@builder.io/qwik';
-import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
+import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import {
   disperseColors,
@@ -17,6 +17,8 @@ import {
   hexToRGB,
   rgbToHex,
   invertRgbColor,
+  GradientType,
+  GRADIENT_TYPES,
 } from '@birdflop/rgbirdflop';
 import {
   ArrowRightLeft,
@@ -26,11 +28,13 @@ import {
   Copy,
   Dices,
   Eclipse,
+  Eye,
   MoveHorizontal,
+  Palette,
   Shuffle,
   Trash,
 } from 'lucide-icons-qwik';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import { rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
@@ -43,6 +47,7 @@ export default component$(
     const opened = useSignal(-1);
     const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
     const colors = getColors(rgbStore, id);
+    const showAllGradients = useContext(showAllGradientsContext);
 
     useOnDocument(
       'click',
@@ -66,6 +71,45 @@ export default component$(
         }}
         id={'colorlist' + id}
       >
+        <div class="flex items-center gap-1 py-2 font-semibold">
+          <span class="flex items-center gap-2 flex-1">
+            <Palette />
+            {t('rgb.colors.title@@Colors')}
+          </span>
+          <SelectMenuRaw
+            title={t('rgb.colors.gradientType@@Gradient Type')}
+            id="gradientType"
+            value={rgbStore.gradientType}
+            class={{ 'lum-btn-p-1 text-sm rounded-r-sm': true }}
+            onChange$={(e, el) => {
+              const value = el.value as GradientType;
+              rgbStore.gradientType = value;
+            }}
+            values={GRADIENT_TYPES.map((type) => ({
+              name: type,
+              value: type,
+            }))}
+          />
+          <button
+            q:slot="extra-buttons"
+            class={{
+              'lum-btn p-1 transition-colors rounded-l-sm': true,
+              'text-lum-primary': showAllGradients.value,
+              'text-lum-text-secondary': !showAllGradients.value,
+            }}
+            onClick$={() =>
+              (showAllGradients.value = !showAllGradients.value)
+            }
+            title={
+              showAllGradients.value
+                ? 'Show only selected gradient'
+                : 'Show all gradients'
+            }
+          >
+            <Eye size={20} />
+          </button>
+        </div>
+
         <Slot />
         {rgbStore.colorFormat.color != 'MiniMessage' && id == 'text' && (
           <NumberInput
