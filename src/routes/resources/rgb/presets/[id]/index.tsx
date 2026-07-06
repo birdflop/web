@@ -314,14 +314,14 @@ export default component$(() => {
             (savedPreset) =>
               JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset),
           ) ? (
-            <>
-              <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
-            </>
-          ) : (
-            <>
-              <Save size={20} /> {t('rgb.presets.save@@Save')}
-            </>
-          )}
+              <>
+                <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
+              </>
+            ) : (
+              <>
+                <Save size={20} /> {t('rgb.presets.save@@Save')}
+              </>
+            )}
         </button>
         <button
           class="lum-btn lum-grad-bg-purple hover:bg-purple text-sm"
@@ -392,74 +392,74 @@ export default component$(() => {
 
         {(isAdmin ||
           (isOwner && (presetInfo.pending || presetInfo.saves < 1))) && (
-            <div class="lum-card lum-grad-bg-red/20">
-              <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+          <div class="lum-card lum-grad-bg-red/20">
+            <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
                 Manage Preset
-              </h3>
-              {isOwner && (
-                <p class="mb-2">
+            </h3>
+            {isOwner && (
+              <p class="mb-2">
                   You are the owner of this preset.
-                  {presetInfo.saves < 1 &&
+                {presetInfo.saves < 1 &&
                     ' Since this preset has no saves, you can safely delete it if you no longer want it to be available.'}
-                </p>
-              )}
-              {isOwner && presetInfo.pending && (
-                <p class="mb-2 text-yellow-500!">
+              </p>
+            )}
+            {isOwner && presetInfo.pending && (
+              <p class="mb-2 text-yellow-500!">
                   This preset is pending review. You can either delete it or wait
                   for an admin to review and approve it. Once approved and the
                   preset has saves, it will not be able to be deleted. If you want
                   to delete this preset after it's approved, please contact us on{' '}
-                  <a
-                    href={discordLink}
-                    target="_blank"
-                    class="text-blue-500 hover:underline"
-                  >
+                <a
+                  href={discordLink}
+                  target="_blank"
+                  class="text-blue-500 hover:underline"
+                >
                     Discord
-                  </a>
+                </a>
                   .
-                </p>
-              )}
-              <div class="flex items-center gap-1">
-                {isAdmin && presetInfo.pending && (
-                  <button
-                    class="lum-btn lum-bg-green hover:bg-green"
-                    onClick$={async () => {
-                      await updatePreset(presetInfo.id, { pending: false });
-                      window.location.assign(
-                        '/resources/rgb/presets?showPending=true',
-                      );
-                    }}
-                  >
-                    <Check size={20} /> Approve
-                  </button>
-                )}
-                {isAdmin && !presetInfo.pending && (
-                  <button
-                    class="lum-btn lum-bg-yellow hover:bg-yellow"
-                    onClick$={async () => {
-                      await updatePreset(presetInfo.id, { pending: true });
-                      window.location.assign(
-                        '/resources/rgb/presets?showPending=true',
-                      );
-                    }}
-                  >
-                    <Minus size={20} /> Unapprove
-                  </button>
-                )}
+              </p>
+            )}
+            <div class="flex items-center gap-1">
+              {isAdmin && presetInfo.pending && (
                 <button
-                  class="lum-btn lum-bg-red hover:bg-red"
+                  class="lum-btn lum-bg-green hover:bg-green"
                   onClick$={async () => {
-                    await deletePreset(presetInfo.id);
+                    await updatePreset(presetInfo.id, { pending: false });
                     window.location.assign(
                       '/resources/rgb/presets?showPending=true',
                     );
                   }}
                 >
-                  <Trash size={20} /> Delete
+                  <Check size={20} /> Approve
                 </button>
-              </div>
+              )}
+              {isAdmin && !presetInfo.pending && (
+                <button
+                  class="lum-btn lum-bg-yellow hover:bg-yellow"
+                  onClick$={async () => {
+                    await updatePreset(presetInfo.id, { pending: true });
+                    window.location.assign(
+                      '/resources/rgb/presets?showPending=true',
+                    );
+                  }}
+                >
+                  <Minus size={20} /> Unapprove
+                </button>
+              )}
+              <button
+                class="lum-btn lum-bg-red hover:bg-red"
+                onClick$={async () => {
+                  await deletePreset(presetInfo.id);
+                  window.location.assign(
+                    '/resources/rgb/presets?showPending=true',
+                  );
+                }}
+              >
+                <Trash size={20} /> Delete
+              </button>
             </div>
-          )}
+          </div>
+        )}
       </div>
 
       <div class="mt-8 text-sm">
