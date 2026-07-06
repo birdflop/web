@@ -20,6 +20,7 @@ import {
   GradientType,
   GRADIENT_TYPES,
   ColorStop,
+  disperseColors,
 } from '@birdflop/rgbirdflop';
 import {
   ArrowRightLeft,
@@ -30,6 +31,7 @@ import {
   Dices,
   Eclipse,
   Eye,
+  MoveHorizontal,
   Palette,
   Shuffle,
   Trash,
@@ -145,7 +147,6 @@ export default component$<ColorListProps>((props) => {
       )}
 
       <Slot />
-      {/*
       {rgbStore.colorFormat.color != 'MiniMessage' && id == 'text' && (
         <NumberInput
           input
@@ -161,7 +162,6 @@ export default component$<ColorListProps>((props) => {
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       )}
-      */}
       <NumberInput
         input
         id={`colorlist${id}-amount`}
@@ -212,7 +212,7 @@ export default component$<ColorListProps>((props) => {
       <div class="flex gap-1 *:w-full">
         <button
           class={{
-            'lum-btn justify-center rounded-r-sm p-1': true,
+            'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
             const newColors = colors.map((color) => ({
@@ -228,7 +228,7 @@ export default component$<ColorListProps>((props) => {
         {id == 'shadow' && (
           <button
             class={{
-              'lum-btn justify-center rounded-l-sm p-1': true,
+              'lum-btn justify-center p-1': true,
             }}
             onClick$={() => {
               void setColors(rgbStore.colors);
@@ -240,7 +240,7 @@ export default component$<ColorListProps>((props) => {
         )}
         <button
           class={{
-            'lum-btn justify-center rounded-l-sm p-1': true,
+            'lum-btn justify-center p-1': true,
           }}
           disabled={colors.length >= resolvedTextLength}
           onClick$={() => {
@@ -253,7 +253,7 @@ export default component$<ColorListProps>((props) => {
         </button>
         <button
           class={{
-            'lum-btn justify-center rounded-sm p-1': true,
+            'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
             const newColors = colors
@@ -268,7 +268,7 @@ export default component$<ColorListProps>((props) => {
         </button>
         <button
           class={{
-            'lum-btn justify-center rounded-sm p-1': true,
+            'lum-btn justify-center p-1': true,
           }}
           disabled={colors.length < 3}
           onClick$={() => {
@@ -287,7 +287,7 @@ export default component$<ColorListProps>((props) => {
         </button>
         <button
           class={{
-            'lum-btn justify-center rounded-l-sm p-1': true,
+            'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
             const newColors = colors.map((color) => {
@@ -302,10 +302,9 @@ export default component$<ColorListProps>((props) => {
         >
           <Eclipse size={20} />
         </button>
-        {/*
         {!rgbStore.disperse && (
           <button
-            class="lum-btn justify-center rounded-l-sm p-1"
+            class="lum-btn justify-center p-1"
             disabled={
               !colors.find((color, i) => {
                 return (
@@ -322,7 +321,6 @@ export default component$<ColorListProps>((props) => {
             <MoveHorizontal size={20} />
           </button>
         )}
-        */}
       </div>
       <div class="relative flex flex-col gap-2" id={`colorlistcolors${id}`}>
         {colors.map((color, i) => (
