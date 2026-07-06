@@ -24,7 +24,7 @@ import {
 } from '~/components/RgbAdvanced/model';
 import { generateAdvancedOutput } from '~/components/RgbAdvanced/output';
 import { defaultDescription, generateHead } from '~/root';
-import { ArrowLeft, TestTube2, Type } from 'lucide-icons-qwik';
+import { ArrowLeft, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/Rgbirdflop/RGBirdflop';
 import Options from '~/components/Rgbirdflop/Options';
@@ -123,13 +123,7 @@ export default component$(() => {
 
       <Options q:slot="options" hidden={!openItems.value.includes('options')} />
 
-      <div class="mb-4 flex flex-col gap-2" q:slot="column1">
-        <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-          <Type />
-          {t('rgb.segmentColorEditor.title@@Segment Color Editor')}
-        </div>
-        <SegmentColorEditor />
-      </div>
+      <SegmentColorEditor q:slot="column1" />
     </RGBirdflop>
   );
 });

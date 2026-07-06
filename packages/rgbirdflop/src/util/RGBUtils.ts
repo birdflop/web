@@ -1,4 +1,4 @@
-import { ColorStop, rgbDefaults, Formatting } from './Defaults';
+import { ColorStop, rgbDefaults, Formatting, rgbColorDefaults } from './Defaults';
 import { hexToRGB, rgbToHex } from './Colors';
 import { ColorGradient } from './ColorUtils';
 import { RGBColorStop } from './ColorUtils/BaseGradient';
@@ -143,7 +143,7 @@ function normalizeShadowRGB(rgb: number[]): number[] {
   return norm;
 }
 
-export function getShadowColors(rgbOptions: typeof rgbDefaults) {
+export function getShadowColors(rgbOptions: typeof rgbColorDefaults) {
   if (!rgbOptions.shadowColors) {
     return rgbOptions.colors.map((color) => {
       const shadowRGB = hexToRGB(color.hex).map((c) => c * 0.25);

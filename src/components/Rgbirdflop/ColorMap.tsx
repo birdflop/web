@@ -14,8 +14,8 @@ import {
   getRGBColorStop,
   rgbToHex,
   getShadowColors,
-  rgbDefaults,
   ColorStop,
+  rgbColorDefaults,
 } from '@birdflop/rgbirdflop';
 import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
 import { Plus, Trash } from 'lucide-icons-qwik';
@@ -60,7 +60,7 @@ function generateGradientCSS(
   return `linear-gradient(to right, ${sampledColors.join(', ')})`;
 }
 
-export function getColors(rgbStore: typeof rgbDefaults, id: string) {
+export function getColors(rgbStore: typeof rgbColorDefaults, id: string) {
   return id === 'text' ? rgbStore.colors : getShadowColors(rgbStore);
 }
 
