@@ -28,6 +28,7 @@ import { Rainbow, Braces } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { deepTrack } from '~/util/misc';
 import {
+  EmptyPreview,
   getEffectiveFormatting,
   getFormattingClasses,
 } from '~/components/Rgbirdflop/preview';
@@ -62,13 +63,13 @@ function renderFrames(
   currentFrameIndex: number,
   shadowLength: string = '4px 4px',
 ) {
-  if (!rgbStore.text) return '\u00A0';
+  if (!rgbStore.text || rgbStore.text.trim() === '') return EmptyPreview;
   // Generate frames for this specific gradient type
   const { frames: framesList } = generateAnimTABFrames(rgbStore, animtabStore);
 
-  if (!framesList[0]) return '\u00A0';
+  if (!framesList[0]) return EmptyPreview;
   const colors = framesList[currentFrameIndex % framesList.length];
-  if (!colors) return '\u00A0';
+  if (!colors) return EmptyPreview;
 
   const segments = [
     ...rgbStore.text.matchAll(new RegExp(`.{1,${rgbStore.colorLength}}`, 'g')),

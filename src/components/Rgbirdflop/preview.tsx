@@ -9,6 +9,10 @@ import {
   type Formatting,
 } from '@birdflop/rgbirdflop';
 
+export const EmptyPreview = <span class="text-lum-text-secondary/25" q:slot="input">
+  Birdflop
+</span>;
+
 function getFormattingSignature(formatting: Formatting) {
   return (
     FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('') +
@@ -53,7 +57,7 @@ export function getFormattingClasses(formatting: Formatting) {
 }
 
 export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
-  if (!rgbStore.text) return '\u00A0';
+  if (!rgbStore.text || rgbStore.text.trim() === '') return EmptyPreview;
   if (rgbStore.colors.length < 1) return rgbStore.text;
 
   const colorLength = Math.max(1, Math.floor(rgbStore.colorLength || 1));
