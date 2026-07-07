@@ -31,6 +31,21 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             }}
           />
         </div>
+        {rgbStore.colorFormat.color != 'MiniMessage' &&
+          <NumberInput
+            input
+            disabled
+            id="colorLength"
+            min={1}
+            max={rgbStore.text.length / rgbStore.colors.length}
+            value={rgbStore.colorLength}
+            class={{ 'w-full opacity-100!': true }}
+            onIncrement$={() => rgbStore.colorLength++}
+            onDecrement$={() => rgbStore.colorLength--}
+          >
+            {t('rgb.colors.charsPer@@Characters per color')}
+          </NumberInput>
+        }
         <div class="flex flex-col gap-1">
           <Toggle
             id="disperse"
@@ -48,19 +63,6 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
           </p>
         </div>
         {rgbStore.colorFormat.color != 'MiniMessage' && <>
-          <NumberInput
-            input
-            disabled
-            id="colorLength"
-            min={1}
-            max={rgbStore.text.length / rgbStore.colors.length}
-            value={rgbStore.colorLength}
-            class={{ 'w-full opacity-100!': true }}
-            onIncrement$={() => rgbStore.colorLength++}
-            onDecrement$={() => rgbStore.colorLength--}
-          >
-            {t('rgb.colors.charsPer@@Characters per color')}
-          </NumberInput>
           <div class="flex flex-col gap-1">
             <Toggle
               id="trimspaces"
