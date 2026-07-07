@@ -77,7 +77,7 @@ const InputField = component$(
     const rgbSegments = useContext(rgbSegmentsContext, null);
 
     const selection = useContext(selectionContext, useSignal<Selection>());
-    const rawEdit = useSignal(false);
+    const rawEdit = useContext(rawEditModeContext);
 
     const syncSelection = $((el: HTMLTextAreaElement) => {
       const start = el.selectionStart ?? 0;
@@ -548,7 +548,7 @@ export default component$(
               <button
                 type="button"
                 class={{
-                  'rounded-lum-1 lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg flex items-center justify-center p-1 transition-colors': true,
+                  'lum-btn p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75': true,
                   'text-lum-primary-active!': rawEditMode.value,
                   'text-lum-text-secondary': !rawEditMode.value,
                 }}
