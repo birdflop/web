@@ -1,9 +1,6 @@
 import {
-  $,
   component$,
   useContext,
-  useOnDocument,
-  useSignal,
   useComputed$,
 } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
@@ -18,8 +15,7 @@ import {
   ColorStop,
   rgbColorDefaults,
 } from '@birdflop/rgbirdflop';
-import { ColorPicker, NumberInput } from '@luminescent/ui-qwik';
-import { Plus, Trash } from 'lucide-icons-qwik';
+import { Plus } from 'lucide-icons-qwik';
 
 /**
  * Generates a CSS gradient string using the specified gradient type
@@ -67,22 +63,8 @@ export function getColors(rgbStore: typeof rgbColorDefaults, id: string) {
 
 export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
   const rgbStore = useContext(rgbStoreContext);
-  const opened = useSignal(-1);
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const colors = useComputed$(() => getColors(rgbStore, id));
-
-  useOnDocument(
-    'click',
-    $((e) => {
-      if (
-        e.target instanceof HTMLElement &&
-        !e.target.closest(`#colormap${id}-color-popup`) &&
-        !e.target.closest(`#colormap${id}`)
-      ) {
-        opened.value = -1;
-      }
-    }),
-  );
 
   return (
     <div
@@ -164,7 +146,6 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
             document.addEventListener(
               'mousemove',
               (e) => {
-                opened.value = -1;
                 el.classList.add('scale-150');
                 let pos = ((e.clientX - rect.left) / rect.width) * 100;
                 if (pos < 0) pos = 0;
@@ -186,108 +167,8 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
               { signal: abortController.signal },
             );
           }}
-          onMouseUp$={() => {
-            // set opened value
-            if (opened.value == i) return (opened.value = -1);
-            else opened.value = i;
-
-            const picker = document.getElementById(
-              `colormap${id}-color-picker`,
-            );
-            const popup = document.getElementById(`colormap${id}-color-popup`);
-            if (!picker || !popup) return;
-
-            // set the color picker's value and trigger input to update color picker
-            picker.dataset.value = color.hex;
-            picker.dispatchEvent(new Event('input'));
-
-            // set the position of the popup
-            if (color.pos < 50) {
-              popup.style.left = `${color.pos}%`;
-              popup.style.right = 'auto';
-            } else {
-              popup.style.left = 'auto';
-              popup.style.right = `${100 - color.pos}%`;
-            }
-          }}
         />
       ))}
-      <div
-        id={`colormap${id}-color-popup`}
-        stoppropagation:mousedown
-        stoppropagation:click
-        class={{
-          hidden: true,
-          'sm:flex': opened.value > -1,
-          'absolute top-full z-1000 mt-2 flex-col gap-2 motion-safe:transition-all': true,
-          'animate-in fade-in slide-in-from-top-2': true,
-        }}
-        style={{
-          '--lum-border-radius': '1rem',
-          left:
-            colors.value[opened.value]?.pos < 50
-              ? `${colors.value[opened.value]?.pos}%`
-              : 'auto',
-          right:
-            colors.value[opened.value]?.pos >= 50
-              ? `${100 - colors.value[opened.value]?.pos}%`
-              : 'auto',
-        }}
-      >
-        <div class="lum-card flex flex-row items-end justify-evenly gap-1 p-2">
-          <NumberInput
-            input
-            id={`colorlist${id}-color-pos`}
-            min={0}
-            max={100}
-            value={Math.round(colors.value[opened.value]?.pos)}
-            onChange$={(e, el) => {
-              const newColors = colors.value.slice(0);
-              let newPos = Number(el.value);
-              if (newPos < 0) newPos = 0;
-              if (newPos > 100) newPos = 100;
-              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-              rgbStore[colorsKey] = sortColors(newColors);
-            }}
-            onIncrement$={() => {
-              const newColors = colors.value.slice(0);
-              let newPos = newColors[opened.value].pos + 1;
-              if (newPos > 100) newPos = 100;
-              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-              rgbStore[colorsKey] = sortColors(newColors);
-            }}
-            onDecrement$={() => {
-              const newColors = colors.value.slice(0);
-              let newPos = newColors[opened.value].pos - 1;
-              if (newPos < 0) newPos = 0;
-              newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-              rgbStore[colorsKey] = sortColors(newColors);
-            }}
-          >
-            Position (%)
-          </NumberInput>
-          <button
-            class="lum-btn lum-grad-bg-red hover:lum-bg-red p-2"
-            onClick$={() => {
-              const newColors = colors.value.slice(0);
-              newColors.splice(opened.value, 1);
-              rgbStore[colorsKey] = newColors;
-            }}
-          >
-            <Trash size={20} />
-          </button>
-        </div>
-        <ColorPicker
-          id={`colormap${id}-color-picker`}
-          value={colors.value[opened.value]?.hex}
-          onInput$={(newColor) => {
-            const newColors = colors.value.slice(0);
-            newColors[opened.value].hex = newColor;
-            rgbStore[colorsKey] = sortColors(newColors);
-          }}
-          horizontal
-        />
-      </div>
     </div>
   );
 });

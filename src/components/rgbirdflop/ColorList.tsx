@@ -397,7 +397,7 @@ export default component$<ColorListProps>((props) => {
                 const colorContainer = document.getElementById(
                   `colorlist${id}-color-${i + 1}`,
                 )!;
-                popup.style.top = `${colorContainer.offsetTop + colorContainer.offsetHeight + 8}px`;
+                popup.style.setProperty('--popup-top', `${colorContainer.offsetTop}px`);
 
                 // set the color picker's value and trigger input to update color picker
                 picker.dataset.value = color.hex;
@@ -423,7 +423,7 @@ export default component$<ColorListProps>((props) => {
           class={{
             flex: opened.value > -1,
             hidden: opened.value < 0,
-            'absolute z-10 flex-col gap-2 motion-safe:transition-all': true,
+            'absolute left-15 sm:left-full top-[calc(var(--popup-top)+2.4rem)] sm:top-(--popup-top) z-10 flex-col gap-2 motion-safe:transition-all': true,
             'animate-in fade-in slide-in-from-top-2': true,
           }}
           style={{
