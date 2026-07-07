@@ -347,7 +347,7 @@ export default component$(() => {
               class={{
                 [notification.bgColor ?? 'lum-grad-bg-lum-input-bg/60']: true,
                 'lum-card sm:rounded-lum max-w-lg min-w-84 gap-0 p-4 text-left backdrop-blur-xl': true,
-                'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 anim-duration-500': true,
+                'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 duration-500': true,
               }}
               key={notification.id}
               onClick$={async (e, el) => {
@@ -405,7 +405,7 @@ export default component$(() => {
           class={{
             'lum-grad-bg-lum-input-bg/60 fixed bottom-4 left-4': true,
             'lum-card sm:rounded-lum min-w-84 gap-0 p-4 text-left backdrop-blur-xl': true,
-            'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 anim-duration-500': true,
+            'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 duration-500': true,
           }}
           style={{
             '--lum-border-radius': '1rem',

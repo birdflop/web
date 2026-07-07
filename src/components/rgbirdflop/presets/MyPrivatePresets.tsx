@@ -73,8 +73,8 @@ export default component$(() => {
         class={{
           'text-lum-text m-auto hidden overflow-visible open:flex': true,
           'lum-card lum-grad-bg-lum-card-bg/50 min-w-1/4 drop-shadow-2xl backdrop-blur-xl': true,
-          'open:animate-in open:fade-in open:slide-in-from-top-8 open:anim-duration-300': true,
-          'animate-out fade-out slide-in-from-top-8 anim-duration-300': true,
+          'open:animate-in open:fade-in open:slide-in-from-top-8 open:duration-300': true,
+          'animate-out fade-out slide-in-from-top-8 duration-300': true,
         }}
       >
         <div class="border-lum-border/10 flex flex-col border-b pb-4">

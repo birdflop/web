@@ -70,14 +70,14 @@ export default component$(() => {
         </p>
         <div class="mb-2 flex flex-wrap gap-2">
           <a
-            class="lum-btn lum-bg-blue hover:lum-bg-blue"
+            class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
             href="https://status.birdflop.com/"
           >
             <Activity size={20} />
             {t('nav.hosting.nodeStats.overview@@Overview')}
           </a>
           <a
-            class="lum-btn lum-bg-blue hover:lum-bg-blue"
+            class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
             href="https://netdata.birdflop.com/panel"
           >
             <AppWindow size={20} />

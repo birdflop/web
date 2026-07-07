@@ -72,7 +72,7 @@ export default component$(() => {
               <h1
                 class={{
                   'relative flex items-center bg-clip-text text-7xl font-extrabold text-transparent drop-shadow-lg xl:text-8xl': true,
-                  'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600': true,
+                  'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600': true,
                 }}
               >
                 <LogoBirdflop
@@ -99,7 +99,7 @@ export default component$(() => {
               }}
             >
               <div class="absolute -inset-2 rounded-2xl blur-lg backdrop-blur-md" />
-              <h2 class="animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800 text-xl! font-bold drop-shadow-md md:text-2xl! xl:text-3xl!">
+              <h2 class="animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-800 text-xl! font-bold drop-shadow-md md:text-2xl! xl:text-3xl!">
                 The only 501(c)(3) nonprofit server host{' '}
                 <br class="hidden sm:block" /> dedicated to{' '}
                 <br class="sm:hidden" />
@@ -122,19 +122,19 @@ export default component$(() => {
           <div class="mt-8 flex flex-col gap-2">
             <a
               href="#plans"
-              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-grad-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-600 text-xl backdrop-blur-sm"
+              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600 text-xl backdrop-blur-sm"
             >
               <Server size={32} /> Hosting
             </a>
             <Link
               href="/resources"
-              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-grad-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-800 text-xl backdrop-blur-sm"
+              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-800 text-xl backdrop-blur-sm"
             >
               <Box size={32} /> Resources
             </Link>
             <a
               href={donateLink}
-              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-grad-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:anim-duration-1000 text-xl backdrop-blur-sm"
+              class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-1000 text-xl backdrop-blur-sm"
             >
               <PiggyBank size={32} /> Donate Today
             </a>
