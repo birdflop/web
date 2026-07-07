@@ -376,7 +376,7 @@ export default component$<ColorListProps>((props) => {
                     getBrightness(hexToRGB(color.hex)) < 126,
                   'text-gray-700 hover:text-gray-700':
                     getBrightness(hexToRGB(color.hex)) > 126,
-                  'lum-input lum-btn-p-1 lum-grad-bg w-full rounded-sm': true,
+                  'lum-input font-mono lum-btn-p-1 lum-grad-bg w-full rounded-sm': true,
                 }}
                 style={`--bg-color: ${color.hex};`}
                 value={color.hex}
