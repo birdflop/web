@@ -180,21 +180,6 @@ export default component$<ColorListProps>((props) => {
       </div>
 
       <Slot />
-      {rgbStore.colorFormat.color != 'MiniMessage' && id == 'text' && (
-        <NumberInput
-          input
-          disabled
-          id="colorLength"
-          min={1}
-          max={resolvedTextLength.value / colors.value.length}
-          value={rgbStore.colorLength}
-          class={{ 'w-full opacity-100!': true }}
-          onIncrement$={() => rgbStore.colorLength++}
-          onDecrement$={() => rgbStore.colorLength--}
-        >
-          {t('rgb.colors.charsPer@@Characters per color')}
-        </NumberInput>
-      )}
       <div
         class={{
           'lum-card flex-row items-center gap-1 p-1 transition-colors duration-200': true,

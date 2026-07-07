@@ -1,7 +1,7 @@
 import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { Toggle } from '@luminescent/ui-qwik';
+import { NumberInput, Toggle } from '@luminescent/ui-qwik';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -47,7 +47,20 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             )}
           </p>
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && (
+        {rgbStore.colorFormat.color != 'MiniMessage' && <>
+          <NumberInput
+            input
+            disabled
+            id="colorLength"
+            min={1}
+            max={rgbStore.text.length / rgbStore.colors.length}
+            value={rgbStore.colorLength}
+            class={{ 'w-full opacity-100!': true }}
+            onIncrement$={() => rgbStore.colorLength++}
+            onDecrement$={() => rgbStore.colorLength--}
+          >
+            {t('rgb.colors.charsPer@@Characters per color')}
+          </NumberInput>
           <div class="flex flex-col gap-1">
             <Toggle
               id="trimspaces"
@@ -64,8 +77,6 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
               )}
             </p>
           </div>
-        )}
-        {rgbStore.colorFormat.color != 'MiniMessage' && (
           <div class="flex flex-col gap-1">
             <Toggle
               id="lowercase"
@@ -82,7 +93,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
               )}
             </p>
           </div>
-        )}
+        </>}
       </div>
     </div>
   );
