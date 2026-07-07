@@ -34,7 +34,7 @@ export default component$(() => {
           const range = segmentRange(rgbSegments.value, i);
           const active = selection.value
             ? selection.value.start === range.start &&
-            selection.value.end === range.end
+              selection.value.end === range.end
             : false;
           return (
             <div

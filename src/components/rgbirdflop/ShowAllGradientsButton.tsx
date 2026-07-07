@@ -12,7 +12,9 @@ export const ShowAllGradientsButton = component$<{
         'text-lum-primary': props.showAllGradients.value,
         'text-lum-text-secondary': !props.showAllGradients.value,
       }}
-      onClick$={() => (props.showAllGradients.value = !props.showAllGradients.value)}
+      onClick$={() =>
+        (props.showAllGradients.value = !props.showAllGradients.value)
+      }
       title={
         props.showAllGradients.value
           ? 'Show only selected gradient'

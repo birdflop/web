@@ -58,10 +58,7 @@ export function analyzeJvmFlags(
           value:
             'Allocate at least 6-10GB of ram to your server if you can afford it.',
         });
-      if (
-        (1000 * playerCount) / max_mem > 6 &&
-        max_mem < 10000
-      )
+      if ((1000 * playerCount) / max_mem > 6 && max_mem < 10000)
         fields.push({
           name: '❌ Low Memory',
           value: 'You should be using more RAM with this many players.',

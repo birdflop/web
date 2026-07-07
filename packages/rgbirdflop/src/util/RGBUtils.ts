@@ -654,7 +654,10 @@ function renderTemplateGradient(
 
     const hex = rgbToHex(gradient.next());
     const fmt = getFormattingAtOffset(charIndex, rgbOptions);
-    const skipColor = previousHex !== null && hex === previousHex && isFormattingEqual(fmt, previousFmt);
+    const skipColor =
+      previousHex !== null &&
+      hex === previousHex &&
+      isFormattingEqual(fmt, previousFmt);
     out += renderTemplateSegment(hex, segment, fmt, rgbOptions, skipColor);
     previousHex = hex;
     previousFmt = fmt;

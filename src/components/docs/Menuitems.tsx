@@ -1,4 +1,4 @@
-import { component$, $, useContext, QRL } from '@builder.io/qwik';
+import { component$, useContext, QRL } from '@builder.io/qwik';
 import { ContentMenu, Link } from '@builder.io/qwik-city';
 import { MarkdownItems } from '~/routes/docs/layout';
 import Accordion from '../Elements/Accordion';
@@ -109,30 +109,28 @@ export const MenuItems = component$(
                     'lum-btn-p-1 rounded-lum-1 text-sm': level > 0,
                     'text-indigo-500!': item.href === pathname,
                   }}
-                  onMouseOver$={$(
-                    (
-                      evt,
-                      target: HTMLAnchorElement & { __prefetchLink: number },
-                    ) => {
-                      const canHover =
-                        window.matchMedia('(hover: hover)').matches;
-                      if (!canHover) return;
+                  onMouseOver$={(
+                    evt,
+                    target: HTMLAnchorElement & { __prefetchLink: number },
+                  ) => {
+                    const canHover =
+                      window.matchMedia('(hover: hover)').matches;
+                    if (!canHover) return;
 
-                      if (!target?.href) return;
+                    if (!target?.href) return;
 
-                      const fiveMinutesInMs = 5 * 60 * 1000;
-                      const now = Date.now();
-                      const timeGap = now - (target.__prefetchLink || 0);
-                      if (timeGap < fiveMinutesInMs) return;
+                    const fiveMinutesInMs = 5 * 60 * 1000;
+                    const now = Date.now();
+                    const timeGap = now - (target.__prefetchLink || 0);
+                    if (timeGap < fiveMinutesInMs) return;
 
-                      const prefetchLink = document.createElement('link');
-                      prefetchLink.href = target.href;
-                      prefetchLink.rel = 'prefetch';
-                      document.head.appendChild(prefetchLink);
+                    const prefetchLink = document.createElement('link');
+                    prefetchLink.href = target.href;
+                    prefetchLink.rel = 'prefetch';
+                    document.head.appendChild(prefetchLink);
 
-                      target.__prefetchLink = now;
-                    },
-                  )}
+                    target.__prefetchLink = now;
+                  }}
                   onClick$={onClick$}
                 >
                   {item.href && renderUpdated(item.href, markdownItems)}

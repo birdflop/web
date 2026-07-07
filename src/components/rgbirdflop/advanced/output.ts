@@ -190,7 +190,10 @@ function renderTemplate(
         }
         const hex = nextHex();
         const fmt = getFormattingAtOffset(charOffset + rel, options);
-        const skipColor = previousHex !== null && hex === previousHex && isFormattingEqual(fmt, previousFmt);
+        const skipColor =
+          previousHex !== null &&
+          hex === previousHex &&
+          isFormattingEqual(fmt, previousFmt);
         segOut += renderTemplateSegment(hex, chunk, fmt, options, skipColor);
         previousHex = hex;
         previousFmt = fmt;

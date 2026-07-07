@@ -1,4 +1,9 @@
-import type { ServerPlugin, PluginVersion, PluginType, PluginSource } from './ServerPlugin';
+import type {
+  ServerPlugin,
+  PluginVersion,
+  PluginType,
+  PluginSource,
+} from './ServerPlugin';
 
 export abstract class BasePlugin implements ServerPlugin {
   id: number | string;

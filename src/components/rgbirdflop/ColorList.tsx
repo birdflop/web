@@ -12,7 +12,6 @@ import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ShowAllGradientsButton } from './ShowAllGradientsButton';
 import {
-  swapItems,
   sortColors,
   getBrightness,
   getRandomColor,
@@ -26,12 +25,11 @@ import {
 } from '@birdflop/rgbirdflop';
 import {
   ArrowRightLeft,
-  ChevronDown,
-  ChevronUp,
   Combine,
   Copy,
   Dices,
   Eclipse,
+  GripVertical,
   Minus,
   MoveHorizontal,
   Palette,
@@ -47,6 +45,17 @@ import { getColors } from './ColorMap';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
+
+const moveItem = (array: ColorStop[], fromIndex: number, toIndex: number) => {
+  const arr = array.map((c) => ({ ...c }));
+  const positions = arr.map((item) => item.pos);
+  const [movedItem] = arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, movedItem);
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].pos = positions[i];
+  }
+  return arr;
+};
 
 type ColorListProps = {
   hidden?: boolean;
@@ -67,8 +76,12 @@ export default component$<ColorListProps>((props) => {
   const showAllGradients = useContext(showAllGradientsContext);
 
   const colors = useComputed$(() => props.colors ?? getColors(rgbStore, id));
-  const resolvedGradientType = useComputed$(() => props.gradientType ?? rgbStore.gradientType);
-  const resolvedTextLength = useComputed$(() => props.textLength ?? rgbStore.text.length);
+  const resolvedGradientType = useComputed$(
+    () => props.gradientType ?? rgbStore.gradientType,
+  );
+  const resolvedTextLength = useComputed$(
+    () => props.textLength ?? rgbStore.text.length,
+  );
 
   const setColors = $(async (newColors: ColorStop[]) => {
     if (props.onColorsChange$) {
@@ -77,6 +90,10 @@ export default component$<ColorListProps>((props) => {
       rgbStore[colorsKey] = newColors;
     }
   });
+
+  const draggedIndex = useSignal<number | null>(null);
+  const draggableIndex = useSignal<number | null>(null);
+  const dragOverIndex = useSignal<number | null>(null);
 
   useOnDocument(
     'click',
@@ -104,13 +121,15 @@ export default component$<ColorListProps>((props) => {
         <span class="flex flex-1 items-center gap-2">
           <Palette />
           {colors.value.length} {t('rgb.colors.title@@Colors')}
-          <button class="lum-btn p-1 rounded-r-sm -mr-1"
+          <button
+            class="lum-btn -mr-1 rounded-r-sm p-1"
             onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.pop();
               const mappedColors = newColors.map((color, i) => ({
                 hex: color.hex,
-                pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
+                pos:
+                  Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
               }));
               void setColors(mappedColors);
             }}
@@ -118,7 +137,8 @@ export default component$<ColorListProps>((props) => {
           >
             <Minus size={20} />
           </button>
-          <button class="lum-btn p-1 rounded-l-sm"
+          <button
+            class="lum-btn rounded-l-sm p-1"
             onClick$={() => {
               const newColors = [
                 ...colors.value,
@@ -128,7 +148,8 @@ export default component$<ColorListProps>((props) => {
               ];
               const mappedColors = newColors.map((color, i) => ({
                 hex: color.hex,
-                pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
+                pos:
+                  Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
               }));
               void setColors(mappedColors);
             }}
@@ -174,11 +195,13 @@ export default component$<ColorListProps>((props) => {
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       )}
-      <div class="flex gap-1 *:w-full">
+      <div
+        class={{
+          'lum-card flex-row items-center gap-1 p-1 transition-colors duration-200': true,
+          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1 *:justify-center *:p-1': true,
+        }}
+      >
         <button
-          class={{
-            'lum-btn justify-center p-1': true,
-          }}
           onClick$={() => {
             const newColors = colors.value.map((color) => ({
               hex: getRandomColor(),
@@ -192,9 +215,6 @@ export default component$<ColorListProps>((props) => {
         </button>
         {id == 'shadow' && (
           <button
-            class={{
-              'lum-btn justify-center p-1': true,
-            }}
             onClick$={() => {
               void setColors(rgbStore.colors);
             }}
@@ -204,9 +224,6 @@ export default component$<ColorListProps>((props) => {
           </button>
         )}
         <button
-          class={{
-            'lum-btn justify-center p-1': true,
-          }}
           disabled={colors.value.length >= resolvedTextLength.value}
           onClick$={() => {
             const newColors = [...colors.value, ...colors.value];
@@ -217,9 +234,6 @@ export default component$<ColorListProps>((props) => {
           <Copy size={20} />
         </button>
         <button
-          class={{
-            'lum-btn justify-center p-1': true,
-          }}
           onClick$={() => {
             const newColors = colors.value
               .slice()
@@ -232,9 +246,6 @@ export default component$<ColorListProps>((props) => {
           <ArrowRightLeft size={20} />
         </button>
         <button
-          class={{
-            'lum-btn justify-center p-1': true,
-          }}
           disabled={colors.value.length < 3}
           onClick$={() => {
             const shuffledColors = colors.value
@@ -251,9 +262,6 @@ export default component$<ColorListProps>((props) => {
           <Shuffle size={20} />
         </button>
         <button
-          class={{
-            'lum-btn justify-center p-1': true,
-          }}
           onClick$={() => {
             const newColors = colors.value.map((color) => {
               const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
@@ -267,12 +275,12 @@ export default component$<ColorListProps>((props) => {
         </button>
         {!rgbStore.disperse && (
           <button
-            class="lum-btn justify-center p-1"
             disabled={
               !colors.value.find((color, i) => {
                 return (
                   color.pos !=
-                  Math.round((100 / (colors.value.length - 1)) * i * 1000) / 1000
+                  Math.round((100 / (colors.value.length - 1)) * i * 1000) /
+                    1000
                 );
               })
             }
@@ -290,26 +298,91 @@ export default component$<ColorListProps>((props) => {
           <div
             key={`${i}/${colors.value.length}`}
             id={`colorlist${id}-color-${i + 1}`}
-            class="relative flex gap-1"
+            class={{
+              'relative flex items-center gap-1 transition-all duration-200': true,
+              'scale-[0.98] opacity-40': draggedIndex.value === i,
+            }}
+            draggable={draggableIndex.value === i}
+            onDragStart$={() => {
+              draggedIndex.value = i;
+            }}
+            onDragOver$={(e) => {
+              e.preventDefault();
+            }}
+            onDragEnter$={() => {
+              dragOverIndex.value = i;
+            }}
+            onDragLeave$={() => {
+              if (dragOverIndex.value === i) {
+                dragOverIndex.value = null;
+              }
+            }}
+            onDrop$={() => {
+              if (draggedIndex.value === null || draggedIndex.value === i)
+                return;
+              const newColors = moveItem(colors.value, draggedIndex.value, i);
+              void setColors(newColors);
+              draggedIndex.value = null;
+              draggableIndex.value = null;
+              dragOverIndex.value = null;
+            }}
+            onDragEnd$={() => {
+              draggedIndex.value = null;
+              draggableIndex.value = null;
+              dragOverIndex.value = null;
+            }}
           >
-            <div class="flex flex-col gap-1">
+            {dragOverIndex.value === i &&
+              draggedIndex.value !== null &&
+              draggedIndex.value > i && (
+              <div class="bg-lum-accent pointer-events-none absolute -top-1 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+              </div>
+            )}
+            {dragOverIndex.value === i &&
+              draggedIndex.value !== null &&
+              draggedIndex.value < i && (
+              <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-1 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+              </div>
+            )}
+            <label
+              for={`colorlist${id}-color-${i + 1}-input`}
+              class="text-lum-text-secondary w-6 font-mono"
+            >
+              {i + 1}
+            </label>
+            <div
+              class={{
+                'flex flex-col justify-end': true,
+                'pointer-events-none': draggedIndex.value !== null,
+              }}
+            >
               <button
-                class="lum-btn rounded-b-sm p-1"
-                onClick$={() => void setColors(swapItems(colors.value, i, i - 1))}
+                type="button"
+                class="lum-btn cursor-grab rounded-r-sm p-1.5 active:cursor-grabbing"
+                onMouseDown$={() => {
+                  draggableIndex.value = i;
+                }}
+                onMouseUp$={() => {
+                  draggableIndex.value = null;
+                }}
+                onTouchStart$={() => {
+                  draggableIndex.value = i;
+                }}
+                onTouchEnd$={() => {
+                  draggableIndex.value = null;
+                }}
               >
-                <ChevronUp size={20} />
-              </button>
-              <button
-                class="lum-btn rounded-t-sm p-1"
-                onClick$={() => void setColors(swapItems(colors.value, i, i + 1))}
-              >
-                <ChevronDown size={20} />
+                <GripVertical size={20} />
               </button>
             </div>
-            <div class="flex flex-col justify-end">
-              <label for={`colorlist${id}-color-${i + 1}-input`}>
-                {t('rgb.colors.color@@Color')} {i + 1}
-              </label>
+            <div
+              class={{
+                'flex flex-col justify-end': true,
+                'pointer-events-none': draggedIndex.value !== null,
+              }}
+            >
               <input
                 key={`colorlist${id}-color-${i + 1}`}
                 id={`colorlist${id}-color-${i + 1}-input`}
@@ -318,7 +391,7 @@ export default component$<ColorListProps>((props) => {
                     getBrightness(hexToRGB(color.hex)) < 126,
                   'text-gray-700 hover:text-gray-700':
                     getBrightness(hexToRGB(color.hex)) > 126,
-                  'lum-input lum-btn-p-1 lum-grad-bg w-full rounded-r-sm': true,
+                  'lum-input lum-btn-p-1 lum-grad-bg w-full rounded-sm': true,
                 }}
                 style={`--bg-color: ${color.hex};`}
                 value={color.hex}
@@ -370,7 +443,12 @@ export default component$<ColorListProps>((props) => {
                 }}
               />
             </div>
-            <div class="flex flex-col justify-end">
+            <div
+              class={{
+                'flex flex-col justify-end': true,
+                'pointer-events-none': draggedIndex.value !== null,
+              }}
+            >
               <button
                 class="lum-btn lum-grad-bg-red hover:lum-bg-red rounded-l-sm p-1.5"
                 onClick$={() => {

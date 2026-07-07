@@ -192,12 +192,12 @@ export default component$(
             textLength={
               selection.value ? selection.value.end - selection.value.start : 1
             }
-            onColorsChange$={$(async (newColors) => {
+            onColorsChange$={async (newColors) => {
               await writeConfig({ colors: newColors });
-            })}
-            onGradientTypeChange$={$(async (newGradientType) => {
+            }}
+            onGradientTypeChange$={async (newGradientType) => {
               await writeConfig({ gradientType: newGradientType });
-            })}
+            }}
           />
         )}
       </div>
