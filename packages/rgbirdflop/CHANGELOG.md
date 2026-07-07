@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.0](https://github.com/birdflop/web/compare/v0.2.0...v0.3.0) (2026-07-07)
+
+
+### Features
+
+* Fonts for RGB tool ([0cfff23](https://github.com/birdflop/web/commit/0cfff23da711066b9a5f34e37a85c6b2b584333f)), closes [#224](https://github.com/birdflop/web/issues/224)
+* implement small text font transformation ([86b1b91](https://github.com/birdflop/web/commit/86b1b91d65d906f41247c845132c98f0832917f4))
+* new color list with more compact ui and drag-and-drop handles ([63a1763](https://github.com/birdflop/web/commit/63a1763b845cac33d0e4083537966dabadc0251d))
+* smarter hex code generation with check for if same color per letter ([30d52e6](https://github.com/birdflop/web/commit/30d52e65966b910e75b55309bb603a3466934d8b))
+* translate untranslated keys and clean up code formatting ig ([31003fd](https://github.com/birdflop/web/commit/31003fd70b7b53ed2670714dba4c2249eeee0c82))
+
+
+### Code Refactoring
+
+* abstract gradient preview rendering and clean up AnimTAB frame generation logic, fix cookie issues ([4827f1a](https://github.com/birdflop/web/commit/4827f1a5257f3a5662bac9be4e9ad254491733a5))
+* consolidate segment color editing logic into the reusable ColorList component ([15319b6](https://github.com/birdflop/web/commit/15319b6261119abf83bba6802e9f4edff4bc7ffd))
+* decompose RGBirdflop component and centralize state management via RGBirdflopBase ([89aff16](https://github.com/birdflop/web/commit/89aff167b8ddebf358956a1adf3dad5f8cecedeb))
+* decouple advanced segments and rgb options state across the advanced RGB editor component suite. ([ea02f8a](https://github.com/birdflop/web/commit/ea02f8a2a7c40a485158f094f8ba0efdbbe8d49e))
+* introduce BasePlugin class, modularize ESLint ignores, and extract JVM flag analysis logic ([186e2e7](https://github.com/birdflop/web/commit/186e2e75c670e99bead01dd2b3b84e2d39357d2c))
+* prettier and eslint ([2a0239b](https://github.com/birdflop/web/commit/2a0239bff1983ebe897be07fb2d10b7b2da8026a))
+
 ## [0.2.0](https://github.com/birdflop/web/compare/v0.1.17...v0.2.0) (2026-07-01)
 
 ### Features
