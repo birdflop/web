@@ -27,17 +27,14 @@ export default component$(() => {
   const rgbSegments = useContext(rgbSegmentsContext);
   const selection = useContext(selectionContext);
 
-  // Only one part means nothing meaningful to manage yet — keep the UI uncluttered.
-  if (rgbSegments.value.length <= 1) return null;
-
   return (
-    <div class="border-lum-border/10 flex flex-col gap-2 border-t pt-4">
+    <div class="flex flex-col gap-2">
       <div class="flex flex-wrap gap-2">
         {rgbSegments.value.map((seg, i) => {
           const range = segmentRange(rgbSegments.value, i);
           const active = selection.value
             ? selection.value.start === range.start &&
-              selection.value.end === range.end
+            selection.value.end === range.end
             : false;
           return (
             <div

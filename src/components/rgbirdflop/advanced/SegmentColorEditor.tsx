@@ -6,15 +6,12 @@ import {
   useOnDocument,
   useSignal,
 } from '@builder.io/qwik';
-import { ColorPicker, SelectMenuRaw } from '@luminescent/ui-qwik';
+import { ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { ShowAllGradientsButton } from '../ShowAllGradientsButton';
 import {
   getRandomColor,
   rgbColorDefaultsWithColorMode,
   type ColorStop,
-  type GradientType,
-  GRADIENT_TYPES,
 } from '@birdflop/rgbirdflop';
 import { Ban, Droplet, Palette } from 'lucide-icons-qwik';
 import {
@@ -27,7 +24,6 @@ import {
   restoreSelection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { showAllGradientsContext } from '../RGBirdflop';
 import ColorList from '../ColorList';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
@@ -44,7 +40,6 @@ export default component$(
     const t = inlineTranslate();
     const rgbSegments = useContext(rgbSegmentsContext);
     const selection = useContext(selectionContext);
-    const showAllGradients = useContext(showAllGradientsContext);
     const opened = useSignal(-1);
 
     const hasSelection = useComputed$(
@@ -113,29 +108,8 @@ export default component$(
         }}
         id={'colorlist' + id}
       >
-        <div class="flex items-center gap-1 py-2 font-semibold">
-          <span class="flex flex-1 items-center gap-2">
-            <Palette />
-            {t('rgb.colors.title@@Colors')}
-          </span>
-          <SelectMenuRaw
-            title={t('rgb.colors.gradientType@@Gradient Type')}
-            id="gradientType"
-            value={current.value.gradientType}
-            class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
-            onChange$={(e, el) => {
-              const value = el.value as GradientType;
-              void writeConfig({ gradientType: value });
-            }}
-            values={GRADIENT_TYPES.map((type) => ({
-              name: type,
-              value: type,
-            }))}
-          />
-          <ShowAllGradientsButton showAllGradients={showAllGradients} />
-        </div>
         {/* Color mode switch */}
-        <div class="flex gap-1 *:flex-1">
+        <div class="flex flex-col gap-1">
           <button
             class={{
               'lum-btn justify-center gap-2 rounded-sm p-2': true,
@@ -180,6 +154,15 @@ export default component$(
           </button>
         </div>
 
+        {mode != 'gradient' && (
+          <div class="flex items-center gap-1 py-2 font-semibold">
+            <span class="flex flex-1 items-center gap-2">
+              <Palette />
+              {t('rgb.colors.title@@Colors')}
+            </span>
+          </div>
+        )}
+
         {mode === 'none' && (
           <p class="text-lum-text-secondary px-1 text-xs">
             {t(
@@ -215,7 +198,6 @@ export default component$(
             onGradientTypeChange$={$(async (newGradientType) => {
               await writeConfig({ gradientType: newGradientType });
             })}
-            hideHeader
           />
         )}
       </div>

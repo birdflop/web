@@ -6,6 +6,7 @@ import {
   useContext,
   useOnDocument,
   useSignal,
+  useComputed$,
 } from '@builder.io/qwik';
 import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
@@ -31,8 +32,10 @@ import {
   Copy,
   Dices,
   Eclipse,
+  Minus,
   MoveHorizontal,
   Palette,
+  Plus,
   Shuffle,
   Trash,
 } from 'lucide-icons-qwik';
@@ -53,22 +56,19 @@ type ColorListProps = {
   textLength?: number;
   onColorsChange$?: PropFunction<(colors: ColorStop[]) => void>;
   onGradientTypeChange$?: PropFunction<(gradientType: GradientType) => void>;
-  hideHeader?: boolean;
 };
 
 export default component$<ColorListProps>((props) => {
-  const { hidden, id = 'text', hideHeader = false } = props;
+  const { hidden, id = 'text' } = props;
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const showAllGradients = useContext(showAllGradientsContext);
 
-  const resolvedColors = props.colors ?? getColors(rgbStore, id);
-  const resolvedGradientType = props.gradientType ?? rgbStore.gradientType;
-  const resolvedTextLength = props.textLength ?? rgbStore.text.length;
-
-  const colors = resolvedColors;
+  const colors = useComputed$(() => props.colors ?? getColors(rgbStore, id));
+  const resolvedGradientType = useComputed$(() => props.gradientType ?? rgbStore.gradientType);
+  const resolvedTextLength = useComputed$(() => props.textLength ?? rgbStore.text.length);
 
   const setColors = $(async (newColors: ColorStop[]) => {
     if (props.onColorsChange$) {
@@ -100,33 +100,63 @@ export default component$<ColorListProps>((props) => {
       }}
       id={'colorlist' + id}
     >
-      {!hideHeader && (
-        <div class="flex items-center gap-1 py-2 font-semibold">
-          <span class="flex flex-1 items-center gap-2">
-            <Palette />
-            {t('rgb.colors.title@@Colors')}
-          </span>
-          <SelectMenuRaw
-            title={t('rgb.colors.gradientType@@Gradient Type')}
-            id="gradientType"
-            value={resolvedGradientType}
-            class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
-            onChange$={async (e, el) => {
-              const value = el.value as GradientType;
-              if (props.onGradientTypeChange$) {
-                await props.onGradientTypeChange$(value);
-              } else {
-                rgbStore.gradientType = value;
-              }
+      <div class="flex items-center gap-1 py-2 font-semibold">
+        <span class="flex flex-1 items-center gap-2">
+          <Palette />
+          {colors.value.length} {t('rgb.colors.title@@Colors')}
+          <button class="lum-btn p-1 rounded-r-sm -mr-1"
+            onClick$={() => {
+              const newColors = colors.value.slice(0);
+              newColors.pop();
+              const mappedColors = newColors.map((color, i) => ({
+                hex: color.hex,
+                pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
+              }));
+              void setColors(mappedColors);
             }}
-            values={GRADIENT_TYPES.map((type) => ({
-              name: type,
-              value: type,
-            }))}
-          />
-          <ShowAllGradientsButton showAllGradients={showAllGradients} />
-        </div>
-      )}
+            disabled={colors.value.length <= 1}
+          >
+            <Minus size={20} />
+          </button>
+          <button class="lum-btn p-1 rounded-l-sm"
+            onClick$={() => {
+              const newColors = [
+                ...colors.value,
+                {
+                  hex: getRandomColor(),
+                },
+              ];
+              const mappedColors = newColors.map((color, i) => ({
+                hex: color.hex,
+                pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
+              }));
+              void setColors(mappedColors);
+            }}
+          >
+            <Plus size={20} />
+          </button>
+        </span>
+
+        <SelectMenuRaw
+          title={t('rgb.colors.gradientType@@Gradient Type')}
+          id="gradientType"
+          value={resolvedGradientType.value}
+          class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
+          onChange$={async (e, el) => {
+            const value = el.value as GradientType;
+            if (props.onGradientTypeChange$) {
+              await props.onGradientTypeChange$(value);
+            } else {
+              rgbStore.gradientType = value;
+            }
+          }}
+          values={GRADIENT_TYPES.map((type) => ({
+            name: type,
+            value: type,
+          }))}
+        />
+        <ShowAllGradientsButton showAllGradients={showAllGradients} />
+      </div>
 
       <Slot />
       {rgbStore.colorFormat.color != 'MiniMessage' && id == 'text' && (
@@ -135,7 +165,7 @@ export default component$<ColorListProps>((props) => {
           disabled
           id="colorLength"
           min={1}
-          max={resolvedTextLength / colors.length}
+          max={resolvedTextLength.value / colors.value.length}
           value={rgbStore.colorLength}
           class={{ 'w-full opacity-100!': true }}
           onIncrement$={() => rgbStore.colorLength++}
@@ -144,60 +174,13 @@ export default component$<ColorListProps>((props) => {
           {t('rgb.colors.charsPer@@Characters per color')}
         </NumberInput>
       )}
-      <NumberInput
-        input
-        id={`colorlist${id}-amount`}
-        min={1}
-        max={resolvedTextLength}
-        value={colors.length}
-        class={{ 'w-full': true }}
-        onChange$={(e, el) => {
-          let colorAmount = Number(el.value);
-          if (colorAmount > resolvedTextLength)
-            colorAmount = resolvedTextLength;
-          const newColors = [];
-          for (let i = 0; i < colorAmount; i++) {
-            if (colors[i]) newColors.push(colors[i]);
-            else newColors.push({ hex: getRandomColor() });
-          }
-          const mappedColors = newColors.map((color, i) => ({
-            hex: color.hex,
-            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
-          }));
-          void setColors(mappedColors);
-        }}
-        onIncrement$={() => {
-          const newColors = [
-            ...colors,
-            {
-              hex: getRandomColor(),
-            },
-          ];
-          const mappedColors = newColors.map((color, i) => ({
-            hex: color.hex,
-            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
-          }));
-          void setColors(mappedColors);
-        }}
-        onDecrement$={() => {
-          const newColors = colors.slice(0);
-          newColors.pop();
-          const mappedColors = newColors.map((color, i) => ({
-            hex: color.hex,
-            pos: Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
-          }));
-          void setColors(mappedColors);
-        }}
-      >
-        {t('rgb.colors.amount@@Color Amount')}
-      </NumberInput>
       <div class="flex gap-1 *:w-full">
         <button
           class={{
             'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
-            const newColors = colors.map((color) => ({
+            const newColors = colors.value.map((color) => ({
               hex: getRandomColor(),
               pos: color.pos,
             }));
@@ -224,9 +207,9 @@ export default component$<ColorListProps>((props) => {
           class={{
             'lum-btn justify-center p-1': true,
           }}
-          disabled={colors.length >= resolvedTextLength}
+          disabled={colors.value.length >= resolvedTextLength.value}
           onClick$={() => {
-            const newColors = [...colors, ...colors];
+            const newColors = [...colors.value, ...colors.value];
             void setColors(newColors);
           }}
           title={t('rgb.colors.duplicate@@Duplicate')}
@@ -238,7 +221,7 @@ export default component$<ColorListProps>((props) => {
             'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
-            const newColors = colors
+            const newColors = colors.value
               .slice()
               .reverse()
               .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
@@ -252,14 +235,14 @@ export default component$<ColorListProps>((props) => {
           class={{
             'lum-btn justify-center p-1': true,
           }}
-          disabled={colors.length < 3}
+          disabled={colors.value.length < 3}
           onClick$={() => {
-            const shuffledColors = colors
+            const shuffledColors = colors.value
               .slice(0)
               .sort(() => Math.random() - 0.5);
             const newColors = shuffledColors.map((color, i) => ({
               hex: color.hex,
-              pos: colors[i].pos,
+              pos: colors.value[i].pos,
             }));
             void setColors(newColors);
           }}
@@ -272,7 +255,7 @@ export default component$<ColorListProps>((props) => {
             'lum-btn justify-center p-1': true,
           }}
           onClick$={() => {
-            const newColors = colors.map((color) => {
+            const newColors = colors.value.map((color) => {
               const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
               return { ...color, hex: `#${invertedHex}` };
             });
@@ -286,15 +269,15 @@ export default component$<ColorListProps>((props) => {
           <button
             class="lum-btn justify-center p-1"
             disabled={
-              !colors.find((color, i) => {
+              !colors.value.find((color, i) => {
                 return (
                   color.pos !=
-                  Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
+                  Math.round((100 / (colors.value.length - 1)) * i * 1000) / 1000
                 );
               })
             }
             onClick$={() => {
-              void setColors(disperseColors(colors));
+              void setColors(disperseColors(colors.value));
             }}
             title={t('rgb.colors.disperse.title@@Disperse')}
           >
@@ -303,22 +286,22 @@ export default component$<ColorListProps>((props) => {
         )}
       </div>
       <div class="relative flex flex-col gap-2" id={`colorlistcolors${id}`}>
-        {colors.map((color, i) => (
+        {colors.value.map((color, i) => (
           <div
-            key={`${i}/${colors.length}`}
+            key={`${i}/${colors.value.length}`}
             id={`colorlist${id}-color-${i + 1}`}
             class="relative flex gap-1"
           >
             <div class="flex flex-col gap-1">
               <button
                 class="lum-btn rounded-b-sm p-1"
-                onClick$={() => void setColors(swapItems(colors, i, i - 1))}
+                onClick$={() => void setColors(swapItems(colors.value, i, i - 1))}
               >
                 <ChevronUp size={20} />
               </button>
               <button
                 class="lum-btn rounded-t-sm p-1"
-                onClick$={() => void setColors(swapItems(colors, i, i + 1))}
+                onClick$={() => void setColors(swapItems(colors.value, i, i + 1))}
               >
                 <ChevronDown size={20} />
               </button>
@@ -350,7 +333,7 @@ export default component$<ColorListProps>((props) => {
                     return;
                   }
                   // update the color
-                  const newColors = colors.slice(0);
+                  const newColors = colors.value.slice(0);
                   newColors[i].hex = hex;
                   void setColors(sortColors(newColors));
 
@@ -391,7 +374,7 @@ export default component$<ColorListProps>((props) => {
               <button
                 class="lum-btn lum-grad-bg-red hover:lum-bg-red rounded-l-sm p-1.5"
                 onClick$={() => {
-                  const newColors = colors.slice(0);
+                  const newColors = colors.value.slice(0);
                   newColors.splice(i, 1);
                   void setColors(newColors);
                 }}
@@ -417,9 +400,9 @@ export default component$<ColorListProps>((props) => {
         >
           <ColorPicker
             id={`colorlist${id}-color-picker`}
-            value={colors[opened.value]?.hex}
+            value={colors.value[opened.value]?.hex}
             onInput$={(newColor) => {
-              const newColors = colors.slice(0);
+              const newColors = colors.value.slice(0);
               newColors[opened.value].hex = newColor;
               void setColors(sortColors(newColors));
             }}
@@ -433,9 +416,9 @@ export default component$<ColorListProps>((props) => {
               id={`colorlist${id}-color-pos`}
               min={0}
               max={100}
-              value={Math.round(colors[opened.value]?.pos)}
+              value={Math.round(colors.value[opened.value]?.pos)}
               onChange$={(e, el) => {
-                const newColors = colors.slice(0);
+                const newColors = colors.value.slice(0);
                 let newPos = Number(el.value);
                 if (newPos < 0) newPos = 0;
                 if (newPos > 100) newPos = 100;
@@ -443,14 +426,14 @@ export default component$<ColorListProps>((props) => {
                 void setColors(sortColors(newColors));
               }}
               onIncrement$={() => {
-                const newColors = colors.slice(0);
+                const newColors = colors.value.slice(0);
                 let newPos = newColors[opened.value].pos + 1;
                 if (newPos > 100) newPos = 100;
                 newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
                 void setColors(sortColors(newColors));
               }}
               onDecrement$={() => {
-                const newColors = colors.slice(0);
+                const newColors = colors.value.slice(0);
                 let newPos = newColors[opened.value].pos - 1;
                 if (newPos < 0) newPos = 0;
                 newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
