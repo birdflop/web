@@ -35,7 +35,6 @@ export function isFormattingEqual(
   );
 }
 
-
 export type FormatKey =
   | 'bold'
   | 'italic'
