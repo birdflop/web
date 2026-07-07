@@ -142,6 +142,12 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="presets"
     >
+      <div class="flex items-center gap-1 py-2 font-semibold">
+        <span class="flex flex-1 items-center gap-2">
+          <Save />
+          {t('rgb.presets.title@@Presets')}
+        </span>
+      </div>
       <div class="flex gap-1">
         <Accordion
           sectionName="saved-presets"

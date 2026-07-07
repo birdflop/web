@@ -333,118 +333,97 @@ export default component$<ColorListProps>((props) => {
             )}
             <label
               for={`colorlist${id}-color-${i + 1}-input`}
-              class="text-lum-text-secondary w-6 font-mono"
+              class="text-lum-text-secondary w-6 font-mono text-center"
             >
               {i + 1}
             </label>
-            <div
-              class={{
-                'flex flex-col justify-end': true,
-                'pointer-events-none': draggedIndex.value !== null,
+            <button
+              type="button"
+              class="lum-btn cursor-grab rounded-r-sm p-1.5 active:cursor-grabbing"
+              onMouseDown$={() => {
+                draggableIndex.value = i;
+              }}
+              onMouseUp$={() => {
+                draggableIndex.value = null;
+              }}
+              onTouchStart$={() => {
+                draggableIndex.value = i;
+              }}
+              onTouchEnd$={() => {
+                draggableIndex.value = null;
               }}
             >
-              <button
-                type="button"
-                class="lum-btn cursor-grab rounded-r-sm p-1.5 active:cursor-grabbing"
-                onMouseDown$={() => {
-                  draggableIndex.value = i;
-                }}
-                onMouseUp$={() => {
-                  draggableIndex.value = null;
-                }}
-                onTouchStart$={() => {
-                  draggableIndex.value = i;
-                }}
-                onTouchEnd$={() => {
-                  draggableIndex.value = null;
-                }}
-              >
-                <GripVertical size={20} />
-              </button>
-            </div>
-            <div
+              <GripVertical size={20} />
+            </button>
+            <input
+              key={`colorlist${id}-color-${i + 1}`}
+              id={`colorlist${id}-color-${i + 1}-input`}
               class={{
-                'flex flex-col justify-end': true,
-                'pointer-events-none': draggedIndex.value !== null,
-              }}
-            >
-              <input
-                key={`colorlist${id}-color-${i + 1}`}
-                id={`colorlist${id}-color-${i + 1}-input`}
-                class={{
-                  'text-gray-400 hover:text-gray-400':
+                'text-gray-400 hover:text-gray-400':
                     getBrightness(hexToRGB(color.hex)) < 126,
-                  'text-gray-700 hover:text-gray-700':
+                'text-gray-700 hover:text-gray-700':
                     getBrightness(hexToRGB(color.hex)) > 126,
-                  'lum-input font-mono lum-btn-p-1 lum-grad-bg w-full rounded-sm': true,
-                }}
-                style={`--bg-color: ${color.hex};`}
-                value={color.hex}
-                onInput$={(e, el) => {
-                  let hex = el.value.trim();
-                  if (!hex.startsWith('#')) hex = '#' + hex;
-                  // lightly check if valid hex color
-                  const validRegex =
+                'lum-input font-mono lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm': true,
+              }}
+              style={`--bg-color: ${color.hex};`}
+              value={color.hex}
+              onInput$={(e, el) => {
+                let hex = el.value.trim();
+                if (!hex.startsWith('#')) hex = '#' + hex;
+                // lightly check if valid hex color
+                const validRegex =
                     id == 'shadow' ? hexRegex : hexRegexNoOpacity;
-                  if (!validRegex.test(hex)) {
-                    el.value = color.hex;
-                    return;
-                  }
-                  // update the color
-                  const newColors = colors.value.slice(0);
-                  newColors[i].hex = hex;
-                  void setColors(sortColors(newColors));
+                if (!validRegex.test(hex)) {
+                  el.value = color.hex;
+                  return;
+                }
+                // update the color
+                const newColors = colors.value.slice(0);
+                newColors[i].hex = hex;
+                void setColors(sortColors(newColors));
 
-                  // set the color picker's value and trigger input to update color picker
-                  if (opened.value != i) return;
-                  const picker = document.getElementById(
-                    `colorlist${id}-color-picker`,
-                  )!;
-                  picker.dataset.value = el.value;
-                  picker.dispatchEvent(new Event('input'));
-                }}
-                onFocus$={() => {
-                  // set opened value
-                  if (opened.value == i) return (opened.value = -1);
-                  else opened.value = i;
+                // set the color picker's value and trigger input to update color picker
+                if (opened.value != i) return;
+                const picker = document.getElementById(
+                  `colorlist${id}-color-picker`,
+                )!;
+                picker.dataset.value = el.value;
+                picker.dispatchEvent(new Event('input'));
+              }}
+              onFocus$={() => {
+                // set opened value
+                if (opened.value == i) return (opened.value = -1);
+                else opened.value = i;
 
-                  const picker = document.getElementById(
-                    `colorlist${id}-color-picker`,
-                  )!;
-                  const popup = document.getElementById(
-                    `colorlist${id}-color-popup`,
-                  );
-                  if (!picker || !popup) return;
+                const picker = document.getElementById(
+                  `colorlist${id}-color-picker`,
+                )!;
+                const popup = document.getElementById(
+                  `colorlist${id}-color-popup`,
+                );
+                if (!picker || !popup) return;
 
-                  // set the position of the popup relative to the list of colors
-                  const colorContainer = document.getElementById(
-                    `colorlist${id}-color-${i + 1}`,
-                  )!;
-                  popup.style.top = `${colorContainer.offsetTop + colorContainer.offsetHeight + 8}px`;
+                // set the position of the popup relative to the list of colors
+                const colorContainer = document.getElementById(
+                  `colorlist${id}-color-${i + 1}`,
+                )!;
+                popup.style.top = `${colorContainer.offsetTop + colorContainer.offsetHeight + 8}px`;
 
-                  // set the color picker's value and trigger input to update color picker
-                  picker.dataset.value = color.hex;
-                  picker.dispatchEvent(new Event('input'));
-                }}
-              />
-            </div>
-            <div
-              class={{
-                'flex flex-col justify-end': true,
-                'pointer-events-none': draggedIndex.value !== null,
+                // set the color picker's value and trigger input to update color picker
+                picker.dataset.value = color.hex;
+                picker.dispatchEvent(new Event('input'));
+              }}
+            />
+            <button
+              class="lum-btn lum-grad-bg-red hover:lum-bg-red rounded-l-sm p-1.5"
+              onClick$={() => {
+                const newColors = colors.value.slice(0);
+                newColors.splice(i, 1);
+                void setColors(newColors);
               }}
             >
-              <button
-                class="lum-btn lum-grad-bg-red hover:lum-bg-red rounded-l-sm p-1.5"
-                onClick$={() => {
-                  const newColors = colors.value.slice(0);
-                  newColors.splice(i, 1);
-                  void setColors(newColors);
-                }}
-              >
-                <Trash size={20} />
-              </button>
-            </div>
+              <Trash size={20} />
+            </button>
           </div>
         ))}
         <div

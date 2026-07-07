@@ -2,6 +2,7 @@ import { component$, Slot, useContext } from '@builder.io/qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { NumberInput, Toggle } from '@luminescent/ui-qwik';
+import { Settings } from 'lucide-icons-qwik';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -15,6 +16,12 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
         'pointer-events-auto max-h-120 opacity-100': !hidden,
       }}
     >
+      <div class="flex items-center gap-1 py-2 font-semibold">
+        <span class="flex flex-1 items-center gap-2">
+          <Settings />
+          {t('rgb.options@@Options')}
+        </span>
+      </div>
       <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
         <div class="flex flex-col gap-1">

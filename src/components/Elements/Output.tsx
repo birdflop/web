@@ -27,7 +27,7 @@ export default component$<{ hidden?: boolean; value: string; class?: string }>(
         }}
         id="outputcontainer"
       >
-        <label for="output" class="flex items-center gap-2 p-2 font-semibold">
+        <label for="output" class="flex items-center gap-1 py-2 font-semibold">
           <span class="flex flex-1 items-center gap-2">
             <Clipboard />
             {t('rgb.output.title@@Output')}

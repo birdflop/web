@@ -14,19 +14,19 @@ import {
   rgbDefaults,
   disperseColors,
   colorFormats,
+  getShadowColors,
 } from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
-import { Blend, Save, Settings, Sparkles } from 'lucide-icons-qwik';
+import { Settings, Sparkles } from 'lucide-icons-qwik';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
 import Input from '~/components/rgbirdflop/Input';
 import ColorMap from '~/components/rgbirdflop/ColorMap';
 import ColorList from '~/components/rgbirdflop/ColorList';
-import TextShadow from '~/components/rgbirdflop/TextShadow';
 import Options from '~/components/rgbirdflop/Options';
 import Presets from '~/components/rgbirdflop/presets/Presets';
 import CustomFormat from '~/components/rgbirdflop/CustomFormat';
@@ -39,7 +39,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/misc';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
@@ -282,46 +282,39 @@ export default component$(
           </Input>
 
           <Slot name="input-extra" />
-          {!advanced && <ColorMap />}
+          {!advanced && <>
+            <ColorMap />
+            {rgbStore.shadowColors && <ColorMap id="shadow" />}
+          </>}
 
-          <div class="mt-1 grid gap-2 sm:grid-cols-3 sm:gap-2 md:grid-cols-4">
+          <div class="mt-3 grid gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
             <MobileNavbar>
-              {!advanced && (
-                <button
-                  onClick$={() => {
-                    openItems.value = openItems.value.includes('textshadow')
-                      ? openItems.value.filter((item) => item !== 'textshadow')
-                      : ['textshadow'];
-                  }}
-                  class={{
-                    'lum-grad-bg-blue!': openItems.value.includes('textshadow'),
-                  }}
-                >
-                  <Blend />
-                  {t('rgb.colors.shadow.title@@Text Shadow')}
-                </button>
-              )}
               <Slot name="mobile-navbar" />
             </MobileNavbar>
 
             <div class="relative flex flex-col gap-2" id="column1">
-              {!advanced && (
-                <>
-                  <ColorList hidden={!openItems.value.includes('colors')} />
-                  <Accordion sectionName="textshadow" pcOnly>
-                    <Blend />
-                    {t('rgb.colors.shadow.title@@Text Shadow')}
-                  </Accordion>
-                  <TextShadow
-                    hidden={!openItems.value.includes('textshadow')}
-                  />
-                </>
-              )}
+              {!advanced && <>
+                <ColorList hidden={!openItems.value.includes('colors')} />
+                {(rgbStore.colorFormat.color === 'MiniMessage' || rgbStore.colorFormat.color === 'JSON') && <>
+                  <Toggle
+                    id="textshadowtoggle"
+                    checked={!!rgbStore.shadowColors}
+                    onChange$={(e, el) => {
+                      if (!el.checked) rgbStore.shadowColors = null;
+                      else if (!rgbStore.shadowColors)
+                        rgbStore.shadowColors = getShadowColors(rgbStore);
+                    }}
+                  >
+                    {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
+                  </Toggle>
+                  {rgbStore.shadowColors && <ColorList id="shadow" hidden={!openItems.value.includes('colors')} />}
+                </>}
+              </>}
               <Slot name="column1" />
             </div>
 
             <div
-              class="border-lum-border/10 flex flex-col gap-1 sm:border-x sm:px-2 md:col-span-2"
+              class="border-lum-border/10 flex flex-col gap-1 sm:border-x sm:px-4 md:col-span-2"
               id="column2"
             >
               <Output
@@ -406,10 +399,6 @@ export default component$(
                 />
               </Output>
 
-              <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-                <Settings />
-                {t('rgb.options@@Options')}
-              </div>
               {!advanced && (
                 <Options hidden={!openItems.value.includes('options')}>
                   <Slot name="options" />
@@ -431,10 +420,6 @@ export default component$(
             </div>
 
             <div class="mb-4 flex flex-col gap-2" id="column3">
-              <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
-                <Save />
-                {t('rgb.presets.title@@Presets')}
-              </div>
               <Presets hidden={!openItems.value.includes('presets')} />
 
               <Slot name="column3" />
