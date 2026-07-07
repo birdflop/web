@@ -92,7 +92,6 @@ export default component$<ColorListProps>((props) => {
   });
 
   const draggedIndex = useSignal<number | null>(null);
-  const draggableIndex = useSignal<number | null>(null);
   const dragOverIndex = useSignal<number | null>(null);
 
   useOnDocument(
@@ -278,18 +277,15 @@ export default component$<ColorListProps>((props) => {
           </button>
         )}
       </div>
-      <div class="relative flex flex-col gap-2" id={`colorlistcolors${id}`}>
+      <div class="relative flex flex-col" id={`colorlistcolors${id}`}>
         {colors.value.map((color, i) => (
           <div
             key={`${i}/${colors.value.length}`}
             id={`colorlist${id}-color-${i + 1}`}
             class={{
-              'relative flex items-center gap-1 transition-all duration-200': true,
+              'relative flex items-center gap-1 py-1 transition-all duration-200': true,
               'scale-[0.98] opacity-40': draggedIndex.value === i,
-            }}
-            draggable={draggableIndex.value === i}
-            onDragStart$={() => {
-              draggedIndex.value = i;
+              '*:pointer-events-none': draggedIndex.value !== null,
             }}
             onDragOver$={(e) => {
               e.preventDefault();
@@ -308,26 +304,20 @@ export default component$<ColorListProps>((props) => {
               const newColors = moveItem(colors.value, draggedIndex.value, i);
               void setColors(newColors);
               draggedIndex.value = null;
-              draggableIndex.value = null;
-              dragOverIndex.value = null;
-            }}
-            onDragEnd$={() => {
-              draggedIndex.value = null;
-              draggableIndex.value = null;
               dragOverIndex.value = null;
             }}
           >
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
-              draggedIndex.value > i && (
-              <div class="bg-lum-accent pointer-events-none absolute -top-1 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+              draggedIndex.value >= i && (
+              <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
                 <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
               </div>
             )}
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
               draggedIndex.value < i && (
-              <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-1 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+              <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
                 <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
               </div>
             )}
@@ -340,17 +330,17 @@ export default component$<ColorListProps>((props) => {
             <button
               type="button"
               class="lum-btn cursor-grab rounded-r-sm p-1.5 active:cursor-grabbing"
-              onMouseDown$={() => {
-                draggableIndex.value = i;
+              draggable
+              onDragStart$={(e) => {
+                draggedIndex.value = i;
+                const row = document.getElementById(`colorlist${id}-color-${i + 1}`);
+                if (row && e.dataTransfer) {
+                  e.dataTransfer.setDragImage(row, 20, 20);
+                }
               }}
-              onMouseUp$={() => {
-                draggableIndex.value = null;
-              }}
-              onTouchStart$={() => {
-                draggableIndex.value = i;
-              }}
-              onTouchEnd$={() => {
-                draggableIndex.value = null;
+              onDragEnd$={() => {
+                draggedIndex.value = null;
+                dragOverIndex.value = null;
               }}
             >
               <GripVertical size={20} />
