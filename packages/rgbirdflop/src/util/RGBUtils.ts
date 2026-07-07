@@ -19,6 +19,23 @@ export function segmentText(text: string, colorLength?: number): string[] {
   return out;
 }
 
+export function isFormattingEqual(
+  a: Formatting | null,
+  b: Formatting | null,
+): boolean {
+  if (a === b) return true;
+  if (!a || !b) return false;
+  return (
+    !!a.bold === !!b.bold &&
+    !!a.italic === !!b.italic &&
+    !!a.underline === !!b.underline &&
+    !!a.strikethrough === !!b.strikethrough &&
+    !!a.obfuscate === !!b.obfuscate &&
+    a.font === b.font
+  );
+}
+
+
 export type FormatKey =
   | 'bold'
   | 'italic'
@@ -90,8 +107,16 @@ export function renderTemplateSegment(
   text: string,
   formatting: Formatting,
   rgbOptions: typeof rgbDefaults,
+  skipColor: boolean = false,
 ): string {
   let out = rgbOptions.colorFormat.color;
+  if (skipColor) {
+    if (out.includes('$f$c')) {
+      out = '$f$c';
+    } else if (out.includes('$c')) {
+      out = '$c';
+    }
+  }
   for (let n = 1; n <= 6; n++)
     out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
@@ -617,6 +642,9 @@ function renderTemplateGradient(
   let charIndex = 0;
 
   let out = '';
+  let previousHex: string | null = null;
+  let previousFmt: Formatting | null = null;
+
   for (const segment of segments) {
     if (rgbOptions.trimSpaces && segment.trim() === '') {
       out += segment;
@@ -627,7 +655,10 @@ function renderTemplateGradient(
 
     const hex = rgbToHex(gradient.next());
     const fmt = getFormattingAtOffset(charIndex, rgbOptions);
-    out += renderTemplateSegment(hex, segment, fmt, rgbOptions);
+    const skipColor = previousHex !== null && hex === previousHex && isFormattingEqual(fmt, previousFmt);
+    out += renderTemplateSegment(hex, segment, fmt, rgbOptions, skipColor);
+    previousHex = hex;
+    previousFmt = fmt;
     charIndex += segment.length;
   }
   return out;

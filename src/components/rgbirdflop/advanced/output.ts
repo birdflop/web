@@ -10,6 +10,7 @@ import {
   rgbDefaults,
   type ColorFormat,
   type Formatting,
+  isFormattingEqual,
 } from '@birdflop/rgbirdflop';
 import { chunkText, SegmentType } from './rgbSegments';
 
@@ -18,8 +19,16 @@ function renderTemplateSegment(
   text: string,
   fmt: Formatting,
   options: typeof rgbDefaults,
+  skipColor: boolean = false,
 ): string {
   let out = options.colorFormat.color;
+  if (skipColor) {
+    if (out.includes('$f$c')) {
+      out = '$f$c';
+    } else if (out.includes('$c')) {
+      out = '$c';
+    }
+  }
   for (let n = 1; n <= 6; n++)
     out = out.replace(`$${n}`, hexWithoutHash.charAt(n - 1));
   out = out.replace('$f', buildFormatCodes(fmt, options));
@@ -147,6 +156,8 @@ function renderTemplate(
 ): string {
   let out = '';
   let charOffset = 0;
+  let previousHex: string | null = null;
+  let previousFmt: Formatting | null = null;
   for (const segment of segments) {
     if (!segment.text) continue;
     const nextHex = segmentHexProvider(segment);
@@ -165,6 +176,8 @@ function renderTemplate(
         segOut += buildFormatCodes(fmt, options) + translatedCh;
         rel += ch.length;
       }
+      previousHex = null;
+      previousFmt = null;
     } else {
       segOut = '';
       let rel = 0;
@@ -175,8 +188,12 @@ function renderTemplate(
           rel += chunk.length;
           continue;
         }
+        const hex = nextHex();
         const fmt = getFormattingAtOffset(charOffset + rel, options);
-        segOut += renderTemplateSegment(nextHex(), chunk, fmt, options);
+        const skipColor = previousHex !== null && hex === previousHex && isFormattingEqual(fmt, previousFmt);
+        segOut += renderTemplateSegment(hex, chunk, fmt, options, skipColor);
+        previousHex = hex;
+        previousFmt = fmt;
         rel += chunk.length;
       }
     }

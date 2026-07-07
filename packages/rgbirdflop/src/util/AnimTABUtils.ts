@@ -9,8 +9,9 @@ import {
   renderTemplateSegment,
   applyWrappers,
   segmentText,
+  isFormattingEqual,
 } from './RGBUtils';
-import { animTABDefaults, rgbDefaults } from './Defaults';
+import { animTABDefaults, rgbDefaults, Formatting } from './Defaults';
 
 export function generateAnimTABFrames(
   rgbOptions: typeof rgbDefaults,
@@ -158,6 +159,8 @@ function formatFrames(
       output = renderTemplateSegment(hex, text, formatting, rgbOptions);
     } else if (frame.type === 'segments') {
       let charIndex = 0;
+      let previousHex: string | null = null;
+      let previousFormatting: Formatting | null = null;
       for (let i = 0; i < frame.segments.length; i++) {
         const segment = frame.segments[i];
         const hex = frame.colors[i];
@@ -170,11 +173,16 @@ function formatFrames(
           }
           output += segText;
           charIndex += segment.length;
+          previousHex = null;
+          previousFormatting = null;
           continue;
         }
 
         const formatting = getFormattingAtOffset(charIndex, rgbOptions);
-        output += renderTemplateSegment(hex, segment, formatting, rgbOptions);
+        const skipColor = previousHex !== null && hex === previousHex && isFormattingEqual(formatting, previousFormatting);
+        output += renderTemplateSegment(hex, segment, formatting, rgbOptions, skipColor);
+        previousHex = hex;
+        previousFormatting = formatting;
         charIndex += segment.length;
       }
     }
