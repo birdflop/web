@@ -50,7 +50,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         <div class="px-4 py-2">
           <ColorMap id="shadow" />
         </div>
-        <ColorList id="shadow" hideHeader />
+        <ColorList id="shadow" />
       </div>
     </div>
   );
