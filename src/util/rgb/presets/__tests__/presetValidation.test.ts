@@ -40,7 +40,9 @@ describe('presetValidation', () => {
         true,
       );
       expect(
-        errors.some((e) => e.message.includes('position must be between 0 and 100')),
+        errors.some((e) =>
+          e.message.includes('position must be between 0 and 100'),
+        ),
       ).toBe(true);
     });
 

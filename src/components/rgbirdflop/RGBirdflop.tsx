@@ -282,10 +282,12 @@ export default component$(
           </Input>
 
           <Slot name="input-extra" />
-          {!advanced && <>
-            <ColorMap />
-            {rgbStore.shadowColors && <ColorMap id="shadow" />}
-          </>}
+          {!advanced && (
+            <>
+              <ColorMap />
+              {rgbStore.shadowColors && <ColorMap id="shadow" />}
+            </>
+          )}
 
           <div class="mt-3 grid gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
             <MobileNavbar>
@@ -293,23 +295,33 @@ export default component$(
             </MobileNavbar>
 
             <div class="relative flex flex-col gap-2" id="column1">
-              {!advanced && <>
-                <ColorList hidden={!openItems.value.includes('colors')} />
-                {(rgbStore.colorFormat.color === 'MiniMessage' || rgbStore.colorFormat.color === 'JSON') && <>
-                  <Toggle
-                    id="textshadowtoggle"
-                    checked={!!rgbStore.shadowColors}
-                    onChange$={(e, el) => {
-                      if (!el.checked) rgbStore.shadowColors = null;
-                      else if (!rgbStore.shadowColors)
-                        rgbStore.shadowColors = getShadowColors(rgbStore);
-                    }}
-                  >
-                    {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
-                  </Toggle>
-                  {rgbStore.shadowColors && <ColorList id="shadow" hidden={!openItems.value.includes('colors')} />}
-                </>}
-              </>}
+              {!advanced && (
+                <>
+                  <ColorList hidden={!openItems.value.includes('colors')} />
+                  {(rgbStore.colorFormat.color === 'MiniMessage' ||
+                    rgbStore.colorFormat.color === 'JSON') && (
+                    <>
+                      <Toggle
+                        id="textshadowtoggle"
+                        checked={!!rgbStore.shadowColors}
+                        onChange$={(e, el) => {
+                          if (!el.checked) rgbStore.shadowColors = null;
+                          else if (!rgbStore.shadowColors)
+                            rgbStore.shadowColors = getShadowColors(rgbStore);
+                        }}
+                      >
+                        {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
+                      </Toggle>
+                      {rgbStore.shadowColors && (
+                        <ColorList
+                          id="shadow"
+                          hidden={!openItems.value.includes('colors')}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
               <Slot name="column1" />
             </div>
 

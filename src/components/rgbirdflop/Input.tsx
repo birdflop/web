@@ -548,7 +548,7 @@ export default component$(
               <button
                 type="button"
                 class={{
-                  'lum-btn p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75': true,
+                  'lum-btn rounded-lum-1 lum-grad-bg-lum-card-bg/75 p-1': true,
                   'text-lum-primary-active!': rawEditMode.value,
                   'text-lum-text-secondary': !rawEditMode.value,
                 }}

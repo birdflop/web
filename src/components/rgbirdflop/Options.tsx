@@ -38,7 +38,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             }}
           />
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' &&
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
           <NumberInput
             input
             disabled
@@ -52,7 +52,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
           >
             {t('rgb.colors.charsPer@@Characters per color')}
           </NumberInput>
-        }
+        )}
         <div class="flex flex-col gap-1">
           <Toggle
             id="disperse"
@@ -69,40 +69,42 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             )}
           </p>
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && <>
-          <div class="flex flex-col gap-1">
-            <Toggle
-              id="trimspaces"
-              checked={rgbStore.trimSpaces}
-              onChange$={(e, el) => {
-                rgbStore.trimSpaces = el.checked;
-              }}
-            >
-              {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
-            </Toggle>
-            <p class="text-lum-text-secondary text-xs">
-              {t(
-                'rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs',
-              )}
-            </p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <Toggle
-              id="lowercase"
-              checked={rgbStore.lowercase}
-              onChange$={(e, el) => {
-                rgbStore.lowercase = el.checked;
-              }}
-            >
-              {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
-            </Toggle>
-            <p class="text-lum-text-secondary text-xs">
-              {t(
-                'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.',
-              )}
-            </p>
-          </div>
-        </>}
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
+          <>
+            <div class="flex flex-col gap-1">
+              <Toggle
+                id="trimspaces"
+                checked={rgbStore.trimSpaces}
+                onChange$={(e, el) => {
+                  rgbStore.trimSpaces = el.checked;
+                }}
+              >
+                {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
+              </Toggle>
+              <p class="text-lum-text-secondary text-xs">
+                {t(
+                  'rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs',
+                )}
+              </p>
+            </div>
+            <div class="flex flex-col gap-1">
+              <Toggle
+                id="lowercase"
+                checked={rgbStore.lowercase}
+                onChange$={(e, el) => {
+                  rgbStore.lowercase = el.checked;
+                }}
+              >
+                {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
+              </Toggle>
+              <p class="text-lum-text-secondary text-xs">
+                {t(
+                  'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.',
+                )}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

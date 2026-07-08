@@ -1,8 +1,4 @@
-import {
-  component$,
-  useContext,
-  useComputed$,
-} from '@builder.io/qwik';
+import { component$, useContext, useComputed$ } from '@builder.io/qwik';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
   sortColors,

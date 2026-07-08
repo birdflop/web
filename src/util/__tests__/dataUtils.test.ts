@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { parseParams, getCookies, getClientCookies, setCookies } from '../dataUtils';
+import {
+  parseParams,
+  getCookies,
+  getClientCookies,
+  setCookies,
+} from '../dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 
 // Mock document.cookie behavior
@@ -103,7 +108,9 @@ describe('dataUtils', () => {
       const mockCookie = {
         get: (name: string) => {
           if (name === 'rgb') {
-            return { value: JSON.stringify({ colorLength: 5, disperse: true }) };
+            return {
+              value: JSON.stringify({ colorLength: 5, disperse: true }),
+            };
           }
           return null;
         },
@@ -136,7 +143,8 @@ describe('dataUtils', () => {
   describe('setCookies', () => {
     it('should delete values matching defaults before writing to cookie to optimize size', () => {
       // First set cookies: cookies = true in settings to allow writing
-      document.cookie = 'settings=' + encodeURIComponent(JSON.stringify({ cookies: true }));
+      document.cookie =
+        'settings=' + encodeURIComponent(JSON.stringify({ cookies: true }));
 
       const inputCookies = {
         version: rgbDefaults.version,

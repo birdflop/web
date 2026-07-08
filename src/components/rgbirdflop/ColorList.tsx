@@ -323,7 +323,7 @@ export default component$<ColorListProps>((props) => {
             )}
             <label
               for={`colorlist${id}-color-${i + 1}-input`}
-              class="text-lum-text-secondary w-6 font-mono text-center"
+              class="text-lum-text-secondary w-6 text-center font-mono"
             >
               {i + 1}
             </label>
@@ -333,7 +333,9 @@ export default component$<ColorListProps>((props) => {
               draggable
               onDragStart$={(e) => {
                 draggedIndex.value = i;
-                const row = document.getElementById(`colorlist${id}-color-${i + 1}`);
+                const row = document.getElementById(
+                  `colorlist${id}-color-${i + 1}`,
+                );
                 if (row && e.dataTransfer) {
                   e.dataTransfer.setDragImage(row, 20, 20);
                 }
@@ -350,10 +352,10 @@ export default component$<ColorListProps>((props) => {
               id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400':
-                    getBrightness(hexToRGB(color.hex)) < 126,
+                  getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700':
-                    getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input font-mono lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm': true,
+                  getBrightness(hexToRGB(color.hex)) > 126,
+                'lum-input lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm font-mono': true,
               }}
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
@@ -362,7 +364,7 @@ export default component$<ColorListProps>((props) => {
                 if (!hex.startsWith('#')) hex = '#' + hex;
                 // lightly check if valid hex color
                 const validRegex =
-                    id == 'shadow' ? hexRegex : hexRegexNoOpacity;
+                  id == 'shadow' ? hexRegex : hexRegexNoOpacity;
                 if (!validRegex.test(hex)) {
                   el.value = color.hex;
                   return;
@@ -397,7 +399,10 @@ export default component$<ColorListProps>((props) => {
                 const colorContainer = document.getElementById(
                   `colorlist${id}-color-${i + 1}`,
                 )!;
-                popup.style.setProperty('--popup-top', `${colorContainer.offsetTop}px`);
+                popup.style.setProperty(
+                  '--popup-top',
+                  `${colorContainer.offsetTop}px`,
+                );
 
                 // set the color picker's value and trigger input to update color picker
                 picker.dataset.value = color.hex;
@@ -423,7 +428,7 @@ export default component$<ColorListProps>((props) => {
           class={{
             flex: opened.value > -1,
             hidden: opened.value < 0,
-            'absolute left-15 sm:left-full top-[calc(var(--popup-top)+2.4rem)] sm:top-(--popup-top) z-10 flex-col gap-2 motion-safe:transition-all': true,
+            'absolute top-[calc(var(--popup-top)+2.4rem)] left-15 z-10 flex-col gap-2 motion-safe:transition-all sm:top-(--popup-top) sm:left-full': true,
             'animate-in fade-in slide-in-from-top-2': true,
           }}
           style={{
