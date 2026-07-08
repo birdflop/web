@@ -42,7 +42,9 @@
     "qwik-speak-extract": "qwik-speak-extract --supportedLangs=en-US,es-ES,ko-KR,de-DE,nl-NL,pl-PL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n",
     "serve": "wrangler dev",
     "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
@@ -72,6 +74,7 @@
     "eslint-plugin-qwik": "^1.20.0",
     "gifuct-js": "^2.1.2",
     "globals": "17.6.0",
+    "happy-dom": "^20.10.6",
     "lucide-icons-qwik": "^0.577.2",
     "prettier": "3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
@@ -88,6 +91,7 @@
     "valibot": "^1.4.1",
     "vite": "8.0.16",
     "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.10",
     "wrangler": "^4.101.0",
     "yaml": "^2.9.0"
   },
