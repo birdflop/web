@@ -5,7 +5,10 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['chunk-gc']['period-in-ticks']) >= 600;
+              return (
+                parseInt(dict_of_vars.bukkit['chunk-gc']['period-in-ticks']) >=
+                600
+              );
             },
             vars: ['bukkit'],
           },
@@ -19,7 +22,10 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['ticks-per']['monster-spawns']) == 1;
+              return (
+                parseInt(dict_of_vars.bukkit['ticks-per']['monster-spawns']) ==
+                1
+              );
             },
             vars: ['bukkit'],
           },
@@ -33,7 +39,9 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['spawn-limits']['monsters']) >= 70;
+              return (
+                parseInt(dict_of_vars.bukkit['spawn-limits']['monsters']) >= 70
+              );
             },
             vars: ['bukkit'],
           },
@@ -47,7 +55,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['spawn-limits']['water-ambient']) >= 20;
+              return (
+                parseInt(
+                  dict_of_vars.bukkit['spawn-limits']['water-ambient'],
+                ) >= 20
+              );
             },
             vars: ['bukkit'],
           },
@@ -61,7 +73,9 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['spawn-limits']['ambient']) >= 15;
+              return (
+                parseInt(dict_of_vars.bukkit['spawn-limits']['ambient']) >= 15
+              );
             },
             vars: ['bukkit'],
           },
@@ -75,7 +89,9 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['spawn-limits']['animals']) >= 10;
+              return (
+                parseInt(dict_of_vars.bukkit['spawn-limits']['animals']) >= 10
+              );
             },
             vars: ['bukkit'],
           },
@@ -89,7 +105,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.bukkit['spawn-limits']['water-animals']) >= 15;
+              return (
+                parseInt(
+                  dict_of_vars.bukkit['spawn-limits']['water-animals'],
+                ) >= 15
+              );
             },
             vars: ['bukkit'],
           },

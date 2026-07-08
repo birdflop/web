@@ -10,7 +10,7 @@ on:
       - 'release-please-config.json'
 
 permissions:
-  id-token: write  # Required for OIDC
+  id-token: write # Required for OIDC
   contents: write
   pull-requests: write
   packages: write
@@ -61,4 +61,4 @@ jobs:
         env:
           # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
           # https://github.com/actions/setup-node/blob/633bb92bc0aabcae06e8ea93b85aecddd374c402/src/authutil.ts#L57
-          NODE_AUTH_TOKEN: ""
+          NODE_AUTH_TOKEN: ''

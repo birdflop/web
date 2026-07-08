@@ -46,8 +46,8 @@
     },
     "memory": {
       "calcOverhead": {
-        "description": "This is recommended to avoid out-of-memory issues on your server.nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.",
-        "title": "Calculate Overhead"
+        "description": "Sunucunuzda bellek yetersizliği sorunlarını önlemek için bu önerilir.\nKullanılan formül 11x ÷ 12 - 1200'dür; burada x, RAM miktarıdır.",
+        "title": "Ek Yükü Hesapla"
       },
       "description": "Sunucunuza tahsis edilecek bellek (RAM) miktarı.",
       "label": "Bellek"

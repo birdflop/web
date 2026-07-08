@@ -4,47 +4,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
-const ignores = [
-  "**/*.log",
-  "**/.DS_Store",
-  "**/*.",
-  ".vscode/settings.json",
-  "**/.history",
-  "**/.yarn",
-  "**/bazel-*",
-  "**/bazel-bin",
-  "**/bazel-out",
-  "**/bazel-qwik",
-  "**/bazel-testlogs",
-  "**/dist",
-  "**/dist-dev",
-  "**/lib",
-  "**/lib-types",
-  "**/etc",
-  "**/external",
-  "**/node_modules",
-  "**/temp",
-  "**/tsc-out",
-  "**/tsdoc-metadata.json",
-  "**/target",
-  "**/output",
-  "**/rollup.config.js",
-  "**/build",
-  "**/.cache",
-  "**/.vscode",
-  "**/.rollup.cache",
-  "**/dist",
-  "**/tsconfig.tsbuildinfo",
-  "**/vite.config.ts",
-  "**/*.spec.tsx",
-  "**/*.spec.ts",
-  "**/.netlify",
-  "**/pnpm-lock.yaml",
-  "**/package-lock.json",
-  "**/yarn.lock",
-  "**/server",
-  "eslint.config.js",
-];
+import { ignores } from '../../eslint.ignores.js';
 
 export default defineConfig(
   globalIgnores(ignores),
@@ -76,9 +36,9 @@ export default defineConfig(
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/only-throw-error': 'off',
-      'indent': ['error', 2],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
+      indent: ['error', 2],
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
       'no-trailing-spaces': ['error'],
       'no-multiple-empty-lines': ['error', { max: 1 }],
@@ -88,5 +48,5 @@ export default defineConfig(
       'key-spacing': ['error', { beforeColon: false, afterColon: true }],
       'keyword-spacing': ['error', { before: true, after: true }],
     },
-  }
+  },
 );

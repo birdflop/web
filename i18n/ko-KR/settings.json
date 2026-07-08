@@ -1,14 +1,14 @@
 {
   "settings": {
     "cookies": {
-      "description": "Allow Birdflop to use cookies for personalization and improved user experience.",
-      "title": "Enable Cookies"
+      "description": "개인화 및 사용자 경험 향상을 위해 Birdflop이 쿠키를 사용하는 것을 허용합니다.",
+      "title": "쿠키 활성화"
     },
     "flopbird": {
-      "description": "Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you're on. Experimental",
-      "enable": "Enable Flopbird"
+      "description": "화면 모퉁이에 앉아 현재 페이지에 대한 유용한 정보로 여러분을 안내하는 귀여운 마스코트입니다. 실험적",
+      "enable": "Flopbird 활성화"
     },
-    "language": "Language",
-    "theme": "Theme Preference"
+    "language": "언어",
+    "theme": "테마 설정"
   }
 }

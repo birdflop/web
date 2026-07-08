@@ -11,12 +11,19 @@ export type AvailableFlags = keyof typeof flags;
 export type AvailableExtraFlags = keyof typeof extraFlags;
 
 interface FlagOption {
-  'generate': Generate<AvailableConfig | AvailableOperatingSystem | AvailableServerType>
+  generate: Generate<
+    AvailableConfig | AvailableOperatingSystem | AvailableServerType
+  >;
 }
 
 interface FlagExtraOption extends FlagOption {
-  'supports': AvailableFlags[],
-  'generate': Generate<AvailableConfig | AvailableOperatingSystem | AvailableServerType | 'existingFlags'>
+  supports: AvailableFlags[];
+  generate: Generate<
+    | AvailableConfig
+    | AvailableOperatingSystem
+    | AvailableServerType
+    | 'existingFlags'
+  >;
 }
 
 const baseAikar = [
@@ -121,17 +128,19 @@ export const flags = {
     generate: ({ memory }: { memory: number }) => {
       return [
         ...baseAikar,
-        ...(memory < 12 ? [
-          '-XX:G1NewSizePercent=30',
-          '-XX:G1MaxNewSizePercent=40',
-          '-XX:G1HeapRegionSize=8M',
-          '-XX:G1ReservePercent=20',
-        ] : [
-          '-XX:G1NewSizePercent=40',
-          '-XX:G1MaxNewSizePercent=50',
-          '-XX:G1HeapRegionSize=16M',
-          '-XX:G1ReservePercent=15',
-        ]),
+        ...(memory < 12
+          ? [
+            '-XX:G1NewSizePercent=30',
+            '-XX:G1MaxNewSizePercent=40',
+            '-XX:G1HeapRegionSize=8M',
+            '-XX:G1ReservePercent=20',
+          ]
+          : [
+            '-XX:G1NewSizePercent=40',
+            '-XX:G1MaxNewSizePercent=50',
+            '-XX:G1HeapRegionSize=16M',
+            '-XX:G1ReservePercent=15',
+          ]),
       ];
     },
   },
@@ -324,19 +333,21 @@ export const flags = {
     generate: ({ memory }: { memory: number }) => {
       return [
         ...baseEtil,
-        ...(memory < 12 ? [
-          '-XX:G1NewSizePercent=30',
-          '-XX:G1MaxNewSizePercent=40',
-          '-XX:G1HeapRegionSize=8M',
-          '-XX:G1ReservePercent=20',
-          '-XX:InitiatingHeapOccupancyPercent=15',
-        ] : [
-          '-XX:G1NewSizePercent=40',
-          '-XX:G1MaxNewSizePercent=50',
-          '-XX:G1HeapRegionSize=16M',
-          '-XX:G1ReservePercent=15',
-          '-XX:InitiatingHeapOccupancyPercent=20',
-        ]),
+        ...(memory < 12
+          ? [
+            '-XX:G1NewSizePercent=30',
+            '-XX:G1MaxNewSizePercent=40',
+            '-XX:G1HeapRegionSize=8M',
+            '-XX:G1ReservePercent=20',
+            '-XX:InitiatingHeapOccupancyPercent=15',
+          ]
+          : [
+            '-XX:G1NewSizePercent=40',
+            '-XX:G1MaxNewSizePercent=50',
+            '-XX:G1HeapRegionSize=16M',
+            '-XX:G1ReservePercent=15',
+            '-XX:InitiatingHeapOccupancyPercent=20',
+          ]),
       ];
     },
   },
@@ -363,10 +374,7 @@ export const extraFlags = {
   vectors: {
     supports: ['aikars', 'obyduxs', 'meowice'],
     generate: ({ existingFlags }) => {
-      return [
-        ...existingFlags,
-        '--add-modules=jdk.incubator.vector',
-      ];
+      return [...existingFlags, '--add-modules=jdk.incubator.vector'];
     },
   } as FlagExtraOption,
   benchmarkedGraalVM: {

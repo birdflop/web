@@ -8,12 +8,21 @@ export function loadPreset(p: string): rgbPreset {
   let newPreset: rgbPreset = {};
 
   // Migrate colors from strings to objects
-  if (preset.colors && preset.colors.length && typeof preset.colors[0] == 'string') {
-    if (typeof preset.colors[0] == 'string') preset.colors = preset.colors.map((color: string, i: number) => ({ hex: color, pos: (100 / (preset.colors.length - 1)) * i }));
+  if (
+    preset.colors &&
+    preset.colors.length &&
+    typeof preset.colors[0] == 'string'
+  ) {
+    if (typeof preset.colors[0] == 'string')
+      preset.colors = preset.colors.map((color: string, i: number) => ({
+        hex: color,
+        pos: (100 / (preset.colors.length - 1)) * i,
+      }));
   }
 
   // if version is current, return the preset
-  if (preset.version === combinedDefaults.version || !preset.version) return preset;
+  if (preset.version === combinedDefaults.version || !preset.version)
+    return preset;
 
   // if version is not current, migrate the preset
   const migratedPreset = migrateBetweenVersions(preset);
@@ -39,10 +48,11 @@ export function getPresets(): rgbPreset[] {
 
   // if localStorage is empty, try to get presets from cookies
   if (localStoragePresets) {
-    const localStoragePresetsParsed = JSON.parse(localStoragePresets) as rgbPreset[];
+    const localStoragePresetsParsed = JSON.parse(
+      localStoragePresets,
+    ) as rgbPreset[];
     privatePresets = privatePresets.concat(localStoragePresetsParsed);
-  }
-  else {
+  } else {
     migratePresetsFromCookies(privatePresets);
   }
 

@@ -33,6 +33,6 @@ Before you begin, ensure you have the following:
 
 1. Go to the **Console** tab of your server
 2. Click the **Start** button to power on your server
-5. After logging in, the server will automatically download the necessary files and start up
+3. After logging in, the server will automatically download the necessary files and start up
 
 🎉 **Your server is now fully set up and ready to play!**

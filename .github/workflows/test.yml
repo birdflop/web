@@ -1,0 +1,43 @@
+name: CI Tests
+
+on:
+  push:
+    branches:
+      - birdflop
+  pull_request:
+    branches:
+      - birdflop
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Lint, Format, Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Check
+        run: pnpm run lint
+
+      - name: Format Check
+        run: pnpm run fmt.check
+
+      - name: Build Library Package
+        run: pnpm run build.pkg
+
+      - name: Run Tests
+        run: pnpm test

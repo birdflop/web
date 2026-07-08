@@ -1,11 +1,25 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Farbe hinzufügen",
+      "backToClassic": "Klassischer Editor",
+      "highlightHint": "Markieren Sie Buchstaben im obigen Feld, um nur diesen Teil zu färben und zu formatieren.",
+      "mode": {
+        "gradient": "Farbverlauf",
+        "none": "Ungefärbt",
+        "noneDescription": "Diese Zeichen behalten die Standardfarbe von Minecraft bei (es wird nur die Formatierung angewendet).",
+        "solid": "Einfarbig"
+      },
+      "selectAll": "Alles auswählen",
+      "styling": "Styling",
+      "tryAdvanced": "Probieren Sie den erweiterten Editor mit segmentbasierten Farbverläufen aus"
+    },
     "colors": {
       "amount": "Anzahl an Farben",
       "character": "Zeichen",
       "charsPer": "Zeichen pro Farbe",
       "color": "Farbe",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "Aus Textfarben kopieren",
       "customFormat": "Benutzerdefiniertes Format",
       "disperse": {
         "always": {
@@ -14,23 +28,23 @@
         },
         "title": "Zerstreuen"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "Duplizieren",
       "format": "Farbformat",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "Verlaufstyp",
+      "invert": "Invertieren",
       "lowercase": {
         "description": "Aktivieren falls sie kleingeschriebene Hex-Codes nutzen wollen.",
         "title": "Kleingeschriebene Hex-Codes"
       },
       "position": "Position",
       "randomize": "Randomisieren",
-      "reverse": "Reverse",
+      "reverse": "Umkehren",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "Benutzerdefinierter Textschatten",
         "title": "Textschatten",
         "warning": "Achtung! Textschatten funktioniert nur mit JSON- oder MiniMessage-Formatierung!"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "Mischen",
       "title": "Farben",
       "trimSpaces": {
         "description": "Deaktivieren falls sie leere Unterstreichung/Durchstreichung nutzen.",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Fett",
       "character": "Formattierungszeichen",
+      "clear": "Formatierung löschen",
       "italic": "Kursiv",
       "obfuscate": "Obfuskiert",
       "options": "Formattierungsoptionen",
@@ -69,9 +84,9 @@
         "chat": "Minecraft Chat",
         "default": "Standard",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "Minecraft GUI Truhe",
+          "item": "Minecraft GUI Gegenstandsname",
+          "lore": "Minecraft GUI Gegenstandsbeschreibung"
         },
         "tab": {
           "footer": "Minecraft Tab Fußzeile",
@@ -80,7 +95,9 @@
         },
         "typeHere": "hier schreiben!"
       },
-      "title": "Eingabetext"
+      "rawEdit": "Rohbearbeitungsmodus",
+      "title": "Eingabetext",
+      "viewFormatted": "Formatierte Vorschau anzeigen"
     },
     "options": "Optionen",
     "output": {
@@ -96,7 +113,7 @@
       "back": "Zurück zu den Voreinstellungen",
       "copied": {
         "description": "Voreinstellung in die Zwischenablage kopiert!",
-        "title": "Preset Copied!"
+        "title": "Vorlage kopiert!"
       },
       "copy": "Kopieren",
       "createNew": "Eine neue Voreinstellung erstellen",
@@ -123,8 +140,9 @@
       },
       "pasteHere": "Hier einfügen",
       "pending": "Diese Voreinstellung befindet sich noch in der Überarbeitung und ist möglicherweise noch nicht für andere Benutzer verfügbar.",
+      "personalPresets": "Persönliche Vorlagen",
       "presetData": "Voreingestellte Daten",
-      "preview": "Preset Preview",
+      "preview": "Vorlagen-Vorschau",
       "publish": "Veröffentlichen Sie Ihre eigene Voreinstellung",
       "remove": "Entfernen",
       "save": "Speichern",
@@ -134,13 +152,14 @@
         "title": "Voreinstellung gespeichert!",
         "warning": "Bitte loggen sie sich ein um Voreinstellungen permanent zu speichern."
       },
+      "savedPresets": "Gespeicherte Vorlagen",
       "showSaved": {
         "description": "Aktivieren sie dies um nur ihre gespeicherten Voreinstellungen anzuzeigen.",
         "title": "Gespeicherte Voreinstellungen anzeigen"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "Am wenigsten gespeichert",
+        "mostSaved": "Am häufigsten gespeichert",
         "nameAZ": "Name A-Z",
         "nameZA": "Name Z-A",
         "newest": "Neuestes zuerst",
@@ -163,6 +182,12 @@
         "description": "Aktivieren Sie diese Option, um die Vorschauen mit den aktuellen Optionen anzuzeigen.",
         "title": "Vorschau mit aktuellen Optionen anzeigen"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segmentfarben-Editor"
+    },
+    "segments": {
+      "title": "Segmente"
     }
   }
 }

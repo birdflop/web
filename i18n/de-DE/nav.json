@@ -5,14 +5,15 @@
       "home": "Zurück zum Start.",
       "title": "404: Seite nicht gefunden."
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Zum Schließen klicken",
     "cookies": {
-      "acknowledge": "Accept",
+      "acknowledge": "Akzeptieren",
       "description": "Wir nutzen Cookies um deine Einstellungen zu speichern und zu laden.",
-      "optOut": "Reject",
+      "optOut": "Ablehnen",
       "title": "Cookies"
     },
     "docs": "Dokumente",
+    "experimental": "experimentell",
     "hosting": {
       "billing": "Abrechnung",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "Profil"
     },
     "resources": {
+      "analyze": {
+        "description": "Analysieren Sie ein Spark-Profil oder Paper Timings und erhalten Sie mögliche Optimierungen",
+        "title": "Analysieren"
+      },
       "animatedTAB": {
         "description": "TAB Plugin Farbverlaufanimations-Ersteller",
         "title": "Animierter TAB"
@@ -59,6 +64,10 @@
         "title": "Werkzeuge für Farbverläufe"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "Geben Sie Ihren Text ein, markieren Sie einen beliebigen Teil davon und geben Sie diesem Teil eine eigene Farbe und Formatierung. Mischen Sie so viele Farbverläufe, Volltonfarben und Stile wie Sie möchten.",
+          "title": "RGBirdflop Erweitert"
+        },
         "description": "Hex-Farbverlauf Text Generator, angetrieben by Birdflop, ein 501(c)(3) gemeinnütziger Minecraft host.",
         "title": "RGBirdflop"
       },
@@ -75,6 +84,11 @@
         "description": "Paper Timings analysieren und optimisieren.",
         "title": "Zeitplan für das Papier"
       },
+      "plugins": {
+        "description": "Verfolgen Sie Plugin-Updates, ohne jede Plugin-Seite einzeln zu überprüfen.",
+        "noServers": "Noch keine Server hinzugefügt. Fügen Sie einen Server und einige Plugins hinzu, um loszulegen!",
+        "title": "Plugin-Updates"
+      },
       "serverTools": {
         "description": "Tools, die bei der Konfiguration und Einrichtung von Minecraft-Servern helfen.",
         "title": "Server-Tools"
@@ -90,8 +104,8 @@
       "title": "Ressourcen"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Verwalten Sie hier Ihre Einstellungen und Präferenzen.",
+      "title": "Einstellungen"
     },
     "termsofService": "Nutzungsbedingungen"
   }

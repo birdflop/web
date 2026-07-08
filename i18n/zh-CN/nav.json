@@ -5,14 +5,15 @@
       "home": "返回首页",
       "title": "404：页面未找到"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "点击以关闭",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "接受",
+      "description": "我们使用 Cookie 来自动保存和加载您的偏好设置。",
+      "optOut": "拒绝",
+      "title": "Cookie"
     },
     "docs": "文档",
+    "experimental": "实验性",
     "hosting": {
       "billing": "计费",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "个人资料"
     },
     "resources": {
+      "analyze": {
+        "description": "分析 Spark 性能分析文件或 Paper Timings 并获取可能的优化建议",
+        "title": "分析"
+      },
       "animatedTAB": {
         "description": "TAB 插件渐变动画创建器",
         "title": "动画 TAB"
@@ -59,6 +64,10 @@
         "title": "渐变工具"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "输入您的文本，突出显示其中的任何部分，然后为该部分赋予其自己的颜色 and 格式。随心所欲地混合任意数量的渐变、纯色和样式。",
+          "title": "RGBirdflop 高级版"
+        },
         "description": "十六进制渐变文本生成器，由 Birdflop 提供支持，这是一个 501(c)(3) 非营利性 Minecraft 托管服务。",
         "title": "RGBirdflop"
       },
@@ -75,6 +84,11 @@
         "description": "分析 Paper Timings 并获得可能的优化",
         "title": "试卷时间"
       },
+      "plugins": {
+        "description": "追踪插件更新，而无需检查每个插件页面。",
+        "noServers": "尚未添加服务器。首先添加服务器和一些插件吧！",
+        "title": "插件更新"
+      },
       "serverTools": {
         "description": "帮助配置和设置 Minecraft 服务器的工具。",
         "title": "服务器工具"
@@ -90,8 +104,8 @@
       "title": "资源"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "在此处管理您的设置和偏好设置。",
+      "title": "设置"
     },
     "termsofService": "服务条款"
   }

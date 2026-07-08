@@ -8,16 +8,6 @@ import Hero6 from '~/images/Hero6.png?format=avif&jsx&w=1280;1920;2560;3840';
 import HeroLight1 from '~/images/HeroLight1.png?format=avif&jsx&w=1280;1920;2560;3840';
 import HeroLight2 from '~/images/HeroLight2.png?format=avif&jsx&w=1280;1920;2560;3840';
 
-export default [
-  Hero1,
-  Hero2,
-  Hero3,
-  Hero4,
-  Hero5,
-  Hero6,
-];
+export default [Hero1, Hero2, Hero3, Hero4, Hero5, Hero6];
 
-export const lightBackgrounds = [
-  HeroLight1,
-  HeroLight2,
-];
+export const lightBackgrounds = [HeroLight1, HeroLight2];

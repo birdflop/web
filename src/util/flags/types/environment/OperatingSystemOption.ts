@@ -3,12 +3,12 @@ import type { GenerateOperatingSystem } from '~/util/flags/types/generate/Genera
 import type { AvailableConfig } from '~/util/flags/config';
 
 interface File {
-    'name'?: string,
-    'mime': string,
-    'extension': string
+  name?: string;
+  mime: string;
+  extension: string;
 }
 
 export interface OperatingSystemOption extends EnvironmentOption {
-    'file': File | false,
-    'generate': GenerateOperatingSystem<AvailableConfig | 'existingFlags'>
+  file: File | false;
+  generate: GenerateOperatingSystem<AvailableConfig | 'existingFlags'>;
 }

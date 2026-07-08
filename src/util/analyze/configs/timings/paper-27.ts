@@ -5,7 +5,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['max-auto-save-chunks-per-tick']) >= 24;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'max-auto-save-chunks-per-tick'
+                  ],
+                ) >= 24
+              );
             },
             vars: ['paper'],
           },
@@ -19,7 +25,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['optimize-explosions'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'optimize-explosions'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -33,7 +43,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['mob-spawner-tick-rate']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'mob-spawner-tick-rate'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
@@ -47,7 +63,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['game-mechanics']['disable-chest-cat-detection'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'game-mechanics'
+                ]['disable-chest-cat-detection'] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -61,7 +81,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['container-update-tick-rate']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'container-update-tick-rate'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
@@ -75,7 +101,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['grass-spread-tick-rate']) == 1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'grass-spread-tick-rate'
+                  ],
+                ) == 1
+              );
             },
             vars: ['paper'],
           },
@@ -89,7 +121,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['despawn-ranges']['soft']) >= 32;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'despawn-ranges'
+                  ]['soft'],
+                ) >= 32
+              );
             },
             vars: ['paper'],
           },
@@ -103,7 +141,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['despawn-ranges']['hard']) >= 128;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'despawn-ranges'
+                  ]['hard'],
+                ) >= 128
+              );
             },
             vars: ['paper'],
           },
@@ -117,7 +161,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['hopper']['disable-move-event'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default']['hopper'][
+                  'disable-move-event'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -131,7 +179,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['non-player-arrow-despawn-rate']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'non-player-arrow-despawn-rate'
+                  ],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
@@ -145,7 +199,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['creative-arrow-despawn-rate']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'creative-arrow-despawn-rate'
+                  ],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
@@ -159,7 +219,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['prevent-moving-into-unloaded-chunks'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'prevent-moving-into-unloaded-chunks'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -173,7 +237,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['use-faster-eigencraft-redstone'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'use-faster-eigencraft-redstone'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -187,7 +255,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['fix-climbing-bypassing-cramming-rule'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'fix-climbing-bypassing-cramming-rule'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -201,7 +273,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['armor-stands-do-collision-entity-lookups'] == 'true';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'armor-stands-do-collision-entity-lookups'
+                ] == 'true'
+              );
             },
             vars: ['paper'],
           },
@@ -215,25 +291,41 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['armor-stands-tick'] == 'true';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'armor-stands-tick'
+                ] == 'true'
+              );
             },
             vars: ['paper'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'PetBlocks') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'PetBlocks',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'BlockBalls') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'BlockBalls',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.plugins.find((plugin: Field) => plugin.name == 'ArmorStandTools') !== undefined;
+              return (
+                dict_of_vars.plugins.find(
+                  (plugin: Field) => plugin.name == 'ArmorStandTools',
+                ) !== undefined
+              );
             },
             vars: ['plugins'],
           },
@@ -247,7 +339,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['per-player-mob-spawns'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'per-player-mob-spawns'
+                ] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -261,7 +357,11 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return dict_of_vars.paper['world-settings']['default']['alt-item-despawn-rate']['enabled'] == 'false';
+              return (
+                dict_of_vars.paper['world-settings']['default'][
+                  'alt-item-despawn-rate'
+                ]['enabled'] == 'false'
+              );
             },
             vars: ['paper'],
           },
@@ -275,7 +375,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['entity-per-chunk-save-limit']['experience_orb']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'entity-per-chunk-save-limit'
+                  ]['experience_orb'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
@@ -289,7 +395,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['entity-per-chunk-save-limit']['snowball']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'entity-per-chunk-save-limit'
+                  ]['snowball'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
@@ -303,7 +415,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['entity-per-chunk-save-limit']['ender_pearl']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'entity-per-chunk-save-limit'
+                  ]['ender_pearl'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },
@@ -317,7 +435,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.paper['world-settings']['default']['entity-per-chunk-save-limit']['arrow']) == -1;
+              return (
+                parseInt(
+                  dict_of_vars.paper['world-settings']['default'][
+                    'entity-per-chunk-save-limit'
+                  ]['arrow'],
+                ) == -1
+              );
             },
             vars: ['paper'],
           },

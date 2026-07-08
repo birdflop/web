@@ -1,4 +1,8 @@
-import { BaseTwoStopGradient, BaseGradient, RGBColorStop } from './BaseGradient';
+import {
+  BaseTwoStopGradient,
+  BaseGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * RGB-based gradient classes using linear RGB interpolation.
@@ -26,7 +30,11 @@ class RgbTwoStopGradient extends BaseTwoStopGradient<number[]> {
     return rgb;
   }
 
-  protected interpolate(start: number[], end: number[], factor: number): number[] {
+  protected interpolate(
+    start: number[],
+    end: number[],
+    factor: number,
+  ): number[] {
     return [
       start[0] + (end[0] - start[0]) * factor,
       start[1] + (end[1] - start[1]) * factor,

@@ -1,18 +1,31 @@
-import { component$, useContext, useContextProvider, useSignal, useStore } from '@builder.io/qwik';
+import {
+  component$,
+  useContextProvider,
+  useSignal,
+  useStore,
+} from '@builder.io/qwik';
 import { defaultDescription, generateHead } from '~/root';
-import RGBirdflop, { renderPreview, rgbStoreContext, showAllGradientsContext } from '~/components/Rgbirdflop/RGBirdflop';
 import { Link, routeLoader$ } from '@builder.io/qwik-city';
 import { getCookies } from '~/util/dataUtils';
-import { generateOutput, GRADIENT_TYPES, rgbDefaults } from '@birdflop/rgbirdflop';
-import { previewStyleContext, Selection, selectionContext } from '~/components/Rgbirdflop/Input';
-import { Blend, Palette, Sparkles } from 'lucide-icons-qwik';
+import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
+import {
+  previewStyleContext,
+  Selection,
+  selectionContext,
+} from '~/components/rgbirdflop/Input';
+import { Palette, TestTube2 } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { openItemsContext } from '~/routes/layout';
+import { renderPreview } from '~/components/rgbirdflop/preview';
+import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import RGBirdflop, {
+  rgbStoreContext,
+  showAllGradientsContext,
+} from '~/components/rgbirdflop/RGBirdflop';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
-    cookies: Partial<typeof rgbDefaults>
-    errors: string[]
+    cookies: Partial<typeof rgbDefaults>;
+    errors: string[];
   } = getCookies(cookie, 'rgb', url.searchParams);
   return cookies;
 });
@@ -22,10 +35,13 @@ export default component$(() => {
   const useCookiesValue = useRGBCookies().value;
   const { cookies: rgbCookies, errors } = useCookiesValue;
 
-  const rgbStore = useStore({
-    ...structuredClone(rgbDefaults),
-    ...rgbCookies,
-  }, { deep: true });
+  const rgbStore = useStore(
+    {
+      ...structuredClone(rgbDefaults),
+      ...rgbCookies,
+    },
+    { deep: true },
+  );
   useContextProvider(rgbStoreContext, rgbStore);
 
   const selection = useSignal<Selection>();
@@ -35,66 +51,43 @@ export default component$(() => {
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
 
-  const openItemsStore = useContext(openItemsContext);
-
   return (
     <RGBirdflop errors={errors} output={generateOutput(rgbStore)}>
-      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2" q:slot="header">
-        <Palette size={32} />
-        {t('nav.resources.hexGradient.title@@RGBirdflop')}
-      </h1>
-      <p class="mb-2 text-lum-text-secondary" q:slot="header">
-        {t('nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.')}
-      </p>
-      <Link href="/resources/rgb/beta" q:slot="column3" class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum p-2 gap-2 text-sm w-fit whitespace-normal">
-        <Sparkles size={18} class="min-w-4 min-h-4" />
-        {t('rgb.beta.tryAdvanced@@Try the Advanced editor (multiple gradients & per-character styles)')}
-        <span class="lum-grad-bg-blue/50 text-xs py-0.5 px-2 rounded-lum-1">
-          {t('nav.experimental@@experimental')}
-        </span>
-      </Link>
+      <div class="flex items-start gap-2" q:slot="header">
+        <div class="flex flex-1 flex-col gap-1">
+          <h1
+            class="my-2 flex items-center gap-3 text-2xl font-extrabold"
+            q:slot="header"
+          >
+            <Palette size={32} />
+            {t('nav.resources.hexGradient.title@@RGBirdflop')}
+          </h1>
+          <p class="text-lum-text-secondary mb-2" q:slot="header">
+            {t(
+              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
+            )}
+          </p>
+        </div>
+        <Link
+          href="/resources/rgb/beta"
+          class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum w-fit gap-2 p-2 text-sm whitespace-normal"
+        >
+          <TestTube2 size={18} class="min-h-4 min-w-4" />
+          {t(
+            'rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients',
+          )}
+        </Link>
+      </div>
       {showAllGradients.value
-        ? GRADIENT_TYPES.map((gradientType) => {
-          const tempStore = {
-            ...rgbStore,
-            gradientType: gradientType,
-          };
-          const isActive = gradientType === rgbStore.gradientType;
-          return (
-            <span key={gradientType} class="flex items-center gap-2" q:slot="input">
-              <span
-                class={{
-                  'lum-grad-bg-lum-input-bg lum-btn-p-1 rounded-lum text-[10px] min-w-15 text-center': true,
-                  'text-lum-text': isActive,
-                  'text-gray-400': !isActive,
-                }}
-              >
-                {gradientType}
-              </span>
-              <span class="flex-1">
-                {renderPreview(
-                  tempStore,
-                  previewStyle.value == 'default' ? 4 : 2,
-                )}
-              </span>
-            </span>
-          );
-        })
-        : renderPreview(
-          rgbStore,
-          previewStyle.value == 'default' ? 4 : 2,
-        )}
-
-      <button onClick$={() => {
-        openItemsStore.items = openItemsStore.items.includes('textshadow')
-          ? openItemsStore.items.filter(item => item !== 'textshadow')
-          : ['textshadow'];
-      }} class={{
-        'lum-grad-bg-blue!': openItemsStore.items.includes('textshadow'),
-      }} q:slot="mobile-navbar">
-        <Blend />
-        {t('rgb.colors.shadow.title@@Text Shadow')}
-      </button>
+        ? renderAllGradientsPreview(
+          (gradientType) =>
+            renderPreview(
+              { ...rgbStore, gradientType },
+              previewStyle.value == 'default' ? 4 : 2,
+            ),
+          rgbStore.gradientType,
+        )
+        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
     </RGBirdflop>
   );
 });

@@ -12,7 +12,7 @@ export const onRequest: RequestHandler = ({ request, locale, cookie }) => {
 
   // Check for old locale cookie as well
   const oldLocale = cookie.get('locale')?.json() as {
-    lang: keyof typeof languages
+    lang: keyof typeof languages;
   };
 
   if (settings.locale) lang = settings.locale;

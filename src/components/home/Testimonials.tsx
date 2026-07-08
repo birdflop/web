@@ -7,7 +7,8 @@ import { SiGoogle, SiTrustpilot } from 'simple-icons-qwik';
 
 const testimonials = [
   {
-    image: 'https://lh3.googleusercontent.com/a-/ALV-UjUNDQylUlWQB3O8Hu6QMwbxIfP1OMRqpGYZ3fW72-JuVt-wZ5eFvQ=w72-h72-p-rp-mo-ba3-br100',
+    image:
+      'https://lh3.googleusercontent.com/a-/ALV-UjUNDQylUlWQB3O8Hu6QMwbxIfP1OMRqpGYZ3fW72-JuVt-wZ5eFvQ=w72-h72-p-rp-mo-ba3-br100',
     name: 'Mikkel Hansen',
     description: `
       I'm happy with my subscription, providing nearly full system access at a great price point.
@@ -17,7 +18,8 @@ const testimonials = [
     link: 'https://maps.app.goo.gl/6zZBB1HSqdGyTmeT6',
   },
   {
-    image: 'https://lh3.googleusercontent.com/a-/ALV-UjWgGf8lxvVXxJ-XLj4lR_fg9vpg6Es7yyO3L_kn5bFA-mlE2So=w72-h72-p-rp-mo-ba2-br100',
+    image:
+      'https://lh3.googleusercontent.com/a-/ALV-UjWgGf8lxvVXxJ-XLj4lR_fg9vpg6Es7yyO3L_kn5bFA-mlE2So=w72-h72-p-rp-mo-ba2-br100',
     name: 'Hunter Smith',
     description: `
       Great service! I like hosting my Minecraft server here and the customer service that is provided is awesome.
@@ -25,7 +27,8 @@ const testimonials = [
     link: 'https://maps.app.goo.gl/muRrvsTKKVYFgtYq9',
   },
   {
-    image: 'https://lh3.googleusercontent.com/a-/ALV-UjVUyTs5IBGv7tzc6vfl3LPjoJqE3fYZx3AkVP7-Yb_qClOeecg=w72-h72-p-rp-mo-br100',
+    image:
+      'https://lh3.googleusercontent.com/a-/ALV-UjVUyTs5IBGv7tzc6vfl3LPjoJqE3fYZx3AkVP7-Yb_qClOeecg=w72-h72-p-rp-mo-br100',
     name: 'Rensura',
     description: `
       Absolutely amazing service. Ever since setting up my server they have been absolutely phenomenal in response time,
@@ -34,7 +37,8 @@ const testimonials = [
     link: 'https://maps.app.goo.gl/GEc5uhvu9GpkMyN47',
   },
   {
-    image: 'https://lh3.googleusercontent.com/a-/ALV-UjXgAKImQtGZT54-UxHCp0q1qKxXxvN5bWtW25WsMXp_GXpo5tg=w72-h72-p-rp-mo-br100',
+    image:
+      'https://lh3.googleusercontent.com/a-/ALV-UjXgAKImQtGZT54-UxHCp0q1qKxXxvN5bWtW25WsMXp_GXpo5tg=w72-h72-p-rp-mo-br100',
     name: 'Voldechu The Second',
     description: `
       Server has run off of Birdflop for years now, and when the rare problem occurs they're on top of it in minutes!
@@ -42,7 +46,8 @@ const testimonials = [
     link: 'https://maps.app.goo.gl/UYenFJwRmsW6ZFZj8',
   },
   {
-    image: 'https://lh3.googleusercontent.com/a-/ALV-UjU4YKyizffiGFijCfoFHF6L-Y1yvfCFc_0DdXHXlvj9irg21sjEUQ=w72-h72-p-rp-mo-ba3-br100',
+    image:
+      'https://lh3.googleusercontent.com/a-/ALV-UjU4YKyizffiGFijCfoFHF6L-Y1yvfCFc_0DdXHXlvj9irg21sjEUQ=w72-h72-p-rp-mo-ba3-br100',
     name: 'Muhammad Saboor Bilal',
     description: `
       amazing host fr top tier, the fact that it's non-profit makes it also cheaper than other hosts
@@ -50,7 +55,8 @@ const testimonials = [
     link: 'https://maps.app.goo.gl/8ACmFHJhU2JLd8g89',
   },
   {
-    image: 'https://user-images.trustpilot.com/65a592af0b3452001203b7e7/73x73.png',
+    image:
+      'https://user-images.trustpilot.com/65a592af0b3452001203b7e7/73x73.png',
     name: 'Wizzy SMP',
     title: 'Birdflop is the best Minecraft server host!',
     description: `
@@ -83,7 +89,8 @@ const testimonials = [
     link: 'https://www.trustpilot.com/reviews/5fd91bba755dc10b4824093d',
   },
   {
-    image: 'https://user-images.trustpilot.com/5ee43541207f32075f73a687/73x73.png',
+    image:
+      'https://user-images.trustpilot.com/5ee43541207f32075f73a687/73x73.png',
     name: 'sab',
     title: 'birdflop good',
     description: `
@@ -99,7 +106,8 @@ const testimonials = [
     link: 'https://www.trustpilot.com/reviews/655f9f61ead4189d862f06ce',
   },
   {
-    image: 'https://user-images.trustpilot.com/603d5a838063b500195c1f75/73x73.png',
+    image:
+      'https://user-images.trustpilot.com/603d5a838063b500195c1f75/73x73.png',
     name: 'Kayla T.',
     description: `
       I've been using Birdflop for a week now and I've gotten service that is not only cheaper than a shared CPU VPS at a hosting provider, but excellent support from the support team on odd issues I've had.
@@ -126,70 +134,98 @@ const testimonials = [
 ];
 
 export default component$(() => {
-  useOnWindow('scroll', $(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) return;
-    const bg = document.getElementById('bg')!;
-    bg.style.bottom = `${window.scrollY / 3}px`;
-    bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
-    const hero = document.getElementById('hero')!;
-    hero.style.transform = `translateY(${window.scrollY / 2}px)`;
-  }));
+  useOnWindow(
+    'scroll',
+    $(() => {
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mediaQuery.matches) return;
+      const bg = document.getElementById('bg')!;
+      bg.style.bottom = `${window.scrollY / 3}px`;
+      bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
+      const hero = document.getElementById('hero')!;
+      hero.style.transform = `translateY(${window.scrollY / 2}px)`;
+    }),
+  );
 
   // pick random 6 testimonials to show
-  const sixTestimonials = testimonials.sort(() => 0.5 - Math.random()).slice(0, 6);
+  const sixTestimonials = testimonials
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 6);
 
-  return <section class="flex flex-col w-full bg-bg p-10 items-center justify-center"
-    style={{
-      '--lum-border-radius': '1.5rem',
-    }}>
-    <Anchor id="testimonials">
-      <h3 id="testimonials" class="font-extrabold text-5xl my-6 mr-2">
-        Testimonials
-      </h3>
-    </Anchor>
-    <div class="grid md:grid-cols-2 gap-2 max-w-6xl">
-      {sixTestimonials.map(({ name, image, title, description, link }) => {
-        return <a href={link} key={name}
-          class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-          <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
-            {image ?
-              <img src={image} alt={name} class="rounded-full object-cover" width={30} height={30} />
-              : <CircleUser size={30} />}
-            {name}
-          </h4>
-          {title && <p class="font-bold">
-            {title}
-          </p>}
-          <p class="whitespace-normal text-lum-text-secondary">
-            {description}
-          </p>
-        </a>;
-      })}
-    </div>
-    <div class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200! justify-center px-6 mt-2"
-      onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-      onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}>
-      <h4 class="mb-2 flex items-center gap-2 font-bold text-2xl">
-        <Star size={30} /> More
-      </h4>
-      <p class="text-lum-text-secondary">
-        Check out our Trustpilot or Google page for more testimonials.
-      </p>
-      <div class="flex gap-2">
-        <a href="https://www.trustpilot.com/review/birdflop.com" class="flex-1 lum-btn lum-btn-p-3 rounded-lum-3">
-          <SiTrustpilot class="fill-current" />
-          Trustpilot
-        </a>
-        <a href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8" class="flex-1 lum-btn lum-btn-p-3 rounded-lum-3">
-          <SiGoogle class="fill-current" />
-          Google
-        </a>
+  return (
+    <section
+      class="bg-bg flex w-full flex-col items-center justify-center p-10"
+      style={{
+        '--lum-border-radius': '1.5rem',
+      }}
+    >
+      <Anchor id="testimonials">
+        <h3 id="testimonials" class="my-6 mr-2 text-5xl font-extrabold">
+          Testimonials
+        </h3>
+      </Anchor>
+      <div class="grid max-w-6xl gap-2 md:grid-cols-2">
+        {sixTestimonials.map(({ name, image, title, description, link }) => {
+          return (
+            <a
+              href={link}
+              key={name}
+              class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+              onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+              onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+            >
+              <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                {image ? (
+                  <img
+                    src={image}
+                    alt={name}
+                    class="rounded-full object-cover"
+                    width={30}
+                    height={30}
+                  />
+                ) : (
+                  <CircleUser size={30} />
+                )}
+                {name}
+              </h4>
+              {title && <p class="font-bold">{title}</p>}
+              <p class="text-lum-text-secondary whitespace-normal">
+                {description}
+              </p>
+            </a>
+          );
+        })}
       </div>
-    </div>
-  </section>;
+      <div
+        class="lum-card lum-grad-bg-lum-card-bg mt-2 justify-center px-6 transition-all duration-200!"
+        onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+        onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+      >
+        <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+          <Star size={30} /> More
+        </h4>
+        <p class="text-lum-text-secondary">
+          Check out our Trustpilot or Google page for more testimonials.
+        </p>
+        <div class="flex gap-2">
+          <a
+            href="https://www.trustpilot.com/review/birdflop.com"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+          >
+            <SiTrustpilot class="fill-current" />
+            Trustpilot
+          </a>
+          <a
+            href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+          >
+            <SiGoogle class="fill-current" />
+            Google
+          </a>
+        </div>
+      </div>
+    </section>
+  );
 });
 
 export const head = generateHead({});

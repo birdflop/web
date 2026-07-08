@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Animation Interval",
       "name": "Animation Name",
-      "style": "Animation Style"
+      "style": {
+        "BOUNCING": "Bouncing",
+        "FULL_TEXT_CYCLE": "Full Text Cycle",
+        "LEFT_TO_RIGHT": "Left to Right",
+        "RIGHT_TO_LEFT": "Right to Left",
+        "title": "Animation Style"
+      }
     },
     "length": "Gradient Length",
     "outputFormat": {

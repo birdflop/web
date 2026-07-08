@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Animatie interval",
       "name": "Animatie Naam",
-      "style": "Animatie stijl"
+      "style": {
+        "BOUNCING": "Stuiteren",
+        "FULL_TEXT_CYCLE": "Volledige tekstcyclus",
+        "LEFT_TO_RIGHT": "Links naar rechts",
+        "RIGHT_TO_LEFT": "Rechts naar links",
+        "title": "Animatie stijl"
+      }
     },
     "length": "Gradient lengte",
     "outputFormat": {

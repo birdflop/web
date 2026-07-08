@@ -5,7 +5,7 @@ export type PluginVersion = {
   id: number | string;
   name: string;
   releaseDate: Date;
-}
+};
 
 export type PluginSource = 'spigot' | 'modrinth' | 'misc';
 
@@ -20,7 +20,7 @@ export type PluginType3 = {
 };
 
 export type PluginData = {
-  name?: string
+  name?: string;
   external?: boolean;
   tag?: string;
   iconUrl?: string;
@@ -38,7 +38,7 @@ export type PluginData = {
   latestVersion?: PluginVersion;
   sourceCodeLink?: string;
   versions?: PluginVersion[];
-}
+};
 
 export type PluginWithData = PluginType & {
   data?: PluginData;
@@ -64,9 +64,9 @@ export type PluginType = {
     sizeUnit: string;
     url: string;
     externalUrl?: string;
-  }
+  };
   sourceCodeLink?: string;
-}
+};
 
 export function getPlugin(plugin: PluginType): ServerPlugin {
   switch (plugin.type) {
@@ -79,7 +79,11 @@ export function getPlugin(plugin: PluginType): ServerPlugin {
   }
 }
 
-export function searchPlugins(type: PluginSource, query: string, loaders?: string[]) {
+export function searchPlugins(
+  type: PluginSource,
+  query: string,
+  loaders?: string[],
+) {
   switch (type) {
   case 'spigot':
     return SpigotPlugin.search(query);

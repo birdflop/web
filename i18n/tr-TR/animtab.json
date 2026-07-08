@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Animasyon Aralığı",
       "name": "Animasyon Adı",
-      "style": "Animasyon Stili"
+      "style": {
+        "BOUNCING": "Sıçrama",
+        "FULL_TEXT_CYCLE": "Tam Metin Döngüsü",
+        "LEFT_TO_RIGHT": "Soldan Sağa",
+        "RIGHT_TO_LEFT": "Sağdan Sola",
+        "title": "Animasyon Stili"
+      }
     },
     "length": "Gradyant Uzunluğu",
     "outputFormat": {

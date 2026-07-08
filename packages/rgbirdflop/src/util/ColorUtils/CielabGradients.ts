@@ -1,5 +1,14 @@
-import { rgbToLchab, interpolateLchab, lchabToRgb, type LCHab } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
+import {
+  rgbToLchab,
+  interpolateLchab,
+  lchabToRgb,
+  type LCHab,
+} from '../Colors';
+import {
+  BaseGradient,
+  BaseTwoStopGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * CIELAB/LCh(ab)-based gradient classes using perceptually uniform color interpolation.

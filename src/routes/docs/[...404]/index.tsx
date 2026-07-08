@@ -19,8 +19,12 @@ export default component$(() => {
   return (
     <section>
       <div>
-        <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
-        <h1  class="font-extrabold text-5xl my-6">
+        <LogoBirdflop
+          confused
+          size={100}
+          fillGradient={['#54daf4', '#545eb6']}
+        />
+        <h1 class="my-6 text-5xl font-extrabold">
           {t('nav.404.title@@404: Page not found')}
         </h1>
         <h4 class="text-lum-text-secondary">

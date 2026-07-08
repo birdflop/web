@@ -46,15 +46,15 @@ export function rgbToHsl(rgb: number[]): HSL {
     s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
 
     switch (max) {
-    case r:
-      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
-      break;
-    case g:
-      h = ((b - r) / delta + 2) / 6;
-      break;
-    case b:
-      h = ((r - g) / delta + 4) / 6;
-      break;
+      case r:
+        h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / delta + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / delta + 4) / 6;
+        break;
     }
   }
 
@@ -97,11 +97,7 @@ export function hslToRgb(hsl: HSL): number[] {
     b = hue2rgb(p, q, h - 1 / 3);
   }
 
-  return [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),
-  ];
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 /**
@@ -132,11 +128,7 @@ export function hslToHex(hsl: HSL): string {
  * @param factor - Interpolation factor (0 = color1, 1 = color2)
  * @returns Interpolated HSL color
  */
-export function interpolateHsl(
-  color1: HSL,
-  color2: HSL,
-  factor: number,
-): HSL {
+export function interpolateHsl(color1: HSL, color2: HSL, factor: number): HSL {
   // Interpolate S and L linearly
   const s = color1.s + (color2.s - color1.s) * factor;
   const l = color1.l + (color2.l - color1.l) * factor;
@@ -184,15 +176,15 @@ export function rgbToHsv(rgb: number[]): HSV {
 
   if (delta !== 0) {
     switch (max) {
-    case r:
-      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
-      break;
-    case g:
-      h = ((b - r) / delta + 2) / 6;
-      break;
-    case b:
-      h = ((r - g) / delta + 4) / 6;
-      break;
+      case r:
+        h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / delta + 2) / 6;
+        break;
+      case b:
+        h = ((r - g) / delta + 4) / 6;
+        break;
     }
   }
 
@@ -222,33 +214,41 @@ export function hsvToRgb(hsv: HSV): number[] {
   let r: number, g: number, b: number;
 
   switch (i % 6) {
-  case 0:
-    r = v; g = t; b = p;
-    break;
-  case 1:
-    r = q; g = v; b = p;
-    break;
-  case 2:
-    r = p; g = v; b = t;
-    break;
-  case 3:
-    r = p; g = q; b = v;
-    break;
-  case 4:
-    r = t; g = p; b = v;
-    break;
-  case 5:
-    r = v; g = p; b = q;
-    break;
-  default:
-    r = g = b = 0;
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
+    default:
+      r = g = b = 0;
   }
 
-  return [
-    Math.round(r * 255),
-    Math.round(g * 255),
-    Math.round(b * 255),
-  ];
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
 /**
@@ -279,11 +279,7 @@ export function hsvToHex(hsv: HSV): string {
  * @param factor - Interpolation factor (0 = color1, 1 = color2)
  * @returns Interpolated HSV color
  */
-export function interpolateHsv(
-  color1: HSV,
-  color2: HSV,
-  factor: number,
-): HSV {
+export function interpolateHsv(color1: HSV, color2: HSV, factor: number): HSV {
   // Interpolate S and V linearly
   const s = color1.s + (color2.s - color1.s) * factor;
   const v = color1.v + (color2.v - color1.v) * factor;

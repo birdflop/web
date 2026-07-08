@@ -17,27 +17,27 @@ export type MarkdownItems = Record<string, MDX>;
 export const menuItemPriority: {
   [key: string]: number;
 } = {
-  'Overview': 1,
-  'Panel': 2,
-  'Games': 3,
+  Overview: 1,
+  Panel: 2,
+  Games: 3,
   'Non Profit': 4,
   'Open Source': 5,
-  'Rgbirdflop': 6,
+  Rgbirdflop: 6,
 };
 
 export const getMarkdownItems = async () => {
   const rawData = await Promise.all(
-    Object.entries(import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}')).map(
-      async ([k, v]) => {
-        return [
-          k
-            .replace('/src/routes', '')
-            .replace('index.mdx', '')
-            .replace('index.md', ''),
-          await v(),
-        ] as const;
-      },
-    ),
+    Object.entries(
+      import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}'),
+    ).map(async ([k, v]) => {
+      return [
+        k
+          .replace('/src/routes', '')
+          .replace('index.mdx', '')
+          .replace('index.md', ''),
+        await v(),
+      ] as const;
+    }),
   );
 
   const markdownItems: MarkdownItems = {};
@@ -67,13 +67,13 @@ export default component$(() => {
   });
   const title = currentItem ? currentItem[1].title : 'Docs';
   return (
-    <div class="flex gap-12 xl:gap-20 items-stretch lg:pl-0 xl:pr-0 min-h-dvh">
+    <div class="flex min-h-dvh items-stretch gap-12 lg:pl-0 xl:gap-20 xl:pr-0">
       <DocsSidebar />
-      <main class="contents markdown">
-        <div class="w-full mt-48 sm:mt-30 min-w-48">
+      <main class="markdown contents">
+        <div class="mt-48 w-full min-w-48 sm:mt-30">
           <Breadcrumbs />
           <article class="px-4">
-            <h1 class="font-bold text-center border-b border-gray-700 pb-4">
+            <h1 class="border-b border-gray-700 pb-4 text-center font-bold">
               {title}
             </h1>
             <Slot />

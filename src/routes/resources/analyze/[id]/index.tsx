@@ -8,7 +8,6 @@ import { collector } from '~/util/analyze/functions/collector';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useResults = routeLoader$(async ({ params }) => {
-
   // paper timings id is 32 characters and spark profile id is 10 characters
   // just in case spark decides to use more than 10, just check if it's less than 30 characters idk
   if (params.id.length < 30) {
@@ -22,7 +21,11 @@ export const useResults = routeLoader$(async ({ params }) => {
   } else {
     const results = await analyzeTimings(params.id);
     try {
-      await collector(params.id, 'https://api.profiler.birdflop.com', 'timings');
+      await collector(
+        params.id,
+        'https://api.profiler.birdflop.com',
+        'timings',
+      );
     } catch (error) {
       console.error('Collector error:', error);
     }
@@ -35,16 +38,14 @@ export default component$(() => {
 
   return (
     <Analyze>
-      <div class="w-full my-12 grid grid-cols-3 gap-4">
+      <div class="my-12 grid w-full grid-cols-3 gap-4">
         {results.value.map((field: Field, i: number) => {
           return (
             <div class="lum-card" key={`field${i}`}>
-              <p class="font-bold text-xl wrap-break-word">
+              <p class="text-xl font-bold wrap-break-word">
                 {field.name.replace(/\./g, '\n> ')}
               </p>
-              <p class="lum-text-secondary">
-                {field.value}
-              </p>
+              <p class="lum-text-secondary">{field.value}</p>
               {field.buttons?.map((button: any, i2: number) => {
                 return (
                   <a class="lum-btn" key={`button${i2}-${i}`} href={button.url}>
@@ -65,5 +66,7 @@ export default component$(() => {
 
 export const head = generateHead({
   title: 'Automatic Minecraft Spark Profile and Timings Analyzer - Birdflop',
-  description: 'Analyze your Spark Profile and Paper Timings to get optimization recommendations. Developed by Birdflop. ' + defaultDescription,
+  description:
+    'Analyze your Spark Profile and Paper Timings to get optimization recommendations. Developed by Birdflop. ' +
+    defaultDescription,
 });

@@ -1,11 +1,25 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "Kleur toevoegen",
+      "backToClassic": "Klassieke editor",
+      "highlightHint": "Markeer letters in het vak hierboven om alleen dat deel te kleuren en op te maken.",
+      "mode": {
+        "gradient": "Verloop",
+        "none": "Ongekleurd",
+        "noneDescription": "Deze tekens behouden de standaardkleur van Minecraft (alleen opmaak wordt toegepast).",
+        "solid": "Egaal"
+      },
+      "selectAll": "Alles selecteren",
+      "styling": "Opmaak",
+      "tryAdvanced": "Probeer de Geavanceerde editor met segment-gebaseerde verlopen"
+    },
     "colors": {
       "amount": "Aantal kleuren",
       "character": "Karakter",
       "charsPer": "Karakters per kleur",
       "color": "Kleur",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "Kopiëren van tekstkleuren",
       "customFormat": "Aangepast formaat",
       "disperse": {
         "always": {
@@ -14,23 +28,23 @@
         },
         "title": "Verspreiden"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "Dupliceren",
       "format": "Kleurformaat",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "Verlooptype",
+      "invert": "Inverteren",
       "lowercase": {
         "description": "Zet dit aan als je kleine hexadecimale codes wilt gebruiken.",
         "title": "Kleine hexadecimale codes"
       },
-      "position": "Position",
+      "position": "Positie",
       "randomize": "Willekeurig maken",
-      "reverse": "Reverse",
+      "reverse": "Omdraaien",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "Aangepaste tekstschaduw",
         "title": "Tekstschaduw",
         "warning": "Waarschuwing: Tekstschaduw werkt alleen met JSON-opmaak!"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "Schudden",
       "title": "Kleuren",
       "trimSpaces": {
         "description": "Zet dit uit als je lege onderstrepingen / doorhalingen gebruikt",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "Vet",
       "character": "Opmaak karakter",
+      "clear": "Opmaak wissen",
       "italic": "Cursief",
       "obfuscate": "Verduisteren",
       "options": "Opmaak opties",
@@ -69,8 +84,8 @@
         "chat": "Minecraft chat",
         "default": "Standaard",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
+          "chest": "Minecraft GUI Kist",
+          "item": "Minecraft GUI Itemnaam",
           "lore": "Minecraft GUI Item Lore"
         },
         "tab": {
@@ -80,9 +95,11 @@
         },
         "typeHere": "Typ hier!"
       },
-      "title": "Invoertekst"
+      "rawEdit": "Ruwe bewerkingsmodus",
+      "title": "Invoertekst",
+      "viewFormatted": "Bekijk geformatteerde weergave"
     },
-    "options": "Options",
+    "options": "Opties",
     "output": {
       "copied": {
         "description": "De RGB-tekst is succesvol naar je klembord gekopieerd.",
@@ -96,7 +113,7 @@
       "back": "Terug naar voorinstellingen",
       "copied": {
         "description": "Voorinstelling succesvol naar klembord gekopieerd!",
-        "title": "Preset Copied!"
+        "title": "Preset gekopieerd!"
       },
       "copy": "Kopiëren",
       "createNew": "Maak een nieuwe voorinstelling",
@@ -123,8 +140,9 @@
       },
       "pasteHere": "Plak hier",
       "pending": "Deze voorinstelling wacht op beoordeling en is mogelijk nog niet beschikbaar voor andere gebruikers.",
+      "personalPresets": "Persoonlijke presets",
       "presetData": "Voorinstelling gegevens",
-      "preview": "Preset Preview",
+      "preview": "Preset-voorvertoning",
       "publish": "Publiceer je eigen voorinstelling",
       "remove": "Verwijderen",
       "save": "Opslaan",
@@ -134,13 +152,14 @@
         "title": "Voorinstelling opgeslagen!",
         "warning": "Log in om voorinstellingen permanent op te slaan."
       },
+      "savedPresets": "Opgeslagen presets",
       "showSaved": {
         "description": "Zet dit aan om alleen je opgeslagen voorinstellingen te tonen.",
         "title": "Toon opgeslagen voorinstellingen"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "Minst opgeslagen",
+        "mostSaved": "Meest opgeslagen",
         "nameAZ": "Naam A-Z",
         "nameZA": "Naam Z-A",
         "newest": "Nieuwste eerst",
@@ -163,6 +182,12 @@
         "description": "Zet dit aan om de voorvertoningen te tonen met de huidige opties toegepast.",
         "title": "Toon voorvertoning met huidige opties"
       }
+    },
+    "segmentColorEditor": {
+      "title": "Segmentkleuren bewerken"
+    },
+    "segments": {
+      "title": "Segmenten"
     }
   }
 }

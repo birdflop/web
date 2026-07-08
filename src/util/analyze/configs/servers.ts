@@ -4,7 +4,8 @@ export default function getConfig() {
       {
         name: 'Yatopia',
         prefix: '❌',
-        value: 'Yatopia is prone to bugs and is no longer in development.\nFind a better server fork.',
+        value:
+          'Yatopia is prone to bugs and is no longer in development.\nFind a better server fork.',
         buttons: [
           {
             text: 'Paper',
@@ -23,7 +24,8 @@ export default function getConfig() {
       {
         name: 'Mirai',
         prefix: '❌',
-        value: 'Mirai is prone to bugs and corruption (AKA Yatopia 2.0).\nFind a better server fork.',
+        value:
+          'Mirai is prone to bugs and corruption (AKA Yatopia 2.0).\nFind a better server fork.',
         buttons: [
           {
             text: 'Paper',

@@ -1,19 +1,19 @@
 {
   "animtexture": {
-    "accumulate": "Add to existing frames",
+    "accumulate": "Zu vorhandenen Frames hinzufügen",
     "animationPreview": "Vorschau der Animation",
     "bounce": "Springende Animation",
     "downloadMCMETA": "MCMETA Herunterladen",
     "downloadPNG": "PNG Herunterladen",
     "duration": "Dauer",
-    "frames": "Animation Frames",
+    "frames": "Animationsframes",
     "height": "Höhe",
     "lockDimensions": "Dimensionen feststellen",
     "pasteUrl": "GIF oder Bild-URL einfügen",
     "selectFrames": "GIF oder Bild von Ihrem Gerät auswählen",
     "showChatPreview": "Minecraft-Chat-Vorschau anzeigen",
     "syncDuration": "Dauer synchronisieren",
-    "texture": "Texture",
+    "texture": "Textur",
     "textureName": "Name der Textur",
     "width": "Breite"
   }

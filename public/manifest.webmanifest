@@ -1,35 +1,35 @@
 {
-    "theme_color" : "#0D0D0D",
-    "background_color" : "#0D0D0D",
-    "name": "Birdflop",
-    "short_name": "Birdflop",
-    "start_url": ".",
-    "display": "standalone",
-    "description": "The only 501(c)(3) nonprofit Minecraft server host.",
-    "icons": [
-        {
-            "src": "/branding/pwa-icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "/branding/pwa-icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "/branding/pwa-icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png",
-            "purpose": "any maskable"
-        },
-        {
-            "src": "/branding/pwa-icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-        }
-    ]
+  "theme_color": "#0D0D0D",
+  "background_color": "#0D0D0D",
+  "name": "Birdflop",
+  "short_name": "Birdflop",
+  "start_url": ".",
+  "display": "standalone",
+  "description": "The only 501(c)(3) nonprofit Minecraft server host.",
+  "icons": [
+    {
+      "src": "/branding/pwa-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/branding/pwa-icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/branding/pwa-icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/branding/pwa-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

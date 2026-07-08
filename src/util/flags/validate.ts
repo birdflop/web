@@ -2,7 +2,10 @@ import * as v from 'valibot';
 import type { AvailableConfig } from './config';
 import { config } from './config';
 import type { AvailableOperatingSystem } from './environment/operatingSystem';
-import { defaultOperatingSystem, operatingSystem } from './environment/operatingSystem';
+import {
+  defaultOperatingSystem,
+  operatingSystem,
+} from './environment/operatingSystem';
 import type { AvailableServerType } from './environment/serverType';
 import { defaultServerType, serverType } from './environment/serverType';
 
@@ -10,7 +13,10 @@ const operatingSystemKeys = Object.keys(operatingSystem);
 const serverTypeKeys = Object.keys(serverType);
 
 export const BaseConfigValidation = v.object({
-  operatingSystem: v.optional(v.picklist(operatingSystemKeys), defaultOperatingSystem),
+  operatingSystem: v.optional(
+    v.picklist(operatingSystemKeys),
+    defaultOperatingSystem,
+  ),
   serverType: v.optional(v.picklist(serverTypeKeys), defaultServerType),
   withHTML: v.optional(v.boolean(), false),
   withFlags: v.optional(v.boolean(), true),
@@ -39,9 +45,10 @@ export function generateConfigSchema(
       continue;
     }
 
-    schema[key] = value.default !== undefined
-      ? v.optional(value.type, value.default)
-      : value.type;
+    schema[key] =
+      value.default !== undefined
+        ? v.optional(value.type, value.default)
+        : value.type;
   }
 
   // flags

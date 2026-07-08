@@ -1,7 +1,5 @@
 import { AdapterUser as AdapterUserFromAuth } from '@auth/qwik/adapters';
-import {
-  User as UserFromAuth,
-} from '@auth/qwik';
+import { User as UserFromAuth } from '@auth/qwik';
 import { rgbPreset } from './util/rgb/presets';
 import { PublicPreset } from '../drizzle/schema';
 
@@ -21,7 +19,10 @@ declare module '@auth/qwik/adapters' {
 declare global {
   interface Window {
     umami?: {
-      track: (eventName: string, payload?: Record<string, string | number>) => void;
+      track: (
+        eventName: string,
+        payload?: Record<string, string | number>,
+      ) => void;
     };
   }
 }

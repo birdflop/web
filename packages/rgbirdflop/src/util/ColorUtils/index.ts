@@ -10,20 +10,33 @@ import { RGBColorStop } from './BaseGradient';
  * Available gradient types as a const array.
  * This is the single source of truth for gradient type values.
  */
-export const GRADIENT_TYPES = ['rgb', 'hsl', 'oklab', 'oklch', 'cielab', 'luvLch'] as const;
+export const GRADIENT_TYPES = [
+  'rgb',
+  'hsl',
+  'oklab',
+  'oklch',
+  'cielab',
+  'luvLch',
+] as const;
 
 /**
  * Union type of all available gradient types.
  * Automatically derived from GRADIENT_TYPES array.
  */
-export type GradientType = typeof GRADIENT_TYPES[number];
+export type GradientType = (typeof GRADIENT_TYPES)[number];
 
 /**
  * Unified gradient interface that can switch between RGB and OKLAB interpolation.
  * Provides a consistent API regardless of the underlying color space.
  */
 export class ColorGradient {
-  private gradient: RgbGradient | HslGradient | OklabGradient | OklchGradient | CielabGradient | LuvLChGradient;
+  private gradient:
+    | RgbGradient
+    | HslGradient
+    | OklabGradient
+    | OklchGradient
+    | CielabGradient
+    | LuvLChGradient;
   private type: GradientType;
 
   /**
@@ -40,25 +53,25 @@ export class ColorGradient {
     this.type = type;
 
     switch (type) {
-    case 'hsl':
-      this.gradient = new HslGradient(colors, numSteps);
-      break;
-    case 'oklab':
-      this.gradient = new OklabGradient(colors, numSteps);
-      break;
-    case 'oklch':
-      this.gradient = new OklchGradient(colors, numSteps);
-      break;
-    case 'cielab':
-      this.gradient = new CielabGradient(colors, numSteps);
-      break;
-    case 'luvLch':
-      this.gradient = new LuvLChGradient(colors, numSteps);
-      break;
-    case 'rgb':
-    default:
-      this.gradient = new RgbGradient(colors, numSteps);
-      break;
+      case 'hsl':
+        this.gradient = new HslGradient(colors, numSteps);
+        break;
+      case 'oklab':
+        this.gradient = new OklabGradient(colors, numSteps);
+        break;
+      case 'oklch':
+        this.gradient = new OklchGradient(colors, numSteps);
+        break;
+      case 'cielab':
+        this.gradient = new CielabGradient(colors, numSteps);
+        break;
+      case 'luvLch':
+        this.gradient = new LuvLChGradient(colors, numSteps);
+        break;
+      case 'rgb':
+      default:
+        this.gradient = new RgbGradient(colors, numSteps);
+        break;
     }
   }
 
@@ -83,7 +96,13 @@ export class ColorGradient {
  * Includes offset support for animation effects.
  */
 export class ColorAnimatedGradient {
-  private gradient: RgbAnimatedGradient | HslAnimatedGradient | OklabAnimatedGradient | OklchAnimatedGradient | CielabAnimatedGradient | LuvLChAnimatedGradient;
+  private gradient:
+    | RgbAnimatedGradient
+    | HslAnimatedGradient
+    | OklabAnimatedGradient
+    | OklchAnimatedGradient
+    | CielabAnimatedGradient
+    | LuvLChAnimatedGradient;
   private type: GradientType;
 
   /**
@@ -102,25 +121,25 @@ export class ColorAnimatedGradient {
     this.type = type;
 
     switch (type) {
-    case 'hsl':
-      this.gradient = new HslAnimatedGradient(colors, numSteps, offset);
-      break;
-    case 'oklab':
-      this.gradient = new OklabAnimatedGradient(colors, numSteps, offset);
-      break;
-    case 'oklch':
-      this.gradient = new OklchAnimatedGradient(colors, numSteps, offset);
-      break;
-    case 'cielab':
-      this.gradient = new CielabAnimatedGradient(colors, numSteps, offset);
-      break;
-    case 'luvLch':
-      this.gradient = new LuvLChAnimatedGradient(colors, numSteps, offset);
-      break;
-    case 'rgb':
-    default:
-      this.gradient = new RgbAnimatedGradient(colors, numSteps, offset);
-      break;
+      case 'hsl':
+        this.gradient = new HslAnimatedGradient(colors, numSteps, offset);
+        break;
+      case 'oklab':
+        this.gradient = new OklabAnimatedGradient(colors, numSteps, offset);
+        break;
+      case 'oklch':
+        this.gradient = new OklchAnimatedGradient(colors, numSteps, offset);
+        break;
+      case 'cielab':
+        this.gradient = new CielabAnimatedGradient(colors, numSteps, offset);
+        break;
+      case 'luvLch':
+        this.gradient = new LuvLChAnimatedGradient(colors, numSteps, offset);
+        break;
+      case 'rgb':
+      default:
+        this.gradient = new RgbAnimatedGradient(colors, numSteps, offset);
+        break;
     }
   }
 

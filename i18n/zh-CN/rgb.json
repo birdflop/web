@@ -1,11 +1,25 @@
 {
   "rgb": {
+    "advanced": {
+      "addColor": "添加颜色",
+      "backToClassic": "经典编辑器",
+      "highlightHint": "在上方输入框中突出显示字符，以仅为该部分设置颜色和格式。",
+      "mode": {
+        "gradient": "渐变",
+        "none": "无颜色",
+        "noneDescription": "这些字符将保持 Minecraft 的默认颜色（仅应用格式）。",
+        "solid": "纯色"
+      },
+      "selectAll": "全选",
+      "styling": "样式设定",
+      "tryAdvanced": "尝试使用支持分段渐变的高级编辑器"
+    },
     "colors": {
       "amount": "颜色数量",
       "character": "字符",
       "charsPer": "每种颜色的字符数",
       "color": "颜色",
-      "copyFromText": "Copy from text colors",
+      "copyFromText": "从文本颜色复制",
       "customFormat": "自定义格式",
       "disperse": {
         "always": {
@@ -14,23 +28,23 @@
         },
         "title": "分散"
       },
-      "duplicate": "Duplicate",
+      "duplicate": "复制",
       "format": "颜色格式",
-      "gradientType": "Gradient Type",
-      "invert": "Invert",
+      "gradientType": "渐变类型",
+      "invert": "反转",
       "lowercase": {
         "description": "如果您想使用小写十六进制代码，请开启此选项。",
         "title": "小写十六进制代码"
       },
-      "position": "Position",
+      "position": "位置",
       "randomize": "随机化",
-      "reverse": "Reverse",
+      "reverse": "反转",
       "shadow": {
-        "enable": "Custom Text Shadow",
+        "enable": "自定义文本阴影",
         "title": "文本阴影",
         "warning": "警告：文本阴影仅在 JSON 格式下有效！"
       },
-      "shuffle": "Shuffle",
+      "shuffle": "随机化",
       "title": "颜色",
       "trimSpaces": {
         "description": "如果您使用空的下划线/删除线，请关闭此选项",
@@ -55,6 +69,7 @@
     "formatting": {
       "bold": "粗体",
       "character": "格式字符",
+      "clear": "清除格式",
       "italic": "斜体",
       "obfuscate": "混淆",
       "options": "格式选项",
@@ -69,9 +84,9 @@
         "chat": "Minecraft 聊天",
         "default": "默认",
         "gui": {
-          "chest": "Minecraft GUI Chest",
-          "item": "Minecraft GUI Item Name",
-          "lore": "Minecraft GUI Item Lore"
+          "chest": "Minecraft GUI 箱子",
+          "item": "Minecraft GUI 物品名称",
+          "lore": "Minecraft GUI 物品介绍"
         },
         "tab": {
           "footer": "Minecraft Tab 页脚",
@@ -80,9 +95,11 @@
         },
         "typeHere": "在此输入！"
       },
-      "title": "输入文本"
+      "rawEdit": "源码编辑模式",
+      "title": "输入文本",
+      "viewFormatted": "查看格式化预览"
     },
-    "options": "Options",
+    "options": "选项",
     "output": {
       "copied": {
         "description": "RGB 文本已成功复制到您的剪贴板。",
@@ -96,7 +113,7 @@
       "back": "返回预设",
       "copied": {
         "description": "预设已成功复制到剪贴板！",
-        "title": "Preset Copied!"
+        "title": "预设已复制！"
       },
       "copy": "复制",
       "createNew": "创建新预设",
@@ -123,8 +140,9 @@
       },
       "pasteHere": "在此粘贴",
       "pending": "此预设正在等待审核，可能尚未对其他用户可用。",
+      "personalPresets": "个人预设",
       "presetData": "预设数据",
-      "preview": "Preset Preview",
+      "preview": "预设预览",
       "publish": "发布您自己的预设",
       "remove": "删除",
       "save": "保存",
@@ -134,13 +152,14 @@
         "title": "预设已保存！",
         "warning": "请登录以永久保存预设。"
       },
+      "savedPresets": "已保存预设",
       "showSaved": {
         "description": "开启此选项以仅显示您已保存的预设。",
         "title": "显示已保存的预设"
       },
       "sortBy": {
-        "leastSaved": "Least saved",
-        "mostSaved": "Most saved",
+        "leastSaved": "最少保存",
+        "mostSaved": "最多保存",
         "nameAZ": "名称 A-Z",
         "nameZA": "名称 Z-A",
         "newest": "最新优先",
@@ -163,6 +182,12 @@
         "description": "开启此选项以显示应用了当前选项的预览。",
         "title": "使用当前选项显示预览"
       }
+    },
+    "segmentColorEditor": {
+      "title": "分段颜色编辑器"
+    },
+    "segments": {
+      "title": "分段"
     }
   }
 }

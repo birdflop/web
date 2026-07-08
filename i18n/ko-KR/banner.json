@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "명령이 클립보드에 성공적으로 복사되었습니다.",
-        "title": "Command Copied!"
+        "title": "명령어가 복사되었습니다!"
       },
       "title": "명령"
     },

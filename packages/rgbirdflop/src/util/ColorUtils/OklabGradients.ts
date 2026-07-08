@@ -1,5 +1,15 @@
-import { rgbToOklab, interpolateColor, oklabToLinearSrgb, linearToSrgb, type OKLAB } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
+import {
+  rgbToOklab,
+  interpolateColor,
+  oklabToLinearSrgb,
+  linearToSrgb,
+  type OKLAB,
+} from '../Colors';
+import {
+  BaseGradient,
+  BaseTwoStopGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * OKLAB-based gradient classes using perceptually uniform color interpolation.

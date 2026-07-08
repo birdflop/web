@@ -1,22 +1,24 @@
-@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
 
-@import "tailwindcss";
-
-@import "@luminescent/ui";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@luminescent/ui';
 
 .markdown {
-  @import "@luminescent/ui/formatting";
+  @import '@luminescent/ui/formatting';
 }
 
-@plugin "@anuragroy/tailwindcss-animate";
-
-@config "@luminescent/ui-qwik/config";
-@source "../node_modules/@luminescent/ui-qwik";
+@config '@luminescent/ui-qwik/config';
+@source '../node_modules/@luminescent/ui-qwik';
 
 @theme {
   --lum-border-radius: 0.625rem;
   --color-lum-gradient: var(--color-gray-950);
-  --color-gray-850: color-mix(in oklab, var(--color-gray-900), var(--color-gray-800) 50%);
+  --color-gray-850: color-mix(
+    in oklab,
+    var(--color-gray-900),
+    var(--color-gray-800) 50%
+  );
   --color-green: var(--color-green-900);
   --color-red: var(--color-red-900);
   --color-orange: var(--color-orange-900);
@@ -39,32 +41,32 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --color-bg: var(--color-white);
-    --color-lum-gradient: var(--color-gray-200);
-    --color-nav-bg: --alpha(var(--color-blue-300) / 70%);
-    --color-green: var(--color-green-500);
-    --color-red: var(--color-red-500);
-    --color-orange: var(--color-orange-500);
-    --color-yellow: var(--color-yellow-500);
-    --color-blue: var(--color-blue-500);
-    --color-violet: var(--color-violet-500);
-    --color-pink: var(--color-pink-500);
-    --color-purple: var(--color-purple-500);
-    --color-cyan: var(--color-cyan-500);
-    --color-lime: var(--color-lime-500);
-    --color-teal: var(--color-teal-500);
-    --color-lum-border: var(--color-neutral-500);
-    --color-lum-card-bg: var(--color-gray-200);
+    --color-bg: var(--color-gray-200);
+    --color-lum-gradient: var(--color-gray-300);
+    --color-nav-bg: --alpha(var(--color-gray-100) / 70%);
+    --color-green: var(--color-green-400);
+    --color-red: var(--color-red-400);
+    --color-orange: var(--color-orange-400);
+    --color-yellow: var(--color-yellow-400);
+    --color-blue: var(--color-blue-400);
+    --color-violet: var(--color-violet-400);
+    --color-pink: var(--color-pink-400);
+    --color-purple: var(--color-purple-400);
+    --color-cyan: var(--color-cyan-400);
+    --color-lime: var(--color-lime-400);
+    --color-teal: var(--color-teal-400);
+    --color-lum-border: var(--color-color-white);
+    --color-lum-card-bg: var(--color-gray-100);
     --color-lum-input-bg: var(--color-neutral-50);
     --color-lum-input-hover-bg: var(--color-neutral-50);
-    --color-lum-accent: var(--color-nav-bg);
+    --color-lum-accent: var(--color-blue);
     --color-lum-text: var(--color-neutral-900);
     --color-lum-text-secondary: var(--color-neutral-700);
-    --lum-depth: 0;
   }
 }
 
-a.lum-btn, a.lum-card {
+a.lum-btn,
+a.lum-card {
   color: var(--color-text) !important;
   text-decoration: none;
 }
@@ -145,11 +147,12 @@ html {
 }
 
 hr {
-  @apply my-6 border-lum-border/10;
+  @apply border-lum-border/10 my-6;
 }
 
 .font-mc {
-  font-family: MinecraftRegular, MinecraftOfficial, MinecraftRegularAlt, MinecraftRus;
+  font-family:
+    MinecraftRegular, MinecraftOfficial, MinecraftRegularAlt, MinecraftRus;
 }
 
 .font-mc-bold {
