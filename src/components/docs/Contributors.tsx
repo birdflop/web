@@ -10,7 +10,7 @@ export default component$(() => {
 
   return (
     <div class="lum-card my-12">
-      <h2>Contributors</h2>
+      <h2 class="my-0!">Contributors</h2>
       <p>Thank you to everyone who has helped us improve our documentation!</p>
       <div class="m-0 flex list-none flex-row flex-wrap items-center justify-start gap-2 p-0">
         {contributors.map((contributor: string) => (

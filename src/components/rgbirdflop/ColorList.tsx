@@ -42,6 +42,7 @@ import {
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
+import { ButtonContainer } from '../Elements/ButtonContainer';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
@@ -179,12 +180,10 @@ export default component$<ColorListProps>((props) => {
       </div>
 
       <Slot />
-      <div
-        class={{
-          'lum-card flex-row items-center gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1 *:justify-center *:p-1': true,
-        }}
-      >
+
+      <ButtonContainer class={{
+        '*:justify-center *:p-1': true,
+      }}>
         <button
           onClick$={() => {
             const newColors = colors.value.map((color) => ({
@@ -276,7 +275,8 @@ export default component$<ColorListProps>((props) => {
             <MoveHorizontal size={20} />
           </button>
         )}
-      </div>
+      </ButtonContainer>
+
       <div class="relative flex flex-col" id={`colorlistcolors${id}`}>
         {colors.value.map((color, i) => (
           <div

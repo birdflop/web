@@ -9,6 +9,7 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { ButtonContainer } from '../Elements/ButtonContainer';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -16,7 +17,9 @@ export default component$(() => {
   const rgbStore = useContext(rgbStoreContext);
 
   return (
-    <div class="lum-card *:lum-btn *:rounded-lum-1 my-2 w-full min-w-0 flex-row gap-1 overflow-auto p-1 sm:hidden">
+    <ButtonContainer class={{
+      'sm:hidden overflow-scroll': true,
+    }}>
       <button
         onClick$={() => {
           openItems.value = openItems.value.includes('colors')
@@ -101,6 +104,6 @@ export default component$(() => {
           {t('nav.experimental@@experimental')}
         </span>
       </button>
-    </div>
+    </ButtonContainer>
   );
 });

@@ -39,6 +39,7 @@ import {
   PluginType,
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
+import { Tabs } from '~/components/Elements/Tabs';
 
 const debug = true;
 
@@ -293,49 +294,37 @@ export default component$(() => {
         tool.
       </p>
 
-      <div class="lum-card flex-row items-center gap-1 overflow-x-scroll p-1">
-        {Object.keys(pluginsStore.servers).length > 0 &&
-          Object.keys(pluginsStore.servers).map((server) => (
-            <div
-              key={server}
-              class={{
-                'lum-btn lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
-                'lum-grad-bg-blue/50 hover:lum-bg-blue/80':
-                  pluginsStore.openServer === server,
-              }}
-              onClick$={() =>
-                (pluginsStore.openServer =
-                  pluginsStore.openServer === server ? undefined : server)
-              }
-            >
-              {server}
-            </div>
-          ))}
-        <button
-          class="lum-btn lum-bg-transparent rounded-lum-1 p-2"
-          onClick$={() => {
-            const serverName = prompt('Enter server name');
-            if (serverName) {
-              if (pluginsStore.servers[serverName]) {
-                alert('A server with that name already exists.');
-                return;
-              }
-              pluginsStore.servers[serverName] = { ...serverDefaults };
-              pluginsStore.openServer = serverName;
+      <Tabs values={Object.keys(pluginsStore.servers)} value={pluginsStore.openServer}
+        onDelete$={(serverName) => {
+          if (confirm(`Are you sure you want to delete the server "${serverName}"? This cannot be undone.`)) {
+            delete pluginsStore.servers[serverName];
+            if (pluginsStore.openServer === serverName) {
+              pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
             }
-          }}
-          title="Add server"
-        >
-          <Plus size={16} />
-        </button>
-        {Object.keys(pluginsStore.servers).length < 1 && (
-          <p class="text-lum-text-secondary mx-2 text-sm">
-            {t(
-              'nav.resources.plugins.noServers@@No servers added yet. Get started by adding a server and some plugins!',
-            )}
-          </p>
-        )}
-      </div>
+          }
+        }}
+        onClick$={(serverName) => {
+          pluginsStore.openServer = serverName;
+        }}
+        onPlus$={() => {
+          const serverName = prompt('Enter server name');
+          if (serverName) {
+            if (pluginsStore.servers[serverName]) {
+              alert('A server with that name already exists.');
+              return;
+            }
+            pluginsStore.servers[serverName] = { ...serverDefaults };
+            pluginsStore.openServer = serverName;
+          }
+        }}>
+      </Tabs>
+      {Object.keys(pluginsStore.servers).length < 1 && (
+        <p class="text-lum-text-secondary mx-2 text-sm">
+          {t(
+            'nav.resources.plugins.noServers@@No servers added yet. Get started by adding a server and some plugins!',
+          )}
+        </p>
+      )}
 
       {pluginsStore.openServer &&
         pluginsStore.servers[pluginsStore.openServer].plugins && (
@@ -379,22 +368,6 @@ export default component$(() => {
                 title="Duplicate server"
               >
                 <Copy size={16} />
-              </button>
-              <button
-                class="lum-btn lum-bg-transparent hover:lum-bg-red rounded-lum-1 p-2"
-                onClick$={() => {
-                  if (
-                    confirm(
-                      `Are you sure you want to delete the server "${pluginsStore.openServer}"? This action cannot be undone.`,
-                    )
-                  ) {
-                    delete pluginsStore.servers[pluginsStore.openServer!];
-                    pluginsStore.openServer = undefined;
-                  }
-                }}
-                title="Delete server"
-              >
-                <Trash size={16} />
               </button>
 
               <SelectMenuRaw

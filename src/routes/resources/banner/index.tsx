@@ -32,6 +32,7 @@ import { colors, patterns } from '~/util/banner';
 import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import Output from '~/components/Elements/Output';
+import { ButtonContainer } from '~/components/Elements/ButtonContainer';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -239,7 +240,9 @@ export default component$(() => {
       </p>
 
       <div class="grid gap-2 sm:grid-cols-2">
-        <div class="lum-card *:lum-btn *:rounded-lum-1 my-2 w-full min-w-0 flex-row gap-1 overflow-auto p-1 sm:hidden">
+        <ButtonContainer class={{
+          'sm:hidden overflow-scroll': true,
+        }}>
           <button
             onClick$={() => {
               openItems.value = openItems.value.includes('options')
@@ -279,7 +282,7 @@ export default component$(() => {
             <Eye />
             {t('banner.preview@@Preview')}
           </button>
-        </div>
+        </ButtonContainer>
 
         <div class="flex flex-col gap-2" id="inputcolumn">
           <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">

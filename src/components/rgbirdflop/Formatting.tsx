@@ -26,6 +26,7 @@ import {
   combinedText,
   rgbSegmentsContext,
 } from '~/components/rgbirdflop/advanced/rgbSegments';
+import { ButtonContainer } from '../Elements/ButtonContainer';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -251,9 +252,10 @@ export default component$(() => {
     <>
       <SelectMenuRaw
         class={{
-          'lum-btn-p-2': true,
+          'lum-btn-p-2 lum-bg-lum-card-bg': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
+        panelClass="lum-bg-lum-card-bg"
         id="font-select"
         value={formatting.font || 'default'}
         onChange$={(e, el) => {
@@ -265,10 +267,9 @@ export default component$(() => {
           value: key,
         }))}
       />
-      <div
+      <ButtonContainer
         class={{
-          'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:p-2': true,
+          '*:p-2 *:justify-center': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="formatting"
@@ -290,11 +291,11 @@ export default component$(() => {
             </span>
           </button>
         ))}
-      </div>
-      <div
+      </ButtonContainer>
+      <ButtonContainer
         class={{
-          'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:p-2': true,
+          '*:p-2 *:justify-center': true,
+          'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="clear-formatting"
       >
@@ -309,7 +310,7 @@ export default component$(() => {
             {t('rgb.formatting.clear@@Clear Formatting')}
           </span>
         </button>
-      </div>
+      </ButtonContainer>
     </>
   );
 });

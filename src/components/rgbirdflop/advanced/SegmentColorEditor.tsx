@@ -25,6 +25,7 @@ import {
   selectionContext,
 } from '~/components/rgbirdflop/Input';
 import ColorList from '../ColorList';
+import { ButtonContainer } from '~/components/Elements/ButtonContainer';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
   if (colors.length >= 2) return colors.map((c) => ({ ...c }));
@@ -109,10 +110,11 @@ export default component$(
         id={'colorlist' + id}
       >
         {/* Color mode switch */}
-        <div class="flex flex-col gap-1">
+        <ButtonContainer class={{
+          'items-stretch *:lum-btn-p-1 *:justify-center': true,
+        }}>
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'gradient',
             }}
             onClick$={() =>
@@ -122,11 +124,10 @@ export default component$(
               })
             }
           >
-            <Palette size={18} /> {t('rgb.advanced.mode.gradient@@Gradient')}
+            <Palette size={18} /> {mode === 'gradient' && t('rgb.advanced.mode.gradient@@Gradient')}
           </button>
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'solid',
             }}
             onClick$={() =>
@@ -141,18 +142,17 @@ export default component$(
               })
             }
           >
-            <Droplet size={18} /> {t('rgb.advanced.mode.solid@@Solid')}
+            <Droplet size={18} /> {mode === 'solid' && t('rgb.advanced.mode.solid@@Solid')}
           </button>
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'none',
             }}
             onClick$={() => writeConfig({ colorMode: 'none' })}
           >
-            <Ban size={18} /> {t('rgb.advanced.mode.none@@Uncolored')}
+            <Ban size={18} /> {mode === 'none' && t('rgb.advanced.mode.none@@Uncolored')}
           </button>
-        </div>
+        </ButtonContainer>
 
         {mode != 'gradient' && (
           <div class="flex items-center gap-1 py-2 font-semibold">
