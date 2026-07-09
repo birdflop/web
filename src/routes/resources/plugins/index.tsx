@@ -294,17 +294,15 @@ export default component$(() => {
         tool.
       </p>
 
-      <Tabs values={Object.keys(pluginsStore.servers)} value={pluginsStore.openServer}
+      <Tabs values={Object.keys(pluginsStore.servers).map((k) => ({ name: k, value: k }))} value={pluginsStore.openServer ? { name: pluginsStore.openServer, value: pluginsStore.openServer } : undefined}
         onDelete$={(serverName) => {
-          if (confirm(`Are you sure you want to delete the server "${serverName}"? This cannot be undone.`)) {
-            delete pluginsStore.servers[serverName];
-            if (pluginsStore.openServer === serverName) {
-              pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
-            }
+          delete pluginsStore.servers[serverName.value];
+          if (pluginsStore.openServer === serverName.value) {
+            pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
           }
         }}
         onClick$={(serverName) => {
-          pluginsStore.openServer = serverName;
+          pluginsStore.openServer = serverName.value;
         }}
         onPlus$={() => {
           const serverName = prompt('Enter server name');

@@ -11,7 +11,7 @@ export const ButtonContainer = component$<ButtonContainerProps>(({ class: classL
     <div { ...props }
       class={{
         'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-        '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1': true,
+        '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1': true,
         ...classList,
       }}>
       <Slot />

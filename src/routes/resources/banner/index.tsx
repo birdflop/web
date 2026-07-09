@@ -306,13 +306,15 @@ export default component$(() => {
                 )}
               </span>
             </h6>
-            <div class="flex flex-wrap gap-1">
+            <ButtonContainer class={{
+              'flex-wrap shrink-2 *:hover:lum-bg *:p-2 *:justify-center *:flex-none': true,
+            }}>
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button
                     key={colorName}
                     class={{
-                      'lum-btn lum-grad-bg p-2 hover:brightness-80': true,
+                      'lum-grad-bg': bannerStore.color === colorName,
                     }}
                     style={{
                       '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
@@ -332,7 +334,7 @@ export default component$(() => {
                   </button>
                 );
               })}
-            </div>
+            </ButtonContainer>
             <h6 class="flex items-center gap-3">
               {t('banner.options.patterns@@Patterns')}
               <button
