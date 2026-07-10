@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { deepTrack } from '../misc';
+import { deepTrack } from '../track';
 
 vi.mock('@builder.io/qwik', async () => {
   const actual = (await vi.importActual('@builder.io/qwik')) as any;

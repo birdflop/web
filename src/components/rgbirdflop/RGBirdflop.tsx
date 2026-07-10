@@ -38,7 +38,7 @@ import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
-import { deepTrack } from '~/util/misc';
+import { deepTrack } from '~/util/track';
 import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
 
 export const rgbStoreContext =
@@ -354,9 +354,9 @@ export default component$(
                   }}
                   values={[
                     ...(!rgbStore.customFormat &&
-                    !colorFormats.find(
-                      (format) => format.color == rgbStore.colorFormat.color,
-                    )
+                      !colorFormats.find(
+                        (format) => format.color == rgbStore.colorFormat.color,
+                      )
                       ? [
                         {
                           name: rgbStore.colorFormat.color

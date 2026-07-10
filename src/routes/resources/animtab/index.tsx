@@ -26,7 +26,7 @@ import {
 } from '~/components/rgbirdflop/Input';
 import { Rainbow, Braces } from 'lucide-icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
-import { deepTrack } from '~/util/misc';
+import { deepTrack } from '~/util/track';
 import {
   EmptyPreview,
   getEffectiveFormatting,

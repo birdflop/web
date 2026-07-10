@@ -36,7 +36,7 @@ import {
   SiSpigotmc,
   SiVelocity,
 } from 'simple-icons-qwik';
-import { deepTrack } from '~/util/misc';
+import { deepTrack } from '~/util/track';
 import Output from '~/components/Elements/Output';
 
 const Linux = component$(() => (

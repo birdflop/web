@@ -1,7 +1,7 @@
 import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
 import { useMarkdownItems } from '~/routes/docs/layout';
-import { buildMenu } from '~/util/buildMenu';
+import { buildMenu } from '~/util/docs';
 import { MenuItems } from './Menuitems';
 import { Book, Menu, Search } from 'lucide-icons-qwik';
 

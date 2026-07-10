@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { getGlobalHighlighter } from '~/util/highlighter';
+import { getGlobalHighlighter } from '~/util/docs/highlighter';
 import { apiEndpoints } from '~/routes/api/v2';
 import { routeLoader$ } from '@builder.io/qwik-city';
 
