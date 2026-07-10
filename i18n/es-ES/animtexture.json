@@ -1,6 +1,6 @@
 {
   "animtexture": {
-    "accumulate": "Añadir a los fotogramas existentes",
+    "accumulate": "Accumulate frames",
     "animationPreview": "Avance de la animación",
     "bounce": "Animación de rebote",
     "downloadMCMETA": "Descargar MCMETA",
