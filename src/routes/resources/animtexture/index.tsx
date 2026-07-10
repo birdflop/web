@@ -21,7 +21,7 @@ import {
   Settings,
   X,
 } from 'lucide-icons-qwik';
-import { NumberInput, Toggle } from '@luminescent/ui-qwik';
+import { NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
@@ -35,8 +35,9 @@ type AnimtextureFrame = {
 };
 
 type AnimtextureTexture = {
-  textureName: string;
-  texturePath: string;
+  name: string;
+  path: string;
+  namespace: string;
   width: number;
   height: number;
   lockdimensions: boolean;
@@ -73,8 +74,9 @@ const readFileAsDataURL = (file: Blob) =>
   });
 
 const createTexture = (index = 1): AnimtextureTexture => ({
-  textureName: index === 1 ? 'animtexture' : `animtexture-${index}`,
-  texturePath: 'minecraft/textures/block',
+  name: index === 1 ? 'animtexture' : `animtexture-${index}`,
+  path: 'block',
+  namespace: 'minecraft',
   width: 16,
   height: 16,
   lockdimensions: true,
@@ -199,8 +201,8 @@ const loadGifFrames = async (arrayBuffer: ArrayBuffer) => {
   return frames;
 };
 
-const normalizeTextureName = (textureName: string) =>
-  textureName
+const normalizeTextureName = (name: string) =>
+  name
     .trim()
     .replace(/^\/+/, '')
     .replace(/\\/g, '/')
@@ -258,19 +260,19 @@ const downloadBlob = (blob: Blob, fileName: string) => {
 };
 
 const getUniqueTextureName = (
-  textureNames: Set<string>,
-  textureName: string,
+  names: Set<string>,
+  name: string,
 ) => {
-  const baseName = normalizeTextureName(textureName);
+  const baseName = normalizeTextureName(name);
   let uniqueName = baseName;
   let counter = 1;
 
-  while (textureNames.has(uniqueName)) {
+  while (names.has(uniqueName)) {
     uniqueName = `${baseName}-${counter}`;
     counter++;
   }
 
-  textureNames.add(uniqueName);
+  names.add(uniqueName);
   return uniqueName;
 };
 
@@ -290,17 +292,17 @@ const buildResourcePack = async (textures: AnimtextureTexture[]) => {
     ),
   );
 
-  const textureNames = new Set<string>();
+  const names = new Set<string>();
   for (const texture of textures) {
     if (texture.frames.length === 0) continue;
 
     const { png, mcmeta } = buildTextureOutputs(texture);
     if (!png) continue;
 
-    const textureName = getUniqueTextureName(textureNames, texture.textureName);
+    const name = getUniqueTextureName(names, texture.name);
     const pngBlob = await (await fetch(png)).blob();
-    zip.file(`assets/${texture.texturePath}/${textureName}.png`, pngBlob);
-    zip.file(`assets/${texture.texturePath}/${textureName}.png.mcmeta`, mcmeta);
+    zip.file(`assets/${texture.namespace}/textures/${texture.path}/${name}.png`, pngBlob);
+    zip.file(`assets/${texture.namespace}/textures/${texture.path}/${name}.png.mcmeta`, mcmeta);
   }
 
   return zip.generateAsync({ type: 'blob' });
@@ -446,9 +448,9 @@ export default component$(() => {
                 Download Resource Pack ZIP
               </button>
             </div>
-            <Tabs values={animtextureStore.textures.map((t, i) => ({ name: t.textureName, value: i.toString() }))}
+            <Tabs values={animtextureStore.textures.map((t, i) => ({ name: t.name, value: i.toString() }))}
               value={{
-                name: animtextureStore.textures[animtextureStore.activeTexture].textureName,
+                name: animtextureStore.textures[animtextureStore.activeTexture].name,
                 value: animtextureStore.textures.indexOf(animtextureStore.textures[animtextureStore.activeTexture]).toString(),
               }}
               onClick$={(value) => {
@@ -458,9 +460,9 @@ export default component$(() => {
                 const currentTexture =
                   animtextureStore.textures[animtextureStore.activeTexture] ?? animtextureStore.textures[0];
                 const nextIndex = animtextureStore.textures.length + 1;
-                const textureNames = new Set(
+                const names = new Set(
                   animtextureStore.textures.map((item) =>
-                    normalizeTextureName(item.textureName),
+                    normalizeTextureName(item.name),
                   ),
                 );
                 const nextTexture = {
@@ -472,9 +474,9 @@ export default component$(() => {
                   syncduration: currentTexture.syncduration,
                   showChatPreview: currentTexture.showChatPreview,
                 };
-                nextTexture.textureName = getUniqueTextureName(
-                  textureNames,
-                  nextTexture.textureName,
+                nextTexture.name = getUniqueTextureName(
+                  names,
+                  nextTexture.name,
                 );
                 animtextureStore.textures = [
                   ...animtextureStore.textures,
@@ -501,37 +503,82 @@ export default component$(() => {
             />
             <div
               class={{
-                'flex items-end gap-1': true,
+                'flex items-center gap-1': true,
                 'col-span-2': texture.lockdimensions,
               }}
             >
+              <SelectMenu
+                id="namespace"
+                class={{ 'w-full': true }}
+                customDropdown
+                values={[
+                  { name: 'minecraft', value: 'minecraft' },
+                  { name: 'birdflop', value: 'birdflop' },
+                ]}
+                onChange$={(e, el) => {
+                  texture.namespace = el.value;
+                }}
+              >
+                <span q:slot="dropdown">
+                  {texture.namespace}
+                </span>
+                {t('animtexture.namespace@@Namespace')}
+                <input q:slot="extra-buttons"
+                  id="namespace"
+                  class={{ 'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true }}
+                  placeholder="Custom"
+                  onInput$={(e, el) => {
+                    texture.namespace = el.value;
+                  }}
+                />
+              </SelectMenu>
+              <p class="text-lum-text-secondary mt-7 mx-1">
+                :
+              </p>
+              <SelectMenu
+                id="path"
+                class={{ 'w-full': true }}
+                customDropdown
+                values={[
+                  { name: 'block', value: 'block' },
+                  { name: 'item', value: 'item' },
+                ]}
+                onChange$={(e, el) => {
+                  texture.path = el.value;
+                }}
+              >
+                <span q:slot="dropdown">
+                  {texture.path}
+                </span>
+                {t('animtexture.path@@Path')}
+                <input q:slot="extra-buttons"
+                  id="path"
+                  class={{ 'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true }}
+                  placeholder={t('animtexture.custom@@Custom')}
+                  onInput$={(e, el) => {
+                    texture.namespace = el.value;
+                  }}
+                />
+              </SelectMenu>
+              <p class="text-lum-text-secondary mt-7 mx-1">
+                /
+              </p>
               <div class="flex flex-1 flex-col gap-1">
-                <label for="texturePath">
-                  {t('animtexture.texturePath@@Texture Path')}
+                <label for="name">
+                  {t('animtexture.name@@Texture Name')}
                 </label>
                 <input
-                  id="texturePath"
+                  id="name"
                   class={{ 'lum-input': true }}
-                  value={texture.texturePath}
+                  value={texture.name}
                   onInput$={(e, el) => {
-                    texture.texturePath = el.value;
+                    texture.name = el.value;
                   }}
                 />
               </div>
-              <div class="flex flex-1 flex-col gap-1">
-                <label for="textureName">
-                  {t('animtexture.textureName@@Texture Name')}
-                </label>
-                <input
-                  id="textureName"
-                  class={{ 'lum-input': true }}
-                  value={texture.textureName}
-                  onInput$={(e, el) => {
-                    texture.textureName = el.value;
-                  }}
-                />
-              </div>
-              <p class="lum-btn p-2">.png</p>
+              <p class="text-lum-text-secondary mt-7 mx-1">
+                .png
+              </p>
             </div>
           </div>
           <div class="mb-5 flex gap-6">
@@ -787,7 +834,7 @@ export default component$(() => {
                   class="lum-btn"
                   id="pngd"
                   target="_blank"
-                  download={texture.textureName + '.png'}
+                  download={texture.name + '.png'}
                   href={activeTextureOutputs.value.png}
                 >
                   <Download size={20} />
@@ -797,7 +844,7 @@ export default component$(() => {
                   class="lum-btn"
                   id="mcmeta"
                   target="_blank"
-                  download={texture.textureName + '.png.mcmeta'}
+                  download={texture.name + '.png.mcmeta'}
                   href={
                     'data:text/plain;charset=utf-8,' +
                     encodeURIComponent(activeTextureOutputs.value.mcmeta)
@@ -885,7 +932,7 @@ export default component$(() => {
             <Input
               readOnly
               noFormatRow
-              chatInput={`this is so funny <sprite:"birdflop:gifs":"birdflop:gif"/${texture.textureName}>`}
+              chatInput={`this is so funny <sprite:"birdflop:gifs":"birdflop:gif"/${texture.name}>`}
               playerName="AnimatedTexture"
             >
               <span class="items-center gap-2 text-white!">
