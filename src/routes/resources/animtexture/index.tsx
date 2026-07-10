@@ -181,7 +181,10 @@ export default component$(() => {
                 Download Resource Pack ZIP
               </button>
             </div>
-            <Tabs values={animtextureStore.textures.map((t, i) => ({ name: t.name, value: i.toString() }))}
+            <Tabs
+              values={animtextureStore.textures.map((t, i) => ({
+                name: `${t.namespace}:${t.name}`, value: i.toString(),
+              }))}
               value={{
                 name: animtextureStore.textures[animtextureStore.activeTexture].name,
                 value: animtextureStore.textures.indexOf(animtextureStore.textures[animtextureStore.activeTexture]).toString(),
@@ -234,9 +237,10 @@ export default component$(() => {
                 );
               }}
             />
+
             <div
               class={{
-                'flex items-center gap-1': true,
+                'flex items-center gap-1 mt-2': true,
                 'col-span-2': texture.lockdimensions,
               }}
             >
@@ -314,6 +318,9 @@ export default component$(() => {
               </p>
             </div>
           </div>
+
+          <hr />
+
           <div class="mb-5 flex gap-6">
             <div class="lum-card flex-1">
               <label for="fileInput" class="font-semibold flex items-center gap-2">
