@@ -2,7 +2,8 @@ import type { EnvironmentOptions } from '~/util/flags/types/environment/Environm
 import type { OperatingSystemOption } from '~/util/flags/types/environment/OperatingSystemOption';
 import type { AvailableConfig } from '~/util/flags/config';
 
-export type AvailableOperatingSystem = 'linux' | 'windows' | 'macos' | 'pterodactyl' | 'command';
+export type AvailableOperatingSystem =
+  'linux' | 'windows' | 'macos' | 'pterodactyl' | 'command';
 
 const sharedConfig: AvailableConfig[] = [
   'fileName',
@@ -27,8 +28,12 @@ function getMemory(memory: number, isContainer = false) {
   return Math.round(binaryMemory * 0.85);
 }
 
-function getJava(config: Record<AvailableConfig | 'existingFlags', any>): string {
-  let ram = config.calcOverhead ? Math.ceil((11 * config.memory / 12 - 1200) / 100) * 100 : config.memory;
+function getJava(
+  config: Record<AvailableConfig | 'existingFlags', any>,
+): string {
+  let ram = config.calcOverhead
+    ? Math.ceil(((11 * config.memory) / 12 - 1200) / 100) * 100
+    : config.memory;
   if (ram < 512) ram = 512;
 
   const base = [
@@ -51,17 +56,14 @@ function getJava(config: Record<AvailableConfig | 'existingFlags', any>): string
 import type { Generate } from '~/util/flags/types/generate/Generate';
 
 interface GenerateNixResult {
-  'script': string[],
-  'flags': string[]
+  script: string[];
+  flags: string[];
 }
 
 type NixScript = Generate<AvailableConfig | 'existingFlags', GenerateNixResult>; // todo: dedupe
 
 const nixScript: NixScript = (config) => {
-  const base = [
-    '#!/usr/bin/env bash',
-    '',
-  ];
+  const base = ['#!/usr/bin/env bash', ''];
 
   let fileName = config.fileName;
   let memory: number | string = getMemory(config.memory);
@@ -100,8 +102,8 @@ const nixScript: NixScript = (config) => {
   }
 
   return {
-    'script': base,
-    'flags': config.existingFlags,
+    script: base,
+    flags: config.existingFlags,
   };
 };
 
@@ -112,11 +114,8 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       mime: 'text/plain',
       extension: '.sh',
     },
-    config: [
-      ...sharedConfig,
-      ...sharedScriptConfig,
-    ],
-    generate: config => {
+    config: [...sharedConfig, ...sharedScriptConfig],
+    generate: (config) => {
       const nix = nixScript(config);
 
       return {
@@ -131,22 +130,15 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       mime: 'text/plain',
       extension: '.bat',
     },
-    config: [
-      ...sharedConfig,
-      ...sharedScriptConfig,
-    ],
-    generate: config => {
+    config: [...sharedConfig, ...sharedScriptConfig],
+    generate: (config) => {
       const base = [];
 
       let fileName = config.fileName;
       let memory: number | string = getMemory(config.memory);
 
       if (config.variables) {
-        base.push(
-          `set fileName="${fileName}"`,
-          `set /A memory=${memory}`,
-          '',
-        );
+        base.push(`set fileName="${fileName}"`, `set /A memory=${memory}`, '');
 
         fileName = '%fileName%';
         memory = '%memory%';
@@ -184,11 +176,8 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       mime: 'text/plain',
       extension: '.command',
     },
-    config: [
-      ...sharedConfig,
-      ...sharedScriptConfig,
-    ],
-    generate: config => {
+    config: [...sharedConfig, ...sharedScriptConfig],
+    generate: (config) => {
       const nix = nixScript(config);
 
       // First line of *nix files should contain shebang
@@ -202,11 +191,8 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
   },
   pterodactyl: {
     file: false,
-    config: [
-      ...sharedConfig,
-      'variables',
-    ],
-    generate: config => {
+    config: [...sharedConfig, 'variables'],
+    generate: (config) => {
       const base = [];
 
       let fileName = config.fileName;
@@ -225,7 +211,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
 
       const java = getJava({
         ...config,
-        'existingFlags': flags,
+        existingFlags: flags,
         fileName,
         memory,
       });
@@ -240,10 +226,8 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
   },
   command: {
     file: false,
-    config: [
-      ...sharedConfig,
-    ],
-    generate: config => {
+    config: [...sharedConfig],
+    generate: (config) => {
       const base = [];
 
       const java = getJava({

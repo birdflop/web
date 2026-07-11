@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "Komenda została skopiowana do schowka.",
-        "title": "Command Copied!"
+        "title": "Skopiowano polecenie!"
       },
       "title": "Komenda"
     },

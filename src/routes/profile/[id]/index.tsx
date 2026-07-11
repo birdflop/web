@@ -1,12 +1,23 @@
-import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  useContext,
+  useContextProvider,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 import { generateHead } from '~/root';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { privatePresetsContext, savedPresetsContext } from '~/routes/resources/rgb/presets';
+import {
+  privatePresetsContext,
+  savedPresetsContext,
+} from '~/routes/resources/rgb/presets';
 
-import UsersPublicPresets, { getUsersPresets } from '~/components/Rgbirdflop/UsersPublicPresets';
+import UsersPublicPresets, {
+  getUsersPresets,
+} from '~/components/rgbirdflop/presets/UsersPublicPresets';
 
 export const useUser = routeLoader$(async ({ params }) => {
   return getUsersPresets(params.id);
@@ -34,7 +45,7 @@ export default component$(() => {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-bg-red/50')
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -48,7 +59,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -56,15 +67,24 @@ export default component$(() => {
   });
 
   return (
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
-        {userInfo.image &&
-          <img src={userInfo.image} width={48} height={48} class="rounded-full!" />
-        }
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
+      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
+        {userInfo.image && (
+          <img
+            src={userInfo.image}
+            width={48}
+            height={48}
+            class="rounded-full!"
+          />
+        )}
         {userInfo?.name || 'User'}
       </h1>
       <main>
-        <UsersPublicPresets userInfo={userInfo} userPresets={userPresets} errors={errors} />
+        <UsersPublicPresets
+          userInfo={userInfo}
+          userPresets={userPresets}
+          errors={errors}
+        />
       </main>
     </section>
   );

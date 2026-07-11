@@ -1,5 +1,9 @@
 import { rgbToHsl, interpolateHsl, hslToRgb, type HSL } from '../Colors';
-import { BaseGradient, BaseTwoStopGradient, RGBColorStop } from './BaseGradient';
+import {
+  BaseGradient,
+  BaseTwoStopGradient,
+  RGBColorStop,
+} from './BaseGradient';
 
 /**
  * HSL-based gradient classes using intuitive color interpolation.

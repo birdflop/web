@@ -5,14 +5,15 @@
       "home": "Возвращайтесь домой",
       "title": "404: Страница не найдена"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Нажмите, чтобы скрыть",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "Принять",
+      "description": "Мы используем файлы cookie для автоматического сохранения и загрузки ваших настроек.",
+      "optOut": "Отклонить",
+      "title": "Файлы cookie"
     },
-    "docs": "Docs",
+    "docs": "Документация",
+    "experimental": "экспериментально",
     "hosting": {
       "billing": "Выставление счетов",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "Профиль"
     },
     "resources": {
+      "analyze": {
+        "description": "Анализируйте профиль Spark или Paper Timings для получения рекомендаций по оптимизации",
+        "title": "Анализ"
+      },
       "animatedTAB": {
         "description": "Создать анимацию для плагина TAB",
         "title": "Анимация TAB"
@@ -59,6 +64,10 @@
         "title": "Инструменты градиента"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "Введите свой текст, выделите любую его часть, а затем настройте для неё собственный цвет и форматирование. Смешивайте сколько угодно градиентов, сплошных цветов и стилей.",
+          "title": "RGBirdflop Расширенный"
+        },
         "description": "Создатель HEX градиента, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
         "title": "RGBirdflop"
       },
@@ -72,11 +81,16 @@
       },
       "more": "Дополнительные ресурсы",
       "paperTimings": {
-        "description": "Проанализируйте расписания и получите возможную оптимизацию",
-        "title": "Расписание работы"
+        "description": "Проанализируйте timings и получите возможные рекомендации по оптимизации.",
+        "title": "Анализ timings"
+      },
+      "plugins": {
+        "description": "Отслеживайте обновления плагинов без необходимости проверять страницу каждого плагина вручную.",
+        "noServers": "Серверы ещё не добавлены. Начните с добавления сервера и плагинов!",
+        "title": "Обновления плагинов"
       },
       "serverTools": {
-        "description": "Инструменты для настройки и установки серверов minecraft.",
+        "description": "Инструменты для настройки и установки серверов Minecraft.",
         "title": "Серверные инструменты"
       },
       "sparkProfile": {
@@ -90,8 +104,8 @@
       "title": "Ресурсы"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Управляйте своими настройками и предпочтениями здесь.",
+      "title": "Настройки"
     },
     "termsofService": "Условия предоставления услуг"
   }

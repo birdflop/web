@@ -1,8 +1,4 @@
-import {
-  component$,
-  isDev,
-  useServerData,
-} from '@builder.io/qwik';
+import { component$, isDev, useServerData } from '@builder.io/qwik';
 import {
   DocumentHead,
   DocumentHeadValue,
@@ -105,8 +101,6 @@ export function generateHead({
       },
       ...(head.meta ?? []),
     ],
-    scripts: [
-      ...(head.scripts ?? []),
-    ],
+    scripts: [...(head.scripts ?? [])],
   };
 }

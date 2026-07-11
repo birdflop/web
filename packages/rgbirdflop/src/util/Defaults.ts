@@ -1,12 +1,27 @@
 import type { GradientType } from './ColorUtils';
 
+export type ColorMode = 'gradient' | 'solid' | 'none';
 export type ColorStop = {
   hex: string;
   pos: number;
   opacity?: number;
 };
 
-export interface format {
+export interface Formatting {
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+  obfuscate?: boolean;
+  font?: string;
+}
+
+export interface FormatSegment extends Formatting {
+  start: number;
+  end: number;
+}
+
+export interface ColorFormat {
   color: string;
   char?: string;
   class?: string;
@@ -17,7 +32,7 @@ export interface format {
   obfuscate?: string;
 }
 
-export const formats: format[] = [
+export const colorFormats: ColorFormat[] = [
   {
     color: 'MiniMessage',
     bold: '<b>$t</b>',
@@ -54,44 +69,56 @@ export const formats: format[] = [
   },
 ];
 
-export const animationStyles = [
-  { name: 'Normal (Left -> Right)', value: 1 },
-  { name: 'Reversed (Right -> Left)', value: 2 },
-  { name: 'Bouncing (Left -> Right -> Left)', value: 3 },
-  { name: 'Full Text Cycle', value: 4 },
-];
+export const ANIMATION_STYLES = {
+  LEFT_TO_RIGHT: 1,
+  RIGHT_TO_LEFT: 2,
+  BOUNCING: 3,
+  FULL_TEXT_CYCLE: 4,
+};
 
-export const rgbDefaults = {
-  version: 4,
+export const version = 5;
+export const rgbColorDefaults = {
+  version,
+  text: 'Birdflop',
   colors: [
     { hex: '#54daf4', pos: 0 },
     { hex: '#545eb6', pos: 100 },
   ] as ColorStop[],
-  shadowcolors: null as null | ColorStop[],
-  colorlength: 1,
-  text: 'Birdflop',
-  format: formats[1],
-  prefixsuffix: '',
+  shadowColors: null as null | ColorStop[],
+  colorLength: 1,
+  gradientType: 'rgb' as GradientType,
+};
+export const rgbColorDefaultsWithColorMode = {
+  ...rgbColorDefaults,
+  colorMode: 'gradient' as ColorMode,
+};
+export const rgbOptionDefaults = {
+  version,
+  colorFormat: colorFormats[1],
+  formatting: [] as FormatSegment[],
+  baseFormatting: {} as Formatting,
+  prefixSuffix: '',
   customFormat: false,
-  trimspaces: true,
+  trimSpaces: true,
   disperse: false,
   lowercase: false,
-  bold: false,
-  italic: false,
-  underline: false,
-  strikethrough: false,
-  obfuscate: false,
-  gradientType: 'rgb' satisfies GradientType,
+};
+
+export const rgbDefaults = {
+  ...rgbColorDefaults,
+  ...rgbOptionDefaults,
 };
 
 export const animTABDefaults = {
   name: 'logo',
-  type: 1,
+  type: ANIMATION_STYLES.LEFT_TO_RIGHT,
   speed: 50,
   length: 1,
-  outputFormat: '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
+  outputFormat:
+    '%name%:\n  change-interval: %speed%\n  texts:\n%output:{  - "$t"}%',
 };
 
 export const combinedDefaults = {
-  ...rgbDefaults, ...animTABDefaults,
+  ...rgbDefaults,
+  ...animTABDefaults,
 };

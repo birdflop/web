@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Intervalo da animação",
       "name": "Nome da Animação",
-      "style": "Estilo da animação"
+      "style": {
+        "BOUNCING": "Ressaltando",
+        "FULL_TEXT_CYCLE": "Ciclo completo de texto",
+        "LEFT_TO_RIGHT": "Esquerda para a direita",
+        "RIGHT_TO_LEFT": "Direita para a esquerda",
+        "title": "Estilo da animação"
+      }
     },
     "length": "Comprimento do Gradiente",
     "outputFormat": {

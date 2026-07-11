@@ -4,11 +4,11 @@ import type { AvailableServerType } from '~/util/flags/environment/serverType';
 import type { AvailableExtraFlags, AvailableFlags } from '~/util/flags/flags';
 
 export interface ServerTypeOption extends EnvironmentOption {
-    'flags': AvailableFlags[],
-    'extraFlags'?: AvailableExtraFlags[],
-    'default': {
-        'flags': AvailableFlags,
-        'extraFlags'?: AvailableExtraFlags[]
-    },
-    'generate'?: Generate<AvailableServerType | 'existingFlags'>
+  flags: AvailableFlags[];
+  extraFlags?: AvailableExtraFlags[];
+  default: {
+    flags: AvailableFlags;
+    extraFlags?: AvailableExtraFlags[];
+  };
+  generate?: Generate<AvailableServerType | 'existingFlags'>;
 }

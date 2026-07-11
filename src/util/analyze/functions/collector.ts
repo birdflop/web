@@ -1,4 +1,8 @@
-export async function collector(id: string, url: string, type: 'spark' | 'timings') {
+export async function collector(
+  id: string,
+  url: string,
+  type: 'spark' | 'timings',
+) {
   if (!url) return;
   try {
     await fetch(url + '/' + type, {
@@ -8,9 +12,8 @@ export async function collector(id: string, url: string, type: 'spark' | 'timing
       },
       body: JSON.stringify({ id }),
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Fetch error:', error);
     throw error;
-  };
+  }
 }

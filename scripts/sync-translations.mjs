@@ -25,21 +25,39 @@ const deeplLangMap = {
 
 async function parseSupportedFromSpeakConfig() {
   const fallback = {
-    languages: ['en-US', 'es-ES', 'ko-KR', 'de-DE', 'nl-NL', 'pl-PL', 'pt-PT', 'ru-RU', 'tr-TR', 'zh-CN'],
+    languages: [
+      'en-US',
+      'es-ES',
+      'ko-KR',
+      'de-DE',
+      'nl-NL',
+      'pl-PL',
+      'pt-PT',
+      'ru-RU',
+      'tr-TR',
+      'zh-CN',
+    ],
     assets: ['animtab', 'animtexture', 'flags', 'nav', 'rgb'],
   };
 
   try {
     const raw = await fs.readFile(SPEAK_CONFIG_PATH, 'utf8');
-    const languages = Array.from(raw.matchAll(/'([a-z]{2}-[A-Z]{2})'\s*:/g)).map((m) => m[1]);
+    const languages = Array.from(
+      raw.matchAll(/'([a-z]{2}-[A-Z]{2})'\s*:/g),
+    ).map((m) => m[1]);
     const assetsBlock = raw.match(/assets:\s*\[([^]*?)\]/m);
-    const assets = assetsBlock ? Array.from(assetsBlock[1].matchAll(/'([\w-]+)'/g)).map((m) => m[1]) : [];
+    const assets = assetsBlock
+      ? Array.from(assetsBlock[1].matchAll(/'([\w-]+)'/g)).map((m) => m[1])
+      : [];
     return {
       languages: languages.length ? languages : fallback.languages,
       assets: assets.length ? assets : fallback.assets,
     };
   } catch (error) {
-    console.warn('[warn] Failed to read speak-config.ts, falling back to defaults:', error);
+    console.warn(
+      '[warn] Failed to read speak-config.ts, falling back to defaults:',
+      error,
+    );
     return fallback;
   }
 }
@@ -61,7 +79,9 @@ function walkStrings(node, pathParts = [], out = []) {
     return out;
   }
   if (Array.isArray(node)) {
-    node.forEach((item, index) => walkStrings(item, [...pathParts, index], out));
+    node.forEach((item, index) =>
+      walkStrings(item, [...pathParts, index], out),
+    );
     return out;
   }
   if (node && typeof node === 'object') {
@@ -89,7 +109,10 @@ function setPath(target, pathParts, value) {
 }
 
 function getPath(source, pathParts) {
-  return pathParts.reduce((current, part) => (current ? current[part] : undefined), source);
+  return pathParts.reduce(
+    (current, part) => (current ? current[part] : undefined),
+    source,
+  );
 }
 
 function pathKey(pathParts) {
@@ -158,7 +181,8 @@ function parseArgs(argv) {
   argv.forEach((part) => {
     const [key, rawValue] = part.split('=');
     const value = rawValue ?? 'true';
-    if (key.startsWith('--asset')) args.assets = value.split(',').filter(Boolean);
+    if (key.startsWith('--asset'))
+      args.assets = value.split(',').filter(Boolean);
     if (key.startsWith('--lang')) args.langs = value.split(',').filter(Boolean);
     if (key === '--dry-run') args.dryRun = true;
     if (key === '--force') args.force = true;
@@ -171,12 +195,16 @@ async function main() {
   const { languages, assets } = await parseSupportedFromSpeakConfig();
   const args = parseArgs(process.argv.slice(2));
   const targetAssets = args.assets?.length ? args.assets : assets;
-  const targetLangs = (args.langs?.length ? args.langs : languages).filter((lang) => lang !== BASE_LANG);
+  const targetLangs = (args.langs?.length ? args.langs : languages).filter(
+    (lang) => lang !== BASE_LANG,
+  );
   const providerName = args.provider ?? DEFAULT_PROVIDER;
   const translate = providers[providerName];
 
   if (!translate) {
-    throw new Error(`Unknown provider '${providerName}'. Use one of: ${Object.keys(providers).join(', ')}.`);
+    throw new Error(
+      `Unknown provider '${providerName}'. Use one of: ${Object.keys(providers).join(', ')}.`,
+    );
   }
 
   const cache = await loadCache();
@@ -184,9 +212,14 @@ async function main() {
 
   for (const asset of targetAssets) {
     const basePath = path.join(I18N_DIR, BASE_LANG, `${asset}.json`);
-    const baseExists = await fs.stat(basePath).then(() => true).catch(() => false);
+    const baseExists = await fs
+      .stat(basePath)
+      .then(() => true)
+      .catch(() => false);
     if (!baseExists) {
-      console.warn(`[warn] Missing base file for asset '${asset}' at ${basePath}, skipping.`);
+      console.warn(
+        `[warn] Missing base file for asset '${asset}' at ${basePath}, skipping.`,
+      );
       continue;
     }
 
@@ -196,7 +229,10 @@ async function main() {
 
     for (const lang of targetLangs) {
       const targetPath = path.join(I18N_DIR, lang, `${asset}.json`);
-      const targetExists = await fs.stat(targetPath).then(() => true).catch(() => false);
+      const targetExists = await fs
+        .stat(targetPath)
+        .then(() => true)
+        .catch(() => false);
       const targetJson = targetExists ? await readJson(targetPath) : {};
 
       const toTranslate = [];
@@ -229,7 +265,12 @@ async function main() {
         setPath(targetJson, pathsNeedingUpdate[idx], text);
       });
 
-      summary.push({ asset, lang, updated: translated.length, skipped: strings.length - translated.length });
+      summary.push({
+        asset,
+        lang,
+        updated: translated.length,
+        skipped: strings.length - translated.length,
+      });
       if (!args.dryRun) {
         await writeJson(targetPath, targetJson);
       }
@@ -238,7 +279,10 @@ async function main() {
 
   await saveCache(cache, args.dryRun);
 
-  const rows = summary.map((item) => `${item.asset} -> ${item.lang}: ${item.updated} updated, ${item.skipped} unchanged`);
+  const rows = summary.map(
+    (item) =>
+      `${item.asset} -> ${item.lang}: ${item.updated} updated, ${item.skipped} unchanged`,
+  );
   console.log('\nTranslation sync complete');
   rows.forEach((row) => console.log(` - ${row}`));
   if (args.dryRun) console.log('\n(dry run: no files were written)');

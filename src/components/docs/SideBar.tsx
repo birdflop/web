@@ -1,7 +1,7 @@
 import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
 import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
 import { useMarkdownItems } from '~/routes/docs/layout';
-import { buildMenu } from '~/util/buildMenu';
+import { buildMenu } from '~/util/docs';
 import { MenuItems } from './Menuitems';
 import { Book, Menu, Search } from 'lucide-icons-qwik';
 
@@ -61,41 +61,52 @@ export const DocsSidebar = component$(() => {
   });
 
   return (
-    <aside
-      class="w-full lg:w-100 fixed lg:sticky lg:h-dvh lum-card backdrop-blur-lg rounded-none border-l-0 lg:border-y-0 top-0 z-40 pt-14 lg:pt-20 px-0 lg:px-6 pb-0"
-    >
-      <nav id="docs-sidebar" class="invisible min-h-full relative">
-        <div class="flex items-center gap-3 py-3 px-2 border-b border-gray-700">
+    <aside class="lum-card fixed top-0 z-40 w-full rounded-none border-l-0 px-0 pt-14 pb-0 backdrop-blur-lg lg:sticky lg:h-dvh lg:w-100 lg:border-y-0 lg:px-6 lg:pt-20">
+      <nav id="docs-sidebar" class="invisible relative min-h-full">
+        <div class="flex items-center gap-3 border-b border-gray-700 px-2 py-3">
           <Book class="ml-2 lg:ml-0" />
-          <h5 class="flex flex-1 my-0!">
-            Documentation
-          </h5>
+          <h5 class="flex flex-1">Documentation</h5>
 
-          <button class="lum-btn lum-bg-transparent p-2 lg:hidden" onClick$={() => {
-            store.sideMenuOpen = !store.sideMenuOpen;
-            const abortController = new AbortController();
-            document.addEventListener('click', (e) => {
-              if (!e.composedPath().includes(document.querySelector('aside')!) || e.target instanceof HTMLAnchorElement) {
-                store.sideMenuOpen = false;
-                abortController.abort();
-              }
-            }, { signal: abortController.signal });
-          }} aria-label="Toggle Menu">
+          <button
+            class="lum-btn lum-bg-transparent p-2 lg:hidden"
+            onClick$={() => {
+              store.sideMenuOpen = !store.sideMenuOpen;
+              const abortController = new AbortController();
+              document.addEventListener(
+                'click',
+                (e) => {
+                  if (
+                    !e
+                      .composedPath()
+                      .includes(document.querySelector('aside')!) ||
+                    e.target instanceof HTMLAnchorElement
+                  ) {
+                    store.sideMenuOpen = false;
+                    abortController.abort();
+                  }
+                },
+                { signal: abortController.signal },
+              );
+            }}
+            aria-label="Toggle Menu"
+          >
             <Menu />
           </button>
         </div>
 
-        <div class={{
-          'flex-col gap-3 my-4 mx-4 lg:mx-0': true,
-          'hidden lg:flex': !store.sideMenuOpen,
-          'flex': store.sideMenuOpen,
-        }}>
-          <div class="flex gap-3 items-center">
+        <div
+          class={{
+            'mx-4 my-4 flex-col gap-3 lg:mx-0': true,
+            'hidden lg:flex': !store.sideMenuOpen,
+            flex: store.sideMenuOpen,
+          }}
+        >
+          <div class="flex items-center gap-3">
             <Search size={24} />
             <input
               type="text"
               placeholder="Search docs..."
-              class="w-full lum-input lum-btn-p-1"
+              class="lum-input lum-btn-p-1 w-full"
             />
           </div>
 
@@ -109,7 +120,9 @@ export const DocsSidebar = component$(() => {
           ) : (
             <div class="py-4 text-center">
               <p>No documentation found</p>
-              <p class="mt-2 text-sm">Add markdown files to your docs directory</p>
+              <p class="mt-2 text-sm">
+                Add markdown files to your docs directory
+              </p>
             </div>
           )}
         </div>
@@ -118,12 +131,17 @@ export const DocsSidebar = component$(() => {
   );
 });
 
-export function createBreadcrumbs(menu: ContentMenu | undefined, pathname: string) {
+export function createBreadcrumbs(
+  menu: ContentMenu | undefined,
+  pathname: string,
+) {
   if (!menu?.items) return [];
 
-  function findPath(items: ContentMenu[], path: ContentMenu[] = []): ContentMenu[] | null {
+  function findPath(
+    items: ContentMenu[],
+    path: ContentMenu[] = [],
+  ): ContentMenu[] | null {
     for (const item of items) {
-
       if (item.href === pathname) {
         return [...path, item];
       }

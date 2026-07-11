@@ -5,14 +5,15 @@
       "home": "Voltar ao início",
       "title": "404: Página não encontrada"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Clique para fechar",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
+      "acknowledge": "Aceitar",
+      "description": "Utilizamos cookies para guardar e carregar as suas preferências automaticamente.",
+      "optOut": "Rejeitar",
       "title": "Cookies"
     },
-    "docs": "Documentação",
+    "docs": "Docs",
+    "experimental": "experimental",
     "hosting": {
       "billing": "Faturação",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "Perfil"
     },
     "resources": {
+      "analyze": {
+        "description": "Analise um perfil Spark ou Paper Timings e obtenha possíveis otimizações",
+        "title": "Analisar"
+      },
       "animatedTAB": {
         "description": "Criador de animação de gradiente do plugin TAB",
         "title": "TAB animado"
@@ -59,6 +64,10 @@
         "title": "Ferramentas de gradiente"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "Escreva o seu texto, selecione qualquer parte e dê a essa parte a sua própria cor e formatação. Misture quantos gradientes, cores sólidas e estilos desejar.",
+          "title": "RGBirdflop Avançado"
+        },
         "description": "Gerador de texto de gradiente hexadecimal, alimentado pelo Birdflop, um host Minecraft sem fins lucrativos 501(c)(3).",
         "title": "RGBirdflop"
       },
@@ -75,6 +84,11 @@
         "description": "Analise Paper Timings e obtenha possíveis otimizações",
         "title": "Horários dos documentos"
       },
+      "plugins": {
+        "description": "Acompanhe as updates dos plugins sem precisar verificar a página de cada um deles.",
+        "noServers": "Nenhum servidor adicionado ainda. Comece por adicionar um servidor e alguns plugins!",
+        "title": "Atualizações de plugins"
+      },
       "serverTools": {
         "description": "Ferramentas para ajudar a configurar e configurar servidores Minecraft.",
         "title": "Ferramentas do servidor"
@@ -90,8 +104,8 @@
       "title": "Recursos"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Gira as suas definições e preferências aqui.",
+      "title": "Definições"
     },
     "termsofService": "Termos de serviço"
   }

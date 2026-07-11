@@ -1,10 +1,21 @@
-import { component$, useContext, useContextProvider, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  useContext,
+  useContextProvider,
+  useSignal,
+  useVisibleTask$,
+} from '@builder.io/qwik';
 
-import { privatePresetsContext, savedPresetsContext } from '../resources/rgb/presets';
+import {
+  privatePresetsContext,
+  savedPresetsContext,
+} from '../resources/rgb/presets';
 import { useSession } from '~/routes/plugin@auth';
 import { generateHead } from '~/root';
-import MyPrivatePresets from '~/components/Rgbirdflop/MyPrivatePresets';
-import UsersPublicPresets, { getUsersPresets } from '~/components/Rgbirdflop/UsersPublicPresets';
+import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
+import UsersPublicPresets, {
+  getUsersPresets,
+} from '~/components/rgbirdflop/presets/UsersPublicPresets';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { Notification, NotificationContext } from '~/util/Notification';
 
@@ -33,17 +44,23 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error fetching user data')
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-bg-red/50')
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
     }
   });
 
-  return <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-    <UsersPublicPresets userInfo={userInfo} userPresets={userPresets} errors={errors} />
-    <MyPrivatePresets />
-  </section>;
+  return (
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
+      <UsersPublicPresets
+        userInfo={userInfo}
+        userPresets={userPresets}
+        errors={errors}
+      />
+      <MyPrivatePresets />
+    </section>
+  );
 });
 
 export const head = generateHead({});

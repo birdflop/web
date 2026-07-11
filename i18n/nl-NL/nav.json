@@ -5,14 +5,15 @@
       "home": "Ga terug naar huis",
       "title": "404: Pagina niet gevonden"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Klik om te sluiten",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
+      "acknowledge": "Accepteren",
+      "description": "We gebruiken cookies om uw voorkeuren automatisch op te slaan en te laden.",
+      "optOut": "Weigeren",
       "title": "Cookies"
     },
     "docs": "Documentatie",
+    "experimental": "experimenteel",
     "hosting": {
       "billing": "Facturering",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "Profiel"
     },
     "resources": {
+      "analyze": {
+        "description": "Analyseer een Spark-profiel of Paper Timings en ontvang mogelijke optimalisaties",
+        "title": "Analyseren"
+      },
       "animatedTAB": {
         "description": "TAB plugin gradiënt animatie maker",
         "title": "Geanimeerde TAB"
@@ -59,6 +64,10 @@
         "title": "Gradiënt hulpmiddelen"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "Typ uw tekst, markeer een willekeurig deel ervan en geef dat deel een eigen kleur en opmaak. Mix zoveel verlopen, egale kleuren en stijlen als u wilt.",
+          "title": "RGBirdflop Geavanceerd"
+        },
         "description": "Hexadecimale gradiënt tekst generator, aangedreven door Birdflop, een 501(c)(3) non-profit Minecraft host.",
         "title": "RGBirdflop"
       },
@@ -75,6 +84,11 @@
         "description": "Analyseer Paper Timings en krijg mogelijke optimalisaties",
         "title": "Papierschema's"
       },
+      "plugins": {
+        "description": "Blijf op de hoogte van plugin-updates zonder elke plugin-pagina handmatig te controleren.",
+        "noServers": "Nog geen servers toegevoegd. Ga aan de slag door een server en enkele plugins toe te voegen!",
+        "title": "Plugin-updates"
+      },
       "serverTools": {
         "description": "Hulpmiddelen om te helpen bij het configureren en instellen van Minecraft-servers.",
         "title": "Server hulpmiddelen"
@@ -90,8 +104,8 @@
       "title": "Bronnen"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Beheer hier uw instellingen en voorkeuren.",
+      "title": "Instellingen"
     },
     "termsofService": "Gebruiksvoorwaarden"
   }

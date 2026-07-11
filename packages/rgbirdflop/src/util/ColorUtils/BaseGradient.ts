@@ -19,8 +19,7 @@ export interface TwoStopGradient {
  * `@property` pos - Position in gradient (0-100)
  */
 export type RGBColorStop = {
-  rgb: [number, number, number]
-    | [number, number, number, number];
+  rgb: [number, number, number] | [number, number, number, number];
   pos: number;
 };
 
@@ -36,7 +35,14 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
   lowerRange: number;
   upperRange: number;
 
-  constructor(startRgb: number[], endRgb: number[], startAlpha: number, endAlpha: number, lowerRange: number, upperRange: number) {
+  constructor(
+    startRgb: number[],
+    endRgb: number[],
+    startAlpha: number,
+    endAlpha: number,
+    lowerRange: number,
+    upperRange: number,
+  ) {
     this.startColor = this.rgbToColorSpace(startRgb);
     this.endColor = this.rgbToColorSpace(endRgb);
     this.startAlpha = startAlpha;
@@ -71,12 +77,20 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
     const factor = range > 0 ? (step - this.lowerRange) / range : 0;
 
     // Interpolate in the specific color space
-    const interpolated = this.interpolate(this.startColor, this.endColor, factor);
+    const interpolated = this.interpolate(
+      this.startColor,
+      this.endColor,
+      factor,
+    );
 
-    const interpolatedAlpha = this.startAlpha + (this.endAlpha - this.startAlpha) * factor;
+    const interpolatedAlpha =
+      this.startAlpha + (this.endAlpha - this.startAlpha) * factor;
 
     // Convert back to RGB
-    return [...this.colorSpaceToRgb(interpolated), Math.round(interpolatedAlpha * 255)];
+    return [
+      ...this.colorSpaceToRgb(interpolated),
+      Math.round(interpolatedAlpha * 255),
+    ];
   }
 }
 
@@ -137,8 +151,8 @@ export class BaseGradient {
         nextColor = temp;
       }
 
-      const lowerRange = Math.round(currentColor.pos / 100 * this.steps);
-      const upperRange = Math.round(nextColor.pos / 100 * this.steps);
+      const lowerRange = Math.round((currentColor.pos / 100) * this.steps);
+      const upperRange = Math.round((nextColor.pos / 100) * this.steps);
 
       if (upperRange < 1) continue;
       if (lowerRange === upperRange) continue;
@@ -163,13 +177,15 @@ export class BaseGradient {
   next(): number[] {
     if (this.steps < 1) {
       // Single color, just return it
-      return this.colors[0].rgb;
+      return this.colors[0]?.rgb;
     }
 
     // Apply easing function for smooth transitions
     const adjustedStep = Math.round(
       Math.abs(
-        ((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) / Math.PI) * this.steps,
+        ((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) /
+          Math.PI) *
+          this.steps,
       ),
     );
 
@@ -178,10 +194,10 @@ export class BaseGradient {
       color = this.gradients[0]?.colorAt(adjustedStep);
     } else {
       const gradient = this.gradients.find(
-        g => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
+        (g) => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
       );
       if (!gradient) {
-        return this.colors[0].rgb;
+        return this.colors[0]?.rgb;
       }
       color = gradient.colorAt(adjustedStep);
     }

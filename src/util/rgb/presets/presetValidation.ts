@@ -71,15 +71,25 @@ export async function validatePresetSubmission(
   let similarPresets: SimilarPreset[] | undefined;
   if (errors.length === 0 && checkSimilarity) {
     try {
-      const similarityCheck = await checkPresetSimilarity(submission.preset, 0.38);
-      if (similarityCheck.isSimilar && similarityCheck.similarPresets.length > 0) {
+      const similarityCheck = await checkPresetSimilarity(
+        submission.preset,
+        0.38,
+      );
+      if (
+        similarityCheck.isSimilar &&
+        similarityCheck.similarPresets.length > 0
+      ) {
         similarPresets = similarityCheck.similarPresets;
 
         errors.push({
           field: 'preset',
-          message: 'This gradient is too similar to existing presets, Please modify it to be more unique.',
+          message:
+            'This gradient is too similar to existing presets, Please modify it to be more unique.',
         });
-      } else if (similarityCheck.closestDistance !== undefined && similarityCheck.closestDistance < 8000) {
+      } else if (
+        similarityCheck.closestDistance !== undefined &&
+        similarityCheck.closestDistance < 8000
+      ) {
         warnings.push(
           'This gradient is somewhat similar to an existing preset. Consider making it more unique.',
         );
@@ -128,35 +138,41 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
   }
 
   // Validate each color
-  preset.colors.forEach((color: { hex?: string; pos?: number }, index: number) => {
-    if (!color.hex) {
-      errors.push({
-        field: `preset.colors[${index}]`,
-        message: `Color at index ${index} is missing hex value`,
-      });
-    } else if (!isValidHexColor(color.hex)) {
-      errors.push({
-        field: `preset.colors[${index}]`,
-        message: `Invalid hex color: ${color.hex}`,
-      });
-    }
+  preset.colors.forEach(
+    (color: { hex?: string; pos?: number }, index: number) => {
+      if (!color.hex) {
+        errors.push({
+          field: `preset.colors[${index}]`,
+          message: `Color at index ${index} is missing hex value`,
+        });
+      } else if (!isValidHexColor(color.hex)) {
+        errors.push({
+          field: `preset.colors[${index}]`,
+          message: `Invalid hex color: ${color.hex}`,
+        });
+      }
 
-    if (color.pos === undefined || color.pos === null) {
-      errors.push({
-        field: `preset.colors[${index}]`,
-        message: `Color at index ${index} is missing position`,
-      });
-    } else if (color.pos < 0 || color.pos > 100) {
-      errors.push({
-        field: `preset.colors[${index}]`,
-        message: `Color position must be between 0 and 100 (got ${color.pos})`,
-      });
-    }
-  });
+      if (color.pos === undefined || color.pos === null) {
+        errors.push({
+          field: `preset.colors[${index}]`,
+          message: `Color at index ${index} is missing position`,
+        });
+      } else if (color.pos < 0 || color.pos > 100) {
+        errors.push({
+          field: `preset.colors[${index}]`,
+          message: `Color position must be between 0 and 100 (got ${color.pos})`,
+        });
+      }
+    },
+  );
 
   // Check for duplicate positions
-  const positions: (number | undefined)[] = preset.colors.map((c: { hex?: string; pos?: number }) => c.pos);
-  const duplicatePositions = positions.filter((pos, index) => positions.indexOf(pos) !== index);
+  const positions: (number | undefined)[] = preset.colors.map(
+    (c: { hex?: string; pos?: number }) => c.pos,
+  );
+  const duplicatePositions = positions.filter(
+    (pos, index) => positions.indexOf(pos) !== index,
+  );
   if (duplicatePositions.length > 0) {
     errors.push({
       field: 'preset.colors',
@@ -180,10 +196,10 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
   }
 
   // Validate format if present
-  if (preset.format) {
-    if (!preset.format.color) {
+  if (preset.colorFormat) {
+    if (!preset.colorFormat.color) {
       errors.push({
-        field: 'preset.format',
+        field: 'preset.colorFormat',
         message: 'Format must have a color property',
       });
     }

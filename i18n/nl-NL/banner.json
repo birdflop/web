@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "Het commando is succesvol naar je klembord gekopieerd.",
-        "title": "Command Copied!"
+        "title": "Opdracht gekopieerd!"
       },
       "title": "Commando"
     },

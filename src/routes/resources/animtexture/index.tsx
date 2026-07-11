@@ -1,32 +1,45 @@
-import { component$, isBrowser, useContextProvider, useSignal, useStore, useTask$ } from '@builder.io/qwik';
+import {
+  component$,
+  isBrowser,
+  useContextProvider,
+  useSignal,
+  useStore,
+  useTask$,
+} from '@builder.io/qwik';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import { parseGIF, decompressFrames } from 'gifuct-js';
-import { Download, GalleryHorizontalEnd, RefreshCw, X } from 'lucide-icons-qwik';
-import { NumberInput, Toggle } from '@luminescent/ui-qwik';
+import {
+  Download,
+  File,
+  GalleryHorizontalEnd,
+  Link,
+  Proportions,
+  RefreshCw,
+  Settings,
+  X,
+} from 'lucide-icons-qwik';
+import { NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
-import Input, { previewStyleContext } from '~/components/Rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/Rgbirdflop/RGBirdflop';
+import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-
-export async function base64ToFile(dataURL: string) {
-  const arr = dataURL.split(',');
-  const match = arr[0].match(/:(.*?);/);
-  const mime = match ? match[1] : '';
-  const result = await fetch(dataURL);
-  return {
-    mime,
-    buffer: await result.arrayBuffer(),
-  };
-};
-
-const readFileAsDataURL = (file: Blob) => new Promise<ProgressEvent<FileReader>>((resolve, reject) => {
-  const f = new FileReader();
-  f.readAsDataURL(file);
-  f.onloadend = (e) => resolve(e);
-  f.onerror = reject;
-});
+import { deepTrack } from '~/util/track';
+import { Tabs } from '~/components/Elements/Tabs';
+import {
+  createTexture,
+  buildTextureOutputs,
+  getTextureFrameHeight,
+  getUniqueTextureName,
+  downloadBlob,
+  buildResourcePack,
+  RenderedTexture,
+  normalizeTextureName,
+  readFileAsDataURL,
+  base64ToFile,
+  loadGifFrames,
+  loadImageFromDataURL,
+} from '~/util/animtexture';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -35,74 +48,80 @@ export default component$(() => {
   const previewStyle = useSignal('chat');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const animtextureStore = useStore({
-    textureName: 'animtexture',
-    loading: false,
-    width: 16,
-    height: 16,
-    lockdimensions: true,
-    bounce: false,
-    syncduration: false,
-    showChatPreview: false,
-    accumulate: false,
+  const animtextureStore = useStore(
+    {
+      textures: [createTexture()],
+      activeTexture: 0,
+      accumulate: false,
+    },
+    { deep: true },
+  );
+
+  const activeTextureOutputs = useSignal<RenderedTexture>({
     png: '',
     mcmeta: '',
-  }, { deep: true });
-
-  const animtextureFrames = useSignal<{
-    img: HTMLImageElement,
-    delay: number
-  }[]>([]);
+  });
 
   const animCanvasRef = useSignal<HTMLCanvasElement>();
   const textureCanvasRef = useSignal<HTMLCanvasElement>();
 
+  const texture =
+    animtextureStore.textures[animtextureStore.activeTexture] ??
+    animtextureStore.textures[0];
+
   useTask$(({ track }) => {
-    (Object.keys(animtextureStore) as Array<keyof typeof animtextureStore>).forEach((key) => {
-      if (key == 'loading') return;
-      track(() => animtextureStore[key]);
-    });
-    track(() => animtextureFrames.value);
+    deepTrack(track, animtextureStore);
+    track(() => animtextureStore.activeTexture);
+    track(() => animtextureStore.textures.length);
     track(() => animCanvasRef.value);
     track(() => textureCanvasRef.value);
 
-    if (animtextureStore.lockdimensions) animtextureStore.height = animtextureStore.width;
+    const texture =
+      animtextureStore.textures[animtextureStore.activeTexture] ??
+      animtextureStore.textures[0];
+    if (!texture) return;
+
+    if (texture.lockdimensions) texture.height = texture.width;
     if (!isBrowser) return;
 
     const canvas = textureCanvasRef.value;
     if (!canvas) return console.error('Canvas for texture preview not found');
     const ctx = canvas.getContext('2d')!;
 
-    canvas.width = animtextureStore.width;
-    canvas.height = animtextureStore.height * animtextureFrames.value.length;
+    const renderedTexture = buildTextureOutputs(texture);
+    activeTextureOutputs.value = renderedTexture;
 
-    for (let i = 0; i != animtextureFrames.value.length; i++) {
-      const img = animtextureFrames.value[i].img;
-      ctx.drawImage(img, 0, i * animtextureStore.height, animtextureStore.width, animtextureStore.height);
+    canvas.width = texture.width;
+    canvas.height = getTextureFrameHeight(texture) * texture.frames.length;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (renderedTexture.png) {
+      const previewImg = new Image();
+      previewImg.onload = () => {
+        ctx.drawImage(previewImg, 0, 0);
+      };
+      previewImg.src = renderedTexture.png;
     }
-
-    animtextureStore.png = canvas.toDataURL();
 
     const anim = animCanvasRef.value;
     if (!anim) return console.error('Canvas for animation preview not found');
     const animctx = anim.getContext('2d')!;
-    anim.width = animtextureStore.width;
-    anim.height = animtextureStore.height;
+    anim.width = texture.width;
+    anim.height = getTextureFrameHeight(texture);
     let i = 0;
     let lastTime = 0;
     let bounce = false;
     const animate = (time: number) => {
-      if (animtextureFrames.value.length == 0) return;
-      if (time - lastTime > animtextureFrames.value[i].delay / 20 * 1000) {
+      if (texture.frames.length == 0) return;
+      if (time - lastTime > (texture.frames[i].delay / 20) * 1000) {
         lastTime = time;
         if (bounce) i--;
         else i++;
-        if (i >= animtextureFrames.value.length) {
-          if (animtextureStore.bounce) {
+        if (i >= texture.frames.length) {
+          if (texture.bounce) {
             bounce = !bounce;
             i--;
-          }
-          else {
+          } else {
             i = 0;
           }
         }
@@ -112,354 +131,609 @@ export default component$(() => {
         }
       }
       animctx.clearRect(0, 0, anim.width, anim.height);
-      animctx.drawImage(animtextureFrames.value[i].img, 0, 0, animtextureStore.width, animtextureStore.height);
+      animctx.drawImage(
+        texture.frames[i].img,
+        0,
+        0,
+        texture.width,
+        getTextureFrameHeight(texture),
+      );
       requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
   });
 
   return (
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl! items-center my-2!">
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
+      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <GalleryHorizontalEnd size={32} />
         {t('nav.resources.animatedTextures.title@@Animated Textures')}
       </h1>
-      <p class="mb-4 border-b border-lum-border/10 pb-4">
-        {t('nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.')}
+      <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
+        {t(
+          'nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.',
+        )}
       </p>
 
       <div class="flex gap-4">
         <div class="flex-1">
-          <h3 class="mt-0!">
-            Input Image(s)
-          </h3>
-          <div class="flex flex-col gap-1 mb-5">
-            <label for="fileInput">
-              {t('animtexture.selectFrames@@Select GIF or image from your device')}
-            </label>
-            <input id="fileInput" type="file" multiple accept="image/*" class="file:lum-btn hover:file:lum-bg-gray-700 file:mb-1" onChange$={async (e, el) => {
-              const files = Array.from(el.files ?? []);
-              animtextureStore.loading = true;
-              for (const f of files) {
-                const e = await readFileAsDataURL(f);
-                if (!e.target?.result) return;
+          <div class="mb-4 flex flex-col gap-2">
+            <div class="flex items-center gap-1 py-2 font-semibold">
+              <h2 class="flex flex-1 items-center gap-2 text-2xl">
+                <GalleryHorizontalEnd size={30} />
+                {t('animtexture.textures@@Textures')}
+              </h2>
+              <button
+                class="lum-btn"
+                onClick$={async () => {
+                  if (
+                    animtextureStore.textures.every(
+                      (item) => item.frames.length === 0,
+                    )
+                  )
+                    return;
 
-                const frames = animtextureStore.accumulate ? animtextureFrames.value : [];
-                const file = await base64ToFile(e.target.result.toString());
-                if (file.mime == 'image/gif') {
-                  const parsedGif = parseGIF(file.buffer);
-                  const gifFrames = decompressFrames(parsedGif, true);
-                  gifFrames.forEach((frame) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = frame.dims.width;
-                    canvas.height = frame.dims.height;
-                    const ctx = canvas.getContext('2d')!;
-                    const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                    frameImageData.data.set(frame.patch);
-                    ctx.putImageData(frameImageData, 0, 0);
-                    const img = new Image();
-                    img.src = canvas.toDataURL();
-                    img.onload = () => {
-                      frames.push({
-                        img,
-                        delay: Math.ceil(frame.delay / 100),
-                      });
-                    };
-                  });
-                }
-                else {
-                  const img = new Image();
-                  img.src = e.target.result as string;
-                  frames.push({
-                    img,
-                    delay: 20,
-                  });
-                }
-
-                animtextureFrames.value = frames;
-              }
-              animtextureStore.loading = false;
-            }} />
-            <label for="urlInput" class="mt-2">
-              {t('animtexture.pasteUrl@@Paste GIF or image URL')}
-            </label>
-            <input id="urlInput" type="text" class="lum-input mb-2"
-              placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true"
-              onChange$={async (event, el) => {
-                let url = el.value;
-                if (!url) return;
-
-                animtextureStore.loading = true;
-
-                // if the url is a discord emoji, you can replace .webp with .gif
-                if (url.includes('cdn.discordapp.com/emojis/') && url.includes('.webp')) {
-                  url = url.replace('.webp', '.gif').split('?')[0];
-                  el.value = url;
-                }
-
-                const f = await (await fetch(url)).blob();
-
-                const e = await readFileAsDataURL(f);
-                if (!e.target?.result) return;
-
-                const frames = animtextureStore.accumulate ? animtextureFrames.value : [];
-                const file = await base64ToFile(e.target.result.toString());
-                if (file.mime == 'image/gif') {
-                  const parsedGif = parseGIF(file.buffer);
-                  const gifFrames = decompressFrames(parsedGif, true);
-                  gifFrames.forEach((frame) => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = frame.dims.width;
-                    canvas.height = frame.dims.height;
-                    const ctx = canvas.getContext('2d')!;
-                    const frameImageData = ctx.createImageData(frame.dims.width, frame.dims.height);
-                    frameImageData.data.set(frame.patch);
-                    ctx.putImageData(frameImageData, 0, 0);
-                    const img = new Image();
-                    img.src = canvas.toDataURL();
-                    img.onload = () => {
-                      frames.push({
-                        img,
-                        delay: Math.ceil(frame.delay / 100),
-                      });
-                    };
-                  });
-                }
-                else {
-                  const img = new Image();
-                  img.src = e.target.result as string;
-                  frames.push({
-                    img,
-                    delay: 20,
-                  });
-                }
-
-                animtextureFrames.value = frames;
-
-                animtextureStore.loading = false;
-              }} />
-            <Toggle id="accumulate" checked={animtextureStore.accumulate}
-              onChange$={(e, el) => { animtextureStore.accumulate = el.checked; }}>
-              {t('animtexture.accumulate@@Add to existing frames')}
-            </Toggle>
-          </div>
-
-          <hr/>
-
-          <div class="grid grid-cols-3 gap-2 my-4">
-            <div class={{
-              'flex items-end gap-1': true,
-              'col-span-2': animtextureStore.lockdimensions,
-            }}>
-              <div class="flex-1 flex flex-col gap-1">
-                <label for="textureName">{t('animtexture.textureName@@Texture Name')}</label>
-                <input id="textureName" class={{ 'lum-input': true }} value={animtextureStore.textureName} onInput$={(e, el) => { animtextureStore.textureName = el.value; }}/>
-              </div>
-              <p class="lum-btn p-2">
-                    .png
-              </p>
-            </div>
-            <NumberInput input min={1} step={16} value={animtextureStore.width} id="width" class={{ 'w-full': true }}
-              onIncrement$={() => {
-                animtextureStore.width += 16;
-              }}
-              onDecrement$={() => {
-                animtextureStore.width -= 16;
-              }}
-              onInput$={(e, el) => {
-                const value = Number(el.value);
-                if (isNaN(value)) return;
-                animtextureStore.width = value;
-              }}
-            >
-              <span class="flex gap-1 items-center">
-                {t('animtexture.width@@Width')}
-                <button class="lum-btn p-1" onClick$={() => {
-                  const maxWidth = Math.max(...animtextureFrames.value.map(frame => frame.img.naturalWidth));
-                  animtextureStore.width = maxWidth;
-                }}>
-                  <RefreshCw size={16} />
-                </button>
-              </span>
-            </NumberInput>
-            {!animtextureStore.lockdimensions &&
-              <NumberInput input min={1} step={16} value={animtextureStore.height} id="height" class={{ 'w-full': true }}
-                onIncrement$={() => {
-                  animtextureStore.height += 16;
-                }}
-                onDecrement$={() => {
-                  animtextureStore.height -= 16;
-                }}
-                onInput$={(e, el) => {
-                  const value = Number(el.value);
-                  if (isNaN(value)) return;
-                  animtextureStore.height = value;
+                  const blob = await buildResourcePack(
+                    animtextureStore.textures,
+                  );
+                  downloadBlob(blob, 'animtexture-resource-pack.zip');
                 }}
               >
-                <span class="flex gap-1 items-center">
-                  {t('animtexture.height@@Height')}
-                  <button class="lum-btn p-1" onClick$={() => {
-                    const maxHeight = Math.max(...animtextureFrames.value.map(frame => frame.img.naturalHeight));
-                    animtextureStore.height = maxHeight;
-                  }}>
-                    <RefreshCw size={16} />
-                  </button>
-                </span>
-              </NumberInput>
-            }
-          </div>
-          <div class="flex flex-col gap-2">
-            <Toggle id="lockdimensions" checked={animtextureStore.lockdimensions}
-              onChange$={(e, el) => { animtextureStore.lockdimensions = el.checked; }}>
-              {t('animtexture.lockDimensions@@Lock Dimensions')}
-            </Toggle>
-            <Toggle id="bounce" checked={animtextureStore.bounce}
-              onChange$={(e, el) => { animtextureStore.bounce = el.checked; }}>
-              {t('animtexture.bounce@@Bounce Animation')}
-            </Toggle>
-            <Toggle id="syncduration" checked={animtextureStore.syncduration}
-              onChange$={(e, el) => { animtextureStore.syncduration = el.checked; }}>
-              {t('animtexture.syncDuration@@Sync Duration')}
-            </Toggle>
-            <Toggle id="showchatpreview" checked={animtextureStore.showChatPreview}
-              onChange$={(e, el) => { animtextureStore.showChatPreview = el.checked; }}>
-              {t('animtexture.showChatPreview@@Show Minecraft chat preview')}
-            </Toggle>
+                <Download size={20} />
+                Download Resource Pack ZIP
+              </button>
+            </div>
+            <Tabs
+              values={animtextureStore.textures.map((t, i) => ({
+                name: `${t.namespace}:${t.name}`,
+                value: i.toString(),
+              }))}
+              value={{
+                name: animtextureStore.textures[animtextureStore.activeTexture]
+                  .name,
+                value: animtextureStore.textures
+                  .indexOf(
+                    animtextureStore.textures[animtextureStore.activeTexture],
+                  )
+                  .toString(),
+              }}
+              onClick$={(value) => {
+                animtextureStore.activeTexture = parseInt(value.value);
+              }}
+              onPlus$={() => {
+                const currentTexture =
+                  animtextureStore.textures[animtextureStore.activeTexture] ??
+                  animtextureStore.textures[0];
+                const nextIndex = animtextureStore.textures.length + 1;
+                const names = new Set(
+                  animtextureStore.textures.map((item) =>
+                    normalizeTextureName(item.name),
+                  ),
+                );
+                const nextTexture = {
+                  ...createTexture(nextIndex),
+                  width: currentTexture.width,
+                  height: currentTexture.height,
+                  lockdimensions: currentTexture.lockdimensions,
+                  bounce: currentTexture.bounce,
+                  syncduration: currentTexture.syncduration,
+                  showChatPreview: currentTexture.showChatPreview,
+                };
+                nextTexture.name = getUniqueTextureName(
+                  names,
+                  nextTexture.name,
+                );
+                animtextureStore.textures = [
+                  ...animtextureStore.textures,
+                  nextTexture,
+                ];
+                animtextureStore.activeTexture =
+                  animtextureStore.textures.length - 1;
+              }}
+              onDelete$={(value) => {
+                if (animtextureStore.textures.length === 1) {
+                  animtextureStore.textures = [createTexture()];
+                  animtextureStore.activeTexture = 0;
+                  return;
+                }
+
+                const nextTextures = animtextureStore.textures.filter(
+                  (_, textureIndex) => textureIndex != parseInt(value.value),
+                );
+                animtextureStore.textures = nextTextures;
+                animtextureStore.activeTexture = Math.min(
+                  animtextureStore.activeTexture,
+                  nextTextures.length - 1,
+                );
+              }}
+            />
+
+            <div
+              class={{
+                'mt-2 flex items-center gap-1': true,
+                'col-span-2': texture.lockdimensions,
+              }}
+            >
+              <SelectMenu
+                id="namespace"
+                class={{ 'w-full': true }}
+                customDropdown
+                values={[
+                  { name: 'minecraft', value: 'minecraft' },
+                  { name: 'birdflop', value: 'birdflop' },
+                ]}
+                onChange$={(e, el) => {
+                  texture.namespace = el.value;
+                }}
+              >
+                <span q:slot="dropdown">{texture.namespace}</span>
+                {t('animtexture.namespace@@Namespace')}
+                <input
+                  q:slot="extra-buttons"
+                  id="namespace"
+                  class={{
+                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                  }}
+                  placeholder="Custom"
+                  onInput$={(e, el) => {
+                    texture.namespace = el.value;
+                  }}
+                />
+              </SelectMenu>
+              <p class="text-lum-text-secondary mx-1 mt-7">:</p>
+              <SelectMenu
+                id="path"
+                class={{ 'w-full': true }}
+                customDropdown
+                values={[
+                  { name: 'block', value: 'block' },
+                  { name: 'item', value: 'item' },
+                ]}
+                onChange$={(e, el) => {
+                  texture.path = el.value;
+                }}
+              >
+                <span q:slot="dropdown">{texture.path}</span>
+                {t('animtexture.path@@Path')}
+                <input
+                  q:slot="extra-buttons"
+                  id="path"
+                  class={{
+                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                  }}
+                  placeholder={t('animtexture.custom@@Custom')}
+                  onInput$={(e, el) => {
+                    texture.namespace = el.value;
+                  }}
+                />
+              </SelectMenu>
+              <p class="text-lum-text-secondary mx-1 mt-7">/</p>
+              <div class="flex flex-1 flex-col gap-1">
+                <label for="name">{t('animtexture.name@@Texture Name')}</label>
+                <input
+                  id="name"
+                  class={{ 'lum-input': true }}
+                  value={texture.name}
+                  onInput$={(e, el) => {
+                    texture.name = el.value;
+                  }}
+                />
+              </div>
+              <p class="text-lum-text-secondary mx-1 mt-7">.png</p>
+            </div>
           </div>
 
-          { animtextureStore.showChatPreview &&
-            <Input readOnly
+          <hr />
+
+          <div class="mb-5 flex gap-6">
+            <div class="lum-card flex-1">
+              <label
+                for="fileInput"
+                class="flex items-center gap-2 font-semibold"
+              >
+                <File size={20} />
+                {t(
+                  'animtexture.selectFrames@@Select GIF or image from your device',
+                )}
+              </label>
+              <input
+                id="fileInput"
+                type="file"
+                multiple
+                accept="image/*"
+                class="file:lum-btn hover:file:lum-grad-bg-gray-700 file:mb-1"
+                onChange$={async (e, el) => {
+                  const texture =
+                    animtextureStore.textures[animtextureStore.activeTexture] ??
+                    animtextureStore.textures[0];
+                  const files = Array.from(el.files ?? []);
+                  for (const f of files) {
+                    const fileEvent = await readFileAsDataURL(f);
+                    if (!fileEvent.target?.result) return;
+
+                    const frames = animtextureStore.accumulate
+                      ? texture.frames
+                      : [];
+                    const file = await base64ToFile(
+                      fileEvent.target.result.toString(),
+                    );
+                    if (file.mime == 'image/gif') {
+                      frames.push(...(await loadGifFrames(file.buffer)));
+                    } else {
+                      const img = await loadImageFromDataURL(
+                        fileEvent.target.result as string,
+                      );
+                      frames.push({
+                        img,
+                        delay: 20,
+                      });
+                    }
+
+                    texture.frames = frames;
+                  }
+                }}
+              />
+            </div>
+            <p class="text-lum-text-secondary my-auto">OR</p>
+            <div class="lum-card flex-1">
+              <label
+                for="urlInput"
+                class="flex items-center gap-2 font-semibold"
+              >
+                <Link size={20} />
+                {t('animtexture.pasteUrl@@Paste GIF or image URL')}
+              </label>
+              <input
+                id="urlInput"
+                type="text"
+                class="lum-input mb-2"
+                placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true"
+                onChange$={async (event, el) => {
+                  let url = el.value;
+                  if (!url) return;
+
+                  // if the url is a discord emoji, you can replace .webp with .gif
+                  if (
+                    url.includes('cdn.discordapp.com/emojis/') &&
+                    url.includes('.webp')
+                  ) {
+                    url = url.replace('.webp', '.gif').split('?')[0];
+                    el.value = url;
+                  }
+
+                  const f = await (await fetch(url)).blob();
+
+                  const fileEvent = await readFileAsDataURL(f);
+                  if (!fileEvent.target?.result) return;
+
+                  const texture =
+                    animtextureStore.textures[animtextureStore.activeTexture] ??
+                    animtextureStore.textures[0];
+                  const frames = animtextureStore.accumulate
+                    ? texture.frames
+                    : [];
+                  const file = await base64ToFile(
+                    fileEvent.target.result.toString(),
+                  );
+                  if (file.mime == 'image/gif') {
+                    frames.push(...(await loadGifFrames(file.buffer)));
+                  } else {
+                    const img = await loadImageFromDataURL(
+                      fileEvent.target.result as string,
+                    );
+                    frames.push({
+                      img,
+                      delay: 20,
+                    });
+                  }
+
+                  texture.frames = frames;
+                }}
+              />
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="flex gap-2 *:flex-1">
+            <div class="lum-card">
+              <div class="flex items-center gap-2 font-semibold">
+                <Proportions size={20} />
+                {t('animtexture.dimensions@@Dimensions')}
+              </div>
+              <NumberInput
+                input
+                min={1}
+                value={texture.width}
+                id="width"
+                onInput$={(e, el) => (texture.width = Number(el.value))}
+              >
+                <span class="flex items-center gap-1">
+                  {t('animtexture.width@@Width')}
+                </span>
+              </NumberInput>
+              <button
+                class="lum-btn lum-btn-p-1"
+                onClick$={() => {
+                  const maxWidth =
+                    texture.frames.length > 0
+                      ? Math.max(
+                        ...texture.frames.map(
+                          (frame) => frame.img.naturalWidth,
+                        ),
+                      )
+                      : texture.width;
+                  texture.width = maxWidth;
+                  if (texture.lockdimensions) texture.height = texture.width;
+                }}
+              >
+                <RefreshCw size={16} />
+                {t('animtexture.getWidth@@Get width from frames')}
+              </button>
+              <div
+                class={{
+                  'opacity-50': texture.lockdimensions,
+                }}
+              >
+                <NumberInput
+                  input
+                  min={2}
+                  value={texture.height}
+                  id="height"
+                  onIncrement$={() => {
+                    texture.height += 16;
+                    if (texture.lockdimensions) texture.width += 16;
+                  }}
+                  onDecrement$={() => {
+                    texture.height -= 16;
+                    if (texture.lockdimensions) texture.width -= 16;
+                  }}
+                  onInput$={(e, el) => {
+                    const value = Number(el.value);
+                    if (isNaN(value)) return;
+                    texture.height = value;
+                    if (texture.lockdimensions) texture.width = texture.height;
+                  }}
+                >
+                  <span class="flex items-center gap-1">
+                    {t('animtexture.height@@Height')}
+                  </span>
+                </NumberInput>
+                <button
+                  class="lum-btn lum-btn-p-1"
+                  onClick$={() => {
+                    const maxHeight =
+                      texture.frames.length > 0
+                        ? Math.max(
+                          ...texture.frames.map(
+                            (frame) => frame.img.naturalHeight,
+                          ),
+                        )
+                        : texture.height;
+                    texture.height = maxHeight;
+                    if (texture.lockdimensions) texture.width = texture.height;
+                  }}
+                >
+                  <RefreshCw size={16} />
+                  {t('animtexture.getHeight@@Get height from frames')}
+                </button>
+              </div>
+              <Toggle
+                id="lockdimensions"
+                checked={texture.lockdimensions}
+                onChange$={(e, el) => {
+                  texture.lockdimensions = el.checked;
+                }}
+              >
+                {t('animtexture.lockDimensions@@Lock Dimensions')}
+              </Toggle>
+            </div>
+            <div class="lum-card">
+              <div class="flex items-center gap-2 font-semibold">
+                <Settings size={20} />
+                {t('animtexture.options@@Options')}
+              </div>
+              <Toggle
+                id="accumulate"
+                checked={animtextureStore.accumulate}
+                onChange$={(e, el) => {
+                  animtextureStore.accumulate = el.checked;
+                }}
+              >
+                {t('animtexture.accumulate@@Accumulate frames')}
+              </Toggle>
+              <Toggle
+                id="bounce"
+                checked={texture.bounce}
+                onChange$={(e, el) => {
+                  texture.bounce = el.checked;
+                }}
+              >
+                {t('animtexture.bounce@@Bounce Animation')}
+              </Toggle>
+              <Toggle
+                id="syncduration"
+                checked={texture.syncduration}
+                onChange$={(e, el) => {
+                  texture.syncduration = el.checked;
+                }}
+              >
+                {t('animtexture.syncDuration@@Sync Duration')}
+              </Toggle>
+              <Toggle
+                id="showchatpreview"
+                checked={texture.showChatPreview}
+                onChange$={(e, el) => {
+                  texture.showChatPreview = el.checked;
+                }}
+              >
+                {t('animtexture.showChatPreview@@Show Minecraft chat preview')}
+              </Toggle>
+              <div id="links" class="mt-4 flex flex-wrap gap-2">
+                <a
+                  class="lum-btn"
+                  id="pngd"
+                  target="_blank"
+                  download={texture.name + '.png'}
+                  href={activeTextureOutputs.value.png}
+                >
+                  <Download size={20} />
+                  {t('animtexture.downloadPNG@@Download PNG')}
+                </a>
+                <a
+                  class="lum-btn"
+                  id="mcmeta"
+                  target="_blank"
+                  download={texture.name + '.png.mcmeta'}
+                  href={
+                    'data:text/plain;charset=utf-8,' +
+                    encodeURIComponent(activeTextureOutputs.value.mcmeta)
+                  }
+                >
+                  <Download size={20} />
+                  {t('animtexture.downloadMCMETA@@Download MCMETA')}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {activeTextureOutputs.value.png && (
+            <>
+              <div class="mt-10 flex gap-2">
+                {!texture.showChatPreview && (
+                  <div class="w-1/4">
+                    <p class="mb-2">
+                      {t('animtexture.animationPreview@@Animation Preview')}
+                    </p>
+                    <canvas
+                      ref={animCanvasRef}
+                      class="lum-card w-full p-0"
+                      style={{
+                        imageRendering: 'pixelated',
+                      }}
+                    />
+                  </div>
+                )}
+                <div class="flex-1">
+                  <p class="mb-2">
+                    {t('animtexture.frames@@Animation Frames')}
+                  </p>
+                  <div
+                    id="imgs"
+                    class="flex max-h-155 min-h-[calc(100%-32px)] flex-wrap gap-2 overflow-auto p-2"
+                  >
+                    {texture.frames.map((frame, i) => (
+                      <div
+                        key={`frame${i}`}
+                        class="lum-card relative w-24 gap-0 p-0"
+                      >
+                        <img
+                          width={96}
+                          height={96}
+                          class={{
+                            'rounded-t-md': true,
+                            'rounded-b-md': texture.syncduration,
+                          }}
+                          src={frame.img.src}
+                        />
+                        {!texture.syncduration && (
+                          <>
+                            <label for={`frame-${i}-delay`} class="m-2 flex">
+                              <span class="flex-1">ticks</span>
+                              <button
+                                class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1"
+                                onClick$={() => {
+                                  const frames = [...texture.frames];
+                                  frames.splice(i, 1);
+                                  texture.frames = frames;
+                                }}
+                              >
+                                <X size={16} />
+                              </button>
+                            </label>
+                            <input
+                              id={`frame-${i}-delay`}
+                              type="number"
+                              value={frame.delay}
+                              onInput$={(e, el) => {
+                                texture.frames[i].delay = Number(el.value);
+                              }}
+                              class="lum-input lum-grad-bg-lum-card-bg lum-btn-p-1 mx-1 mb-1"
+                            />
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {texture.showChatPreview && (
+            <Input
+              readOnly
               noFormatRow
-              chatInput={`this is so funny <sprite:item/${animtextureStore.textureName}>`}
-              playerName="AnimatedTexture">
-              <span class="text-white! items-center gap-2">
+              chatInput={`this is so funny <sprite:"birdflop:gifs":"birdflop:gif"/${texture.name}>`}
+              playerName="AnimatedTexture"
+            >
+              <span class="items-center gap-2 text-white!">
                 this is so funny
               </span>
               <span class="ml-2 inline-block align-middle">
-                <canvas ref={animCanvasRef} class="p-0 w-6 h-6" style={{
-                  imageRendering: 'pixelated',
-                }} />
+                <canvas
+                  ref={animCanvasRef}
+                  class="h-6 w-6 p-0"
+                  style={{
+                    imageRendering: 'pixelated',
+                  }}
+                />
               </span>
             </Input>
-          }
+          )}
 
-          <div class="mt-10 flex gap-2">
-            {!animtextureStore.showChatPreview && <div class="w-1/4">
-              <p class="mb-2">
-                {t('animtexture.animationPreview@@Animation Preview')}
-              </p>
-              <canvas ref={animCanvasRef} class="lum-card w-full p-0" style={{
-                imageRendering: 'pixelated',
-              }} />
-            </div>}
-            <div class="flex-1">
-              <p class="mb-2">
-                {t('animtexture.frames@@Animation Frames')}
-              </p>
-              <div id="imgs" class="lum-card flex-row flex-wrap min-h-[calc(100%-32px)] max-h-155 overflow-auto gap-2 p-2">
-                {animtextureFrames.value.map((frame, i) => (
-                  <div key={`frame${i}`} class="lum-card w-24 p-0 gap-0 relative">
-                    <button class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1 absolute top-1 right-1" onClick$={() => {
-                      const frames = [...animtextureFrames.value];
-                      frames.splice(i, 1);
-                      animtextureFrames.value = frames;
-                    }}>
-                      <X size={16}/>
-                    </button>
-                    <img width={96} height={96} class={{
-                      'rounded-t-md': true,
-                      'rounded-b-md': animtextureStore.syncduration,
-                    }} src={frame.img.src} />
-                    {!animtextureStore.syncduration && <>
-                      <label for={`frame-${i}-delay`} class="m-1">
-                        ticks
-                      </label>
-                      <input id={`frame-${i}-delay`} type="number" value={frame.delay}
-                        onInput$={(e, el) => {
-                          animtextureFrames.value[i].delay = Number(el.value);
-                        }}
-                        class="lum-input lum-bg-lum-card-bg mb-1 mx-1 lum-btn-p-1" />
-                    </>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          {animtextureStore.syncduration &&
-            <NumberInput input min={1} value={animtextureFrames.value[0].delay} id="height"
+          {texture.syncduration && texture.frames.length > 0 && (
+            <NumberInput
+              input
+              min={1}
+              value={texture.frames[0].delay}
+              id="height"
               onIncrement$={() => {
-                animtextureFrames.value[0].delay++;
-                animtextureFrames.value.forEach((frame) => {
-                  frame.delay = animtextureFrames.value[0].delay;
+                texture.frames[0].delay++;
+                texture.frames.forEach((frame) => {
+                  frame.delay = texture.frames[0].delay;
                 });
               }}
               onDecrement$={() => {
-                animtextureFrames.value[0].delay--;
-                animtextureFrames.value.forEach((frame) => {
-                  frame.delay = animtextureFrames.value[0].delay;
+                texture.frames[0].delay--;
+                texture.frames.forEach((frame) => {
+                  frame.delay = texture.frames[0].delay;
                 });
               }}
               onInput$={(e, el) => {
                 const value = Number(el.value);
                 if (isNaN(value)) return;
-                animtextureFrames.value.forEach((frame) => {
+                texture.frames.forEach((frame) => {
                   frame.delay = value;
                 });
               }}
             >
               {t('animtexture.duration@@Duration')}
             </NumberInput>
-          }
-
-          {animtextureStore.png &&
-             <div id="links" class="flex gap-2 mt-4">
-               <a class="lum-btn" id="pngd" target="_blank" download={animtextureStore.textureName + '.png'}
-                 href={animtextureStore.png}>
-                 <Download size={20} />
-                 {t('animtexture.downloadPNG@@Download PNG')}
-               </a>
-               <a class="lum-btn" id="mcmeta" target="_blank" download={animtextureStore.textureName + '.png.mcmeta'}
-                 href={
-                   'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(
-                     {
-                       animation: {
-                         frames: [
-                           ...animtextureFrames.value.map((frame, i) => ({
-                             index: i,
-                             time: frame.delay,
-                           })),
-                           ...(animtextureStore.bounce ?
-                             animtextureFrames.value.map((frame, i) => ({
-                               index: animtextureFrames.value.length - i,
-                               time: animtextureFrames.value[i].delay,
-                             }))
-                             : []),
-                         ],
-                       },
-                     }, null, 2,
-                   ))}>
-                 <Download size={20} />
-                 {t('animtexture.downloadMCMETA@@Download MCMETA')}
-               </a>
-             </div>
-          }
+          )}
         </div>
-        <div class={{
-          'flex flex-col max-w-24 transition-all': true,
-        }}>
-          {animtextureFrames.value.length != 1 && <>
-            <p class="mb-2">
-              {t('animtexture.texture@@Texture')}
-            </p>
-            <div class={{
-              'lum-card w-full p-0': true,
-              'min-h-[calc(100%-32px)]': animtextureFrames.value.length == 0,
-            }}>
-              <canvas ref={textureCanvasRef} class="w-full rounded-lum" style={{
-                imageRendering: 'pixelated',
-              }} />
-            </div>
-          </>}
+        <div
+          class={{
+            'lum-card max-h-[70svh] w-24 overflow-y-scroll p-0': true,
+          }}
+        >
+          <canvas
+            ref={textureCanvasRef}
+            class="rounded-lum w-full"
+            style={{
+              imageRendering: 'pixelated',
+            }}
+          />
         </div>
       </div>
     </section>
@@ -468,5 +742,7 @@ export default component$(() => {
 
 export const head = generateHead({
   title: 'Minecraft Animated Textures Creator - Birdflop',
-  description: 'Easily merge textures for resource pack animations or convert from GIF. ' + defaultDescription,
+  description:
+    'Easily merge textures for resource pack animations or convert from GIF. ' +
+    defaultDescription,
 });

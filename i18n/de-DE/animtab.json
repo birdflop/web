@@ -3,7 +3,13 @@
     "animation": {
       "interval": "Dauer der Animation",
       "name": "Name der Animation",
-      "style": "Styl der Animation"
+      "style": {
+        "BOUNCING": "Bouncing",
+        "FULL_TEXT_CYCLE": "Vollständiger Textzyklus",
+        "LEFT_TO_RIGHT": "Links nach rechts",
+        "RIGHT_TO_LEFT": "Rechts nach links",
+        "title": "Styl der Animation"
+      }
     },
     "length": "Länge des Farbverlaufs",
     "outputFormat": {

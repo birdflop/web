@@ -192,11 +192,7 @@ export function getComplementary(oklch: OKLCh): OKLCh {
  * @returns Array of three OKLCh colors forming a triadic harmony
  */
 export function getTriadic(oklch: OKLCh): [OKLCh, OKLCh, OKLCh] {
-  return [
-    oklch,
-    adjustHue(oklch, 120),
-    adjustHue(oklch, 240),
-  ];
+  return [oklch, adjustHue(oklch, 120), adjustHue(oklch, 240)];
 }
 
 /**
@@ -206,9 +202,5 @@ export function getTriadic(oklch: OKLCh): [OKLCh, OKLCh, OKLCh] {
  * @returns Array of three OKLCh colors forming an analogous harmony
  */
 export function getAnalogous(oklch: OKLCh, angle = 30): [OKLCh, OKLCh, OKLCh] {
-  return [
-    adjustHue(oklch, -angle),
-    oklch,
-    adjustHue(oklch, angle),
-  ];
+  return [adjustHue(oklch, -angle), oklch, adjustHue(oklch, angle)];
 }

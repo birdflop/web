@@ -10,26 +10,26 @@ export default component$(() => {
 
   return (
     <div class="lum-card my-12">
-      <h2 class="my-0!">
-        Contributors
-      </h2>
-      <p>
-        Thank you to everyone who has helped us improve our documentation!
-      </p>
-      <div class="flex flex-row flex-wrap justify-start gap-2 items-center list-none m-0 p-0">
+      <h2 class="my-0!">Contributors</h2>
+      <p>Thank you to everyone who has helped us improve our documentation!</p>
+      <div class="m-0 flex list-none flex-row flex-wrap items-center justify-start gap-2 p-0">
         {contributors.map((contributor: string) => (
-          <a key={`contributor-${contributor}`} href={`https://github.com/${contributor}`} target="_blank" rel="noreferrer" class="lum-btn lum-bg-lum-card-bg p-2 pr-3 gap-2 font-bold">
+          <a
+            key={`contributor-${contributor}`}
+            href={`https://github.com/${contributor}`}
+            target="_blank"
+            rel="noreferrer"
+            class="lum-btn gap-2 p-2 pr-3 font-bold"
+          >
             <img
               loading="lazy"
               src={`https://github.com/${contributor}.png?size=80`}
               width="40"
               height="40"
               alt={contributor}
-              class="w-10 h-auto rounded-lum-1!"
+              class="rounded-lum-1! h-auto w-10"
             />
-            <span>
-              {contributor}
-            </span>
+            <span>{contributor}</span>
           </a>
         ))}
       </div>

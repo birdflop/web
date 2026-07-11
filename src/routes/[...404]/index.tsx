@@ -18,21 +18,24 @@ export const onGet: RequestHandler = ({ json, request }) => {
 export default component$(() => {
   const t = inlineTranslate();
 
-  // Keeping below unloading in case we mess up navbar in future
-
   return (
-    <section class="flex mx-auto max-w-7xl px-6 items-center justify-center min-h-svh" >
+    <section class="mx-auto flex min-h-svh max-w-7xl items-center justify-center px-6">
       <div>
-        <LogoBirdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
-        <h1 class="text-red-400">
-          {t('nav.404.title@@404: Page not found')}
-        </h1>
+        <LogoBirdflop
+          confused
+          size={100}
+          fillGradient={['#54daf4', '#545eb6']}
+        />
+        <h1 class="text-red-400">{t('nav.404.title@@404: Page not found')}</h1>
         <h2 class="text-lum-text-secondary">
           {t('nav.404.description@@Whoops! You\'ve hit a dead-end.')}
         </h2>
-        <div class="flex mt-4">
-          <Link href="/" class="lum-btn lum-btn-p-4 lum-bg-blue/60 hover:lum-bg-blue">
-            <Home size={26}/> {t('nav.404.home@@Go back home')}
+        <div class="mt-4 flex">
+          <Link
+            href="/"
+            class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue"
+          >
+            <Home size={26} /> {t('nav.404.home@@Go back home')}
           </Link>
         </div>
       </div>

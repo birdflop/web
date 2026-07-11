@@ -3,7 +3,7 @@
     "command": {
       "copied": {
         "description": "Komut başarıyla panonuza kopyalandı.",
-        "title": "Command Copied!"
+        "title": "Komut Kopyalandı!"
       },
       "title": "Komut"
     },

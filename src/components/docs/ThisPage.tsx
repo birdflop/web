@@ -1,5 +1,9 @@
 import { $, component$, useOnDocument, useSignal } from '@builder.io/qwik';
-import { useContent, useLocation, useDocumentHead } from '@builder.io/qwik-city';
+import {
+  useContent,
+  useLocation,
+  useDocumentHead,
+} from '@builder.io/qwik-city';
 import { AlertCircle, Edit, Clock, User } from 'lucide-icons-qwik';
 
 const makeEditPageUrl = (url: string): string => {
@@ -26,9 +30,7 @@ const formatDate = (dateStr?: string): string => {
   }
 };
 
-export const OnThisPage = component$(({ readOnly }: {
-  readOnly?: boolean;
-}) => {
+export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
   const { headings } = useContent();
   const contentHeadings = headings?.filter((h) => h.level <= 3) || [];
   const { frontmatter, meta } = useDocumentHead();
@@ -43,34 +45,37 @@ export const OnThisPage = component$(({ readOnly }: {
 
   const useActiveItem = (itemIds: string[]) => {
     const activeId = useSignal<string | null>(null);
-    useOnDocument('scroll', $(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              activeId.value = entry.target.id;
-            }
-          });
-        },
-        { rootMargin: '0% 0% -80% 0%' },
-      );
+    useOnDocument(
+      'scroll',
+      $(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                activeId.value = entry.target.id;
+              }
+            });
+          },
+          { rootMargin: '0% 0% -80% 0%' },
+        );
 
-      itemIds.forEach((id) => {
-        const element = document.getElementById(id);
-        if (element) {
-          observer.observe(element);
-        }
-      });
-
-      return () => {
         itemIds.forEach((id) => {
           const element = document.getElementById(id);
           if (element) {
-            observer.unobserve(element);
+            observer.observe(element);
           }
         });
-      };
-    }));
+
+        return () => {
+          itemIds.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+              observer.unobserve(element);
+            }
+          });
+        };
+      }),
+    );
 
     return activeId;
   };
@@ -78,23 +83,21 @@ export const OnThisPage = component$(({ readOnly }: {
   const activeId = useActiveItem(contentHeadings.map((h) => h.id));
 
   return (
-    <aside
-      class="hidden sm:flex w-1/4 sticky h-dvh lum-card bg-transparent rounded-none border-r-0 sm:border-y-0 top-0 z-40 pt-14 sm:pt-20 px-0 sm:px-6 pb-0"
-    >
+    <aside class="lum-card sticky top-0 z-40 hidden h-dvh w-1/4 rounded-none border-r-0 bg-transparent px-0 pt-14 pb-0 sm:flex sm:border-y-0 sm:px-6 sm:pt-20">
       {contentHeadings.length > 0 ? (
         <>
-          <h6 class="py-3 border-b border-b-gray-700">On this page</h6>
-          <div class="flex flex-col gap-2 overflow-y-scroll relative">
+          <h6 class="border-b border-b-gray-700 py-3">On this page</h6>
+          <div class="relative flex flex-col gap-2 overflow-y-scroll">
             {contentHeadings.map((h) => (
               <a
                 key={h.id}
                 href={`#${h.id}`}
                 class={{
-                  'lum-btn text-ellipsis lum-bg-transparent whitespace-normal text-left': true,
+                  'lum-btn lum-bg-transparent text-left text-ellipsis whitespace-normal': true,
                   'text-indigo-500!': activeId.value === h.id,
-                  'font-bold text-xl': h.level == 1,
-                  'font-medium text-lg': h.level == 2,
-                  'font-normal text-base': h.level == 3,
+                  'text-xl font-bold': h.level == 1,
+                  'text-lg font-medium': h.level == 2,
+                  'text-base font-normal': h.level == 3,
                   'lum-btn-p-1': true,
                 }}
               >
@@ -105,47 +108,51 @@ export const OnThisPage = component$(({ readOnly }: {
         </>
       ) : null}
 
-      {!readOnly && <>
-        <h6 class="py-3 border-b border-b-gray-700">More</h6>
-        <div class="flex flex-col gap-2">
-          <a
-            class="lum-btn text-ellipsis lum-bg-transparent"
-            href={editUrl}
-            rel="noopener"
-            target="_blank"
-          >
-            <Edit size={20} />
-            <span>Edit this Page</span>
-          </a>
-          <a
-            class="lum-btn text-ellipsis lum-bg-transparent"
-            href="https://github.com/birdflop/web/issues/new/choose"
-            rel="noopener"
-            target="_blank"
-          >
-            <AlertCircle size={20} />
-            <span>Create an issue</span>
-          </a>
-          <div
-            class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary"
-          >
-            <User size={20} />
-            <span>Created by: {author}</span>
+      {!readOnly && (
+        <>
+          <h6 class="border-b border-b-gray-700 py-3">More</h6>
+          <div class="flex flex-col gap-2">
+            <a
+              class="lum-btn lum-bg-transparent text-ellipsis"
+              href={editUrl}
+              rel="noopener"
+              target="_blank"
+            >
+              <Edit size={20} />
+              <span>Edit this Page</span>
+            </a>
+            <a
+              class="lum-btn lum-bg-transparent text-ellipsis"
+              href="https://github.com/birdflop/web/issues/new/choose"
+              rel="noopener"
+              target="_blank"
+            >
+              <AlertCircle size={20} />
+              <span>Create an issue</span>
+            </a>
+            <div class="lum-btn lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-ellipsis">
+              <User size={20} />
+              <span>Created by: {author}</span>
+            </div>
+            <div class="lum-btn lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left text-ellipsis">
+              <Clock size={20} />
+              <span>
+                Created:
+                <br />
+                {created}
+              </span>
+            </div>
           </div>
-          <div
-            class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left"
-          >
-            <Clock size={20} />
-            <span>Created:<br/>{created}</span>
-          </div>
-        </div>
-      </>}
+        </>
+      )}
       {updated !== 'Unknown' && updated !== created && (
-        <div
-          class="lum-btn text-ellipsis lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left"
-        >
+        <div class="lum-btn lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left text-ellipsis">
           <Clock size={20} />
-          <span>Last Updated:<br/>{updated}</span>
+          <span>
+            Last Updated:
+            <br />
+            {updated}
+          </span>
         </div>
       )}
     </aside>

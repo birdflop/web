@@ -7,6 +7,14 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+
+minimumReleaseAgeExclude:
+  - '@luminescent/ui-qwik@6.9.0'
+  - eslint@10.7.0
+
+onlyBuiltDependencies:
+  - better-sqlite3
+  - workerd
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest

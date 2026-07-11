@@ -9,6 +9,7 @@ import { qwikSpeakInline } from "qwik-speak/inline";
 import { partytownVite } from "@qwik.dev/partytown/utils";
 import { join } from "path";
 import tailwindcss from "@tailwindcss/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 import shikiRehype from '@shikijs/rehype';
 import { transformerMetaHighlight, transformerMetaWordHighlight } from '@shikijs/transformers';
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
@@ -39,6 +40,7 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
+<<<<<<< HEAD
     staged: {
       "*": "vp check --fix"
     },
@@ -304,7 +306,10 @@ export default defineConfig(({ command, mode }): UserConfig => {
     resolve: {
       tsconfigPaths: true,
     },
+=======
+>>>>>>> texturepacks
     plugins: [
+      tsconfigPaths(),
       qwikCity({
         platform,
         mdxPlugins: {

@@ -2,8 +2,6 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "separate-pull-requests": true,
   "release-type": "simple",
-  "bump-minor-pre-major": true,
-  "bump-patch-for-minor-pre-major": true,
   "draft": false,
   "prerelease": false,
   "changelog-path": "CHANGELOG.md",
@@ -13,7 +11,7 @@
     "packages/rgbirdflop": {
       "package-name": "RGBirdflop",
       "component": "rgbirdflop",
-      "extra-files": [ "package.json" ]
+      "extra-files": ["package.json"]
     }
   },
   "changelog-sections": [
@@ -64,7 +62,7 @@
     },
     {
       "type": "chore",
-      "section": "Miscellaneous",
+      "section": "Misc",
       "hidden": true
     },
     {

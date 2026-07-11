@@ -5,14 +5,15 @@
       "home": "Powrót na stronę główną",
       "title": "404: Strona nie znaleziona"
     },
-    "clickToDismiss": "Click to dismiss",
+    "clickToDismiss": "Kliknij, aby zamknąć",
     "cookies": {
-      "acknowledge": "Accept",
-      "description": "We use cookies to automatically save and load your preferences.",
-      "optOut": "Reject",
-      "title": "Cookies"
+      "acknowledge": "Akceptuj",
+      "description": "Używamy plików cookie do automatycznego zapisywania i wczytywania Twoich preferencji.",
+      "optOut": "Odrzuć",
+      "title": "Ciasteczka"
     },
     "docs": "Dokumentacja",
+    "experimental": "eksperymentalne",
     "hosting": {
       "billing": "Rozliczenia",
       "nodeStats": {
@@ -37,6 +38,10 @@
       "title": "Profil"
     },
     "resources": {
+      "analyze": {
+        "description": "Przeanalizuj profil Spark lub Paper Timings i uzyskaj sugerowane optymalizacje",
+        "title": "Analizuj"
+      },
       "animatedTAB": {
         "description": "Generator animacji dla pluginu TAB",
         "title": "Animowany TAB"
@@ -59,6 +64,10 @@
         "title": "Narzędzia do gradientów"
       },
       "hexGradient": {
+        "advanced": {
+          "description": "Wpisz swój tekst, zaznacz dowolną jego część, a następnie nadaj jej własny kolor i formatowanie. Łącz dowolną liczbę gradientów, jednolitych kolorów i stylów.",
+          "title": "RGBirdflop Zaawansowany"
+        },
         "description": "Generator gradientu, Zasilany przez Birdflop, 501(c)(3) bez-zyskowy hosting serwerów Minecraft.",
         "title": "RGBirdflop"
       },
@@ -75,6 +84,11 @@
         "description": "Przeanalizuj timingi Paper, aby uzyskać możliwe optymalizacje.",
         "title": "Analiza timingów Paper"
       },
+      "plugins": {
+        "description": "Śledź aktualizacje wtyczek bez konieczności sprawdzania strony każdej z nich osobno.",
+        "noServers": "Nie dodano jeszcze żadnych serwerów. Zacznij od dodania serwera i wtyczek!",
+        "title": "Aktualizacje wtyczek"
+      },
       "serverTools": {
         "description": "Narzędzia pomagające w konfiguracji serwera.",
         "title": "Narzędzia Serwerowe"
@@ -90,8 +104,8 @@
       "title": "Zasoby"
     },
     "settings": {
-      "description": "Manage your settings and preferences here.",
-      "title": "Settings"
+      "description": "Zarządzaj swoimi ustawieniami i preferencjami tutaj.",
+      "title": "Ustawienia"
     },
     "termsofService": "Warunki Korzystania"
   }

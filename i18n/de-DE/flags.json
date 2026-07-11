@@ -46,8 +46,8 @@
     },
     "memory": {
       "calcOverhead": {
-        "description": "This is recommended to avoid out-of-memory issues on your server.nThe formula used is 11x ÷ 12 - 1200 where x is the amount of RAM.",
-        "title": "Calculate Overhead"
+        "description": "Dies wird empfohlen, um Out-of-Memory-Probleme auf Ihrem Server zu vermeiden.\nDie verwendete Formel lautet 11x ÷ 12 - 1200, wobei x die Menge an RAM ist.",
+        "title": "Overhead berechnen"
       },
       "description": "Die Menge an Speicher (RAM) die zum Server allokiert werden soll.",
       "label": "Speicher"

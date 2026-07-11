@@ -1,4 +1,3 @@
-
 export default function createField(option: FieldOption) {
   const field: FieldOption = { name: option.name, value: option.value };
   if (option.prefix) field.name = option.prefix + ' ' + field.name;

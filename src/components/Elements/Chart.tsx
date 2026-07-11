@@ -1,7 +1,6 @@
 // components/elements/Chart.tsx
-import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { Chart, registerables } from 'chart.js';
-import { ThemeContext } from '~/util/themeUtil';
 
 export interface ChartProps {
   config: {
@@ -10,26 +9,32 @@ export interface ChartProps {
     options?: any;
   };
 }
-const dollarLabel = (context: { parsed: number | bigint | null | undefined }) => {
-  if (context.parsed === null || context.parsed === undefined || isNaN(Number(context.parsed))) {
+const dollarLabel = (context: {
+  parsed: number | bigint | null | undefined;
+}) => {
+  if (
+    context.parsed === null ||
+    context.parsed === undefined ||
+    isNaN(Number(context.parsed))
+  ) {
     return ' N/A';
   }
-  const label = ' ' + new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(context.parsed));
+  const label =
+    ' ' +
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(context.parsed));
   return label;
 };
 
 export default component$<ChartProps>((props) => {
   const myChart = useSignal<HTMLCanvasElement>();
-  const themeStore = useContext(ThemeContext);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    console.log(themeStore);
     if (myChart?.value) {
       Chart.register(...registerables);
 
@@ -38,15 +43,22 @@ export default component$<ChartProps>((props) => {
       // find css variables in the config and replace them with their values
       const jsonString = JSON.stringify(providedConfig);
       const cssVarRegex = /var\(--(.*?)\)/g;
-      const replacedString = jsonString.replace(cssVarRegex, (match, varName) => {
-        const value = getComputedStyle(document.documentElement).getPropertyValue(`--${varName}`).trim();
-        console.log(value);
-        return value ? value : match; // Return the original match if the variable is not found
-      });
+      const replacedString = jsonString.replace(
+        cssVarRegex,
+        (match, varName) => {
+          const value = getComputedStyle(document.documentElement)
+            .getPropertyValue(`--${varName}`)
+            .trim();
+          return value ? value : match; // Return the original match if the variable is not found
+        },
+      );
       providedConfig = JSON.parse(replacedString);
 
       // small workaround for functions in the config
-      if (providedConfig.options?.plugins?.tooltip?.callbacks?.label === 'dollarLabel') {
+      if (
+        providedConfig.options?.plugins?.tooltip?.callbacks?.label ===
+        'dollarLabel'
+      ) {
         providedConfig.options.plugins.tooltip.callbacks.label = dollarLabel;
       }
 

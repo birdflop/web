@@ -5,7 +5,13 @@ export default function getConfig() {
         expressions: [
           {
             bool: (dict_of_vars: any) => {
-              return parseInt(dict_of_vars.pufferfish['projectile']['max-load-per-projectile']) >= 9;
+              return (
+                parseInt(
+                  dict_of_vars.pufferfish['projectile'][
+                    'max-load-per-projectile'
+                  ],
+                ) >= 9
+              );
             },
             vars: ['pufferfish'],
           },

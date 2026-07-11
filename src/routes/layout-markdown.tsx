@@ -9,10 +9,10 @@ export * from './layout';
 export default component$(() => {
   return (
     <Layout>
-      <div class="flex gap-12 xl:gap-20 items-stretch lg:pl-0 xl:pr-0 min-h-dvh">
+      <div class="flex min-h-dvh items-stretch gap-12 lg:pl-0 xl:gap-20 xl:pr-0">
         <main class="contents">
-          <div class="w-full mt-48 sm:mt-30 min-w-4 max-w-5xl ml-auto">
-            <article class="px-4">
+          <div class="mt-48 ml-auto w-full max-w-5xl min-w-4 sm:mt-30">
+            <article class="markdown px-4">
               <Slot />
             </article>
           </div>
