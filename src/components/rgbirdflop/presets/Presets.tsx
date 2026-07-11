@@ -31,7 +31,7 @@ import {
 import Accordion from '~/components/Elements/Accordion';
 import { discordLink } from '~/components/Elements/Nav';
 import { SelectList } from '~/components/Elements/SelectList';
-import { PresetPartial, PublicPreset } from '~/util/db';
+import { PublicPreset } from '~/util/db';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -81,7 +81,9 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     } catch (err) {
       notification
         .setTitle(invalidPresetTitle)
-        .setDescription(`Error: ${err}\n${invalidPresetDescription}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}\n${invalidPresetDescription}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setButtons([
           {
@@ -129,7 +131,9 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification.toJSON());

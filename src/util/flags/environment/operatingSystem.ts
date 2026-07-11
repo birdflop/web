@@ -33,7 +33,7 @@ function getMemory(memory: number, isContainer = false) {
 }
 
 function getJava(
-  config: Record<AvailableConfig | 'existingFlags', any>
+  config: Partial<Record<AvailableConfig | 'existingFlags' | 'calcOverhead', any>>
 ): string {
   let ram = config.calcOverhead
     ? Math.ceil(((11 * config.memory) / 12 - 1200) / 100) * 100

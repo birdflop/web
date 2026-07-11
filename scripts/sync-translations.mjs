@@ -167,7 +167,7 @@ async function deeplTranslate(texts, targetLang) {
   return data.translations.map((item) => item.text);
 }
 
-async function noopTranslate(texts) {
+function noopTranslate(texts) {
   return texts;
 }
 

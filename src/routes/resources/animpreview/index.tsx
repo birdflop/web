@@ -125,7 +125,7 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error parsing YAML')
-        .setDescription(`Error: ${err}`)
+        .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);

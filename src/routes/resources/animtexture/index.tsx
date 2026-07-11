@@ -353,7 +353,7 @@ export default component$(() => {
                       ? texture.frames
                       : [];
                     const file = await base64ToFile(
-                      fileEvent.target.result.toString()
+                      fileEvent.target.result as string
                     );
                     if (file.mime == 'image/gif') {
                       frames.push(...(await loadGifFrames(file.buffer)));
@@ -411,7 +411,7 @@ export default component$(() => {
                     ? texture.frames
                     : [];
                   const file = await base64ToFile(
-                    fileEvent.target.result.toString()
+                    fileEvent.target.result as string
                   );
                   if (file.mime == 'image/gif') {
                     frames.push(...(await loadGifFrames(file.buffer)));

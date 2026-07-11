@@ -59,7 +59,7 @@ export function parseParams(params: { [key: string]: any }, name: names) {
       else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
     } catch (e) {
       params[key] = undefined;
-      errors.push(`Error parsing the ${key} value: ${e}`);
+      errors.push(`Error parsing the ${key} value: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
   return {
@@ -83,7 +83,7 @@ export function getCookies(
     try {
       cookies = JSON.parse(cookieVal);
     } catch (e) {
-      errors.push(`Failed to parse cookie ${name}: ${e}`);
+      errors.push(`Failed to parse cookie ${name}: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
 
@@ -106,7 +106,7 @@ export function getCookies(
       });
     }
   } catch (e) {
-    errors.push(`Error loading preset: ${e}`);
+    errors.push(`Error loading preset: ${e instanceof Error ? e.message : String(e)}`);
   }
 
   // Check for any numbers lower than 1 in the cookies

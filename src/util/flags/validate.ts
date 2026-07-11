@@ -31,12 +31,12 @@ export function generateConfigSchema(
   requestOperatingSystem: AvailableOperatingSystem,
   requestServerType: AvailableServerType
 ) {
-  const schema: GenerateConfigSchema = {};
+  const schema = {} as GenerateConfigSchema;
 
   const selectedOperatingSystem = operatingSystem[requestOperatingSystem];
   const selectedServerType = serverType[requestServerType];
 
-  for (const [key, value] of Object.entries(config)) {
+  for (const [key, value] of Object.entries(config) as [AvailableConfig, any][]) {
     if (
       !selectedOperatingSystem.config.includes(key) ||
       !selectedServerType.config.includes(key)

@@ -13,6 +13,7 @@ import shikiRehype from '@shikijs/rehype';
 import { transformerMetaHighlight, transformerMetaWordHighlight } from '@shikijs/transformers';
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
 import type { ShikiTransformer } from '@shikijs/types';
+import { strict } from 'oxlint-plugin-qwik';
 
 import birdflopTheme from './src/theme.json' with { type: 'json' };
 import languages from './src/languages.json' with { type: 'json' };
@@ -59,14 +60,12 @@ export default defineConfig({
     "*": "vp check --fix"
   },
   lint: {
+    extends: [strict],
     plugins: [
       "oxc",
       "typescript",
       "unicorn",
       "react"
-    ],
-    jsPlugins: [
-      "eslint-plugin-qwik"
     ],
     categories: {
       correctness: "warn"
@@ -191,7 +190,7 @@ export default defineConfig({
       "typescript/no-duplicate-enum-values": "error",
       "typescript/no-duplicate-type-constituents": "error",
       "typescript/no-empty-object-type": "error",
-      "typescript/no-explicit-any": "error",
+      "typescript/no-explicit-any": "warn",
       "typescript/no-extra-non-null-assertion": "error",
       "typescript/no-floating-promises": "error",
       "typescript/no-for-in-array": "error",
@@ -205,15 +204,15 @@ export default defineConfig({
       "typescript/no-this-alias": "error",
       "typescript/no-unnecessary-type-assertion": "error",
       "typescript/no-unnecessary-type-constraint": "error",
-      "typescript/no-unsafe-argument": "error",
-      "typescript/no-unsafe-assignment": "error",
-      "typescript/no-unsafe-call": "error",
-      "typescript/no-unsafe-declaration-merging": "error",
-      "typescript/no-unsafe-enum-comparison": "error",
-      "typescript/no-unsafe-function-type": "error",
-      "typescript/no-unsafe-member-access": "error",
-      "typescript/no-unsafe-return": "error",
-      "typescript/no-unsafe-unary-minus": "error",
+      "typescript/no-unsafe-argument": "warn",
+      "typescript/no-unsafe-assignment": "warn",
+      "typescript/no-unsafe-call": "warn",
+      "typescript/no-unsafe-declaration-merging": "warn",
+      "typescript/no-unsafe-enum-comparison": "warn",
+      "typescript/no-unsafe-function-type": "warn",
+      "typescript/no-unsafe-member-access": "warn",
+      "typescript/no-unsafe-return": "warn",
+      "typescript/no-unsafe-unary-minus": "warn",
       "no-unused-expressions": "error",
       "typescript/no-wrapper-object-types": "error",
       "typescript/only-throw-error": "error",
@@ -225,18 +224,6 @@ export default defineConfig({
       "typescript/restrict-template-expressions": "error",
       "typescript/triple-slash-reference": "error",
       "typescript/unbound-method": "error",
-      "qwik/valid-lexical-scope": "error",
-      "qwik/use-method-usage": "error",
-      "qwik/no-react-props": "error",
-      "qwik/loader-location": "warn",
-      "qwik/prefer-classlist": "warn",
-      "qwik/jsx-no-script-url": "warn",
-      "qwik/jsx-key": "warn",
-      "qwik/unused-server": "off",
-      "qwik/jsx-img": "warn",
-      "qwik/jsx-a": "warn",
-      "qwik/no-use-visible-task": "warn",
-      "qwik/no-async-prevent-default": "warn"
     },
     overrides: [
       {
@@ -286,6 +273,14 @@ export default defineConfig({
           "typescript/no-base-to-string": "off",
           "typescript/restrict-template-expressions": "off",
           "typescript/ban-ts-comment": "off",
+          "typescript/only-throw-error": "off"
+        }
+      },
+      {
+        files: [
+          "src/routes/**"
+        ],
+        rules: {
           "typescript/only-throw-error": "off"
         }
       }

@@ -26,7 +26,7 @@ export default async function analyzeTimings(id: string) {
     return [
       {
         name: '❌ Processing Error',
-        value: `birdflop cannot process this spark profile. Please use an alternative spark profile. ${err}`,
+        value: `birdflop cannot process this spark profile. Please use an alternative spark profile. ${err instanceof Error ? err.message : String(err)}`,
       },
     ];
   }

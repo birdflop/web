@@ -50,7 +50,7 @@ export const getUsersPresets = server$(async (userId: string) => {
       .innerJoin(users, eq(users.id, presets.userId))
       .then((r) => r ?? []);
   } catch (err) {
-    errors.push(`Error fetching presets: ${err}`);
+    errors.push(`Error fetching presets: ${err instanceof Error ? err.message : String(err)}`);
   }
 
   const userPresets = presetsFromDB.map(({ user, preset }) => ({
@@ -92,7 +92,7 @@ export default component$(
       } catch (err) {
         const notification = new Notification()
           .setTitle('Error loading saved presets')
-          .setDescription(`Error: ${err}`)
+          .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);

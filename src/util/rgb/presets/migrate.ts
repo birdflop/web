@@ -50,7 +50,7 @@ function migrateFromV4(preset: any) {
     obfuscate,
     shadowcolors: shadowColors,
     format: colorFormat,
-    colorLength: colorLength,
+    colorLength,
     prefixsuffix: prefixSuffix,
     trimspaces: trimSpaces,
     ...rest

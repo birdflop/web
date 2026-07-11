@@ -6,8 +6,8 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccountType } from '@auth/qwik/adapters';
 import { sql } from 'drizzle-orm/sql/sql';
-import { rgbPreset } from '~/util/rgb/presets';
-import { Settings } from '~/routes/layout';
+import { rgbPreset } from '../src/util/rgb/presets';
+import { Settings } from '../src/routes/layout';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {

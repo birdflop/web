@@ -130,7 +130,7 @@ export default component$(
                 const notification = new Notification()
                   .setTitle('Error fetching plugin data')
                   .setDescription(
-                    `An error occurred while fetching plugin data. ${error}`
+                    `An error occurred while fetching plugin data. ${error instanceof Error ? error.message : String(error)}`
                   )
                   .setBgColor('lum-grad-bg-red/50');
                 notifications.push(notification);
@@ -169,7 +169,7 @@ export default component$(
                 const notification = new Notification()
                   .setTitle('Error searching for plugins')
                   .setDescription(
-                    `An error occurred while searching for plugins. ${error}`
+                    `An error occurred while searching for plugins. ${error instanceof Error ? error.message : String(error)}`
                   )
                   .setBgColor('lum-grad-bg-red/50');
                 notifications.push(notification);
@@ -224,7 +224,7 @@ export default component$(
                   const notification = new Notification()
                     .setTitle('Error fetching plugin versions')
                     .setDescription(
-                      `An error occurred while fetching plugin versions. ${error}`
+                      `An error occurred while fetching plugin versions. ${error instanceof Error ? error.message : String(error)}`
                     )
                     .setBgColor('lum-grad-bg-red/50');
                   notifications.push(notification);

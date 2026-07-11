@@ -200,7 +200,7 @@ export default component$(() => {
         const notification = new Notification()
           .setTitle('Error loading plugins')
           .setDescription(
-            `There was an error loading your saved plugins: ${e}.`
+            `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
           )
           .setBgColor('lum-grad-bg-red/50');
         notifications.push(notification);
@@ -249,7 +249,7 @@ export default component$(() => {
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
-        .setDescription(`There was an error saving your plugins: ${e}.`)
+        .setDescription(`There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`)
         .setBgColor('lum-grad-bg-red/50');
       notifications.push(notification);
     }
@@ -416,7 +416,7 @@ export default component$(() => {
                       .catch((err) => {
                         notification
                           .setTitle('Failed to copy plugins to clipboard')
-                          .setDescription(err)
+                          .setDescription(err instanceof Error ? err.message : String(err))
                           .setBgColor('lum-grad-bg-red/50')
                           .setPersist(true);
                       });
@@ -461,7 +461,7 @@ export default component$(() => {
                       const notification = new Notification()
                         .setTitle('Failed to parse imported plugins')
                         .setDescription(
-                          `An error occurred while parsing imported plugins. ${err}`
+                          `An error occurred while parsing imported plugins. ${err instanceof Error ? err.message : String(err)}`
                         )
                         .setBgColor('lum-grad-bg-red/50');
                       notifications.push(notification);
@@ -647,7 +647,7 @@ export default component$(() => {
                           const notification = new Notification()
                             .setTitle('Error fetching plugin versions')
                             .setDescription(
-                              `An error occurred while fetching plugin versions. ${error}`
+                              `An error occurred while fetching plugin versions. ${error instanceof Error ? error.message : String(error)}`
                             )
                             .setBgColor('lum-grad-bg-red/50');
                           notifications.push(notification);

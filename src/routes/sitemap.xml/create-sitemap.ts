@@ -14,6 +14,6 @@ ${entries.map(
         <loc>${baseUrl}${entry.loc.startsWith('/') ? '' : '/'}${entry.loc}</loc>
         <priority>${entry.priority}</priority>
     </url>`
-)}
+).join('')}
 </urlset>`.trim();
 }
