@@ -9,7 +9,6 @@ import { qwikSpeakInline } from "qwik-speak/inline";
 import { partytownVite } from "@qwik.dev/partytown/utils";
 import { join } from "path";
 import tailwindcss from "@tailwindcss/vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 import shikiRehype from '@shikijs/rehype';
 import { transformerMetaHighlight, transformerMetaWordHighlight } from '@shikijs/transformers';
 import { transformerColorizedBrackets } from '@shikijs/colorized-brackets';
@@ -306,7 +305,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
       tsconfigPaths: true,
     },
     plugins: [
-      tsconfigPaths(),
       qwikCity({
         platform,
         mdxPlugins: {
@@ -361,6 +359,36 @@ export default defineConfig(({ command, mode }): UserConfig => {
         '@qwik.dev/partytown/integration',
         'drizzle-orm',
       ],
+    },
+    
+    build: {
+      rollupOptions: {
+        output: {
+          // Sanitize chunk filenames to prevent relative path substitutions
+          chunkFileNames: (chunkInfo) => {
+            let name = chunkInfo.name;
+            
+            // If the chunk name contains node_modules or relative paths, clean it up
+            if (name.includes('node_modules') || name.includes('..')) {
+              // Strip out path separators, dots, and node_modules to make it a safe flat string
+              name = name
+                .replace(/[^a-zA-Z0-9-_]/g, '-') // Replace symbols with dashes
+                .replace(/-+/g, '-')             // Collapse duplicate dashes
+                .replace(/^-|-$/g, '');          // Trim leading/trailing dashes
+            }
+            
+            return `assets/${name}-[hash].js`;
+          },
+          // Apply the same treatment to entry files just in case
+          entryFileNames: (chunkInfo) => {
+            let name = chunkInfo.name;
+            if (name.includes('node_modules') || name.includes('..')) {
+              name = name.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            }
+            return `assets/${name}-[hash].js`;
+          }
+        }
+      }
     },
   
     /**
