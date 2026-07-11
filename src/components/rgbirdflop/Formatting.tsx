@@ -18,7 +18,7 @@ import {
   Formatting,
   FORMAT_KEYS,
   FONT_LABELS,
-  FormatKey,
+  type FormatKey,
 } from "@birdflop/rgbirdflop";
 import {
   combinedText,
