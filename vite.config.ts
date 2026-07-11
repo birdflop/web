@@ -40,7 +40,6 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
-<<<<<<< HEAD
     staged: {
       "*": "vp check --fix"
     },
@@ -306,8 +305,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
     resolve: {
       tsconfigPaths: true,
     },
-=======
->>>>>>> texturepacks
     plugins: [
       tsconfigPaths(),
       qwikCity({
