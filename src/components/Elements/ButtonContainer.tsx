@@ -1,6 +1,6 @@
-import { component$, PropsOf, Slot } from '@qwik.dev/core';
+import { component$, PropsOf, Slot } from "@qwik.dev/core";
 
-export interface ButtonContainerProps extends Omit<PropsOf<'div'>, 'class'> {
+export interface ButtonContainerProps extends Omit<PropsOf<"div">, "class"> {
   class?: {
     [key: string]: boolean;
   };
@@ -12,8 +12,8 @@ export const ButtonContainer = component$<ButtonContainerProps>(
       <div
         {...props}
         class={{
-          'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1': true,
+          "lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200": true,
+          "*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1": true,
           ...classList,
         }}
       >

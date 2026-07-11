@@ -7,10 +7,15 @@ import {
   useSignal,
   useComputed$,
   QRL,
-} from '@qwik.dev/core';
-import { ColorPicker, Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
-import { inlineTranslate } from 'qwik-speak';
-import { ShowAllGradientsButton } from './ShowAllGradientsButton';
+} from "@qwik.dev/core";
+import {
+  ColorPicker,
+  Label,
+  NumberInput,
+  SelectMenu,
+} from "@luminescent/ui-qwik";
+import { inlineTranslate } from "qwik-speak";
+import { ShowAllGradientsButton } from "./ShowAllGradientsButton";
 import {
   sortColors,
   getBrightness,
@@ -22,27 +27,27 @@ import {
   GRADIENT_TYPES,
   ColorStop,
   disperseColors,
-} from '@birdflop/rgbirdflop';
+} from "@birdflop/rgbirdflop";
 
-import ArrowRightLeft from 'lucide-icons-qwik/icons/ArrowRightLeft';
-import Combine from 'lucide-icons-qwik/icons/Combine';
-import Copy from 'lucide-icons-qwik/icons/Copy';
-import Dices from 'lucide-icons-qwik/icons/Dices';
-import Eclipse from 'lucide-icons-qwik/icons/Eclipse';
-import GripVertical from 'lucide-icons-qwik/icons/GripVertical';
-import Minus from 'lucide-icons-qwik/icons/Minus';
-import MoveHorizontal from 'lucide-icons-qwik/icons/MoveHorizontal';
-import Palette from 'lucide-icons-qwik/icons/Palette';
-import Plus from 'lucide-icons-qwik/icons/Plus';
-import Shuffle from 'lucide-icons-qwik/icons/Shuffle';
-import Trash from 'lucide-icons-qwik/icons/Trash';
+import ArrowRightLeft from "lucide-icons-qwik/icons/ArrowRightLeft";
+import Combine from "lucide-icons-qwik/icons/Combine";
+import Copy from "lucide-icons-qwik/icons/Copy";
+import Dices from "lucide-icons-qwik/icons/Dices";
+import Eclipse from "lucide-icons-qwik/icons/Eclipse";
+import GripVertical from "lucide-icons-qwik/icons/GripVertical";
+import Minus from "lucide-icons-qwik/icons/Minus";
+import MoveHorizontal from "lucide-icons-qwik/icons/MoveHorizontal";
+import Palette from "lucide-icons-qwik/icons/Palette";
+import Plus from "lucide-icons-qwik/icons/Plus";
+import Shuffle from "lucide-icons-qwik/icons/Shuffle";
+import Trash from "lucide-icons-qwik/icons/Trash";
 
 import {
   rgbStoreContext,
   showAllGradientsContext,
-} from '~/components/rgbirdflop/RGBirdflop';
-import { getColors } from './ColorMap';
-import { ButtonContainer } from '../Elements/ButtonContainer';
+} from "~/components/rgbirdflop/RGBirdflop";
+import { getColors } from "./ColorMap";
+import { ButtonContainer } from "../Elements/ButtonContainer";
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
@@ -69,11 +74,11 @@ type ColorListProps = {
 };
 
 export default component$<ColorListProps>((props) => {
-  const { hidden, id = 'text' } = props;
+  const { hidden, id = "text" } = props;
   const t = inlineTranslate();
   const rgbStore = useContext(rgbStoreContext);
   const opened = useSignal(-1);
-  const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
+  const colorsKey = id == "text" ? "colors" : "shadowColors";
   const showAllGradients = useContext(showAllGradientsContext);
 
   const colors = useComputed$(() => props.colors ?? getColors(rgbStore, id));
@@ -96,7 +101,7 @@ export default component$<ColorListProps>((props) => {
   const dragOverIndex = useSignal<number | null>(null);
 
   useOnDocument(
-    'click',
+    "click",
     $((e) => {
       if (
         e.target instanceof HTMLElement &&
@@ -111,16 +116,16 @@ export default component$<ColorListProps>((props) => {
   return (
     <div
       class={{
-        'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:h-auto sm:opacity-100': true,
-        'pointer-events-none h-0 opacity-0': hidden,
-        'pointer-events-auto opacity-100': !hidden,
+        "flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:h-auto sm:opacity-100": true,
+        "pointer-events-none h-0 opacity-0": hidden,
+        "pointer-events-auto opacity-100": !hidden,
       }}
-      id={'colorlist' + id}
+      id={"colorlist" + id}
     >
       <div class="flex items-center gap-1 py-2 font-semibold">
         <span class="flex flex-1 items-center gap-2">
           <Palette />
-          {colors.value.length} {t('rgb.colors.title@@Colors')}
+          {colors.value.length} {t("rgb.colors.title@@Colors")}
           <button
             class="lum-btn -mr-1 rounded-r-sm p-1"
             onClick$={() => {
@@ -159,10 +164,10 @@ export default component$<ColorListProps>((props) => {
         </span>
 
         <SelectMenu
-          title={t('rgb.colors.gradientType@@Gradient Type')}
+          title={t("rgb.colors.gradientType@@Gradient Type")}
           id="gradientType"
           value={resolvedGradientType.value}
-          class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
+          class={{ "lum-btn-p-1 rounded-r-sm text-sm": true }}
           onChange$={async (e, el) => {
             const value = el.value as GradientType;
             if (props.onGradientTypeChange$) {
@@ -183,7 +188,7 @@ export default component$<ColorListProps>((props) => {
 
       <ButtonContainer
         class={{
-          '*:justify-center *:p-1': true,
+          "*:justify-center *:p-1": true,
         }}
       >
         <button
@@ -194,16 +199,16 @@ export default component$<ColorListProps>((props) => {
             }));
             void setColors(newColors);
           }}
-          title={t('rgb.colors.randomize@@Randomize')}
+          title={t("rgb.colors.randomize@@Randomize")}
         >
           <Dices size={20} />
         </button>
-        {id == 'shadow' && (
+        {id == "shadow" && (
           <button
             onClick$={() => {
               void setColors(rgbStore.colors);
             }}
-            title={t('rgb.colors.copyFromText@@Copy from text colors')}
+            title={t("rgb.colors.copyFromText@@Copy from text colors")}
           >
             <Combine size={20} />
           </button>
@@ -214,7 +219,7 @@ export default component$<ColorListProps>((props) => {
             const newColors = [...colors.value, ...colors.value];
             void setColors(newColors);
           }}
-          title={t('rgb.colors.duplicate@@Duplicate')}
+          title={t("rgb.colors.duplicate@@Duplicate")}
         >
           <Copy size={20} />
         </button>
@@ -226,7 +231,7 @@ export default component$<ColorListProps>((props) => {
               .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
             void setColors(newColors);
           }}
-          title={t('rgb.colors.reverse@@Reverse')}
+          title={t("rgb.colors.reverse@@Reverse")}
         >
           <ArrowRightLeft size={20} />
         </button>
@@ -242,7 +247,7 @@ export default component$<ColorListProps>((props) => {
             }));
             void setColors(newColors);
           }}
-          title={t('rgb.colors.shuffle@@Shuffle')}
+          title={t("rgb.colors.shuffle@@Shuffle")}
         >
           <Shuffle size={20} />
         </button>
@@ -254,7 +259,7 @@ export default component$<ColorListProps>((props) => {
             });
             void setColors(newColors);
           }}
-          title={t('rgb.colors.invert@@Invert')}
+          title={t("rgb.colors.invert@@Invert")}
         >
           <Eclipse size={20} />
         </button>
@@ -272,7 +277,7 @@ export default component$<ColorListProps>((props) => {
             onClick$={() => {
               void setColors(disperseColors(colors.value));
             }}
-            title={t('rgb.colors.disperse.title@@Disperse')}
+            title={t("rgb.colors.disperse.title@@Disperse")}
           >
             <MoveHorizontal size={20} />
           </button>
@@ -285,9 +290,9 @@ export default component$<ColorListProps>((props) => {
             key={`${i}/${colors.value.length}`}
             id={`colorlist${id}-color-${i + 1}`}
             class={{
-              'relative flex items-center gap-1 py-1 transition-all duration-200': true,
-              'scale-[0.98] opacity-40': draggedIndex.value === i,
-              '*:pointer-events-none': draggedIndex.value !== null,
+              "relative flex items-center gap-1 py-1 transition-all duration-200": true,
+              "scale-[0.98] opacity-40": draggedIndex.value === i,
+              "*:pointer-events-none": draggedIndex.value !== null,
             }}
             onDragOver$={(e) => {
               e.preventDefault();
@@ -312,17 +317,17 @@ export default component$<ColorListProps>((props) => {
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
               draggedIndex.value >= i && (
-              <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-              </div>
-            )}
+                <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+                </div>
+              )}
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
               draggedIndex.value < i && (
-              <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-              </div>
-            )}
+                <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+                </div>
+              )}
             <label
               for={`colorlist${id}-color-${i + 1}-input`}
               class="text-lum-text-secondary w-6 text-center font-mono"
@@ -353,20 +358,20 @@ export default component$<ColorListProps>((props) => {
               key={`colorlist${id}-color-${i + 1}`}
               id={`colorlist${id}-color-${i + 1}-input`}
               class={{
-                'text-gray-400 hover:text-gray-400':
+                "text-gray-400 hover:text-gray-400":
                   getBrightness(hexToRGB(color.hex)) < 126,
-                'text-gray-700 hover:text-gray-700':
+                "text-gray-700 hover:text-gray-700":
                   getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm font-mono': true,
+                "lum-input lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm font-mono": true,
               }}
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
               onInput$={(e, el) => {
                 let hex = el.value.trim();
-                if (!hex.startsWith('#')) hex = '#' + hex;
+                if (!hex.startsWith("#")) hex = "#" + hex;
                 // lightly check if valid hex color
                 const validRegex =
-                  id == 'shadow' ? hexRegex : hexRegexNoOpacity;
+                  id == "shadow" ? hexRegex : hexRegexNoOpacity;
                 if (!validRegex.test(hex)) {
                   el.value = color.hex;
                   return;
@@ -382,7 +387,7 @@ export default component$<ColorListProps>((props) => {
                   `colorlist${id}-color-picker`,
                 )!;
                 picker.dataset.value = el.value;
-                picker.dispatchEvent(new Event('input'));
+                picker.dispatchEvent(new Event("input"));
               }}
               onFocus$={() => {
                 // set opened value
@@ -402,13 +407,13 @@ export default component$<ColorListProps>((props) => {
                   `colorlist${id}-color-${i + 1}`,
                 )!;
                 popup.style.setProperty(
-                  '--popup-top',
+                  "--popup-top",
                   `${colorContainer.offsetTop}px`,
                 );
 
                 // set the color picker's value and trigger input to update color picker
                 picker.dataset.value = color.hex;
-                picker.dispatchEvent(new Event('input'));
+                picker.dispatchEvent(new Event("input"));
               }}
             />
             <button
@@ -430,11 +435,11 @@ export default component$<ColorListProps>((props) => {
           class={{
             flex: opened.value > -1,
             hidden: opened.value < 0,
-            'absolute top-[calc(var(--popup-top)+2.4rem)] left-15 z-10 flex-col gap-2 motion-safe:transition-all sm:top-(--popup-top) sm:left-full': true,
-            'animate-in fade-in slide-in-from-top-2': true,
+            "absolute top-[calc(var(--popup-top)+2.4rem)] left-15 z-10 flex-col gap-2 motion-safe:transition-all sm:top-(--popup-top) sm:left-full": true,
+            "animate-in fade-in slide-in-from-top-2": true,
           }}
           style={{
-            '--lum-border-radius': '1rem',
+            "--lum-border-radius": "1rem",
           }}
         >
           <ColorPicker
@@ -447,10 +452,13 @@ export default component$<ColorListProps>((props) => {
             }}
             showInput={false}
             horizontal
-            opacity={id == 'shadow'}
+            opacity={id == "shadow"}
           />
           <div class="lum-card flex flex-col justify-evenly gap-1 p-2">
-            <Label for={`colorlist${id}-color-pos`} label={`${t('rgb.colors.position@@Position')} (%)`}>
+            <Label
+              for={`colorlist${id}-color-pos`}
+              label={`${t("rgb.colors.position@@Position")} (%)`}
+            >
               <NumberInput
                 input
                 id={`colorlist${id}-color-pos`}
@@ -462,21 +470,24 @@ export default component$<ColorListProps>((props) => {
                   let newPos = Number(el.value);
                   if (newPos < 0) newPos = 0;
                   if (newPos > 100) newPos = 100;
-                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
                   void setColors(sortColors(newColors));
                 }}
                 onIncrement$={() => {
                   const newColors = colors.value.slice(0);
                   let newPos = newColors[opened.value].pos + 1;
                   if (newPos > 100) newPos = 100;
-                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
                   void setColors(sortColors(newColors));
                 }}
                 onDecrement$={() => {
                   const newColors = colors.value.slice(0);
                   let newPos = newColors[opened.value].pos - 1;
                   if (newPos < 0) newPos = 0;
-                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
                   void setColors(sortColors(newColors));
                 }}
               />

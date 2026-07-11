@@ -7,30 +7,30 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from '@qwik.dev/core';
-import type { NoSerialize } from '@qwik.dev/core';
+} from "@qwik.dev/core";
+import type { NoSerialize } from "@qwik.dev/core";
 
-import { inlineTranslate } from 'qwik-speak';
+import { inlineTranslate } from "qwik-speak";
 
-import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
-import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
-import Copy from 'lucide-icons-qwik/icons/Copy';
-import Eye from 'lucide-icons-qwik/icons/Eye';
-import Plus from 'lucide-icons-qwik/icons/Plus';
-import Presentation from 'lucide-icons-qwik/icons/Presentation';
-import Settings from 'lucide-icons-qwik/icons/Settings';
-import Terminal from 'lucide-icons-qwik/icons/Terminal';
-import Trash from 'lucide-icons-qwik/icons/Trash';
+import ChevronLeft from "lucide-icons-qwik/icons/ChevronLeft";
+import ChevronRight from "lucide-icons-qwik/icons/ChevronRight";
+import Copy from "lucide-icons-qwik/icons/Copy";
+import Eye from "lucide-icons-qwik/icons/Eye";
+import Plus from "lucide-icons-qwik/icons/Plus";
+import Presentation from "lucide-icons-qwik/icons/Presentation";
+import Settings from "lucide-icons-qwik/icons/Settings";
+import Terminal from "lucide-icons-qwik/icons/Terminal";
+import Trash from "lucide-icons-qwik/icons/Trash";
 
-import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { openItemsContext } from '~/routes/layout';
-import { colors, patterns } from '~/util/banner';
-import { swapItems } from '@birdflop/rgbirdflop';
-import { defaultDescription, generateHead } from '~/root';
-import Output from '~/components/Elements/Output';
-import { ButtonContainer } from '~/components/Elements/ButtonContainer';
+import * as THREE from "three";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { openItemsContext } from "~/routes/layout";
+import { colors, patterns } from "~/util/banner";
+import { swapItems } from "@birdflop/rgbirdflop";
+import { defaultDescription, generateHead } from "~/root";
+import Output from "~/components/Elements/Output";
+import { ButtonContainer } from "~/components/Elements/ButtonContainer";
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -58,7 +58,7 @@ export default component$(() => {
       pattern: (typeof patterns)[number];
     }[];
   } = useStore({
-    color: 'blue',
+    color: "blue",
     patterns: [],
   });
 
@@ -66,7 +66,7 @@ export default component$(() => {
   useVisibleTask$(async () => {
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.TextureLoader().load('');
+    scene.background = new THREE.TextureLoader().load("");
 
     // get width of element
     const width = preview.value.clientWidth;
@@ -103,10 +103,10 @@ export default component$(() => {
 
     // OBJ Loader for banner obj
     const loader = new OBJLoader();
-    const stand = await loader.loadAsync('/banner/banner_stand.obj');
+    const stand = await loader.loadAsync("/banner/banner_stand.obj");
     stand.position.y = -2;
     stand.position.z = -5;
-    const mainObj = await loader.loadAsync('/banner/banner_main.obj');
+    const mainObj = await loader.loadAsync("/banner/banner_main.obj");
     const main = new THREE.Group();
     main.add(mainObj);
     mainObj.position.x = -0.1;
@@ -126,7 +126,7 @@ export default component$(() => {
     bannerTexture.value.magFilter = THREE.NearestFilter;
 
     const baseTexture = new THREE.TextureLoader().load(
-      '/banner/banner_base.png',
+      "/banner/banner_base.png",
     );
     baseTexture.colorSpace = THREE.SRGBColorSpace;
     baseTexture.minFilter = THREE.NearestFilter;
@@ -136,7 +136,7 @@ export default component$(() => {
     Object.entries(objects).forEach(([name, object]) => {
       object.traverse((child: any) => {
         if (child.isMesh) {
-          if (name === 'stand') child.material.map = baseTexture;
+          if (name === "stand") child.material.map = baseTexture;
           else child.material.map = bannerTexture.value;
         }
       });
@@ -165,7 +165,7 @@ export default component$(() => {
       const canvas = document.getElementById(
         `canvas-preview-${i}`,
       ) as HTMLCanvasElement;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
       const baseImg = await createImage(
@@ -174,16 +174,16 @@ export default component$(() => {
       canvas.width = baseImg.width;
       canvas.height = baseImg.height;
       ctx.drawImage(baseImg, 0, 0);
-      ctx.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
-      ctx.globalCompositeOperation = 'multiply';
+      ctx.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, "0")}`;
+      ctx.globalCompositeOperation = "multiply";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.globalCompositeOperation = 'destination-in';
+      ctx.globalCompositeOperation = "destination-in";
       ctx.drawImage(baseImg, 0, 0);
 
       const texture = document.getElementById(
         `canvas-texture-${i}`,
       ) as HTMLCanvasElement;
-      const ctxTexture = texture.getContext('2d');
+      const ctxTexture = texture.getContext("2d");
       if (!ctxTexture) return;
 
       const baseImgTexture = await createImage(
@@ -192,29 +192,29 @@ export default component$(() => {
       texture.width = baseImgTexture.width;
       texture.height = baseImgTexture.height;
       ctxTexture.drawImage(baseImgTexture, 0, 0);
-      ctxTexture.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, '0')}`;
-      ctxTexture.globalCompositeOperation = 'multiply';
+      ctxTexture.fillStyle = `#${colors[pattern.color].toString(16).padStart(6, "0")}`;
+      ctxTexture.globalCompositeOperation = "multiply";
       ctxTexture.fillRect(0, 0, texture.width, texture.height);
-      ctxTexture.globalCompositeOperation = 'destination-in';
+      ctxTexture.globalCompositeOperation = "destination-in";
       ctxTexture.drawImage(baseImgTexture, 0, 0);
     }
 
     const canvas = textureCanvas.value;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const baseImg = await createImage('/banner/patterns/textures/base.png');
+    const baseImg = await createImage("/banner/patterns/textures/base.png");
     canvas.width = baseImg.width;
     canvas.height = baseImg.height;
     ctx.drawImage(baseImg, 0, 0);
 
-    ctx.fillStyle = `#${colors[bannerStore.color].toString(16).padStart(6, '0')}`;
-    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = `#${colors[bannerStore.color].toString(16).padStart(6, "0")}`;
+    ctx.globalCompositeOperation = "multiply";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.globalCompositeOperation = 'destination-in';
+    ctx.globalCompositeOperation = "destination-in";
     ctx.drawImage(baseImg, 0, 0);
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = "source-over";
 
     for (let i = 0; i < bannerStore.patterns.length; i++) {
       const patternImg = document.getElementById(
@@ -229,86 +229,86 @@ export default component$(() => {
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <Presentation size={32} />
-        {t('nav.resources.banner.title@@Banner Generator')}
+        {t("nav.resources.banner.title@@Banner Generator")}
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.banner.description@@Easily generate banner designs for Minecraft.',
+          "nav.resources.banner.description@@Easily generate banner designs for Minecraft.",
         )}
       </p>
 
       <div class="grid gap-2 sm:grid-cols-2">
         <ButtonContainer
           class={{
-            'overflow-scroll sm:hidden': true,
+            "overflow-scroll sm:hidden": true,
           }}
         >
           <button
             onClick$={() => {
-              openItems.value = openItems.value.includes('options')
-                ? openItems.value.filter((item) => item !== 'options')
-                : ['options'];
+              openItems.value = openItems.value.includes("options")
+                ? openItems.value.filter((item) => item !== "options")
+                : ["options"];
             }}
             class={{
-              'lum-grad-bg-blue!': openItems.value.includes('options'),
+              "lum-grad-bg-blue!": openItems.value.includes("options"),
             }}
           >
             <Settings />
-            {t('banner.options.title@@Options')}
+            {t("banner.options.title@@Options")}
           </button>
           <button
             onClick$={() => {
-              openItems.value = openItems.value.includes('command')
-                ? openItems.value.filter((item) => item !== 'command')
-                : ['command'];
+              openItems.value = openItems.value.includes("command")
+                ? openItems.value.filter((item) => item !== "command")
+                : ["command"];
             }}
             class={{
-              'lum-grad-bg-blue!': openItems.value.includes('command'),
+              "lum-grad-bg-blue!": openItems.value.includes("command"),
             }}
           >
             <Terminal />
-            {t('banner.command.title@@Command')}
+            {t("banner.command.title@@Command")}
           </button>
           <button
             onClick$={() => {
-              openItems.value = openItems.value.includes('preview')
-                ? openItems.value.filter((item) => item !== 'preview')
-                : ['preview'];
+              openItems.value = openItems.value.includes("preview")
+                ? openItems.value.filter((item) => item !== "preview")
+                : ["preview"];
             }}
             class={{
-              'lum-grad-bg-blue!': openItems.value.includes('preview'),
+              "lum-grad-bg-blue!": openItems.value.includes("preview"),
             }}
           >
             <Eye />
-            {t('banner.preview@@Preview')}
+            {t("banner.preview@@Preview")}
           </button>
         </ButtonContainer>
 
         <div class="flex flex-col gap-2" id="inputcolumn">
           <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
             <Settings />
-            {t('banner.options.title@@Options')}
+            {t("banner.options.title@@Options")}
           </div>
           <div
             class={{
-              'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-              'pointer-events-none max-h-0 opacity-0':
-                !openItems.value.includes('options'),
-              'max-h-auto pointer-events-auto opacity-100':
-                openItems.value.includes('options'),
+              "flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100": true,
+              "pointer-events-none max-h-0 opacity-0":
+                !openItems.value.includes("options"),
+              "max-h-auto pointer-events-auto opacity-100":
+                openItems.value.includes("options"),
             }}
           >
             <h6 class="flex items-center gap-3">
-              {t('banner.options.baseColor.title@@Base Color')}
+              {t("banner.options.baseColor.title@@Base Color")}
               <span class="text-lum-text-secondary text-sm font-normal">
                 {t(
-                  'banner.options.baseColor.description@@This is the base color of the banner to start with.',
+                  "banner.options.baseColor.description@@This is the base color of the banner to start with.",
                 )}
               </span>
             </h6>
             <ButtonContainer
               class={{
-                '*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2': true,
+                "*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2": true,
               }}
             >
               {Object.entries(colors).map(([colorName, color]) => {
@@ -316,10 +316,10 @@ export default component$(() => {
                   <button
                     key={colorName}
                     class={{
-                      'lum-grad-bg': bannerStore.color === colorName,
+                      "lum-grad-bg": bannerStore.color === colorName,
                     }}
                     style={{
-                      '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
+                      "--bg-color": `#${color.toString(16).padStart(6, "0")}`,
                     }}
                     onClick$={() => {
                       bannerStore.color = colorName as keyof typeof colors;
@@ -330,7 +330,7 @@ export default component$(() => {
                       src={`/banner/dyes/${colorName}_dye.png`}
                       alt={colorName}
                       style={{
-                        imageRendering: 'pixelated',
+                        imageRendering: "pixelated",
                       }}
                     />
                   </button>
@@ -338,7 +338,7 @@ export default component$(() => {
               })}
             </ButtonContainer>
             <h6 class="flex items-center gap-3">
-              {t('banner.options.patterns@@Patterns')}
+              {t("banner.options.patterns@@Patterns")}
               <button
                 class="lum-btn lum-grad-bg-green-700 hover:lum-bg-green-600 p-2"
                 onClick$={() => {
@@ -418,7 +418,7 @@ export default component$(() => {
                       else openPopup.value = i;
                       const abortController = new AbortController();
                       document.addEventListener(
-                        'click',
+                        "click",
                         (e) => {
                           if (
                             e.target instanceof HTMLElement &&
@@ -436,19 +436,19 @@ export default component$(() => {
                     <canvas
                       id={`canvas-preview-${i}`}
                       style={{
-                        imageRendering: 'pixelated',
+                        imageRendering: "pixelated",
                       }}
                       class={{
-                        'rounded-lum w-full': true,
+                        "rounded-lum w-full": true,
                       }}
                     />
                     <canvas
                       id={`canvas-texture-${i}`}
                       style={{
-                        imageRendering: 'pixelated',
+                        imageRendering: "pixelated",
                       }}
                       class={{
-                        'rounded-lum hidden w-full': true,
+                        "rounded-lum hidden w-full": true,
                       }}
                     />
                   </button>
@@ -456,8 +456,8 @@ export default component$(() => {
                     id={`pattern-${i + 1}-popup`}
                     stoppropagation:mousedown
                     class={{
-                      'absolute top-full left-0 z-1000 mt-2 flex flex-col gap-2 motion-safe:transition-all': true,
-                      'pointer-events-none scale-95 opacity-0':
+                      "absolute top-full left-0 z-1000 mt-2 flex flex-col gap-2 motion-safe:transition-all": true,
+                      "pointer-events-none scale-95 opacity-0":
                         openPopup.value != i,
                     }}
                   >
@@ -468,10 +468,10 @@ export default component$(() => {
                             <button
                               key={colorName}
                               class={{
-                                'lum-btn lum-grad-bg p-1 hover:brightness-150': true,
+                                "lum-btn lum-grad-bg p-1 hover:brightness-150": true,
                               }}
                               style={{
-                                '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
+                                "--bg-color": `#${color.toString(16).padStart(6, "0")}`,
                               }}
                               onClick$={() => {
                                 const newPatterns =
@@ -486,7 +486,7 @@ export default component$(() => {
                                 src={`/banner/dyes/${colorName}_dye.png`}
                                 alt={colorName}
                                 style={{
-                                  imageRendering: 'pixelated',
+                                  imageRendering: "pixelated",
                                 }}
                               />
                             </button>
@@ -499,7 +499,7 @@ export default component$(() => {
                             <button
                               key={pattern}
                               class={{
-                                'lum-btn p-0 hover:brightness-150': true,
+                                "lum-btn p-0 hover:brightness-150": true,
                               }}
                               onClick$={() => {
                                 const newPatterns =
@@ -513,7 +513,7 @@ export default component$(() => {
                                 src={`/banner/patterns/previews/${pattern}.png`}
                                 alt={pattern}
                                 style={{
-                                  imageRendering: 'pixelated',
+                                  imageRendering: "pixelated",
                                 }}
                               />
                             </button>
@@ -528,10 +528,10 @@ export default component$(() => {
           </div>
           <Output
             class="font-mc"
-            value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(',')}]]`}
+            value={`/give @p minecraft:${bannerStore.color}_banner[banner_patterns=[${bannerStore.patterns.map((pattern) => `{pattern:${pattern.pattern},color:${pattern.color}}`).join(",")}]]`}
           >
             <span q:slot="label" class="text-lum-text-secondary text-sm">
-              {t('banner.command.title@@Command')}
+              {t("banner.command.title@@Command")}
             </span>
           </Output>
         </div>
@@ -541,17 +541,17 @@ export default component$(() => {
         >
           <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
             <Eye />
-            {t('banner.preview@@Preview')}
+            {t("banner.preview@@Preview")}
           </div>
           <canvas
             ref={preview}
             id="preview"
             class={{
-              'lum-card lum-grad-bg-lum-card-bg flex-col gap-2 p-0 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-              'pointer-events-none max-h-0 opacity-0':
-                !openItems.value.includes('preview'),
-              'max-h-auto pointer-events-auto opacity-100':
-                openItems.value.includes('preview'),
+              "lum-card lum-grad-bg-lum-card-bg flex-col gap-2 p-0 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100": true,
+              "pointer-events-none max-h-0 opacity-0":
+                !openItems.value.includes("preview"),
+              "max-h-auto pointer-events-auto opacity-100":
+                openItems.value.includes("preview"),
             }}
           />
           <canvas
@@ -559,7 +559,7 @@ export default component$(() => {
             id="texture"
             class="hidden"
             style={{
-              imageRendering: 'pixelated',
+              imageRendering: "pixelated",
             }}
           />
         </div>
@@ -569,7 +569,7 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Banner Generator - Birdflop',
+  title: "Banner Generator - Birdflop",
   description:
-    'Easily generate banner designs for Minecraft. ' + defaultDescription,
+    "Easily generate banner designs for Minecraft. " + defaultDescription,
 });

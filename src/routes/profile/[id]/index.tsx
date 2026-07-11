@@ -4,20 +4,20 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@qwik.dev/core';
-import { generateHead } from '~/root';
-import { routeLoader$ } from '@qwik.dev/router';
-import { useSession } from '~/routes/plugin@auth';
-import { getPresets } from '~/util/rgb/presets';
-import { Notification, NotificationContext } from '~/util/Notification';
+} from "@qwik.dev/core";
+import { generateHead } from "~/root";
+import { routeLoader$ } from "@qwik.dev/router";
+import { useSession } from "~/routes/plugin@auth";
+import { getPresets } from "~/util/rgb/presets";
+import { Notification, NotificationContext } from "~/util/Notification";
 import {
   privatePresetsContext,
   savedPresetsContext,
-} from '~/routes/resources/rgb/presets';
+} from "~/routes/resources/rgb/presets";
 
 import UsersPublicPresets, {
   getUsersPresets,
-} from '~/components/rgbirdflop/presets/UsersPublicPresets';
+} from "~/components/rgbirdflop/presets/UsersPublicPresets";
 
 export const useUser = routeLoader$(async ({ params }) => {
   return getUsersPresets(params.id);
@@ -43,9 +43,9 @@ export default component$(() => {
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const notification = new Notification()
-        .setTitle('Error loading saved presets')
+        .setTitle("Error loading saved presets")
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-grad-bg-red/50')
+        .setBgColor("lum-grad-bg-red/50")
         .setPersist(true);
       notifications.push(notification);
     }
@@ -57,9 +57,9 @@ export default component$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
         const notification = new Notification()
-          .setTitle('Error fetching user data')
+          .setTitle("Error fetching user data")
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-grad-bg-red/50')
+          .setBgColor("lum-grad-bg-red/50")
           .setPersist(true);
         notifications.push(notification);
       });
@@ -77,7 +77,7 @@ export default component$(() => {
             class="rounded-full!"
           />
         )}
-        {userInfo?.name || 'User'}
+        {userInfo?.name || "User"}
       </h1>
       <main>
         <UsersPublicPresets

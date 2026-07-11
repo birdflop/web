@@ -1,10 +1,10 @@
-import { $, component$, useComputed$, useContext } from '@qwik.dev/core';
-import { inlineTranslate } from 'qwik-speak';
-import MousePointerClick from 'lucide-icons-qwik/icons/MousePointerClick';
-import Palette from 'lucide-icons-qwik/icons/Palette';
-import { combinedText, rgbSegmentsContext } from './rgbSegments';
-import SegmentColorEditor from './SegmentColorEditor';
-import { selectionContext } from '~/components/rgbirdflop/Input';
+import { $, component$, useComputed$, useContext } from "@qwik.dev/core";
+import { inlineTranslate } from "qwik-speak";
+import MousePointerClick from "lucide-icons-qwik/icons/MousePointerClick";
+import Palette from "lucide-icons-qwik/icons/Palette";
+import { combinedText, rgbSegmentsContext } from "./rgbSegments";
+import SegmentColorEditor from "./SegmentColorEditor";
+import { selectionContext } from "~/components/rgbirdflop/Input";
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -15,12 +15,12 @@ export default component$(() => {
     () => !!selection.value && selection.value.end > selection.value.start,
   );
   const selText = useComputed$(() => {
-    if (!selection.value) return '';
+    if (!selection.value) return "";
     const txt = combinedText(rgbSegments.value).slice(
       selection.value.start,
       selection.value.end,
     );
-    return txt.length > 24 ? txt.slice(0, 24) + '…' : txt;
+    return txt.length > 24 ? txt.slice(0, 24) + "…" : txt;
   });
 
   const selectAll = $(() => {
@@ -36,17 +36,17 @@ export default component$(() => {
         {hasSel.value ? (
           <p class="flex min-w-0 flex-wrap items-center gap-2">
             <span class="text-lum-text-secondary text-sm">
-              {t('rgb.advanced.styling@@Styling')}
+              {t("rgb.advanced.styling@@Styling")}
             </span>
             <span class="font-mc lum-grad-bg-lum-input-bg rounded-lum-1 max-w-50 truncate px-2 py-0.5">
-              {selText.value.replace(/ /g, '␣') || '␣'}
+              {selText.value.replace(/ /g, "␣") || "␣"}
             </span>
           </p>
         ) : (
           <p class="text-lum-text-secondary flex items-center gap-2 text-sm">
             <MousePointerClick size={18} class="shrink-0" />
             {t(
-              'rgb.advanced.highlightHint@@Highlight letters in the box above to color & format just that part.',
+              "rgb.advanced.highlightHint@@Highlight letters in the box above to color & format just that part.",
             )}
           </p>
         )}
@@ -54,7 +54,7 @@ export default component$(() => {
           class="lum-btn lum-grad-bg-lum-card-bg/75 hover:lum-bg-lum-card-bg rounded-lum shrink-0 p-2 text-sm"
           onClick$={selectAll}
         >
-          {t('rgb.advanced.selectAll@@Select all')}
+          {t("rgb.advanced.selectAll@@Select all")}
         </button>
       </div>
 
@@ -62,7 +62,7 @@ export default component$(() => {
         <>
           <div class="flex flex-col gap-2">
             <h4 class="text-lum-text-secondary flex items-center gap-2 text-xs font-bold tracking-wider uppercase">
-              <Palette size={15} /> {t('rgb.colors.color@@Color')}
+              <Palette size={15} /> {t("rgb.colors.color@@Color")}
             </h4>
             <SegmentColorEditor />
           </div>

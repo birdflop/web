@@ -1,9 +1,9 @@
-import type { JSXChildren, PropsOf, QRL } from '@qwik.dev/core';
-import { component$, Slot, useSignal } from '@qwik.dev/core';
+import type { JSXChildren, PropsOf, QRL } from "@qwik.dev/core";
+import { component$, Slot, useSignal } from "@qwik.dev/core";
 
 interface SelectListProps extends Omit<
-  PropsOf<'select'>,
-  'class' | 'size' | 'onChange$'
+  PropsOf<"select">,
+  "class" | "size" | "onChange$"
 > {
   btnClass?: string;
   class?: { [className: string]: boolean };
@@ -18,17 +18,17 @@ export const SelectList = component$<SelectListProps>(
   ({
     values,
     class: Class,
-    btnClass = 'lum-bg-transparent',
+    btnClass = "lum-bg-transparent",
     onChange$,
     ...props
   }) => {
-    const selected = useSignal<string | number>('');
+    const selected = useSignal<string | number>("");
     const selectRef = useSignal<HTMLInputElement>();
 
     return (
       <div
         class={{
-          'lum-card lum-grad-bg-lum-input-bg relative max-h-64 touch-manipulation gap-1 overflow-auto p-1': true,
+          "lum-card lum-grad-bg-lum-input-bg relative max-h-64 touch-manipulation gap-1 overflow-auto p-1": true,
           ...Class,
         }}
       >
@@ -57,8 +57,8 @@ export const SelectList = component$<SelectListProps>(
             <button
               type="button"
               class={{
-                'lum-btn rounded-lum-1': true,
-                'lum-grad-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50':
+                "lum-btn rounded-lum-1": true,
+                "lum-grad-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50":
                   selected.value == value,
                 [btnClass]: true,
               }}
@@ -68,7 +68,7 @@ export const SelectList = component$<SelectListProps>(
                 const select = selectRef.value;
                 if (select) {
                   select.value = value.toString();
-                  select.dispatchEvent(new Event('change'));
+                  select.dispatchEvent(new Event("change"));
                 }
                 selected.value = value.toString();
               }}

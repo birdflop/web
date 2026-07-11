@@ -4,24 +4,24 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@qwik.dev/core';
+} from "@qwik.dev/core";
 
 import {
   privatePresetsContext,
   savedPresetsContext,
-} from '../resources/rgb/presets';
-import { useSession } from '~/routes/plugin@auth';
-import { generateHead } from '~/root';
-import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
+} from "../resources/rgb/presets";
+import { useSession } from "~/routes/plugin@auth";
+import { generateHead } from "~/root";
+import MyPrivatePresets from "~/components/rgbirdflop/presets/MyPrivatePresets";
 import UsersPublicPresets, {
   getUsersPresets,
-} from '~/components/rgbirdflop/presets/UsersPublicPresets';
-import { routeLoader$ } from '@qwik.dev/router';
-import { Notification, NotificationContext } from '~/util/Notification';
+} from "~/components/rgbirdflop/presets/UsersPublicPresets";
+import { routeLoader$ } from "@qwik.dev/router";
+import { Notification, NotificationContext } from "~/util/Notification";
 
 export const useUser = routeLoader$(async ({ sharedMap }) => {
-  const session = sharedMap.get('session') as { user: { id: string } } | null;
-  if (!session) throw new Error('No session found');
+  const session = sharedMap.get("session") as { user: { id: string } } | null;
+  if (!session) throw new Error("No session found");
   return getUsersPresets(session.user.id);
 });
 
@@ -42,9 +42,9 @@ export default component$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
         const notification = new Notification()
-          .setTitle('Error fetching user data')
+          .setTitle("Error fetching user data")
           .setDescription(`Error: ${error}`)
-          .setBgColor('lum-grad-bg-red/50')
+          .setBgColor("lum-grad-bg-red/50")
           .setPersist(true);
         notifications.push(notification);
       });

@@ -1,44 +1,44 @@
 // components/home/ExpensesChart.tsx
-import { component$ } from '@qwik.dev/core';
-import Chart from '~/components/Elements/Chart';
+import { component$ } from "@qwik.dev/core";
+import Chart from "~/components/Elements/Chart";
 
 export default component$(() => {
   const config = {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
       labels: [
-        'EU Hosting Expenses',
-        'US Hosting Expenses',
-        'Infrastructure',
-        'Platform Development',
-        'Client Reimbursements',
-        'Hosting Revenue',
-        'Ad Revenue',
+        "EU Hosting Expenses",
+        "US Hosting Expenses",
+        "Infrastructure",
+        "Platform Development",
+        "Client Reimbursements",
+        "Hosting Revenue",
+        "Ad Revenue",
       ],
       datasets: [
         {
           // Outer Ring (EXPENDITURES)
           backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', // EU Hosting Expenses
-            'rgba(255, 50, 0, 0.2)', // US Hosting Expenses
-            'rgba(255, 100, 0, 0.2)', // Infra
-            'rgba(255, 150, 0, 0.2)', // Dev
+            "rgba(255, 0, 0, 0.2)", // EU Hosting Expenses
+            "rgba(255, 50, 0, 0.2)", // US Hosting Expenses
+            "rgba(255, 100, 0, 0.2)", // Infra
+            "rgba(255, 150, 0, 0.2)", // Dev
             // 'rgba(255, 160, 0, 1)', // loan payments
-            'rgba(255, 200, 0, 0.2)', // client reimbursements
-            'rgba(0, 200, 0, 0.2)', // hosting revenue
-            'rgba(0, 200, 120, 0.2)', // ad revenue
+            "rgba(255, 200, 0, 0.2)", // client reimbursements
+            "rgba(0, 200, 0, 0.2)", // hosting revenue
+            "rgba(0, 200, 120, 0.2)", // ad revenue
             // 'rgba(0, 210, 100, 1)',
             // 'rgba(0, 215, 150, 1)',
           ],
           borderColor: [
-            'rgba(255, 0, 0, 1)', // EU Hosting Expenses
-            'rgba(255, 50, 0, 1)', // US Hosting Expenses
-            'rgba(255, 100, 0, 1)', // Infra
-            'rgba(255, 150, 0, 1)', // Dev
+            "rgba(255, 0, 0, 1)", // EU Hosting Expenses
+            "rgba(255, 50, 0, 1)", // US Hosting Expenses
+            "rgba(255, 100, 0, 1)", // Infra
+            "rgba(255, 150, 0, 1)", // Dev
             // 'rgba(255, 160, 0, 1)', // loan payments
-            'rgba(255, 200, 0, 1)', // client reimbursements
-            'rgba(0, 200, 0, 1)', // hosting revenue
-            'rgba(0, 200, 120, 1)', // ad revenue
+            "rgba(255, 200, 0, 1)", // client reimbursements
+            "rgba(0, 200, 0, 1)", // hosting revenue
+            "rgba(0, 200, 120, 1)", // ad revenue
             // 'rgba(0, 210, 100, 1)',
             // 'rgba(0, 215, 150, 1)',
           ],
@@ -48,26 +48,26 @@ export default component$(() => {
         {
           // Inner Ring (REVENUE)
           backgroundColor: [
-            'rgba(255, 0, 0, 0.2)', // EU Hosting Expenses
-            'rgba(255, 50, 0, 0.2)', // US Hosting Expenses
-            'rgba(255, 100, 0, 0.2)', // Infra
-            'rgba(255, 150, 0, 0.2)', // Dev
+            "rgba(255, 0, 0, 0.2)", // EU Hosting Expenses
+            "rgba(255, 50, 0, 0.2)", // US Hosting Expenses
+            "rgba(255, 100, 0, 0.2)", // Infra
+            "rgba(255, 150, 0, 0.2)", // Dev
             // 'rgba(255, 160, 0, 1)', // loan payments
-            'rgba(255, 200, 0, 0.2)', // client reimbursements
-            'rgba(0, 200, 0, 0.2)', // hosting revenue
-            'rgba(0, 200, 120, 0.2)', // ad revenue
+            "rgba(255, 200, 0, 0.2)", // client reimbursements
+            "rgba(0, 200, 0, 0.2)", // hosting revenue
+            "rgba(0, 200, 120, 0.2)", // ad revenue
             // 'rgba(0, 210, 100, 1)',
             // 'rgba(0, 215, 150, 1)',
           ],
           borderColor: [
-            'rgba(255, 0, 0, 1)', // EU Hosting Expenses
-            'rgba(255, 50, 0, 1)', // US Hosting Expenses
-            'rgba(255, 100, 0, 1)', // Infra
-            'rgba(255, 150, 0, 1)', // Dev
+            "rgba(255, 0, 0, 1)", // EU Hosting Expenses
+            "rgba(255, 50, 0, 1)", // US Hosting Expenses
+            "rgba(255, 100, 0, 1)", // Infra
+            "rgba(255, 150, 0, 1)", // Dev
             // 'rgba(255, 160, 0, 1)', // loan payments
-            'rgba(255, 200, 0, 1)', // client reimbursements
-            'rgba(0, 200, 0, 1)', // hosting revenue
-            'rgba(0, 200, 120, 1)', // ad revenue
+            "rgba(255, 200, 0, 1)", // client reimbursements
+            "rgba(0, 200, 0, 1)", // hosting revenue
+            "rgba(0, 200, 120, 1)", // ad revenue
             // 'rgba(0, 210, 100, 1)',
             // 'rgba(0, 215, 150, 1)',
           ],
@@ -83,14 +83,14 @@ export default component$(() => {
         legend: {
           display: true,
           labels: {
-            color: 'var(--color-lum-text)',
+            color: "var(--color-lum-text)",
             usePointStyle: true,
           },
-          position: 'bottom',
+          position: "bottom",
           title: {
             display: true,
-            text: '',
-            color: 'var(--color-lum-text)',
+            text: "",
+            color: "var(--color-lum-text)",
           },
         },
         tooltip: {
@@ -98,7 +98,7 @@ export default component$(() => {
           cornerRadius: 10,
           padding: 10,
           callbacks: {
-            label: 'dollarLabel',
+            label: "dollarLabel",
           },
         },
       },

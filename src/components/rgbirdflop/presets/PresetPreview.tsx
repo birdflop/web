@@ -4,37 +4,37 @@ import {
   Signal,
   useContext,
   useSignal,
-} from '@qwik.dev/core';
-import { inlineTranslate } from 'qwik-speak';
-import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import Loader2 from 'lucide-icons-qwik/icons/Loader2';
-import MousePointer2 from 'lucide-icons-qwik/icons/MousePointer2';
-import Palette from 'lucide-icons-qwik/icons/Palette';
-import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
-import Save from 'lucide-icons-qwik/icons/Save';
-import Send from 'lucide-icons-qwik/icons/Send';
-import Trash from 'lucide-icons-qwik/icons/Trash';
-import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
+} from "@qwik.dev/core";
+import { inlineTranslate } from "qwik-speak";
+import { combinedDefaults, rgbDefaults } from "@birdflop/rgbirdflop";
+import Loader2 from "lucide-icons-qwik/icons/Loader2";
+import MousePointer2 from "lucide-icons-qwik/icons/MousePointer2";
+import Palette from "lucide-icons-qwik/icons/Palette";
+import Rainbow from "lucide-icons-qwik/icons/Rainbow";
+import Save from "lucide-icons-qwik/icons/Save";
+import Send from "lucide-icons-qwik/icons/Send";
+import Trash from "lucide-icons-qwik/icons/Trash";
+import { Birdflop, Luminescent } from "@luminescent/icons-qwik";
+import { SelectMenu } from "@luminescent/ui-qwik";
 import {
   deletePreset,
   savePreset,
   setUserData,
   unsavePreset,
-} from '~/util/dataUtils';
-import { renderPreview } from '~/components/rgbirdflop/preview';
+} from "~/util/dataUtils";
+import { renderPreview } from "~/components/rgbirdflop/preview";
 import {
   privatePresetsContext,
   savedPresetsContext,
-} from '~/routes/resources/rgb/presets';
-import { Link, LinkProps } from '@qwik.dev/router';
-import { rgbPreset } from '~/util/rgb/presets';
-import { PresetPartial } from '~/util/db';
-import { useIsAdmin } from '~/routes/layout';
-import SiGithub from 'simple-icons-qwik/icons/SiGithub';
-const fallbackpfp = '/branding/icon.png';
+} from "~/routes/resources/rgb/presets";
+import { Link, LinkProps } from "@qwik.dev/router";
+import { rgbPreset } from "~/util/rgb/presets";
+import { PresetPartial } from "~/util/db";
+import { useIsAdmin } from "~/routes/layout";
+import SiGithub from "simple-icons-qwik/icons/SiGithub";
+const fallbackpfp = "/branding/icon.png";
 
-interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
+interface PresetPreviewProps extends Omit<LinkProps, "class"> {
   Preset: PresetPartial;
   class?: { [key: string]: boolean };
   defaults?: rgbPreset;
@@ -57,7 +57,7 @@ export default component$<PresetPreviewProps>(
     (
       Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
     ).forEach(([key, value]) => {
-      if (typeof value === 'object' && value !== null)
+      if (typeof value === "object" && value !== null)
         value = JSON.stringify(value);
       searchParams.set(key, String(value));
     });
@@ -74,22 +74,22 @@ export default component$<PresetPreviewProps>(
       <div
         class="lum-card lum-bg gap-0 border-none p-0 transition duration-1000 ease-out hover:duration-75"
         style={{
-          '--bg-color':
-            (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + '10',
-          '--lum-border-radius': '1rem',
+          "--bg-color":
+            (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + "10",
+          "--lum-border-radius": "1rem",
           background: `linear-gradient(to bottom right, ${(
             Preset.preset.colors ?? defaults?.colors
           )
             ?.map((color) => `${color.hex}10 ${color.pos}%`)
-            .join(', ')})`,
+            .join(", ")})`,
         }}
       >
         {Preset.author && (
           <div class="lum-btn-p-1 lum-bg-bg/50 rounded-lum-1 m-1 flex items-center">
             <div
               class={{
-                'flex flex-1 items-center gap-2': true,
-                'text-blue-300/80!': !Preset.user,
+                "flex flex-1 items-center gap-2": true,
+                "text-blue-300/80!": !Preset.user,
               }}
             >
               {Preset.user && (
@@ -115,16 +115,13 @@ export default component$<PresetPreviewProps>(
               )}
               {Preset.author && !Preset.user && (
                 <>
-                  {Preset.author == 'RGBirdflop' && (
-                    <Birdflop
-                      size={20}
-                      fillGradient={['#54daf4', '#545eb6']}
-                    />
+                  {Preset.author == "RGBirdflop" && (
+                    <Birdflop size={20} fillGradient={["#54daf4", "#545eb6"]} />
                   )}
-                  {Preset.author == 'Luminescent' && (
+                  {Preset.author == "Luminescent" && (
                     <Luminescent size={20} class="text-luminescent-300" />
                   )}
-                  {Preset.author.includes('GitHub') && <SiGithub size={20} />}
+                  {Preset.author.includes("GitHub") && <SiGithub size={20} />}
                   {Preset.author}
                 </>
               )}
@@ -132,15 +129,15 @@ export default component$<PresetPreviewProps>(
             <p class="text-xs">
               {Preset.createdAt &&
                 new Date(Preset.createdAt).toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
                 })}
             </p>
           </div>
         )}
         <Link
-          href={Preset.id ? `/resources/rgb/presets/${Preset.id}` : '#'}
+          href={Preset.id ? `/resources/rgb/presets/${Preset.id}` : "#"}
           {...props}
           class="group flex w-full flex-1 flex-col justify-center p-4 text-white! no-underline!"
           key={`preset-${Preset.name}-${Preset.author}`}
@@ -148,14 +145,14 @@ export default component$<PresetPreviewProps>(
         >
           <p
             class={{
-              'font-mc max-w-7xl text-2xl tracking-tight break-all sm:text-3xl': true,
-              'font-mc-bold':
+              "font-mc max-w-7xl text-2xl tracking-tight break-all sm:text-3xl": true,
+              "font-mc-bold":
                 Preset.preset.baseFormatting?.bold ||
                 defaults?.baseFormatting?.bold,
-              'font-mc-italic':
+              "font-mc-italic":
                 Preset.preset.baseFormatting?.italic ||
                 defaults?.baseFormatting?.italic,
-              'font-mc-bold-italic':
+              "font-mc-bold-italic":
                 (Preset.preset.baseFormatting?.bold &&
                   Preset.preset.baseFormatting?.italic) ||
                 (defaults?.baseFormatting?.bold &&
@@ -191,7 +188,7 @@ export default component$<PresetPreviewProps>(
           {Preset.pending && (
             <p class="pt-2 text-sm text-red-400/80!">
               {t(
-                'rgb.presets.pending@@This preset is pending review and may not be available to other users yet.',
+                "rgb.presets.pending@@This preset is pending review and may not be available to other users yet.",
               )}
             </p>
           )}
@@ -209,7 +206,7 @@ export default component$<PresetPreviewProps>(
                 <span
                   key={index}
                   class="rounded-lum-3 lum-bg p-1.5"
-                  style={{ '--bg-color': color.hex }}
+                  style={{ "--bg-color": color.hex }}
                 />
               ))}
           </div>
@@ -250,7 +247,7 @@ export default component$<PresetPreviewProps>(
 
               if (isBrowser)
                 localStorage.setItem(
-                  'privatePresets',
+                  "privatePresets",
                   JSON.stringify(privatePresets.value),
                 );
               isLoading.value = false;
@@ -265,14 +262,14 @@ export default component$<PresetPreviewProps>(
             savedPresets.value.find(
               (savedPreset) => savedPreset.id === Preset.id,
             ) ? (
-                <span class="flex gap-3 text-red-300">
-                  <Trash size={20} />
-                </span>
-              ) : (
-                <span class="flex gap-3 text-green-300">
-                  <Save size={20} />
-                </span>
-              )}
+              <span class="flex gap-3 text-red-300">
+                <Trash size={20} />
+              </span>
+            ) : (
+              <span class="flex gap-3 text-green-300">
+                <Save size={20} />
+              </span>
+            )}
           </button>
 
           <SelectMenu
@@ -280,7 +277,7 @@ export default component$<PresetPreviewProps>(
             hover
             customDropdown
             class={{
-              'lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex': true,
+              "lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex": true,
             }}
           >
             <span q:slot="dropdown" class="flex items-center gap-3">
@@ -291,16 +288,16 @@ export default component$<PresetPreviewProps>(
               q:slot="extra-buttons"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
-              <Palette size={20} />{' '}
-              {t('nav.resources.hexGradient.title@@RGBirdflop')}
+              <Palette size={20} />{" "}
+              {t("nav.resources.hexGradient.title@@RGBirdflop")}
             </Link>
             <Link
               href={`/resources/animtab?${searchParams.toString()}`}
               q:slot="extra-buttons"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
-              <Rainbow size={20} />{' '}
-              {t('nav.resources.animatedTAB.title@@Animated TAB')}
+              <Rainbow size={20} />{" "}
+              {t("nav.resources.animatedTAB.title@@Animated TAB")}
             </Link>
           </SelectMenu>
 
@@ -314,8 +311,8 @@ export default component$<PresetPreviewProps>(
                 );
               }}
             >
-              <Send size={20} />{' '}
-              {t('rgb.presets.publish@@Publish your own preset')}
+              <Send size={20} />{" "}
+              {t("rgb.presets.publish@@Publish your own preset")}
             </button>
           )}
 

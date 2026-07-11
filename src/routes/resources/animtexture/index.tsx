@@ -5,25 +5,25 @@ import {
   useSignal,
   useStore,
   useTask$,
-} from '@qwik.dev/core';
+} from "@qwik.dev/core";
 
-import { inlineTranslate } from 'qwik-speak';
+import { inlineTranslate } from "qwik-speak";
 
-import Download from 'lucide-icons-qwik/icons/Download';
-import File from 'lucide-icons-qwik/icons/File';
-import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
-import Link from 'lucide-icons-qwik/icons/Link';
-import Proportions from 'lucide-icons-qwik/icons/Proportions';
-import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
-import Settings from 'lucide-icons-qwik/icons/Settings';
-import X from 'lucide-icons-qwik/icons/X';
-import { Label, NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { defaultDescription, generateHead } from '~/root';
-import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { deepTrack } from '~/util/track';
-import { Tabs } from '~/components/Elements/Tabs';
+import Download from "lucide-icons-qwik/icons/Download";
+import File from "lucide-icons-qwik/icons/File";
+import GalleryHorizontalEnd from "lucide-icons-qwik/icons/GalleryHorizontalEnd";
+import Link from "lucide-icons-qwik/icons/Link";
+import Proportions from "lucide-icons-qwik/icons/Proportions";
+import RefreshCw from "lucide-icons-qwik/icons/RefreshCw";
+import Settings from "lucide-icons-qwik/icons/Settings";
+import X from "lucide-icons-qwik/icons/X";
+import { Label, NumberInput, SelectMenu, Toggle } from "@luminescent/ui-qwik";
+import { defaultDescription, generateHead } from "~/root";
+import Input, { previewStyleContext } from "~/components/rgbirdflop/Input";
+import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
+import { rgbDefaults } from "@birdflop/rgbirdflop";
+import { deepTrack } from "~/util/track";
+import { Tabs } from "~/components/Elements/Tabs";
 import {
   createTexture,
   buildTextureOutputs,
@@ -37,13 +37,13 @@ import {
   base64ToFile,
   loadGifFrames,
   loadImageFromDataURL,
-} from '~/util/animtexture';
+} from "~/util/animtexture";
 
 export default component$(() => {
   const t = inlineTranslate();
   useContextProvider(rgbStoreContext, rgbDefaults);
 
-  const previewStyle = useSignal('chat');
+  const previewStyle = useSignal("chat");
   useContextProvider(previewStyleContext, previewStyle);
 
   const animtextureStore = useStore(
@@ -56,8 +56,8 @@ export default component$(() => {
   );
 
   const activeTextureOutputs = useSignal<RenderedTexture>({
-    png: '',
-    mcmeta: '',
+    png: "",
+    mcmeta: "",
   });
 
   const animCanvasRef = useSignal<HTMLCanvasElement>();
@@ -83,8 +83,8 @@ export default component$(() => {
     if (!isBrowser) return;
 
     const canvas = textureCanvasRef.value;
-    if (!canvas) return console.error('Canvas for texture preview not found');
-    const ctx = canvas.getContext('2d')!;
+    if (!canvas) return console.error("Canvas for texture preview not found");
+    const ctx = canvas.getContext("2d")!;
 
     const renderedTexture = buildTextureOutputs(texture);
     activeTextureOutputs.value = renderedTexture;
@@ -102,8 +102,8 @@ export default component$(() => {
     }
 
     const anim = animCanvasRef.value;
-    if (!anim) return console.error('Canvas for animation preview not found');
-    const animctx = anim.getContext('2d')!;
+    if (!anim) return console.error("Canvas for animation preview not found");
+    const animctx = anim.getContext("2d")!;
     anim.width = texture.width;
     anim.height = getTextureFrameHeight(texture);
     let i = 0;
@@ -145,11 +145,11 @@ export default component$(() => {
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <GalleryHorizontalEnd size={32} />
-        {t('nav.resources.animatedTextures.title@@Animated Textures')}
+        {t("nav.resources.animatedTextures.title@@Animated Textures")}
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.',
+          "nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.",
         )}
       </p>
 
@@ -159,7 +159,7 @@ export default component$(() => {
             <div class="flex items-center gap-1 py-2 font-semibold">
               <h2 class="flex flex-1 items-center gap-2 text-2xl">
                 <GalleryHorizontalEnd size={30} />
-                {t('animtexture.textures@@Textures')}
+                {t("animtexture.textures@@Textures")}
               </h2>
               <button
                 class="lum-btn"
@@ -174,7 +174,7 @@ export default component$(() => {
                   const blob = await buildResourcePack(
                     animtextureStore.textures,
                   );
-                  downloadBlob(blob, 'animtexture-resource-pack.zip');
+                  downloadBlob(blob, "animtexture-resource-pack.zip");
                 }}
               >
                 <Download size={20} />
@@ -248,29 +248,29 @@ export default component$(() => {
 
             <div
               class={{
-                'mt-2 flex items-center gap-1': true,
-                'col-span-2': texture.lockdimensions,
+                "mt-2 flex items-center gap-1": true,
+                "col-span-2": texture.lockdimensions,
               }}
             >
               <SelectMenu
                 id="namespace"
-                class={{ 'w-full': true }}
+                class={{ "w-full": true }}
                 customDropdown
                 values={[
-                  { name: 'minecraft', value: 'minecraft' },
-                  { name: 'birdflop', value: 'birdflop' },
+                  { name: "minecraft", value: "minecraft" },
+                  { name: "birdflop", value: "birdflop" },
                 ]}
                 onChange$={(e, el) => {
                   texture.namespace = el.value;
                 }}
               >
                 <span q:slot="dropdown">{texture.namespace}</span>
-                {t('animtexture.namespace@@Namespace')}
+                {t("animtexture.namespace@@Namespace")}
                 <input
                   q:slot="extra-buttons"
                   id="namespace"
                   class={{
-                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                    "lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2": true,
                   }}
                   placeholder="Custom"
                   onInput$={(e, el) => {
@@ -281,25 +281,25 @@ export default component$(() => {
               <p class="text-lum-text-secondary mx-1 mt-7">:</p>
               <SelectMenu
                 id="path"
-                class={{ 'w-full': true }}
+                class={{ "w-full": true }}
                 customDropdown
                 values={[
-                  { name: 'block', value: 'block' },
-                  { name: 'item', value: 'item' },
+                  { name: "block", value: "block" },
+                  { name: "item", value: "item" },
                 ]}
                 onChange$={(e, el) => {
                   texture.path = el.value;
                 }}
               >
                 <span q:slot="dropdown">{texture.path}</span>
-                {t('animtexture.path@@Path')}
+                {t("animtexture.path@@Path")}
                 <input
                   q:slot="extra-buttons"
                   id="path"
                   class={{
-                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                    "lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2": true,
                   }}
-                  placeholder={t('animtexture.custom@@Custom')}
+                  placeholder={t("animtexture.custom@@Custom")}
                   onInput$={(e, el) => {
                     texture.namespace = el.value;
                   }}
@@ -307,10 +307,10 @@ export default component$(() => {
               </SelectMenu>
               <p class="text-lum-text-secondary mx-1 mt-7">/</p>
               <div class="flex flex-1 flex-col gap-1">
-                <label for="name">{t('animtexture.name@@Texture Name')}</label>
+                <label for="name">{t("animtexture.name@@Texture Name")}</label>
                 <input
                   id="name"
-                  class={{ 'lum-input': true }}
+                  class={{ "lum-input": true }}
                   value={texture.name}
                   onInput$={(e, el) => {
                     texture.name = el.value;
@@ -331,7 +331,7 @@ export default component$(() => {
               >
                 <File size={20} />
                 {t(
-                  'animtexture.selectFrames@@Select GIF or image from your device',
+                  "animtexture.selectFrames@@Select GIF or image from your device",
                 )}
               </label>
               <input
@@ -355,7 +355,7 @@ export default component$(() => {
                     const file = await base64ToFile(
                       fileEvent.target.result.toString(),
                     );
-                    if (file.mime == 'image/gif') {
+                    if (file.mime == "image/gif") {
                       frames.push(...(await loadGifFrames(file.buffer)));
                     } else {
                       const img = await loadImageFromDataURL(
@@ -379,7 +379,7 @@ export default component$(() => {
                 class="flex items-center gap-2 font-semibold"
               >
                 <Link size={20} />
-                {t('animtexture.pasteUrl@@Paste GIF or image URL')}
+                {t("animtexture.pasteUrl@@Paste GIF or image URL")}
               </label>
               <input
                 id="urlInput"
@@ -392,10 +392,10 @@ export default component$(() => {
 
                   // if the url is a discord emoji, you can replace .webp with .gif
                   if (
-                    url.includes('cdn.discordapp.com/emojis/') &&
-                    url.includes('.webp')
+                    url.includes("cdn.discordapp.com/emojis/") &&
+                    url.includes(".webp")
                   ) {
-                    url = url.replace('.webp', '.gif').split('?')[0];
+                    url = url.replace(".webp", ".gif").split("?")[0];
                     el.value = url;
                   }
 
@@ -413,7 +413,7 @@ export default component$(() => {
                   const file = await base64ToFile(
                     fileEvent.target.result.toString(),
                   );
-                  if (file.mime == 'image/gif') {
+                  if (file.mime == "image/gif") {
                     frames.push(...(await loadGifFrames(file.buffer)));
                   } else {
                     const img = await loadImageFromDataURL(
@@ -437,9 +437,9 @@ export default component$(() => {
             <div class="lum-card">
               <div class="flex items-center gap-2 font-semibold">
                 <Proportions size={20} />
-                {t('animtexture.dimensions@@Dimensions')}
+                {t("animtexture.dimensions@@Dimensions")}
               </div>
-              <Label for="width" label={t('animtexture.width@@Width')}>
+              <Label for="width" label={t("animtexture.width@@Width")}>
                 <NumberInput
                   input
                   min={1}
@@ -454,44 +454,45 @@ export default component$(() => {
                   const maxWidth =
                     texture.frames.length > 0
                       ? Math.max(
-                        ...texture.frames.map(
-                          (frame) => frame.img.naturalWidth,
-                        ),
-                      )
+                          ...texture.frames.map(
+                            (frame) => frame.img.naturalWidth,
+                          ),
+                        )
                       : texture.width;
                   texture.width = maxWidth;
                   if (texture.lockdimensions) texture.height = texture.width;
                 }}
               >
                 <RefreshCw size={16} />
-                {t('animtexture.getWidth@@Get width from frames')}
+                {t("animtexture.getWidth@@Get width from frames")}
               </button>
               <div
                 class={{
-                  'opacity-50': texture.lockdimensions,
+                  "opacity-50": texture.lockdimensions,
                 }}
               >
-                <Label for="height" label={t('animtexture.height@@Height')}>
-                <NumberInput
-                  input
-                  min={2}
-                  value={texture.height}
-                  id="height"
-                  onIncrement$={() => {
-                    texture.height += 16;
-                    if (texture.lockdimensions) texture.width += 16;
-                  }}
-                  onDecrement$={() => {
-                    texture.height -= 16;
-                    if (texture.lockdimensions) texture.width -= 16;
-                  }}
-                  onInput$={(e, el) => {
-                    const value = Number(el.value);
-                    if (isNaN(value)) return;
-                    texture.height = value;
-                    if (texture.lockdimensions) texture.width = texture.height;
-                  }}
-                />
+                <Label for="height" label={t("animtexture.height@@Height")}>
+                  <NumberInput
+                    input
+                    min={2}
+                    value={texture.height}
+                    id="height"
+                    onIncrement$={() => {
+                      texture.height += 16;
+                      if (texture.lockdimensions) texture.width += 16;
+                    }}
+                    onDecrement$={() => {
+                      texture.height -= 16;
+                      if (texture.lockdimensions) texture.width -= 16;
+                    }}
+                    onInput$={(e, el) => {
+                      const value = Number(el.value);
+                      if (isNaN(value)) return;
+                      texture.height = value;
+                      if (texture.lockdimensions)
+                        texture.width = texture.height;
+                    }}
+                  />
                 </Label>
                 <button
                   class="lum-btn lum-btn-p-1"
@@ -499,17 +500,17 @@ export default component$(() => {
                     const maxHeight =
                       texture.frames.length > 0
                         ? Math.max(
-                          ...texture.frames.map(
-                            (frame) => frame.img.naturalHeight,
-                          ),
-                        )
+                            ...texture.frames.map(
+                              (frame) => frame.img.naturalHeight,
+                            ),
+                          )
                         : texture.height;
                     texture.height = maxHeight;
                     if (texture.lockdimensions) texture.width = texture.height;
                   }}
                 >
                   <RefreshCw size={16} />
-                  {t('animtexture.getHeight@@Get height from frames')}
+                  {t("animtexture.getHeight@@Get height from frames")}
                 </button>
               </div>
               <Toggle
@@ -519,13 +520,13 @@ export default component$(() => {
                   texture.lockdimensions = el.checked;
                 }}
               >
-                {t('animtexture.lockDimensions@@Lock Dimensions')}
+                {t("animtexture.lockDimensions@@Lock Dimensions")}
               </Toggle>
             </div>
             <div class="lum-card">
               <div class="flex items-center gap-2 font-semibold">
                 <Settings size={20} />
-                {t('animtexture.options@@Options')}
+                {t("animtexture.options@@Options")}
               </div>
               <Toggle
                 id="accumulate"
@@ -534,7 +535,7 @@ export default component$(() => {
                   animtextureStore.accumulate = el.checked;
                 }}
               >
-                {t('animtexture.accumulate@@Accumulate frames')}
+                {t("animtexture.accumulate@@Accumulate frames")}
               </Toggle>
               <Toggle
                 id="bounce"
@@ -543,7 +544,7 @@ export default component$(() => {
                   texture.bounce = el.checked;
                 }}
               >
-                {t('animtexture.bounce@@Bounce Animation')}
+                {t("animtexture.bounce@@Bounce Animation")}
               </Toggle>
               <Toggle
                 id="syncduration"
@@ -552,7 +553,7 @@ export default component$(() => {
                   texture.syncduration = el.checked;
                 }}
               >
-                {t('animtexture.syncDuration@@Sync Duration')}
+                {t("animtexture.syncDuration@@Sync Duration")}
               </Toggle>
               <Toggle
                 id="showchatpreview"
@@ -561,31 +562,31 @@ export default component$(() => {
                   texture.showChatPreview = el.checked;
                 }}
               >
-                {t('animtexture.showChatPreview@@Show Minecraft chat preview')}
+                {t("animtexture.showChatPreview@@Show Minecraft chat preview")}
               </Toggle>
               <div id="links" class="mt-4 flex flex-wrap gap-2">
                 <a
                   class="lum-btn"
                   id="pngd"
                   target="_blank"
-                  download={texture.name + '.png'}
+                  download={texture.name + ".png"}
                   href={activeTextureOutputs.value.png}
                 >
                   <Download size={20} />
-                  {t('animtexture.downloadPNG@@Download PNG')}
+                  {t("animtexture.downloadPNG@@Download PNG")}
                 </a>
                 <a
                   class="lum-btn"
                   id="mcmeta"
                   target="_blank"
-                  download={texture.name + '.png.mcmeta'}
+                  download={texture.name + ".png.mcmeta"}
                   href={
-                    'data:text/plain;charset=utf-8,' +
+                    "data:text/plain;charset=utf-8," +
                     encodeURIComponent(activeTextureOutputs.value.mcmeta)
                   }
                 >
                   <Download size={20} />
-                  {t('animtexture.downloadMCMETA@@Download MCMETA')}
+                  {t("animtexture.downloadMCMETA@@Download MCMETA")}
                 </a>
               </div>
             </div>
@@ -597,20 +598,20 @@ export default component$(() => {
                 {!texture.showChatPreview && (
                   <div class="w-1/4">
                     <p class="mb-2">
-                      {t('animtexture.animationPreview@@Animation Preview')}
+                      {t("animtexture.animationPreview@@Animation Preview")}
                     </p>
                     <canvas
                       ref={animCanvasRef}
                       class="lum-card w-full p-0"
                       style={{
-                        imageRendering: 'pixelated',
+                        imageRendering: "pixelated",
                       }}
                     />
                   </div>
                 )}
                 <div class="flex-1">
                   <p class="mb-2">
-                    {t('animtexture.frames@@Animation Frames')}
+                    {t("animtexture.frames@@Animation Frames")}
                   </p>
                   <div
                     id="imgs"
@@ -625,8 +626,8 @@ export default component$(() => {
                           width={96}
                           height={96}
                           class={{
-                            'rounded-t-md': true,
-                            'rounded-b-md': texture.syncduration,
+                            "rounded-t-md": true,
+                            "rounded-b-md": texture.syncduration,
                           }}
                           src={frame.img.src}
                         />
@@ -679,51 +680,53 @@ export default component$(() => {
                   ref={animCanvasRef}
                   class="h-6 w-6 p-0"
                   style={{
-                    imageRendering: 'pixelated',
+                    imageRendering: "pixelated",
                   }}
                 />
               </span>
             </Input>
           )}
 
-          {texture.syncduration && texture.frames.length > 0 && <Label for="duration" label={t('animtexture.duration@@Duration')}>
-            <NumberInput
-              input
-              min={1}
-              value={texture.frames[0].delay}
-              id="duration"
-              onIncrement$={() => {
-                texture.frames[0].delay++;
-                texture.frames.forEach((frame) => {
-                  frame.delay = texture.frames[0].delay;
-                });
-              }}
-              onDecrement$={() => {
-                texture.frames[0].delay--;
-                texture.frames.forEach((frame) => {
-                  frame.delay = texture.frames[0].delay;
-                });
-              }}
-              onInput$={(e, el) => {
-                const value = Number(el.value);
-                if (isNaN(value)) return;
-                texture.frames.forEach((frame) => {
-                  frame.delay = value;
-                });
-              }}
-            />
-          </Label>}
+          {texture.syncduration && texture.frames.length > 0 && (
+            <Label for="duration" label={t("animtexture.duration@@Duration")}>
+              <NumberInput
+                input
+                min={1}
+                value={texture.frames[0].delay}
+                id="duration"
+                onIncrement$={() => {
+                  texture.frames[0].delay++;
+                  texture.frames.forEach((frame) => {
+                    frame.delay = texture.frames[0].delay;
+                  });
+                }}
+                onDecrement$={() => {
+                  texture.frames[0].delay--;
+                  texture.frames.forEach((frame) => {
+                    frame.delay = texture.frames[0].delay;
+                  });
+                }}
+                onInput$={(e, el) => {
+                  const value = Number(el.value);
+                  if (isNaN(value)) return;
+                  texture.frames.forEach((frame) => {
+                    frame.delay = value;
+                  });
+                }}
+              />
+            </Label>
+          )}
         </div>
         <div
           class={{
-            'lum-card max-h-[70svh] w-24 overflow-y-scroll p-0': true,
+            "lum-card max-h-[70svh] w-24 overflow-y-scroll p-0": true,
           }}
         >
           <canvas
             ref={textureCanvasRef}
             class="rounded-lum w-full"
             style={{
-              imageRendering: 'pixelated',
+              imageRendering: "pixelated",
             }}
           />
         </div>
@@ -733,8 +736,8 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Minecraft Animated Textures Creator - Birdflop',
+  title: "Minecraft Animated Textures Creator - Birdflop",
   description:
-    'Easily merge textures for resource pack animations or convert from GIF. ' +
+    "Easily merge textures for resource pack animations or convert from GIF. " +
     defaultDescription,
 });

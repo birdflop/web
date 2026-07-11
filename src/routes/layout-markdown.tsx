@@ -1,10 +1,10 @@
-import { component$, Slot } from '@qwik.dev/core';
-import { OnThisPage } from '~/components/docs/ThisPage';
+import { component$, Slot } from "@qwik.dev/core";
+import { OnThisPage } from "~/components/docs/ThisPage";
 
-import Layout from './layout';
+import Layout from "./layout";
 
 // Re-export route loaders used by Layout component
-export * from './layout';
+export * from "./layout";
 
 export default component$(() => {
   return (

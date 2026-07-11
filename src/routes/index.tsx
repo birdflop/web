@@ -4,31 +4,31 @@ import {
   useSignal,
   useOnWindow,
   $,
-} from '@qwik.dev/core';
-import { Link } from '@qwik.dev/router';
+} from "@qwik.dev/core";
+import { Link } from "@qwik.dev/router";
 
-import { Birdflop } from '@luminescent/icons-qwik';
-import { Anchor, Hoverable } from '@luminescent/ui-qwik';
-import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
-import HandCoins from 'lucide-icons-qwik/icons/HandCoins';
-import Eye from 'lucide-icons-qwik/icons/Eye';
-import Globe from 'lucide-icons-qwik/icons/Globe';
-import Heart from 'lucide-icons-qwik/icons/Heart';
-import Rocket from 'lucide-icons-qwik/icons/Rocket';
-import Server from 'lucide-icons-qwik/icons/Server';
-import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
-import AlertTriangle from 'lucide-icons-qwik/icons/AlertTriangle';
-import Box from 'lucide-icons-qwik/icons/Box';
-import Settings from 'lucide-icons-qwik/icons/Settings';
-import PiggyBank from 'lucide-icons-qwik/icons/PiggyBank';
-import { initiateTyper } from '~/util/Typer';
+import { Birdflop } from "@luminescent/icons-qwik";
+import { Anchor, Hoverable } from "@luminescent/ui-qwik";
+import ShoppingCart from "lucide-icons-qwik/icons/ShoppingCart";
+import HandCoins from "lucide-icons-qwik/icons/HandCoins";
+import Eye from "lucide-icons-qwik/icons/Eye";
+import Globe from "lucide-icons-qwik/icons/Globe";
+import Heart from "lucide-icons-qwik/icons/Heart";
+import Rocket from "lucide-icons-qwik/icons/Rocket";
+import Server from "lucide-icons-qwik/icons/Server";
+import CheckCircle from "lucide-icons-qwik/icons/CheckCircle";
+import AlertTriangle from "lucide-icons-qwik/icons/AlertTriangle";
+import Box from "lucide-icons-qwik/icons/Box";
+import Settings from "lucide-icons-qwik/icons/Settings";
+import PiggyBank from "lucide-icons-qwik/icons/PiggyBank";
+import { initiateTyper } from "~/util/Typer";
 
-import { plans } from './plans';
-import HistoricLinePlot from '~/components/home/HistoricLinePlot';
-import { generateHead } from '~/root';
-import ExpensesChart from '~/components/home/ExpensesChart';
-import { discordLink, donateLink } from '~/components/Elements/Nav';
-import Testimonials from '~/components/home/Testimonials';
+import { plans } from "./plans";
+import HistoricLinePlot from "~/components/home/HistoricLinePlot";
+import { generateHead } from "~/root";
+import ExpensesChart from "~/components/home/ExpensesChart";
+import { discordLink, donateLink } from "~/components/Elements/Nav";
+import Testimonials from "~/components/home/Testimonials";
 
 export default component$(() => {
   const missionExpanded = useSignal(false);
@@ -37,14 +37,14 @@ export default component$(() => {
   useVisibleTask$(() => initiateTyper());
 
   useOnWindow(
-    'scroll',
+    "scroll",
     $(() => {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       if (mediaQuery.matches) return;
-      const bg = document.getElementById('bg')!;
+      const bg = document.getElementById("bg")!;
       bg.style.bottom = `${window.scrollY / 3}px`;
-      bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
-      const hero = document.getElementById('hero')!;
+      bg.style.setProperty("--tw-blur", `blur(${window.scrollY / 20}px)`);
+      const hero = document.getElementById("hero")!;
       hero.style.transform = `translateY(${window.scrollY / 2}px)`;
     }),
   );
@@ -54,7 +54,7 @@ export default component$(() => {
       <section
         class="relative flex min-h-svh justify-center overflow-hidden"
         style={{
-          '--lum-border-radius': '1.5rem',
+          "--lum-border-radius": "1.5rem",
         }}
       >
         <div
@@ -64,27 +64,27 @@ export default component$(() => {
           <div class="relative flex flex-col gap-4 xl:gap-8">
             <div
               class={{
-                'relative mr-auto': true,
+                "relative mr-auto": true,
               }}
             >
               <div class="absolute -inset-4 rounded-4xl blur-lg backdrop-blur-md" />
               <h1
                 class={{
-                  'relative flex items-center bg-clip-text text-7xl font-extrabold text-transparent drop-shadow-lg xl:text-8xl': true,
-                  'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600': true,
+                  "relative flex items-center bg-clip-text text-7xl font-extrabold text-transparent drop-shadow-lg xl:text-8xl": true,
+                  "animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600": true,
                 }}
               >
                 <Birdflop
                   size={70}
-                  fillGradient={['#54daf4', '#545eb6']}
+                  fillGradient={["#54daf4", "#545eb6"]}
                   class="absolute -z-1 w-12.5 xl:-left-1 xl:w-17.5"
                 />
                 <span class="text-transparent!">
                   <span>b</span>
                   <span
                     style={{
-                      background: 'linear-gradient(180deg, #54daf4, #545eb6)',
-                      backgroundClip: 'text',
+                      background: "linear-gradient(180deg, #54daf4, #545eb6)",
+                      backgroundClip: "text",
                     }}
                   >
                     irdflop
@@ -94,18 +94,18 @@ export default component$(() => {
             </div>
             <div
               class={{
-                'relative mr-auto': true,
+                "relative mr-auto": true,
               }}
             >
               <div class="absolute -inset-2 rounded-2xl blur-lg backdrop-blur-md" />
               <h2 class="animate-in fade-in motion-safe:slide-in-from-top-16 text-xl! font-bold drop-shadow-md motion-safe:duration-800 md:text-2xl! xl:text-3xl!">
-                The only 501(c)(3) nonprofit server host{' '}
-                <br class="hidden sm:block" /> dedicated to{' '}
+                The only 501(c)(3) nonprofit server host{" "}
+                <br class="hidden sm:block" /> dedicated to{" "}
                 <br class="sm:hidden" />
                 <span
                   class="typer"
                   id="main"
-                  data-words={'public resources,communities,you'}
+                  data-words={"public resources,communities,you"}
                   data-colors="#5487CB,#54B1DF,#54DAF4,#54EEFF"
                   data-delay="50"
                   data-deleteDelay="1500"
@@ -161,15 +161,15 @@ export default component$(() => {
               <br />
               Birdflop goes beyond mere hosting; we actively foster a community
               of learning and growth, exemplified through the wealth of public
-              resources available on our{' '}
+              resources available on our{" "}
               <Link href="/resources" class="text-blue-400 hover:underline">
                 Resources
-              </Link>{' '}
+              </Link>{" "}
               page. Looking ahead, we are committed to expanding our reach,
               investing in initiatives that fuel a passion for computer science
               and technology, and making a lasting impact in shaping future
               innovators. If you would like to further our mission, please
-              consider making a tax-deductible{' '}
+              consider making a tax-deductible{" "}
               <a href={donateLink} class="text-blue-400 hover:underline">
                 charitable donation
               </a>
@@ -180,14 +180,14 @@ export default component$(() => {
             class="text-blue-400 hover:underline"
             onClick$={() => (missionExpanded.value = !missionExpanded.value)}
           >
-            {missionExpanded.value ? 'Read less' : 'Read more'}
+            {missionExpanded.value ? "Read less" : "Read more"}
           </button>
         </p>
       </section>
       <section
         class="bg-bg flex w-full flex-col items-center justify-center p-10"
         style={{
-          '--lum-border-radius': '1.5rem',
+          "--lum-border-radius": "1.5rem",
         }}
       >
         <Anchor id="plans">
@@ -202,7 +202,7 @@ export default component$(() => {
             return (
               <div class="lum-card lum-grad-bg-lum-card-bg" key={planName}>
                 <p class="text-lum-text-secondary">
-                  Last quarter, clients paid{' '}
+                  Last quarter, clients paid{" "}
                   <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
                   reimbursements.
                 </p>
@@ -263,7 +263,7 @@ export default component$(() => {
       <section
         class="bg-bg flex w-full flex-col items-center justify-center p-10"
         style={{
-          '--lum-border-radius': '1.5rem',
+          "--lum-border-radius": "1.5rem",
         }}
       >
         <Anchor id="features">
@@ -310,10 +310,10 @@ export default component$(() => {
             </h4>
             <p>
               We don't oversell, and we're transparent about that. View our
-              public{' '}
+              public{" "}
               <Link href="/node-stats" class="text-blue-400 hover:underline">
                 detailed server statistics
-              </Link>{' '}
+              </Link>{" "}
               or financial breakdown.
             </p>
           </div>
@@ -340,7 +340,7 @@ export default component$(() => {
               <Heart size={30} /> Instant Support
             </h4>
             <p>
-              You can contact support at any time through our{' '}
+              You can contact support at any time through our{" "}
               <a
                 href={discordLink}
                 data-umami-event="discord-link"
@@ -386,7 +386,7 @@ export default component$(() => {
         <div
           class="lum-card lum-grad-bg-lum-card-bg mt-12"
           style={{
-            '--lum-border-radius': '1.5rem',
+            "--lum-border-radius": "1.5rem",
           }}
         >
           <h4 class="mb-2 text-2xl font-bold">
@@ -401,7 +401,7 @@ export default component$(() => {
           <div
             class="lum-card lum-grad-bg-lum-card-bg"
             style={{
-              '--lum-border-radius': '1.5rem',
+              "--lum-border-radius": "1.5rem",
             }}
           >
             <ExpensesChart />
@@ -422,15 +422,15 @@ export default component$(() => {
             </p>
             <p class="text-lum-text-secondary">
               Your payments get you the best possible rate while contributing to
-              the development of our{' '}
+              the development of our{" "}
               <Link href="/resources" class="text-blue-400 hover:underline">
                 free public resources
               </Link>
               . We reimburse clients based on excess profit, and we never
-              overload our servers. View our server statistics on the{' '}
+              overload our servers. View our server statistics on the{" "}
               <Link href="/node-stats" class="text-blue-400 hover:underline">
                 Node Stats
-              </Link>{' '}
+              </Link>{" "}
               page.
             </p>
           </div>
@@ -440,7 +440,7 @@ export default component$(() => {
       <section class="bg-bg flex w-full flex-col items-center justify-center p-10">
         <h3 class="my-6 text-5xl font-extrabold">Still not convinced?</h3>
         <p class="max-w-4xl">
-          Create a ticket on our{' '}
+          Create a ticket on our{" "}
           <a
             href={discordLink}
             data-umami-event="discord-link"
@@ -448,7 +448,7 @@ export default component$(() => {
             class="text-blue-400 hover:underline"
           >
             Discord server
-          </a>{' '}
+          </a>{" "}
           to ask for more information or request a free trial. All plans include
           a 3-day refund guarantee if you're not satisfied for any reason. On
           the Discord, you'll also find several more happy clients who can tell

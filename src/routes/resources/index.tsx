@@ -1,26 +1,26 @@
-import { component$ } from '@qwik.dev/core';
-import { Link } from '@qwik.dev/router';
-import { Hoverable } from '@luminescent/ui-qwik';
+import { component$ } from "@qwik.dev/core";
+import { Link } from "@qwik.dev/router";
+import { Hoverable } from "@luminescent/ui-qwik";
 
-import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
-import SiGithub from 'simple-icons-qwik/icons/SiGithub';
-import Binary from 'lucide-icons-qwik/icons/Binary';
-import Blocks from 'lucide-icons-qwik/icons/Blocks';
-import Bot from 'lucide-icons-qwik/icons/Bot';
-import Box from 'lucide-icons-qwik/icons/Box';
-import Eye from 'lucide-icons-qwik/icons/Eye';
-import Flag from 'lucide-icons-qwik/icons/Flag';
-import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
-import LinkIcon from 'lucide-icons-qwik/icons/Link';
-import Palette from 'lucide-icons-qwik/icons/Palette';
-import Presentation from 'lucide-icons-qwik/icons/Presentation';
-import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
-import Save from 'lucide-icons-qwik/icons/Save';
-import Server from 'lucide-icons-qwik/icons/Server';
-import Wrench from 'lucide-icons-qwik/icons/Wrench';
-import Zap from 'lucide-icons-qwik/icons/Zap';
-import { inlineTranslate } from 'qwik-speak';
-import { defaultDescription, generateHead } from '~/root';
+import SiDiscord from "simple-icons-qwik/icons/SiDiscord";
+import SiGithub from "simple-icons-qwik/icons/SiGithub";
+import Binary from "lucide-icons-qwik/icons/Binary";
+import Blocks from "lucide-icons-qwik/icons/Blocks";
+import Bot from "lucide-icons-qwik/icons/Bot";
+import Box from "lucide-icons-qwik/icons/Box";
+import Eye from "lucide-icons-qwik/icons/Eye";
+import Flag from "lucide-icons-qwik/icons/Flag";
+import GalleryHorizontalEnd from "lucide-icons-qwik/icons/GalleryHorizontalEnd";
+import LinkIcon from "lucide-icons-qwik/icons/Link";
+import Palette from "lucide-icons-qwik/icons/Palette";
+import Presentation from "lucide-icons-qwik/icons/Presentation";
+import Rainbow from "lucide-icons-qwik/icons/Rainbow";
+import Save from "lucide-icons-qwik/icons/Save";
+import Server from "lucide-icons-qwik/icons/Server";
+import Wrench from "lucide-icons-qwik/icons/Wrench";
+import Zap from "lucide-icons-qwik/icons/Zap";
+import { inlineTranslate } from "qwik-speak";
+import { defaultDescription, generateHead } from "~/root";
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -29,26 +29,26 @@ export default component$(() => {
     <section
       class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20"
       style={{
-        '--lum-border-radius': '1.2rem',
+        "--lum-border-radius": "1.2rem",
       }}
     >
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <Box size={32} />
-        {t('nav.resources.title@@Resources')}
+        {t("nav.resources.title@@Resources")}
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-8 border-b pb-4">
         {t(
-          'nav.resources.description@@Here you can find all of Birdflop\'s public resources.',
+          "nav.resources.description@@Here you can find all of Birdflop's public resources.",
         )}
       </p>
 
       <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
         <Palette size={30} />
-        {t('nav.resources.gradientTools.title@@Gradient Tools')}
+        {t("nav.resources.gradientTools.title@@Gradient Tools")}
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.',
+          "nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.",
         )}
       </p>
       <div class="flex flex-wrap gap-2 *:flex-1">
@@ -60,11 +60,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Palette size={30} />
-            {t('nav.resources.hexGradient.title@@RGBirdflop')}
+            {t("nav.resources.hexGradient.title@@RGBirdflop")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
+              "nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
             )}
           </p>
         </Link>
@@ -76,11 +76,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Rainbow size={30} />
-            {t('nav.resources.animatedTAB.title@@Animated TAB')}
+            {t("nav.resources.animatedTAB.title@@Animated TAB")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator',
+              "nav.resources.animatedTAB.description@@TAB plugin gradient animation creator",
             )}
           </p>
         </Link>
@@ -92,11 +92,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Save size={30} />
-            {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
+            {t("nav.resources.hexGradientPresets.title@@RGBirdflop Presets")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+              "nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
             )}
           </p>
         </Link>
@@ -104,11 +104,11 @@ export default component$(() => {
       <hr />
       <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
         <Server size={30} />
-        {t('nav.resources.serverTools.title@@Server Tools')}
+        {t("nav.resources.serverTools.title@@Server Tools")}
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.',
+          "nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.",
         )}
       </p>
       <div class="flex flex-wrap gap-2 *:flex-1">
@@ -120,11 +120,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Zap size={30} />
-            {t('nav.resources.analyze.title@@Analyze')}
+            {t("nav.resources.analyze.title@@Analyze")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations',
+              "nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations",
             )}
           </p>
         </Link>
@@ -136,11 +136,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Flag size={30} />
-            {t('nav.resources.flags.title@@Flags Generator')}
+            {t("nav.resources.flags.title@@Flags Generator")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags',
+              "nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags",
             )}
           </p>
         </Link>
@@ -152,11 +152,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Blocks size={30} />
-            {t('nav.resources.plugins.title@@Plugin Updates')}
+            {t("nav.resources.plugins.title@@Plugin Updates")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.',
+              "nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.",
             )}
           </p>
         </Link>
@@ -164,11 +164,11 @@ export default component$(() => {
       <hr />
       <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
         <Wrench size={30} />
-        {t('nav.resources.miscellaneousTools.title@@Miscellaneous Tools')}
+        {t("nav.resources.miscellaneousTools.title@@Miscellaneous Tools")}
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.',
+          "nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.",
         )}
       </p>
       <div class="mb-2 flex flex-wrap gap-2 *:flex-1">
@@ -180,11 +180,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Presentation size={30} />
-            {t('nav.resources.banner.title@@Banner Generator')}
+            {t("nav.resources.banner.title@@Banner Generator")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.banner.description@@Easily generate banner designs for Minecraft.',
+              "nav.resources.banner.description@@Easily generate banner designs for Minecraft.",
             )}
           </p>
         </Link>
@@ -196,11 +196,11 @@ export default component$(() => {
         >
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <GalleryHorizontalEnd size={30} />
-            {t('nav.resources.animatedTextures.title@@Animated Textures')}
+            {t("nav.resources.animatedTextures.title@@Animated Textures")}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations',
+              "nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations",
             )}
           </p>
         </Link>
@@ -213,12 +213,12 @@ export default component$(() => {
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Eye size={30} />
             {t(
-              'nav.resources.tabAnimationPreview.title@@TAB Animation Preview',
+              "nav.resources.tabAnimationPreview.title@@TAB Animation Preview",
             )}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game',
+              "nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game",
             )}
           </p>
         </Link>
@@ -333,6 +333,6 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Resources - Free Minecraft Resources by Birdflop',
-  description: 'Public resources developed by Birdflop. ' + defaultDescription,
+  title: "Resources - Free Minecraft Resources by Birdflop",
+  description: "Public resources developed by Birdflop. " + defaultDescription,
 });

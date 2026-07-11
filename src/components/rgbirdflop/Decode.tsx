@@ -1,11 +1,11 @@
-import { $, component$, useContext, useSignal } from '@qwik.dev/core';
-import { Label, NumberInput } from '@luminescent/ui-qwik';
-import { inlineTranslate } from 'qwik-speak';
-import { generateOutput } from '@birdflop/rgbirdflop';
-import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { Notification, NotificationContext } from '~/util/Notification';
-import { getSignificantPoints } from '~/util/rgb/Decode';
-import { decodeMiniMessage } from '~/util/rgb/MiniMessageDecode';
+import { $, component$, useContext, useSignal } from "@qwik.dev/core";
+import { Label, NumberInput } from "@luminescent/ui-qwik";
+import { inlineTranslate } from "qwik-speak";
+import { generateOutput } from "@birdflop/rgbirdflop";
+import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
+import { Notification, NotificationContext } from "~/util/Notification";
+import { getSignificantPoints } from "~/util/rgb/Decode";
+import { decodeMiniMessage } from "~/util/rgb/MiniMessageDecode";
 
 function decodeLegacy(rgbtext: string) {
   const legacyCodeRegex =
@@ -21,9 +21,9 @@ function decodeLegacy(rgbtext: string) {
     strikethrough?: boolean;
     obfuscate?: boolean;
   }> = [];
-  let plainText = '';
+  let plainText = "";
 
-  let currentColor = '#ffffff';
+  let currentColor = "#ffffff";
   const currentFmts = {
     bold: false,
     italic: false,
@@ -37,31 +37,31 @@ function decodeLegacy(rgbtext: string) {
     const codeStr = match[0];
 
     const lastChar = codeStr.charAt(codeStr.length - 1).toLowerCase();
-    if (codeStr.length === 2 || codeStr.startsWith('\\u00a7')) {
-      if (lastChar === 'r') {
-        currentColor = '#ffffff';
+    if (codeStr.length === 2 || codeStr.startsWith("\\u00a7")) {
+      if (lastChar === "r") {
+        currentColor = "#ffffff";
         currentFmts.bold = false;
         currentFmts.italic = false;
         currentFmts.underline = false;
         currentFmts.strikethrough = false;
         currentFmts.obfuscate = false;
-      } else if (lastChar === 'l') {
+      } else if (lastChar === "l") {
         currentFmts.bold = true;
-      } else if (lastChar === 'o') {
+      } else if (lastChar === "o") {
         currentFmts.italic = true;
-      } else if (lastChar === 'n') {
+      } else if (lastChar === "n") {
         currentFmts.underline = true;
-      } else if (lastChar === 'm') {
+      } else if (lastChar === "m") {
         currentFmts.strikethrough = true;
-      } else if (lastChar === 'k') {
+      } else if (lastChar === "k") {
         currentFmts.obfuscate = true;
       }
     } else {
-      if (codeStr.startsWith('&#')) {
-        currentColor = '#' + codeStr.slice(2);
+      if (codeStr.startsWith("&#")) {
+        currentColor = "#" + codeStr.slice(2);
       } else {
-        const hexDigits = codeStr.replace(/(?:[&§]|\\u00a7|x)/g, '');
-        currentColor = '#' + hexDigits;
+        const hexDigits = codeStr.replace(/(?:[&§]|\\u00a7|x)/g, "");
+        currentColor = "#" + hexDigits;
       }
       currentFmts.bold = false;
       currentFmts.italic = false;
@@ -172,9 +172,9 @@ function buildFormatSegments(
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
-  const textDecodedTitle = t('rgb.decode.decoded.title@@RGB Text Decoded!');
+  const textDecodedTitle = t("rgb.decode.decoded.title@@RGB Text Decoded!");
   const textDecodedDescription = t(
-    'rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.',
+    "rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.",
   );
 
   const notifications = useContext(NotificationContext);
@@ -206,7 +206,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     }
 
     if (colors.length === 0) return;
-    rgbStore.text = text ?? '';
+    rgbStore.text = text ?? "";
     const colorHexes = colors.map((color) => color.hex);
     const significantPoints = getSignificantPoints(colorHexes, threshold);
     const newColors = significantPoints.map((color) => {
@@ -228,71 +228,81 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     const notification = new Notification()
       .setTitle(textDecodedTitle)
       .setDescription(textDecodedDescription)
-      .setBgColor('lum-grad-bg-green/50');
+      .setBgColor("lum-grad-bg-green/50");
     notifications.push(notification);
   });
 
   return (
     <div
       class={{
-        'flex flex-col gap-2 transition-all duration-300': true,
-        'pointer-events-none max-h-0 opacity-0': hidden,
-        'pointer-events-auto max-h-100 opacity-100': !hidden,
+        "flex flex-col gap-2 transition-all duration-300": true,
+        "pointer-events-none max-h-0 opacity-0": hidden,
+        "pointer-events-auto max-h-100 opacity-100": !hidden,
       }}
       id="decode"
     >
       <label for="decode">
-        {t('rgb.decode.title@@Decode')}
+        {t("rgb.decode.title@@Decode")}
         <span class="text-lum-text-secondary">
-          {' '}
-          -{' '}
+          {" "}
+          -{" "}
           {t(
-            'rgb.decode.description@@Copy-paste an existing RGB text here to edit it',
+            "rgb.decode.description@@Copy-paste an existing RGB text here to edit it",
           )}
         </span>
       </label>
       <textarea
         id="decode"
         class={{
-          'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
+          "lum-input font-mc h-16 w-full whitespace-pre-wrap": true,
         }}
         placeholder={generateOutput(rgbStore)}
         onInput$={async (e, el) => {
           const threshold = document.getElementById(
-            'threshold',
+            "threshold",
           ) as HTMLInputElement;
           await decodeText(el.value, Number(threshold.value));
         }}
       />
-      <Label for="threshold" label={t('rgb.decode.threshold.title@@Threshold')}>
+      <Label for="threshold" label={t("rgb.decode.threshold.title@@Threshold")}>
         <span q:slot="label" class="text-lum-text-secondary">
-          {' '}-{' '}{t('rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors')}
+          {" "}
+          -{" "}
+          {t(
+            "rgb.decode.threshold.description@@Try changing this around if you're getting too many colors",
+          )}
         </span>
         <NumberInput
           input
           value={threshold.value}
           id="threshold"
-          class={{ 'w-full': true }}
+          class={{ "w-full": true }}
           onInput$={async (e, el) => {
             threshold.value = Number(el.value);
-            const decode = document.getElementById('decode') as HTMLInputElement;
+            const decode = document.getElementById(
+              "decode",
+            ) as HTMLInputElement;
             if (decode.value) await decodeText(decode.value, threshold.value);
           }}
           onIncrement$={async () => {
             threshold.value = threshold.value + 10;
-            const decode = document.getElementById('decode') as HTMLInputElement;
+            const decode = document.getElementById(
+              "decode",
+            ) as HTMLInputElement;
             if (decode.value) await decodeText(decode.value, threshold.value);
           }}
           onDecrement$={async () => {
             threshold.value = threshold.value - 10;
-            const decode = document.getElementById('decode') as HTMLInputElement;
+            const decode = document.getElementById(
+              "decode",
+            ) as HTMLInputElement;
             if (decode.value) await decodeText(decode.value, threshold.value);
           }}
         />
       </Label>
       <p class="text-sm">
         {t(
-          'rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.',
+          "rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.",
         )}
       </p>
     </div>

@@ -1,23 +1,23 @@
-import { component$, useSignal, $, useContextProvider } from '@qwik.dev/core';
-import { RequestHandler } from '@qwik.dev/router';
-import { vectorDistance } from '@birdflop/rgbirdflop';
-import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
+import { component$, useSignal, $, useContextProvider } from "@qwik.dev/core";
+import { RequestHandler } from "@qwik.dev/router";
+import { vectorDistance } from "@birdflop/rgbirdflop";
+import PresetPreview from "~/components/rgbirdflop/presets/PresetPreview";
 import {
   privatePresetsContext,
   savedPresetsContext,
-} from '~/routes/resources/rgb/presets';
-import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
-import { checkAdmin } from '../layout';
+} from "~/routes/resources/rgb/presets";
+import AppWindow from "lucide-icons-qwik/icons/AppWindow";
+import { checkAdmin } from "../layout";
 import {
   loadAllPresets,
   backfillPresetSaves,
   runMigratePresets,
   backfillColorVectors,
-} from '~/util/admin';
+} from "~/util/admin";
 
 export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
-  if (!admin) throw new Response('Unauthorized', { status: 401 });
+  if (!admin) throw new Response("Unauthorized", { status: 401 });
 };
 
 export default component$(() => {
@@ -52,24 +52,24 @@ export default component$(() => {
 
   const handleMigratePresets = $(async () => {
     isMigrating.value = true;
-    await addLog('Version Migration', 'Running migration...');
+    await addLog("Version Migration", "Running migration...");
 
     try {
       const response = await runMigratePresets();
 
       if (response.success) {
-        await addLog('Version Migration', response.logs.join('\n'));
+        await addLog("Version Migration", response.logs.join("\n"));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
-          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+          errorMsg = response.logs.join("\n") + `\n${errorMsg}`;
         }
-        await addLog('Version Migration', errorMsg);
+        await addLog("Version Migration", errorMsg);
       }
     } catch (error) {
       await addLog(
-        'Version Migration',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        "Version Migration",
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -78,24 +78,24 @@ export default component$(() => {
 
   const handleBackfill = $(async () => {
     isRunning.value = true;
-    await addLog('Vector Backfill', 'Running backfill...');
+    await addLog("Vector Backfill", "Running backfill...");
 
     try {
       const response = await backfillColorVectors();
 
       if (response.success) {
-        await addLog('Vector Backfill', response.logs.join('\n'));
+        await addLog("Vector Backfill", response.logs.join("\n"));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
-          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+          errorMsg = response.logs.join("\n") + `\n${errorMsg}`;
         }
-        await addLog('Vector Backfill', errorMsg);
+        await addLog("Vector Backfill", errorMsg);
       }
     } catch (error) {
       await addLog(
-        'Vector Backfill',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        "Vector Backfill",
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -104,24 +104,24 @@ export default component$(() => {
 
   const handleSavesBackfill = $(async () => {
     isRunning.value = true;
-    await addLog('Saves Backfill', 'Running saves backfill...');
+    await addLog("Saves Backfill", "Running saves backfill...");
 
     try {
       const response = await backfillPresetSaves();
 
       if (response.success) {
-        await addLog('Saves Backfill', response.logs.join('\n'));
+        await addLog("Saves Backfill", response.logs.join("\n"));
       } else {
         let errorMsg = `Error: ${response.error}`;
         if (response.logs && response.logs.length > 0) {
-          errorMsg = response.logs.join('\n') + `\n${errorMsg}`;
+          errorMsg = response.logs.join("\n") + `\n${errorMsg}`;
         }
-        await addLog('Saves Backfill', errorMsg);
+        await addLog("Saves Backfill", errorMsg);
       }
     } catch (error) {
       await addLog(
-        'Saves Backfill',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        "Saves Backfill",
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -131,7 +131,7 @@ export default component$(() => {
   const handleLoadPresets = $(async () => {
     isLoadingPresets.value = true;
     similarResults.value = null;
-    await addLog('Find Similar', 'Loading all published presets...');
+    await addLog("Find Similar", "Loading all published presets...");
 
     try {
       const response = await loadAllPresets();
@@ -140,19 +140,19 @@ export default component$(() => {
         loadedPresets.value = response.presets;
         loadedAt.value = new Date();
         await addLog(
-          'Find Similar',
+          "Find Similar",
           `Loaded ${response.presets.length} presets.`,
         );
       } else {
         await addLog(
-          'Find Similar',
+          "Find Similar",
           `Error loading presets: ${response.error}`,
         );
       }
     } catch (error) {
       await addLog(
-        'Find Similar',
-        `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        "Find Similar",
+        `Error loading presets: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -161,7 +161,7 @@ export default component$(() => {
 
   const handleFindSimilar = $(async () => {
     if (loadedPresets.value.length === 0) {
-      alert('Please load presets first');
+      alert("Please load presets first");
       return;
     }
 
@@ -183,7 +183,7 @@ export default component$(() => {
 
     try {
       const threshold = similarThreshold.value;
-      console.log('Using threshold:', threshold);
+      console.log("Using threshold:", threshold);
       const allPresets = loadedPresets.value;
 
       // Find all pairs within threshold
@@ -307,11 +307,11 @@ export default component$(() => {
 
       let msg = `Completed similarity check!\nFound ${similarGroups.length} groups of similar presets out of ${allPresets.length} total presets.\n`;
       msg += `Threshold: ${threshold} | Pairs checked: ${pairsChecked} | Pairs grouped: ${pairsGrouped}`;
-      await addLog('Find Similar', msg);
+      await addLog("Find Similar", msg);
     } catch (error) {
       await addLog(
-        'Find Similar',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        "Find Similar",
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -342,7 +342,7 @@ export default component$(() => {
               disabled={isRunning.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
-              {isRunning.value ? 'Running...' : 'Run Backfill'}
+              {isRunning.value ? "Running..." : "Run Backfill"}
             </button>
           </div>
         </div>
@@ -360,7 +360,7 @@ export default component$(() => {
               disabled={isRunning.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
-              {isRunning.value ? 'Running...' : 'Run Backfill'}
+              {isRunning.value ? "Running..." : "Run Backfill"}
             </button>
           </div>
         </div>
@@ -378,7 +378,7 @@ export default component$(() => {
               disabled={isMigrating.value}
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
-              {isMigrating.value ? 'Migrating...' : 'Run Migration'}
+              {isMigrating.value ? "Migrating..." : "Run Migration"}
             </button>
           </div>
         </div>
@@ -398,15 +398,15 @@ export default component$(() => {
               class="lum-btn lum-bg-blue hover:lum-bg-blue/50"
             >
               {isLoadingPresets.value
-                ? 'Loading Presets...'
-                : 'Load All Presets'}
+                ? "Loading Presets..."
+                : "Load All Presets"}
             </button>
             {loadedPresets.value.length > 0 && (
               <div class="mt-3 rounded-lg bg-gray-900 p-3">
-                <span class="font-semibold text-green-400">✓ Loaded:</span>{' '}
+                <span class="font-semibold text-green-400">✓ Loaded:</span>{" "}
                 <span class="font-bold text-white">
                   {loadedPresets.value.length}
-                </span>{' '}
+                </span>{" "}
                 presets
                 {loadedAt.value && (
                   <span class="ml-3 text-sm text-gray-400">
@@ -438,7 +438,7 @@ export default component$(() => {
               class="lum-input max-w-50"
             />
             <p class="mt-1 text-xs text-gray-500">
-              Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current:{' '}
+              Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current:{" "}
               {similarThreshold.value}
             </p>
           </div>
@@ -450,7 +450,7 @@ export default component$(() => {
             }
             class="lum-btn lum-bg-purple hover:lum-bg-purple/50 max-w-50"
           >
-            {isCheckingSimilar.value ? 'Checking...' : 'Find Similar'}
+            {isCheckingSimilar.value ? "Checking..." : "Find Similar"}
           </button>
 
           {similarResults.value && similarResults.value.groupCount > 0 && (
@@ -458,26 +458,26 @@ export default component$(() => {
               <div class="mb-4 rounded-lg bg-gray-900 p-4">
                 <h3 class="mb-2 text-lg font-bold">Results Summary</h3>
                 <p class="mb-2 text-gray-300">
-                  Found{' '}
+                  Found{" "}
                   <span class="font-bold text-yellow-400">
                     {similarResults.value.groupCount}
-                  </span>{' '}
-                  groups of similar presets out of{' '}
+                  </span>{" "}
+                  groups of similar presets out of{" "}
                   <span class="font-bold text-blue-400">
                     {similarResults.value.totalPresets}
-                  </span>{' '}
+                  </span>{" "}
                   total presets.
                 </p>
                 <p class="text-sm text-gray-400">
-                  Threshold used:{' '}
+                  Threshold used:{" "}
                   <span class="font-semibold text-blue-400">
                     {similarResults.value.threshold}
-                  </span>{' '}
-                  | Pairs checked:{' '}
+                  </span>{" "}
+                  | Pairs checked:{" "}
                   <span class="text-gray-300">
                     {similarResults.value.pairsChecked}
-                  </span>{' '}
-                  | Pairs grouped:{' '}
+                  </span>{" "}
+                  | Pairs grouped:{" "}
                   <span class="font-semibold text-green-400">
                     {similarResults.value.pairsGrouped}
                   </span>
@@ -512,11 +512,11 @@ export default component$(() => {
                               <span class="text-gray-400">
                                 {fromPreset?.name}
                               </span>
-                              {' ↔ '}
+                              {" ↔ "}
                               <span class="text-gray-400">
                                 {toPreset?.name}
                               </span>
-                              {': '}
+                              {": "}
                               <span class="font-semibold text-yellow-300">
                                 {distValue.toFixed(3)}
                               </span>
@@ -597,11 +597,11 @@ export default component$(() => {
 });
 
 export const head = {
-  title: 'Admin Panel - Birdflop',
+  title: "Admin Panel - Birdflop",
   meta: [
     {
-      name: 'description',
-      content: 'Admin panel for Birdflop',
+      name: "description",
+      content: "Admin panel for Birdflop",
     },
   ],
 };

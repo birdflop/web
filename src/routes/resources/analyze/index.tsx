@@ -1,20 +1,20 @@
-import { component$ } from '@qwik.dev/core';
+import { component$ } from "@qwik.dev/core";
 
-import { defaultDescription, generateHead } from '~/root';
-import Analyze from '~/components/analyze/Analyze';
+import { defaultDescription, generateHead } from "~/root";
+import Analyze from "~/components/analyze/Analyze";
 
 export default component$(() => {
   return (
     <>
       <Analyze>
         <p class="my-12">
-          1.{' '}
+          1.{" "}
           <a
             href="https://spark.lucko.me/"
             class="text-blue-400 hover:underline"
           >
             Install spark
-          </a>{' '}
+          </a>{" "}
           on your server and restart
           <br />
           <span class="text-lum-text-secondary">
@@ -32,8 +32,8 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Automatic Minecraft Spark Profile and Timings Analyzer - Birdflop',
+  title: "Automatic Minecraft Spark Profile and Timings Analyzer - Birdflop",
   description:
-    'Analyze your Spark Profile and Paper Timings to get optimization recommendations. Developed by Birdflop. ' +
+    "Analyze your Spark Profile and Paper Timings to get optimization recommendations. Developed by Birdflop. " +
     defaultDescription,
 });

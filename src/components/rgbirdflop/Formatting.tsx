@@ -1,30 +1,30 @@
-import { $, component$, useContext, useSignal } from '@qwik.dev/core';
-import Bold from 'lucide-icons-qwik/icons/Bold';
-import Eraser from 'lucide-icons-qwik/icons/Eraser';
-import Italic from 'lucide-icons-qwik/icons/Italic';
-import Strikethrough from 'lucide-icons-qwik/icons/Strikethrough';
-import Underline from 'lucide-icons-qwik/icons/Underline';
-import Wand2 from 'lucide-icons-qwik/icons/Wand2';
-import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { $, component$, useContext, useSignal } from "@qwik.dev/core";
+import Bold from "lucide-icons-qwik/icons/Bold";
+import Eraser from "lucide-icons-qwik/icons/Eraser";
+import Italic from "lucide-icons-qwik/icons/Italic";
+import Strikethrough from "lucide-icons-qwik/icons/Strikethrough";
+import Underline from "lucide-icons-qwik/icons/Underline";
+import Wand2 from "lucide-icons-qwik/icons/Wand2";
+import { inlineTranslate } from "qwik-speak";
+import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
 import {
   restoreSelection,
   Selection,
   selectionContext,
-} from '~/components/rgbirdflop/Input';
-import { SelectMenu } from '@luminescent/ui-qwik';
+} from "~/components/rgbirdflop/Input";
+import { SelectMenu } from "@luminescent/ui-qwik";
 import {
   FormatSegment,
   Formatting,
   FORMAT_KEYS,
   FONT_LABELS,
   FormatKey,
-} from '@birdflop/rgbirdflop';
+} from "@birdflop/rgbirdflop";
 import {
   combinedText,
   rgbSegmentsContext,
-} from '~/components/rgbirdflop/advanced/rgbSegments';
-import { ButtonContainer } from '../Elements/ButtonContainer';
+} from "~/components/rgbirdflop/advanced/rgbSegments";
+import { ButtonContainer } from "../Elements/ButtonContainer";
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -35,21 +35,21 @@ export default component$(() => {
   const getFormatLabel = (FormatKey: FormatKey) => {
     if (rgbStore.colorFormat.char) {
       const formatMap = {
-        bold: 'l',
-        italic: 'o',
-        underline: 'n',
-        strikethrough: 'm',
-        obfuscate: 'k',
+        bold: "l",
+        italic: "o",
+        underline: "n",
+        strikethrough: "m",
+        obfuscate: "k",
       };
       return ` - ${rgbStore.colorFormat.char}${formatMap[FormatKey]}`;
     }
 
     const formatValue = rgbStore.colorFormat[FormatKey];
     if (formatValue) {
-      return ` - ${formatValue.replace('$t', '')}`;
+      return ` - ${formatValue.replace("$t", "")}`;
     }
 
-    return '';
+    return "";
   };
 
   const getIntervalsInRange = (start: number, end: number) => {
@@ -227,21 +227,21 @@ export default component$(() => {
     label: string;
     icon: typeof Bold;
   }[] = [
-    { key: 'bold', label: t('rgb.formatting.bold@@Bold'), icon: Bold },
-    { key: 'italic', label: t('rgb.formatting.italic@@Italic'), icon: Italic },
+    { key: "bold", label: t("rgb.formatting.bold@@Bold"), icon: Bold },
+    { key: "italic", label: t("rgb.formatting.italic@@Italic"), icon: Italic },
     {
-      key: 'underline',
-      label: t('rgb.formatting.underline@@Underline'),
+      key: "underline",
+      label: t("rgb.formatting.underline@@Underline"),
       icon: Underline,
     },
     {
-      key: 'strikethrough',
-      label: t('rgb.formatting.strikethrough@@Strikethrough'),
+      key: "strikethrough",
+      label: t("rgb.formatting.strikethrough@@Strikethrough"),
       icon: Strikethrough,
     },
     {
-      key: 'obfuscate',
-      label: t('rgb.formatting.obfuscate@@Obfuscate'),
+      key: "obfuscate",
+      label: t("rgb.formatting.obfuscate@@Obfuscate"),
       icon: Wand2,
     },
   ];
@@ -250,14 +250,14 @@ export default component$(() => {
     <>
       <SelectMenu
         class={{
-          'lum-btn-p-2 lum-bg-lum-card-bg': true,
-          'lum-bg-blue/20': !!isSelectionActive,
+          "lum-btn-p-2 lum-bg-lum-card-bg": true,
+          "lum-bg-blue/20": !!isSelectionActive,
         }}
         panelClass="lum-bg-lum-card-bg"
         id="font-select"
-        value={formatting.font || 'default'}
+        value={formatting.font || "default"}
         onChange$={(e, el) => {
-          const val = el.value === 'default' ? undefined : el.value;
+          const val = el.value === "default" ? undefined : el.value;
           void setFont(val);
         }}
         values={Object.entries(FONT_LABELS).map(([key, label]) => ({
@@ -267,8 +267,8 @@ export default component$(() => {
       />
       <ButtonContainer
         class={{
-          '*:justify-center *:p-2': true,
-          'lum-bg-blue/20': !!isSelectionActive,
+          "*:justify-center *:p-2": true,
+          "lum-bg-blue/20": !!isSelectionActive,
         }}
         id="formatting"
       >
@@ -279,7 +279,7 @@ export default component$(() => {
             aria-pressed={formatting[key]}
             title={label}
             class={{
-              'lum-grad-bg-lum-accent/100!': formatting[key],
+              "lum-grad-bg-lum-accent/100!": formatting[key],
             }}
             onClick$={() => toggleFlag(key)}
           >
@@ -292,20 +292,20 @@ export default component$(() => {
       </ButtonContainer>
       <ButtonContainer
         class={{
-          '*:justify-center *:p-2': true,
-          'lum-bg-blue/20': !!isSelectionActive,
+          "*:justify-center *:p-2": true,
+          "lum-bg-blue/20": !!isSelectionActive,
         }}
         id="clear-formatting"
       >
         <button
           type="button"
           id="clear"
-          title={t('rgb.formatting.clear@@Clear Formatting')}
+          title={t("rgb.formatting.clear@@Clear Formatting")}
           onClick$={clearFormatting}
         >
           <Eraser size={16} />
           <span class="lum-card/100 lum-btn-p-1 absolute top-[-105%] left-1/2 z-50 -translate-x-1/2 scale-75 whitespace-nowrap opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
-            {t('rgb.formatting.clear@@Clear Formatting')}
+            {t("rgb.formatting.clear@@Clear Formatting")}
           </span>
         </button>
       </ButtonContainer>

@@ -3,39 +3,39 @@ import {
   useComputed$,
   useContext,
   useSignal,
-} from '@qwik.dev/core';
-import { Notification, NotificationContext } from '~/util/Notification';
+} from "@qwik.dev/core";
+import { Notification, NotificationContext } from "~/util/Notification";
 import {
   pluginsStoreContext,
   resolvedPluginContext,
-} from '~/routes/resources/plugins';
-import { SelectList } from '../Elements/SelectList';
-import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
-import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
-import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+} from "~/routes/resources/plugins";
+import { SelectList } from "../Elements/SelectList";
+import SiModrinth from "simple-icons-qwik/icons/SiModrinth";
+import SiSpigotmc from "simple-icons-qwik/icons/SiSpigotmc";
+import Loader2 from "lucide-icons-qwik/icons/Loader2";
 import {
   getPlugin,
   PluginSource,
   searchPlugins,
-} from '~/util/plugins/ServerPlugin';
+} from "~/util/plugins/ServerPlugin";
 
 function getLoaders(software: string) {
   let loaders;
   switch (software) {
-  case 'purpur':
-    loaders = ['purpur', 'paper', 'spigot', 'bukkit'];
-    break;
-  case 'paper':
-    loaders = ['paper', 'spigot', 'bukkit'];
-    break;
-  case 'spigot':
-    loaders = ['spigot', 'bukkit'];
-    break;
-  case 'bukkit':
-    loaders = ['bukkit'];
-    break;
-  default:
-    loaders = [software];
+    case "purpur":
+      loaders = ["purpur", "paper", "spigot", "bukkit"];
+      break;
+    case "paper":
+      loaders = ["paper", "spigot", "bukkit"];
+      break;
+    case "spigot":
+      loaders = ["spigot", "bukkit"];
+      break;
+    case "bukkit":
+      loaders = ["bukkit"];
+      break;
+    default:
+      loaders = [software];
   }
 
   return loaders;
@@ -47,12 +47,12 @@ const urlRegex = {
 };
 
 const urls = {
-  modrinth: 'https://modrinth.com/plugin/',
-  spigot: 'https://www.spigotmc.org/resources/',
+  modrinth: "https://modrinth.com/plugin/",
+  spigot: "https://www.spigotmc.org/resources/",
 };
 
 export default component$(
-  ({ type = 'modrinth' }: { type?: Exclude<PluginSource, 'misc'> }) => {
+  ({ type = "modrinth" }: { type?: Exclude<PluginSource, "misc"> }) => {
     const pluginsStore = useContext(pluginsStoreContext);
     const resolvedPlugin = useContext(resolvedPluginContext);
     const notifications = useContext(NotificationContext);
@@ -68,13 +68,13 @@ export default component$(
         <div class="mt-6 flex flex-col gap-1">
           <div class="border-lum-border/10 mb-4 flex flex-col border-b pb-4">
             <h4 class="flex items-center gap-2 fill-current text-xl font-bold">
-              {type === 'modrinth' && (
+              {type === "modrinth" && (
                 <>
                   <SiModrinth size={28} />
                   Modrinth
                 </>
               )}
-              {type === 'spigot' && (
+              {type === "spigot" && (
                 <>
                   <SiSpigotmc size={28} />
                   SpigotMC
@@ -106,11 +106,11 @@ export default component$(
                 ];
               if (existingPlugin) {
                 const notification = new Notification()
-                  .setTitle('Plugin already added')
+                  .setTitle("Plugin already added")
                   .setDescription(
                     `The plugin ${existingPlugin.name} is already added.`,
                   )
-                  .setBgColor('lum-grad-bg-yellow/50');
+                  .setBgColor("lum-grad-bg-yellow/50");
                 notifications.push(notification);
                 return;
               }
@@ -126,13 +126,13 @@ export default component$(
 
                 resolvedPlugin.plugin = newPlugin;
               } catch (error) {
-                console.error('Error fetching plugin data:', error);
+                console.error("Error fetching plugin data:", error);
                 const notification = new Notification()
-                  .setTitle('Error fetching plugin data')
+                  .setTitle("Error fetching plugin data")
                   .setDescription(
                     `An error occurred while fetching plugin data. ${error}`,
                   )
-                  .setBgColor('lum-grad-bg-red/50');
+                  .setBgColor("lum-grad-bg-red/50");
                 notifications.push(notification);
               }
               isLoading.value = false;
@@ -142,7 +142,7 @@ export default component$(
               const match = value.match(urlRegex[type]);
               if (match) return;
 
-              console.log('Searching for plugin:', value);
+              console.log("Searching for plugin:", value);
               try {
                 isLoading.value = true;
                 const searchData = await searchPlugins(
@@ -153,11 +153,11 @@ export default component$(
 
                 if (searchData.length === 0) {
                   const notification = new Notification()
-                    .setTitle('No results found')
+                    .setTitle("No results found")
                     .setDescription(
                       `No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`,
                     )
-                    .setBgColor('lum-grad-bg-yellow/50');
+                    .setBgColor("lum-grad-bg-yellow/50");
                   notifications.push(notification);
                   isLoading.value = false;
                   return;
@@ -165,13 +165,13 @@ export default component$(
 
                 resolvedPlugin.plugins = searchData;
               } catch (error) {
-                console.error('Error searching for plugins:', error);
+                console.error("Error searching for plugins:", error);
                 const notification = new Notification()
-                  .setTitle('Error searching for plugins')
+                  .setTitle("Error searching for plugins")
                   .setDescription(
                     `An error occurred while searching for plugins. ${error}`,
                   )
-                  .setBgColor('lum-grad-bg-red/50');
+                  .setBgColor("lum-grad-bg-red/50");
                 notifications.push(notification);
               }
               isLoading.value = false;
@@ -220,13 +220,13 @@ export default component$(
                   resolvedPlugin.plugin = plugin.toJSON();
                   resolvedPlugin.plugins = undefined;
                 } catch (error) {
-                  console.error('Error fetching plugin versions:', error);
+                  console.error("Error fetching plugin versions:", error);
                   const notification = new Notification()
-                    .setTitle('Error fetching plugin versions')
+                    .setTitle("Error fetching plugin versions")
                     .setDescription(
                       `An error occurred while fetching plugin versions. ${error}`,
                     )
-                    .setBgColor('lum-grad-bg-red/50');
+                    .setBgColor("lum-grad-bg-red/50");
                   notifications.push(notification);
                 }
                 isLoading.value = false;
@@ -252,9 +252,9 @@ export default component$(
                       </span>
                       <span class="text-lum-text-secondary ml-1 text-right text-xs">
                         {version.releaseDate.toLocaleDateString(undefined, {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
                         })}
                       </span>
                     </>

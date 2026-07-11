@@ -4,43 +4,43 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from '@qwik.dev/core';
-import { Link, routeLoader$ } from '@qwik.dev/router';
-import { getCookies } from '~/util/dataUtils';
-import { rgbDefaults } from '@birdflop/rgbirdflop';
+} from "@qwik.dev/core";
+import { Link, routeLoader$ } from "@qwik.dev/router";
+import { getCookies } from "~/util/dataUtils";
+import { rgbDefaults } from "@birdflop/rgbirdflop";
 import {
   previewStyleContext,
   Selection,
   selectionContext,
-} from '~/components/rgbirdflop/Input';
+} from "~/components/rgbirdflop/Input";
 import {
   rgbStoreContext,
   showAllGradientsContext,
-} from '~/components/rgbirdflop/RGBirdflop';
+} from "~/components/rgbirdflop/RGBirdflop";
 import {
   SegmentType,
   normalizeSegments,
   rgbSegmentsContext,
-} from '~/components/rgbirdflop/advanced/rgbSegments';
-import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
-import { defaultDescription, generateHead } from '~/root';
-import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
-import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
-import { inlineTranslate } from 'qwik-speak';
-import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
-import Options from '~/components/rgbirdflop/Options';
-import SegmentInspector from '~/components/rgbirdflop/advanced/SegmentInspector';
-import { renderAdvancedPreview } from '~/components/rgbirdflop/advanced/preview';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
-import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEditor';
-import { openItemsContext } from '~/routes/layout-profile';
+} from "~/components/rgbirdflop/advanced/rgbSegments";
+import { generateAdvancedOutput } from "~/components/rgbirdflop/advanced/output";
+import { defaultDescription, generateHead } from "~/root";
+import ArrowLeft from "lucide-icons-qwik/icons/ArrowLeft";
+import TestTube2 from "lucide-icons-qwik/icons/TestTube2";
+import { inlineTranslate } from "qwik-speak";
+import RGBirdflop from "~/components/rgbirdflop/RGBirdflop";
+import Options from "~/components/rgbirdflop/Options";
+import SegmentInspector from "~/components/rgbirdflop/advanced/SegmentInspector";
+import { renderAdvancedPreview } from "~/components/rgbirdflop/advanced/preview";
+import { renderAllGradientsPreview } from "~/components/rgbirdflop/AllGradientsPreview";
+import SegmentColorEditor from "~/components/rgbirdflop/advanced/SegmentColorEditor";
+import { openItemsContext } from "~/routes/layout-profile";
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams);
+  return getCookies(cookie, "rgb", url.searchParams);
 });
 
 export const useSegmentsCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgbsegments', url.searchParams);
+  return getCookies(cookie, "rgbsegments", url.searchParams);
 });
 export default component$(() => {
   const t = inlineTranslate();
@@ -66,7 +66,7 @@ export default component$(() => {
 
   const selection = useSignal<Selection>();
   useContextProvider(selectionContext, selection);
-  const previewStyle = useSignal('default');
+  const previewStyle = useSignal("default");
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
@@ -85,14 +85,14 @@ export default component$(() => {
             q:slot="header"
           >
             <TestTube2 size={32} />
-            {t('nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced')}
+            {t("nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced")}
             <span class="lum-grad-bg-blue/50 rounded-lum-1 self-center px-2 py-1 text-xs">
-              {t('nav.experimental@@experimental')}
+              {t("nav.experimental@@experimental")}
             </span>
           </h1>
           <p class="text-lum-text-secondary mb-2" q:slot="header">
             {t(
-              'nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.',
+              "nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.",
             )}
           </p>
         </div>
@@ -101,24 +101,24 @@ export default component$(() => {
           class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum w-fit gap-2 p-2 text-sm whitespace-normal"
         >
           <ArrowLeft size={18} />
-          {t('rgb.advanced.backToClassic@@Classic editor')}
+          {t("rgb.advanced.backToClassic@@Classic editor")}
         </Link>
       </div>
 
       {showAllGradients.value
         ? renderAllGradientsPreview(
-          (gradientType) =>
-            renderAdvancedPreview(rgbSegments.value, {
-              ...rgbStore,
-              gradientType,
-            }),
-          rgbStore.gradientType,
-        )
+            (gradientType) =>
+              renderAdvancedPreview(rgbSegments.value, {
+                ...rgbStore,
+                gradientType,
+              }),
+            rgbStore.gradientType,
+          )
         : renderAdvancedPreview(rgbSegments.value, rgbStore)}
 
       <SegmentInspector q:slot="input-extra" />
 
-      <Options q:slot="options" hidden={!openItems.value.includes('options')} />
+      <Options q:slot="options" hidden={!openItems.value.includes("options")} />
 
       <SegmentColorEditor q:slot="column1" />
     </RGBirdflop>
@@ -126,8 +126,8 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'RGBirdflop Advanced - Per-Character Minecraft Gradient Editor',
+  title: "RGBirdflop Advanced - Per-Character Minecraft Gradient Editor",
   description:
-    'Advanced Minecraft RGB gradient editor: apply multiple gradients, solid colors, and per-character formatting to one piece of text. ' +
+    "Advanced Minecraft RGB gradient editor: apply multiple gradients, solid colors, and per-character formatting to one piece of text. " +
     defaultDescription,
 });

@@ -1,11 +1,11 @@
-import { component$, useSignal, useVisibleTask$ } from '@qwik.dev/core';
+import { component$, useSignal, useVisibleTask$ } from "@qwik.dev/core";
 
 interface HostingAdProps {
   variant: {
     image: string;
     label: string;
   };
-  position: 'Left' | 'Right';
+  position: "Left" | "Right";
 }
 
 export default component$<HostingAdProps>(({ variant, position }) => {
@@ -16,21 +16,21 @@ export default component$<HostingAdProps>(({ variant, position }) => {
   useVisibleTask$(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px',
+      rootMargin: "0px",
       threshold: 0.5, // Track when at least 50% of the ad is visible
     };
 
     const trackAdView = (adElement: Element) => {
       if (tracked.value) return;
 
-      const variant = adElement.getAttribute('data-umami-event-variant');
+      const variant = adElement.getAttribute("data-umami-event-variant");
 
       // Send the impression event to Umami
       if (window.umami) {
-        window.umami.track('Hosting Ad View', {
-          page: 'RGBirdflop',
+        window.umami.track("Hosting Ad View", {
+          page: "RGBirdflop",
           action: `${position} Ad`,
-          variant: variant || 'unknown',
+          variant: variant || "unknown",
         });
       }
 
@@ -63,9 +63,9 @@ export default component$<HostingAdProps>(({ variant, position }) => {
   return (
     <div
       class={
-        position === 'Left'
-          ? 'hidden justify-center 2xl:flex'
-          : '3xl:flex hidden justify-center'
+        position === "Left"
+          ? "hidden justify-center 2xl:flex"
+          : "3xl:flex hidden justify-center"
       }
     >
       <a

@@ -1,6 +1,6 @@
-import { component$, useContext } from '@qwik.dev/core';
-import { inlineTranslate } from 'qwik-speak';
-import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { component$, useContext } from "@qwik.dev/core";
+import { inlineTranslate } from "qwik-speak";
+import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -9,19 +9,19 @@ export default component$(({ hidden }: { hidden: boolean }) => {
   return (
     <div
       class={{
-        'grid grid-cols-2 gap-2 transition-all duration-200': true,
-        'pointer-events-none max-h-0 opacity-0': hidden,
-        'pointer-events-auto max-h-125 opacity-100': !hidden,
+        "grid grid-cols-2 gap-2 transition-all duration-200": true,
+        "pointer-events-none max-h-0 opacity-0": hidden,
+        "pointer-events-auto max-h-125 opacity-100": !hidden,
       }}
       id="customformat"
     >
       <div
         class={{
-          'flex flex-col gap-2': true,
+          "flex flex-col gap-2": true,
         }}
       >
         <label for="customformat">
-          {t('rgb.colors.customFormat@@Custom Format')}
+          {t("rgb.colors.customFormat@@Custom Format")}
         </label>
         <input
           class="lum-input"
@@ -33,7 +33,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           }}
         />
         <div class="font-mono text-sm">
-          <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
+          <p>{t("rgb.formatting.placeholders@@Placeholders:")}</p>
           <p>
             $1 = <strong class="text-red-400">R</strong>RGGBB
           </p>
@@ -53,14 +53,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             $6 = RRGGB<strong class="text-blue-400">B</strong>
           </p>
           {rgbStore.colorFormat.char && (
-            <p>$f = {t('rgb.formatting.title@@Formatting')}</p>
+            <p>$f = {t("rgb.formatting.title@@Formatting")}</p>
           )}
-          <p>$c = {t('rgb.colors.character@@Character')}</p>
+          <p>$c = {t("rgb.colors.character@@Character")}</p>
         </div>
       </div>
       <div
         class={{
-          'flex flex-col gap-2': true,
+          "flex flex-col gap-2": true,
         }}
       >
         {rgbStore.colorFormat.char != undefined &&
@@ -68,24 +68,24 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           !rgbStore.colorFormat.italic &&
           !rgbStore.colorFormat.underline &&
           !rgbStore.colorFormat.strikethrough && (
-          <>
-            <label for="format-char">
-              {t('rgb.formatting.character@@Format Character')}
-            </label>
-            <input
-              class="lum-input"
-              id="format-char"
-              value={rgbStore.colorFormat.char}
-              placeholder="&"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.char = el.value;
-              }}
-            />
-          </>
-        )}
+            <>
+              <label for="format-char">
+                {t("rgb.formatting.character@@Format Character")}
+              </label>
+              <input
+                class="lum-input"
+                id="format-char"
+                value={rgbStore.colorFormat.char}
+                placeholder="&"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.char = el.value;
+                }}
+              />
+            </>
+          )}
         {!rgbStore.colorFormat.char && (
           <>
-            <label for="format-bold">{t('rgb.formatting.bold@@Bold')}</label>
+            <label for="format-bold">{t("rgb.formatting.bold@@Bold")}</label>
             <input
               class="lum-input"
               id="format-bold"
@@ -96,7 +96,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               }}
             />
             <label for="format-italic">
-              {t('rgb.formatting.italic@@Italic')}
+              {t("rgb.formatting.italic@@Italic")}
             </label>
             <input
               class="lum-input"
@@ -108,7 +108,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               }}
             />
             <label for="format-underline">
-              {t('rgb.formatting.underline@@Underline')}
+              {t("rgb.formatting.underline@@Underline")}
             </label>
             <input
               class="lum-input"
@@ -120,7 +120,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               }}
             />
             <label for="format-strikethrough">
-              {t('rgb.formatting.strikethrough@@Strikethrough')}
+              {t("rgb.formatting.strikethrough@@Strikethrough")}
             </label>
             <input
               class="lum-input"
@@ -132,7 +132,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               }}
             />
             <label for="format-obfuscate">
-              {t('rgb.formatting.obfuscate@@Obfuscate')}
+              {t("rgb.formatting.obfuscate@@Obfuscate")}
             </label>
             <input
               class="lum-input"
@@ -144,7 +144,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               }}
             />
             <div class="font-mono text-sm">
-              <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
+              <p>{t("rgb.formatting.placeholders@@Placeholders:")}</p>
               <p>$t = Output Text</p>
             </div>
           </>

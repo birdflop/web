@@ -1,10 +1,10 @@
-import { component$ } from '@qwik.dev/core';
-import { Link, useLocation } from '@qwik.dev/router';
-import { createBreadcrumbs } from '~/components/docs/SideBar';
-import { buildMenu } from '~/util/docs';
-import { useMarkdownItems } from '~/routes/docs/layout';
-import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
-import Home from 'lucide-icons-qwik/icons/Home';
+import { component$ } from "@qwik.dev/core";
+import { Link, useLocation } from "@qwik.dev/router";
+import { createBreadcrumbs } from "~/components/docs/SideBar";
+import { buildMenu } from "~/util/docs";
+import { useMarkdownItems } from "~/routes/docs/layout";
+import ChevronRight from "lucide-icons-qwik/icons/ChevronRight";
+import Home from "lucide-icons-qwik/icons/Home";
 
 export const Breadcrumbs = component$(() => {
   const { url } = useLocation();
@@ -12,8 +12,8 @@ export const Breadcrumbs = component$(() => {
 
   const menuItems = buildMenu(markdownItems.value);
   const menu = {
-    text: 'Root',
-    href: '/docs/',
+    text: "Root",
+    href: "/docs/",
     items: menuItems,
   };
 
@@ -38,9 +38,9 @@ export const Breadcrumbs = component$(() => {
           <Link
             href={crumb.href}
             class={{
-              'lum-btn lum-btn-p-1 rounded-full text-sm': true,
-              'lum-bg-transparent': index < breadcrumbs.length - 1,
-              'lum-grad-bg-blue-400/30 hover:lum-bg-blue-400/30':
+              "lum-btn lum-btn-p-1 rounded-full text-sm": true,
+              "lum-bg-transparent": index < breadcrumbs.length - 1,
+              "lum-grad-bg-blue-400/30 hover:lum-bg-blue-400/30":
                 index === breadcrumbs.length - 1,
             }}
           >

@@ -1,14 +1,14 @@
-import { component$, useStore } from '@qwik.dev/core';
-import { routeLoader$ } from '@qwik.dev/router';
+import { component$, useStore } from "@qwik.dev/core";
+import { routeLoader$ } from "@qwik.dev/router";
 
-import Package from 'lucide-icons-qwik/icons/Package';
-import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
-import { discordLink } from '~/components/Elements/Nav';
-import { generateHead } from '~/root';
+import Package from "lucide-icons-qwik/icons/Package";
+import ShoppingCart from "lucide-icons-qwik/icons/ShoppingCart";
+import { discordLink } from "~/components/Elements/Nav";
+import { generateHead } from "~/root";
 
 export const plans = {
-  'EU Premium': {
-    id: 'eu-premium',
+  "EU Premium": {
+    id: "eu-premium",
     groupId: 9,
     $PerGB: 2,
     $PerGBReimbursed: 1.48,
@@ -21,15 +21,15 @@ export const plans = {
       20: 13,
     },
     features: [
-      'Falkenstein, Germany',
-      'Ryzen 9 5950X',
-      '6 Logical Cores',
-      'Unmetered* NVMe Storage',
+      "Falkenstein, Germany",
+      "Ryzen 9 5950X",
+      "6 Logical Cores",
+      "Unmetered* NVMe Storage",
     ],
     outOfStock: false,
   },
-  'US Premium': {
-    id: 'us-premium',
+  "US Premium": {
+    id: "us-premium",
     groupId: 7,
     $PerGB: 3,
     $PerGBReimbursed: 1.99,
@@ -39,16 +39,16 @@ export const plans = {
       8: 3,
     },
     features: [
-      'US East (NYC / Ashburn VA)',
-      'Ryzen 9 3900XT or Better',
-      '4 Logical Cores',
-      'Up to 80 GB NVMe Storage',
-      'Free upgrade to US Premium+ after 6 months',
+      "US East (NYC / Ashburn VA)",
+      "Ryzen 9 3900XT or Better",
+      "4 Logical Cores",
+      "Up to 80 GB NVMe Storage",
+      "Free upgrade to US Premium+ after 6 months",
     ],
     outOfStock: false,
   },
-  'US Premium+': {
-    id: 'us-premium',
+  "US Premium+": {
+    id: "us-premium",
     groupId: 7,
     $PerGB: 3,
     $PerGBReimbursed: 1.99,
@@ -58,10 +58,10 @@ export const plans = {
       20: 6,
     },
     features: [
-      'US East (NYC / Ashburn VA)',
-      'Ryzen 9 9900X or Better',
-      '6 Logical Cores',
-      'Unmetered* NVMe Storage',
+      "US East (NYC / Ashburn VA)",
+      "Ryzen 9 9900X or Better",
+      "6 Logical Cores",
+      "Unmetered* NVMe Storage",
     ],
     outOfStock: false,
   },
@@ -74,11 +74,11 @@ export const useParams = routeLoader$(({ query }) => {
 export default component$(() => {
   const params = useParams().value;
   const plansStore = useStore({
-    plan: params.get('plan') as keyof typeof plans,
+    plan: params.get("plan") as keyof typeof plans,
     showMiscPlans: false,
     gb: 0,
-    name: 'My server',
-    desc: '',
+    name: "My server",
+    desc: "",
   });
 
   return (
@@ -86,7 +86,7 @@ export default component$(() => {
       <section
         class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20"
         style={{
-          '--lum-border-radius': '1.5rem',
+          "--lum-border-radius": "1.5rem",
         }}
       >
         <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
@@ -108,7 +108,7 @@ export default component$(() => {
                 (plansStore.showMiscPlans = !plansStore.showMiscPlans)
               }
             >
-              {plansStore.showMiscPlans ? 'Hide misc plans' : 'Show misc plans'}
+              {plansStore.showMiscPlans ? "Hide misc plans" : "Show misc plans"}
             </button>
           </h2>
           <p class="text-lum-text-secondary">
@@ -126,11 +126,11 @@ export default component$(() => {
                 return (
                   <button
                     class={{
-                      'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                      'opacity-50': plan.outOfStock,
-                      'lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70':
+                      "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
+                      "opacity-50": plan.outOfStock,
+                      "lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70":
                         plansStore.plan != planName,
-                      'lum-grad-bg-blue-500/30 hover:lum-bg-blue-500/30':
+                      "lum-grad-bg-blue-500/30 hover:lum-bg-blue-500/30":
                         plansStore.plan == planName,
                     }}
                     data-umami-event="Plan Pick Click"
@@ -139,18 +139,18 @@ export default component$(() => {
                     key={planName}
                     onClick$={() => {
                       if (plan.outOfStock)
-                        return window.open(discordLink, '_blank')?.focus();
+                        return window.open(discordLink, "_blank")?.focus();
                       plansStore.plan = planName;
                       plansStore.gb = 0;
                       setTimeout(() => {
-                        const anchor = document.getElementById('ram');
+                        const anchor = document.getElementById("ram");
                         if (anchor)
-                          anchor.scrollIntoView({ behavior: 'smooth' });
+                          anchor.scrollIntoView({ behavior: "smooth" });
                       }, 100);
                     }}
                   >
                     <p class="text-lum-text-secondary">
-                      Last quarter, clients paid{' '}
+                      Last quarter, clients paid{" "}
                       <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
                       reimbursements.
                     </p>
@@ -184,7 +184,7 @@ export default component$(() => {
               <div class="mt-2 grid gap-2 md:grid-cols-3">
                 <a
                   class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
+                    "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
                   }}
                   href="https://client.birdflop.com/order/main/packages/discord/?group_id=12"
                   target="_blank"
@@ -201,7 +201,7 @@ export default component$(() => {
                 </a>
                 <a
                   class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
+                    "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
                   }}
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15"
                   target="_blank"
@@ -218,7 +218,7 @@ export default component$(() => {
                 </a>
                 <a
                   class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
+                    "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
                   }}
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7"
                   target="_blank"
@@ -235,7 +235,7 @@ export default component$(() => {
                 </a>
                 <a
                   class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
+                    "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
                   }}
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16"
                   target="_blank"
@@ -252,7 +252,7 @@ export default component$(() => {
                 </a>
                 <a
                   class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
+                    "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
                   }}
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14"
                   target="_blank"
@@ -288,16 +288,16 @@ export default component$(() => {
                         onClick$={() => {
                           plansStore.gb = Number(gb);
                           setTimeout(() => {
-                            const anchor = document.getElementById('summary');
+                            const anchor = document.getElementById("summary");
                             if (anchor)
-                              anchor.scrollIntoView({ behavior: 'smooth' });
+                              anchor.scrollIntoView({ behavior: "smooth" });
                           }, 100);
                         }}
                         class={{
-                          'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                          'lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70':
+                          "lum-card relative text-left transition duration-300 ease-out hover:duration-75": true,
+                          "lum-grad-bg-lum-input-bg hover:lum-bg-lum-input-bg/70":
                             plansStore.gb != Number(gb),
-                          'lum-grad-bg-green-500/30 hover:lum-bg-green-500/30':
+                          "lum-grad-bg-green-500/30 hover:lum-bg-green-500/30":
                             plansStore.gb == Number(gb),
                         }}
                         data-umami-event="Plan RAM Click"
@@ -363,18 +363,18 @@ export default component$(() => {
                 <a
                   class="lum-btn lum-btn-p-4 lum-grad-bg-blue/80 hover:lum-bg-blue mt-auto gap-4 text-lg"
                   href={
-                    'https://client.birdflop.com/order/config/index/' +
+                    "https://client.birdflop.com/order/config/index/" +
                     plans[plansStore.plan]?.id +
-                    '/?group_id=' +
+                    "/?group_id=" +
                     plans[plansStore.plan]?.groupId +
-                    '&pricing_id=' +
+                    "&pricing_id=" +
                     // @ts-expect-error type wont work with how this works
                     plans[plansStore.plan]?.ramAndId[plansStore.gb] +
-                    '&server_name=' +
+                    "&server_name=" +
                     plansStore.name +
-                    '&server_description=' +
+                    "&server_description=" +
                     plansStore.desc +
-                    '&billing_cycle=monthly'
+                    "&billing_cycle=monthly"
                   }
                   target="_blank"
                   data-umami-event="Plan AddToCart Click"
@@ -394,5 +394,5 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Order your new server - Birdflop',
+  title: "Order your new server - Birdflop",
 });

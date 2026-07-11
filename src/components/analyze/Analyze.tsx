@@ -1,22 +1,22 @@
-import { Slot, component$, useSignal } from '@qwik.dev/core';
-import { Link } from '@qwik.dev/router';
-import Zap from 'lucide-icons-qwik/icons/Zap';
-import { inlineTranslate } from 'qwik-speak';
+import { Slot, component$, useSignal } from "@qwik.dev/core";
+import { Link } from "@qwik.dev/router";
+import Zap from "lucide-icons-qwik/icons/Zap";
+import { inlineTranslate } from "qwik-speak";
 
 export default component$(() => {
   const t = inlineTranslate();
-  const redirect = useSignal('');
-  const error = useSignal('');
+  const redirect = useSignal("");
+  const error = useSignal("");
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <Zap size={32} />
-        {t('nav.resources.analyze.title@@Analyze')}
+        {t("nav.resources.analyze.title@@Analyze")}
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations',
+          "nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations",
         )}
       </p>
 
@@ -24,13 +24,13 @@ export default component$(() => {
         These are not magic values. Many of these settings have real
         consequences on your server's mechanics.
         <br />
-        See{' '}
+        See{" "}
         <a
           href="https://eternity.community/index.php/paper-optimization/"
           class="text-blue-400 hover:underline"
         >
           this guide
-        </a>{' '}
+        </a>{" "}
         for detailed information on the functionality of each setting.
       </p>
 
@@ -44,25 +44,25 @@ export default component$(() => {
         id="link"
         onInput$={(e, el) => {
           const link = el.value;
-          redirect.value = '';
+          redirect.value = "";
           let code;
           if (
-            link.startsWith('https://www.spigotmc.org/go/timings?url=') ||
-            link.startsWith('https://spigotmc.org/go/timings?url=')
+            link.startsWith("https://www.spigotmc.org/go/timings?url=") ||
+            link.startsWith("https://spigotmc.org/go/timings?url=")
           ) {
             error.value =
-              '❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don\'t like it, you can easily switch back.';
-          } else if (link.startsWith('https://spark.lucko.me')) {
-            code = link.replace('https://spark.lucko.me/', '');
-          } else if (link.startsWith('https://timin')) {
+              "❌ Spigot timings have limited information. Switch to Purpur (or Paper) for better timings analysis. All your plugins will be compatible, and if you don't like it, you can easily switch back.";
+          } else if (link.startsWith("https://spark.lucko.me")) {
+            code = link.replace("https://spark.lucko.me/", "");
+          } else if (link.startsWith("https://timin")) {
             code = link
-              .replace('/d=', '/?id=')
-              .replace('timin.gs', 'timings.aikar.co')
-              .split('#')[0]
-              .split('\n')[0]
-              .split('/?id=')[1];
+              .replace("/d=", "/?id=")
+              .replace("timin.gs", "timings.aikar.co")
+              .split("#")[0]
+              .split("\n")[0]
+              .split("/?id=")[1];
           } else {
-            error.value = '❌ This is an invalid link.';
+            error.value = "❌ This is an invalid link.";
           }
           if (code) redirect.value = `/resources/analyze/${code}`;
         }}
@@ -70,7 +70,7 @@ export default component$(() => {
 
       <p
         class={{
-          'mt-3 text-red-400': true,
+          "mt-3 text-red-400": true,
           hidden: !error.value,
         }}
       >
@@ -78,7 +78,7 @@ export default component$(() => {
       </p>
       <div
         class={{
-          'mt-3 flex': true,
+          "mt-3 flex": true,
           hidden: !redirect.value,
         }}
       >
@@ -101,7 +101,7 @@ export default component$(() => {
           https://birdflop.com/resources/analyze/[id]
         </span>
         <br />
-        Powered by{' '}
+        Powered by{" "}
         <a
           href="https://github.com/birdflop/botflop"
           class="text-blue-400 hover:underline"

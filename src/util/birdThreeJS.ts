@@ -1,23 +1,23 @@
-import { Signal } from '@qwik.dev/core';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { NotificationType } from './Notification';
-import { FlopbirdStore } from '~/routes/layout';
+import { Signal } from "@qwik.dev/core";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { NotificationType } from "./Notification";
+import { FlopbirdStore } from "~/routes/layout";
 
 function targetElement(id?: string) {
-  const oldEl = document.querySelector('.bird-target');
+  const oldEl = document.querySelector(".bird-target");
   if (oldEl)
-    oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
+    oldEl.classList.remove("outline-3", "outline-lum-accent", "bird-target");
 
   if (!id) return;
   const el = document.getElementById(id);
   if (!el) return;
 
   el.classList.add(
-    'outline-3',
-    'outline-lum-accent',
-    'bird-target',
-    'rounded-lum',
+    "outline-3",
+    "outline-lum-accent",
+    "bird-target",
+    "rounded-lum",
   );
   const rect = el.getBoundingClientRect();
   return {
@@ -34,11 +34,11 @@ export default async function birdThreeJS(
 ) {
   // check if birdRef is defined
   if (!birdRef.value)
-    return console.warn('birdRef is undefined in birdThreeJS');
+    return console.warn("birdRef is undefined in birdThreeJS");
 
   // Scene
   const scene = new THREE.Scene();
-  scene.background = new THREE.TextureLoader().load('');
+  scene.background = new THREE.TextureLoader().load("");
 
   // get width of window
   let width = window.innerWidth;
@@ -77,14 +77,14 @@ export default async function birdThreeJS(
 
   // GLTF Loader for parrot model
   const loader = new GLTFLoader();
-  const gltf = await loader.loadAsync('/birdflop-bird.glb');
+  const gltf = await loader.loadAsync("/birdflop-bird.glb");
   const bird = gltf.scene;
   bird.scale.set(0.5, 0.5, 0.5);
   bird.rotation.y = 2.5; // temp until bird moves around
   bird.rotation.x = 0;
 
   // Texture Loader for parrot obj
-  const parrotTexture = new THREE.TextureLoader().load('/birdflop-bird.png');
+  const parrotTexture = new THREE.TextureLoader().load("/birdflop-bird.png");
   if (!parrotTexture) return;
   parrotTexture.colorSpace = THREE.SRGBColorSpace;
   parrotTexture.minFilter = THREE.NearestFilter;
@@ -99,15 +99,15 @@ export default async function birdThreeJS(
   });
 
   // Bird bones
-  const body = bird.getObjectByName('body');
-  const wingL = bird.getObjectByName('left_wing');
-  const wingR = bird.getObjectByName('right_wing');
-  const tail = bird.getObjectByName('tail');
-  const legL = bird.getObjectByName('left_leg');
-  const legR = bird.getObjectByName('right_leg');
-  const head = bird.getObjectByName('head');
+  const body = bird.getObjectByName("body");
+  const wingL = bird.getObjectByName("left_wing");
+  const wingR = bird.getObjectByName("right_wing");
+  const tail = bird.getObjectByName("tail");
+  const legL = bird.getObjectByName("left_leg");
+  const legR = bird.getObjectByName("right_leg");
+  const head = bird.getObjectByName("head");
   if (!body || !wingL || !wingR || !tail || !legL || !legR || !head)
-    return console.warn('One or more bones not found! Not rendering bird.');
+    return console.warn("One or more bones not found! Not rendering bird.");
 
   // Initial bone rotations
   head.rotation.x += 0.15;
@@ -139,18 +139,18 @@ export default async function birdThreeJS(
 
     renderer.setSize(width, height);
   }
-  window.addEventListener('resize', onWindowResize);
+  window.addEventListener("resize", onWindowResize);
 
   // Add bird to scene
   scene.add(bird);
 
   // Animation state
-  let emote: 'waving' | undefined;
+  let emote: "waving" | undefined;
   let flying = false;
 
   // Track mouse position
   const mouse = { x: 0, y: 0 };
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener("mousemove", (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   });
@@ -237,9 +237,9 @@ export default async function birdThreeJS(
     head.getWorldPosition(headWorldPos);
 
     const screen = worldToScreen(headWorldPos, camera);
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     if (!isMobile) anchorElementRef.value.style.left = `${screen.x}px`;
-    else anchorElementRef.value.style.left = 'calc(100% - 10px)'; // fixed position on mobile
+    else anchorElementRef.value.style.left = "calc(100% - 10px)"; // fixed position on mobile
     anchorElementRef.value.style.top = `${screen.y}px`;
   }
 
@@ -335,7 +335,7 @@ export default async function birdThreeJS(
     updateHeadLook(time);
     updateAnchorElement();
 
-    emote = notifications.length > 0 ? 'waving' : undefined;
+    emote = notifications.length > 0 ? "waving" : undefined;
 
     const pos = targetElement(birdStore.ref);
     if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
@@ -370,7 +370,7 @@ export default async function birdThreeJS(
       }
     }
 
-    if (emote === 'waving') updateWaving(time);
+    if (emote === "waving") updateWaving(time);
     else updateIdle(time);
 
     if (flying) updateFlying(time);

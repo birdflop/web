@@ -1,8 +1,8 @@
 import {
   sortColors,
   rgbColorDefaultsWithColorMode,
-} from '@birdflop/rgbirdflop';
-import { createContextId, Signal } from '@qwik.dev/core';
+} from "@birdflop/rgbirdflop";
+import { createContextId, Signal } from "@qwik.dev/core";
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
@@ -25,7 +25,7 @@ export function chunkText(text: string, colorLength?: number): string[] {
   const out: string[] = [];
   const arr = Array.from(text);
   for (let i = 0; i < arr.length; i += len)
-    out.push(arr.slice(i, i + len).join(''));
+    out.push(arr.slice(i, i + len).join(""));
   return out;
 }
 
@@ -37,15 +37,15 @@ export function chunkText(text: string, colorLength?: number): string[] {
  */
 function styleKey(s: SegmentType): string {
   let colorPart: string;
-  if (s.colorMode === 'none' || s.colors.length === 0) {
-    colorPart = 'none';
-  } else if (s.colorMode === 'solid') {
-    colorPart = `solid:${(s.colors[0]?.hex ?? '').toLowerCase()}`;
+  if (s.colorMode === "none" || s.colors.length === 0) {
+    colorPart = "none";
+  } else if (s.colorMode === "solid") {
+    colorPart = `solid:${(s.colors[0]?.hex ?? "").toLowerCase()}`;
   } else {
     const cols = sortColors(s.colors).map(
       (c) => `${c.hex.toLowerCase()}@${Math.round(c.pos * 1000) / 1000}`,
     );
-    colorPart = `grad:${s.gradientType}:${s.colorLength}:${cols.join(',')}`;
+    colorPart = `grad:${s.gradientType}:${s.colorLength}:${cols.join(",")}`;
   }
   return colorPart;
 }
@@ -71,7 +71,7 @@ function regroup(chars: FlatChar[]): SegmentType[] {
   for (const { ch, style } of chars) {
     const k = styleKey(style);
     if (cur === null || k !== curKey) {
-      cur = { ...cloneStyle(style), text: '' };
+      cur = { ...cloneStyle(style), text: "" };
       segs.push(cur);
       curKey = k;
     }
@@ -85,7 +85,7 @@ export function normalizeSegments(segments: SegmentType[]): SegmentType[] {
 }
 
 export function combinedText(segments: SegmentType[]): string {
-  return segments.map((s) => s.text).join('');
+  return segments.map((s) => s.text).join("");
 }
 
 /**
@@ -98,7 +98,7 @@ export function applyTextDiff(
   newText: string,
 ): SegmentType[] {
   const oldChars = flatten(segments);
-  const oldText = oldChars.map((c) => c.ch).join('');
+  const oldText = oldChars.map((c) => c.ch).join("");
   if (newText === oldText) return segments;
 
   const oldLen = oldText.length;
@@ -220,5 +220,5 @@ export function deleteSegment(
 }
 
 export const rgbSegmentsContext = createContextId<Signal<SegmentType[]>>(
-  'rgbsegments-context',
+  "rgbsegments-context",
 );

@@ -1,14 +1,14 @@
-import { server$ } from '@qwik.dev/router';
-import { getDB, presets } from '../db';
-import { loadPreset } from '../rgb/presets';
-import { eq } from 'drizzle-orm';
+import { server$ } from "@qwik.dev/router";
+import { getDB, presets } from "../db";
+import { loadPreset } from "../rgb/presets";
+import { eq } from "drizzle-orm";
 
 export const runMigratePresets = server$(async function () {
   const logs: string[] = [];
   try {
     const db = getDB();
     if (!db) {
-      return { success: false, error: 'Database not available', logs };
+      return { success: false, error: "Database not available", logs };
     }
 
     const allPresets = await db.select().from(presets);
@@ -32,7 +32,7 @@ export const runMigratePresets = server$(async function () {
           logs.push(logMsg);
         }
       } catch (err) {
-        const errMsg = err instanceof Error ? err.message : 'Unknown error';
+        const errMsg = err instanceof Error ? err.message : "Unknown error";
         errors.push({ id: p.id, error: errMsg });
         logs.push(`Error migrating preset ${p.id} (${p.name}): ${errMsg}`);
       }
@@ -48,7 +48,7 @@ export const runMigratePresets = server$(async function () {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       logs,
     };
   }

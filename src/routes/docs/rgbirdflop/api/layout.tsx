@@ -1,7 +1,7 @@
-import { component$ } from '@qwik.dev/core';
-import { getGlobalHighlighter } from '~/util/docs/highlighter';
-import { apiEndpoints } from '~/routes/api/v2';
-import { routeLoader$ } from '@qwik.dev/router';
+import { component$ } from "@qwik.dev/core";
+import { getGlobalHighlighter } from "~/util/docs/highlighter";
+import { apiEndpoints } from "~/routes/api/v2";
+import { routeLoader$ } from "@qwik.dev/router";
 
 const getEndpoints = async () => {
   const paths = Object.keys(
@@ -15,13 +15,13 @@ const getEndpoints = async () => {
     const optionNames = Object.keys(options) as (keyof typeof options)[];
 
     const html = optionNames.map((option) => {
-      if (!options[option]) return '';
+      if (!options[option]) return "";
       return highlighter.codeToHtml(
         `// ${options[option].description}
 ${option}: ${options[option].type} = ${JSON.stringify(options[option].default, null, 2)}`,
         {
-          lang: 'ts',
-          theme: 'birdflop',
+          lang: "ts",
+          theme: "birdflop",
           meta: {
             title: option,
             description: options[option].description,

@@ -4,27 +4,27 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@qwik.dev/core';
-import { generateHead } from '~/root';
-import { Link, server$ } from '@qwik.dev/router';
-import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import { useSession } from '~/routes/plugin@auth';
-import { getPresets } from '~/util/rgb/presets';
-import { Notification, NotificationContext } from '~/util/Notification';
+} from "@qwik.dev/core";
+import { generateHead } from "~/root";
+import { Link, server$ } from "@qwik.dev/router";
+import PresetPreview from "~/components/rgbirdflop/presets/PresetPreview";
+import { useSession } from "~/routes/plugin@auth";
+import { getPresets } from "~/util/rgb/presets";
+import { Notification, NotificationContext } from "~/util/Notification";
 import {
   privatePresetsContext,
   savedPresetsContext,
-} from '~/routes/resources/rgb/presets';
-import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
-import Save from 'lucide-icons-qwik/icons/Save';
+} from "~/routes/resources/rgb/presets";
+import ChevronLeft from "lucide-icons-qwik/icons/ChevronLeft";
+import Save from "lucide-icons-qwik/icons/Save";
 
-import { inlineTranslate } from 'qwik-speak';
-import { getDB, presets, PublicPreset, User, users } from '~/util/db';
-import { eq } from 'drizzle-orm';
+import { inlineTranslate } from "qwik-speak";
+import { getDB, presets, PublicPreset, User, users } from "~/util/db";
+import { eq } from "drizzle-orm";
 
 export const getUsersPresets = server$(async (userId: string) => {
   const db = getDB();
-  if (!db) throw new Error('No database connection');
+  if (!db) throw new Error("No database connection");
 
   const userInfo = await db
     .select()
@@ -32,7 +32,7 @@ export const getUsersPresets = server$(async (userId: string) => {
     .where(eq(users.id, userId))
     .get();
 
-  if (!userInfo) throw new Error('User not found');
+  if (!userInfo) throw new Error("User not found");
 
   let presetsFromDB: {
     user: typeof userInfo;
@@ -91,9 +91,9 @@ export default component$(
         privatePresets.value = privatePresets.value.concat(localStoragePresets);
       } catch (err) {
         const notification = new Notification()
-          .setTitle('Error loading saved presets')
+          .setTitle("Error loading saved presets")
           .setDescription(`Error: ${err}`)
-          .setBgColor('lum-grad-bg-red/50')
+          .setBgColor("lum-grad-bg-red/50")
           .setPersist(true);
         notifications.push(notification);
       }
@@ -104,9 +104,9 @@ export default component$(
       if (errors.length > 0) {
         errors.forEach((error) => {
           const notification = new Notification()
-            .setTitle('Error fetching user data')
+            .setTitle("Error fetching user data")
             .setDescription(`Error: ${error}`)
-            .setBgColor('lum-grad-bg-red/50')
+            .setBgColor("lum-grad-bg-red/50")
             .setPersist(true);
           notifications.push(notification);
         });
@@ -120,14 +120,14 @@ export default component$(
             <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
               <Save size={30} />
               <span class="flex-1">
-                {userInfo?.name || 'User'}'s Public RGBirdflop Presets
+                {userInfo?.name || "User"}'s Public RGBirdflop Presets
               </span>
               <Link
                 href="/resources/rgb/presets"
                 class="lum-btn lum-bg-transparent"
               >
-                <ChevronLeft size={20} />{' '}
-                {t('rgb.presets.back@@Back to presets')}
+                <ChevronLeft size={20} />{" "}
+                {t("rgb.presets.back@@Back to presets")}
               </Link>
             </h2>
             <div class="grid gap-2 sm:grid-cols-2">

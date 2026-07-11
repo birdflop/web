@@ -1,7 +1,7 @@
-import { server$ } from '@qwik.dev/router';
-import { getDB, presets } from '../db';
-import { presetToVector } from '../rgb/presets/vectorize';
-import { eq } from 'drizzle-orm';
+import { server$ } from "@qwik.dev/router";
+import { getDB, presets } from "../db";
+import { presetToVector } from "../rgb/presets/vectorize";
+import { eq } from "drizzle-orm";
 
 /**
  * Backfills colorVector (in OKLAB space) for all existing presets in the database
@@ -15,7 +15,7 @@ export const backfillColorVectors = server$(async function () {
   try {
     const db = getDB();
     if (!db) {
-      return { success: false, error: 'Database not available', logs };
+      return { success: false, error: "Database not available", logs };
     }
 
     const errors: Array<{ id: number; error: string }> = [];
@@ -67,10 +67,10 @@ export const backfillColorVectors = server$(async function () {
       logs,
     };
   } catch (error) {
-    console.error('Fatal error during backfill:', error);
+    console.error("Fatal error during backfill:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       logs,
     };
   }
@@ -88,7 +88,7 @@ export async function regeneratePresetVector(
 ): Promise<boolean> {
   const db = getDB();
   if (!db) {
-    throw new Error('Database not available');
+    throw new Error("Database not available");
   }
 
   try {

@@ -7,40 +7,40 @@ import {
   useTask$,
   useVisibleTask$,
   isBrowser,
-} from '@qwik.dev/core';
-import { routeLoader$ } from '@qwik.dev/router';
-import { getCookies, setCookies } from '~/util/dataUtils';
-import { inlineTranslate } from 'qwik-speak';
-import yaml from 'yaml';
-import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
-import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { Notification, NotificationContext } from '~/util/Notification';
-import Eye from 'lucide-icons-qwik/icons/Eye';
-import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
-import { defaultDescription, generateHead } from '~/root';
-import { getFormattingClasses } from '~/components/rgbirdflop/preview';
+} from "@qwik.dev/core";
+import { routeLoader$ } from "@qwik.dev/router";
+import { getCookies, setCookies } from "~/util/dataUtils";
+import { inlineTranslate } from "qwik-speak";
+import yaml from "yaml";
+import Input, { previewStyleContext } from "~/components/rgbirdflop/Input";
+import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
+import { Notification, NotificationContext } from "~/util/Notification";
+import Eye from "lucide-icons-qwik/icons/Eye";
+import { hexToRGB, rgbDefaults } from "@birdflop/rgbirdflop";
+import { defaultDescription, generateHead } from "~/root";
+import { getFormattingClasses } from "~/components/rgbirdflop/preview";
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'animpreview', url.searchParams);
+  return getCookies(cookie, "animpreview", url.searchParams);
 });
 
 const minecraftColors = {
-  '&0': '#000000',
-  '&1': '#0000AA',
-  '&2': '#00AA00',
-  '&3': '#00AAAA',
-  '&4': '#AA0000',
-  '&5': '#AA00AA',
-  '&6': '#FFAA00',
-  '&7': '#AAAAAA',
-  '&8': '#555555',
-  '&9': '#5555FF',
-  '&a': '#55FF55',
-  '&b': '#55FFFF',
-  '&c': '#FF5555',
-  '&d': '#FF55FF',
-  '&e': '#FFFF55',
-  '&f': '#FFFFFF',
+  "&0": "#000000",
+  "&1": "#0000AA",
+  "&2": "#00AA00",
+  "&3": "#00AAAA",
+  "&4": "#AA0000",
+  "&5": "#AA00AA",
+  "&6": "#FFAA00",
+  "&7": "#AAAAAA",
+  "&8": "#555555",
+  "&9": "#5555FF",
+  "&a": "#55FF55",
+  "&b": "#55FFFF",
+  "&c": "#FF5555",
+  "&d": "#FF55FF",
+  "&e": "#FFFF55",
+  "&f": "#FFFFFF",
 };
 
 export default component$(() => {
@@ -52,9 +52,9 @@ export default component$(() => {
   useVisibleTask$(() => {
     errors.forEach((error) => {
       const notification = new Notification()
-        .setTitle('Error loading cookies')
+        .setTitle("Error loading cookies")
         .setDescription(`${error}`)
-        .setBgColor('lum-grad-bg-red/50')
+        .setBgColor("lum-grad-bg-red/50")
         .setPersist(true);
       notifications.push(notification);
     });
@@ -90,13 +90,13 @@ export default component$(() => {
   const rgbStore = useStore(
     {
       ...rgbDefaults,
-      text: '',
+      text: "",
     },
     { deep: true },
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
-  const previewStyle = useSignal('default');
+  const previewStyle = useSignal("default");
   useContextProvider(previewStyleContext, previewStyle);
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -118,54 +118,54 @@ export default component$(() => {
 
   useTask$(({ track }) => {
     track(() => animprevStore.yaml);
-    if (isBrowser) setCookies('animpreview', { yaml: animprevStore.yaml });
+    if (isBrowser) setCookies("animpreview", { yaml: animprevStore.yaml });
     let json;
     try {
       json = yaml.parse(animprevStore.yaml);
     } catch (err) {
       const notification = new Notification()
-        .setTitle('Error parsing YAML')
+        .setTitle("Error parsing YAML")
         .setDescription(`Error: ${err}`)
-        .setBgColor('lum-grad-bg-red/50')
+        .setBgColor("lum-grad-bg-red/50")
         .setPersist(true);
       notifications.push(notification);
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
-    animprevStore.speed = json['change-interval'] ?? 50;
-    animprevStore.frames = json['texts'] ?? [];
+    animprevStore.speed = json["change-interval"] ?? 50;
+    animprevStore.frames = json["texts"] ?? [];
   });
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <Eye size={32} />
-        {t('nav.resources.tabAnimationPreview.title@@TAB Animation Preview')}
+        {t("nav.resources.tabAnimationPreview.title@@TAB Animation Preview")}
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game',
+          "nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game",
         )}
       </p>
 
       <Input readOnly playerName="AnimPreview">
         {(() => {
-          if (!animprevStore.frames[animprevStore.frame]) return '';
+          if (!animprevStore.frames[animprevStore.frame]) return "";
           const pattern =
             /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/g;
           const pattern2 =
             /&?(#([0-9A-Fa-f]{6}))?((&[0-9a-fk-or]){0,5})([^&#]*)/;
           const spans =
             animprevStore.frames[animprevStore.frame].match(pattern);
-          let color = '#ffffff';
+          let color = "#ffffff";
           return spans?.map((string: string, i: number) => {
             const result = string.match(pattern2);
-            if (!result) return '';
+            if (!result) return "";
             console.log(result);
             color = result[2] ? `#${result[2]}` : color;
 
             const shadowLength =
-              previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
+              previewStyle.value == "default" ? "4px 4px" : "2px 2px";
             const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
             const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
             Object.keys(minecraftColors).forEach((key) => {
@@ -180,11 +180,11 @@ export default component$(() => {
                   textShadow: `${shadowLength} 0 ${shadowColor}`,
                 }}
                 class={getFormattingClasses({
-                  underline: result[3]?.includes('&n'),
-                  strikethrough: result[3]?.includes('&m'),
-                  bold: result[3]?.includes('&l'),
-                  italic: result[3]?.includes('&o'),
-                  obfuscate: result[3]?.includes('&k'),
+                  underline: result[3]?.includes("&n"),
+                  strikethrough: result[3]?.includes("&m"),
+                  bold: result[3]?.includes("&l"),
+                  italic: result[3]?.includes("&o"),
+                  obfuscate: result[3]?.includes("&k"),
                 })}
               >
                 {result[result.length - 1]}
@@ -195,10 +195,10 @@ export default component$(() => {
       </Input>
 
       <div class="mb-2 flex flex-col gap-1">
-        <label for="animation">{t('animtab.yamlInput@@YAML Input')}</label>
+        <label for="animation">{t("animtab.yamlInput@@YAML Input")}</label>
         <textarea
           id="animation"
-          class={{ 'lum-input h-96 font-mono': true }}
+          class={{ "lum-input h-96 font-mono": true }}
           value={animprevStore.yaml}
           onInput$={(e, el) => {
             animprevStore.yaml = el.value;
@@ -214,8 +214,8 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'TAB Animation Previewer - Birdflop',
+  title: "TAB Animation Previewer - Birdflop",
   description:
-    'Preview TAB Animations without the need to put them in-game. ' +
+    "Preview TAB Animations without the need to put them in-game. " +
     defaultDescription,
 });

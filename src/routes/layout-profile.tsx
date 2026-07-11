@@ -1,18 +1,18 @@
-import { component$, Slot } from '@qwik.dev/core';
+import { component$, Slot } from "@qwik.dev/core";
 
-import { useSession, useSignIn, useSignOut } from './plugin@auth';
-import { Form, Link, useLocation } from '@qwik.dev/router';
-import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
-import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
-import LogOut from 'lucide-icons-qwik/icons/LogOut';
-import Settings from 'lucide-icons-qwik/icons/Settings';
-import { Birdflop } from '@luminescent/icons-qwik';
-import { inlineTranslate } from 'qwik-speak';
+import { useSession, useSignIn, useSignOut } from "./plugin@auth";
+import { Form, Link, useLocation } from "@qwik.dev/router";
+import AppWindow from "lucide-icons-qwik/icons/AppWindow";
+import CircleUserRound from "lucide-icons-qwik/icons/CircleUserRound";
+import LogOut from "lucide-icons-qwik/icons/LogOut";
+import Settings from "lucide-icons-qwik/icons/Settings";
+import { Birdflop } from "@luminescent/icons-qwik";
+import { inlineTranslate } from "qwik-speak";
 
-import Layout, { useIsAdmin } from './layout';
+import Layout, { useIsAdmin } from "./layout";
 
 // Re-export route loaders used by Layout component
-export * from './layout';
+export * from "./layout";
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -26,16 +26,12 @@ export default component$(() => {
     return (
       <Layout>
         <div class="text-red-400">
-          <Birdflop
-            confused
-            size={100}
-            fillGradient={['#54daf4', '#545eb6']}
-          />
+          <Birdflop confused size={100} fillGradient={["#54daf4", "#545eb6"]} />
           <h1 class="my-6 text-5xl font-extrabold">
-            {t('nav.profile.notLoggedIn.title@@You are not logged in!')}
+            {t("nav.profile.notLoggedIn.title@@You are not logged in!")}
           </h1>
           <h4 class="text-lum-text-secondary">
-            {t('nav.profile.notLoggedIn.description@@Click below to login')}
+            {t("nav.profile.notLoggedIn.description@@Click below to login")}
           </h4>
           <div class="mt-4 flex">
             <Form action={signIn}>
@@ -46,7 +42,7 @@ export default component$(() => {
                 value={loc.url.pathname + loc.url.search}
               />
               <button class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue text-white">
-                <CircleUserRound size={20} /> {t('nav.profile.login@@Login')}
+                <CircleUserRound size={20} /> {t("nav.profile.login@@Login")}
               </button>
             </Form>
           </div>
@@ -68,7 +64,7 @@ export default component$(() => {
                 class="h-9 w-9 rounded-full!"
               />
             )}
-            {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+            {t("nav.profile.hey@@Hey")}, {session.value.user?.name || "User"}!
             {isAdmin && (
               <Link href="/admin" class="lum-btn">
                 <AppWindow />
@@ -83,7 +79,7 @@ export default component$(() => {
         <div class="flex items-center gap-4">
           <Link href="/settings" class="lum-btn lum-bg-transparent">
             <Settings />
-            {t('nav.settings.title@@Settings')}
+            {t("nav.settings.title@@Settings")}
           </Link>
           <Form action={signOut} q:slot="extra-buttons">
             <input type="hidden" name="providerId" value="discord" />
@@ -93,7 +89,7 @@ export default component$(() => {
               value={loc.url.pathname + loc.url.search}
             />
             <button class="lum-btn lum-bg-transparent">
-              <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
+              <LogOut size={20} /> {t("nav.profile.logout@@Logout")}
             </button>
           </Form>
         </div>

@@ -1,16 +1,16 @@
-import { component$, Slot, useSignal } from '@qwik.dev/core';
-import { LinkProps } from '@qwik.dev/router';
-import SiGithub from 'simple-icons-qwik/icons/SiGithub';
-import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
-import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
-import Check from 'lucide-icons-qwik/icons/Check';
-import Download from 'lucide-icons-qwik/icons/Download';
-import Link from 'lucide-icons-qwik/icons/Link';
-import Loader2 from 'lucide-icons-qwik/icons/Loader2';
-import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
-import { PluginType } from '~/util/plugins/ServerPlugin';
+import { component$, Slot, useSignal } from "@qwik.dev/core";
+import { LinkProps } from "@qwik.dev/router";
+import SiGithub from "simple-icons-qwik/icons/SiGithub";
+import SiModrinth from "simple-icons-qwik/icons/SiModrinth";
+import SiSpigotmc from "simple-icons-qwik/icons/SiSpigotmc";
+import Check from "lucide-icons-qwik/icons/Check";
+import Download from "lucide-icons-qwik/icons/Download";
+import Link from "lucide-icons-qwik/icons/Link";
+import Loader2 from "lucide-icons-qwik/icons/Loader2";
+import { downloadSpigotPlugin } from "~/util/plugins/SpigotPlugin";
+import { PluginType } from "~/util/plugins/ServerPlugin";
 
-export interface PluginCardProps extends Omit<LinkProps, 'class'> {
+export interface PluginCardProps extends Omit<LinkProps, "class"> {
   class?: {
     [key: string]: boolean;
   };
@@ -34,12 +34,12 @@ export default component$<PluginCardProps>(
       <div
         key={plugin.id}
         class={{
-          'lum-card lum-grad-bg-lum-card-bg/90 relative flex-1 overflow-clip p-4': true,
-          'border-green': updateAvailable,
+          "lum-card lum-grad-bg-lum-card-bg/90 relative flex-1 overflow-clip p-4": true,
+          "border-green": updateAvailable,
           ...cardClass,
         }}
         style={{
-          '--lum-border-radius': '1rem',
+          "--lum-border-radius": "1rem",
         }}
       >
         {plugin.iconUrl && (
@@ -56,18 +56,18 @@ export default component$<PluginCardProps>(
           <div class="flex-1 flex-col items-center">
             {plugin.latestVersion && updateAvailable && (
               <p class="mb-2 text-xs text-green-500!">
-                Update available as of{' '}
+                Update available as of{" "}
                 {new Date(plugin.latestVersion.releaseDate).toLocaleDateString(
                   undefined,
-                  { year: 'numeric', month: 'short', day: 'numeric' },
+                  { year: "numeric", month: "short", day: "numeric" },
                 )}
               </p>
             )}
             <p class="flex items-center gap-2">
-              {plugin.type === 'spigot' && !plugin.iconUrl && (
+              {plugin.type === "spigot" && !plugin.iconUrl && (
                 <SiSpigotmc class="fill-yellow" />
               )}
-              {plugin.type === 'modrinth' && !plugin.iconUrl && (
+              {plugin.type === "modrinth" && !plugin.iconUrl && (
                 <SiModrinth class="fill-green" />
               )}
               {plugin.iconUrl && (
@@ -83,15 +83,15 @@ export default component$<PluginCardProps>(
               <span class="text-lum-text! text-lg!">{plugin.name}</span>
               {plugin.mcVersions && (
                 <span class="text-lum-text-secondary text-sm">
-                  {plugin.mcVersions[0]} -{' '}
+                  {plugin.mcVersions[0]} -{" "}
                   {plugin.mcVersions[plugin.mcVersions.length - 1]}
                 </span>
               )}
             </p>
 
-            {plugin.type !== 'misc' && (
+            {plugin.type !== "misc" && (
               <p class="text-lum-text-secondary text-sm">
-                {plugin.description ?? 'Loading...'}
+                {plugin.description ?? "Loading..."}
               </p>
             )}
           </div>
@@ -99,22 +99,22 @@ export default component$<PluginCardProps>(
           <div class="flex-1 flex-col items-center gap-2">
             {plugin.updateDate && (
               <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Last Updated{' '}
+                Last Updated{" "}
                 {new Date(plugin.updateDate).toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
                 })}
               </p>
             )}
             {plugin.currentVersion && (
               <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Current:{' '}
+                Current:{" "}
                 <span
                   class={{
-                    'font-mono': true,
-                    'text-red-500': updateAvailable,
-                    'text-blue-500': !updateAvailable,
+                    "font-mono": true,
+                    "text-red-500": updateAvailable,
+                    "text-blue-500": !updateAvailable,
                   }}
                 >
                   {plugin.currentVersion.name}
@@ -123,13 +123,13 @@ export default component$<PluginCardProps>(
             )}
             {plugin.latestVersion && (
               <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Latest:{' '}
+                Latest:{" "}
                 <span class="font-mono text-green-500">
                   {plugin.latestVersion.name}
                 </span>
               </p>
             )}
-            {plugin.type !== 'misc' && !plugin && (
+            {plugin.type !== "misc" && !plugin && (
               <Loader2 size={16} class="animate-spin" />
             )}
           </div>
@@ -140,15 +140,15 @@ export default component$<PluginCardProps>(
             {plugin.file?.url && (
               <button
                 class={{
-                  'lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200': true,
+                  "lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200": true,
                 }}
                 onClick$={async () => {
                   if (!plugin.file?.url) return;
                   isLoading.value = true;
 
-                  if (plugin.type === 'spigot')
+                  if (plugin.type === "spigot")
                     await downloadSpigotPlugin(plugin, spigotRateLimit);
-                  else window.open(plugin.file.url, '_blank');
+                  else window.open(plugin.file.url, "_blank");
 
                   plugin.currentVersion = plugin.latestVersion;
                   isLoading.value = false;
@@ -157,7 +157,7 @@ export default component$<PluginCardProps>(
               >
                 <Download size={16} /> Download
                 <span class="text-lum-text-secondary text-xs">
-                  {plugin.file?.name ?? plugin.latestVersion?.name ?? 'latest'}
+                  {plugin.file?.name ?? plugin.latestVersion?.name ?? "latest"}
                 </span>
                 {!!plugin.file?.size && (
                   <span class="text-lum-text-secondary text-xs">
@@ -174,7 +174,7 @@ export default component$<PluginCardProps>(
             {plugin.url && (
               <a
                 class={{
-                  'lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200': true,
+                  "lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200": true,
                 }}
                 href={plugin.url}
                 target="_blank"
@@ -207,9 +207,9 @@ export default component$<PluginCardProps>(
                 <SiGithub size={16} class="fill-current" />
               </a>
             )}
-            {plugin.type === 'spigot' && (
+            {plugin.type === "spigot" && (
               <>
-                {plugin.file?.externalUrl?.includes('modrinth') && (
+                {plugin.file?.externalUrl?.includes("modrinth") && (
                   <a
                     href={plugin.file?.externalUrl}
                     target="_blank"
@@ -227,7 +227,7 @@ export default component$<PluginCardProps>(
                 </a>
               </>
             )}
-            {plugin.type === 'modrinth' && (
+            {plugin.type === "modrinth" && (
               <>
                 <a
                   href={`https://modrinth.com/plugin/${plugin.id}`}

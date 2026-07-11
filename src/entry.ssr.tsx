@@ -8,9 +8,9 @@
  */
 import { createRenderer } from "@qwik.dev/router";
 import Root from "./root";
-import { isDev } from '@qwik.dev/core/build';
-import type { RenderOptions } from '@qwik.dev/core/server';
-import { config } from '~/speak-config';
+import { isDev } from "@qwik.dev/core/build";
+import type { RenderOptions } from "@qwik.dev/core/server";
+import { config } from "~/speak-config";
 
 /**
  * Determine the base URL to use for loading the chunks in the browser.
@@ -23,9 +23,9 @@ export function extractBase({ serverData }: RenderOptions): string {
     serverData?.locale &&
     config.supportedLocales.find((locale) => locale.lang === serverData?.locale)
   ) {
-    return '/build/' + serverData.locale;
+    return "/build/" + serverData.locale;
   } else {
-    return '/build';
+    return "/build";
   }
 }
 
