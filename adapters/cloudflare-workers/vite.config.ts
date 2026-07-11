@@ -1,15 +1,15 @@
-import { cloudflarePagesAdapter as cloudflareWorkersAdapter } from "@qwik.dev/router/adapters/cloudflare-pages/vite";
+import { cloudflarePagesAdapter } from "@qwik.dev/router/adapters/cloudflare-pages/vite";
 import { extendConfig } from "@qwik.dev/router/vite";
-import baseConfig from "../../vite.config";
+import baseConfig from "../../vite.config.ts";
 
 export default extendConfig(baseConfig, () => {
   return {
     build: {
       ssr: true,
       rollupOptions: {
-        input: ["src/entry.cloudflare-pages.tsx", "@qwik-router-config"],
+        input: ["src/entry.cloudflare-pages.tsx"],
       },
     },
-    plugins: [cloudflareWorkersAdapter()],
+    plugins: [cloudflarePagesAdapter()],
   };
 });

@@ -31,6 +31,7 @@ import {
 import Accordion from "~/components/Elements/Accordion";
 import { discordLink } from "~/components/Elements/Nav";
 import { SelectList } from "~/components/Elements/SelectList";
+import { PresetPartial, PublicPreset } from "~/util/db";
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -102,10 +103,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     notifications.push(notification);
   });
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? [],
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? [],
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
   const openItems = useContext(openItemsContext);

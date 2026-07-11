@@ -319,10 +319,14 @@ export default component$(() => {
     previewWithSettings: false,
   });
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? [],
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? [],
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
   // eslint-disable-next-line qwik/no-use-visible-task

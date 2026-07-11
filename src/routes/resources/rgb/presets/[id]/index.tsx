@@ -9,7 +9,7 @@ import {
 } from "@qwik.dev/core";
 import { inlineTranslate } from "qwik-speak";
 import { useSession } from "~/routes/plugin@auth";
-import { getPresets } from "~/util/rgb/presets";
+import { getPresets, rgbPreset } from "~/util/rgb/presets";
 import Check from "lucide-icons-qwik/icons/Check";
 import ChevronLeft from "lucide-icons-qwik/icons/ChevronLeft";
 import Copy from "lucide-icons-qwik/icons/Copy";
@@ -36,7 +36,7 @@ import {
   deletePreset,
 } from "~/util/dataUtils";
 import { privatePresetsContext, savedPresetsContext } from "..";
-import { getDB, presets, savedPresets, users } from "~/util/db";
+import { getDB, presets, PublicPreset, savedPresets, users } from "~/util/db";
 import { eq } from "drizzle-orm";
 import { useIsAdmin } from "~/routes/layout-profile";
 import { discordLink, donateLink } from "~/components/Elements/Nav";
@@ -97,10 +97,14 @@ export default component$(() => {
   const previewStyle = useSignal("default");
   useContextProvider(previewStyleContext, previewStyle);
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? [],
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? [],
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
   const existingPreset =
