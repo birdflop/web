@@ -4,9 +4,9 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { generateHead } from '~/root';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';

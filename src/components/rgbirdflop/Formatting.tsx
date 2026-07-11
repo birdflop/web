@@ -1,12 +1,10 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import {
-  Bold,
-  Eraser,
-  Italic,
-  Strikethrough,
-  Underline,
-  Wand2,
-} from 'lucide-icons-qwik';
+import { $, component$, useContext, useSignal } from '@qwik.dev/core';
+import Bold from 'lucide-icons-qwik/icons/Bold';
+import Eraser from 'lucide-icons-qwik/icons/Eraser';
+import Italic from 'lucide-icons-qwik/icons/Italic';
+import Strikethrough from 'lucide-icons-qwik/icons/Strikethrough';
+import Underline from 'lucide-icons-qwik/icons/Underline';
+import Wand2 from 'lucide-icons-qwik/icons/Wand2';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
@@ -14,7 +12,7 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import {
   FormatSegment,
   Formatting,
@@ -250,7 +248,7 @@ export default component$(() => {
 
   return (
     <>
-      <SelectMenuRaw
+      <SelectMenu
         class={{
           'lum-btn-p-2 lum-bg-lum-card-bg': true,
           'lum-bg-blue/20': !!isSelectionActive,

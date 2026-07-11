@@ -1,12 +1,16 @@
-import { component$, useContext, useSignal } from '@builder.io/qwik';
+import { component$, useContext, useSignal } from '@qwik.dev/core';
 
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import { CircleUserRound, Palette, Plus, Save, X } from 'lucide-icons-qwik';
+import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Save from 'lucide-icons-qwik/icons/Save';
+import X from 'lucide-icons-qwik/icons/X';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { renderPreview } from '~/components/rgbirdflop/preview';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { Form, Link } from '@builder.io/qwik-city';
+import { Form, Link } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbPreset } from '~/util/rgb/presets';
 import { inlineTranslate } from 'qwik-speak';

@@ -7,22 +7,20 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from '@builder.io/qwik';
-import type { NoSerialize } from '@builder.io/qwik';
+} from '@qwik.dev/core';
+import type { NoSerialize } from '@qwik.dev/core';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  Eye,
-  Plus,
-  Presentation,
-  Settings,
-  Terminal,
-  Trash,
-} from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Presentation from 'lucide-icons-qwik/icons/Presentation';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';

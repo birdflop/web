@@ -7,15 +7,15 @@ import {
   useTask$,
   useVisibleTask$,
   isBrowser,
-} from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
+} from '@qwik.dev/core';
+import { routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Eye } from 'lucide-icons-qwik';
+import Eye from 'lucide-icons-qwik/icons/Eye';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import { getFormattingClasses } from '~/components/rgbirdflop/preview';

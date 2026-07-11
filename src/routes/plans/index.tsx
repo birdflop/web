@@ -1,8 +1,8 @@
-import { component$, useStore } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { component$, useStore } from '@qwik.dev/core';
+import { routeLoader$ } from '@qwik.dev/router';
 
-import { Blobs } from '@luminescent/ui-qwik';
-import { Package, ShoppingCart } from 'lucide-icons-qwik';
+import Package from 'lucide-icons-qwik/icons/Package';
+import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
 import { discordLink } from '~/components/Elements/Nav';
 import { generateHead } from '~/root';
 
@@ -149,17 +149,6 @@ export default component$(() => {
                       }, 100);
                     }}
                   >
-                    {plansStore.plan == planName && (
-                      <Blobs
-                        color="blue"
-                        class={{
-                          'rounded-lum absolute -z-10 overflow-clip': true,
-                        }}
-                        style={{
-                          transform: 'translateZ(-10px)',
-                        }}
-                      />
-                    )}
                     <p class="text-lum-text-secondary">
                       Last quarter, clients paid{' '}
                       <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
@@ -321,17 +310,6 @@ export default component$(() => {
                         <p class="text-lum-text-secondary">
                           {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                         </p>
-                        {plansStore.gb == Number(gb) && (
-                          <Blobs
-                            color="green"
-                            class={{
-                              'rounded-lum absolute overflow-clip': true,
-                            }}
-                            style={{
-                              transform: 'translateZ(-10px)',
-                            }}
-                          />
-                        )}
                       </button>
                     );
                   })}

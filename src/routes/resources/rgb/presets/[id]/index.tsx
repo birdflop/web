@@ -6,35 +6,29 @@ import {
   useSignal,
   useStore,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
-import {
-  Check,
-  ChevronLeft,
-  Copy,
-  Github,
-  Loader2,
-  Minus,
-  MousePointer2,
-  Palette,
-  Rainbow,
-  Save,
-  Trash,
-} from 'lucide-icons-qwik';
+import Check from 'lucide-icons-qwik/icons/Check';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+import Minus from 'lucide-icons-qwik/icons/Minus';
+import MousePointer2 from 'lucide-icons-qwik/icons/MousePointer2';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { NotificationContext, Notification } from '~/util/Notification';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { renderPreview } from '~/components/rgbirdflop/preview';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import {
-  LogoBirdflop,
-  LogoLuminescent,
-  SelectMenuRaw,
-} from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
+import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
 import {
   savePreset,
   unsavePreset,
@@ -46,6 +40,7 @@ import { getDB, presets, savedPresets, users } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { useIsAdmin } from '~/routes/layout-profile';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -197,12 +192,12 @@ export default component$(() => {
         {presetInfo.author && !presetInfo.user && (
           <>
             {presetInfo.author == 'RGBirdflop' && (
-              <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+              <Birdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
             )}
             {presetInfo.author == 'SimplyMC' && (
-              <LogoLuminescent size={32} class="text-luminescent-300" />
+              <Luminescent size={32} class="text-luminescent-300" />
             )}
-            {presetInfo.author.includes('GitHub') && <Github size={32} />}
+            {presetInfo.author.includes('GitHub') && <SiGithub size={32} />}
             {presetInfo.author}
           </>
         )}
@@ -233,7 +228,7 @@ export default component$(() => {
       )}
 
       <div class="flex gap-2">
-        <SelectMenuRaw
+        <SelectMenu
           id={`use-${presetInfo.name}-${presetInfo.author}`}
           hover
           customDropdown
@@ -241,9 +236,9 @@ export default component$(() => {
             'lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex': true,
           }}
         >
-          <div q:slot="dropdown" class="flex items-center gap-3">
+          <span q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
-          </div>
+          </span>
           <Link
             href={`/resources/rgb?${searchParams.toString()}`}
             q:slot="extra-buttons"
@@ -260,7 +255,7 @@ export default component$(() => {
             <Rainbow size={20} />{' '}
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </Link>
-        </SelectMenuRaw>
+        </SelectMenu>
         <button
           class={{
             'lum-btn text-sm': true,

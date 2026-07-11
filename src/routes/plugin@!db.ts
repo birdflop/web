@@ -1,4 +1,4 @@
-import { type RequestHandler } from '@builder.io/qwik-city';
+import { type RequestHandler } from '@qwik.dev/router';
 import { drizzle } from 'drizzle-orm/d1';
 import { type AppDatabase, initializeDbIfNeeded } from '~/util/db';
 

@@ -1,8 +1,8 @@
-import { component$ } from '@builder.io/qwik';
-import type { RequestHandler } from '@builder.io/qwik-city';
-import { Link } from '@builder.io/qwik-city';
-import { LogoBirdflop } from '@luminescent/ui-qwik';
-import { Home } from 'lucide-icons-qwik';
+import { component$ } from '@qwik.dev/core';
+import type { RequestHandler } from '@qwik.dev/router';
+import { Link } from '@qwik.dev/router';
+import { Birdflop } from '@luminescent/icons-qwik';
+import Home from 'lucide-icons-qwik/icons/Home';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -21,7 +21,7 @@ export default component$(() => {
   return (
     <section class="mx-auto flex min-h-svh max-w-7xl items-center justify-center px-6">
       <div>
-        <LogoBirdflop
+        <Birdflop
           confused
           size={100}
           fillGradient={['#54daf4', '#545eb6']}

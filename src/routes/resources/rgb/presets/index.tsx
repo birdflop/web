@@ -9,22 +9,20 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets, rgbPreset } from '~/util/rgb/presets';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Save,
-  Search,
-  Send,
-  Settings,
-} from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Search from 'lucide-icons-qwik/icons/Search';
+import Send from 'lucide-icons-qwik/icons/Send';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
+import { routeLoader$, useNavigate } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { getCookies } from '~/util/dataUtils';
@@ -241,7 +239,7 @@ const Pagination = component$(
           <p class="whitespace-nowrap">
             {t('rgb.presets.pagination.perPage@@Per page:')}
           </p>
-          <SelectMenuRaw
+          <SelectMenu
             class={{
               'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
             }}
@@ -425,7 +423,7 @@ export default component$(() => {
           />
         </div>
         <div class="flex items-center justify-center gap-1">
-          <SelectMenuRaw
+          <SelectMenu
             value={`${sortBy}-${sortOrder}`}
             class={{
               'rounded-lum-1 lum-bg-transparent': true,
@@ -466,7 +464,7 @@ export default component$(() => {
               },
             ]}
           />
-          <SelectMenuRaw
+          <SelectMenu
             align="right"
             id="settings"
             class={{
@@ -531,7 +529,7 @@ export default component$(() => {
                 )}
               </p>
             </div>
-          </SelectMenuRaw>
+          </SelectMenu>
         </div>
       </div>
 

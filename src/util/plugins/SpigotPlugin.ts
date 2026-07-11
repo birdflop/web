@@ -1,4 +1,4 @@
-import { $ } from '@builder.io/qwik';
+import { $ } from '@qwik.dev/core';
 import { BasePlugin } from './BasePlugin';
 import { PluginType } from './ServerPlugin';
 import { Notification } from '../Notification';

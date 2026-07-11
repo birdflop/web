@@ -1,10 +1,13 @@
-import { $, component$, useOnDocument, useSignal } from '@builder.io/qwik';
+import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core';
 import {
   useContent,
   useLocation,
   useDocumentHead,
-} from '@builder.io/qwik-city';
-import { AlertCircle, Edit, Clock, User } from 'lucide-icons-qwik';
+} from '@qwik.dev/router';
+import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
+import Edit from 'lucide-icons-qwik/icons/Edit';
+import Clock from 'lucide-icons-qwik/icons/Clock';
+import User from 'lucide-icons-qwik/icons/User';
 
 const makeEditPageUrl = (url: string): string => {
   const segments = url.split('/').filter((part) => part !== '');

@@ -2,7 +2,7 @@ import {
   sortColors,
   rgbColorDefaultsWithColorMode,
 } from '@birdflop/rgbirdflop';
-import { createContextId, Signal } from '@builder.io/qwik';
+import { createContextId, Signal } from '@qwik.dev/core';
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 

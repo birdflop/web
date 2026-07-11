@@ -1,6 +1,8 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext } from '@qwik.dev/core';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { Bird, Cookie, Settings } from 'lucide-icons-qwik';
+import Bird from 'lucide-icons-qwik/icons/Bird';
+import Cookie from 'lucide-icons-qwik/icons/Cookie';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';

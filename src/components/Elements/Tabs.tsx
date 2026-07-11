@@ -1,12 +1,13 @@
-import { component$, PropFunction, PropsOf } from '@builder.io/qwik';
+import { component$, QRL, PropsOf } from '@qwik.dev/core';
 import { ButtonContainer, ButtonContainerProps } from './ButtonContainer';
-import { Plus, X } from 'lucide-icons-qwik';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import X from 'lucide-icons-qwik/icons/X';
 
 type Value = { name: string; value: string };
 interface TabsProps extends Omit<ButtonContainerProps, 'onClick$'> {
-  onPlus$?: PropFunction<PropsOf<'button'>['onClick$']>;
-  onClick$?: PropFunction<(value: Value) => void>;
-  onDelete$?: PropFunction<(value: Value) => void>;
+  onPlus$?: PropsOf<'button'>['onClick$'];
+  onClick$?: QRL<(value: Value) => void>;
+  onDelete$?: QRL<(value: Value) => void>;
   values?: Value[];
   value?: Value;
 }

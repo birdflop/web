@@ -8,7 +8,6 @@
   @import '@luminescent/ui/formatting';
 }
 
-@config '@luminescent/ui-qwik/config';
 @source '../node_modules/@luminescent/ui-qwik';
 
 @theme {

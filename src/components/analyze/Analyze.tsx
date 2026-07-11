@@ -1,6 +1,6 @@
-import { Slot, component$, useSignal } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
-import { Zap } from 'lucide-icons-qwik';
+import { Slot, component$, useSignal } from '@qwik.dev/core';
+import { Link } from '@qwik.dev/router';
+import Zap from 'lucide-icons-qwik/icons/Zap';
 import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {

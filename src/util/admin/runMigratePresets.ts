@@ -1,4 +1,4 @@
-import { server$ } from '@builder.io/qwik-city';
+import { server$ } from '@qwik.dev/router';
 import { getDB, presets } from '../db';
 import { loadPreset } from '../rgb/presets';
 import { eq } from 'drizzle-orm';

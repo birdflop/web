@@ -1,5 +1,5 @@
-import { component$ } from '@builder.io/qwik';
-import { useDocumentHead } from '@builder.io/qwik-city';
+import { component$ } from '@qwik.dev/core';
+import { useDocumentHead } from '@qwik.dev/router';
 
 export default component$(() => {
   const { frontmatter } = useDocumentHead<{ contributors?: string[] }>();

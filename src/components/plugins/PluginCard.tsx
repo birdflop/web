@@ -1,7 +1,12 @@
-import { component$, Slot, useSignal } from '@builder.io/qwik';
-import { LinkProps } from '@builder.io/qwik-city';
-import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { Check, Download, Link, Loader2 } from 'lucide-icons-qwik';
+import { component$, Slot, useSignal } from '@qwik.dev/core';
+import { LinkProps } from '@qwik.dev/router';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
+import Check from 'lucide-icons-qwik/icons/Check';
+import Download from 'lucide-icons-qwik/icons/Download';
+import Link from 'lucide-icons-qwik/icons/Link';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import { PluginType } from '~/util/plugins/ServerPlugin';
 

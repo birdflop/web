@@ -4,9 +4,9 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { generateHead } from '~/root';
-import { Link, server$ } from '@builder.io/qwik-city';
+import { Link, server$ } from '@qwik.dev/router';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
@@ -15,7 +15,8 @@ import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { ChevronLeft, Save } from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import Save from 'lucide-icons-qwik/icons/Save';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getDB, presets, PublicPreset, User, users } from '~/util/db';

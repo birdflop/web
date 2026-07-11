@@ -5,7 +5,7 @@ import {
   useContext,
   useOnDocument,
   useSignal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import {
@@ -13,7 +13,9 @@ import {
   rgbColorDefaultsWithColorMode,
   type ColorStop,
 } from '@birdflop/rgbirdflop';
-import { Ban, Droplet, Palette } from 'lucide-icons-qwik';
+import Ban from 'lucide-icons-qwik/icons/Ban';
+import Droplet from 'lucide-icons-qwik/icons/Droplet';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 import {
   applyStyleToRange,
   styleAtChar,

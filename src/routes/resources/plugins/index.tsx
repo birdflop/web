@@ -9,30 +9,29 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
-import {
-  Blocks,
-  Check,
-  Copy,
-  Download,
-  Ellipsis,
-  Filter,
-  Loader2,
-  Plus,
-  RefreshCw,
-  Trash,
-  X,
-} from 'lucide-icons-qwik';
+import Blocks from 'lucide-icons-qwik/icons/Blocks';
+import Check from 'lucide-icons-qwik/icons/Check';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Download from 'lucide-icons-qwik/icons/Download';
+import Ellipsis from 'lucide-icons-qwik/icons/Ellipsis';
+import Filter from 'lucide-icons-qwik/icons/Filter';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+import X from 'lucide-icons-qwik/icons/X';
 import { defaultDescription, generateHead } from '~/root';
-import { SelectMenu, SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
 import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/track';
 import { softwareOptions } from '../flags';
-import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
+import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import {
   getPlugin,
   PluginSource,
@@ -378,7 +377,7 @@ export default component$(() => {
                 <Copy size={16} />
               </button>
 
-              <SelectMenuRaw
+              <SelectMenu
                 id="software"
                 onChange$={(e, el) => {
                   pluginsStore.servers[pluginsStore.openServer!].software =
@@ -469,7 +468,7 @@ export default component$(() => {
                   }
                 }}
               />
-              <SelectMenuRaw
+              <SelectMenu
                 id="filter"
                 onChange$={(e, el) => {
                   if (el.value === 'all') pluginsStore.filter = undefined;
@@ -493,7 +492,7 @@ export default component$(() => {
                   <Filter size={16} />
                     Filter
                 </span>
-              </SelectMenuRaw>
+              </SelectMenu>
             </div>
 
             {Object.keys(

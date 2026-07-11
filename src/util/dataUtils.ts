@@ -1,4 +1,4 @@
-import { server$, type Cookie } from '@builder.io/qwik-city';
+import { server$, type Cookie } from '@qwik.dev/router';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import {
   animTABDefaults,

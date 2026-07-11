@@ -5,7 +5,7 @@ import {
   QRL,
   Slot,
   useContext,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
@@ -71,9 +71,7 @@ export default component$(
           openItems.value = await toggleAccordion(sectionName, openItems.value);
         }}
       >
-        <div class="flex items-center gap-2">
-          <Slot />
-        </div>
+        <Slot />
       </Dropdown>
     );
   },

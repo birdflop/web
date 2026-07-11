@@ -1,12 +1,12 @@
-import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
-import { RequestHandler } from '@builder.io/qwik-city';
+import { component$, useSignal, $, useContextProvider } from '@qwik.dev/core';
+import { RequestHandler } from '@qwik.dev/router';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { AppWindow } from 'lucide-icons-qwik';
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
 import { checkAdmin } from '../layout';
 import {
   loadAllPresets,

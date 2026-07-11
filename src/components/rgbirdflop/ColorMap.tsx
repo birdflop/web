@@ -1,4 +1,4 @@
-import { component$, useContext, useComputed$ } from '@builder.io/qwik';
+import { component$, useContext, useComputed$ } from '@qwik.dev/core';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
   sortColors,
@@ -11,7 +11,7 @@ import {
   ColorStop,
   rgbColorDefaults,
 } from '@birdflop/rgbirdflop';
-import { Plus } from 'lucide-icons-qwik';
+import Plus from 'lucide-icons-qwik/icons/Plus';
 
 /**
  * Generates a CSS gradient string using the specified gradient type

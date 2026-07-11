@@ -1,6 +1,7 @@
-import { $, component$, useComputed$, useContext } from '@builder.io/qwik';
+import { $, component$, useComputed$, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
-import { MousePointerClick, Palette } from 'lucide-icons-qwik';
+import MousePointerClick from 'lucide-icons-qwik/icons/MousePointerClick';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 import { combinedText, rgbSegmentsContext } from './rgbSegments';
 import SegmentColorEditor from './SegmentColorEditor';
 import { selectionContext } from '~/components/rgbirdflop/Input';

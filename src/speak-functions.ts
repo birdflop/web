@@ -1,4 +1,4 @@
-import { server$ } from '@builder.io/qwik-city';
+import { server$ } from '@qwik.dev/router';
 import type { LoadTranslationFn, Translation, TranslationFn } from 'qwik-speak';
 
 /**
@@ -10,10 +10,10 @@ const translationData = import.meta.glob<Translation>('/i18n/**/*.json');
 /**
  * Using server$, translation data is always accessed on the server
  */
-const loadTranslation$: LoadTranslationFn = server$(
+const loadTranslation$ = server$(
   async (lang: string, asset: string) =>
     await translationData[`/i18n/${lang}/${asset}.json`]?.(),
-);
+) as LoadTranslationFn;
 
 export const translationFn: TranslationFn = {
   loadTranslation$: loadTranslation$,

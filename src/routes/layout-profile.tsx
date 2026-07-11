@@ -1,14 +1,12 @@
-import { component$, Slot } from '@builder.io/qwik';
+import { component$, Slot } from '@qwik.dev/core';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
-import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import {
-  AppWindow,
-  CircleUserRound,
-  LogOut,
-  Settings,
-} from 'lucide-icons-qwik';
-import { LogoBirdflop } from '@luminescent/ui-qwik';
+import { Form, Link, useLocation } from '@qwik.dev/router';
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
+import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
+import LogOut from 'lucide-icons-qwik/icons/LogOut';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import { Birdflop } from '@luminescent/icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import Layout, { useIsAdmin } from './layout';
@@ -28,7 +26,7 @@ export default component$(() => {
     return (
       <Layout>
         <div class="text-red-400">
-          <LogoBirdflop
+          <Birdflop
             confused
             size={100}
             fillGradient={['#54daf4', '#545eb6']}

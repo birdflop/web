@@ -1,4 +1,4 @@
-import { createContextId, QRL } from '@builder.io/qwik';
+import { createContextId, QRL } from '@qwik.dev/core';
 
 export interface NotificationType {
   id: string;

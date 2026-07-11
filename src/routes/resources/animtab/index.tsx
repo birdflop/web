@@ -7,9 +7,9 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import {
   ANIMATION_STYLES,
@@ -24,7 +24,8 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { Rainbow, Braces } from 'lucide-icons-qwik';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Braces from 'lucide-icons-qwik/icons/Braces';
 import { inlineTranslate } from 'qwik-speak';
 import { deepTrack } from '~/util/track';
 import {
@@ -36,7 +37,7 @@ import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
-import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
+import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
 import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
@@ -222,19 +223,19 @@ export default component$(() => {
           previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
         )}
 
-      <NumberInput
-        id="length"
-        input
-        disabled
-        value={animtabStore.length}
-        min={1}
-        max={rgbStore.text.length}
-        class={{ 'w-full opacity-100!': true }}
-        onInput$={(event, el) => (animtabStore.length = Number(el.value))}
-        q:slot="column1"
-      >
-        {t('animtab.length@@Gradient Length')}
-      </NumberInput>
+      <Label for="length" label={t('animtab.length@@Gradient Length')}>
+        <NumberInput
+          id="length"
+          input
+          disabled
+          value={animtabStore.length}
+          min={1}
+          max={rgbStore.text.length}
+          class={{ 'w-full opacity-100!': true }}
+          onInput$={(event, el) => (animtabStore.length = Number(el.value))}
+          q:slot="column1"
+        />
+      </Label>
 
       <div class="col-span-2 flex flex-col gap-1" q:slot="options">
         <label for="nameinput">
@@ -248,18 +249,18 @@ export default component$(() => {
           onInput$={(e, el) => (animtabStore.name = el.value)}
         />
       </div>
-      <NumberInput
-        q:slot="options"
-        id="speed"
-        input
-        value={animtabStore.speed}
-        class={{ 'w-full': true }}
+      <Label for="speed" label={`${t('animtab.animation.interval@@Animation Interval')} (ms)`}>
+        <NumberInput
+          q:slot="options"
+          id="speed"
+          input
+          value={animtabStore.speed}
+          class={{ 'w-full': true }}
         step={50}
         min={50}
         onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
-      >
-        {t('animtab.animation.interval@@Animation Interval')} (ms)
-      </NumberInput>
+        />
+      </Label>
       <SelectMenu
         q:slot="options"
         id="type"

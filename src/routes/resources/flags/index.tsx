@@ -1,41 +1,40 @@
-import { component$, useStore, useTask$, isBrowser } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { component$, useStore, useTask$, isBrowser } from '@qwik.dev/core';
+import { routeLoader$ } from '@qwik.dev/router';
 import {
-  SelectMenu,
   Toggle,
-  SelectMenuRaw,
+  SelectMenu,
   RangeInput,
-  LogoPaper,
-  LogoPurpur,
-  LogoWaterfall,
-  LogoForge,
-  LogoFabric,
+  Label,
 } from '@luminescent/ui-qwik';
+import {
+  Paper as LogoPaper,
+  Purpur as LogoPurpur,
+  Waterfall as LogoWaterfall,
+  Forge as LogoForge,
+  Fabric as LogoFabric,
+} from '@luminescent/icons-qwik';
+
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { flagsDefaults, generateResult } from '~/util/flags/generateResult';
 import type { AvailableFlags } from '~/util/flags/flags';
 import { extraFlags as extFlags } from '~/util/flags/flags';
 import { serverType as srvType } from '~/util/flags/environment/serverType';
-import {
-  Box,
-  Code,
-  CircleHelp,
-  RefreshCw,
-  SquareTerminal,
-  Flag,
-  MemoryStick,
-  Computer,
-  Terminal,
-} from 'lucide-icons-qwik';
+import Box from 'lucide-icons-qwik/icons/Box';
+import Code from 'lucide-icons-qwik/icons/Code';
+import CircleHelp from 'lucide-icons-qwik/icons/CircleHelp';
+import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
+import SquareTerminal from 'lucide-icons-qwik/icons/SquareTerminal';
+import Flag from 'lucide-icons-qwik/icons/Flag';
+import MemoryStick from 'lucide-icons-qwik/icons/MemoryStick';
+import Computer from 'lucide-icons-qwik/icons/Computer';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
 import { defaultDescription, generateHead } from '~/root';
-import {
-  SiApple,
-  SiLinux,
-  SiPterodactyl,
-  SiSpigotmc,
-  SiVelocity,
-} from 'simple-icons-qwik';
+import SiApple from 'simple-icons-qwik/icons/SiApple';
+import SiLinux from 'simple-icons-qwik/icons/SiLinux';
+import SiPterodactyl from 'simple-icons-qwik/icons/SiPterodactyl';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
+import SiVelocity from 'simple-icons-qwik/icons/SiVelocity';
 import { deepTrack } from '~/util/track';
 import Output from '~/components/Elements/Output';
 
@@ -322,18 +321,18 @@ export default component$(() => {
             </div>
           </div>
           <div>
-            <RangeInput
-              id="memory"
-              min={1}
-              max={32}
-              step={0.5}
-              value={flagsStore.memory}
-              onInput$={(e, el) => {
-                flagsStore.memory = Number(el.value);
-              }}
-            >
-              {t('flags.memory.label@@Memory')} ({flagsStore.memory} GiB)
-            </RangeInput>
+            <Label for="memory" label={`${t('flags.memory.label@@Memory')} (${flagsStore.memory} GiB)`}>
+              <RangeInput
+                id="memory"
+                min={1}
+                max={32}
+                step={0.5}
+                value={flagsStore.memory}
+                onInput$={(e, el) => {
+                  flagsStore.memory = Number(el.value);
+                }}
+              />
+            </Label>
             <p class="text-lum-text-secondary mt-2 text-sm">
               {t(
                 'flags.memory.description@@The amount of memory (RAM) to allocate to your server.',
@@ -372,7 +371,7 @@ export default component$(() => {
               >
                 {t('flags.flags.label@@Flags')}
               </SelectMenu>
-              <SelectMenuRaw
+              <SelectMenu
                 id="flagshelp"
                 onChange$={(e, el) => {
                   flagsStore.flags = el.value as AvailableFlags;
@@ -420,7 +419,7 @@ export default component$(() => {
                 >
                   {t('flags.flags.obyduxs@@Obydux\'s Flags')}
                 </a>
-              </SelectMenuRaw>
+              </SelectMenu>
             </div>
             <p class="text-lum-text-secondary text-sm">
               {t(

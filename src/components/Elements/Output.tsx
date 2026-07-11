@@ -1,5 +1,5 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
-import { Clipboard } from 'lucide-icons-qwik';
+import { component$, Slot, useContext } from '@qwik.dev/core';
+import Clipboard from 'lucide-icons-qwik/icons/Clipboard';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 

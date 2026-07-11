@@ -1,7 +1,11 @@
-import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
+import { component$, useVisibleTask$, $, useContext } from '@qwik.dev/core';
 import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
-import { Moon, Sun, Sparkles, Battery, Smile } from 'lucide-icons-qwik';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import Moon from 'lucide-icons-qwik/icons/Moon';
+import Sun from 'lucide-icons-qwik/icons/Sun';
+import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
+import Battery from 'lucide-icons-qwik/icons/Battery';
+import Smile from 'lucide-icons-qwik/icons/Smile';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
 
@@ -162,7 +166,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     // Dropdown variant - full theme selector
     return (
       <div class={`relative ${className}`}>
-        <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
+        <SelectMenu id="theme-toggle-dropdown" customDropdown>
           <span q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && (
               <>
@@ -218,7 +222,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               </button>
             );
           })}
-        </SelectMenuRaw>
+        </SelectMenu>
       </div>
     );
   },

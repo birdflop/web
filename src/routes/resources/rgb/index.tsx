@@ -3,9 +3,9 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
@@ -13,7 +13,8 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { Palette, TestTube2 } from 'lucide-icons-qwik';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
 import { renderPreview } from '~/components/rgbirdflop/preview';
 import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';

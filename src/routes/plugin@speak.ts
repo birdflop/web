@@ -1,4 +1,4 @@
-import type { RequestHandler } from '@builder.io/qwik-city';
+import type { RequestHandler } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { languages } from '~/speak-config';
 

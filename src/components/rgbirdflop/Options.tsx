@@ -1,8 +1,8 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
+import { component$, Slot, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { NumberInput, Toggle } from '@luminescent/ui-qwik';
-import { Settings } from 'lucide-icons-qwik';
+import { Label, NumberInput, Toggle } from '@luminescent/ui-qwik';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -38,7 +38,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             }}
           />
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && (
+        {rgbStore.colorFormat.color != 'MiniMessage' && <Label for="colorLength" label={t('rgb.colors.charsPer@@Characters per color')}>
           <NumberInput
             input
             disabled
@@ -48,10 +48,8 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             value={rgbStore.colorLength}
             class={{ 'w-full opacity-100!': true }}
             onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
-          >
-            {t('rgb.colors.charsPer@@Characters per color')}
-          </NumberInput>
-        )}
+          />
+        </Label>}
         <div class="flex flex-col gap-1">
           <Toggle
             id="disperse"

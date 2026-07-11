@@ -1,5 +1,5 @@
 // components/elements/Chart.tsx
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useVisibleTask$ } from '@qwik.dev/core';
 import { Chart, registerables } from 'chart.js';
 
 export interface ChartProps {

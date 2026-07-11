@@ -5,21 +5,19 @@ import {
   useSignal,
   useStore,
   useTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import {
-  Download,
-  File,
-  GalleryHorizontalEnd,
-  Link,
-  Proportions,
-  RefreshCw,
-  Settings,
-  X,
-} from 'lucide-icons-qwik';
-import { NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import Download from 'lucide-icons-qwik/icons/Download';
+import File from 'lucide-icons-qwik/icons/File';
+import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
+import Link from 'lucide-icons-qwik/icons/Link';
+import Proportions from 'lucide-icons-qwik/icons/Proportions';
+import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import X from 'lucide-icons-qwik/icons/X';
+import { Label, NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
@@ -441,17 +439,15 @@ export default component$(() => {
                 <Proportions size={20} />
                 {t('animtexture.dimensions@@Dimensions')}
               </div>
-              <NumberInput
-                input
-                min={1}
-                value={texture.width}
-                id="width"
-                onInput$={(e, el) => (texture.width = Number(el.value))}
-              >
-                <span class="flex items-center gap-1">
-                  {t('animtexture.width@@Width')}
-                </span>
-              </NumberInput>
+              <Label for="width" label={t('animtexture.width@@Width')}>
+                <NumberInput
+                  input
+                  min={1}
+                  value={texture.width}
+                  id="width"
+                  onInput$={(e, el) => (texture.width = Number(el.value))}
+                />
+              </Label>
               <button
                 class="lum-btn lum-btn-p-1"
                 onClick$={() => {
@@ -475,6 +471,7 @@ export default component$(() => {
                   'opacity-50': texture.lockdimensions,
                 }}
               >
+                <Label for="height" label={t('animtexture.height@@Height')}>
                 <NumberInput
                   input
                   min={2}
@@ -494,11 +491,8 @@ export default component$(() => {
                     texture.height = value;
                     if (texture.lockdimensions) texture.width = texture.height;
                   }}
-                >
-                  <span class="flex items-center gap-1">
-                    {t('animtexture.height@@Height')}
-                  </span>
-                </NumberInput>
+                />
+                </Label>
                 <button
                   class="lum-btn lum-btn-p-1"
                   onClick$={() => {
@@ -692,12 +686,12 @@ export default component$(() => {
             </Input>
           )}
 
-          {texture.syncduration && texture.frames.length > 0 && (
+          {texture.syncduration && texture.frames.length > 0 && <Label for="duration" label={t('animtexture.duration@@Duration')}>
             <NumberInput
               input
               min={1}
               value={texture.frames[0].delay}
-              id="height"
+              id="duration"
               onIncrement$={() => {
                 texture.frames[0].delay++;
                 texture.frames.forEach((frame) => {
@@ -717,10 +711,8 @@ export default component$(() => {
                   frame.delay = value;
                 });
               }}
-            >
-              {t('animtexture.duration@@Duration')}
-            </NumberInput>
-          )}
+            />
+          </Label>}
         </div>
         <div
           class={{

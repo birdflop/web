@@ -1,4 +1,4 @@
-import { RequestHandler } from '@builder.io/qwik-city';
+import { RequestHandler } from '@qwik.dev/router';
 
 // redirect to analyze page.
 export const onGet: RequestHandler = ({ redirect, params }) => {

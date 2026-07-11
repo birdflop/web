@@ -1,4 +1,4 @@
-import { Component } from '@builder.io/qwik';
+import { Component } from '@qwik.dev/core';
 import type { AvailableConfig } from '~/util/flags/config';
 
 export interface EnvironmentOption {

@@ -2,9 +2,9 @@
  * This is the base config for vite.
  * When building, the adapter config is used which loads this file and extends it.
  */
-import { defineConfig, type UserConfig } from "vite-plus";
-import { qwikVite } from "@builder.io/qwik/optimizer";
-import { qwikCity } from "@builder.io/qwik-city/vite";
+import { defineConfig } from "vite-plus";
+import { qwikVite } from "@qwik.dev/core/optimizer";
+import { qwikRouter } from "@qwik.dev/router/vite";
 import { qwikSpeakInline } from "qwik-speak/inline";
 import { partytownVite } from "@qwik.dev/partytown/utils";
 import { join } from "path";
@@ -33,12 +33,17 @@ const { dependencies = {}, devDependencies = {} } = pkg as any as {
 };
 errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
+const qwikDeps = [
+  'lucide-icons-qwik',
+  'simple-icons-qwik',
+  '@luminescent/ui-qwik',
+  '@luminescent/icons-qwik',
+]
+
 /**
  * Note that Vite normally starts from `index.html` but the qwikCity plugin makes start at `src/entry.ssr.tsx` instead.
  */
-
-export default defineConfig(({ command, mode }): UserConfig => {
-  return {
+export default defineConfig({
     staged: {
       "*": "vp check --fix"
     },
@@ -305,7 +310,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
       tsconfigPaths: true,
     },
     plugins: [
-      qwikCity({
+      qwikRouter({
         platform,
         mdxPlugins: {
           rehypeSyntaxHighlight: false,
@@ -344,7 +349,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
     optimizeDeps: {
       // Put problematic deps that break bundling here, mostly those with binaries.
       // For example ['better-sqlite3'] if you use that in server functions.
-      exclude: [],
+      exclude: [
+        '@builder.io/qwik-city',
+      ],
       include: [
         'yaml',
         'gifuct-js',
@@ -391,6 +398,10 @@ export default defineConfig(({ command, mode }): UserConfig => {
       }
     },
   
+    // All Qwik libraries should be bundled in the server build.
+    ssr: {
+      noExternal: qwikDeps,
+    },
     /**
      * This is an advanced setting. It improves the bundling of your server code. To use it, make sure you understand when your consumed packages are dependencies or dev dependencies. (otherwise things will break in production)
      */
@@ -420,7 +431,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
         "Cache-Control": "public, max-age=600",
       },
     },
-  }
 });
 
 
@@ -448,7 +458,7 @@ function errorOnDuplicatesPkgDeps(
   );
 
   // any errors for missing "qwik-city-plan"
-  // [PLUGIN_ERROR]: Invalid module "@qwik-city-plan" is not a valid package
+  // [PLUGIN_ERROR]: Invalid module "@qwik-router-config" is not a valid package
   msg = `Move qwik packages ${qwikPkg.join(", ")} to devDependencies`;
 
   if (qwikPkg.length > 0) {

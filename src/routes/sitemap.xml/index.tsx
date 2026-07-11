@@ -1,5 +1,5 @@
-import type { RequestHandler } from '@builder.io/qwik-city';
-import { routes } from '@qwik-city-plan';
+import type { RequestHandler } from '@qwik.dev/router';
+import { routes } from '@qwik-router-config';
 import { createSitemap } from './create-sitemap';
 
 const excludeRoutes = [

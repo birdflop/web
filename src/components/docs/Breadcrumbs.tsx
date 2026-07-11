@@ -1,9 +1,10 @@
-import { component$ } from '@builder.io/qwik';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { component$ } from '@qwik.dev/core';
+import { Link, useLocation } from '@qwik.dev/router';
 import { createBreadcrumbs } from '~/components/docs/SideBar';
 import { buildMenu } from '~/util/docs';
 import { useMarkdownItems } from '~/routes/docs/layout';
-import { ChevronRight, Home } from 'lucide-icons-qwik';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Home from 'lucide-icons-qwik/icons/Home';
 
 export const Breadcrumbs = component$(() => {
   const { url } = useLocation();

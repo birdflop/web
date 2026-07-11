@@ -1,11 +1,9 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
-import {
-  Clipboard,
-  Palette,
-  Save,
-  Settings,
-  Sparkles,
-} from 'lucide-icons-qwik';
+import { component$, Slot, useContext } from '@qwik.dev/core';
+import Clipboard from 'lucide-icons-qwik/icons/Clipboard';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';

@@ -1,7 +1,9 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { sortColors } from '@birdflop/rgbirdflop';
-import { ChevronLeft, ChevronRight, Trash } from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 import {
   deleteSegment,
   segmentRange,

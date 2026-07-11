@@ -1,5 +1,5 @@
-import { component$, Signal } from '@builder.io/qwik';
-import { Eye } from 'lucide-icons-qwik';
+import { component$, Signal } from '@qwik.dev/core';
+import Eye from 'lucide-icons-qwik/icons/Eye';
 
 export const ShowAllGradientsButton = component$<{
   showAllGradients: Signal<boolean>;

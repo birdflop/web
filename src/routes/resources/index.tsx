@@ -1,24 +1,24 @@
-import { component$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
-import { Blobs, Hoverable, LogoDiscord } from '@luminescent/ui-qwik';
-import {
-  Binary,
-  Blocks,
-  Bot,
-  Box,
-  Eye,
-  Flag,
-  GalleryHorizontalEnd,
-  Github,
-  Link as LinkIcon,
-  Palette,
-  Presentation,
-  Rainbow,
-  Save,
-  Server,
-  Wrench,
-  Zap,
-} from 'lucide-icons-qwik';
+import { component$ } from '@qwik.dev/core';
+import { Link } from '@qwik.dev/router';
+import { Hoverable } from '@luminescent/ui-qwik';
+
+import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import Binary from 'lucide-icons-qwik/icons/Binary';
+import Blocks from 'lucide-icons-qwik/icons/Blocks';
+import Bot from 'lucide-icons-qwik/icons/Bot';
+import Box from 'lucide-icons-qwik/icons/Box';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Flag from 'lucide-icons-qwik/icons/Flag';
+import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
+import LinkIcon from 'lucide-icons-qwik/icons/Link';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Presentation from 'lucide-icons-qwik/icons/Presentation';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Server from 'lucide-icons-qwik/icons/Server';
+import Wrench from 'lucide-icons-qwik/icons/Wrench';
+import Zap from 'lucide-icons-qwik/icons/Zap';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -58,11 +58,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb"
         >
-          <Blobs
-            color="red"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Palette size={30} />
             {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -79,11 +74,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtab"
         >
-          <Blobs
-            color="blue"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Rainbow size={30} />
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
@@ -100,11 +90,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb/presets"
         >
-          <Blobs
-            color="green"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Save size={30} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -133,11 +118,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/analyze"
         >
-          <Blobs
-            color="yellow"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Zap size={30} />
             {t('nav.resources.analyze.title@@Analyze')}
@@ -154,11 +134,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/flags"
         >
-          <Blobs
-            color="orange"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Flag size={30} />
             {t('nav.resources.flags.title@@Flags Generator')}
@@ -175,11 +150,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/plugins"
         >
-          <Blobs
-            color="violet"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Blocks size={30} />
             {t('nav.resources.plugins.title@@Plugin Updates')}
@@ -208,11 +178,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/banner"
         >
-          <Blobs
-            color="purple"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Presentation size={30} />
             {t('nav.resources.banner.title@@Banner Generator')}
@@ -229,11 +194,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtexture"
         >
-          <Blobs
-            color="cyan"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <GalleryHorizontalEnd size={30} />
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
@@ -250,11 +210,6 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animpreview"
         >
-          <Blobs
-            color="lime"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Eye size={30} />
             {t(
@@ -288,14 +243,14 @@ export default component$(() => {
           class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
           href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot"
         >
-          <LogoDiscord size={20} />
+          <SiDiscord size={20} />
           Invite
         </a>
         <a
           class="lum-btn lum-bg-transparent"
           href="https://github.com/birdflop/botflop"
         >
-          <Github size={20} />
+          <SiGithub size={20} />
           Learn More
         </a>
       </div>
@@ -360,14 +315,14 @@ export default component$(() => {
           class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan"
           href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot"
         >
-          <LogoDiscord size={20} />
+          <SiDiscord size={20} />
           Invite
         </a>
         <a
           class="lum-btn lum-bg-transparent"
           href="https://github.com/birdflop/birdtickets"
         >
-          <Github size={20} />
+          <SiGithub size={20} />
           Learn More
         </a>
       </div>

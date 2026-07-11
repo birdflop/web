@@ -1,5 +1,5 @@
-import { component$, useContext, QRL } from '@builder.io/qwik';
-import { ContentMenu, Link } from '@builder.io/qwik-city';
+import { component$, useContext, QRL } from '@qwik.dev/core';
+import { ContentMenu, Link } from '@qwik.dev/router';
 import { MarkdownItems } from '~/routes/docs/layout';
 import Accordion from '../Elements/Accordion';
 import { openItemsContext } from '~/routes/layout';

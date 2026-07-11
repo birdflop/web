@@ -1,10 +1,10 @@
-import { component$, isDev, useServerData } from '@builder.io/qwik';
+import { component$, isDev, useServerData } from '@qwik.dev/core';
 import {
   DocumentHead,
   DocumentHeadValue,
-  QwikCityProvider,
+  QwikRouterProvider,
   RouterOutlet,
-} from '@builder.io/qwik-city';
+} from '@qwik.dev/router';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
@@ -30,7 +30,7 @@ export default component$(() => {
     url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com';
 
   return (
-    <QwikCityProvider>
+    <QwikRouterProvider>
       <head>
         <meta charset="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -65,7 +65,7 @@ export default component$(() => {
       <body class="text-lum-text">
         <RouterOutlet />
       </body>
-    </QwikCityProvider>
+    </QwikRouterProvider>
   );
 });
 

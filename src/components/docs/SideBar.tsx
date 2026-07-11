@@ -1,9 +1,11 @@
-import { component$, useStore, $, useVisibleTask$ } from '@builder.io/qwik';
-import { type ContentMenu, useLocation } from '@builder.io/qwik-city';
+import { component$, useStore, $, useVisibleTask$ } from '@qwik.dev/core';
+import { type ContentMenu, useLocation } from '@qwik.dev/router';
 import { useMarkdownItems } from '~/routes/docs/layout';
 import { buildMenu } from '~/util/docs';
 import { MenuItems } from './Menuitems';
-import { Book, Menu, Search } from 'lucide-icons-qwik';
+import Book from 'lucide-icons-qwik/icons/Book';
+import Menu from 'lucide-icons-qwik/icons/Menu';
+import Search from 'lucide-icons-qwik/icons/Search';
 
 export const DocsSidebar = component$(() => {
   const store = useStore({

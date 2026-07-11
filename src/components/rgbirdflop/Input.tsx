@@ -8,14 +8,16 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
-import { Eye, Terminal, Pencil } from 'lucide-icons-qwik';
+} from '@qwik.dev/core';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
+import Pencil from 'lucide-icons-qwik/icons/Pencil';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import Formatting from '~/components/rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
 import {
@@ -563,7 +565,7 @@ export default component$(
               </button>
             )}
             <Slot name="extra-buttons" />
-            <SelectMenuRaw
+            <SelectMenu
               align="right"
               id="previewstyle"
               value={previewStyle.value}
@@ -626,7 +628,7 @@ export default component$(
                 class="text-lum-text-secondary"
                 q:slot="dropdown"
               />
-            </SelectMenuRaw>
+            </SelectMenu>
           </div>
         </label>
       </>

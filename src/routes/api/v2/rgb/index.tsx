@@ -1,4 +1,4 @@
-import type { RequestHandler } from '@builder.io/qwik-city';
+import type { RequestHandler } from '@qwik.dev/router';
 import { parseParams } from '~/util/dataUtils';
 import {
   colorFormats,

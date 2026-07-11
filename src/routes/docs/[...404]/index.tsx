@@ -1,6 +1,6 @@
-import { component$ } from '@builder.io/qwik';
-import type { RequestHandler } from '@builder.io/qwik-city';
-import { LogoBirdflop } from '@luminescent/ui-qwik';
+import { component$ } from '@qwik.dev/core';
+import type { RequestHandler } from '@qwik.dev/router';
+import { Birdflop } from '@luminescent/icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -19,7 +19,7 @@ export default component$(() => {
   return (
     <section>
       <div>
-        <LogoBirdflop
+        <Birdflop
           confused
           size={100}
           fillGradient={['#54daf4', '#545eb6']}

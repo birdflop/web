@@ -1,4 +1,4 @@
-import { Signal } from '@builder.io/qwik';
+import { Signal } from '@qwik.dev/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { NotificationType } from './Notification';

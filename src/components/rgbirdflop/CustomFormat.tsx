@@ -1,4 +1,4 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 

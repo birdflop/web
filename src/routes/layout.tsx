@@ -9,7 +9,7 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import Backgrounds, {
   lightBackgrounds,
@@ -22,8 +22,8 @@ import {
   routeLoader$,
   server$,
   useLocation,
-} from '@builder.io/qwik-city';
-import { Cookie } from 'lucide-icons-qwik';
+} from '@qwik.dev/router';
+import Cookie from 'lucide-icons-qwik/icons/Cookie';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import {

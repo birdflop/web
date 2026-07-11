@@ -6,15 +6,13 @@ import {
   useContextProvider,
   useSignal,
   useTask$,
-} from '@builder.io/qwik';
-import {
-  Save,
-  Link as LinkIcon,
-  Copy,
-  Globe,
-  Trash,
-  ExternalLink,
-} from 'lucide-icons-qwik';
+} from '@qwik.dev/core';
+import Save from 'lucide-icons-qwik/icons/Save';
+import LinkIcon from 'lucide-icons-qwik/icons/Link';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Globe from 'lucide-icons-qwik/icons/Globe';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
@@ -22,7 +20,7 @@ import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { renderPreview } from '~/components/rgbirdflop/preview';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { Link, useLocation } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';

@@ -1,14 +1,14 @@
 import {
   $,
   component$,
-  PropFunction,
   Slot,
   useContext,
   useOnDocument,
   useSignal,
   useComputed$,
-} from '@builder.io/qwik';
-import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
+  QRL,
+} from '@qwik.dev/core';
+import { ColorPicker, Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ShowAllGradientsButton } from './ShowAllGradientsButton';
 import {
@@ -23,20 +23,20 @@ import {
   ColorStop,
   disperseColors,
 } from '@birdflop/rgbirdflop';
-import {
-  ArrowRightLeft,
-  Combine,
-  Copy,
-  Dices,
-  Eclipse,
-  GripVertical,
-  Minus,
-  MoveHorizontal,
-  Palette,
-  Plus,
-  Shuffle,
-  Trash,
-} from 'lucide-icons-qwik';
+
+import ArrowRightLeft from 'lucide-icons-qwik/icons/ArrowRightLeft';
+import Combine from 'lucide-icons-qwik/icons/Combine';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Dices from 'lucide-icons-qwik/icons/Dices';
+import Eclipse from 'lucide-icons-qwik/icons/Eclipse';
+import GripVertical from 'lucide-icons-qwik/icons/GripVertical';
+import Minus from 'lucide-icons-qwik/icons/Minus';
+import MoveHorizontal from 'lucide-icons-qwik/icons/MoveHorizontal';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Shuffle from 'lucide-icons-qwik/icons/Shuffle';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+
 import {
   rgbStoreContext,
   showAllGradientsContext,
@@ -64,8 +64,8 @@ type ColorListProps = {
   colors?: ColorStop[];
   gradientType?: GradientType;
   textLength?: number;
-  onColorsChange$?: PropFunction<(colors: ColorStop[]) => void>;
-  onGradientTypeChange$?: PropFunction<(gradientType: GradientType) => void>;
+  onColorsChange$?: QRL<(colors: ColorStop[]) => void>;
+  onGradientTypeChange$?: QRL<(gradientType: GradientType) => void>;
 };
 
 export default component$<ColorListProps>((props) => {
@@ -158,7 +158,7 @@ export default component$<ColorListProps>((props) => {
           </button>
         </span>
 
-        <SelectMenuRaw
+        <SelectMenu
           title={t('rgb.colors.gradientType@@Gradient Type')}
           id="gradientType"
           value={resolvedGradientType.value}
@@ -450,37 +450,37 @@ export default component$<ColorListProps>((props) => {
             opacity={id == 'shadow'}
           />
           <div class="lum-card flex flex-col justify-evenly gap-1 p-2">
-            <NumberInput
-              input
-              id={`colorlist${id}-color-pos`}
-              min={0}
-              max={100}
-              value={Math.round(colors.value[opened.value]?.pos)}
-              onInput$={(e, el) => {
-                const newColors = colors.value.slice(0);
-                let newPos = Number(el.value);
-                if (newPos < 0) newPos = 0;
-                if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
-              onIncrement$={() => {
-                const newColors = colors.value.slice(0);
-                let newPos = newColors[opened.value].pos + 1;
-                if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
-              onDecrement$={() => {
-                const newColors = colors.value.slice(0);
-                let newPos = newColors[opened.value].pos - 1;
-                if (newPos < 0) newPos = 0;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
-            >
-              {t('rgb.colors.position@@Position')} (%)
-            </NumberInput>
+            <Label for={`colorlist${id}-color-pos`} label={`${t('rgb.colors.position@@Position')} (%)`}>
+              <NumberInput
+                input
+                id={`colorlist${id}-color-pos`}
+                min={0}
+                max={100}
+                value={Math.round(colors.value[opened.value]?.pos)}
+                onInput$={(e, el) => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = Number(el.value);
+                  if (newPos < 0) newPos = 0;
+                  if (newPos > 100) newPos = 100;
+                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+                onIncrement$={() => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = newColors[opened.value].pos + 1;
+                  if (newPos > 100) newPos = 100;
+                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+                onDecrement$={() => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = newColors[opened.value].pos - 1;
+                  if (newPos < 0) newPos = 0;
+                  newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+              />
+            </Label>
           </div>
         </div>
       </div>

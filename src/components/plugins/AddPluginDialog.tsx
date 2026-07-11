@@ -3,15 +3,16 @@ import {
   useComputed$,
   useContext,
   useSignal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { Notification, NotificationContext } from '~/util/Notification';
 import {
   pluginsStoreContext,
   resolvedPluginContext,
 } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
-import { SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { Loader2 } from 'lucide-icons-qwik';
+import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import {
   getPlugin,
   PluginSource,

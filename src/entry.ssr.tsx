@@ -1,24 +1,16 @@
 /**
  * WHAT IS THIS FILE?
  *
- * SSR entry point, in all cases the application is rendered outside the browser, this
- * entry point will be the common one.
+ * SSR renderer function, used by Qwik Router.
  *
- * - Server (express, cloudflare...)
- * - npm run start
- * - npm run preview
- * - npm run build
- *
+ * Note that this is the only place the Qwik renderer is called.
+ * On the client, containers resume and do not call render.
  */
-import { isDev } from '@builder.io/qwik/build';
-import type { RenderOptions } from '@builder.io/qwik/server';
+import { createRenderer } from "@qwik.dev/router";
+import Root from "./root";
+import { isDev } from '@qwik.dev/core/build';
+import type { RenderOptions } from '@qwik.dev/core/server';
 import { config } from '~/speak-config';
-import {
-  renderToStream,
-  type RenderToStreamOptions,
-} from '@builder.io/qwik/server';
-import { manifest } from '@qwik-client-manifest';
-import Root from './root';
 
 /**
  * Determine the base URL to use for loading the chunks in the browser.
@@ -37,18 +29,24 @@ export function extractBase({ serverData }: RenderOptions): string {
   }
 }
 
-export default function (opts: RenderToStreamOptions) {
-  return renderToStream(<Root />, {
-    manifest,
-    ...opts,
-    base: extractBase,
-    // Use container attributes to set attributes on the html tag.
-    containerAttributes: {
-      lang: opts.serverData?.locale || config.defaultLocale.lang,
-      ...opts.containerAttributes,
+export default createRenderer((opts) => {
+  return {
+    jsx: <Root />,
+    options: {
+      base: extractBase(opts),
+      ...opts,
+      // Use container attributes to set attributes on the html tag.
+      containerAttributes: {
+        lang: opts.serverData?.locale || config.defaultLocale.lang,
+        ...opts.containerAttributes,
+      },
+      serverData: {
+        ...opts.serverData,
+        // These are the default values for the document head and are overridden by the `head` exports
+        // documentHead: {
+        //   title: "My App",
+        // },
+      },
     },
-    serverData: {
-      ...opts.serverData,
-    },
-  });
-}
+  };
+});

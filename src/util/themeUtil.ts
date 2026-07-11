@@ -1,4 +1,4 @@
-import { createContextId } from '@builder.io/qwik';
+import { createContextId } from '@qwik.dev/core';
 export type ThemeName = keyof typeof themes | 'auto';
 
 const darkTheme = {

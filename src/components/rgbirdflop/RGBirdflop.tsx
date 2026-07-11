@@ -8,7 +8,7 @@ import {
   isBrowser,
   Slot,
   Signal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import {
   rgbDefaults,
@@ -20,7 +20,8 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
-import { Settings, Sparkles } from 'lucide-icons-qwik';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
@@ -39,7 +40,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/track';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
@@ -334,7 +335,7 @@ export default component$(
                 hidden={!openItems.value.includes('output')}
                 value={output}
               >
-                <SelectMenuRaw
+                <SelectMenu
                   q:slot="label"
                   title={t('rgb.colors.format@@Color Format')}
                   id="format"

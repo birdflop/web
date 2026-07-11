@@ -1,33 +1,31 @@
-import { component$, useContext } from '@builder.io/qwik';
-import { Form, Link, useLocation } from '@builder.io/qwik-city';
+import { component$, useContext } from '@qwik.dev/core';
+import { Form, Link, useLocation } from '@qwik.dev/router';
 import {
-  LogoBirdflop,
-  LogoDiscord,
   Nav,
-  SelectMenuRaw,
+  SelectMenu,
 } from '@luminescent/ui-qwik';
+import { Birdflop } from '@luminescent/icons-qwik';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub'
+import SiDiscord from 'simple-icons-qwik/icons/SiDiscord'
 
-import {
-  Box,
-  Globe,
-  Github,
-  Server,
-  Book,
-  LogOut,
-  User,
-  Palette,
-  Rainbow,
-  Zap,
-  Flag,
-  Presentation,
-  Ellipsis,
-  ShoppingCart,
-  DollarSign,
-  Activity,
-  AppWindow,
-  Settings,
-  Loader2,
-} from 'lucide-icons-qwik';
+import Box from 'lucide-icons-qwik/icons/Box'
+import Globe from 'lucide-icons-qwik/icons/Globe'
+import Server from 'lucide-icons-qwik/icons/Server'
+import Book from 'lucide-icons-qwik/icons/Book'
+import LogOut from 'lucide-icons-qwik/icons/LogOut'
+import User from 'lucide-icons-qwik/icons/User'
+import Palette from 'lucide-icons-qwik/icons/Palette'
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow'
+import Zap from 'lucide-icons-qwik/icons/Zap'
+import Flag from 'lucide-icons-qwik/icons/Flag'
+import Presentation from 'lucide-icons-qwik/icons/Presentation'
+import Ellipsis from 'lucide-icons-qwik/icons/Ellipsis'
+import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart'
+import DollarSign from 'lucide-icons-qwik/icons/DollarSign'
+import Activity from 'lucide-icons-qwik/icons/Activity'
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow'
+import Settings from 'lucide-icons-qwik/icons/Settings'
+import Loader2 from 'lucide-icons-qwik/icons/Loader2'
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -62,7 +60,7 @@ export default component$(() => {
         href="/"
         class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
       >
-        <LogoBirdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
+        <Birdflop size={24} fillGradient={['#54daf4', '#545eb6']} />
         <span class="-ml-1 font-semibold">Birdflop</span>
         <div
           class={{
@@ -80,7 +78,7 @@ export default component$(() => {
       >
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <SelectMenuRaw
+      <SelectMenu
         id="nav-hosting"
         q:slot="end"
         hover
@@ -90,9 +88,9 @@ export default component$(() => {
           'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
         }}
       >
-        <div q:slot="dropdown" class="flex items-center gap-2">
+        <span q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
-        </div>
+        </span>
         <a
           q:slot="extra-buttons"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
@@ -121,8 +119,8 @@ export default component$(() => {
         >
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
-      </SelectMenuRaw>
-      <SelectMenuRaw
+      </SelectMenu>
+      <SelectMenu
         id="nav-resources"
         q:slot="end"
         hover
@@ -132,9 +130,9 @@ export default component$(() => {
           'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
         }}
       >
-        <div q:slot="dropdown" class="flex items-center gap-2">
+        <span q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
-        </div>
+        </span>
         <Link
           q:slot="extra-buttons"
           href="/resources/rgb"
@@ -180,8 +178,8 @@ export default component$(() => {
         >
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
-      </SelectMenuRaw>
-      <SelectMenuRaw
+      </SelectMenu>
+      <SelectMenu
         align="right"
         q:slot="end"
         class={{
@@ -209,7 +207,7 @@ export default component$(() => {
           {locale.lang.split('-')[0]}
         </span>
         <Globe size={20} q:slot="dropdown" />
-      </SelectMenuRaw>
+      </SelectMenu>
       <Link
         q:slot="end"
         href="/settings"
@@ -223,7 +221,7 @@ export default component$(() => {
         <SocialButtons />
       </div>
       {session.value && session.value.user && (
-        <SelectMenuRaw
+        <SelectMenu
           align="right"
           q:slot="end"
           class={{
@@ -262,7 +260,7 @@ export default component$(() => {
               <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
             </button>
           </Form>
-        </SelectMenuRaw>
+        </SelectMenu>
       )}
       {!session.value && (
         <Form action={signIn} q:slot="end">
@@ -404,7 +402,7 @@ export const SocialButtons = component$(() => {
         title="GitHub"
         class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
       >
-        <Github size={20} />
+        <SiGithub size={20} />
       </a>
       <a
         href={discordLink}
@@ -413,7 +411,7 @@ export const SocialButtons = component$(() => {
         data-umami-event="discord-link"
         data-umami-source="nav"
       >
-        <LogoDiscord size={20} />
+        <SiDiscord size={20} />
       </a>
     </>
   );

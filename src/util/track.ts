@@ -1,4 +1,4 @@
-import { unwrapStore } from '@builder.io/qwik';
+import { unwrapStore } from "@qwik.dev/core/internal";
 
 export const deepTrack = (track: any, obj: any) => {
   track(obj);

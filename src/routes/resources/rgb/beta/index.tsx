@@ -4,8 +4,8 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from '@builder.io/qwik';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+} from '@qwik.dev/core';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import {
@@ -24,7 +24,8 @@ import {
 } from '~/components/rgbirdflop/advanced/rgbSegments';
 import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
 import { defaultDescription, generateHead } from '~/root';
-import { ArrowLeft, TestTube2 } from 'lucide-icons-qwik';
+import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
 import Options from '~/components/rgbirdflop/Options';

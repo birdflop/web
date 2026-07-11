@@ -4,24 +4,23 @@ import {
   useSignal,
   useOnWindow,
   $,
-} from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
+} from '@qwik.dev/core';
+import { Link } from '@qwik.dev/router';
 
-import { Anchor, Hoverable, LogoBirdflop } from '@luminescent/ui-qwik';
-import {
-  ShoppingCart,
-  HandCoins,
-  Eye,
-  Globe,
-  Heart,
-  Rocket,
-  Server,
-  CheckCircle,
-  AlertTriangle,
-  Box,
-  Settings,
-  PiggyBank,
-} from 'lucide-icons-qwik';
+import { Birdflop } from '@luminescent/icons-qwik';
+import { Anchor, Hoverable } from '@luminescent/ui-qwik';
+import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
+import HandCoins from 'lucide-icons-qwik/icons/HandCoins';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Globe from 'lucide-icons-qwik/icons/Globe';
+import Heart from 'lucide-icons-qwik/icons/Heart';
+import Rocket from 'lucide-icons-qwik/icons/Rocket';
+import Server from 'lucide-icons-qwik/icons/Server';
+import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
+import AlertTriangle from 'lucide-icons-qwik/icons/AlertTriangle';
+import Box from 'lucide-icons-qwik/icons/Box';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import PiggyBank from 'lucide-icons-qwik/icons/PiggyBank';
 import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
@@ -75,7 +74,7 @@ export default component$(() => {
                   'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600': true,
                 }}
               >
-                <LogoBirdflop
+                <Birdflop
                   size={70}
                   fillGradient={['#54daf4', '#545eb6']}
                   class="absolute -z-1 w-12.5 xl:-left-1 xl:w-17.5"

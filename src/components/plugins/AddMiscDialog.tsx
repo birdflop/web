@@ -1,4 +1,4 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$, useContext } from '@qwik.dev/core';
 import { resolvedPluginContext } from '~/routes/resources/plugins';
 
 export default component$(() => {

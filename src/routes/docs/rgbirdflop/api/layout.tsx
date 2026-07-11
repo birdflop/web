@@ -1,7 +1,7 @@
-import { component$ } from '@builder.io/qwik';
+import { component$ } from '@qwik.dev/core';
 import { getGlobalHighlighter } from '~/util/docs/highlighter';
 import { apiEndpoints } from '~/routes/api/v2';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@qwik.dev/router';
 
 const getEndpoints = async () => {
   const paths = Object.keys(
