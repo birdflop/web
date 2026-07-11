@@ -166,15 +166,17 @@ export default component$(() => {
               <button
                 class="lum-btn"
                 onClick$={async () => {
-                  if (animtextureStore.textures.every((item) => item.frames.length === 0)) return;
+                  if (
+                    animtextureStore.textures.every(
+                      (item) => item.frames.length === 0,
+                    )
+                  )
+                    return;
 
                   const blob = await buildResourcePack(
                     animtextureStore.textures,
                   );
-                  downloadBlob(
-                    blob,
-                    'animtexture-resource-pack.zip',
-                  );
+                  downloadBlob(blob, 'animtexture-resource-pack.zip');
                 }}
               >
                 <Download size={20} />
@@ -183,18 +185,25 @@ export default component$(() => {
             </div>
             <Tabs
               values={animtextureStore.textures.map((t, i) => ({
-                name: `${t.namespace}:${t.name}`, value: i.toString(),
+                name: `${t.namespace}:${t.name}`,
+                value: i.toString(),
               }))}
               value={{
-                name: animtextureStore.textures[animtextureStore.activeTexture].name,
-                value: animtextureStore.textures.indexOf(animtextureStore.textures[animtextureStore.activeTexture]).toString(),
+                name: animtextureStore.textures[animtextureStore.activeTexture]
+                  .name,
+                value: animtextureStore.textures
+                  .indexOf(
+                    animtextureStore.textures[animtextureStore.activeTexture],
+                  )
+                  .toString(),
               }}
               onClick$={(value) => {
                 animtextureStore.activeTexture = parseInt(value.value);
               }}
               onPlus$={() => {
                 const currentTexture =
-                  animtextureStore.textures[animtextureStore.activeTexture] ?? animtextureStore.textures[0];
+                  animtextureStore.textures[animtextureStore.activeTexture] ??
+                  animtextureStore.textures[0];
                 const nextIndex = animtextureStore.textures.length + 1;
                 const names = new Set(
                   animtextureStore.textures.map((item) =>
@@ -218,7 +227,8 @@ export default component$(() => {
                   ...animtextureStore.textures,
                   nextTexture,
                 ];
-                animtextureStore.activeTexture = animtextureStore.textures.length - 1;
+                animtextureStore.activeTexture =
+                  animtextureStore.textures.length - 1;
               }}
               onDelete$={(value) => {
                 if (animtextureStore.textures.length === 1) {
@@ -240,7 +250,7 @@ export default component$(() => {
 
             <div
               class={{
-                'flex items-center gap-1 mt-2': true,
+                'mt-2 flex items-center gap-1': true,
                 'col-span-2': texture.lockdimensions,
               }}
             >
@@ -256,22 +266,21 @@ export default component$(() => {
                   texture.namespace = el.value;
                 }}
               >
-                <span q:slot="dropdown">
-                  {texture.namespace}
-                </span>
+                <span q:slot="dropdown">{texture.namespace}</span>
                 {t('animtexture.namespace@@Namespace')}
-                <input q:slot="extra-buttons"
+                <input
+                  q:slot="extra-buttons"
                   id="namespace"
-                  class={{ 'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true }}
+                  class={{
+                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                  }}
                   placeholder="Custom"
                   onInput$={(e, el) => {
                     texture.namespace = el.value;
                   }}
                 />
               </SelectMenu>
-              <p class="text-lum-text-secondary mt-7 mx-1">
-                :
-              </p>
+              <p class="text-lum-text-secondary mx-1 mt-7">:</p>
               <SelectMenu
                 id="path"
                 class={{ 'w-full': true }}
@@ -284,26 +293,23 @@ export default component$(() => {
                   texture.path = el.value;
                 }}
               >
-                <span q:slot="dropdown">
-                  {texture.path}
-                </span>
+                <span q:slot="dropdown">{texture.path}</span>
                 {t('animtexture.path@@Path')}
-                <input q:slot="extra-buttons"
+                <input
+                  q:slot="extra-buttons"
                   id="path"
-                  class={{ 'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true }}
+                  class={{
+                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                  }}
                   placeholder={t('animtexture.custom@@Custom')}
                   onInput$={(e, el) => {
                     texture.namespace = el.value;
                   }}
                 />
               </SelectMenu>
-              <p class="text-lum-text-secondary mt-7 mx-1">
-                /
-              </p>
+              <p class="text-lum-text-secondary mx-1 mt-7">/</p>
               <div class="flex flex-1 flex-col gap-1">
-                <label for="name">
-                  {t('animtexture.name@@Texture Name')}
-                </label>
+                <label for="name">{t('animtexture.name@@Texture Name')}</label>
                 <input
                   id="name"
                   class={{ 'lum-input': true }}
@@ -313,9 +319,7 @@ export default component$(() => {
                   }}
                 />
               </div>
-              <p class="text-lum-text-secondary mt-7 mx-1">
-                .png
-              </p>
+              <p class="text-lum-text-secondary mx-1 mt-7">.png</p>
             </div>
           </div>
 
@@ -323,7 +327,10 @@ export default component$(() => {
 
           <div class="mb-5 flex gap-6">
             <div class="lum-card flex-1">
-              <label for="fileInput" class="font-semibold flex items-center gap-2">
+              <label
+                for="fileInput"
+                class="flex items-center gap-2 font-semibold"
+              >
                 <File size={20} />
                 {t(
                   'animtexture.selectFrames@@Select GIF or image from your device',
@@ -367,11 +374,12 @@ export default component$(() => {
                 }}
               />
             </div>
-            <p class="my-auto text-lum-text-secondary">
-              OR
-            </p>
+            <p class="text-lum-text-secondary my-auto">OR</p>
             <div class="lum-card flex-1">
-              <label for="urlInput" class="font-semibold flex items-center gap-2">
+              <label
+                for="urlInput"
+                class="flex items-center gap-2 font-semibold"
+              >
                 <Link size={20} />
                 {t('animtexture.pasteUrl@@Paste GIF or image URL')}
               </label>
@@ -427,9 +435,9 @@ export default component$(() => {
 
           <hr />
 
-          <div class="flex *:flex-1 gap-2">
+          <div class="flex gap-2 *:flex-1">
             <div class="lum-card">
-              <div class="font-semibold flex items-center gap-2">
+              <div class="flex items-center gap-2 font-semibold">
                 <Proportions size={20} />
                 {t('animtexture.dimensions@@Dimensions')}
               </div>
@@ -438,17 +446,7 @@ export default component$(() => {
                 min={1}
                 value={texture.width}
                 id="width"
-                onIncrement$={() => {
-                  texture.width += 16;
-                }}
-                onDecrement$={() => {
-                  texture.width -= 16;
-                }}
-                onInput$={(e, el) => {
-                  const value = Number(el.value);
-                  if (isNaN(value)) return;
-                  texture.width = value;
-                }}
+                onInput$={(e, el) => (texture.width = Number(el.value))}
               >
                 <span class="flex items-center gap-1">
                   {t('animtexture.width@@Width')}
@@ -472,9 +470,11 @@ export default component$(() => {
                 <RefreshCw size={16} />
                 {t('animtexture.getWidth@@Get width from frames')}
               </button>
-              <div class={{
-                'opacity-50': texture.lockdimensions,
-              }}>
+              <div
+                class={{
+                  'opacity-50': texture.lockdimensions,
+                }}
+              >
                 <NumberInput
                   input
                   min={2}
@@ -482,11 +482,11 @@ export default component$(() => {
                   id="height"
                   onIncrement$={() => {
                     texture.height += 16;
-                    if (texture.lockdimensions) texture.width = texture.height;
+                    if (texture.lockdimensions) texture.width += 16;
                   }}
                   onDecrement$={() => {
                     texture.height -= 16;
-                    if (texture.lockdimensions) texture.width = texture.height;
+                    if (texture.lockdimensions) texture.width -= 16;
                   }}
                   onInput$={(e, el) => {
                     const value = Number(el.value);
@@ -529,7 +529,7 @@ export default component$(() => {
               </Toggle>
             </div>
             <div class="lum-card">
-              <div class="font-semibold flex items-center gap-2">
+              <div class="flex items-center gap-2 font-semibold">
                 <Settings size={20} />
                 {t('animtexture.options@@Options')}
               </div>
@@ -597,76 +597,78 @@ export default component$(() => {
             </div>
           </div>
 
-          {activeTextureOutputs.value.png && <>
-            <div class="mt-10 flex gap-2">
-              {!texture.showChatPreview && (
-                <div class="w-1/4">
+          {activeTextureOutputs.value.png && (
+            <>
+              <div class="mt-10 flex gap-2">
+                {!texture.showChatPreview && (
+                  <div class="w-1/4">
+                    <p class="mb-2">
+                      {t('animtexture.animationPreview@@Animation Preview')}
+                    </p>
+                    <canvas
+                      ref={animCanvasRef}
+                      class="lum-card w-full p-0"
+                      style={{
+                        imageRendering: 'pixelated',
+                      }}
+                    />
+                  </div>
+                )}
+                <div class="flex-1">
                   <p class="mb-2">
-                    {t('animtexture.animationPreview@@Animation Preview')}
+                    {t('animtexture.frames@@Animation Frames')}
                   </p>
-                  <canvas
-                    ref={animCanvasRef}
-                    class="lum-card w-full p-0"
-                    style={{
-                      imageRendering: 'pixelated',
-                    }}
-                  />
-                </div>
-              )}
-              <div class="flex-1">
-                <p class="mb-2">{t('animtexture.frames@@Animation Frames')}</p>
-                <div
-                  id="imgs"
-                  class="flex max-h-155 min-h-[calc(100%-32px)] flex-wrap gap-2 overflow-auto p-2"
-                >
-                  {texture.frames.map((frame, i) => (
-                    <div
-                      key={`frame${i}`}
-                      class="lum-card relative w-24 gap-0 p-0"
-                    >
-                      <img
-                        width={96}
-                        height={96}
-                        class={{
-                          'rounded-t-md': true,
-                          'rounded-b-md': texture.syncduration,
-                        }}
-                        src={frame.img.src}
-                      />
-                      {!texture.syncduration && (
-                        <>
-                          <label for={`frame-${i}-delay`} class="m-2 flex">
-                            <span class="flex-1">
-                              ticks
-                            </span>
-                            <button
-                              class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1"
-                              onClick$={() => {
-                                const frames = [...texture.frames];
-                                frames.splice(i, 1);
-                                texture.frames = frames;
+                  <div
+                    id="imgs"
+                    class="flex max-h-155 min-h-[calc(100%-32px)] flex-wrap gap-2 overflow-auto p-2"
+                  >
+                    {texture.frames.map((frame, i) => (
+                      <div
+                        key={`frame${i}`}
+                        class="lum-card relative w-24 gap-0 p-0"
+                      >
+                        <img
+                          width={96}
+                          height={96}
+                          class={{
+                            'rounded-t-md': true,
+                            'rounded-b-md': texture.syncduration,
+                          }}
+                          src={frame.img.src}
+                        />
+                        {!texture.syncduration && (
+                          <>
+                            <label for={`frame-${i}-delay`} class="m-2 flex">
+                              <span class="flex-1">ticks</span>
+                              <button
+                                class="lum-btn lum-bg-red-700/20 hover:lum-bg-red-700 p-1"
+                                onClick$={() => {
+                                  const frames = [...texture.frames];
+                                  frames.splice(i, 1);
+                                  texture.frames = frames;
+                                }}
+                              >
+                                <X size={16} />
+                              </button>
+                            </label>
+                            <input
+                              id={`frame-${i}-delay`}
+                              type="number"
+                              value={frame.delay}
+                              onInput$={(e, el) => {
+                                texture.frames[i].delay = Number(el.value);
                               }}
-                            >
-                              <X size={16} />
-                            </button>
-                          </label>
-                          <input
-                            id={`frame-${i}-delay`}
-                            type="number"
-                            value={frame.delay}
-                            onInput$={(e, el) => {
-                              texture.frames[i].delay = Number(el.value);
-                            }}
-                            class="lum-input lum-grad-bg-lum-card-bg lum-btn-p-1 mx-1 mb-1"
-                          />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                              class="lum-input lum-grad-bg-lum-card-bg lum-btn-p-1 mx-1 mb-1"
+                            />
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </>}
+            </>
+          )}
 
           {texture.showChatPreview && (
             <Input
@@ -722,7 +724,7 @@ export default component$(() => {
         </div>
         <div
           class={{
-            'lum-card p-0 w-24 max-h-[70svh] overflow-y-scroll': true,
+            'lum-card max-h-[70svh] w-24 overflow-y-scroll p-0': true,
           }}
         >
           <canvas
@@ -734,7 +736,7 @@ export default component$(() => {
           />
         </div>
       </div>
-    </section >
+    </section>
   );
 });
 

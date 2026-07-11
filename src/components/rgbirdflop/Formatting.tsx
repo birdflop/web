@@ -269,7 +269,7 @@ export default component$(() => {
       />
       <ButtonContainer
         class={{
-          '*:p-2 *:justify-center': true,
+          '*:justify-center *:p-2': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="formatting"
@@ -294,7 +294,7 @@ export default component$(() => {
       </ButtonContainer>
       <ButtonContainer
         class={{
-          '*:p-2 *:justify-center': true,
+          '*:justify-center *:p-2': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="clear-formatting"

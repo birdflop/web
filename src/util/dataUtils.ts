@@ -19,12 +19,7 @@ import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
 
 type names =
-  | 'rgb'
-  | 'rgbsegments'
-  | 'animtab'
-  | 'parsed'
-  | 'animpreview'
-  | 'settings';
+  'rgb' | 'rgbsegments' | 'animtab' | 'parsed' | 'animpreview' | 'settings';
 
 const getDefaults = (name: names) => {
   switch (name) {

@@ -354,9 +354,9 @@ export default component$(
                   }}
                   values={[
                     ...(!rgbStore.customFormat &&
-                      !colorFormats.find(
-                        (format) => format.color == rgbStore.colorFormat.color,
-                      )
+                    !colorFormats.find(
+                      (format) => format.color == rgbStore.colorFormat.color,
+                    )
                       ? [
                         {
                           name: rgbStore.colorFormat.color

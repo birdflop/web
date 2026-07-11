@@ -47,8 +47,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             max={rgbStore.text.length / rgbStore.colors.length}
             value={rgbStore.colorLength}
             class={{ 'w-full opacity-100!': true }}
-            onIncrement$={() => rgbStore.colorLength++}
-            onDecrement$={() => rgbStore.colorLength--}
+            onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
           >
             {t('rgb.colors.charsPer@@Characters per color')}
           </NumberInput>
@@ -57,9 +56,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
           <Toggle
             id="disperse"
             checked={rgbStore.disperse}
-            onChange$={(e, el) => {
-              rgbStore.disperse = el.checked;
-            }}
+            onChange$={(e, el) => (rgbStore.disperse = el.checked)}
           >
             {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
           </Toggle>

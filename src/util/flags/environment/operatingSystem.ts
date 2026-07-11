@@ -3,11 +3,7 @@ import type { OperatingSystemOption } from '~/util/flags/types/environment/Opera
 import type { AvailableConfig } from '~/util/flags/config';
 
 export type AvailableOperatingSystem =
-  | 'linux'
-  | 'windows'
-  | 'macos'
-  | 'pterodactyl'
-  | 'command';
+  'linux' | 'windows' | 'macos' | 'pterodactyl' | 'command';
 
 const sharedConfig: AvailableConfig[] = [
   'fileName',

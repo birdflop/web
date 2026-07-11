@@ -36,3 +36,4 @@ package-lock.json
 yarn.lock
 server
 drizzle
+i18n

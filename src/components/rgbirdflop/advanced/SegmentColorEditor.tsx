@@ -110,9 +110,11 @@ export default component$(
         id={'colorlist' + id}
       >
         {/* Color mode switch */}
-        <ButtonContainer class={{
-          'items-stretch *:lum-btn-p-1 *:justify-center': true,
-        }}>
+        <ButtonContainer
+          class={{
+            '*:lum-btn-p-1 items-stretch *:justify-center': true,
+          }}
+        >
           <button
             class={{
               'lum-grad-bg-lum-accent!': mode === 'gradient',
@@ -124,7 +126,8 @@ export default component$(
               })
             }
           >
-            <Palette size={18} /> {mode === 'gradient' && t('rgb.advanced.mode.gradient@@Gradient')}
+            <Palette size={18} />{' '}
+            {mode === 'gradient' && t('rgb.advanced.mode.gradient@@Gradient')}
           </button>
           <button
             class={{
@@ -142,7 +145,8 @@ export default component$(
               })
             }
           >
-            <Droplet size={18} /> {mode === 'solid' && t('rgb.advanced.mode.solid@@Solid')}
+            <Droplet size={18} />{' '}
+            {mode === 'solid' && t('rgb.advanced.mode.solid@@Solid')}
           </button>
           <button
             class={{
@@ -150,7 +154,8 @@ export default component$(
             }}
             onClick$={() => writeConfig({ colorMode: 'none' })}
           >
-            <Ban size={18} /> {mode === 'none' && t('rgb.advanced.mode.none@@Uncolored')}
+            <Ban size={18} />{' '}
+            {mode === 'none' && t('rgb.advanced.mode.none@@Uncolored')}
           </button>
         </ButtonContainer>
 

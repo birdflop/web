@@ -226,12 +226,12 @@ export default component$(() => {
         id="length"
         input
         disabled
-        value={animtabStore.length * rgbStore.text.length}
-        min={rgbStore.text.length}
+        value={animtabStore.length}
+        min={1}
+        max={rgbStore.text.length}
         class={{ 'w-full opacity-100!': true }}
-        onIncrement$={() => animtabStore.length++}
-        onDecrement$={() => animtabStore.length--}
-        q:slot="color-list"
+        onInput$={(event, el) => (animtabStore.length = Number(el.value))}
+        q:slot="column1"
       >
         {t('animtab.length@@Gradient Length')}
       </NumberInput>
@@ -245,9 +245,7 @@ export default component$(() => {
           id="nameinput"
           value={animtabStore.name}
           placeholder={'name'}
-          onInput$={(e, el) => {
-            animtabStore.name = el.value;
-          }}
+          onInput$={(e, el) => (animtabStore.name = el.value)}
         />
       </div>
       <NumberInput
@@ -259,12 +257,6 @@ export default component$(() => {
         step={50}
         min={50}
         onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
-        onIncrement$={() =>
-          (animtabStore.speed = Number(animtabStore.speed) + 50)
-        }
-        onDecrement$={() =>
-          (animtabStore.speed = Number(animtabStore.speed) - 50)
-        }
       >
         {t('animtab.animation.interval@@Animation Interval')} (ms)
       </NumberInput>
@@ -272,9 +264,7 @@ export default component$(() => {
         q:slot="options"
         id="type"
         class={{ 'w-full': true }}
-        onChange$={(e, el) => {
-          animtabStore.type = Number(el.value);
-        }}
+        onChange$={(e, el) => (animtabStore.type = Number(el.value))}
         values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
           name: t(`animtab.animation.style.${key}@@${key}`),
           value: String(value),

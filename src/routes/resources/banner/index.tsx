@@ -240,9 +240,11 @@ export default component$(() => {
       </p>
 
       <div class="grid gap-2 sm:grid-cols-2">
-        <ButtonContainer class={{
-          'sm:hidden overflow-scroll': true,
-        }}>
+        <ButtonContainer
+          class={{
+            'overflow-scroll sm:hidden': true,
+          }}
+        >
           <button
             onClick$={() => {
               openItems.value = openItems.value.includes('options')
@@ -306,9 +308,11 @@ export default component$(() => {
                 )}
               </span>
             </h6>
-            <ButtonContainer class={{
-              'flex-wrap shrink-2 *:hover:lum-bg *:p-2 *:justify-center *:flex-none': true,
-            }}>
+            <ButtonContainer
+              class={{
+                '*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2': true,
+              }}
+            >
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button

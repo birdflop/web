@@ -269,7 +269,7 @@ export default component$(() => {
         plugin.latestVersion?.releaseDate !== undefined &&
         plugin.currentVersion?.releaseDate !== undefined &&
         new Date(plugin.latestVersion.releaseDate).getTime() >
-        new Date(plugin.currentVersion.releaseDate).getTime();
+          new Date(plugin.currentVersion.releaseDate).getTime();
       return updateAvailable && plugin.file?.url;
     }).length;
   });
@@ -294,11 +294,21 @@ export default component$(() => {
         tool.
       </p>
 
-      <Tabs values={Object.keys(pluginsStore.servers).map((k) => ({ name: k, value: k }))} value={pluginsStore.openServer ? { name: pluginsStore.openServer, value: pluginsStore.openServer } : undefined}
+      <Tabs
+        values={Object.keys(pluginsStore.servers).map((k) => ({
+          name: k,
+          value: k,
+        }))}
+        value={
+          pluginsStore.openServer
+            ? { name: pluginsStore.openServer, value: pluginsStore.openServer }
+            : undefined
+        }
         onDelete$={(serverName) => {
           delete pluginsStore.servers[serverName.value];
           if (pluginsStore.openServer === serverName.value) {
-            pluginsStore.openServer = Object.keys(pluginsStore.servers)[0] || undefined;
+            pluginsStore.openServer =
+              Object.keys(pluginsStore.servers)[0] || undefined;
           }
         }}
         onClick$={(serverName) => {
@@ -314,8 +324,8 @@ export default component$(() => {
             pluginsStore.servers[serverName] = { ...serverDefaults };
             pluginsStore.openServer = serverName;
           }
-        }}>
-      </Tabs>
+        }}
+      ></Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
         <p class="text-lum-text-secondary mx-2 text-sm">
           {t(
@@ -495,8 +505,8 @@ export default component$(() => {
                     class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1"
                     onClick$={() => {
                       const plugins =
-                            pluginsStore.servers[pluginsStore.openServer!]
-                              .plugins;
+                          pluginsStore.servers[pluginsStore.openServer!]
+                            .plugins;
                       Object.values(plugins).forEach((plugin) => {
                         plugin.currentVersion = {
                           id: 'outdated',
@@ -507,14 +517,14 @@ export default component$(() => {
                     }}
                   >
                     <X size={16} />
-                        Mark all out of date
+                      Mark all out of date
                   </button>
                 )}
                 <button
                   class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1"
                   onClick$={() => {
                     const plugins =
-                          pluginsStore.servers[pluginsStore.openServer!].plugins;
+                        pluginsStore.servers[pluginsStore.openServer!].plugins;
                     Object.values(plugins).forEach((plugin) => {
                       if (plugin.latestVersion)
                         plugin.currentVersion = plugin.latestVersion;
@@ -523,13 +533,13 @@ export default component$(() => {
                   }}
                 >
                   <Check size={16} />
-                      Mark all updated
+                    Mark all updated
                 </button>
                 <button
                   class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1"
                   onClick$={async () => {
                     const plugins =
-                          pluginsStore.servers[pluginsStore.openServer!].plugins;
+                        pluginsStore.servers[pluginsStore.openServer!].plugins;
                     for (const pluginId in plugins) {
                       const plugin = plugins[pluginId];
                       Object.assign(
@@ -540,7 +550,7 @@ export default component$(() => {
                   }}
                 >
                   <RefreshCw size={16} />
-                      Check all for updates
+                    Check all for updates
                 </button>
 
                 {!!outdatedPlugins.value && (
@@ -550,16 +560,16 @@ export default component$(() => {
                       isLoading.value = [...isLoading.value, 'downloadAll'];
 
                       const plugins =
-                            pluginsStore.servers[pluginsStore.openServer!]
-                              .plugins;
+                          pluginsStore.servers[pluginsStore.openServer!]
+                            .plugins;
                       for (const pluginId in plugins) {
                         const plugin = plugins[pluginId];
                         const updateAvailable =
-                              plugin.latestVersion?.releaseDate !== undefined &&
-                              plugin.currentVersion?.releaseDate !== undefined &&
-                              new Date(
-                                plugin.latestVersion.releaseDate,
-                              ).getTime() >
+                            plugin.latestVersion?.releaseDate !== undefined &&
+                            plugin.currentVersion?.releaseDate !== undefined &&
+                            new Date(
+                              plugin.latestVersion.releaseDate,
+                            ).getTime() >
                               new Date(
                                 plugin.currentVersion.releaseDate,
                               ).getTime();
@@ -580,11 +590,11 @@ export default component$(() => {
                     disabled={isLoading.value.includes('downloadAll')}
                   >
                     <Download size={16} />
-                        Download all out of date ({outdatedPlugins.value})
+                      Download all out of date ({outdatedPlugins.value})
                     {outdatedPlugins.value > 10 && (
                       <span class="lum-card pointer-events-none absolute bottom-full left-0 mb-2 w-full p-2 text-xs opacity-0 transition-opacity group-hover:opacity-100">
-                            Spigot limits downloads to 10 per minute, so some of
-                            these may not open immediately.
+                          Spigot limits downloads to 10 per minute, so some of
+                          these may not open immediately.
                       </span>
                     )}
                     {isLoading.value.includes('downloadAll') && (
@@ -603,7 +613,7 @@ export default component$(() => {
                   plugin.latestVersion?.releaseDate !== undefined &&
                   plugin.currentVersion?.releaseDate !== undefined &&
                   new Date(plugin.latestVersion.releaseDate).getTime() >
-                  new Date(plugin.currentVersion.releaseDate).getTime();
+                    new Date(plugin.currentVersion.releaseDate).getTime();
 
               if (pluginsStore.filter === 'outdated' && !updateAvailable)
                 return null;

@@ -181,9 +181,11 @@ export default component$<ColorListProps>((props) => {
 
       <Slot />
 
-      <ButtonContainer class={{
-        '*:justify-center *:p-1': true,
-      }}>
+      <ButtonContainer
+        class={{
+          '*:justify-center *:p-1': true,
+        }}
+      >
         <button
           onClick$={() => {
             const newColors = colors.value.map((color) => ({
@@ -454,7 +456,7 @@ export default component$<ColorListProps>((props) => {
               min={0}
               max={100}
               value={Math.round(colors.value[opened.value]?.pos)}
-              onChange$={(e, el) => {
+              onInput$={(e, el) => {
                 const newColors = colors.value.slice(0);
                 let newPos = Number(el.value);
                 if (newPos < 0) newPos = 0;

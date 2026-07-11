@@ -183,7 +183,9 @@ export const normalizeTextureName = (name: string) =>
 export const getTextureFrameHeight = (texture: AnimtextureTexture) =>
   texture.lockdimensions ? texture.width : texture.height;
 
-export const buildTextureOutputs = (texture: AnimtextureTexture): RenderedTexture => {
+export const buildTextureOutputs = (
+  texture: AnimtextureTexture,
+): RenderedTexture => {
   if (texture.frames.length === 0) {
     return { png: '', mcmeta: '' };
   }
@@ -231,10 +233,7 @@ export const downloadBlob = (blob: Blob, fileName: string) => {
   URL.revokeObjectURL(url);
 };
 
-export const getUniqueTextureName = (
-  names: Set<string>,
-  name: string,
-) => {
+export const getUniqueTextureName = (names: Set<string>, name: string) => {
   const baseName = normalizeTextureName(name);
   let uniqueName = baseName;
   let counter = 1;
@@ -273,8 +272,14 @@ export const buildResourcePack = async (textures: AnimtextureTexture[]) => {
 
     const name = getUniqueTextureName(names, texture.name);
     const pngBlob = await (await fetch(png)).blob();
-    zip.file(`assets/${texture.namespace}/textures/${texture.path}/${name}.png`, pngBlob);
-    zip.file(`assets/${texture.namespace}/textures/${texture.path}/${name}.png.mcmeta`, mcmeta);
+    zip.file(
+      `assets/${texture.namespace}/textures/${texture.path}/${name}.png`,
+      pngBlob,
+    );
+    zip.file(
+      `assets/${texture.namespace}/textures/${texture.path}/${name}.png.mcmeta`,
+      mcmeta,
+    );
   }
 
   return zip.generateAsync({ type: 'blob' });

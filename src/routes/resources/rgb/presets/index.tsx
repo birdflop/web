@@ -180,7 +180,7 @@ const Pagination = component$(
     const t = inlineTranslate();
 
     return (
-      <div class="relative my-2 flex flex-col sm:flex-row items-center justify-between gap-2 p-1">
+      <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
         <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
           {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
           {totalPages > 1 &&
