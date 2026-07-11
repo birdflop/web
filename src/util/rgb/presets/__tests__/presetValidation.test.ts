@@ -37,12 +37,12 @@ describe('presetValidation', () => {
       };
       const errors = validatePreset(preset);
       expect(errors.some((e) => e.message.includes('Invalid hex color'))).toBe(
-        true,
+        true
       );
       expect(
         errors.some((e) =>
-          e.message.includes('position must be between 0 and 100'),
-        ),
+          e.message.includes('position must be between 0 and 100')
+        )
       ).toBe(true);
     });
 
@@ -56,8 +56,8 @@ describe('presetValidation', () => {
       const errors = validatePreset(preset);
       expect(
         errors.some((e) =>
-          e.message.includes('Multiple colors at the same position'),
-        ),
+          e.message.includes('Multiple colors at the same position')
+        )
       ).toBe(true);
     });
   });

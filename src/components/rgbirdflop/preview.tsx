@@ -25,7 +25,7 @@ function getFormattingSignature(formatting: Formatting) {
 
 export function getEffectiveFormatting(
   rgbStore: typeof rgbDefaults,
-  index: number,
+  index: number
 ) {
   const formatting: Formatting = { ...rgbStore.baseFormatting };
 
@@ -74,21 +74,21 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
     (color) => ({
       rgb: hexToRGB(color.hex),
       pos: color.pos,
-    }),
+    })
   );
 
   const gradient = new ColorGradient(
     colorsRGB,
     bucketCount,
-    rgbStore.gradientType,
+    rgbStore.gradientType
   );
   const shadowGradient = new ColorGradient(shadowColorsRGB, bucketCount);
 
   const gradientColors = Array.from({ length: bucketCount }, () =>
-    gradient.next(),
+    gradient.next()
   );
   const shadowColors = Array.from({ length: bucketCount }, () =>
-    shadowGradient.next(),
+    shadowGradient.next()
   );
 
   const segments: Array<{
@@ -102,7 +102,7 @@ export function renderPreview(rgbStore: typeof rgbDefaults, shadowLength = 4) {
   for (let index = 0; index < textArray.length; index++) {
     const bucketIndex = Math.min(
       Math.floor(index / colorLength),
-      bucketCount - 1,
+      bucketCount - 1
     );
     const formatting = getEffectiveFormatting(rgbStore, index);
     const signature = `${bucketIndex}:${getFormattingSignature(formatting)}`;

@@ -1,27 +1,27 @@
-import { component$, useContext } from "@qwik.dev/core";
-import { inlineTranslate } from "qwik-speak";
-import { sortColors } from "@birdflop/rgbirdflop";
-import ChevronLeft from "lucide-icons-qwik/icons/ChevronLeft";
-import ChevronRight from "lucide-icons-qwik/icons/ChevronRight";
-import Trash from "lucide-icons-qwik/icons/Trash";
+import { component$, useContext } from '@qwik.dev/core';
+import { inlineTranslate } from 'qwik-speak';
+import { sortColors } from '@birdflop/rgbirdflop';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 import {
   deleteSegment,
   segmentRange,
   swapSegments,
   type SegmentType,
   rgbSegmentsContext,
-} from "./rgbSegments";
-import { selectionContext } from "~/components/rgbirdflop/Input";
+} from './rgbSegments';
+import { selectionContext } from '~/components/rgbirdflop/Input';
 
 function swatchStyle(seg: SegmentType): string {
-  if (seg.colorMode === "none" || seg.colors.length === 0) {
-    return "repeating-linear-gradient(45deg, #888 0 4px, #555 4px 8px)";
+  if (seg.colorMode === 'none' || seg.colors.length === 0) {
+    return 'repeating-linear-gradient(45deg, #888 0 4px, #555 4px 8px)';
   }
-  if (seg.colorMode === "solid") return seg.colors[0].hex;
+  if (seg.colorMode === 'solid') return seg.colors[0].hex;
   const stops = sortColors(seg.colors)
-    .map((c) => c.hex + " " + c.pos + "%")
-    .join(", ");
-  return "linear-gradient(to right, " + stops + ")";
+    .map((c) => c.hex + ' ' + c.pos + '%')
+    .join(', ');
+  return 'linear-gradient(to right, ' + stops + ')';
 }
 
 export default component$(() => {
@@ -42,14 +42,14 @@ export default component$(() => {
             <div
               key={`part-${i}`}
               class={{
-                "rounded-lum-1 flex items-center overflow-hidden border transition-colors": true,
-                "border-lum-accent lum-grad-bg-lum-accent/15": active,
-                "border-lum-border/20 hover:border-lum-border/40": !active,
+                'rounded-lum-1 flex items-center overflow-hidden border transition-colors': true,
+                'border-lum-accent lum-grad-bg-lum-accent/15': active,
+                'border-lum-border/20 hover:border-lum-border/40': !active,
               }}
             >
               <button
                 class="flex min-w-0 items-center gap-1.5 py-1.5 pr-2.5 pl-2"
-                title={t("rgb.advanced.selectSegment@@Click to edit this part")}
+                title={t('rgb.advanced.selectSegment@@Click to edit this part')}
                 onClick$={() => {
                   selection.value = {
                     start: range.start,
@@ -63,8 +63,8 @@ export default component$(() => {
                   style={`background: ${swatchStyle(seg)};`}
                 />
                 <span class="font-mc max-w-32 truncate">
-                  {seg.text.trim() === ""
-                    ? "␣".repeat(Math.min(seg.text.length, 4))
+                  {seg.text.trim() === ''
+                    ? '␣'.repeat(Math.min(seg.text.length, 4))
                     : seg.text}
                 </span>
               </button>
@@ -73,12 +73,12 @@ export default component$(() => {
                   <button
                     class="lum-btn rounded-sm p-1"
                     disabled={i === 0}
-                    title={t("rgb.advanced.moveLeft@@Move left")}
+                    title={t('rgb.advanced.moveLeft@@Move left')}
                     onClick$={() => {
                       rgbSegments.value = swapSegments(
                         rgbSegments.value,
                         i,
-                        i - 1,
+                        i - 1
                       );
                     }}
                   >
@@ -87,12 +87,12 @@ export default component$(() => {
                   <button
                     class="lum-btn rounded-sm p-1"
                     disabled={i >= rgbSegments.value.length - 1}
-                    title={t("rgb.advanced.moveRight@@Move right")}
+                    title={t('rgb.advanced.moveRight@@Move right')}
                     onClick$={() => {
                       rgbSegments.value = swapSegments(
                         rgbSegments.value,
                         i,
-                        i + 1,
+                        i + 1
                       );
                     }}
                   >
@@ -100,7 +100,7 @@ export default component$(() => {
                   </button>
                   <button
                     class="lum-btn hover:lum-bg-red rounded-sm p-1"
-                    title={t("rgb.advanced.deleteSegment@@Delete this part")}
+                    title={t('rgb.advanced.deleteSegment@@Delete this part')}
                     onClick$={() => {
                       rgbSegments.value = deleteSegment(rgbSegments.value, i);
                     }}

@@ -1,17 +1,17 @@
-import type { RequestHandler } from "@qwik.dev/router";
-import { getCookies } from "~/util/dataUtils";
-import { languages } from "~/speak-config";
+import type { RequestHandler } from '@qwik.dev/router';
+import { getCookies } from '~/util/dataUtils';
+import { languages } from '~/speak-config';
 
 export const onRequest: RequestHandler = ({ request, locale, cookie }) => {
-  const acceptLanguage = request.headers?.get("accept-language");
+  const acceptLanguage = request.headers?.get('accept-language');
 
   let lang: keyof typeof languages | undefined = undefined;
 
   // Try whether the language is stored in a cookie
-  const { cookies: settings } = getCookies(cookie, "settings");
+  const { cookies: settings } = getCookies(cookie, 'settings');
 
   // Check for old locale cookie as well
-  const oldLocale = cookie.get("locale")?.json() as {
+  const oldLocale = cookie.get('locale')?.json() as {
     lang: keyof typeof languages;
   };
 
@@ -19,5 +19,5 @@ export const onRequest: RequestHandler = ({ request, locale, cookie }) => {
   else if (oldLocale) lang = oldLocale.lang;
 
   // Set Qwik locale based on cookie or Accept-Language header
-  locale(lang || acceptLanguage?.split(";")[0]?.split(",")[0]);
+  locale(lang || acceptLanguage?.split(';')[0]?.split(',')[0]);
 };

@@ -1,9 +1,9 @@
-import { component$, Slot } from "@qwik.dev/core";
-import { routeLoader$, useLocation } from "@qwik.dev/router";
-import { DocsSidebar } from "~/components/docs/SideBar";
-import { Breadcrumbs } from "~/components/docs/Breadcrumbs";
-import Contributors from "~/components/docs/Contributors";
-import { OnThisPage } from "~/components/docs/ThisPage";
+import { component$, Slot } from '@qwik.dev/core';
+import { routeLoader$, useLocation } from '@qwik.dev/router';
+import { DocsSidebar } from '~/components/docs/SideBar';
+import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
+import Contributors from '~/components/docs/Contributors';
+import { OnThisPage } from '~/components/docs/ThisPage';
 
 type MDX = {
   title: string;
@@ -20,30 +20,30 @@ export const menuItemPriority: {
   Overview: 1,
   Panel: 2,
   Games: 3,
-  "Non Profit": 4,
-  "Open Source": 5,
+  'Non Profit': 4,
+  'Open Source': 5,
   Rgbirdflop: 6,
 };
 
 export const getMarkdownItems = async () => {
   const rawData = await Promise.all(
     Object.entries(
-      import.meta.glob<{ frontmatter?: MDX }>("/src/routes/docs/**/*.{md,mdx}"),
+      import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}')
     ).map(async ([k, v]) => {
       return [
         k
-          .replace("/src/routes", "")
-          .replace("index.mdx", "")
-          .replace("index.md", ""),
+          .replace('/src/routes', '')
+          .replace('index.mdx', '')
+          .replace('index.md', ''),
         await v(),
       ] as const;
-    }),
+    })
   );
 
   const markdownItems: MarkdownItems = {};
   rawData.forEach(([k, v]) => {
     // skip marksdown cheatsheet and extras
-    if (k.includes("extras")) return;
+    if (k.includes('extras')) return;
     if (v.frontmatter) {
       markdownItems[k] = {
         title: v.frontmatter.title,
@@ -65,7 +65,7 @@ export default component$(() => {
   const currentItem = Object.entries(markdownItems.value).find(([k]) => {
     return currentPath == k;
   });
-  const title = currentItem ? currentItem[1].title : "Docs";
+  const title = currentItem ? currentItem[1].title : 'Docs';
   return (
     <div class="flex min-h-dvh items-stretch gap-12 lg:pl-0 xl:gap-20 xl:pr-0">
       <DocsSidebar />

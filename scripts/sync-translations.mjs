@@ -43,7 +43,7 @@ async function parseSupportedFromSpeakConfig() {
   try {
     const raw = await fs.readFile(SPEAK_CONFIG_PATH, 'utf8');
     const languages = Array.from(
-      raw.matchAll(/'([a-z]{2}-[A-Z]{2})'\s*:/g),
+      raw.matchAll(/'([a-z]{2}-[A-Z]{2})'\s*:/g)
     ).map((m) => m[1]);
     const assetsBlock = raw.match(/assets:\s*\[([^]*?)\]/m);
     const assets = assetsBlock
@@ -56,7 +56,7 @@ async function parseSupportedFromSpeakConfig() {
   } catch (error) {
     console.warn(
       '[warn] Failed to read speak-config.ts, falling back to defaults:',
-      error,
+      error
     );
     return fallback;
   }
@@ -80,7 +80,7 @@ function walkStrings(node, pathParts = [], out = []) {
   }
   if (Array.isArray(node)) {
     node.forEach((item, index) =>
-      walkStrings(item, [...pathParts, index], out),
+      walkStrings(item, [...pathParts, index], out)
     );
     return out;
   }
@@ -111,7 +111,7 @@ function setPath(target, pathParts, value) {
 function getPath(source, pathParts) {
   return pathParts.reduce(
     (current, part) => (current ? current[part] : undefined),
-    source,
+    source
   );
 }
 
@@ -196,14 +196,14 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const targetAssets = args.assets?.length ? args.assets : assets;
   const targetLangs = (args.langs?.length ? args.langs : languages).filter(
-    (lang) => lang !== BASE_LANG,
+    (lang) => lang !== BASE_LANG
   );
   const providerName = args.provider ?? DEFAULT_PROVIDER;
   const translate = providers[providerName];
 
   if (!translate) {
     throw new Error(
-      `Unknown provider '${providerName}'. Use one of: ${Object.keys(providers).join(', ')}.`,
+      `Unknown provider '${providerName}'. Use one of: ${Object.keys(providers).join(', ')}.`
     );
   }
 
@@ -218,7 +218,7 @@ async function main() {
       .catch(() => false);
     if (!baseExists) {
       console.warn(
-        `[warn] Missing base file for asset '${asset}' at ${basePath}, skipping.`,
+        `[warn] Missing base file for asset '${asset}' at ${basePath}, skipping.`
       );
       continue;
     }
@@ -281,7 +281,7 @@ async function main() {
 
   const rows = summary.map(
     (item) =>
-      `${item.asset} -> ${item.lang}: ${item.updated} updated, ${item.skipped} unchanged`,
+      `${item.asset} -> ${item.lang}: ${item.updated} updated, ${item.skipped} unchanged`
   );
   console.log('\nTranslation sync complete');
   rows.forEach((row) => console.log(` - ${row}`));

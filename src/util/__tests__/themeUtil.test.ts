@@ -19,7 +19,7 @@ describe('themeUtil', () => {
       const cssString = getCSSString('dark');
       expect(cssString).toContain('--color-bg: var(--color-gray-900)');
       expect(cssString).toContain(
-        '--color-nav-bg: color-mix(in oklab, var(--color-sky-950), transparent 30%)',
+        '--color-nav-bg: color-mix(in oklab, var(--color-sky-950), transparent 30%)'
       );
     });
   });

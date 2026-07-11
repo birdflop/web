@@ -149,7 +149,7 @@ export function rgbToOklab(rgb: number[]): OKLAB {
 export function interpolateColor(
   color1: OKLAB,
   color2: OKLAB,
-  factor: number,
+  factor: number
 ): OKLAB {
   return {
     L: color1.L + (color2.L - color1.L) * factor,

@@ -48,30 +48,30 @@ export default defineConfig({
     "*": "vp check --fix"
   },
   lint: {
-    "plugins": [
+    plugins: [
       "oxc",
       "typescript",
       "unicorn",
       "react"
     ],
-    "jsPlugins": [
+    jsPlugins: [
       "eslint-plugin-qwik"
     ],
-    "categories": {
-      "correctness": "warn"
+    categories: {
+      correctness: "warn"
     },
-    "options": {
-      "typeAware": true,
-      "typeCheck": true
+    options: {
+      typeAware: true,
+      typeCheck: true
     },
-    "env": {
-      "builtin": true,
-      "browser": true,
-      "es2024": true,
-      "node": true,
-      "serviceworker": true
+    env: {
+      builtin: true,
+      browser: true,
+      es2024: true,
+      node: true,
+      serviceworker: true
     },
-    "ignorePatterns": [
+    ignorePatterns: [
       "**/*.log",
       "**/.DS_Store",
       "**/*.",
@@ -111,7 +111,7 @@ export default defineConfig({
       "**/server",
       "eslint.config.js"
     ],
-    "rules": {
+    rules: {
       "constructor-super": "error",
       "for-direction": "error",
       "getter-return": "error",
@@ -173,48 +173,48 @@ export default defineConfig({
       "require-yield": "error",
       "use-isnan": "error",
       "valid-typeof": "error",
-      "@typescript-eslint/await-thenable": "error",
-      "@typescript-eslint/ban-ts-comment": "error",
+      "typescript/await-thenable": "error",
+      "typescript/ban-ts-comment": "error",
       "no-array-constructor": "error",
-      "@typescript-eslint/no-array-delete": "error",
-      "@typescript-eslint/no-base-to-string": "error",
-      "@typescript-eslint/no-duplicate-enum-values": "error",
-      "@typescript-eslint/no-duplicate-type-constituents": "error",
-      "@typescript-eslint/no-empty-object-type": "error",
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-extra-non-null-assertion": "error",
-      "@typescript-eslint/no-floating-promises": "error",
-      "@typescript-eslint/no-for-in-array": "error",
-      "@typescript-eslint/no-implied-eval": "error",
-      "@typescript-eslint/no-misused-new": "error",
-      "@typescript-eslint/no-misused-promises": "error",
-      "@typescript-eslint/no-namespace": "error",
-      "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
-      "@typescript-eslint/no-redundant-type-constituents": "error",
-      "@typescript-eslint/no-require-imports": "error",
-      "@typescript-eslint/no-this-alias": "error",
-      "@typescript-eslint/no-unnecessary-type-assertion": "error",
-      "@typescript-eslint/no-unnecessary-type-constraint": "error",
-      "@typescript-eslint/no-unsafe-argument": "error",
-      "@typescript-eslint/no-unsafe-assignment": "error",
-      "@typescript-eslint/no-unsafe-call": "error",
-      "@typescript-eslint/no-unsafe-declaration-merging": "error",
-      "@typescript-eslint/no-unsafe-enum-comparison": "error",
-      "@typescript-eslint/no-unsafe-function-type": "error",
-      "@typescript-eslint/no-unsafe-member-access": "error",
-      "@typescript-eslint/no-unsafe-return": "error",
-      "@typescript-eslint/no-unsafe-unary-minus": "error",
+      "typescript/no-array-delete": "error",
+      "typescript/no-base-to-string": "error",
+      "typescript/no-duplicate-enum-values": "error",
+      "typescript/no-duplicate-type-constituents": "error",
+      "typescript/no-empty-object-type": "error",
+      "typescript/no-explicit-any": "error",
+      "typescript/no-extra-non-null-assertion": "error",
+      "typescript/no-floating-promises": "error",
+      "typescript/no-for-in-array": "error",
+      "typescript/no-implied-eval": "error",
+      "typescript/no-misused-new": "error",
+      "typescript/no-misused-promises": "error",
+      "typescript/no-namespace": "error",
+      "typescript/no-non-null-asserted-optional-chain": "error",
+      "typescript/no-redundant-type-constituents": "error",
+      "typescript/no-require-imports": "error",
+      "typescript/no-this-alias": "error",
+      "typescript/no-unnecessary-type-assertion": "error",
+      "typescript/no-unnecessary-type-constraint": "error",
+      "typescript/no-unsafe-argument": "error",
+      "typescript/no-unsafe-assignment": "error",
+      "typescript/no-unsafe-call": "error",
+      "typescript/no-unsafe-declaration-merging": "error",
+      "typescript/no-unsafe-enum-comparison": "error",
+      "typescript/no-unsafe-function-type": "error",
+      "typescript/no-unsafe-member-access": "error",
+      "typescript/no-unsafe-return": "error",
+      "typescript/no-unsafe-unary-minus": "error",
       "no-unused-expressions": "error",
-      "@typescript-eslint/no-wrapper-object-types": "error",
-      "@typescript-eslint/only-throw-error": "error",
-      "@typescript-eslint/prefer-as-const": "error",
-      "@typescript-eslint/prefer-namespace-keyword": "error",
-      "@typescript-eslint/prefer-promise-reject-errors": "error",
-      "@typescript-eslint/require-await": "error",
-      "@typescript-eslint/restrict-plus-operands": "error",
-      "@typescript-eslint/restrict-template-expressions": "error",
-      "@typescript-eslint/triple-slash-reference": "error",
-      "@typescript-eslint/unbound-method": "error",
+      "typescript/no-wrapper-object-types": "error",
+      "typescript/only-throw-error": "error",
+      "typescript/prefer-as-const": "error",
+      "typescript/prefer-namespace-keyword": "error",
+      "typescript/prefer-promise-reject-errors": "error",
+      "typescript/require-await": "error",
+      "typescript/restrict-plus-operands": "error",
+      "typescript/restrict-template-expressions": "error",
+      "typescript/triple-slash-reference": "error",
+      "typescript/unbound-method": "error",
       "qwik/valid-lexical-scope": "error",
       "qwik/use-method-usage": "error",
       "qwik/no-react-props": "error",
@@ -228,15 +228,15 @@ export default defineConfig({
       "qwik/no-use-visible-task": "warn",
       "qwik/no-async-prevent-default": "warn"
     },
-    "overrides": [
+    overrides: [
       {
-        "files": [
+        files: [
           "**/*.ts",
           "**/*.tsx",
           "**/*.mts",
           "**/*.cts"
         ],
-        "rules": {
+        rules: {
           "constructor-super": "off",
           "getter-return": "off",
           "no-class-assign": "off",
@@ -259,14 +259,39 @@ export default defineConfig({
           "prefer-rest-params": "error",
           "prefer-spread": "error"
         }
+      },
+      {
+        files: [
+          "packages/rgbirdflop/**"
+        ],
+        rules: {
+          "typescript/no-explicit-any": "off",
+          "typescript/no-unsafe-member-access": "off",
+          "typescript/no-unsafe-assignment": "off",
+          "typescript/no-unsafe-return": "off",
+          "typescript/no-unsafe-call": "off",
+          "typescript/no-unsafe-argument": "off",
+          "typescript/no-redundant-type-constituents": "off",
+          "typescript/no-duplicate-type-constituents": "off",
+          "typescript/no-base-to-string": "off",
+          "typescript/restrict-template-expressions": "off",
+          "typescript/ban-ts-comment": "off",
+          "typescript/only-throw-error": "off"
+        }
       }
     ]
   },
   fmt: {
-    "sortTailwindcss": {},
-    "printWidth": 80,
-    "sortPackageJson": false,
-    "ignorePatterns": [
+    sortTailwindcss: {},
+    printWidth: 80,
+    sortPackageJson: false,
+    tabWidth: 2,
+    useTabs: false,
+    singleQuote: true,
+    semi: true,
+    trailingComma: "es5",
+    bracketSpacing: true,
+    ignorePatterns: [
       "**/*.log",
       "**/.DS_Store",
       "*.",

@@ -1,15 +1,15 @@
-import type { RequestHandler } from "@qwik.dev/router";
-import { parseParams } from "~/util/dataUtils";
+import type { RequestHandler } from '@qwik.dev/router';
+import { parseParams } from '~/util/dataUtils';
 import {
   colorFormats,
   rgbDefaults,
   generateOutput,
-} from "@birdflop/rgbirdflop";
+} from '@birdflop/rgbirdflop';
 
 export const onGet: RequestHandler = ({ json, query }) => {
   let output;
   try {
-    const { params } = parseParams(Object.fromEntries(query), "rgb");
+    const { params } = parseParams(Object.fromEntries(query), 'rgb');
 
     output = getOutput(params);
   } catch (e: any) {
@@ -35,34 +35,34 @@ export const onPost: RequestHandler = async ({ json, parseBody }) => {
 const descriptions: {
   [key in keyof typeof rgbDefaults]?: string;
 } = {
-  text: "The text to use for the gradient.",
-  colors: "The colors to use for the gradient. Must be in hex format.",
+  text: 'The text to use for the gradient.',
+  colors: 'The colors to use for the gradient. Must be in hex format.',
   shadowColors:
-    "The colors to use for the text shadow gradient. Must be in hex format and requires color format set to JSON or MiniMessage",
+    'The colors to use for the text shadow gradient. Must be in hex format and requires color format set to JSON or MiniMessage',
   colorFormat:
     'The format to use for the color and format codes. For MiniMessage or JSON, { color: "MiniMessage" } can be used.',
   prefixSuffix:
-    "The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.",
+    'The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.',
   trimSpaces:
     "Whether or not to trim color codes from spaces. Turn this off if you're using empty underlines or strikethroughs.",
-  colorLength: "The amount of characters for one color step.",
-  baseFormatting: "The base formatting options to apply (bold, italic, etc.).",
+  colorLength: 'The amount of characters for one color step.',
+  baseFormatting: 'The base formatting options to apply (bold, italic, etc.).',
 };
 
 const customTypes: {
   [key in keyof typeof rgbDefaults]?: string;
 } = {
-  colors: "Color[] - see types in docs | string[]",
-  shadowColors: "Color[] - see types in docs | string[]",
+  colors: 'Color[] - see types in docs | string[]',
+  shadowColors: 'Color[] - see types in docs | string[]',
   colorFormat:
-    "RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs",
-  baseFormatting: "Formatting - see types in docs",
+    'RegularFormatting | MiniMessageFormatting | JSONFormatting - see types in docs',
+  baseFormatting: 'Formatting - see types in docs',
 };
 
 export const rgbOptions = (
   Object.keys(rgbDefaults) as (keyof typeof rgbDefaults)[]
 )
-  .filter((key) => !["version", "disperse", "customFormat"].includes(key))
+  .filter((key) => !['version', 'disperse', 'customFormat'].includes(key))
   .reduce(
     (
       acc: {
@@ -72,7 +72,7 @@ export const rgbOptions = (
           default: any;
         };
       },
-      key,
+      key
     ) => {
       const description = descriptions[key];
       const customType = customTypes[key];
@@ -83,7 +83,7 @@ export const rgbOptions = (
       };
       return acc;
     },
-    {},
+    {}
   );
 
 function getOutput(body: any) {
@@ -118,8 +118,8 @@ function getOutput(body: any) {
         options: {
           ...rgbOptions,
           silent: {
-            type: "boolean",
-            description: "Set this to true to hide the options and input.",
+            type: 'boolean',
+            description: 'Set this to true to hide the options and input.',
             default: false,
           },
         },
@@ -137,15 +137,15 @@ function getOutput(body: any) {
   ) {
     format = colorFormats.find((f: any) => f.color == format.color) ?? {
       ...format,
-      char: "&",
+      char: '&',
     };
   }
   if (format) body.colorFormat = format;
 
   // make string[] a valid color array
   let colors = body?.colors;
-  if (colors && colors.length && typeof colors[0] == "string") {
-    if (typeof colors[0] == "string")
+  if (colors && colors.length && typeof colors[0] == 'string') {
+    if (typeof colors[0] == 'string')
       colors = colors.map((color: string, i: number) => ({
         hex: color,
         pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
@@ -157,9 +157,9 @@ function getOutput(body: any) {
   if (
     shadowColors &&
     shadowColors.length &&
-    typeof shadowColors[0] == "string"
+    typeof shadowColors[0] == 'string'
   ) {
-    if (typeof shadowColors[0] == "string")
+    if (typeof shadowColors[0] == 'string')
       shadowColors = shadowColors.map((color: string, i: number) => ({
         hex: color,
         pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,

@@ -24,7 +24,7 @@ export default function getConfig() {
     BookLimiter: {
       prefix: '❌',
       value:
-        'You don\'t need BookLimiter as Paper already fixes all crash bugs.',
+        "You don't need BookLimiter as Paper already fixes all crash bugs.",
     },
     LimitPillagers: {
       prefix: '❌',
@@ -64,21 +64,21 @@ export default function getConfig() {
     IllegalStack: {
       prefix: '❌',
       value:
-        'You probably don\'t need IllegalStack as Paper already fixes all dupe and crash bugs.',
+        "You probably don't need IllegalStack as Paper already fixes all dupe and crash bugs.",
     },
     ExploitFixer: {
       prefix: '❌',
       value:
-        'You probably don\'t need ExploitFixer as Paper already fixes all dupe and crash bugs.',
+        "You probably don't need ExploitFixer as Paper already fixes all dupe and crash bugs.",
     },
     EntityTrackerFixer: {
       prefix: '❌',
       value:
-        'You don\'t need EntityTrackerFixer as Paper already has its features.',
+        "You don't need EntityTrackerFixer as Paper already has its features.",
     },
     Orebfuscator: {
       prefix: '❌',
-      value: 'You don\'t need Orebfuscator as Paper already has its features.',
+      value: "You don't need Orebfuscator as Paper already has its features.",
     },
     GroupManager: {
       prefix: '❌',
@@ -129,7 +129,7 @@ export default function getConfig() {
         ],
         prefix: '❌',
         value:
-          'You probably don\'t need PhantomSMP as Paper already has its features.',
+          "You probably don't need PhantomSMP as Paper already has its features.",
       },
       {
         expressions: [
@@ -146,12 +146,12 @@ export default function getConfig() {
         ],
         prefix: '❌',
         value:
-          'You probably don\'t need PhantomSMP as Paper already has its features.\nEnable phantoms-only-attack-insomniacs in paper.yml.',
+          "You probably don't need PhantomSMP as Paper already has its features.\nEnable phantoms-only-attack-insomniacs in paper.yml.",
       },
     ],
     PacketLimiter: {
       prefix: '❌',
-      value: 'You don\'t need PacketLimiter as Paper already has its features.',
+      value: "You don't need PacketLimiter as Paper already has its features.",
     },
   };
 }

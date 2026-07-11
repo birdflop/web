@@ -13,7 +13,7 @@ export function getDB() {
 }
 
 export async function initializeDbIfNeeded(
-  factory: () => Promise<AppDatabase>,
+  factory: () => Promise<AppDatabase>
 ) {
   if (!_db) _db = await factory();
 }

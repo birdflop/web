@@ -22,7 +22,7 @@ export function trim(s: string) {
  * @returns Tuple of [R, G, B] or [R, G, B, A] values (0-255)
  */
 export function hexToRGB(
-  hex: string,
+  hex: string
 ): [number, number, number] | [number, number, number, number] {
   // Remove '#' if present
   const cleanHex = hex.replace('#', '');
@@ -53,7 +53,7 @@ export function getBrightness(RGBAcolor: number[]) {
   return Math.sqrt(
     RGBAcolor[0] * RGBAcolor[0] * 0.299 +
       RGBAcolor[1] * RGBAcolor[1] * 0.587 +
-      RGBAcolor[2] * RGBAcolor[2] * 0.114,
+      RGBAcolor[2] * RGBAcolor[2] * 0.114
   );
 }
 

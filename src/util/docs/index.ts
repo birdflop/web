@@ -1,11 +1,11 @@
-import { type ContentMenu } from "@qwik.dev/router";
-import { menuItemPriority, type MarkdownItems } from "~/routes/docs/layout";
+import { type ContentMenu } from '@qwik.dev/router';
+import { menuItemPriority, type MarkdownItems } from '~/routes/docs/layout';
 
 function capitalizeWords(string: string) {
   return string
-    .split("_")
+    .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
@@ -14,8 +14,8 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
   const pathsByDir = new Map<string, string[]>();
 
   paths.forEach((path) => {
-    const cleanPath = path.endsWith("/") ? path : `${path}/`;
-    const parts = cleanPath.split("/").filter(Boolean);
+    const cleanPath = path.endsWith('/') ? path : `${path}/`;
+    const parts = cleanPath.split('/').filter(Boolean);
 
     if (parts.length < 2) {
       return;
@@ -25,8 +25,8 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
 
     const parentPath =
       parts.length > 1
-        ? `/docs/${parts.slice(0, parts.length - 1).join("/")}/`
-        : "/docs/";
+        ? `/docs/${parts.slice(0, parts.length - 1).join('/')}/`
+        : '/docs/';
 
     if (!pathsByDir.has(parentPath)) {
       pathsByDir.set(parentPath, []);
@@ -42,8 +42,8 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
 
   pathsByDir.forEach((dirPaths) => {
     dirPaths.forEach((path) => {
-      const cleanPath = path.endsWith("/") ? path : `${path}/`;
-      const parts = cleanPath.split("/").filter(Boolean);
+      const cleanPath = path.endsWith('/') ? path : `${path}/`;
+      const parts = cleanPath.split('/').filter(Boolean);
 
       if (parts.length > 2) {
         const parentDir = `/docs/${parts[1]}/`;
@@ -63,8 +63,8 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
   paths.forEach((path) => {
     if (!path) return;
 
-    const cleanPath = path.endsWith("/") ? path : `${path}/`;
-    const parts = cleanPath.split("/").filter(Boolean);
+    const cleanPath = path.endsWith('/') ? path : `${path}/`;
+    const parts = cleanPath.split('/').filter(Boolean);
 
     if (parts.length < 2) return;
 
@@ -137,8 +137,8 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
   paths.forEach((path) => {
     if (!path) return;
 
-    const cleanPath = path.endsWith("/") ? path : `${path}/`;
-    const parts = cleanPath.split("/").filter(Boolean);
+    const cleanPath = path.endsWith('/') ? path : `${path}/`;
+    const parts = cleanPath.split('/').filter(Boolean);
 
     if (parts.length === 2) {
       const categoryName = parts[1];
@@ -168,25 +168,25 @@ export function buildMenu(markdownItems: MarkdownItems): ContentMenu[] {
   }
 
   const result: ContentMenu[] = Array.from(categories.values())
-    .sort((a, b) => (a.text || "").localeCompare(b.text || ""))
+    .sort((a, b) => (a.text || '').localeCompare(b.text || ''))
     .map(toContentMenu);
 
-  const indexTitle = markdownItems["/docs/"]?.title || "Overview";
+  const indexTitle = markdownItems['/docs/']?.title || 'Overview';
   result.unshift({
     text: indexTitle,
-    href: "/docs/",
+    href: '/docs/',
     items: undefined,
   });
 
   result.sort((a, b) => {
-    const aPriority = menuItemPriority[a.text || ""] || 100;
-    const bPriority = menuItemPriority[b.text || ""] || 100;
+    const aPriority = menuItemPriority[a.text || ''] || 100;
+    const bPriority = menuItemPriority[b.text || ''] || 100;
 
     if (aPriority !== bPriority) {
       return aPriority - bPriority;
     }
 
-    return (a.text || "").localeCompare(b.text || "");
+    return (a.text || '').localeCompare(b.text || '');
   });
 
   return result;

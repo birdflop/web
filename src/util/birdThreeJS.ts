@@ -1,23 +1,23 @@
-import { Signal } from "@qwik.dev/core";
-import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { NotificationType } from "./Notification";
-import { FlopbirdStore } from "~/routes/layout";
+import { Signal } from '@qwik.dev/core';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { NotificationType } from './Notification';
+import { FlopbirdStore } from '~/routes/layout';
 
 function targetElement(id?: string) {
-  const oldEl = document.querySelector(".bird-target");
+  const oldEl = document.querySelector('.bird-target');
   if (oldEl)
-    oldEl.classList.remove("outline-3", "outline-lum-accent", "bird-target");
+    oldEl.classList.remove('outline-3', 'outline-lum-accent', 'bird-target');
 
   if (!id) return;
   const el = document.getElementById(id);
   if (!el) return;
 
   el.classList.add(
-    "outline-3",
-    "outline-lum-accent",
-    "bird-target",
-    "rounded-lum",
+    'outline-3',
+    'outline-lum-accent',
+    'bird-target',
+    'rounded-lum'
   );
   const rect = el.getBoundingClientRect();
   return {
@@ -30,15 +30,15 @@ export default async function birdThreeJS(
   birdRef: Signal<HTMLCanvasElement | undefined>,
   anchorElementRef: Signal<HTMLDivElement | undefined>,
   notifications: NotificationType[],
-  birdStore: FlopbirdStore,
+  birdStore: FlopbirdStore
 ) {
   // check if birdRef is defined
   if (!birdRef.value)
-    return console.warn("birdRef is undefined in birdThreeJS");
+    return console.warn('birdRef is undefined in birdThreeJS');
 
   // Scene
   const scene = new THREE.Scene();
-  scene.background = new THREE.TextureLoader().load("");
+  scene.background = new THREE.TextureLoader().load('');
 
   // get width of window
   let width = window.innerWidth;
@@ -53,7 +53,7 @@ export default async function birdThreeJS(
     viewSize,
     -viewSize, // top, bottom
     0.1,
-    1000, // near, far
+    1000 // near, far
   );
   camera.position.z = 6;
 
@@ -77,14 +77,14 @@ export default async function birdThreeJS(
 
   // GLTF Loader for parrot model
   const loader = new GLTFLoader();
-  const gltf = await loader.loadAsync("/birdflop-bird.glb");
+  const gltf = await loader.loadAsync('/birdflop-bird.glb');
   const bird = gltf.scene;
   bird.scale.set(0.5, 0.5, 0.5);
   bird.rotation.y = 2.5; // temp until bird moves around
   bird.rotation.x = 0;
 
   // Texture Loader for parrot obj
-  const parrotTexture = new THREE.TextureLoader().load("/birdflop-bird.png");
+  const parrotTexture = new THREE.TextureLoader().load('/birdflop-bird.png');
   if (!parrotTexture) return;
   parrotTexture.colorSpace = THREE.SRGBColorSpace;
   parrotTexture.minFilter = THREE.NearestFilter;
@@ -99,15 +99,15 @@ export default async function birdThreeJS(
   });
 
   // Bird bones
-  const body = bird.getObjectByName("body");
-  const wingL = bird.getObjectByName("left_wing");
-  const wingR = bird.getObjectByName("right_wing");
-  const tail = bird.getObjectByName("tail");
-  const legL = bird.getObjectByName("left_leg");
-  const legR = bird.getObjectByName("right_leg");
-  const head = bird.getObjectByName("head");
+  const body = bird.getObjectByName('body');
+  const wingL = bird.getObjectByName('left_wing');
+  const wingR = bird.getObjectByName('right_wing');
+  const tail = bird.getObjectByName('tail');
+  const legL = bird.getObjectByName('left_leg');
+  const legR = bird.getObjectByName('right_leg');
+  const head = bird.getObjectByName('head');
   if (!body || !wingL || !wingR || !tail || !legL || !legR || !head)
-    return console.warn("One or more bones not found! Not rendering bird.");
+    return console.warn('One or more bones not found! Not rendering bird.');
 
   // Initial bone rotations
   head.rotation.x += 0.15;
@@ -121,7 +121,7 @@ export default async function birdThreeJS(
   bird.position.set(
     camera.right - margin, // near right edge
     camera.bottom + margin, // near bottom edge (negative number + positive margin = near bottom)
-    0,
+    0
   );
 
   // Handle window resize
@@ -139,18 +139,18 @@ export default async function birdThreeJS(
 
     renderer.setSize(width, height);
   }
-  window.addEventListener("resize", onWindowResize);
+  window.addEventListener('resize', onWindowResize);
 
   // Add bird to scene
   scene.add(bird);
 
   // Animation state
-  let emote: "waving" | undefined;
+  let emote: 'waving' | undefined;
   let flying = false;
 
   // Track mouse position
   const mouse = { x: 0, y: 0 };
-  window.addEventListener("mousemove", (e) => {
+  window.addEventListener('mousemove', (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   });
@@ -167,7 +167,7 @@ export default async function birdThreeJS(
     const mouseWorld = new THREE.Vector3(
       mouse.x * camera.right,
       mouse.y * camera.top,
-      0,
+      0
     );
 
     // Direction to mouse in world space
@@ -180,7 +180,7 @@ export default async function birdThreeJS(
     const yaw = Math.atan2(targetLocal.x, targetLocal.z);
     const pitch = Math.atan2(
       targetLocal.y,
-      Math.sqrt(targetLocal.x * targetLocal.x + targetLocal.z * targetLocal.z),
+      Math.sqrt(targetLocal.x * targetLocal.x + targetLocal.z * targetLocal.z)
     );
 
     // Clamp like Minecraft
@@ -195,7 +195,7 @@ export default async function birdThreeJS(
     head.rotation.x = THREE.MathUtils.lerp(
       head.rotation.x,
       clampedPitch + idle,
-      0.12,
+      0.12
     );
 
     // Kill roll
@@ -215,7 +215,7 @@ export default async function birdThreeJS(
   function screenToWorld(
     x: number,
     y: number,
-    camera: THREE.OrthographicCamera,
+    camera: THREE.OrthographicCamera
   ) {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -237,9 +237,9 @@ export default async function birdThreeJS(
     head.getWorldPosition(headWorldPos);
 
     const screen = worldToScreen(headWorldPos, camera);
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (!isMobile) anchorElementRef.value.style.left = `${screen.x}px`;
-    else anchorElementRef.value.style.left = "calc(100% - 10px)"; // fixed position on mobile
+    else anchorElementRef.value.style.left = 'calc(100% - 10px)'; // fixed position on mobile
     anchorElementRef.value.style.top = `${screen.y}px`;
   }
 
@@ -261,12 +261,12 @@ export default async function birdThreeJS(
     bird: any,
     targetAngle: number,
     deltaTime: number,
-    speed = 6,
+    speed = 6
   ) {
     bird.rotation.y = smoothRotate(
       bird.rotation.y,
       targetAngle,
-      Math.min(1, speed * deltaTime),
+      Math.min(1, speed * deltaTime)
     );
   }
 
@@ -286,7 +286,7 @@ export default async function birdThreeJS(
     body.rotation.x = THREE.MathUtils.lerp(
       body.rotation.x,
       THREE.MathUtils.degToRad(-20),
-      0.05,
+      0.05
     );
     otherWing.rotation.z = Math.sin(time / 500) * 0.05;
   }
@@ -298,7 +298,7 @@ export default async function birdThreeJS(
     body.rotation.x = THREE.MathUtils.lerp(
       body.rotation.x,
       THREE.MathUtils.degToRad(-28),
-      0.05,
+      0.05
     );
     wingL.rotation.z = Math.sin(time / 500) * 0.05;
     wingR.rotation.z = -Math.sin(time / 500) * 0.05;
@@ -312,7 +312,7 @@ export default async function birdThreeJS(
     body.rotation.x = THREE.MathUtils.lerp(
       body.rotation.x,
       THREE.MathUtils.degToRad(-36),
-      0.05,
+      0.05
     );
     bird.position.y += Math.sin(time / 25) * 0.003;
     wingL.rotation.z = Math.sin(time / 25) * 0.5 - 0.5;
@@ -326,7 +326,7 @@ export default async function birdThreeJS(
   const defaultTargetPos = new THREE.Vector3(
     camera.right - margin,
     camera.bottom + margin,
-    0,
+    0
   );
   const animate = (time: number) => {
     const deltaTime = (time - lastTime) / 1000; // seconds
@@ -335,7 +335,7 @@ export default async function birdThreeJS(
     updateHeadLook(time);
     updateAnchorElement();
 
-    emote = notifications.length > 0 ? "waving" : undefined;
+    emote = notifications.length > 0 ? 'waving' : undefined;
 
     const pos = targetElement(birdStore.ref);
     if (pos) targetPos = screenToWorld(pos.x, pos.y, camera);
@@ -344,7 +344,7 @@ export default async function birdThreeJS(
     if (targetPos) {
       const direction = new THREE.Vector3().subVectors(
         targetPos,
-        bird.position,
+        bird.position
       );
       const distance = direction.length();
 
@@ -355,7 +355,7 @@ export default async function birdThreeJS(
       const desiredRotation = THREE.MathUtils.lerp(
         targetRotation,
         cameraRotation,
-        blendFactor,
+        blendFactor
       );
 
       updateRotationTowards(bird, desiredRotation, deltaTime);
@@ -370,7 +370,7 @@ export default async function birdThreeJS(
       }
     }
 
-    if (emote === "waving") updateWaving(time);
+    if (emote === 'waving') updateWaving(time);
     else updateIdle(time);
 
     if (flying) updateFlying(time);

@@ -1,8 +1,8 @@
-import { component$, useContext, QRL } from "@qwik.dev/core";
-import { ContentMenu, Link } from "@qwik.dev/router";
-import { MarkdownItems } from "~/routes/docs/layout";
-import Accordion from "../Elements/Accordion";
-import { openItemsContext } from "~/routes/layout";
+import { component$, useContext, QRL } from '@qwik.dev/core';
+import { ContentMenu, Link } from '@qwik.dev/router';
+import { MarkdownItems } from '~/routes/docs/layout';
+import Accordion from '../Elements/Accordion';
+import { openItemsContext } from '~/routes/layout';
 
 const DAYS = 24 * 60 * 60 * 1000;
 
@@ -14,10 +14,10 @@ const renderUpdated = (itemHref: string, markdownItems: MarkdownItems) => {
     const isUpdated = updateDate.getTime() + 14 * DAYS > new Date().getTime();
 
     if (isUpdated) {
-      const formattedDate = updateDate.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
+      const formattedDate = updateDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
       });
 
       return (
@@ -59,8 +59,8 @@ export const MenuItems = component$(
     return (
       <div
         class={{
-          "pl-0": level === 0,
-          "ml-1 border-l border-gray-200/20 pl-3": level > 0,
+          'pl-0': level === 0,
+          'ml-1 border-l border-gray-200/20 pl-3': level > 0,
         }}
       >
         {items && items.length > 0 ? (
@@ -71,23 +71,23 @@ export const MenuItems = component$(
                   <Accordion
                     sectionName={item.text || `docs-item-${i}`}
                     class={{
-                      "lum-bg-transparent w-full": true,
-                      "lum-btn-p-1! rounded-lum-1 text-sm": level > 0,
-                      "text-indigo-500": isActiveOrParent(item),
+                      'lum-bg-transparent w-full': true,
+                      'lum-btn-p-1! rounded-lum-1 text-sm': level > 0,
+                      'text-indigo-500': isActiveOrParent(item),
                     }}
                   >
                     {item.text}
                   </Accordion>
                   <div
                     class={{
-                      "overflow-hidden transition-all duration-200": true,
-                      "max-h-0 scale-98 opacity-0": !openItems.value.includes(
-                        item.text || `docs-item-${i}`,
+                      'overflow-hidden transition-all duration-200': true,
+                      'max-h-0 scale-98 opacity-0': !openItems.value.includes(
+                        item.text || `docs-item-${i}`
                       ),
-                      "mt-1 max-h-screen opacity-100": openItems.value.includes(
-                        item.text || `docs-item-${i}`,
+                      'mt-1 max-h-screen opacity-100': openItems.value.includes(
+                        item.text || `docs-item-${i}`
                       ),
-                      "pl-1": level > 0,
+                      'pl-1': level > 0,
                     }}
                   >
                     {item.items && item.items.length > 0 && (
@@ -105,16 +105,16 @@ export const MenuItems = component$(
                 <Link
                   href={item.href}
                   class={{
-                    "lum-btn lum-bg-transparent": true,
-                    "lum-btn-p-1 rounded-lum-1 text-sm": level > 0,
-                    "text-indigo-500!": item.href === pathname,
+                    'lum-btn lum-bg-transparent': true,
+                    'lum-btn-p-1 rounded-lum-1 text-sm': level > 0,
+                    'text-indigo-500!': item.href === pathname,
                   }}
                   onMouseOver$={(
                     evt,
-                    target: HTMLAnchorElement & { __prefetchLink: number },
+                    target: HTMLAnchorElement & { __prefetchLink: number }
                   ) => {
                     const canHover =
-                      window.matchMedia("(hover: hover)").matches;
+                      window.matchMedia('(hover: hover)').matches;
                     if (!canHover) return;
 
                     if (!target?.href) return;
@@ -124,9 +124,9 @@ export const MenuItems = component$(
                     const timeGap = now - (target.__prefetchLink || 0);
                     if (timeGap < fiveMinutesInMs) return;
 
-                    const prefetchLink = document.createElement("link");
+                    const prefetchLink = document.createElement('link');
                     prefetchLink.href = target.href;
-                    prefetchLink.rel = "prefetch";
+                    prefetchLink.rel = 'prefetch';
                     document.head.appendChild(prefetchLink);
 
                     target.__prefetchLink = now;
@@ -147,5 +147,5 @@ export const MenuItems = component$(
         )}
       </div>
     );
-  },
+  }
 );

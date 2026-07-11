@@ -9,7 +9,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['chunks']['max-auto-save-chunks-per-tick'],
+                  ]['chunks']['max-auto-save-chunks-per-tick']
                 ) >= 24
               );
             },
@@ -48,7 +48,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['tick-rates']['mob-spawner'],
+                  ]['tick-rates']['mob-spawner']
                 ) == 1
               );
             },
@@ -88,7 +88,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['tick-rates']['container-update'],
+                  ]['tick-rates']['container-update']
                 ) == 1
               );
             },
@@ -109,7 +109,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['tick-rates']['grass-spread'],
+                  ]['tick-rates']['grass-spread']
                 ) == 1
               );
             },
@@ -130,9 +130,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['ambient'][
-                    'soft'
-                  ],
+                  ]['entities']['spawning']['despawn-ranges']['ambient']['soft']
                 ) >= 32
               );
             },
@@ -153,9 +151,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['ambient'][
-                    'hard'
-                  ],
+                  ]['entities']['spawning']['despawn-ranges']['ambient']['hard']
                 ) >= 128
               );
             },
@@ -178,7 +174,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['axolotls'][
                     'soft'
-                  ],
+                  ]
                 ) >= 32
               );
             },
@@ -201,7 +197,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['axolotls'][
                     'hard'
-                  ],
+                  ]
                 ) >= 128
               );
             },
@@ -224,7 +220,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['creature'][
                     'soft'
-                  ],
+                  ]
                 ) >= 32
               );
             },
@@ -247,7 +243,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['creature'][
                     'hard'
-                  ],
+                  ]
                 ) >= 128
               );
             },
@@ -268,7 +264,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['misc']['soft'],
+                  ]['entities']['spawning']['despawn-ranges']['misc']['soft']
                 ) >= 32
               );
             },
@@ -289,7 +285,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['misc']['hard'],
+                  ]['entities']['spawning']['despawn-ranges']['misc']['hard']
                 ) >= 128
               );
             },
@@ -310,9 +306,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['monster'][
-                    'soft'
-                  ],
+                  ]['entities']['spawning']['despawn-ranges']['monster']['soft']
                 ) >= 32
               );
             },
@@ -333,9 +327,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['despawn-ranges']['monster'][
-                    'hard'
-                  ],
+                  ]['entities']['spawning']['despawn-ranges']['monster']['hard']
                 ) >= 128
               );
             },
@@ -358,7 +350,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges'][
                     'underground_water_creature'
-                  ]['soft'],
+                  ]['soft']
                 ) >= 32
               );
             },
@@ -381,7 +373,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges'][
                     'underground_water_creature'
-                  ]['hard'],
+                  ]['hard']
                 ) >= 128
               );
             },
@@ -404,7 +396,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['water_ambient'][
                     'soft'
-                  ],
+                  ]
                 ) >= 32
               );
             },
@@ -427,7 +419,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['water_ambient'][
                     'hard'
-                  ],
+                  ]
                 ) >= 128
               );
             },
@@ -450,7 +442,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['water_creature'][
                     'soft'
-                  ],
+                  ]
                 ) >= 32
               );
             },
@@ -473,7 +465,7 @@ export default function getConfig() {
                     '__defaults__'
                   ]['entities']['spawning']['despawn-ranges']['water_creature'][
                     'hard'
-                  ],
+                  ]
                 ) >= 128
               );
             },
@@ -512,7 +504,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['non-player-arrow-despawn-rate'],
+                  ]['entities']['spawning']['non-player-arrow-despawn-rate']
                 ) == -1
               );
             },
@@ -533,7 +525,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['entities']['spawning']['creative-arrow-despawn-rate'],
+                  ]['entities']['spawning']['creative-arrow-despawn-rate']
                 ) == -1
               );
             },
@@ -637,7 +629,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'PetBlocks',
+                  (plugin: Field) => plugin.name == 'PetBlocks'
                 ) !== undefined
               );
             },
@@ -647,7 +639,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'BlockBalls',
+                  (plugin: Field) => plugin.name == 'BlockBalls'
                 ) !== undefined
               );
             },
@@ -657,7 +649,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'ArmorStandTools',
+                  (plugin: Field) => plugin.name == 'ArmorStandTools'
                 ) !== undefined
               );
             },
@@ -714,7 +706,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['chunks']['entity-per-chunk-save-limit']['experience_orb'],
+                  ]['chunks']['entity-per-chunk-save-limit']['experience_orb']
                 ) == -1
               );
             },
@@ -735,7 +727,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['chunks']['entity-per-chunk-save-limit']['snowball'],
+                  ]['chunks']['entity-per-chunk-save-limit']['snowball']
                 ) == -1
               );
             },
@@ -756,7 +748,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['chunks']['entity-per-chunk-save-limit']['ender_pearl'],
+                  ]['chunks']['entity-per-chunk-save-limit']['ender_pearl']
                 ) == -1
               );
             },
@@ -777,7 +769,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.paper['__________WORLDS__________'][
                     '__defaults__'
-                  ]['chunks']['entity-per-chunk-save-limit']['arrow'],
+                  ]['chunks']['entity-per-chunk-save-limit']['arrow']
                 ) == -1
               );
             },

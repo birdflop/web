@@ -5,33 +5,33 @@ import {
   useContext,
   useOnDocument,
   useSignal,
-} from "@qwik.dev/core";
-import { ColorPicker } from "@luminescent/ui-qwik";
-import { inlineTranslate } from "qwik-speak";
+} from '@qwik.dev/core';
+import { ColorPicker } from '@luminescent/ui-qwik';
+import { inlineTranslate } from 'qwik-speak';
 import {
   getRandomColor,
   rgbColorDefaultsWithColorMode,
   type ColorStop,
-} from "@birdflop/rgbirdflop";
-import Ban from "lucide-icons-qwik/icons/Ban";
-import Droplet from "lucide-icons-qwik/icons/Droplet";
-import Palette from "lucide-icons-qwik/icons/Palette";
+} from '@birdflop/rgbirdflop';
+import Ban from 'lucide-icons-qwik/icons/Ban';
+import Droplet from 'lucide-icons-qwik/icons/Droplet';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 import {
   applyStyleToRange,
   styleAtChar,
   type SegmentType,
   rgbSegmentsContext,
-} from "./rgbSegments";
+} from './rgbSegments';
 import {
   restoreSelection,
   selectionContext,
-} from "~/components/rgbirdflop/Input";
-import ColorList from "../ColorList";
-import { ButtonContainer } from "~/components/Elements/ButtonContainer";
+} from '~/components/rgbirdflop/Input';
+import ColorList from '../ColorList';
+import { ButtonContainer } from '~/components/Elements/ButtonContainer';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
   if (colors.length >= 2) return colors.map((c) => ({ ...c }));
-  const base = colors.length === 1 ? colors[0].hex : "#54daf4";
+  const base = colors.length === 1 ? colors[0].hex : '#54daf4';
   return [
     { hex: base, pos: 0 },
     { hex: getRandomColor(), pos: 100 },
@@ -39,14 +39,14 @@ function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
 }
 
 export default component$(
-  ({ hidden, id = "text" }: { hidden?: boolean; id?: string }) => {
+  ({ hidden, id = 'text' }: { hidden?: boolean; id?: string }) => {
     const t = inlineTranslate();
     const rgbSegments = useContext(rgbSegmentsContext);
     const selection = useContext(selectionContext);
     const opened = useSignal(-1);
 
     const hasSelection = useComputed$(
-      () => !!selection.value && selection.value.end > selection.value.start,
+      () => !!selection.value && selection.value.end > selection.value.start
     );
 
     const current = useComputed$<SegmentType>(() => {
@@ -58,16 +58,16 @@ export default component$(
     });
 
     useOnDocument(
-      "click",
+      'click',
       $((e) => {
         if (
           e.target instanceof HTMLElement &&
-          !e.target.closest("#adv-color-popup") &&
-          !e.target.closest("#adv-color-list")
+          !e.target.closest('#adv-color-popup') &&
+          !e.target.closest('#adv-color-list')
         ) {
           opened.value = -1;
         }
-      }),
+      })
     );
 
     // Writes a uniform color config over the whole selection (formatting flags untouched).
@@ -91,7 +91,7 @@ export default component$(
           s.colors = colors.map((c) => ({ ...c }));
           s.gradientType = gradientType;
           s.colorLength = colorLength;
-        },
+        }
       );
       void restoreSelection(start, end);
     });
@@ -105,39 +105,39 @@ export default component$(
     return (
       <div
         class={{
-          "flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:h-auto sm:opacity-100": true,
-          "pointer-events-none h-0 opacity-0": hidden,
-          "pointer-events-auto opacity-100": !hidden,
+          'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:h-auto sm:opacity-100': true,
+          'pointer-events-none h-0 opacity-0': hidden,
+          'pointer-events-auto opacity-100': !hidden,
         }}
-        id={"colorlist" + id}
+        id={'colorlist' + id}
       >
         {/* Color mode switch */}
         <ButtonContainer
           class={{
-            "*:lum-btn-p-1 items-stretch *:justify-center": true,
+            '*:lum-btn-p-1 items-stretch *:justify-center': true,
           }}
         >
           <button
             class={{
-              "lum-grad-bg-lum-accent!": mode === "gradient",
+              'lum-grad-bg-lum-accent!': mode === 'gradient',
             }}
             onClick$={() =>
               writeConfig({
-                colorMode: "gradient",
+                colorMode: 'gradient',
                 colors: ensureGradientColors(current.value.colors),
               })
             }
           >
-            <Palette size={18} />{" "}
-            {mode === "gradient" && t("rgb.advanced.mode.gradient@@Gradient")}
+            <Palette size={18} />{' '}
+            {mode === 'gradient' && t('rgb.advanced.mode.gradient@@Gradient')}
           </button>
           <button
             class={{
-              "lum-grad-bg-lum-accent!": mode === "solid",
+              'lum-grad-bg-lum-accent!': mode === 'solid',
             }}
             onClick$={() =>
               writeConfig({
-                colorMode: "solid",
+                colorMode: 'solid',
                 colors: [
                   {
                     hex: current.value.colors[0]?.hex ?? getRandomColor(),
@@ -147,42 +147,42 @@ export default component$(
               })
             }
           >
-            <Droplet size={18} />{" "}
-            {mode === "solid" && t("rgb.advanced.mode.solid@@Solid")}
+            <Droplet size={18} />{' '}
+            {mode === 'solid' && t('rgb.advanced.mode.solid@@Solid')}
           </button>
           <button
             class={{
-              "lum-grad-bg-lum-accent!": mode === "none",
+              'lum-grad-bg-lum-accent!': mode === 'none',
             }}
-            onClick$={() => writeConfig({ colorMode: "none" })}
+            onClick$={() => writeConfig({ colorMode: 'none' })}
           >
-            <Ban size={18} />{" "}
-            {mode === "none" && t("rgb.advanced.mode.none@@Uncolored")}
+            <Ban size={18} />{' '}
+            {mode === 'none' && t('rgb.advanced.mode.none@@Uncolored')}
           </button>
         </ButtonContainer>
 
-        {mode != "gradient" && (
+        {mode != 'gradient' && (
           <div class="flex items-center gap-1 py-2 font-semibold">
             <span class="flex flex-1 items-center gap-2">
               <Palette />
-              {t("rgb.colors.title@@Colors")}
+              {t('rgb.colors.title@@Colors')}
             </span>
           </div>
         )}
 
-        {mode === "none" && (
+        {mode === 'none' && (
           <p class="text-lum-text-secondary px-1 text-xs">
             {t(
-              "rgb.advanced.mode.noneDescription@@These characters keep Minecraft's default color (only formatting is applied).",
+              "rgb.advanced.mode.noneDescription@@These characters keep Minecraft's default color (only formatting is applied)."
             )}
           </p>
         )}
 
-        {mode === "solid" && (
+        {mode === 'solid' && (
           <div class="p-2">
             <ColorPicker
               id="adv-solid-picker"
-              value={colors[0]?.hex ?? "#ffffff"}
+              value={colors[0]?.hex ?? '#ffffff'}
               onInput$={(newColor) =>
                 writeConfig({ colors: [{ hex: newColor, pos: 0 }] })
               }
@@ -191,7 +191,7 @@ export default component$(
           </div>
         )}
 
-        {mode === "gradient" && (
+        {mode === 'gradient' && (
           <ColorList
             id={id}
             colors={current.value.colors}
@@ -209,5 +209,5 @@ export default component$(
         )}
       </div>
     );
-  },
+  }
 );

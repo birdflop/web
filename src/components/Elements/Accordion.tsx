@@ -1,24 +1,24 @@
-import { $, component$, PropsOf, QRL, Slot, useContext } from "@qwik.dev/core";
-import { Dropdown } from "@luminescent/ui-qwik";
-import { openItemsContext } from "~/routes/layout";
+import { $, component$, PropsOf, QRL, Slot, useContext } from '@qwik.dev/core';
+import { Dropdown } from '@luminescent/ui-qwik';
+import { openItemsContext } from '~/routes/layout';
 
 export const loadOpenItems = $(() => {
   try {
-    const savedState = localStorage.getItem("openItems");
+    const savedState = localStorage.getItem('openItems');
     if (savedState) {
       return JSON.parse(savedState);
     }
   } catch (err) {
-    console.error("Error loading menu state:", err);
+    console.error('Error loading menu state:', err);
   }
   return [];
 });
 
 export const saveOpenItems = $((items: string[]) => {
   try {
-    localStorage.setItem("openItems", JSON.stringify(items));
+    localStorage.setItem('openItems', JSON.stringify(items));
   } catch (err) {
-    console.error("Error saving menu state:", err);
+    console.error('Error saving menu state:', err);
   }
 });
 
@@ -34,7 +34,7 @@ export const toggleAccordion = $(async (index: string, openItems: string[]) => {
   return newOpenItems;
 });
 
-interface AccordionProps extends PropsOf<"button"> {
+interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
   pcOnly?: boolean;
   onClick$?: QRL<() => void>;
@@ -54,7 +54,7 @@ export default component$(
     return (
       <Dropdown
         class={{
-          "hidden sm:flex": !!pcOnly,
+          'hidden sm:flex': !!pcOnly,
           ...className,
         }}
         opened={openItems.value.includes(sectionName) && !pcOnly}
@@ -67,5 +67,5 @@ export default component$(
         <Slot />
       </Dropdown>
     );
-  },
+  }
 );

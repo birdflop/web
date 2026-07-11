@@ -79,7 +79,7 @@ export const drawGifFramePatch = (
   frame: {
     dims: { width: number; height: number; top: number; left: number };
     patch: Uint8ClampedArray;
-  },
+  }
 ) => {
   const patchCanvas = document.createElement('canvas');
   patchCanvas.width = frame.dims.width;
@@ -88,7 +88,7 @@ export const drawGifFramePatch = (
   const patchCtx = patchCanvas.getContext('2d')!;
   const frameImageData = patchCtx.createImageData(
     frame.dims.width,
-    frame.dims.height,
+    frame.dims.height
   );
   frameImageData.data.set(frame.patch);
   patchCtx.putImageData(frameImageData, 0, 0);
@@ -119,7 +119,7 @@ export const loadGifFrames = async (arrayBuffer: ArrayBuffer) => {
     left: number,
     top: number,
     width: number,
-    height: number,
+    height: number
   ) => {
     if (backgroundColor) {
       ctx.fillStyle = backgroundColor;
@@ -145,7 +145,7 @@ export const loadGifFrames = async (arrayBuffer: ArrayBuffer) => {
           previousFrame.dims.left,
           previousFrame.dims.top,
           previousFrame.dims.width,
-          previousFrame.dims.height,
+          previousFrame.dims.height
         );
       } else if (previousFrame.disposalType === 3 && restoreImageData) {
         ctx.putImageData(restoreImageData, 0, 0);
@@ -184,7 +184,7 @@ export const getTextureFrameHeight = (texture: AnimtextureTexture) =>
   texture.lockdimensions ? texture.width : texture.height;
 
 export const buildTextureOutputs = (
-  texture: AnimtextureTexture,
+  texture: AnimtextureTexture
 ): RenderedTexture => {
   if (texture.frames.length === 0) {
     return { png: '', mcmeta: '' };
@@ -210,9 +210,9 @@ export const buildTextureOutputs = (
         })),
         ...(texture.bounce
           ? texture.frames.map((frame, i) => ({
-            index: texture.frames.length - i,
-            time: texture.frames[i].delay,
-          }))
+              index: texture.frames.length - i,
+              time: texture.frames[i].delay,
+            }))
           : []),
       ],
     },
@@ -259,8 +259,8 @@ export const buildResourcePack = async (textures: AnimtextureTexture[]) => {
         },
       },
       null,
-      2,
-    ),
+      2
+    )
   );
 
   const names = new Set<string>();
@@ -274,11 +274,11 @@ export const buildResourcePack = async (textures: AnimtextureTexture[]) => {
     const pngBlob = await (await fetch(png)).blob();
     zip.file(
       `assets/${texture.namespace}/textures/${texture.path}/${name}.png`,
-      pngBlob,
+      pngBlob
     );
     zip.file(
       `assets/${texture.namespace}/textures/${texture.path}/${name}.png.mcmeta`,
-      mcmeta,
+      mcmeta
     );
   }
 

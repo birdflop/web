@@ -22,7 +22,7 @@ export interface ValidationResult {
  */
 export async function validatePresetSubmission(
   submission: PublicPresetSubmission,
-  checkSimilarity: boolean = true,
+  checkSimilarity: boolean = true
 ): Promise<ValidationResult> {
   const errors: ValidationError[] = [];
   const warnings: string[] = [];
@@ -73,7 +73,7 @@ export async function validatePresetSubmission(
     try {
       const similarityCheck = await checkPresetSimilarity(
         submission.preset,
-        0.38,
+        0.38
       );
       if (
         similarityCheck.isSimilar &&
@@ -91,7 +91,7 @@ export async function validatePresetSubmission(
         similarityCheck.closestDistance < 8000
       ) {
         warnings.push(
-          'This gradient is somewhat similar to an existing preset. Consider making it more unique.',
+          'This gradient is somewhat similar to an existing preset. Consider making it more unique.'
         );
       }
     } catch (error) {
@@ -163,15 +163,15 @@ export function validatePreset(preset: rgbPreset): ValidationError[] {
           message: `Color position must be between 0 and 100 (got ${color.pos})`,
         });
       }
-    },
+    }
   );
 
   // Check for duplicate positions
   const positions: (number | undefined)[] = preset.colors.map(
-    (c: { hex?: string; pos?: number }) => c.pos,
+    (c: { hex?: string; pos?: number }) => c.pos
   );
   const duplicatePositions = positions.filter(
-    (pos, index) => positions.indexOf(pos) !== index,
+    (pos, index) => positions.indexOf(pos) !== index
   );
   if (duplicatePositions.length > 0) {
     errors.push({

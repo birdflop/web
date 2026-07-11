@@ -1,13 +1,13 @@
-import { server$ } from "@qwik.dev/router";
-import { getDB, presets, savedPresets } from "../db";
-import { isNotNull, eq, sql } from "drizzle-orm";
+import { server$ } from '@qwik.dev/router';
+import { getDB, presets, savedPresets } from '../db';
+import { isNotNull, eq, sql } from 'drizzle-orm';
 
 export const backfillPresetSaves = server$(async function () {
   const logs: string[] = [];
   try {
     const db = getDB();
     if (!db) {
-      return { success: false, error: "Database not available", logs };
+      return { success: false, error: 'Database not available', logs };
     }
 
     // Fetch all published presets with save counts
@@ -15,7 +15,7 @@ export const backfillPresetSaves = server$(async function () {
       .select({
         id: presets.id,
         name: presets.name,
-        saveCount: sql<number>`COUNT(${savedPresets.presetId})`.as("saveCount"),
+        saveCount: sql<number>`COUNT(${savedPresets.presetId})`.as('saveCount'),
       })
       .from(presets)
       .where(isNotNull(presets.id))
@@ -37,10 +37,10 @@ export const backfillPresetSaves = server$(async function () {
     logs.push(`Saves backfill complete: ${updatedCount} presets updated.`);
     return { success: true, updated: updatedCount, logs };
   } catch (error) {
-    console.error("Error during preset saves backfill:", error);
+    console.error('Error during preset saves backfill:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : 'Unknown error',
       logs,
     };
   }

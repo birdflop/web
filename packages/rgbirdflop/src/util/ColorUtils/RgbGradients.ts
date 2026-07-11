@@ -33,7 +33,7 @@ class RgbTwoStopGradient extends BaseTwoStopGradient<number[]> {
   protected interpolate(
     start: number[],
     end: number[],
-    factor: number,
+    factor: number
   ): number[] {
     return [
       start[0] + (end[0] - start[0]) * factor,

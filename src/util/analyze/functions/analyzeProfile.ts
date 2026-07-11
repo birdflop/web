@@ -110,8 +110,8 @@ export default async function analyzeProfile(id: string) {
     ...analyzeJvmFlags(
       flags,
       jvm_version,
-      sampler.metadata.platformStatistics.playerCount,
-    ),
+      sampler.metadata.platformStatistics.playerCount
+    )
   );
 
   const cpu = sampler.metadata.systemStatistics.cpu.threads;
@@ -174,7 +174,7 @@ export default async function analyzeProfile(id: string) {
             spigot,
             paper,
             null,
-            purpur,
+            purpur
           );
         });
       });

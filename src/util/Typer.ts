@@ -33,7 +33,7 @@ export function initiateTyper() {
       colorIndex: number;
       doTyping: () => void;
     },
-    element: typerElement,
+    element: typerElement
   ) {
     this.element = element;
     const delim = element.dataset.delim || ',';
@@ -88,7 +88,7 @@ export function initiateTyper() {
       clearInterval(this.cursor.interval);
       this.cursor.interval = setInterval(
         () => this.cursor.updateBlinkState(),
-        400,
+        400
       );
     }
 
@@ -126,7 +126,7 @@ export function initiateTyper() {
           this.doTyping();
         }
       },
-      atWordEnd ? this.deleteDelay : this.delay,
+      atWordEnd ? this.deleteDelay : this.delay
     );
   };
 
@@ -138,7 +138,7 @@ export function initiateTyper() {
       interval: any;
       updateBlinkState: () => void;
     },
-    element: typerElement,
+    element: typerElement
   ) {
     this.element = element;
     this.cursorDisplay =

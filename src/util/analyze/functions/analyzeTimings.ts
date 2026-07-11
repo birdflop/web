@@ -147,7 +147,7 @@ export default async function analyzeTimings(id: string) {
   const handlers = Object.keys(request.timingsMaster.idmap.handlerMap).map(
     (i) => {
       return request.timingsMaster.idmap.handlerMap[i];
-    },
+    }
   );
   handlers.forEach((handler) => {
     let handler_name = handler.name;
@@ -204,7 +204,7 @@ export default async function analyzeTimings(id: string) {
             spigot,
             paper,
             pufferfish,
-            purpur,
+            purpur
           );
         });
       });
@@ -245,10 +245,10 @@ export default async function analyzeTimings(id: string) {
 
   const worlds = request.timingsMaster.config['__________WORLDS__________']
     ? Object.keys(
-      request.timingsMaster.config['__________WORLDS__________'],
-    ).map((i) => {
-      return request.timingsMaster.config['__________WORLDS__________'][i];
-    })
+        request.timingsMaster.config['__________WORLDS__________']
+      ).map((i) => {
+        return request.timingsMaster.config['__________WORLDS__________'][i];
+      })
     : [];
   let high_mec = false;
   worlds.forEach((world) => {

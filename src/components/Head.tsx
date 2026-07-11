@@ -1,5 +1,5 @@
-import { component$ } from "@qwik.dev/core";
-import { useDocumentHead, useLocation } from "@qwik.dev/router";
+import { component$ } from '@qwik.dev/core';
+import { useDocumentHead, useLocation } from '@qwik.dev/router';
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.

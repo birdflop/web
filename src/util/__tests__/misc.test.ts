@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { deepTrack } from "../track";
+import { describe, it, expect, vi } from 'vitest';
+import { deepTrack } from '../track';
 
-vi.mock("@qwik.dev/core", async () => {
-  const actual = (await vi.importActual("@qwik.dev/core")) as any;
+vi.mock('@qwik.dev/core', async () => {
+  const actual = (await vi.importActual('@qwik.dev/core')) as any;
   return {
     ...actual,
     unwrapStore: (o: any) => {
@@ -16,18 +16,18 @@ vi.mock("@qwik.dev/core", async () => {
   };
 });
 
-describe("deepTrack", () => {
-  it("should call track on the root object", () => {
+describe('deepTrack', () => {
+  it('should call track on the root object', () => {
     const track = vi.fn();
-    const obj = { key: "value" };
+    const obj = { key: 'value' };
     deepTrack(track, obj);
     expect(track).toHaveBeenCalledTimes(1);
     expect(track).toHaveBeenCalledWith(obj);
   });
 
-  it("should recursively track nested objects marked as stores", () => {
+  it('should recursively track nested objects marked as stores', () => {
     const track = vi.fn();
-    const childTarget = { leaf: "leafVal" };
+    const childTarget = { leaf: 'leafVal' };
     const child = { __isStore: true, target: childTarget };
     const parent = {
       nested: child,

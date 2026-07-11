@@ -1,31 +1,31 @@
-import { $, component$, useOnDocument, useSignal } from "@qwik.dev/core";
-import { useContent, useLocation, useDocumentHead } from "@qwik.dev/router";
-import AlertCircle from "lucide-icons-qwik/icons/AlertCircle";
-import Edit from "lucide-icons-qwik/icons/Edit";
-import Clock from "lucide-icons-qwik/icons/Clock";
-import User from "lucide-icons-qwik/icons/User";
+import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core';
+import { useContent, useLocation, useDocumentHead } from '@qwik.dev/router';
+import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
+import Edit from 'lucide-icons-qwik/icons/Edit';
+import Clock from 'lucide-icons-qwik/icons/Clock';
+import User from 'lucide-icons-qwik/icons/User';
 
 const makeEditPageUrl = (url: string): string => {
-  const segments = url.split("/").filter((part) => part !== "");
-  if (segments[0] !== "docs") {
+  const segments = url.split('/').filter((part) => part !== '');
+  if (segments[0] !== 'docs') {
     return url;
   }
 
-  return segments.join("/");
+  return segments.join('/');
 };
 
 const formatDate = (dateStr?: string): string => {
-  if (!dateStr) return "Unknown";
+  if (!dateStr) return 'Unknown';
 
   try {
     const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   } catch {
-    return "Unknown";
+    return 'Unknown';
   }
 };
 
@@ -35,7 +35,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
   const { frontmatter, meta } = useDocumentHead();
   const created = formatDate(frontmatter.date_created);
   const updated = formatDate(frontmatter.last_updated);
-  const author = meta.find((m) => m.name === "author")?.content || "Unknown";
+  const author = meta.find((m) => m.name === 'author')?.content || 'Unknown';
   const { url } = useLocation();
 
   const githubEditRoute = makeEditPageUrl(url.pathname);
@@ -45,7 +45,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
   const useActiveItem = (itemIds: string[]) => {
     const activeId = useSignal<string | null>(null);
     useOnDocument(
-      "scroll",
+      'scroll',
       $(() => {
         const observer = new IntersectionObserver(
           (entries) => {
@@ -55,7 +55,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
               }
             });
           },
-          { rootMargin: "0% 0% -80% 0%" },
+          { rootMargin: '0% 0% -80% 0%' }
         );
 
         itemIds.forEach((id) => {
@@ -73,7 +73,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
             }
           });
         };
-      }),
+      })
     );
 
     return activeId;
@@ -92,12 +92,12 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
                 key={h.id}
                 href={`#${h.id}`}
                 class={{
-                  "lum-btn lum-bg-transparent text-left text-ellipsis whitespace-normal": true,
-                  "text-indigo-500!": activeId.value === h.id,
-                  "text-xl font-bold": h.level == 1,
-                  "text-lg font-medium": h.level == 2,
-                  "text-base font-normal": h.level == 3,
-                  "lum-btn-p-1": true,
+                  'lum-btn lum-bg-transparent text-left text-ellipsis whitespace-normal': true,
+                  'text-indigo-500!': activeId.value === h.id,
+                  'text-xl font-bold': h.level == 1,
+                  'text-lg font-medium': h.level == 2,
+                  'text-base font-normal': h.level == 3,
+                  'lum-btn-p-1': true,
                 }}
               >
                 {h.text}
@@ -144,7 +144,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
           </div>
         </>
       )}
-      {updated !== "Unknown" && updated !== created && (
+      {updated !== 'Unknown' && updated !== created && (
         <div class="lum-btn lum-bg-transparent hover:lum-bg-transparent text-lum-text-secondary text-left text-ellipsis">
           <Clock size={20} />
           <span>

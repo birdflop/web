@@ -1,7 +1,7 @@
 export function analyzeJvmFlags(
   flags: string,
   jvm_version: string,
-  playerCount: number,
+  playerCount: number
 ): Field[] {
   const fields: Field[] = [];
 
@@ -38,8 +38,8 @@ export function analyzeJvmFlags(
       });
     if (!flags.includes('-XX:+UseG1GC') && jvm_version.startsWith('1.8.'))
       fields.push({
-        name: '❌ Aikar\'s Flags',
-        value: 'You must use G1GC when using Aikar\'s flags.',
+        name: "❌ Aikar's Flags",
+        value: "You must use G1GC when using Aikar's flags.",
       });
     if (flags.includes('-Xmx')) {
       let max_mem = 0;
@@ -75,9 +75,9 @@ export function analyzeJvmFlags(
         });
         if (min_mem != max_mem)
           fields.push({
-            name: '❌ Aikar\'s Flags',
+            name: "❌ Aikar's Flags",
             value:
-              'Your Xmx and Xms values should be equal when using Aikar\'s flags.',
+              "Your Xmx and Xms values should be equal when using Aikar's flags.",
           });
       }
     }
@@ -87,19 +87,19 @@ export function analyzeJvmFlags(
       value: 'Your flags are outdated.',
       buttons: [
         {
-          text: 'Update Aikar\'s Flags',
+          text: "Update Aikar's Flags",
           url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
         },
       ],
     });
   } else {
     fields.push({
-      name: '❌ Aikar\'s Flags',
+      name: "❌ Aikar's Flags",
       value:
-        'Aikar\'s Flags add some optimizations to the java garbage collector.',
+        "Aikar's Flags add some optimizations to the java garbage collector.",
       buttons: [
         {
-          text: 'Use Aikar\'s Flags',
+          text: "Use Aikar's Flags",
           url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
         },
       ],

@@ -1,11 +1,11 @@
-import { component$, QRL, PropsOf } from "@qwik.dev/core";
-import { ButtonContainer, ButtonContainerProps } from "./ButtonContainer";
-import Plus from "lucide-icons-qwik/icons/Plus";
-import X from "lucide-icons-qwik/icons/X";
+import { component$, QRL, PropsOf } from '@qwik.dev/core';
+import { ButtonContainer, ButtonContainerProps } from './ButtonContainer';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import X from 'lucide-icons-qwik/icons/X';
 
 type Value = { name: string; value: string };
-interface TabsProps extends Omit<ButtonContainerProps, "onClick$"> {
-  onPlus$?: PropsOf<"button">["onClick$"];
+interface TabsProps extends Omit<ButtonContainerProps, 'onClick$'> {
+  onPlus$?: PropsOf<'button'>['onClick$'];
   onClick$?: QRL<(value: Value) => void>;
   onDelete$?: QRL<(value: Value) => void>;
   values?: Value[];
@@ -26,7 +26,7 @@ export const Tabs = component$<TabsProps>(
       <ButtonContainer
         {...props}
         class={{
-          "*:lum-btn-p-1 items-stretch justify-start overflow-x-scroll *:flex-none": true,
+          '*:lum-btn-p-1 items-stretch justify-start overflow-x-scroll *:flex-none': true,
           ...classList,
         }}
       >
@@ -34,8 +34,8 @@ export const Tabs = component$<TabsProps>(
           <div
             key={tab.value}
             class={{
-              "p-0!": true,
-              "lum-grad-bg-lum-accent!": value?.value === tab.value,
+              'p-0!': true,
+              'lum-grad-bg-lum-accent!': value?.value === tab.value,
             }}
           >
             <button class="lum-btn-p-1 pr-0" onClick$={() => onClick$?.(tab)}>
@@ -59,5 +59,5 @@ export const Tabs = component$<TabsProps>(
         </button>
       </ButtonContainer>
     );
-  },
+  }
 );

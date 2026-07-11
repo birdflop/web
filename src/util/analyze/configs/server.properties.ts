@@ -41,7 +41,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.server_properties[
                     'network-compression-threshold'
-                  ],
+                  ]
                 ) <= 256
               );
             },

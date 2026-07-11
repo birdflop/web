@@ -1,6 +1,6 @@
-import { component$ } from "@qwik.dev/core";
-import { SocialButtons } from "./Nav";
-import { inlineTranslate } from "qwik-speak";
+import { component$ } from '@qwik.dev/core';
+import { SocialButtons } from './Nav';
+import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -14,16 +14,16 @@ export default component$(() => {
         Copyright © 2025 Birdflop. All rights reserved. Birdflop is a registered
         501(c)(3) nonprofit organization (EIN: 93-2401009).
         <br />
-        By using this site, you agree to our{" "}
+        By using this site, you agree to our{' '}
         <a href="/terms" class="text-blue-400 hover:underline">
-          {t("nav.termsofService@@Terms of Service")}
-        </a>{" "}
-        and{" "}
+          {t('nav.termsofService@@Terms of Service')}
+        </a>{' '}
+        and{' '}
         <a href="/privacy" class="text-blue-400 hover:underline">
-          {t("nav.privacyPolicy@@Privacy Policy")}
+          {t('nav.privacyPolicy@@Privacy Policy')}
         </a>
-        . Items marked with an asterisk (*) are a reminder that our{" "}
-        {t("nav.termsofService@@Terms of Service")} apply.
+        . Items marked with an asterisk (*) are a reminder that our{' '}
+        {t('nav.termsofService@@Terms of Service')} apply.
       </span>
     </footer>
   );

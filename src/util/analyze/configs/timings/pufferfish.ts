@@ -9,7 +9,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.pufferfish['projectile'][
                     'max-load-per-projectile'
-                  ],
+                  ]
                 ) >= 9
               );
             },

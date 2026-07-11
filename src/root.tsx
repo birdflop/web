@@ -1,17 +1,17 @@
-import { component$, isDev, useServerData } from "@qwik.dev/core";
+import { component$, isDev, useServerData } from '@qwik.dev/core';
 import {
   DocumentHead,
   DocumentHeadValue,
   QwikRouterProvider,
   RouterOutlet,
-} from "@qwik.dev/router";
-import { RouterHead } from "~/components/Head";
-import { useQwikSpeak } from "qwik-speak";
+} from '@qwik.dev/router';
+import { RouterHead } from '~/components/Head';
+import { useQwikSpeak } from 'qwik-speak';
 
-import "./global.css";
-import { config } from "~/speak-config";
-import { translationFn } from "~/speak-functions";
-import { QwikPartytown } from "~/components/Partytown";
+import './global.css';
+import { config } from '~/speak-config';
+import { translationFn } from '~/speak-functions';
+import { QwikPartytown } from '~/components/Partytown';
 
 export default component$(() => {
   /**
@@ -24,17 +24,17 @@ export default component$(() => {
    * Init Qwik Speak
    */
   useQwikSpeak({ config, translationFn });
-  const serverDataUrl = useServerData<string>("url");
-  const url = new URL(serverDataUrl || "http://unknown");
+  const serverDataUrl = useServerData<string>('url');
+  const url = new URL(serverDataUrl || 'http://unknown');
   const isBirdflop =
-    url.hostname === "birdflop.com" || url.hostname === "www.birdflop.com";
+    url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com';
 
   return (
     <QwikRouterProvider>
       <head>
         <meta charset="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <QwikPartytown forward={["dataLayer.push"]} />
+        <QwikPartytown forward={['dataLayer.push']} />
         <script
           async
           type="text/partytown"
@@ -73,9 +73,9 @@ export const defaultDescription =
   "Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry's fastest and cheapest servers, or use our free public resources.";
 
 export function generateHead({
-  title = "Birdflop - Server Hosting & Resources",
+  title = 'Birdflop - Server Hosting & Resources',
   description = defaultDescription,
-  image = "/branding/icon.png",
+  image = '/branding/icon.png',
   head = {},
 }: {
   title?: string;
@@ -88,15 +88,15 @@ export function generateHead({
     title,
     meta: [
       {
-        name: "description",
+        name: 'description',
         content: description,
       },
       {
-        name: "og:description",
+        name: 'og:description',
         content: description,
       },
       {
-        name: "og:image",
+        name: 'og:image',
         content: image,
       },
       ...(head.meta ?? []),

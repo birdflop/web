@@ -9,23 +9,23 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from "@qwik.dev/core";
-import { inlineTranslate } from "qwik-speak";
-import { useSession } from "~/routes/plugin@auth";
-import { getPresets, rgbPreset } from "~/util/rgb/presets";
-import { SelectMenu, Toggle } from "@luminescent/ui-qwik";
-import PresetPreview from "~/components/rgbirdflop/presets/PresetPreview";
-import ChevronLeft from "lucide-icons-qwik/icons/ChevronLeft";
-import ChevronRight from "lucide-icons-qwik/icons/ChevronRight";
-import Save from "lucide-icons-qwik/icons/Save";
-import Search from "lucide-icons-qwik/icons/Search";
-import Send from "lucide-icons-qwik/icons/Send";
-import Settings from "lucide-icons-qwik/icons/Settings";
-import { defaultDescription, generateHead } from "~/root";
-import { routeLoader$, useNavigate } from "@qwik.dev/router";
-import { Notification, NotificationContext } from "~/util/Notification";
-import { rgbDefaults } from "@birdflop/rgbirdflop";
-import { getCookies } from "~/util/dataUtils";
+} from '@qwik.dev/core';
+import { inlineTranslate } from 'qwik-speak';
+import { useSession } from '~/routes/plugin@auth';
+import { getPresets, rgbPreset } from '~/util/rgb/presets';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Search from 'lucide-icons-qwik/icons/Search';
+import Send from 'lucide-icons-qwik/icons/Send';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import { defaultDescription, generateHead } from '~/root';
+import { routeLoader$, useNavigate } from '@qwik.dev/router';
+import { Notification, NotificationContext } from '~/util/Notification';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { getCookies } from '~/util/dataUtils';
 
 import {
   getDB,
@@ -34,40 +34,40 @@ import {
   PublicPreset,
   savedPresets,
   users,
-} from "~/util/db";
-import { and, count, desc, eq, like, inArray, or } from "drizzle-orm";
-import MyPrivatePresets from "~/components/rgbirdflop/presets/MyPrivatePresets";
-import { useIsAdmin } from "~/routes/layout";
-import { donateLink } from "~/components/Elements/Nav";
-import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
+} from '~/util/db';
+import { and, count, desc, eq, like, inArray, or } from 'drizzle-orm';
+import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
+import { useIsAdmin } from '~/routes/layout';
+import { donateLink } from '~/components/Elements/Nav';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
-  const session = sharedMap.get("session") as { user: { id: string } } | null;
+  const session = sharedMap.get('session') as { user: { id: string } } | null;
   let publicPresets: PublicPreset[] = [];
   let presetCount = 0;
   const errors: string[] = [];
 
   const searchParams = url.searchParams;
-  const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
   const perPage = Math.max(
     1,
-    Math.min(100, parseInt(searchParams.get("perPage") || "20", 10)),
+    Math.min(100, parseInt(searchParams.get('perPage') || '20', 10))
   );
-  const searchTerm = searchParams.get("search") || "";
-  const showPending = searchParams.get("showPending") === "true";
-  const showSaved = searchParams.get("showSaved") === "true";
+  const searchTerm = searchParams.get('search') || '';
+  const showPending = searchParams.get('showPending') === 'true';
+  const showSaved = searchParams.get('showSaved') === 'true';
   const savedPresetIds =
     searchParams
-      .get("savedPresetIds")
-      ?.split(",")
+      .get('savedPresetIds')
+      ?.split(',')
       .filter(Boolean)
       .map((id) => parseInt(id)) || [];
-  const sortBy = searchParams.get("sortBy") || "createdAt";
-  const sortOrder = searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
+  const sortBy = searchParams.get('sortBy') || 'createdAt';
+  const sortOrder = searchParams.get('sortOrder') === 'asc' ? 'asc' : 'desc';
 
   try {
     const db = getDB();
-    if (!db) throw new Error("No database client");
+    if (!db) throw new Error('No database client');
 
     presetCount = await db
       .select({
@@ -80,24 +80,24 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
           searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
           showSaved && savedPresetIds.length > 0
             ? inArray(presets.id, savedPresetIds)
-            : undefined,
-        ),
+            : undefined
+        )
       )
       .get()
       .then((r) => r?.count ?? 0);
 
     let orderBy;
     switch (sortBy) {
-      case "name":
-        orderBy = sortOrder === "desc" ? desc(presets.name) : presets.name;
+      case 'name':
+        orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
         break;
-      case "saves":
-        orderBy = sortOrder === "desc" ? desc(presets.saves) : presets.saves;
+      case 'saves':
+        orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
         break;
-      case "createdAt":
+      case 'createdAt':
       default:
         orderBy =
-          sortOrder === "desc" ? desc(presets.createdAt) : presets.createdAt;
+          sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
         break;
     }
 
@@ -113,13 +113,13 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
             eq(presets.pending, showPending),
             session?.user?.id
               ? eq(presets.userId, session?.user?.id)
-              : undefined,
+              : undefined
           ),
           searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
           showSaved && savedPresetIds.length > 0
             ? inArray(presets.id, savedPresetIds)
-            : undefined,
-        ),
+            : undefined
+        )
       )
       .leftJoin(users, eq(users.id, presets.userId))
       .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
@@ -135,7 +135,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
     }));
   } catch (err) {
     errors.push(`Error fetching presets: ${err}`);
-    console.error("Error fetching presets:", err);
+    console.error('Error fetching presets:', err);
   }
   return {
     publicPresets,
@@ -155,7 +155,7 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
     cookies: Partial<typeof rgbDefaults>;
     errors: string[];
-  } = getCookies(cookie, "rgb", url.searchParams);
+  } = getCookies(cookie, 'rgb', url.searchParams);
   return cookies;
 });
 
@@ -180,15 +180,15 @@ const Pagination = component$(
     return (
       <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
         <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
-          {`${t("rgb.presets.totalCount@@Total presets: ")}${presetsLength}/${presetCount}`}
+          {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
           {totalPages > 1 &&
-            ` - ${t("rgb.presets.pageInfo@@Page ")}${page} ${t("rgb.presets.pageInfo.of@@of")} ${totalPages}`}
+            ` - ${t('rgb.presets.pageInfo@@Page ')}${page} ${t('rgb.presets.pageInfo.of@@of')} ${totalPages}`}
         </p>
         <div class="flex flex-1 items-center justify-center gap-2">
           <button
             class="lum-btn rounded-lum-1 p-1"
             disabled={page === 1}
-            title={t("rgb.presets.pagination.previous@@Previous")}
+            title={t('rgb.presets.pagination.previous@@Previous')}
             onClick$={() => {
               void updateURL({ page: Math.max(1, page - 1) });
             }}
@@ -212,8 +212,8 @@ const Pagination = component$(
                   key={pageNum}
                   class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
                     pageNum === page
-                      ? "lum-grad-bg-lum-accent/20"
-                      : "lum-bg-transparent"
+                      ? 'lum-grad-bg-lum-accent/20'
+                      : 'lum-bg-transparent'
                   }`}
                   onClick$={() => {
                     void updateURL({ page: pageNum });
@@ -230,18 +230,18 @@ const Pagination = component$(
             onClick$={() => {
               void updateURL({ page: Math.min(totalPages, page + 1) });
             }}
-            title={t("rgb.presets.pagination.next@@Next")}
+            title={t('rgb.presets.pagination.next@@Next')}
           >
             <ChevronRight size={20} />
           </button>
         </div>
         <div class="flex items-center justify-center gap-2 sm:justify-end">
           <p class="whitespace-nowrap">
-            {t("rgb.presets.pagination.perPage@@Per page:")}
+            {t('rgb.presets.pagination.perPage@@Per page:')}
           </p>
           <SelectMenu
             class={{
-              "lum-btn-p-1 rounded-lum-1 lum-bg-transparent": true,
+              'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
             }}
             value={perPage}
             onChange$={(e, el) => {
@@ -250,23 +250,23 @@ const Pagination = component$(
             }}
             title="Items per page"
             values={[
-              { name: "10", value: "10" },
-              { name: "20", value: "20" },
-              { name: "50", value: "50" },
-              { name: "100", value: "100" },
+              { name: '10', value: '10' },
+              { name: '20', value: '20' },
+              { name: '50', value: '50' },
+              { name: '100', value: '100' },
             ]}
           />
         </div>
       </div>
     );
-  },
+  }
 );
 
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
-  "privatepresets-context",
+  'privatepresets-context'
 );
 export const savedPresetsContext = createContextId<Signal<any[]>>(
-  "savedpresets-context",
+  'savedpresets-context'
 );
 export default component$(() => {
   const t = inlineTranslate();
@@ -280,7 +280,7 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
@@ -306,9 +306,9 @@ export default component$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
         const notification = new Notification()
-          .setTitle("Error fetching presets")
+          .setTitle('Error fetching presets')
           .setDescription(`${error}`)
-          .setBgColor("lum-grad-bg-red/50")
+          .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       });
@@ -320,12 +320,12 @@ export default component$(() => {
   });
 
   const privatePresets = useSignal<rgbPreset[]>(
-    session.value?.user?.privatePresets ?? [],
+    session.value?.user?.privatePresets ?? []
   );
   useContextProvider(privatePresetsContext, privatePresets);
 
   const savedPresets = useSignal<PublicPreset[]>(
-    session.value?.user?.savedPresets ?? [],
+    session.value?.user?.savedPresets ?? []
   );
   useContextProvider(savedPresetsContext, savedPresets);
 
@@ -340,9 +340,9 @@ export default component$(() => {
       privatePresets.value = privatePresets.value.concat(localStoragePresets);
     } catch (err) {
       const notification = new Notification()
-        .setTitle("Error loading saved presets")
+        .setTitle('Error loading saved presets')
         .setDescription(`Error: ${err}`)
-        .setBgColor("lum-grad-bg-red/50")
+        .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
     }
@@ -355,7 +355,7 @@ export default component$(() => {
     });
     if (isunique) {
       privatePresetsParsed.push({
-        name: preset.text ?? "Saved Preset",
+        name: preset.text ?? 'Saved Preset',
         preset: preset,
         pending: false,
         colorVector: null,
@@ -368,21 +368,21 @@ export default component$(() => {
   const updateURL = $((params: Record<string, string | number | boolean>) => {
     const url = new URL(window.location.href);
     Object.entries(params).forEach(([key, value]) => {
-      if (value === "" || value === false || (value === 1 && key === "page")) {
+      if (value === '' || value === false || (value === 1 && key === 'page')) {
         url.searchParams.delete(key);
       } else {
         url.searchParams.set(key, String(value));
       }
     });
     if (params.showSaved || showSaved) {
-      const savedIds = savedPresets.value.map((p) => p.id).join(",");
+      const savedIds = savedPresets.value.map((p) => p.id).join(',');
       if (savedIds) {
-        url.searchParams.set("savedPresetIds", savedIds);
+        url.searchParams.set('savedPresetIds', savedIds);
       } else {
-        url.searchParams.delete("savedPresetIds");
+        url.searchParams.delete('savedPresetIds');
       }
     } else {
-      url.searchParams.delete("savedPresetIds");
+      url.searchParams.delete('savedPresetIds');
     }
     void nav(url.pathname + url.search);
   });
@@ -402,15 +402,15 @@ export default component$(() => {
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <span class="flex flex-1 items-center gap-3">
           <Save size={32} />
-          {t("nav.resources.hexGradientPresets.title@@RGBirdflop Presets")}
+          {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </span>
         <a href="#my-presets" class="lum-btn mr-auto font-normal">
-          <Send size={20} /> {t("rgb.presets.publish@@Publish your own preset")}
+          <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
         </a>
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          "nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.",
+          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.'
         )}
       </p>
       <div class="flex flex-col gap-2"></div>
@@ -430,41 +430,41 @@ export default component$(() => {
           <SelectMenu
             value={`${sortBy}-${sortOrder}`}
             class={{
-              "rounded-lum-1 lum-bg-transparent": true,
+              'rounded-lum-1 lum-bg-transparent': true,
             }}
             onChange$={(e, el) => {
-              const [newSortBy, newSortOrder] = el.value.split("-");
+              const [newSortBy, newSortOrder] = el.value.split('-');
               void updateURL({
                 sortBy: newSortBy,
                 sortOrder: newSortOrder,
                 page: 1,
               });
             }}
-            title={t("rgb.presets.sortBy.title@@Sort by")}
+            title={t('rgb.presets.sortBy.title@@Sort by')}
             values={[
               {
-                name: t("rgb.presets.sortBy.newest@@Newest first"),
-                value: "createdAt-desc",
+                name: t('rgb.presets.sortBy.newest@@Newest first'),
+                value: 'createdAt-desc',
               },
               {
-                name: t("rgb.presets.sortBy.oldest@@Oldest first"),
-                value: "createdAt-asc",
+                name: t('rgb.presets.sortBy.oldest@@Oldest first'),
+                value: 'createdAt-asc',
               },
               {
-                name: t("rgb.presets.sortBy.nameAZ@@Name A-Z"),
-                value: "name-asc",
+                name: t('rgb.presets.sortBy.nameAZ@@Name A-Z'),
+                value: 'name-asc',
               },
               {
-                name: t("rgb.presets.sortBy.nameZA@@Name Z-A"),
-                value: "name-desc",
+                name: t('rgb.presets.sortBy.nameZA@@Name Z-A'),
+                value: 'name-desc',
               },
               {
-                name: t("rgb.presets.sortBy.mostSaved@@Most saved"),
-                value: "saves-desc",
+                name: t('rgb.presets.sortBy.mostSaved@@Most saved'),
+                value: 'saves-desc',
               },
               {
-                name: t("rgb.presets.sortBy.leastSaved@@Least saved"),
-                value: "saves-asc",
+                name: t('rgb.presets.sortBy.leastSaved@@Least saved'),
+                value: 'saves-asc',
               },
             ]}
           />
@@ -472,7 +472,7 @@ export default component$(() => {
             align="right"
             id="settings"
             class={{
-              "rounded-lum-1 lum-bg-transparent p-3": true,
+              'rounded-lum-1 lum-bg-transparent p-3': true,
             }}
             panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
             customDropdown
@@ -503,12 +503,12 @@ export default component$(() => {
                   }
                 >
                   <span class="whitespace-nowrap">
-                    {t("rgb.presets.showSaved.title@@Show saved presets")}
+                    {t('rgb.presets.showSaved.title@@Show saved presets')}
                   </span>
                 </Toggle>
                 <p class="text-lum-text-secondary mt-1 text-xs">
                   {t(
-                    "rgb.presets.showSaved.description@@Turn this on to show only your saved presets.",
+                    'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.'
                   )}
                 </p>
               </div>
@@ -523,13 +523,13 @@ export default component$(() => {
               >
                 <span class="whitespace-nowrap">
                   {t(
-                    "rgb.presets.withCurrentOptions.title@@Show preview with current options",
+                    'rgb.presets.withCurrentOptions.title@@Show preview with current options'
                   )}
                 </span>
               </Toggle>
               <p class="text-lum-text-secondary mt-1 text-xs">
                 {t(
-                  "rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.",
+                  'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.'
                 )}
               </p>
             </div>
@@ -557,12 +557,12 @@ export default component$(() => {
         ))}
         {publicPresets.length === 0 && (
           <p class="text-lum-text-secondary col-span-full my-6 text-center">
-            {t("rgb.presets.noResults@@No results found.")}
+            {t('rgb.presets.noResults@@No results found.')}
             <br />
-            {t("rgb.presets.suggestion.one@@Think something is missing?")}
+            {t('rgb.presets.suggestion.one@@Think something is missing?')}
             <br />
             {t(
-              "rgb.presets.suggestion.two@@publish your own preset at your profile page!",
+              'rgb.presets.suggestion.two@@publish your own preset at your profile page!'
             )}
           </p>
         )}
@@ -584,7 +584,7 @@ export default component$(() => {
         gradient creator that generates hex formatted text. RGB Birdflop is a
         public resource developed by Birdflop, a 501(c)(3) nonprofit providing
         affordable and accessible hosting and public resources. If you would
-        like to support our mission, please <a href={donateLink}>click here</a>{" "}
+        like to support our mission, please <a href={donateLink}>click here</a>{' '}
         to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>
@@ -592,8 +592,8 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: "RGBirdflop Presets",
+  title: 'RGBirdflop Presets',
   description:
-    "Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. " +
+    'Welcome to the one-stop shop for presets! Here you can find and share presets for RGBirdflop. ' +
     defaultDescription,
 });

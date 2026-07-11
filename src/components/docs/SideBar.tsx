@@ -1,11 +1,11 @@
-import { component$, useStore, $, useVisibleTask$ } from "@qwik.dev/core";
-import { type ContentMenu, useLocation } from "@qwik.dev/router";
-import { useMarkdownItems } from "~/routes/docs/layout";
-import { buildMenu } from "~/util/docs";
-import { MenuItems } from "./Menuitems";
-import Book from "lucide-icons-qwik/icons/Book";
-import Menu from "lucide-icons-qwik/icons/Menu";
-import Search from "lucide-icons-qwik/icons/Search";
+import { component$, useStore, $, useVisibleTask$ } from '@qwik.dev/core';
+import { type ContentMenu, useLocation } from '@qwik.dev/router';
+import { useMarkdownItems } from '~/routes/docs/layout';
+import { buildMenu } from '~/util/docs';
+import { MenuItems } from './Menuitems';
+import Book from 'lucide-icons-qwik/icons/Book';
+import Menu from 'lucide-icons-qwik/icons/Menu';
+import Search from 'lucide-icons-qwik/icons/Search';
 
 export const DocsSidebar = component$(() => {
   const store = useStore({
@@ -19,11 +19,11 @@ export const DocsSidebar = component$(() => {
 
   const saveScrollPosition = $(() => {
     try {
-      const scrollTop = document.getElementById("docs-sidebar")?.scrollTop || 0;
-      sessionStorage.setItem("docs-sidebar", String(scrollTop));
+      const scrollTop = document.getElementById('docs-sidebar')?.scrollTop || 0;
+      sessionStorage.setItem('docs-sidebar', String(scrollTop));
       store.scrollPosition = scrollTop;
     } catch (err) {
-      console.error("Error saving sidebar scroll position:", err);
+      console.error('Error saving sidebar scroll position:', err);
     }
   });
 
@@ -32,33 +32,33 @@ export const DocsSidebar = component$(() => {
     if (markdownItems.value && Object.keys(markdownItems.value).length > 0) {
       store.menuItems = buildMenu(markdownItems.value);
     } else {
-      console.log("No markdown items available to build menu");
+      console.log('No markdown items available to build menu');
     }
 
     try {
-      const val = sessionStorage.getItem("docs-sidebar");
+      const val = sessionStorage.getItem('docs-sidebar');
       const savedScroll = !val || /null|NaN/.test(val) ? 0 : +val;
-      const el = document.getElementById("docs-sidebar");
+      const el = document.getElementById('docs-sidebar');
       if (el) {
         el.scrollTop = savedScroll;
-        el.classList.remove("invisible");
+        el.classList.remove('invisible');
         store.scrollPosition = savedScroll;
       }
 
       const handleResize = () => {
         if (window.innerWidth >= 1024 && store.sideMenuOpen) {
           store.sideMenuOpen = false;
-          document.body.classList.remove("overflow-hidden");
+          document.body.classList.remove('overflow-hidden');
         }
       };
 
-      window.addEventListener("resize", handleResize);
+      window.addEventListener('resize', handleResize);
 
       return () => {
-        window.removeEventListener("resize", handleResize);
+        window.removeEventListener('resize', handleResize);
       };
     } catch (err) {
-      console.error("Error loading sidebar scroll position:", err);
+      console.error('Error loading sidebar scroll position:', err);
     }
   });
 
@@ -75,19 +75,19 @@ export const DocsSidebar = component$(() => {
               store.sideMenuOpen = !store.sideMenuOpen;
               const abortController = new AbortController();
               document.addEventListener(
-                "click",
+                'click',
                 (e) => {
                   if (
                     !e
                       .composedPath()
-                      .includes(document.querySelector("aside")!) ||
+                      .includes(document.querySelector('aside')!) ||
                     e.target instanceof HTMLAnchorElement
                   ) {
                     store.sideMenuOpen = false;
                     abortController.abort();
                   }
                 },
-                { signal: abortController.signal },
+                { signal: abortController.signal }
               );
             }}
             aria-label="Toggle Menu"
@@ -98,8 +98,8 @@ export const DocsSidebar = component$(() => {
 
         <div
           class={{
-            "mx-4 my-4 flex-col gap-3 lg:mx-0": true,
-            "hidden lg:flex": !store.sideMenuOpen,
+            'mx-4 my-4 flex-col gap-3 lg:mx-0': true,
+            'hidden lg:flex': !store.sideMenuOpen,
             flex: store.sideMenuOpen,
           }}
         >
@@ -135,13 +135,13 @@ export const DocsSidebar = component$(() => {
 
 export function createBreadcrumbs(
   menu: ContentMenu | undefined,
-  pathname: string,
+  pathname: string
 ) {
   if (!menu?.items) return [];
 
   function findPath(
     items: ContentMenu[],
-    path: ContentMenu[] = [],
+    path: ContentMenu[] = []
   ): ContentMenu[] | null {
     for (const item of items) {
       if (item.href === pathname) {

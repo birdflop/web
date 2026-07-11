@@ -1,5 +1,5 @@
-import { component$, useContext } from "@qwik.dev/core";
-import { resolvedPluginContext } from "~/routes/resources/plugins";
+import { component$, useContext } from '@qwik.dev/core';
+import { resolvedPluginContext } from '~/routes/resources/plugins';
 
 export default component$(() => {
   const resolvedPlugin = useContext(resolvedPluginContext);
@@ -18,7 +18,7 @@ export default component$(() => {
             if (!resolvedPlugin.plugin) {
               resolvedPlugin.plugin = {
                 id: Math.random().toString(36).substring(2, 15),
-                type: "misc",
+                type: 'misc',
               };
             }
             resolvedPlugin.plugin.name = value;

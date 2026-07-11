@@ -203,7 +203,7 @@ export function lchToRgb(lch: LuvLCh): number[] {
 export function interpolateLch(
   color1: LuvLCh,
   color2: LuvLCh,
-  factor: number,
+  factor: number
 ): LuvLCh {
   // Interpolate L and C linearly
   const L = color1.L + (color2.L - color1.L) * factor;

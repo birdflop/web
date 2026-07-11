@@ -1,6 +1,6 @@
 // components/elements/Chart.tsx
-import { component$, useSignal, useVisibleTask$ } from "@qwik.dev/core";
-import { Chart, registerables } from "chart.js";
+import { component$, useSignal, useVisibleTask$ } from '@qwik.dev/core';
+import { Chart, registerables } from 'chart.js';
 
 export interface ChartProps {
   config: {
@@ -17,13 +17,13 @@ const dollarLabel = (context: {
     context.parsed === undefined ||
     isNaN(Number(context.parsed))
   ) {
-    return " N/A";
+    return ' N/A';
   }
   const label =
-    " " +
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    ' ' +
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(Number(context.parsed));
@@ -50,14 +50,14 @@ export default component$<ChartProps>((props) => {
             .getPropertyValue(`--${varName}`)
             .trim();
           return value ? value : match; // Return the original match if the variable is not found
-        },
+        }
       );
       providedConfig = JSON.parse(replacedString);
 
       // small workaround for functions in the config
       if (
         providedConfig.options?.plugins?.tooltip?.callbacks?.label ===
-        "dollarLabel"
+        'dollarLabel'
       ) {
         providedConfig.options.plugins.tooltip.callbacks.label = dollarLabel;
       }

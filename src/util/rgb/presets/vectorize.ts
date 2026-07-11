@@ -114,7 +114,7 @@ export interface SimilarPreset extends PublicPresetWithUser {
  */
 export async function checkPresetSimilarity(
   newPreset: rgbPreset,
-  threshold: number = 2.0,
+  threshold: number = 2.0
 ): Promise<{
   isSimilar: boolean;
   similarPresets: SimilarPreset[];

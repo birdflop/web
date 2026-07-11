@@ -1,51 +1,51 @@
-import { component$ } from "@qwik.dev/core";
+import { component$ } from '@qwik.dev/core';
 
-import { Hoverable } from "@luminescent/ui-qwik";
-import Activity from "lucide-icons-qwik/icons/Activity";
-import AppWindow from "lucide-icons-qwik/icons/AppWindow";
-import { inlineTranslate } from "qwik-speak";
-import { defaultDescription, generateHead } from "~/root";
+import { Hoverable } from '@luminescent/ui-qwik';
+import Activity from 'lucide-icons-qwik/icons/Activity';
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
+import { inlineTranslate } from 'qwik-speak';
+import { defaultDescription, generateHead } from '~/root';
 
 const nodes = [
   {
-    name: "Crabwings",
-    location: "New York City Metro, USA",
-    color: "red",
+    name: 'Crabwings',
+    location: 'New York City Metro, USA',
+    color: 'red',
   },
   {
-    name: "Impeyes",
-    location: "Falkenstein, Germany (EU)",
-    color: "orange",
+    name: 'Impeyes',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'orange',
   },
   {
-    name: "Jellyfishjaws",
-    location: "Falkenstein, Germany (EU)",
-    color: "yellow",
+    name: 'Jellyfishjaws',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'yellow',
   },
   {
-    name: "Koalaknees",
-    location: "Ashburn, VA, USA",
-    color: "green",
+    name: 'Koalaknees',
+    location: 'Ashburn, VA, USA',
+    color: 'green',
   },
   {
-    name: "Llamalips",
-    location: "Falkenstein, Germany (EU)",
-    color: "teal",
+    name: 'Llamalips',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'teal',
   },
   {
-    name: "Monkeymouth",
-    location: "New York City Metro, USA",
-    color: "blue",
+    name: 'Monkeymouth',
+    location: 'New York City Metro, USA',
+    color: 'blue',
   },
   {
-    name: "Narwhalnose",
-    location: "Ashburn, VA, USA",
-    color: "violet",
+    name: 'Narwhalnose',
+    location: 'Ashburn, VA, USA',
+    color: 'violet',
   },
   {
-    name: "Owlorgans",
-    location: "Falkenstein, Germany (EU)",
-    color: "pink",
+    name: 'Owlorgans',
+    location: 'Falkenstein, Germany (EU)',
+    color: 'pink',
   },
 ];
 
@@ -57,16 +57,16 @@ export default component$(() => {
       <section
         class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20"
         style={{
-          "--lum-border-radius": "1.5rem",
+          '--lum-border-radius': '1.5rem',
         }}
       >
         <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
           <Activity size={32} />
-          {t("nav.hosting.nodeStats.title@@Node Stats")}
+          {t('nav.hosting.nodeStats.title@@Node Stats')}
         </h1>
         <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
           {t(
-            "nav.hosting.nodeStats.description@@Check the status of Birdflop's server nodes.",
+            "nav.hosting.nodeStats.description@@Check the status of Birdflop's server nodes."
           )}
         </p>
         <div class="mb-2 flex flex-wrap gap-2">
@@ -75,14 +75,14 @@ export default component$(() => {
             href="https://status.birdflop.com/"
           >
             <Activity size={20} />
-            {t("nav.hosting.nodeStats.overview@@Overview")}
+            {t('nav.hosting.nodeStats.overview@@Overview')}
           </a>
           <a
             class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
             href="https://netdata.birdflop.com/panel"
           >
             <AppWindow size={20} />
-            {t("nav.hosting.nodeStats.webServices@@Web Services")}
+            {t('nav.hosting.nodeStats.webServices@@Web Services')}
           </a>
         </div>
         <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -111,6 +111,6 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: "Node Stats - Birdflop",
+  title: 'Node Stats - Birdflop',
   description: "Check the status of Birdflop's nodes. " + defaultDescription,
 });

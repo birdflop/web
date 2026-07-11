@@ -8,29 +8,29 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from "@qwik.dev/core";
-import Eye from "lucide-icons-qwik/icons/Eye";
-import Terminal from "lucide-icons-qwik/icons/Terminal";
-import Pencil from "lucide-icons-qwik/icons/Pencil";
-import { inlineTranslate } from "qwik-speak";
+} from '@qwik.dev/core';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
+import Pencil from 'lucide-icons-qwik/icons/Pencil';
+import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, {
   lightBackgrounds,
-} from "~/components/Elements/Background";
-import { rgbStoreContext } from "~/components/rgbirdflop/RGBirdflop";
-import { SelectMenu } from "@luminescent/ui-qwik";
-import Formatting from "~/components/rgbirdflop/Formatting";
-import { generateOutput } from "@birdflop/rgbirdflop";
+} from '~/components/Elements/Background';
+import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { SelectMenu } from '@luminescent/ui-qwik';
+import Formatting from '~/components/rgbirdflop/Formatting';
+import { generateOutput } from '@birdflop/rgbirdflop';
 import {
   applyTextDiff,
   combinedText,
   segmentIndexAtChar,
   rgbSegmentsContext,
-} from "~/components/rgbirdflop/advanced/rgbSegments";
-import { generateAdvancedOutput } from "~/components/rgbirdflop/advanced/output";
+} from '~/components/rgbirdflop/advanced/rgbSegments';
+import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
 
 /** Re-applies the textarea selection after a store mutation (Qwik may reset the caret). */
 export const restoreSelection = $((start: number, end: number) => {
-  const el = document.getElementById("input") as HTMLTextAreaElement | null;
+  const el = document.getElementById('input') as HTMLTextAreaElement | null;
   if (!el) return;
   requestAnimationFrame(() => {
     try {
@@ -49,18 +49,18 @@ export interface Selection {
 }
 
 export const selectionContext = createContextId<Signal<Selection | undefined>>(
-  "advanced-rgb-selection",
+  'advanced-rgb-selection'
 );
 export const previewStyleContext = createContextId<Signal<string>>(
-  "previewstyle-context",
+  'previewstyle-context'
 );
 export const rawEditModeContext =
-  createContextId<Signal<boolean>>("raw-edit-mode");
+  createContextId<Signal<boolean>>('raw-edit-mode');
 
-const ImgPwaIcon8x8 = "/branding/pwa-icon-8x8.png";
-const ImgItem = "/banner/dyes/cyan_dye.png";
-const ImgMcPing5 = "/minecraft/ping_5.png";
-const ImgChestGui = "/minecraft/chest.png";
+const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
+const ImgItem = '/banner/dyes/cyan_dye.png';
+const ImgMcPing5 = '/minecraft/ping_5.png';
+const ImgChestGui = '/minecraft/chest.png';
 
 // The main input field component where you type your text
 const InputField = component$(
@@ -90,7 +90,7 @@ const InputField = component$(
           end,
           segmentIndex: segmentIndexAtChar(
             rgbSegments.value,
-            Math.max(0, Math.min(start, end > start ? start : start - 1)),
+            Math.max(0, Math.min(start, end > start ? start : start - 1))
           ),
         };
       } else {
@@ -104,33 +104,33 @@ const InputField = component$(
           end,
         };
       }
-      console.log("Selection updated:", selection.value);
+      console.log('Selection updated:', selection.value);
     });
 
     return (
       <div
         class={{
-          "focus-within:border-lum-accent relative break-all caret-white": true,
+          'focus-within:border-lum-accent relative break-all caret-white': true,
           [`${className}`]: className,
           [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
         }}
       >
         <p
           class={{
-            "pointer-events-none whitespace-pre-wrap": true,
+            'pointer-events-none whitespace-pre-wrap': true,
             [`${inputClass}`]: inputClass,
           }}
-          style={{ visibility: rawEdit.value ? "hidden" : "visible" }}
+          style={{ visibility: rawEdit.value ? 'hidden' : 'visible' }}
         >
           <Slot />
         </p>
         {!readOnly && (
           <textarea
             class={{
-              "rounded-lum selection:bg-blue/50 selection:text-lum-text-secondary/60 absolute inset-0 whitespace-pre-wrap outline-0": true,
-              "resize-none border-none bg-transparent text-transparent outline-none":
+              'rounded-lum selection:bg-blue/50 selection:text-lum-text-secondary/60 absolute inset-0 whitespace-pre-wrap outline-0': true,
+              'resize-none border-none bg-transparent text-transparent outline-none':
                 !rawEdit.value,
-              "resize-none border-none bg-transparent text-white outline-none":
+              'resize-none border-none bg-transparent text-white outline-none':
                 rawEdit.value,
               [`${inputClass}`]: inputClass,
             }}
@@ -140,7 +140,7 @@ const InputField = component$(
                 : rgbStore.text
             }
             spellcheck={false}
-            id={"input"}
+            id={'input'}
             onInput$={(e, el) => {
               if (advanced && rgbSegments) {
                 if (e.isComposing) return;
@@ -158,7 +158,7 @@ const InputField = component$(
                   end: caret,
                   segmentIndex: segmentIndexAtChar(
                     rgbSegments.value,
-                    Math.max(0, caret - 1),
+                    Math.max(0, caret - 1)
                   ),
                 };
               } else {
@@ -172,7 +172,7 @@ const InputField = component$(
         )}
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -194,7 +194,7 @@ const DefaultInput = component$(
         <Slot />
       </InputField>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -210,7 +210,7 @@ const MCPreviewTabSection = component$(
 
     return (
       <div class="max-h-64 min-h-8 overflow-auto bg-black/50 py-0.5 pl-0.5 text-2xl wrap-break-word">
-        {previewStyle.value == "tab-header" && (
+        {previewStyle.value == 'tab-header' && (
           <InputField
             readOnly={readOnly}
             advanced={advanced}
@@ -238,7 +238,7 @@ const MCPreviewTabSection = component$(
             style="image-rendering: pixelated;"
           />
         </div>
-        {previewStyle.value == "tab-player" && (
+        {previewStyle.value == 'tab-player' && (
           <div class="mx-auto flex gap-0.5 overflow-hidden bg-[#aaaaaa]/20 pr-0.5 text-left text-2xl">
             <img
               width={24}
@@ -265,7 +265,7 @@ const MCPreviewTabSection = component$(
             />
           </div>
         )}
-        {previewStyle.value == "tab-footer" && (
+        {previewStyle.value == 'tab-footer' && (
           <InputField
             readOnly={readOnly}
             advanced={advanced}
@@ -276,14 +276,14 @@ const MCPreviewTabSection = component$(
         )}
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
 const MCPreviewChatSection = component$(
   ({
     readOnly,
-    playerName = "RGBirdflop",
+    playerName = 'RGBirdflop',
     advanced,
   }: {
     readOnly: boolean | undefined;
@@ -295,12 +295,12 @@ const MCPreviewChatSection = component$(
     return (
       <div
         class="absolute bottom-25 min-h-8 w-[75%] overflow-y-auto bg-black/50 px-2 py-0.5 text-2xl wrap-break-word"
-        style={{ maxHeight: "calc(100% - 7rem)" }}
+        style={{ maxHeight: 'calc(100% - 7rem)' }}
       >
         {!readOnly && (
           <p class="text-white!">
-            {`<${playerName}>`}{" "}
-            {t("rgb.inputText.preview.typeHere@@Type here!")}
+            {`<${playerName}>`}{' '}
+            {t('rgb.inputText.preview.typeHere@@Type here!')}
           </p>
         )}
         <InputField readOnly={readOnly} advanced={advanced}>
@@ -311,7 +311,7 @@ const MCPreviewChatSection = component$(
         </InputField>
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -337,7 +337,7 @@ const MCPreviewGUISection = component$(
             height={168}
           />
           <div class="absolute inset-0 text-xs sm:text-sm md:text-base lg:text-2xl">
-            {previewStyle.value == "gui-chest" && (
+            {previewStyle.value == 'gui-chest' && (
               <InputField
                 readOnly={readOnly}
                 advanced={advanced}
@@ -347,7 +347,7 @@ const MCPreviewGUISection = component$(
                 <Slot />
               </InputField>
             )}
-            {previewStyle.value != "gui-chest" && (
+            {previewStyle.value != 'gui-chest' && (
               <p class="absolute top-[calc(4/168*100%)] left-[calc(8/176*100%)] text-[#404040]! text-shadow-none">
                 Minecraft GUI Preview
               </p>
@@ -363,9 +363,9 @@ const MCPreviewGUISection = component$(
             <p class="absolute top-[calc(72/168*100%)] left-[calc(8/176*100%)] text-[#404040]! text-shadow-none">
               RGBirdflop
             </p>
-            {previewStyle.value.includes("gui-item") && (
+            {previewStyle.value.includes('gui-item') && (
               <div class="lum-btn-p-1 absolute top-[calc(28/168*100%)] left-[calc(20/176*100%)] bg-[#100010]/95">
-                {previewStyle.value == "gui-item-lore" && (
+                {previewStyle.value == 'gui-item-lore' && (
                   <p class="text-white!">Cyan Dye</p>
                 )}
                 <InputField
@@ -393,7 +393,7 @@ const MCPreviewGUISection = component$(
         </div>
       </div>
     );
-  },
+  }
 );
 
 // The Minecraft preview style for the input field
@@ -401,7 +401,7 @@ const MCPreviewInput = component$(
   ({
     readOnly,
     chatInput,
-    playerName = "RGBirdflop",
+    playerName = 'RGBirdflop',
     advanced,
   }: {
     readOnly: boolean | undefined;
@@ -418,7 +418,7 @@ const MCPreviewInput = component$(
     return (
       <div
         class="rounded-lum font-mc relative break-all"
-        style={{ textShadow: "2px 2px 0 #373737" }}
+        style={{ textShadow: '2px 2px 0 #373737' }}
       >
         <Background
           class="rounded-lum overflow-hidden"
@@ -432,20 +432,20 @@ const MCPreviewInput = component$(
 
         <div
           class={{
-            "absolute flex w-full flex-col text-2xl": true,
-            "bottom-0 h-full overflow-auto wrap-break-word":
-              previewStyle.value == "chat" ||
-              previewStyle.value.includes("gui"),
-            "top-5 max-h-64 min-h-8 items-center justify-center px-2 text-center":
-              previewStyle.value.includes("tab"),
+            'absolute flex w-full flex-col text-2xl': true,
+            'bottom-0 h-full overflow-auto wrap-break-word':
+              previewStyle.value == 'chat' ||
+              previewStyle.value.includes('gui'),
+            'top-5 max-h-64 min-h-8 items-center justify-center px-2 text-center':
+              previewStyle.value.includes('tab'),
           }}
         >
-          {previewStyle.value.includes("tab") && (
+          {previewStyle.value.includes('tab') && (
             <MCPreviewTabSection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewTabSection>
           )}
-          {previewStyle.value == "chat" && (
+          {previewStyle.value == 'chat' && (
             <MCPreviewChatSection
               readOnly={readOnly}
               playerName={playerName}
@@ -454,7 +454,7 @@ const MCPreviewInput = component$(
               <Slot />
             </MCPreviewChatSection>
           )}
-          {previewStyle.value.includes("gui") && (
+          {previewStyle.value.includes('gui') && (
             <MCPreviewGUISection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewGUISection>
@@ -462,7 +462,7 @@ const MCPreviewInput = component$(
         </div>
       </div>
     );
-  },
+  }
 );
 
 // The main Input component that combines everything
@@ -492,7 +492,7 @@ export default component$(
 
     // eslint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
-      const input = document.getElementById("input") as HTMLTextAreaElement;
+      const input = document.getElementById('input') as HTMLTextAreaElement;
       if (!input) return;
       input.focus();
       const len =
@@ -508,10 +508,10 @@ export default component$(
           {!readOnly && !noLabel && (
             <h5 class="my-2! flex flex-1 items-center gap-3 font-semibold md:text-lg xl:text-xl">
               <Terminal />
-              {t("rgb.inputText.title@@Input Text")}
+              {t('rgb.inputText.title@@Input Text')}
               <p class="text-lum-text-secondary text-sm font-normal">
                 {t(
-                  "rgb.inputText.description@@Type here to generate a gradient!",
+                  'rgb.inputText.description@@Type here to generate a gradient!'
                 )}
               </p>
             </h5>
@@ -519,7 +519,7 @@ export default component$(
           {!noFormatRow && <Formatting />}
         </div>
         <label for="input" class="relative mt-2 mb-4 flex flex-col items-start">
-          {previewStyle.value != "default" && (
+          {previewStyle.value != 'default' && (
             <MCPreviewInput
               readOnly={readOnly}
               chatInput={
@@ -534,7 +534,7 @@ export default component$(
               <Slot name="input" />
             </MCPreviewInput>
           )}
-          {previewStyle.value == "default" && (
+          {previewStyle.value == 'default' && (
             <DefaultInput readOnly={readOnly} advanced={advanced}>
               <Slot />
               <Slot name="input" />
@@ -542,23 +542,23 @@ export default component$(
           )}
           <div
             class={{
-              "flex items-center gap-1": true,
-              "absolute top-1 right-1": true,
+              'flex items-center gap-1': true,
+              'absolute top-1 right-1': true,
             }}
           >
             {!readOnly && (
               <button
                 type="button"
                 class={{
-                  "lum-btn rounded-lum-1 lum-grad-bg-lum-card-bg/75 p-1": true,
-                  "text-lum-primary-active!": rawEditMode.value,
-                  "text-lum-text-secondary": !rawEditMode.value,
+                  'lum-btn rounded-lum-1 lum-grad-bg-lum-card-bg/75 p-1': true,
+                  'text-lum-primary-active!': rawEditMode.value,
+                  'text-lum-text-secondary': !rawEditMode.value,
                 }}
                 onClick$={() => (rawEditMode.value = !rawEditMode.value)}
                 title={
                   rawEditMode.value
-                    ? t("rgb.inputText.viewFormatted@@View Formatted Preview")
-                    : t("rgb.inputText.rawEdit@@Raw Edit Mode")
+                    ? t('rgb.inputText.viewFormatted@@View Formatted Preview')
+                    : t('rgb.inputText.rawEdit@@Raw Edit Mode')
                 }
               >
                 {rawEditMode.value ? <Eye size={20} /> : <Pencil size={20} />}
@@ -574,53 +574,53 @@ export default component$(
               }}
               values={[
                 {
-                  name: t("rgb.inputText.preview.default@@Default"),
-                  value: "default",
+                  name: t('rgb.inputText.preview.default@@Default'),
+                  value: 'default',
                 },
                 {
-                  name: t("rgb.inputText.preview.chat@@Minecraft Chat"),
-                  value: "chat",
-                },
-                {
-                  name: t(
-                    "rgb.inputText.preview.tab.header@@Minecraft Tab Header",
-                  ),
-                  value: "tab-header",
+                  name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
+                  value: 'chat',
                 },
                 {
                   name: t(
-                    "rgb.inputText.preview.tab.footer@@Minecraft Tab Footer",
+                    'rgb.inputText.preview.tab.header@@Minecraft Tab Header'
                   ),
-                  value: "tab-footer",
+                  value: 'tab-header',
                 },
                 {
                   name: t(
-                    "rgb.inputText.preview.tab.player@@Minecraft Tab Player",
+                    'rgb.inputText.preview.tab.footer@@Minecraft Tab Footer'
                   ),
-                  value: "tab-player",
+                  value: 'tab-footer',
                 },
                 {
                   name: t(
-                    "rgb.inputText.preview.gui.chest@@Minecraft GUI Chest",
+                    'rgb.inputText.preview.tab.player@@Minecraft Tab Player'
                   ),
-                  value: "gui-chest",
+                  value: 'tab-player',
                 },
                 {
                   name: t(
-                    "rgb.inputText.preview.gui.item@@Minecraft GUI Item Name",
+                    'rgb.inputText.preview.gui.chest@@Minecraft GUI Chest'
                   ),
-                  value: "gui-item-name",
+                  value: 'gui-chest',
                 },
                 {
                   name: t(
-                    "rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore",
+                    'rgb.inputText.preview.gui.item@@Minecraft GUI Item Name'
                   ),
-                  value: "gui-item-lore",
+                  value: 'gui-item-name',
+                },
+                {
+                  name: t(
+                    'rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore'
+                  ),
+                  value: 'gui-item-lore',
                 },
               ]}
               customDropdown
               class={{
-                "lum-grad-bg-lum-card-bg/75 rounded-lum-1 gap-1 p-1": true,
+                'lum-grad-bg-lum-card-bg/75 rounded-lum-1 gap-1 p-1': true,
               }}
             >
               <Eye
@@ -633,5 +633,5 @@ export default component$(
         </label>
       </>
     );
-  },
+  }
 );

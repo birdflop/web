@@ -3,7 +3,11 @@ import type { OperatingSystemOption } from '~/util/flags/types/environment/Opera
 import type { AvailableConfig } from '~/util/flags/config';
 
 export type AvailableOperatingSystem =
-  'linux' | 'windows' | 'macos' | 'pterodactyl' | 'command';
+  | 'linux'
+  | 'windows'
+  | 'macos'
+  | 'pterodactyl'
+  | 'command';
 
 const sharedConfig: AvailableConfig[] = [
   'fileName',
@@ -29,7 +33,7 @@ function getMemory(memory: number, isContainer = false) {
 }
 
 function getJava(
-  config: Record<AvailableConfig | 'existingFlags', any>,
+  config: Record<AvailableConfig | 'existingFlags', any>
 ): string {
   let ram = config.calcOverhead
     ? Math.ceil(((11 * config.memory) / 12 - 1200) / 100) * 100
@@ -74,7 +78,7 @@ const nixScript: NixScript = (config) => {
       `memory=${memory}`,
       '',
       'declare -i memory',
-      '',
+      ''
     );
 
     fileName = '"$fileName"';
@@ -95,7 +99,7 @@ const nixScript: NixScript = (config) => {
       'echo Restarting in 5 seconds...',
       'echo Press CTRL + C to cancel.',
       'sleep 5',
-      'done',
+      'done'
     );
   } else {
     base.push(java);
@@ -158,7 +162,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
           'echo Restarting in 5 seconds...',
           'echo Press CTRL + C to cancel.',
           'timeout 5',
-          'goto :start',
+          'goto :start'
         );
       } else {
         base.push(java);

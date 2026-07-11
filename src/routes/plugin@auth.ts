@@ -76,7 +76,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
             } catch (error) {
               console.error(
                 'Failed to refresh Discord profile picture on sign in:',
-                error,
+                error
               );
             }
           }
@@ -110,5 +110,5 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         },
       },
     };
-  },
+  }
 );

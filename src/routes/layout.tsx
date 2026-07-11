@@ -9,39 +9,39 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from "@qwik.dev/core";
+} from '@qwik.dev/core';
 
 import Backgrounds, {
   lightBackgrounds,
-} from "~/components/Elements/Background";
-import Footer from "~/components/Elements/Footer";
-import Nav from "~/components/Elements/Nav";
+} from '~/components/Elements/Background';
+import Footer from '~/components/Elements/Footer';
+import Nav from '~/components/Elements/Nav';
 import {
   Link,
   RequestEventBase,
   routeLoader$,
   server$,
   useLocation,
-} from "@qwik.dev/router";
-import Cookie from "lucide-icons-qwik/icons/Cookie";
-import { inlineTranslate } from "qwik-speak";
-import { loadOpenItems } from "~/components/Elements/Accordion";
+} from '@qwik.dev/router';
+import Cookie from 'lucide-icons-qwik/icons/Cookie';
+import { inlineTranslate } from 'qwik-speak';
+import { loadOpenItems } from '~/components/Elements/Accordion';
 import {
   getCSSString,
   ThemeContext,
   ThemeContextType,
   ThemeName,
   themes,
-} from "~/util/themeUtil";
+} from '~/util/themeUtil';
 
 import {
   Notification,
   NotificationContext,
   NotificationType,
-} from "~/util/Notification";
-import { getCookies, setCookies, setUserData } from "~/util/dataUtils";
-import birdThreeJS from "~/util/birdThreeJS";
-import { languages } from "~/speak-config";
+} from '~/util/Notification';
+import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
+import birdThreeJS from '~/util/birdThreeJS';
+import { languages } from '~/speak-config';
 
 export type Settings = {
   cookies?: boolean;
@@ -66,11 +66,11 @@ export type FlopbirdStore = {
 export const checkAdmin = function (props: RequestEventBase) {
   const { env, sharedMap } = props;
 
-  const session = sharedMap.get("session");
+  const session = sharedMap.get('session');
   const admins =
     env
-      .get("ADMINS")
-      ?.split(",")
+      .get('ADMINS')
+      ?.split(',')
       .map((id) => id.trim()) || [];
 
   return admins.includes(session?.user?.id);
@@ -82,19 +82,19 @@ export const isAdmin = server$(function () {
 export const useIsAdmin = routeLoader$((props) => checkAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
-  const settingsCookies = getCookies(cookie, "settings", url.searchParams) as {
+  const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {
     cookies: Settings;
     errors: string[];
   };
 
-  const theme = settingsCookies.cookies.theme || "dark";
+  const theme = settingsCookies.cookies.theme || 'dark';
 
   return {
     ...settingsCookies,
     theme: {
       currentTheme: theme,
-      ...(theme !== "auto" && {
-        isDark: theme === "dark" || theme === "black" || theme === "simplymc",
+      ...(theme !== 'auto' && {
+        isDark: theme === 'dark' || theme === 'black' || theme === 'simplymc',
         css: themes[theme],
         cssString: getCSSString(theme),
       }),
@@ -103,10 +103,10 @@ export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
 });
 
 export const birdStoreContext =
-  createContextId<FlopbirdStore>("birdstore-context");
-export const SettingsContext = createContextId<Settings>("settings-context");
+  createContextId<FlopbirdStore>('birdstore-context');
+export const SettingsContext = createContextId<Settings>('settings-context');
 export const openItemsContext =
-  createContextId<Signal<string[]>>("openitems-context");
+  createContextId<Signal<string[]>>('openitems-context');
 export default component$(() => {
   const t = inlineTranslate();
   const loc = useLocation();
@@ -139,7 +139,7 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() =>
-    birdThreeJS(birdRef, anchorElementRef, notifications, birdStore),
+    birdThreeJS(birdRef, anchorElementRef, notifications, birdStore)
   );
 
   useTask$(({ track }) => {
@@ -148,14 +148,14 @@ export default component$(() => {
     if (!birdStore.track || birdStore.track.length === 0) return;
 
     const notification = new Notification()
-      .setTitle("Flopbird:")
+      .setTitle('Flopbird:')
       .setDescription(birdStore.track[0].description)
-      .setBgColor("lum-grad-bg-cyan/50")
+      .setBgColor('lum-grad-bg-cyan/50')
       .setPersist(true)
       .toJSON();
 
     notification.action = {
-      text: "Click to continue",
+      text: 'Click to continue',
       onClick$: $(() => {
         if (!birdStore.track || birdStore.track.length === 0) return;
         let nextStep = birdStore.track.shift();
@@ -191,7 +191,7 @@ export default component$(() => {
     if (settingsStore.cookies !== undefined) return;
     try {
       // Fetch user's location information
-      const response = await fetch("https://ipapi.co/json/");
+      const response = await fetch('https://ipapi.co/json/');
       const locationData = await response.json();
 
       // Type guard for locationData
@@ -202,43 +202,43 @@ export default component$(() => {
       const { region_code, country_code } = locationData as LocationData;
 
       // Check if user is from California or EU
-      const isCaliforniaUser = region_code === "CA" && country_code === "US";
+      const isCaliforniaUser = region_code === 'CA' && country_code === 'US';
       const isEUUser = [
-        "AT",
-        "BE",
-        "BG",
-        "HR",
-        "CY",
-        "CZ",
-        "DK",
-        "EE",
-        "FI",
-        "FR",
-        "DE",
-        "GR",
-        "HU",
-        "IE",
-        "IT",
-        "LV",
-        "LT",
-        "LU",
-        "MT",
-        "NL",
-        "PL",
-        "PT",
-        "RO",
-        "SK",
-        "SI",
-        "ES",
-        "SE",
-        "GB",
-      ].includes(country_code ?? "");
+        'AT',
+        'BE',
+        'BG',
+        'HR',
+        'CY',
+        'CZ',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GR',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'MT',
+        'NL',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'SE',
+        'GB',
+      ].includes(country_code ?? '');
 
       // Only show consent popup for California or EU users
       showCookieConsent.value = isCaliforniaUser || isEUUser;
     } catch (error) {
       // Fallback to showing consent for everyone if geolocation fails
-      console.error("Error determining user location:", error);
+      console.error('Error determining user location:', error);
       showCookieConsent.value = true;
     }
   });
@@ -249,7 +249,7 @@ export default component$(() => {
     // If the theme is not set, check the user's preference
     if (themeStore.isDark === undefined) {
       themeStore.isDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
+        '(prefers-color-scheme: dark)'
       ).matches;
     }
 
@@ -271,7 +271,7 @@ export default component$(() => {
         <canvas
           ref={birdRef}
           class={{
-            "pointer-events-none fixed inset-0 z-10 overflow-hidden blur-none": true,
+            'pointer-events-none fixed inset-0 z-10 overflow-hidden blur-none': true,
           }}
         />
       )}
@@ -281,10 +281,10 @@ export default component$(() => {
           id="bg"
           alt="Background"
           class={{
-            "hidden dark:flex": themeStore.isDark === undefined,
-            "fixed bottom-0 -z-10 h-lvh w-lvw scale-120 overflow-hidden object-cover blur-none": true,
-            "transition-all duration-1000": loc.isNavigating,
-            "bottom-0! scale-150 opacity-5 blur-xl!": loc.url.pathname != "/",
+            'hidden dark:flex': themeStore.isDark === undefined,
+            'fixed bottom-0 -z-10 h-lvh w-lvw scale-120 overflow-hidden object-cover blur-none': true,
+            'transition-all duration-1000': loc.isNavigating,
+            'bottom-0! scale-150 opacity-5 blur-xl!': loc.url.pathname != '/',
           }}
         />
       )}
@@ -293,10 +293,10 @@ export default component$(() => {
           id="bg"
           alt="Background"
           class={{
-            "flex dark:hidden": themeStore.isDark === undefined,
-            "fixed bottom-0 -z-10 h-lvh w-lvw scale-120 overflow-hidden object-cover blur-none": true,
-            "transition-all duration-1000": loc.isNavigating,
-            "bottom-0! scale-150 opacity-0 blur-xl!": loc.url.pathname != "/",
+            'flex dark:hidden': themeStore.isDark === undefined,
+            'fixed bottom-0 -z-10 h-lvh w-lvw scale-120 overflow-hidden object-cover blur-none': true,
+            'transition-all duration-1000': loc.isNavigating,
+            'bottom-0! scale-150 opacity-0 blur-xl!': loc.url.pathname != '/',
           }}
         />
       )}
@@ -304,16 +304,16 @@ export default component$(() => {
       <div
         ref={anchorElementRef}
         class={{
-          "fixed flex max-w-full flex-col gap-1 md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4": true,
-          "right-4 bottom-4": !settingsStore.flopbird?.toggle,
+          'fixed flex max-w-full flex-col gap-1 md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+          'right-4 bottom-4': !settingsStore.flopbird?.toggle,
         }}
         id="notifications"
         style={{
-          "--lum-border-radius": "1rem",
+          '--lum-border-radius': '1rem',
 
           ...(settingsStore.flopbird?.toggle
             ? {
-                transform: "translate(-100%, -100%)",
+                transform: 'translate(-100%, -100%)',
               }
             : {}),
         }}
@@ -327,15 +327,15 @@ export default component$(() => {
             setTimeout(() => {
               const el = document.getElementById(id);
               el?.classList.add(
-                "animate-out",
-                "fade-out",
-                "slide-out-to-bottom-8",
-                "sm:slide-out-to-right-8",
+                'animate-out',
+                'fade-out',
+                'slide-out-to-bottom-8',
+                'sm:slide-out-to-right-8'
               );
               setTimeout(() => {
                 notifications.splice(
                   notifications.findIndex((n) => n?.id === id),
-                  1,
+                  1
                 );
               }, 300);
             }, 4000);
@@ -345,23 +345,23 @@ export default component$(() => {
             <button
               id={notification.id}
               class={{
-                [notification.bgColor ?? "lum-grad-bg-lum-input-bg/60"]: true,
-                "lum-card sm:rounded-lum max-w-lg min-w-84 gap-0 p-4 text-left backdrop-blur-xl": true,
-                "animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 duration-500": true,
+                [notification.bgColor ?? 'lum-grad-bg-lum-input-bg/60']: true,
+                'lum-card sm:rounded-lum max-w-lg min-w-84 gap-0 p-4 text-left backdrop-blur-xl': true,
+                'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-right-8 duration-500': true,
               }}
               key={notification.id}
               onClick$={async (e, el) => {
                 await onClick$?.();
                 el.classList.add(
-                  "animate-out",
-                  "fade-out",
-                  "slide-out-to-bottom-8",
-                  "sm:slide-out-to-right-8",
+                  'animate-out',
+                  'fade-out',
+                  'slide-out-to-bottom-8',
+                  'sm:slide-out-to-right-8'
                 );
                 setTimeout(() => {
                   notifications.splice(
                     notifications.findIndex((n) => n?.id === id),
-                    1,
+                    1
                   );
                 }, 300);
               }}
@@ -388,7 +388,7 @@ export default component$(() => {
               {notification.persist && (
                 <p class="lum-text-xs text-lum-text-secondary/50! mt-1!">
                   {notification.action?.text ??
-                    t("nav.clickToDismiss@@Click to dismiss")}
+                    t('nav.clickToDismiss@@Click to dismiss')}
                 </p>
               )}
               {/*
@@ -403,25 +403,25 @@ export default component$(() => {
       {showCookieConsent.value && settingsStore.cookies === undefined && (
         <div
           class={{
-            "lum-grad-bg-lum-input-bg/60 fixed bottom-4 left-4": true,
-            "lum-card sm:rounded-lum min-w-84 gap-0 p-4 text-left backdrop-blur-xl": true,
-            "animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 duration-500": true,
+            'lum-grad-bg-lum-input-bg/60 fixed bottom-4 left-4': true,
+            'lum-card sm:rounded-lum min-w-84 gap-0 p-4 text-left backdrop-blur-xl': true,
+            'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 duration-500': true,
           }}
           style={{
-            "--lum-border-radius": "1rem",
+            '--lum-border-radius': '1rem',
           }}
         >
           <div>
             <h5 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Cookie size={24} /> {t("nav.cookies.title@@Cookies")}
+              <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
             </h5>
             <p>
               {t(
-                "nav.cookies.description@@We use cookies to automatically save and load your preferences.",
+                'nav.cookies.description@@We use cookies to automatically save and load your preferences.'
               )}
             </p>
             <Link href="/privacy">
-              {t("nav.privacyPolicy@@Privacy Policy")}
+              {t('nav.privacyPolicy@@Privacy Policy')}
             </Link>
           </div>
           <div class="flex flex-wrap items-center justify-end gap-2">
@@ -429,21 +429,21 @@ export default component$(() => {
               class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-2"
               onClick$={async () => {
                 settingsStore.cookies = false;
-                setCookies("settings", settingsStore);
+                setCookies('settings', settingsStore);
                 await setUserData({ settings: settingsStore });
               }}
             >
-              {t("nav.cookies.optOut@@Reject")}
+              {t('nav.cookies.optOut@@Reject')}
             </button>
             <button
               class="lum-btn lum-bg-blue hover:lum-bg-blue lum-btn-p-1 rounded-lum-2"
               onClick$={async () => {
                 settingsStore.cookies = true;
-                setCookies("settings", settingsStore);
+                setCookies('settings', settingsStore);
                 await setUserData({ settings: settingsStore });
               }}
             >
-              {t("nav.cookies.acknowledge@@Accept")}
+              {t('nav.cookies.acknowledge@@Accept')}
             </button>
           </div>
         </div>

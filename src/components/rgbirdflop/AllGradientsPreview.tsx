@@ -2,7 +2,7 @@ import { GRADIENT_TYPES, GradientType } from '@birdflop/rgbirdflop';
 
 export function renderAllGradientsPreview(
   renderPreview: (gradientType: GradientType) => any,
-  activeGradientType: GradientType,
+  activeGradientType: GradientType
 ) {
   return GRADIENT_TYPES.map((gradientType) => {
     const isActive = gradientType === activeGradientType;

@@ -1,6 +1,6 @@
-import { type RequestHandler } from "@qwik.dev/router";
-import { drizzle } from "drizzle-orm/d1";
-import { type AppDatabase, initializeDbIfNeeded } from "~/util/db";
+import { type RequestHandler } from '@qwik.dev/router';
+import { drizzle } from 'drizzle-orm/d1';
+import { type AppDatabase, initializeDbIfNeeded } from '~/util/db';
 
 export const onRequest: RequestHandler = async ({ platform }) => {
   const env = platform.env as Env;

@@ -3,31 +3,31 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from "@qwik.dev/core";
-import { defaultDescription, generateHead } from "~/root";
-import { Link, routeLoader$ } from "@qwik.dev/router";
-import { getCookies } from "~/util/dataUtils";
-import { generateOutput, rgbDefaults } from "@birdflop/rgbirdflop";
+} from '@qwik.dev/core';
+import { defaultDescription, generateHead } from '~/root';
+import { Link, routeLoader$ } from '@qwik.dev/router';
+import { getCookies } from '~/util/dataUtils';
+import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   previewStyleContext,
   Selection,
   selectionContext,
-} from "~/components/rgbirdflop/Input";
-import Palette from "lucide-icons-qwik/icons/Palette";
-import TestTube2 from "lucide-icons-qwik/icons/TestTube2";
-import { inlineTranslate } from "qwik-speak";
-import { renderPreview } from "~/components/rgbirdflop/preview";
-import { renderAllGradientsPreview } from "~/components/rgbirdflop/AllGradientsPreview";
+} from '~/components/rgbirdflop/Input';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
+import { inlineTranslate } from 'qwik-speak';
+import { renderPreview } from '~/components/rgbirdflop/preview';
+import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
-} from "~/components/rgbirdflop/RGBirdflop";
+} from '~/components/rgbirdflop/RGBirdflop';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies: {
     cookies: Partial<typeof rgbDefaults>;
     errors: string[];
-  } = getCookies(cookie, "rgb", url.searchParams);
+  } = getCookies(cookie, 'rgb', url.searchParams);
   return cookies;
 });
 
@@ -41,13 +41,13 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
   const selection = useSignal<Selection>();
   useContextProvider(selectionContext, selection);
-  const previewStyle = useSignal("default");
+  const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
@@ -61,11 +61,11 @@ export default component$(() => {
             q:slot="header"
           >
             <Palette size={32} />
-            {t("nav.resources.hexGradient.title@@RGBirdflop")}
+            {t('nav.resources.hexGradient.title@@RGBirdflop')}
           </h1>
           <p class="text-lum-text-secondary mb-2" q:slot="header">
             {t(
-              "nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.",
+              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.'
             )}
           </p>
         </div>
@@ -75,7 +75,7 @@ export default component$(() => {
         >
           <TestTube2 size={18} class="min-h-4 min-w-4" />
           {t(
-            "rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients",
+            'rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients'
           )}
         </Link>
       </div>
@@ -84,17 +84,17 @@ export default component$(() => {
             (gradientType) =>
               renderPreview(
                 { ...rgbStore, gradientType },
-                previewStyle.value == "default" ? 4 : 2,
+                previewStyle.value == 'default' ? 4 : 2
               ),
-            rgbStore.gradientType,
+            rgbStore.gradientType
           )
-        : renderPreview(rgbStore, previewStyle.value == "default" ? 4 : 2)}
+        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
     </RGBirdflop>
   );
 });
 
 export const head = generateHead({
-  title: "RGB Birdflop - Minecraft RGB Gradient Creator",
+  title: 'RGB Birdflop - Minecraft RGB Gradient Creator',
   description:
-    "Hex gradient text generator. Developed by Birdflop. " + defaultDescription,
+    'Hex gradient text generator. Developed by Birdflop. ' + defaultDescription,
 });

@@ -130,17 +130,17 @@ export const flags = {
         ...baseAikar,
         ...(memory < 12
           ? [
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1MaxNewSizePercent=40',
-            '-XX:G1HeapRegionSize=8M',
-            '-XX:G1ReservePercent=20',
-          ]
+              '-XX:G1NewSizePercent=30',
+              '-XX:G1MaxNewSizePercent=40',
+              '-XX:G1HeapRegionSize=8M',
+              '-XX:G1ReservePercent=20',
+            ]
           : [
-            '-XX:G1NewSizePercent=40',
-            '-XX:G1MaxNewSizePercent=50',
-            '-XX:G1HeapRegionSize=16M',
-            '-XX:G1ReservePercent=15',
-          ]),
+              '-XX:G1NewSizePercent=40',
+              '-XX:G1MaxNewSizePercent=50',
+              '-XX:G1HeapRegionSize=16M',
+              '-XX:G1ReservePercent=15',
+            ]),
       ];
     },
   },
@@ -335,19 +335,19 @@ export const flags = {
         ...baseEtil,
         ...(memory < 12
           ? [
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1MaxNewSizePercent=40',
-            '-XX:G1HeapRegionSize=8M',
-            '-XX:G1ReservePercent=20',
-            '-XX:InitiatingHeapOccupancyPercent=15',
-          ]
+              '-XX:G1NewSizePercent=30',
+              '-XX:G1MaxNewSizePercent=40',
+              '-XX:G1HeapRegionSize=8M',
+              '-XX:G1ReservePercent=20',
+              '-XX:InitiatingHeapOccupancyPercent=15',
+            ]
           : [
-            '-XX:G1NewSizePercent=40',
-            '-XX:G1MaxNewSizePercent=50',
-            '-XX:G1HeapRegionSize=16M',
-            '-XX:G1ReservePercent=15',
-            '-XX:InitiatingHeapOccupancyPercent=20',
-          ]),
+              '-XX:G1NewSizePercent=40',
+              '-XX:G1MaxNewSizePercent=50',
+              '-XX:G1HeapRegionSize=16M',
+              '-XX:G1ReservePercent=15',
+              '-XX:InitiatingHeapOccupancyPercent=20',
+            ]),
       ];
     },
   },

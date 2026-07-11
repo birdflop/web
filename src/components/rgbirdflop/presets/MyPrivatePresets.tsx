@@ -1,22 +1,22 @@
-import { component$, useContext, useSignal } from "@qwik.dev/core";
+import { component$, useContext, useSignal } from '@qwik.dev/core';
 
-import { privatePresetsContext } from "~/routes/resources/rgb/presets";
-import PresetPreview from "~/components/rgbirdflop/presets/PresetPreview";
-import CircleUserRound from "lucide-icons-qwik/icons/CircleUserRound";
-import Palette from "lucide-icons-qwik/icons/Palette";
-import Plus from "lucide-icons-qwik/icons/Plus";
-import Save from "lucide-icons-qwik/icons/Save";
-import X from "lucide-icons-qwik/icons/X";
-import { SelectMenu, Toggle } from "@luminescent/ui-qwik";
-import { renderPreview } from "~/components/rgbirdflop/preview";
-import { rgbDefaults } from "@birdflop/rgbirdflop";
-import { Form, Link } from "@qwik.dev/router";
-import { Notification, NotificationContext } from "~/util/Notification";
-import { rgbPreset } from "~/util/rgb/presets";
-import { inlineTranslate } from "qwik-speak";
-import { publishPreset } from "~/util/dataUtils";
-import { validatePresetSubmission } from "~/util/rgb/presets/presetValidation";
-import type { SimilarPreset } from "~/util/rgb/presets/vectorize";
+import { privatePresetsContext } from '~/routes/resources/rgb/presets';
+import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
+import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Save from 'lucide-icons-qwik/icons/Save';
+import X from 'lucide-icons-qwik/icons/X';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { renderPreview } from '~/components/rgbirdflop/preview';
+import { rgbDefaults } from '@birdflop/rgbirdflop';
+import { Form, Link } from '@qwik.dev/router';
+import { Notification, NotificationContext } from '~/util/Notification';
+import { rgbPreset } from '~/util/rgb/presets';
+import { inlineTranslate } from 'qwik-speak';
+import { publishPreset } from '~/util/dataUtils';
+import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
+import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
@@ -30,7 +30,7 @@ export default component$(() => {
   const similarPresets = useSignal<SimilarPreset[]>([]);
 
   const privatePresetsParsed = [...privatePresets.value].map((preset) => ({
-    name: preset.text ?? "Saved Preset",
+    name: preset.text ?? 'Saved Preset',
     preset: preset,
     pending: false,
   }));
@@ -43,10 +43,10 @@ export default component$(() => {
       >
         <CircleUserRound size={30} />
         <span class="flex-1">
-          {t("rgb.presets.myPrivate@@My Private RGBirdflop Presets")}
+          {t('rgb.presets.myPrivate@@My Private RGBirdflop Presets')}
         </span>
         <Link href="/resources/rgb" class="lum-btn lum-bg-transparent">
-          <Plus size={20} /> {t("rgb.presets.createNew@@Create a new preset")}
+          <Plus size={20} /> {t('rgb.presets.createNew@@Create a new preset')}
         </Link>
       </h2>
 
@@ -75,10 +75,10 @@ export default component$(() => {
       <dialog
         ref={modalRef}
         class={{
-          "text-lum-text m-auto hidden overflow-visible open:flex": true,
-          "lum-card lum-grad-bg-lum-card-bg/50 min-w-1/4 drop-shadow-2xl backdrop-blur-xl": true,
-          "open:animate-in open:fade-in open:slide-in-from-top-8 open:duration-300": true,
-          "animate-out fade-out slide-in-from-top-8 duration-300": true,
+          'text-lum-text m-auto hidden overflow-visible open:flex': true,
+          'lum-card lum-grad-bg-lum-card-bg/50 min-w-1/4 drop-shadow-2xl backdrop-blur-xl': true,
+          'open:animate-in open:fade-in open:slide-in-from-top-8 open:duration-300': true,
+          'animate-out fade-out slide-in-from-top-8 duration-300': true,
         }}
       >
         <div class="border-lum-border/10 flex flex-col border-b pb-4">
@@ -104,29 +104,29 @@ export default component$(() => {
             isSubmitting.value = true;
 
             const name = (
-              form.querySelector("#publish-preset-name") as HTMLInputElement
+              form.querySelector('#publish-preset-name') as HTMLInputElement
             ).value;
             const description = (
               form.querySelector(
-                "#publish-preset-description",
+                '#publish-preset-description'
               ) as HTMLTextAreaElement
             ).value;
 
             const presetSelectElem = form.querySelector(
-              "#publish-preset-preset",
+              '#publish-preset-preset'
             );
             if (
               !presetSelectElem ||
               !(presetSelectElem instanceof HTMLSelectElement)
             ) {
-              validationErrors.value = ["Preset select element not found."];
+              validationErrors.value = ['Preset select element not found.'];
               isSubmitting.value = false;
               return;
             }
 
             const includetext = (
               form.querySelector(
-                "#publish-preset-includetext",
+                '#publish-preset-includetext'
               ) as HTMLInputElement
             ).checked;
             const preset = JSON.parse(presetSelectElem.value) as rgbPreset;
@@ -140,12 +140,12 @@ export default component$(() => {
                 description,
                 preset,
               },
-              true,
+              true
             );
 
             if (!validation.isValid) {
               validationErrors.value = validation.errors.map(
-                (e) => `${e.field}: ${e.message}`,
+                (e) => `${e.field}: ${e.message}`
               );
               similarPresets.value = validation.similarPresets || [];
               isSubmitting.value = false;
@@ -155,7 +155,7 @@ export default component$(() => {
             // Show warnings if any
             if (validation.warnings && validation.warnings.length > 0) {
               const continueSubmission = confirm(
-                `Warning:\n${validation.warnings.join("\n")}\n\nDo you want to continue?`,
+                `Warning:\n${validation.warnings.join('\n')}\n\nDo you want to continue?`
               );
               if (!continueSubmission) {
                 isSubmitting.value = false;
@@ -173,38 +173,38 @@ export default component$(() => {
 
             const notification = result.result?.[0]
               ? new Notification()
-                  .setTitle("Preset Submitted!")
+                  .setTitle('Preset Submitted!')
                   .setDescription(
-                    "Your preset has been submitted for review. It may take a few days for it to be reviewed and published.",
+                    'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.'
                   )
-                  .setBgColor("lum-grad-bg-green/50")
+                  .setBgColor('lum-grad-bg-green/50')
                   .setButtons([
                     {
-                      text: "View Preset",
+                      text: 'View Preset',
                       href: `/resources/rgb/presets/${result.result?.[0]?.id}`,
                     },
                   ])
               : new Notification()
-                  .setTitle("Preset Submission Failed")
+                  .setTitle('Preset Submission Failed')
                   .setDescription(
-                    "Your preset failed to submit. Is there already a preset with the same configuration?",
+                    'Your preset failed to submit. Is there already a preset with the same configuration?'
                   )
-                  .setBgColor("lum-grad-bg-yellow/50")
+                  .setBgColor('lum-grad-bg-yellow/50')
                   .setPersist(true);
 
             if (!result.success) {
               const errorMsg =
-                typeof result.error === "string"
+                typeof result.error === 'string'
                   ? result.error
-                  : "Unknown error";
+                  : 'Unknown error';
               notification
                 .setDescription(`Your preset failed to submit: ${errorMsg}`)
-                .setBgColor("lum-grad-bg-red/50")
+                .setBgColor('lum-grad-bg-red/50')
                 .setPersist(true);
 
               if (result.validationErrors) {
                 validationErrors.value = result.validationErrors.map(
-                  (e) => `${e.field}: ${e.message}`,
+                  (e) => `${e.field}: ${e.message}`
                 );
               }
               if (result.similarPresets) {
@@ -213,8 +213,8 @@ export default component$(() => {
             } else if (result.warnings && result.warnings.length > 0) {
               notification.setDescription(
                 notification.description +
-                  "\n\nNote: " +
-                  result.warnings.join(" "),
+                  '\n\nNote: ' +
+                  result.warnings.join(' ')
               );
             }
 
@@ -241,7 +241,7 @@ export default component$(() => {
             {selectedPreset.value && (
               <SelectMenu
                 id="publish-preset-preset"
-                class={{ "w-full": true }}
+                class={{ 'w-full': true }}
                 values={
                   privatePresets.value.length == 0
                     ? undefined
@@ -249,10 +249,10 @@ export default component$(() => {
                         name: (
                           <span
                             class={{
-                              "font-mc tracking-tight break-all": true,
-                              "font-mc-bold": preset.baseFormatting?.bold,
-                              "font-mc-italic": preset.baseFormatting?.italic,
-                              "font-mc-bold-italic":
+                              'font-mc tracking-tight break-all': true,
+                              'font-mc-bold': preset.baseFormatting?.bold,
+                              'font-mc-italic': preset.baseFormatting?.italic,
+                              'font-mc-bold-italic':
                                 preset.baseFormatting?.bold &&
                                 preset.baseFormatting?.italic,
                               [`${preset.colorFormat?.class}`]:
@@ -334,8 +334,8 @@ export default component$(() => {
             id="publish-preset"
             disabled={isSubmitting.value}
           >
-            <Save size={20} /> Publish{" "}
-            {isSubmitting.value ? "Validating..." : "Publish"}
+            <Save size={20} /> Publish{' '}
+            {isSubmitting.value ? 'Validating...' : 'Publish'}
           </button>
         </div>
       </dialog>

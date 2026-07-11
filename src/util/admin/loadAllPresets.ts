@@ -1,12 +1,12 @@
-import { server$ } from "@qwik.dev/router";
-import { getDB, presets, users } from "../db";
-import { isNotNull, eq } from "drizzle-orm";
+import { server$ } from '@qwik.dev/router';
+import { getDB, presets, users } from '../db';
+import { isNotNull, eq } from 'drizzle-orm';
 
 export const loadAllPresets = server$(async function () {
   try {
     const db = getDB();
     if (!db) {
-      return { success: false, error: "Database not available" };
+      return { success: false, error: 'Database not available' };
     }
 
     // Fetch all published presets with vectors
@@ -40,10 +40,10 @@ export const loadAllPresets = server$(async function () {
       count: formattedPresets.length,
     };
   } catch (error) {
-    console.error("Error loading presets:", error);
+    console.error('Error loading presets:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 });

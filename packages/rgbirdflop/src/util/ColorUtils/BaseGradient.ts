@@ -41,7 +41,7 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
     startAlpha: number,
     endAlpha: number,
     lowerRange: number,
-    upperRange: number,
+    upperRange: number
   ) {
     this.startColor = this.rgbToColorSpace(startRgb);
     this.endColor = this.rgbToColorSpace(endRgb);
@@ -80,7 +80,7 @@ export abstract class BaseTwoStopGradient<T> implements TwoStopGradient {
     const interpolated = this.interpolate(
       this.startColor,
       this.endColor,
-      factor,
+      factor
     );
 
     const interpolatedAlpha =
@@ -103,7 +103,7 @@ type TwoStopGradientConstructor = new (
   startAlpha: number,
   endAlpha: number,
   lowerRange: number,
-  upperRange: number,
+  upperRange: number
 ) => TwoStopGradient;
 
 /**
@@ -120,7 +120,7 @@ export class BaseGradient {
   constructor(
     colors: RGBColorStop[],
     numSteps: number,
-    private TwoStopGradientClass: TwoStopGradientConstructor,
+    private TwoStopGradientClass: TwoStopGradientConstructor
   ) {
     this.colors = colors;
     this.gradients = [];
@@ -164,8 +164,8 @@ export class BaseGradient {
           currentColor.rgb[3] !== undefined ? currentColor.rgb[3] / 255 : 1,
           nextColor.rgb[3] !== undefined ? nextColor.rgb[3] / 255 : 1,
           lowerRange,
-          upperRange,
-        ),
+          upperRange
+        )
       );
     }
   }
@@ -185,8 +185,8 @@ export class BaseGradient {
       Math.abs(
         ((2 * Math.asin(Math.sin(this.step * (Math.PI / (2 * this.steps))))) /
           Math.PI) *
-          this.steps,
-      ),
+          this.steps
+      )
     );
 
     let color: number[];
@@ -194,7 +194,7 @@ export class BaseGradient {
       color = this.gradients[0]?.colorAt(adjustedStep);
     } else {
       const gradient = this.gradients.find(
-        (g) => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep,
+        (g) => g.lowerRange <= adjustedStep && g.upperRange >= adjustedStep
       );
       if (!gradient) {
         return this.colors[0]?.rgb;

@@ -1,4 +1,4 @@
-import { createContextId, QRL } from "@qwik.dev/core";
+import { createContextId, QRL } from '@qwik.dev/core';
 
 export interface NotificationType {
   id: string;
@@ -85,5 +85,5 @@ export class Notification implements NotificationType {
 }
 
 export const NotificationContext = createContextId<NotificationType[]>(
-  "notification-context",
+  'notification-context'
 );

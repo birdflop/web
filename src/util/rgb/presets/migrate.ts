@@ -32,9 +32,9 @@ function migrateFromV3(preset: any) {
     ...preset,
     colors: preset.colors
       ? preset.colors.map((color: string, i: number) => ({
-        hex: color,
-        pos: (100 / (preset.colors.length - 1)) * i,
-      }))
+          hex: color,
+          pos: (100 / (preset.colors.length - 1)) * i,
+        }))
       : undefined,
   });
 }
@@ -60,12 +60,12 @@ function migrateFromV4(preset: any) {
   const baseFormatting =
     bold || italic || underline || strikethrough || obfuscate
       ? {
-        ...(bold ? { bold } : {}),
-        ...(italic ? { italic } : {}),
-        ...(underline ? { underline } : {}),
-        ...(strikethrough ? { strikethrough } : {}),
-        ...(obfuscate ? { obfuscate } : {}),
-      }
+          ...(bold ? { bold } : {}),
+          ...(italic ? { italic } : {}),
+          ...(underline ? { underline } : {}),
+          ...(strikethrough ? { strikethrough } : {}),
+          ...(obfuscate ? { obfuscate } : {}),
+        }
       : undefined;
 
   console.log(baseFormatting);

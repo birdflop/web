@@ -21,7 +21,7 @@ declare global {
     umami?: {
       track: (
         eventName: string,
-        payload?: Record<string, string | number>,
+        payload?: Record<string, string | number>
       ) => void;
     };
   }

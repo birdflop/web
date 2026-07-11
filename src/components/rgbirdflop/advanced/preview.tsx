@@ -22,7 +22,7 @@ function toCSS(rgb: number[]): string {
  */
 export function renderAdvancedPreview(
   segments: SegmentType[],
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ) {
   const text = combinedText(segments);
   if (!text) return EmptyPreview;
@@ -37,7 +37,7 @@ export function renderAdvancedPreview(
       gradient = new ColorGradient(
         sortColors(seg.colors).map(getRGBColorStop),
         Math.max(1, Math.ceil(Array.from(seg.text).length / len)),
-        seg.gradientType,
+        seg.gradientType
       );
     }
 

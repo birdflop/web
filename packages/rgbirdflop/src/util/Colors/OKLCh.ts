@@ -109,7 +109,7 @@ export function oklchToHex(oklch: OKLCh): string {
 export function interpolateOklch(
   color1: OKLCh,
   color2: OKLCh,
-  factor: number,
+  factor: number
 ): OKLCh {
   // Interpolate L and C linearly
   const L = color1.L + (color2.L - color1.L) * factor;
