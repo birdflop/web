@@ -35,7 +35,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint": "vp lint \"src/**/*.ts*\"",
+    "lint": "vp lint",
     "test": "echo \"No test specified\" && exit 0"
   },
   "devDependencies": {

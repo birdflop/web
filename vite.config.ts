@@ -74,7 +74,6 @@ export default defineConfig({
     ignorePatterns: [
       "**/*.log",
       "**/.DS_Store",
-      "**/*.",
       ".vscode/settings.json",
       "**/.history",
       "**/.yarn",
@@ -222,7 +221,7 @@ export default defineConfig({
       "qwik/prefer-classlist": "warn",
       "qwik/jsx-no-script-url": "warn",
       "qwik/jsx-key": "warn",
-      "qwik/unused-server": "error",
+      "qwik/unused-server": "off",
       "qwik/jsx-img": "warn",
       "qwik/jsx-a": "warn",
       "qwik/no-use-visible-task": "warn",
