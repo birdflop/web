@@ -20,7 +20,18 @@ import pkg from "./package.json" with { type: 'json' };
 
 let platform = {};
 
-if (process.env.NODE_ENV === 'development') {
+if (
+  process.env.NODE_ENV === 'development' &&
+  process.argv.some(arg =>
+    arg === 'dev' ||
+    arg === 'serve' ||
+    arg === 'start' ||
+    arg === 'vite' ||
+    arg.endsWith('/vite') ||
+    arg.endsWith('\\vite') ||
+    arg.endsWith('vite.js')
+  )
+) {
   const { getPlatformProxy } = await import('wrangler');
   platform = await getPlatformProxy();
 }
