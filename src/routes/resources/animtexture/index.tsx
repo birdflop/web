@@ -436,7 +436,6 @@ export default component$(() => {
               <NumberInput
                 input
                 min={1}
-                step={16}
                 value={texture.width}
                 id="width"
                 onIncrement$={() => {
@@ -453,32 +452,32 @@ export default component$(() => {
               >
                 <span class="flex items-center gap-1">
                   {t('animtexture.width@@Width')}
-                  <button
-                    class="lum-btn lum-btn-p-1"
-                    onClick$={() => {
-                      const maxWidth =
-                        texture.frames.length > 0
-                          ? Math.max(
-                            ...texture.frames.map(
-                              (frame) => frame.img.naturalWidth,
-                            ),
-                          )
-                          : texture.width;
-                      texture.width = maxWidth;
-                    }}
-                  >
-                    <RefreshCw size={16} />
-                    {t('animtexture.getWidth@@Get width from frames')}
-                  </button>
                 </span>
               </NumberInput>
+              <button
+                class="lum-btn lum-btn-p-1"
+                onClick$={() => {
+                  const maxWidth =
+                    texture.frames.length > 0
+                      ? Math.max(
+                        ...texture.frames.map(
+                          (frame) => frame.img.naturalWidth,
+                        ),
+                      )
+                      : texture.width;
+                  texture.width = maxWidth;
+                  if (texture.lockdimensions) texture.height = texture.width;
+                }}
+              >
+                <RefreshCw size={16} />
+                {t('animtexture.getWidth@@Get width from frames')}
+              </button>
               <div class={{
                 'opacity-50': texture.lockdimensions,
               }}>
                 <NumberInput
                   input
-                  min={1}
-                  step={16}
+                  min={2}
                   value={texture.height}
                   id="height"
                   onIncrement$={() => {
@@ -498,25 +497,26 @@ export default component$(() => {
                 >
                   <span class="flex items-center gap-1">
                     {t('animtexture.height@@Height')}
-                    <button
-                      class="lum-btn lum-btn-p-1"
-                      onClick$={() => {
-                        const maxHeight =
-                          texture.frames.length > 0
-                            ? Math.max(
-                              ...texture.frames.map(
-                                (frame) => frame.img.naturalHeight,
-                              ),
-                            )
-                            : texture.height;
-                        texture.height = maxHeight;
-                      }}
-                    >
-                      <RefreshCw size={16} />
-                      {t('animtexture.getHeight@@Get height from frames')}
-                    </button>
                   </span>
                 </NumberInput>
+                <button
+                  class="lum-btn lum-btn-p-1"
+                  onClick$={() => {
+                    const maxHeight =
+                      texture.frames.length > 0
+                        ? Math.max(
+                          ...texture.frames.map(
+                            (frame) => frame.img.naturalHeight,
+                          ),
+                        )
+                        : texture.height;
+                    texture.height = maxHeight;
+                    if (texture.lockdimensions) texture.width = texture.height;
+                  }}
+                >
+                  <RefreshCw size={16} />
+                  {t('animtexture.getHeight@@Get height from frames')}
+                </button>
               </div>
               <Toggle
                 id="lockdimensions"
