@@ -9,14 +9,10 @@ import {
 } from '@birdflop/rgbirdflop';
 import type { SegmentType } from './rgbSegments';
 import { chunkText, combinedText, rgbSegmentsContext } from './rgbSegments';
-import { EmptyPreview, getFormattingClasses } from '../preview';
+import { EmptyPreview, getFormattingClasses, toCSS } from '../preview';
 import { component$, useContext, useSignal } from '@qwik.dev/core';
 import { RgbPreviewProps } from '../RgbPreview';
 import { rgbStoreContext } from '../RGBirdflop';
-
-function toCSS(rgb: number[]): string {
-  return `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;
-}
 
 interface AdvancedRgbPreviewProps extends RgbPreviewProps {
   rgbSegments?: SegmentType[];

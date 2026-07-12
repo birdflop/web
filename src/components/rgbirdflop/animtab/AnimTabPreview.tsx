@@ -9,6 +9,7 @@ import {
   EmptyPreview,
   getEffectiveFormatting,
   getFormattingClasses,
+  toCSS,
 } from '../preview';
 import { rgbStoreContext } from '../RGBirdflop';
 import { animtabStoreContext } from '~/routes/resources/animtab';
@@ -59,8 +60,8 @@ export default component$<AnimTABPreviewProps>(
       const segmentStart = charIndex;
       charIndex += segmentText.length;
       const color = `#${colors[segmentIndex]}`;
-      const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
-      const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+      const rgbShadow = hexToRGB(color).map((c) => Math.round(c * 0.25));
+      const rgbShadowCSS = toCSS(rgbShadow);
       const output = Array.from(segmentText).map((char, offset) => {
         const formatting = getEffectiveFormatting(
           rgbStore,
@@ -71,7 +72,7 @@ export default component$<AnimTABPreviewProps>(
             key={`char${segmentStart + offset}`}
             style={{
               color,
-              textShadow: `${shadowLength} 0 ${shadowColor};`,
+              textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
             }}
             class={getFormattingClasses(formatting)}
           >

@@ -164,6 +164,7 @@ export default component$(() => {
       </div>
 
       <AnimTabPreview
+        q:slot="input"
         currentFrameIndex={framesStore.current}
         shadowLength={previewStyle.value == 'default' ? 4 : 2}
       />

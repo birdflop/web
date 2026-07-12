@@ -5,6 +5,10 @@ import {
 } from '@birdflop/rgbirdflop';
 import { component$ } from '@qwik.dev/core';
 
+export function toCSS(rgb: number[]): string {
+  return `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;
+}
+
 export function getFormattingSignature(formatting: Formatting) {
   return (
     FORMAT_KEYS.map((key) => (formatting[key] ? '1' : '0')).join('') +

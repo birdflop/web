@@ -18,7 +18,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import Eye from 'lucide-icons-qwik/icons/Eye';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
-import { getFormattingClasses } from '~/components/rgbirdflop/preview';
+import { getFormattingClasses, toCSS } from '~/components/rgbirdflop/preview';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies<{ yaml?: string }>(cookie, 'animpreview', url.searchParams);
@@ -169,7 +169,7 @@ export default component$(() => {
             const shadowLength =
               previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
             const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
-            const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+            const rgbShadowCSS = toCSS(shadowRGB);
             Object.keys(minecraftColors).forEach((key) => {
               if (result[3]?.includes(key))
                 color = minecraftColors[key as keyof typeof minecraftColors];
@@ -179,7 +179,7 @@ export default component$(() => {
                 key={`char${i}`}
                 style={{
                   color,
-                  textShadow: `${shadowLength} 0 ${shadowColor}`,
+                  textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
                 }}
                 class={getFormattingClasses({
                   underline: result[3]?.includes('&n'),

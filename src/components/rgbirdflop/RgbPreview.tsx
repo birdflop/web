@@ -14,6 +14,7 @@ import {
   getEffectiveFormatting,
   getFormattingClasses,
   getFormattingSignature,
+  toCSS,
 } from './preview';
 
 export interface RgbPreviewProps {
@@ -94,9 +95,9 @@ export default component$<RgbPreviewProps>(
 
     return segments.map((segment, i) => {
       const rgb = gradientColors[segment.bucketIndex];
-      const rgbCSS = `rgba(${rgb.slice(0, 3).join(',')}, ${rgb[3] !== undefined ? rgb[3] / 255 : 1})`;
+      const rgbCSS = toCSS(rgb);
       const rgbShadow = shadowColors[segment.bucketIndex];
-      const rgbShadowCSS = `rgba(${rgbShadow?.slice(0, 3).join(',')}, ${rgbShadow && rgbShadow[3] !== undefined ? rgbShadow[3] / 255 : 1})`;
+      const rgbShadowCSS = toCSS(rgbShadow);
 
       let segmentText = segment.text;
       if (segment.formatting.font) {

@@ -112,7 +112,7 @@ export default component$(() => {
         </Link>
       </div>
 
-      <RgbAdvancedPreview />
+      <RgbAdvancedPreview q:slot="input" />
 
       <SegmentInspector q:slot="input-extra" />
 
