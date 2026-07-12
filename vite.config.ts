@@ -120,36 +120,6 @@ export default defineConfig({
     ],
   },
 
-  build: {
-    rollupOptions: {
-      output: {
-        // Sanitize chunk filenames to prevent relative path substitutions
-        chunkFileNames: (chunkInfo) => {
-          let name = chunkInfo.name;
-
-          // If the chunk name contains node_modules or relative paths, clean it up
-          if (name.includes('node_modules') || name.includes('..')) {
-            // Strip out path separators, dots, and node_modules to make it a safe flat string
-            name = name
-              .replace(/[^a-zA-Z0-9-_]/g, '-') // Replace symbols with dashes
-              .replace(/-+/g, '-')             // Collapse duplicate dashes
-              .replace(/^-|-$/g, '');          // Trim leading/trailing dashes
-          }
-
-          return `assets/${name}-[hash].js`;
-        },
-        // Apply the same treatment to entry files just in case
-        entryFileNames: (chunkInfo) => {
-          let name = chunkInfo.name;
-          if (name.includes('node_modules') || name.includes('..')) {
-            name = name.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          }
-          return `assets/${name}-[hash].js`;
-        }
-      }
-    }
-  },
-
   // All Qwik libraries should be bundled in the server build.
   ssr: {
     noExternal: qwikDeps,
