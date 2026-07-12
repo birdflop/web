@@ -11,6 +11,8 @@ import {
   GalleryHorizontalEnd,
   Github,
   Link as LinkIcon,
+  MemoryStick,
+  MessageSquare,
   Palette,
   Presentation,
   Rainbow,
@@ -38,7 +40,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-8 border-b pb-4">
         {t(
-          'nav.resources.description@@Here you can find all of Birdflop\'s public resources.',
+          "nav.resources.description@@Here you can find all of Birdflop's public resources.",
         )}
       </p>
 
@@ -187,6 +189,48 @@ export default component$(() => {
           <p class="text-lum-text-secondary">
             {t(
               'nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.',
+            )}
+          </p>
+        </Link>
+        <Link
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-green relative transition-all duration-200!"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+          href="/resources/hardware"
+        >
+          <Blobs
+            color="green"
+            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
+            style={{ transform: 'translateZ(-10px)' }}
+          />
+          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+            <MemoryStick size={30} />
+            {t('nav.resources.hardware.title@@RAM & Hardware Planner')}
+          </h3>
+          <p class="text-lum-text-secondary">
+            {t(
+              'nav.resources.hardware.description@@Estimate the RAM, CPU and storage your server needs from players, distances and plugins.',
+            )}
+          </p>
+        </Link>
+        <Link
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-blue relative transition-all duration-200!"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+          href="/resources/motd"
+        >
+          <Blobs
+            color="blue"
+            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
+            style={{ transform: 'translateZ(-10px)' }}
+          />
+          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+            <MessageSquare size={30} />
+            {t('nav.resources.motd.title@@MOTD Designer')}
+          </h3>
+          <p class="text-lum-text-secondary">
+            {t(
+              'nav.resources.motd.description@@Design your server list MOTD with colors, formatting and a favicon, then export to server.properties.',
             )}
           </p>
         </Link>

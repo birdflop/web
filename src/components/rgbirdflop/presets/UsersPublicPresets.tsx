@@ -66,7 +66,7 @@ export default component$(
     userPresets,
     errors,
   }: {
-    userInfo: User;
+    userInfo: User | null;
     userPresets: PublicPreset[];
     errors: string[];
   }) => {
