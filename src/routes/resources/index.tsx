@@ -40,7 +40,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-8 border-b pb-4">
         {t(
-          "nav.resources.description@@Here you can find all of Birdflop's public resources.",
+          'nav.resources.description@@Here you can find all of Birdflop\'s public resources.',
         )}
       </p>
 

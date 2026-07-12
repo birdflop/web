@@ -323,8 +323,8 @@ export default component$(() => {
 
           ...(settingsStore.flopbird?.toggle
             ? {
-                transform: 'translate(-100%, -100%)',
-              }
+              transform: 'translate(-100%, -100%)',
+            }
             : {}),
         }}
       >
