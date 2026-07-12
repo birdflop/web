@@ -82,8 +82,8 @@ type PluginSourceComponent = {
 
 const Modrinth = component$(({ noDescription }: PluginSourceComponent) => (
   <span class="text-left">
-    <span class="flex items-center gap-2">
-      <SiModrinth class="fill-current" size={20} />
+    <span class="flex items-center gap-2 fill-current">
+      <SiModrinth size={20} />
       Modrinth
       <br />
     </span>
@@ -99,8 +99,8 @@ const Modrinth = component$(({ noDescription }: PluginSourceComponent) => (
 
 const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => (
   <span class="text-left">
-    <span class="flex items-center gap-2">
-      <SiSpigotmc class="fill-current" size={20} />
+    <span class="flex items-center gap-2 fill-current">
+      <SiSpigotmc size={20} />
       SpigotMC
       <br />
     </span>
@@ -116,8 +116,8 @@ const SpigotMC = component$(({ noDescription }: PluginSourceComponent) => (
 
 /*
 const GitHub = component$(({ noDescription }: PluginSourceComponent) => <span class="text-left">
-  <span class="flex items-center gap-2">
-    <SiGithub class="fill-current" size={20} />
+  <span class="flex items-center gap-2 fill-current">
+    <SiGithub size={20} />
     GitHub<br/>
   </span>
   {!noDescription
@@ -249,7 +249,9 @@ export default component$(() => {
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
-        .setDescription(`There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`)
+        .setDescription(
+          `There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`
+        )
         .setBgColor('lum-grad-bg-red/50');
       notifications.push(notification);
     }
@@ -416,7 +418,9 @@ export default component$(() => {
                       .catch((err) => {
                         notification
                           .setTitle('Failed to copy plugins to clipboard')
-                          .setDescription(err instanceof Error ? err.message : String(err))
+                          .setDescription(
+                            err instanceof Error ? err.message : String(err)
+                          )
                           .setBgColor('lum-grad-bg-red/50')
                           .setPersist(true);
                       });

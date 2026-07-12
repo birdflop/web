@@ -212,16 +212,16 @@ export default component$(() => {
         <div class="flex gap-2">
           <a
             href="https://www.trustpilot.com/review/birdflop.com"
-            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1 fill-current"
           >
-            <SiTrustpilot class="fill-current" />
+            <SiTrustpilot />
             Trustpilot
           </a>
           <a
             href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8"
-            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1 fill-current"
           >
-            <SiGoogle class="fill-current" />
+            <SiGoogle />
             Google
           </a>
         </div>

@@ -268,7 +268,7 @@ const Pagination = component$(
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context'
 );
-export const savedPresetsContext = createContextId<Signal<PublicPreset[]>>(
+export const savedPresetsContext = createContextId<Signal<PresetPartial[]>>(
   'savedpresets-context'
 );
 export default component$(() => {

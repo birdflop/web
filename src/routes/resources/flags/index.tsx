@@ -34,8 +34,8 @@ import { deepTrack } from '~/util/track';
 import Output from '~/components/Elements/Output';
 
 const Linux = component$(() => (
-  <span class="flex items-center gap-2">
-    <SiLinux class="fill-current" size={20} /> Linux
+  <span class="flex items-center gap-2 fill-current">
+    <SiLinux size={20} /> Linux
   </span>
 ));
 
@@ -46,14 +46,14 @@ const Windows = component$(() => (
 ));
 
 const MacOS = component$(() => (
-  <span class="flex items-center gap-2">
-    <SiApple class="fill-current" size={20} /> MacOS
+  <span class="flex items-center gap-2 fill-current">
+    <SiApple size={20} /> MacOS
   </span>
 ));
 
 const Pterodactyl = component$(() => (
-  <span class="flex items-center gap-2">
-    <SiPterodactyl class="fill-current" size={20} /> Pterodactyl
+  <span class="flex items-center gap-2 fill-current">
+    <SiPterodactyl size={20} /> Pterodactyl
   </span>
 ));
 
@@ -72,8 +72,8 @@ const environmentOptions = [
 ];
 
 const Spigot = component$(() => (
-  <span class="flex items-center gap-2">
-    <SiSpigotmc class="fill-current" size={20} /> Spigot
+  <span class="flex items-center gap-2 fill-current">
+    <SiSpigotmc size={20} /> Spigot
   </span>
 ));
 
@@ -90,8 +90,8 @@ const Purpur = component$(() => (
 ));
 
 const Velocity = component$(() => (
-  <span class="flex items-center gap-2">
-    <SiVelocity class="fill-current" size={20} /> Velocity
+  <span class="flex items-center gap-2 fill-current">
+    <SiVelocity size={20} /> Velocity
   </span>
 ));
 

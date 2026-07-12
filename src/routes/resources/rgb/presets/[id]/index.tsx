@@ -203,7 +203,11 @@ export default component$(() => {
             {presetInfo.author == 'SimplyMC' && (
               <Luminescent size={32} class="text-luminescent-300" />
             )}
-            {presetInfo.author.includes('GitHub') && <SiGithub size={32} />}
+            {presetInfo.author.includes('GitHub') && (
+              <span class="fill-current">
+                <SiGithub size={32} />
+              </span>
+            )}
             {presetInfo.author}
           </>
         )}

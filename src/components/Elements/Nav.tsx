@@ -398,14 +398,14 @@ export const SocialButtons = component$(() => {
       <a
         href="https://github.com/birdflop/web"
         title="GitHub"
-        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg fill-current p-2"
       >
         <SiGithub size={20} />
       </a>
       <a
         href={discordLink}
         title="Discord"
-        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg fill-current p-2"
         data-umami-event="discord-link"
         data-umami-source="nav"
       >

@@ -121,7 +121,11 @@ export default component$<PresetPreviewProps>(
                   {Preset.author == 'Luminescent' && (
                     <Luminescent size={20} class="text-luminescent-300" />
                   )}
-                  {Preset.author.includes('GitHub') && <SiGithub size={20} />}
+                  {Preset.author.includes('GitHub') && (
+                    <span class="fill-current">
+                      <SiGithub size={20} />
+                    </span>
+                  )}
                   {Preset.author}
                 </>
               )}

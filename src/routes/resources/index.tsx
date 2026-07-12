@@ -240,14 +240,14 @@ export default component$(() => {
       </p>
       <div class="mt-2 flex gap-2">
         <a
-          class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
+          class="lum-btn lum-bg-blue/50 hover:lum-bg-blue fill-current"
           href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot"
         >
           <SiDiscord size={20} />
           Invite
         </a>
         <a
-          class="lum-btn lum-bg-transparent"
+          class="lum-btn lum-bg-transparent fill-current"
           href="https://github.com/birdflop/botflop"
         >
           <SiGithub size={20} />
@@ -312,14 +312,14 @@ export default component$(() => {
       </ul>
       <div class="mt-2 flex gap-2">
         <a
-          class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan"
+          class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan fill-current"
           href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot"
         >
           <SiDiscord size={20} />
           Invite
         </a>
         <a
-          class="lum-btn lum-bg-transparent"
+          class="lum-btn lum-bg-transparent fill-current"
           href="https://github.com/birdflop/birdtickets"
         >
           <SiGithub size={20} />

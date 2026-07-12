@@ -63,13 +63,9 @@ export default component$<PluginCardProps>(
                 )}
               </p>
             )}
-            <p class="flex items-center gap-2">
-              {plugin.type === 'spigot' && !plugin.iconUrl && (
-                <SiSpigotmc class="fill-yellow" />
-              )}
-              {plugin.type === 'modrinth' && !plugin.iconUrl && (
-                <SiModrinth class="fill-green" />
-              )}
+            <p class="flex items-center gap-2 fill-current">
+              {plugin.type === 'spigot' && !plugin.iconUrl && <SiSpigotmc />}
+              {plugin.type === 'modrinth' && !plugin.iconUrl && <SiModrinth />}
               {plugin.iconUrl && (
                 <img
                   src={plugin.iconUrl}
@@ -202,9 +198,9 @@ export default component$<PluginCardProps>(
               <a
                 href={plugin.sourceCodeLink}
                 target="_blank"
-                class="lum-btn rounded-lum-2 p-2"
+                class="lum-btn rounded-lum-2 fill-current p-2"
               >
-                <SiGithub size={16} class="fill-current" />
+                <SiGithub size={16} />
               </a>
             )}
             {plugin.type === 'spigot' && (
@@ -213,17 +209,17 @@ export default component$<PluginCardProps>(
                   <a
                     href={plugin.file?.externalUrl}
                     target="_blank"
-                    class="lum-btn rounded-lum-2 lum-grad-bg-green p-2"
+                    class="lum-btn rounded-lum-2 lum-grad-bg-green fill-current p-2"
                   >
-                    <SiModrinth size={16} class="fill-current" />
+                    <SiModrinth size={16} />
                   </a>
                 )}
                 <a
                   href={`https://www.spigotmc.org/resources/${plugin.id}`}
                   target="_blank"
-                  class="lum-btn rounded-lum-2 lum-grad-bg-yellow p-2"
+                  class="lum-btn rounded-lum-2 lum-grad-bg-yellow fill-current p-2"
                 >
-                  <SiSpigotmc size={16} class="fill-current" />
+                  <SiSpigotmc size={16} />
                 </a>
               </>
             )}
@@ -232,9 +228,9 @@ export default component$<PluginCardProps>(
                 <a
                   href={`https://modrinth.com/plugin/${plugin.id}`}
                   target="_blank"
-                  class="lum-btn rounded-lum-2 lum-grad-bg-green p-2"
+                  class="lum-btn rounded-lum-2 lum-grad-bg-green fill-current p-2"
                 >
-                  <SiModrinth size={16} class="fill-current" />
+                  <SiModrinth size={16} />
                 </a>
               </>
             )}

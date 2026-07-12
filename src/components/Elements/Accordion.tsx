@@ -62,7 +62,9 @@ export default component$(
           openItems.value = await toggleAccordion(sectionName, openItems.value);
         }}
       >
-        <Slot />
+        <span class="flex items-center gap-2">
+          <Slot />
+        </span>
       </Dropdown>
     );
   }
