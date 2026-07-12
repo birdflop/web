@@ -22,7 +22,6 @@ import {
   setUserData,
   unsavePreset,
 } from '~/util/dataUtils';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import {
   privatePresetsContext,
   savedPresetsContext,
@@ -32,6 +31,7 @@ import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
 import { useIsAdmin } from '~/routes/layout';
 import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import RgbPreview from '../RgbPreview';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
@@ -166,15 +166,10 @@ export default component$<PresetPreviewProps>(
                 defaults?.colorFormat?.class,
             }}
           >
-            {renderPreview(
-              {
-                ...rgbDefaults,
-                ...defaults,
-                ...Preset.preset,
-                text: Preset.name,
-              },
-              3
-            )}
+            <RgbPreview
+              rgbStore={{ ...rgbDefaults, ...defaults, ...Preset.preset }}
+              shadowLength={3}
+            />
           </p>
 
           {Preset.description && (

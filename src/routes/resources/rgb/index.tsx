@@ -16,12 +16,12 @@ import {
 import Palette from 'lucide-icons-qwik/icons/Palette';
 import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
-import { renderPreview } from '~/components/rgbirdflop/preview';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
+import AllGradientsPreview from '~/components/rgbirdflop/AllGradientsPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
@@ -80,16 +80,18 @@ export default component$(() => {
           )}
         </Link>
       </div>
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-            (gradientType) =>
-              renderPreview(
-                { ...rgbStore, gradientType },
-                previewStyle.value == 'default' ? 4 : 2
-              ),
-            rgbStore.gradientType
-          )
-        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+
+      {showAllGradients.value ? (
+        <AllGradientsPreview
+          q:slot="input"
+          shadowLength={previewStyle.value == 'default' ? 4 : 2}
+        />
+      ) : (
+        <RgbPreview
+          q:slot="input"
+          shadowLength={previewStyle.value == 'default' ? 4 : 2}
+        />
+      )}
     </RGBirdflop>
   );
 });

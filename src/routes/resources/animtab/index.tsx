@@ -1,5 +1,6 @@
 import {
   component$,
+  createContextId,
   isBrowser,
   useContext,
   useContextProvider,
@@ -16,7 +17,6 @@ import {
   AnimationOutput,
   animTABDefaults,
   generateAnimTABFrames,
-  hexToRGB,
   rgbDefaults,
 } from '@birdflop/rgbirdflop';
 import {
@@ -28,11 +28,6 @@ import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
 import Braces from 'lucide-icons-qwik/icons/Braces';
 import { inlineTranslate } from 'qwik-speak';
 import { deepTrack } from '~/util/track';
-import {
-  EmptyPreview,
-  getEffectiveFormatting,
-  getFormattingClasses,
-} from '~/components/rgbirdflop/preview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
@@ -40,7 +35,7 @@ import RGBirdflop, {
 import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import AnimTabPreview from '~/components/rgbirdflop/animtab/AnimTabPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
@@ -60,57 +55,8 @@ export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
   return cookies;
 });
 
-function renderFrames(
-  rgbStore: typeof rgbDefaults,
-  animtabStore: typeof animTABDefaults,
-  currentFrameIndex: number,
-  shadowLength: string = '4px 4px'
-) {
-  if (!rgbStore.text || rgbStore.text.trim() === '') return EmptyPreview;
-  // Generate frames for this specific gradient type
-  const { frames: framesList } = generateAnimTABFrames(rgbStore, animtabStore);
-
-  if (!framesList[0]) return EmptyPreview;
-  const colors = framesList[currentFrameIndex % framesList.length];
-  if (!colors) return EmptyPreview;
-
-  const segments = [
-    ...rgbStore.text.matchAll(new RegExp(`.{1,${rgbStore.colorLength}}`, 'g')),
-  ];
-  let charIndex = 0;
-  return segments.map((segment, segmentIndex) => {
-    const segmentText = segment[0];
-    const segmentStart = charIndex;
-    charIndex += segmentText.length;
-    const color = `#${colors[segmentIndex]}`;
-    const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
-    const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-    const output = Array.from(segmentText).map((char, offset) => {
-      const formatting = getEffectiveFormatting(
-        rgbStore,
-        segmentStart + offset
-      );
-      return (
-        <span
-          key={`char${segmentStart + offset}`}
-          style={{
-            color,
-            textShadow: `${shadowLength} 0 ${shadowColor};`,
-          }}
-          class={getFormattingClasses(formatting)}
-        >
-          {char}
-        </span>
-      );
-    });
-    return (
-      <span key={`segment-${segmentStart}`} q:slot="input">
-        {output}
-      </span>
-    );
-  });
-}
-
+export const animtabStoreContext =
+  createContextId<typeof animTABDefaults>('animtab-store');
 export default component$(() => {
   const t = inlineTranslate();
   const { cookies: rgbCookies, errors: rgbErrors } = useRGBCookies().value;
@@ -133,6 +79,7 @@ export default component$(() => {
     },
     { deep: true }
   );
+  useContextProvider(animtabStoreContext, animtabStore);
 
   const selection = useSignal<Selection>();
   useContextProvider(selectionContext, selection);
@@ -207,23 +154,10 @@ export default component$(() => {
         )}
       </p>
 
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-            (gradientType) =>
-              renderFrames(
-                { ...rgbStore, gradientType },
-                animtabStore,
-                framesStore.current,
-                previewStyle.value == 'default' ? '4px 4px' : '2px 2px'
-              ),
-            rgbStore.gradientType
-          )
-        : renderFrames(
-            rgbStore,
-            animtabStore,
-            framesStore.current,
-            previewStyle.value == 'default' ? '4px 4px' : '2px 2px'
-          )}
+      <AnimTabPreview
+        currentFrameIndex={framesStore.current}
+        shadowLength={previewStyle.value == 'default' ? 4 : 2}
+      />
 
       <Label for="length" label={t('animtab.length@@Gradient Length')}>
         <NumberInput

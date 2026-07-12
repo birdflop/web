@@ -19,7 +19,6 @@ import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import { Link, useLocation } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
@@ -32,6 +31,7 @@ import Accordion from '~/components/Elements/Accordion';
 import { discordLink } from '~/components/Elements/Nav';
 import { SelectList } from '~/components/Elements/SelectList';
 import { PublicPreset } from '~/util/db';
+import RgbPreview from '../RgbPreview';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -242,10 +242,10 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               class="flex-1 p-1.5 pl-3 text-left"
               onClick$={() => loadPresetJSON(JSON.stringify(preset))}
             >
-              {renderPreview(
-                { ...rgbDefaults, text: rgbStore.text, ...preset },
-                1
-              )}
+              <RgbPreview
+                rgbStore={{ ...rgbDefaults, text: rgbStore.text, ...preset }}
+                shadowLength={1}
+              />
             </button>
             <button
               class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 text-lum-text-secondary mr-1.5 cursor-pointer p-1.5 hover:text-red-500"
@@ -295,10 +295,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               class="flex-1 p-1.5 pl-3 text-left"
               onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}
             >
-              {renderPreview(
-                { ...rgbDefaults, text: Preset.name, ...Preset.preset },
-                1
-              )}
+              <RgbPreview
+                rgbStore={{
+                  ...rgbDefaults,
+                  text: Preset.name,
+                  ...Preset.preset,
+                }}
+                shadowLength={1}
+              />
             </button>
             <a
               href={`presets/${Preset.id}`}

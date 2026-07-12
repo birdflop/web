@@ -8,7 +8,6 @@ import Plus from 'lucide-icons-qwik/icons/Plus';
 import Save from 'lucide-icons-qwik/icons/Save';
 import X from 'lucide-icons-qwik/icons/X';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -17,6 +16,7 @@ import { inlineTranslate } from 'qwik-speak';
 import { publishPreset } from '~/util/dataUtils';
 import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
 import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
+import RgbPreview from '../RgbPreview';
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
@@ -259,7 +259,9 @@ export default component$(() => {
                                 preset.colorFormat?.class,
                             }}
                           >
-                            {renderPreview({ ...rgbDefaults, ...preset }, 1)}
+                            <RgbPreview
+                              rgbStore={{ ...rgbDefaults, ...preset }}
+                            />
                           </span>
                         ),
                         value: JSON.stringify(preset),

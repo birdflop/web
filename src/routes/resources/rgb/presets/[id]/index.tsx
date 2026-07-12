@@ -25,7 +25,6 @@ import { Link, routeLoader$ } from '@qwik.dev/router';
 import { NotificationContext, Notification } from '~/util/Notification';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { SelectMenu } from '@luminescent/ui-qwik';
 import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
@@ -41,6 +40,7 @@ import { eq } from 'drizzle-orm';
 import { useIsAdmin } from '~/routes/layout-profile';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
 import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -357,7 +357,10 @@ export default component$(() => {
             {t('rgb.presets.preview@@Preset Preview')}
           </h3>
           <Input noLabel>
-            {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+            <RgbPreview
+              q:slot="input"
+              shadowLength={previewStyle.value == 'default' ? 4 : 2}
+            />
           </Input>
         </div>
 

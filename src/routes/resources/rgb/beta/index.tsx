@@ -30,10 +30,9 @@ import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
 import Options from '~/components/rgbirdflop/Options';
 import SegmentInspector from '~/components/rgbirdflop/advanced/SegmentInspector';
-import { renderAdvancedPreview } from '~/components/rgbirdflop/advanced/preview';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEditor';
 import { openItemsContext } from '~/routes/layout-profile';
+import RgbAdvancedPreview from '~/components/rgbirdflop/advanced/RgbAdvancedPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   return getCookies<Partial<typeof rgbDefaults>>(
@@ -113,16 +112,7 @@ export default component$(() => {
         </Link>
       </div>
 
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-            (gradientType) =>
-              renderAdvancedPreview(rgbSegments.value, {
-                ...rgbStore,
-                gradientType,
-              }),
-            rgbStore.gradientType
-          )
-        : renderAdvancedPreview(rgbSegments.value, rgbStore)}
+      <RgbAdvancedPreview />
 
       <SegmentInspector q:slot="input-extra" />
 
