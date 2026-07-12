@@ -10,7 +10,7 @@ import {
   useVisibleTask$,
 } from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$ } from '@qwik.dev/router';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import {
   ANIMATION_STYLES,
@@ -36,6 +36,7 @@ import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
 import AnimTabPreview from '~/components/rgbirdflop/animtab/AnimTabPreview';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
@@ -138,21 +139,29 @@ export default component$(() => {
       errors={[...rgbErrors, ...animTABErrors]}
       output={AnimationOutput(rgbStore, animtabStore)}
     >
-      <h1
-        class="my-2 flex items-center gap-3 text-2xl font-extrabold"
-        q:slot="header"
-      >
-        <Rainbow size={32} />
-        {t('nav.resources.animatedTAB.title@@Animated TAB')}
-      </h1>
-      <p
-        class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4"
-        q:slot="header"
-      >
-        {t(
-          'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
-        )}
-      </p>
+      <div class="flex items-start gap-2" q:slot="header">
+        <div class="flex flex-1 flex-col gap-1">
+          <h1
+            class="my-2 flex items-center gap-3 text-2xl font-extrabold"
+            q:slot="header"
+          >
+            <Rainbow size={32} />
+            {t('nav.resources.animatedTAB.title@@Animated TAB')}
+          </h1>
+          <p class="text-lum-text-secondary mb-2" q:slot="header">
+            {t(
+              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
+            )}
+          </p>
+        </div>
+        <Link
+          href="/resources/rgb"
+          class="lum-btn w-fit gap-2 p-2 text-sm whitespace-normal"
+        >
+          <Palette size={18} class="min-h-4 min-w-4" />
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        </Link>
+      </div>
 
       <AnimTabPreview
         currentFrameIndex={framesStore.current}
