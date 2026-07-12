@@ -38,7 +38,7 @@ if (
 }
 
 type PkgDep = Record<string, string>;
-const { dependencies = {}, devDependencies = {} } = pkg as any as {
+const { dependencies = {}, devDependencies = {} } = pkg as unknown as {
   dependencies: PkgDep;
   devDependencies: PkgDep;
   [key: string]: unknown;

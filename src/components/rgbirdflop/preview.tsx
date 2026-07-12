@@ -23,7 +23,7 @@ export function getEffectiveFormatting(
     if (segment.start <= index && index < segment.end) {
       for (const key of FORMAT_KEYS) {
         if (segment[key] !== undefined) {
-          (formatting as any)[key] = segment[key];
+          formatting[key] = segment[key];
         }
       }
       if (segment.font !== undefined) {

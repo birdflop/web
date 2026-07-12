@@ -11,7 +11,7 @@ declare interface typerElement extends Element {
     cursorDisplay?: string;
     owner?: string;
   };
-  style: any;
+  style: CSSStyleDeclaration;
 }
 
 export function initiateTyper() {
@@ -65,7 +65,7 @@ export function initiateTyper() {
     cursor: {
       element: typerElement;
       on: boolean;
-      interval: any;
+      interval: ReturnType<typeof setInterval>;
       updateBlinkState: () => void;
     };
     typing: boolean;

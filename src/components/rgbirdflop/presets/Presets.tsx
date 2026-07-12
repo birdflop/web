@@ -98,9 +98,9 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     if (!json) return;
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       if (rgbStore[key] === undefined) return;
-      if (key == 'text')
-        return ((rgbStore as any)[key] = json[key] ?? rgbStore[key]);
-      (rgbStore as any)[key] = json[key] ?? combinedDefaults[key];
+      if (key == 'text') return (rgbStore[key] = json[key] ?? rgbStore[key]);
+      (rgbStore as Record<keyof typeof combinedDefaults, unknown>)[key] =
+        json[key] ?? combinedDefaults[key];
     });
     notifications.push(notification);
   });

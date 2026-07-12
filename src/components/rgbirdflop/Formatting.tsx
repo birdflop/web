@@ -203,7 +203,7 @@ export default component$(() => {
 
   const toggleFlag = $((flag: FormatKey) => {
     void updateSelectionFormatting((fmt) => {
-      (fmt as any)[flag] = !(fmt as any)[flag];
+      fmt[flag] = !fmt[flag];
     });
   });
 
@@ -216,7 +216,7 @@ export default component$(() => {
   const clearFormatting = $(() => {
     void updateSelectionFormatting((fmt) => {
       for (const k of FORMAT_KEYS) {
-        (fmt as any)[k] = false;
+        fmt[k] = false;
       }
       fmt.font = undefined;
     }, true);
