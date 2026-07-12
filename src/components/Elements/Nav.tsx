@@ -231,6 +231,7 @@ export default component$(() => {
           <p q:slot="dropdown" class="text-lum-text flex items-center gap-2">
             {session.value.user.image && (
               <img
+                alt={session.value.user.name || 'User'}
                 src={session.value.user.image}
                 width={20}
                 height={20}

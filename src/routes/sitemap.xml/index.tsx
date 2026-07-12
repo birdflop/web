@@ -1,4 +1,4 @@
-import { useQwikRouter, type RequestHandler } from '@qwik.dev/router';
+import { type RequestHandler } from '@qwik.dev/router';
 import { routes } from '@qwik-router-config';
 import { createSitemap } from './create-sitemap';
 

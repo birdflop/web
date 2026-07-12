@@ -58,13 +58,14 @@ export default component$(() => {
           <h1 class="mb-2 flex items-center gap-4 text-3xl font-extrabold">
             {session.value.user.image && (
               <img
+                alt={session.value.user.name || 'User'}
                 src={session.value.user.image}
                 width={36}
                 height={36}
                 class="h-9 w-9 rounded-full!"
               />
             )}
-            {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+            {t('nav.profile.hey@@Hey')}, {session.value.user.name || 'User'}!
             {isAdmin && (
               <Link href="/admin" class="lum-btn">
                 <AppWindow />

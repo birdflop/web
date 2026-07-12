@@ -44,7 +44,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -75,6 +77,7 @@ export default component$(() => {
             width={48}
             height={48}
             class="rounded-full!"
+            alt={userInfo.name || 'User'}
           />
         )}
         {userInfo?.name || 'User'}

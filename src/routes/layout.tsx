@@ -42,6 +42,7 @@ import {
 import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
 import birdThreeJS from '~/util/birdThreeJS';
 import { languages } from '~/speak-config';
+import { Session } from '@auth/qwik';
 
 export type Settings = {
   cookies?: boolean;
@@ -66,7 +67,8 @@ export type FlopbirdStore = {
 export const checkAdmin = function (props: RequestEventBase) {
   const { env, sharedMap } = props;
 
-  const session = sharedMap.get('session');
+  const session = sharedMap.get('session') as Session;
+  if (!session?.user?.id) return false;
   const admins =
     env
       .get('ADMINS')
@@ -82,10 +84,11 @@ export const isAdmin = server$(function () {
 export const useIsAdmin = routeLoader$((props) => checkAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
-  const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {
-    cookies: Settings;
-    errors: string[];
-  };
+  const settingsCookies = getCookies<Settings>(
+    cookie,
+    'settings',
+    url.searchParams
+  );
 
   const theme = settingsCookies.cookies.theme || 'dark';
 

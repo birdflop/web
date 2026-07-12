@@ -20,10 +20,6 @@ export interface Config {
   };
 }
 
-type DefaultConfig = {
-  [key in AvailableConfig]: any;
-};
-
 export const config: Config = {
   fileName: {
     type: v.pipe(v.string(), v.minLength(1), v.maxLength(25)),

@@ -36,11 +36,19 @@ import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEdi
 import { openItemsContext } from '~/routes/layout-profile';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams);
+  return getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
 });
 
 export const useSegmentsCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgbsegments', url.searchParams);
+  return getCookies<{ segments: SegmentType[] }>(
+    cookie,
+    'rgbsegments',
+    url.searchParams
+  );
 });
 export default component$(() => {
   const t = inlineTranslate();

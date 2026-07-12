@@ -356,33 +356,6 @@ export function sortColors(colors: ColorStop[]) {
   return [...colors].sort((a, b) => a.pos - b.pos);
 }
 
-export function swapItems(array: any[], indexA: number, indexB: number) {
-  const arrLength = array.length;
-  if (arrLength === 0) return [...array];
-
-  const wrap = (i: number) => ((i % arrLength) + arrLength) % arrLength;
-  const a = wrap(indexA);
-  const b = wrap(indexB);
-
-  const arr = [...array];
-
-  const hasA = a in arr;
-  const hasB = b in arr;
-  if (!hasA || !hasB) return arr;
-
-  const itemA = arr[a];
-  const itemB = arr[b];
-  if (itemA && itemB && 'pos' in itemA && 'pos' in itemB) {
-    const currentPos = itemA.pos;
-    itemA.pos = itemB.pos;
-    itemB.pos = currentPos;
-  }
-
-  [arr[a], arr[b]] = [arr[b], arr[a]];
-
-  return arr;
-}
-
 export function generateOutput(rgbOptions: typeof rgbDefaults) {
   const colors = sortColors(rgbOptions.colors);
   const shadowColors = rgbOptions.shadowColors

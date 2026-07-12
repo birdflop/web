@@ -117,7 +117,10 @@ describe('dataUtils', () => {
         set: vi.fn(),
       } as any;
 
-      const { cookies, errors } = getCookies(mockCookie, 'rgb');
+      const { cookies, errors } = getCookies<Partial<typeof rgbDefaults>>(
+        mockCookie,
+        'rgb'
+      );
       expect(errors).toHaveLength(0);
       expect(cookies.colorLength).toBe(5);
       expect(cookies.disperse).toBe(true);
@@ -134,7 +137,10 @@ describe('dataUtils', () => {
         set: vi.fn(),
       } as any;
 
-      const { cookies, errors } = getCookies(mockCookie, 'rgb');
+      const { cookies, errors } = getCookies<Partial<typeof rgbDefaults>>(
+        mockCookie,
+        'rgb'
+      );
       expect(errors.length).toBeGreaterThan(0);
       expect(cookies.colorLength).toBe(1); // Reset to 1
     });

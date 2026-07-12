@@ -128,10 +128,7 @@ export const softwareOptions = [
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: any;
-    errors: string[];
-  } = getCookies(cookie, 'parsed', url.searchParams);
+  const cookies = getCookies(cookie, 'parsed', url.searchParams);
   return cookies;
 });
 

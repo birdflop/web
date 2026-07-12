@@ -623,6 +623,7 @@ export default component$(() => {
                         class="lum-card relative w-24 gap-0 p-0"
                       >
                         <img
+                          alt={`${texture.name} frame ${i + 1}`}
                           width={96}
                           height={96}
                           class={{

@@ -43,18 +43,20 @@ import { openItemsContext } from '~/routes/layout-markdown';
 import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 
 export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof animTABDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'animtab', url.searchParams);
+  const cookies = getCookies<Partial<typeof animTABDefaults>>(
+    cookie,
+    'animtab',
+    url.searchParams
+  );
   return cookies;
 });
 

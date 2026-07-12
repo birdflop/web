@@ -27,6 +27,9 @@ importers:
       '@birdflop/rgbirdflop':
         specifier: workspace:*
         version: link:packages/rgbirdflop
+      '@builder.io/qwik-city':
+        specifier: ^1.20.0
+        version: 1.20.0(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.4)(rollup@4.62.2)(sass@1.98.0)(stylus@0.62.0)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.9.0)
       '@luminescent/icons-qwik':
         specifier: ^0.1.0
         version: 0.1.0
@@ -203,6 +206,10 @@ packages:
 
   '@blazediff/core@1.9.1':
     resolution: {integrity: sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA==}
+
+  '@builder.io/qwik-city@1.20.0':
+    resolution: {integrity: sha512-gvw75M0yMDMelF/v56x4P1sLccEYT7jmfGZeWSV4c9KCrVAbY+Sp/w/R3c7WodGztWFRF37n1APXbbxhLIP6vw==}
+    engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
 
   '@builder.io/qwik@1.20.0':
     resolution: {integrity: sha512-mPnENUgyOGYQW9UNGGeGP67hg8rI/hi4WQ0z/rM3PAgQl3UjfreBxyj1njxvSLAz5nei6yD20/W/eywVIxOCIw==}
@@ -3634,6 +3641,10 @@ packages:
     peerDependencies:
       vite: '>=7.0.0'
 
+  vite-imagetools@9.0.3:
+    resolution: {integrity: sha512-FwjApRNZyN+RucPW9Z9kf0dyzyi3r3zlDfrTnzHXNaYpmT3pZ5w//d6QkApy1iypbDm+3fq+Gwfv+PYA4j4uYw==}
+    engines: {node: '>=20.0.0'}
+
   vite-plus@0.2.4:
     resolution: {integrity: sha512-gaBBjOXIq9lLRU44oAYdIr99p+JBLX1kxs+l/6LqGgSXwcVKAdDa1boSrOTELqYCkQQ0fpppXUGWi9o6JDT5zw==}
     engines: {node: ^20.19.0 || ^22.18.0 || >=24.11.0}
@@ -3754,6 +3765,39 @@ snapshots:
   '@babel/runtime@7.29.7': {}
 
   '@blazediff/core@1.9.1': {}
+
+  '@builder.io/qwik-city@1.20.0(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.4)(rollup@4.62.2)(sass@1.98.0)(stylus@0.62.0)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.9.0)':
+    dependencies:
+      '@mdx-js/mdx': 3.1.1
+      '@types/mdx': 2.0.13
+      source-map: 0.7.6
+      svgo: 3.3.3
+      undici: 7.28.0
+      valibot: 1.4.2(typescript@6.0.3)
+      vfile: 6.0.3
+      vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.9.0)'
+      vite-imagetools: 9.0.3(rollup@4.62.2)
+      zod: 3.25.48
+    transitivePeerDependencies:
+      - '@arethetypeswrong/core'
+      - '@types/node'
+      - '@vitejs/devtools'
+      - esbuild
+      - jiti
+      - less
+      - publint
+      - rollup
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - typescript
+      - unplugin-unused
+      - unrun
+      - yaml
 
   '@builder.io/qwik@1.20.0(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.9.0))':
     dependencies:
@@ -7000,6 +7044,14 @@ snapshots:
       imagetools-core: 9.1.0
       sharp: 0.34.5
       vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.4)(sass@1.98.0)(stylus@0.62.0)(tsx@4.21.0)(typescript@6.0.3)(yaml@2.9.0)'
+    transitivePeerDependencies:
+      - rollup
+
+  vite-imagetools@9.0.3(rollup@4.62.2):
+    dependencies:
+      '@rollup/pluginutils': 5.3.0(rollup@4.62.2)
+      imagetools-core: 9.1.0
+      sharp: 0.34.5
     transitivePeerDependencies:
       - rollup
 

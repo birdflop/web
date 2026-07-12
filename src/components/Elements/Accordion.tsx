@@ -5,9 +5,7 @@ import { openItemsContext } from '~/routes/layout';
 export const loadOpenItems = $(() => {
   try {
     const savedState = localStorage.getItem('openItems');
-    if (savedState) {
-      return JSON.parse(savedState);
-    }
+    if (savedState) return JSON.parse(savedState) as string[];
   } catch (err) {
     console.error('Error loading menu state:', err);
   }

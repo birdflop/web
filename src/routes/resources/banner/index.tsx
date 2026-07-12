@@ -25,12 +25,15 @@ import Trash from 'lucide-icons-qwik/icons/Trash';
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 import { openItemsContext } from '~/routes/layout';
-import { colors, patterns } from '~/util/banner';
-import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import Output from '~/components/Elements/Output';
 import { ButtonContainer } from '~/components/Elements/ButtonContainer';
+
+import colors from '~/util/banner/colors';
+import patterns from '~/util/banner/patterns';
+import swapItems from '~/util/banner/swapItems';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -132,12 +135,16 @@ export default component$(() => {
     baseTexture.minFilter = THREE.NearestFilter;
     baseTexture.magFilter = THREE.NearestFilter;
 
+    const texture = bannerTexture.value;
+    if (!texture) return;
+
     // Add objects to scene
     Object.entries(objects).forEach(([name, object]) => {
-      object.traverse((child: any) => {
-        if (child.isMesh) {
-          if (name === 'stand') child.material.map = baseTexture;
-          else child.material.map = bannerTexture.value;
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          const material = child.material as THREE.MeshStandardMaterial;
+          if (name === 'stand') material.map = baseTexture;
+          else material.map = texture;
         }
       });
       scene.add(object);
@@ -326,7 +333,9 @@ export default component$(() => {
                     }}
                   >
                     <img
-                      class="w-10"
+                      width={40}
+                      height={40}
+                      class="h-10 w-10"
                       src={`/banner/dyes/${colorName}_dye.png`}
                       alt={colorName}
                       style={{
@@ -482,7 +491,9 @@ export default component$(() => {
                               }}
                             >
                               <img
-                                class="w-7"
+                                width={28}
+                                height={28}
+                                class="h-7 w-7"
                                 src={`/banner/dyes/${colorName}_dye.png`}
                                 alt={colorName}
                                 style={{
@@ -509,7 +520,9 @@ export default component$(() => {
                               }}
                             >
                               <img
-                                class="rounded-lum w-9"
+                                width={36}
+                                height={72}
+                                class="rounded-lum h-18 w-9"
                                 src={`/banner/patterns/previews/${pattern}.png`}
                                 alt={pattern}
                                 style={{

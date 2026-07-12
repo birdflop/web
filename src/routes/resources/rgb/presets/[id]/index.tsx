@@ -118,7 +118,7 @@ export default component$(() => {
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
   (
-    Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
+    Object.entries(params) as Array<[keyof typeof combinedDefaults, unknown]>
   ).forEach(([key, value]) => {
     if (typeof value === 'object' && value !== null)
       value = JSON.stringify(value);
@@ -136,7 +136,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error parsing saved presets')
-        .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -383,7 +385,11 @@ export default component$(() => {
               )}
               <span class="text-lum-text-secondary font-mono">{key}:</span>
               <span class="font-mono">
-                {JSON.stringify(presetInfo.preset[key as keyof typeof presetInfo.preset], null, 2)}
+                {JSON.stringify(
+                  presetInfo.preset[key as keyof typeof presetInfo.preset],
+                  null,
+                  2
+                )}
               </span>
             </div>
           ))}

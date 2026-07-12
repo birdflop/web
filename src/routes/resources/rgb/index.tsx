@@ -24,10 +24,11 @@ import RGBirdflop, {
 } from '~/components/rgbirdflop/RGBirdflop';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 

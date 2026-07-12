@@ -134,7 +134,9 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       user,
     }));
   } catch (err) {
-    errors.push(`Error fetching presets: ${err instanceof Error ? err.message : String(err)}`);
+    errors.push(
+      `Error fetching presets: ${err instanceof Error ? err.message : String(err)}`
+    );
     console.error('Error fetching presets:', err);
   }
   return {
@@ -152,10 +154,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 });
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 
@@ -265,7 +268,7 @@ const Pagination = component$(
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context'
 );
-export const savedPresetsContext = createContextId<Signal<any[]>>(
+export const savedPresetsContext = createContextId<Signal<PublicPreset[]>>(
   'savedpresets-context'
 );
 export default component$(() => {
@@ -341,7 +344,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
