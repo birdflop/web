@@ -115,7 +115,7 @@ export default component$(() => {
             Your ID is:{' '}
             <button
               class="inline-flex cursor-pointer items-center gap-1 align-middle font-mono underline decoration-dotted"
-              onClick$={() => copyId(session.value.user!.id!)}
+              onClick$={() => copyId(session.value.user!.id ?? '')}
               title={t('nav.profile.clickToCopy@@Click to copy')}
             >
               {copied.value
