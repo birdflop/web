@@ -2,10 +2,9 @@
 
 ## [0.3.1](https://github.com/birdflop/web/compare/v0.3.0...v0.3.1) (2026-07-13)
 
-
 ### Code Refactoring
 
-* modularize banner utilities and improve codebase type safety and maintenance ([309c6e1](https://github.com/birdflop/web/commit/309c6e1ccc4c5069c1b64ed4de68a9bbb20d352c))
+- modularize banner utilities and improve codebase type safety and maintenance ([309c6e1](https://github.com/birdflop/web/commit/309c6e1ccc4c5069c1b64ed4de68a9bbb20d352c))
 
 ## [0.3.0](https://github.com/birdflop/web/compare/v0.2.0...v0.3.0) (2026-07-07)
 

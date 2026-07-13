@@ -57,7 +57,7 @@ export default component$(() => {
         .setDescription(`${error}`)
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     });
   });
 
@@ -131,7 +131,7 @@ export default component$(() => {
         )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     }
     if (!json) return;
     json = json[Object.keys(json)[0]];
@@ -200,7 +200,7 @@ export default component$(() => {
       <Label for="animation" label={t('animtab.yamlInput@@YAML Input')}>
         <textarea
           id="animation"
-          class={{ 'lum-input h-96 font-mono': true }}
+          class="lum-input h-96 font-mono"
           value={animprevStore.yaml}
           onInput$={(e, el) => {
             animprevStore.yaml = el.value;

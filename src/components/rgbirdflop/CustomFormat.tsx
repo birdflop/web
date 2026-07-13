@@ -16,11 +16,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="customformat"
     >
-      <div
-        class={{
-          'flex flex-col gap-2': true,
-        }}
-      >
+      <div class="flex flex-col gap-2">
         <Label
           for="customformat"
           label={t('rgb.colors.customFormat@@Custom Format')}
@@ -61,11 +57,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <p>$c = {t('rgb.colors.character@@Character')}</p>
         </div>
       </div>
-      <div
-        class={{
-          'flex flex-col gap-2': true,
-        }}
-      >
+      <div class="flex flex-col gap-2">
         {rgbStore.colorFormat.char != undefined &&
           !rgbStore.colorFormat.bold &&
           !rgbStore.colorFormat.italic &&

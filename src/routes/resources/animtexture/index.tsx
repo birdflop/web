@@ -258,7 +258,7 @@ export default component$(() => {
               >
                 <SelectMenu
                   id="namespace"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   customDropdown
                   values={[
                     { name: 'minecraft', value: 'minecraft' },
@@ -272,9 +272,7 @@ export default component$(() => {
                   <input
                     q:slot="extra-buttons"
                     id="namespace"
-                    class={{
-                      'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
-                    }}
+                    class="lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2"
                     placeholder="Custom"
                     onInput$={(e, el) => {
                       texture.namespace = el.value;
@@ -286,7 +284,7 @@ export default component$(() => {
               <Label for="path" label={t('animtexture.path@@Path')}>
                 <SelectMenu
                   id="path"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   customDropdown
                   values={[
                     { name: 'block', value: 'block' },
@@ -300,9 +298,7 @@ export default component$(() => {
                   <input
                     q:slot="extra-buttons"
                     id="path"
-                    class={{
-                      'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
-                    }}
+                    class="lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2"
                     placeholder={t('animtexture.custom@@Custom')}
                     onInput$={(e, el) => {
                       texture.path = el.value;
@@ -314,7 +310,7 @@ export default component$(() => {
               <Label for="name" label={t('animtexture.name@@Texture Name')}>
                 <input
                   id="name"
-                  class={{ 'lum-input': true }}
+                  class="lum-input"
                   value={texture.name}
                   onInput$={(e, el) => {
                     texture.name = el.value;
@@ -722,11 +718,7 @@ export default component$(() => {
             </Label>
           )}
         </div>
-        <div
-          class={{
-            'lum-card max-h-[70svh] w-24 overflow-y-scroll p-0': true,
-          }}
-        >
+        <div class="lum-card max-h-[70svh] w-24 overflow-y-scroll p-0">
           <canvas
             ref={textureCanvasRef}
             class="rounded-lum w-full"

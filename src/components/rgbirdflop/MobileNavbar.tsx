@@ -15,11 +15,7 @@ export default component$(() => {
   const rgbStore = useContext(rgbStoreContext);
 
   return (
-    <ButtonContainer
-      class={{
-        'overflow-scroll sm:hidden': true,
-      }}
-    >
+    <ButtonContainer class="overflow-scroll sm:hidden">
       <button
         onClick$={() => {
           openItems.value = openItems.value.includes('colors')

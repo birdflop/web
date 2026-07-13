@@ -283,9 +283,7 @@ export default component$(() => {
       {settingsStore.flopbird?.toggle && (
         <canvas
           ref={birdRef}
-          class={{
-            'pointer-events-none fixed inset-0 z-10 overflow-hidden blur-none': true,
-          }}
+          class="pointer-events-none fixed inset-0 z-10 overflow-hidden blur-none"
         />
       )}
 
@@ -421,11 +419,7 @@ export default component$(() => {
       </div>
       {showCookieConsent.value && settingsStore.cookies === undefined && (
         <div
-          class={{
-            'lum-grad-bg-lum-input-bg/60 fixed bottom-4 left-4': true,
-            'lum-card sm:rounded-lum min-w-84 gap-0 p-4 text-left backdrop-blur-xl': true,
-            'animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 duration-500': true,
-          }}
+          class="lum-grad-bg-lum-input-bg/60 lum-card sm:rounded-lum animate-in fade-in slide-in-from-bottom-8 sm:slide-in-from-left-8 fixed bottom-4 left-4 min-w-84 gap-0 p-4 text-left backdrop-blur-xl duration-500"
           style={{
             '--lum-border-radius': '1rem',
           }}

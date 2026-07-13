@@ -53,7 +53,7 @@
     "@builder.io/qwik-city": "^1.20.0",
     "@luminescent/icons-qwik": "^0.1.0",
     "@luminescent/ui": "^7.0.1",
-    "@luminescent/ui-qwik": "7.0.0-4",
+    "@luminescent/ui-qwik": "7.0.0-6",
     "@qwik.dev/core": "https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785",
     "@qwik.dev/partytown": "^0.14.0",
     "@qwik.dev/router": "https://pkg.pr.new/QwikDev/qwik/@qwik.dev/router@8785",

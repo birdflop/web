@@ -229,7 +229,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       .setTitle(textDecodedTitle)
       .setDescription(textDecodedDescription)
       .setBgColor('lum-grad-bg-green/50');
-    notifications.push(notification);
+    notifications.push(notification.toJSON());
   });
 
   return (
@@ -251,9 +251,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         </span>
         <textarea
           id="decode"
-          class={{
-            'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
-          }}
+          class="lum-input font-mc h-16 w-full whitespace-pre-wrap"
           placeholder={generateOutput(rgbStore)}
           onInput$={async (e, el) => {
             const threshold = document.getElementById(
@@ -275,7 +273,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           input
           value={threshold.value}
           id="threshold"
-          class={{ 'w-full': true }}
+          class="w-full"
           onInput$={async (e, el) => {
             threshold.value = Number(el.value);
             const decode = document.getElementById(

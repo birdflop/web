@@ -102,7 +102,7 @@ export default component$(() => {
           <div class="flex flex-col gap-1">
             <SelectMenu
               id="software"
-              class={{ 'w-full': true }}
+              class="w-full"
               value={store.software}
               onChange$={(e, el) => {
                 store.software = el.value as Software;
@@ -135,7 +135,12 @@ export default component$(() => {
           </Label>
 
           {/* Hidden (not unmounted) for proxies so slider state stays in sync. */}
-          <div class={{ 'flex flex-col gap-5': true, hidden: isProxy }}>
+          <div
+            class={{
+              'flex flex-col gap-5': true,
+              hidden: isProxy,
+            }}
+          >
             <Label
               for="view"
               label={`${t('hardware.view@@View distance')} (${store.viewDistance})`}
@@ -184,7 +189,7 @@ export default component$(() => {
             <Label for="world" label={t('hardware.world.title@@World size')}>
               <SelectMenu
                 id="world"
-                class={{ 'w-full': true }}
+                class="w-full"
                 value={store.worldSize}
                 onChange$={(e, el) => {
                   store.worldSize = el.value as WorldSize;

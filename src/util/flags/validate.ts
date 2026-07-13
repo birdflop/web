@@ -36,7 +36,10 @@ export function generateConfigSchema(
   const selectedOperatingSystem = operatingSystem[requestOperatingSystem];
   const selectedServerType = serverType[requestServerType];
 
-  for (const [key, value] of Object.entries(config) as [AvailableConfig, any][]) {
+  for (const [key, value] of Object.entries(config) as [
+    AvailableConfig,
+    any,
+  ][]) {
     if (
       !selectedOperatingSystem.config.includes(key) ||
       !selectedServerType.config.includes(key)

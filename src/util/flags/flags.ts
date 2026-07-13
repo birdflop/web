@@ -8,7 +8,10 @@ import type { AvailableServerType } from './environment/serverType';
 // TODO: Fabric, Forge, etc.
 
 export type AvailableFlags = keyof typeof flags;
-export type AvailableExtraFlags = 'vectors' | 'benchmarkedGraalVM' | 'meowiceGraalVM';
+export type AvailableExtraFlags =
+  | 'vectors'
+  | 'benchmarkedGraalVM'
+  | 'meowiceGraalVM';
 
 interface FlagOption {
   generate: Generate<

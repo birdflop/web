@@ -9,7 +9,7 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - '@luminescent/ui-qwik@6.9.0'
+  - '@luminescent/ui-qwik@6.9.0 || 7.0.0-5 || 7.0.0-6'
 
 onlyBuiltDependencies:
   - better-sqlite3

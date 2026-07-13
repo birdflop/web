@@ -1,12 +1,12 @@
-import type { JSXChildren, PropsOf, QRL } from '@qwik.dev/core';
+import { getClassObject } from '@luminescent/ui-qwik';
+import type { ClassList, JSXChildren, PropsOf, QRL } from '@qwik.dev/core';
 import { component$, Slot, useSignal } from '@qwik.dev/core';
 
 interface SelectListProps extends Omit<
   PropsOf<'select'>,
-  'class' | 'size' | 'onChange$'
+  'size' | 'onChange$'
 > {
-  btnClass?: string;
-  class?: { [className: string]: boolean };
+  btnClass?: ClassList;
   values?: {
     name: JSXChildren;
     value: string | number;
@@ -29,7 +29,7 @@ export const SelectList = component$<SelectListProps>(
       <div
         class={{
           'lum-card lum-grad-bg-lum-input-bg relative max-h-64 touch-manipulation gap-1 overflow-auto p-1': true,
-          ...Class,
+          ...getClassObject(Class),
         }}
       >
         {values && (
@@ -60,7 +60,7 @@ export const SelectList = component$<SelectListProps>(
                 'lum-btn rounded-lum-1': true,
                 'lum-grad-bg-lum-input-hover-bg hover:lum-bg-lum-input-bg/50':
                   selected.value == value,
-                [btnClass]: true,
+                ...getClassObject(btnClass),
               }}
               key={i}
               onClick$={() => {

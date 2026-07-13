@@ -49,7 +49,7 @@ export default component$(() => {
           .setDescription(`Error: ${error}`)
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
-        notifications.push(notification);
+        notifications.push(notification.toJSON());
       });
     }
   });

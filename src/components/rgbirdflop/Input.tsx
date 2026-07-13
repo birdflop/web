@@ -1,5 +1,6 @@
 import {
   $,
+  ClassList,
   component$,
   createContextId,
   Signal,
@@ -17,7 +18,7 @@ import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { getClassObject, SelectMenu } from '@luminescent/ui-qwik';
 import Formatting from '~/components/rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
 import {
@@ -70,8 +71,8 @@ const InputField = component$(
     readOnly,
     advanced,
   }: {
-    class?: string;
-    inputClass?: string;
+    class?: ClassList;
+    inputClass?: ClassList;
     readOnly?: boolean;
     advanced?: boolean;
   }) => {
@@ -111,14 +112,14 @@ const InputField = component$(
       <div
         class={{
           'focus-within:border-lum-accent relative break-all caret-white': true,
-          [`${className}`]: className,
+          ...getClassObject(className),
           [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
         }}
       >
         <p
           class={{
             'pointer-events-none whitespace-pre-wrap': true,
-            [`${inputClass}`]: inputClass,
+            ...getClassObject(inputClass),
           }}
           style={{ visibility: rawEdit.value ? 'hidden' : 'visible' }}
         >
@@ -132,7 +133,7 @@ const InputField = component$(
                 !rawEdit.value,
               'resize-none border-none bg-transparent text-white outline-none':
                 rawEdit.value,
-              [`${inputClass}`]: inputClass,
+              ...getClassObject(inputClass),
             }}
             value={
               advanced && rgbSegments
@@ -548,12 +549,7 @@ export default component$(
               <Slot name="input" />
             </DefaultInput>
           )}
-          <div
-            class={{
-              'flex items-center gap-1': true,
-              'absolute top-1 right-1': true,
-            }}
-          >
+          <div class="absolute top-1 right-1 flex items-center gap-1">
             {!readOnly && (
               <button
                 type="button"
@@ -627,9 +623,7 @@ export default component$(
                 },
               ]}
               customDropdown
-              class={{
-                'lum-grad-bg-lum-card-bg/75 rounded-lum-1 gap-1 p-1': true,
-              }}
+              class="lum-grad-bg-lum-card-bg/75 rounded-lum-1 gap-1 p-1"
             >
               <Eye
                 size={20}

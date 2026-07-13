@@ -243,9 +243,7 @@ const Pagination = component$(
             {t('rgb.presets.pagination.perPage@@Per page:')}
           </p>
           <SelectMenu
-            class={{
-              'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
-            }}
+            class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
             value={perPage}
             onChange$={(e, el) => {
               const newPerPage = parseInt(el.value, 10);
@@ -313,7 +311,7 @@ export default component$(() => {
           .setDescription(`${error}`)
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
-        notifications.push(notification);
+        notifications.push(notification.toJSON());
       });
     }
   });
@@ -349,7 +347,7 @@ export default component$(() => {
         )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     }
   });
 
@@ -434,9 +432,7 @@ export default component$(() => {
         <div class="flex items-center justify-center gap-1">
           <SelectMenu
             value={`${sortBy}-${sortOrder}`}
-            class={{
-              'rounded-lum-1 lum-bg-transparent': true,
-            }}
+            class="rounded-lum-1 lum-bg-transparent"
             onChange$={(e, el) => {
               const [newSortBy, newSortOrder] = el.value.split('-');
               void updateURL({
@@ -476,9 +472,7 @@ export default component$(() => {
           <SelectMenu
             align="right"
             id="settings"
-            class={{
-              'rounded-lum-1 lum-bg-transparent p-3': true,
-            }}
+            class="rounded-lum-1 lum-bg-transparent p-3"
             panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
             customDropdown
           >

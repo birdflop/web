@@ -244,11 +244,7 @@ export default component$(() => {
       </p>
 
       <div class="grid gap-2 sm:grid-cols-2">
-        <ButtonContainer
-          class={{
-            'overflow-scroll sm:hidden': true,
-          }}
-        >
+        <ButtonContainer class="overflow-scroll sm:hidden">
           <button
             onClick$={() => {
               openItems.value = openItems.value.includes('options')
@@ -312,11 +308,7 @@ export default component$(() => {
                 )}
               </span>
             </h6>
-            <ButtonContainer
-              class={{
-                '*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2': true,
-              }}
-            >
+            <ButtonContainer class="*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2">
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button
@@ -446,18 +438,14 @@ export default component$(() => {
                       style={{
                         imageRendering: 'pixelated',
                       }}
-                      class={{
-                        'rounded-lum w-full': true,
-                      }}
+                      class="rounded-lum w-full"
                     />
                     <canvas
                       id={`canvas-texture-${i}`}
                       style={{
                         imageRendering: 'pixelated',
                       }}
-                      class={{
-                        'rounded-lum hidden w-full': true,
-                      }}
+                      class="rounded-lum hidden w-full"
                     />
                   </button>
                   <div
@@ -475,9 +463,7 @@ export default component$(() => {
                           return (
                             <button
                               key={colorName}
-                              class={{
-                                'lum-btn lum-grad-bg p-1 hover:brightness-150': true,
-                              }}
+                              class="lum-btn lum-grad-bg p-1 hover:brightness-150"
                               style={{
                                 '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
                               }}
@@ -508,9 +494,7 @@ export default component$(() => {
                           return (
                             <button
                               key={pattern}
-                              class={{
-                                'lum-btn p-0 hover:brightness-150': true,
-                              }}
+                              class="lum-btn p-0 hover:brightness-150"
                               onClick$={() => {
                                 const newPatterns =
                                   bannerStore.patterns.slice(0);

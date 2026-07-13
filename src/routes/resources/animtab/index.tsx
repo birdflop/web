@@ -177,7 +177,7 @@ export default component$(() => {
           value={animtabStore.length}
           min={1}
           max={rgbStore.text.length}
-          class={{ 'w-full opacity-100!': true }}
+          class="w-full opacity-100!"
           onInput$={(event, el) => (animtabStore.length = Number(el.value))}
           q:slot="column1"
         />
@@ -205,7 +205,7 @@ export default component$(() => {
           id="speed"
           input
           value={animtabStore.speed}
-          class={{ 'w-full': true }}
+          class="w-full"
           step={50}
           min={50}
           onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
@@ -218,7 +218,7 @@ export default component$(() => {
       >
         <SelectMenu
           id="type"
-          class={{ 'w-full': true }}
+          class="w-full"
           onChange$={(e, el) => (animtabStore.type = Number(el.value))}
           values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
             name: t(`animtab.animation.style.${key}@@${key}`),

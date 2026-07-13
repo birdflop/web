@@ -203,7 +203,7 @@ export default component$(() => {
             `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
           )
           .setBgColor('lum-grad-bg-red/50');
-        notifications.push(notification);
+        notifications.push(notification.toJSON());
       }
     }
   });
@@ -253,7 +253,7 @@ export default component$(() => {
           `There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`
         )
         .setBgColor('lum-grad-bg-red/50');
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     }
   });
 
@@ -387,9 +387,7 @@ export default component$(() => {
                   }}
                   values={softwareOptions}
                   value={pluginsStore.servers[pluginsStore.openServer].software}
-                  class={{
-                    'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true,
-                  }}
+                  class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
                 />
 
                 <button
@@ -424,7 +422,7 @@ export default component$(() => {
                           .setBgColor('lum-grad-bg-red/50')
                           .setPersist(true);
                       });
-                    notifications.push(notification);
+                    notifications.push(notification.toJSON());
                   }}
                   title="Export server plugins as JSON"
                 >
@@ -459,7 +457,7 @@ export default component$(() => {
                           'The plugins have been imported successfully.'
                         )
                         .setBgColor('lum-grad-bg-green/50');
-                      notifications.push(notification);
+                      notifications.push(notification.toJSON());
                     } catch (err) {
                       console.error('Failed to parse imported plugins:', err);
                       const notification = new Notification()
@@ -468,7 +466,7 @@ export default component$(() => {
                           `An error occurred while parsing imported plugins. ${err instanceof Error ? err.message : String(err)}`
                         )
                         .setBgColor('lum-grad-bg-red/50');
-                      notifications.push(notification);
+                      notifications.push(notification.toJSON());
                     }
                   }}
                 />
@@ -488,9 +486,7 @@ export default component$(() => {
                   ]}
                   value={pluginsStore.filter}
                   customDropdown
-                  class={{
-                    'lum-bg-transparent lum-btn-p-1 rounded-lum-1': true,
-                  }}
+                  class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
                 >
                   <span class="flex items-center gap-2" q:slot="dropdown">
                     <Filter size={16} />
@@ -654,7 +650,7 @@ export default component$(() => {
                               `An error occurred while fetching plugin versions. ${error instanceof Error ? error.message : String(error)}`
                             )
                             .setBgColor('lum-grad-bg-red/50');
-                          notifications.push(notification);
+                          notifications.push(notification.toJSON());
                         }
                       }}
                     >
@@ -679,12 +675,7 @@ export default component$(() => {
 
       <dialog
         ref={modalRef}
-        class={{
-          'text-lum-text m-auto hidden overflow-visible open:flex': true,
-          'lum-card lum-grad-bg-lum-card-bg/50 min-w-1/4 drop-shadow-2xl backdrop-blur-xl': true,
-          'open:animate-in open:fade-in open:slide-in-from-top-8 open:duration-300': true,
-          'animate-out fade-out slide-in-from-top-8 duration-300': true,
-        }}
+        class="text-lum-text lum-card lum-grad-bg-lum-card-bg/50 open:animate-in open:fade-in open:slide-in-from-top-8 animate-out fade-out slide-in-from-top-8 m-auto hidden min-w-1/4 overflow-visible drop-shadow-2xl backdrop-blur-xl duration-300 open:flex open:duration-300"
       >
         <div class="flex flex-col">
           <div class="border-lum-border/10 mb-4 flex flex-col border-b pb-4">
@@ -740,12 +731,7 @@ export default component$(() => {
 
           {(resolvedPlugin.type === 'misc' ||
             resolvedPlugin.plugin?.currentVersion) && (
-            <div
-              class={{
-                'border-lum-border/10 mt-4 flex justify-end gap-1 border-t pt-4 transition-all duration-300': true,
-                'animate-in fade-in slide-in-from-top-8 duration-300': true,
-              }}
-            >
+            <div class="border-lum-border/10 animate-in fade-in slide-in-from-top-8 mt-4 flex justify-end gap-1 border-t pt-4 transition-all duration-300">
               <button
                 class="lum-btn lum-bg-green/50 hover:lum-bg-green disabled:cursor-not-allowed disabled:bg-gray-600"
                 onClick$={() => {

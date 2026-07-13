@@ -1,5 +1,5 @@
 import { $, component$, PropsOf, QRL, Slot, useContext } from '@qwik.dev/core';
-import { Dropdown } from '@luminescent/ui-qwik';
+import { Dropdown, getClassObject } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
 export const loadOpenItems = $(() => {
@@ -36,7 +36,6 @@ interface AccordionProps extends PropsOf<'button'> {
   sectionName: string;
   pcOnly?: boolean;
   onClick$?: QRL<() => void>;
-  class?: { [key: string]: boolean };
 }
 
 export default component$(
@@ -53,7 +52,7 @@ export default component$(
       <Dropdown
         class={{
           'hidden sm:flex': !!pcOnly,
-          ...className,
+          ...getClassObject(className),
         }}
         opened={openItems.value.includes(sectionName) && !pcOnly}
         {...props}

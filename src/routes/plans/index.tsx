@@ -184,9 +184,7 @@ export default component$(() => {
 
               <div class="mt-2 grid gap-2 md:grid-cols-3">
                 <a
-                  class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                  }}
+                  class="lum-card relative text-left transition duration-300 ease-out hover:duration-75"
                   href="https://client.birdflop.com/order/main/packages/discord/?group_id=12"
                   target="_blank"
                 >
@@ -201,9 +199,7 @@ export default component$(() => {
                   </ul>
                 </a>
                 <a
-                  class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                  }}
+                  class="lum-card relative text-left transition duration-300 ease-out hover:duration-75"
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15"
                   target="_blank"
                 >
@@ -218,9 +214,7 @@ export default component$(() => {
                   </ul>
                 </a>
                 <a
-                  class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                  }}
+                  class="lum-card relative text-left transition duration-300 ease-out hover:duration-75"
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7"
                   target="_blank"
                 >
@@ -235,9 +229,7 @@ export default component$(() => {
                   </ul>
                 </a>
                 <a
-                  class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                  }}
+                  class="lum-card relative text-left transition duration-300 ease-out hover:duration-75"
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16"
                   target="_blank"
                 >
@@ -252,9 +244,7 @@ export default component$(() => {
                   </ul>
                 </a>
                 <a
-                  class={{
-                    'lum-card relative text-left transition duration-300 ease-out hover:duration-75': true,
-                  }}
+                  class="lum-card relative text-left transition duration-300 ease-out hover:duration-75"
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14"
                   target="_blank"
                 >

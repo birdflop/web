@@ -141,7 +141,7 @@ export default component$(() => {
         )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     }
   });
 
@@ -242,9 +242,7 @@ export default component$(() => {
           id={`use-${presetInfo.name}-${presetInfo.author}`}
           hover
           customDropdown
-          class={{
-            'lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex': true,
-          }}
+          class="lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex"
         >
           <span q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
@@ -345,7 +343,7 @@ export default component$(() => {
                   .setBgColor('lum-grad-bg-red/50')
                   .setPersist(true);
               });
-            notifications.push(notification);
+            notifications.push(notification.toJSON());
           }}
         >
           <Copy size={20} /> {t('rgb.presets.copy@@Copy')}

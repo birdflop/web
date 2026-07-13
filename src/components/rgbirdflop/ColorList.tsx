@@ -123,8 +123,8 @@ export default component$<ColorListProps>((props) => {
       }}
       id={'colorlist' + id}
     >
-      <div class="flex items-center gap-1 py-2 font-semibold">
-        <span class="flex flex-1 items-center gap-2">
+      <div class="flex items-center gap-2">
+        <h3 class="flex flex-1 items-center gap-2 font-semibold">
           <Palette />
           {colors.value.length} {t('rgb.colors.title@@Colors')}
           <button
@@ -153,36 +153,34 @@ export default component$<ColorListProps>((props) => {
           >
             <Plus size={20} />
           </button>
-        </span>
+        </h3>
 
-        <SelectMenu
-          title={t('rgb.colors.gradientType@@Gradient Type')}
-          id="gradientType"
-          value={resolvedGradientType.value}
-          class={{ 'lum-btn-p-1 rounded-r-sm text-sm': true }}
-          onChange$={async (e, el) => {
-            const value = el.value as GradientType;
-            if (props.onGradientTypeChange$) {
-              await props.onGradientTypeChange$(value);
-            } else {
-              rgbStore.gradientType = value;
-            }
-          }}
-          values={GRADIENT_TYPES.map((type) => ({
-            name: type,
-            value: type,
-          }))}
-        />
-        <ShowAllGradientsButton showAllGradients={showAllGradients} />
+        <div class="flex gap-1">
+          <SelectMenu
+            title={t('rgb.colors.gradientType@@Gradient Type')}
+            id="gradientType"
+            value={resolvedGradientType.value}
+            class="lum-btn-p-1 rounded-r-sm text-sm"
+            onChange$={async (e, el) => {
+              const value = el.value as GradientType;
+              if (props.onGradientTypeChange$) {
+                await props.onGradientTypeChange$(value);
+              } else {
+                rgbStore.gradientType = value;
+              }
+            }}
+            values={GRADIENT_TYPES.map((type) => ({
+              name: type,
+              value: type,
+            }))}
+          />
+          <ShowAllGradientsButton showAllGradients={showAllGradients} />
+        </div>
       </div>
 
       <Slot />
 
-      <ButtonContainer
-        class={{
-          '*:justify-center *:p-1': true,
-        }}
-      >
+      <ButtonContainer class="[&>button]:justify-center [&>button]:p-1">
         <button
           onClick$={() => {
             const newColors = colors.value.map((color) => ({
@@ -206,28 +204,6 @@ export default component$<ColorListProps>((props) => {
           </button>
         )}
         <button
-          disabled={colors.value.length >= resolvedTextLength.value}
-          onClick$={() => {
-            const newColors = [...colors.value, ...colors.value];
-            void setColors(newColors);
-          }}
-          title={t('rgb.colors.duplicate@@Duplicate')}
-        >
-          <Copy size={20} />
-        </button>
-        <button
-          onClick$={() => {
-            const newColors = colors.value
-              .slice()
-              .reverse()
-              .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
-            void setColors(newColors);
-          }}
-          title={t('rgb.colors.reverse@@Reverse')}
-        >
-          <ArrowRightLeft size={20} />
-        </button>
-        <button
           disabled={colors.value.length < 3}
           onClick$={() => {
             const shuffledColors = colors.value
@@ -243,18 +219,6 @@ export default component$<ColorListProps>((props) => {
         >
           <Shuffle size={20} />
         </button>
-        <button
-          onClick$={() => {
-            const newColors = colors.value.map((color) => {
-              const invertedHex = rgbToHex(invertRgbColor(hexToRGB(color.hex)));
-              return { ...color, hex: `#${invertedHex}` };
-            });
-            void setColors(newColors);
-          }}
-          title={t('rgb.colors.invert@@Invert')}
-        >
-          <Eclipse size={20} />
-        </button>
         {!rgbStore.disperse && (
           <button
             disabled={isDispersed(colors.value)}
@@ -266,6 +230,54 @@ export default component$<ColorListProps>((props) => {
             <MoveHorizontal size={20} />
           </button>
         )}
+        <SelectMenu
+          id="moreColorOptions"
+          align="right"
+          class="rounded-lum-1 lum-bg-transparent justify-center! gap-0! p-1.5"
+        >
+          <button
+            q:slot="extra-buttons"
+            class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
+            onClick$={() => {
+              const newColors = colors.value.map((color) => {
+                const invertedHex = rgbToHex(
+                  invertRgbColor(hexToRGB(color.hex))
+                );
+                return { ...color, hex: `#${invertedHex}` };
+              });
+              void setColors(newColors);
+            }}
+          >
+            <Eclipse size={20} />
+            {t('rgb.colors.invert@@Invert')}
+          </button>
+          <button
+            q:slot="extra-buttons"
+            class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
+            onClick$={() => {
+              const newColors = colors.value
+                .slice()
+                .reverse()
+                .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
+              void setColors(newColors);
+            }}
+          >
+            <ArrowRightLeft size={20} />
+            {t('rgb.colors.reverse@@Reverse')}
+          </button>
+          <button
+            q:slot="extra-buttons"
+            class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
+            disabled={colors.value.length >= resolvedTextLength.value}
+            onClick$={() => {
+              const newColors = [...colors.value, ...colors.value];
+              void setColors(newColors);
+            }}
+          >
+            <Copy size={20} />
+            {t('rgb.colors.duplicate@@Duplicate')}
+          </button>
+        </SelectMenu>
       </ButtonContainer>
 
       <div class="relative flex flex-col" id={`colorlistcolors${id}`}>

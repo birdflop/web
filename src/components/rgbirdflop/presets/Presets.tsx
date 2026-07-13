@@ -94,7 +94,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           },
         ])
         .setPersist(true);
-      notifications.push(notification);
+      notifications.push(notification.toJSON());
     }
     if (!json) return;
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
@@ -103,7 +103,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       (rgbStore as Record<keyof typeof combinedDefaults, unknown>)[key] =
         json[key] ?? combinedDefaults[key];
     });
-    notifications.push(notification);
+    notifications.push(notification.toJSON());
   });
 
   const privatePresets = useSignal<rgbPreset[]>(
@@ -150,23 +150,18 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="presets"
     >
-      <div class="flex items-center gap-1 py-2 font-semibold">
-        <span class="flex flex-1 items-center gap-2">
+      <div class="flex items-center gap-2">
+        <h3 class="flex flex-1 items-center gap-2 font-semibold">
           <Save />
           {t('rgb.presets.title@@Presets')}
-        </span>
+        </h3>
       </div>
       <div class="flex gap-1">
-        <Accordion
-          sectionName="saved-presets"
-          class={{ 'flex-1 rounded-r-sm': true }}
-        >
+        <Accordion sectionName="saved-presets" class="flex-1 rounded-r-sm">
           {t('rgb.presets.saved.presets@@Saved Presets')}
         </Accordion>
         <button
-          class={{
-            'lum-btn rounded-l-sm': true,
-          }}
+          class="lum-btn rounded-l-sm"
           id="save"
           onClick$={async () => {
             const preset: rgbPreset = { ...rgbStore };
@@ -202,7 +197,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               .setBgColor(
                 session.value ? 'lum-grad-bg-green/50' : 'lum-grad-bg-orange/50'
               );
-            notifications.push(notification);
+            notifications.push(notification.toJSON());
           }}
         >
           <Save size={20} /> {t('rgb.presets.save@@Save')}
@@ -330,9 +325,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       </SelectList>
 
       <Link
-        class={{
-          'lum-btn border-blue hover:border-blue': true,
-        }}
+        class="lum-btn border-blue hover:border-blue"
         href="/resources/rgb/presets"
         id="findmorepresets"
       >
@@ -355,9 +348,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
 
       <div class="flex flex-wrap gap-1">
         <button
-          class={{
-            'lum-btn flex-1 rounded-r-sm': true,
-          }}
+          class="lum-btn flex-1 rounded-r-sm"
           id="copy"
           onClick$={() => {
             const preset: rgbPreset = { ...rgbStore };
@@ -384,16 +375,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                   .setBgColor('lum-grad-bg-red/50')
                   .setPersist(true);
               });
-            notifications.push(notification);
+            notifications.push(notification.toJSON());
           }}
         >
           <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
         </button>
 
         <button
-          class={{
-            'lum-btn flex-1 rounded-l-sm': true,
-          }}
+          class="lum-btn flex-1 rounded-l-sm"
           id="createurl"
           onClick$={() => {
             const base_url = `${loc.url.protocol}//${loc.url.host}${loc.url.pathname}`;
@@ -417,7 +406,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               .setTitle(presetUrlTitle)
               .setDescription(presetUrlDescription)
               .setBgColor('lum-grad-bg-green/50');
-            notifications.push(notification);
+            notifications.push(notification.toJSON());
           }}
         >
           <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}

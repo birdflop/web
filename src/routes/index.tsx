@@ -62,18 +62,9 @@ export default component$(() => {
           class="flex w-full max-w-5xl flex-col items-center justify-center px-20 pt-18 text-gray-100 md:flex-row md:justify-between xl:max-w-6xl 2xl:max-w-7xl"
         >
           <div class="relative flex flex-col gap-4 xl:gap-8">
-            <div
-              class={{
-                'relative mr-auto': true,
-              }}
-            >
+            <div class="relative mr-auto">
               <div class="absolute -inset-4 rounded-4xl blur-lg backdrop-blur-md" />
-              <h1
-                class={{
-                  'relative flex items-center bg-clip-text text-7xl font-extrabold text-transparent drop-shadow-lg xl:text-8xl': true,
-                  'animate-in fade-in motion-safe:slide-in-from-top-16 motion-safe:duration-600': true,
-                }}
-              >
+              <h1 class="animate-in fade-in motion-safe:slide-in-from-top-16 relative flex items-center bg-clip-text text-7xl font-extrabold text-transparent drop-shadow-lg motion-safe:duration-600 xl:text-8xl">
                 <Birdflop
                   size={70}
                   fillGradient={['#54daf4', '#545eb6']}
@@ -92,11 +83,7 @@ export default component$(() => {
                 </span>
               </h1>
             </div>
-            <div
-              class={{
-                'relative mr-auto': true,
-              }}
-            >
+            <div class="relative mr-auto">
               <div class="absolute -inset-2 rounded-2xl blur-lg backdrop-blur-md" />
               <h2 class="animate-in fade-in motion-safe:slide-in-from-top-16 text-xl! font-bold drop-shadow-md motion-safe:duration-800 md:text-2xl! xl:text-3xl!">
                 The only 501(c)(3) nonprofit server host{' '}

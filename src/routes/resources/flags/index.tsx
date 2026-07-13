@@ -280,7 +280,7 @@ export default component$(() => {
               <Label for="os" label={t('flags.environment.label@@Environment')}>
                 <SelectMenu
                   id="os"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   onChange$={(e, el) => {
                     flagsStore.operatingSystem = el.value;
                   }}
@@ -298,7 +298,7 @@ export default component$(() => {
               <Label for="software" label={t('flags.software.label@@Software')}>
                 <SelectMenu
                   id="software"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   onChange$={(e, el) => {
                     flagsStore.serverType = el.value;
                   }}
@@ -359,7 +359,7 @@ export default component$(() => {
               <Label for="flags" label={t('flags.flags.label@@Flags')}>
                 <SelectMenu
                   id="flags"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   onChange$={(e, el) => {
                     flagsStore.flags = el.value as AvailableFlags;
                   }}

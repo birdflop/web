@@ -74,12 +74,7 @@ export default component$(() => {
       {/* todo: modal component */}
       <dialog
         ref={modalRef}
-        class={{
-          'text-lum-text m-auto hidden overflow-visible open:flex': true,
-          'lum-card lum-grad-bg-lum-card-bg/50 min-w-1/4 drop-shadow-2xl backdrop-blur-xl': true,
-          'open:animate-in open:fade-in open:slide-in-from-top-8 open:duration-300': true,
-          'animate-out fade-out slide-in-from-top-8 duration-300': true,
-        }}
+        class="text-lum-text lum-card lum-grad-bg-lum-card-bg/50 open:animate-in open:fade-in open:slide-in-from-top-8 animate-out fade-out slide-in-from-top-8 m-auto hidden min-w-1/4 overflow-visible drop-shadow-2xl backdrop-blur-xl duration-300 open:flex open:duration-300"
       >
         <div class="border-lum-border/10 flex flex-col border-b pb-4">
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
@@ -218,7 +213,7 @@ export default component$(() => {
               );
             }
 
-            notifications.push(notification);
+            notifications.push(notification.toJSON());
             if (result.success) {
               modalRef.value?.close();
               selectedPreset.value = undefined;
@@ -244,7 +239,7 @@ export default component$(() => {
               >
                 <SelectMenu
                   id="publish-preset-preset"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   values={
                     privatePresets.value.length == 0
                       ? undefined

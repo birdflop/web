@@ -1,7 +1,7 @@
 import { $ } from '@qwik.dev/core';
 import { BasePlugin } from './BasePlugin';
 import { PluginType } from './ServerPlugin';
-import { Notification } from '../Notification';
+import { Notification, NotificationType } from '../Notification';
 
 export class SpigotPlugin extends BasePlugin {
   static async search(query: string): Promise<any[]> {
@@ -99,7 +99,7 @@ export const downloadSpigotPlugin = $(
   async (
     plugin: PluginType,
     spigotRateLimit?: { downloadCount: number; resetTime: number },
-    notifications?: Notification[]
+    notifications?: NotificationType[]
   ) => {
     const targetUrl = plugin.file?.url;
 
@@ -127,7 +127,7 @@ export const downloadSpigotPlugin = $(
           )
           .setBgColor('lum-grad-bg-yellow/50')
           .setPersist(true);
-        notifications.push(notification);
+        notifications.push(notification.toJSON());
       }
       await new Promise((resolve) =>
         setTimeout(resolve, spigotRateLimit.resetTime - Date.now())

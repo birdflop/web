@@ -1,10 +1,11 @@
 import { component$, QRL, PropsOf } from '@qwik.dev/core';
-import { ButtonContainer, ButtonContainerProps } from './ButtonContainer';
+import { ButtonContainer } from './ButtonContainer';
 import Plus from 'lucide-icons-qwik/icons/Plus';
 import X from 'lucide-icons-qwik/icons/X';
+import { getClassObject } from '@luminescent/ui-qwik';
 
 type Value = { name: string; value: string };
-interface TabsProps extends Omit<ButtonContainerProps, 'onClick$'> {
+interface TabsProps extends Omit<PropsOf<'div'>, 'onClick$'> {
   onPlus$?: PropsOf<'button'>['onClick$'];
   onClick$?: QRL<(value: Value) => void>;
   onDelete$?: QRL<(value: Value) => void>;
@@ -27,7 +28,7 @@ export const Tabs = component$<TabsProps>(
         {...props}
         class={{
           '*:lum-btn-p-1 items-stretch justify-start overflow-x-scroll *:flex-none': true,
-          ...classList,
+          ...getClassObject(classList),
         }}
       >
         {values?.map((tab) => (

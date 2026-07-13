@@ -16,11 +16,11 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
         'pointer-events-auto max-h-120 opacity-100': !hidden,
       }}
     >
-      <div class="flex items-center gap-1 py-2 font-semibold">
-        <span class="flex flex-1 items-center gap-2">
+      <div class="flex items-center gap-2">
+        <h3 class="flex flex-1 items-center gap-2 font-semibold">
           <Settings />
           {t('rgb.options@@Options')}
-        </span>
+        </h3>
       </div>
       <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
@@ -52,7 +52,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
               min={1}
               max={rgbStore.text.length / rgbStore.colors.length}
               value={rgbStore.colorLength}
-              class={{ 'w-full opacity-100!': true }}
+              class="w-full opacity-100!"
               onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
             />
           </Label>

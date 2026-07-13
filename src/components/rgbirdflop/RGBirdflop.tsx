@@ -84,7 +84,7 @@ export default component$(
           .setDescription(`${error}`)
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
-        notifications.push(notification);
+        notifications.push(notification.toJSON());
       });
     });
 
@@ -365,7 +365,7 @@ export default component$(
                       ? 'custom'
                       : JSON.stringify(rgbStore.colorFormat)
                   }
-                  class={{ 'lum-btn-p-1 text-sm': true }}
+                  class="lum-btn-p-1 text-sm"
                   onChange$={(e, el) => {
                     if (el.value == 'custom') {
                       rgbStore.customFormat = true;

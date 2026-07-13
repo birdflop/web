@@ -112,11 +112,7 @@ export default component$(
         id={'colorlist' + id}
       >
         {/* Color mode switch */}
-        <ButtonContainer
-          class={{
-            '*:lum-btn-p-1 items-stretch *:justify-center': true,
-          }}
-        >
+        <ButtonContainer class="*:lum-btn-p-1 items-stretch *:justify-center">
           <button
             class={{
               'lum-grad-bg-lum-accent!': mode === 'gradient',

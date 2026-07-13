@@ -34,9 +34,8 @@ import SiGithub from 'simple-icons-qwik/icons/SiGithub';
 import RgbPreview from '../RgbPreview';
 const fallbackpfp = '/branding/icon.png';
 
-interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
+interface PresetPreviewProps extends LinkProps {
   Preset: PresetPartial;
-  class?: { [key: string]: boolean };
   defaults?: rgbPreset;
   publishRefs?: {
     modalRef: Signal<HTMLDialogElement | undefined>;
@@ -280,9 +279,7 @@ export default component$<PresetPreviewProps>(
             id={`use-${Preset.name}-${Preset.author}`}
             hover
             customDropdown
-            class={{
-              'lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex': true,
-            }}
+            class="lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex"
           >
             <span q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} />

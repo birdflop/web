@@ -113,7 +113,7 @@ export default component$(
                       `The plugin ${existingPlugin.name} is already added.`
                     )
                     .setBgColor('lum-grad-bg-yellow/50');
-                  notifications.push(notification);
+                  notifications.push(notification.toJSON());
                   return;
                 }
 
@@ -135,7 +135,7 @@ export default component$(
                       `An error occurred while fetching plugin data. ${error instanceof Error ? error.message : String(error)}`
                     )
                     .setBgColor('lum-grad-bg-red/50');
-                  notifications.push(notification);
+                  notifications.push(notification.toJSON());
                 }
                 isLoading.value = false;
               }}
@@ -160,7 +160,7 @@ export default component$(
                         `No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`
                       )
                       .setBgColor('lum-grad-bg-yellow/50');
-                    notifications.push(notification);
+                    notifications.push(notification.toJSON());
                     isLoading.value = false;
                     return;
                   }
@@ -174,7 +174,7 @@ export default component$(
                       `An error occurred while searching for plugins. ${error instanceof Error ? error.message : String(error)}`
                     )
                     .setBgColor('lum-grad-bg-red/50');
-                  notifications.push(notification);
+                  notifications.push(notification.toJSON());
                 }
                 isLoading.value = false;
               }}
@@ -229,7 +229,7 @@ export default component$(
                       `An error occurred while fetching plugin versions. ${error instanceof Error ? error.message : String(error)}`
                     )
                     .setBgColor('lum-grad-bg-red/50');
-                  notifications.push(notification);
+                  notifications.push(notification.toJSON());
                 }
                 isLoading.value = false;
               }}

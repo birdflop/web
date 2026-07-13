@@ -117,9 +117,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
     >
       <div
         id={`colormap${id}-add-button`}
-        class={{
-          'lum-grad-bg-lum-card-bg pointer-events-none absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full opacity-0': true,
-        }}
+        class="lum-grad-bg-lum-card-bg pointer-events-none absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full opacity-0"
       >
         <Plus size={18} />
       </div>
@@ -127,9 +125,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
         <div
           key={`${i}/${colors.value.length}`}
           id={`colormap${id}-color-${i + 1}`}
-          class={{
-            'lum-bg absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full drop-shadow-md transition-transform hover:scale-125': true,
-          }}
+          class="lum-bg absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full drop-shadow-md transition-transform hover:scale-125"
           style={{
             '--bg-color': color.hex,
             left: `${color.pos}%`,

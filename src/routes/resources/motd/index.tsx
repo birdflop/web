@@ -206,7 +206,7 @@ export default component$(() => {
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
     });
-    notifications.push(notification);
+    notifications.push(notification.toJSON());
   });
 
   const setLine = $((field: LineField, value: string) => {
@@ -438,7 +438,7 @@ export default component$(() => {
                 </label>
                 <SelectMenu
                   id="format"
-                  class={{ 'w-full': true }}
+                  class="w-full"
                   value={store.format}
                   onChange$={(e, el) => {
                     store.format = el.value as MotdFormat;

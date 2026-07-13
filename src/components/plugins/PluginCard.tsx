@@ -9,11 +9,9 @@ import Link from 'lucide-icons-qwik/icons/Link';
 import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import { PluginType } from '~/util/plugins/ServerPlugin';
+import { getClassObject } from '@luminescent/ui-qwik';
 
-export interface PluginCardProps extends Omit<LinkProps, 'class'> {
-  class?: {
-    [key: string]: boolean;
-  };
+export interface PluginCardProps extends LinkProps {
   plugin: PluginType;
   updateAvailable?: boolean;
   noActions?: boolean;
@@ -36,7 +34,7 @@ export default component$<PluginCardProps>(
         class={{
           'lum-card lum-grad-bg-lum-card-bg/90 relative flex-1 overflow-clip p-4': true,
           'border-green': updateAvailable,
-          ...cardClass,
+          ...getClassObject(cardClass),
         }}
         style={{
           '--lum-border-radius': '1rem',
@@ -135,9 +133,7 @@ export default component$<PluginCardProps>(
           <div class="flex items-center gap-1">
             {plugin.file?.url && (
               <button
-                class={{
-                  'lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200': true,
-                }}
+                class="lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200"
                 onClick$={async () => {
                   if (!plugin.file?.url) return;
                   isLoading.value = true;
@@ -169,9 +165,7 @@ export default component$<PluginCardProps>(
 
             {plugin.url && (
               <a
-                class={{
-                  'lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200': true,
-                }}
+                class="lum-btn rounded-lum-2 lum-grad-bg-gray-900/0 hover:lum-bg-blue cursor-pointer text-sm backdrop-contrast-80 backdrop-saturate-200"
                 href={plugin.url}
                 target="_blank"
                 onClick$={() => {

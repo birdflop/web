@@ -81,9 +81,7 @@ export default component$(() => {
         hover
         customDropdown
         panelClass="lum-grad-bg-nav-bg"
-        class={{
-          'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
-        }}
+        class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <span q:slot="dropdown" class="flex items-center gap-2">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
@@ -123,9 +121,7 @@ export default component$(() => {
         hover
         customDropdown
         panelClass="lum-grad-bg-nav-bg"
-        class={{
-          'lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex': true,
-        }}
+        class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <span q:slot="dropdown" class="flex items-center gap-2">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
@@ -221,9 +217,7 @@ export default component$(() => {
         <SelectMenu
           align="right"
           q:slot="end"
-          class={{
-            'lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2': true,
-          }}
+          class="lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2"
           id="profile"
           customDropdown
           panelClass="lum-grad-bg-nav-bg"
@@ -284,9 +278,7 @@ export default component$(() => {
       <Accordion
         q:slot="mobile"
         sectionName="nav-hosting"
-        class={{
-          'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
-        }}
+        class="lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss"
       >
         <Server size={20} /> {t('nav.hosting.title@@Hosting')}
       </Accordion>
@@ -328,9 +320,7 @@ export default component$(() => {
       <Accordion
         q:slot="mobile"
         sectionName="nav-resources"
-        class={{
-          'lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss': true,
-        }}
+        class="lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss"
       >
         <Box size={20} /> {t('nav.resources.title@@Resources')}
       </Accordion>
