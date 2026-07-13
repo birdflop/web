@@ -303,7 +303,8 @@ export default component$(
                 <>
                   <ColorList hidden={!openItems.value.includes('colors')} />
                   {(rgbStore.colorFormat.color === 'MiniMessage' ||
-                    rgbStore.colorFormat.color === 'JSON') && (
+                    rgbStore.colorFormat.color === 'JSON' ||
+                    rgbStore.shadowColors) && (
                     <>
                       <Toggle
                         id="textshadowtoggle"
