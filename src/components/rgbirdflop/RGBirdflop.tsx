@@ -20,8 +20,11 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
+import CaseLower from 'lucide-icons-qwik/icons/CaseLower';
+import CaseUpper from 'lucide-icons-qwik/icons/CaseUpper';
 import Settings from 'lucide-icons-qwik/icons/Settings';
 import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
+import Hash from 'lucide-icons-qwik/icons/Hash';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
@@ -335,6 +338,24 @@ export default component$(
                 hidden={!openItems.value.includes('output')}
                 value={output}
               >
+                <button
+                  class={{
+                    'lum-btn lum-btn-p-1': true,
+                    'lum-bg-lum-accent hover:lum-bg-lum-accent/50':
+                      rgbStore.lowercase,
+                  }}
+                  q:slot="label"
+                  title={t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
+                  id="lowercase"
+                  onClick$={() => (rgbStore.lowercase = !rgbStore.lowercase)}
+                >
+                  <Hash size={20} />
+                  {rgbStore.lowercase ? (
+                    <CaseLower size={20} />
+                  ) : (
+                    <CaseUpper size={20} />
+                  )}
+                </button>
                 <SelectMenu
                   q:slot="label"
                   title={t('rgb.colors.format@@Color Format')}

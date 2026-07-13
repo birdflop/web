@@ -89,22 +89,6 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
                 )}
               </p>
             </div>
-            <div class="flex flex-col gap-1">
-              <Toggle
-                id="lowercase"
-                checked={rgbStore.lowercase}
-                onChange$={(e, el) => {
-                  rgbStore.lowercase = el.checked;
-                }}
-              >
-                {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
-              </Toggle>
-              <p class="text-lum-text-secondary text-xs">
-                {t(
-                  'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.'
-                )}
-              </p>
-            </div>
           </>
         )}
       </div>
