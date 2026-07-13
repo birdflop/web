@@ -341,13 +341,26 @@ function buildShadowContent(
   return out;
 }
 
+export function calculateDispersedPosition(
+  length: number,
+  index: number
+): number {
+  return Math.round((100 / (length - 1)) * index * 1000) / 1000;
+}
+
+export function isDispersed(colors: ColorStop[]): boolean {
+  return colors.some(
+    (color, i) => color.pos !== calculateDispersedPosition(colors.length, i)
+  );
+}
+
 export function disperseColors(colors: ColorStop[]) {
   if (colors.length <= 1) {
     return colors.slice(0).map((color) => ({ ...color, pos: 0 }));
   }
   const newColors = colors.slice(0).map((color, i) => ({
     ...color,
-    pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
+    pos: calculateDispersedPosition(colors.length, i),
   }));
   return newColors;
 }
@@ -470,13 +483,7 @@ function renderMiniMessageGradient(
   };
 
   const renderUnevenGradient = (text: string) => {
-    // todo: make an iseven function to avoid math.random issues
-    const even = !colors.find((color, i) => {
-      return (
-        color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
-      );
-    });
-    if (even) return null;
+    if (isDispersed(colors)) return null;
 
     const copy = [...colors];
     if (copy[0].pos !== 0) copy.unshift({ ...copy[0], pos: 0 });

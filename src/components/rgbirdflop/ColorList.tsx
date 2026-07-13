@@ -27,6 +27,7 @@ import {
   GRADIENT_TYPES,
   ColorStop,
   disperseColors,
+  isDispersed,
 } from '@birdflop/rgbirdflop';
 
 import ArrowRightLeft from 'lucide-icons-qwik/icons/ArrowRightLeft';
@@ -131,12 +132,7 @@ export default component$<ColorListProps>((props) => {
             onClick$={() => {
               const newColors = colors.value.slice(0);
               newColors.pop();
-              const mappedColors = newColors.map((color, i) => ({
-                hex: color.hex,
-                pos:
-                  Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
-              }));
-              void setColors(mappedColors);
+              void setColors(disperseColors(newColors));
             }}
             disabled={colors.value.length <= 1}
           >
@@ -149,14 +145,10 @@ export default component$<ColorListProps>((props) => {
                 ...colors.value,
                 {
                   hex: getRandomColor(),
+                  pos: 0, // will be filled in by disperseColors
                 },
               ];
-              const mappedColors = newColors.map((color, i) => ({
-                hex: color.hex,
-                pos:
-                  Math.round((100 / (newColors.length - 1)) * i * 1000) / 1000,
-              }));
-              void setColors(mappedColors);
+              void setColors(disperseColors(newColors));
             }}
           >
             <Plus size={20} />
@@ -265,15 +257,7 @@ export default component$<ColorListProps>((props) => {
         </button>
         {!rgbStore.disperse && (
           <button
-            disabled={
-              !colors.value.find((color, i) => {
-                return (
-                  color.pos !=
-                  Math.round((100 / (colors.value.length - 1)) * i * 1000) /
-                    1000
-                );
-              })
-            }
+            disabled={isDispersed(colors.value)}
             onClick$={() => {
               void setColors(disperseColors(colors.value));
             }}

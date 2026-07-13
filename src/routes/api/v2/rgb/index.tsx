@@ -4,6 +4,7 @@ import {
   colorFormats,
   rgbDefaults,
   generateOutput,
+  disperseColors,
 } from '@birdflop/rgbirdflop';
 
 export const onGet: RequestHandler = ({ json, query }) => {
@@ -145,11 +146,7 @@ function getOutput(body: any) {
   // make string[] a valid color array
   let colors = body?.colors;
   if (colors && colors.length && typeof colors[0] == 'string') {
-    if (typeof colors[0] == 'string')
-      colors = colors.map((color: string, i: number) => ({
-        hex: color,
-        pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
-      }));
+    if (typeof colors[0] == 'string') colors = disperseColors(colors);
   }
   body.colors = colors;
 
@@ -160,10 +157,7 @@ function getOutput(body: any) {
     typeof shadowColors[0] == 'string'
   ) {
     if (typeof shadowColors[0] == 'string')
-      shadowColors = shadowColors.map((color: string, i: number) => ({
-        hex: color,
-        pos: Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
-      }));
+      shadowColors = disperseColors(shadowColors);
   }
   body.shadowColors = shadowColors;
 

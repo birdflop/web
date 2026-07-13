@@ -11,6 +11,7 @@ import {
   type ColorFormat,
   type Formatting,
   isFormattingEqual,
+  isDispersed,
 } from '@birdflop/rgbirdflop';
 import { chunkText, SegmentType } from './rgbSegments';
 
@@ -287,11 +288,7 @@ function miniMessageGradientBody(
   const colors = sortColors(segment.colors);
   const text = segment.text;
 
-  const even = !colors.find(
-    (color, i) =>
-      color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
-  );
-  if (even) {
+  if (isDispersed(colors)) {
     const inner = applySelectiveFormatting(text, charOffset, options);
     return `<gradient:${colors.map((c) => c.hex).join(':')}>${inner}</gradient>`;
   }

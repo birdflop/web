@@ -194,38 +194,6 @@ export default component$(() => {
             )}
           </p>
         </Link>
-        <Link
-          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-green relative transition-all duration-200!"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
-          href="/resources/hardware"
-        >
-          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-            <MemoryStick size={30} />
-            {t('nav.resources.hardware.title@@RAM & Hardware Planner')}
-          </h3>
-          <p class="text-lum-text-secondary">
-            {t(
-              'nav.resources.hardware.description@@Estimate the RAM, CPU and storage your server needs from players, distances and plugins.'
-            )}
-          </p>
-        </Link>
-        <Link
-          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-blue relative transition-all duration-200!"
-          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
-          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
-          href="/resources/motd"
-        >
-          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-            <MessageSquare size={30} />
-            {t('nav.resources.motd.title@@MOTD Designer')}
-          </h3>
-          <p class="text-lum-text-secondary">
-            {t(
-              'nav.resources.motd.description@@Design your server list MOTD with colors, formatting and a favicon, then export to server.properties.'
-            )}
-          </p>
-        </Link>
       </div>
       <hr />
       <h2 class="mb-2 flex items-center gap-2 text-2xl font-bold">
