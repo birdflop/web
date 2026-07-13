@@ -295,7 +295,7 @@ export default component$(
             <div class="relative flex flex-col gap-2" id="column1">
               {!advanced && <>
                 <ColorList hidden={!openItems.value.includes('colors')} />
-                {(rgbStore.colorFormat.color === 'MiniMessage' || rgbStore.colorFormat.color === 'JSON') && <>
+                {(rgbStore.colorFormat.color === 'MiniMessage' || rgbStore.colorFormat.color === 'JSON' || rgbStore.shadowColors) && <>
                   <Toggle
                     id="textshadowtoggle"
                     checked={!!rgbStore.shadowColors}
