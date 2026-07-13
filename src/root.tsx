@@ -41,12 +41,19 @@ export default component$(() => {
           src="https://www.googletagmanager.com/gtag/js?id=AW-11483620641"
         />
         {isBirdflop ? (
-          <script
-            defer
-            src="https://umami.bwmp.dev/script.js"
-            data-website-id="49e1c025-20df-48d7-9da7-82f1c2ecff88"
-            data-domains="birdflop.com,www.birdflop.com"
-          />
+          <>
+            <script
+              defer
+              src="https://umami.bwmp.dev/script.js"
+              data-website-id="49e1c025-20df-48d7-9da7-82f1c2ecff88"
+              data-domains="birdflop.com,www.birdflop.com"
+            />
+            <script
+              defer
+              src="https://umami.bwmp.dev/recorder.js"
+              data-website-id="49e1c025-20df-48d7-9da7-82f1c2ecff88"
+            />
+          </>
         ) : (
           <script
             defer

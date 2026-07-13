@@ -40,7 +40,9 @@ import {
   NotificationType,
 } from '~/util/Notification';
 import { getCookies, setCookies, setUserData } from '~/util/dataUtils';
+import { identifyUmami } from '~/util/umami';
 import birdThreeJS from '~/util/birdThreeJS';
+import { useSession } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
 import { Session } from '@auth/qwik';
 
@@ -113,6 +115,14 @@ export const openItemsContext =
 export default component$(() => {
   const t = inlineTranslate();
   const loc = useLocation();
+  const session = useSession();
+
+  /* Umami distinct ID */
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    track(() => session.value?.user?.id);
+    identifyUmami(session.value?.user?.id);
+  });
 
   // Select background images
   const Background = Backgrounds[1];

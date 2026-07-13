@@ -21,7 +21,9 @@ import { Notification, NotificationContext } from '~/util/Notification';
 
 export const useUser = routeLoader$(async ({ sharedMap }) => {
   const session = sharedMap.get('session') as { user: { id: string } } | null;
-  if (!session) throw new Error('No session found');
+  // Logged-out visitors still get the layout's "not logged in" screen,
+  // which shows their debug ID — don't error the whole page.
+  if (!session) return { userInfo: null, userPresets: [], errors: [] };
   return getUsersPresets(session.user.id);
 });
 
@@ -29,6 +31,7 @@ export default component$(() => {
   const notifications = useContext(NotificationContext);
 
   const session = useSession();
+  const loggedIn = !!session.value?.user;
 
   const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
   useContextProvider(privatePresetsContext, privatePresets);
@@ -50,6 +53,9 @@ export default component$(() => {
       });
     }
   });
+
+  // The layout shows the login prompt (with the debug ID) instead
+  if (!loggedIn) return null;
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">

@@ -1,4 +1,10 @@
-import { component$, Slot } from '@qwik.dev/core';
+import {
+  $,
+  component$,
+  Slot,
+  useSignal,
+  useVisibleTask$,
+} from '@qwik.dev/core';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
 import { Form, Link, useLocation } from '@qwik.dev/router';
@@ -6,10 +12,12 @@ import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
 import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
 import LogOut from 'lucide-icons-qwik/icons/LogOut';
 import Settings from 'lucide-icons-qwik/icons/Settings';
+import Copy from 'lucide-icons-qwik/icons/Copy';
 import { Birdflop } from '@luminescent/icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import Layout, { useIsAdmin } from './layout';
+import { getAnonymousId } from '~/util/umami';
 
 // Re-export route loaders used by Layout component
 export * from './layout';
@@ -21,6 +29,20 @@ export default component$(() => {
   const signOut = useSignOut();
   const loc = useLocation();
   const isAdmin = useIsAdmin().value;
+
+  const debugId = useSignal('');
+  const copied = useSignal(false);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!session.value?.user) debugId.value = getAnonymousId();
+  });
+
+  const copyId = $((id: string) => {
+    void navigator.clipboard.writeText(id);
+    copied.value = true;
+    setTimeout(() => (copied.value = false), 2000);
+  });
 
   if (!session.value || !session.value.user) {
     return (
@@ -46,7 +68,23 @@ export default component$(() => {
               </button>
             </Form>
           </div>
+          {debugId.value && (
+            <p class="text-lum-text-secondary mt-6 text-sm">
+              {t('nav.profile.debugId@@Your debug ID is')}:{' '}
+              <button
+                class="inline-flex cursor-pointer items-center gap-1 align-middle font-mono underline decoration-dotted"
+                onClick$={() => copyId(debugId.value)}
+                title={t('nav.profile.clickToCopy@@Click to copy')}
+              >
+                {copied.value
+                  ? t('nav.profile.copied@@Copied!')
+                  : debugId.value}
+                <Copy size={14} />
+              </button>
+            </p>
+          )}
         </div>
+        <Slot />
       </Layout>
     );
   }
@@ -74,7 +112,17 @@ export default component$(() => {
             )}
           </h1>
           <p class="text-lum-text-secondary">
-            Your ID is: {session.value.user.id}
+            Your ID is:{' '}
+            <button
+              class="inline-flex cursor-pointer items-center gap-1 align-middle font-mono underline decoration-dotted"
+              onClick$={() => copyId(session.value.user!.id!)}
+              title={t('nav.profile.clickToCopy@@Click to copy')}
+            >
+              {copied.value
+                ? t('nav.profile.copied@@Copied!')
+                : session.value.user.id}
+              <Copy size={14} />
+            </button>
           </p>
         </div>
         <div class="flex items-center gap-4">
