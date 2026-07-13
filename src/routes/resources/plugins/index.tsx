@@ -186,7 +186,7 @@ export default component$(() => {
   });
   useContextProvider(pluginsStoreContext, pluginsStore);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
     const pluginsData = localStorage.getItem('plugins');

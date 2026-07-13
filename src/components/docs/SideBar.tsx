@@ -27,7 +27,7 @@ export const DocsSidebar = component$(() => {
     }
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (markdownItems.value && Object.keys(markdownItems.value).length > 0) {
       store.menuItems = buildMenu(markdownItems.value);

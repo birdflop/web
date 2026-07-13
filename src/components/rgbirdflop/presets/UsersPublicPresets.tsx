@@ -50,7 +50,9 @@ export const getUsersPresets = server$(async (userId: string) => {
       .innerJoin(users, eq(users.id, presets.userId))
       .then((r) => r ?? []);
   } catch (err) {
-    errors.push(`Error fetching presets: ${err instanceof Error ? err.message : String(err)}`);
+    errors.push(
+      `Error fetching presets: ${err instanceof Error ? err.message : String(err)}`
+    );
   }
 
   const userPresets = presetsFromDB.map(({ user, preset }) => ({
@@ -81,7 +83,7 @@ export default component$(
     const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
     useContextProvider(savedPresetsContext, savedPresets);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       // If privatePresets is empty, load presets from localStorage
       if (privatePresets.value.length != 0) return;
@@ -92,14 +94,16 @@ export default component$(
       } catch (err) {
         const notification = new Notification()
           .setTitle('Error loading saved presets')
-          .setDescription(`Error: ${err instanceof Error ? err.message : String(err)}`)
+          .setDescription(
+            `Error: ${err instanceof Error ? err.message : String(err)}`
+          )
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       }
     });
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (errors.length > 0) {
         errors.forEach((error) => {

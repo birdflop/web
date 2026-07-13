@@ -117,7 +117,7 @@ export default component$(() => {
   });
 
   // Animtab frames updater
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {

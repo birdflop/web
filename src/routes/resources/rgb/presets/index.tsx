@@ -303,7 +303,7 @@ export default component$(() => {
 
   const isAdmin = useIsAdmin().value;
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
     if (errors.length > 0) {
@@ -332,7 +332,7 @@ export default component$(() => {
   );
   useContextProvider(savedPresetsContext, savedPresets);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0 || savedPresets.value.length != 0)

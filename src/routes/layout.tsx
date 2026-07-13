@@ -140,7 +140,7 @@ export default component$(() => {
   const birdStore = useStore<FlopbirdStore>({});
   useContextProvider(birdStoreContext, birdStore);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() =>
     birdThreeJS(birdRef, anchorElementRef, notifications, birdStore)
   );
@@ -188,7 +188,7 @@ export default component$(() => {
   /* Cookie Consent */
   const showCookieConsent = useSignal(false);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // check if cookies have been accepted or opted out
     if (settingsStore.cookies !== undefined) return;
@@ -247,7 +247,7 @@ export default component$(() => {
   });
 
   /* Misc */
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // If the theme is not set, check the user's preference
     if (themeStore.isDark === undefined) {

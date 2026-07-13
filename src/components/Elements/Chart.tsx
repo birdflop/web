@@ -33,7 +33,7 @@ const dollarLabel = (context: {
 export default component$<ChartProps>((props) => {
   const myChart = useSignal<HTMLCanvasElement>();
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (myChart?.value) {
       Chart.register(...registerables);

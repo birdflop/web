@@ -33,7 +33,7 @@ export default component$(() => {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0) return;
@@ -54,7 +54,7 @@ export default component$(() => {
   });
 
   const { userInfo, userPresets, errors } = useUser().value;
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {

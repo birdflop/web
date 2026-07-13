@@ -414,7 +414,7 @@ const MCPreviewInput = component$(
     const rgbStore = useContext(rgbStoreContext);
     const previewStyle = useContext(previewStyleContext);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       background.value =
         Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
@@ -498,7 +498,7 @@ export default component$(
     const rawEditMode = useSignal(false);
     useContextProvider(rawEditModeContext, rawEditMode);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       const input = document.getElementById('input') as HTMLTextAreaElement;
       if (!input) return;

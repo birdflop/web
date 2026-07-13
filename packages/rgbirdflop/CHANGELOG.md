@@ -16,8 +16,7 @@
 - consolidate segment color editing logic into the reusable ColorList component ([15319b6](https://github.com/birdflop/web/commit/15319b6261119abf83bba6802e9f4edff4bc7ffd))
 - decompose RGBirdflop component and centralize state management via RGBirdflopBase ([89aff16](https://github.com/birdflop/web/commit/89aff167b8ddebf358956a1adf3dad5f8cecedeb))
 - decouple advanced segments and rgb options state across the advanced RGB editor component suite. ([ea02f8a](https://github.com/birdflop/web/commit/ea02f8a2a7c40a485158f094f8ba0efdbbe8d49e))
-- introduce BasePlugin class, modularize ESLint ignores, and extract JVM flag analysis logic ([186e2e7](https://github.com/birdflop/web/commit/186e2e75c670e99bead01dd2b3b84e2d39357d2c))
-- prettier and eslint ([2a0239b](https://github.com/birdflop/web/commit/2a0239bff1983ebe897be07fb2d10b7b2da8026a))
+- introduce BasePlugin class, modularize oxlint ignores, and extract JVM flag analysis logic ([186e2e7](https://github.com/birdflop/web/commit/186e2e75c670e99bead01dd2b3b84e2d39357d2c))
 
 ## [0.2.0](https://github.com/birdflop/web/compare/v0.1.17...v0.2.0) (2026-07-01)
 

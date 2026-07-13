@@ -73,7 +73,7 @@ export default component$(
   }) => {
     const t = inlineTranslate();
     const notifications = useContext(NotificationContext);
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       errors.forEach((error) => {
         const notification = new Notification()
@@ -113,7 +113,7 @@ export default component$(
     });
 
     // Obfuscate effect
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
       if (!isBrowser) return;
 
@@ -154,7 +154,7 @@ export default component$(
     });
 
     // Ads
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (!isBrowser) return;
 
@@ -265,7 +265,7 @@ export default component$(
       },
     ];
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       birdStore.track = flopBirdTrack;
     });

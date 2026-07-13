@@ -10,7 +10,6 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - '@luminescent/ui-qwik@6.9.0'
-  - eslint@10.7.0
 
 onlyBuiltDependencies:
   - better-sqlite3

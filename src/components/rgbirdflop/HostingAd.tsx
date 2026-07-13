@@ -12,7 +12,7 @@ export default component$<HostingAdProps>(({ variant, position }) => {
   const tracked = useSignal(false);
 
   // Track ad impressions when they become visible
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const observerOptions = {
       root: null,

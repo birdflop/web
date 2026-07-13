@@ -48,7 +48,7 @@ export default component$(() => {
 
   const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
       const notification = new Notification()
@@ -99,7 +99,7 @@ export default component$(() => {
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {

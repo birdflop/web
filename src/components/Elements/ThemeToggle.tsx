@@ -21,7 +21,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     const settingsStore = useContext(SettingsContext);
 
     // Update current theme from DOM
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (typeof document !== 'undefined') {
         const updateCurrentTheme = () => {

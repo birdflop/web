@@ -37,7 +37,7 @@ export default component$(() => {
   useContextProvider(savedPresetsContext, savedPresets);
 
   const { userInfo, userPresets, errors } = useUser().value;
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {

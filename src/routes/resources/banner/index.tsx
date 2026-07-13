@@ -1,4 +1,3 @@
-/* eslint-disable qwik/jsx-img */
 import {
   component$,
   noSerialize,
@@ -65,7 +64,7 @@ export default component$(() => {
     patterns: [],
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // Scene
     const scene = new THREE.Scene();
@@ -162,7 +161,7 @@ export default component$(() => {
     animate();
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => bannerStore.color);
     track(() => bannerStore.patterns);

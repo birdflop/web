@@ -125,7 +125,7 @@ export default component$(() => {
     searchParams.set(key, String(value));
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If savedPresets is empty, load presets from localStorage
     if (savedPresets.value.length != 0) return;

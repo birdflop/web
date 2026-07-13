@@ -33,7 +33,7 @@ import Testimonials from '~/components/home/Testimonials';
 export default component$(() => {
   const missionExpanded = useSignal(false);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => initiateTyper());
 
   useOnWindow(
