@@ -14,6 +14,7 @@ import {
   runMigratePresets,
   backfillColorVectors,
 } from '~/util/admin';
+import { Label } from '@luminescent/ui-qwik';
 
 export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
@@ -268,9 +269,7 @@ export default component$(() => {
       const similarGroups = groups
         .filter((group) => group.size > 1)
         .map((groupIds) => {
-          const groupPresets = allPresets.filter((p: any) =>
-            groupIds.has(p.id)
-          );
+          const groupPresets = allPresets.filter((p) => groupIds.has(p.id));
 
           // Get distances for this group (only pairs within threshold)
           const distances: { from: number; to: number; distance: number }[] =
@@ -286,7 +285,7 @@ export default component$(() => {
           });
 
           return {
-            presets: groupPresets.map((p: any) => ({
+            presets: groupPresets.map((p) => ({
               ...p,
               createdAt: new Date(p.createdAt),
             })),
@@ -418,25 +417,24 @@ export default component$(() => {
           </div>
 
           <div class="flex flex-col">
-            <label
+            <Label
               for="similarity-threshold"
-              class="mb-2 block text-sm font-medium"
+              label="Similarity Threshold (lower = stricter)"
             >
-              Similarity Threshold (lower = stricter)
-            </label>
-            <input
-              id="similarity-threshold"
-              type="number"
-              value={similarThreshold.value}
-              onInput$={(e) => {
-                const val = parseFloat((e.target as HTMLInputElement).value);
-                similarThreshold.value = isNaN(val) || val < 0.1 ? 0.1 : val;
-              }}
-              min="0.1"
-              max="10"
-              step="0.01"
-              class="lum-input max-w-50"
-            />
+              <input
+                id="similarity-threshold"
+                type="number"
+                value={similarThreshold.value}
+                onInput$={(e) => {
+                  const val = parseFloat((e.target as HTMLInputElement).value);
+                  similarThreshold.value = isNaN(val) || val < 0.1 ? 0.1 : val;
+                }}
+                min="0.1"
+                max="10"
+                step="0.01"
+                class="lum-input max-w-50"
+              />
+            </Label>
             <p class="mt-1 text-xs text-gray-500">
               Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current:{' '}
               {similarThreshold.value}

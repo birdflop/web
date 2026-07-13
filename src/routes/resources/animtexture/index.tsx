@@ -252,62 +252,66 @@ export default component$(() => {
                 'col-span-2': texture.lockdimensions,
               }}
             >
-              <SelectMenu
-                id="namespace"
-                class={{ 'w-full': true }}
-                customDropdown
-                values={[
-                  { name: 'minecraft', value: 'minecraft' },
-                  { name: 'birdflop', value: 'birdflop' },
-                ]}
-                onChange$={(e, el) => {
-                  texture.namespace = el.value;
-                }}
+              <Label
+                for="namespace"
+                label={t('animtexture.namespace@@Namespace')}
               >
-                <span q:slot="dropdown">{texture.namespace}</span>
-                {t('animtexture.namespace@@Namespace')}
-                <input
-                  q:slot="extra-buttons"
+                <SelectMenu
                   id="namespace"
-                  class={{
-                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
-                  }}
-                  placeholder="Custom"
-                  onInput$={(e, el) => {
+                  class={{ 'w-full': true }}
+                  customDropdown
+                  values={[
+                    { name: 'minecraft', value: 'minecraft' },
+                    { name: 'birdflop', value: 'birdflop' },
+                  ]}
+                  onChange$={(e, el) => {
                     texture.namespace = el.value;
                   }}
-                />
-              </SelectMenu>
+                >
+                  <span q:slot="dropdown">{texture.namespace}</span>
+                  <input
+                    q:slot="extra-buttons"
+                    id="namespace"
+                    class={{
+                      'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                    }}
+                    placeholder="Custom"
+                    onInput$={(e, el) => {
+                      texture.namespace = el.value;
+                    }}
+                  />
+                </SelectMenu>
+              </Label>
               <p class="text-lum-text-secondary mx-1 mt-7">:</p>
-              <SelectMenu
-                id="path"
-                class={{ 'w-full': true }}
-                customDropdown
-                values={[
-                  { name: 'block', value: 'block' },
-                  { name: 'item', value: 'item' },
-                ]}
-                onChange$={(e, el) => {
-                  texture.path = el.value;
-                }}
-              >
-                <span q:slot="dropdown">{texture.path}</span>
-                {t('animtexture.path@@Path')}
-                <input
-                  q:slot="extra-buttons"
+              <Label for="path" label={t('animtexture.path@@Path')}>
+                <SelectMenu
                   id="path"
-                  class={{
-                    'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                  class={{ 'w-full': true }}
+                  customDropdown
+                  values={[
+                    { name: 'block', value: 'block' },
+                    { name: 'item', value: 'item' },
+                  ]}
+                  onChange$={(e, el) => {
+                    texture.path = el.value;
                   }}
-                  placeholder={t('animtexture.custom@@Custom')}
-                  onInput$={(e, el) => {
-                    texture.namespace = el.value;
-                  }}
-                />
-              </SelectMenu>
+                >
+                  <span q:slot="dropdown">{texture.path}</span>
+                  <input
+                    q:slot="extra-buttons"
+                    id="path"
+                    class={{
+                      'lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2': true,
+                    }}
+                    placeholder={t('animtexture.custom@@Custom')}
+                    onInput$={(e, el) => {
+                      texture.path = el.value;
+                    }}
+                  />
+                </SelectMenu>
+              </Label>
               <p class="text-lum-text-secondary mx-1 mt-7">/</p>
-              <div class="flex flex-1 flex-col gap-1">
-                <label for="name">{t('animtexture.name@@Texture Name')}</label>
+              <Label for="name" label={t('animtexture.name@@Texture Name')}>
                 <input
                   id="name"
                   class={{ 'lum-input': true }}
@@ -316,7 +320,7 @@ export default component$(() => {
                     texture.name = el.value;
                   }}
                 />
-              </div>
+              </Label>
               <p class="text-lum-text-secondary mx-1 mt-7">.png</p>
             </div>
           </div>

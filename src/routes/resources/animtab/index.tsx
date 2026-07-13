@@ -183,10 +183,11 @@ export default component$(() => {
         />
       </Label>
 
-      <div class="col-span-2 flex flex-col gap-1" q:slot="options">
-        <label for="nameinput">
-          {t('animtab.animation.name@@Animation Name')}
-        </label>
+      <Label
+        q:slot="options"
+        for="nameinput"
+        label={t('animtab.animation.name@@Animation Name')}
+      >
         <input
           class="lum-input"
           id="nameinput"
@@ -194,13 +195,13 @@ export default component$(() => {
           placeholder={'name'}
           onInput$={(e, el) => (animtabStore.name = el.value)}
         />
-      </div>
+      </Label>
       <Label
+        q:slot="options"
         for="speed"
         label={`${t('animtab.animation.interval@@Animation Interval')} (ms)`}
       >
         <NumberInput
-          q:slot="options"
           id="speed"
           input
           value={animtabStore.speed}
@@ -210,19 +211,22 @@ export default component$(() => {
           onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
         />
       </Label>
-      <SelectMenu
+      <Label
         q:slot="options"
-        id="type"
-        class={{ 'w-full': true }}
-        onChange$={(e, el) => (animtabStore.type = Number(el.value))}
-        values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
-          name: t(`animtab.animation.style.${key}@@${key}`),
-          value: String(value),
-        }))}
-        value={animtabStore.type}
+        for="type"
+        label={t('animtab.animation.style.title@@Animation Style')}
       >
-        {t('animtab.animation.style.title@@Animation Style')}
-      </SelectMenu>
+        <SelectMenu
+          id="type"
+          class={{ 'w-full': true }}
+          onChange$={(e, el) => (animtabStore.type = Number(el.value))}
+          values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
+            name: t(`animtab.animation.style.${key}@@${key}`),
+            value: String(value),
+          }))}
+          value={animtabStore.type}
+        />
+      </Label>
 
       <button
         onClick$={() => {

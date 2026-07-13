@@ -24,7 +24,7 @@ import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
 import { defaultDescription, generateHead } from '~/root';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { Label, SelectMenu } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
 import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
@@ -705,19 +705,22 @@ export default component$(() => {
             </h3>
           </div>
 
-          <SelectMenu
-            id="add-plugin-type"
-            onChange$={(e, el) => {
-              resolvedPlugin.type = el.value as PluginSource;
-              resolvedPlugin.plugin = undefined;
-            }}
-            values={pluginSources.map((Source) => ({
-              name: <Source.component />,
-              value: Source.value,
-            }))}
+          <Label
+            for="add-plugin-type"
+            label={t('plugins.source@@Plugin Source')}
           >
-            Plugin source
-          </SelectMenu>
+            <SelectMenu
+              id="add-plugin-type"
+              onChange$={(e, el) => {
+                resolvedPlugin.type = el.value as PluginSource;
+                resolvedPlugin.plugin = undefined;
+              }}
+              values={pluginSources.map((Source) => ({
+                name: <Source.component />,
+                value: Source.value,
+              }))}
+            />
+          </Label>
 
           {resolvedPlugin.type !== 'misc' && (
             <AddPluginDialog type={resolvedPlugin.type} />

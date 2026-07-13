@@ -7,7 +7,7 @@ import Palette from 'lucide-icons-qwik/icons/Palette';
 import Plus from 'lucide-icons-qwik/icons/Plus';
 import Save from 'lucide-icons-qwik/icons/Save';
 import X from 'lucide-icons-qwik/icons/X';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -229,59 +229,60 @@ export default component$(() => {
           class="flex flex-col gap-2"
         >
           <div class="grid gap-2 sm:grid-cols-2">
-            <div class="flex flex-col gap-1">
-              <label for="publish-preset-name">Preset name</label>
+            <Label for="publish-preset-name" label="Preset name">
               <input
                 type="text"
                 class="lum-input"
                 placeholder="My Preset"
                 id="publish-preset-name"
               />
-            </div>
+            </Label>
             {selectedPreset.value && (
-              <SelectMenu
-                id="publish-preset-preset"
-                class={{ 'w-full': true }}
-                values={
-                  privatePresets.value.length == 0
-                    ? undefined
-                    : privatePresets.value.map((preset) => ({
-                        name: (
-                          <span
-                            class={{
-                              'font-mc tracking-tight break-all': true,
-                              'font-mc-bold': preset.baseFormatting?.bold,
-                              'font-mc-italic': preset.baseFormatting?.italic,
-                              'font-mc-bold-italic':
-                                preset.baseFormatting?.bold &&
-                                preset.baseFormatting?.italic,
-                              [`${preset.colorFormat?.class}`]:
-                                preset.colorFormat?.class,
-                            }}
-                          >
-                            <RgbPreview
-                              rgbStore={{ ...rgbDefaults, ...preset }}
-                            />
-                          </span>
-                        ),
-                        value: JSON.stringify(preset),
-                      }))
-                }
-                value={selectedPreset.value}
+              <Label
+                for="publish-preset-preset"
+                label="Select a preset to publish"
               >
-                Select a preset to publish
-              </SelectMenu>
+                <SelectMenu
+                  id="publish-preset-preset"
+                  class={{ 'w-full': true }}
+                  values={
+                    privatePresets.value.length == 0
+                      ? undefined
+                      : privatePresets.value.map((preset) => ({
+                          name: (
+                            <span
+                              class={{
+                                'font-mc tracking-tight break-all': true,
+                                'font-mc-bold': preset.baseFormatting?.bold,
+                                'font-mc-italic': preset.baseFormatting?.italic,
+                                'font-mc-bold-italic':
+                                  preset.baseFormatting?.bold &&
+                                  preset.baseFormatting?.italic,
+                                [`${preset.colorFormat?.class}`]:
+                                  preset.colorFormat?.class,
+                              }}
+                            >
+                              <RgbPreview
+                                rgbStore={{ ...rgbDefaults, ...preset }}
+                              />
+                            </span>
+                          ),
+                          value: JSON.stringify(preset),
+                        }))
+                  }
+                  value={selectedPreset.value}
+                />
+              </Label>
             )}
           </div>
 
-          <label for="publish-preset-description" class="-mb-1">
-            Preset description
-          </label>
-          <textarea
-            class="lum-input"
-            placeholder="This is my preset"
-            id="publish-preset-description"
-          />
+          <Label for="publish-preset-description" label="Preset description">
+            <textarea
+              class="lum-input"
+              placeholder="This is my preset"
+              id="publish-preset-description"
+            />
+          </Label>
 
           <Toggle id="publish-preset-includetext">
             Include preset input text (You usually do not need to enable this.)

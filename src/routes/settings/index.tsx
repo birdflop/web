@@ -1,5 +1,5 @@
 import { component$, useContext } from '@qwik.dev/core';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import Bird from 'lucide-icons-qwik/icons/Bird';
 import Cookie from 'lucide-icons-qwik/icons/Cookie';
 import Settings from 'lucide-icons-qwik/icons/Settings';
@@ -29,27 +29,26 @@ export default component$(() => {
       </p>
 
       <div class="grid gap-2 sm:grid-cols-3">
-        <SelectMenu
-          id="lang-picker"
-          values={config.supportedLocales.map((value) => ({
-            name: languages[value.lang as keyof typeof languages],
-            value: value.lang,
-          }))}
-          value={locale.lang}
-          onChange$={async (e, el) => {
-            settingsStore.locale = el.value as keyof typeof languages;
-            setCookies('settings', settingsStore);
-            await setUserData({ settings: settingsStore });
-            location.reload();
-          }}
-        >
-          {t('settings.language@@Language')}
-        </SelectMenu>
+        <Label for="lang-picker" label={t('settings.language@@Language')}>
+          <SelectMenu
+            id="lang-picker"
+            values={config.supportedLocales.map((value) => ({
+              name: languages[value.lang as keyof typeof languages],
+              value: value.lang,
+            }))}
+            value={locale.lang}
+            onChange$={async (e, el) => {
+              settingsStore.locale = el.value as keyof typeof languages;
+              setCookies('settings', settingsStore);
+              await setUserData({ settings: settingsStore });
+              location.reload();
+            }}
+          />
+        </Label>
 
-        <div class="flex flex-col gap-1">
-          <label for="theme">{t('settings.theme@@Theme Preference')}</label>
+        <Label for="theme" label={t('settings.theme@@Theme Preference')}>
           <ThemeToggle variant="full" showLabel />
-        </div>
+        </Label>
 
         <div class="flex flex-col gap-1">
           <Toggle

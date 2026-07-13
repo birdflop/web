@@ -241,29 +241,28 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="decode"
     >
-      <label for="decode">
-        {t('rgb.decode.title@@Decode')}
-        <span class="text-lum-text-secondary">
+      <Label for="decode" label={t('rgb.decode.title@@Decode')}>
+        <span q:slot="label" class="text-lum-text-secondary">
           {' '}
           -{' '}
           {t(
             'rgb.decode.description@@Copy-paste an existing RGB text here to edit it'
           )}
         </span>
-      </label>
-      <textarea
-        id="decode"
-        class={{
-          'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
-        }}
-        placeholder={generateOutput(rgbStore)}
-        onInput$={async (e, el) => {
-          const threshold = document.getElementById(
-            'threshold'
-          ) as HTMLInputElement;
-          await decodeText(el.value, Number(threshold.value));
-        }}
-      />
+        <textarea
+          id="decode"
+          class={{
+            'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
+          }}
+          placeholder={generateOutput(rgbStore)}
+          onInput$={async (e, el) => {
+            const threshold = document.getElementById(
+              'threshold'
+            ) as HTMLInputElement;
+            await decodeText(el.value, Number(threshold.value));
+          }}
+        />
+      </Label>
       <Label for="threshold" label={t('rgb.decode.threshold.title@@Threshold')}>
         <span q:slot="label" class="text-lum-text-secondary">
           {' '}

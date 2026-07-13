@@ -19,6 +19,7 @@ import Eye from 'lucide-icons-qwik/icons/Eye';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import { getFormattingClasses, toCSS } from '~/components/rgbirdflop/preview';
+import { Label } from '@luminescent/ui-qwik';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
   return getCookies<{ yaml?: string }>(cookie, 'animpreview', url.searchParams);
@@ -196,8 +197,7 @@ export default component$(() => {
         })()}
       </Input>
 
-      <div class="mb-2 flex flex-col gap-1">
-        <label for="animation">{t('animtab.yamlInput@@YAML Input')}</label>
+      <Label for="animation" label={t('animtab.yamlInput@@YAML Input')}>
         <textarea
           id="animation"
           class={{ 'lum-input h-96 font-mono': true }}
@@ -206,7 +206,7 @@ export default component$(() => {
             animprevStore.yaml = el.value;
           }}
         />
-      </div>
+      </Label>
 
       <p class="lum-grad-bg-lum-input-bg lum-btn-p-2 rounded-lum font-mono">
         {animprevStore.frames[animprevStore.frame]}

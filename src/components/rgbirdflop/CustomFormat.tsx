@@ -1,3 +1,4 @@
+import { Label } from '@luminescent/ui-qwik';
 import { component$, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
@@ -20,18 +21,20 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           'flex flex-col gap-2': true,
         }}
       >
-        <label for="customformat">
-          {t('rgb.colors.customFormat@@Custom Format')}
-        </label>
-        <input
-          class="lum-input"
-          id="customformat"
-          value={rgbStore.colorFormat.color}
-          placeholder="&#$1$2$3$4$5$6$f$c"
-          onInput$={(e, el) => {
-            rgbStore.colorFormat.color = el.value;
-          }}
-        />
+        <Label
+          for="customformat"
+          label={t('rgb.colors.customFormat@@Custom Format')}
+        >
+          <input
+            class="lum-input"
+            id="customformat"
+            value={rgbStore.colorFormat.color}
+            placeholder="&#$1$2$3$4$5$6$f$c"
+            onInput$={(e, el) => {
+              rgbStore.colorFormat.color = el.value;
+            }}
+          />
+        </Label>
         <div class="font-mono text-sm">
           <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
           <p>
@@ -68,10 +71,10 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           !rgbStore.colorFormat.italic &&
           !rgbStore.colorFormat.underline &&
           !rgbStore.colorFormat.strikethrough && (
-            <>
-              <label for="format-char">
-                {t('rgb.formatting.character@@Format Character')}
-              </label>
+            <Label
+              for="format-char"
+              label={t('rgb.formatting.character@@Format Character')}
+            >
               <input
                 class="lum-input"
                 id="format-char"
@@ -81,68 +84,77 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                   rgbStore.colorFormat.char = el.value;
                 }}
               />
-            </>
+            </Label>
           )}
         {!rgbStore.colorFormat.char && (
           <>
-            <label for="format-bold">{t('rgb.formatting.bold@@Bold')}</label>
-            <input
-              class="lum-input"
-              id="format-bold"
-              value={rgbStore.colorFormat.bold}
-              placeholder="<bold>$t</bold>"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.bold = el.value;
-              }}
-            />
-            <label for="format-italic">
-              {t('rgb.formatting.italic@@Italic')}
-            </label>
-            <input
-              class="lum-input"
-              id="format-italic"
-              value={rgbStore.colorFormat.italic}
-              placeholder="<italic>$t</italic>"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.italic = el.value;
-              }}
-            />
-            <label for="format-underline">
-              {t('rgb.formatting.underline@@Underline')}
-            </label>
-            <input
-              class="lum-input"
-              id="format-underline"
-              value={rgbStore.colorFormat.underline}
-              placeholder="<underlined>$t</underlined>"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.underline = el.value;
-              }}
-            />
-            <label for="format-strikethrough">
-              {t('rgb.formatting.strikethrough@@Strikethrough')}
-            </label>
-            <input
-              class="lum-input"
-              id="format-strikethrough"
-              value={rgbStore.colorFormat.strikethrough}
-              placeholder="<strikethrough>$t</strikethrough>"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.strikethrough = el.value;
-              }}
-            />
-            <label for="format-obfuscate">
-              {t('rgb.formatting.obfuscate@@Obfuscate')}
-            </label>
-            <input
-              class="lum-input"
-              id="format-obfuscate"
-              value={rgbStore.colorFormat.obfuscate}
-              placeholder="<obfuscated>$t</obfuscated>"
-              onInput$={(e, el) => {
-                rgbStore.colorFormat.obfuscate = el.value;
-              }}
-            />
+            <Label for="format-bold" label={t('rgb.formatting.bold@@Bold')}>
+              <input
+                class="lum-input"
+                id="format-bold"
+                value={rgbStore.colorFormat.bold}
+                placeholder="<bold>$t</bold>"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.bold = el.value;
+                }}
+              />
+            </Label>
+            <Label
+              for="format-italic"
+              label={t('rgb.formatting.italic@@Italic')}
+            >
+              <input
+                class="lum-input"
+                id="format-italic"
+                value={rgbStore.colorFormat.italic}
+                placeholder="<italic>$t</italic>"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.italic = el.value;
+                }}
+              />
+            </Label>
+            <Label
+              for="format-underline"
+              label={t('rgb.formatting.underline@@Underline')}
+            >
+              <input
+                class="lum-input"
+                id="format-underline"
+                value={rgbStore.colorFormat.underline}
+                placeholder="<underlined>$t</underlined>"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.underline = el.value;
+                }}
+              />
+            </Label>
+            <Label
+              for="format-strikethrough"
+              label={t('rgb.formatting.strikethrough@@Strikethrough')}
+            >
+              <input
+                class="lum-input"
+                id="format-strikethrough"
+                value={rgbStore.colorFormat.strikethrough}
+                placeholder="<strikethrough>$t</strikethrough>"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.strikethrough = el.value;
+                }}
+              />
+            </Label>
+            <Label
+              for="format-obfuscate"
+              label={t('rgb.formatting.obfuscate@@Obfuscate')}
+            >
+              <input
+                class="lum-input"
+                id="format-obfuscate"
+                value={rgbStore.colorFormat.obfuscate}
+                placeholder="<obfuscated>$t</obfuscated>"
+                onInput$={(e, el) => {
+                  rgbStore.colorFormat.obfuscate = el.value;
+                }}
+              />
+            </Label>
             <div class="font-mono text-sm">
               <p>{t('rgb.formatting.placeholders@@Placeholders:')}</p>
               <p>$t = Output Text</p>

@@ -25,18 +25,20 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
       <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
         <div class="flex flex-col gap-1">
-          <label for="prefixsuffix">
-            {t('rgb.prefixsuffix@@Prefix/Suffix')}
-          </label>
-          <input
-            class="lum-input"
-            id="prefixsuffix"
-            value={rgbStore.prefixSuffix}
-            placeholder={'/nick $t'}
-            onInput$={(e, el) => {
-              rgbStore.prefixSuffix = el.value;
-            }}
-          />
+          <Label
+            for="prefixsuffix"
+            label={t('rgb.prefixsuffix@@Prefix/Suffix')}
+          >
+            <input
+              class="lum-input"
+              id="prefixsuffix"
+              value={rgbStore.prefixSuffix}
+              placeholder={'/nick $t'}
+              onInput$={(e, el) => {
+                rgbStore.prefixSuffix = el.value;
+              }}
+            />
+          </Label>
         </div>
         {rgbStore.colorFormat.color != 'MiniMessage' && (
           <Label

@@ -32,6 +32,7 @@ import { discordLink } from '~/components/Elements/Nav';
 import { SelectList } from '~/components/Elements/SelectList';
 import { PublicPreset } from '~/util/db';
 import RgbPreview from '../RgbPreview';
+import { Label } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -338,21 +339,19 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
 
-      <label for="import">
-        {t('rgb.presets.import@@Import')}
-        <span class="text-lum-text-secondary">
+      <Label for="import" label={t('rgb.presets.import@@Import')}>
+        <span q:slot="label" class="text-lum-text-secondary">
           {' '}
           - {t('rgb.presets.importSubtitle@@Load a JSON preset')}
         </span>
-      </label>
-
-      <input
-        class="lum-input"
-        id="import"
-        name="import"
-        placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
-        onInput$={async (e, el) => loadPresetJSON(el.value)}
-      />
+        <input
+          class="lum-input"
+          id="import"
+          name="import"
+          placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
+          onInput$={async (e, el) => loadPresetJSON(el.value)}
+        />
+      </Label>
 
       <div class="flex flex-wrap gap-1">
         <button
@@ -402,7 +401,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             const params: rgbPreset = { ...rgbStore };
             (
               Object.entries(params) as Array<
-                [keyof typeof combinedDefaults, any]
+                [keyof typeof combinedDefaults, unknown]
               >
             ).forEach(([key, value]) => {
               const defaultValue = combinedDefaults[key];

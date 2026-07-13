@@ -254,20 +254,21 @@ export default component$(() => {
       <div class="my-6 flex flex-wrap justify-between gap-4 *:flex-1">
         <div class="flex flex-col gap-2">
           <div class="flex flex-col gap-1">
-            <label for="input">{t('flags.fileName.label@@File Name')}</label>
-            <input
-              class="lum-input"
-              id="input"
-              value={flagsStore.fileName}
-              placeholder="server.jar"
-              onChange$={(e, el) => {
-                if (el.value.replace(/ /g, '') == '') return;
-                if (!el.value.endsWith('.jar')) {
-                  el.value += '.jar';
-                }
-                flagsStore.fileName = el.value;
-              }}
-            />
+            <Label for="file-name" label={t('flags.fileName.label@@File Name')}>
+              <input
+                class="lum-input"
+                id="file-name"
+                value={flagsStore.fileName}
+                placeholder="server.jar"
+                onChange$={(e, el) => {
+                  if (el.value.replace(/ /g, '') == '') return;
+                  if (!el.value.endsWith('.jar')) {
+                    el.value += '.jar';
+                  }
+                  flagsStore.fileName = el.value;
+                }}
+              />
+            </Label>
             <p class="text-lum-text-secondary text-sm">
               {t(
                 'flags.fileName.description@@The name of the file that will be used to start your server.'
@@ -276,17 +277,17 @@ export default component$(() => {
           </div>
           <div class="flex gap-2">
             <div class="flex flex-col gap-1">
-              <SelectMenu
-                id="os"
-                class={{ 'w-full': true }}
-                onChange$={(e, el) => {
-                  flagsStore.operatingSystem = el.value;
-                }}
-                values={environmentOptions}
-                value={flagsStore.operatingSystem}
-              >
-                {t('flags.environment.label@@Environment')}
-              </SelectMenu>
+              <Label for="os" label={t('flags.environment.label@@Environment')}>
+                <SelectMenu
+                  id="os"
+                  class={{ 'w-full': true }}
+                  onChange$={(e, el) => {
+                    flagsStore.operatingSystem = el.value;
+                  }}
+                  values={environmentOptions}
+                  value={flagsStore.operatingSystem}
+                />
+              </Label>
               <p class="text-lum-text-secondary text-sm">
                 {t(
                   'flags.environment.description@@The operating system that the server runs on.'
@@ -294,17 +295,17 @@ export default component$(() => {
               </p>
             </div>
             <div class="flex flex-col gap-1">
-              <SelectMenu
-                id="software"
-                class={{ 'w-full': true }}
-                onChange$={(e, el) => {
-                  flagsStore.serverType = el.value;
-                }}
-                values={softwareOptionsFlags}
-                value={flagsStore.serverType}
-              >
-                {t('flags.software.label@@Software')}
-              </SelectMenu>
+              <Label for="software" label={t('flags.software.label@@Software')}>
+                <SelectMenu
+                  id="software"
+                  class={{ 'w-full': true }}
+                  onChange$={(e, el) => {
+                    flagsStore.serverType = el.value;
+                  }}
+                  values={softwareOptionsFlags}
+                  value={flagsStore.serverType}
+                />
+              </Label>
               <p class="text-lum-text-secondary text-sm">
                 {t(
                   'flags.software.description@@The software in which your Minecraft server will run on.'
@@ -355,17 +356,17 @@ export default component$(() => {
         <div class="flex flex-col gap-2">
           <div class="flex w-full flex-col gap-1">
             <div class="flex items-end gap-2">
-              <SelectMenu
-                id="flags"
-                class={{ 'w-full': true }}
-                onChange$={(e, el) => {
-                  flagsStore.flags = el.value as AvailableFlags;
-                }}
-                values={flagOptions}
-                value={flagsStore.flags}
-              >
-                {t('flags.flags.label@@Flags')}
-              </SelectMenu>
+              <Label for="flags" label={t('flags.flags.label@@Flags')}>
+                <SelectMenu
+                  id="flags"
+                  class={{ 'w-full': true }}
+                  onChange$={(e, el) => {
+                    flagsStore.flags = el.value as AvailableFlags;
+                  }}
+                  values={flagOptions}
+                  value={flagsStore.flags}
+                />
+              </Label>
               <SelectMenu
                 id="flagshelp"
                 onChange$={(e, el) => {

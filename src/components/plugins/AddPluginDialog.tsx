@@ -18,6 +18,7 @@ import {
   PluginSource,
   searchPlugins,
 } from '~/util/plugins/ServerPlugin';
+import { Label } from '@luminescent/ui-qwik';
 
 function getLoaders(software: string) {
   let loaders;
@@ -84,104 +85,105 @@ export default component$(
             </h4>
           </div>
 
-          <label for="plugin-link">
-            Search or paste the link of the plugin you want to add.
-          </label>
-          <input
-            type="text"
-            class="lum-input"
-            id="plugin-link"
-            placeholder={`Plugin name or ${urls[type]}...`}
-            onInput$={async (e, el) => {
-              const value = el.value;
-              const match = value.match(urlRegex[type]);
+          <Label
+            for="plugin-link"
+            label="Search or paste the link of the plugin you want to add."
+          >
+            <input
+              type="text"
+              class="lum-input"
+              id="plugin-link"
+              placeholder={`Plugin name or ${urls[type]}...`}
+              onInput$={async (e, el) => {
+                const value = el.value;
+                const match = value.match(urlRegex[type]);
 
-              if (!match) return;
+                if (!match) return;
 
-              const pluginId = match[1];
-              // check if the plugin is already added
-              const existingPlugin =
-                pluginsStore.servers[pluginsStore.openServer!].plugins[
-                  pluginId
-                ];
-              if (existingPlugin) {
-                const notification = new Notification()
-                  .setTitle('Plugin already added')
-                  .setDescription(
-                    `The plugin ${existingPlugin.name} is already added.`
-                  )
-                  .setBgColor('lum-grad-bg-yellow/50');
-                notifications.push(notification);
-                return;
-              }
-
-              try {
-                isLoading.value = true;
-
-                const newPlugin = getPlugin({
-                  type: type,
-                  id: pluginId,
-                });
-                await newPlugin.fetch();
-
-                resolvedPlugin.plugin = newPlugin;
-              } catch (error) {
-                console.error('Error fetching plugin data:', error);
-                const notification = new Notification()
-                  .setTitle('Error fetching plugin data')
-                  .setDescription(
-                    `An error occurred while fetching plugin data. ${error instanceof Error ? error.message : String(error)}`
-                  )
-                  .setBgColor('lum-grad-bg-red/50');
-                notifications.push(notification);
-              }
-              isLoading.value = false;
-            }}
-            onChange$={async (e, el) => {
-              const value = el.value;
-              const match = value.match(urlRegex[type]);
-              if (match) return;
-
-              console.log('Searching for plugin:', value);
-              try {
-                isLoading.value = true;
-                const searchData = await searchPlugins(
-                  type,
-                  value,
-                  loaders.value
-                );
-
-                if (searchData.length === 0) {
+                const pluginId = match[1];
+                // check if the plugin is already added
+                const existingPlugin =
+                  pluginsStore.servers[pluginsStore.openServer!].plugins[
+                    pluginId
+                  ];
+                if (existingPlugin) {
                   const notification = new Notification()
-                    .setTitle('No results found')
+                    .setTitle('Plugin already added')
                     .setDescription(
-                      `No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`
+                      `The plugin ${existingPlugin.name} is already added.`
                     )
                     .setBgColor('lum-grad-bg-yellow/50');
                   notifications.push(notification);
-                  isLoading.value = false;
                   return;
                 }
 
-                resolvedPlugin.plugins = searchData;
-              } catch (error) {
-                console.error('Error searching for plugins:', error);
-                const notification = new Notification()
-                  .setTitle('Error searching for plugins')
-                  .setDescription(
-                    `An error occurred while searching for plugins. ${error instanceof Error ? error.message : String(error)}`
-                  )
-                  .setBgColor('lum-grad-bg-red/50');
-                notifications.push(notification);
-              }
-              isLoading.value = false;
-            }}
-          />
+                try {
+                  isLoading.value = true;
+
+                  const newPlugin = getPlugin({
+                    type: type,
+                    id: pluginId,
+                  });
+                  await newPlugin.fetch();
+
+                  resolvedPlugin.plugin = newPlugin;
+                } catch (error) {
+                  console.error('Error fetching plugin data:', error);
+                  const notification = new Notification()
+                    .setTitle('Error fetching plugin data')
+                    .setDescription(
+                      `An error occurred while fetching plugin data. ${error instanceof Error ? error.message : String(error)}`
+                    )
+                    .setBgColor('lum-grad-bg-red/50');
+                  notifications.push(notification);
+                }
+                isLoading.value = false;
+              }}
+              onChange$={async (e, el) => {
+                const value = el.value;
+                const match = value.match(urlRegex[type]);
+                if (match) return;
+
+                console.log('Searching for plugin:', value);
+                try {
+                  isLoading.value = true;
+                  const searchData = await searchPlugins(
+                    type,
+                    value,
+                    loaders.value
+                  );
+
+                  if (searchData.length === 0) {
+                    const notification = new Notification()
+                      .setTitle('No results found')
+                      .setDescription(
+                        `No plugins found matching "${value}". Please try searching by plugin name or pasting the plugin link.`
+                      )
+                      .setBgColor('lum-grad-bg-yellow/50');
+                    notifications.push(notification);
+                    isLoading.value = false;
+                    return;
+                  }
+
+                  resolvedPlugin.plugins = searchData;
+                } catch (error) {
+                  console.error('Error searching for plugins:', error);
+                  const notification = new Notification()
+                    .setTitle('Error searching for plugins')
+                    .setDescription(
+                      `An error occurred while searching for plugins. ${error instanceof Error ? error.message : String(error)}`
+                    )
+                    .setBgColor('lum-grad-bg-red/50');
+                  notifications.push(notification);
+                }
+                isLoading.value = false;
+              }}
+            />
+          </Label>
         </div>
 
         {resolvedPlugin.plugins && (
-          <>
-            <label for="add-plugin-options">Search results:</label>
+          <Label for="add-plugin-options" label="Search results:">
             <SelectList
               id="add-plugin-options"
               values={resolvedPlugin.plugins.map((plugin) => ({
@@ -232,15 +234,14 @@ export default component$(
                 isLoading.value = false;
               }}
             />
-          </>
+          </Label>
         )}
 
         {resolvedPlugin.plugin?.versions && (
-          <>
-            <label for="add-plugin-options">
-              Which version are you currently using?
-            </label>
-
+          <Label
+            for="add-plugin-options"
+            label="Which version are you currently using?"
+          >
             <SelectList
               id="add-plugin-options"
               values={
@@ -273,7 +274,7 @@ export default component$(
                 }
               }}
             />
-          </>
+          </Label>
         )}
       </>
     );

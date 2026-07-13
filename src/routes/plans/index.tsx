@@ -1,3 +1,4 @@
+import { Label } from '@luminescent/ui-qwik';
 import { component$, useStore } from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
 
@@ -341,24 +342,25 @@ export default component$(() => {
                   /mo after reimbursements.
                 </p>
               </div>
-              <div class="flex-1 space-y-2">
-                <label for="server_name">Server Name</label>
+              <Label for="server_name" label="Server name">
                 <input
                   id="server_name"
                   placeholder="A Minecraft Server"
                   class="lum-input"
                   onChange$={(e, el) => (plansStore.name = el.value)}
                 />
-                <label for="server_description">
-                  Server Description (optional)
-                </label>
+              </Label>
+              <Label
+                for="server_description"
+                label="Server description (optional)"
+              >
                 <input
                   id="server_description"
                   placeholder="This is my Minecraft server!"
                   class="lum-input"
                   onChange$={(e, el) => (plansStore.desc = el.value)}
                 />
-              </div>
+              </Label>
               <div>
                 <a
                   class="lum-btn lum-btn-p-4 lum-grad-bg-blue/80 hover:lum-bg-blue mt-auto gap-4 text-lg"
