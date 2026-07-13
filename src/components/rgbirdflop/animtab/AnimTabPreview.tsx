@@ -27,14 +27,13 @@ export default component$<AnimTABPreviewProps>(
     animtabStore: animtabStoreFromProp,
     currentFrameIndex,
   }) => {
-    const rgbStore = useContext(
-      rgbStoreContext,
-      rgbStoreFromProp || rgbDefaults
-    );
-    const animtabStore = useContext(
+    const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
+    const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
+    const animtabStoreFromContext = useContext(
       animtabStoreContext,
-      animtabStoreFromProp || animTABDefaults
+      animTABDefaults
     );
+    const animtabStore = animtabStoreFromProp || animtabStoreFromContext;
 
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;

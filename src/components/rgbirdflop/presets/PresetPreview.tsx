@@ -55,7 +55,7 @@ export default component$<PresetPreviewProps>(
     const searchParams = new URLSearchParams();
     const params = { ...Preset.preset };
     (
-      Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
+      Object.entries(params) as Array<[keyof typeof combinedDefaults, unknown]>
     ).forEach(([key, value]) => {
       if (typeof value === 'object' && value !== null)
         value = JSON.stringify(value);
@@ -167,7 +167,12 @@ export default component$<PresetPreviewProps>(
             }}
           >
             <RgbPreview
-              rgbStore={{ ...rgbDefaults, ...defaults, ...Preset.preset }}
+              rgbStore={{
+                ...rgbDefaults,
+                ...defaults,
+                ...Preset.preset,
+                text: Preset.name,
+              }}
               shadowLength={3}
             />
           </p>

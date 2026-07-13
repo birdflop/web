@@ -24,10 +24,8 @@ export interface RgbPreviewProps {
 
 export default component$<RgbPreviewProps>(
   ({ rgbStore: rgbStoreFromProp, shadowLength = 4 }) => {
-    const rgbStore = useContext(
-      rgbStoreContext,
-      rgbStoreFromProp || rgbDefaults
-    );
+    const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
+    const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
 
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;

@@ -10,12 +10,12 @@ import {
 import type { SegmentType } from './rgbSegments';
 import { chunkText, combinedText, rgbSegmentsContext } from './rgbSegments';
 import { EmptyPreview, getFormattingClasses, toCSS } from '../preview';
-import { component$, useContext, useSignal } from '@qwik.dev/core';
+import { component$, Signal, useContext, useSignal } from '@qwik.dev/core';
 import { RgbPreviewProps } from '../RgbPreview';
 import { rgbStoreContext } from '../RGBirdflop';
 
 interface AdvancedRgbPreviewProps extends RgbPreviewProps {
-  rgbSegments?: SegmentType[];
+  rgbSegments?: Signal<SegmentType[]>;
 }
 /**
  * Render the segmented preview as styled spans (analog of renderPreview in
@@ -24,14 +24,13 @@ interface AdvancedRgbPreviewProps extends RgbPreviewProps {
  */
 export default component$<AdvancedRgbPreviewProps>(
   ({ rgbStore: rgbStoreFromProp, rgbSegments: rgbSegmentsFromProp }) => {
-    const rgbStore = useContext(
-      rgbStoreContext,
-      rgbStoreFromProp || rgbDefaults
-    );
-    const rgbSegments = useContext(
+    const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
+    const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
+    const rgbSegmentsFromContext = useContext(
       rgbSegmentsContext,
-      useSignal(rgbSegmentsFromProp || [])
+      useSignal([])
     );
+    const rgbSegments = rgbSegmentsFromProp || rgbSegmentsFromContext;
 
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;

@@ -1,3 +1,4 @@
+//import { Component, PropsOf } from '@qwik.dev/core';
 //@ts-expect-error vite imagetools
 import Hero1 from '~/images/Hero1.png?url&format=avif&w=1280;1920;2560;3840';
 //@ts-expect-error vite imagetools
@@ -15,6 +16,6 @@ import HeroLight1 from '~/images/HeroLight1.png?url&format=avif&w=1280;1920;2560
 //@ts-expect-error vite imagetools
 import HeroLight2 from '~/images/HeroLight2.png?url&format=avif&w=1280;1920;2560;3840';
 
-export default [Hero1, Hero2, Hero3, Hero4, Hero5, Hero6] as string[];
+export default [Hero1, Hero2, Hero3, Hero4, Hero5, Hero6] as string[]; //Component<PropsOf<'img'>>[];
 
-export const lightBackgrounds = [HeroLight1, HeroLight2] as string[];
+export const lightBackgrounds = [HeroLight1, HeroLight2] as string[]; //Component<PropsOf<'img'>>[];
