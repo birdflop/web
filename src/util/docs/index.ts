@@ -1,4 +1,4 @@
-import { type ContentMenu } from '@builder.io/qwik-city';
+import { type ContentMenu } from '@qwik.dev/router';
 import { menuItemPriority, type MarkdownItems } from '~/routes/docs/layout';
 
 function capitalizeWords(string: string) {

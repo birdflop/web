@@ -4,8 +4,8 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from '@builder.io/qwik';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+} from '@qwik.dev/core';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import {
@@ -24,22 +24,30 @@ import {
 } from '~/components/rgbirdflop/advanced/rgbSegments';
 import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
 import { defaultDescription, generateHead } from '~/root';
-import { ArrowLeft, TestTube2 } from 'lucide-icons-qwik';
+import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
 import Options from '~/components/rgbirdflop/Options';
 import SegmentInspector from '~/components/rgbirdflop/advanced/SegmentInspector';
-import { renderAdvancedPreview } from '~/components/rgbirdflop/advanced/preview';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
 import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEditor';
 import { openItemsContext } from '~/routes/layout-profile';
+import RgbAdvancedPreview from '~/components/rgbirdflop/advanced/RgbAdvancedPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgb', url.searchParams);
+  return getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
 });
 
 export const useSegmentsCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'rgbsegments', url.searchParams);
+  return getCookies<{ segments: SegmentType[] }>(
+    cookie,
+    'rgbsegments',
+    url.searchParams
+  );
 });
 export default component$(() => {
   const t = inlineTranslate();
@@ -49,7 +57,7 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
@@ -58,8 +66,8 @@ export default component$(() => {
   const initialSegments = segmentsCookies.segments;
   const rgbSegments = useSignal<SegmentType[]>(
     normalizeSegments(
-      initialSegments && initialSegments.length ? initialSegments : [],
-    ),
+      initialSegments && initialSegments.length ? initialSegments : []
+    )
   );
   useContextProvider(rgbSegmentsContext, rgbSegments);
 
@@ -91,7 +99,7 @@ export default component$(() => {
           </h1>
           <p class="text-lum-text-secondary mb-2" q:slot="header">
             {t(
-              'nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.',
+              'nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.'
             )}
           </p>
         </div>
@@ -104,16 +112,7 @@ export default component$(() => {
         </Link>
       </div>
 
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-          (gradientType) =>
-            renderAdvancedPreview(rgbSegments.value, {
-              ...rgbStore,
-              gradientType,
-            }),
-          rgbStore.gradientType,
-        )
-        : renderAdvancedPreview(rgbSegments.value, rgbStore)}
+      <RgbAdvancedPreview q:slot="input" />
 
       <SegmentInspector q:slot="input-extra" />
 

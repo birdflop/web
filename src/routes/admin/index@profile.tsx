@@ -1,12 +1,12 @@
-import { component$, useSignal, $, useContextProvider } from '@builder.io/qwik';
-import { RequestHandler } from '@builder.io/qwik-city';
+import { component$, useSignal, $, useContextProvider } from '@qwik.dev/core';
+import { RequestHandler } from '@qwik.dev/router';
 import { vectorDistance } from '@birdflop/rgbirdflop';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { AppWindow } from 'lucide-icons-qwik';
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
 import { checkAdmin } from '../layout';
 import {
   loadAllPresets,
@@ -14,6 +14,7 @@ import {
   runMigratePresets,
   backfillColorVectors,
 } from '~/util/admin';
+import { Label } from '@luminescent/ui-qwik';
 
 export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
@@ -69,7 +70,7 @@ export default component$(() => {
     } catch (error) {
       await addLog(
         'Version Migration',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -95,7 +96,7 @@ export default component$(() => {
     } catch (error) {
       await addLog(
         'Vector Backfill',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -121,7 +122,7 @@ export default component$(() => {
     } catch (error) {
       await addLog(
         'Saves Backfill',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -141,18 +142,18 @@ export default component$(() => {
         loadedAt.value = new Date();
         await addLog(
           'Find Similar',
-          `Loaded ${response.presets.length} presets.`,
+          `Loaded ${response.presets.length} presets.`
         );
       } else {
         await addLog(
           'Find Similar',
-          `Error loading presets: ${response.error}`,
+          `Error loading presets: ${response.error}`
         );
       }
     } catch (error) {
       await addLog(
         'Find Similar',
-        `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Error loading presets: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -199,12 +200,12 @@ export default component$(() => {
           if (preset1.colorVector && preset2.colorVector) {
             const distance = vectorDistance(
               preset1.colorVector,
-              preset2.colorVector,
+              preset2.colorVector
             );
             pairsChecked++;
             if (distance <= threshold) {
               console.log(
-                `Found similar: ${preset1.name} and ${preset2.name} (distance: ${distance.toFixed(3)})`,
+                `Found similar: ${preset1.name} and ${preset2.name} (distance: ${distance.toFixed(3)})`
               );
               similarPairs.push({
                 id1: preset1.id,
@@ -217,7 +218,7 @@ export default component$(() => {
         }
       }
       console.log(
-        `Checked ${pairsChecked} pairs, found ${pairsGrouped} similar pairs with threshold ${threshold}`,
+        `Checked ${pairsChecked} pairs, found ${pairsGrouped} similar pairs with threshold ${threshold}`
       );
 
       // Build groups where ALL presets are within threshold of each other (cliques)
@@ -236,7 +237,7 @@ export default component$(() => {
             const hasPair = similarPairs.some(
               (p) =>
                 (p.id1 === id1 && p.id2 === existingId) ||
-                (p.id2 === id1 && p.id1 === existingId),
+                (p.id2 === id1 && p.id1 === existingId)
             );
             return hasPair || existingId === id1;
           });
@@ -245,7 +246,7 @@ export default component$(() => {
             const hasPair = similarPairs.some(
               (p) =>
                 (p.id1 === id2 && p.id2 === existingId) ||
-                (p.id2 === id2 && p.id1 === existingId),
+                (p.id2 === id2 && p.id1 === existingId)
             );
             return hasPair || existingId === id2;
           });
@@ -268,9 +269,7 @@ export default component$(() => {
       const similarGroups = groups
         .filter((group) => group.size > 1)
         .map((groupIds) => {
-          const groupPresets = allPresets.filter((p: any) =>
-            groupIds.has(p.id),
-          );
+          const groupPresets = allPresets.filter((p) => groupIds.has(p.id));
 
           // Get distances for this group (only pairs within threshold)
           const distances: { from: number; to: number; distance: number }[] =
@@ -286,7 +285,7 @@ export default component$(() => {
           });
 
           return {
-            presets: groupPresets.map((p: any) => ({
+            presets: groupPresets.map((p) => ({
               ...p,
               createdAt: new Date(p.createdAt),
             })),
@@ -311,7 +310,7 @@ export default component$(() => {
     } catch (error) {
       await addLog(
         'Find Similar',
-        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
@@ -418,25 +417,24 @@ export default component$(() => {
           </div>
 
           <div class="flex flex-col">
-            <label
+            <Label
               for="similarity-threshold"
-              class="mb-2 block text-sm font-medium"
+              label="Similarity Threshold (lower = stricter)"
             >
-              Similarity Threshold (lower = stricter)
-            </label>
-            <input
-              id="similarity-threshold"
-              type="number"
-              value={similarThreshold.value}
-              onInput$={(e) => {
-                const val = parseFloat((e.target as HTMLInputElement).value);
-                similarThreshold.value = isNaN(val) || val < 0.1 ? 0.1 : val;
-              }}
-              min="0.1"
-              max="10"
-              step="0.01"
-              class="lum-input max-w-50"
-            />
+              <input
+                id="similarity-threshold"
+                type="number"
+                value={similarThreshold.value}
+                onInput$={(e) => {
+                  const val = parseFloat((e.target as HTMLInputElement).value);
+                  similarThreshold.value = isNaN(val) || val < 0.1 ? 0.1 : val;
+                }}
+                min="0.1"
+                max="10"
+                step="0.01"
+                class="lum-input max-w-50"
+              />
+            </Label>
             <p class="mt-1 text-xs text-gray-500">
               Recommended: 1.0 (strict), 2.0 (moderate), 3.0 (lenient). Current:{' '}
               {similarThreshold.value}
@@ -500,10 +498,10 @@ export default component$(() => {
                       <div class="flex flex-wrap gap-2 text-xs">
                         {group.distances.map((dist: any, i: number) => {
                           const fromPreset = group.presets.find(
-                            (p: any) => p.id === dist.from,
+                            (p: any) => p.id === dist.from
                           );
                           const toPreset = group.presets.find(
-                            (p: any) => p.id === dist.to,
+                            (p: any) => p.id === dist.to
                           );
                           // Ensure distance is treated as a float
                           const distValue = Number(dist.distance);
@@ -535,7 +533,7 @@ export default component$(() => {
                       ))}
                     </div>
                   </div>
-                ),
+                )
               )}
 
               {similarResults.value.groupCount === 0 && (

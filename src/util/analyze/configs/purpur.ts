@@ -16,7 +16,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'TCPShield',
+                  (plugin: Field) => plugin.name == 'TCPShield'
                 ) === undefined
               );
             },
@@ -41,7 +41,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'TCPShield',
+                  (plugin: Field) => plugin.name == 'TCPShield'
                 ) !== undefined
               );
             },
@@ -79,7 +79,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.purpur['world-settings']['default']['mobs'][
                     'villager'
-                  ]['brain-ticks'],
+                  ]['brain-ticks']
                 ) == 1
               );
             },
@@ -99,7 +99,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.purpur['world-settings']['default']['mobs'][
                     'villager'
-                  ]['spawn-iron-golem']['radius'],
+                  ]['spawn-iron-golem']['radius']
                 ) == 0
               );
             },

@@ -1,6 +1,6 @@
 import { QwikAuth$ } from '@auth/qwik';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import Discord from '@auth/qwik/providers/discord';
+import Discord, { DiscordProfile } from '@auth/qwik/providers/discord';
 import { getDB } from '~/util/db';
 
 import {
@@ -18,17 +18,17 @@ const tempsecret = Math.random().toString(36).slice(2);
 
 export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
   (event) => {
-    let secret = event?.platform?.env?.AUTH_SECRET || process.env.AUTH_SECRET;
-    if (!secret) {
+    const secretFromEnvPlatform = event?.platform?.env?.AUTH_SECRET;
+    const secretFromEnvProcess = process.env.AUTH_SECRET;
+    if (!secretFromEnvPlatform && !secretFromEnvProcess)
       console.error('AUTH_SECRET is not set, using a temporary secret');
-      secret = tempsecret;
-    }
+    const secret = secretFromEnvPlatform || secretFromEnvProcess || tempsecret;
     const db = getDB();
 
     return {
       providers: [
         Discord({
-          profile(profile) {
+          profile(profile: DiscordProfile) {
             if (profile.avatar === null) {
               const defaultAvatarNumber =
                 profile.discriminator === '0'
@@ -62,10 +62,10 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         async signIn({ user, account, profile }) {
           if (account?.provider === 'discord' && profile) {
             try {
-              if (profile.avatar && user.id) {
-                const avatarHash = (profile as any).avatar;
+              if (user.id && typeof profile.avatar === 'string') {
+                const avatarHash = profile.avatar;
                 const format = avatarHash?.startsWith('a_') ? 'gif' : 'png';
-                const newImageUrl = `https://cdn.discordapp.com/avatars/${(profile as any).id}/${avatarHash}.${format}`;
+                const newImageUrl = `https://cdn.discordapp.com/avatars/${profile.id}/${avatarHash}.${format}`;
                 user.image = newImageUrl;
 
                 await db
@@ -76,7 +76,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
             } catch (error) {
               console.error(
                 'Failed to refresh Discord profile picture on sign in:',
-                error,
+                error
               );
             }
           }
@@ -110,5 +110,5 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
         },
       },
     };
-  },
+  }
 );

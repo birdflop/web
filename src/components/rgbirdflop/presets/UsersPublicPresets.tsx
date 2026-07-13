@@ -4,9 +4,9 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { generateHead } from '~/root';
-import { Link, server$ } from '@builder.io/qwik-city';
+import { Link, server$ } from '@qwik.dev/router';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
@@ -15,7 +15,8 @@ import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { ChevronLeft, Save } from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import Save from 'lucide-icons-qwik/icons/Save';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getDB, presets, PublicPreset, User, users } from '~/util/db';
@@ -49,7 +50,9 @@ export const getUsersPresets = server$(async (userId: string) => {
       .innerJoin(users, eq(users.id, presets.userId))
       .then((r) => r ?? []);
   } catch (err) {
-    errors.push(`Error fetching presets: ${err}`);
+    errors.push(
+      `Error fetching presets: ${err instanceof Error ? err.message : String(err)}`
+    );
   }
 
   const userPresets = presetsFromDB.map(({ user, preset }) => ({
@@ -80,7 +83,7 @@ export default component$(
     const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
     useContextProvider(savedPresetsContext, savedPresets);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       // If privatePresets is empty, load presets from localStorage
       if (privatePresets.value.length != 0) return;
@@ -91,14 +94,16 @@ export default component$(
       } catch (err) {
         const notification = new Notification()
           .setTitle('Error loading saved presets')
-          .setDescription(`Error: ${err}`)
+          .setDescription(
+            `Error: ${err instanceof Error ? err.message : String(err)}`
+          )
           .setBgColor('lum-grad-bg-red/50')
           .setPersist(true);
         notifications.push(notification);
       }
     });
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (errors.length > 0) {
         errors.forEach((error) => {
@@ -138,7 +143,7 @@ export default component$(
         )}
       </>
     );
-  },
+  }
 );
 
 export const head = generateHead({});

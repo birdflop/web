@@ -1,12 +1,10 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import {
-  Bold,
-  Eraser,
-  Italic,
-  Strikethrough,
-  Underline,
-  Wand2,
-} from 'lucide-icons-qwik';
+import { $, component$, useContext, useSignal } from '@qwik.dev/core';
+import Bold from 'lucide-icons-qwik/icons/Bold';
+import Eraser from 'lucide-icons-qwik/icons/Eraser';
+import Italic from 'lucide-icons-qwik/icons/Italic';
+import Strikethrough from 'lucide-icons-qwik/icons/Strikethrough';
+import Underline from 'lucide-icons-qwik/icons/Underline';
+import Wand2 from 'lucide-icons-qwik/icons/Wand2';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
@@ -14,18 +12,19 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import {
   FormatSegment,
   Formatting,
   FORMAT_KEYS,
   FONT_LABELS,
-  FormatKey,
+  type FormatKey,
 } from '@birdflop/rgbirdflop';
 import {
   combinedText,
   rgbSegmentsContext,
 } from '~/components/rgbirdflop/advanced/rgbSegments';
+import { ButtonContainer } from '../Elements/ButtonContainer';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -68,12 +67,12 @@ export default component$(() => {
       if (a >= b || b <= start || a >= end) continue;
 
       const covering = rgbStore.formatting.find(
-        (s) => s.start <= a && s.end >= b,
+        (s) => s.start <= a && s.end >= b
       );
       intervals.push(
         covering
           ? { ...rgbStore.baseFormatting, ...covering }
-          : { ...rgbStore.baseFormatting },
+          : { ...rgbStore.baseFormatting }
       );
     }
     return intervals;
@@ -82,7 +81,7 @@ export default component$(() => {
   const updateSelectionFormatting = $(
     (
       transform: (fmt: Formatting) => void,
-      clearAllIfEntire: boolean = false,
+      clearAllIfEntire: boolean = false
     ) => {
       const textLength = rgbSegments?.value
         ? combinedText(rgbSegments.value).length
@@ -120,7 +119,7 @@ export default component$(() => {
         if (a >= b) continue;
 
         const covering = rgbStore.formatting.find(
-          (s) => s.start <= a && s.end >= b,
+          (s) => s.start <= a && s.end >= b
         );
         const fmt = covering
           ? { ...rgbStore.baseFormatting, ...covering }
@@ -141,7 +140,7 @@ export default component$(() => {
 
       const merged: any[] = [];
       for (const seg of newSegments.sort(
-        (x: any, y: any) => x.start - y.start,
+        (x: any, y: any) => x.start - y.start
       )) {
         const last = merged[merged.length - 1];
         if (
@@ -158,7 +157,7 @@ export default component$(() => {
 
       rgbStore.formatting = merged;
       void restoreSelection(start, end);
-    },
+    }
   );
 
   const computeSelectionFormatting = () => {
@@ -204,7 +203,7 @@ export default component$(() => {
 
   const toggleFlag = $((flag: FormatKey) => {
     void updateSelectionFormatting((fmt) => {
-      (fmt as any)[flag] = !(fmt as any)[flag];
+      fmt[flag] = !fmt[flag];
     });
   });
 
@@ -217,7 +216,7 @@ export default component$(() => {
   const clearFormatting = $(() => {
     void updateSelectionFormatting((fmt) => {
       for (const k of FORMAT_KEYS) {
-        (fmt as any)[k] = false;
+        fmt[k] = false;
       }
       fmt.font = undefined;
     }, true);
@@ -249,11 +248,12 @@ export default component$(() => {
 
   return (
     <>
-      <SelectMenuRaw
+      <SelectMenu
         class={{
-          'lum-btn-p-2': true,
+          'lum-btn-p-2 lum-bg-lum-card-bg': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
+        panelClass="lum-bg-lum-card-bg"
         id="font-select"
         value={formatting.font || 'default'}
         onChange$={(e, el) => {
@@ -265,10 +265,9 @@ export default component$(() => {
           value: key,
         }))}
       />
-      <div
+      <ButtonContainer
         class={{
-          'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:p-2': true,
+          '*:justify-center *:p-2': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="formatting"
@@ -290,11 +289,11 @@ export default component$(() => {
             </span>
           </button>
         ))}
-      </div>
-      <div
+      </ButtonContainer>
+      <ButtonContainer
         class={{
-          'lum-card flex-row items-center justify-evenly gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:p-2': true,
+          '*:justify-center *:p-2': true,
+          'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="clear-formatting"
       >
@@ -309,7 +308,7 @@ export default component$(() => {
             {t('rgb.formatting.clear@@Clear Formatting')}
           </span>
         </button>
-      </div>
+      </ButtonContainer>
     </>
   );
 });

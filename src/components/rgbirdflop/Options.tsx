@@ -1,8 +1,8 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
+import { component$, Slot, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { NumberInput, Toggle } from '@luminescent/ui-qwik';
-import { Settings } from 'lucide-icons-qwik';
+import { Label, NumberInput, Toggle } from '@luminescent/ui-qwik';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -25,84 +25,88 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
       <div class="flex grid-cols-2 flex-col gap-2 md:grid">
         <Slot />
         <div class="flex flex-col gap-1">
-          <label for="prefixsuffix">
-            {t('rgb.prefixsuffix@@Prefix/Suffix')}
-          </label>
-          <input
-            class="lum-input"
-            id="prefixsuffix"
-            value={rgbStore.prefixSuffix}
-            placeholder={'/nick $t'}
-            onInput$={(e, el) => {
-              rgbStore.prefixSuffix = el.value;
-            }}
-          />
-        </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' &&
-          <NumberInput
-            input
-            disabled
-            id="colorLength"
-            min={1}
-            max={rgbStore.text.length / rgbStore.colors.length}
-            value={rgbStore.colorLength}
-            class={{ 'w-full opacity-100!': true }}
-            onIncrement$={() => rgbStore.colorLength++}
-            onDecrement$={() => rgbStore.colorLength--}
+          <Label
+            for="prefixsuffix"
+            label={t('rgb.prefixsuffix@@Prefix/Suffix')}
           >
-            {t('rgb.colors.charsPer@@Characters per color')}
-          </NumberInput>
-        }
+            <input
+              class="lum-input"
+              id="prefixsuffix"
+              value={rgbStore.prefixSuffix}
+              placeholder={'/nick $t'}
+              onInput$={(e, el) => {
+                rgbStore.prefixSuffix = el.value;
+              }}
+            />
+          </Label>
+        </div>
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
+          <Label
+            for="colorLength"
+            label={t('rgb.colors.charsPer@@Characters per color')}
+          >
+            <NumberInput
+              input
+              disabled
+              id="colorLength"
+              min={1}
+              max={rgbStore.text.length / rgbStore.colors.length}
+              value={rgbStore.colorLength}
+              class={{ 'w-full opacity-100!': true }}
+              onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
+            />
+          </Label>
+        )}
         <div class="flex flex-col gap-1">
           <Toggle
             id="disperse"
             checked={rgbStore.disperse}
-            onChange$={(e, el) => {
-              rgbStore.disperse = el.checked;
-            }}
+            onChange$={(e, el) => (rgbStore.disperse = el.checked)}
           >
             {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
           </Toggle>
           <p class="text-lum-text-secondary text-xs">
             {t(
-              'rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.',
+              'rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.'
             )}
           </p>
         </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && <>
-          <div class="flex flex-col gap-1">
-            <Toggle
-              id="trimspaces"
-              checked={rgbStore.trimSpaces}
-              onChange$={(e, el) => {
-                rgbStore.trimSpaces = el.checked;
-              }}
-            >
-              {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
-            </Toggle>
-            <p class="text-lum-text-secondary text-xs">
-              {t(
-                'rgb.colors.trimSpaces.description@@Turn this off if you\'re using empty underlines / strikethroughs',
-              )}
-            </p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <Toggle
-              id="lowercase"
-              checked={rgbStore.lowercase}
-              onChange$={(e, el) => {
-                rgbStore.lowercase = el.checked;
-              }}
-            >
-              {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
-            </Toggle>
-            <p class="text-lum-text-secondary text-xs">
-              {t(
-                'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.',
-              )}
-            </p>
-          </div>
-        </>}
+        {rgbStore.colorFormat.color != 'MiniMessage' && (
+          <>
+            <div class="flex flex-col gap-1">
+              <Toggle
+                id="trimspaces"
+                checked={rgbStore.trimSpaces}
+                onChange$={(e, el) => {
+                  rgbStore.trimSpaces = el.checked;
+                }}
+              >
+                {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
+              </Toggle>
+              <p class="text-lum-text-secondary text-xs">
+                {t(
+                  "rgb.colors.trimSpaces.description@@Turn this off if you're using empty underlines / strikethroughs"
+                )}
+              </p>
+            </div>
+            <div class="flex flex-col gap-1">
+              <Toggle
+                id="lowercase"
+                checked={rgbStore.lowercase}
+                onChange$={(e, el) => {
+                  rgbStore.lowercase = el.checked;
+                }}
+              >
+                {t('rgb.colors.lowercase.title@@Lowercase Hex Codes')}
+              </Toggle>
+              <p class="text-lum-text-secondary text-xs">
+                {t(
+                  'rgb.colors.lowercase.description@@Turn this on if you want to use lowercase hex codes.'
+                )}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

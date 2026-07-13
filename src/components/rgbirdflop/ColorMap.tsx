@@ -1,8 +1,4 @@
-import {
-  component$,
-  useContext,
-  useComputed$,
-} from '@builder.io/qwik';
+import { component$, useContext, useComputed$ } from '@qwik.dev/core';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
   sortColors,
@@ -15,7 +11,7 @@ import {
   ColorStop,
   rgbColorDefaults,
 } from '@birdflop/rgbirdflop';
-import { Plus } from 'lucide-icons-qwik';
+import Plus from 'lucide-icons-qwik/icons/Plus';
 
 /**
  * Generates a CSS gradient string using the specified gradient type
@@ -24,7 +20,7 @@ import { Plus } from 'lucide-icons-qwik';
 function generateGradientCSS(
   colors: ColorStop[],
   gradientType: string,
-  samples = 20,
+  samples = 20
 ): string {
   if (colors.length < 2) {
     return colors[0]?.hex ?? 'transparent';
@@ -43,7 +39,7 @@ function generateGradientCSS(
   const gradient = new ColorGradient(
     colorsRGB,
     samples,
-    gradientType as GradientType,
+    gradientType as GradientType
   );
   const sampledColors: string[] = [];
 
@@ -75,7 +71,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       id={'colormap' + id}
       style={`background: ${generateGradientCSS(
         colors.value,
-        rgbStore.gradientType,
+        rgbStore.gradientType
       )};`}
       onMouseDown$={(e, el) => {
         if (e.target != el) return;
@@ -92,7 +88,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
           'mousemove',
           (e) => {
             const addbutton = document.getElementById(
-              `colormap${id}-add-button`,
+              `colormap${id}-add-button`
             )!;
             if (e.target != el) {
               addbutton.classList.add('opacity-0');
@@ -104,18 +100,18 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
             addbutton.classList.remove('opacity-0');
             addbutton.style.left = `${pos}%`;
           },
-          { signal: abortController.signal },
+          { signal: abortController.signal }
         );
         el.addEventListener(
           'mouseleave',
           () => {
             const addbutton = document.getElementById(
-              `colormap${id}-add-button`,
+              `colormap${id}-add-button`
             )!;
             addbutton.classList.add('opacity-0');
             abortController.abort();
           },
-          { signal: abortController.signal },
+          { signal: abortController.signal }
         );
       }}
     >
@@ -155,7 +151,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
                 newColors[i].pos = Math.round(pos * 1000) / 1000;
                 rgbStore[colorsKey] = newColors;
               },
-              { signal: abortController.signal },
+              { signal: abortController.signal }
             );
             document.addEventListener(
               'mouseup',
@@ -164,7 +160,7 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
                 abortController.abort();
                 rgbStore[colorsKey] = sortColors(colors.value);
               },
-              { signal: abortController.signal },
+              { signal: abortController.signal }
             );
           }}
         />

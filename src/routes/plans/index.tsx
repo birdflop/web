@@ -1,8 +1,9 @@
-import { component$, useStore } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { Label } from '@luminescent/ui-qwik';
+import { component$, useStore } from '@qwik.dev/core';
+import { routeLoader$ } from '@qwik.dev/router';
 
-import { Blobs } from '@luminescent/ui-qwik';
-import { Package, ShoppingCart } from 'lucide-icons-qwik';
+import Package from 'lucide-icons-qwik/icons/Package';
+import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
 import { discordLink } from '~/components/Elements/Nav';
 import { generateHead } from '~/root';
 
@@ -149,17 +150,6 @@ export default component$(() => {
                       }, 100);
                     }}
                   >
-                    {plansStore.plan == planName && (
-                      <Blobs
-                        color="blue"
-                        class={{
-                          'rounded-lum absolute -z-10 overflow-clip': true,
-                        }}
-                        style={{
-                          transform: 'translateZ(-10px)',
-                        }}
-                      />
-                    )}
                     <p class="text-lum-text-secondary">
                       Last quarter, clients paid{' '}
                       <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
@@ -181,7 +171,7 @@ export default component$(() => {
                     </ul>
                   </button>
                 );
-              },
+              }
             )}
           </div>
           {plansStore.showMiscPlans && (
@@ -321,17 +311,6 @@ export default component$(() => {
                         <p class="text-lum-text-secondary">
                           {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
                         </p>
-                        {plansStore.gb == Number(gb) && (
-                          <Blobs
-                            color="green"
-                            class={{
-                              'rounded-lum absolute overflow-clip': true,
-                            }}
-                            style={{
-                              transform: 'translateZ(-10px)',
-                            }}
-                          />
-                        )}
                       </button>
                     );
                   })}
@@ -363,24 +342,25 @@ export default component$(() => {
                   /mo after reimbursements.
                 </p>
               </div>
-              <div class="flex-1 space-y-2">
-                <label for="server_name">Server Name</label>
+              <Label for="server_name" label="Server name">
                 <input
                   id="server_name"
                   placeholder="A Minecraft Server"
                   class="lum-input"
                   onChange$={(e, el) => (plansStore.name = el.value)}
                 />
-                <label for="server_description">
-                  Server Description (optional)
-                </label>
+              </Label>
+              <Label
+                for="server_description"
+                label="Server description (optional)"
+              >
                 <input
                   id="server_description"
                   placeholder="This is my Minecraft server!"
                   class="lum-input"
                   onChange$={(e, el) => (plansStore.desc = el.value)}
                 />
-              </div>
+              </Label>
               <div>
                 <a
                   class="lum-btn lum-btn-p-4 lum-grad-bg-blue/80 hover:lum-bg-blue mt-auto gap-4 text-lg"

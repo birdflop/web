@@ -4,9 +4,9 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { generateHead } from '~/root';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -33,7 +33,7 @@ export default component$(() => {
   const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
   useContextProvider(savedPresetsContext, savedPresets);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0) return;
@@ -44,7 +44,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -52,7 +54,7 @@ export default component$(() => {
   });
 
   const { userInfo, userPresets, errors } = useUser().value;
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {
@@ -75,6 +77,7 @@ export default component$(() => {
             width={48}
             height={48}
             class="rounded-full!"
+            alt={userInfo.name || 'User'}
           />
         )}
         {userInfo?.name || 'User'}

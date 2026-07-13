@@ -6,8 +6,8 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccountType } from '@auth/qwik/adapters';
 import { sql } from 'drizzle-orm/sql/sql';
-import { rgbPreset } from '~/util/rgb/presets';
-import { Settings } from '~/routes/layout';
+import { rgbPreset } from '../src/util/rgb/presets';
+import { Settings } from '../src/routes/layout';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {
@@ -53,7 +53,7 @@ export const accounts = sqliteTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  }),
+  })
 );
 
 // -------------------- Session --------------------
@@ -76,7 +76,7 @@ export const verificationTokens = sqliteTable(
     compositePk: primaryKey({
       columns: [verificationToken.identifier, verificationToken.token],
     }),
-  }),
+  })
 );
 
 // -------------------- Presets --------------------
@@ -146,5 +146,5 @@ export const savedPresets = sqliteTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.presetId] })],
+  (t) => [primaryKey({ columns: [t.userId, t.presetId] })]
 );

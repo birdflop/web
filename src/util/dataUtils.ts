@@ -1,4 +1,4 @@
-import { server$, type Cookie } from '@builder.io/qwik-city';
+import { server$, type Cookie } from '@qwik.dev/router';
 import { loadPreset, rgbPreset } from './rgb/presets';
 import {
   animTABDefaults,
@@ -17,6 +17,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
+import { Session } from '@auth/qwik';
 
 type names =
   | 'rgb'
@@ -28,38 +29,51 @@ type names =
 
 const getDefaults = (name: names) => {
   switch (name) {
-  case 'rgb':
-    return rgbDefaults;
-  case 'rgbsegments':
-    return [rgbColorDefaultsWithColorMode];
-  case 'animtab':
-    return animTABDefaults;
+    case 'rgb':
+      return rgbDefaults;
+    case 'rgbsegments':
+      return [rgbColorDefaultsWithColorMode];
+    case 'animtab':
+      return animTABDefaults;
   }
   return {};
 };
 
-export function parseParams(params: { [key: string]: any }, name: names) {
+export function parseParams(params: Record<string, string>, name: names) {
   const errors: string[] = [];
   const defaults = getDefaults(name);
-  for (const key in params) {
+  const parsedParams: Record<string, unknown> = {};
+
+  for (const key of Object.keys(params)) {
     try {
       const isSegmentsKey = name === 'rgbsegments' && key === 'segments';
-      if (!isSegmentsKey && !Object.keys(defaults).includes(key)) {
-        delete params[key];
-        continue;
-      }
+      if (!isSegmentsKey && !(key in defaults)) continue;
+
       const defaultValue = defaults[key as keyof typeof defaults];
+
       const isJsonObject =
         isSegmentsKey ||
         (defaultValue !== undefined && typeof defaultValue === 'object');
-      if (isJsonObject && params[key]) {
-        params[key] = JSON.parse(params[key]);
-      } else if (params[key] === 'true' || params[key] === 'false')
-        params[key] = params[key] === 'true';
-      else if (!isNaN(Number(params[key]))) params[key] = Number(params[key]);
+
+      const isBoolean = params[key] === 'true' || params[key] === 'false';
+
+      // check if param is a json object and parse it
+      if (isJsonObject) {
+        parsedParams[key] = JSON.parse(params[key]);
+      }
+      // check if param is a boolean and parse it
+      else if (isBoolean) {
+        parsedParams[key] = params[key] === 'true';
+      }
+      // check if param is a number and parse it
+      else if (!isNaN(Number(params[key]))) {
+        parsedParams[key] = Number(params[key]);
+      }
     } catch (e) {
-      params[key] = undefined;
-      errors.push(`Error parsing the ${key} value: ${e}`);
+      parsedParams[key] = undefined;
+      errors.push(
+        `Error parsing the ${key} value: ${e instanceof Error ? e.message : String(e)}`
+      );
     }
   }
   return {
@@ -68,12 +82,12 @@ export function parseParams(params: { [key: string]: any }, name: names) {
   };
 }
 
-export function getCookies(
+export function getCookies<T extends Record<string, unknown>>(
   cookie: Cookie,
   name: names,
-  urlParams?: URLSearchParams,
+  urlParams?: URLSearchParams
 ) {
-  let cookies: { [key: string]: any } = {};
+  let cookies = {} as T;
   const errors: string[] = [];
 
   const cookieVal = cookie.get(name)?.value;
@@ -81,16 +95,18 @@ export function getCookies(
   // parse the cookie value if it exists
   if (cookieVal) {
     try {
-      cookies = JSON.parse(cookieVal);
+      cookies = JSON.parse(cookieVal) as T;
     } catch (e) {
-      errors.push(`Failed to parse cookie ${name}: ${e}`);
+      errors.push(
+        `Failed to parse cookie ${name}: ${e instanceof Error ? e.message : String(e)}`
+      );
     }
   }
 
   if (urlParams) {
     const { params, errors: parseErrors } = parseParams(
       Object.fromEntries(urlParams.entries()),
-      name,
+      name
     );
     if (parseErrors.length > 0) errors.push(...parseErrors);
     cookies = { ...cookies, ...params };
@@ -99,21 +115,24 @@ export function getCookies(
   try {
     // Migrate between versions (only the classic 'rgb' store uses preset migration)
     if (name === 'rgb' && cookies.version != rgbDefaults.version) {
-      cookies = loadPreset(JSON.stringify(cookies));
+      cookies = loadPreset(JSON.stringify(cookies)) as T;
       cookie.set(name, JSON.stringify(cookies), {
         path: '/',
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
       });
     }
   } catch (e) {
-    errors.push(`Error loading preset: ${e}`);
+    errors.push(
+      `Error loading preset: ${e instanceof Error ? e.message : String(e)}`
+    );
   }
 
   // Check for any numbers lower than 1 in the cookies
   Object.keys(cookies).forEach((key) => {
-    if (typeof cookies[key] === 'number' && cookies[key] < 1) {
-      errors.push(`Invalid value found in ${key}: ${cookies[key]}`);
-      cookies[key] = 1; // Reset values lower than 1 to 1
+    const value = cookies[key as keyof T];
+    if (typeof value === 'number' && value < 1) {
+      errors.push(`Invalid value found in ${key}: ${value}`);
+      cookies[key as keyof T] = 1 as typeof value; // Reset values lower than 1 to 1
     }
   });
 
@@ -121,7 +140,7 @@ export function getCookies(
   if (errors.length > 0) {
     console.error(
       `Errors encountered while processing cookies for ${name}:`,
-      errors,
+      errors
     );
   }
 
@@ -138,19 +157,23 @@ export function getClientCookies(): { [key: string]: string } {
   return cookie;
 }
 
-export function setCookies(name: names, cookies: { [key: string]: any }) {
+export function setCookies<T extends Record<string, unknown>>(
+  name: names,
+  cookies: T
+) {
   console.debug('cookie', name, JSON.stringify(cookies));
 
   const cookie = getClientCookies();
 
   // Settings cookie may not exist yet (e.g. a fresh browser); default to allowing cookies.
   let settings: { cookies?: boolean } = {};
-  if (cookie.settings) {
-    try {
-      settings = JSON.parse(decodeURIComponent(cookie.settings));
-    } catch {
-      settings = {};
-    }
+  try {
+    if (cookie.settings)
+      settings = JSON.parse(
+        decodeURIComponent(cookie.settings)
+      ) as typeof settings;
+  } catch {
+    settings = {};
   }
   // don't set cookies if user has opted out unless this is the settings cookie itself
   if (settings.cookies === false && name !== 'settings') return;
@@ -179,10 +202,10 @@ export const setUserData = server$(async function (data: {
   privatePresets?: rgbPreset[];
   settings?: Settings;
 }) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
 
   const db = getDB();
-  if (!session || !db || !session.user.id)
+  if (!session || !db || !session.user?.id)
     return console.warn('No session or database client');
 
   const userData = await db
@@ -199,7 +222,7 @@ export const setUserData = server$(async function (data: {
 });
 
 export const savePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -229,7 +252,7 @@ export const savePreset = server$(async function (presetId: number) {
 });
 
 export const unsavePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -243,8 +266,8 @@ export const unsavePreset = server$(async function (presetId: number) {
     .where(
       and(
         eq(savedPresets.userId, session.user.id),
-        eq(savedPresets.presetId, presetId),
-      ),
+        eq(savedPresets.presetId, presetId)
+      )
     )
     .run();
 
@@ -261,12 +284,12 @@ export const unsavePreset = server$(async function (presetId: number) {
 });
 
 export const publishPreset = server$(async function (
-  submission: PublicPresetSubmission,
+  submission: PublicPresetSubmission
 ) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
 
   const db = getDB();
-  if (!session || !db || !session.user.id)
+  if (!session || !db || !session.user?.id)
     return { success: false, error: 'No session or database client' };
 
   try {
@@ -289,7 +312,7 @@ export const publishPreset = server$(async function (
       .values({
         name: submission.name,
         userId: session.user.id,
-        author: session.user.name,
+        author: session.user.name || 'User',
         description: submission.description,
         preset: submission.preset,
         colorVector: colorVector,
@@ -309,12 +332,12 @@ export const publishPreset = server$(async function (
 
 export const updatePreset = server$(async function (
   presetId: number,
-  presetData: Partial<PresetPartial>,
+  presetData: Partial<PresetPartial>
 ) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
 
   const db = getDB();
-  if (!session || !db || !session.user.id)
+  if (!session || !db || !session.user?.id)
     return console.warn('No session or database client');
   const admin = await isAdmin();
 
@@ -330,8 +353,8 @@ export const updatePreset = server$(async function (
       .where(
         and(
           eq(presets.id, presetId),
-          admin ? undefined : eq(presets.userId, session.user.id),
-        ),
+          admin ? undefined : eq(presets.userId, session.user.id)
+        )
       )
       .returning()
       .get();
@@ -343,10 +366,10 @@ export const updatePreset = server$(async function (
 });
 
 export const deletePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session;
 
   const db = getDB();
-  if (!session || !db || !session.user.id)
+  if (!session || !db || !session.user?.id)
     return console.warn('No session or database client');
   const admin = await isAdmin();
 
@@ -356,8 +379,8 @@ export const deletePreset = server$(async function (presetId: number) {
       .where(
         and(
           eq(presets.id, presetId),
-          admin ? undefined : eq(presets.userId, session.user.id),
-        ),
+          admin ? undefined : eq(presets.userId, session.user.id)
+        )
       );
   } catch (error) {
     console.error('Error deleting preset:', error);

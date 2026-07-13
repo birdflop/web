@@ -70,27 +70,27 @@ export type PluginType = {
 
 export function getPlugin(plugin: PluginType): ServerPlugin {
   switch (plugin.type) {
-  case 'spigot':
-    return new SpigotPlugin(plugin);
-  case 'modrinth':
-    return new ModrinthPlugin(plugin);
-  default:
-    throw new Error(`Unsupported plugin type: ${plugin.type}`);
+    case 'spigot':
+      return new SpigotPlugin(plugin);
+    case 'modrinth':
+      return new ModrinthPlugin(plugin);
+    default:
+      throw new Error(`Unsupported plugin type: ${plugin.type}`);
   }
 }
 
 export function searchPlugins(
   type: PluginSource,
   query: string,
-  loaders?: string[],
+  loaders?: string[]
 ) {
   switch (type) {
-  case 'spigot':
-    return SpigotPlugin.search(query);
-  case 'modrinth':
-    return ModrinthPlugin.search(query, loaders);
-  default:
-    throw new Error(`Unsupported plugin type: ${type}`);
+    case 'spigot':
+      return SpigotPlugin.search(query);
+    case 'modrinth':
+      return ModrinthPlugin.search(query, loaders);
+    default:
+      throw new Error(`Unsupported plugin type: ${type}`);
   }
 }
 

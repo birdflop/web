@@ -15,7 +15,7 @@ const serverTypeKeys = Object.keys(serverType);
 export const BaseConfigValidation = v.object({
   operatingSystem: v.optional(
     v.picklist(operatingSystemKeys),
-    defaultOperatingSystem,
+    defaultOperatingSystem
   ),
   serverType: v.optional(v.picklist(serverTypeKeys), defaultServerType),
   withHTML: v.optional(v.boolean(), false),
@@ -29,14 +29,14 @@ type GenerateConfigSchema = {
 
 export function generateConfigSchema(
   requestOperatingSystem: AvailableOperatingSystem,
-  requestServerType: AvailableServerType,
+  requestServerType: AvailableServerType
 ) {
-  const schema: GenerateConfigSchema = {};
+  const schema = {} as GenerateConfigSchema;
 
   const selectedOperatingSystem = operatingSystem[requestOperatingSystem];
   const selectedServerType = serverType[requestServerType];
 
-  for (const [key, value] of Object.entries(config)) {
+  for (const [key, value] of Object.entries(config) as [AvailableConfig, any][]) {
     if (
       !selectedOperatingSystem.config.includes(key) ||
       !selectedServerType.config.includes(key)
@@ -54,7 +54,7 @@ export function generateConfigSchema(
   // flags
   schema.flags = v.optional(
     v.picklist(Object.values(selectedServerType.flags)),
-    selectedServerType.default.flags,
+    selectedServerType.default.flags
   );
 
   // extraFlags
@@ -62,9 +62,9 @@ export function generateConfigSchema(
     !selectedServerType.extraFlags || selectedServerType.extraFlags.length === 0
       ? v.optional(v.never())
       : v.optional(
-        v.array(v.picklist(selectedServerType.extraFlags)),
-        selectedServerType.default.extraFlags ?? [],
-      );
+          v.array(v.picklist(selectedServerType.extraFlags)),
+          selectedServerType.default.extraFlags ?? []
+        );
 
   return v.object({
     ...BaseConfigValidation.entries,

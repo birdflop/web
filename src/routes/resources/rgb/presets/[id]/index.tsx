@@ -6,35 +6,28 @@ import {
   useSignal,
   useStore,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
-import { getPresets } from '~/util/rgb/presets';
-import {
-  Check,
-  ChevronLeft,
-  Copy,
-  Github,
-  Loader2,
-  Minus,
-  MousePointer2,
-  Palette,
-  Rainbow,
-  Save,
-  Trash,
-} from 'lucide-icons-qwik';
+import { getPresets, rgbPreset } from '~/util/rgb/presets';
+import Check from 'lucide-icons-qwik/icons/Check';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+import Minus from 'lucide-icons-qwik/icons/Minus';
+import MousePointer2 from 'lucide-icons-qwik/icons/MousePointer2';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { NotificationContext, Notification } from '~/util/Notification';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import {
-  LogoBirdflop,
-  LogoLuminescent,
-  SelectMenuRaw,
-} from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
+import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
 import {
   savePreset,
   unsavePreset,
@@ -42,10 +35,12 @@ import {
   deletePreset,
 } from '~/util/dataUtils';
 import { privatePresetsContext, savedPresetsContext } from '..';
-import { getDB, presets, savedPresets, users } from '~/util/db';
+import { getDB, presets, PublicPreset, savedPresets, users } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { useIsAdmin } from '~/routes/layout-profile';
 import { discordLink, donateLink } from '~/components/Elements/Nav';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 
 export const usePreset = routeLoader$(async ({ params }) => {
   const db = getDB();
@@ -76,7 +71,7 @@ export default component$(() => {
   const t = inlineTranslate();
   const presetCopiedTitle = t('rgb.presets.copied.title@@Preset Copied!');
   const presetCopiedDescription = t(
-    'rgb.presets.copied.description@@Successfully copied preset to clipboard!',
+    'rgb.presets.copied.description@@Successfully copied preset to clipboard!'
   );
   const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
 
@@ -95,17 +90,21 @@ export default component$(() => {
       ...presetInfo.preset,
       text: presetInfo.name,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? []
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? []
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
   const existingPreset =
@@ -119,14 +118,14 @@ export default component$(() => {
   const searchParams = new URLSearchParams();
   const params = { ...presetInfo.preset };
   (
-    Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
+    Object.entries(params) as Array<[keyof typeof combinedDefaults, unknown]>
   ).forEach(([key, value]) => {
     if (typeof value === 'object' && value !== null)
       value = JSON.stringify(value);
     searchParams.set(key, String(value));
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If savedPresets is empty, load presets from localStorage
     if (savedPresets.value.length != 0) return;
@@ -137,7 +136,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error parsing saved presets')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -152,7 +153,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.'
         )}
       </p>
 
@@ -165,7 +166,7 @@ export default component$(() => {
       {presetInfo.pending && (
         <p class="my-5 text-2xl font-bold text-yellow-500!">
           {t(
-            'rgb.presets.pending@@This preset is pending review and may not be available to other users yet.',
+            'rgb.presets.pending@@This preset is pending review and may not be available to other users yet.'
           )}
         </p>
       )}
@@ -197,12 +198,16 @@ export default component$(() => {
         {presetInfo.author && !presetInfo.user && (
           <>
             {presetInfo.author == 'RGBirdflop' && (
-              <LogoBirdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
+              <Birdflop size={32} fillGradient={['#54daf4', '#545eb6']} />
             )}
             {presetInfo.author == 'SimplyMC' && (
-              <LogoLuminescent size={32} class="text-luminescent-300" />
+              <Luminescent size={32} class="text-luminescent-300" />
             )}
-            {presetInfo.author.includes('GitHub') && <Github size={32} />}
+            {presetInfo.author.includes('GitHub') && (
+              <span class="fill-current">
+                <SiGithub size={32} />
+              </span>
+            )}
             {presetInfo.author}
           </>
         )}
@@ -233,7 +238,7 @@ export default component$(() => {
       )}
 
       <div class="flex gap-2">
-        <SelectMenuRaw
+        <SelectMenu
           id={`use-${presetInfo.name}-${presetInfo.author}`}
           hover
           customDropdown
@@ -241,9 +246,9 @@ export default component$(() => {
             'lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex': true,
           }}
         >
-          <div q:slot="dropdown" class="flex items-center gap-3">
+          <span q:slot="dropdown" class="flex items-center gap-3">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
-          </div>
+          </span>
           <Link
             href={`/resources/rgb?${searchParams.toString()}`}
             q:slot="extra-buttons"
@@ -260,19 +265,19 @@ export default component$(() => {
             <Rainbow size={20} />{' '}
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </Link>
-        </SelectMenuRaw>
+        </SelectMenu>
         <button
           class={{
             'lum-btn text-sm': true,
             'lum-grad-bg-green hover:bg-green': !privatePresets.value.find(
               (savedPreset) =>
                 JSON.stringify(savedPreset) ===
-                JSON.stringify(presetInfo.preset),
+                JSON.stringify(presetInfo.preset)
             ),
             'lum-grad-bg-red hover:bg-red': !!privatePresets.value.find(
               (savedPreset) =>
                 JSON.stringify(savedPreset) ===
-                JSON.stringify(presetInfo.preset),
+                JSON.stringify(presetInfo.preset)
             ),
           }}
           disabled={isLoading.value}
@@ -281,11 +286,11 @@ export default component$(() => {
 
             if (existingPreset) {
               privatePresets.value = privatePresets.value.filter(
-                (p) => p !== existingPreset,
+                (p) => p !== existingPreset
               );
               if (presetInfo.id) {
                 savedPresets.value = savedPresets.value.filter(
-                  (p) => p.id !== presetInfo.id,
+                  (p) => p.id !== presetInfo.id
                 );
                 await unsavePreset(presetInfo.id);
               }
@@ -303,7 +308,7 @@ export default component$(() => {
             if (isBrowser)
               localStorage.setItem(
                 'privatePresets',
-                JSON.stringify(privatePresets.value),
+                JSON.stringify(privatePresets.value)
               );
             isLoading.value = false;
           }}
@@ -312,16 +317,16 @@ export default component$(() => {
           {isLoading.value && <Loader2 size={12} class="animate-spin" />}
           {privatePresets.value.find(
             (savedPreset) =>
-              JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset),
+              JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)
           ) ? (
-              <>
-                <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
-              </>
-            ) : (
-              <>
-                <Save size={20} /> {t('rgb.presets.save@@Save')}
-              </>
-            )}
+            <>
+              <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
+            </>
+          ) : (
+            <>
+              <Save size={20} /> {t('rgb.presets.save@@Save')}
+            </>
+          )}
         </button>
         <button
           class="lum-btn lum-grad-bg-purple hover:bg-purple text-sm"
@@ -352,7 +357,10 @@ export default component$(() => {
             {t('rgb.presets.preview@@Preset Preview')}
           </h3>
           <Input noLabel>
-            {renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+            <RgbPreview
+              q:slot="input"
+              shadowLength={previewStyle.value == 'default' ? 4 : 2}
+            />
           </Input>
         </div>
 
@@ -384,7 +392,11 @@ export default component$(() => {
               )}
               <span class="text-lum-text-secondary font-mono">{key}:</span>
               <span class="font-mono">
-                {JSON.stringify((presetInfo.preset as any)[key], null, 2)}
+                {JSON.stringify(
+                  presetInfo.preset[key as keyof typeof presetInfo.preset],
+                  null,
+                  2
+                )}
               </span>
             </div>
           ))}
@@ -426,7 +438,7 @@ export default component$(() => {
                   onClick$={async () => {
                     await updatePreset(presetInfo.id, { pending: false });
                     window.location.assign(
-                      '/resources/rgb/presets?showPending=true',
+                      '/resources/rgb/presets?showPending=true'
                     );
                   }}
                 >
@@ -439,7 +451,7 @@ export default component$(() => {
                   onClick$={async () => {
                     await updatePreset(presetInfo.id, { pending: true });
                     window.location.assign(
-                      '/resources/rgb/presets?showPending=true',
+                      '/resources/rgb/presets?showPending=true'
                     );
                   }}
                 >
@@ -451,7 +463,7 @@ export default component$(() => {
                 onClick$={async () => {
                   await deletePreset(presetInfo.id);
                   window.location.assign(
-                    '/resources/rgb/presets?showPending=true',
+                    '/resources/rgb/presets?showPending=true'
                   );
                 }}
               >

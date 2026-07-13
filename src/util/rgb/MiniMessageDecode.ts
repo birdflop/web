@@ -106,7 +106,7 @@ function tokenize(input: string) {
 let nodeIdCounter = 0;
 
 function parseMiniMessage(
-  tokens: Array<{ type: 'tag' | 'text'; value: string }>,
+  tokens: Array<{ type: 'tag' | 'text'; value: string }>
 ): MiniMessageNode {
   nodeIdCounter = 0;
   const root: MiniMessageNode = {
@@ -189,10 +189,10 @@ function hexToRgb(hex: string): [number, number, number] {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-      parseInt(result[1], 16),
-      parseInt(result[2], 16),
-      parseInt(result[3], 16),
-    ]
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16),
+      ]
     : [255, 255, 255];
 }
 
@@ -208,7 +208,7 @@ function rgbToHex(r: number, g: number, b: number): string {
 function interpolateColor(
   c1: [number, number, number],
   c2: [number, number, number],
-  ratio: number,
+  ratio: number
 ): [number, number, number] {
   return [
     c1[0] + (c2[0] - c1[0]) * ratio,
@@ -326,8 +326,8 @@ export function decodeMiniMessage(input: string) {
       } else if (tag.tagName === 'gradient' || tag.tagName === 'g') {
         const gColors = tag.params
           ? tag.params
-            .map((p) => resolveColor(p))
-            .filter((c): c is string => c !== null)
+              .map((p) => resolveColor(p))
+              .filter((c): c is string => c !== null)
           : [];
         if (gColors.length > 0) {
           if (gColors.length === 1) {
@@ -351,7 +351,7 @@ export function decodeMiniMessage(input: string) {
               resolvedHex = rgbToHex(
                 interpolated[0],
                 interpolated[1],
-                interpolated[2],
+                interpolated[2]
               );
             }
           }

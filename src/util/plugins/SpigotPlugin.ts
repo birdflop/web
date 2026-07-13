@@ -1,4 +1,4 @@
-import { $ } from '@builder.io/qwik';
+import { $ } from '@qwik.dev/core';
 import { BasePlugin } from './BasePlugin';
 import { PluginType } from './ServerPlugin';
 import { Notification } from '../Notification';
@@ -11,11 +11,11 @@ export class SpigotPlugin extends BasePlugin {
     });
 
     const searchRes = await fetch(
-      `${searchUrl}${encodeURIComponent(query)}?${searchParams.toString()}`,
+      `${searchUrl}${encodeURIComponent(query)}?${searchParams.toString()}`
     );
     const searchData: any[] = await searchRes.json();
     return searchData.map((data) =>
-      new SpigotPlugin({ id: data.id }).fromData(data),
+      new SpigotPlugin({ id: data.id }).fromData(data)
     );
   }
   type = 'spigot' as const;
@@ -34,12 +34,12 @@ export class SpigotPlugin extends BasePlugin {
       updateDate: new Date(data.updateDate * 1000),
       file: data.file
         ? {
-          type: data.file.type,
-          size: data.file.size,
-          sizeUnit: data.file.sizeUnit,
-          url: data.file.url,
-          externalUrl: data.file.externalUrl,
-        }
+            type: data.file.type,
+            size: data.file.size,
+            sizeUnit: data.file.sizeUnit,
+            url: data.file.url,
+            externalUrl: data.file.externalUrl,
+          }
         : undefined,
       sourceCodeLink: data.sourceCodeLink,
     });
@@ -56,7 +56,7 @@ export class SpigotPlugin extends BasePlugin {
 
   async fetchVersions() {
     const versionsRes = await fetch(
-      `https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`,
+      `https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`
     );
     const versionsData: any[] = await versionsRes.json();
 
@@ -99,7 +99,7 @@ export const downloadSpigotPlugin = $(
   async (
     plugin: PluginType,
     spigotRateLimit?: { downloadCount: number; resetTime: number },
-    notifications?: Notification[],
+    notifications?: Notification[]
   ) => {
     const targetUrl = plugin.file?.url;
 
@@ -123,14 +123,14 @@ export const downloadSpigotPlugin = $(
         const notification = new Notification()
           .setTitle('Spigot Download Rate Limit Reached')
           .setDescription(
-            `Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`,
+            `Spigot limits downloads to 10 per minute. Waiting ${Math.ceil((spigotRateLimit.resetTime - Date.now()) / 1000)} seconds to continue downloading.`
           )
           .setBgColor('lum-grad-bg-yellow/50')
           .setPersist(true);
         notifications.push(notification);
       }
       await new Promise((resolve) =>
-        setTimeout(resolve, spigotRateLimit.resetTime - Date.now()),
+        setTimeout(resolve, spigotRateLimit.resetTime - Date.now())
       );
       spigotRateLimit.downloadCount = 0;
     }
@@ -143,5 +143,5 @@ export const downloadSpigotPlugin = $(
     // set the reset time to 1 minute from now
     if (spigotRateLimit.resetTime < Date.now())
       spigotRateLimit.resetTime = Date.now() + 60 * 1000;
-  },
+  }
 );

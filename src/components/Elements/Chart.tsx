@@ -1,5 +1,5 @@
 // components/elements/Chart.tsx
-import { component$, useSignal, useVisibleTask$ } from '@builder.io/qwik';
+import { component$, useSignal, useVisibleTask$ } from '@qwik.dev/core';
 import { Chart, registerables } from 'chart.js';
 
 export interface ChartProps {
@@ -33,7 +33,7 @@ const dollarLabel = (context: {
 export default component$<ChartProps>((props) => {
   const myChart = useSignal<HTMLCanvasElement>();
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (myChart?.value) {
       Chart.register(...registerables);
@@ -50,7 +50,7 @@ export default component$<ChartProps>((props) => {
             .getPropertyValue(`--${varName}`)
             .trim();
           return value ? value : match; // Return the original match if the variable is not found
-        },
+        }
       );
       providedConfig = JSON.parse(replacedString);
 

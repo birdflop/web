@@ -19,7 +19,7 @@ function renderTemplateSegment(
   text: string,
   fmt: Formatting,
   options: typeof rgbDefaults,
-  skipColor: boolean = false,
+  skipColor: boolean = false
 ): string {
   let out = options.colorFormat.color;
   if (skipColor) {
@@ -49,7 +49,7 @@ function renderTemplateSegment(
 function applyFormatWrappers(
   output: string,
   format: ColorFormat,
-  style: Formatting,
+  style: Formatting
 ): string {
   let out = output;
   if (format.bold && style.bold) out = format.bold.replace('$t', out);
@@ -66,7 +66,7 @@ function applyFormatWrappers(
 function applySelectiveFormatting(
   text: string,
   offset: number,
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   const chars = Array.from(text);
   let currentFmt: Formatting | undefined;
@@ -136,12 +136,12 @@ function segmentHexProvider(segment: SegmentType): (() => string) | null {
   if (!len || len < 1) len = 1;
   const numChunks = Math.max(
     1,
-    Math.ceil(Array.from(segment.text).length / len),
+    Math.ceil(Array.from(segment.text).length / len)
   );
   const gradient = new ColorGradient(
     sortColors(segment.colors).map(getRGBColorStop),
     numChunks,
-    segment.gradientType,
+    segment.gradientType
   );
   return () => rgbToHex(gradient.next());
 }
@@ -152,7 +152,7 @@ function segmentHexProvider(segment: SegmentType): (() => string) | null {
 
 function renderTemplate(
   segments: SegmentType[],
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   let out = '';
   let charOffset = 0;
@@ -220,7 +220,7 @@ interface JsonExtra {
 function buildJsonExtra(
   text: string,
   colorHexWithHash: string | undefined,
-  style: Formatting,
+  style: Formatting
 ): JsonExtra {
   let translatedText = text;
   if (style.font) {
@@ -238,7 +238,7 @@ function buildJsonExtra(
 
 function renderJson(
   segments: SegmentType[],
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   const json: { text: string; extra: JsonExtra[] } = { text: '', extra: [] };
   let charOffset = 0;
@@ -282,14 +282,14 @@ function renderJson(
 function miniMessageGradientBody(
   segment: SegmentType,
   charOffset: number,
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   const colors = sortColors(segment.colors);
   const text = segment.text;
 
   const even = !colors.find(
     (color, i) =>
-      color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000,
+      color.pos != Math.round((100 / (colors.length - 1)) * i * 1000) / 1000
   );
   if (even) {
     const inner = applySelectiveFormatting(text, charOffset, options);
@@ -324,7 +324,7 @@ function miniMessageGradientBody(
 
 function renderMiniMessage(
   segments: SegmentType[],
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   let out = '';
   let charOffset = 0;
@@ -353,7 +353,7 @@ function renderMiniMessage(
  */
 export function generateAdvancedOutput(
   segments: SegmentType[],
-  options: typeof rgbDefaults,
+  options: typeof rgbDefaults
 ): string {
   const c = options.colorFormat.color;
   let combined: string;

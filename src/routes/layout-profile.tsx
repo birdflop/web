@@ -4,22 +4,20 @@ import {
   Slot,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import { useSession, useSignIn, useSignOut } from './plugin@auth';
-import { Form, Link, useLocation } from '@builder.io/qwik-city';
-import {
-  AppWindow,
-  CircleUserRound,
-  Copy,
-  LogOut,
-  Settings,
-} from 'lucide-icons-qwik';
-import { getAnonymousId } from '~/util/umami';
-import { LogoBirdflop } from '@luminescent/ui-qwik';
+import { Form, Link, useLocation } from '@qwik.dev/router';
+import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
+import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
+import LogOut from 'lucide-icons-qwik/icons/LogOut';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import { Birdflop } from '@luminescent/icons-qwik';
 import { inlineTranslate } from 'qwik-speak';
 
 import Layout, { useIsAdmin } from './layout';
+import { getAnonymousId } from '~/util/umami';
 
 // Re-export route loaders used by Layout component
 export * from './layout';
@@ -50,11 +48,7 @@ export default component$(() => {
     return (
       <Layout>
         <div class="text-red-400">
-          <LogoBirdflop
-            confused
-            size={100}
-            fillGradient={['#54daf4', '#545eb6']}
-          />
+          <Birdflop confused size={100} fillGradient={['#54daf4', '#545eb6']} />
           <h1 class="my-6 text-5xl font-extrabold">
             {t('nav.profile.notLoggedIn.title@@You are not logged in!')}
           </h1>
@@ -102,13 +96,14 @@ export default component$(() => {
           <h1 class="mb-2 flex items-center gap-4 text-3xl font-extrabold">
             {session.value.user.image && (
               <img
+                alt={session.value.user.name || 'User'}
                 src={session.value.user.image}
                 width={36}
                 height={36}
                 class="h-9 w-9 rounded-full!"
               />
             )}
-            {t('nav.profile.hey@@Hey')}, {session.value.user?.name || 'User'}!
+            {t('nav.profile.hey@@Hey')}, {session.value.user.name || 'User'}!
             {isAdmin && (
               <Link href="/admin" class="lum-btn">
                 <AppWindow />

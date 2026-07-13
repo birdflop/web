@@ -7,21 +7,22 @@ import {
   useTask$,
   useVisibleTask$,
   isBrowser,
-} from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
+} from '@qwik.dev/core';
+import { routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { Eye } from 'lucide-icons-qwik';
+import Eye from 'lucide-icons-qwik/icons/Eye';
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
-import { getFormattingClasses } from '~/components/rgbirdflop/preview';
+import { getFormattingClasses, toCSS } from '~/components/rgbirdflop/preview';
+import { Label } from '@luminescent/ui-qwik';
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  return getCookies(cookie, 'animpreview', url.searchParams);
+  return getCookies<{ yaml?: string }>(cookie, 'animpreview', url.searchParams);
 });
 
 const minecraftColors = {
@@ -48,7 +49,7 @@ export default component$(() => {
 
   const { cookies, errors } = useCookies().value;
   const notifications = useContext(NotificationContext);
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     errors.forEach((error) => {
       const notification = new Notification()
@@ -84,7 +85,7 @@ export default component$(() => {
     - "&#00FFE0&lS&#22DBE4&li&#43B6E9&lm&#6592ED&lp&#866DF2&ll&#A849F6&ly&#C924FB&lM&#EB00FF&lC"`,
       ...cookies,
     },
-    { deep: true },
+    { deep: true }
   );
 
   const rgbStore = useStore(
@@ -92,14 +93,14 @@ export default component$(() => {
       ...rgbDefaults,
       text: '',
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
   const previewStyle = useSignal('default');
   useContextProvider(previewStyleContext, previewStyle);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
@@ -125,7 +126,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error parsing YAML')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -144,7 +147,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game',
+          'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game'
         )}
       </p>
 
@@ -167,7 +170,7 @@ export default component$(() => {
             const shadowLength =
               previewStyle.value == 'default' ? '4px 4px' : '2px 2px';
             const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
-            const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
+            const rgbShadowCSS = toCSS(shadowRGB);
             Object.keys(minecraftColors).forEach((key) => {
               if (result[3]?.includes(key))
                 color = minecraftColors[key as keyof typeof minecraftColors];
@@ -177,7 +180,7 @@ export default component$(() => {
                 key={`char${i}`}
                 style={{
                   color,
-                  textShadow: `${shadowLength} 0 ${shadowColor}`,
+                  textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
                 }}
                 class={getFormattingClasses({
                   underline: result[3]?.includes('&n'),
@@ -194,8 +197,7 @@ export default component$(() => {
         })()}
       </Input>
 
-      <div class="mb-2 flex flex-col gap-1">
-        <label for="animation">{t('animtab.yamlInput@@YAML Input')}</label>
+      <Label for="animation" label={t('animtab.yamlInput@@YAML Input')}>
         <textarea
           id="animation"
           class={{ 'lum-input h-96 font-mono': true }}
@@ -204,7 +206,7 @@ export default component$(() => {
             animprevStore.yaml = el.value;
           }}
         />
-      </div>
+      </Label>
 
       <p class="lum-grad-bg-lum-input-bg lum-btn-p-2 rounded-lum font-mono">
         {animprevStore.frames[animprevStore.frame]}

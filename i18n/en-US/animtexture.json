@@ -1,6 +1,6 @@
 {
   "animtexture": {
-    "accumulate": "Add to existing frames",
+    "accumulate": "Accumulate frames",
     "animationPreview": "Animation Preview",
     "bounce": "Bounce Animation",
     "downloadMCMETA": "Download MCMETA",

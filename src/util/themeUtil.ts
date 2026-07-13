@@ -1,4 +1,4 @@
-import { createContextId } from '@builder.io/qwik';
+import { createContextId } from '@qwik.dev/core';
 export type ThemeName = keyof typeof themes | 'auto';
 
 const darkTheme = {
@@ -117,7 +117,7 @@ export function getCSSString(themeName: Exclude<ThemeName, 'auto'>): string {
  * @returns The effective theme name ('dark' or 'light' etc.)
  */
 export function getEffectiveTheme(
-  themeName: ThemeName,
+  themeName: ThemeName
 ): Exclude<ThemeName, 'auto'> {
   if (themeName === 'auto') {
     // Server-side auto theme detection fallback

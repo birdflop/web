@@ -8,14 +8,16 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
-import { Eye, Terminal, Pencil } from 'lucide-icons-qwik';
+} from '@qwik.dev/core';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
+import Pencil from 'lucide-icons-qwik/icons/Pencil';
 import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import Formatting from '~/components/rgbirdflop/Formatting';
 import { generateOutput } from '@birdflop/rgbirdflop';
 import {
@@ -47,10 +49,10 @@ export interface Selection {
 }
 
 export const selectionContext = createContextId<Signal<Selection | undefined>>(
-  'advanced-rgb-selection',
+  'advanced-rgb-selection'
 );
 export const previewStyleContext = createContextId<Signal<string>>(
-  'previewstyle-context',
+  'previewstyle-context'
 );
 export const rawEditModeContext =
   createContextId<Signal<boolean>>('raw-edit-mode');
@@ -88,7 +90,7 @@ const InputField = component$(
           end,
           segmentIndex: segmentIndexAtChar(
             rgbSegments.value,
-            Math.max(0, Math.min(start, end > start ? start : start - 1)),
+            Math.max(0, Math.min(start, end > start ? start : start - 1))
           ),
         };
       } else {
@@ -156,7 +158,7 @@ const InputField = component$(
                   end: caret,
                   segmentIndex: segmentIndexAtChar(
                     rgbSegments.value,
-                    Math.max(0, caret - 1),
+                    Math.max(0, caret - 1)
                   ),
                 };
               } else {
@@ -170,7 +172,7 @@ const InputField = component$(
         )}
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -192,7 +194,7 @@ const DefaultInput = component$(
         <Slot />
       </InputField>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -274,7 +276,7 @@ const MCPreviewTabSection = component$(
         )}
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -309,7 +311,7 @@ const MCPreviewChatSection = component$(
         </InputField>
       </div>
     );
-  },
+  }
 );
 
 // The default input field style
@@ -391,7 +393,7 @@ const MCPreviewGUISection = component$(
         </div>
       </div>
     );
-  },
+  }
 );
 
 // The Minecraft preview style for the input field
@@ -408,17 +410,25 @@ const MCPreviewInput = component$(
     advanced?: boolean;
   }) => {
     const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
-    const Background =
-      Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+    const background = useSignal(Backgrounds[0]);
     const rgbStore = useContext(rgbStoreContext);
     const previewStyle = useContext(previewStyleContext);
+
+    // oxlint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(() => {
+      background.value =
+        Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+    });
 
     return (
       <div
         class="rounded-lum font-mc relative break-all"
         style={{ textShadow: '2px 2px 0 #373737' }}
       >
-        <Background
+        <img
+          src={background.value}
+          width={1920}
+          height={1080}
           class="rounded-lum overflow-hidden"
           id="bg"
           alt="background"
@@ -460,7 +470,7 @@ const MCPreviewInput = component$(
         </div>
       </div>
     );
-  },
+  }
 );
 
 // The main Input component that combines everything
@@ -488,7 +498,7 @@ export default component$(
     const rawEditMode = useSignal(false);
     useContextProvider(rawEditModeContext, rawEditMode);
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       const input = document.getElementById('input') as HTMLTextAreaElement;
       if (!input) return;
@@ -509,7 +519,7 @@ export default component$(
               {t('rgb.inputText.title@@Input Text')}
               <p class="text-lum-text-secondary text-sm font-normal">
                 {t(
-                  'rgb.inputText.description@@Type here to generate a gradient!',
+                  'rgb.inputText.description@@Type here to generate a gradient!'
                 )}
               </p>
             </h5>
@@ -548,7 +558,7 @@ export default component$(
               <button
                 type="button"
                 class={{
-                  'lum-btn p-1 rounded-lum-1 lum-grad-bg-lum-card-bg/75': true,
+                  'lum-btn rounded-lum-1 lum-grad-bg-lum-card-bg/75 p-1': true,
                   'text-lum-primary-active!': rawEditMode.value,
                   'text-lum-text-secondary': !rawEditMode.value,
                 }}
@@ -563,7 +573,7 @@ export default component$(
               </button>
             )}
             <Slot name="extra-buttons" />
-            <SelectMenuRaw
+            <SelectMenu
               align="right"
               id="previewstyle"
               value={previewStyle.value}
@@ -581,37 +591,37 @@ export default component$(
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.tab.header@@Minecraft Tab Header',
+                    'rgb.inputText.preview.tab.header@@Minecraft Tab Header'
                   ),
                   value: 'tab-header',
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.tab.footer@@Minecraft Tab Footer',
+                    'rgb.inputText.preview.tab.footer@@Minecraft Tab Footer'
                   ),
                   value: 'tab-footer',
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.tab.player@@Minecraft Tab Player',
+                    'rgb.inputText.preview.tab.player@@Minecraft Tab Player'
                   ),
                   value: 'tab-player',
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.gui.chest@@Minecraft GUI Chest',
+                    'rgb.inputText.preview.gui.chest@@Minecraft GUI Chest'
                   ),
                   value: 'gui-chest',
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.gui.item@@Minecraft GUI Item Name',
+                    'rgb.inputText.preview.gui.item@@Minecraft GUI Item Name'
                   ),
                   value: 'gui-item-name',
                 },
                 {
                   name: t(
-                    'rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore',
+                    'rgb.inputText.preview.gui.lore@@Minecraft GUI Item Lore'
                   ),
                   value: 'gui-item-lore',
                 },
@@ -626,10 +636,10 @@ export default component$(
                 class="text-lum-text-secondary"
                 q:slot="dropdown"
               />
-            </SelectMenuRaw>
+            </SelectMenu>
           </div>
         </label>
       </>
     );
-  },
+  }
 );

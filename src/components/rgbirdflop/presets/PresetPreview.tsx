@@ -4,39 +4,34 @@ import {
   Signal,
   useContext,
   useSignal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import {
-  Github,
-  Loader2,
-  MousePointer2,
-  Palette,
-  Rainbow,
-  Save,
-  Send,
-  Trash,
-} from 'lucide-icons-qwik';
-import {
-  LogoBirdflop,
-  LogoLuminescent,
-  SelectMenuRaw,
-} from '@luminescent/ui-qwik';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+import MousePointer2 from 'lucide-icons-qwik/icons/MousePointer2';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Send from 'lucide-icons-qwik/icons/Send';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import {
   deletePreset,
   savePreset,
   setUserData,
   unsavePreset,
 } from '~/util/dataUtils';
-import { renderPreview } from '~/components/rgbirdflop/preview';
 import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { Link, LinkProps } from '@builder.io/qwik-city';
+import { Link, LinkProps } from '@qwik.dev/router';
 import { rgbPreset } from '~/util/rgb/presets';
 import { PresetPartial } from '~/util/db';
 import { useIsAdmin } from '~/routes/layout';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import RgbPreview from '../RgbPreview';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends Omit<LinkProps, 'class'> {
@@ -60,7 +55,7 @@ export default component$<PresetPreviewProps>(
     const searchParams = new URLSearchParams();
     const params = { ...Preset.preset };
     (
-      Object.entries(params) as Array<[keyof typeof combinedDefaults, any]>
+      Object.entries(params) as Array<[keyof typeof combinedDefaults, unknown]>
     ).forEach(([key, value]) => {
       if (typeof value === 'object' && value !== null)
         value = JSON.stringify(value);
@@ -121,15 +116,16 @@ export default component$<PresetPreviewProps>(
               {Preset.author && !Preset.user && (
                 <>
                   {Preset.author == 'RGBirdflop' && (
-                    <LogoBirdflop
-                      size={20}
-                      fillGradient={['#54daf4', '#545eb6']}
-                    />
+                    <Birdflop size={20} fillGradient={['#54daf4', '#545eb6']} />
                   )}
                   {Preset.author == 'Luminescent' && (
-                    <LogoLuminescent size={20} class="text-luminescent-300" />
+                    <Luminescent size={20} class="text-luminescent-300" />
                   )}
-                  {Preset.author.includes('GitHub') && <Github size={20} />}
+                  {Preset.author.includes('GitHub') && (
+                    <span class="fill-current">
+                      <SiGithub size={20} />
+                    </span>
+                  )}
                   {Preset.author}
                 </>
               )}
@@ -170,15 +166,15 @@ export default component$<PresetPreviewProps>(
                 defaults?.colorFormat?.class,
             }}
           >
-            {renderPreview(
-              {
+            <RgbPreview
+              rgbStore={{
                 ...rgbDefaults,
-                ...(defaults || {}),
+                ...defaults,
                 ...Preset.preset,
                 text: Preset.name,
-              },
-              3,
-            )}
+              }}
+              shadowLength={3}
+            />
           </p>
 
           {Preset.description && (
@@ -196,7 +192,7 @@ export default component$<PresetPreviewProps>(
           {Preset.pending && (
             <p class="pt-2 text-sm text-red-400/80!">
               {t(
-                'rgb.presets.pending@@This preset is pending review and may not be available to other users yet.',
+                'rgb.presets.pending@@This preset is pending review and may not be available to other users yet.'
               )}
             </p>
           )}
@@ -227,11 +223,11 @@ export default component$<PresetPreviewProps>(
 
               if (existingPreset) {
                 privatePresets.value = privatePresets.value.filter(
-                  (p) => p !== existingPreset,
+                  (p) => p !== existingPreset
                 );
                 if (Preset.id) {
                   savedPresets.value = savedPresets.value.filter(
-                    (p) => p.id !== Preset.id,
+                    (p) => p.id !== Preset.id
                   );
                   const result = await unsavePreset(Preset.id);
                   if (result.success) Preset.saves = (Preset.saves || 0) - 1;
@@ -256,7 +252,7 @@ export default component$<PresetPreviewProps>(
               if (isBrowser)
                 localStorage.setItem(
                   'privatePresets',
-                  JSON.stringify(privatePresets.value),
+                  JSON.stringify(privatePresets.value)
                 );
               isLoading.value = false;
             }}
@@ -265,22 +261,22 @@ export default component$<PresetPreviewProps>(
             {isLoading.value && <Loader2 size={12} class="animate-spin" />}
             {privatePresets.value.find(
               (savedPreset) =>
-                JSON.stringify(savedPreset) === JSON.stringify(Preset.preset),
+                JSON.stringify(savedPreset) === JSON.stringify(Preset.preset)
             ) ||
             savedPresets.value.find(
-              (savedPreset) => savedPreset.id === Preset.id,
+              (savedPreset) => savedPreset.id === Preset.id
             ) ? (
-                <span class="flex gap-3 text-red-300">
-                  <Trash size={20} />
-                </span>
-              ) : (
-                <span class="flex gap-3 text-green-300">
-                  <Save size={20} />
-                </span>
-              )}
+              <span class="flex gap-3 text-red-300">
+                <Trash size={20} />
+              </span>
+            ) : (
+              <span class="flex gap-3 text-green-300">
+                <Save size={20} />
+              </span>
+            )}
           </button>
 
-          <SelectMenuRaw
+          <SelectMenu
             id={`use-${Preset.name}-${Preset.author}`}
             hover
             customDropdown
@@ -288,9 +284,9 @@ export default component$<PresetPreviewProps>(
               'lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex': true,
             }}
           >
-            <div q:slot="dropdown" class="flex items-center gap-3">
+            <span q:slot="dropdown" class="flex items-center gap-3">
               <MousePointer2 size={20} />
-            </div>
+            </span>
             <Link
               href={`/resources/rgb?${searchParams.toString()}`}
               q:slot="extra-buttons"
@@ -307,7 +303,7 @@ export default component$<PresetPreviewProps>(
               <Rainbow size={20} />{' '}
               {t('nav.resources.animatedTAB.title@@Animated TAB')}
             </Link>
-          </SelectMenuRaw>
+          </SelectMenu>
 
           {publishRefs && (
             <button
@@ -315,7 +311,7 @@ export default component$<PresetPreviewProps>(
               onClick$={() => {
                 publishRefs.modalRef.value?.showModal();
                 publishRefs.selectedPreset.value = JSON.stringify(
-                  Preset.preset,
+                  Preset.preset
                 );
               }}
             >
@@ -338,5 +334,5 @@ export default component$<PresetPreviewProps>(
         </div>
       </div>
     );
-  },
+  }
 );

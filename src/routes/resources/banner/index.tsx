@@ -1,4 +1,3 @@
-/* eslint-disable qwik/jsx-img */
 import {
   component$,
   noSerialize,
@@ -7,31 +6,33 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from '@builder.io/qwik';
-import type { NoSerialize } from '@builder.io/qwik';
+} from '@qwik.dev/core';
+import type { NoSerialize } from '@qwik.dev/core';
 
 import { inlineTranslate } from 'qwik-speak';
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  Eye,
-  Plus,
-  Presentation,
-  Settings,
-  Terminal,
-  Trash,
-} from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Presentation from 'lucide-icons-qwik/icons/Presentation';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Terminal from 'lucide-icons-qwik/icons/Terminal';
+import Trash from 'lucide-icons-qwik/icons/Trash';
 
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 import { openItemsContext } from '~/routes/layout';
-import { colors, patterns } from '~/util/banner';
-import { swapItems } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import Output from '~/components/Elements/Output';
+import { ButtonContainer } from '~/components/Elements/ButtonContainer';
+
+import colors from '~/util/banner/colors';
+import patterns from '~/util/banner/patterns';
+import swapItems from '~/util/banner/swapItems';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -63,7 +64,7 @@ export default component$(() => {
     patterns: [],
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // Scene
     const scene = new THREE.Scene();
@@ -119,7 +120,7 @@ export default component$(() => {
 
     // Texture Loader for banner obj
     bannerTexture.value = noSerialize(
-      new THREE.CanvasTexture(textureCanvas.value),
+      new THREE.CanvasTexture(textureCanvas.value)
     );
     if (!bannerTexture.value) return;
     bannerTexture.value.colorSpace = THREE.SRGBColorSpace;
@@ -127,18 +128,22 @@ export default component$(() => {
     bannerTexture.value.magFilter = THREE.NearestFilter;
 
     const baseTexture = new THREE.TextureLoader().load(
-      '/banner/banner_base.png',
+      '/banner/banner_base.png'
     );
     baseTexture.colorSpace = THREE.SRGBColorSpace;
     baseTexture.minFilter = THREE.NearestFilter;
     baseTexture.magFilter = THREE.NearestFilter;
 
+    const texture = bannerTexture.value;
+    if (!texture) return;
+
     // Add objects to scene
     Object.entries(objects).forEach(([name, object]) => {
-      object.traverse((child: any) => {
-        if (child.isMesh) {
-          if (name === 'stand') child.material.map = baseTexture;
-          else child.material.map = bannerTexture.value;
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          const material = child.material as THREE.MeshStandardMaterial;
+          if (name === 'stand') material.map = baseTexture;
+          else material.map = texture;
         }
       });
       scene.add(object);
@@ -156,7 +161,7 @@ export default component$(() => {
     animate();
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => bannerStore.color);
     track(() => bannerStore.patterns);
@@ -164,13 +169,13 @@ export default component$(() => {
     for (let i = 0; i < bannerStore.patterns.length; i++) {
       const pattern = bannerStore.patterns[i];
       const canvas = document.getElementById(
-        `canvas-preview-${i}`,
+        `canvas-preview-${i}`
       ) as HTMLCanvasElement;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
       const baseImg = await createImage(
-        `/banner/patterns/previews/${pattern.pattern}.png`,
+        `/banner/patterns/previews/${pattern.pattern}.png`
       );
       canvas.width = baseImg.width;
       canvas.height = baseImg.height;
@@ -182,13 +187,13 @@ export default component$(() => {
       ctx.drawImage(baseImg, 0, 0);
 
       const texture = document.getElementById(
-        `canvas-texture-${i}`,
+        `canvas-texture-${i}`
       ) as HTMLCanvasElement;
       const ctxTexture = texture.getContext('2d');
       if (!ctxTexture) return;
 
       const baseImgTexture = await createImage(
-        `/banner/patterns/textures/${pattern.pattern}.png`,
+        `/banner/patterns/textures/${pattern.pattern}.png`
       );
       texture.width = baseImgTexture.width;
       texture.height = baseImgTexture.height;
@@ -219,7 +224,7 @@ export default component$(() => {
 
     for (let i = 0; i < bannerStore.patterns.length; i++) {
       const patternImg = document.getElementById(
-        `canvas-texture-${i}`,
+        `canvas-texture-${i}`
       ) as HTMLCanvasElement;
       ctx.drawImage(patternImg, 0, 0);
     }
@@ -234,12 +239,16 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.banner.description@@Easily generate banner designs for Minecraft.',
+          'nav.resources.banner.description@@Easily generate banner designs for Minecraft.'
         )}
       </p>
 
       <div class="grid gap-2 sm:grid-cols-2">
-        <div class="lum-card *:lum-btn *:rounded-lum-1 my-2 w-full min-w-0 flex-row gap-1 overflow-auto p-1 sm:hidden">
+        <ButtonContainer
+          class={{
+            'overflow-scroll sm:hidden': true,
+          }}
+        >
           <button
             onClick$={() => {
               openItems.value = openItems.value.includes('options')
@@ -279,7 +288,7 @@ export default component$(() => {
             <Eye />
             {t('banner.preview@@Preview')}
           </button>
-        </div>
+        </ButtonContainer>
 
         <div class="flex flex-col gap-2" id="inputcolumn">
           <div class="hidden items-center gap-2 p-2 font-semibold sm:flex">
@@ -299,17 +308,21 @@ export default component$(() => {
               {t('banner.options.baseColor.title@@Base Color')}
               <span class="text-lum-text-secondary text-sm font-normal">
                 {t(
-                  'banner.options.baseColor.description@@This is the base color of the banner to start with.',
+                  'banner.options.baseColor.description@@This is the base color of the banner to start with.'
                 )}
               </span>
             </h6>
-            <div class="flex flex-wrap gap-1">
+            <ButtonContainer
+              class={{
+                '*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2': true,
+              }}
+            >
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button
                     key={colorName}
                     class={{
-                      'lum-btn lum-grad-bg p-2 hover:brightness-80': true,
+                      'lum-grad-bg': bannerStore.color === colorName,
                     }}
                     style={{
                       '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
@@ -319,7 +332,9 @@ export default component$(() => {
                     }}
                   >
                     <img
-                      class="w-10"
+                      width={40}
+                      height={40}
+                      class="h-10 w-10"
                       src={`/banner/dyes/${colorName}_dye.png`}
                       alt={colorName}
                       style={{
@@ -329,7 +344,7 @@ export default component$(() => {
                   </button>
                 );
               })}
-            </div>
+            </ButtonContainer>
             <h6 class="flex items-center gap-3">
               {t('banner.options.patterns@@Patterns')}
               <button
@@ -364,7 +379,7 @@ export default component$(() => {
                         (bannerStore.patterns = swapItems(
                           bannerStore.patterns,
                           i,
-                          i - 1,
+                          i - 1
                         ))
                       }
                     >
@@ -376,7 +391,7 @@ export default component$(() => {
                         (bannerStore.patterns = swapItems(
                           bannerStore.patterns,
                           i,
-                          i + 1,
+                          i + 1
                         ))
                       }
                     >
@@ -422,7 +437,7 @@ export default component$(() => {
                             abortController.abort();
                           }
                         },
-                        { signal: abortController.signal },
+                        { signal: abortController.signal }
                       );
                     }}
                   >
@@ -475,7 +490,9 @@ export default component$(() => {
                               }}
                             >
                               <img
-                                class="w-7"
+                                width={28}
+                                height={28}
+                                class="h-7 w-7"
                                 src={`/banner/dyes/${colorName}_dye.png`}
                                 alt={colorName}
                                 style={{
@@ -502,7 +519,9 @@ export default component$(() => {
                               }}
                             >
                               <img
-                                class="rounded-lum w-9"
+                                width={36}
+                                height={72}
+                                class="rounded-lum h-18 w-9"
                                 src={`/banner/patterns/previews/${pattern}.png`}
                                 alt={pattern}
                                 style={{

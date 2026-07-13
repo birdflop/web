@@ -9,7 +9,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['animals'],
+                  ]['animals']
                 ) >= 32
               );
             },
@@ -29,7 +29,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['monsters'],
+                  ]['monsters']
                 ) >= 32
               );
             },
@@ -49,7 +49,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['misc'],
+                  ]['misc']
                 ) >= 16
               );
             },
@@ -69,7 +69,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['water'],
+                  ]['water']
                 ) >= 16
               );
             },
@@ -89,7 +89,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['villagers'],
+                  ]['villagers']
                 ) >= 32
               );
             },
@@ -127,7 +127,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['villagers-max-per-tick'],
+                  ]['wake-up-inactive']['villagers-max-per-tick']
                 ) >= 1
               );
             },
@@ -139,7 +139,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['villagers-for'],
+                  ]['wake-up-inactive']['villagers-for']
                 ) >= 100
               );
             },
@@ -159,7 +159,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['flying-monsters-max-per-tick'],
+                  ]['wake-up-inactive']['flying-monsters-max-per-tick']
                 ) >= 1
               );
             },
@@ -171,7 +171,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['flying-monsters-for'],
+                  ]['wake-up-inactive']['flying-monsters-for']
                 ) >= 100
               );
             },
@@ -191,7 +191,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['villagers-max-per-tick'],
+                  ]['wake-up-inactive']['villagers-max-per-tick']
                 ) >= 4
               );
             },
@@ -211,7 +211,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['animals-max-per-tick'],
+                  ]['wake-up-inactive']['animals-max-per-tick']
                 ) >= 1
               );
             },
@@ -223,7 +223,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['animals-for'],
+                  ]['wake-up-inactive']['animals-for']
                 ) >= 100
               );
             },
@@ -243,7 +243,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['monsters-max-per-tick'],
+                  ]['wake-up-inactive']['monsters-max-per-tick']
                 ) >= 8
               );
             },
@@ -263,7 +263,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['flying-monsters-max-per-tick'],
+                  ]['wake-up-inactive']['flying-monsters-max-per-tick']
                 ) >= 8
               );
             },
@@ -283,7 +283,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['animals-max-per-tick'],
+                  ]['wake-up-inactive']['animals-max-per-tick']
                 ) >= 4
               );
             },
@@ -303,7 +303,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['monsters-max-per-tick'],
+                  ]['wake-up-inactive']['monsters-max-per-tick']
                 ) >= 1
               );
             },
@@ -315,7 +315,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'entity-activation-range'
-                  ]['wake-up-inactive']['monsters-for'],
+                  ]['wake-up-inactive']['monsters-for']
                 ) >= 100
               );
             },
@@ -335,7 +335,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'arrow-despawn-rate'
-                  ],
+                  ]
                 ) >= 1200
               );
             },
@@ -355,7 +355,7 @@ export default function getConfig() {
                 parseFloat(
                   dict_of_vars.spigot['world-settings']['default'][
                     'merge-radius'
-                  ]['item'],
+                  ]['item']
                 ) <= 2.5
               );
             },
@@ -375,7 +375,7 @@ export default function getConfig() {
                 parseFloat(
                   dict_of_vars.spigot['world-settings']['default'][
                     'merge-radius'
-                  ]['exp'],
+                  ]['exp']
                 ) <= 3.0
               );
             },
@@ -395,7 +395,7 @@ export default function getConfig() {
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
                     'max-entity-collisions'
-                  ],
+                  ]
                 ) >= 8
               );
             },

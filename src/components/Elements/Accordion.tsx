@@ -1,20 +1,11 @@
-import {
-  $,
-  component$,
-  PropsOf,
-  QRL,
-  Slot,
-  useContext,
-} from '@builder.io/qwik';
+import { $, component$, PropsOf, QRL, Slot, useContext } from '@qwik.dev/core';
 import { Dropdown } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
 export const loadOpenItems = $(() => {
   try {
     const savedState = localStorage.getItem('openItems');
-    if (savedState) {
-      return JSON.parse(savedState);
-    }
+    if (savedState) return JSON.parse(savedState) as string[];
   } catch (err) {
     console.error('Error loading menu state:', err);
   }
@@ -71,10 +62,10 @@ export default component$(
           openItems.value = await toggleAccordion(sectionName, openItems.value);
         }}
       >
-        <div class="flex items-center gap-2">
+        <span class="flex items-center gap-2">
           <Slot />
-        </div>
+        </span>
       </Dropdown>
     );
-  },
+  }
 );

@@ -1,18 +1,22 @@
-import { component$, useContext, useSignal } from '@builder.io/qwik';
+import { component$, useContext, useSignal } from '@qwik.dev/core';
 
 import { privatePresetsContext } from '~/routes/resources/rgb/presets';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import { CircleUserRound, Palette, Plus, Save, X } from 'lucide-icons-qwik';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { renderPreview } from '~/components/rgbirdflop/preview';
+import CircleUserRound from 'lucide-icons-qwik/icons/CircleUserRound';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Save from 'lucide-icons-qwik/icons/Save';
+import X from 'lucide-icons-qwik/icons/X';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { Form, Link } from '@builder.io/qwik-city';
+import { Form, Link } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbPreset } from '~/util/rgb/presets';
 import { inlineTranslate } from 'qwik-speak';
 import { publishPreset } from '~/util/dataUtils';
 import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
 import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
+import RgbPreview from '../RgbPreview';
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
@@ -104,12 +108,12 @@ export default component$(() => {
             ).value;
             const description = (
               form.querySelector(
-                '#publish-preset-description',
+                '#publish-preset-description'
               ) as HTMLTextAreaElement
             ).value;
 
             const presetSelectElem = form.querySelector(
-              '#publish-preset-preset',
+              '#publish-preset-preset'
             );
             if (
               !presetSelectElem ||
@@ -122,7 +126,7 @@ export default component$(() => {
 
             const includetext = (
               form.querySelector(
-                '#publish-preset-includetext',
+                '#publish-preset-includetext'
               ) as HTMLInputElement
             ).checked;
             const preset = JSON.parse(presetSelectElem.value) as rgbPreset;
@@ -136,12 +140,12 @@ export default component$(() => {
                 description,
                 preset,
               },
-              true,
+              true
             );
 
             if (!validation.isValid) {
               validationErrors.value = validation.errors.map(
-                (e) => `${e.field}: ${e.message}`,
+                (e) => `${e.field}: ${e.message}`
               );
               similarPresets.value = validation.similarPresets || [];
               isSubmitting.value = false;
@@ -151,7 +155,7 @@ export default component$(() => {
             // Show warnings if any
             if (validation.warnings && validation.warnings.length > 0) {
               const continueSubmission = confirm(
-                `Warning:\n${validation.warnings.join('\n')}\n\nDo you want to continue?`,
+                `Warning:\n${validation.warnings.join('\n')}\n\nDo you want to continue?`
               );
               if (!continueSubmission) {
                 isSubmitting.value = false;
@@ -169,24 +173,24 @@ export default component$(() => {
 
             const notification = result.result?.[0]
               ? new Notification()
-                .setTitle('Preset Submitted!')
-                .setDescription(
-                  'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.',
-                )
-                .setBgColor('lum-grad-bg-green/50')
-                .setButtons([
-                  {
-                    text: 'View Preset',
-                    href: `/resources/rgb/presets/${result.result?.[0]?.id}`,
-                  },
-                ])
+                  .setTitle('Preset Submitted!')
+                  .setDescription(
+                    'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.'
+                  )
+                  .setBgColor('lum-grad-bg-green/50')
+                  .setButtons([
+                    {
+                      text: 'View Preset',
+                      href: `/resources/rgb/presets/${result.result?.[0]?.id}`,
+                    },
+                  ])
               : new Notification()
-                .setTitle('Preset Submission Failed')
-                .setDescription(
-                  'Your preset failed to submit. Is there already a preset with the same configuration?',
-                )
-                .setBgColor('lum-grad-bg-yellow/50')
-                .setPersist(true);
+                  .setTitle('Preset Submission Failed')
+                  .setDescription(
+                    'Your preset failed to submit. Is there already a preset with the same configuration?'
+                  )
+                  .setBgColor('lum-grad-bg-yellow/50')
+                  .setPersist(true);
 
             if (!result.success) {
               const errorMsg =
@@ -200,7 +204,7 @@ export default component$(() => {
 
               if (result.validationErrors) {
                 validationErrors.value = result.validationErrors.map(
-                  (e) => `${e.field}: ${e.message}`,
+                  (e) => `${e.field}: ${e.message}`
                 );
               }
               if (result.similarPresets) {
@@ -210,7 +214,7 @@ export default component$(() => {
               notification.setDescription(
                 notification.description +
                   '\n\nNote: ' +
-                  result.warnings.join(' '),
+                  result.warnings.join(' ')
               );
             }
 
@@ -225,57 +229,60 @@ export default component$(() => {
           class="flex flex-col gap-2"
         >
           <div class="grid gap-2 sm:grid-cols-2">
-            <div class="flex flex-col gap-1">
-              <label for="publish-preset-name">Preset name</label>
+            <Label for="publish-preset-name" label="Preset name">
               <input
                 type="text"
                 class="lum-input"
                 placeholder="My Preset"
                 id="publish-preset-name"
               />
-            </div>
+            </Label>
             {selectedPreset.value && (
-              <SelectMenu
-                id="publish-preset-preset"
-                class={{ 'w-full': true }}
-                values={
-                  privatePresets.value.length == 0
-                    ? undefined
-                    : privatePresets.value.map((preset) => ({
-                      name: (
-                        <span
-                          class={{
-                            'font-mc tracking-tight break-all': true,
-                            'font-mc-bold': preset.baseFormatting?.bold,
-                            'font-mc-italic': preset.baseFormatting?.italic,
-                            'font-mc-bold-italic':
-                                preset.baseFormatting?.bold &&
-                                preset.baseFormatting?.italic,
-                            [`${preset.colorFormat?.class}`]:
-                                preset.colorFormat?.class,
-                          }}
-                        >
-                          {renderPreview({ ...rgbDefaults, ...preset }, 1)}
-                        </span>
-                      ),
-                      value: JSON.stringify(preset),
-                    }))
-                }
-                value={selectedPreset.value}
+              <Label
+                for="publish-preset-preset"
+                label="Select a preset to publish"
               >
-                Select a preset to publish
-              </SelectMenu>
+                <SelectMenu
+                  id="publish-preset-preset"
+                  class={{ 'w-full': true }}
+                  values={
+                    privatePresets.value.length == 0
+                      ? undefined
+                      : privatePresets.value.map((preset) => ({
+                          name: (
+                            <span
+                              class={{
+                                'font-mc tracking-tight break-all': true,
+                                'font-mc-bold': preset.baseFormatting?.bold,
+                                'font-mc-italic': preset.baseFormatting?.italic,
+                                'font-mc-bold-italic':
+                                  preset.baseFormatting?.bold &&
+                                  preset.baseFormatting?.italic,
+                                [`${preset.colorFormat?.class}`]:
+                                  preset.colorFormat?.class,
+                              }}
+                            >
+                              <RgbPreview
+                                rgbStore={{ ...rgbDefaults, ...preset }}
+                              />
+                            </span>
+                          ),
+                          value: JSON.stringify(preset),
+                        }))
+                  }
+                  value={selectedPreset.value}
+                />
+              </Label>
             )}
           </div>
 
-          <label for="publish-preset-description" class="-mb-1">
-            Preset description
-          </label>
-          <textarea
-            class="lum-input"
-            placeholder="This is my preset"
-            id="publish-preset-description"
-          />
+          <Label for="publish-preset-description" label="Preset description">
+            <textarea
+              class="lum-input"
+              placeholder="This is my preset"
+              id="publish-preset-description"
+            />
+          </Label>
 
           <Toggle id="publish-preset-includetext">
             Include preset input text (You usually do not need to enable this.)

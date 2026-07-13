@@ -1,7 +1,12 @@
-import { component$, Slot, useSignal } from '@builder.io/qwik';
-import { LinkProps } from '@builder.io/qwik-city';
-import { SiGithub, SiModrinth, SiSpigotmc } from 'simple-icons-qwik';
-import { Check, Download, Link, Loader2 } from 'lucide-icons-qwik';
+import { component$, Slot, useSignal } from '@qwik.dev/core';
+import { LinkProps } from '@qwik.dev/router';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
+import Check from 'lucide-icons-qwik/icons/Check';
+import Download from 'lucide-icons-qwik/icons/Download';
+import Link from 'lucide-icons-qwik/icons/Link';
+import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import { PluginType } from '~/util/plugins/ServerPlugin';
 
@@ -54,17 +59,13 @@ export default component$<PluginCardProps>(
                 Update available as of{' '}
                 {new Date(plugin.latestVersion.releaseDate).toLocaleDateString(
                   undefined,
-                  { year: 'numeric', month: 'short', day: 'numeric' },
+                  { year: 'numeric', month: 'short', day: 'numeric' }
                 )}
               </p>
             )}
-            <p class="flex items-center gap-2">
-              {plugin.type === 'spigot' && !plugin.iconUrl && (
-                <SiSpigotmc class="fill-yellow" />
-              )}
-              {plugin.type === 'modrinth' && !plugin.iconUrl && (
-                <SiModrinth class="fill-green" />
-              )}
+            <p class="flex items-center gap-2 fill-current">
+              {plugin.type === 'spigot' && !plugin.iconUrl && <SiSpigotmc />}
+              {plugin.type === 'modrinth' && !plugin.iconUrl && <SiModrinth />}
               {plugin.iconUrl && (
                 <img
                   src={plugin.iconUrl}
@@ -197,9 +198,9 @@ export default component$<PluginCardProps>(
               <a
                 href={plugin.sourceCodeLink}
                 target="_blank"
-                class="lum-btn rounded-lum-2 p-2"
+                class="lum-btn rounded-lum-2 fill-current p-2"
               >
-                <SiGithub size={16} class="fill-current" />
+                <SiGithub size={16} />
               </a>
             )}
             {plugin.type === 'spigot' && (
@@ -208,17 +209,17 @@ export default component$<PluginCardProps>(
                   <a
                     href={plugin.file?.externalUrl}
                     target="_blank"
-                    class="lum-btn rounded-lum-2 lum-grad-bg-green p-2"
+                    class="lum-btn rounded-lum-2 lum-grad-bg-green fill-current p-2"
                   >
-                    <SiModrinth size={16} class="fill-current" />
+                    <SiModrinth size={16} />
                   </a>
                 )}
                 <a
                   href={`https://www.spigotmc.org/resources/${plugin.id}`}
                   target="_blank"
-                  class="lum-btn rounded-lum-2 lum-grad-bg-yellow p-2"
+                  class="lum-btn rounded-lum-2 lum-grad-bg-yellow fill-current p-2"
                 >
-                  <SiSpigotmc size={16} class="fill-current" />
+                  <SiSpigotmc size={16} />
                 </a>
               </>
             )}
@@ -227,9 +228,9 @@ export default component$<PluginCardProps>(
                 <a
                   href={`https://modrinth.com/plugin/${plugin.id}`}
                   target="_blank"
-                  class="lum-btn rounded-lum-2 lum-grad-bg-green p-2"
+                  class="lum-btn rounded-lum-2 lum-grad-bg-green fill-current p-2"
                 >
-                  <SiModrinth size={16} class="fill-current" />
+                  <SiModrinth size={16} />
                 </a>
               </>
             )}
@@ -238,5 +239,5 @@ export default component$<PluginCardProps>(
         )}
       </div>
     );
-  },
+  }
 );

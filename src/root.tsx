@@ -1,10 +1,10 @@
-import { component$, isDev, useServerData } from '@builder.io/qwik';
+import { component$, isDev, useServerData } from '@qwik.dev/core';
 import {
   DocumentHead,
   DocumentHeadValue,
-  QwikCityProvider,
+  QwikRouterProvider,
   RouterOutlet,
-} from '@builder.io/qwik-city';
+} from '@qwik.dev/router';
 import { RouterHead } from '~/components/Head';
 import { useQwikSpeak } from 'qwik-speak';
 
@@ -30,7 +30,7 @@ export default component$(() => {
     url.hostname === 'birdflop.com' || url.hostname === 'www.birdflop.com';
 
   return (
-    <QwikCityProvider>
+    <QwikRouterProvider>
       <head>
         <meta charset="utf-8" />
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -72,12 +72,12 @@ export default component$(() => {
       <body class="text-lum-text">
         <RouterOutlet />
       </body>
-    </QwikCityProvider>
+    </QwikRouterProvider>
   );
 });
 
 export const defaultDescription =
-  'Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry\'s fastest and cheapest servers, or use our free public resources.';
+  "Birdflop is a registered 501(c)(3) nonprofit server host aiming to provide affordable and accessible hosting and resources. Check out our plans starting at $1.48/GB RAM for some of the industry's fastest and cheapest servers, or use our free public resources.";
 
 export function generateHead({
   title = 'Birdflop - Server Hosting & Resources',

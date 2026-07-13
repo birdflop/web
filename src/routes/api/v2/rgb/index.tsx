@@ -1,4 +1,4 @@
-import type { RequestHandler } from '@builder.io/qwik-city';
+import type { RequestHandler } from '@qwik.dev/router';
 import { parseParams } from '~/util/dataUtils';
 import {
   colorFormats,
@@ -44,7 +44,7 @@ const descriptions: {
   prefixSuffix:
     'The prefix or suffix to use for the text. Usually used for commands and stuff. $t will be replaced with the output text, if $t is not included, the output will not show.',
   trimSpaces:
-    'Whether or not to trim color codes from spaces. Turn this off if you\'re using empty underlines or strikethroughs.',
+    "Whether or not to trim color codes from spaces. Turn this off if you're using empty underlines or strikethroughs.",
   colorLength: 'The amount of characters for one color step.',
   baseFormatting: 'The base formatting options to apply (bold, italic, etc.).',
 };
@@ -72,7 +72,7 @@ export const rgbOptions = (
           default: any;
         };
       },
-      key,
+      key
     ) => {
       const description = descriptions[key];
       const customType = customTypes[key];
@@ -83,7 +83,7 @@ export const rgbOptions = (
       };
       return acc;
     },
-    {},
+    {}
   );
 
 function getOutput(body: any) {
@@ -111,19 +111,19 @@ function getOutput(body: any) {
   const options = body?.silent
     ? {}
     : {
-      input: {
-        ...rgbDefaults,
-        ...body,
-      },
-      options: {
-        ...rgbOptions,
-        silent: {
-          type: 'boolean',
-          description: 'Set this to true to hide the options and input.',
-          default: false,
+        input: {
+          ...rgbDefaults,
+          ...body,
         },
-      },
-    };
+        options: {
+          ...rgbOptions,
+          silent: {
+            type: 'boolean',
+            description: 'Set this to true to hide the options and input.',
+            default: false,
+          },
+        },
+      };
 
   // make { color: "MiniMessage" } a valid format
   let format = body?.colorFormat ?? body?.colorformat ?? body?.format;

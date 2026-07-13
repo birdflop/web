@@ -3,9 +3,9 @@ import {
   useContextProvider,
   useSignal,
   useStore,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
@@ -13,20 +13,22 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { Palette, TestTube2 } from 'lucide-icons-qwik';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
-import { renderPreview } from '~/components/rgbirdflop/preview';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
+import AllGradientsPreview from '~/components/rgbirdflop/AllGradientsPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 
@@ -40,7 +42,7 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
@@ -64,7 +66,7 @@ export default component$(() => {
           </h1>
           <p class="text-lum-text-secondary mb-2" q:slot="header">
             {t(
-              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
+              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.'
             )}
           </p>
         </div>
@@ -74,20 +76,22 @@ export default component$(() => {
         >
           <TestTube2 size={18} class="min-h-4 min-w-4" />
           {t(
-            'rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients',
+            'rgb.advanced.tryAdvanced@@Try the Advanced editor with segment-based gradients'
           )}
         </Link>
       </div>
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-          (gradientType) =>
-            renderPreview(
-              { ...rgbStore, gradientType },
-              previewStyle.value == 'default' ? 4 : 2,
-            ),
-          rgbStore.gradientType,
-        )
-        : renderPreview(rgbStore, previewStyle.value == 'default' ? 4 : 2)}
+
+      {showAllGradients.value ? (
+        <AllGradientsPreview
+          q:slot="input"
+          shadowLength={previewStyle.value == 'default' ? 4 : 2}
+        />
+      ) : (
+        <RgbPreview
+          q:slot="input"
+          shadowLength={previewStyle.value == 'default' ? 4 : 2}
+        />
+      )}
     </RGBirdflop>
   );
 });

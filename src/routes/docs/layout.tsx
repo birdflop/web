@@ -1,5 +1,5 @@
-import { component$, Slot } from '@builder.io/qwik';
-import { routeLoader$, useLocation } from '@builder.io/qwik-city';
+import { component$, Slot } from '@qwik.dev/core';
+import { routeLoader$, useLocation } from '@qwik.dev/router';
 import { DocsSidebar } from '~/components/docs/SideBar';
 import { Breadcrumbs } from '~/components/docs/Breadcrumbs';
 import Contributors from '~/components/docs/Contributors';
@@ -28,7 +28,7 @@ export const menuItemPriority: {
 export const getMarkdownItems = async () => {
   const rawData = await Promise.all(
     Object.entries(
-      import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}'),
+      import.meta.glob<{ frontmatter?: MDX }>('/src/routes/docs/**/*.{md,mdx}')
     ).map(async ([k, v]) => {
       return [
         k
@@ -37,7 +37,7 @@ export const getMarkdownItems = async () => {
           .replace('index.md', ''),
         await v(),
       ] as const;
-    }),
+    })
   );
 
   const markdownItems: MarkdownItems = {};

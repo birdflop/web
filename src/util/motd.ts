@@ -38,7 +38,7 @@ export const MC_FORMATS = [
 ] as const;
 
 const COLOR_BY_CODE: Record<string, string> = Object.fromEntries(
-  MC_COLORS.map((c) => [c.code, c.hex]),
+  MC_COLORS.map((c) => [c.code, c.hex])
 );
 
 // Default MOTD text color (white) used until a color code is encountered.
@@ -104,24 +104,43 @@ export function parseMotdLine(line: string): MotdRun[] {
     const next = chars[i + 1];
 
     // Hex: &#RRGGBB
-    if (next === '#' && /^[0-9a-fA-F]{6}$/.test(chars.slice(i + 2, i + 8).join(''))) {
+    if (
+      next === '#' &&
+      /^[0-9a-fA-F]{6}$/.test(chars.slice(i + 2, i + 8).join(''))
+    ) {
       flush();
-      style = { ...baseStyle(), color: '#' + chars.slice(i + 2, i + 8).join('').toUpperCase() };
+      style = {
+        ...baseStyle(),
+        color:
+          '#' +
+          chars
+            .slice(i + 2, i + 8)
+            .join('')
+            .toUpperCase(),
+      };
       i += 7;
       continue;
     }
 
     // Spread hex: &x&R&R&G&G&B&B
-    if ((next === 'x' || next === 'X')) {
+    if (next === 'x' || next === 'X') {
       const hexDigits: string[] = [];
       let j = i + 2;
-      while (hexDigits.length < 6 && j + 1 < chars.length && (chars[j] === '&' || chars[j] === '§') && /[0-9a-fA-F]/.test(chars[j + 1])) {
+      while (
+        hexDigits.length < 6 &&
+        j + 1 < chars.length &&
+        (chars[j] === '&' || chars[j] === '§') &&
+        /[0-9a-fA-F]/.test(chars[j + 1])
+      ) {
         hexDigits.push(chars[j + 1]);
         j += 2;
       }
       if (hexDigits.length === 6) {
         flush();
-        style = { ...baseStyle(), color: '#' + hexDigits.join('').toUpperCase() };
+        style = {
+          ...baseStyle(),
+          color: '#' + hexDigits.join('').toUpperCase(),
+        };
         i = j - 1;
         continue;
       }
@@ -137,14 +156,38 @@ export function parseMotdLine(line: string): MotdRun[] {
     }
 
     switch (lower) {
-    case 'l': flush(); style.bold = true; i++; continue;
-    case 'o': flush(); style.italic = true; i++; continue;
-    case 'n': flush(); style.underline = true; i++; continue;
-    case 'm': flush(); style.strikethrough = true; i++; continue;
-    case 'k': flush(); style.obfuscated = true; i++; continue;
-    case 'r': flush(); style = baseStyle(); i++; continue;
-    default:
-      buffer += c;
+      case 'l':
+        flush();
+        style.bold = true;
+        i++;
+        continue;
+      case 'o':
+        flush();
+        style.italic = true;
+        i++;
+        continue;
+      case 'n':
+        flush();
+        style.underline = true;
+        i++;
+        continue;
+      case 'm':
+        flush();
+        style.strikethrough = true;
+        i++;
+        continue;
+      case 'k':
+        flush();
+        style.obfuscated = true;
+        i++;
+        continue;
+      case 'r':
+        flush();
+        style = baseStyle();
+        i++;
+        continue;
+      default:
+        buffer += c;
     }
   }
   flush();
@@ -154,8 +197,14 @@ export function parseMotdLine(line: string): MotdRun[] {
 // Convert a string using & codes to § (section sign) codes.
 function ampToSection(text: string): string {
   return text
-    .replace(/&#([0-9a-fA-F]{6})/g, (_, h: string) =>
-      '§x' + h.split('').map((d) => '§' + d).join(''),
+    .replace(
+      /&#([0-9a-fA-F]{6})/g,
+      (_, h: string) =>
+        '§x' +
+        h
+          .split('')
+          .map((d) => '§' + d)
+          .join('')
     )
     .replace(/&([0-9a-fk-orxA-FK-ORX])/g, '§$1');
 }
@@ -163,12 +212,18 @@ function ampToSection(text: string): string {
 export type MotdFormat = 'properties' | 'section' | 'amp';
 
 // Build the output string for the chosen target format.
-export function generateMotdOutput(line1: string, line2: string, format: MotdFormat): string {
+export function generateMotdOutput(
+  line1: string,
+  line2: string,
+  format: MotdFormat
+): string {
   if (format === 'amp') {
     return line2 ? `${line1}\n${line2}` : line1;
   }
 
-  const section = line2 ? `${ampToSection(line1)}\n${ampToSection(line2)}` : ampToSection(line1);
+  const section = line2
+    ? `${ampToSection(line1)}\n${ampToSection(line2)}`
+    : ampToSection(line1);
 
   if (format === 'section') return section;
 

@@ -1,7 +1,7 @@
 export async function collector(
   id: string,
   url: string,
-  type: 'spark' | 'timings',
+  type: 'spark' | 'timings'
 ) {
   if (!url) return;
   try {

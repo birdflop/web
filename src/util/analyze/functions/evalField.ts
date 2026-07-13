@@ -10,7 +10,7 @@ export default function evalField(
   spigot: any,
   paper: any,
   pufferfish: any,
-  purpur: any,
+  purpur: any
 ) {
   const dict_of_vars: any = {
     plugins,

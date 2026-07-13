@@ -1,5 +1,5 @@
-import { component$, Slot, useContext } from '@builder.io/qwik';
-import { Clipboard } from 'lucide-icons-qwik';
+import { component$, Slot, useContext } from '@qwik.dev/core';
+import Clipboard from 'lucide-icons-qwik/icons/Clipboard';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 
@@ -8,7 +8,7 @@ export default component$<{ hidden?: boolean; value: string; class?: string }>(
     const t = inlineTranslate();
     const copiedTitle = t('nav.copied.title@@Copied to clipboard!');
     const copiedDescription = t(
-      'nav.copied.description@@The text has been copied to your clipboard successfully.',
+      'nav.copied.description@@The text has been copied to your clipboard successfully.'
     );
     const copyFailedTitle = t('nav.copyFailed@@Failed to copy to clipboard!');
 
@@ -21,9 +21,9 @@ export default component$<{ hidden?: boolean; value: string; class?: string }>(
           ...(hidden === undefined
             ? {}
             : {
-              'pointer-events-none max-h-0 opacity-0': hidden,
-              'pointer-events-auto max-h-62.5 opacity-100': !hidden,
-            }),
+                'pointer-events-none max-h-0 opacity-0': hidden,
+                'pointer-events-auto max-h-62.5 opacity-100': !hidden,
+              }),
         }}
         id="outputcontainer"
       >
@@ -59,5 +59,5 @@ export default component$<{ hidden?: boolean; value: string; class?: string }>(
         />
       </div>
     );
-  },
+  }
 );

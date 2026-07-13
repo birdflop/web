@@ -1,6 +1,8 @@
-import { component$, useContext } from '@builder.io/qwik';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { Bird, Cookie, Settings } from 'lucide-icons-qwik';
+import { component$, useContext } from '@qwik.dev/core';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import Bird from 'lucide-icons-qwik/icons/Bird';
+import Cookie from 'lucide-icons-qwik/icons/Cookie';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';
@@ -22,32 +24,31 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.settings.description@@Manage your settings and preferences here.',
+          'nav.settings.description@@Manage your settings and preferences here.'
         )}
       </p>
 
       <div class="grid gap-2 sm:grid-cols-3">
-        <SelectMenu
-          id="lang-picker"
-          values={config.supportedLocales.map((value) => ({
-            name: languages[value.lang as keyof typeof languages],
-            value: value.lang,
-          }))}
-          value={locale.lang}
-          onChange$={async (e, el) => {
-            settingsStore.locale = el.value as keyof typeof languages;
-            setCookies('settings', settingsStore);
-            await setUserData({ settings: settingsStore });
-            location.reload();
-          }}
-        >
-          {t('settings.language@@Language')}
-        </SelectMenu>
+        <Label for="lang-picker" label={t('settings.language@@Language')}>
+          <SelectMenu
+            id="lang-picker"
+            values={config.supportedLocales.map((value) => ({
+              name: languages[value.lang as keyof typeof languages],
+              value: value.lang,
+            }))}
+            value={locale.lang}
+            onChange$={async (e, el) => {
+              settingsStore.locale = el.value as keyof typeof languages;
+              setCookies('settings', settingsStore);
+              await setUserData({ settings: settingsStore });
+              location.reload();
+            }}
+          />
+        </Label>
 
-        <div class="flex flex-col gap-1">
-          <label for="theme">{t('settings.theme@@Theme Preference')}</label>
+        <Label for="theme" label={t('settings.theme@@Theme Preference')}>
           <ThemeToggle variant="full" showLabel />
-        </div>
+        </Label>
 
         <div class="flex flex-col gap-1">
           <Toggle
@@ -64,7 +65,7 @@ export default component$(() => {
           </Toggle>
           <p>
             {t(
-              'settings.cookies.description@@Allow Birdflop to use cookies for personalization and improved user experience.',
+              'settings.cookies.description@@Allow Birdflop to use cookies for personalization and improved user experience.'
             )}
           </p>
         </div>
@@ -87,7 +88,7 @@ export default component$(() => {
           </Toggle>
           <p>
             {t(
-              'settings.flopbird.description@@Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you\'re on. Experimental',
+              "settings.flopbird.description@@Our cute little mascot sitting in the corner of the screen, guiding you with helpful information about the page you're on. Experimental"
             )}
           </p>
         </div>

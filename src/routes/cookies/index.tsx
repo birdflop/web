@@ -1,4 +1,4 @@
-import type { RequestHandler } from '@builder.io/qwik-city';
+import type { RequestHandler } from '@qwik.dev/router';
 
 export const onGet: RequestHandler = ({ text, json, cookie, query }) => {
   // get all cookies
@@ -16,7 +16,7 @@ export const onGet: RequestHandler = ({ text, json, cookie, query }) => {
         }
       }
       return [key, value.value];
-    }),
+    })
   );
 
   if (query.get('text') !== null) {

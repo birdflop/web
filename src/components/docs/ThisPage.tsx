@@ -1,10 +1,9 @@
-import { $, component$, useOnDocument, useSignal } from '@builder.io/qwik';
-import {
-  useContent,
-  useLocation,
-  useDocumentHead,
-} from '@builder.io/qwik-city';
-import { AlertCircle, Edit, Clock, User } from 'lucide-icons-qwik';
+import { $, component$, useOnDocument, useSignal } from '@qwik.dev/core';
+import { useContent, useLocation, useDocumentHead } from '@qwik.dev/router';
+import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
+import Edit from 'lucide-icons-qwik/icons/Edit';
+import Clock from 'lucide-icons-qwik/icons/Clock';
+import User from 'lucide-icons-qwik/icons/User';
 
 const makeEditPageUrl = (url: string): string => {
   const segments = url.split('/').filter((part) => part !== '');
@@ -56,7 +55,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
               }
             });
           },
-          { rootMargin: '0% 0% -80% 0%' },
+          { rootMargin: '0% 0% -80% 0%' }
         );
 
         itemIds.forEach((id) => {
@@ -74,7 +73,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
             }
           });
         };
-      }),
+      })
     );
 
     return activeId;

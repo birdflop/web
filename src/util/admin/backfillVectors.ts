@@ -1,4 +1,4 @@
-import { server$ } from '@builder.io/qwik-city';
+import { server$ } from '@qwik.dev/router';
 import { getDB, presets } from '../db';
 import { presetToVector } from '../rgb/presets/vectorize';
 import { eq } from 'drizzle-orm';
@@ -84,7 +84,7 @@ export const backfillColorVectors = server$(async function () {
  * @returns True if successful, false otherwise
  */
 export async function regeneratePresetVector(
-  presetId: number,
+  presetId: number
 ): Promise<boolean> {
   const db = getDB();
   if (!db) {

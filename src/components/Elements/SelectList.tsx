@@ -1,5 +1,5 @@
-import type { JSXChildren, PropsOf, QRL } from '@builder.io/qwik';
-import { component$, Slot, useSignal } from '@builder.io/qwik';
+import type { JSXChildren, PropsOf, QRL } from '@qwik.dev/core';
+import { component$, Slot, useSignal } from '@qwik.dev/core';
 
 interface SelectListProps extends Omit<
   PropsOf<'select'>,
@@ -80,5 +80,5 @@ export const SelectList = component$<SelectListProps>(
         <Slot name="extra-buttons" />
       </div>
     );
-  },
+  }
 );

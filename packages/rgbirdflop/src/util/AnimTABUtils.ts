@@ -15,7 +15,7 @@ import { animTABDefaults, rgbDefaults, Formatting } from './Defaults';
 
 export function generateAnimTABFrames(
   rgbOptions: typeof rgbDefaults,
-  animtabStore: typeof animTABDefaults,
+  animtabStore: typeof animTABDefaults
 ) {
   if (rgbOptions.colors.length < 2) return { OutputArray: [], frames: [] };
 
@@ -25,12 +25,12 @@ export function generateAnimTABFrames(
   let loopAmount;
   const length = (text.length * animtabStore.length) / rgbOptions.colorLength;
   switch (Number(animtabStore.type)) {
-  case 3:
-    loopAmount = length;
-    break;
-  default:
-    loopAmount = length * 2 - 2;
-    break;
+    case 3:
+      loopAmount = length;
+      break;
+    default:
+      loopAmount = length * 2 - 2;
+      break;
   }
 
   const colorFrames = [];
@@ -42,7 +42,7 @@ export function generateAnimTABFrames(
       colors,
       length,
       n,
-      rgbOptions.gradientType,
+      rgbOptions.gradientType
     );
 
     if (animtabStore.type === 4) {
@@ -76,7 +76,7 @@ export function generateAnimTABFrames(
   const OutputArray = formatFrames(
     { colorFrames, textFrames },
     rgbOptions,
-    animtabStore,
+    animtabStore
   );
 
   let processedOutputArray = OutputArray;
@@ -98,7 +98,7 @@ export function generateAnimTABFrames(
 function formatFrames(
   frames: { colorFrames?: string[][]; textFrames: any },
   rgbOptions: typeof rgbDefaults,
-  animtabStore: typeof animTABDefaults,
+  animtabStore: typeof animTABDefaults
 ) {
   const { textFrames } = frames;
   const OutputArray = [];
@@ -117,13 +117,13 @@ function formatFrames(
         if (
           rgbOptions.colors.find(
             (color, i) =>
-              color.pos != (100 / (rgbOptions.colors.length - 1)) * i,
+              color.pos != (100 / (rgbOptions.colors.length - 1)) * i
           )
         ) {
           output = formatMiniMessageCustomPositions(
             rgbOptions,
             animtabStore,
-            n,
+            n
           );
         } else {
           const animatedColors = [];
@@ -139,7 +139,7 @@ function formatFrames(
               colors,
               length,
               offset,
-              rgbOptions.gradientType,
+              rgbOptions.gradientType
             );
             const color = rgbToHex(shiftedGradient.next());
             animatedColors.push('#' + color);
@@ -188,7 +188,7 @@ function formatFrames(
           segment,
           formatting,
           rgbOptions,
-          skipColor,
+          skipColor
         );
         previousHex = hex;
         previousFormatting = formatting;
@@ -206,7 +206,7 @@ function formatFrames(
 function formatMiniMessageCustomPositions(
   rgbOptions: typeof rgbDefaults,
   animtabStore: typeof animTABDefaults,
-  frameIndex: number,
+  frameIndex: number
 ) {
   const text = rgbOptions.text ?? 'Birdflop';
   const colors = sortColors(rgbOptions.colors);
@@ -224,7 +224,7 @@ function formatMiniMessageCustomPositions(
       colorArray,
       length,
       offset,
-      rgbOptions.gradientType,
+      rgbOptions.gradientType
     );
     return {
       hex: rgbToHex(shiftedGradient.next()),
@@ -252,7 +252,7 @@ function formatMiniMessageCustomPositions(
     const innerText = applyMiniMessageFormatting(
       text.substring(lowerRange, upperRange),
       formatting,
-      rgbOptions,
+      rgbOptions
     );
     output += `<gradient:#${currentColor.hex}:#${nextColor.hex}>${innerText}</gradient>`;
   }
@@ -262,7 +262,7 @@ function formatMiniMessageCustomPositions(
 
 export function AnimationOutput(
   rgbOptions: typeof rgbDefaults,
-  animtabStore: typeof animTABDefaults,
+  animtabStore: typeof animTABDefaults
 ) {
   let FinalOutput;
 
@@ -276,11 +276,11 @@ export function AnimationOutput(
   const outputFormat = FinalOutput.match(/%output:{(.*\$t.*)}%/);
   if (outputFormat)
     OutputArray = OutputArray.map((output) =>
-      outputFormat[1].replace('$t', output),
+      outputFormat[1].replace('$t', output)
     );
   FinalOutput = FinalOutput.replace(
     /%output:{.*\$t.*}%/,
-    OutputArray.join('\n'),
+    OutputArray.join('\n')
   );
   return FinalOutput;
 }

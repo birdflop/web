@@ -5,7 +5,7 @@ import {
   useContext,
   useOnDocument,
   useSignal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { ColorPicker } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import {
@@ -13,7 +13,9 @@ import {
   rgbColorDefaultsWithColorMode,
   type ColorStop,
 } from '@birdflop/rgbirdflop';
-import { Ban, Droplet, Palette } from 'lucide-icons-qwik';
+import Ban from 'lucide-icons-qwik/icons/Ban';
+import Droplet from 'lucide-icons-qwik/icons/Droplet';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 import {
   applyStyleToRange,
   styleAtChar,
@@ -25,6 +27,7 @@ import {
   selectionContext,
 } from '~/components/rgbirdflop/Input';
 import ColorList from '../ColorList';
+import { ButtonContainer } from '~/components/Elements/ButtonContainer';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
   if (colors.length >= 2) return colors.map((c) => ({ ...c }));
@@ -43,7 +46,7 @@ export default component$(
     const opened = useSignal(-1);
 
     const hasSelection = useComputed$(
-      () => !!selection.value && selection.value.end > selection.value.start,
+      () => !!selection.value && selection.value.end > selection.value.start
     );
 
     const current = useComputed$<SegmentType>(() => {
@@ -64,7 +67,7 @@ export default component$(
         ) {
           opened.value = -1;
         }
-      }),
+      })
     );
 
     // Writes a uniform color config over the whole selection (formatting flags untouched).
@@ -88,7 +91,7 @@ export default component$(
           s.colors = colors.map((c) => ({ ...c }));
           s.gradientType = gradientType;
           s.colorLength = colorLength;
-        },
+        }
       );
       void restoreSelection(start, end);
     });
@@ -109,10 +112,13 @@ export default component$(
         id={'colorlist' + id}
       >
         {/* Color mode switch */}
-        <div class="flex flex-col gap-1">
+        <ButtonContainer
+          class={{
+            '*:lum-btn-p-1 items-stretch *:justify-center': true,
+          }}
+        >
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'gradient',
             }}
             onClick$={() =>
@@ -122,11 +128,11 @@ export default component$(
               })
             }
           >
-            <Palette size={18} /> {t('rgb.advanced.mode.gradient@@Gradient')}
+            <Palette size={18} />{' '}
+            {mode === 'gradient' && t('rgb.advanced.mode.gradient@@Gradient')}
           </button>
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'solid',
             }}
             onClick$={() =>
@@ -141,18 +147,19 @@ export default component$(
               })
             }
           >
-            <Droplet size={18} /> {t('rgb.advanced.mode.solid@@Solid')}
+            <Droplet size={18} />{' '}
+            {mode === 'solid' && t('rgb.advanced.mode.solid@@Solid')}
           </button>
           <button
             class={{
-              'lum-btn justify-center gap-2 rounded-sm p-2': true,
               'lum-grad-bg-lum-accent!': mode === 'none',
             }}
             onClick$={() => writeConfig({ colorMode: 'none' })}
           >
-            <Ban size={18} /> {t('rgb.advanced.mode.none@@Uncolored')}
+            <Ban size={18} />{' '}
+            {mode === 'none' && t('rgb.advanced.mode.none@@Uncolored')}
           </button>
-        </div>
+        </ButtonContainer>
 
         {mode != 'gradient' && (
           <div class="flex items-center gap-1 py-2 font-semibold">
@@ -166,7 +173,7 @@ export default component$(
         {mode === 'none' && (
           <p class="text-lum-text-secondary px-1 text-xs">
             {t(
-              'rgb.advanced.mode.noneDescription@@These characters keep Minecraft\'s default color (only formatting is applied).',
+              "rgb.advanced.mode.noneDescription@@These characters keep Minecraft's default color (only formatting is applied)."
             )}
           </p>
         )}
@@ -202,5 +209,5 @@ export default component$(
         )}
       </div>
     );
-  },
+  }
 );

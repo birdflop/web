@@ -1,9 +1,11 @@
-import { component$, useOnWindow, $ } from '@builder.io/qwik';
+import { component$, useOnWindow, $ } from '@qwik.dev/core';
 
 import { Anchor, Hoverable } from '@luminescent/ui-qwik';
 import { generateHead } from '~/root';
-import { CircleUser, Star } from 'lucide-icons-qwik';
-import { SiGoogle, SiTrustpilot } from 'simple-icons-qwik';
+import CircleUser from 'lucide-icons-qwik/icons/CircleUser';
+import Star from 'lucide-icons-qwik/icons/Star';
+import SiGoogle from 'simple-icons-qwik/icons/SiGoogle';
+import SiTrustpilot from 'simple-icons-qwik/icons/SiTrustpilot';
 
 const testimonials = [
   {
@@ -144,7 +146,7 @@ export default component$(() => {
       bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
       const hero = document.getElementById('hero')!;
       hero.style.transform = `translateY(${window.scrollY / 2}px)`;
-    }),
+    })
   );
 
   // pick random 6 testimonials to show
@@ -210,16 +212,16 @@ export default component$(() => {
         <div class="flex gap-2">
           <a
             href="https://www.trustpilot.com/review/birdflop.com"
-            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1 fill-current"
           >
-            <SiTrustpilot class="fill-current" />
+            <SiTrustpilot />
             Trustpilot
           </a>
           <a
             href="https://maps.app.goo.gl/R1AYXVd1Q6YvTLBT8"
-            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1"
+            class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1 fill-current"
           >
-            <SiGoogle class="fill-current" />
+            <SiGoogle />
             Google
           </a>
         </div>

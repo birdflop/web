@@ -3,7 +3,14 @@ import { defaultOperatingSystem } from './environment/operatingSystem';
 import { defaultServerType, serverType } from './environment/serverType';
 import { extraFlags, flags } from './flags';
 
-export type AvailableConfig = keyof typeof config;
+export type AvailableConfig =
+  | 'fileName'
+  | 'flags'
+  | 'extraFlags'
+  | 'memory'
+  | 'gui'
+  | 'autoRestart'
+  | 'variables';
 
 export interface Config {
   [key: string]: {
@@ -12,10 +19,6 @@ export interface Config {
     default?: any;
   };
 }
-
-type DefaultConfig = {
-  [key in AvailableConfig]: any;
-};
 
 export const config: Config = {
   fileName: {
@@ -48,7 +51,7 @@ export const config: Config = {
 };
 
 export function getDefaults() {
-  const defaultConfig: DefaultConfig = {};
+  const defaultConfig: Record<string, any> = {};
   for (const [key, value] of Object.entries(config)) {
     defaultConfig[key] = value.default;
   }

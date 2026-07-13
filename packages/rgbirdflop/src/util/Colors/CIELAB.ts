@@ -165,7 +165,7 @@ export function labToHex(lab: CIELAB): string {
 export function interpolateLab(
   color1: CIELAB,
   color2: CIELAB,
-  factor: number,
+  factor: number
 ): CIELAB {
   return {
     L: color1.L + (color2.L - color1.L) * factor,
@@ -217,7 +217,7 @@ export function lchabToHex(lch: LCHab): string {
 export function interpolateLchab(
   color1: LCHab,
   color2: LCHab,
-  factor: number,
+  factor: number
 ): LCHab {
   // Interpolate L and C linearly
   const L = color1.L + (color2.L - color1.L) * factor;
@@ -388,7 +388,7 @@ export function deltaE2000(lab1: CIELAB, lab2: CIELAB): number {
     Math.pow(dLp / (kL * Sl), 2) +
       Math.pow(dCp / (kC * Sc), 2) +
       Math.pow(dHp / (kH * Sh), 2) +
-      Rt * (dCp / (kC * Sc)) * (dHp / (kH * Sh)),
+      Rt * (dCp / (kC * Sc)) * (dHp / (kH * Sh))
   );
 
   return dE;

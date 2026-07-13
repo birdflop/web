@@ -57,7 +57,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 parseInt(
-                  dict_of_vars.bukkit['spawn-limits']['water-ambient'],
+                  dict_of_vars.bukkit['spawn-limits']['water-ambient']
                 ) >= 20
               );
             },
@@ -107,7 +107,7 @@ export default function getConfig() {
             bool: (dict_of_vars: any) => {
               return (
                 parseInt(
-                  dict_of_vars.bukkit['spawn-limits']['water-animals'],
+                  dict_of_vars.bukkit['spawn-limits']['water-animals']
                 ) >= 15
               );
             },

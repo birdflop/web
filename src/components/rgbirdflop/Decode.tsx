@@ -1,5 +1,5 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
-import { NumberInput } from '@luminescent/ui-qwik';
+import { $, component$, useContext, useSignal } from '@qwik.dev/core';
+import { Label, NumberInput } from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { generateOutput } from '@birdflop/rgbirdflop';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
@@ -100,7 +100,7 @@ function buildFormatSegments(
     underline?: boolean;
     strikethrough?: boolean;
     obfuscate?: boolean;
-  }>,
+  }>
 ) {
   const segments: Array<{
     start: number;
@@ -174,7 +174,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
   const textDecodedTitle = t('rgb.decode.decoded.title@@RGB Text Decoded!');
   const textDecodedDescription = t(
-    'rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.',
+    'rgb.decode.decoded.description@@Successfully decoded the existing RGB text! If this is not what you expected, try changing the threshold value.'
   );
 
   const notifications = useContext(NotificationContext);
@@ -241,62 +241,67 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       }}
       id="decode"
     >
-      <label for="decode">
-        {t('rgb.decode.title@@Decode')}
-        <span class="text-lum-text-secondary">
+      <Label for="decode" label={t('rgb.decode.title@@Decode')}>
+        <span q:slot="label" class="text-lum-text-secondary">
           {' '}
           -{' '}
           {t(
-            'rgb.decode.description@@Copy-paste an existing RGB text here to edit it',
+            'rgb.decode.description@@Copy-paste an existing RGB text here to edit it'
           )}
         </span>
-      </label>
-      <textarea
-        id="decode"
-        class={{
-          'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
-        }}
-        placeholder={generateOutput(rgbStore)}
-        onInput$={async (e, el) => {
-          const threshold = document.getElementById(
-            'threshold',
-          ) as HTMLInputElement;
-          await decodeText(el.value, Number(threshold.value));
-        }}
-      />
-      <NumberInput
-        input
-        value={threshold.value}
-        id="threshold"
-        class={{ 'w-full': true }}
-        onInput$={async (e, el) => {
-          threshold.value = Number(el.value);
-          const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) await decodeText(decode.value, threshold.value);
-        }}
-        onIncrement$={async () => {
-          threshold.value = threshold.value + 10;
-          const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) await decodeText(decode.value, threshold.value);
-        }}
-        onDecrement$={async () => {
-          threshold.value = threshold.value - 10;
-          const decode = document.getElementById('decode') as HTMLInputElement;
-          if (decode.value) await decodeText(decode.value, threshold.value);
-        }}
-      >
-        {t('rgb.decode.threshold.title@@Threshold')}
-        <span class="text-lum-text-secondary">
+        <textarea
+          id="decode"
+          class={{
+            'lum-input font-mc h-16 w-full whitespace-pre-wrap': true,
+          }}
+          placeholder={generateOutput(rgbStore)}
+          onInput$={async (e, el) => {
+            const threshold = document.getElementById(
+              'threshold'
+            ) as HTMLInputElement;
+            await decodeText(el.value, Number(threshold.value));
+          }}
+        />
+      </Label>
+      <Label for="threshold" label={t('rgb.decode.threshold.title@@Threshold')}>
+        <span q:slot="label" class="text-lum-text-secondary">
           {' '}
           -{' '}
           {t(
-            'rgb.decode.threshold.description@@Try changing this around if you\'re getting too many colors',
+            "rgb.decode.threshold.description@@Try changing this around if you're getting too many colors"
           )}
         </span>
-      </NumberInput>
+        <NumberInput
+          input
+          value={threshold.value}
+          id="threshold"
+          class={{ 'w-full': true }}
+          onInput$={async (e, el) => {
+            threshold.value = Number(el.value);
+            const decode = document.getElementById(
+              'decode'
+            ) as HTMLInputElement;
+            if (decode.value) await decodeText(decode.value, threshold.value);
+          }}
+          onIncrement$={async () => {
+            threshold.value = threshold.value + 10;
+            const decode = document.getElementById(
+              'decode'
+            ) as HTMLInputElement;
+            if (decode.value) await decodeText(decode.value, threshold.value);
+          }}
+          onDecrement$={async () => {
+            threshold.value = threshold.value - 10;
+            const decode = document.getElementById(
+              'decode'
+            ) as HTMLInputElement;
+            if (decode.value) await decodeText(decode.value, threshold.value);
+          }}
+        />
+      </Label>
       <p class="text-sm">
         {t(
-          'rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.',
+          'rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.'
         )}
       </p>
     </div>

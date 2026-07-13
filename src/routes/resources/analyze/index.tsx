@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$ } from '@qwik.dev/core';
 
 import { defaultDescription, generateHead } from '~/root';
 import Analyze from '~/components/analyze/Analyze';

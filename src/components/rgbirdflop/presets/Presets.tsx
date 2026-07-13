@@ -6,23 +6,20 @@ import {
   useContextProvider,
   useSignal,
   useTask$,
-} from '@builder.io/qwik';
-import {
-  Save,
-  Link as LinkIcon,
-  Copy,
-  Globe,
-  Trash,
-  ExternalLink,
-} from 'lucide-icons-qwik';
+} from '@qwik.dev/core';
+import Save from 'lucide-icons-qwik/icons/Save';
+import LinkIcon from 'lucide-icons-qwik/icons/Link';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Globe from 'lucide-icons-qwik/icons/Globe';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
 import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { renderPreview } from '~/components/rgbirdflop/preview';
-import { Link, useLocation } from '@builder.io/qwik-city';
+import { Link, useLocation } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
@@ -33,33 +30,36 @@ import {
 import Accordion from '~/components/Elements/Accordion';
 import { discordLink } from '~/components/Elements/Nav';
 import { SelectList } from '~/components/Elements/SelectList';
+import { PublicPreset } from '~/util/db';
+import RgbPreview from '../RgbPreview';
+import { Label } from '@luminescent/ui-qwik';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
   const importedPresetTitle = t(
-    'rgb.presets.imported.title@@Successfully imported preset!',
+    'rgb.presets.imported.title@@Successfully imported preset!'
   );
   const importedPresetDescription = t(
-    'rgb.presets.imported.description@@The preset has been imported successfully.',
+    'rgb.presets.imported.description@@The preset has been imported successfully.'
   );
   const invalidPresetTitle = t('rgb.presets.invalid.title@@Invalid Preset');
   const invalidPresetDescription = t(
-    'rgb.presets.invalid.description@@Please report this to the Discord server with the preset you tried to import.',
+    'rgb.presets.invalid.description@@Please report this to the Discord server with the preset you tried to import.'
   );
   const savedPresetTitle = t('rgb.presets.saved.title@@Preset Saved!');
   const savedPresetDescription = t(
-    'rgb.presets.saved.description@@The preset has been saved successfully.',
+    'rgb.presets.saved.description@@The preset has been saved successfully.'
   );
   const savedPresetWarning = t(
-    'rgb.presets.saved.warning@@Please login to save presets permanently.',
+    'rgb.presets.saved.warning@@Please login to save presets permanently.'
   );
   const presetCopiedTitle = t('rgb.presets.copied.title@@Preset Copied!');
   const presetCopiedDescription = t(
-    'rgb.presets.copied.description@@Successfully copied preset to clipboard!',
+    'rgb.presets.copied.description@@Successfully copied preset to clipboard!'
   );
   const presetUrlTitle = t('rgb.presets.url.title@@URL Updated!');
   const presetUrlDescription = t(
-    'rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)',
+    'rgb.presets.url.description@@Successfully exported preset to url! (Check the URL bar)'
   );
   const copyFailedTitle = t('rgb.copyFailed@@Failed to copy to clipboard!');
 
@@ -82,7 +82,9 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     } catch (err) {
       notification
         .setTitle(invalidPresetTitle)
-        .setDescription(`Error: ${err}\n${invalidPresetDescription}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}\n${invalidPresetDescription}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setButtons([
           {
@@ -97,17 +99,21 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     if (!json) return;
     (Object.keys(rgbStore) as Array<keyof typeof rgbStore>).forEach((key) => {
       if (rgbStore[key] === undefined) return;
-      if (key == 'text')
-        return ((rgbStore as any)[key] = json[key] ?? rgbStore[key]);
-      (rgbStore as any)[key] = json[key] ?? combinedDefaults[key];
+      if (key == 'text') return (rgbStore[key] = json[key] ?? rgbStore[key]);
+      (rgbStore as Record<keyof typeof combinedDefaults, unknown>)[key] =
+        json[key] ?? combinedDefaults[key];
     });
     notifications.push(notification);
   });
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? []
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? []
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
   const openItems = useContext(openItemsContext);
@@ -126,7 +132,9 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification.toJSON());
@@ -174,7 +182,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             });
             if (
               !privatePresets.value.find(
-                (p) => JSON.stringify(p) === JSON.stringify(preset),
+                (p) => JSON.stringify(p) === JSON.stringify(preset)
               )
             ) {
               privatePresets.value.push(preset);
@@ -182,19 +190,17 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             if (isBrowser)
               localStorage.setItem(
                 'privatePresets',
-                JSON.stringify(privatePresets.value),
+                JSON.stringify(privatePresets.value)
               );
             await setUserData({ privatePresets: privatePresets.value });
 
             const notification = new Notification()
               .setTitle(savedPresetTitle)
               .setDescription(
-                session.value ? savedPresetDescription : savedPresetWarning,
+                session.value ? savedPresetDescription : savedPresetWarning
               )
               .setBgColor(
-                session.value
-                  ? 'lum-grad-bg-green/50'
-                  : 'lum-grad-bg-orange/50',
+                session.value ? 'lum-grad-bg-green/50' : 'lum-grad-bg-orange/50'
               );
             notifications.push(notification);
           }}
@@ -237,16 +243,16 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               class="flex-1 p-1.5 pl-3 text-left"
               onClick$={() => loadPresetJSON(JSON.stringify(preset))}
             >
-              {renderPreview(
-                { ...rgbDefaults, text: rgbStore.text, ...preset },
-                1,
-              )}
+              <RgbPreview
+                rgbStore={{ ...rgbDefaults, text: rgbStore.text, ...preset }}
+                shadowLength={1}
+              />
             </button>
             <button
               class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 text-lum-text-secondary mr-1.5 cursor-pointer p-1.5 hover:text-red-500"
               onClick$={async () => {
                 privatePresets.value = privatePresets.value.filter(
-                  (p) => p !== preset,
+                  (p) => p !== preset
                 );
                 await setUserData({
                   privatePresets: privatePresets.value,
@@ -254,7 +260,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
                 if (isBrowser)
                   localStorage.setItem(
                     'privatePresets',
-                    JSON.stringify(privatePresets.value),
+                    JSON.stringify(privatePresets.value)
                   );
               }}
             >
@@ -290,10 +296,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               class="flex-1 p-1.5 pl-3 text-left"
               onClick$={() => loadPresetJSON(JSON.stringify(Preset.preset))}
             >
-              {renderPreview(
-                { ...rgbDefaults, text: Preset.name, ...Preset.preset },
-                1,
-              )}
+              <RgbPreview
+                rgbStore={{
+                  ...rgbDefaults,
+                  text: Preset.name,
+                  ...Preset.preset,
+                }}
+                shadowLength={1}
+              />
             </button>
             <a
               href={`presets/${Preset.id}`}
@@ -307,7 +317,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               class="lum-btn lum-bg-transparent hover:lum-bg-transparent rounded-lum-1 text-lum-text-secondary cursor-pointer p-1.5 hover:text-red-500"
               onClick$={async () => {
                 savedPresets.value = savedPresets.value.filter(
-                  (p) => p.id !== Preset.id,
+                  (p) => p.id !== Preset.id
                 );
                 const result = await unsavePreset(Preset.id);
                 if (result.success) Preset.saves = (Preset.saves || 0) - 1;
@@ -329,21 +339,19 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
       </Link>
 
-      <label for="import">
-        {t('rgb.presets.import@@Import')}
-        <span class="text-lum-text-secondary">
+      <Label for="import" label={t('rgb.presets.import@@Import')}>
+        <span q:slot="label" class="text-lum-text-secondary">
           {' '}
           - {t('rgb.presets.importSubtitle@@Load a JSON preset')}
         </span>
-      </label>
-
-      <input
-        class="lum-input"
-        id="import"
-        name="import"
-        placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
-        onInput$={async (e, el) => loadPresetJSON(el.value)}
-      />
+        <input
+          class="lum-input"
+          id="import"
+          name="import"
+          placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
+          onInput$={async (e, el) => loadPresetJSON(el.value)}
+        />
+      </Label>
 
       <div class="flex flex-wrap gap-1">
         <button
@@ -393,7 +401,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             const params: rgbPreset = { ...rgbStore };
             (
               Object.entries(params) as Array<
-                [keyof typeof combinedDefaults, any]
+                [keyof typeof combinedDefaults, unknown]
               >
             ).forEach(([key, value]) => {
               const defaultValue = combinedDefaults[key];

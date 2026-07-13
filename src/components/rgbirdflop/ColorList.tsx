@@ -1,14 +1,19 @@
 import {
   $,
   component$,
-  PropFunction,
   Slot,
   useContext,
   useOnDocument,
   useSignal,
   useComputed$,
-} from '@builder.io/qwik';
-import { ColorPicker, NumberInput, SelectMenuRaw } from '@luminescent/ui-qwik';
+  QRL,
+} from '@qwik.dev/core';
+import {
+  ColorPicker,
+  Label,
+  NumberInput,
+  SelectMenu,
+} from '@luminescent/ui-qwik';
 import { inlineTranslate } from 'qwik-speak';
 import { ShowAllGradientsButton } from './ShowAllGradientsButton';
 import {
@@ -23,25 +28,26 @@ import {
   ColorStop,
   disperseColors,
 } from '@birdflop/rgbirdflop';
-import {
-  ArrowRightLeft,
-  Combine,
-  Copy,
-  Dices,
-  Eclipse,
-  GripVertical,
-  Minus,
-  MoveHorizontal,
-  Palette,
-  Plus,
-  Shuffle,
-  Trash,
-} from 'lucide-icons-qwik';
+
+import ArrowRightLeft from 'lucide-icons-qwik/icons/ArrowRightLeft';
+import Combine from 'lucide-icons-qwik/icons/Combine';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Dices from 'lucide-icons-qwik/icons/Dices';
+import Eclipse from 'lucide-icons-qwik/icons/Eclipse';
+import GripVertical from 'lucide-icons-qwik/icons/GripVertical';
+import Minus from 'lucide-icons-qwik/icons/Minus';
+import MoveHorizontal from 'lucide-icons-qwik/icons/MoveHorizontal';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Plus from 'lucide-icons-qwik/icons/Plus';
+import Shuffle from 'lucide-icons-qwik/icons/Shuffle';
+import Trash from 'lucide-icons-qwik/icons/Trash';
+
 import {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
+import { ButtonContainer } from '../Elements/ButtonContainer';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
@@ -63,8 +69,8 @@ type ColorListProps = {
   colors?: ColorStop[];
   gradientType?: GradientType;
   textLength?: number;
-  onColorsChange$?: PropFunction<(colors: ColorStop[]) => void>;
-  onGradientTypeChange$?: PropFunction<(gradientType: GradientType) => void>;
+  onColorsChange$?: QRL<(colors: ColorStop[]) => void>;
+  onGradientTypeChange$?: QRL<(gradientType: GradientType) => void>;
 };
 
 export default component$<ColorListProps>((props) => {
@@ -77,10 +83,10 @@ export default component$<ColorListProps>((props) => {
 
   const colors = useComputed$(() => props.colors ?? getColors(rgbStore, id));
   const resolvedGradientType = useComputed$(
-    () => props.gradientType ?? rgbStore.gradientType,
+    () => props.gradientType ?? rgbStore.gradientType
   );
   const resolvedTextLength = useComputed$(
-    () => props.textLength ?? rgbStore.text.length,
+    () => props.textLength ?? rgbStore.text.length
   );
 
   const setColors = $(async (newColors: ColorStop[]) => {
@@ -104,7 +110,7 @@ export default component$<ColorListProps>((props) => {
       ) {
         opened.value = -1;
       }
-    }),
+    })
   );
 
   return (
@@ -157,7 +163,7 @@ export default component$<ColorListProps>((props) => {
           </button>
         </span>
 
-        <SelectMenuRaw
+        <SelectMenu
           title={t('rgb.colors.gradientType@@Gradient Type')}
           id="gradientType"
           value={resolvedGradientType.value}
@@ -179,10 +185,10 @@ export default component$<ColorListProps>((props) => {
       </div>
 
       <Slot />
-      <div
+
+      <ButtonContainer
         class={{
-          'lum-card flex-row items-center gap-1 p-1 transition-colors duration-200': true,
-          '*:lum-btn *:lum-bg-transparent *:group *:rounded-lum-1 *:flex-1 *:justify-center *:p-1': true,
+          '*:justify-center *:p-1': true,
         }}
       >
         <button
@@ -276,7 +282,8 @@ export default component$<ColorListProps>((props) => {
             <MoveHorizontal size={20} />
           </button>
         )}
-      </div>
+      </ButtonContainer>
+
       <div class="relative flex flex-col" id={`colorlistcolors${id}`}>
         {colors.value.map((color, i) => (
           <div
@@ -310,20 +317,20 @@ export default component$<ColorListProps>((props) => {
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
               draggedIndex.value >= i && (
-              <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-              </div>
-            )}
+                <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+                </div>
+              )}
             {dragOverIndex.value === i &&
               draggedIndex.value !== null &&
               draggedIndex.value < i && (
-              <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-              </div>
-            )}
+                <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
+                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+                </div>
+              )}
             <label
               for={`colorlist${id}-color-${i + 1}-input`}
-              class="text-lum-text-secondary w-6 font-mono text-center"
+              class="text-lum-text-secondary w-6 text-center font-mono"
             >
               {i + 1}
             </label>
@@ -333,7 +340,9 @@ export default component$<ColorListProps>((props) => {
               draggable
               onDragStart$={(e) => {
                 draggedIndex.value = i;
-                const row = document.getElementById(`colorlist${id}-color-${i + 1}`);
+                const row = document.getElementById(
+                  `colorlist${id}-color-${i + 1}`
+                );
                 if (row && e.dataTransfer) {
                   e.dataTransfer.setDragImage(row, 20, 20);
                 }
@@ -350,10 +359,10 @@ export default component$<ColorListProps>((props) => {
               id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400':
-                    getBrightness(hexToRGB(color.hex)) < 126,
+                  getBrightness(hexToRGB(color.hex)) < 126,
                 'text-gray-700 hover:text-gray-700':
-                    getBrightness(hexToRGB(color.hex)) > 126,
-                'lum-input font-mono lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm': true,
+                  getBrightness(hexToRGB(color.hex)) > 126,
+                'lum-input lum-btn-p-1 lum-grad-bg min-w-20 flex-1 rounded-sm font-mono': true,
               }}
               style={`--bg-color: ${color.hex};`}
               value={color.hex}
@@ -362,7 +371,7 @@ export default component$<ColorListProps>((props) => {
                 if (!hex.startsWith('#')) hex = '#' + hex;
                 // lightly check if valid hex color
                 const validRegex =
-                    id == 'shadow' ? hexRegex : hexRegexNoOpacity;
+                  id == 'shadow' ? hexRegex : hexRegexNoOpacity;
                 if (!validRegex.test(hex)) {
                   el.value = color.hex;
                   return;
@@ -375,7 +384,7 @@ export default component$<ColorListProps>((props) => {
                 // set the color picker's value and trigger input to update color picker
                 if (opened.value != i) return;
                 const picker = document.getElementById(
-                  `colorlist${id}-color-picker`,
+                  `colorlist${id}-color-picker`
                 )!;
                 picker.dataset.value = el.value;
                 picker.dispatchEvent(new Event('input'));
@@ -386,18 +395,21 @@ export default component$<ColorListProps>((props) => {
                 else opened.value = i;
 
                 const picker = document.getElementById(
-                  `colorlist${id}-color-picker`,
+                  `colorlist${id}-color-picker`
                 )!;
                 const popup = document.getElementById(
-                  `colorlist${id}-color-popup`,
+                  `colorlist${id}-color-popup`
                 );
                 if (!picker || !popup) return;
 
                 // set the position of the popup relative to the list of colors
                 const colorContainer = document.getElementById(
-                  `colorlist${id}-color-${i + 1}`,
+                  `colorlist${id}-color-${i + 1}`
                 )!;
-                popup.style.setProperty('--popup-top', `${colorContainer.offsetTop}px`);
+                popup.style.setProperty(
+                  '--popup-top',
+                  `${colorContainer.offsetTop}px`
+                );
 
                 // set the color picker's value and trigger input to update color picker
                 picker.dataset.value = color.hex;
@@ -423,7 +435,7 @@ export default component$<ColorListProps>((props) => {
           class={{
             flex: opened.value > -1,
             hidden: opened.value < 0,
-            'absolute left-15 sm:left-full top-[calc(var(--popup-top)+2.4rem)] sm:top-(--popup-top) z-10 flex-col gap-2 motion-safe:transition-all': true,
+            'absolute top-[calc(var(--popup-top)+2.4rem)] left-15 z-10 flex-col gap-2 motion-safe:transition-all sm:top-(--popup-top) sm:left-full': true,
             'animate-in fade-in slide-in-from-top-2': true,
           }}
           style={{
@@ -443,37 +455,43 @@ export default component$<ColorListProps>((props) => {
             opacity={id == 'shadow'}
           />
           <div class="lum-card flex flex-col justify-evenly gap-1 p-2">
-            <NumberInput
-              input
-              id={`colorlist${id}-color-pos`}
-              min={0}
-              max={100}
-              value={Math.round(colors.value[opened.value]?.pos)}
-              onChange$={(e, el) => {
-                const newColors = colors.value.slice(0);
-                let newPos = Number(el.value);
-                if (newPos < 0) newPos = 0;
-                if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
-              onIncrement$={() => {
-                const newColors = colors.value.slice(0);
-                let newPos = newColors[opened.value].pos + 1;
-                if (newPos > 100) newPos = 100;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
-              onDecrement$={() => {
-                const newColors = colors.value.slice(0);
-                let newPos = newColors[opened.value].pos - 1;
-                if (newPos < 0) newPos = 0;
-                newColors[opened.value].pos = Math.round(newPos * 1000) / 1000;
-                void setColors(sortColors(newColors));
-              }}
+            <Label
+              for={`colorlist${id}-color-pos`}
+              label={`${t('rgb.colors.position@@Position')} (%)`}
             >
-              {t('rgb.colors.position@@Position')} (%)
-            </NumberInput>
+              <NumberInput
+                input
+                id={`colorlist${id}-color-pos`}
+                min={0}
+                max={100}
+                value={Math.round(colors.value[opened.value]?.pos)}
+                onInput$={(e, el) => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = Number(el.value);
+                  if (newPos < 0) newPos = 0;
+                  if (newPos > 100) newPos = 100;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+                onIncrement$={() => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = newColors[opened.value].pos + 1;
+                  if (newPos > 100) newPos = 100;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+                onDecrement$={() => {
+                  const newColors = colors.value.slice(0);
+                  let newPos = newColors[opened.value].pos - 1;
+                  if (newPos < 0) newPos = 0;
+                  newColors[opened.value].pos =
+                    Math.round(newPos * 1000) / 1000;
+                  void setColors(sortColors(newColors));
+                }}
+              />
+            </Label>
           </div>
         </div>
       </div>

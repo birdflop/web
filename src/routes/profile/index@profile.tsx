@@ -4,7 +4,7 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import {
   privatePresetsContext,
@@ -16,7 +16,7 @@ import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
 import UsersPublicPresets, {
   getUsersPresets,
 } from '~/components/rgbirdflop/presets/UsersPublicPresets';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { routeLoader$ } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
 
 export const useUser = routeLoader$(async ({ sharedMap }) => {
@@ -40,7 +40,7 @@ export default component$(() => {
   useContextProvider(savedPresetsContext, savedPresets);
 
   const { userInfo, userPresets, errors } = useUser().value;
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (errors.length > 0) {
       errors.forEach((error) => {

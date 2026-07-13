@@ -49,7 +49,7 @@ export function getPresets(): rgbPreset[] {
   // if localStorage is empty, try to get presets from cookies
   if (localStoragePresets) {
     const localStoragePresetsParsed = JSON.parse(
-      localStoragePresets,
+      localStoragePresets
     ) as rgbPreset[];
     privatePresets = privatePresets.concat(localStoragePresetsParsed);
   } else {

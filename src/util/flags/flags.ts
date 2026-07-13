@@ -8,7 +8,7 @@ import type { AvailableServerType } from './environment/serverType';
 // TODO: Fabric, Forge, etc.
 
 export type AvailableFlags = keyof typeof flags;
-export type AvailableExtraFlags = keyof typeof extraFlags;
+export type AvailableExtraFlags = 'vectors' | 'benchmarkedGraalVM' | 'meowiceGraalVM';
 
 interface FlagOption {
   generate: Generate<
@@ -130,17 +130,17 @@ export const flags = {
         ...baseAikar,
         ...(memory < 12
           ? [
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1MaxNewSizePercent=40',
-            '-XX:G1HeapRegionSize=8M',
-            '-XX:G1ReservePercent=20',
-          ]
+              '-XX:G1NewSizePercent=30',
+              '-XX:G1MaxNewSizePercent=40',
+              '-XX:G1HeapRegionSize=8M',
+              '-XX:G1ReservePercent=20',
+            ]
           : [
-            '-XX:G1NewSizePercent=40',
-            '-XX:G1MaxNewSizePercent=50',
-            '-XX:G1HeapRegionSize=16M',
-            '-XX:G1ReservePercent=15',
-          ]),
+              '-XX:G1NewSizePercent=40',
+              '-XX:G1MaxNewSizePercent=50',
+              '-XX:G1HeapRegionSize=16M',
+              '-XX:G1ReservePercent=15',
+            ]),
       ];
     },
   },
@@ -335,19 +335,19 @@ export const flags = {
         ...baseEtil,
         ...(memory < 12
           ? [
-            '-XX:G1NewSizePercent=30',
-            '-XX:G1MaxNewSizePercent=40',
-            '-XX:G1HeapRegionSize=8M',
-            '-XX:G1ReservePercent=20',
-            '-XX:InitiatingHeapOccupancyPercent=15',
-          ]
+              '-XX:G1NewSizePercent=30',
+              '-XX:G1MaxNewSizePercent=40',
+              '-XX:G1HeapRegionSize=8M',
+              '-XX:G1ReservePercent=20',
+              '-XX:InitiatingHeapOccupancyPercent=15',
+            ]
           : [
-            '-XX:G1NewSizePercent=40',
-            '-XX:G1MaxNewSizePercent=50',
-            '-XX:G1HeapRegionSize=16M',
-            '-XX:G1ReservePercent=15',
-            '-XX:InitiatingHeapOccupancyPercent=20',
-          ]),
+              '-XX:G1NewSizePercent=40',
+              '-XX:G1MaxNewSizePercent=50',
+              '-XX:G1HeapRegionSize=16M',
+              '-XX:G1ReservePercent=15',
+              '-XX:InitiatingHeapOccupancyPercent=20',
+            ]),
       ];
     },
   },
@@ -370,13 +370,13 @@ export const flags = {
   } as FlagOption,
 };
 
-export const extraFlags = {
+export const extraFlags: Record<AvailableExtraFlags, FlagExtraOption> = {
   vectors: {
     supports: ['aikars', 'obyduxs', 'meowice'],
     generate: ({ existingFlags }) => {
       return [...existingFlags, '--add-modules=jdk.incubator.vector'];
     },
-  } as FlagExtraOption,
+  },
   benchmarkedGraalVM: {
     supports: ['benchmarkedG1GC'],
     generate: ({ existingFlags }) => {
@@ -403,7 +403,7 @@ export const extraFlags = {
         '-Dgraal.CompilerConfiguration=enterprise',
       ];
     },
-  } as FlagExtraOption,
+  },
   meowiceGraalVM: {
     supports: ['meowice'],
     generate: ({ existingFlags }) => {
@@ -428,5 +428,5 @@ export const extraFlags = {
         '-Dgraal.CompilerConfiguration=enterprise',
       ];
     },
-  } as FlagExtraOption,
+  },
 };

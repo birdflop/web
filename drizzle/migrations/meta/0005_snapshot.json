@@ -91,22 +91,15 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "account_provider_providerAccountId_pk": {
-          "columns": [
-            "provider",
-            "providerAccountId"
-          ],
+          "columns": ["provider", "providerAccountId"],
           "name": "account_provider_providerAccountId_pk"
         }
       },
@@ -193,9 +186,7 @@
       "indexes": {
         "presets_preset_unique": {
           "name": "presets_preset_unique",
-          "columns": [
-            "preset"
-          ],
+          "columns": ["preset"],
           "isUnique": true
         }
       },
@@ -204,12 +195,8 @@
           "name": "presets_userId_user_id_fk",
           "tableFrom": "presets",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -250,12 +237,8 @@
           "name": "savedPresets_userId_user_id_fk",
           "tableFrom": "savedPresets",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -263,22 +246,15 @@
           "name": "savedPresets_presetId_presets_id_fk",
           "tableFrom": "savedPresets",
           "tableTo": "presets",
-          "columnsFrom": [
-            "presetId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["presetId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "savedPresets_userId_presetId_pk": {
-          "columns": [
-            "userId",
-            "presetId"
-          ],
+          "columns": ["userId", "presetId"],
           "name": "savedPresets_userId_presetId_pk"
         }
       },
@@ -316,12 +292,8 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -409,16 +381,12 @@
       "indexes": {
         "user_username_unique": {
           "name": "user_username_unique",
-          "columns": [
-            "username"
-          ],
+          "columns": ["username"],
           "isUnique": true
         },
         "user_email_unique": {
           "name": "user_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -456,10 +424,7 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "verificationToken_identifier_token_pk": {
-          "columns": [
-            "identifier",
-            "token"
-          ],
+          "columns": ["identifier", "token"],
           "name": "verificationToken_identifier_token_pk"
         }
       },

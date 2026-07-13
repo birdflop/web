@@ -1,5 +1,5 @@
-import { component$, useContext, QRL } from '@builder.io/qwik';
-import { ContentMenu, Link } from '@builder.io/qwik-city';
+import { component$, useContext, QRL } from '@qwik.dev/core';
+import { ContentMenu, Link } from '@qwik.dev/router';
 import { MarkdownItems } from '~/routes/docs/layout';
 import Accordion from '../Elements/Accordion';
 import { openItemsContext } from '~/routes/layout';
@@ -82,10 +82,10 @@ export const MenuItems = component$(
                     class={{
                       'overflow-hidden transition-all duration-200': true,
                       'max-h-0 scale-98 opacity-0': !openItems.value.includes(
-                        item.text || `docs-item-${i}`,
+                        item.text || `docs-item-${i}`
                       ),
                       'mt-1 max-h-screen opacity-100': openItems.value.includes(
-                        item.text || `docs-item-${i}`,
+                        item.text || `docs-item-${i}`
                       ),
                       'pl-1': level > 0,
                     }}
@@ -111,7 +111,7 @@ export const MenuItems = component$(
                   }}
                   onMouseOver$={(
                     evt,
-                    target: HTMLAnchorElement & { __prefetchLink: number },
+                    target: HTMLAnchorElement & { __prefetchLink: number }
                   ) => {
                     const canHover =
                       window.matchMedia('(hover: hover)').matches;
@@ -147,5 +147,5 @@ export const MenuItems = component$(
         )}
       </div>
     );
-  },
+  }
 );

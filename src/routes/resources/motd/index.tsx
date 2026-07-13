@@ -1,9 +1,20 @@
 /* eslint-disable qwik/jsx-img */
-import { $, component$, useContext, useSignal, useStore, useVisibleTask$ } from '@builder.io/qwik';
-import type { QRL, Signal } from '@builder.io/qwik';
+import {
+  $,
+  component$,
+  useContext,
+  useSignal,
+  useStore,
+  useVisibleTask$,
+} from '@qwik.dev/core';
+import type { QRL, Signal } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { SelectMenu } from '@luminescent/ui-qwik';
-import { Copy, Eraser, ImageUp, MessageSquare, Trash2 } from 'lucide-icons-qwik';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import Eraser from 'lucide-icons-qwik/icons/Eraser';
+import ImageUp from 'lucide-icons-qwik/icons/ImageUp';
+import MessageSquare from 'lucide-icons-qwik/icons/MessageSquare';
+import Trash2 from 'lucide-icons-qwik/icons/Trash2';
 import { defaultDescription, generateHead } from '~/root';
 import { Notification, NotificationContext } from '~/util/Notification';
 import {
@@ -15,14 +26,17 @@ import {
   type MotdFormat,
 } from '~/util/motd';
 
-const OBF_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const OBF_CHARS =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const Ping5 = '/minecraft/ping_5.png';
 
-const createImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
-  const img = new Image();
-  img.onload = () => resolve(img);
-  img.onerror = reject;
-  img.src = src;
-});
+const createImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
 
 type LineField = 'line1' | 'line2';
 
@@ -35,24 +49,28 @@ interface MotdLineInputProps {
   onCaret$: QRL<(field: LineField, el: HTMLTextAreaElement) => void>;
 }
 
-const MotdLineInput = component$<MotdLineInputProps>(({ field, label, value, inputRef, onValue$, onCaret$ }) => (
-  <div class="flex flex-col gap-1">
-    <label for={field} class="text-sm text-lum-text-secondary">{label}</label>
-    <textarea
-      ref={inputRef}
-      id={field}
-      rows={1}
-      spellcheck={false}
-      class="lum-input font-mono w-full resize-none"
-      value={value}
-      onInput$={(e, el) => onValue$(field, el.value)}
-      onFocus$={(e, el) => onCaret$(field, el)}
-      onClick$={(e, el) => onCaret$(field, el)}
-      onKeyUp$={(e, el) => onCaret$(field, el)}
-      onSelect$={(e, el) => onCaret$(field, el)}
-    />
-  </div>
-));
+const MotdLineInput = component$<MotdLineInputProps>(
+  ({ field, label, value, inputRef, onValue$, onCaret$ }) => (
+    <div class="flex flex-col gap-1">
+      <label for={field} class="text-lum-text-secondary text-sm">
+        {label}
+      </label>
+      <textarea
+        ref={inputRef}
+        id={field}
+        rows={1}
+        spellcheck={false}
+        class="lum-input w-full resize-none font-mono"
+        value={value}
+        onInput$={(e, el) => onValue$(field, el.value)}
+        onFocus$={(e, el) => onCaret$(field, el)}
+        onClick$={(e, el) => onCaret$(field, el)}
+        onKeyUp$={(e, el) => onCaret$(field, el)}
+        onSelect$={(e, el) => onCaret$(field, el)}
+      />
+    </div>
+  )
+);
 
 // Renders one MOTD line into styled spans matching Minecraft's appearance.
 function renderMotdLine(line: string) {
@@ -67,9 +85,10 @@ function renderMotdLine(line: string) {
         'font-mc-bold': run.style.bold && !run.style.italic,
         'font-mc-italic': run.style.italic && !run.style.bold,
         'font-mc-bold-italic': run.style.bold && run.style.italic,
-        'underline': run.style.underline && !run.style.strikethrough,
-        'strikethrough': run.style.strikethrough && !run.style.underline,
-        'underline-strikethrough': run.style.underline && run.style.strikethrough,
+        underline: run.style.underline && !run.style.strikethrough,
+        strikethrough: run.style.strikethrough && !run.style.underline,
+        'underline-strikethrough':
+          run.style.underline && run.style.strikethrough,
         'motd-obf': run.style.obfuscated,
       }}
       style={{
@@ -103,7 +122,11 @@ export default component$(() => {
   // Tracks where in which line the formatting toolbar should insert codes.
   const line1Ref = useSignal<HTMLTextAreaElement>();
   const line2Ref = useSignal<HTMLTextAreaElement>();
-  const active = useStore({ field: 'line1' as 'line1' | 'line2', start: 0, end: 0 });
+  const active = useStore({
+    field: 'line1' as 'line1' | 'line2',
+    start: 0,
+    end: 0,
+  });
 
   const trackCaret = $((field: 'line1' | 'line2', el: HTMLTextAreaElement) => {
     active.field = field;
@@ -159,7 +182,10 @@ export default component$(() => {
         const original = el.getAttribute('data-obf') ?? el.textContent ?? '';
         let out = '';
         for (const ch of original) {
-          out += ch === ' ' ? ' ' : OBF_CHARS[Math.floor(Math.random() * OBF_CHARS.length)];
+          out +=
+            ch === ' '
+              ? ' '
+              : OBF_CHARS[Math.floor(Math.random() * OBF_CHARS.length)];
         }
         el.textContent = out;
       });
@@ -174,72 +200,138 @@ export default component$(() => {
       .setTitle(copiedTitle)
       .setBgColor('lum-grad-bg-green/50');
     navigator.clipboard.writeText(value).catch((err) => {
-      notification.setTitle(copyFailedTitle).setDescription(`${err}`).setBgColor('lum-grad-bg-red/50').setPersist(true);
+      notification
+        .setTitle(copyFailedTitle)
+        .setDescription(`${err}`)
+        .setBgColor('lum-grad-bg-red/50')
+        .setPersist(true);
     });
     notifications.push(notification);
   });
 
-  const setLine = $((field: LineField, value: string) => { store[field] = value; });
+  const setLine = $((field: LineField, value: string) => {
+    store[field] = value;
+  });
 
   const customColor = useSignal('#54daf4');
 
   return (
-    <section class="flex flex-col mx-auto max-w-6xl px-6 min-h-svh pt-20">
-      <h1 class="flex gap-3 text-2xl font-extrabold items-center my-2">
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
+      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <MessageSquare size={32} />
         {t('motd.title@@MOTD Designer')}
       </h1>
-      <p class="mb-6 border-b border-lum-border/10 pb-4 text-lum-text-secondary">
-        {t('motd.description@@Design your server\'s message of the day with colors, formatting, and a favicon, then copy it straight into server.properties.')}
+      <p class="border-lum-border/10 text-lum-text-secondary mb-6 border-b pb-4">
+        {t(
+          "motd.description@@Design your server's message of the day with colors, formatting, and a favicon, then copy it straight into server.properties."
+        )}
       </p>
 
       {/* Live server-list preview */}
-      <label class="text-sm text-lum-text-secondary mb-2">{t('motd.preview.label@@Preview')}</label>
-      <div class="rounded-lum p-4 mb-6 overflow-hidden"
-        style={{ background: 'linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%)' }}>
-        <div class="flex gap-3 items-start rounded-lum p-2 border border-white/10"
-          style={{ background: 'rgba(0,0,0,0.45)' }}>
-          {store.icon
-            ? <img src={store.icon} width={64} height={64} alt="Server icon" class="w-16 h-16 shrink-0 pixelated" style={{ imageRendering: 'pixelated' }} />
-            : <div class="w-16 h-16 shrink-0 flex items-center justify-center text-3xl text-gray-500"
-              style={{ background: 'rgba(255,255,255,0.06)' }}>?</div>
-          }
-          <div class="flex-1 min-w-0 leading-tight">
+      <label class="text-lum-text-secondary mb-2 text-sm">
+        {t('motd.preview.label@@Preview')}
+      </label>
+      <div
+        class="rounded-lum mb-6 overflow-hidden p-4"
+        style={{
+          background: 'linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%)',
+        }}
+      >
+        <div
+          class="rounded-lum flex items-start gap-3 border border-white/10 p-2"
+          style={{ background: 'rgba(0,0,0,0.45)' }}
+        >
+          {store.icon ? (
+            <img
+              src={store.icon}
+              width={64}
+              height={64}
+              alt="Server icon"
+              class="pixelated h-16 w-16 shrink-0"
+              style={{ imageRendering: 'pixelated' }}
+            />
+          ) : (
+            <div
+              class="flex h-16 w-16 shrink-0 items-center justify-center text-3xl text-gray-500"
+              style={{ background: 'rgba(255,255,255,0.06)' }}
+            >
+              ?
+            </div>
+          )}
+          <div class="min-w-0 flex-1 leading-tight">
             <div class="flex items-center justify-between gap-2">
-              <span class="font-mc text-white truncate" style={{ textShadow: '2px 2px 0 #3f3f3f' }}>{store.label}</span>
-              <div class="flex items-center gap-1 shrink-0 font-mc">
-                <span style={{ color: '#AAAAAA', textShadow: '2px 2px 0 #2a2a2a' }}>
-                  {store.playersOnline}<span style={{ color: '#555555' }}>/</span>{store.playersMax}
+              <span
+                class="font-mc truncate text-white"
+                style={{ textShadow: '2px 2px 0 #3f3f3f' }}
+              >
+                {store.label}
+              </span>
+              <div class="font-mc flex shrink-0 items-center gap-1">
+                <span
+                  style={{ color: '#AAAAAA', textShadow: '2px 2px 0 #2a2a2a' }}
+                >
+                  {store.playersOnline}
+                  <span style={{ color: '#555555' }}>/</span>
+                  {store.playersMax}
                 </span>
-                <img src="/minecraft/ping_5.png" width={20} height={16} alt="ping" class="ml-1" style={{ imageRendering: 'pixelated' }} />
+                <img
+                  src={Ping5}
+                  width={20}
+                  height={16}
+                  alt="ping"
+                  class="ml-1"
+                  style={{ imageRendering: 'pixelated' }}
+                />
               </div>
             </div>
-            <div class="text-lg whitespace-pre">{renderMotdLine(store.line1)}</div>
-            <div class="text-lg whitespace-pre">{renderMotdLine(store.line2)}</div>
+            <div class="text-lg whitespace-pre">
+              {renderMotdLine(store.line1)}
+            </div>
+            <div class="text-lg whitespace-pre">
+              {renderMotdLine(store.line2)}
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-col lg:flex-row gap-6">
+      <div class="flex flex-col gap-6 lg:flex-row">
         {/* Editor */}
-        <div class="flex-1 flex flex-col gap-4">
+        <div class="flex flex-1 flex-col gap-4">
           {/* Color palette */}
           <div class="flex flex-col gap-2">
-            <span class="text-sm text-lum-text-secondary">{t('motd.colors@@Colors')}</span>
+            <span class="text-lum-text-secondary text-sm">
+              {t('motd.colors@@Colors')}
+            </span>
             <div class="flex flex-wrap gap-1">
               {MC_COLORS.map((c) => (
-                <button key={c.code} type="button" title={`${c.name} (&${c.code})`}
+                <button
+                  key={c.code}
+                  type="button"
+                  title={`${c.name} (&${c.code})`}
                   onClick$={() => insertCode(`&${c.code}`)}
-                  class="w-8 h-8 rounded-md border border-white/20 hover:scale-110 transition-transform"
-                  style={{ background: c.hex }} />
+                  class="h-8 w-8 rounded-md border border-white/20 transition-transform hover:scale-110"
+                  style={{ background: c.hex }}
+                />
               ))}
-              <label class="flex items-center gap-1 ml-1 cursor-pointer lum-btn lum-bg-lum-input-bg/50 p-1 h-8"
-                title={t('motd.customColor@@Insert custom hex color')}>
-                <input type="color" class="w-6 h-6 bg-transparent border-0 cursor-pointer"
+              <label
+                class="lum-btn lum-bg-lum-input-bg/50 ml-1 flex h-8 cursor-pointer items-center gap-1 p-1"
+                title={t('motd.customColor@@Insert custom hex color')}
+              >
+                <input
+                  type="color"
+                  class="h-6 w-6 cursor-pointer border-0 bg-transparent"
                   value={customColor.value}
-                  onInput$={(e, el) => { customColor.value = el.value; }} />
-                <button type="button" class="lum-btn lum-bg-blue/40 hover:lum-bg-blue p-1 text-xs"
-                  onClick$={() => insertCode(`&${customColor.value.toUpperCase()}`)}>
+                  onInput$={(e, el) => {
+                    customColor.value = el.value;
+                  }}
+                />
+                <button
+                  type="button"
+                  class="lum-btn lum-bg-blue/40 hover:lum-bg-blue p-1 text-xs"
+                  onClick$={() =>
+                    insertCode(`&${customColor.value.toUpperCase()}`)
+                  }
+                >
                   + Hex
                 </button>
               </label>
@@ -248,105 +340,200 @@ export default component$(() => {
 
           {/* Formatting */}
           <div class="flex flex-col gap-2">
-            <span class="text-sm text-lum-text-secondary">{t('motd.formatting@@Formatting')}</span>
+            <span class="text-lum-text-secondary text-sm">
+              {t('motd.formatting@@Formatting')}
+            </span>
             <div class="flex flex-wrap gap-1">
               {MC_FORMATS.map((f) => (
-                <button key={f.code} type="button"
+                <button
+                  key={f.code}
+                  type="button"
                   onClick$={() => insertCode(`&${f.code}`)}
                   class={{
                     'lum-btn lum-bg-lum-input-bg/50 hover:lum-bg-lum-input-bg px-3 py-1.5 text-sm': true,
                     'font-mc-bold': f.code === 'l',
                     'font-mc-italic': f.code === 'o',
-                    'underline': f.code === 'n',
-                    'strikethrough': f.code === 'm',
-                  }}>
+                    underline: f.code === 'n',
+                    strikethrough: f.code === 'm',
+                  }}
+                >
                   {f.code === 'r' ? <Eraser size={16} /> : null}
-                  {f.name} <span class="text-lum-text-secondary">&amp;{f.code}</span>
+                  {f.name}{' '}
+                  <span class="text-lum-text-secondary">&amp;{f.code}</span>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Line inputs */}
-          <MotdLineInput field="line1" label={t('motd.line1@@First line')} value={store.line1}
-            inputRef={line1Ref} onValue$={setLine} onCaret$={trackCaret} />
-          <MotdLineInput field="line2" label={t('motd.line2@@Second line')} value={store.line2}
-            inputRef={line2Ref} onValue$={setLine} onCaret$={trackCaret} />
+          <MotdLineInput
+            field="line1"
+            label={t('motd.line1@@First line')}
+            value={store.line1}
+            inputRef={line1Ref}
+            onValue$={setLine}
+            onCaret$={trackCaret}
+          />
+          <MotdLineInput
+            field="line2"
+            label={t('motd.line2@@Second line')}
+            value={store.line2}
+            inputRef={line2Ref}
+            onValue$={setLine}
+            onCaret$={trackCaret}
+          />
 
           {/* Favicon */}
           <div class="flex flex-col gap-2">
-            <span class="text-sm text-lum-text-secondary">{t('motd.favicon@@Server icon (favicon)')}</span>
+            <span class="text-lum-text-secondary text-sm">
+              {t('motd.favicon@@Server icon (favicon)')}
+            </span>
             <div class="flex items-center gap-3">
               <label class="lum-btn lum-bg-blue/40 hover:lum-bg-blue cursor-pointer">
                 <ImageUp size={20} />
                 {t('motd.favicon.upload@@Upload image')}
-                <input type="file" accept="image/*" class="hidden"
-                  onChange$={(e, el) => handleIcon(el.files?.[0])} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  onChange$={(e, el) => handleIcon(el.files?.[0])}
+                />
               </label>
-              {store.icon && <>
-                <a class="lum-btn lum-bg-green/40 hover:lum-bg-green" href={store.icon} download="server-icon.png">
-                  {t('motd.favicon.download@@Download server-icon.png')}
-                </a>
-                <button type="button" class="lum-btn lum-bg-red/40 hover:lum-bg-red" onClick$={() => { store.icon = ''; }}>
-                  <Trash2 size={18} />
-                </button>
-              </>}
+              {store.icon && (
+                <>
+                  <a
+                    class="lum-btn lum-bg-green/40 hover:lum-bg-green"
+                    href={store.icon}
+                    download="server-icon.png"
+                  >
+                    {t('motd.favicon.download@@Download server-icon.png')}
+                  </a>
+                  <button
+                    type="button"
+                    class="lum-btn lum-bg-red/40 hover:lum-bg-red"
+                    onClick$={() => {
+                      store.icon = '';
+                    }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </>
+              )}
             </div>
-            <p class="text-xs text-lum-text-secondary">
-              {t('motd.favicon.help@@Any image works — it\'s cropped to a square and resized to 64×64. Place the downloaded server-icon.png in your server\'s root folder.')}
+            <p class="text-lum-text-secondary text-xs">
+              {t(
+                "motd.favicon.help@@Any image works — it's cropped to a square and resized to 64×64. Place the downloaded server-icon.png in your server's root folder."
+              )}
             </p>
           </div>
         </div>
 
         {/* Output + preview settings */}
-        <div class="flex-1 flex flex-col gap-4">
+        <div class="flex flex-1 flex-col gap-4">
           <div class="flex flex-col gap-2">
             <div class="flex items-end gap-2">
-              <div class="flex flex-col gap-1 flex-1">
-                <label for="format" class="text-sm text-lum-text-secondary">{t('motd.output.format@@Output format')}</label>
-                <SelectMenu id="format" class={{ 'w-full': true }} value={store.format}
-                  onChange$={(e, el) => { store.format = el.value as MotdFormat; }}
+              <div class="flex flex-1 flex-col gap-1">
+                <label for="format" class="text-lum-text-secondary text-sm">
+                  {t('motd.output.format@@Output format')}
+                </label>
+                <SelectMenu
+                  id="format"
+                  class={{ 'w-full': true }}
+                  value={store.format}
+                  onChange$={(e, el) => {
+                    store.format = el.value as MotdFormat;
+                  }}
                   values={[
                     { name: 'server.properties', value: 'properties' },
-                    { name: t('motd.output.section@@Section signs (§)'), value: 'section' },
+                    {
+                      name: t('motd.output.section@@Section signs (§)'),
+                      value: 'section',
+                    },
                     { name: t('motd.output.amp@@Ampersand (&)'), value: 'amp' },
-                  ]}>
+                  ]}
+                >
                   {t('motd.output.format@@Output format')}
                 </SelectMenu>
               </div>
-              <button type="button" class="lum-btn lum-bg-blue/40 hover:lum-bg-blue h-fit" onClick$={() => copy(output)}>
+              <button
+                type="button"
+                class="lum-btn lum-bg-blue/40 hover:lum-bg-blue h-fit"
+                onClick$={() => copy(output)}
+              >
                 <Copy size={18} /> {t('motd.output.copy@@Copy')}
               </button>
             </div>
-            <textarea readOnly id="output"
-              class="lum-input font-mono w-full h-32 whitespace-pre-wrap break-all"
+            <textarea
+              readOnly
+              id="output"
+              class="lum-input h-32 w-full font-mono break-all whitespace-pre-wrap"
               value={output}
-              onClick$={() => copy(output)} />
-            <p class="text-xs text-lum-text-secondary">
+              onClick$={() => copy(output)}
+            />
+            <p class="text-lum-text-secondary text-xs">
               {store.format === 'properties'
-                ? t('motd.output.help.properties@@Paste this line into your server.properties file (it replaces the existing motd= line).')
+                ? t(
+                    'motd.output.help.properties@@Paste this line into your server.properties file (it replaces the existing motd= line).'
+                  )
                 : store.format === 'section'
-                  ? t('motd.output.help.section@@Section-sign format, accepted by most plugin configs that support legacy colors.')
-                  : t('motd.output.help.amp@@Ampersand format, for plugins that translate & color codes.')}
+                  ? t(
+                      'motd.output.help.section@@Section-sign format, accepted by most plugin configs that support legacy colors.'
+                    )
+                  : t(
+                      'motd.output.help.amp@@Ampersand format, for plugins that translate & color codes.'
+                    )}
             </p>
           </div>
 
           <div class="lum-card lum-bg-lum-card-bg/40 flex flex-col gap-3">
-            <span class="text-sm text-lum-text-secondary">{t('motd.previewSettings@@Preview settings (not part of the MOTD)')}</span>
+            <span class="text-lum-text-secondary text-sm">
+              {t(
+                'motd.previewSettings@@Preview settings (not part of the MOTD)'
+              )}
+            </span>
             <div class="flex flex-col gap-1">
-              <label for="label" class="text-sm">{t('motd.previewSettings.label@@Server label')}</label>
-              <input id="label" class="lum-input" value={store.label} onInput$={(e, el) => { store.label = el.value; }} />
+              <label for="label" class="text-sm">
+                {t('motd.previewSettings.label@@Server label')}
+              </label>
+              <input
+                id="label"
+                class="lum-input"
+                value={store.label}
+                onInput$={(e, el) => {
+                  store.label = el.value;
+                }}
+              />
             </div>
             <div class="flex gap-2">
-              <div class="flex flex-col gap-1 flex-1">
-                <label for="online" class="text-sm">{t('motd.previewSettings.online@@Players online')}</label>
-                <input id="online" type="number" min={0} class="lum-input" value={store.playersOnline}
-                  onInput$={(e, el) => { store.playersOnline = Math.max(0, Number(el.value) || 0); }} />
+              <div class="flex flex-1 flex-col gap-1">
+                <label for="online" class="text-sm">
+                  {t('motd.previewSettings.online@@Players online')}
+                </label>
+                <input
+                  id="online"
+                  type="number"
+                  min={0}
+                  class="lum-input"
+                  value={store.playersOnline}
+                  onInput$={(e, el) => {
+                    store.playersOnline = Math.max(0, Number(el.value) || 0);
+                  }}
+                />
               </div>
-              <div class="flex flex-col gap-1 flex-1">
-                <label for="max" class="text-sm">{t('motd.previewSettings.max@@Max players')}</label>
-                <input id="max" type="number" min={0} class="lum-input" value={store.playersMax}
-                  onInput$={(e, el) => { store.playersMax = Math.max(0, Number(el.value) || 0); }} />
+              <div class="flex flex-1 flex-col gap-1">
+                <label for="max" class="text-sm">
+                  {t('motd.previewSettings.max@@Max players')}
+                </label>
+                <input
+                  id="max"
+                  type="number"
+                  min={0}
+                  class="lum-input"
+                  value={store.playersMax}
+                  onInput$={(e, el) => {
+                    store.playersMax = Math.max(0, Number(el.value) || 0);
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -359,5 +546,7 @@ export default component$(() => {
 
 export const head = generateHead({
   title: 'Minecraft MOTD Designer & server.properties Generator - Birdflop',
-  description: 'Design your Minecraft server MOTD with colors, gradients, formatting and a favicon, then copy it into server.properties. Developed by Birdflop. ' + defaultDescription,
+  description:
+    'Design your Minecraft server MOTD with colors, gradients, formatting and a favicon, then copy it into server.properties. Developed by Birdflop. ' +
+    defaultDescription,
 });

@@ -48,7 +48,7 @@ export class ColorGradient {
   constructor(
     colors: RGBColorStop[],
     numSteps: number,
-    type: GradientType = 'rgb',
+    type: GradientType = 'rgb'
   ) {
     this.type = type;
 
@@ -116,7 +116,7 @@ export class ColorAnimatedGradient {
     colors: RGBColorStop[],
     numSteps: number,
     offset: number,
-    type: GradientType = 'rgb',
+    type: GradientType = 'rgb'
   ) {
     this.type = type;
 

@@ -9,7 +9,7 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import Backgrounds, {
   lightBackgrounds,
@@ -22,8 +22,8 @@ import {
   routeLoader$,
   server$,
   useLocation,
-} from '@builder.io/qwik-city';
-import { Cookie } from 'lucide-icons-qwik';
+} from '@qwik.dev/router';
+import Cookie from 'lucide-icons-qwik/icons/Cookie';
 import { inlineTranslate } from 'qwik-speak';
 import { loadOpenItems } from '~/components/Elements/Accordion';
 import {
@@ -44,6 +44,7 @@ import { identifyUmami } from '~/util/umami';
 import birdThreeJS from '~/util/birdThreeJS';
 import { useSession } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
+import { Session } from '@auth/qwik';
 
 export type Settings = {
   cookies?: boolean;
@@ -68,7 +69,8 @@ export type FlopbirdStore = {
 export const checkAdmin = function (props: RequestEventBase) {
   const { env, sharedMap } = props;
 
-  const session = sharedMap.get('session');
+  const session = sharedMap.get('session') as Session;
+  if (!session?.user?.id) return false;
   const admins =
     env
       .get('ADMINS')
@@ -84,10 +86,11 @@ export const isAdmin = server$(function () {
 export const useIsAdmin = routeLoader$((props) => checkAdmin(props));
 
 export const useSettingsCookies = routeLoader$(({ cookie, url }) => {
-  const settingsCookies = getCookies(cookie, 'settings', url.searchParams) as {
-    cookies: Settings;
-    errors: string[];
-  };
+  const settingsCookies = getCookies<Settings>(
+    cookie,
+    'settings',
+    url.searchParams
+  );
 
   const theme = settingsCookies.cookies.theme || 'dark';
 
@@ -147,9 +150,9 @@ export default component$(() => {
   const birdStore = useStore<FlopbirdStore>({});
   useContextProvider(birdStoreContext, birdStore);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() =>
-    birdThreeJS(birdRef, anchorElementRef, notifications, birdStore),
+    birdThreeJS(birdRef, anchorElementRef, notifications, birdStore)
   );
 
   useTask$(({ track }) => {
@@ -195,7 +198,7 @@ export default component$(() => {
   /* Cookie Consent */
   const showCookieConsent = useSignal(false);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // check if cookies have been accepted or opted out
     if (settingsStore.cookies !== undefined) return;
@@ -254,12 +257,12 @@ export default component$(() => {
   });
 
   /* Misc */
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     // If the theme is not set, check the user's preference
     if (themeStore.isDark === undefined) {
       themeStore.isDark = window.matchMedia(
-        '(prefers-color-scheme: dark)',
+        '(prefers-color-scheme: dark)'
       ).matches;
     }
 
@@ -287,7 +290,10 @@ export default component$(() => {
       )}
 
       {(themeStore.isDark === undefined || themeStore.isDark) && (
-        <Background
+        <img
+          width={1920}
+          height={1080}
+          src={Background}
           id="bg"
           alt="Background"
           class={{
@@ -299,7 +305,10 @@ export default component$(() => {
         />
       )}
       {(themeStore.isDark === undefined || !themeStore.isDark) && (
-        <LightBackground
+        <img
+          width={1920}
+          height={1080}
+          src={LightBackground}
           id="bg"
           alt="Background"
           class={{
@@ -323,8 +332,8 @@ export default component$(() => {
 
           ...(settingsStore.flopbird?.toggle
             ? {
-              transform: 'translate(-100%, -100%)',
-            }
+                transform: 'translate(-100%, -100%)',
+              }
             : {}),
         }}
       >
@@ -340,12 +349,12 @@ export default component$(() => {
                 'animate-out',
                 'fade-out',
                 'slide-out-to-bottom-8',
-                'sm:slide-out-to-right-8',
+                'sm:slide-out-to-right-8'
               );
               setTimeout(() => {
                 notifications.splice(
                   notifications.findIndex((n) => n?.id === id),
-                  1,
+                  1
                 );
               }, 300);
             }, 4000);
@@ -366,12 +375,12 @@ export default component$(() => {
                   'animate-out',
                   'fade-out',
                   'slide-out-to-bottom-8',
-                  'sm:slide-out-to-right-8',
+                  'sm:slide-out-to-right-8'
                 );
                 setTimeout(() => {
                   notifications.splice(
                     notifications.findIndex((n) => n?.id === id),
-                    1,
+                    1
                   );
                 }, 300);
               }}
@@ -427,7 +436,7 @@ export default component$(() => {
             </h5>
             <p>
               {t(
-                'nav.cookies.description@@We use cookies to automatically save and load your preferences.',
+                'nav.cookies.description@@We use cookies to automatically save and load your preferences.'
               )}
             </p>
             <Link href="/privacy">

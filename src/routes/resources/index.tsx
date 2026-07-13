@@ -1,26 +1,26 @@
-import { component$ } from '@builder.io/qwik';
-import { Link } from '@builder.io/qwik-city';
-import { Blobs, Hoverable, LogoDiscord } from '@luminescent/ui-qwik';
-import {
-  Binary,
-  Blocks,
-  Bot,
-  Box,
-  Eye,
-  Flag,
-  GalleryHorizontalEnd,
-  Github,
-  Link as LinkIcon,
-  MemoryStick,
-  MessageSquare,
-  Palette,
-  Presentation,
-  Rainbow,
-  Save,
-  Server,
-  Wrench,
-  Zap,
-} from 'lucide-icons-qwik';
+import { component$ } from '@qwik.dev/core';
+import { Link } from '@qwik.dev/router';
+import { Hoverable } from '@luminescent/ui-qwik';
+
+import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
+import SiGithub from 'simple-icons-qwik/icons/SiGithub';
+import Binary from 'lucide-icons-qwik/icons/Binary';
+import Blocks from 'lucide-icons-qwik/icons/Blocks';
+import Bot from 'lucide-icons-qwik/icons/Bot';
+import Box from 'lucide-icons-qwik/icons/Box';
+import Eye from 'lucide-icons-qwik/icons/Eye';
+import Flag from 'lucide-icons-qwik/icons/Flag';
+import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
+import LinkIcon from 'lucide-icons-qwik/icons/Link';
+import MemoryStick from 'lucide-icons-qwik/icons/MemoryStick';
+import MessageSquare from 'lucide-icons-qwik/icons/MessageSquare';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Presentation from 'lucide-icons-qwik/icons/Presentation';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Server from 'lucide-icons-qwik/icons/Server';
+import Wrench from 'lucide-icons-qwik/icons/Wrench';
+import Zap from 'lucide-icons-qwik/icons/Zap';
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 
@@ -40,7 +40,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-8 border-b pb-4">
         {t(
-          'nav.resources.description@@Here you can find all of Birdflop\'s public resources.',
+          "nav.resources.description@@Here you can find all of Birdflop's public resources."
         )}
       </p>
 
@@ -50,7 +50,7 @@ export default component$(() => {
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.',
+          'nav.resources.gradientTools.description@@Tools to help you create gradient text in Minecraft.'
         )}
       </p>
       <div class="flex flex-wrap gap-2 *:flex-1">
@@ -60,18 +60,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb"
         >
-          <Blobs
-            color="red"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Palette size={30} />
             {t('nav.resources.hexGradient.title@@RGBirdflop')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.',
+              'nav.resources.hexGradient.description@@Hex gradient text generator, Powered by Birdflop, a 501(c)(3) nonprofit Minecraft host.'
             )}
           </p>
         </Link>
@@ -81,18 +76,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtab"
         >
-          <Blobs
-            color="blue"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Rainbow size={30} />
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator',
+              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
             )}
           </p>
         </Link>
@@ -102,18 +92,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb/presets"
         >
-          <Blobs
-            color="green"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Save size={30} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+              'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.'
             )}
           </p>
         </Link>
@@ -125,7 +110,7 @@ export default component$(() => {
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.',
+          'nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.'
         )}
       </p>
       <div class="flex flex-wrap gap-2 *:flex-1">
@@ -135,18 +120,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/analyze"
         >
-          <Blobs
-            color="yellow"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Zap size={30} />
             {t('nav.resources.analyze.title@@Analyze')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations',
+              'nav.resources.analyze.description@@Analyze a Spark Profile or Paper Timings and get possible optimizations'
             )}
           </p>
         </Link>
@@ -156,18 +136,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/flags"
         >
-          <Blobs
-            color="orange"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Flag size={30} />
             {t('nav.resources.flags.title@@Flags Generator')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags',
+              'nav.resources.flags.description@@A simple script generator to start your Minecraft servers with optimal flags'
             )}
           </p>
         </Link>
@@ -177,18 +152,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/plugins"
         >
-          <Blobs
-            color="violet"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Blocks size={30} />
             {t('nav.resources.plugins.title@@Plugin Updates')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.',
+              'nav.resources.plugins.description@@Keep track of plugin updates without checking every plugin page for updates.'
             )}
           </p>
         </Link>
@@ -198,18 +168,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/hardware"
         >
-          <Blobs
-            color="green"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <MemoryStick size={30} />
             {t('nav.resources.hardware.title@@RAM & Hardware Planner')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.hardware.description@@Estimate the RAM, CPU and storage your server needs from players, distances and plugins.',
+              'nav.resources.hardware.description@@Estimate the RAM, CPU and storage your server needs from players, distances and plugins.'
             )}
           </p>
         </Link>
@@ -219,18 +184,45 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/motd"
         >
-          <Blobs
-            color="blue"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <MessageSquare size={30} />
             {t('nav.resources.motd.title@@MOTD Designer')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.motd.description@@Design your server list MOTD with colors, formatting and a favicon, then export to server.properties.',
+              'nav.resources.motd.description@@Design your server list MOTD with colors, formatting and a favicon, then export to server.properties.'
+            )}
+          </p>
+        </Link>
+        <Link
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-green relative transition-all duration-200!"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+          href="/resources/hardware"
+        >
+          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+            <MemoryStick size={30} />
+            {t('nav.resources.hardware.title@@RAM & Hardware Planner')}
+          </h3>
+          <p class="text-lum-text-secondary">
+            {t(
+              'nav.resources.hardware.description@@Estimate the RAM, CPU and storage your server needs from players, distances and plugins.'
+            )}
+          </p>
+        </Link>
+        <Link
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-blue relative transition-all duration-200!"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+          href="/resources/motd"
+        >
+          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+            <MessageSquare size={30} />
+            {t('nav.resources.motd.title@@MOTD Designer')}
+          </h3>
+          <p class="text-lum-text-secondary">
+            {t(
+              'nav.resources.motd.description@@Design your server list MOTD with colors, formatting and a favicon, then export to server.properties.'
             )}
           </p>
         </Link>
@@ -242,7 +234,7 @@ export default component$(() => {
       </h2>
       <p class="text-lum-text-secondary mt-1 mb-4">
         {t(
-          'nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.',
+          'nav.resources.miscellaneousTools.description@@Miscellaneous tools to help with random miscellaneous things.'
         )}
       </p>
       <div class="mb-2 flex flex-wrap gap-2 *:flex-1">
@@ -252,18 +244,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/banner"
         >
-          <Blobs
-            color="purple"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Presentation size={30} />
             {t('nav.resources.banner.title@@Banner Generator')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.banner.description@@Easily generate banner designs for Minecraft.',
+              'nav.resources.banner.description@@Easily generate banner designs for Minecraft.'
             )}
           </p>
         </Link>
@@ -273,18 +260,13 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtexture"
         >
-          <Blobs
-            color="cyan"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <GalleryHorizontalEnd size={30} />
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations',
+              'nav.resources.animatedTextures.description@@Easily merge textures for resource pack animations'
             )}
           </p>
         </Link>
@@ -294,20 +276,15 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animpreview"
         >
-          <Blobs
-            color="lime"
-            class={{ 'rounded-lum absolute -z-10 overflow-clip': true }}
-            style={{ transform: 'translateZ(-10px)' }}
-          />
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Eye size={30} />
             {t(
-              'nav.resources.tabAnimationPreview.title@@TAB Animation Preview',
+              'nav.resources.tabAnimationPreview.title@@TAB Animation Preview'
             )}
           </h3>
           <p class="text-lum-text-secondary">
             {t(
-              'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game',
+              'nav.resources.tabAnimationPreview.description@@Preview TAB Animations without the need to put them in-game'
             )}
           </p>
         </Link>
@@ -329,17 +306,17 @@ export default component$(() => {
       </p>
       <div class="mt-2 flex gap-2">
         <a
-          class="lum-btn lum-bg-blue/50 hover:lum-bg-blue"
+          class="lum-btn lum-bg-blue/50 hover:lum-bg-blue fill-current"
           href="https://discord.com/oauth2/authorize?client_id=787929894616825867&permissions=0&scope=bot"
         >
-          <LogoDiscord size={20} />
+          <SiDiscord size={20} />
           Invite
         </a>
         <a
-          class="lum-btn lum-bg-transparent"
+          class="lum-btn lum-bg-transparent fill-current"
           href="https://github.com/birdflop/botflop"
         >
-          <Github size={20} />
+          <SiGithub size={20} />
           Learn More
         </a>
       </div>
@@ -401,17 +378,17 @@ export default component$(() => {
       </ul>
       <div class="mt-2 flex gap-2">
         <a
-          class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan"
+          class="lum-btn lum-bg-cyan/70 hover:lum-bg-cyan fill-current"
           href="https://discord.com/oauth2/authorize?client_id=809975422640717845&permissions=0&scope=bot"
         >
-          <LogoDiscord size={20} />
+          <SiDiscord size={20} />
           Invite
         </a>
         <a
-          class="lum-btn lum-bg-transparent"
+          class="lum-btn lum-bg-transparent fill-current"
           href="https://github.com/birdflop/birdtickets"
         >
-          <Github size={20} />
+          <SiGithub size={20} />
           Learn More
         </a>
       </div>

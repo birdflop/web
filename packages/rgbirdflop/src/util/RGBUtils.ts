@@ -21,7 +21,7 @@ export function segmentText(text: string, colorLength?: number): string[] {
 
 export function isFormattingEqual(
   a: Formatting | null,
-  b: Formatting | null,
+  b: Formatting | null
 ): boolean {
   if (a === b) return true;
   if (!a || !b) return false;
@@ -61,7 +61,7 @@ export function applyFont(text: string, fontName: string | undefined): string {
 
 export function buildFormatCodes(
   formatting: Formatting,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   let codes = '';
   if (
@@ -80,7 +80,7 @@ export function buildFormatCodes(
 export function applyMiniMessageFormatting(
   text: string,
   formatting: Formatting,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
@@ -106,7 +106,7 @@ export function renderTemplateSegment(
   text: string,
   formatting: Formatting,
   rgbOptions: typeof rgbDefaults,
-  skipColor: boolean = false,
+  skipColor: boolean = false
 ): string {
   let out = rgbOptions.colorFormat.color;
   if (skipColor) {
@@ -146,7 +146,7 @@ export function renderTemplateSegment(
 
 export function applyWrappers(
   output: string,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   let out = output;
   if (!rgbOptions.formatting || rgbOptions.formatting.length === 0) {
@@ -205,7 +205,7 @@ type ShadowSegment = {
 
 function buildShadowSegments(
   rgbOptions: typeof rgbDefaults,
-  shadowColors: ColorStop[],
+  shadowColors: ColorStop[]
 ): ShadowSegment[] {
   const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
   if (!segments.length || !shadowColors) return [];
@@ -213,7 +213,7 @@ function buildShadowSegments(
   const shadowGradient = new ColorGradient(
     shadowColors.map(getRGBColorStop),
     segments.length,
-    rgbOptions.gradientType,
+    rgbOptions.gradientType
   );
 
   let cursor = 0;
@@ -235,7 +235,7 @@ function buildShadowSegments(
 function applySelectiveFormattingToText(
   text: string,
   offset: number,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   const chars = Array.from(text);
   let currentFmt: Formatting | undefined;
@@ -267,7 +267,7 @@ function applySelectiveFormattingToText(
   let charOffset = offset;
   for (const ch of chars) {
     const covering = rgbOptions.formatting?.find(
-      (s) => s.start <= charOffset && s.end > charOffset,
+      (s) => s.start <= charOffset && s.end > charOffset
     );
     const fmt = covering
       ? { ...rgbOptions.baseFormatting, ...covering }
@@ -293,7 +293,7 @@ function buildShadowContent(
   shadowSegments: ShadowSegment[],
   start: number,
   end: number,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   let currentHex: string | undefined;
   let currentOpacity: number | undefined;
@@ -306,7 +306,7 @@ function buildShadowContent(
     const formatted = applySelectiveFormattingToText(
       buffer,
       bufferStartOffset,
-      rgbOptions,
+      rgbOptions
     );
     out += `<shadow:${currentHex}:${currentOpacity ?? 1}>${formatted}</shadow>`;
     buffer = '';
@@ -356,33 +356,6 @@ export function sortColors(colors: ColorStop[]) {
   return [...colors].sort((a, b) => a.pos - b.pos);
 }
 
-export function swapItems(array: any[], indexA: number, indexB: number) {
-  const arrLength = array.length;
-  if (arrLength === 0) return [...array];
-
-  const wrap = (i: number) => ((i % arrLength) + arrLength) % arrLength;
-  const a = wrap(indexA);
-  const b = wrap(indexB);
-
-  const arr = [...array];
-
-  const hasA = a in arr;
-  const hasB = b in arr;
-  if (!hasA || !hasB) return arr;
-
-  const itemA = arr[a];
-  const itemB = arr[b];
-  if (itemA && itemB && 'pos' in itemA && 'pos' in itemB) {
-    const currentPos = itemA.pos;
-    itemA.pos = itemB.pos;
-    itemB.pos = currentPos;
-  }
-
-  [arr[a], arr[b]] = [arr[b], arr[a]];
-
-  return arr;
-}
-
 export function generateOutput(rgbOptions: typeof rgbDefaults) {
   const colors = sortColors(rgbOptions.colors);
   const shadowColors = rgbOptions.shadowColors
@@ -394,7 +367,7 @@ export function generateOutput(rgbOptions: typeof rgbDefaults) {
       const single = renderMiniMessageGradient(
         colors,
         rgbOptions,
-        shadowColors,
+        shadowColors
       );
       return applyWrappers(single, rgbOptions);
     }
@@ -428,7 +401,7 @@ type JsonExtra = {
 
 function renderSingleColorOutput(
   singleHex: string,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   if (rgbOptions.colorFormat.color === 'MiniMessage') {
     const shadowColors = rgbOptions.shadowColors
@@ -437,7 +410,7 @@ function renderSingleColorOutput(
     return renderMiniMessageGradient(
       [{ hex: singleHex, pos: 0 }],
       rgbOptions,
-      shadowColors,
+      shadowColors
     );
   }
 
@@ -448,7 +421,7 @@ function renderSingleColorOutput(
       segments,
       () => singleHex,
       () => shadowGradient?.next(),
-      rgbOptions,
+      rgbOptions
     );
     return JSON.stringify({ text: '', extra });
   }
@@ -464,14 +437,14 @@ function renderSingleColorOutput(
     hex,
     rgbOptions.text,
     rgbOptions.baseFormatting,
-    rgbOptions,
+    rgbOptions
   );
 }
 
 function renderMiniMessageGradient(
   colors: ColorStop[],
   rgbOptions: typeof rgbDefaults,
-  shadowColors: ColorStop[] | null,
+  shadowColors: ColorStop[] | null
 ): string {
   const shadowSegments =
     shadowColors && shadowColors.length > 0
@@ -483,7 +456,7 @@ function renderMiniMessageGradient(
       return applySelectiveFormattingToText(
         rgbOptions.text.substring(start, end),
         start,
-        rgbOptions,
+        rgbOptions
       );
     }
     return (
@@ -491,7 +464,7 @@ function renderMiniMessageGradient(
       applySelectiveFormattingToText(
         rgbOptions.text.substring(start, end),
         start,
-        rgbOptions,
+        rgbOptions
       )
     );
   };
@@ -546,10 +519,10 @@ function renderMiniMessageGradient(
 
 export function getFormattingAtOffset(
   charIndex: number,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): Formatting {
   const covering = rgbOptions.formatting?.find(
-    (s) => s.start <= charIndex && s.end > charIndex,
+    (s) => s.start <= charIndex && s.end > charIndex
   );
   return covering
     ? { ...rgbOptions.baseFormatting, ...covering }
@@ -557,14 +530,14 @@ export function getFormattingAtOffset(
 }
 
 function buildShadowGradient(
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): ColorGradient | undefined {
   if (!rgbOptions.shadowColors) return undefined;
   const shadowColors = rgbOptions.shadowColors.map(getRGBColorStop);
   return new ColorGradient(
     shadowColors,
     rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
-    rgbOptions.gradientType,
+    rgbOptions.gradientType
   );
 }
 
@@ -572,7 +545,7 @@ function buildJsonExtraList(
   segments: string[],
   colorProvider: () => string,
   shadowProvider: () => number[] | undefined,
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): JsonExtra[] {
   const extra: JsonExtra[] = [];
   let charIndex = 0;
@@ -592,7 +565,7 @@ function buildJsonExtraList(
       color,
       fmt,
       rgbOptions,
-      shadow,
+      shadow
     );
     extra.push(jsonExtra);
     charIndex += segment.length;
@@ -602,7 +575,7 @@ function buildJsonExtraList(
 
 function renderJsonGradient(
   colors: ColorStop[],
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   const newColors = colors.map(getRGBColorStop);
   if (newColors.length < 1) return 'Error: Not enough colors.';
@@ -610,7 +583,7 @@ function renderJsonGradient(
   const gradient = new ColorGradient(
     newColors,
     rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
-    rgbOptions.gradientType,
+    rgbOptions.gradientType
   );
   const shadowGradient = buildShadowGradient(rgbOptions);
 
@@ -619,7 +592,7 @@ function renderJsonGradient(
     segments,
     () => '#' + rgbToHex(gradient.next()),
     () => (shadowGradient ? shadowGradient.next() : undefined),
-    rgbOptions,
+    rgbOptions
   );
 
   return JSON.stringify({ text: '', extra });
@@ -627,7 +600,7 @@ function renderJsonGradient(
 
 function renderTemplateGradient(
   colors: ColorStop[],
-  rgbOptions: typeof rgbDefaults,
+  rgbOptions: typeof rgbDefaults
 ): string {
   const newColors = colors.map(getRGBColorStop);
   if (newColors.length === 0) return 'Error: Not enough colors.';
@@ -635,7 +608,7 @@ function renderTemplateGradient(
   const gradient = new ColorGradient(
     newColors,
     rgbOptions.text.length / (rgbOptions.colorLength ?? 1),
-    rgbOptions.gradientType,
+    rgbOptions.gradientType
   );
   const segments = segmentText(rgbOptions.text, rgbOptions.colorLength);
   let charIndex = 0;
@@ -671,7 +644,7 @@ function buildJsonFormatting(
   colorHexWithHash: string,
   formatting: Formatting,
   rgbOptions: typeof rgbDefaults,
-  rgbShadow?: number[],
+  rgbShadow?: number[]
 ): JsonExtra {
   let textVal = segment;
   if (formatting.font) {

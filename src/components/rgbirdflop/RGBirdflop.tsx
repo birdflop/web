@@ -8,7 +8,7 @@ import {
   isBrowser,
   Slot,
   Signal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 
 import {
   rgbDefaults,
@@ -20,7 +20,8 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 import { setCookies } from '~/util/dataUtils';
 
-import { Settings, Sparkles } from 'lucide-icons-qwik';
+import Settings from 'lucide-icons-qwik/icons/Settings';
+import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
@@ -38,13 +39,13 @@ import { birdStoreContext, openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
-import { deepTrack } from '~/util/misc';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import { deepTrack } from '~/util/track';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
 export const showAllGradientsContext = createContextId<Signal<boolean>>(
-  'showallgradients-context',
+  'showallgradients-context'
 );
 
 export const AD_VARIANTS = {
@@ -72,7 +73,7 @@ export default component$(
   }) => {
     const t = inlineTranslate();
     const notifications = useContext(NotificationContext);
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       errors.forEach((error) => {
         const notification = new Notification()
@@ -103,7 +104,7 @@ export default component$(
       ) {
         rgbStore.colorLength = Math.max(
           1,
-          Math.floor(rgbStore.text.length / rgbStore.colors.length),
+          Math.floor(rgbStore.text.length / rgbStore.colors.length)
         );
       }
 
@@ -112,7 +113,7 @@ export default component$(
     });
 
     // Obfuscate effect
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(({ track }) => {
       if (!isBrowser) return;
 
@@ -122,7 +123,7 @@ export default component$(
 
       const spans = () =>
         document.querySelectorAll<HTMLElement>(
-          'label[for="input"] span[data-text]',
+          'label[for="input"] span[data-text]'
         );
       const restore = (el: HTMLElement) => {
         const dt = el.getAttribute('data-text') ?? '';
@@ -153,14 +154,14 @@ export default component$(
     });
 
     // Ads
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (!isBrowser) return;
 
       try {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
         const stored = localStorage.getItem(
-          AD_VARIANT_STORAGE_KEY,
+          AD_VARIANT_STORAGE_KEY
         ) as AdVariantKey | null;
 
         const usPreferredRegions = [
@@ -171,7 +172,7 @@ export default component$(
         ];
         // const shouldShowAds = usPreferredRegions.some(region => tz.startsWith(region));
         const shouldShowAds = !usPreferredRegions.some((region) =>
-          tz.startsWith(region),
+          tz.startsWith(region)
         );
 
         if (shouldShowAds) {
@@ -195,11 +196,11 @@ export default component$(
     const birdStore = useContext(birdStoreContext);
     const flopBirdTrack = [
       {
-        description: 'Hi! I\'m here to help you create RGB gradients!',
+        description: "Hi! I'm here to help you create RGB gradients!",
       },
       {
         id: 'input',
-        description: 'First, type something into the text box I\'m on top of!',
+        description: "First, type something into the text box I'm on top of!",
       },
       {
         id: 'colorlistcolorstext',
@@ -215,7 +216,7 @@ export default component$(
       {
         id: 'format-dropdown',
         description:
-          'You can change the format of the hex codes if the server you\'re playing on requires a different format.',
+          "You can change the format of the hex codes if the server you're playing on requires a different format.",
         openItem: 'options',
       },
       {
@@ -238,7 +239,7 @@ export default component$(
       {
         id: 'gradientType-dropdown',
         description:
-          'There are multiple gradient types to choose from, this is useful if the gradient doesn\'t look vibrant enough :)',
+          "There are multiple gradient types to choose from, this is useful if the gradient doesn't look vibrant enough :)",
         openItem: 'options',
       },
       {
@@ -260,11 +261,11 @@ export default component$(
       },
       {
         description:
-          'I\'ll be down here letting you know if there\'s anything new. Happy gradient making!',
+          "I'll be down here letting you know if there's anything new. Happy gradient making!",
       },
     ];
 
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       birdStore.track = flopBirdTrack;
     });
@@ -282,10 +283,12 @@ export default component$(
           </Input>
 
           <Slot name="input-extra" />
-          {!advanced && <>
-            <ColorMap />
-            {rgbStore.shadowColors && <ColorMap id="shadow" />}
-          </>}
+          {!advanced && (
+            <>
+              <ColorMap />
+              {rgbStore.shadowColors && <ColorMap id="shadow" />}
+            </>
+          )}
 
           <div class="mt-3 grid gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4">
             <MobileNavbar>
@@ -293,23 +296,33 @@ export default component$(
             </MobileNavbar>
 
             <div class="relative flex flex-col gap-2" id="column1">
-              {!advanced && <>
-                <ColorList hidden={!openItems.value.includes('colors')} />
-                {(rgbStore.colorFormat.color === 'MiniMessage' || rgbStore.colorFormat.color === 'JSON') && <>
-                  <Toggle
-                    id="textshadowtoggle"
-                    checked={!!rgbStore.shadowColors}
-                    onChange$={(e, el) => {
-                      if (!el.checked) rgbStore.shadowColors = null;
-                      else if (!rgbStore.shadowColors)
-                        rgbStore.shadowColors = getShadowColors(rgbStore);
-                    }}
-                  >
-                    {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
-                  </Toggle>
-                  {rgbStore.shadowColors && <ColorList id="shadow" hidden={!openItems.value.includes('colors')} />}
-                </>}
-              </>}
+              {!advanced && (
+                <>
+                  <ColorList hidden={!openItems.value.includes('colors')} />
+                  {(rgbStore.colorFormat.color === 'MiniMessage' ||
+                    rgbStore.colorFormat.color === 'JSON') && (
+                    <>
+                      <Toggle
+                        id="textshadowtoggle"
+                        checked={!!rgbStore.shadowColors}
+                        onChange$={(e, el) => {
+                          if (!el.checked) rgbStore.shadowColors = null;
+                          else if (!rgbStore.shadowColors)
+                            rgbStore.shadowColors = getShadowColors(rgbStore);
+                        }}
+                      >
+                        {t('rgb.colors.shadow.enable@@Custom Text Shadow')}
+                      </Toggle>
+                      {rgbStore.shadowColors && (
+                        <ColorList
+                          id="shadow"
+                          hidden={!openItems.value.includes('colors')}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
               <Slot name="column1" />
             </div>
 
@@ -322,7 +335,7 @@ export default component$(
                 hidden={!openItems.value.includes('output')}
                 value={output}
               >
-                <SelectMenuRaw
+                <SelectMenu
                   q:slot="label"
                   title={t('rgb.colors.format@@Color Format')}
                   id="format"
@@ -343,25 +356,25 @@ export default component$(
                   values={[
                     ...(!rgbStore.customFormat &&
                     !colorFormats.find(
-                      (format) => format.color == rgbStore.colorFormat.color,
+                      (format) => format.color == rgbStore.colorFormat.color
                     )
                       ? [
-                        {
-                          name: rgbStore.colorFormat.color
-                            .replace('$1', 'r')
-                            .replace('$2', 'r')
-                            .replace('$3', 'g')
-                            .replace('$4', 'g')
-                            .replace('$5', 'b')
-                            .replace('$6', 'b')
-                            .replace(
-                              '$f',
-                              `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
-                            )
-                            .replace('$c', ''),
-                          value: JSON.stringify(rgbStore.colorFormat),
-                        },
-                      ]
+                          {
+                            name: rgbStore.colorFormat.color
+                              .replace('$1', 'r')
+                              .replace('$2', 'r')
+                              .replace('$3', 'g')
+                              .replace('$4', 'g')
+                              .replace('$5', 'b')
+                              .replace('$6', 'b')
+                              .replace(
+                                '$f',
+                                `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
+                              )
+                              .replace('$c', ''),
+                            value: JSON.stringify(rgbStore.colorFormat),
+                          },
+                        ]
                       : []),
                     ...colorFormats.map((format) => ({
                       name: format.color
@@ -373,7 +386,7 @@ export default component$(
                         .replace('$6', 'b')
                         .replace(
                           '$f',
-                          `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
+                          `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
                         )
                         .replace('$c', ''),
                       value: JSON.stringify(format),
@@ -381,17 +394,17 @@ export default component$(
                     {
                       name: rgbStore.customFormat
                         ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
-                          .replace('$1', 'r')
-                          .replace('$2', 'r')
-                          .replace('$3', 'g')
-                          .replace('$4', 'g')
-                          .replace('$5', 'b')
-                          .replace('$6', 'b')
-                          .replace(
-                            '$f',
-                            `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`,
-                          )
-                          .replace('$c', '')}`
+                            .replace('$1', 'r')
+                            .replace('$2', 'r')
+                            .replace('$3', 'g')
+                            .replace('$4', 'g')
+                            .replace('$5', 'b')
+                            .replace('$6', 'b')
+                            .replace(
+                              '$f',
+                              `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
+                            )
+                            .replace('$c', '')}`
                         : t('rgb.colors.customFormat@@Custom Format'),
                       value: 'custom',
                     },
@@ -466,5 +479,5 @@ export default component$(
         )}
       </section>
     );
-  },
+  }
 );

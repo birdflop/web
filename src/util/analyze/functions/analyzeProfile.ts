@@ -26,7 +26,7 @@ export default async function analyzeProfile(id: string) {
     return [
       {
         name: '❌ Processing Error',
-        value: `Birdflop cannot process this spark profile. Please use an alternative spark profile. ${err}`,
+        value: `Birdflop cannot process this spark profile. Please use an alternative spark profile. ${err instanceof Error ? err.message : String(err)}`,
       },
     ];
   }
@@ -110,8 +110,8 @@ export default async function analyzeProfile(id: string) {
     ...analyzeJvmFlags(
       flags,
       jvm_version,
-      sampler.metadata.platformStatistics.playerCount,
-    ),
+      sampler.metadata.platformStatistics.playerCount
+    )
   );
 
   const cpu = sampler.metadata.systemStatistics.cpu.threads;
@@ -174,7 +174,7 @@ export default async function analyzeProfile(id: string) {
             spigot,
             paper,
             null,
-            purpur,
+            purpur
           );
         });
       });

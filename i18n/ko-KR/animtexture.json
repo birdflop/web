@@ -1,6 +1,6 @@
 {
   "animtexture": {
-    "accumulate": "기존 프레임에 추가",
+    "accumulate": "Accumulate frames",
     "animationPreview": "애니메이션 미리보기",
     "bounce": "바운스 애니메이션",
     "downloadMCMETA": "MCMETA 다운로드",

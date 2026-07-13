@@ -9,22 +9,20 @@ import {
   useStore,
   useVisibleTask$,
   type Signal,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets, rgbPreset } from '~/util/rgb/presets';
-import { SelectMenuRaw, Toggle } from '@luminescent/ui-qwik';
+import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Save,
-  Search,
-  Send,
-  Settings,
-} from 'lucide-icons-qwik';
+import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
+import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Save from 'lucide-icons-qwik/icons/Save';
+import Search from 'lucide-icons-qwik/icons/Search';
+import Send from 'lucide-icons-qwik/icons/Send';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$, useNavigate } from '@builder.io/qwik-city';
+import { routeLoader$, useNavigate } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { getCookies } from '~/util/dataUtils';
@@ -53,7 +51,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
   const perPage = Math.max(
     1,
-    Math.min(100, parseInt(searchParams.get('perPage') || '20', 10)),
+    Math.min(100, parseInt(searchParams.get('perPage') || '20', 10))
   );
   const searchTerm = searchParams.get('search') || '';
   const showPending = searchParams.get('showPending') === 'true';
@@ -82,25 +80,25 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
           searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
           showSaved && savedPresetIds.length > 0
             ? inArray(presets.id, savedPresetIds)
-            : undefined,
-        ),
+            : undefined
+        )
       )
       .get()
       .then((r) => r?.count ?? 0);
 
     let orderBy;
     switch (sortBy) {
-    case 'name':
-      orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
-      break;
-    case 'saves':
-      orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
-      break;
-    case 'createdAt':
-    default:
-      orderBy =
+      case 'name':
+        orderBy = sortOrder === 'desc' ? desc(presets.name) : presets.name;
+        break;
+      case 'saves':
+        orderBy = sortOrder === 'desc' ? desc(presets.saves) : presets.saves;
+        break;
+      case 'createdAt':
+      default:
+        orderBy =
           sortOrder === 'desc' ? desc(presets.createdAt) : presets.createdAt;
-      break;
+        break;
     }
 
     const presetsFromDB = await db
@@ -115,13 +113,13 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
             eq(presets.pending, showPending),
             session?.user?.id
               ? eq(presets.userId, session?.user?.id)
-              : undefined,
+              : undefined
           ),
           searchTerm ? like(presets.name, `%${searchTerm}%`) : undefined,
           showSaved && savedPresetIds.length > 0
             ? inArray(presets.id, savedPresetIds)
-            : undefined,
-        ),
+            : undefined
+        )
       )
       .leftJoin(users, eq(users.id, presets.userId))
       .leftJoin(savedPresets, eq(savedPresets.presetId, presets.id))
@@ -136,7 +134,9 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
       user,
     }));
   } catch (err) {
-    errors.push(`Error fetching presets: ${err}`);
+    errors.push(
+      `Error fetching presets: ${err instanceof Error ? err.message : String(err)}`
+    );
     console.error('Error fetching presets:', err);
   }
   return {
@@ -154,10 +154,11 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
 });
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 
@@ -180,7 +181,7 @@ const Pagination = component$(
     const t = inlineTranslate();
 
     return (
-      <div class="lum-card lum-bg-transparent sm:lum-grad-bg-lum-card-bg relative my-2 grid items-center gap-2 p-1 sm:grid-cols-3">
+      <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
         <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
           {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
           {totalPages > 1 &&
@@ -241,7 +242,7 @@ const Pagination = component$(
           <p class="whitespace-nowrap">
             {t('rgb.presets.pagination.perPage@@Per page:')}
           </p>
-          <SelectMenuRaw
+          <SelectMenu
             class={{
               'lum-btn-p-1 rounded-lum-1 lum-bg-transparent': true,
             }}
@@ -261,14 +262,14 @@ const Pagination = component$(
         </div>
       </div>
     );
-  },
+  }
 );
 
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
-  'privatepresets-context',
+  'privatepresets-context'
 );
-export const savedPresetsContext = createContextId<Signal<any[]>>(
-  'savedpresets-context',
+export const savedPresetsContext = createContextId<Signal<PresetPartial[]>>(
+  'savedpresets-context'
 );
 export default component$(() => {
   const t = inlineTranslate();
@@ -282,7 +283,7 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
@@ -302,7 +303,7 @@ export default component$(() => {
 
   const isAdmin = useIsAdmin().value;
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const errors = [...rgbCookiesErrors, ...presetsErrors];
     if (errors.length > 0) {
@@ -321,13 +322,17 @@ export default component$(() => {
     previewWithSettings: false,
   });
 
-  const privatePresets = useSignal(session.value?.user?.privatePresets ?? []);
+  const privatePresets = useSignal<rgbPreset[]>(
+    session.value?.user?.privatePresets ?? []
+  );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal(session.value?.user?.savedPresets ?? []);
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? []
+  );
   useContextProvider(savedPresetsContext, savedPresets);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
     if (privatePresets.value.length != 0 || savedPresets.value.length != 0)
@@ -339,7 +344,9 @@ export default component$(() => {
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error loading saved presets')
-        .setDescription(`Error: ${err}`)
+        .setDescription(
+          `Error: ${err instanceof Error ? err.message : String(err)}`
+        )
         .setBgColor('lum-grad-bg-red/50')
         .setPersist(true);
       notifications.push(notification);
@@ -408,7 +415,7 @@ export default component$(() => {
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">
         {t(
-          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.',
+          'nav.resources.hexGradientPresets.description@@Here you can find and save, copy, or directly use presets for use on RGBirdflop.'
         )}
       </p>
       <div class="flex flex-col gap-2"></div>
@@ -425,7 +432,7 @@ export default component$(() => {
           />
         </div>
         <div class="flex items-center justify-center gap-1">
-          <SelectMenuRaw
+          <SelectMenu
             value={`${sortBy}-${sortOrder}`}
             class={{
               'rounded-lum-1 lum-bg-transparent': true,
@@ -466,7 +473,7 @@ export default component$(() => {
               },
             ]}
           />
-          <SelectMenuRaw
+          <SelectMenu
             align="right"
             id="settings"
             class={{
@@ -506,7 +513,7 @@ export default component$(() => {
                 </Toggle>
                 <p class="text-lum-text-secondary mt-1 text-xs">
                   {t(
-                    'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.',
+                    'rgb.presets.showSaved.description@@Turn this on to show only your saved presets.'
                   )}
                 </p>
               </div>
@@ -521,17 +528,17 @@ export default component$(() => {
               >
                 <span class="whitespace-nowrap">
                   {t(
-                    'rgb.presets.withCurrentOptions.title@@Show preview with current options',
+                    'rgb.presets.withCurrentOptions.title@@Show preview with current options'
                   )}
                 </span>
               </Toggle>
               <p class="text-lum-text-secondary mt-1 text-xs">
                 {t(
-                  'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.',
+                  'rgb.presets.withCurrentOptions.description@@Turn this on to show the previews with the current options applied.'
                 )}
               </p>
             </div>
-          </SelectMenuRaw>
+          </SelectMenu>
         </div>
       </div>
 
@@ -560,7 +567,7 @@ export default component$(() => {
             {t('rgb.presets.suggestion.one@@Think something is missing?')}
             <br />
             {t(
-              'rgb.presets.suggestion.two@@publish your own preset at your profile page!',
+              'rgb.presets.suggestion.two@@publish your own preset at your profile page!'
             )}
           </p>
         )}

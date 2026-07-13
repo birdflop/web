@@ -1,5 +1,6 @@
 import {
   component$,
+  createContextId,
   isBrowser,
   useContext,
   useContextProvider,
@@ -7,16 +8,15 @@ import {
   useStore,
   useTask$,
   useVisibleTask$,
-} from '@builder.io/qwik';
+} from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { routeLoader$ } from '@builder.io/qwik-city';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import {
   ANIMATION_STYLES,
   AnimationOutput,
   animTABDefaults,
   generateAnimTABFrames,
-  hexToRGB,
   rgbDefaults,
 } from '@birdflop/rgbirdflop';
 import {
@@ -24,90 +24,40 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { Rainbow, Braces } from 'lucide-icons-qwik';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
+import Braces from 'lucide-icons-qwik/icons/Braces';
 import { inlineTranslate } from 'qwik-speak';
-import { deepTrack } from '~/util/misc';
-import {
-  EmptyPreview,
-  getEffectiveFormatting,
-  getFormattingClasses,
-} from '~/components/rgbirdflop/preview';
+import { deepTrack } from '~/util/track';
 import RGBirdflop, {
   rgbStoreContext,
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
-import { NumberInput, SelectMenu } from '@luminescent/ui-qwik';
+import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
-import { renderAllGradientsPreview } from '~/components/rgbirdflop/AllGradientsPreview';
+import AnimTabPreview from '~/components/rgbirdflop/animtab/AnimTabPreview';
+import Palette from 'lucide-icons-qwik/icons/Palette';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof rgbDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'rgb', url.searchParams);
+  const cookies = getCookies<Partial<typeof rgbDefaults>>(
+    cookie,
+    'rgb',
+    url.searchParams
+  );
   return cookies;
 });
 
 export const useAnimTABCookies = routeLoader$(({ cookie, url }) => {
-  const cookies: {
-    cookies: Partial<typeof animTABDefaults>;
-    errors: string[];
-  } = getCookies(cookie, 'animtab', url.searchParams);
+  const cookies = getCookies<Partial<typeof animTABDefaults>>(
+    cookie,
+    'animtab',
+    url.searchParams
+  );
   return cookies;
 });
 
-function renderFrames(
-  rgbStore: typeof rgbDefaults,
-  animtabStore: typeof animTABDefaults,
-  currentFrameIndex: number,
-  shadowLength: string = '4px 4px',
-) {
-  if (!rgbStore.text || rgbStore.text.trim() === '') return EmptyPreview;
-  // Generate frames for this specific gradient type
-  const { frames: framesList } = generateAnimTABFrames(rgbStore, animtabStore);
-
-  if (!framesList[0]) return EmptyPreview;
-  const colors = framesList[currentFrameIndex % framesList.length];
-  if (!colors) return EmptyPreview;
-
-  const segments = [
-    ...rgbStore.text.matchAll(new RegExp(`.{1,${rgbStore.colorLength}}`, 'g')),
-  ];
-  let charIndex = 0;
-  return segments.map((segment, segmentIndex) => {
-    const segmentText = segment[0];
-    const segmentStart = charIndex;
-    charIndex += segmentText.length;
-    const color = `#${colors[segmentIndex]}`;
-    const shadowRGB = hexToRGB(color).map((c) => Math.round(c * 0.25));
-    const shadowColor = `rgb(${shadowRGB[0]}, ${shadowRGB[1]}, ${shadowRGB[2]})`;
-    const output = Array.from(segmentText).map((char, offset) => {
-      const formatting = getEffectiveFormatting(
-        rgbStore,
-        segmentStart + offset,
-      );
-      return (
-        <span
-          key={`char${segmentStart + offset}`}
-          style={{
-            color,
-            textShadow: `${shadowLength} 0 ${shadowColor};`,
-          }}
-          class={getFormattingClasses(formatting)}
-        >
-          {char}
-        </span>
-      );
-    });
-    return (
-      <span key={`segment-${segmentStart}`} q:slot="input">
-        {output}
-      </span>
-    );
-  });
-}
-
+export const animtabStoreContext =
+  createContextId<typeof animTABDefaults>('animtab-store');
 export default component$(() => {
   const t = inlineTranslate();
   const { cookies: rgbCookies, errors: rgbErrors } = useRGBCookies().value;
@@ -119,7 +69,7 @@ export default component$(() => {
       ...structuredClone(rgbDefaults),
       ...rgbCookies,
     },
-    { deep: true },
+    { deep: true }
   );
   useContextProvider(rgbStoreContext, rgbStore);
 
@@ -128,8 +78,9 @@ export default component$(() => {
       ...structuredClone(animTABDefaults),
       ...animTABCookies,
     },
-    { deep: true },
+    { deep: true }
   );
+  useContextProvider(animtabStoreContext, animtabStore);
 
   const selection = useSignal<Selection>();
   useContextProvider(selectionContext, selection);
@@ -144,7 +95,7 @@ export default component$(() => {
       list: [] as (string | null)[][],
       current: 0,
     },
-    { deep: true },
+    { deep: true }
   );
 
   useTask$(({ track }) => {
@@ -159,14 +110,14 @@ export default component$(() => {
 
     const { frames: newFrames } = generateAnimTABFrames(
       { ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' },
-      animtabStore,
+      animtabStore
     );
 
     framesStore.list = newFrames;
   });
 
   // Animtab frames updater
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     let lastTime = performance.now();
     function setFrame(currentTime: number) {
@@ -188,101 +139,94 @@ export default component$(() => {
       errors={[...rgbErrors, ...animTABErrors]}
       output={AnimationOutput(rgbStore, animtabStore)}
     >
-      <h1
-        class="my-2 flex items-center gap-3 text-2xl font-extrabold"
-        q:slot="header"
-      >
-        <Rainbow size={32} />
-        {t('nav.resources.animatedTAB.title@@Animated TAB')}
-      </h1>
-      <p
-        class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4"
-        q:slot="header"
-      >
-        {t(
-          'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator',
-        )}
-      </p>
+      <div class="flex items-start gap-2" q:slot="header">
+        <div class="flex flex-1 flex-col gap-1">
+          <h1
+            class="my-2 flex items-center gap-3 text-2xl font-extrabold"
+            q:slot="header"
+          >
+            <Rainbow size={32} />
+            {t('nav.resources.animatedTAB.title@@Animated TAB')}
+          </h1>
+          <p class="text-lum-text-secondary mb-2" q:slot="header">
+            {t(
+              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
+            )}
+          </p>
+        </div>
+        <Link
+          href="/resources/rgb"
+          class="lum-btn w-fit gap-2 p-2 text-sm whitespace-normal"
+        >
+          <Palette size={18} class="min-h-4 min-w-4" />
+          {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        </Link>
+      </div>
 
-      {showAllGradients.value
-        ? renderAllGradientsPreview(
-          (gradientType) =>
-            renderFrames(
-              { ...rgbStore, gradientType },
-              animtabStore,
-              framesStore.current,
-              previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
-            ),
-          rgbStore.gradientType,
-        )
-        : renderFrames(
-          rgbStore,
-          animtabStore,
-          framesStore.current,
-          previewStyle.value == 'default' ? '4px 4px' : '2px 2px',
-        )}
+      <AnimTabPreview
+        q:slot="input"
+        currentFrameIndex={framesStore.current}
+        shadowLength={previewStyle.value == 'default' ? 4 : 2}
+      />
 
-      <NumberInput
-        id="length"
-        input
-        disabled
-        value={animtabStore.length * rgbStore.text.length}
-        min={rgbStore.text.length}
-        class={{ 'w-full opacity-100!': true }}
-        onIncrement$={() => animtabStore.length++}
-        onDecrement$={() => animtabStore.length--}
-        q:slot="color-list"
+      <Label for="length" label={t('animtab.length@@Gradient Length')}>
+        <NumberInput
+          id="length"
+          input
+          disabled
+          value={animtabStore.length}
+          min={1}
+          max={rgbStore.text.length}
+          class={{ 'w-full opacity-100!': true }}
+          onInput$={(event, el) => (animtabStore.length = Number(el.value))}
+          q:slot="column1"
+        />
+      </Label>
+
+      <Label
+        q:slot="options"
+        for="nameinput"
+        label={t('animtab.animation.name@@Animation Name')}
       >
-        {t('animtab.length@@Gradient Length')}
-      </NumberInput>
-
-      <div class="col-span-2 flex flex-col gap-1" q:slot="options">
-        <label for="nameinput">
-          {t('animtab.animation.name@@Animation Name')}
-        </label>
         <input
           class="lum-input"
           id="nameinput"
           value={animtabStore.name}
           placeholder={'name'}
-          onInput$={(e, el) => {
-            animtabStore.name = el.value;
-          }}
+          onInput$={(e, el) => (animtabStore.name = el.value)}
         />
-      </div>
-      <NumberInput
+      </Label>
+      <Label
         q:slot="options"
-        id="speed"
-        input
-        value={animtabStore.speed}
-        class={{ 'w-full': true }}
-        step={50}
-        min={50}
-        onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
-        onIncrement$={() =>
-          (animtabStore.speed = Number(animtabStore.speed) + 50)
-        }
-        onDecrement$={() =>
-          (animtabStore.speed = Number(animtabStore.speed) - 50)
-        }
+        for="speed"
+        label={`${t('animtab.animation.interval@@Animation Interval')} (ms)`}
       >
-        {t('animtab.animation.interval@@Animation Interval')} (ms)
-      </NumberInput>
-      <SelectMenu
+        <NumberInput
+          id="speed"
+          input
+          value={animtabStore.speed}
+          class={{ 'w-full': true }}
+          step={50}
+          min={50}
+          onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
+        />
+      </Label>
+      <Label
         q:slot="options"
-        id="type"
-        class={{ 'w-full': true }}
-        onChange$={(e, el) => {
-          animtabStore.type = Number(el.value);
-        }}
-        values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
-          name: t(`animtab.animation.style.${key}@@${key}`),
-          value: String(value),
-        }))}
-        value={animtabStore.type}
+        for="type"
+        label={t('animtab.animation.style.title@@Animation Style')}
       >
-        {t('animtab.animation.style.title@@Animation Style')}
-      </SelectMenu>
+        <SelectMenu
+          id="type"
+          class={{ 'w-full': true }}
+          onChange$={(e, el) => (animtabStore.type = Number(el.value))}
+          values={Object.entries(ANIMATION_STYLES).map(([key, value]) => ({
+            name: t(`animtab.animation.style.${key}@@${key}`),
+            value: String(value),
+          }))}
+          value={animtabStore.type}
+        />
+      </Label>
 
       <button
         onClick$={() => {
@@ -314,7 +258,7 @@ export default component$(() => {
       >
         <label for="outputformat" class="text-lum-text-secondary">
           {t(
-            'animtab.outputFormat.description@@Only use this if you\'re trying to use this tool for a different plugin or know what you\'re doing.',
+            "animtab.outputFormat.description@@Only use this if you're trying to use this tool for a different plugin or know what you're doing."
           )}
         </label>
         <textarea

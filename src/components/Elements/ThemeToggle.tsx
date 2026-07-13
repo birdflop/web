@@ -1,7 +1,11 @@
-import { component$, useVisibleTask$, $, useContext } from '@builder.io/qwik';
+import { component$, useVisibleTask$, $, useContext } from '@qwik.dev/core';
 import { type ThemeName, themes, ThemeContext } from '~/util/themeUtil';
-import { Moon, Sun, Sparkles, Battery, Smile } from 'lucide-icons-qwik';
-import { SelectMenuRaw } from '@luminescent/ui-qwik';
+import Moon from 'lucide-icons-qwik/icons/Moon';
+import Sun from 'lucide-icons-qwik/icons/Sun';
+import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
+import Battery from 'lucide-icons-qwik/icons/Battery';
+import Smile from 'lucide-icons-qwik/icons/Smile';
+import { SelectMenu } from '@luminescent/ui-qwik';
 import { SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
 
@@ -17,12 +21,12 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     const settingsStore = useContext(SettingsContext);
 
     // Update current theme from DOM
-    // eslint-disable-next-line qwik/no-use-visible-task
+    // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
       if (typeof document !== 'undefined') {
         const updateCurrentTheme = () => {
           const themeVariant = document.documentElement.getAttribute(
-            'data-theme-variant',
+            'data-theme-variant'
           ) as ThemeName;
           if (themeVariant) {
             themeStore.currentTheme = themeVariant;
@@ -123,7 +127,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
       // Get current theme from DOM attribute instead of context to avoid serialization
       const currentTheme =
         (document.documentElement.getAttribute(
-          'data-theme-variant',
+          'data-theme-variant'
         ) as ThemeName) || 'dark';
       const mainThemes: ThemeName[] = ['auto', 'dark', 'light'];
       const currentIndex = mainThemes.indexOf(currentTheme);
@@ -162,7 +166,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     // Dropdown variant - full theme selector
     return (
       <div class={`relative ${className}`}>
-        <SelectMenuRaw id="theme-toggle-dropdown" customDropdown>
+        <SelectMenu id="theme-toggle-dropdown" customDropdown>
           <span q:slot="dropdown" class="flex items-center gap-2">
             {CurrentThemeOption.value === 'auto' && (
               <>
@@ -218,8 +222,8 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               </button>
             );
           })}
-        </SelectMenuRaw>
+        </SelectMenu>
       </div>
     );
-  },
+  }
 );

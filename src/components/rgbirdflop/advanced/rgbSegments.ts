@@ -2,7 +2,7 @@ import {
   sortColors,
   rgbColorDefaultsWithColorMode,
 } from '@birdflop/rgbirdflop';
-import { createContextId, Signal } from '@builder.io/qwik';
+import { createContextId, Signal } from '@qwik.dev/core';
 
 export type SegmentType = typeof rgbColorDefaultsWithColorMode;
 
@@ -43,7 +43,7 @@ function styleKey(s: SegmentType): string {
     colorPart = `solid:${(s.colors[0]?.hex ?? '').toLowerCase()}`;
   } else {
     const cols = sortColors(s.colors).map(
-      (c) => `${c.hex.toLowerCase()}@${Math.round(c.pos * 1000) / 1000}`,
+      (c) => `${c.hex.toLowerCase()}@${Math.round(c.pos * 1000) / 1000}`
     );
     colorPart = `grad:${s.gradientType}:${s.colorLength}:${cols.join(',')}`;
   }
@@ -95,7 +95,7 @@ export function combinedText(segments: SegmentType[]): string {
  */
 export function applyTextDiff(
   segments: SegmentType[],
-  newText: string,
+  newText: string
 ): SegmentType[] {
   const oldChars = flatten(segments);
   const oldText = oldChars.map((c) => c.ch).join('');
@@ -144,7 +144,7 @@ export function applyStyleToRange(
   segments: SegmentType[],
   start: number,
   end: number,
-  mutate: (style: SegmentType) => void,
+  mutate: (style: SegmentType) => void
 ): SegmentType[] {
   if (start >= end) return segments;
   const chars = flatten(segments);
@@ -162,7 +162,7 @@ export function applyStyleToRange(
 /** The char range [start, end) occupied by segment `index`. */
 export function segmentRange(
   segments: SegmentType[],
-  index: number,
+  index: number
 ): { start: number; end: number } {
   let start = 0;
   for (let i = 0; i < index && i < segments.length; i++)
@@ -174,7 +174,7 @@ export function segmentRange(
 /** Index of the segment containing flat char `charIndex`. */
 export function segmentIndexAtChar(
   segments: SegmentType[],
-  charIndex: number,
+  charIndex: number
 ): number {
   let acc = 0;
   for (let i = 0; i < segments.length; i++) {
@@ -187,7 +187,7 @@ export function segmentIndexAtChar(
 /** A clone of the style at flat char `charIndex` (or null). */
 export function styleAtChar(
   segments: SegmentType[],
-  charIndex: number,
+  charIndex: number
 ): SegmentType | null {
   const chars = flatten(segments);
   const c = chars[Math.max(0, Math.min(chars.length - 1, charIndex))];
@@ -198,7 +198,7 @@ export function styleAtChar(
 export function swapSegments(
   segments: SegmentType[],
   i: number,
-  j: number,
+  j: number
 ): SegmentType[] {
   if (i < 0 || j < 0 || i >= segments.length || j >= segments.length || i === j)
     return segments;
@@ -210,7 +210,7 @@ export function swapSegments(
 /** Remove a segment's characters entirely. */
 export function deleteSegment(
   segments: SegmentType[],
-  index: number,
+  index: number
 ): SegmentType[] {
   if (index < 0 || index >= segments.length) return segments;
   const { start, end } = segmentRange(segments, index);
@@ -220,5 +220,5 @@ export function deleteSegment(
 }
 
 export const rgbSegmentsContext = createContextId<Signal<SegmentType[]>>(
-  'rgbsegments-context',
+  'rgbsegments-context'
 );

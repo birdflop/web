@@ -1,4 +1,4 @@
-import { type RequestHandler } from '@builder.io/qwik-city';
+import { type RequestHandler } from '@qwik.dev/router';
 import { drizzle } from 'drizzle-orm/d1';
 import { type AppDatabase, initializeDbIfNeeded } from '~/util/db';
 
@@ -8,6 +8,6 @@ export const onRequest: RequestHandler = async ({ platform }) => {
 };
 
 function initD1(env: Env): () => Promise<AppDatabase> {
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // oxlint-disable-next-line typescript/require-await
   return async () => drizzle(env.DB);
 }
