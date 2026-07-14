@@ -14,3 +14,9 @@ Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.de
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
 <!--VITE PLUS END-->
+
+# UI Components and Styling
+
+This project uses UI components and styling from `@luminescent/ui-qwik` and `@luminescent/ui`. When designing or updating elements (like custom color inputs or other control widgets), prefer importing and utilizing existing components from `@luminescent/ui-qwik` (such as `ColorPicker`, `Label`, `SelectMenu`, `NumberInput`) to maintain design consistency and reuse established interactive patterns.
+
+Docs are online at https://ui.luminescent.dev/docs and the source code is at https://github.com/LuminescentDev/ui/tree/qwik-v2/packages/ui-qwik
