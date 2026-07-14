@@ -92,7 +92,7 @@ export default defineConfig({
         ],
       },
     }),
-    qwikVite({ debug: true }),
+    qwikVite(),
     tailwindcss(),
     qwikSpeakInline({
       basePath: './',
