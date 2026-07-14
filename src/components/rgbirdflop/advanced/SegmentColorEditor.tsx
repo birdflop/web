@@ -27,6 +27,7 @@ import {
   selectionContext,
 } from '~/components/rgbirdflop/Input';
 import ColorList from '../ColorList';
+import ColorMap from '../ColorMap';
 import { ButtonContainer } from '~/components/Elements/ButtonContainer';
 
 function ensureGradientColors(colors: ColorStop[]): ColorStop[] {
@@ -201,7 +202,16 @@ export default component$(
             onGradientTypeChange$={async (newGradientType) => {
               await writeConfig({ gradientType: newGradientType });
             }}
-          />
+          >
+            <ColorMap
+              id={id}
+              colors={current.value.colors}
+              gradientType={current.value.gradientType}
+              onColorsChange$={async (newColors) => {
+                await writeConfig({ colors: newColors });
+              }}
+            />
+          </ColorList>
         )}
       </div>
     );

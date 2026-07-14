@@ -5,7 +5,6 @@ import {
   useContext,
   useOnDocument,
   useSignal,
-  useComputed$,
   QRL,
 } from '@qwik.dev/core';
 import {
@@ -79,13 +78,9 @@ export default component$<ColorListProps>((props) => {
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
   const showAllGradients = useContext(showAllGradientsContext);
 
-  const colors = useComputed$(() => props.colors ?? getColors(rgbStore, id));
-  const resolvedGradientType = useComputed$(
-    () => props.gradientType ?? rgbStore.gradientType
-  );
-  const resolvedTextLength = useComputed$(
-    () => props.textLength ?? rgbStore.text.length
-  );
+  const colors = props.colors ?? getColors(rgbStore, id);
+  const resolvedGradientType = props.gradientType ?? rgbStore.gradientType;
+  const resolvedTextLength = props.textLength ?? rgbStore.text.length;
 
   const setColors = $(async (newColors: ColorStop[]) => {
     if (props.onColorsChange$) {
@@ -129,17 +124,18 @@ export default component$<ColorListProps>((props) => {
           input
           id={`colorlist${id}-amount`}
           min={1}
-          max={resolvedTextLength.value}
-          value={colors.value.length}
+          max={resolvedTextLength}
+          value={colors.length}
           btnProps={{ class: 'p-1!' }}
           class={{ 'lum-input-p-1 w-full text-sm': true }}
           onInput$={(e, el) => {
             let colorAmount = Number(el.value);
-            if (colorAmount > resolvedTextLength.value)
-              colorAmount = resolvedTextLength.value;
+            if (colorAmount > resolvedTextLength)
+              colorAmount = resolvedTextLength;
+            const currentColors = props.colors ?? getColors(rgbStore, id);
             const newColors = [];
             for (let i = 0; i < colorAmount; i++) {
-              if (colors.value[i]) newColors.push(colors.value[i]);
+              if (currentColors[i]) newColors.push(currentColors[i]);
               else
                 newColors.push({
                   hex: getRandomColor(),
@@ -149,8 +145,9 @@ export default component$<ColorListProps>((props) => {
             void setColors(disperseColors(newColors));
           }}
           onIncrement$={() => {
+            const currentColors = props.colors ?? getColors(rgbStore, id);
             const newColors = [
-              ...colors.value,
+              ...currentColors,
               {
                 hex: getRandomColor(),
                 pos: 0, // will be filled in by disperseColors
@@ -159,7 +156,8 @@ export default component$<ColorListProps>((props) => {
             void setColors(disperseColors(newColors));
           }}
           onDecrement$={() => {
-            const newColors = colors.value.slice(0);
+            const currentColors = props.colors ?? getColors(rgbStore, id);
+            const newColors = currentColors.slice(0);
             newColors.pop();
             void setColors(disperseColors(newColors));
           }}
@@ -171,7 +169,8 @@ export default component$<ColorListProps>((props) => {
       <ButtonContainer class="[&>button]:justify-center [&>button]:p-1!">
         <button
           onClick$={() => {
-            const newColors = colors.value.map((color) => ({
+            const currentColors = props.colors ?? getColors(rgbStore, id);
+            const newColors = currentColors.map((color) => ({
               hex: getRandomColor(),
               pos: color.pos,
             }));
@@ -192,14 +191,15 @@ export default component$<ColorListProps>((props) => {
           </button>
         )}
         <button
-          disabled={colors.value.length < 3}
+          disabled={colors.length < 3}
           onClick$={() => {
-            const shuffledColors = colors.value
+            const currentColors = props.colors ?? getColors(rgbStore, id);
+            const shuffledColors = currentColors
               .slice(0)
               .sort(() => Math.random() - 0.5);
             const newColors = shuffledColors.map((color, i) => ({
               hex: color.hex,
-              pos: colors.value[i].pos,
+              pos: currentColors[i].pos,
             }));
             void setColors(newColors);
           }}
@@ -225,7 +225,8 @@ export default component$<ColorListProps>((props) => {
             q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
-              const newColors = colors.value.map((color) => {
+              const currentColors = props.colors ?? getColors(rgbStore, id);
+              const newColors = currentColors.map((color) => {
                 const invertedHex = rgbToHex(
                   invertRgbColor(hexToRGB(color.hex))
                 );
@@ -241,7 +242,8 @@ export default component$<ColorListProps>((props) => {
             q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
-              const newColors = colors.value
+              const currentColors = props.colors ?? getColors(rgbStore, id);
+              const newColors = currentColors
                 .slice()
                 .reverse()
                 .map((color) => ({ hex: color.hex, pos: 100 - color.pos }));
@@ -254,9 +256,10 @@ export default component$<ColorListProps>((props) => {
           <button
             q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
-            disabled={colors.value.length >= resolvedTextLength.value}
+            disabled={colors.length >= resolvedTextLength}
             onClick$={() => {
-              const newColors = [...colors.value, ...colors.value];
+              const currentColors = props.colors ?? getColors(rgbStore, id);
+              const newColors = [...currentColors, ...currentColors];
               void setColors(newColors);
             }}
           >
@@ -268,7 +271,7 @@ export default component$<ColorListProps>((props) => {
           <SelectMenu
             title={t('rgb.colors.gradientType@@Gradient Type')}
             id="gradientType"
-            value={resolvedGradientType.value}
+            value={resolvedGradientType}
             class="lum-btn-p-1 rounded-lum-1 rounded-r-none text-sm"
             btnProps={{ class: 'lum-btn-p-1' }}
             onChange$={async (e, el) => {
@@ -289,9 +292,9 @@ export default component$<ColorListProps>((props) => {
       </ButtonContainer>
 
       <div class="relative flex flex-col" id={`colorlistcolors${id}`}>
-        {colors.value.map((color, i) => (
+        {colors.map((color, i) => (
           <div
-            key={`${i}/${colors.value.length}`}
+            key={`${i}/${colors.length}`}
             id={`colorlist${id}-color-${i + 1}`}
             class={{
               'relative flex items-center gap-1 py-1 transition-all duration-200': true,
@@ -312,7 +315,8 @@ export default component$<ColorListProps>((props) => {
             onDrop$={() => {
               if (draggedIndex.value === null || draggedIndex.value === i)
                 return;
-              const newColors = moveItem(colors.value, draggedIndex.value, i);
+              const currentColors = props.colors ?? getColors(rgbStore, id);
+              const newColors = moveItem(currentColors, draggedIndex.value, i);
               void setColors(newColors);
               draggedIndex.value = null;
               dragOverIndex.value = null;
@@ -381,7 +385,8 @@ export default component$<ColorListProps>((props) => {
                   return;
                 }
                 // update the color
-                const newColors = colors.value.slice(0);
+                const currentColors = props.colors ?? getColors(rgbStore, id);
+                const newColors = currentColors.slice(0);
                 newColors[i].hex = hex;
                 void setColors(sortColors(newColors));
 
@@ -423,7 +428,8 @@ export default component$<ColorListProps>((props) => {
             <button
               class="lum-btn lum-grad-bg-red hover:lum-bg-red rounded-l-sm p-1.5"
               onClick$={() => {
-                const newColors = colors.value.slice(0);
+                const currentColors = props.colors ?? getColors(rgbStore, id);
+                const newColors = currentColors.slice(0);
                 newColors.splice(i, 1);
                 void setColors(newColors);
               }}
@@ -448,9 +454,10 @@ export default component$<ColorListProps>((props) => {
         >
           <ColorPicker
             id={`colorlist${id}-color-picker`}
-            value={colors.value[opened.value]?.hex}
+            value={colors[opened.value]?.hex}
             onInput$={(newColor) => {
-              const newColors = colors.value.slice(0);
+              const currentColors = props.colors ?? getColors(rgbStore, id);
+              const newColors = currentColors.slice(0);
               newColors[opened.value].hex = newColor;
               void setColors(sortColors(newColors));
             }}
@@ -468,9 +475,10 @@ export default component$<ColorListProps>((props) => {
                 id={`colorlist${id}-color-pos`}
                 min={0}
                 max={100}
-                value={Math.round(colors.value[opened.value]?.pos)}
+                value={Math.round(colors[opened.value]?.pos)}
                 onInput$={(e, el) => {
-                  const newColors = colors.value.slice(0);
+                  const currentColors = props.colors ?? getColors(rgbStore, id);
+                  const newColors = currentColors.slice(0);
                   let newPos = Number(el.value);
                   if (newPos < 0) newPos = 0;
                   if (newPos > 100) newPos = 100;
@@ -479,7 +487,8 @@ export default component$<ColorListProps>((props) => {
                   void setColors(sortColors(newColors));
                 }}
                 onIncrement$={() => {
-                  const newColors = colors.value.slice(0);
+                  const currentColors = props.colors ?? getColors(rgbStore, id);
+                  const newColors = currentColors.slice(0);
                   let newPos = newColors[opened.value].pos + 1;
                   if (newPos > 100) newPos = 100;
                   newColors[opened.value].pos =
@@ -487,7 +496,8 @@ export default component$<ColorListProps>((props) => {
                   void setColors(sortColors(newColors));
                 }}
                 onDecrement$={() => {
-                  const newColors = colors.value.slice(0);
+                  const currentColors = props.colors ?? getColors(rgbStore, id);
+                  const newColors = currentColors.slice(0);
                   let newPos = newColors[opened.value].pos - 1;
                   if (newPos < 0) newPos = 0;
                   newColors[opened.value].pos =

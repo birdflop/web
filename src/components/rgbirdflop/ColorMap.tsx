@@ -1,4 +1,4 @@
-import { component$, useContext, useComputed$ } from '@qwik.dev/core';
+import { component$, useContext, $, QRL } from '@qwik.dev/core';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import {
   sortColors,
@@ -12,6 +12,13 @@ import {
   rgbColorDefaults,
 } from '@birdflop/rgbirdflop';
 import Plus from 'lucide-icons-qwik/icons/Plus';
+
+type ColorMapProps = {
+  id?: string;
+  colors?: ColorStop[];
+  gradientType?: GradientType;
+  onColorsChange$?: QRL<(colors: ColorStop[]) => void>;
+};
 
 /**
  * Generates a CSS gradient string using the specified gradient type
@@ -57,10 +64,20 @@ export function getColors(rgbStore: typeof rgbColorDefaults, id: string) {
   return id === 'text' ? rgbStore.colors : getShadowColors(rgbStore);
 }
 
-export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
+export default component$<ColorMapProps>((props) => {
+  const { id = 'text' } = props;
   const rgbStore = useContext(rgbStoreContext);
   const colorsKey = id == 'text' ? 'colors' : 'shadowColors';
-  const colors = useComputed$(() => getColors(rgbStore, id));
+  const colors = props.colors ?? getColors(rgbStore, id);
+  const resolvedGradientType = props.gradientType ?? rgbStore.gradientType;
+
+  const setColors = $(async (newColors: ColorStop[]) => {
+    if (props.onColorsChange$) {
+      await props.onColorsChange$(newColors);
+    } else {
+      rgbStore[colorsKey] = newColors;
+    }
+  });
 
   return (
     <div
@@ -71,17 +88,18 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       }}
       id={'colormap' + id}
       style={`background: ${generateGradientCSS(
-        colors.value,
-        rgbStore.gradientType
+        colors,
+        resolvedGradientType
       )};`}
       onMouseDown$={(e, el) => {
         if (e.target != el) return;
         const rect = el.getBoundingClientRect();
         const pos = ((e.clientX - rect.left) / rect.width) * 100;
-        if (colors.value.find((c) => c.pos == pos)) return;
-        const newColors = colors.value.slice(0);
+        const currentColors = props.colors ?? getColors(rgbStore, id);
+        if (currentColors.find((c) => c.pos == pos)) return;
+        const newColors = currentColors.slice(0);
         newColors.push({ hex: getRandomColor(), pos });
-        rgbStore[colorsKey] = sortColors(newColors);
+        void setColors(sortColors(newColors));
       }}
       onMouseEnter$={(e, el) => {
         const abortController = new AbortController();
@@ -97,7 +115,8 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
             }
             const rect = el.getBoundingClientRect();
             const pos = ((e.clientX - rect.left) / rect.width) * 100;
-            if (colors.value.find((c) => c.pos == pos)) return;
+            const currentColors = props.colors ?? getColors(rgbStore, id);
+            if (currentColors.find((c) => c.pos == pos)) return;
             addbutton.classList.remove('opacity-0');
             addbutton.style.left = `${pos}%`;
           },
@@ -122,9 +141,9 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
       >
         <Plus size={18} />
       </div>
-      {colors.value.map((color, i) => (
+      {colors.map((color, i) => (
         <div
-          key={`${i}/${colors.value.length}`}
+          key={`${i}/${colors.length}`}
           id={`colormap${id}-color-${i + 1}`}
           class="lum-bg absolute -mt-1.5 -ml-3 h-5 w-5 rounded-full drop-shadow-md transition-transform hover:scale-125"
           style={{
@@ -143,10 +162,11 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
                 let pos = ((e.clientX - rect.left) / rect.width) * 100;
                 if (pos < 0) pos = 0;
                 if (pos > 100) pos = 100;
-                if (colors.value.find((c) => c.pos == pos)) return;
-                const newColors = colors.value.slice(0);
+                const currentColors = props.colors ?? getColors(rgbStore, id);
+                if (currentColors.find((c) => c.pos == pos)) return;
+                const newColors = currentColors.slice(0);
                 newColors[i].pos = Math.round(pos * 1000) / 1000;
-                rgbStore[colorsKey] = newColors;
+                void setColors(newColors);
               },
               { signal: abortController.signal }
             );
@@ -155,7 +175,8 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
               () => {
                 el.classList.remove('scale-150');
                 abortController.abort();
-                rgbStore[colorsKey] = sortColors(colors.value);
+                const currentColors = props.colors ?? getColors(rgbStore, id);
+                void setColors(sortColors(currentColors));
               },
               { signal: abortController.signal }
             );
