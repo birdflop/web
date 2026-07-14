@@ -9,7 +9,8 @@ import {
   Fabric as LogoFabric,
 } from '@luminescent/icons-qwik';
 
-import { SiSpigotmc, SiVelocity } from 'simple-icons-qwik';
+import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
+import SiVelocity from 'simple-icons-qwik/icons/SiVelocity';
 
 import Coffee from 'lucide-icons-qwik/icons/Coffee';
 import Cpu from 'lucide-icons-qwik/icons/Cpu';
