@@ -35,7 +35,7 @@
   --color-lum-card-bg: var(--color-gray-850);
   --color-lum-accent: var(--color-blue-500);
   --breakpoint-3xl: 125rem;
-  --lum-depth: 1.5;
+  --lum-depth: 1;
 }
 
 @media (prefers-color-scheme: light) {
@@ -54,7 +54,7 @@
     --color-cyan: var(--color-cyan-400);
     --color-lime: var(--color-lime-400);
     --color-teal: var(--color-teal-400);
-    --color-lum-border: var(--color-color-white);
+    --color-lum-border: var(--color-white);
     --color-lum-card-bg: var(--color-gray-100);
     --color-lum-input-bg: var(--color-neutral-50);
     --color-lum-input-hover-bg: var(--color-neutral-50);

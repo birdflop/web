@@ -186,42 +186,43 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               <span>{CurrentThemeOption.label}</span>
             )}
           </span>
-          {themeOptions.map((option) => {
-            const IconComponent = option.icon;
-            const isActive = themeStore.currentTheme === option.value;
-            const value = option.value;
+          <div q:slot="extra-buttons">
+            {themeOptions.map((option) => {
+              const IconComponent = option.icon;
+              const isActive = themeStore.currentTheme === option.value;
+              const value = option.value;
 
-            return (
-              <button
-                q:slot="extra-buttons"
-                key={value}
-                onClick$={() => handleThemeChange(value)}
-                class={{
-                  'lum-btn rounded-lum-1 p-2 pr-4 text-left': true,
-                  [`bg-linear-to-br ${option.gradient} border-lum-accent border`]:
-                    isActive,
-                  'lum-bg-transparent': !isActive,
-                }}
-              >
-                <span
+              return (
+                <button
+                  key={value}
+                  onClick$={() => handleThemeChange(value)}
                   class={{
-                    'rounded-lum-1 flex items-center justify-center p-2': true,
-                    [`bg-linear-to-r ${option.gradient}`]: !isActive,
+                    'lum-btn rounded-lum-1 p-2 pr-4 text-left': true,
+                    [`bg-linear-to-br ${option.gradient} border-lum-accent border`]:
+                      isActive,
+                    'lum-bg-transparent': !isActive,
                   }}
                 >
-                  <IconComponent class="h-4 w-4 text-white" />
-                </span>
-                <span class="flex flex-col">
-                  <span class="text-theme-text-primary text-sm font-medium">
-                    {option.label}
+                  <span
+                    class={{
+                      'rounded-lum-1 flex items-center justify-center p-2': true,
+                      [`bg-linear-to-r ${option.gradient}`]: !isActive,
+                    }}
+                  >
+                    <IconComponent class="h-4 w-4 text-white" />
                   </span>
-                  <span class="text-theme-text-muted text-lum-text-secondary text-xs">
-                    {option.description}
+                  <span class="flex flex-col">
+                    <span class="text-theme-text-primary text-sm font-medium">
+                      {option.label}
+                    </span>
+                    <span class="text-theme-text-muted text-lum-text-secondary text-xs">
+                      {option.description}
+                    </span>
                   </span>
-                </span>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </SelectMenu>
       </div>
     );
