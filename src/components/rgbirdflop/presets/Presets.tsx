@@ -199,7 +199,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       </div>
 
       <div class="lum-card max-h-64 gap-1 overflow-auto p-1">
-        {privatePresets.value.length && (
+        {!!privatePresets.value.length && (
           <p class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2">
             {t('rgb.presets.personalPresets@@Personal Presets')}
           </p>
@@ -246,7 +246,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           </div>
         ))}
 
-        {savedPresets.value.length && (
+        {!!savedPresets.value.length && (
           <p class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2">
             {t('rgb.presets.savedPresets@@Saved Presets')}
           </p>
