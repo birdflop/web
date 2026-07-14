@@ -37,7 +37,7 @@
     "fmt.check": "vp fmt --check .",
     "lint": "vp lint --quiet",
     "postinstall": "drizzle-kit generate && wrangler types",
-    "preview": "qwik build preview && vp preview --open",
+    "preview": "qwik build && wrangler dev",
     "qwik-speak-extract": "qwik-speak-extract --supportedLangs=en-US,es-ES,ko-KR,de-DE,nl-NL,pl-PL,pt-PT,ru-RU,tr-TR,zh-CN --assetsPath=i18n",
     "serve": "wrangler dev",
     "start": "vp dev --open --mode ssr",
