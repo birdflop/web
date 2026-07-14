@@ -12,6 +12,11 @@
   "engines": {
     "node": ">=22"
   },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm"
+    }
+  },
   "private": true,
   "type": "module",
   "scripts": {
@@ -42,8 +47,8 @@
     "serve": "wrangler dev",
     "start": "vp dev --open --mode ssr",
     "qwik": "qwik",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vp test run",
+    "test:watch": "vp test",
     "prepare": "vp config"
   },
   "devDependencies": {
@@ -89,9 +94,8 @@
     "valibot": "^1.4.2",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "^4.1.10",
+    "vitest": "catalog:",
     "wrangler": "^4.110.0",
     "yaml": "^2.9.0"
-  },
-  "packageManager": "pnpm@11.11.0"
+  }
 }

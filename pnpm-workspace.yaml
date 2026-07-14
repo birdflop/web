@@ -17,9 +17,9 @@ onlyBuiltDependencies:
   - better-sqlite3
   - workerd
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
-  vitest: npm:@voidzero-dev/vite-plus-test@latest
-  vite-plus: latest
+  vite: npm:@voidzero-dev/vite-plus-core@0.2.4
+  vitest: 4.1.10
+  vite-plus: 0.2.4
 overrides:
   vite: 'catalog:'
   vitest: 'catalog:'
