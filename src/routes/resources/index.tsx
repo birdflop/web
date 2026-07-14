@@ -55,11 +55,14 @@ export default component$(() => {
       </p>
       <div class="flex flex-wrap gap-2 *:flex-1">
         <Link
-          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-red relative duration-200!"
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-red relative transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-red/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Palette size={30} />
             {t('nav.resources.hexGradient.title@@RGBirdflop')}
@@ -76,6 +79,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtab"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-blue/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Rainbow size={30} />
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
@@ -92,6 +98,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/rgb/presets"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-green/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Save size={30} />
             {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
@@ -113,13 +122,16 @@ export default component$(() => {
           'nav.resources.serverTools.description@@Tools to help configure and setup minecraft servers.'
         )}
       </p>
-      <div class="flex flex-wrap gap-2 *:flex-1">
+      <div class="flex flex-wrap gap-2 *:min-w-1/4 *:flex-1">
         <Link
           class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-yellow relative transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/analyze"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-yellow/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Zap size={30} />
             {t('nav.resources.analyze.title@@Analyze')}
@@ -136,6 +148,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/flags"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-orange/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Flag size={30} />
             {t('nav.resources.flags.title@@Flags Generator')}
@@ -152,6 +167,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/plugins"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-violet/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Blocks size={30} />
             {t('nav.resources.plugins.title@@Plugin Updates')}
@@ -168,6 +186,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/hardware"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-green/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <MemoryStick size={30} />
             {t('nav.resources.hardware.title@@RAM & Hardware Planner')}
@@ -184,6 +205,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/motd"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-blue/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <MessageSquare size={30} />
             {t('nav.resources.motd.title@@MOTD Designer')}
@@ -212,6 +236,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/banner"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-purple/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Presentation size={30} />
             {t('nav.resources.banner.title@@Banner Generator')}
@@ -228,6 +255,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animtexture"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-cyan/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <GalleryHorizontalEnd size={30} />
             {t('nav.resources.animatedTextures.title@@Animated Textures')}
@@ -244,6 +274,9 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           href="/resources/animpreview"
         >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-lime/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
           <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
             <Eye size={30} />
             {t(

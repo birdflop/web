@@ -10,42 +10,42 @@ const nodes = [
   {
     name: 'Crabwings',
     location: 'New York City Metro, USA',
-    color: 'red',
+    color: 'bg-red/30',
   },
   {
     name: 'Impeyes',
     location: 'Falkenstein, Germany (EU)',
-    color: 'orange',
+    color: 'bg-orange/30',
   },
   {
     name: 'Jellyfishjaws',
     location: 'Falkenstein, Germany (EU)',
-    color: 'yellow',
+    color: 'bg-yellow/30',
   },
   {
     name: 'Koalaknees',
     location: 'Ashburn, VA, USA',
-    color: 'green',
+    color: 'bg-green/30',
   },
   {
     name: 'Llamalips',
     location: 'Falkenstein, Germany (EU)',
-    color: 'teal',
+    color: 'bg-teal/30',
   },
   {
     name: 'Monkeymouth',
     location: 'New York City Metro, USA',
-    color: 'blue',
+    color: 'bg-blue/30',
   },
   {
     name: 'Narwhalnose',
     location: 'Ashburn, VA, USA',
-    color: 'violet',
+    color: 'bg-violet/30',
   },
   {
     name: 'Owlorgans',
     location: 'Falkenstein, Germany (EU)',
-    color: 'pink',
+    color: 'bg-pink/30',
   },
 ];
 
@@ -94,6 +94,14 @@ export default component$(() => {
               onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
               onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
             >
+              <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+                <div
+                  class={{
+                    'absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl': true,
+                    [node.color]: true,
+                  }}
+                />
+              </div>
               <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
                 {node.name}
               </h3>
