@@ -1326,7 +1326,7 @@ packages:
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
 
   '@qwik.dev/core@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785':
-    resolution: {integrity: sha512-792XafLNBPJ3y+ErqDImHzaSnNcTvc2RKf4S62zY7bp11K+7MLNnj9JZqZDAPU77OvXY/Qvy2LPsu/4U9Vbryw==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785}
+    resolution: {integrity: sha512-HEJh3yhQJCqfu8JObeL8+Dt2GzUtCV2wLHcmAVI5+pdh6UnqgngcjiPeHYeO5rYNpHDbLuYFrpkZFZGVBJBYOQ==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785}
     version: 2.0.0-beta.37
     engines: {node: ^20.3.0 || >=21.0.0}
     hasBin: true
@@ -1340,8 +1340,8 @@ packages:
       vitest:
         optional: true
 
-  '@qwik.dev/optimizer@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@1277c19':
-    resolution: {integrity: sha512-ebfpWrxt/sXfbcH/cOukUorXmT7BTp2mYGYPj7xSLimncdXJ9D+PTUdCyWYjZHpKZeLoCaDY+VPU2pYIW2w+4w==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@1277c19}
+  '@qwik.dev/optimizer@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@26bad23':
+    resolution: {integrity: sha512-ebfpWrxt/sXfbcH/cOukUorXmT7BTp2mYGYPj7xSLimncdXJ9D+PTUdCyWYjZHpKZeLoCaDY+VPU2pYIW2w+4w==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@26bad23}
     version: 2.1.0-beta.5
     engines: {node: ^20.3.0 || >=21.0.0}
 
@@ -1351,7 +1351,7 @@ packages:
     hasBin: true
 
   '@qwik.dev/router@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/router@8785':
-    resolution: {integrity: sha512-TDPVThtgeZMiwGiyzYQF6xcmdMPVc9A8pXdHgZRytYxBsphMqnf4X3e3IGmlF1XqCdC4JB5YzvzbdTJalJzzKw==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/router@8785}
+    resolution: {integrity: sha512-/mDTNkrrrDUxhq/ZDlD4SHE3ENncCXWNY44FLIev7mwiSsraqKjH4VHvPylmRU0Kr+wYLDzxYyHiTgejiaooNA==, tarball: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/router@8785}
     version: 2.0.0-beta.37
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
@@ -4266,7 +4266,7 @@ snapshots:
 
   '@qwik.dev/core@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))(@voidzero-dev/vite-plus-test@0.1.24(@types/node@26.1.1)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))(esbuild@0.28.1)(happy-dom@20.10.6)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))':
     dependencies:
-      '@qwik.dev/optimizer': https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@1277c19
+      '@qwik.dev/optimizer': https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@26bad23
       csstype: 3.2.3
       launch-editor: 2.14.1
       magic-string: 0.30.21
@@ -4274,7 +4274,7 @@ snapshots:
     optionalDependencies:
       vitest: '@voidzero-dev/vite-plus-test@0.1.24(@types/node@26.1.1)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))(esbuild@0.28.1)(happy-dom@20.10.6)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0)'
 
-  '@qwik.dev/optimizer@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@1277c19': {}
+  '@qwik.dev/optimizer@https://pkg.pr.new/QwikDev/qwik/@qwik.dev/optimizer@26bad23': {}
 
   '@qwik.dev/partytown@0.14.0':
     dependencies:
