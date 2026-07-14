@@ -473,7 +473,9 @@ export default component$(() => {
             align="right"
             id="settings"
             class="rounded-lum-1 lum-bg-transparent p-3"
-            panelClass="lum-grad-bg-lum-card-bg p-2 gap-2"
+            panelProps={{
+              class: 'lum-grad-bg-lum-card-bg p-2 gap-2',
+            }}
             customDropdown
           >
             <Settings q:slot="dropdown" size={16} />

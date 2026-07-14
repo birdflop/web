@@ -22,12 +22,8 @@ export default component$<{
     <div
       class={{
         'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
-        ...(hidden === undefined
-          ? {}
-          : {
-              'pointer-events-none max-h-0 opacity-0': hidden,
-              'pointer-events-auto max-h-62.5 opacity-100': !hidden,
-            }),
+        'pointer-events-none max-h-0 opacity-0': hidden,
+        'pointer-events-auto max-h-62.5 opacity-100': !hidden,
       }}
       id="outputcontainer"
     >

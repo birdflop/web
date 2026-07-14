@@ -65,8 +65,9 @@ export default component$(({ id = 'text' }: { id?: 'text' | 'shadow' }) => {
   return (
     <div
       class={{
-        'relative my-2 h-2 w-full items-center rounded-full': true,
-        hidden: rgbStore.disperse,
+        'relative my-4 w-full items-center rounded-full transition-all': true,
+        'h-0 opacity-0': rgbStore.disperse,
+        'h-2': !rgbStore.disperse,
       }}
       id={'colormap' + id}
       style={`background: ${generateGradientCSS(

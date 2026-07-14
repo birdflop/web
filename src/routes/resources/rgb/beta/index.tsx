@@ -1,6 +1,5 @@
 import {
   component$,
-  useContext,
   useContextProvider,
   useSignal,
   useStore,
@@ -28,10 +27,8 @@ import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
 import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
-import Options from '~/components/rgbirdflop/Options';
 import SegmentInspector from '~/components/rgbirdflop/advanced/SegmentInspector';
 import SegmentColorEditor from '~/components/rgbirdflop/advanced/SegmentColorEditor';
-import { openItemsContext } from '~/routes/layout-profile';
 import RgbAdvancedPreview from '~/components/rgbirdflop/advanced/RgbAdvancedPreview';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
@@ -77,7 +74,6 @@ export default component$(() => {
   useContextProvider(previewStyleContext, previewStyle);
   const showAllGradients = useSignal(false);
   useContextProvider(showAllGradientsContext, showAllGradients);
-  const openItems = useContext(openItemsContext);
 
   return (
     <RGBirdflop
@@ -115,8 +111,6 @@ export default component$(() => {
       <RgbAdvancedPreview q:slot="input" />
 
       <SegmentInspector q:slot="input-extra" />
-
-      <Options q:slot="options" hidden={!openItems.value.includes('options')} />
 
       <SegmentColorEditor q:slot="column1" />
     </RGBirdflop>

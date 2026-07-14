@@ -27,7 +27,6 @@ import {
   GRADIENT_TYPES,
   ColorStop,
   disperseColors,
-  isDispersed,
 } from '@birdflop/rgbirdflop';
 
 import ArrowRightLeft from 'lucide-icons-qwik/icons/ArrowRightLeft';
@@ -36,10 +35,8 @@ import Copy from 'lucide-icons-qwik/icons/Copy';
 import Dices from 'lucide-icons-qwik/icons/Dices';
 import Eclipse from 'lucide-icons-qwik/icons/Eclipse';
 import GripVertical from 'lucide-icons-qwik/icons/GripVertical';
-import Minus from 'lucide-icons-qwik/icons/Minus';
 import MoveHorizontal from 'lucide-icons-qwik/icons/MoveHorizontal';
 import Palette from 'lucide-icons-qwik/icons/Palette';
-import Plus from 'lucide-icons-qwik/icons/Plus';
 import Shuffle from 'lucide-icons-qwik/icons/Shuffle';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 
@@ -125,62 +122,53 @@ export default component$<ColorListProps>((props) => {
     >
       <div class="flex items-center gap-2">
         <h3 class="flex flex-1 items-center gap-2 font-semibold">
-          <Palette />
-          {colors.value.length} {t('rgb.colors.title@@Colors')}
-          <button
-            class="lum-btn -mr-1 rounded-r-sm p-1"
-            onClick$={() => {
-              const newColors = colors.value.slice(0);
-              newColors.pop();
-              void setColors(disperseColors(newColors));
-            }}
-            disabled={colors.value.length <= 1}
-          >
-            <Minus size={20} />
-          </button>
-          <button
-            class="lum-btn rounded-l-sm p-1"
-            onClick$={() => {
-              const newColors = [
-                ...colors.value,
-                {
-                  hex: getRandomColor(),
-                  pos: 0, // will be filled in by disperseColors
-                },
-              ];
-              void setColors(disperseColors(newColors));
-            }}
-          >
-            <Plus size={20} />
-          </button>
+          <Palette /> {t('rgb.colors.title@@Colors')}
         </h3>
 
-        <div class="flex gap-1">
-          <SelectMenu
-            title={t('rgb.colors.gradientType@@Gradient Type')}
-            id="gradientType"
-            value={resolvedGradientType.value}
-            class="lum-btn-p-1 rounded-r-sm text-sm"
-            onChange$={async (e, el) => {
-              const value = el.value as GradientType;
-              if (props.onGradientTypeChange$) {
-                await props.onGradientTypeChange$(value);
-              } else {
-                rgbStore.gradientType = value;
-              }
-            }}
-            values={GRADIENT_TYPES.map((type) => ({
-              name: type,
-              value: type,
-            }))}
-          />
-          <ShowAllGradientsButton showAllGradients={showAllGradients} />
-        </div>
+        <NumberInput
+          input
+          id={`colorlist${id}-amount`}
+          min={1}
+          max={resolvedTextLength.value}
+          value={colors.value.length}
+          btnProps={{ class: 'p-1!' }}
+          class={{ 'lum-input-p-1 w-full text-sm': true }}
+          onInput$={(e, el) => {
+            let colorAmount = Number(el.value);
+            if (colorAmount > resolvedTextLength.value)
+              colorAmount = resolvedTextLength.value;
+            const newColors = [];
+            for (let i = 0; i < colorAmount; i++) {
+              if (colors.value[i]) newColors.push(colors.value[i]);
+              else
+                newColors.push({
+                  hex: getRandomColor(),
+                  pos: 0, // will be filled in by disperseColors
+                });
+            }
+            void setColors(disperseColors(newColors));
+          }}
+          onIncrement$={() => {
+            const newColors = [
+              ...colors.value,
+              {
+                hex: getRandomColor(),
+                pos: 0, // will be filled in by disperseColors
+              },
+            ];
+            void setColors(disperseColors(newColors));
+          }}
+          onDecrement$={() => {
+            const newColors = colors.value.slice(0);
+            newColors.pop();
+            void setColors(disperseColors(newColors));
+          }}
+        />
       </div>
 
       <Slot />
 
-      <ButtonContainer class="[&>button]:justify-center [&>button]:p-1">
+      <ButtonContainer class="[&>button]:justify-center [&>button]:p-1!">
         <button
           onClick$={() => {
             const newColors = colors.value.map((color) => ({
@@ -219,17 +207,15 @@ export default component$<ColorListProps>((props) => {
         >
           <Shuffle size={20} />
         </button>
-        {!rgbStore.disperse && (
-          <button
-            disabled={isDispersed(colors.value)}
-            onClick$={() => {
-              void setColors(disperseColors(colors.value));
-            }}
-            title={t('rgb.colors.disperse.title@@Disperse')}
-          >
-            <MoveHorizontal size={20} />
-          </button>
-        )}
+        <button
+          class={{
+            'lum-bg-lum-accent!': rgbStore.disperse,
+          }}
+          onClick$={() => (rgbStore.disperse = !rgbStore.disperse)}
+          title={t('rgb.colors.disperse.title@@Disperse')}
+        >
+          <MoveHorizontal size={20} />
+        </button>
         <SelectMenu
           id="moreColorOptions"
           align="right"
@@ -278,6 +264,28 @@ export default component$<ColorListProps>((props) => {
             {t('rgb.colors.duplicate@@Duplicate')}
           </button>
         </SelectMenu>
+        <div class="flex">
+          <SelectMenu
+            title={t('rgb.colors.gradientType@@Gradient Type')}
+            id="gradientType"
+            value={resolvedGradientType.value}
+            class="lum-btn-p-1 rounded-lum-1 rounded-r-none text-sm"
+            btnProps={{ class: 'lum-btn-p-1' }}
+            onChange$={async (e, el) => {
+              const value = el.value as GradientType;
+              if (props.onGradientTypeChange$) {
+                await props.onGradientTypeChange$(value);
+              } else {
+                rgbStore.gradientType = value;
+              }
+            }}
+            values={GRADIENT_TYPES.map((type) => ({
+              name: type,
+              value: type,
+            }))}
+          />
+          <ShowAllGradientsButton showAllGradients={showAllGradients} />
+        </div>
       </ButtonContainer>
 
       <div class="relative flex flex-col" id={`colorlistcolors${id}`}>

@@ -169,7 +169,11 @@ export default component$(() => {
         shadowLength={previewStyle.value == 'default' ? 4 : 2}
       />
 
-      <Label for="length" label={t('animtab.length@@Gradient Length')}>
+      <Label
+        q:slot="column1"
+        for="length"
+        label={t('animtab.length@@Gradient Length')}
+      >
         <NumberInput
           id="length"
           input
@@ -179,9 +183,20 @@ export default component$(() => {
           max={rgbStore.text.length}
           class="w-full opacity-100!"
           onInput$={(event, el) => (animtabStore.length = Number(el.value))}
-          q:slot="column1"
         />
       </Label>
+
+      <NumberInput
+        q:slot="output"
+        id="speed"
+        input
+        value={animtabStore.speed}
+        class="lum-input-p-1 w-12 text-sm"
+        btnProps={{ class: 'p-1!' }}
+        step={50}
+        min={50}
+        onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
+      />
 
       <Label
         q:slot="options"
@@ -194,21 +209,6 @@ export default component$(() => {
           value={animtabStore.name}
           placeholder={'name'}
           onInput$={(e, el) => (animtabStore.name = el.value)}
-        />
-      </Label>
-      <Label
-        q:slot="options"
-        for="speed"
-        label={`${t('animtab.animation.interval@@Animation Interval')} (ms)`}
-      >
-        <NumberInput
-          id="speed"
-          input
-          value={animtabStore.speed}
-          class="w-full"
-          step={50}
-          min={50}
-          onInput$={(event, el) => (animtabStore.speed = Number(el.value))}
         />
       </Label>
       <Label

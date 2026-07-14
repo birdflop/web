@@ -53,7 +53,7 @@ export default component$(() => {
         }}
       >
         <Settings />
-        {t('rgb.options@@Options')}
+        {t('rgb.advancedoptions@@Advanced Options')}
       </button>
       <button
         onClick$={() => {

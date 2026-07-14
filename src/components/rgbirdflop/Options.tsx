@@ -2,7 +2,6 @@ import { component$, Slot, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Label, NumberInput, Toggle } from '@luminescent/ui-qwik';
-import Settings from 'lucide-icons-qwik/icons/Settings';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -11,87 +10,61 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   return (
     <div
       class={{
-        'flex flex-col gap-2 transition-all duration-200 sm:pointer-events-auto sm:max-h-full sm:opacity-100': true,
+        'flex flex-col gap-2 transition-all duration-300': true,
         'pointer-events-none max-h-0 opacity-0': hidden,
-        'pointer-events-auto max-h-120 opacity-100': !hidden,
+        'pointer-events-auto max-h-100 opacity-100': !hidden,
       }}
+      id="options"
     >
-      <div class="flex items-center gap-2">
-        <h3 class="flex flex-1 items-center gap-2 font-semibold">
-          <Settings />
-          {t('rgb.options@@Options')}
-        </h3>
-      </div>
-      <div class="flex grid-cols-2 flex-col gap-2 md:grid">
-        <Slot />
-        <div class="flex flex-col gap-1">
-          <Label
-            for="prefixsuffix"
-            label={t('rgb.prefixsuffix@@Prefix/Suffix')}
-          >
-            <input
-              class="lum-input"
-              id="prefixsuffix"
-              value={rgbStore.prefixSuffix}
-              placeholder={'/nick $t'}
-              onInput$={(e, el) => {
-                rgbStore.prefixSuffix = el.value;
+      <Slot />
+      <Label for="prefixsuffix" label={t('rgb.prefixsuffix@@Prefix/Suffix')}>
+        <input
+          class="lum-input w-full"
+          id="prefixsuffix"
+          value={rgbStore.prefixSuffix}
+          placeholder={'/nick $t'}
+          onInput$={(e, el) => {
+            rgbStore.prefixSuffix = el.value;
+          }}
+        />
+      </Label>
+      {rgbStore.colorFormat.color != 'MiniMessage' && (
+        <Label
+          for="colorLength"
+          label={t('rgb.colors.charsPer@@Characters per color')}
+        >
+          <NumberInput
+            input
+            disabled
+            id="colorLength"
+            min={1}
+            max={rgbStore.text.length / rgbStore.colors.length}
+            value={rgbStore.colorLength}
+            class="w-full opacity-100!"
+            onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
+          />
+        </Label>
+      )}
+      {rgbStore.colorFormat.color != 'MiniMessage' && (
+        <>
+          <div class="flex flex-col gap-1">
+            <Toggle
+              id="trimspaces"
+              checked={rgbStore.trimSpaces}
+              onChange$={(e, el) => {
+                rgbStore.trimSpaces = el.checked;
               }}
-            />
-          </Label>
-        </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && (
-          <Label
-            for="colorLength"
-            label={t('rgb.colors.charsPer@@Characters per color')}
-          >
-            <NumberInput
-              input
-              disabled
-              id="colorLength"
-              min={1}
-              max={rgbStore.text.length / rgbStore.colors.length}
-              value={rgbStore.colorLength}
-              class="w-full opacity-100!"
-              onInput$={(e, el) => (rgbStore.colorLength = Number(el.value))}
-            />
-          </Label>
-        )}
-        <div class="flex flex-col gap-1">
-          <Toggle
-            id="disperse"
-            checked={rgbStore.disperse}
-            onChange$={(e, el) => (rgbStore.disperse = el.checked)}
-          >
-            {t('rgb.colors.disperse.always.title@@Always Disperse Colors')}
-          </Toggle>
-          <p class="text-lum-text-secondary text-xs">
-            {t(
-              'rgb.colors.disperse.always.description@@Turn this on if you want the gradient to always be equally spread out. This will disable the gradient map.'
-            )}
-          </p>
-        </div>
-        {rgbStore.colorFormat.color != 'MiniMessage' && (
-          <>
-            <div class="flex flex-col gap-1">
-              <Toggle
-                id="trimspaces"
-                checked={rgbStore.trimSpaces}
-                onChange$={(e, el) => {
-                  rgbStore.trimSpaces = el.checked;
-                }}
-              >
-                {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
-              </Toggle>
-              <p class="text-lum-text-secondary text-xs">
-                {t(
-                  "rgb.colors.trimSpaces.description@@Turn this off if you're using empty underlines / strikethroughs"
-                )}
-              </p>
-            </div>
-          </>
-        )}
-      </div>
+            >
+              {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
+            </Toggle>
+            <p class="text-lum-text-secondary text-xs">
+              {t(
+                "rgb.colors.trimSpaces.description@@Turn this off if you're using empty underlines / strikethroughs"
+              )}
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 });

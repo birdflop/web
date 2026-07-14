@@ -37,8 +37,8 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       '@luminescent/ui-qwik':
-        specifier: 7.0.0-6
-        version: 7.0.0-6(@luminescent/ui@7.0.1)
+        specifier: 7.0.0-8
+        version: 7.0.0-8(@luminescent/ui@7.0.1)
       '@qwik.dev/core':
         specifier: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785
         version: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))(@voidzero-dev/vite-plus-test@0.1.24(@types/node@26.1.1)(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))(esbuild@0.28.1)(happy-dom@20.10.6)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.0)(typescript@6.0.3)(yaml@2.9.0))
@@ -905,8 +905,8 @@ packages:
     resolution: {integrity: sha512-W69uzPt9qAhqShl74bma9yzRqXv8FNJLz3R/R6vC4Z5rXYaZJ4W2fcITOUX33WBmKIlq6YNPrm6rWWY6tfMikw==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
 
-  '@luminescent/ui-qwik@7.0.0-6':
-    resolution: {integrity: sha512-NTAJJQe5OJ+ss9HKusEJC4/PHv1VMO3bNqC2zW1+FhZlRCKk9FBtIyapLaAjh7y21rbzmo8Km55VZnvDJPEkUA==}
+  '@luminescent/ui-qwik@7.0.0-8':
+    resolution: {integrity: sha512-5Wv08nRKKvdBbAcz/Mjl9WyoxTG1ZuwMhqZhZRz5MAH4CwgF2LUzlM7i05jHl9pMEOluHL1S3Pj6QXTOOeMPfA==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
       '@luminescent/ui': 7.0.0
@@ -4001,7 +4001,7 @@ snapshots:
 
   '@luminescent/icons-qwik@0.1.1': {}
 
-  '@luminescent/ui-qwik@7.0.0-6(@luminescent/ui@7.0.1)':
+  '@luminescent/ui-qwik@7.0.0-8(@luminescent/ui@7.0.1)':
     dependencies:
       '@luminescent/ui': 7.0.1
 

@@ -51,10 +51,11 @@ export default component$(
     return (
       <Dropdown
         class={{
+          'lum-bg-transparent active:scale-100!': true,
           'hidden sm:flex': !!pcOnly,
           ...getClassObject(className),
         }}
-        opened={openItems.value.includes(sectionName) && !pcOnly}
+        opened={openItems.value.includes(sectionName)}
         {...props}
         onClick$={async () => {
           await onClick$?.();

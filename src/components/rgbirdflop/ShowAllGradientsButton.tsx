@@ -8,7 +8,7 @@ export const ShowAllGradientsButton = component$<{
     <button
       q:slot="extra-buttons"
       class={{
-        'lum-btn rounded-l-sm p-1 transition-colors': true,
+        'lum-btn rounded-lum-1 rounded-l-none p-1 transition-colors': true,
         'text-lum-primary': props.showAllGradients.value,
         'text-lum-text-secondary': !props.showAllGradients.value,
       }}

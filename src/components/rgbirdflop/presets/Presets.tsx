@@ -5,7 +5,7 @@ import {
   useContext,
   useContextProvider,
   useSignal,
-  useTask$,
+  useVisibleTask$,
 } from '@qwik.dev/core';
 import Save from 'lucide-icons-qwik/icons/Save';
 import LinkIcon from 'lucide-icons-qwik/icons/Link';
@@ -16,7 +16,6 @@ import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
 
-import { openItemsContext } from '~/routes/layout';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Link, useLocation } from '@qwik.dev/router';
@@ -27,12 +26,10 @@ import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import Accordion from '~/components/Elements/Accordion';
-import { discordLink } from '~/components/Elements/Nav';
-import { SelectList } from '~/components/Elements/SelectList';
 import { PublicPreset } from '~/util/db';
 import RgbPreview from '../RgbPreview';
 import { Label } from '@luminescent/ui-qwik';
+import { discordLink } from '~/components/Elements/Nav';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -111,20 +108,10 @@ export default component$(({ hidden }: { hidden: boolean }) => {
   );
   useContextProvider(privatePresetsContext, privatePresets);
 
-  const savedPresets = useSignal<PublicPreset[]>(
-    session.value?.user?.savedPresets ?? []
-  );
-  useContextProvider(savedPresetsContext, savedPresets);
-
-  const openItems = useContext(openItemsContext);
-
-  useTask$(({ track }) => {
-    track(() => openItems.value);
-    if (!openItems.value.includes('saved-presets')) return;
-
+  // oxlint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
     // If privatePresets is empty, load presets from localStorage
-    if (privatePresets.value.length != 0 || savedPresets.value.length != 0)
-      return;
+    if (privatePresets.value.length != 0) return;
 
     try {
       const localStoragePresets = getPresets();
@@ -141,10 +128,15 @@ export default component$(({ hidden }: { hidden: boolean }) => {
     }
   });
 
+  const savedPresets = useSignal<PublicPreset[]>(
+    session.value?.user?.savedPresets ?? []
+  );
+  useContextProvider(savedPresetsContext, savedPresets);
+
   return (
     <div
       class={{
-        'flex flex-col gap-1 sm:pointer-events-auto sm:h-auto sm:opacity-100': true,
+        'flex flex-col gap-2 sm:pointer-events-auto sm:h-auto sm:opacity-100': true,
         'pointer-events-none h-0 opacity-0': hidden,
         'pointer-events-auto opacity-100': !hidden,
       }}
@@ -155,13 +147,8 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <Save />
           {t('rgb.presets.title@@Presets')}
         </h3>
-      </div>
-      <div class="flex gap-1">
-        <Accordion sectionName="saved-presets" class="flex-1 rounded-r-sm">
-          {t('rgb.presets.saved.presets@@Saved Presets')}
-        </Accordion>
         <button
-          class="lum-btn rounded-l-sm"
+          class="lum-btn lum-btn-p-1 text-sm"
           id="save"
           onClick$={async () => {
             const preset: rgbPreset = { ...rgbStore };
@@ -202,28 +189,23 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         >
           <Save size={20} /> {t('rgb.presets.save@@Save')}
         </button>
+        <Link
+          class="lum-btn lum-btn-p-1 border-blue hover:border-blue text-sm"
+          href="/resources/rgb/presets"
+          id="findmorepresets"
+        >
+          <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
+        </Link>
       </div>
 
-      {/* todo: make this look better, publish preset function */}
-      <SelectList
-        class={{
-          'transition-all': true,
-          'pointer-events-none -mt-1 max-h-0! p-0! opacity-0':
-            !openItems.value.includes('saved-presets'),
-          'p-1 opacity-100': openItems.value.includes('saved-presets'),
-        }}
-      >
+      <div class="lum-card max-h-64 gap-1 overflow-auto p-1">
         {privatePresets.value.length && (
-          <p
-            q:slot="extra-buttons"
-            class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2"
-          >
+          <p class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2">
             {t('rgb.presets.personalPresets@@Personal Presets')}
           </p>
         )}
         {privatePresets.value.map((preset, i) => (
           <div
-            q:slot="extra-buttons"
             key={i}
             class={{
               'lum-btn lum-bg-transparent rounded-lum-1 font-mc w-full gap-0 p-0 tracking-tight break-all': true,
@@ -265,16 +247,12 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         ))}
 
         {savedPresets.value.length && (
-          <p
-            q:slot="extra-buttons"
-            class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2"
-          >
+          <p class="text-lum-text-secondary border-lum-border/10 my-1 border-b px-2 pb-2">
             {t('rgb.presets.savedPresets@@Saved Presets')}
           </p>
         )}
         {savedPresets.value.map((Preset, i) => (
           <div
-            q:slot="extra-buttons"
             key={i}
             class={{
               'lum-btn lum-bg-transparent rounded-lum-1 font-mc w-full gap-0 p-0 tracking-tight break-all': true,
@@ -322,26 +300,14 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             </button>
           </div>
         ))}
-      </SelectList>
-
-      <Link
-        class="lum-btn border-blue hover:border-blue"
-        href="/resources/rgb/presets"
-        id="findmorepresets"
-      >
-        <Globe size={20} /> {t('rgb.presets.find@@Find more presets')}
-      </Link>
+      </div>
 
       <Label for="import" label={t('rgb.presets.import@@Import')}>
-        <span q:slot="label" class="text-lum-text-secondary">
-          {' '}
-          - {t('rgb.presets.importSubtitle@@Load a JSON preset')}
-        </span>
         <input
-          class="lum-input"
+          class="lum-input w-full"
           id="import"
           name="import"
-          placeholder={`${t('rgb.presets.import@@Import')} - ${t('rgb.presets.pasteHere@@Paste here')}`}
+          placeholder={`${t('rgb.presets.importJSON@@Paste a JSON preset here')}`}
           onInput$={async (e, el) => loadPresetJSON(el.value)}
         />
       </Label>

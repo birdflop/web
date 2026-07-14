@@ -339,6 +339,7 @@ export default component$(
                 hidden={!openItems.value.includes('output')}
                 value={output}
               >
+                <Slot name="output" q:slot="label" />
                 <button
                   class={{
                     'lum-btn lum-btn-p-1': true,
@@ -434,39 +435,49 @@ export default component$(
                 />
               </Output>
 
-              {!advanced && (
-                <Options hidden={!openItems.value.includes('options')}>
-                  <Slot name="options" />
-                </Options>
-              )}
-              {advanced && <Slot name="options" />}
+              <hr class="my-3!" />
 
-              {rgbStore.customFormat && (
-                <>
-                  <Accordion sectionName="formatoptions" pcOnly>
+              <div class="grid gap-2 md:grid-cols-2">
+                {rgbStore.customFormat && (
+                  <div class="col-span-2 flex flex-col">
+                    <Accordion sectionName="formatoptions" pcOnly>
+                      <Settings />
+                      {t('rgb.formatting.options@@Format Options')}
+                    </Accordion>
+                    <CustomFormat
+                      hidden={!openItems.value.includes('formatoptions')}
+                    />
+                  </div>
+                )}
+                <div class="flex flex-col">
+                  <Accordion
+                    sectionName="options"
+                    pcOnly
+                    class="lum-bg-transparent"
+                  >
                     <Settings />
-                    {t('rgb.formatting.options@@Format Options')}
+                    {t('rgb.advancedoptions@@Advanced Options')}
                   </Accordion>
-                  <CustomFormat
-                    hidden={!openItems.value.includes('formatoptions')}
-                  />
-                </>
-              )}
+                  <Options hidden={!openItems.value.includes('options')} />
+                </div>
+                <div class="flex flex-col">
+                  <Accordion sectionName="decode" pcOnly>
+                    <Sparkles />
+                    {t('rgb.decode.title@@Decode')}
+                    <span class="lum-grad-bg-blue/50 rounded-lum-1 px-2 py-1 text-xs">
+                      {t('nav.experimental@@experimental')}
+                    </span>
+                  </Accordion>
+                  <Decode hidden={!openItems.value.includes('decode')} />
+                </div>
+                <Slot name="column2" />
+              </div>
             </div>
 
             <div class="mb-4 flex flex-col gap-2" id="column3">
               <Presets hidden={!openItems.value.includes('presets')} />
 
               <Slot name="column3" />
-
-              <Accordion sectionName="decode" pcOnly>
-                <Sparkles />
-                {t('rgb.decode.title@@Decode')}
-                <span class="lum-grad-bg-blue/50 rounded-lum-1 px-2 py-1 text-xs">
-                  {t('nav.experimental@@experimental')}
-                </span>
-              </Accordion>
-              <Decode hidden={!openItems.value.includes('decode')} />
             </div>
           </div>
           <p class="mt-8">

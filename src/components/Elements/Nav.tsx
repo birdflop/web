@@ -80,7 +80,9 @@ export default component$(() => {
         q:slot="end"
         hover
         customDropdown
-        panelClass="lum-grad-bg-nav-bg"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg',
+        }}
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <span q:slot="dropdown" class="flex items-center gap-2">
@@ -120,7 +122,9 @@ export default component$(() => {
         q:slot="end"
         hover
         customDropdown
-        panelClass="lum-grad-bg-nav-bg"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg',
+        }}
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <span q:slot="dropdown" class="flex items-center gap-2">
@@ -181,7 +185,9 @@ export default component$(() => {
         }}
         id="lang-picker"
         customDropdown
-        panelClass="lum-grad-bg-nav-bg"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg',
+        }}
         values={config.supportedLocales.map((value) => ({
           name: languages[value.lang as keyof typeof languages],
           value: value.lang,
@@ -220,9 +226,11 @@ export default component$(() => {
           class="lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2"
           id="profile"
           customDropdown
-          panelClass="lum-grad-bg-nav-bg"
+          panelProps={{
+            class: 'lum-grad-bg-nav-bg',
+          }}
         >
-          <p q:slot="dropdown" class="text-lum-text flex items-center gap-2">
+          <span q:slot="dropdown" class="text-lum-text flex items-center gap-2">
             {session.value.user.image && (
               <img
                 alt={session.value.user.name || 'User'}
@@ -233,7 +241,7 @@ export default component$(() => {
               />
             )}
             {session.value.user?.name || 'User'}
-          </p>
+          </span>
           <Link
             q:slot="extra-buttons"
             href="/profile"

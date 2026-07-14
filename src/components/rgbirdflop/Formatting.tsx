@@ -253,7 +253,9 @@ export default component$(() => {
           'lum-btn-p-2 lum-bg-lum-card-bg': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
-        panelClass="lum-bg-lum-card-bg"
+        panelProps={{
+          class: 'lum-bg-lum-card-bg',
+        }}
         id="font-select"
         value={formatting.font || 'default'}
         onChange$={(e, el) => {
