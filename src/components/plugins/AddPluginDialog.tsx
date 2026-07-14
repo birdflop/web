@@ -19,6 +19,7 @@ import {
   searchPlugins,
 } from '~/util/plugins/ServerPlugin';
 import { Label } from '@luminescent/ui-qwik';
+import Link from 'lucide-icons-qwik/icons/Link';
 
 function getLoaders(software: string) {
   let loaders;
@@ -89,6 +90,7 @@ export default component$(
             for="plugin-link"
             label="Search or paste the link of the plugin you want to add."
           >
+            <Link size={16} q:slot="before-label" />
             <input
               type="text"
               class="lum-input"

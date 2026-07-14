@@ -3,6 +3,7 @@ import { component$, useStore } from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
 
 import Package from 'lucide-icons-qwik/icons/Package';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 import ShoppingCart from 'lucide-icons-qwik/icons/ShoppingCart';
 import { discordLink } from '~/components/Elements/Nav';
 import { generateHead } from '~/root';
@@ -333,6 +334,7 @@ export default component$(() => {
                 </p>
               </div>
               <Label for="server_name" label="Server name">
+                <PencilLine size={16} q:slot="before-label" />
                 <input
                   id="server_name"
                   placeholder="A Minecraft Server"
@@ -344,6 +346,7 @@ export default component$(() => {
                 for="server_description"
                 label="Server description (optional)"
               >
+                <PencilLine size={16} q:slot="before-label" />
                 <input
                   id="server_description"
                   placeholder="This is my Minecraft server!"

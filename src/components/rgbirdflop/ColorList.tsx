@@ -470,6 +470,7 @@ export default component$<ColorListProps>((props) => {
               for={`colorlist${id}-color-pos`}
               label={`${t('rgb.colors.position@@Position')} (%)`}
             >
+              <MoveHorizontal size={16} q:slot="before-label" />
               <NumberInput
                 input
                 id={`colorlist${id}-color-pos`}

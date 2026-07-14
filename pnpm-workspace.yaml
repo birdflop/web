@@ -9,7 +9,9 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - '@luminescent/ui-qwik@7.0.0-9'
+  - '@luminescent/ui-qwik@7.0.0-11'
+  - '@luminescent/ui@7.0.2'
+  - lucide-icons-qwik@1.24.0-qwik-v2
 
 onlyBuiltDependencies:
   - better-sqlite3

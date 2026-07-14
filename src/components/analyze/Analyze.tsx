@@ -1,6 +1,7 @@
 import { Label } from '@luminescent/ui-qwik';
 import { Slot, component$, useSignal } from '@qwik.dev/core';
 import { Link } from '@qwik.dev/router';
+import Clipboard from 'lucide-icons-qwik/icons/Clipboard';
 import Zap from 'lucide-icons-qwik/icons/Zap';
 import { inlineTranslate } from 'qwik-speak';
 
@@ -43,9 +44,11 @@ export default component$(() => {
           'analyze.pasteLink@@Paste the Spark profile or Paper timings link here'
         )}
       >
+        <Clipboard q:slot="before-label" size={16} />
         <input
           class="lum-input mt-1 w-full"
           id="link"
+          placeholder="https://spark.lucko.me/..."
           onInput$={(e, el) => {
             const link = el.value;
             redirect.value = '';

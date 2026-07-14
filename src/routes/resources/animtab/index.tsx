@@ -24,8 +24,13 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
+
 import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
 import Braces from 'lucide-icons-qwik/icons/Braces';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import RulerDimensionLine from 'lucide-icons-qwik/icons/RulerDimensionLine';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
+
 import { inlineTranslate } from 'qwik-speak';
 import { deepTrack } from '~/util/track';
 import RGBirdflop, {
@@ -36,7 +41,6 @@ import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 import Accordion from '~/components/Elements/Accordion';
 import { openItemsContext } from '~/routes/layout-markdown';
 import AnimTabPreview from '~/components/rgbirdflop/animtab/AnimTabPreview';
-import Palette from 'lucide-icons-qwik/icons/Palette';
 
 export const useRGBCookies = routeLoader$(({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
@@ -170,10 +174,11 @@ export default component$(() => {
       />
 
       <Label
-        q:slot="column1"
         for="length"
+        q:slot="column1"
         label={t('animtab.length@@Gradient Length')}
       >
+        <RulerDimensionLine size={16} q:slot="before-label" />
         <NumberInput
           id="length"
           input
@@ -199,10 +204,11 @@ export default component$(() => {
       />
 
       <Label
-        q:slot="options"
         for="nameinput"
+        q:slot="column2"
         label={t('animtab.animation.name@@Animation Name')}
       >
+        <PencilLine size={16} q:slot="before-label" />
         <input
           class="lum-input"
           id="nameinput"
@@ -212,10 +218,11 @@ export default component$(() => {
         />
       </Label>
       <Label
-        q:slot="options"
         for="type"
+        q:slot="column2"
         label={t('animtab.animation.style.title@@Animation Style')}
       >
+        <Rainbow size={16} q:slot="before-label" />
         <SelectMenu
           id="type"
           class="w-full"
@@ -248,10 +255,8 @@ export default component$(() => {
       </Accordion>
       <Label
         for="outputformat"
-        label={t(
-          "animtab.outputFormat.description@@Only use this if you're trying to use this tool for a different plugin or know what you're doing."
-        )}
         q:slot="column3"
+        label={t('animtab.outputFormat.title@@Output Format')}
         outerProps={{
           class: {
             'flex flex-col gap-2 transition-all duration-200': true,
@@ -262,6 +267,7 @@ export default component$(() => {
           },
         }}
       >
+        <Braces size={16} q:slot="before-label" />
         <textarea
           class="lum-input h-32 whitespace-pre"
           id="outputformat"
@@ -271,6 +277,11 @@ export default component$(() => {
             animtabStore.outputFormat = el.value;
           }}
         />
+        <span class="text-lum-text-secondary text-sm">
+          {t(
+            "animtab.outputFormat.description@@Only use this if you're trying to use this tool for a different plugin or know what you're doing."
+          )}
+        </span>
       </Label>
     </RGBirdflop>
   );

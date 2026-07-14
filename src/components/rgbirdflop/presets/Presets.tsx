@@ -7,29 +7,31 @@ import {
   useSignal,
   useVisibleTask$,
 } from '@qwik.dev/core';
+import { Link, useLocation } from '@qwik.dev/router';
+
+import Braces from 'lucide-icons-qwik/icons/Braces';
 import Save from 'lucide-icons-qwik/icons/Save';
 import LinkIcon from 'lucide-icons-qwik/icons/Link';
 import Copy from 'lucide-icons-qwik/icons/Copy';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
+
 import { inlineTranslate } from 'qwik-speak';
 import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
-
 import { Notification, NotificationContext } from '~/util/Notification';
+import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
+import { discordLink } from '~/components/Elements/Nav';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { Link, useLocation } from '@qwik.dev/router';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData, unsavePreset } from '~/util/dataUtils';
-import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
+import { PublicPreset } from '~/util/db';
 import {
   privatePresetsContext,
   savedPresetsContext,
 } from '~/routes/resources/rgb/presets';
-import { PublicPreset } from '~/util/db';
 import RgbPreview from '../RgbPreview';
 import { Label } from '@luminescent/ui-qwik';
-import { discordLink } from '~/components/Elements/Nav';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -303,6 +305,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
       </div>
 
       <Label for="import" label={t('rgb.presets.import@@Import')}>
+        <Braces size={16} q:slot="before-label" />
         <input
           class="lum-input w-full"
           id="import"

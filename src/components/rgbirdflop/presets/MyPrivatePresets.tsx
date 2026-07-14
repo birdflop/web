@@ -17,6 +17,7 @@ import { publishPreset } from '~/util/dataUtils';
 import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
 import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
 import RgbPreview from '../RgbPreview';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
@@ -225,6 +226,7 @@ export default component$(() => {
         >
           <div class="grid gap-2 sm:grid-cols-2">
             <Label for="publish-preset-name" label="Preset name">
+              <PencilLine size={16} q:slot="before-label" />
               <input
                 type="text"
                 class="lum-input"
@@ -272,6 +274,7 @@ export default component$(() => {
           </div>
 
           <Label for="publish-preset-description" label="Preset description">
+            <PencilLine size={16} q:slot="before-label" />
             <textarea
               class="lum-input"
               placeholder="This is my preset"

@@ -1,5 +1,8 @@
 import { Label } from '@luminescent/ui-qwik';
 import { component$, useContext } from '@qwik.dev/core';
+import Link from 'lucide-icons-qwik/icons/Link';
+import Image from 'lucide-icons-qwik/icons/Image';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 import { resolvedPluginContext } from '~/routes/resources/plugins';
 
 export default component$(() => {
@@ -9,6 +12,7 @@ export default component$(() => {
     <>
       <div class="mb-2 flex flex-col gap-1">
         <Label for="plugin-name" label="Plugin name">
+          <PencilLine size={16} q:slot="before-label" />
           <input
             type="text"
             class="lum-input"
@@ -30,6 +34,7 @@ export default component$(() => {
         {resolvedPlugin.plugin && (
           <>
             <Label for="plugin-link" label="Plugin link">
+              <Link size={16} q:slot="before-label" />
               <input
                 type="text"
                 class="lum-input"
@@ -42,6 +47,7 @@ export default component$(() => {
               />
             </Label>
             <Label for="plugin-icon" label="Plugin icon URL (optional)">
+              <Image size={16} q:slot="before-label" />
               <input
                 type="text"
                 class="lum-input"

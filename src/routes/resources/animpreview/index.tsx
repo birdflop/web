@@ -9,13 +9,17 @@ import {
   isBrowser,
 } from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
+
 import { getCookies, setCookies } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import yaml from 'yaml';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Notification, NotificationContext } from '~/util/Notification';
+
 import Eye from 'lucide-icons-qwik/icons/Eye';
+import FileCog from 'lucide-icons-qwik/icons/FileCog';
+
 import { hexToRGB, rgbDefaults } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
 import { getFormattingClasses, toCSS } from '~/components/rgbirdflop/preview';
@@ -151,7 +155,7 @@ export default component$(() => {
         )}
       </p>
 
-      <Input readOnly playerName="AnimPreview">
+      <Input readOnly noFormatRow playerName="AnimPreview">
         {(() => {
           if (!animprevStore.frames[animprevStore.frame]) return '';
           const pattern =
@@ -198,6 +202,7 @@ export default component$(() => {
       </Input>
 
       <Label for="animation" label={t('animtab.yamlInput@@YAML Input')}>
+        <FileCog size={16} q:slot="before-label" />
         <textarea
           id="animation"
           class="lum-input h-96 font-mono"

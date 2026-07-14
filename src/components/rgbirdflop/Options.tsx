@@ -2,6 +2,9 @@ import { component$, Slot, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { Label, NumberInput, Toggle } from '@luminescent/ui-qwik';
+import SeparatorVertical from 'lucide-icons-qwik/icons/SeparatorVertical';
+import Space from 'lucide-icons-qwik/icons/Space';
+import Proportions from 'lucide-icons-qwik/icons/Proportions';
 
 export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
   const t = inlineTranslate();
@@ -18,6 +21,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
     >
       <Slot />
       <Label for="prefixsuffix" label={t('rgb.prefixsuffix@@Prefix/Suffix')}>
+        <SeparatorVertical size={16} q:slot="before-label" />
         <input
           class="lum-input w-full"
           id="prefixsuffix"
@@ -33,6 +37,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
           for="colorLength"
           label={t('rgb.colors.charsPer@@Characters per color')}
         >
+          <Proportions size={16} q:slot="before-label" />
           <NumberInput
             input
             disabled
@@ -55,6 +60,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
                 rgbStore.trimSpaces = el.checked;
               }}
             >
+              <Space size={16} q:slot="before-label" />
               {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
             </Toggle>
             <p class="text-lum-text-secondary text-sm">

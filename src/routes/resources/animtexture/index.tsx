@@ -11,10 +11,18 @@ import { inlineTranslate } from 'qwik-speak';
 
 import Download from 'lucide-icons-qwik/icons/Download';
 import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
+import FolderEdit from 'lucide-icons-qwik/icons/FolderEdit';
+import Folder from 'lucide-icons-qwik/icons/Folder';
+import ImageIcon from 'lucide-icons-qwik/icons/Image';
+import MoveHorizontal from 'lucide-icons-qwik/icons/MoveHorizontal';
+import MoveVertical from 'lucide-icons-qwik/icons/MoveVertical';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 import Proportions from 'lucide-icons-qwik/icons/Proportions';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Settings from 'lucide-icons-qwik/icons/Settings';
+import Timer from 'lucide-icons-qwik/icons/Timer';
 import X from 'lucide-icons-qwik/icons/X';
+
 import { Label, NumberInput, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { defaultDescription, generateHead } from '~/root';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
@@ -36,6 +44,7 @@ import {
   loadGifFrames,
   loadImageFromDataURL,
 } from '~/util/animtexture';
+import Link from 'lucide-icons-qwik/icons/Link';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -254,6 +263,7 @@ export default component$(() => {
                 for="namespace"
                 label={t('animtexture.namespace@@Namespace')}
               >
+                <FolderEdit size={16} q:slot="before-label" />
                 <SelectMenu
                   id="namespace"
                   class="w-full"
@@ -280,6 +290,7 @@ export default component$(() => {
               </Label>
               <p class="text-lum-text-secondary mx-1 mt-7">:</p>
               <Label for="path" label={t('animtexture.path@@Path')}>
+                <Folder size={16} q:slot="before-label" />
                 <SelectMenu
                   id="path"
                   class="w-full"
@@ -306,6 +317,7 @@ export default component$(() => {
               </Label>
               <p class="text-lum-text-secondary mx-1 mt-7">/</p>
               <Label for="name" label={t('animtexture.name@@Texture Name')}>
+                <PencilLine size={16} q:slot="before-label" />
                 <input
                   id="name"
                   class="lum-input"
@@ -324,11 +336,12 @@ export default component$(() => {
           <div class="mb-5 flex gap-6">
             <div class="lum-card flex-1">
               <Label
+                for="fileInput"
                 label={t(
                   'animtexture.selectFrames@@Select GIF or image from your device'
                 )}
-                for="fileInput"
               >
+                <ImageIcon size={16} q:slot="before-label" />
                 <input
                   id="fileInput"
                   type="file"
@@ -372,9 +385,10 @@ export default component$(() => {
             <p class="text-lum-text-secondary my-auto">OR</p>
             <div class="lum-card flex-1">
               <Label
-                label={t('animtexture.pasteUrl@@Paste GIF or image URL')}
                 for="urlInput"
+                label={t('animtexture.pasteUrl@@Paste GIF or image URL')}
               >
+                <Link size={16} q:slot="before-label" />
                 <input
                   id="urlInput"
                   type="text"
@@ -436,6 +450,7 @@ export default component$(() => {
                 {t('animtexture.dimensions@@Dimensions')}
               </div>
               <Label for="width" label={t('animtexture.width@@Width')}>
+                <MoveHorizontal size={16} q:slot="before-label" />
                 <NumberInput
                   input
                   min={1}
@@ -468,6 +483,7 @@ export default component$(() => {
                 }}
               >
                 <Label for="height" label={t('animtexture.height@@Height')}>
+                  <MoveVertical size={16} q:slot="before-label" />
                   <NumberInput
                     input
                     min={2}
@@ -686,6 +702,7 @@ export default component$(() => {
 
           {texture.syncduration && texture.frames.length > 0 && (
             <Label for="duration" label={t('animtexture.duration@@Duration')}>
+              <Timer size={16} q:slot="before-label" />
               <NumberInput
                 input
                 min={1}

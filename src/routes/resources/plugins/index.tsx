@@ -39,6 +39,7 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import { Tabs } from '~/components/Elements/Tabs';
+import Globe from 'lucide-icons-qwik/icons/Globe';
 
 const debug = true;
 
@@ -700,6 +701,7 @@ export default component$(() => {
             for="add-plugin-type"
             label={t('plugins.source@@Plugin Source')}
           >
+            <Globe size={16} q:slot="before-label" />
             <SelectMenu
               id="add-plugin-type"
               onChange$={(e, el) => {

@@ -1,6 +1,13 @@
 import { Label } from '@luminescent/ui-qwik';
 import { component$, useContext } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
+import Ampersand from 'lucide-icons-qwik/icons/Ampersand';
+import Bold from 'lucide-icons-qwik/icons/Bold';
+import Italic from 'lucide-icons-qwik/icons/Italic';
+import Strikethrough from 'lucide-icons-qwik/icons/Strikethrough';
+import Underline from 'lucide-icons-qwik/icons/Underline';
+import Wand2 from 'lucide-icons-qwik/icons/Wand2';
+import Replace from 'lucide-icons-qwik/icons/Replace';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
@@ -21,6 +28,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           for="customformat"
           label={t('rgb.colors.customFormat@@Custom Format')}
         >
+          <Replace size={16} q:slot="before-label" />
           <input
             class="lum-input"
             id="customformat"
@@ -67,6 +75,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               for="format-char"
               label={t('rgb.formatting.character@@Format Character')}
             >
+              <Ampersand size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-char"
@@ -81,6 +90,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
         {!rgbStore.colorFormat.char && (
           <>
             <Label for="format-bold" label={t('rgb.formatting.bold@@Bold')}>
+              <Bold size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-bold"
@@ -95,6 +105,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               for="format-italic"
               label={t('rgb.formatting.italic@@Italic')}
             >
+              <Italic size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-italic"
@@ -109,6 +120,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               for="format-underline"
               label={t('rgb.formatting.underline@@Underline')}
             >
+              <Underline size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-underline"
@@ -123,6 +135,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               for="format-strikethrough"
               label={t('rgb.formatting.strikethrough@@Strikethrough')}
             >
+              <Strikethrough size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-strikethrough"
@@ -137,6 +150,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
               for="format-obfuscate"
               label={t('rgb.formatting.obfuscate@@Obfuscate')}
             >
+              <Wand2 size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="format-obfuscate"

@@ -1,19 +1,26 @@
 import { component$, useStore } from '@qwik.dev/core';
 import { Label, RangeInput, SelectMenu } from '@luminescent/ui-qwik';
+import { Link } from '@qwik.dev/router';
+
 import {
   Paper as LogoPaper,
   Purpur as LogoPurpur,
   Forge as LogoForge,
   Fabric as LogoFabric,
 } from '@luminescent/icons-qwik';
+
 import { SiSpigotmc, SiVelocity } from 'simple-icons-qwik';
+
 import Coffee from 'lucide-icons-qwik/icons/Coffee';
 import Cpu from 'lucide-icons-qwik/icons/Cpu';
 import Flag from 'lucide-icons-qwik/icons/Flag';
 import HardDrive from 'lucide-icons-qwik/icons/HardDrive';
 import Info from 'lucide-icons-qwik/icons/Info';
 import MemoryStick from 'lucide-icons-qwik/icons/MemoryStick';
+import Plug from 'lucide-icons-qwik/icons/Plug';
 import Server from 'lucide-icons-qwik/icons/Server';
+import User from 'lucide-icons-qwik/icons/User';
+
 import { inlineTranslate } from 'qwik-speak';
 import { defaultDescription, generateHead } from '~/root';
 import { donateLink } from '~/components/Elements/Nav';
@@ -24,7 +31,7 @@ import {
   type Software,
   type WorldSize,
 } from '~/util/hardware';
-import { Link } from '@qwik.dev/router';
+import Eye from 'lucide-icons-qwik/icons/Eye';
 
 // Each option's label is wrapped in a component$ so Qwik can serialize the
 // SelectMenu's values prop (raw icon components are not serializable).
@@ -122,6 +129,7 @@ export default component$(() => {
             for="players"
             label={`${t('hardware.players@@Concurrent players')} (${store.players})`}
           >
+            <User size={16} q:slot="before-label" />
             <RangeInput
               id="players"
               min={1}
@@ -145,6 +153,7 @@ export default component$(() => {
               for="view"
               label={`${t('hardware.view@@View distance')} (${store.viewDistance})`}
             >
+              <Eye size={16} q:slot="before-label" />
               <RangeInput
                 id="view"
                 min={2}
@@ -160,6 +169,7 @@ export default component$(() => {
               for="sim"
               label={`${t('hardware.sim@@Simulation distance')} (${store.simulationDistance} ${t('hardware.chunks@@chunks')})`}
             >
+              <Cpu size={16} q:slot="before-label" />
               <RangeInput
                 id="sim"
                 min={2}
@@ -175,6 +185,7 @@ export default component$(() => {
               for="plugins"
               label={`${isModded ? t('hardware.mods@@Mods') : t('hardware.plugins@@Plugins')} (${store.plugins})`}
             >
+              <Plug size={16} q:slot="before-label" />
               <RangeInput
                 id="plugins"
                 min={0}
@@ -187,6 +198,7 @@ export default component$(() => {
               />
             </Label>
             <Label for="world" label={t('hardware.world.title@@World size')}>
+              <HardDrive size={16} q:slot="before-label" />
               <SelectMenu
                 id="world"
                 class="w-full"

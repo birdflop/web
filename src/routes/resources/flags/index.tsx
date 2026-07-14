@@ -32,6 +32,8 @@ import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import SiVelocity from 'simple-icons-qwik/icons/SiVelocity';
 import { deepTrack } from '~/util/track';
 import Output from '~/components/Elements/Output';
+import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
+import HardDrive from 'lucide-icons-qwik/icons/HardDrive';
 
 const Linux = component$(() => (
   <span class="flex items-center gap-2 fill-current">
@@ -255,6 +257,7 @@ export default component$(() => {
         <div class="flex flex-col gap-2">
           <div class="flex flex-col gap-1">
             <Label for="file-name" label={t('flags.fileName.label@@File Name')}>
+              <PencilLine size={16} q:slot="before-label" />
               <input
                 class="lum-input"
                 id="file-name"
@@ -278,6 +281,7 @@ export default component$(() => {
           <div class="flex gap-2">
             <div class="flex flex-col gap-1">
               <Label for="os" label={t('flags.environment.label@@Environment')}>
+                <HardDrive size={16} q:slot="before-label" />
                 <SelectMenu
                   id="os"
                   class="w-full"
@@ -296,6 +300,7 @@ export default component$(() => {
             </div>
             <div class="flex flex-col gap-1">
               <Label for="software" label={t('flags.software.label@@Software')}>
+                <Box size={16} q:slot="before-label" />
                 <SelectMenu
                   id="software"
                   class="w-full"
@@ -318,6 +323,7 @@ export default component$(() => {
               for="memory"
               label={`${t('flags.memory.label@@Memory')} (${flagsStore.memory} GiB)`}
             >
+              <MemoryStick size={16} q:slot="before-label" />
               <RangeInput
                 id="memory"
                 min={1}
@@ -357,6 +363,7 @@ export default component$(() => {
           <div class="flex w-full flex-col gap-1">
             <div class="flex items-end gap-2">
               <Label for="flags" label={t('flags.flags.label@@Flags')}>
+                <Flag size={16} q:slot="before-label" />
                 <SelectMenu
                   id="flags"
                   class="w-full"

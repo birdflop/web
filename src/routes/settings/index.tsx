@@ -1,14 +1,18 @@
 import { component$, useContext } from '@qwik.dev/core';
 import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
+
 import Bird from 'lucide-icons-qwik/icons/Bird';
 import Cookie from 'lucide-icons-qwik/icons/Cookie';
 import Settings from 'lucide-icons-qwik/icons/Settings';
+import Earth from 'lucide-icons-qwik/icons/Earth';
+
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { ThemeToggle } from '~/components/Elements/ThemeToggle';
 import { defaultDescription, generateHead } from '~/root';
 import { languages } from '~/speak-config';
 import { SettingsContext } from '../layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
+import Eclipse from 'lucide-icons-qwik/icons/Eclipse';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -30,6 +34,7 @@ export default component$(() => {
 
       <div class="grid gap-2 sm:grid-cols-3">
         <Label for="lang-picker" label={t('settings.language@@Language')}>
+          <Earth size={16} q:slot="before-label" />
           <SelectMenu
             id="lang-picker"
             values={config.supportedLocales.map((value) => ({
@@ -47,6 +52,7 @@ export default component$(() => {
         </Label>
 
         <Label for="theme" label={t('settings.theme@@Theme Preference')}>
+          <Eclipse size={16} q:slot="before-label" />
           <ThemeToggle variant="full" showLabel />
         </Label>
 
