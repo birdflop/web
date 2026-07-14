@@ -15,6 +15,7 @@ import {
   disperseColors,
   colorFormats,
   getShadowColors,
+  buildFormatCodes,
 } from '@birdflop/rgbirdflop';
 
 import { inlineTranslate } from 'qwik-speak';
@@ -367,9 +368,12 @@ export default component$(
                       ? 'custom'
                       : JSON.stringify(rgbStore.colorFormat)
                   }
-                  class="lum-btn-p-1 text-sm"
+                  class="lum-btn-p-1 w-full text-sm whitespace-nowrap"
                   btnProps={{
                     class: 'lum-btn-p-1',
+                  }}
+                  outerProps={{
+                    class: 'max-w-3/4',
                   }}
                   onChange$={(e, el) => {
                     if (el.value == 'custom') {
@@ -395,7 +399,10 @@ export default component$(
                               .replace('$6', 'b')
                               .replace(
                                 '$f',
-                                `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
+                                buildFormatCodes(
+                                  rgbStore.baseFormatting,
+                                  rgbStore
+                                )
                               )
                               .replace('$c', ''),
                             value: JSON.stringify(rgbStore.colorFormat),
@@ -412,26 +419,13 @@ export default component$(
                         .replace('$6', 'b')
                         .replace(
                           '$f',
-                          `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
+                          buildFormatCodes(rgbStore.baseFormatting, rgbStore)
                         )
                         .replace('$c', ''),
                       value: JSON.stringify(format),
                     })),
                     {
-                      name: rgbStore.customFormat
-                        ? `${t('rgb.colors.customFormat@@Custom Format')}: ${rgbStore.colorFormat.color
-                            .replace('$1', 'r')
-                            .replace('$2', 'r')
-                            .replace('$3', 'g')
-                            .replace('$4', 'g')
-                            .replace('$5', 'b')
-                            .replace('$6', 'b')
-                            .replace(
-                              '$f',
-                              `${rgbStore.baseFormatting?.bold ? rgbStore.colorFormat.char + 'l' : ''}${rgbStore.baseFormatting?.italic ? rgbStore.colorFormat.char + 'o' : ''}${rgbStore.baseFormatting?.underline ? rgbStore.colorFormat.char + 'n' : ''}${rgbStore.baseFormatting?.strikethrough ? rgbStore.colorFormat.char + 'm' : ''}${rgbStore.baseFormatting?.obfuscate ? rgbStore.colorFormat.char + 'k' : ''}`
-                            )
-                            .replace('$c', '')}`
-                        : t('rgb.colors.customFormat@@Custom Format'),
+                      name: t('rgb.colors.customFormat@@Custom Format'),
                       value: 'custom',
                     },
                   ]}
@@ -444,6 +438,20 @@ export default component$(
                     <Accordion sectionName="formatoptions" pcOnly>
                       <Settings />
                       {t('rgb.formatting.options@@Format Options')}
+                      <span class="text-lum-text-secondary text-xs text-ellipsis">
+                        {rgbStore.colorFormat.color
+                          .replace('$1', 'r')
+                          .replace('$2', 'r')
+                          .replace('$3', 'g')
+                          .replace('$4', 'g')
+                          .replace('$5', 'b')
+                          .replace('$6', 'b')
+                          .replace(
+                            '$f',
+                            buildFormatCodes(rgbStore.baseFormatting, rgbStore)
+                          )
+                          .replace('$c', '')}
+                      </span>
                     </Accordion>
                     <CustomFormat
                       hidden={!openItems.value.includes('formatoptions')}
