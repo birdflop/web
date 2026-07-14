@@ -43,32 +43,47 @@ export function parseParams(params: Record<string, string>, name: names) {
   const errors: string[] = [];
   const defaults = getDefaults(name);
   const parsedParams: Record<string, unknown> = {};
+  const hasDefaults = Object.keys(defaults).length > 0;
 
   for (const key of Object.keys(params)) {
     try {
       const isSegmentsKey = name === 'rgbsegments' && key === 'segments';
-      if (!isSegmentsKey && !(key in defaults)) continue;
+      if (!isSegmentsKey && hasDefaults && !(key in defaults)) continue;
 
       const defaultValue = defaults[key as keyof typeof defaults];
+      let parsedValue: unknown;
 
-      const isJsonObject =
-        isSegmentsKey ||
-        (defaultValue !== undefined && typeof defaultValue === 'object');
+      if (defaultValue !== undefined) {
+        // We have a default value, use its type
+        if (typeof defaultValue === 'object') {
+          parsedValue = JSON.parse(params[key]);
+        } else if (typeof defaultValue === 'boolean') {
+          parsedValue = params[key] === 'true';
+        } else if (typeof defaultValue === 'number') {
+          parsedValue = Number(params[key]);
+        } else {
+          parsedValue = params[key];
+        }
+      } else {
+        // No default value, detect type from the value
+        const val = params[key];
+        const isJsonObject =
+          isSegmentsKey || val.startsWith('{') || val.startsWith('[');
+        const isBoolean = val === 'true' || val === 'false';
+        const isNumber = !isNaN(Number(val)) && val.trim() !== '';
 
-      const isBoolean = params[key] === 'true' || params[key] === 'false';
+        if (isJsonObject) {
+          parsedValue = JSON.parse(val);
+        } else if (isBoolean) {
+          parsedValue = val === 'true';
+        } else if (isNumber) {
+          parsedValue = Number(val);
+        } else {
+          parsedValue = val;
+        }
+      }
 
-      // check if param is a json object and parse it
-      if (isJsonObject) {
-        parsedParams[key] = JSON.parse(params[key]);
-      }
-      // check if param is a boolean and parse it
-      else if (isBoolean) {
-        parsedParams[key] = params[key] === 'true';
-      }
-      // check if param is a number and parse it
-      else if (!isNaN(Number(params[key]))) {
-        parsedParams[key] = Number(params[key]);
-      }
+      parsedParams[key] = parsedValue;
     } catch (e) {
       parsedParams[key] = undefined;
       errors.push(
@@ -77,7 +92,7 @@ export function parseParams(params: Record<string, string>, name: names) {
     }
   }
   return {
-    params,
+    params: parsedParams,
     errors,
   };
 }
