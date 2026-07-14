@@ -27,7 +27,7 @@ export const Tabs = component$<TabsProps>(
       <ButtonContainer
         {...props}
         class={{
-          '*:lum-btn-p-1 items-stretch justify-start overflow-x-scroll *:flex-none': true,
+          'items-stretch justify-start overflow-x-scroll *:flex-none [&>button]:flex-none': true,
           ...getClassObject(classList),
         }}
       >
@@ -35,7 +35,7 @@ export const Tabs = component$<TabsProps>(
           <div
             key={tab.value}
             class={{
-              'p-0!': true,
+              'flex p-0!': true,
               'lum-grad-bg-lum-accent!': value?.value === tab.value,
             }}
           >

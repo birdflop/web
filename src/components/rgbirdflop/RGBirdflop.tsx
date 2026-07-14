@@ -368,6 +368,9 @@ export default component$(
                       : JSON.stringify(rgbStore.colorFormat)
                   }
                   class="lum-btn-p-1 text-sm"
+                  btnProps={{
+                    class: 'lum-btn-p-1',
+                  }}
                   onChange$={(e, el) => {
                     if (el.value == 'custom') {
                       rgbStore.customFormat = true;
@@ -435,9 +438,7 @@ export default component$(
                 />
               </Output>
 
-              <hr class="my-3!" />
-
-              <div class="grid gap-2 md:grid-cols-2">
+              <div class="mt-2 grid gap-2 md:grid-cols-2">
                 {rgbStore.customFormat && (
                   <div class="col-span-2 flex flex-col">
                     <Accordion sectionName="formatoptions" pcOnly>
@@ -450,11 +451,7 @@ export default component$(
                   </div>
                 )}
                 <div class="flex flex-col">
-                  <Accordion
-                    sectionName="options"
-                    pcOnly
-                    class="lum-bg-transparent"
-                  >
+                  <Accordion sectionName="options" pcOnly>
                     <Settings />
                     {t('rgb.advancedoptions@@Advanced Options')}
                   </Accordion>

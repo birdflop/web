@@ -297,7 +297,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           }}
         />
       </Label>
-      <p class="text-sm">
+      <p class="text-lum-text-secondary text-sm">
         {t(
           'rgb.decode.disclaimer@@This feature tries to predict the color points in the gradients and where they are, it is not 100% accurate and we recommend using the presets feature instead to save your gradients.'
         )}

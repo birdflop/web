@@ -55,6 +55,8 @@ export const lint: UserConfig['lint'] = {
     '**/package-lock.json',
     '**/yarn.lock',
     '**/server',
+    '**/CHANGELOG.md',
+    '*.md',
   ],
   rules: {
     'constructor-super': 'error',

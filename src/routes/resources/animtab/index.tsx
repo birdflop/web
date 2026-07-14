@@ -246,21 +246,22 @@ export default component$(() => {
         <Braces />
         {t('animtab.outputFormat.title@@Output Format')}
       </Accordion>
-      <div
+      <Label
+        for="outputformat"
+        label={t(
+          "animtab.outputFormat.description@@Only use this if you're trying to use this tool for a different plugin or know what you're doing."
+        )}
         q:slot="column3"
-        class={{
-          'flex flex-col gap-2 transition-all duration-200': true,
-          'pointer-events-none max-h-0 opacity-0':
-            !openItems.value.includes('outputformat'),
-          'pointer-events-auto max-h-125 opacity-100':
-            openItems.value.includes('outputformat'),
+        outerProps={{
+          class: {
+            'flex flex-col gap-2 transition-all duration-200': true,
+            'pointer-events-none max-h-0 opacity-0':
+              !openItems.value.includes('outputformat'),
+            'pointer-events-auto max-h-64 opacity-100':
+              openItems.value.includes('outputformat'),
+          },
         }}
       >
-        <label for="outputformat" class="text-lum-text-secondary">
-          {t(
-            "animtab.outputFormat.description@@Only use this if you're trying to use this tool for a different plugin or know what you're doing."
-          )}
-        </label>
         <textarea
           class="lum-input h-32 whitespace-pre"
           id="outputformat"
@@ -270,7 +271,7 @@ export default component$(() => {
             animtabStore.outputFormat = el.value;
           }}
         />
-      </div>
+      </Label>
     </RGBirdflop>
   );
 });

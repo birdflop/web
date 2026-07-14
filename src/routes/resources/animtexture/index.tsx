@@ -10,9 +10,7 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 
 import Download from 'lucide-icons-qwik/icons/Download';
-import File from 'lucide-icons-qwik/icons/File';
 import GalleryHorizontalEnd from 'lucide-icons-qwik/icons/GalleryHorizontalEnd';
-import Link from 'lucide-icons-qwik/icons/Link';
 import Proportions from 'lucide-icons-qwik/icons/Proportions';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Settings from 'lucide-icons-qwik/icons/Settings';
@@ -325,30 +323,85 @@ export default component$(() => {
 
           <div class="mb-5 flex gap-6">
             <div class="lum-card flex-1">
-              <label
-                for="fileInput"
-                class="flex items-center gap-2 font-semibold"
-              >
-                <File size={20} />
-                {t(
+              <Label
+                label={t(
                   'animtexture.selectFrames@@Select GIF or image from your device'
                 )}
-              </label>
-              <input
-                id="fileInput"
-                type="file"
-                multiple
-                accept="image/*"
-                class="file:lum-btn hover:file:lum-grad-bg-gray-700 file:mb-1"
-                onChange$={async (e, el) => {
-                  const texture =
-                    animtextureStore.textures[animtextureStore.activeTexture] ??
-                    animtextureStore.textures[0];
-                  const files = Array.from(el.files ?? []);
-                  for (const f of files) {
+                for="fileInput"
+              >
+                <input
+                  id="fileInput"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  class="file:lum-btn hover:file:lum-grad-bg-gray-700 file:mb-1"
+                  onChange$={async (e, el) => {
+                    const texture =
+                      animtextureStore.textures[
+                        animtextureStore.activeTexture
+                      ] ?? animtextureStore.textures[0];
+                    const files = Array.from(el.files ?? []);
+                    for (const f of files) {
+                      const fileEvent = await readFileAsDataURL(f);
+                      if (!fileEvent.target?.result) return;
+
+                      const frames = animtextureStore.accumulate
+                        ? texture.frames
+                        : [];
+                      const file = await base64ToFile(
+                        fileEvent.target.result as string
+                      );
+                      if (file.mime == 'image/gif') {
+                        frames.push(...(await loadGifFrames(file.buffer)));
+                      } else {
+                        const img = await loadImageFromDataURL(
+                          fileEvent.target.result as string
+                        );
+                        frames.push({
+                          img,
+                          delay: 20,
+                        });
+                      }
+
+                      texture.frames = frames;
+                    }
+                  }}
+                />
+              </Label>
+            </div>
+            <p class="text-lum-text-secondary my-auto">OR</p>
+            <div class="lum-card flex-1">
+              <Label
+                label={t('animtexture.pasteUrl@@Paste GIF or image URL')}
+                for="urlInput"
+              >
+                <input
+                  id="urlInput"
+                  type="text"
+                  class="lum-input mb-2"
+                  placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true"
+                  onChange$={async (event, el) => {
+                    let url = el.value;
+                    if (!url) return;
+
+                    // if the url is a discord emoji, you can replace .webp with .gif
+                    if (
+                      url.includes('cdn.discordapp.com/emojis/') &&
+                      url.includes('.webp')
+                    ) {
+                      url = url.replace('.webp', '.gif').split('?')[0];
+                      el.value = url;
+                    }
+
+                    const f = await (await fetch(url)).blob();
+
                     const fileEvent = await readFileAsDataURL(f);
                     if (!fileEvent.target?.result) return;
 
+                    const texture =
+                      animtextureStore.textures[
+                        animtextureStore.activeTexture
+                      ] ?? animtextureStore.textures[0];
                     const frames = animtextureStore.accumulate
                       ? texture.frames
                       : [];
@@ -368,66 +421,9 @@ export default component$(() => {
                     }
 
                     texture.frames = frames;
-                  }
-                }}
-              />
-            </div>
-            <p class="text-lum-text-secondary my-auto">OR</p>
-            <div class="lum-card flex-1">
-              <label
-                for="urlInput"
-                class="flex items-center gap-2 font-semibold"
-              >
-                <Link size={20} />
-                {t('animtexture.pasteUrl@@Paste GIF or image URL')}
-              </label>
-              <input
-                id="urlInput"
-                type="text"
-                class="lum-input mb-2"
-                placeholder="https://cdn.discordapp.com/emojis/904177608537804870.webp?size=128&animated=true"
-                onChange$={async (event, el) => {
-                  let url = el.value;
-                  if (!url) return;
-
-                  // if the url is a discord emoji, you can replace .webp with .gif
-                  if (
-                    url.includes('cdn.discordapp.com/emojis/') &&
-                    url.includes('.webp')
-                  ) {
-                    url = url.replace('.webp', '.gif').split('?')[0];
-                    el.value = url;
-                  }
-
-                  const f = await (await fetch(url)).blob();
-
-                  const fileEvent = await readFileAsDataURL(f);
-                  if (!fileEvent.target?.result) return;
-
-                  const texture =
-                    animtextureStore.textures[animtextureStore.activeTexture] ??
-                    animtextureStore.textures[0];
-                  const frames = animtextureStore.accumulate
-                    ? texture.frames
-                    : [];
-                  const file = await base64ToFile(
-                    fileEvent.target.result as string
-                  );
-                  if (file.mime == 'image/gif') {
-                    frames.push(...(await loadGifFrames(file.buffer)));
-                  } else {
-                    const img = await loadImageFromDataURL(
-                      fileEvent.target.result as string
-                    );
-                    frames.push({
-                      img,
-                      delay: 20,
-                    });
-                  }
-
-                  texture.frames = frames;
-                }}
-              />
+                  }}
+                />
+              </Label>
             </div>
           </div>
 

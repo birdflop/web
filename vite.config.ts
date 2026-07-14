@@ -59,6 +59,9 @@ export default defineConfig({
   staged: {
     "*": "vp check --fix"
   },
+  build: {
+    minify: false,
+  },
   lint, fmt,
   resolve: {
     tsconfigPaths: true,
@@ -89,7 +92,7 @@ export default defineConfig({
         ],
       },
     }),
-    qwikVite(),
+    qwikVite({ debug: true }),
     tailwindcss(),
     qwikSpeakInline({
       basePath: './',

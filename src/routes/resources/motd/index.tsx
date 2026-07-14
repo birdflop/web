@@ -2,21 +2,25 @@
 import {
   $,
   component$,
-  useContext,
   useSignal,
   useStore,
   useVisibleTask$,
+  useOnDocument,
 } from '@qwik.dev/core';
 import type { QRL, Signal } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
-import { SelectMenu } from '@luminescent/ui-qwik';
-import Copy from 'lucide-icons-qwik/icons/Copy';
+import {
+  ColorPicker,
+  Label,
+  NumberInput,
+  SelectMenu,
+} from '@luminescent/ui-qwik';
 import Eraser from 'lucide-icons-qwik/icons/Eraser';
 import ImageUp from 'lucide-icons-qwik/icons/ImageUp';
 import MessageSquare from 'lucide-icons-qwik/icons/MessageSquare';
 import Trash2 from 'lucide-icons-qwik/icons/Trash2';
+import { getBrightness, hexToRGB } from '@birdflop/rgbirdflop';
 import { defaultDescription, generateHead } from '~/root';
-import { Notification, NotificationContext } from '~/util/Notification';
 import {
   generateMotdOutput,
   MC_COLORS,
@@ -25,6 +29,7 @@ import {
   shadowColor,
   type MotdFormat,
 } from '~/util/motd';
+import Output from '~/components/Elements/Output';
 
 const OBF_CHARS =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -51,10 +56,7 @@ interface MotdLineInputProps {
 
 const MotdLineInput = component$<MotdLineInputProps>(
   ({ field, label, value, inputRef, onValue$, onCaret$ }) => (
-    <div class="flex flex-col gap-1">
-      <label for={field} class="text-lum-text-secondary text-sm">
-        {label}
-      </label>
+    <Label for={field} label={label} class="text-lum-text-secondary text-sm">
       <textarea
         ref={inputRef}
         id={field}
@@ -68,7 +70,7 @@ const MotdLineInput = component$<MotdLineInputProps>(
         onKeyUp$={(e, el) => onCaret$(field, el)}
         onSelect$={(e, el) => onCaret$(field, el)}
       />
-    </div>
+    </Label>
   )
 );
 
@@ -103,10 +105,6 @@ function renderMotdLine(line: string) {
 
 export default component$(() => {
   const t = inlineTranslate();
-  const notifications = useContext(NotificationContext);
-
-  const copiedTitle = t('motd.copied.title@@Copied to clipboard!');
-  const copyFailedTitle = t('motd.copyFailed@@Failed to copy to clipboard!');
 
   const store = useStore({
     line1: '&6&lEpic Network &7| &eSurvival',
@@ -195,25 +193,25 @@ export default component$(() => {
 
   const output = generateMotdOutput(store.line1, store.line2, store.format);
 
-  const copy = $((value: string) => {
-    const notification = new Notification()
-      .setTitle(copiedTitle)
-      .setBgColor('lum-grad-bg-green/50');
-    navigator.clipboard.writeText(value).catch((err) => {
-      notification
-        .setTitle(copyFailedTitle)
-        .setDescription(`${err}`)
-        .setBgColor('lum-grad-bg-red/50')
-        .setPersist(true);
-    });
-    notifications.push(notification.toJSON());
-  });
-
   const setLine = $((field: LineField, value: string) => {
     store[field] = value;
   });
 
   const customColor = useSignal('#54daf4');
+  const opened = useSignal(false);
+
+  useOnDocument(
+    'click',
+    $((e) => {
+      if (
+        e.target instanceof HTMLElement &&
+        !e.target.closest('#motd-custom-color-popup') &&
+        !e.target.closest('#motd-custom-color-container')
+      ) {
+        opened.value = false;
+      }
+    })
+  );
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
@@ -228,9 +226,9 @@ export default component$(() => {
       </p>
 
       {/* Live server-list preview */}
-      <label class="text-lum-text-secondary mb-2 text-sm">
+      <p class="text-lum-text-secondary mb-2 text-sm">
         {t('motd.preview.label@@Preview')}
-      </label>
+      </p>
       <div
         class="rounded-lum mb-6 overflow-hidden p-4"
         style={{
@@ -299,9 +297,9 @@ export default component$(() => {
         <div class="flex flex-1 flex-col gap-4">
           {/* Color palette */}
           <div class="flex flex-col gap-2">
-            <span class="text-lum-text-secondary text-sm">
+            <p class="text-lum-text-secondary text-sm">
               {t('motd.colors@@Colors')}
-            </span>
+            </p>
             <div class="flex flex-wrap gap-1">
               {MC_COLORS.map((c) => (
                 <button
@@ -313,28 +311,91 @@ export default component$(() => {
                   style={{ background: c.hex }}
                 />
               ))}
-              <label
-                class="lum-btn lum-bg-lum-input-bg/50 ml-1 flex h-8 cursor-pointer items-center gap-1 p-1"
-                title={t('motd.customColor@@Insert custom hex color')}
+              <div
+                class="relative flex items-center gap-1"
+                id="motd-custom-color-container"
               >
                 <input
-                  type="color"
-                  class="h-6 w-6 cursor-pointer border-0 bg-transparent"
+                  key="motd-custom-color-input"
+                  id="motd-custom-color-input"
+                  class={{
+                    'text-gray-400 hover:text-gray-400':
+                      getBrightness(hexToRGB(customColor.value)) < 126,
+                    'text-gray-700 hover:text-gray-700':
+                      getBrightness(hexToRGB(customColor.value)) > 126,
+                    'lum-input lum-btn-p-1 lum-grad-bg h-8 w-24 rounded-md text-center font-mono text-xs': true,
+                  }}
+                  style={`--bg-color: ${customColor.value};`}
                   value={customColor.value}
                   onInput$={(e, el) => {
-                    customColor.value = el.value;
+                    let hex = el.value.trim();
+                    if (!hex.startsWith('#')) hex = '#' + hex;
+                    const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;
+                    if (!hexRegexNoOpacity.test(hex)) {
+                      el.value = customColor.value;
+                      return;
+                    }
+                    customColor.value = hex;
+
+                    // set the color picker's value and trigger input to update color picker
+                    if (!opened.value) return;
+                    const picker = document.getElementById(
+                      'motd-custom-color-picker'
+                    )!;
+                    picker.dataset.value = el.value;
+                    picker.dispatchEvent(new Event('input'));
+                  }}
+                  onFocus$={() => {
+                    opened.value = true;
+
+                    const picker = document.getElementById(
+                      'motd-custom-color-picker'
+                    )!;
+                    const popup = document.getElementById(
+                      'motd-custom-color-popup'
+                    );
+                    if (!picker || !popup) return;
+
+                    // set the color picker's value and trigger input to update color picker
+                    picker.dataset.value = customColor.value;
+                    picker.dispatchEvent(new Event('input'));
                   }}
                 />
                 <button
                   type="button"
-                  class="lum-btn lum-bg-blue/40 hover:lum-bg-blue p-1 text-xs"
+                  class="lum-btn lum-bg-blue/40 hover:lum-bg-blue h-8 p-1 text-xs"
                   onClick$={() =>
                     insertCode(`&${customColor.value.toUpperCase()}`)
                   }
                 >
                   + Hex
                 </button>
-              </label>
+
+                <div
+                  id="motd-custom-color-popup"
+                  stoppropagation:mousedown
+                  stoppropagation:click
+                  class={{
+                    flex: opened.value,
+                    hidden: !opened.value,
+                    'absolute top-10 left-0 z-10 flex-col gap-2 motion-safe:transition-all': true,
+                    'animate-in fade-in slide-in-from-top-2': true,
+                  }}
+                  style={{
+                    '--lum-border-radius': '1rem',
+                  }}
+                >
+                  <ColorPicker
+                    id="motd-custom-color-picker"
+                    value={customColor.value}
+                    onInput$={(newColor) => {
+                      customColor.value = newColor;
+                    }}
+                    showInput={false}
+                    horizontal
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -389,7 +450,7 @@ export default component$(() => {
               {t('motd.favicon@@Server icon (favicon)')}
             </span>
             <div class="flex items-center gap-3">
-              <label class="lum-btn lum-bg-blue/40 hover:lum-bg-blue cursor-pointer">
+              <div class="lum-btn lum-bg-blue/40 hover:lum-bg-blue cursor-pointer">
                 <ImageUp size={20} />
                 {t('motd.favicon.upload@@Upload image')}
                 <input
@@ -398,7 +459,7 @@ export default component$(() => {
                   class="hidden"
                   onChange$={(e, el) => handleIcon(el.files?.[0])}
                 />
-              </label>
+              </div>
               {store.icon && (
                 <>
                   <a
@@ -430,60 +491,40 @@ export default component$(() => {
 
         {/* Output + preview settings */}
         <div class="flex flex-1 flex-col gap-4">
-          <div class="flex flex-col gap-2">
-            <div class="flex items-end gap-2">
-              <div class="flex flex-1 flex-col gap-1">
-                <label for="format" class="text-lum-text-secondary text-sm">
-                  {t('motd.output.format@@Output format')}
-                </label>
-                <SelectMenu
-                  id="format"
-                  class="w-full"
-                  value={store.format}
-                  onChange$={(e, el) => {
-                    store.format = el.value as MotdFormat;
-                  }}
-                  values={[
-                    { name: 'server.properties', value: 'properties' },
-                    {
-                      name: t('motd.output.section@@Section signs (§)'),
-                      value: 'section',
-                    },
-                    { name: t('motd.output.amp@@Ampersand (&)'), value: 'amp' },
-                  ]}
-                >
-                  {t('motd.output.format@@Output format')}
-                </SelectMenu>
-              </div>
-              <button
-                type="button"
-                class="lum-btn lum-bg-blue/40 hover:lum-bg-blue h-fit"
-                onClick$={() => copy(output)}
-              >
-                <Copy size={18} /> {t('motd.output.copy@@Copy')}
-              </button>
-            </div>
-            <textarea
-              readOnly
-              id="output"
-              class="lum-input h-32 w-full font-mono break-all whitespace-pre-wrap"
-              value={output}
-              onClick$={() => copy(output)}
-            />
-            <p class="text-lum-text-secondary text-xs">
-              {store.format === 'properties'
+          <Output value={output}>
+            <SelectMenu
+              q:slot="label"
+              id="format"
+              class="w-full"
+              value={store.format}
+              onChange$={(e, el) => {
+                store.format = el.value as MotdFormat;
+              }}
+              values={[
+                { name: 'server.properties', value: 'properties' },
+                {
+                  name: t('motd.output.section@@Section signs (§)'),
+                  value: 'section',
+                },
+                { name: t('motd.output.amp@@Ampersand (&)'), value: 'amp' },
+              ]}
+            >
+              {t('motd.output.format@@Output format')}
+            </SelectMenu>
+          </Output>
+          <p class="text-lum-text-secondary text-xs">
+            {store.format === 'properties'
+              ? t(
+                  'motd.output.help.properties@@Paste this line into your server.properties file (it replaces the existing motd= line).'
+                )
+              : store.format === 'section'
                 ? t(
-                    'motd.output.help.properties@@Paste this line into your server.properties file (it replaces the existing motd= line).'
+                    'motd.output.help.section@@Section-sign format, accepted by most plugin configs that support legacy colors.'
                   )
-                : store.format === 'section'
-                  ? t(
-                      'motd.output.help.section@@Section-sign format, accepted by most plugin configs that support legacy colors.'
-                    )
-                  : t(
-                      'motd.output.help.amp@@Ampersand format, for plugins that translate & color codes.'
-                    )}
-            </p>
-          </div>
+                : t(
+                    'motd.output.help.amp@@Ampersand format, for plugins that translate & color codes.'
+                  )}
+          </p>
 
           <div class="lum-card lum-bg-lum-card-bg/40 flex flex-col gap-3">
             <span class="text-lum-text-secondary text-sm">
@@ -491,50 +532,53 @@ export default component$(() => {
                 'motd.previewSettings@@Preview settings (not part of the MOTD)'
               )}
             </span>
-            <div class="flex flex-col gap-1">
-              <label for="label" class="text-sm">
-                {t('motd.previewSettings.label@@Server label')}
-              </label>
+            <Label
+              for="label"
+              label={t('motd.previewSettings.label@@Server label')}
+              class="text-lum-text-secondary text-sm"
+            >
               <input
                 id="label"
-                class="lum-input"
+                class="lum-input w-full"
                 value={store.label}
                 onInput$={(e, el) => {
                   store.label = el.value;
                 }}
               />
-            </div>
+            </Label>
             <div class="flex gap-2">
-              <div class="flex flex-1 flex-col gap-1">
-                <label for="online" class="text-sm">
-                  {t('motd.previewSettings.online@@Players online')}
-                </label>
-                <input
+              <Label
+                for="online"
+                label={t('motd.previewSettings.online@@Players online')}
+                class="text-lum-text-secondary text-sm"
+              >
+                <NumberInput
+                  input
                   id="online"
-                  type="number"
                   min={0}
-                  class="lum-input"
+                  class="w-full"
                   value={store.playersOnline}
                   onInput$={(e, el) => {
                     store.playersOnline = Math.max(0, Number(el.value) || 0);
                   }}
                 />
-              </div>
-              <div class="flex flex-1 flex-col gap-1">
-                <label for="max" class="text-sm">
-                  {t('motd.previewSettings.max@@Max players')}
-                </label>
-                <input
+              </Label>
+              <Label
+                for="max"
+                label={t('motd.previewSettings.max@@Max players')}
+                class="text-lum-text-secondary text-sm"
+              >
+                <NumberInput
+                  input
                   id="max"
-                  type="number"
                   min={0}
-                  class="lum-input"
+                  class="w-full"
                   value={store.playersMax}
                   onInput$={(e, el) => {
                     store.playersMax = Math.max(0, Number(el.value) || 0);
                   }}
                 />
-              </div>
+              </Label>
             </div>
           </div>
         </div>

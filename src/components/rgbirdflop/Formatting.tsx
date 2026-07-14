@@ -247,29 +247,40 @@ export default component$(() => {
   ];
 
   return (
-    <>
-      <SelectMenu
-        class={{
-          'lum-btn-p-2 lum-bg-lum-card-bg': true,
-          'lum-bg-blue/20': !!isSelectionActive,
-        }}
-        panelProps={{
-          class: 'lum-bg-lum-card-bg',
-        }}
-        id="font-select"
-        value={formatting.font || 'default'}
-        onChange$={(e, el) => {
-          const val = el.value === 'default' ? undefined : el.value;
-          void setFont(val);
-        }}
-        values={Object.entries(FONT_LABELS).map(([key, label]) => ({
-          name: <span>{label}</span>,
-          value: key,
-        }))}
-      />
+    <div class="flex" id="formatting-container">
       <ButtonContainer
         class={{
-          '*:justify-center *:p-2': true,
+          'rounded-r-none *:h-full *:justify-center': true,
+          'lum-bg-blue/20': !!isSelectionActive,
+        }}
+        id="formatting"
+      >
+        <SelectMenu
+          class={{
+            'lum-btn-p-1 rounded-lum-1 lum-bg-transparent h-full text-sm': true,
+            'lum-bg-blue/20': !!isSelectionActive,
+          }}
+          panelProps={{
+            class: 'lum-bg-lum-card-bg',
+          }}
+          btnProps={{
+            class: 'lum-btn-p-1',
+          }}
+          id="font-select"
+          value={formatting.font || 'default'}
+          onChange$={(e, el) => {
+            const val = el.value === 'default' ? undefined : el.value;
+            void setFont(val);
+          }}
+          values={Object.entries(FONT_LABELS).map(([key, label]) => ({
+            name: <span>{label}</span>,
+            value: key,
+          }))}
+        />
+      </ButtonContainer>
+      <ButtonContainer
+        class={{
+          'rounded-none *:justify-center *:p-2': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="formatting"
@@ -294,7 +305,7 @@ export default component$(() => {
       </ButtonContainer>
       <ButtonContainer
         class={{
-          '*:justify-center *:p-2': true,
+          'rounded-l-none *:justify-center *:p-2': true,
           'lum-bg-blue/20': !!isSelectionActive,
         }}
         id="clear-formatting"
@@ -311,6 +322,6 @@ export default component$(() => {
           </span>
         </button>
       </ButtonContainer>
-    </>
+    </div>
   );
 });

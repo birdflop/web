@@ -2,10 +2,9 @@
 
 ## [0.4.0](https://github.com/birdflop/web/compare/v0.3.1...v0.4.0) (2026-07-13)
 
-
 ### Features
 
-* **rgbirdflop:** add functions for color position calculation and dispersion checks ([d9d4ac2](https://github.com/birdflop/web/commit/d9d4ac2fe06dca73ec156943c586a52d01410efd))
+- **rgbirdflop:** add functions for color position calculation and dispersion checks ([d9d4ac2](https://github.com/birdflop/web/commit/d9d4ac2fe06dca73ec156943c586a52d01410efd))
 
 ## [0.3.1](https://github.com/birdflop/web/compare/v0.3.0...v0.3.1) (2026-07-13)
 

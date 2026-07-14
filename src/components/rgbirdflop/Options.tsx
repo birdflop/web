@@ -57,7 +57,7 @@ export default component$<{ hidden?: boolean }>(({ hidden = false }) => {
             >
               {t('rgb.colors.trimSpaces.title@@Trim colors from spaces')}
             </Toggle>
-            <p class="text-lum-text-secondary text-xs">
+            <p class="text-lum-text-secondary text-sm">
               {t(
                 "rgb.colors.trimSpaces.description@@Turn this off if you're using empty underlines / strikethroughs"
               )}
