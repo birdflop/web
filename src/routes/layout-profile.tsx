@@ -33,7 +33,7 @@ export default component$(() => {
   const debugId = useSignal('');
   const copied = useSignal(false);
 
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!session.value?.user) debugId.value = getAnonymousId();
   });

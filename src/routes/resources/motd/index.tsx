@@ -1,4 +1,4 @@
-/* eslint-disable qwik/jsx-img */
+/* oxlint-disable qwik/jsx-img */
 import {
   $,
   component$,
@@ -173,7 +173,7 @@ export default component$(() => {
   });
 
   // Animate obfuscated (&k) text by scrambling characters, like Minecraft does.
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$((taskCtx) => {
     const id = setInterval(() => {
       document.querySelectorAll<HTMLElement>('.motd-obf').forEach((el) => {

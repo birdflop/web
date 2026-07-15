@@ -118,7 +118,7 @@ export default component$(() => {
   const session = useSession();
 
   /* Umami distinct ID */
-  // eslint-disable-next-line qwik/no-use-visible-task
+  // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ track }) => {
     track(() => session.value?.user?.id);
     identifyUmami(session.value?.user?.id);
