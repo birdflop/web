@@ -51,3 +51,5 @@ vite.config.mts.*
 worker-configuration.d.ts
 .wrangler
 tmp/*
+
+dummy-non-existing-folder

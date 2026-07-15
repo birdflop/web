@@ -1,8 +1,14 @@
 {
   "name": "birdflop",
-  "author": "birdflop",
+  "author": {
+    "name": "birdflop",
+    "url": "https://birdflop.com"
+  },
+  "homepage": "https://birdflop.com",
+  "bugs": {
+    "url": "https://github.com/LuminescentDev/web/issues"
+  },
   "version": "13.0.0",
-  "homepage": "https://www.birdflop.com",
   "license": "AGPL-3.0-or-later",
   "description": "The only 501(c)(3) nonprofit Minecraft server host.",
   "repository": {
