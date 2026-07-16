@@ -77,9 +77,12 @@ export default component$<AnimTABPreviewProps>(
       const segmentText = segment[0];
       const segmentStart = charIndex;
       charIndex += segmentText.length;
-      const color = `#${colors[segmentIndex]}`;
-      const rgbShadow = hexToRGB(color).map((c) => Math.round(c * 0.25));
-      const rgbShadowCSS = toCSS(rgbShadow);
+      const rawColor = colors[segmentIndex];
+      const color = rawColor ? `#${rawColor}` : 'inherit';
+      const rgbShadow = rawColor
+        ? hexToRGB(rawColor).map((c) => Math.round(c * 0.25))
+        : null;
+      const rgbShadowCSS = rgbShadow ? toCSS(rgbShadow) : null;
 
       const segmentSpans: any[] = [];
 
@@ -103,7 +106,9 @@ export default component$<AnimTABPreviewProps>(
             key={`char${globalIndex}`}
             style={{
               color,
-              textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
+              ...(rgbShadowCSS && {
+                textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
+              }),
             }}
             class={{
               'char-span': true,

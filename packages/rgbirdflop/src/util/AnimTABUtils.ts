@@ -58,6 +58,7 @@ export function generateAnimTABFrames(
       for (const segment of segments) {
         if (rgbOptions.trimSpaces && segment.match(/^\s+$/)) {
           segmentColors.push(null);
+          frameColors.push(null);
           continue;
         }
 
@@ -96,7 +97,7 @@ export function generateAnimTABFrames(
 }
 
 function formatFrames(
-  frames: { colorFrames?: string[][]; textFrames: any },
+  frames: { colorFrames?: (string | null)[][]; textFrames: any },
   rgbOptions: typeof rgbDefaults,
   animtabStore: typeof animTABDefaults
 ) {
