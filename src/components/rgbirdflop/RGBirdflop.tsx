@@ -26,6 +26,9 @@ import CaseUpper from 'lucide-icons-qwik/icons/CaseUpper';
 import Settings from 'lucide-icons-qwik/icons/Settings';
 import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
 import Hash from 'lucide-icons-qwik/icons/Hash';
+import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
 import HostingAd from '~/components/rgbirdflop/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
@@ -45,6 +48,8 @@ import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/track';
 import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { ButtonContainer } from '../Elements/ButtonContainer';
+import { Link, useLocation } from '@qwik.dev/router';
 
 export const rgbStoreContext =
   createContextId<typeof rgbDefaults>('rgbstore-context');
@@ -76,6 +81,7 @@ export default component$(
     advanced?: boolean;
   }) => {
     const t = inlineTranslate();
+    const loc = useLocation();
     const notifications = useContext(NotificationContext);
     // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$(() => {
@@ -280,7 +286,34 @@ export default component$(
           <HostingAd variant={adAsset} position="Left" />
         )}
         <div class="min-h-15 max-w-6xl">
-          <Slot name="header" />
+          <div class="flex items-start gap-2">
+            <div class="flex flex-1 flex-col gap-1">
+              <Slot name="header" />
+            </div>
+
+            <ButtonContainer class="[&>a]:lum-btn-p-1!">
+              {!loc.url.pathname.startsWith('/resources/rgb') && (
+                <Link href="/resources/rgb">
+                  <Palette size={18} />
+                  {t('nav.resources.hexGradient.title@@RGBirdflop')}
+                </Link>
+              )}
+              {!loc.url.pathname.startsWith('/resources/animtab') && (
+                <Link href="/resources/animtab">
+                  <Rainbow size={18} />
+                  {t('nav.resources.animatedTAB.title@@Animated TAB')}
+                </Link>
+              )}
+              {!loc.url.pathname.startsWith('/resources/advancedrgb') && (
+                <Link href="/resources/advancedrgb">
+                  <TestTube2 size={18} />
+                  {t(
+                    'nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced'
+                  )}
+                </Link>
+              )}
+            </ButtonContainer>
+          </div>
 
           <Input advanced={advanced}>
             <Slot name="input" />

@@ -4,7 +4,7 @@ import {
   useSignal,
   useStore,
 } from '@qwik.dev/core';
-import { Link, routeLoader$ } from '@qwik.dev/router';
+import { routeLoader$ } from '@qwik.dev/router';
 import { getCookies } from '~/util/dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import {
@@ -23,7 +23,6 @@ import {
 } from '~/components/rgbirdflop/advanced/rgbSegments';
 import { generateAdvancedOutput } from '~/components/rgbirdflop/advanced/output';
 import { defaultDescription, generateHead } from '~/root';
-import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
 import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import { inlineTranslate } from 'qwik-speak';
 import RGBirdflop from '~/components/rgbirdflop/RGBirdflop';
@@ -81,32 +80,21 @@ export default component$(() => {
       output={generateAdvancedOutput(rgbSegments.value, rgbStore)}
       errors={[...rgbErrors, ...segmentsErrors]}
     >
-      <div class="flex items-start gap-2" q:slot="header">
-        <div class="flex flex-1 flex-col gap-1">
-          <h1
-            class="my-2 flex items-center gap-3 text-2xl font-extrabold"
-            q:slot="header"
-          >
-            <TestTube2 size={32} />
-            {t('nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced')}
-            <span class="lum-grad-bg-blue/50 rounded-lum-1 self-center px-2 py-1 text-xs">
-              {t('nav.experimental@@experimental')}
-            </span>
-          </h1>
-          <p class="text-lum-text-secondary mb-2" q:slot="header">
-            {t(
-              'nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.'
-            )}
-          </p>
-        </div>
-        <Link
-          href="/resources/rgb"
-          class="lum-btn lum-grad-bg-blue/30 hover:lum-bg-blue/40 rounded-lum w-fit gap-2 p-2 text-sm whitespace-normal"
-        >
-          <ArrowLeft size={18} />
-          {t('rgb.advanced.backToClassic@@Classic editor')}
-        </Link>
-      </div>
+      <h1
+        class="my-2 flex items-center gap-3 text-2xl font-extrabold"
+        q:slot="header"
+      >
+        <TestTube2 size={32} />
+        {t('nav.resources.hexGradient.advanced.title@@RGBirdflop Advanced')}
+        <span class="lum-grad-bg-blue/50 rounded-lum-1 self-center px-2 py-1 text-xs">
+          {t('nav.experimental@@experimental')}
+        </span>
+      </h1>
+      <p class="text-lum-text-secondary mb-2" q:slot="header">
+        {t(
+          'nav.resources.hexGradient.advanced.description@@Type your text, highlight any part of it, then give that part its own color and formatting. Mix as many gradients, solid colors, and styles as you like.'
+        )}
+      </p>
 
       <RgbAdvancedPreview q:slot="input" showSelection />
 

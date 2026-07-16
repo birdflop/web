@@ -10,7 +10,7 @@ import {
   useVisibleTask$,
 } from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
-import { Link, routeLoader$ } from '@qwik.dev/router';
+import { routeLoader$ } from '@qwik.dev/router';
 import { getCookies, setCookies } from '~/util/dataUtils';
 import {
   ANIMATION_STYLES,
@@ -27,7 +27,6 @@ import {
 
 import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
 import Braces from 'lucide-icons-qwik/icons/Braces';
-import Palette from 'lucide-icons-qwik/icons/Palette';
 import RulerDimensionLine from 'lucide-icons-qwik/icons/RulerDimensionLine';
 import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 
@@ -143,29 +142,18 @@ export default component$(() => {
       errors={[...rgbErrors, ...animTABErrors]}
       output={AnimationOutput(rgbStore, animtabStore)}
     >
-      <div class="flex items-start gap-2" q:slot="header">
-        <div class="flex flex-1 flex-col gap-1">
-          <h1
-            class="my-2 flex items-center gap-3 text-2xl font-extrabold"
-            q:slot="header"
-          >
-            <Rainbow size={32} />
-            {t('nav.resources.animatedTAB.title@@Animated TAB')}
-          </h1>
-          <p class="text-lum-text-secondary mb-2" q:slot="header">
-            {t(
-              'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
-            )}
-          </p>
-        </div>
-        <Link
-          href="/resources/rgb"
-          class="lum-btn w-fit gap-2 p-2 text-sm whitespace-normal"
-        >
-          <Palette size={18} class="min-h-4 min-w-4" />
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </Link>
-      </div>
+      <h1
+        class="my-2 flex items-center gap-3 text-2xl font-extrabold"
+        q:slot="header"
+      >
+        <Rainbow size={32} />
+        {t('nav.resources.animatedTAB.title@@Animated TAB')}
+      </h1>
+      <p class="text-lum-text-secondary mb-2" q:slot="header">
+        {t(
+          'nav.resources.animatedTAB.description@@TAB plugin gradient animation creator'
+        )}
+      </p>
 
       <AnimTabPreview
         q:slot="input"
