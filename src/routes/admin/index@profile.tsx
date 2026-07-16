@@ -461,14 +461,14 @@ export default component$(() => {
                     {similarResults.value.groupCount}
                   </span>{' '}
                   groups of similar presets out of{' '}
-                  <span class="font-bold text-blue-400">
+                  <span class="text-lum-accent font-bold">
                     {similarResults.value.totalPresets}
                   </span>{' '}
                   total presets.
                 </p>
                 <p class="text-sm text-gray-400">
                   Threshold used:{' '}
-                  <span class="font-semibold text-blue-400">
+                  <span class="text-lum-accent font-semibold">
                     {similarResults.value.threshold}
                   </span>{' '}
                   | Pairs checked:{' '}

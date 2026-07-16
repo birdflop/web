@@ -92,7 +92,11 @@ export default component$(() => {
         selection.value.start === 0 &&
         selection.value.end === textLength;
 
-      if (!selection.value || isEntireSelected) {
+      if (
+        !selection.value ||
+        selection.value.start === selection.value.end ||
+        isEntireSelected
+      ) {
         transform(rgbStore.baseFormatting);
         if (clearAllIfEntire) {
           rgbStore.formatting = [];
@@ -170,7 +174,12 @@ export default component$(() => {
       selection.value.start === 0 &&
       selection.value.end === textLength;
 
-    if (!selection.value || isEntireSelected) return rgbStore.baseFormatting;
+    if (
+      !selection.value ||
+      selection.value.start === selection.value.end ||
+      isEntireSelected
+    )
+      return rgbStore.baseFormatting;
 
     const { start, end } = selection.value;
     const intervals = getIntervalsInRange(start, end);
@@ -199,6 +208,7 @@ export default component$(() => {
 
   const isSelectionActive =
     selection.value &&
+    selection.value.start !== selection.value.end &&
     (selection.value.start !== 0 || selection.value.end !== textLength);
 
   const toggleFlag = $((flag: FormatKey) => {

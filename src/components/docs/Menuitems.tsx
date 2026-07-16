@@ -73,7 +73,7 @@ export const MenuItems = component$(
                     class={{
                       'lum-bg-transparent w-full': true,
                       'lum-btn-p-1! rounded-lum-1 text-sm': level > 0,
-                      'text-indigo-500': isActiveOrParent(item),
+                      'text-lum-accent': isActiveOrParent(item),
                     }}
                   >
                     {item.text}
@@ -107,7 +107,7 @@ export const MenuItems = component$(
                   class={{
                     'lum-btn lum-bg-transparent': true,
                     'lum-btn-p-1 rounded-lum-1 text-sm': level > 0,
-                    'text-indigo-500!': item.href === pathname,
+                    'text-lum-accent!': item.href === pathname,
                   }}
                   onMouseOver$={(
                     evt,
@@ -136,7 +136,7 @@ export const MenuItems = component$(
                   {item.href && renderUpdated(item.href, markdownItems)}
                   <span class="flex-1">{item.text}</span>
                   {item.href === pathname && (
-                    <span class="m-1 h-2 w-2 rounded-full bg-indigo-600" />
+                    <span class="bg-lum-accent m-1 h-2 w-2 rounded-full" />
                   )}
                 </Link>
               )}

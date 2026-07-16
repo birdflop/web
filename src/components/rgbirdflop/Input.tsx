@@ -82,6 +82,9 @@ const InputField = component$(
     const selection = useContext(selectionContext, useSignal<Selection>());
     const rawEdit = useContext(rawEditModeContext);
 
+    const isDragging = useSignal(false);
+    const dragStartIndex = useSignal(0);
+
     const syncSelection = $((el: HTMLTextAreaElement) => {
       const start = el.selectionStart ?? 0;
       const end = el.selectionEnd ?? start;
@@ -95,11 +98,6 @@ const InputField = component$(
           ),
         };
       } else {
-        if (start === end) {
-          // If there's no selection, unset it
-          selection.value = undefined;
-          return;
-        }
         selection.value = {
           start,
           end,
@@ -108,17 +106,140 @@ const InputField = component$(
       console.log('Selection updated:', selection.value);
     });
 
+    const getIndexFromX = $((clientX: number, container: HTMLElement) => {
+      const spans = container.querySelectorAll('.char-span');
+      if (spans.length === 0) return 0;
+      let targetIndex = spans.length;
+      for (let i = 0; i < spans.length; i++) {
+        const rect = spans[i].getBoundingClientRect();
+        const charMiddle = rect.left + rect.width / 2;
+        if (clientX < charMiddle) {
+          targetIndex = i;
+          break;
+        }
+      }
+      return targetIndex;
+    });
+
+    const handlePointerDown = $(async (e: PointerEvent, el: HTMLDivElement) => {
+      if (rawEdit.value || readOnly) return;
+      if (e.button !== 0) return;
+      const targetIndex = await getIndexFromX(e.clientX, el);
+      isDragging.value = true;
+      dragStartIndex.value = targetIndex;
+
+      const textarea = el.querySelector('textarea');
+      if (textarea) {
+        textarea.focus();
+        textarea.setSelectionRange(targetIndex, targetIndex);
+        if (advanced && rgbSegments) {
+          selection.value = {
+            start: targetIndex,
+            end: targetIndex,
+            segmentIndex: segmentIndexAtChar(
+              rgbSegments.value,
+              Math.max(0, targetIndex - 1)
+            ),
+          };
+        } else {
+          selection.value = {
+            start: targetIndex,
+            end: targetIndex,
+          };
+        }
+      }
+    });
+
+    const handlePointerMove = $(async (e: PointerEvent, el: HTMLDivElement) => {
+      if (!isDragging.value || rawEdit.value || readOnly) return;
+      const targetIndex = await getIndexFromX(e.clientX, el);
+      const textarea = el.querySelector('textarea');
+      if (textarea) {
+        const start = Math.min(dragStartIndex.value, targetIndex);
+        const end = Math.max(dragStartIndex.value, targetIndex);
+        textarea.setSelectionRange(start, end);
+        if (advanced && rgbSegments) {
+          selection.value = {
+            start,
+            end,
+            segmentIndex: segmentIndexAtChar(
+              rgbSegments.value,
+              Math.max(0, start - 1)
+            ),
+          };
+        } else {
+          selection.value = {
+            start,
+            end,
+          };
+        }
+      }
+    });
+
+    const handleDblClick = $(async (e: MouseEvent, el: HTMLDivElement) => {
+      if (rawEdit.value || readOnly) return;
+      const targetIndex = await getIndexFromX(e.clientX, el);
+      const text =
+        advanced && rgbSegments
+          ? combinedText(rgbSegments.value)
+          : rgbStore.text;
+
+      let start = targetIndex;
+      while (start > 0 && !/\s/.test(text[start - 1])) {
+        start--;
+      }
+      let end = targetIndex;
+      while (end < text.length && !/\s/.test(text[end])) {
+        end++;
+      }
+
+      const textarea = el.querySelector('textarea');
+      if (textarea) {
+        textarea.focus();
+        textarea.setSelectionRange(start, end);
+        if (advanced && rgbSegments) {
+          selection.value = {
+            start,
+            end,
+            segmentIndex: segmentIndexAtChar(
+              rgbSegments.value,
+              Math.max(0, start - 1)
+            ),
+          };
+        } else {
+          selection.value = { start, end };
+        }
+      }
+    });
+
+    const handleScroll = $((e: Event) => {
+      const textarea = e.target as HTMLTextAreaElement;
+      const container = textarea.closest('.relative') as HTMLElement | null;
+      if (!container) return;
+      const preview = container.querySelector('p') as HTMLElement | null;
+      if (preview) {
+        preview.scrollLeft = textarea.scrollLeft;
+        preview.scrollTop = textarea.scrollTop;
+      }
+    });
+
     return (
       <div
         class={{
-          'focus-within:border-lum-accent relative break-all caret-white': true,
+          'focus-within:border-lum-accent relative cursor-text break-all caret-white': true,
           ...getClassObject(className),
           [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
         }}
+        onPointerDown$={handlePointerDown}
+        onPointerMove$={handlePointerMove}
+        onDblClick$={handleDblClick}
+        document:onPointerUp$={$(() => {
+          isDragging.value = false;
+        })}
       >
         <p
           class={{
-            'pointer-events-none whitespace-pre-wrap': true,
+            'whitespace-pre-wrap select-none': true,
             ...getClassObject(inputClass),
           }}
           style={{ visibility: rawEdit.value ? 'hidden' : 'visible' }}
@@ -129,9 +250,9 @@ const InputField = component$(
           <textarea
             class={{
               'rounded-lum selection:bg-blue/50 selection:text-lum-text-secondary/60 absolute inset-0 whitespace-pre-wrap outline-0': true,
-              'resize-none border-none bg-transparent text-transparent outline-none':
+              'pointer-events-none resize-none border-none bg-transparent text-transparent opacity-0 outline-none':
                 !rawEdit.value,
-              'resize-none border-none bg-transparent text-white outline-none':
+              'pointer-events-auto resize-none border-none bg-transparent text-white opacity-100 outline-none':
                 rawEdit.value,
               ...getClassObject(inputClass),
             }}
@@ -142,6 +263,7 @@ const InputField = component$(
             }
             spellcheck={false}
             id={'input'}
+            onScroll$={handleScroll}
             onInput$={(e, el) => {
               if (advanced && rgbSegments) {
                 if (e.isComposing) return;
@@ -164,6 +286,11 @@ const InputField = component$(
                 };
               } else {
                 rgbStore.text = el.value;
+                const caret = el.selectionStart ?? el.value.length;
+                selection.value = {
+                  start: caret,
+                  end: caret,
+                };
               }
             }}
             onSelect$={(e, el) => syncSelection(el)}

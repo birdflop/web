@@ -108,7 +108,7 @@ export default component$<PluginCardProps>(
                   class={{
                     'font-mono': true,
                     'text-red-500': updateAvailable,
-                    'text-blue-500': !updateAvailable,
+                    'text-lum-accent': !updateAvailable,
                   }}
                 >
                   {plugin.currentVersion.name}

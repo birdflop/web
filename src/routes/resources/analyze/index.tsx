@@ -11,7 +11,7 @@ export default component$(() => {
           1.{' '}
           <a
             href="https://spark.lucko.me/"
-            class="text-blue-400 hover:underline"
+            class="text-lum-accent hover:underline"
           >
             Install spark
           </a>{' '}

@@ -84,11 +84,13 @@ export default component$(() => {
       {showAllGradients.value ? (
         <AllGradientsPreview
           q:slot="input"
+          showSelection
           shadowLength={previewStyle.value == 'default' ? 4 : 2}
         />
       ) : (
         <RgbPreview
           q:slot="input"
+          showSelection
           shadowLength={previewStyle.value == 'default' ? 4 : 2}
         />
       )}

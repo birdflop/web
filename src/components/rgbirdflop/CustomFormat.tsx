@@ -54,10 +54,10 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             $4 = RRG<strong class="text-green-400">G</strong>BB
           </p>
           <p>
-            $5 = RRGG<strong class="text-blue-400">B</strong>B
+            $5 = RRGG<strong class="text-lum-accent">B</strong>B
           </p>
           <p>
-            $6 = RRGGB<strong class="text-blue-400">B</strong>
+            $6 = RRGGB<strong class="text-lum-accent">B</strong>
           </p>
           {rgbStore.colorFormat.char && (
             <p>$f = {t('rgb.formatting.title@@Formatting')}</p>

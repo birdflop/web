@@ -149,7 +149,7 @@ export default component$(() => {
               Birdflop goes beyond mere hosting; we actively foster a community
               of learning and growth, exemplified through the wealth of public
               resources available on our{' '}
-              <Link href="/resources" class="text-blue-400 hover:underline">
+              <Link href="/resources" class="text-lum-accent hover:underline">
                 Resources
               </Link>{' '}
               page. Looking ahead, we are committed to expanding our reach,
@@ -157,14 +157,14 @@ export default component$(() => {
               and technology, and making a lasting impact in shaping future
               innovators. If you would like to further our mission, please
               consider making a tax-deductible{' '}
-              <a href={donateLink} class="text-blue-400 hover:underline">
+              <a href={donateLink} class="text-lum-accent hover:underline">
                 charitable donation
               </a>
               .&nbsp;
             </>
           )}
           <button
-            class="text-blue-400 hover:underline"
+            class="text-lum-accent hover:underline"
             onClick$={() => (missionExpanded.value = !missionExpanded.value)}
           >
             {missionExpanded.value ? 'Read less' : 'Read more'}
@@ -298,7 +298,7 @@ export default component$(() => {
             <p>
               We don't oversell, and we're transparent about that. View our
               public{' '}
-              <Link href="/node-stats" class="text-blue-400 hover:underline">
+              <Link href="/node-stats" class="text-lum-accent hover:underline">
                 detailed server statistics
               </Link>{' '}
               or financial breakdown.
@@ -332,7 +332,7 @@ export default component$(() => {
                 href={discordLink}
                 data-umami-event="discord-link"
                 data-umami-source="support"
-                class="text-blue-400 hover:underline"
+                class="text-lum-accent hover:underline"
               >
                 Discord server
               </a>
@@ -410,12 +410,12 @@ export default component$(() => {
             <p class="text-lum-text-secondary">
               Your payments get you the best possible rate while contributing to
               the development of our{' '}
-              <Link href="/resources" class="text-blue-400 hover:underline">
+              <Link href="/resources" class="text-lum-accent hover:underline">
                 free public resources
               </Link>
               . We reimburse clients based on excess profit, and we never
               overload our servers. View our server statistics on the{' '}
-              <Link href="/node-stats" class="text-blue-400 hover:underline">
+              <Link href="/node-stats" class="text-lum-accent hover:underline">
                 Node Stats
               </Link>{' '}
               page.
@@ -432,7 +432,7 @@ export default component$(() => {
             href={discordLink}
             data-umami-event="discord-link"
             data-umami-source="trial"
-            class="text-blue-400 hover:underline"
+            class="text-lum-accent hover:underline"
           >
             Discord server
           </a>{' '}

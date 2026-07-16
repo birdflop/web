@@ -15,11 +15,11 @@ export default component$(() => {
         501(c)(3) nonprofit organization (EIN: 93-2401009).
         <br />
         By using this site, you agree to our{' '}
-        <a href="/terms" class="text-blue-400 hover:underline">
+        <a href="/terms" class="text-lum-accent hover:underline">
           {t('nav.termsofService@@Terms of Service')}
         </a>{' '}
         and{' '}
-        <a href="/privacy" class="text-blue-400 hover:underline">
+        <a href="/privacy" class="text-lum-accent hover:underline">
           {t('nav.privacyPolicy@@Privacy Policy')}
         </a>
         . Items marked with an asterisk (*) are a reminder that our{' '}

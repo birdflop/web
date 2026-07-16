@@ -175,7 +175,7 @@ export default component$(() => {
       <h6
         class={{
           'flex items-center gap-2': true,
-          'text-blue-300/80!': !presetInfo.user,
+          'text-lum-accent/80!': !presetInfo.user,
           'text-orange-300/80!': !!presetInfo.user,
         }}
       >
@@ -355,6 +355,7 @@ export default component$(() => {
           <Input noLabel>
             <RgbPreview
               q:slot="input"
+              showSelection
               shadowLength={previewStyle.value == 'default' ? 4 : 2}
             />
           </Input>
@@ -420,7 +421,7 @@ export default component$(() => {
                 <a
                   href={discordLink}
                   target="_blank"
-                  class="text-blue-500 hover:underline"
+                  class="text-lum-accent hover:underline"
                 >
                   Discord
                 </a>

@@ -5,27 +5,28 @@ import {
   sortColors,
   hexToRGB,
   getShadowColors,
-  type Formatting,
 } from '@birdflop/rgbirdflop';
 import { component$, useContext } from '@qwik.dev/core';
 import { rgbStoreContext } from './RGBirdflop';
+import { selectionContext } from './Input';
 import {
   EmptyPreview,
   getEffectiveFormatting,
   getFormattingClasses,
-  getFormattingSignature,
   toCSS,
 } from './preview';
 
 export interface RgbPreviewProps {
   rgbStore?: typeof rgbDefaults;
   shadowLength?: number;
+  showSelection?: boolean;
 }
 
 export default component$<RgbPreviewProps>(
-  ({ rgbStore: rgbStoreFromProp, shadowLength = 4 }) => {
+  ({ rgbStore: rgbStoreFromProp, shadowLength = 4, showSelection }) => {
     const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
     const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
+    const selection = useContext(selectionContext, null);
 
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;
@@ -59,64 +60,68 @@ export default component$<RgbPreviewProps>(
       shadowGradient.next()
     );
 
-    const segments: Array<{
-      text: string;
-      bucketIndex: number;
-      formatting: Formatting;
-    }> = [];
+    const cursorIndex =
+      selection &&
+      selection.value &&
+      selection.value.start === selection.value.end
+        ? selection.value.start
+        : -1;
 
-    let currentSegment: (typeof segments)[number] | null = null;
+    const rendered: any[] = [];
 
-    for (let index = 0; index < textArray.length; index++) {
+    textArray.forEach((char, index) => {
+      if (index === cursorIndex && showSelection) {
+        rendered.push(<span key="custom-cursor" class="custom-cursor" />);
+      }
+
       const bucketIndex = Math.min(
         Math.floor(index / colorLength),
         bucketCount - 1
       );
       const formatting = getEffectiveFormatting(rgbStore, index);
-      const signature = `${bucketIndex}:${getFormattingSignature(formatting)}`;
-      const currentSignature = currentSegment
-        ? `${currentSegment.bucketIndex}:${getFormattingSignature(currentSegment.formatting)}`
-        : null;
-
-      if (currentSegment && currentSignature === signature) {
-        currentSegment.text += textArray[index];
-        continue;
-      }
-
-      currentSegment = {
-        text: textArray[index],
-        bucketIndex,
-        formatting,
-      };
-      segments.push(currentSegment);
-    }
-
-    return segments.map((segment, i) => {
-      const rgb = gradientColors[segment.bucketIndex];
+      const rgb = gradientColors[bucketIndex];
       const rgbCSS = toCSS(rgb);
-      const rgbShadow = shadowColors[segment.bucketIndex];
+      const rgbShadow = shadowColors[bucketIndex];
       const rgbShadowCSS = toCSS(rgbShadow);
 
-      let segmentText = segment.text;
-      if (segment.formatting.font) {
-        segmentText = applyFont(segmentText, segment.formatting.font);
+      let segmentText = char;
+      if (formatting.font) {
+        segmentText = applyFont(segmentText, formatting.font);
       }
 
-      return (
+      const isSelected =
+        selection &&
+        selection.value &&
+        selection.value.start !== selection.value.end &&
+        index >= selection.value.start &&
+        index < selection.value.end;
+
+      rendered.push(
         <span
-          key={`char${i}`}
+          key={`char${index}`}
           style={{
             color: rgbCSS,
             ...(rgbShadow && {
               textShadow: `${shadowLength}px ${shadowLength}px 0 ${rgbShadowCSS}`,
             }),
           }}
-          class={getFormattingClasses(segment.formatting)}
+          class={{
+            'char-span': true,
+            'bg-blue/40 text-white!': !!isSelected && showSelection,
+            ...getFormattingClasses(formatting),
+          }}
           data-text={segmentText}
+          data-index={index}
         >
-          {segmentText}
+          {segmentText === ' ' ? '\u00A0' : segmentText}
         </span>
       );
     });
+
+    if (cursorIndex === textArray.length && showSelection) {
+      rendered.push(<span key="custom-cursor" class="custom-cursor" />);
+    }
+
+    return rendered;
   }
 );

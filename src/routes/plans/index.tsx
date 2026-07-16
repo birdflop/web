@@ -105,7 +105,7 @@ export default component$(() => {
           <h2 class="mb-2 text-2xl font-extrabold">
             Pick your plan
             <button
-              class="ml-2 text-sm font-normal text-blue-400 hover:underline"
+              class="text-lum-accent ml-2 text-sm font-normal hover:underline"
               onClick$={() =>
                 (plansStore.showMiscPlans = !plansStore.showMiscPlans)
               }

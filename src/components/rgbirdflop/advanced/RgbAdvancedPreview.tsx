@@ -7,23 +7,30 @@ import {
   rgbDefaults,
   applyFont,
 } from '@birdflop/rgbirdflop';
-import type { SegmentType } from './rgbSegments';
-import { chunkText, combinedText, rgbSegmentsContext } from './rgbSegments';
+import type { Signal } from '@qwik.dev/core';
+import { component$, useContext, useSignal } from '@qwik.dev/core';
+import { selectionContext } from '../Input';
 import { EmptyPreview, getFormattingClasses, toCSS } from '../preview';
-import { component$, Signal, useContext, useSignal } from '@qwik.dev/core';
-import { RgbPreviewProps } from '../RgbPreview';
 import { rgbStoreContext } from '../RGBirdflop';
+import { rgbSegmentsContext, type SegmentType } from './rgbSegments';
 
-interface AdvancedRgbPreviewProps extends RgbPreviewProps {
+interface AdvancedRgbPreviewProps {
+  rgbStore?: typeof rgbDefaults;
   rgbSegments?: Signal<SegmentType[]>;
+  shadowLength?: number;
+  showSelection?: boolean;
 }
+
 /**
- * Render the segmented preview as styled spans (analog of renderPreview in
- * RGBirdflop.tsx, but per-segment with per-character bold/italic). Each
- * obfuscated span carries data-text so the animation can restore the glyph.
+ * Render the segmented preview as styled spans, mapping each character to its own
+ * span for custom selection highlighting and precise custom cursor placement.
  */
 export default component$<AdvancedRgbPreviewProps>(
-  ({ rgbStore: rgbStoreFromProp, rgbSegments: rgbSegmentsFromProp }) => {
+  ({
+    rgbStore: rgbStoreFromProp,
+    rgbSegments: rgbSegmentsFromProp,
+    showSelection,
+  }) => {
     const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
     const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
     const rgbSegmentsFromContext = useContext(
@@ -31,15 +38,20 @@ export default component$<AdvancedRgbPreviewProps>(
       useSignal([])
     );
     const rgbSegments = rgbSegmentsFromProp || rgbSegmentsFromContext;
+    const selection = useContext(selectionContext, null);
 
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;
 
-    const text = combinedText(rgbSegments.value);
-    if (!text) return <EmptyPreview />;
+    const cursorIndex =
+      selection &&
+      selection.value &&
+      selection.value.start === selection.value.end
+        ? selection.value.start
+        : -1;
 
     let charOffset = 0;
-    return rgbSegments.value.flatMap((seg, si) => {
+    const spans = rgbSegments.value.flatMap((seg, si) => {
       if (!seg.text) return [];
 
       let gradient: ColorGradient | null = null;
@@ -53,40 +65,74 @@ export default component$<AdvancedRgbPreviewProps>(
         );
       }
 
-      let rel = 0;
-      const chunkSpans = chunkText(seg.text, seg.colorLength).map(
-        (chunk, ci) => {
-          let color = 'inherit';
-          if (seg.colorMode === 'solid' && seg.colors.length > 0) {
-            color = toCSS(hexToRGB(seg.colors[0].hex));
-          } else if (gradient) {
-            color = toCSS(gradient.next());
-          }
+      const textArray = Array.from(seg.text);
+      let gradientColors: any[] = [];
+      if (gradient) {
+        const bucketCount = Math.max(
+          1,
+          Math.ceil(textArray.length / (seg.colorLength || 1))
+        );
+        gradientColors = Array.from({ length: bucketCount }, () =>
+          gradient.next()
+        );
+      }
 
-          const fmt = getFormattingAtOffset(charOffset + rel, rgbStore);
-          rel += chunk.length;
-
-          let chunkTextVal = chunk;
-          if (fmt.font) {
-            chunkTextVal = applyFont(chunkTextVal, fmt.font);
-          }
-
-          return (
-            <span
-              q:slot="input"
-              key={`s${si}-c${ci}`}
-              data-text={chunkTextVal}
-              style={{ color }}
-              class={getFormattingClasses(fmt)}
-            >
-              {chunkTextVal}
-            </span>
-          );
+      const segmentSpans: any[] = [];
+      textArray.forEach((char, index) => {
+        const globalIndex = charOffset + index;
+        if (globalIndex === cursorIndex && showSelection) {
+          segmentSpans.push(<span key="custom-cursor" class="custom-cursor" />);
         }
-      );
+
+        let color = 'inherit';
+        if (seg.colorMode === 'solid' && seg.colors.length > 0) {
+          color = toCSS(hexToRGB(seg.colors[0].hex));
+        } else if (gradient && gradientColors.length > 0) {
+          const bucketIndex = Math.min(
+            Math.floor(index / (seg.colorLength || 1)),
+            gradientColors.length - 1
+          );
+          color = toCSS(gradientColors[bucketIndex]);
+        }
+
+        const fmt = getFormattingAtOffset(globalIndex, rgbStore);
+        let charText = char;
+        if (fmt.font) {
+          charText = applyFont(charText, fmt.font);
+        }
+
+        const isSelected =
+          selection &&
+          selection.value &&
+          selection.value.start !== selection.value.end &&
+          globalIndex >= selection.value.start &&
+          globalIndex < selection.value.end;
+
+        segmentSpans.push(
+          <span
+            key={`s${si}-char${index}`}
+            data-text={charText}
+            data-index={globalIndex}
+            style={{ color }}
+            class={{
+              'char-span': true,
+              'bg-blue/40 text-white!': !!isSelected,
+              ...getFormattingClasses(fmt),
+            }}
+          >
+            {charText === ' ' ? '\u00A0' : charText}
+          </span>
+        );
+      });
 
       charOffset += seg.text.length;
-      return chunkSpans;
+      return segmentSpans;
     });
+
+    if (cursorIndex === charOffset && showSelection) {
+      spans.push(<span key="custom-cursor" class="custom-cursor" />);
+    }
+
+    return spans;
   }
 );

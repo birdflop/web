@@ -89,7 +89,7 @@ export default component$<PresetPreviewProps>(
             <div
               class={{
                 'flex flex-1 items-center gap-2': true,
-                'text-blue-300/80!': !Preset.user,
+                'text-lum-accent/80!': !Preset.user,
               }}
             >
               {Preset.user && (

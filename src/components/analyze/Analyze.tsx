@@ -29,7 +29,7 @@ export default component$(() => {
         See{' '}
         <a
           href="https://eternity.community/index.php/paper-optimization/"
-          class="text-blue-400 hover:underline"
+          class="text-lum-accent hover:underline"
         >
           this guide
         </a>{' '}
@@ -114,7 +114,7 @@ export default component$(() => {
         Powered by{' '}
         <a
           href="https://github.com/birdflop/botflop"
-          class="text-blue-400 hover:underline"
+          class="text-lum-accent hover:underline"
         >
           botflop
         </a>
