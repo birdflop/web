@@ -9,7 +9,7 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - '@luminescent/ui-qwik@7.0.0-11 || 7.0.0-12 || 7.0.0-13 || 7.0.0-14 || 7.0.0-15'
+  - '@luminescent/ui-qwik@7.0.0-17'
   - '@luminescent/ui@7.0.2'
   - lucide-icons-qwik@1.24.0-qwik-v2
 
