@@ -18,26 +18,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version: '24'
-          cache: 'pnpm'
+          cache: true
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: vp install --frozen-lockfile
 
-      - name: Lint Check
-        run: pnpm run lint
-
-      - name: Format Check
-        run: pnpm run fmt.check
+      - name: Static Checks
+        run: vp check
 
       - name: Build Library Package
-        run: pnpm run build.pkg
+        run: vp run build.pkg
 
       - name: Run Tests
-        run: pnpm test
+        run: vp test
