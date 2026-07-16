@@ -568,7 +568,7 @@ export default component$(
                 {rawEditMode.value ? <Eye size={20} /> : <Pencil size={20} />}
               </button>
             )}
-            <Slot name="extra-buttons" />
+            <Slot name="extra-content" />
             <SelectMenu
               align="right"
               id="previewstyle"
