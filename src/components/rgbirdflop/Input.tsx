@@ -124,6 +124,7 @@ const InputField = component$(
     const handlePointerDown = $(async (e: PointerEvent, el: HTMLDivElement) => {
       if (rawEdit.value || readOnly) return;
       if (e.button !== 0) return;
+      e.preventDefault();
       const targetIndex = await getIndexFromX(e.clientX, el);
       isDragging.value = true;
       dragStartIndex.value = targetIndex;
@@ -178,6 +179,7 @@ const InputField = component$(
 
     const handleDblClick = $(async (e: MouseEvent, el: HTMLDivElement) => {
       if (rawEdit.value || readOnly) return;
+      e.preventDefault();
       const targetIndex = await getIndexFromX(e.clientX, el);
       const text =
         advanced && rgbSegments
