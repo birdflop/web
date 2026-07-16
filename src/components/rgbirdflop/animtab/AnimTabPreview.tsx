@@ -20,6 +20,7 @@ interface AnimTABPreviewProps extends RgbPreviewProps {
   animtabStore?: typeof animTABDefaults;
   currentFrameIndex: number;
   showSelection?: boolean;
+  framesList?: (string | null)[][];
 }
 
 export default component$<AnimTABPreviewProps>(
@@ -29,6 +30,7 @@ export default component$<AnimTABPreviewProps>(
     animtabStore: animtabStoreFromProp,
     currentFrameIndex,
     showSelection,
+    framesList: framesListProp,
   }) => {
     const rgbStoreFromContext = useContext(rgbStoreContext, rgbDefaults);
     const rgbStore = rgbStoreFromProp || rgbStoreFromContext;
@@ -42,13 +44,15 @@ export default component$<AnimTABPreviewProps>(
     if (!rgbStore.text || rgbStore.text.trim() === '') return <EmptyPreview />;
     if (rgbStore.colors.length < 1) return rgbStore.text;
 
-    // Generate frames for this specific gradient type
-    const { frames: framesList } = generateAnimTABFrames(
-      rgbStore,
-      animtabStore
-    );
+    // Use framesList prop if provided, otherwise generate them (fallback)
+    const framesList =
+      framesListProp ||
+      generateAnimTABFrames(
+        { ...rgbStore, text: rgbStore.text != '' ? rgbStore.text : 'Birdflop' },
+        animtabStore
+      ).frames;
 
-    if (!framesList[0]) return <EmptyPreview />;
+    if (!framesList || !framesList[0]) return <EmptyPreview />;
     const colors = framesList[currentFrameIndex % framesList.length];
     if (!colors) return <EmptyPreview />;
 
