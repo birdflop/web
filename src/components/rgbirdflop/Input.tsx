@@ -106,26 +106,49 @@ const InputField = component$(
       console.log('Selection updated:', selection.value);
     });
 
-    const getIndexFromX = $((clientX: number, container: HTMLElement) => {
-      const spans = container.querySelectorAll('.char-span');
-      if (spans.length === 0) return 0;
-      let targetIndex = spans.length;
-      for (let i = 0; i < spans.length; i++) {
-        const rect = spans[i].getBoundingClientRect();
-        const charMiddle = rect.left + rect.width / 2;
-        if (clientX < charMiddle) {
-          targetIndex = i;
-          break;
+    const getIndexFromXY = $(
+      (clientX: number, clientY: number, container: HTMLElement) => {
+        const spans = container.querySelectorAll('.char-span');
+        if (spans.length === 0) return 0;
+
+        let minDistY = Infinity;
+        const spansWithDist = [];
+
+        for (let i = 0; i < spans.length; i++) {
+          const rect = spans[i].getBoundingClientRect();
+          const distY = Math.max(0, rect.top - clientY, clientY - rect.bottom);
+          minDistY = Math.min(minDistY, distY);
+          spansWithDist.push({ index: i, rect, distY });
         }
+
+        // Filter spans on the vertically closest line with a small tolerance (5px)
+        const closestLineSpans = spansWithDist.filter(
+          (item) => item.distY <= minDistY + 5
+        );
+
+        if (closestLineSpans.length === 0) return spans.length;
+
+        // Sort horizontally and locate position
+        closestLineSpans.sort((a, b) => a.rect.left - b.rect.left);
+
+        for (let i = 0; i < closestLineSpans.length; i++) {
+          const item = closestLineSpans[i];
+          const charMiddle = item.rect.left + item.rect.width / 2;
+          if (clientX < charMiddle) {
+            return item.index;
+          }
+        }
+
+        const lastItem = closestLineSpans[closestLineSpans.length - 1];
+        return lastItem.index + 1;
       }
-      return targetIndex;
-    });
+    );
 
     const handlePointerDown = $(async (e: PointerEvent, el: HTMLDivElement) => {
       if (rawEdit.value || readOnly) return;
       if (e.button !== 0) return;
       e.preventDefault();
-      const targetIndex = await getIndexFromX(e.clientX, el);
+      const targetIndex = await getIndexFromXY(e.clientX, e.clientY, el);
       isDragging.value = true;
       dragStartIndex.value = targetIndex;
 
@@ -153,7 +176,7 @@ const InputField = component$(
 
     const handlePointerMove = $(async (e: PointerEvent, el: HTMLDivElement) => {
       if (!isDragging.value || rawEdit.value || readOnly) return;
-      const targetIndex = await getIndexFromX(e.clientX, el);
+      const targetIndex = await getIndexFromXY(e.clientX, e.clientY, el);
       const textarea = el.querySelector('textarea');
       if (textarea) {
         const start = Math.min(dragStartIndex.value, targetIndex);
@@ -180,7 +203,7 @@ const InputField = component$(
     const handleDblClick = $(async (e: MouseEvent, el: HTMLDivElement) => {
       if (rawEdit.value || readOnly) return;
       e.preventDefault();
-      const targetIndex = await getIndexFromX(e.clientX, el);
+      const targetIndex = await getIndexFromXY(e.clientX, e.clientY, el);
       const text =
         advanced && rgbSegments
           ? combinedText(rgbSegments.value)
@@ -216,7 +239,7 @@ const InputField = component$(
 
     const handleScroll = $((e: Event) => {
       const textarea = e.target as HTMLTextAreaElement;
-      const container = textarea.closest('.relative') as HTMLElement | null;
+      const container = textarea.closest('.relative');
       if (!container) return;
       const preview = container.querySelector('p') as HTMLElement | null;
       if (preview) {
