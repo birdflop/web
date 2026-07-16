@@ -222,7 +222,7 @@ export default component$<ColorListProps>((props) => {
           class="rounded-lum-1 lum-bg-transparent justify-center! gap-0! p-1.5"
         >
           <button
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
               const currentColors = props.colors ?? getColors(rgbStore, id);
@@ -239,7 +239,7 @@ export default component$<ColorListProps>((props) => {
             {t('rgb.colors.invert@@Invert')}
           </button>
           <button
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
               const currentColors = props.colors ?? getColors(rgbStore, id);
@@ -254,7 +254,7 @@ export default component$<ColorListProps>((props) => {
             {t('rgb.colors.reverse@@Reverse')}
           </button>
           <button
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             disabled={colors.length >= resolvedTextLength}
             onClick$={() => {

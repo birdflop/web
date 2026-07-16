@@ -193,7 +193,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
 
             return (
               <button
-                q:slot="extra-content"
+                q:slot="extra-buttons"
                 key={value}
                 onClick$={() => handleThemeChange(value)}
                 class={{

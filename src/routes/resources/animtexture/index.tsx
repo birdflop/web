@@ -278,7 +278,7 @@ export default component$(() => {
                 >
                   <span q:slot="dropdown">{texture.namespace}</span>
                   <input
-                    q:slot="extra-content"
+                    q:slot="extra-buttons"
                     id="namespace"
                     class="lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2"
                     placeholder="Custom"
@@ -305,7 +305,7 @@ export default component$(() => {
                 >
                   <span q:slot="dropdown">{texture.path}</span>
                   <input
-                    q:slot="extra-content"
+                    q:slot="extra-buttons"
                     id="path"
                     class="lum-input rounded-lum-1 lum-bg-transparent lum-btn-p-2"
                     placeholder={t('animtexture.custom@@Custom')}

@@ -77,7 +77,7 @@ export const SelectList = component$<SelectListProps>(
             </button>
           );
         })}
-        <Slot name="extra-content" />
+        <Slot name="extra-buttons" />
       </div>
     );
   }

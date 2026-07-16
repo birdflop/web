@@ -34,15 +34,54 @@ import {
 } from '~/util/hardware';
 import Eye from 'lucide-icons-qwik/icons/Eye';
 
-const softwareOptions = {
-  vanilla: { name: 'Vanilla', icon: Server },
-  spigot: { name: 'Spigot', icon: SiSpigotmc },
-  paper: { name: 'Paper', icon: LogoPaper },
-  purpur: { name: 'Purpur', icon: LogoPurpur },
-  fabric: { name: 'Fabric', icon: LogoFabric },
-  forge: { name: 'Forge', icon: LogoForge },
-  proxy: { name: 'Proxy', icon: SiVelocity },
-};
+// Each option's label is wrapped in a component$ so Qwik can serialize the
+// SelectMenu's values prop (raw icon components are not serializable).
+const Vanilla = component$(() => (
+  <span class="flex items-center gap-2">
+    <Server size={18} /> Vanilla
+  </span>
+));
+const Spigot = component$(() => (
+  <span class="flex items-center gap-2">
+    <SiSpigotmc class="fill-current" size={18} /> Spigot
+  </span>
+));
+const Paper = component$(() => (
+  <span class="flex items-center gap-2">
+    <LogoPaper size={18} /> Paper
+  </span>
+));
+const Purpur = component$(() => (
+  <span class="flex items-center gap-2">
+    <LogoPurpur size={18} /> Purpur
+  </span>
+));
+const Fabric = component$(() => (
+  <span class="flex items-center gap-2">
+    <LogoFabric size={18} /> Fabric
+  </span>
+));
+const Forge = component$(() => (
+  <span class="flex items-center gap-2">
+    <LogoForge size={18} /> Forge
+  </span>
+));
+const Proxy = component$(() => (
+  <span class="flex items-center gap-2">
+    <SiVelocity class="fill-current" size={18} /> Proxy (Velocity/Waterfall)
+  </span>
+));
+
+const softwareOptions = [
+  { name: <Vanilla />, value: 'vanilla' },
+  { name: <Spigot />, value: 'spigot' },
+  { name: <Paper />, value: 'paper' },
+  { name: <Purpur />, value: 'purpur' },
+  { name: <Fabric />, value: 'fabric' },
+  { name: <Forge />, value: 'forge' },
+  { name: <Proxy />, value: 'proxy' },
+];
+
 export default component$(() => {
   const t = inlineTranslate();
 
@@ -52,7 +91,6 @@ export default component$(() => {
   const result = planHardware(store);
 
   const estimatedCost = (result.ram * PRICE_PER_GB).toFixed(2);
-  const CurrentSoftware = softwareOptions[store.software];
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
@@ -70,28 +108,17 @@ export default component$(() => {
         {/* Inputs */}
         <div class="flex flex-1 flex-col gap-5">
           <div class="flex flex-col gap-1">
-            <Label
-              for="software"
-              label={t('hardware.software@@Server software')}
+            <SelectMenu
+              id="software"
+              class="w-full"
+              value={store.software}
+              onChange$={(e, el) => {
+                store.software = el.value as Software;
+              }}
+              values={softwareOptions}
             >
-              <SelectMenu
-                id="software"
-                class="w-full"
-                value={store.software}
-                onChange$={(e, el) => (store.software = el.value as Software)}
-                values={Object.entries(softwareOptions).map(
-                  ([key, option]) => ({
-                    name: option.name,
-                    value: key,
-                  })
-                )}
-              >
-                {Object.entries(softwareOptions).map(([key, Option]) => (
-                  <Option.icon key={key} size={20} q:slot={`before-${key}`} />
-                ))}
-                <CurrentSoftware.icon size={20} q:slot="dropdown-before" />
-              </SelectMenu>
-            </Label>
+              {t('hardware.software@@Server software')}
+            </SelectMenu>
             <p class="text-lum-text-secondary text-sm">
               {t(
                 'hardware.software.help@@Modded engines (Fabric/Forge) need significantly more memory than plugin-based servers.'

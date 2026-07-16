@@ -483,7 +483,7 @@ export default component$(() => {
             {isAdmin && (
               <Toggle
                 id="showpendingpresets"
-                q:slot="extra-content"
+                q:slot="extra-buttons"
                 checked={showPending && privatePresets.value.length > 0}
                 onChange$={(e, el) =>
                   void updateURL({ showPending: el.checked, page: 1 })
@@ -494,7 +494,7 @@ export default component$(() => {
             )}
 
             {savedPresets.value.length > 0 && (
-              <div q:slot="extra-content">
+              <div q:slot="extra-buttons">
                 <Toggle
                   id="showsavedpresets"
                   disabled={savedPresets.value.length === 0}
@@ -514,7 +514,7 @@ export default component$(() => {
                 </p>
               </div>
             )}
-            <div q:slot="extra-content">
+            <div q:slot="extra-buttons">
               <Toggle
                 id="previewwithsettings"
                 checked={presetStore.previewWithSettings}

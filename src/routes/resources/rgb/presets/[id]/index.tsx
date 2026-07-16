@@ -249,7 +249,7 @@ export default component$(() => {
           </span>
           <Link
             href={`/resources/rgb?${searchParams.toString()}`}
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
           >
             <Palette size={20} />{' '}
@@ -257,7 +257,7 @@ export default component$(() => {
           </Link>
           <Link
             href={`/resources/animtab?${searchParams.toString()}`}
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
           >
             <Rainbow size={20} />{' '}

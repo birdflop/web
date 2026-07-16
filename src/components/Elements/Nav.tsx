@@ -89,28 +89,28 @@ export default component$(() => {
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
         </span>
         <a
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           href="https://panel.birdflop.com/"
         >
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
         <Link
-          q:slot="exta-butrtons"
+          q:slot="extra-buttons"
           href="/plans"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
         <a
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="https://client.birdflop.com/"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/node-stats"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -131,7 +131,7 @@ export default component$(() => {
           <Box size={20} /> {t('nav.resources.title@@Resources')}
         </span>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources/rgb"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -139,7 +139,7 @@ export default component$(() => {
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources/animtab"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -147,21 +147,21 @@ export default component$(() => {
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources/analyze"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources/flags"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources/banner"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -169,7 +169,7 @@ export default component$(() => {
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
-          q:slot="extra-content"
+          q:slot="extra-buttons"
           href="/resources"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -243,13 +243,13 @@ export default component$(() => {
             {session.value.user?.name || 'User'}
           </span>
           <Link
-            q:slot="extra-content"
+            q:slot="extra-buttons"
             href="/profile"
             class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           >
             <User size={20} /> {t('nav.profile.title@@Profile')}
           </Link>
-          <Form action={signOut} q:slot="extra-content">
+          <Form action={signOut} q:slot="extra-buttons">
             <input type="hidden" name="providerId" value="discord" />
             <input
               type="hidden"

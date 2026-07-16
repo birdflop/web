@@ -1,7 +1,3 @@
-import {
-  environmentOptions,
-  softwareOptionsFlags,
-} from '~/routes/resources/flags';
 import { operatingSystem } from './environment/operatingSystem';
 import { serverType } from './environment/serverType';
 import type { AvailableExtraFlags, AvailableFlags } from './flags';
@@ -13,8 +9,8 @@ interface GenerateResult {
 }
 
 export const flagsDefaults = {
-  operatingSystem: 'linux' as keyof typeof environmentOptions,
-  serverType: 'paper' as keyof typeof softwareOptionsFlags,
+  operatingSystem: 'linux',
+  serverType: 'paper',
   gui: false,
   variables: false,
   autoRestart: false,

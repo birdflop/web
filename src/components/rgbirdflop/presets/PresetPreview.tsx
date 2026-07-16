@@ -39,7 +39,7 @@ interface PresetPreviewProps extends LinkProps {
   defaults?: rgbPreset;
   publishRefs?: {
     modalRef: Signal<HTMLDialogElement | undefined>;
-    selectedPreset: Signal<rgbPreset | null>;
+    selectedPreset: Signal<string | undefined>;
   };
 }
 
@@ -286,7 +286,7 @@ export default component$<PresetPreviewProps>(
             </span>
             <Link
               href={`/resources/rgb?${searchParams.toString()}`}
-              q:slot="extra-content"
+              q:slot="extra-buttons"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
               <Palette size={20} />{' '}
@@ -294,7 +294,7 @@ export default component$<PresetPreviewProps>(
             </Link>
             <Link
               href={`/resources/animtab?${searchParams.toString()}`}
-              q:slot="extra-content"
+              q:slot="extra-buttons"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
               <Rainbow size={20} />{' '}

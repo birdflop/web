@@ -25,7 +25,7 @@ export default component$(() => {
 
   const privatePresets = useContext(privatePresetsContext);
   const modalRef = useSignal<HTMLDialogElement>();
-  const selectedPreset = useSignal<rgbPreset | null>(null);
+  const selectedPreset = useSignal<string>();
   const isSubmitting = useSignal(false);
   const validationErrors = useSignal<string[]>([]);
   const similarPresets = useSignal<SimilarPreset[]>([]);
@@ -217,7 +217,7 @@ export default component$(() => {
             notifications.push(notification.toJSON());
             if (result.success) {
               modalRef.value?.close();
-              selectedPreset.value = null;
+              selectedPreset.value = undefined;
               validationErrors.value = [];
               similarPresets.value = [];
             }
@@ -242,53 +242,33 @@ export default component$(() => {
                 <SelectMenu
                   id="publish-preset-preset"
                   class="w-full"
-                  values={privatePresets.value.map((preset) => ({
-                    name: preset.text ?? 'Saved Preset',
-                    value: JSON.stringify(preset),
-                    custom: true,
-                  }))}
-                  onChange$={(e, el) => {
-                    selectedPreset.value = JSON.parse(el.value);
-                  }}
-                  value={JSON.stringify(selectedPreset.value)}
-                >
-                  {privatePresets.value.map((preset, i) => (
-                    <span
-                      key={i}
-                      q:slot={JSON.stringify(preset)}
-                      class={{
-                        'font-mc tracking-tight break-all': true,
-                        'font-mc-bold': preset.baseFormatting?.bold,
-                        'font-mc-italic': preset.baseFormatting?.italic,
-                        'font-mc-bold-italic':
-                          preset.baseFormatting?.bold &&
-                          preset.baseFormatting?.italic,
-                        [`${preset.colorFormat?.class}`]:
-                          preset.colorFormat?.class,
-                      }}
-                    >
-                      <RgbPreview rgbStore={{ ...rgbDefaults, ...preset }} />
-                    </span>
-                  ))}
-                  <span
-                    q:slot="dropdown-after"
-                    class={{
-                      'font-mc tracking-tight break-all': true,
-                      'font-mc-bold': selectedPreset.value.baseFormatting?.bold,
-                      'font-mc-italic':
-                        selectedPreset.value.baseFormatting?.italic,
-                      'font-mc-bold-italic':
-                        selectedPreset.value.baseFormatting?.bold &&
-                        selectedPreset.value.baseFormatting?.italic,
-                      [`${selectedPreset.value.colorFormat?.class}`]:
-                        selectedPreset.value.colorFormat?.class,
-                    }}
-                  >
-                    <RgbPreview
-                      rgbStore={{ ...rgbDefaults, ...selectedPreset.value }}
-                    />
-                  </span>
-                </SelectMenu>
+                  values={
+                    privatePresets.value.length == 0
+                      ? undefined
+                      : privatePresets.value.map((preset) => ({
+                          name: (
+                            <span
+                              class={{
+                                'font-mc tracking-tight break-all': true,
+                                'font-mc-bold': preset.baseFormatting?.bold,
+                                'font-mc-italic': preset.baseFormatting?.italic,
+                                'font-mc-bold-italic':
+                                  preset.baseFormatting?.bold &&
+                                  preset.baseFormatting?.italic,
+                                [`${preset.colorFormat?.class}`]:
+                                  preset.colorFormat?.class,
+                              }}
+                            >
+                              <RgbPreview
+                                rgbStore={{ ...rgbDefaults, ...preset }}
+                              />
+                            </span>
+                          ),
+                          value: JSON.stringify(preset),
+                        }))
+                  }
+                  value={selectedPreset.value}
+                />
               </Label>
             )}
           </div>
@@ -342,7 +322,7 @@ export default component$(() => {
             class="lum-btn"
             onClick$={() => {
               modalRef.value?.close();
-              selectedPreset.value = null;
+              selectedPreset.value = undefined;
               validationErrors.value = [];
               similarPresets.value = [];
             }}

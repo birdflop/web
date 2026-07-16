@@ -130,7 +130,7 @@ export default component$(() => {
             <Settings />
             {t('nav.settings.title@@Settings')}
           </Link>
-          <Form action={signOut} q:slot="extra-content">
+          <Form action={signOut} q:slot="extra-buttons">
             <input type="hidden" name="providerId" value="discord" />
             <input
               type="hidden"
