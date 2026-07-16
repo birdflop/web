@@ -271,7 +271,7 @@ export default component$(() => {
                     </span>
                   ))}
                   <span
-                    q:slot="dropdown-after"
+                    q:slot="dropdown"
                     class={{
                       'font-mc tracking-tight break-all': true,
                       'font-mc-bold': selectedPreset.value.baseFormatting?.bold,
