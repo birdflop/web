@@ -1,4 +1,10 @@
-import { component$, useStore, useTask$, isBrowser } from '@qwik.dev/core';
+import {
+  component$,
+  useStore,
+  useTask$,
+  isBrowser,
+  Fragment,
+} from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
 import { Toggle, SelectMenu, RangeInput, Label } from '@luminescent/ui-qwik';
 
@@ -343,9 +349,8 @@ export default component$(() => {
                 );
               })
               .map(([id, option]) => (
-                <>
+                <Fragment key={id}>
                   <Toggle
-                    key={id}
                     id={id}
                     checked={flagsStore.extraFlags.includes(id)}
                     onClick$={(e, el) => {
@@ -365,7 +370,7 @@ export default component$(() => {
                       {option.description}
                     </p>
                   )}
-                </>
+                </Fragment>
               ))}
           </div>
         </div>

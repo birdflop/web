@@ -283,7 +283,7 @@ export default component$(() => {
       {settingsStore.flopbird?.toggle && (
         <canvas
           ref={birdRef}
-          class="pointer-events-none fixed inset-0 z-10 overflow-hidden blur-none"
+          class="pointer-events-none fixed z-10 overflow-hidden blur-none"
         />
       )}
 

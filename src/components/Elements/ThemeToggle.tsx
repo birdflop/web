@@ -15,6 +15,50 @@ export interface ThemeToggleProps {
   class?: string;
 }
 
+const themeOptions: Array<{
+  value: ThemeName;
+  name: string;
+  icon: typeof Sparkles;
+  description: string;
+  gradient: string;
+}> = [
+  {
+    value: 'auto',
+    name: 'Auto',
+    icon: Sparkles,
+    description: 'Follows system preference',
+    gradient: 'from-gray-500 to-gray-600',
+  },
+  {
+    value: 'dark',
+    name: 'Dark',
+    icon: Moon,
+    description: 'Classic dark theme',
+    gradient: 'from-gray-800 to-gray-900',
+  },
+  {
+    value: 'light',
+    name: 'Light',
+    icon: Sun,
+    description: 'Clean light theme',
+    gradient: 'from-yellow-400 to-orange-500',
+  },
+  {
+    value: 'black',
+    name: 'Black',
+    icon: Battery,
+    description: 'Full black theme for OLED',
+    gradient: 'from-black to-gray-900',
+  },
+  {
+    value: 'simplymc',
+    name: 'SimplyMC',
+    icon: Smile,
+    description: 'SimplyMC dark theme for the nostalgia',
+    gradient: 'from-purple-600 to-purple-900',
+  },
+];
+
 export const ThemeToggle = component$<ThemeToggleProps>(
   ({ variant = 'compact', showLabel = false, class: className = '' }) => {
     const themeStore = useContext(ThemeContext);
@@ -47,50 +91,6 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         return () => observer.disconnect();
       }
     });
-
-    const themeOptions: Array<{
-      value: ThemeName;
-      label: string;
-      icon: typeof Sparkles;
-      description: string;
-      gradient: string;
-    }> = [
-      {
-        value: 'auto',
-        label: 'Auto',
-        icon: Sparkles,
-        description: 'Follows system preference',
-        gradient: 'from-gray-500 to-gray-600',
-      },
-      {
-        value: 'dark',
-        label: 'Dark',
-        icon: Moon,
-        description: 'Classic dark theme',
-        gradient: 'from-gray-800 to-gray-900',
-      },
-      {
-        value: 'light',
-        label: 'Light',
-        icon: Sun,
-        description: 'Clean light theme',
-        gradient: 'from-yellow-400 to-orange-500',
-      },
-      {
-        value: 'black',
-        label: 'Black',
-        icon: Battery,
-        description: 'Full black theme for OLED',
-        gradient: 'from-black to-gray-900',
-      },
-      {
-        value: 'simplymc',
-        label: 'SimplyMC',
-        icon: Smile,
-        description: 'SimplyMC dark theme for the nostalgia',
-        gradient: 'from-purple-600 to-purple-900',
-      },
-    ];
 
     const CurrentThemeOption =
       themeOptions.find((option) => option.value === themeStore.currentTheme) ||
@@ -141,7 +141,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
         <button
           onClick$={handleCycleTheme}
           class={`lum-btn lum-bg-transparent group relative p-2 ${className}`}
-          title={`Current theme: ${CurrentThemeOption.label}. Click to cycle themes.`}
+          title={`Current theme: ${CurrentThemeOption.name}. Click to cycle themes.`}
         >
           {CurrentThemeOption.value === 'auto' && (
             <>
@@ -158,7 +158,7 @@ export const ThemeToggle = component$<ThemeToggleProps>(
             }
           />
           {showLabel && (
-            <span class="ml-2 text-sm">{CurrentThemeOption.label}</span>
+            <span class="ml-2 text-sm">{CurrentThemeOption.name}</span>
           )}
         </button>
       );
@@ -166,8 +166,24 @@ export const ThemeToggle = component$<ThemeToggleProps>(
     // Dropdown variant - full theme selector
     return (
       <div class={`relative ${className}`}>
-        <SelectMenu id="theme-toggle-dropdown" customDropdown>
-          <span q:slot="dropdown" class="flex items-center gap-2">
+        <SelectMenu
+          btnProps={{
+            class: 'p-2',
+          }}
+          id="theme-toggle-dropdown"
+          values={themeOptions.map((option) => ({
+            name: option.name,
+            value: option.value,
+          }))}
+          value={CurrentThemeOption.value}
+          onChange$={async (e, el) => {
+            await handleThemeChange(el.value as ThemeName);
+          }}
+        >
+          <span
+            q:slot="dropdown-before"
+            class="relative flex items-center gap-2"
+          >
             {CurrentThemeOption.value === 'auto' && (
               <>
                 <Moon size={24} class="hidden dark:flex" />
@@ -178,50 +194,32 @@ export const ThemeToggle = component$<ThemeToggleProps>(
               size={CurrentThemeOption.value === 'auto' ? 12 : 24}
               class={
                 CurrentThemeOption.value === 'auto'
-                  ? 'absolute top-1.5 left-8'
+                  ? 'absolute bottom-4 left-4'
                   : ''
               }
             />
-            {(variant === 'full' || showLabel) && (
-              <span>{CurrentThemeOption.label}</span>
-            )}
           </span>
-          {themeOptions.map((option) => {
-            const IconComponent = option.icon;
-            const isActive = themeStore.currentTheme === option.value;
-            const value = option.value;
-
-            return (
-              <button
-                q:slot="extra-content"
-                key={value}
-                onClick$={() => handleThemeChange(value)}
-                class={{
-                  'lum-btn rounded-lum-1 p-2 pr-4 text-left': true,
-                  [`bg-linear-to-br ${option.gradient} border-lum-accent border`]:
-                    isActive,
-                  'lum-bg-transparent': !isActive,
-                }}
-              >
-                <span
-                  class={{
-                    'rounded-lum-1 flex items-center justify-center p-2': true,
-                    [`bg-linear-to-r ${option.gradient}`]: !isActive,
-                  }}
-                >
-                  <IconComponent class="h-4 w-4 text-white" />
-                </span>
-                <span class="flex flex-col">
-                  <span class="text-theme-text-primary text-sm font-medium">
-                    {option.label}
-                  </span>
-                  <span class="text-theme-text-muted text-lum-text-secondary text-xs">
-                    {option.description}
-                  </span>
-                </span>
-              </button>
-            );
-          })}
+          {themeOptions.map((Option) => (
+            <span
+              key={Option.value}
+              q:slot={`before-${Option.value}`}
+              class={{
+                'rounded-full bg-linear-to-br p-2': true,
+                [Option.gradient]: true,
+              }}
+            >
+              <Option.icon size={16} />
+            </span>
+          ))}
+          {themeOptions.map((Option) => (
+            <span
+              key={Option.value}
+              q:slot={`after-${Option.value}`}
+              class="text-lum-text-secondary text-sm"
+            >
+              {Option.description}
+            </span>
+          ))}
         </SelectMenu>
       </div>
     );
