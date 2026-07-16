@@ -1,7 +1,4 @@
-import {
-  environmentOptions,
-  softwareOptionsFlags,
-} from '~/routes/resources/flags';
+import { environmentOptions, softwareOptionsFlags } from '.';
 import { operatingSystem } from './environment/operatingSystem';
 import { serverType } from './environment/serverType';
 import type { AvailableExtraFlags, AvailableFlags } from './flags';

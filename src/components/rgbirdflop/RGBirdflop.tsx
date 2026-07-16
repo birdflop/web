@@ -366,7 +366,7 @@ export default component$(
                   value={
                     rgbStore.customFormat
                       ? 'custom'
-                      : JSON.stringify(rgbStore.colorFormat)
+                      : colorFormats.indexOf(rgbStore.colorFormat)
                   }
                   class="lum-btn-p-1 w-full text-sm whitespace-nowrap"
                   btnProps={{
@@ -380,36 +380,11 @@ export default component$(
                       rgbStore.customFormat = true;
                     } else {
                       rgbStore.customFormat = false;
-                      rgbStore.colorFormat = JSON.parse(el.value);
+                      rgbStore.colorFormat = colorFormats[parseInt(el.value)];
                     }
                   }}
                   values={[
-                    ...(!rgbStore.customFormat &&
-                    !colorFormats.find(
-                      (format) => format.color == rgbStore.colorFormat.color
-                    )
-                      ? [
-                          {
-                            name: rgbStore.colorFormat.color
-                              .replace('$1', 'r')
-                              .replace('$2', 'r')
-                              .replace('$3', 'g')
-                              .replace('$4', 'g')
-                              .replace('$5', 'b')
-                              .replace('$6', 'b')
-                              .replace(
-                                '$f',
-                                buildFormatCodes(
-                                  rgbStore.baseFormatting,
-                                  rgbStore
-                                )
-                              )
-                              .replace('$c', ''),
-                            value: JSON.stringify(rgbStore.colorFormat),
-                          },
-                        ]
-                      : []),
-                    ...colorFormats.map((format) => ({
+                    ...colorFormats.map((format, i) => ({
                       name: format.color
                         .replace('$1', 'r')
                         .replace('$2', 'r')
@@ -422,7 +397,7 @@ export default component$(
                           buildFormatCodes(rgbStore.baseFormatting, rgbStore)
                         )
                         .replace('$c', ''),
-                      value: JSON.stringify(format),
+                      value: i.toString(),
                     })),
                     {
                       name: t('rgb.colors.customFormat@@Custom Format'),

@@ -29,7 +29,7 @@ import PluginCard from '~/components/plugins/PluginCard';
 import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
 import { deepTrack } from '~/util/track';
-import { softwareOptions } from '../flags';
+import { softwareOptions } from '~/util/flags';
 import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
 import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import {

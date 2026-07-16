@@ -242,15 +242,18 @@ export default component$(() => {
                 <SelectMenu
                   id="publish-preset-preset"
                   class="w-full"
-                  values={privatePresets.value.map((preset) => ({
+                  values={privatePresets.value.map((preset, i) => ({
                     name: preset.text ?? 'Saved Preset',
-                    value: JSON.stringify(preset),
+                    value: i.toString(),
                     custom: true,
                   }))}
                   onChange$={(e, el) => {
-                    selectedPreset.value = JSON.parse(el.value);
+                    selectedPreset.value =
+                      privatePresets.value[parseInt(el.value)];
                   }}
-                  value={JSON.stringify(selectedPreset.value)}
+                  value={privatePresets.value
+                    .indexOf(selectedPreset.value)
+                    .toString()}
                 >
                   {privatePresets.value.map((preset, i) => (
                     <span

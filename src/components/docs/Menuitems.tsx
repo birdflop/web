@@ -80,11 +80,11 @@ export const MenuItems = component$(
                   </Accordion>
                   <div
                     class={{
-                      'overflow-hidden transition-all duration-200': true,
-                      'max-h-0 scale-98 opacity-0': !openItems.value.includes(
+                      'overflow-hidden transition-all transition-discrete duration-300 starting:scale-90 starting:opacity-0': true,
+                      'hidden scale-90 opacity-0': !openItems.value.includes(
                         item.text || `docs-item-${i}`
                       ),
-                      'mt-1 max-h-screen opacity-100': openItems.value.includes(
+                      'scale-100 opacity-100': openItems.value.includes(
                         item.text || `docs-item-${i}`
                       ),
                       'pl-1': level > 0,
