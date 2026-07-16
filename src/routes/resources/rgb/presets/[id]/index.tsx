@@ -1,5 +1,6 @@
 import {
   component$,
+  Fragment,
   isBrowser,
   useContext,
   useContextProvider,
@@ -26,7 +27,7 @@ import { NotificationContext, Notification } from '~/util/Notification';
 import Input, { previewStyleContext } from '~/components/rgbirdflop/Input';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { Dropdown } from '@luminescent/ui-qwik';
 import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
 import {
   savePreset,
@@ -238,18 +239,16 @@ export default component$(() => {
       )}
 
       <div class="flex gap-2">
-        <SelectMenu
+        <Dropdown
           id={`use-${presetInfo.name}-${presetInfo.author}`}
           hover
-          customDropdown
           class="lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex"
         >
-          <span q:slot="dropdown" class="flex items-center gap-3">
+          <Fragment q:slot="dropdown">
             <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
-          </span>
+          </Fragment>
           <Link
             href={`/resources/rgb?${searchParams.toString()}`}
-            q:slot="extra-content"
             class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
           >
             <Palette size={20} />{' '}
@@ -257,13 +256,12 @@ export default component$(() => {
           </Link>
           <Link
             href={`/resources/animtab?${searchParams.toString()}`}
-            q:slot="extra-content"
             class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
           >
             <Rainbow size={20} />{' '}
             {t('nav.resources.animatedTAB.title@@Animated TAB')}
           </Link>
-        </SelectMenu>
+        </Dropdown>
         <button
           class={{
             'lum-btn text-sm': true,

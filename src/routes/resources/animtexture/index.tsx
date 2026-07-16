@@ -1,5 +1,6 @@
 import {
   component$,
+  Fragment,
   isBrowser,
   useContextProvider,
   useSignal,
@@ -267,7 +268,7 @@ export default component$(() => {
                 <SelectMenu
                   id="namespace"
                   class="w-full"
-                  customDropdown
+                  customDropdownButton
                   values={[
                     { name: 'minecraft', value: 'minecraft' },
                     { name: 'birdflop', value: 'birdflop' },
@@ -276,7 +277,7 @@ export default component$(() => {
                     texture.namespace = el.value;
                   }}
                 >
-                  <span q:slot="dropdown">{texture.namespace}</span>
+                  <Fragment q:slot="dropdown">{texture.namespace}</Fragment>
                   <input
                     q:slot="extra-content"
                     id="namespace"
@@ -294,7 +295,7 @@ export default component$(() => {
                 <SelectMenu
                   id="path"
                   class="w-full"
-                  customDropdown
+                  customDropdownButton
                   values={[
                     { name: 'block', value: 'block' },
                     { name: 'item', value: 'item' },
@@ -303,7 +304,7 @@ export default component$(() => {
                     texture.path = el.value;
                   }}
                 >
-                  <span q:slot="dropdown">{texture.path}</span>
+                  <Fragment q:slot="dropdown">{texture.path}</Fragment>
                   <input
                     q:slot="extra-content"
                     id="path"

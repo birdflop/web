@@ -6,7 +6,13 @@ import {
   Fragment,
 } from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
-import { Toggle, SelectMenu, RangeInput, Label } from '@luminescent/ui-qwik';
+import {
+  Toggle,
+  SelectMenu,
+  RangeInput,
+  Label,
+  Dropdown,
+} from '@luminescent/ui-qwik';
 
 import { inlineTranslate } from 'qwik-speak';
 import { getCookies, setCookies } from '~/util/dataUtils';
@@ -265,13 +271,7 @@ export default component$(() => {
                   value={flagsStore.flags}
                 />
               </Label>
-              <SelectMenu
-                id="flagshelp"
-                onChange$={(e, el) =>
-                  (flagsStore.flags = el.value as AvailableFlags)
-                }
-                customDropdown
-              >
+              <Dropdown id="flagshelp">
                 <CircleHelp size={24} q:slot="dropdown" />
                 {flagOptions.map((option) => {
                   if (!option.help) return null;
@@ -279,7 +279,6 @@ export default component$(() => {
                     <a
                       key={option.value}
                       class="lum-btn lum-bg-transparent rounded-lum-1"
-                      q:slot="extra-content"
                       href={option.help}
                       target="_blank"
                     >
@@ -287,7 +286,7 @@ export default component$(() => {
                     </a>
                   );
                 })}
-              </SelectMenu>
+              </Dropdown>
             </div>
             <p class="text-lum-text-secondary text-sm">
               {t(

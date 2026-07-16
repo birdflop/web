@@ -13,7 +13,7 @@ import {
 import { inlineTranslate } from 'qwik-speak';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets, rgbPreset } from '~/util/rgb/presets';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Dropdown, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
 import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
 import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
@@ -469,21 +469,19 @@ export default component$(() => {
               },
             ]}
           />
-          <SelectMenu
+          <Dropdown
             align="right"
             id="settings"
             class="rounded-lum-1 lum-bg-transparent p-3"
             panelProps={{
               class: 'lum-grad-bg-lum-card-bg p-2 gap-2',
             }}
-            customDropdown
           >
             <Settings q:slot="dropdown" size={16} />
 
             {isAdmin && (
               <Toggle
                 id="showpendingpresets"
-                q:slot="extra-content"
                 checked={showPending && privatePresets.value.length > 0}
                 onChange$={(e, el) =>
                   void updateURL({ showPending: el.checked, page: 1 })
@@ -494,7 +492,7 @@ export default component$(() => {
             )}
 
             {savedPresets.value.length > 0 && (
-              <div q:slot="extra-content">
+              <div>
                 <Toggle
                   id="showsavedpresets"
                   disabled={savedPresets.value.length === 0}
@@ -514,7 +512,7 @@ export default component$(() => {
                 </p>
               </div>
             )}
-            <div q:slot="extra-content">
+            <div>
               <Toggle
                 id="previewwithsettings"
                 checked={presetStore.previewWithSettings}
@@ -534,7 +532,7 @@ export default component$(() => {
                 )}
               </p>
             </div>
-          </SelectMenu>
+          </Dropdown>
         </div>
       </div>
 

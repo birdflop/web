@@ -9,6 +9,7 @@ import {
 } from '@qwik.dev/core';
 import {
   ColorPicker,
+  Dropdown,
   Label,
   NumberInput,
   SelectMenu,
@@ -216,13 +217,12 @@ export default component$<ColorListProps>((props) => {
         >
           <MoveHorizontal size={20} />
         </button>
-        <SelectMenu
+        <Dropdown
           id="moreColorOptions"
           align="right"
           class="rounded-lum-1 lum-bg-transparent justify-center! gap-0! p-1.5"
         >
           <button
-            q:slot="extra-content"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
               const currentColors = props.colors ?? getColors(rgbStore, id);
@@ -239,7 +239,6 @@ export default component$<ColorListProps>((props) => {
             {t('rgb.colors.invert@@Invert')}
           </button>
           <button
-            q:slot="extra-content"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             onClick$={() => {
               const currentColors = props.colors ?? getColors(rgbStore, id);
@@ -254,7 +253,6 @@ export default component$<ColorListProps>((props) => {
             {t('rgb.colors.reverse@@Reverse')}
           </button>
           <button
-            q:slot="extra-content"
             class="lum-btn lum-btn-p-2 lum-bg-transparent rounded-lum-1 text-sm"
             disabled={colors.length >= resolvedTextLength}
             onClick$={() => {
@@ -266,7 +264,7 @@ export default component$<ColorListProps>((props) => {
             <Copy size={20} />
             {t('rgb.colors.duplicate@@Duplicate')}
           </button>
-        </SelectMenu>
+        </Dropdown>
         <div class="flex">
           <SelectMenu
             title={t('rgb.colors.gradientType@@Gradient Type')}

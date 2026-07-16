@@ -1,6 +1,6 @@
-import { component$, useContext } from '@qwik.dev/core';
+import { component$, Fragment, useContext } from '@qwik.dev/core';
 import { Form, Link, useLocation } from '@qwik.dev/router';
-import { Nav, SelectMenu } from '@luminescent/ui-qwik';
+import { Dropdown, Nav, SelectMenu } from '@luminescent/ui-qwik';
 import { Birdflop } from '@luminescent/icons-qwik';
 import SiGithub from 'simple-icons-qwik/icons/SiGithub';
 import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
@@ -75,63 +75,56 @@ export default component$(() => {
       >
         <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
-      <SelectMenu
+      <Dropdown
         id="nav-hosting"
         q:slot="end"
         hover
-        customDropdown
         panelProps={{
           class: 'lum-grad-bg-nav-bg',
         }}
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
-        <span q:slot="dropdown" class="flex items-center gap-2">
+        <Fragment q:slot="dropdown">
           <Server size={20} /> {t('nav.hosting.title@@Hosting')}
-        </span>
+        </Fragment>
         <a
-          q:slot="extra-content"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           href="https://panel.birdflop.com/"
         >
           <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
         </a>
         <Link
-          q:slot="exta-butrtons"
           href="/plans"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
         </Link>
         <a
-          q:slot="extra-content"
           href="https://client.birdflop.com/"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
         </a>
         <Link
-          q:slot="extra-content"
           href="/node-stats"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
-      </SelectMenu>
-      <SelectMenu
+      </Dropdown>
+      <Dropdown
         id="nav-resources"
         q:slot="end"
         hover
-        customDropdown
         panelProps={{
           class: 'lum-grad-bg-nav-bg',
         }}
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
-        <span q:slot="dropdown" class="flex items-center gap-2">
+        <Fragment q:slot="dropdown">
           <Box size={20} /> {t('nav.resources.title@@Resources')}
-        </span>
+        </Fragment>
         <Link
-          q:slot="extra-content"
           href="/resources/rgb"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -139,7 +132,6 @@ export default component$(() => {
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
         <Link
-          q:slot="extra-content"
           href="/resources/animtab"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -147,21 +139,18 @@ export default component$(() => {
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link
-          q:slot="extra-content"
           href="/resources/analyze"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link
-          q:slot="extra-content"
           href="/resources/flags"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link
-          q:slot="extra-content"
           href="/resources/banner"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
@@ -169,13 +158,12 @@ export default component$(() => {
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
-          q:slot="extra-content"
           href="/resources"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
-      </SelectMenu>
+      </Dropdown>
       <SelectMenu
         align="right"
         q:slot="end"
@@ -184,7 +172,7 @@ export default component$(() => {
           'lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2': true,
         }}
         id="lang-picker"
-        customDropdown
+        customDropdownButton
         panelProps={{
           class: 'lum-grad-bg-nav-bg',
         }}
@@ -220,12 +208,11 @@ export default component$(() => {
         <SocialButtons />
       </div>
       {session.value && session.value.user && (
-        <SelectMenu
+        <Dropdown
           align="right"
           q:slot="end"
           class="lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2"
           id="profile"
-          customDropdown
           panelProps={{
             class: 'lum-grad-bg-nav-bg',
           }}
@@ -243,13 +230,12 @@ export default component$(() => {
             {session.value.user?.name || 'User'}
           </span>
           <Link
-            q:slot="extra-content"
             href="/profile"
             class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           >
             <User size={20} /> {t('nav.profile.title@@Profile')}
           </Link>
-          <Form action={signOut} q:slot="extra-content">
+          <Form action={signOut}>
             <input type="hidden" name="providerId" value="discord" />
             <input
               type="hidden"
@@ -260,7 +246,7 @@ export default component$(() => {
               <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
             </button>
           </Form>
-        </SelectMenu>
+        </Dropdown>
       )}
       {!session.value && (
         <Form action={signIn} q:slot="end">

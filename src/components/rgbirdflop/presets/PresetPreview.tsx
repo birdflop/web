@@ -1,5 +1,6 @@
 import {
   component$,
+  Fragment,
   isBrowser,
   Signal,
   useContext,
@@ -15,7 +16,7 @@ import Save from 'lucide-icons-qwik/icons/Save';
 import Send from 'lucide-icons-qwik/icons/Send';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import { Birdflop, Luminescent } from '@luminescent/icons-qwik';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { Dropdown } from '@luminescent/ui-qwik';
 import {
   deletePreset,
   savePreset,
@@ -275,18 +276,16 @@ export default component$<PresetPreviewProps>(
             )}
           </button>
 
-          <SelectMenu
+          <Dropdown
             id={`use-${Preset.name}-${Preset.author}`}
             hover
-            customDropdown
             class="lum-bg-transparent rounded-lum-2 lum-btn-p-1 hidden gap-1 text-sm text-orange-300 sm:flex"
           >
-            <span q:slot="dropdown" class="flex items-center gap-3">
+            <Fragment q:slot="dropdown">
               <MousePointer2 size={20} />
-            </span>
+            </Fragment>
             <Link
               href={`/resources/rgb?${searchParams.toString()}`}
-              q:slot="extra-content"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
               <Palette size={20} />{' '}
@@ -294,13 +293,12 @@ export default component$<PresetPreviewProps>(
             </Link>
             <Link
               href={`/resources/animtab?${searchParams.toString()}`}
-              q:slot="extra-content"
               class="lum-btn lum-bg-transparent rounded-lum-1 w-full"
             >
               <Rainbow size={20} />{' '}
               {t('nav.resources.animatedTAB.title@@Animated TAB')}
             </Link>
-          </SelectMenu>
+          </Dropdown>
 
           {publishRefs && (
             <button

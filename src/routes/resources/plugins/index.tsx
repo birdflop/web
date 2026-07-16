@@ -1,6 +1,7 @@
 import {
   component$,
   createContextId,
+  Fragment,
   isBrowser,
   useComputed$,
   useContext,
@@ -434,13 +435,13 @@ export default component$(() => {
                   ...pluginSources,
                 ]}
                 value={pluginsStore.filter}
-                customDropdown
+                customDropdownButton
                 class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
               >
-                <span class="flex items-center gap-2" q:slot="dropdown">
+                <Fragment q:slot="dropdown">
                   <Filter size={16} />
                   Filter
-                </span>
+                </Fragment>
               </SelectMenu>
             </div>
 

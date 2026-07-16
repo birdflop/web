@@ -622,7 +622,7 @@ export default component$(
                   value: 'gui-item-lore',
                 },
               ]}
-              customDropdown
+              customDropdownButton
               class="lum-grad-bg-lum-card-bg/75 rounded-lum-1 gap-1 p-1"
             >
               <Eye

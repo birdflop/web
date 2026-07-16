@@ -1,5 +1,5 @@
 import { $, component$, PropsOf, QRL, Slot, useContext } from '@qwik.dev/core';
-import { Dropdown, getClassObject } from '@luminescent/ui-qwik';
+import { DropdownButton, getClassObject } from '@luminescent/ui-qwik';
 import { openItemsContext } from '~/routes/layout';
 
 export const loadOpenItems = $(() => {
@@ -49,7 +49,7 @@ export default component$(
     const openItems = useContext(openItemsContext);
 
     return (
-      <Dropdown
+      <DropdownButton
         class={{
           'lum-bg-lum-card-bg active:scale-100!': true,
           'hidden sm:flex': !!pcOnly,
@@ -62,10 +62,8 @@ export default component$(
           openItems.value = await toggleAccordion(sectionName, openItems.value);
         }}
       >
-        <span class="flex items-center gap-2">
-          <Slot />
-        </span>
-      </Dropdown>
+        <Slot />
+      </DropdownButton>
     );
   }
 );
