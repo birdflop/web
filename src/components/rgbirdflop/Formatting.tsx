@@ -273,7 +273,7 @@ export default component$(() => {
             void setFont(val);
           }}
           values={Object.entries(FONT_LABELS).map(([key, label]) => ({
-            name: <span>{label}</span>,
+            name: label,
             value: key,
           }))}
         />

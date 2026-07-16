@@ -6,7 +6,7 @@ export const ShowAllGradientsButton = component$<{
 }>((props) => {
   return (
     <button
-      q:slot="extra-buttons"
+      q:slot="extra-content"
       class={{
         'lum-btn rounded-lum-1 rounded-l-none p-1 transition-colors': true,
         'text-lum-primary': props.showAllGradients.value,

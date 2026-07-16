@@ -35,98 +35,68 @@ import Output from '~/components/Elements/Output';
 import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
 import HardDrive from 'lucide-icons-qwik/icons/HardDrive';
 
-const Linux = component$(() => (
-  <span class="flex items-center gap-2 fill-current">
-    <SiLinux size={20} /> Linux
-  </span>
-));
+export const environmentOptions = {
+  linux: { name: 'Linux', icon: SiLinux },
+  windows: { name: 'Windows', icon: Computer },
+  macos: { name: 'MacOS', icon: SiApple },
+  pterodactyl: { name: 'Pterodactyl', icon: SiPterodactyl },
+  command: { name: 'Command', icon: Terminal },
+};
 
-const Windows = component$(() => (
-  <span class="flex items-center gap-2">
-    <Computer size={20} /> Windows
-  </span>
-));
+export const softwareOptionsFlags = {
+  paper: { name: 'Paper', icon: LogoPaper },
+  purpur: { name: 'Purpur', icon: LogoPurpur },
+  velocity: { name: 'Velocity', icon: SiVelocity },
+  waterfall: { name: 'Waterfall', icon: LogoWaterfall },
+};
 
-const MacOS = component$(() => (
-  <span class="flex items-center gap-2 fill-current">
-    <SiApple size={20} /> MacOS
-  </span>
-));
-
-const Pterodactyl = component$(() => (
-  <span class="flex items-center gap-2 fill-current">
-    <SiPterodactyl size={20} /> Pterodactyl
-  </span>
-));
-
-const Command = component$(() => (
-  <span class="flex items-center gap-2">
-    <Terminal size={20} /> Command
-  </span>
-));
-
-const environmentOptions = [
-  { name: <Linux />, value: 'linux' },
-  { name: <Windows />, value: 'windows' },
-  { name: <MacOS />, value: 'macos' },
-  { name: <Pterodactyl />, value: 'pterodactyl' },
-  { name: <Command />, value: 'command' },
-];
-
-const Spigot = component$(() => (
-  <span class="flex items-center gap-2 fill-current">
-    <SiSpigotmc size={20} /> Spigot
-  </span>
-));
-
-const Paper = component$(() => (
-  <span class="flex items-center gap-2">
-    <LogoPaper size={20} /> Paper
-  </span>
-));
-
-const Purpur = component$(() => (
-  <span class="flex items-center gap-2">
-    <LogoPurpur size={20} /> Purpur
-  </span>
-));
-
-const Velocity = component$(() => (
-  <span class="flex items-center gap-2 fill-current">
-    <SiVelocity size={20} /> Velocity
-  </span>
-));
-
-const Waterfall = component$(() => (
-  <span class="flex items-center gap-2">
-    <LogoWaterfall size={20} /> Waterfall
-  </span>
-));
-
-const Forge = component$(() => (
-  <span class="flex items-center gap-2">
-    <LogoForge size={20} /> Forge
-  </span>
-));
-
-const Fabric = component$(() => (
-  <span class="flex items-center gap-2">
-    <LogoFabric size={20} /> Fabric
-  </span>
-));
-
-const softwareOptionsFlags = [
-  { name: <Paper />, value: 'paper' },
-  { name: <Purpur />, value: 'purpur' },
-  { name: <Velocity />, value: 'velocity' },
-  { name: <Waterfall />, value: 'waterfall' },
-];
-
-export const softwareOptions = [
+export const softwareOptions = {
   ...softwareOptionsFlags,
-  { name: <Spigot />, value: 'spigot' },
-  { name: <Forge />, value: 'forge' },
-  { name: <Fabric />, value: 'fabric' },
+  spigot: { name: 'Spigot', icon: SiSpigotmc },
+  forge: { name: 'Forge', icon: LogoForge },
+  fabric: { name: 'Fabric', icon: LogoFabric },
+};
+
+const flagOptions = [
+  {
+    translatedName: 'flags.flags.none@@None',
+    value: 'none',
+  },
+  {
+    name: "Aikar's Flags",
+    value: 'aikars',
+    help: 'https://docs.papermc.io/paper/aikars-flags',
+  },
+  {
+    name: "MeowIce's Flags",
+    value: 'meowice',
+    help: 'https://github.com/MeowIce/meowice-flags',
+  },
+  {
+    name: 'Benchmarked (G1GC)',
+    value: 'benchmarkedG1GC',
+    help: 'https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks',
+  },
+  {
+    name: 'Benchmarked (ZGC, Java 25+)',
+    value: 'benchmarkedZGC',
+    help: 'https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks',
+  },
+  {
+    name: "hilltty's Flags",
+    value: 'hillttys',
+    help: 'https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md',
+  },
+  {
+    name: "Obydux's Flags",
+    value: 'obyduxs',
+    help: 'https://github.com/Obydux/Minecraft-GraalVM-Flags',
+  },
+  {
+    name: "Etil's Flags",
+    value: 'etils',
+    help: 'https://github.com/etil2jz/etil-minecraft-flags',
+  },
 ];
 
 export const useCookies = routeLoader$(({ cookie, url }) => {
@@ -136,41 +106,6 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
 
 export default component$(() => {
   const t = inlineTranslate();
-
-  const flagOptions = [
-    {
-      name: t('flags.flags.none@@None'),
-      value: 'none',
-    },
-    {
-      name: "Aikar's Flags",
-      value: 'aikars',
-    },
-    {
-      name: "MeowIce's Flags",
-      value: 'meowice',
-    },
-    {
-      name: 'Benchmarked (G1GC)',
-      value: 'benchmarkedG1GC',
-    },
-    {
-      name: 'Benchmarked (ZGC, Java 25+)',
-      value: 'benchmarkedZGC',
-    },
-    {
-      name: "hilltty's Flags",
-      value: 'hillttys',
-    },
-    {
-      name: "Obydux's Flags",
-      value: 'obyduxs',
-    },
-    {
-      name: "Etil's Flags",
-      value: 'etils',
-    },
-  ];
 
   const configOptions = {
     gui: {
@@ -240,6 +175,8 @@ export default component$(() => {
     if (isBrowser) setCookies('parsed', flagsStore);
     deepTrack(track, flagsStore);
   });
+  const CurrentSoftware = softwareOptions[flagsStore.serverType];
+  const CurrentEnvironment = environmentOptions[flagsStore.operatingSystem];
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
@@ -284,13 +221,24 @@ export default component$(() => {
                 <HardDrive size={16} q:slot="before-label" />
                 <SelectMenu
                   id="os"
-                  class="w-full"
+                  class="flex w-full items-center"
                   onChange$={(e, el) => {
-                    flagsStore.operatingSystem = el.value;
+                    flagsStore.operatingSystem =
+                      el.value as typeof flagsStore.operatingSystem;
                   }}
-                  values={environmentOptions}
+                  values={Object.entries(environmentOptions).map(
+                    ([key, option]) => ({
+                      name: option.name,
+                      value: key,
+                    })
+                  )}
                   value={flagsStore.operatingSystem}
-                />
+                >
+                  {Object.entries(environmentOptions).map(([key, Option]) => (
+                    <Option.icon key={key} size={20} q:slot={`before-${key}`} />
+                  ))}
+                  <CurrentEnvironment.icon size={20} q:slot="dropdown-before" />
+                </SelectMenu>
               </Label>
               <p class="text-lum-text-secondary text-sm">
                 {t(
@@ -305,11 +253,22 @@ export default component$(() => {
                   id="software"
                   class="w-full"
                   onChange$={(e, el) => {
-                    flagsStore.serverType = el.value;
+                    flagsStore.serverType =
+                      el.value as typeof flagsStore.serverType;
                   }}
-                  values={softwareOptionsFlags}
+                  values={Object.entries(softwareOptions).map(
+                    ([key, option]) => ({
+                      name: option.name,
+                      value: key,
+                    })
+                  )}
                   value={flagsStore.serverType}
-                />
+                >
+                  {Object.entries(softwareOptions).map(([key, Option]) => (
+                    <Option.icon key={key} size={20} q:slot={`before-${key}`} />
+                  ))}
+                  <CurrentSoftware.icon size={20} q:slot="dropdown-before" />
+                </SelectMenu>
               </Label>
               <p class="text-lum-text-secondary text-sm">
                 {t(
@@ -367,61 +326,38 @@ export default component$(() => {
                 <SelectMenu
                   id="flags"
                   class="w-full"
-                  onChange$={(e, el) => {
-                    flagsStore.flags = el.value as AvailableFlags;
-                  }}
-                  values={flagOptions}
+                  onChange$={(e, el) =>
+                    (flagsStore.flags = el.value as AvailableFlags)
+                  }
+                  values={flagOptions.map((option) => ({
+                    name: option.name ?? t(option.translatedName),
+                    value: option.value,
+                  }))}
                   value={flagsStore.flags}
                 />
               </Label>
               <SelectMenu
                 id="flagshelp"
-                onChange$={(e, el) => {
-                  flagsStore.flags = el.value as AvailableFlags;
-                }}
+                onChange$={(e, el) =>
+                  (flagsStore.flags = el.value as AvailableFlags)
+                }
                 customDropdown
               >
                 <CircleHelp size={24} q:slot="dropdown" />
-                <a
-                  class="lum-btn lum-bg-transparent rounded-lum-1"
-                  q:slot="extra-buttons"
-                  href="https://docs.papermc.io/paper/aikars-flags"
-                  target="_blank"
-                >
-                  {t("flags.flags.aikars@@Aikar's Flags")}
-                </a>
-                <a
-                  class="lum-btn lum-bg-transparent rounded-lum-1"
-                  q:slot="extra-buttons"
-                  href="https://github.com/MeowIce/meowice-flags"
-                  target="_blank"
-                >
-                  {t("flags.flags.meowice@@MeowIce's Flags")}
-                </a>
-                <a
-                  class="lum-btn lum-bg-transparent rounded-lum-1"
-                  q:slot="extra-buttons"
-                  href="https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks"
-                  target="_blank"
-                >
-                  {t('flags.flags.benchmarked@@Benchmarked')}
-                </a>
-                <a
-                  class="lum-btn lum-bg-transparent rounded-lum-1"
-                  q:slot="extra-buttons"
-                  href="https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md"
-                  target="_blank"
-                >
-                  {t("flags.flags.hillttys@@hilltty's Flags")}
-                </a>
-                <a
-                  class="lum-btn lum-bg-transparent rounded-lum-1"
-                  q:slot="extra-buttons"
-                  href="https://github.com/Obydux/Minecraft-GraalVM-Flags"
-                  target="_blank"
-                >
-                  {t("flags.flags.obyduxs@@Obydux's Flags")}
-                </a>
+                {flagOptions.map((option) => {
+                  if (!option.help) return null;
+                  return (
+                    <a
+                      key={option.value}
+                      class="lum-btn lum-bg-transparent rounded-lum-1"
+                      q:slot="extra-content"
+                      href={option.help}
+                      target="_blank"
+                    >
+                      {option.name}
+                    </a>
+                  );
+                })}
               </SelectMenu>
             </div>
             <p class="text-lum-text-secondary text-sm">
