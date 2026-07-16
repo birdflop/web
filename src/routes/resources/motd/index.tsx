@@ -68,6 +68,7 @@ const MotdLineInput = component$<MotdLineInputProps>(
         onFocus$={(e, el) => onCaret$(field, el)}
         onClick$={(e, el) => onCaret$(field, el)}
         onKeyUp$={(e, el) => onCaret$(field, el)}
+        onKeyDown$={(e, el) => onCaret$(field, el)}
         onSelect$={(e, el) => onCaret$(field, el)}
       />
     </Label>

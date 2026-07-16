@@ -297,6 +297,7 @@ const InputField = component$(
             }}
             onSelect$={(e, el) => syncSelection(el)}
             onKeyUp$={(e, el) => syncSelection(el)}
+            onKeyDown$={(e, el) => syncSelection(el)}
             onMouseUp$={(e, el) => syncSelection(el)}
           />
         )}
