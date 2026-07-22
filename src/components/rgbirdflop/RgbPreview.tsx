@@ -6,7 +6,7 @@ import {
   hexToRGB,
   getShadowColors,
 } from '@birdflop/rgbirdflop';
-import { component$, useContext } from '@qwik.dev/core';
+import { component$, JSXOutput, useContext } from '@qwik.dev/core';
 import { rgbStoreContext } from './RGBirdflop';
 import { selectionContext } from './Input';
 import {
@@ -67,7 +67,7 @@ export default component$<RgbPreviewProps>(
         ? selection.value.start
         : -1;
 
-    const rendered: any[] = [];
+    const rendered: JSXOutput[] = [];
 
     textArray.forEach((char, index) => {
       if (index === cursorIndex && showSelection) {

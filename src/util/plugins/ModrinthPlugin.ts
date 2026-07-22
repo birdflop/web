@@ -1,7 +1,15 @@
 import { BasePlugin } from './BasePlugin';
+import type {
+  ModrinthProjectData,
+  ModrinthSearchHit,
+  ModrinthVersionData,
+} from './types';
 
 export class ModrinthPlugin extends BasePlugin {
-  static async search(query: string, loaders?: string[]): Promise<any[]> {
+  static async search(
+    query: string,
+    loaders?: string[]
+  ): Promise<ModrinthPlugin[]> {
     const searchUrl = 'https://api.modrinth.com/v2/search';
     const searchParams = new URLSearchParams({
       query: query,
@@ -15,24 +23,31 @@ export class ModrinthPlugin extends BasePlugin {
     });
 
     const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
-    const searchData: { hits: any[] } = await searchRes.json();
+    const searchData = (await searchRes.json()) as {
+      hits: ModrinthSearchHit[];
+    };
     return searchData.hits.map((data) =>
-      new ModrinthPlugin({ id: data.project_id }).fromData(data)
+      new ModrinthPlugin({ id: data.project_id }).fromData(
+        data as unknown as Record<string, unknown>
+      )
     );
   }
+
   type = 'modrinth' as const;
 
-  fromData(data: any) {
+  fromData(data: Record<string, unknown>) {
+    const modrinthData = data as unknown as ModrinthProjectData &
+      ModrinthSearchHit;
     Object.assign(this, {
-      id: data.id ?? data.project_id,
-      name: data.title,
-      description: data.description,
-      url: data.url,
-      iconUrl: data.icon_url,
-      mcVersions: data.game_versions,
-      releaseDate: new Date(data.published),
-      updateDate: new Date(data.updated),
-      sourceCodeLink: data.source_url,
+      id: modrinthData.id ?? modrinthData.project_id,
+      name: modrinthData.title,
+      description: modrinthData.description,
+      url: modrinthData.url,
+      iconUrl: modrinthData.icon_url,
+      mcVersions: modrinthData.game_versions,
+      releaseDate: new Date(modrinthData.published),
+      updateDate: new Date(modrinthData.updated),
+      sourceCodeLink: modrinthData.source_url,
     });
 
     return this;
@@ -40,19 +55,19 @@ export class ModrinthPlugin extends BasePlugin {
 
   async fetchData() {
     const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
-    const data = (await res.json()) as any;
+    const data = (await res.json()) as ModrinthProjectData;
 
-    return this.fromData(data);
+    return this.fromData(data as unknown as Record<string, unknown>);
   }
 
   async fetchVersions() {
     const res = await fetch(
       `https://api.modrinth.com/v2/project/${this.id}/version?loaders=["paper"]`
     );
-    const versions = (await res.json()) as any;
+    const versions = (await res.json()) as ModrinthVersionData[];
     console.log('Fetched versions for plugin', this.name, versions);
 
-    this.versions = versions.map((version: any) => ({
+    this.versions = versions.map((version) => ({
       id: version.id,
       name: version.name,
       releaseDate: new Date(version.date_published),
@@ -60,7 +75,7 @@ export class ModrinthPlugin extends BasePlugin {
     this.latestVersion = this.versions?.[0];
 
     const latestVersion = versions[0];
-    this.file = latestVersion.files?.length
+    this.file = latestVersion?.files?.length
       ? {
           name: latestVersion.files[0].filename,
           type: latestVersion.files[0].file_type,

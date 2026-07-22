@@ -1,10 +1,11 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     'max-auto-save-chunks-per-tick': [
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -24,7 +25,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'optimize-explosions'
@@ -42,7 +43,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -62,7 +63,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'game-mechanics'
@@ -80,7 +81,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -100,7 +101,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -120,7 +121,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -140,7 +141,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -160,7 +161,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default']['hopper'][
                   'disable-move-event'
@@ -178,7 +179,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -198,7 +199,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -218,7 +219,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'prevent-moving-into-unloaded-chunks'
@@ -236,7 +237,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'use-faster-eigencraft-redstone'
@@ -254,7 +255,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'fix-climbing-bypassing-cramming-rule'
@@ -272,7 +273,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'armor-stands-do-collision-entity-lookups'
@@ -290,7 +291,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'armor-stands-tick'
@@ -300,30 +301,30 @@ export default function getConfig() {
             vars: ['paper'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'PetBlocks'
+                  (plugin) => plugin.name == 'PetBlocks'
                 ) !== undefined
               );
             },
             vars: ['plugins'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'BlockBalls'
+                  (plugin) => plugin.name == 'BlockBalls'
                 ) !== undefined
               );
             },
             vars: ['plugins'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'ArmorStandTools'
+                  (plugin) => plugin.name == 'ArmorStandTools'
                 ) !== undefined
               );
             },
@@ -338,7 +339,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'per-player-mob-spawns'
@@ -356,7 +357,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'alt-item-despawn-rate'
@@ -374,7 +375,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -394,7 +395,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -414,7 +415,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][
@@ -434,7 +435,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.paper['world-settings']['default'][

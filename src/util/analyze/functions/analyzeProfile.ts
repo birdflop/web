@@ -1,3 +1,13 @@
+import type {
+  AnalyzePlugin,
+  BukkitConfig,
+  OptionData,
+  PaperConfig,
+  PurpurConfig,
+  PufferfishConfig,
+  ServerPropertiesConfig,
+  SpigotConfig,
+} from '../types';
 import createField from './createField';
 import evalField from './evalField';
 import { analyzeJvmFlags } from './jvmFlags';
@@ -13,15 +23,39 @@ import config_spigot from '~/util/analyze/configs/spigot';
 
 const supportedPlatforms = ['paper', 'bukkit'];
 
+interface SparkSampler {
+  metadata: {
+    platform: {
+      name: string;
+      minecraftVersion: string;
+      brand: string;
+    };
+    sources: Record<string, AnalyzePlugin>;
+    serverConfigurations?: Record<string, string>;
+    systemStatistics: {
+      java: {
+        vmArgs: string;
+        version: string;
+      };
+      cpu: {
+        threads: number;
+      };
+    };
+    platformStatistics: {
+      playerCount: number;
+    };
+  };
+}
+
 export default async function analyzeProfile(id: string) {
   const url_raw = `https://spark.lucko.me/${id}?raw=1`;
 
-  let sampler;
+  let sampler: SparkSampler;
   try {
     const response_raw = await fetch(url_raw, {
       headers: { Accept: 'application/json' },
     });
-    sampler = (await response_raw.json()) as any;
+    sampler = await response_raw.json();
   } catch (err) {
     return [
       {
@@ -33,17 +67,26 @@ export default async function analyzeProfile(id: string) {
 
   const platform = sampler.metadata.platform.name;
 
-  let server_properties: any, bukkit: any, spigot: any, paper: any, purpur: any;
+  let server_properties = {} as ServerPropertiesConfig,
+    bukkit = {} as BukkitConfig,
+    spigot = {} as SpigotConfig,
+    paper = {} as PaperConfig,
+    purpur = {} as PurpurConfig;
 
-  const plugins: any[] = Object.values(sampler.metadata.sources);
+  const plugins: AnalyzePlugin[] = Object.values(sampler.metadata.sources);
   const configs = sampler.metadata.serverConfigurations;
   if (configs) {
     if (configs['server.properties'])
-      server_properties = JSON.parse(configs['server.properties']);
-    if (configs['bukkit.yml']) bukkit = JSON.parse(configs['bukkit.yml']);
-    if (configs['spigot.yml']) spigot = JSON.parse(configs['spigot.yml']);
-    if (configs['paper/']) paper = JSON.parse(configs['paper/']);
-    if (configs['purpur.yml']) purpur = JSON.parse(configs['purpur.yml']);
+      server_properties = JSON.parse(
+        configs['server.properties']
+      ) as ServerPropertiesConfig;
+    if (configs['bukkit.yml'])
+      bukkit = JSON.parse(configs['bukkit.yml']) as BukkitConfig;
+    if (configs['spigot.yml'])
+      spigot = JSON.parse(configs['spigot.yml']) as SpigotConfig;
+    if (configs['paper/']) paper = JSON.parse(configs['paper/']) as PaperConfig;
+    if (configs['purpur.yml'])
+      purpur = JSON.parse(configs['purpur.yml']) as PurpurConfig;
   }
 
   const PROFILE_CHECK = {
@@ -64,7 +107,7 @@ export default async function analyzeProfile(id: string) {
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
 
-  const json = (await req.json()) as any;
+  const json: { versions: string[] } = await req.json();
   const latest = json.versions[json.versions.length - 1];
 
   const fields: Field[] = [];
@@ -137,7 +180,7 @@ export default async function analyzeProfile(id: string) {
   if (PROFILE_CHECK.plugins) {
     const server_names = Object.keys(PROFILE_CHECK.plugins);
     server_names.forEach((server_name) => {
-      if (Object.keys(configs).includes(server_name)) {
+      if (configs && Object.keys(configs).includes(server_name)) {
         plugins.forEach((plugin) => {
           const server_plugins =
             PROFILE_CHECK.plugins[
@@ -145,8 +188,9 @@ export default async function analyzeProfile(id: string) {
             ];
           Object.keys(server_plugins).forEach((plugin_name) => {
             if (plugin.name == plugin_name) {
-              const stored_plugin: any =
-                server_plugins[plugin_name as keyof typeof server_plugins];
+              const stored_plugin = server_plugins[
+                plugin_name as keyof typeof server_plugins
+              ] as FieldOption;
               stored_plugin.name = plugin_name;
               fields.push(createField(stored_plugin));
             }
@@ -163,7 +207,9 @@ export default async function analyzeProfile(id: string) {
       })
       .forEach((config) => {
         Object.keys(config).forEach((option_name) => {
-          const option = config[option_name as keyof typeof config];
+          const option = config[
+            option_name as keyof typeof config
+          ] as OptionData[];
           evalField(
             fields,
             option,
@@ -173,7 +219,7 @@ export default async function analyzeProfile(id: string) {
             bukkit,
             spigot,
             paper,
-            null,
+            {} as PufferfishConfig,
             purpur
           );
         });

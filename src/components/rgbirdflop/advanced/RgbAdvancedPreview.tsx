@@ -7,7 +7,7 @@ import {
   rgbDefaults,
   applyFont,
 } from '@birdflop/rgbirdflop';
-import type { Signal } from '@qwik.dev/core';
+import type { JSXOutput, Signal } from '@qwik.dev/core';
 import { component$, useContext, useSignal } from '@qwik.dev/core';
 import { selectionContext } from '../Input';
 import { EmptyPreview, getFormattingClasses, toCSS } from '../preview';
@@ -66,7 +66,7 @@ export default component$<AdvancedRgbPreviewProps>(
       }
 
       const textArray = Array.from(seg.text);
-      let gradientColors: any[] = [];
+      let gradientColors: number[][] = [];
       if (gradient) {
         const bucketCount = Math.max(
           1,
@@ -77,7 +77,7 @@ export default component$<AdvancedRgbPreviewProps>(
         );
       }
 
-      const segmentSpans: any[] = [];
+      const segmentSpans: JSXOutput[] = [];
       textArray.forEach((char, index) => {
         const globalIndex = charOffset + index;
         if (globalIndex === cursorIndex && showSelection) {

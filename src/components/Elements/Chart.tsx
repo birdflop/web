@@ -1,13 +1,9 @@
 // components/elements/Chart.tsx
 import { component$, useSignal, useVisibleTask$ } from '@qwik.dev/core';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables, type ChartConfiguration } from 'chart.js';
 
 export interface ChartProps {
-  config: {
-    type: string;
-    data: any;
-    options?: any;
-  };
+  config: ChartConfiguration;
 }
 const dollarLabel = (context: {
   parsed: number | bigint | null | undefined;
@@ -52,13 +48,20 @@ export default component$<ChartProps>((props) => {
           return value ? value : match; // Return the original match if the variable is not found
         }
       );
-      providedConfig = JSON.parse(replacedString);
+      providedConfig = JSON.parse(replacedString) as ChartConfiguration;
 
       // small workaround for functions in the config
       if (
-        providedConfig.options?.plugins?.tooltip?.callbacks?.label ===
-        'dollarLabel'
+        (providedConfig.options?.plugins?.tooltip?.callbacks
+          ?.label as unknown) === 'dollarLabel'
       ) {
+        if (!providedConfig.options) providedConfig.options = {};
+        if (!providedConfig.options.plugins)
+          providedConfig.options.plugins = {};
+        if (!providedConfig.options.plugins.tooltip)
+          providedConfig.options.plugins.tooltip = {};
+        if (!providedConfig.options.plugins.tooltip.callbacks)
+          providedConfig.options.plugins.tooltip.callbacks = {};
         providedConfig.options.plugins.tooltip.callbacks.label = dollarLabel;
       }
 

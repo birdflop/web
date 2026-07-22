@@ -1,10 +1,11 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     'settings.use-alternate-keepalive': [
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.purpur['settings']['use-alternate-keepalive'] ==
                 'false'
@@ -13,10 +14,10 @@ export default function getConfig() {
             vars: ['purpur'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'TCPShield'
+                  (plugin) => plugin.name == 'TCPShield'
                 ) === undefined
               );
             },
@@ -29,7 +30,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.purpur['settings']['use-alternate-keepalive'] ==
                 'true'
@@ -38,10 +39,10 @@ export default function getConfig() {
             vars: ['purpur'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.plugins.find(
-                  (plugin: Field) => plugin.name == 'TCPShield'
+                  (plugin) => plugin.name == 'TCPShield'
                 ) !== undefined
               );
             },
@@ -56,7 +57,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.purpur['settings'][
                   'dont-send-useless-entity-packets'
@@ -74,7 +75,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.purpur['world-settings']['default']['mobs'][
@@ -94,7 +95,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.purpur['world-settings']['default']['mobs'][
@@ -114,7 +115,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.purpur['world-settings']['default']['mobs'][
                   'zombie'
@@ -132,7 +133,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.purpur['world-settings']['default'][
                   'gameplay-mechanics'

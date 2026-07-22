@@ -1,3 +1,4 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     ClearLag: {
@@ -117,7 +118,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'phantoms-only-attack-insomniacs'
@@ -134,7 +135,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper['world-settings']['default'][
                   'phantoms-only-attack-insomniacs'

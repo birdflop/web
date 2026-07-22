@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unsafe-assignment typescript/no-unsafe-member-access
+// will be fixed when auth.js supports qwik v2 natively
 import { QwikAuth$ } from '@auth/qwik';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import Discord, { DiscordProfile } from '@auth/qwik/providers/discord';

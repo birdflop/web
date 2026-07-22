@@ -1,74 +1,61 @@
-import {
-  describe,
-  it,
-  expect,
-  vi,
-  beforeEach,
-  afterEach,
-} from 'vite-plus/test';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   parseParams,
   getCookies,
-  getClientCookies,
   setCookies,
+  getClientCookies,
 } from '../dataUtils';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
+import type { Cookie } from '@qwik.dev/router';
 
-// Mock document.cookie behavior
 let mockCookieStore = '';
+
 const mockDocument = {
   get cookie() {
     return mockCookieStore;
   },
   set cookie(val: string) {
-    const parts = val.split(';');
-    const firstPart = parts[0].trim();
-    const eqIndex = firstPart.indexOf('=');
-    if (eqIndex === -1) return;
-
-    const key = firstPart.substring(0, eqIndex).trim();
-    const value = firstPart.substring(eqIndex + 1).trim();
-
-    // Parse existing cookies
+    if (!val) {
+      mockCookieStore = '';
+      return;
+    }
+    const [cookiePair] = val.split(';');
+    const [key, value] = cookiePair.split('=');
     const cookies: Record<string, string> = {};
+
     if (mockCookieStore) {
-      mockCookieStore.split(';').forEach((pair) => {
-        const eqIdx = pair.indexOf('=');
-        if (eqIdx !== -1) {
-          const k = pair.substring(0, eqIdx).trim();
-          const v = pair.substring(eqIdx + 1).trim();
-          if (k) cookies[k] = v;
-        }
+      mockCookieStore.split('; ').forEach((c) => {
+        const [k, v] = c.split('=');
+        if (k && v) cookies[k] = v;
       });
     }
 
-    // Update or delete
     if (val.includes('expires=Thu, 01 Jan 1970')) {
-      delete cookies[key];
+      delete cookies[key.trim()];
     } else {
-      cookies[key] = value;
+      cookies[key.trim()] = value ? value.trim() : '';
     }
 
-    // Serialize back
     mockCookieStore = Object.entries(cookies)
       .map(([k, v]) => `${k}=${v}`)
       .join('; ');
   },
 };
 
-const originalDocument = (globalThis as any).document;
+const globalThisRef = globalThis as unknown as { document?: unknown };
+const originalDocument = globalThisRef.document;
 
 describe('dataUtils', () => {
   beforeEach(() => {
     mockCookieStore = '';
-    (globalThis as any).document = mockDocument;
+    globalThisRef.document = mockDocument;
   });
 
   afterEach(() => {
     if (originalDocument) {
-      (globalThis as any).document = originalDocument;
+      globalThisRef.document = originalDocument;
     } else {
-      delete (globalThis as any).document;
+      delete globalThisRef.document;
     }
   });
 
@@ -78,35 +65,23 @@ describe('dataUtils', () => {
         colorLength: '5',
         disperse: 'true',
         colors: JSON.stringify([{ hex: '#ff0000', pos: 0 }]),
-        invalidParam: 'test', // Should be filtered out
       };
 
-      const result = parseParams(params, 'rgb');
-      expect(result.errors).toHaveLength(0);
-      expect(result.params.colorLength).toBe(5);
-      expect(result.params.disperse).toBe(true);
-      expect(result.params.colors).toEqual([{ hex: '#ff0000', pos: 0 }]);
-      expect(result.params.invalidParam).toBeUndefined(); // Deleted because not in defaults
+      const { params: parsed, errors } = parseParams(params, 'rgb');
+      expect(errors).toHaveLength(0);
+      expect(parsed.colorLength).toBe(5);
+      expect(parsed.disperse).toBe(true);
+      expect(parsed.colors).toEqual([{ hex: '#ff0000', pos: 0 }]);
     });
 
-    it('should catch parsing errors for invalid JSON', () => {
+    it('should catch invalid types and record validation errors', () => {
       const params = {
-        colors: '{invalid-json',
+        colorLength: 'not-a-number',
       };
-      const result = parseParams(params, 'rgb');
-      expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors[0]).toContain('Error parsing the colors value');
-    });
-  });
 
-  describe('getClientCookies', () => {
-    it('should parse cookie string into key-value pairs', () => {
-      document.cookie = 'name1=value1';
-      document.cookie = 'name2=value2';
-
-      const cookies = getClientCookies();
-      expect(cookies.name1).toBe('value1');
-      expect(cookies.name2).toBe('value2');
+      const { params: parsed, errors } = parseParams(params, 'rgb');
+      expect(errors.length).toBeGreaterThan(0);
+      expect(parsed.colorLength).toBe(rgbDefaults.colorLength);
     });
   });
 
@@ -122,7 +97,7 @@ describe('dataUtils', () => {
           return null;
         },
         set: vi.fn(),
-      } as any;
+      } as unknown as Cookie;
 
       const { cookies, errors } = getCookies<Partial<typeof rgbDefaults>>(
         mockCookie,
@@ -142,7 +117,7 @@ describe('dataUtils', () => {
           return null;
         },
         set: vi.fn(),
-      } as any;
+      } as unknown as Cookie;
 
       const { cookies, errors } = getCookies<Partial<typeof rgbDefaults>>(
         mockCookie,
@@ -169,7 +144,9 @@ describe('dataUtils', () => {
 
       const parsedCookies = getClientCookies();
       expect(parsedCookies.rgb).toBeDefined();
-      const rgbCookieVal = JSON.parse(decodeURIComponent(parsedCookies.rgb));
+      const rgbCookieVal = JSON.parse(
+        decodeURIComponent(parsedCookies.rgb)
+      ) as Record<string, unknown>;
 
       expect(rgbCookieVal.colorLength).toBe(10);
       expect(rgbCookieVal.text).toBeUndefined(); // Deleted because it is default

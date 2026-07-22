@@ -15,8 +15,8 @@ export type AvailableConfig =
 export interface Config {
   [key: string]: {
     isAdvanced?: boolean;
-    type: any; // Valibot schema
-    default?: any;
+    type: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
+    default?: unknown;
   };
 }
 
@@ -51,7 +51,7 @@ export const config: Config = {
 };
 
 export function getDefaults() {
-  const defaultConfig: Record<string, any> = {};
+  const defaultConfig: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(config)) {
     defaultConfig[key] = value.default;
   }

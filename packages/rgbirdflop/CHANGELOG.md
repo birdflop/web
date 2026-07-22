@@ -2,20 +2,17 @@
 
 ## [0.4.1](https://github.com/birdflop/web/compare/v0.4.0...v0.4.1) (2026-07-16)
 
-
 ### Bug Fixes
 
-* handle null segment colors in AnimTAB previews and update type definitions to support nullable color frames ([a679eb0](https://github.com/birdflop/web/commit/a679eb0c4cc8ab171cfeea01c435f902507fc303))
-
+- handle null segment colors in AnimTAB previews and update type definitions to support nullable color frames ([a679eb0](https://github.com/birdflop/web/commit/a679eb0c4cc8ab171cfeea01c435f902507fc303))
 
 ### Code Refactoring
 
-* update styles and structure in various components ([af39b7e](https://github.com/birdflop/web/commit/af39b7eca0cad2c3fc654a9b6d3957fe89bf1073))
-
+- update styles and structure in various components ([af39b7e](https://github.com/birdflop/web/commit/af39b7eca0cad2c3fc654a9b6d3957fe89bf1073))
 
 ### Documentation
 
-* update package.json author and bugs fields, add homepage ([39ca181](https://github.com/birdflop/web/commit/39ca181e774f68758ba7ff4d00e873f954c9b7e4))
+- update package.json author and bugs fields, add homepage ([39ca181](https://github.com/birdflop/web/commit/39ca181e774f68758ba7ff4d00e873f954c9b7e4))
 
 ## [0.4.0](https://github.com/birdflop/web/compare/v0.3.1...v0.4.0) (2026-07-13)
 

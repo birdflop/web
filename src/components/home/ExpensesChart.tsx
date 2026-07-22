@@ -1,9 +1,10 @@
 // components/home/ExpensesChart.tsx
 import { component$ } from '@qwik.dev/core';
+import type { ChartConfiguration } from 'chart.js';
 import Chart from '~/components/Elements/Chart';
 
 export default component$(() => {
-  const config = {
+  const config: ChartConfiguration = {
     type: 'doughnut',
     data: {
       labels: [
@@ -97,9 +98,6 @@ export default component$(() => {
           enabled: true,
           cornerRadius: 10,
           padding: 10,
-          callbacks: {
-            label: 'dollarLabel',
-          },
         },
       },
     },

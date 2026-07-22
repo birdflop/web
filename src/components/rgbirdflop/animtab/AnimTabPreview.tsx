@@ -1,4 +1,4 @@
-import { component$, useContext } from '@qwik.dev/core';
+import { component$, JSXOutput, useContext } from '@qwik.dev/core';
 import {
   animTABDefaults,
   generateAnimTABFrames,
@@ -69,7 +69,7 @@ export default component$<AnimTABPreviewProps>(
         ? selection.value.start
         : -1;
 
-    const rendered: any[] = [];
+    const rendered: JSXOutput[] = [];
     const textLength = rgbStore.text.length;
     let charIndex = 0;
 
@@ -84,7 +84,7 @@ export default component$<AnimTABPreviewProps>(
         : null;
       const rgbShadowCSS = rgbShadow ? toCSS(rgbShadow) : null;
 
-      const segmentSpans: any[] = [];
+      const segmentSpans: JSXOutput[] = [];
 
       Array.from(segmentText).forEach((char, offset) => {
         const globalIndex = segmentStart + offset;

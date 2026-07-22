@@ -13,9 +13,9 @@ export const onGet: RequestHandler = ({ json, query }) => {
     const { params } = parseParams(Object.fromEntries(query), 'rgb');
 
     output = getOutput(params);
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e);
-    throw json(400, { error: e.message });
+    throw json(400, { error: e instanceof Error ? e.message : String(e) });
   }
   throw json(200, output);
 };
@@ -23,11 +23,11 @@ export const onGet: RequestHandler = ({ json, query }) => {
 export const onPost: RequestHandler = async ({ json, parseBody }) => {
   let output;
   try {
-    const body = await parseBody();
+    const body = (await parseBody()) as Record<string, unknown>;
     output = getOutput(body);
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error(e);
-    throw json(400, { error: e.message });
+    throw json(400, { error: e instanceof Error ? e.message : String(e) });
   }
 
   throw json(200, output);
@@ -70,7 +70,7 @@ export const rgbOptions = (
         [key in keyof typeof rgbDefaults]?: {
           type: string;
           description: string;
-          default: any;
+          default: unknown;
         };
       },
       key
@@ -87,29 +87,33 @@ export const rgbOptions = (
     {}
   );
 
-function getOutput(body: any) {
+function getOutput(bodyInput: Record<string, unknown> | null | undefined) {
+  const body = bodyInput ? { ...bodyInput } : {};
+
   // Map flat formatting flags to baseFormatting object
-  const baseFormatting = {
-    bold: body?.bold,
-    italic: body?.italic,
-    underline: body?.underline,
-    strikethrough: body?.strikethrough,
-    obfuscate: body?.obfuscate,
+  const baseFormatting: Record<string, boolean | undefined> = {
+    bold: typeof body.bold === 'boolean' ? body.bold : undefined,
+    italic: typeof body.italic === 'boolean' ? body.italic : undefined,
+    underline: typeof body.underline === 'boolean' ? body.underline : undefined,
+    strikethrough:
+      typeof body.strikethrough === 'boolean' ? body.strikethrough : undefined,
+    obfuscate: typeof body.obfuscate === 'boolean' ? body.obfuscate : undefined,
   };
   Object.keys(baseFormatting).forEach((key) => {
-    if (baseFormatting[key as keyof typeof baseFormatting] === undefined) {
-      delete baseFormatting[key as keyof typeof baseFormatting];
+    if (baseFormatting[key] === undefined) {
+      delete baseFormatting[key];
     }
   });
   if (Object.keys(baseFormatting).length > 0) {
+    const existingBase = (body.baseFormatting ?? {}) as Record<string, boolean>;
     body.baseFormatting = {
       ...rgbDefaults.baseFormatting,
-      ...body.baseFormatting,
+      ...existingBase,
       ...baseFormatting,
     };
   }
 
-  const options = body?.silent
+  const options = body.silent
     ? {}
     : {
         input: {
@@ -127,7 +131,16 @@ function getOutput(body: any) {
       };
 
   // make { color: "MiniMessage" } a valid format
-  let format = body?.colorFormat ?? body?.colorformat ?? body?.format;
+  let format = (body.colorFormat ?? body.colorformat ?? body.format) as
+    | {
+        color?: string;
+        char?: string;
+        bold?: string;
+        italic?: string;
+        underline?: string;
+        strikethrough?: string;
+      }
+    | undefined;
   if (
     format &&
     !format.char &&
@@ -136,34 +149,40 @@ function getOutput(body: any) {
       !format.underline ||
       !format.strikethrough)
   ) {
-    format = colorFormats.find((f: any) => f.color == format.color) ?? {
-      ...format,
-      char: '&',
-    };
+    const matched = colorFormats.find((f) => f.color == format?.color);
+    format = matched
+      ? { ...matched }
+      : {
+          ...format,
+          char: '&',
+        };
   }
   if (format) body.colorFormat = format;
 
   // make string[] a valid color array
-  let colors = body?.colors;
+  let colors = body.colors as unknown[] | undefined;
   if (colors && colors.length && typeof colors[0] == 'string') {
-    if (typeof colors[0] == 'string') colors = disperseColors(colors);
+    colors = disperseColors(colors as Parameters<typeof disperseColors>[0]);
   }
   body.colors = colors;
 
-  let shadowColors = body?.shadowColors ?? body?.shadowcolors;
+  let shadowColors = (body.shadowColors ?? body.shadowcolors) as
+    | unknown[]
+    | undefined;
   if (
     shadowColors &&
     shadowColors.length &&
     typeof shadowColors[0] == 'string'
   ) {
-    if (typeof shadowColors[0] == 'string')
-      shadowColors = disperseColors(shadowColors);
+    shadowColors = disperseColors(
+      shadowColors as Parameters<typeof disperseColors>[0]
+    );
   }
   body.shadowColors = shadowColors;
 
   const output = generateOutput({
     ...rgbDefaults,
-    ...body,
+    ...(body as Partial<typeof rgbDefaults>),
   });
   return {
     output,

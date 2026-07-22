@@ -2,9 +2,10 @@ import { $ } from '@qwik.dev/core';
 import { BasePlugin } from './BasePlugin';
 import { PluginType } from './ServerPlugin';
 import { Notification, NotificationType } from '../Notification';
+import type { SpigotResource, SpigotVersion } from './types';
 
 export class SpigotPlugin extends BasePlugin {
-  static async search(query: string): Promise<any[]> {
+  static async search(query: string): Promise<SpigotPlugin[]> {
     const searchUrl = 'https://api.spiget.org/v2/search/resources/';
     const searchParams = new URLSearchParams({
       size: '5',
@@ -13,35 +14,39 @@ export class SpigotPlugin extends BasePlugin {
     const searchRes = await fetch(
       `${searchUrl}${encodeURIComponent(query)}?${searchParams.toString()}`
     );
-    const searchData: any[] = await searchRes.json();
+    const searchData = await searchRes.json();
     return searchData.map((data) =>
-      new SpigotPlugin({ id: data.id }).fromData(data)
+      new SpigotPlugin({ id: data.id }).fromData(
+        data as unknown as Record<string, unknown>
+      )
     );
   }
+
   type = 'spigot' as const;
 
-  fromData(data: any) {
+  fromData(data: Record<string, unknown>) {
+    const spigotData = data as unknown as SpigotResource;
     Object.assign(this, {
-      id: data.id,
-      name: data.name,
-      description: data.tag,
-      url: data.url,
-      iconUrl: data.icon?.url
-        ? 'https://spigotmc.org/' + data.icon.url
+      id: spigotData.id,
+      name: spigotData.name,
+      description: spigotData.tag,
+      url: spigotData.url,
+      iconUrl: spigotData.icon?.url
+        ? 'https://spigotmc.org/' + spigotData.icon.url
         : undefined,
-      mcVersions: data.testedVersions,
-      releaseDate: new Date(data.releaseDate * 1000),
-      updateDate: new Date(data.updateDate * 1000),
-      file: data.file
+      mcVersions: spigotData.testedVersions,
+      releaseDate: new Date(spigotData.releaseDate * 1000),
+      updateDate: new Date(spigotData.updateDate * 1000),
+      file: spigotData.file
         ? {
-            type: data.file.type,
-            size: data.file.size,
-            sizeUnit: data.file.sizeUnit,
-            url: data.file.url,
-            externalUrl: data.file.externalUrl,
+            type: spigotData.file.type,
+            size: spigotData.file.size,
+            sizeUnit: spigotData.file.sizeUnit,
+            url: spigotData.file.url,
+            externalUrl: spigotData.file.externalUrl,
           }
         : undefined,
-      sourceCodeLink: data.sourceCodeLink,
+      sourceCodeLink: spigotData.sourceCodeLink,
     });
 
     return this;
@@ -49,16 +54,16 @@ export class SpigotPlugin extends BasePlugin {
 
   async fetchData() {
     const res = await fetch(`https://api.spiget.org/v2/resources/${this.id}`);
-    const data = (await res.json()) as any;
+    const data = await res.json();
 
-    return this.fromData(data);
+    return this.fromData(data as unknown as Record<string, unknown>);
   }
 
   async fetchVersions() {
     const versionsRes = await fetch(
       `https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`
     );
-    const versionsData: any[] = await versionsRes.json();
+    const versionsData = await versionsRes.json();
 
     this.versions = versionsData.map((version) => ({
       id: version.id,

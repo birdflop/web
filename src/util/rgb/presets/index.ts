@@ -4,20 +4,16 @@ import { migrateBetweenVersions, migratePresetsFromCookies } from './migrate';
 export type rgbPreset = Partial<typeof combinedDefaults>;
 
 export function loadPreset(p: string): rgbPreset {
-  const preset = JSON.parse(p);
+  const preset = JSON.parse(p) as Record<string, unknown>;
   let newPreset: rgbPreset = {};
 
+  const colors = preset.colors as string[] | unknown[] | undefined;
   // Migrate colors from strings to objects
-  if (
-    preset.colors &&
-    preset.colors.length &&
-    typeof preset.colors[0] == 'string'
-  ) {
-    if (typeof preset.colors[0] == 'string')
-      preset.colors = preset.colors.map((color: string, i: number) => ({
-        hex: color,
-        pos: (100 / (preset.colors.length - 1)) * i,
-      }));
+  if (colors && colors.length && typeof colors[0] == 'string') {
+    preset.colors = (colors as string[]).map((color: string, i: number) => ({
+      hex: color,
+      pos: (100 / (colors.length - 1)) * i,
+    }));
   }
 
   // if version is current, return the preset

@@ -1,22 +1,23 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     'online-mode': [
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return !dict_of_vars.server_properties['online-mode'];
             },
             vars: ['server_properties'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return dict_of_vars.spigot.settings.bungeecord == 'false';
             },
             vars: ['spigot'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.paper.settings['velocity-support'][
                   'online-mode'
@@ -36,19 +37,19 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.server_properties[
                     'network-compression-threshold'
-                  ]
+                  ] ?? ''
                 ) <= 256
               );
             },
             vars: ['server_properties'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return dict_of_vars.spigot['settings']['bungeecord'] == 'false';
             },
             vars: ['spigot'],

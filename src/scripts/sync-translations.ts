@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
@@ -11,7 +11,48 @@ const CACHE_PATH = path.join(REPO_ROOT, 'tmp', 'translation-cache.json');
 const BASE_LANG = 'en-US';
 const DEFAULT_PROVIDER = 'deepl';
 
-const deeplLangMap = {
+type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+interface JsonObject {
+  [key: string]: JsonValue;
+}
+type JsonArray = JsonValue[];
+
+type PathSegment = string | number;
+
+interface StringEntry {
+  path: PathSegment[];
+  value: string;
+}
+
+interface SpeakConfig {
+  languages: string[];
+  assets: string[];
+}
+
+interface SummaryItem {
+  asset: string;
+  lang: string;
+  updated: number;
+  skipped: number;
+}
+
+interface ParsedArgs {
+  assets?: string[];
+  langs?: string[];
+  dryRun?: boolean;
+  force?: boolean;
+  provider?: string;
+}
+
+type TranslationCache = Record<string, Record<string, string>>;
+
+type TranslationProvider = (
+  texts: string[],
+  targetLang: string,
+  baseLang: string
+) => Promise<string[]> | string[];
+
+const deeplLangMap: Record<string, string> = {
   'es-ES': 'ES',
   'ko-KR': 'KO',
   'de-DE': 'DE',
@@ -23,8 +64,8 @@ const deeplLangMap = {
   'zh-CN': 'ZH',
 };
 
-async function parseSupportedFromSpeakConfig() {
-  const fallback = {
+async function parseSupportedFromSpeakConfig(): Promise<SpeakConfig> {
+  const fallback: SpeakConfig = {
     languages: [
       'en-US',
       'es-ES',
@@ -44,11 +85,15 @@ async function parseSupportedFromSpeakConfig() {
     const raw = await fs.readFile(SPEAK_CONFIG_PATH, 'utf8');
     const languages = Array.from(
       raw.matchAll(/'([a-z]{2}-[A-Z]{2})'\s*:/g)
-    ).map((m) => m[1]);
+    ).map((m: RegExpMatchArray) => m[1]);
+
     const assetsBlock = raw.match(/assets:\s*\[([^]*?)\]/m);
     const assets = assetsBlock
-      ? Array.from(assetsBlock[1].matchAll(/'([\w-]+)'/g)).map((m) => m[1])
+      ? Array.from(assetsBlock[1].matchAll(/'([\w-]+)'/g)).map(
+          (m: RegExpMatchArray) => m[1]
+        )
       : [];
+
     return {
       languages: languages.length ? languages : fallback.languages,
       assets: assets.length ? assets : fallback.assets,
@@ -62,18 +107,24 @@ async function parseSupportedFromSpeakConfig() {
   }
 }
 
-async function readJson(filePath) {
+async function readJson<T = Record<string, unknown>>(
+  filePath: string
+): Promise<T> {
   const data = await fs.readFile(filePath, 'utf8');
-  return JSON.parse(data);
+  return JSON.parse(data) as T;
 }
 
-async function writeJson(filePath, value) {
+async function writeJson(filePath: string, value: unknown): Promise<void> {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   const text = `${JSON.stringify(value, null, 2)}\n`;
   await fs.writeFile(filePath, text, 'utf8');
 }
 
-function walkStrings(node, pathParts = [], out = []) {
+function walkStrings(
+  node: JsonValue,
+  pathParts: PathSegment[] = [],
+  out: StringEntry[] = []
+): StringEntry[] {
   if (typeof node === 'string') {
     out.push({ path: pathParts, value: node });
     return out;
@@ -92,8 +143,12 @@ function walkStrings(node, pathParts = [], out = []) {
   return out;
 }
 
-function setPath(target, pathParts, value) {
-  let cursor = target;
+function setPath(
+  target: Record<string, unknown>,
+  pathParts: PathSegment[],
+  value: string
+): void {
+  let cursor: Record<string, unknown> = target;
   for (let i = 0; i < pathParts.length; i += 1) {
     const part = pathParts[i];
     const isLast = i === pathParts.length - 1;
@@ -104,37 +159,48 @@ function setPath(target, pathParts, value) {
     if (cursor[part] === undefined) {
       cursor[part] = typeof pathParts[i + 1] === 'number' ? [] : {};
     }
-    cursor = cursor[part];
+    cursor = cursor[part] as Record<string, unknown>;
   }
 }
 
-function getPath(source, pathParts) {
-  return pathParts.reduce(
-    (current, part) => (current ? current[part] : undefined),
-    source
-  );
+function getPath(
+  source: Record<string, unknown>,
+  pathParts: PathSegment[]
+): string | undefined {
+  let current: unknown = source;
+  for (const part of pathParts) {
+    if (!current || typeof current !== 'object') return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return typeof current === 'string' ? current : undefined;
 }
 
-function pathKey(pathParts) {
+function pathKey(pathParts: PathSegment[]): string {
   return pathParts.join('.');
 }
 
-async function loadCache() {
+async function loadCache(): Promise<TranslationCache> {
   try {
     const raw = await fs.readFile(CACHE_PATH, 'utf8');
-    return JSON.parse(raw);
+    return JSON.parse(raw) as TranslationCache;
   } catch {
     return {};
   }
 }
 
-async function saveCache(cache, dryRun) {
+async function saveCache(
+  cache: TranslationCache,
+  dryRun?: boolean
+): Promise<void> {
   if (dryRun) return;
   await fs.mkdir(path.dirname(CACHE_PATH), { recursive: true });
   await fs.writeFile(CACHE_PATH, `${JSON.stringify(cache, null, 2)}\n`, 'utf8');
 }
 
-async function deeplTranslate(texts, targetLang) {
+async function deeplTranslate(
+  texts: string[],
+  targetLang: string
+): Promise<string[]> {
   const apiKey = process.env.DEEPL_API_KEY;
   const deeplLang = deeplLangMap[targetLang];
   if (!apiKey) {
@@ -163,21 +229,21 @@ async function deeplTranslate(texts, targetLang) {
     throw new Error(`DeepL request failed (${response.status}): ${detail}`);
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as { translations: { text: string }[] };
   return data.translations.map((item) => item.text);
 }
 
-function noopTranslate(texts) {
+function noopTranslate(texts: string[]): string[] {
   return texts;
 }
 
-const providers = {
+const providers: Record<string, TranslationProvider> = {
   deepl: deeplTranslate,
   noop: noopTranslate,
 };
 
-function parseArgs(argv) {
-  const args = {};
+function parseArgs(argv: string[]): ParsedArgs {
+  const args: ParsedArgs = {};
   argv.forEach((part) => {
     const [key, rawValue] = part.split('=');
     const value = rawValue ?? 'true';
@@ -191,7 +257,7 @@ function parseArgs(argv) {
   return args;
 }
 
-async function main() {
+async function main(): Promise<void> {
   const { languages, assets } = await parseSupportedFromSpeakConfig();
   const args = parseArgs(process.argv.slice(2));
   const targetAssets = args.assets?.length ? args.assets : assets;
@@ -208,7 +274,7 @@ async function main() {
   }
 
   const cache = await loadCache();
-  const summary = [];
+  const summary: SummaryItem[] = [];
 
   for (const asset of targetAssets) {
     const basePath = path.join(I18N_DIR, BASE_LANG, `${asset}.json`);
@@ -223,7 +289,7 @@ async function main() {
       continue;
     }
 
-    const baseJson = await readJson(basePath);
+    const baseJson = await readJson<JsonObject>(basePath);
     const strings = walkStrings(baseJson);
     cache[asset] = cache[asset] ?? {};
 
@@ -233,10 +299,12 @@ async function main() {
         .stat(targetPath)
         .then(() => true)
         .catch(() => false);
-      const targetJson = targetExists ? await readJson(targetPath) : {};
+      const targetJson = targetExists
+        ? await readJson<Record<string, unknown>>(targetPath)
+        : {};
 
-      const toTranslate = [];
-      const pathsNeedingUpdate = [];
+      const toTranslate: string[] = [];
+      const pathsNeedingUpdate: PathSegment[][] = [];
 
       for (const entry of strings) {
         const key = pathKey(entry.path);
@@ -246,7 +314,6 @@ async function main() {
           args.force ||
           currentValue === undefined ||
           previousSource !== entry.value ||
-          // If the target still matches English, re-translate to avoid English bleed-through
           (currentValue === entry.value && lang !== BASE_LANG);
         cache[asset][key] = entry.value;
         if (needsUpdate) {
@@ -281,11 +348,15 @@ async function main() {
 
   const rows = summary.map(
     (item) =>
-      `${item.asset} -> ${item.lang}: ${item.updated} updated, ${item.skipped} unchanged`
+      `${item.asset.padEnd(12)} ${item.lang.padEnd(8)} updated: ${String(item.updated).padStart(3)} | skipped: ${String(item.skipped).padStart(3)}`
   );
-  console.log('\nTranslation sync complete');
-  rows.forEach((row) => console.log(` - ${row}`));
-  if (args.dryRun) console.log('\n(dry run: no files were written)');
+
+  if (rows.length) {
+    console.log('[info] Translation sync summary:');
+    rows.forEach((row) => console.log(`  ${row}`));
+  } else {
+    console.log('[info] No translations needed update.');
+  }
 }
 
 main().catch((error) => {

@@ -33,8 +33,8 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
   const { headings } = useContent();
   const contentHeadings = headings?.filter((h) => h.level <= 3) || [];
   const { frontmatter, meta } = useDocumentHead();
-  const created = formatDate(frontmatter.date_created);
-  const updated = formatDate(frontmatter.last_updated);
+  const created = formatDate(frontmatter.date_created as string | undefined);
+  const updated = formatDate(frontmatter.last_updated as string | undefined);
   const author = meta.find((m) => m.name === 'author')?.content || 'Unknown';
   const { url } = useLocation();
 

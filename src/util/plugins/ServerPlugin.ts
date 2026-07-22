@@ -97,7 +97,7 @@ export function searchPlugins(
 export interface ServerPlugin extends PluginType {
   get(): Promise<this>;
   fetch(): Promise<this>;
-  fromData(data: any): this;
+  fromData(data: Record<string, unknown>): this;
   fetchData(): Promise<this>;
   fetchVersions(): Promise<this>;
 

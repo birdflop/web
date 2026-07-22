@@ -2,7 +2,9 @@ import { rgbPreset } from '.';
 import { colorFormats } from '@birdflop/rgbirdflop';
 import { getClientCookies } from '~/util/dataUtils';
 
-export function migrateBetweenVersions(preset: any) {
+export function migrateBetweenVersions(
+  preset: Record<string, unknown>
+): rgbPreset | undefined {
   return (
     migrateFromV2(preset) ||
     migrateFromV3(preset) ||
@@ -11,35 +13,40 @@ export function migrateBetweenVersions(preset: any) {
   );
 }
 
-function migrateFromV2(preset: any) {
+function migrateFromV2(
+  preset: Record<string, unknown>
+): Record<string, unknown> | undefined {
   if (preset.version != 2) return;
   const { prefix, format, formatchar, ...rest } = preset;
   return migrateFromV3({
     version: 3,
     ...rest,
-    format: colorFormats.find((f: any) => f.color === format) || {
+    format: colorFormats.find((f) => f.color === format) || {
       color: format,
       char: formatchar,
     },
-    prefixsuffix: prefix ? `${prefix}$t` : '',
+    prefixsuffix: typeof prefix === 'string' ? `${prefix}$t` : '',
   });
 }
 
-function migrateFromV3(preset: any) {
+function migrateFromV3(
+  preset: Record<string, unknown>
+): Record<string, unknown> | undefined {
   if (preset.version != 3) return;
+  const colors = preset.colors as string[] | undefined;
   return migrateFromV4({
     version: 4,
     ...preset,
-    colors: preset.colors
-      ? preset.colors.map((color: string, i: number) => ({
+    colors: colors
+      ? colors.map((color: string, i: number) => ({
           hex: color,
-          pos: (100 / (preset.colors.length - 1)) * i,
+          pos: (100 / (colors.length - 1)) * i,
         }))
       : undefined,
   });
 }
 
-function migrateFromV4(preset: any) {
+function migrateFromV4(preset: Record<string, unknown>): rgbPreset | undefined {
   if (preset.version != 4) return;
 
   const {
@@ -60,11 +67,11 @@ function migrateFromV4(preset: any) {
   const baseFormatting =
     bold || italic || underline || strikethrough || obfuscate
       ? {
-          ...(bold ? { bold } : {}),
-          ...(italic ? { italic } : {}),
-          ...(underline ? { underline } : {}),
-          ...(strikethrough ? { strikethrough } : {}),
-          ...(obfuscate ? { obfuscate } : {}),
+          ...(bold ? { bold: Boolean(bold) } : {}),
+          ...(italic ? { italic: Boolean(italic) } : {}),
+          ...(underline ? { underline: Boolean(underline) } : {}),
+          ...(strikethrough ? { strikethrough: Boolean(strikethrough) } : {}),
+          ...(obfuscate ? { obfuscate: Boolean(obfuscate) } : {}),
         }
       : undefined;
 
@@ -72,13 +79,23 @@ function migrateFromV4(preset: any) {
 
   return {
     version: 5,
-    ...rest,
-    ...(shadowColors ? { shadowColors } : {}),
-    ...(colorFormat ? { colorFormat } : {}),
-    ...(colorLength ? { colorLength } : {}),
+    ...(rest as Partial<rgbPreset>),
+    ...(shadowColors
+      ? { shadowColors: shadowColors as rgbPreset['shadowColors'] }
+      : {}),
+    ...(colorFormat
+      ? { colorFormat: colorFormat as rgbPreset['colorFormat'] }
+      : {}),
+    ...(colorLength
+      ? { colorLength: colorLength as rgbPreset['colorLength'] }
+      : {}),
     ...(baseFormatting ? { baseFormatting } : {}),
-    ...(prefixSuffix ? { prefixSuffix } : {}),
-    ...(trimSpaces ? { trimSpaces } : {}),
+    ...(prefixSuffix
+      ? { prefixSuffix: prefixSuffix as rgbPreset['prefixSuffix'] }
+      : {}),
+    ...(trimSpaces
+      ? { trimSpaces: trimSpaces as rgbPreset['trimSpaces'] }
+      : {}),
   };
 }
 
@@ -86,8 +103,8 @@ export function migratePresetsFromCookies(savedPresets: rgbPreset[]) {
   const cookie = getClientCookies();
   if (cookie['presets']) {
     const cookiePresets = decodeURIComponent(cookie['presets']);
-    const privatePresetsFromCookie =
-      JSON.parse(cookiePresets)?.savedPresets || [];
+    const parsed = JSON.parse(cookiePresets) as { savedPresets?: rgbPreset[] };
+    const privatePresetsFromCookie = parsed?.savedPresets || [];
     savedPresets = savedPresets.concat(privatePresetsFromCookie);
     // remove cookie
     document.cookie =

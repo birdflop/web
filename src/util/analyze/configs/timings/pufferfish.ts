@@ -1,10 +1,11 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     'projectile.max-loads-per-projectile': [
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.pufferfish['projectile'][
@@ -24,7 +25,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return dict_of_vars.pufferfish['dab']['enabled'] == 'false';
             },
             vars: ['pufferfish'],

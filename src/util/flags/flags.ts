@@ -376,15 +376,17 @@ export const flags = {
 export const extraFlags: Record<AvailableExtraFlags, FlagExtraOption> = {
   vectors: {
     supports: ['aikars', 'obyduxs', 'meowice'],
-    generate: ({ existingFlags }) => {
-      return [...existingFlags, '--add-modules=jdk.incubator.vector'];
+    generate: ({ existingFlags }: { existingFlags?: string[] }) => {
+      const flags = existingFlags ?? [];
+      return [...flags, '--add-modules=jdk.incubator.vector'];
     },
   },
   benchmarkedGraalVM: {
     supports: ['benchmarkedG1GC'],
-    generate: ({ existingFlags }) => {
+    generate: ({ existingFlags }: { existingFlags?: string[] }) => {
+      const flags = existingFlags ?? [];
       return [
-        ...existingFlags,
+        ...flags,
         '-XX:+UnlockExperimentalVMOptions',
         '-XX:+UnlockDiagnosticVMOptions',
         '-XX:+AlwaysActAsServerClassMachine',
@@ -409,9 +411,10 @@ export const extraFlags: Record<AvailableExtraFlags, FlagExtraOption> = {
   },
   meowiceGraalVM: {
     supports: ['meowice'],
-    generate: ({ existingFlags }) => {
+    generate: ({ existingFlags }: { existingFlags?: string[] }) => {
+      const flags = existingFlags ?? [];
       return [
-        ...existingFlags,
+        ...flags,
         '-Djdk.nio.maxCachedBufferSize=262144',
         '-Dgraal.UsePriorityInlining=true',
         '-Dgraal.Vectorization=true',

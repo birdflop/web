@@ -142,7 +142,7 @@ export default component$(() => {
     const pluginsData = localStorage.getItem('plugins');
     if (pluginsData) {
       try {
-        const savedPluginsStore = JSON.parse(pluginsData);
+        const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
         pluginsStore.servers = savedPluginsStore.servers || {};
         pluginsStore.openServer = savedPluginsStore.openServer;
         pluginsStore.filter = savedPluginsStore.filter;
@@ -176,9 +176,9 @@ export default component$(() => {
     }
 
     try {
-      const exportedPluginsStore: PluginsStoreType = JSON.parse(
+      const exportedPluginsStore = JSON.parse(
         JSON.stringify(pluginsStore)
-      );
+      ) as PluginsStoreType;
       Object.keys(exportedPluginsStore.servers).forEach((server) => {
         const serverPlugins = exportedPluginsStore.servers[server].plugins;
         const mappedPlugins: { [id: string]: PluginType } = {};
@@ -313,7 +313,7 @@ export default component$(() => {
                     }
                     pluginsStore.servers[newName] = JSON.parse(
                       JSON.stringify(CurrentServer)
-                    );
+                    ) as ServerType;
                     pluginsStore.openServer = newName;
                   }
                 }}
@@ -344,29 +344,35 @@ export default component$(() => {
               </SelectMenu>
 
               <button
-                class="lum-btn lum-btn-p-1 lum-bg-transparent rounded-lum-1"
+                class="lum-btn lum-btn-p-2 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
                 onClick$={() => {
-                  const plugins: { [id: string]: Partial<PluginType> } = {};
-                  const serverPlugins =
-                    pluginsStore.servers[pluginsStore.openServer!].plugins;
-                  Object.keys(serverPlugins).forEach((id) => {
-                    const plugin = serverPlugins[id];
-                    plugins[id] = {
+                  if (!CurrentServer) return;
+                  const exportedPlugins: { [id: string]: PluginType } = {};
+                  Object.keys(CurrentServer.plugins).forEach((id) => {
+                    const plugin = CurrentServer.plugins[id];
+                    exportedPlugins[id] = {
                       id: plugin.id,
                       type: plugin.type,
                       currentVersion: plugin.currentVersion,
                     };
                   });
-
-                  const notification = new Notification()
-                    .setTitle('Plugins copied to clipboard')
-                    .setDescription(
-                      `The plugins for server "${pluginsStore.openServer}" have been copied to your clipboard as JSON.`
-                    )
-                    .setBgColor('lum-grad-bg-green/50');
                   navigator.clipboard
-                    .writeText(JSON.stringify(plugins))
+                    .writeText(JSON.stringify(exportedPlugins))
+                    .then(() => {
+                      const notification = new Notification()
+                        .setTitle('Copied plugins to clipboard')
+                        .setDescription(
+                          'The plugins have been copied to your clipboard.'
+                        )
+                        .setBgColor('lum-grad-bg-green/50');
+                      notifications.push(notification.toJSON());
+                    })
                     .catch((err) => {
+                      console.error(
+                        'Failed to copy plugins to clipboard:',
+                        err
+                      );
+                      const notification = new Notification();
                       notification
                         .setTitle('Failed to copy plugins to clipboard')
                         .setDescription(
@@ -374,8 +380,8 @@ export default component$(() => {
                         )
                         .setBgColor('lum-grad-bg-red/50')
                         .setPersist(true);
+                      notifications.push(notification.toJSON());
                     });
-                  notifications.push(notification.toJSON());
                 }}
                 title="Export server plugins as JSON"
               >
@@ -389,9 +395,12 @@ export default component$(() => {
                 placeholder={`${t('plugins.import@@Import')} - ${t('plugins.pasteHere@@Paste here')}`}
                 onInput$={async (e, el) => {
                   try {
-                    const importJSON = JSON.parse(el.value);
+                    const importJSON = JSON.parse(el.value) as Record<
+                      string,
+                      PluginType
+                    >;
                     await Promise.all(
-                      Object.values(importJSON).map(async (plugin: any) => {
+                      Object.values(importJSON).map(async (plugin) => {
                         if (!plugin.id || !plugin.type) {
                           throw new Error(
                             `Invalid plugin data: ${JSON.stringify(plugin)}`

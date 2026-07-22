@@ -1,3 +1,13 @@
+import type {
+  AnalyzePlugin,
+  BukkitConfig,
+  OptionData,
+  PaperConfig,
+  PufferfishConfig,
+  PurpurConfig,
+  ServerPropertiesConfig,
+  SpigotConfig,
+} from '../types';
 import createField from './createField';
 import evalField from './evalField';
 import { analyzeJvmFlags } from './jvmFlags';
@@ -13,10 +23,32 @@ import config_paper_27 from '~/util/analyze/configs/timings/paper-27';
 import config_paper_28 from '~/util/analyze/configs/timings/paper-28';
 import config_pufferfish from '~/util/analyze/configs/timings/pufferfish';
 
+interface TimingsData {
+  timingsMaster: {
+    version: string;
+    plugins: Record<string, AnalyzePlugin>;
+    config?: Record<string, unknown>;
+    system: {
+      timingcost: string;
+      flags: string;
+      jvmversion: string;
+      cpu: string;
+    };
+    data?: Array<{
+      minuteReports: Array<{
+        ticks: { timedTicks: number; playerTicks: number };
+      }>;
+    }>;
+    idmap?: {
+      handlerMap?: Record<string, { name: string }>;
+    };
+  };
+}
+
 export default async function analyzeTimings(id: string) {
   const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
 
-  let request: any;
+  let request: TimingsData;
   try {
     const response_json = await fetch(timings_json, {
       headers: { Accept: 'application/json' },
@@ -36,26 +68,31 @@ export default async function analyzeTimings(id: string) {
   if (version.endsWith('(MC: 1.17)'))
     version = version.replace('(MC: 1.17)', '(MC: 1.17.0)');
 
-  let server_properties: any,
-    bukkit: any,
-    spigot: any,
-    paper: any,
-    pufferfish: any,
-    purpur: any;
+  let server_properties = {} as ServerPropertiesConfig,
+    bukkit = {} as BukkitConfig,
+    spigot = {} as SpigotConfig,
+    paper = {} as PaperConfig,
+    pufferfish = {} as PufferfishConfig,
+    purpur = {} as PurpurConfig;
 
-  const plugins = Object.keys(request.timingsMaster.plugins).map((i) => {
+  const plugins: AnalyzePlugin[] = Object.keys(
+    request.timingsMaster.plugins
+  ).map((i) => {
     return request.timingsMaster.plugins[i];
   });
   const configs = request.timingsMaster.config;
   if (configs) {
     if (configs['server.properties'])
-      server_properties = configs['server.properties'];
-    if (configs['bukkit']) bukkit = configs['bukkit'];
-    if (configs['spigot']) spigot = configs['spigot'];
+      server_properties = configs[
+        'server.properties'
+      ] as ServerPropertiesConfig;
+    if (configs['bukkit']) bukkit = configs['bukkit'] as BukkitConfig;
+    if (configs['spigot']) spigot = configs['spigot'] as SpigotConfig;
     if (configs['paper'] || configs['paperspigot'])
-      paper = configs['paper'] ?? configs['paperspigot'];
-    if (configs['pufferfish']) pufferfish = configs['pufferfish'];
-    if (configs['purpur']) purpur = configs['purpur'];
+      paper = (configs['paper'] ?? configs['paperspigot']) as PaperConfig;
+    if (configs['pufferfish'])
+      pufferfish = configs['pufferfish'] as PufferfishConfig;
+    if (configs['purpur']) purpur = configs['purpur'] as PurpurConfig;
   }
 
   const TIMINGS_CHECK = {
@@ -89,7 +126,7 @@ export default async function analyzeTimings(id: string) {
 
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
-  const json = (await req.json()) as any;
+  const json: { versions: string[] } = await req.json();
   const latest = json.versions[json.versions.length - 1];
 
   // ghetto version check
@@ -121,11 +158,10 @@ export default async function analyzeTimings(id: string) {
   let index = 0;
   let max_online_players = 0;
   if (request.timingsMaster.data) {
-    while (index < request.timingsMaster.data.length) {
-      const timed_ticks =
-        request.timingsMaster.data[index].minuteReports[0].ticks.timedTicks;
-      const player_ticks =
-        request.timingsMaster.data[index].minuteReports[0].ticks.playerTicks;
+    const data = request.timingsMaster.data;
+    while (index < data.length) {
+      const timed_ticks = data[index].minuteReports[0].ticks.timedTicks;
+      const player_ticks = data[index].minuteReports[0].ticks.playerTicks;
       const players = player_ticks / timed_ticks;
       max_online_players = Math.max(players, max_online_players);
       index = index + 1;
@@ -144,11 +180,10 @@ export default async function analyzeTimings(id: string) {
       ],
     });
 
-  const handlers = Object.keys(request.timingsMaster.idmap.handlerMap).map(
-    (i) => {
-      return request.timingsMaster.idmap.handlerMap[i];
-    }
-  );
+  const handlerMap = request.timingsMaster.idmap?.handlerMap;
+  const handlers = handlerMap
+    ? Object.keys(handlerMap).map((i) => handlerMap[i])
+    : [];
   handlers.forEach((handler) => {
     let handler_name = handler.name;
     if (
@@ -168,7 +203,7 @@ export default async function analyzeTimings(id: string) {
   if (TIMINGS_CHECK.plugins) {
     const server_names = Object.keys(TIMINGS_CHECK.plugins);
     server_names.forEach((server_name) => {
-      if (Object.keys(request.timingsMaster.config).includes(server_name)) {
+      if (configs && Object.keys(configs).includes(server_name)) {
         plugins.forEach((plugin) => {
           const server_plugins =
             TIMINGS_CHECK.plugins[
@@ -176,8 +211,9 @@ export default async function analyzeTimings(id: string) {
             ];
           Object.keys(server_plugins).forEach((plugin_name) => {
             if (plugin.name == plugin_name) {
-              const stored_plugin: any =
-                server_plugins[plugin_name as keyof typeof server_plugins];
+              const stored_plugin = server_plugins[
+                plugin_name as keyof typeof server_plugins
+              ] as FieldOption;
               stored_plugin.name = plugin_name;
               fields.push(createField(stored_plugin));
             }
@@ -193,7 +229,9 @@ export default async function analyzeTimings(id: string) {
       })
       .forEach((config) => {
         Object.keys(config).forEach((option_name) => {
-          const option = config[option_name as keyof typeof config];
+          const option = config[
+            option_name as keyof typeof config
+          ] as OptionData[];
           evalField(
             fields,
             option,
@@ -232,7 +270,7 @@ export default async function analyzeTimings(id: string) {
         fields.push({
           name: '❌ UltimateStacker',
           value:
-            'Stacking plugins actually causes more lag.\nRemove UltimateStacker.',
+            'Stacking plugins actually cause more lag.\nRemove UltimateStacker.',
         });
       else
         fields.push({
@@ -243,16 +281,17 @@ export default async function analyzeTimings(id: string) {
     }
   });
 
-  const worlds = request.timingsMaster.config['__________WORLDS__________']
-    ? Object.keys(
-        request.timingsMaster.config['__________WORLDS__________']
-      ).map((i) => {
-        return request.timingsMaster.config['__________WORLDS__________'][i];
-      })
+  const worldsConfig = configs?.['__________WORLDS__________'] as
+    | Record<string, { gamerules?: { maxEntityCramming?: string } }>
+    | undefined;
+  const worlds = worldsConfig
+    ? Object.keys(worldsConfig).map((i) => worldsConfig[i])
     : [];
   let high_mec = false;
   worlds.forEach((world) => {
-    const max_entity_cramming = parseInt(world.gamerules.maxEntityCramming);
+    const max_entity_cramming = parseInt(
+      world.gamerules?.maxEntityCramming ?? '0'
+    );
     if (max_entity_cramming >= 24) high_mec = true;
   });
   if (high_mec)

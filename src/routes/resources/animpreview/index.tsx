@@ -124,9 +124,14 @@ export default component$(() => {
   useTask$(({ track }) => {
     track(() => animprevStore.yaml);
     if (isBrowser) setCookies('animpreview', { yaml: animprevStore.yaml });
-    let json;
+    let parsedYaml:
+      | Record<string, { 'change-interval'?: number; texts?: string[] }>
+      | undefined;
     try {
-      json = yaml.parse(animprevStore.yaml);
+      parsedYaml = yaml.parse(animprevStore.yaml) as Record<
+        string,
+        { 'change-interval'?: number; texts?: string[] }
+      >;
     } catch (err) {
       const notification = new Notification()
         .setTitle('Error parsing YAML')
@@ -137,10 +142,11 @@ export default component$(() => {
         .setPersist(true);
       notifications.push(notification.toJSON());
     }
-    if (!json) return;
-    json = json[Object.keys(json)[0]];
-    animprevStore.speed = json['change-interval'] ?? 50;
-    animprevStore.frames = json['texts'] ?? [];
+    if (!parsedYaml) return;
+    const configNode = Object.values(parsedYaml)[0];
+    if (!configNode) return;
+    animprevStore.speed = configNode['change-interval'] ?? 50;
+    animprevStore.frames = configNode['texts'] ?? [];
   });
 
   return (

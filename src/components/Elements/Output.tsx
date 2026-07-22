@@ -50,10 +50,10 @@ export default component$<{
             .setTitle(copiedTitle)
             .setDescription(copiedDescription)
             .setBgColor('lum-grad-bg-green/50');
-          navigator.clipboard.writeText(value).catch((err) => {
+          navigator.clipboard.writeText(value).catch((err: unknown) => {
             notification
               .setTitle(copyFailedTitle)
-              .setDescription(err)
+              .setDescription(err instanceof Error ? err.message : String(err))
               .setBgColor('lum-grad-bg-red/50')
               .setPersist(true);
           });

@@ -24,7 +24,11 @@ export const BaseConfigValidation = v.object({
 });
 
 type GenerateConfigSchema = {
-  [key in AvailableConfig]: any;
+  [key in AvailableConfig]: v.BaseSchema<
+    unknown,
+    unknown,
+    v.BaseIssue<unknown>
+  >;
 };
 
 export function generateConfigSchema(
@@ -38,7 +42,7 @@ export function generateConfigSchema(
 
   for (const [key, value] of Object.entries(config) as [
     AvailableConfig,
-    any,
+    (typeof config)[string],
   ][]) {
     if (
       !selectedOperatingSystem.config.includes(key) ||
@@ -50,7 +54,7 @@ export function generateConfigSchema(
 
     schema[key] =
       value.default !== undefined
-        ? v.optional(value.type, value.default)
+        ? v.optional(value.type, value.default as never)
         : value.type;
   }
 

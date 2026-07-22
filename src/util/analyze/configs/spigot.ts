@@ -1,10 +1,11 @@
+import type { DictOfVars } from '~/util/analyze/types';
 export default function getConfig() {
   return {
     'entity-activation-range.animals': [
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -24,7 +25,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -44,7 +45,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -64,7 +65,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -84,7 +85,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -104,7 +105,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 dict_of_vars.spigot['world-settings']['default'][
                   'entity-activation-range'
@@ -122,7 +123,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -134,7 +135,7 @@ export default function getConfig() {
             vars: ['spigot'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -154,7 +155,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -166,7 +167,7 @@ export default function getConfig() {
             vars: ['spigot'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -186,7 +187,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -206,7 +207,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -218,7 +219,7 @@ export default function getConfig() {
             vars: ['spigot'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -238,7 +239,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -258,7 +259,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -278,7 +279,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -298,7 +299,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -310,7 +311,7 @@ export default function getConfig() {
             vars: ['spigot'],
           },
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -330,7 +331,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -350,7 +351,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseFloat(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -370,7 +371,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseFloat(
                   dict_of_vars.spigot['world-settings']['default'][
@@ -390,7 +391,7 @@ export default function getConfig() {
       {
         expressions: [
           {
-            bool: (dict_of_vars: any) => {
+            bool: (dict_of_vars: DictOfVars) => {
               return (
                 parseInt(
                   dict_of_vars.spigot['world-settings']['default'][

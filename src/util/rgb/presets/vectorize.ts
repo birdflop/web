@@ -31,7 +31,7 @@ export function presetToVector(preset: rgbPreset): number[] {
   // Handle edge cases
   if (!colors || colors.length === 0) {
     // Return vector of zeros for empty gradient
-    return new Array(75).fill(0);
+    return Array.from({ length: 75 }, () => 0);
   }
 
   // Sort colors by position

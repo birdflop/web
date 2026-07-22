@@ -1,13 +1,15 @@
 import birdflopTheme from '~/theme.json';
-import { createHighlighter, type HighlighterGeneric } from 'shiki';
+import { createHighlighter } from 'shiki';
 import { createJavaScriptRegexEngine } from '@shikijs/engine-javascript';
 const jsEngine = createJavaScriptRegexEngine();
-let highlighterGlobal: HighlighterGeneric<any, any> | undefined;
+let highlighterGlobal:
+  | Awaited<ReturnType<typeof createHighlighter>>
+  | undefined;
 
 export async function getGlobalHighlighter() {
   if (!highlighterGlobal) {
     highlighterGlobal = await createHighlighter({
-      themes: [JSON.parse(JSON.stringify(birdflopTheme))],
+      themes: [birdflopTheme as never],
       langs: ['ts'],
       engine: jsEngine,
     });

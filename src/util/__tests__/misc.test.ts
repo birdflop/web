@@ -2,14 +2,15 @@ import { describe, it, expect, vi } from 'vite-plus/test';
 import { deepTrack } from '../track';
 
 vi.mock('@qwik.dev/core', async () => {
-  const actual = (await vi.importActual('@qwik.dev/core')) as any;
+  const actual =
+    await vi.importActual<Record<string, unknown>>('@qwik.dev/core');
   return {
     ...actual,
-    unwrapStore: (o: any) => {
+    unwrapStore: (o: Record<string, unknown> | null | undefined) => {
       // For testing deepTrack recursion:
       // If we mark an object with __isStore: true, treat it as wrapped
-      if (o && o.__isStore) {
-        return o.target;
+      if (o && typeof o === 'object' && '_isStore' in o && o._isStore) {
+        return (o as { target?: unknown }).target;
       }
       return o;
     },
@@ -28,7 +29,7 @@ describe('deepTrack', () => {
   it('should recursively track nested objects marked as stores', () => {
     const track = vi.fn();
     const childTarget = { leaf: 'leafVal' };
-    const child = { __isStore: true, target: childTarget };
+    const child = { _isStore: true, target: childTarget };
     const parent = {
       nested: child,
     };

@@ -11,7 +11,7 @@ const excludeRoutes = [
   'api',
   'acornmc',
 ];
-const priorities = {
+const priorities: Record<string, number> = {
   plans: 0.9,
   resources: 0.6,
   'resources/rgb/': 0.8,
@@ -20,7 +20,18 @@ const priorities = {
   docs: 0.5,
 };
 
-function extractRoutes(node: any, pathParts: string[] = []): string[] {
+interface RouteNode {
+  _I?: boolean;
+  _M?: RouteNode[];
+  _W?: RouteNode & { _P?: string };
+  _A?: RouteNode & { _P?: string };
+  [key: string]: unknown;
+}
+
+function extractRoutes(
+  node: RouteNode | null | undefined,
+  pathParts: string[] = []
+): string[] {
   const result: string[] = [];
   if (!node || typeof node !== 'object') return result;
 
@@ -50,44 +61,33 @@ function extractRoutes(node: any, pathParts: string[] = []): string[] {
     if (key.startsWith('_')) {
       continue;
     }
-    result.push(...extractRoutes(child, [...pathParts, key]));
+    result.push(...extractRoutes(child as RouteNode, [...pathParts, key]));
   }
 
   return result;
 }
 
 export const onGet: RequestHandler = (ev) => {
-  const siteRoutes = extractRoutes(routes)
-    .filter((route) => route !== '/') // Exclude the '/' route
-    .filter(
-      (route) => !excludeRoutes.some((exclude) => route.includes(exclude))
-    )
-    .map((loc) => {
-      let priority = 0.5; // Default priority
-
-      // Check if the route has a priority override
-      Object.keys(priorities).forEach((priorityRoute) => {
-        if (loc.startsWith(priorityRoute)) {
-          priority = priorities[priorityRoute as keyof typeof priorities];
+  const siteRoutes = extractRoutes(routes as RouteNode)
+    .filter((route) => {
+      return !excludeRoutes.some((exclude) => route.includes(exclude));
+    })
+    .map((route) => {
+      let priority = 1;
+      for (const [key, value] of Object.entries(priorities)) {
+        if (route.startsWith(key)) {
+          priority = value;
+          break;
         }
-      });
-
+      }
       return {
-        loc: loc.startsWith('/') ? loc : '/' + loc,
+        loc: route,
         priority,
       };
-    })
-    .sort((a, b) => b.priority - a.priority); // Sort by priority for better readability
+    });
 
-  const sitemap = createSitemap([
-    { loc: '/', priority: 1 }, // Manually include the root route
-    ...siteRoutes,
-  ]);
+  const sitemap = createSitemap(siteRoutes);
+  ev.headers.set('Content-Type', 'text/xml');
 
-  const response = new Response(sitemap, {
-    status: 200,
-    headers: { 'Content-Type': 'text/xml' },
-  });
-
-  ev.send(response);
+  throw ev.send(200, sitemap);
 };

@@ -1,10 +1,11 @@
 // components/home/HistoricLinePlot.tsx
 import { component$ } from '@qwik.dev/core';
+import type { ChartConfiguration } from 'chart.js';
 import Chart from '~/components/Elements/Chart';
 import { historicPrices } from './historicPrices';
 
 export default component$(() => {
-  const config = {
+  const config: ChartConfiguration = {
     type: 'line',
     data: historicPrices,
     options: {

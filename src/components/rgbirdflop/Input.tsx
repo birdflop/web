@@ -253,7 +253,7 @@ const InputField = component$(
         class={{
           'focus-within:border-lum-accent relative cursor-text break-all caret-white': true,
           ...getClassObject(className),
-          [`${rgbStore.colorFormat.class}`]: rgbStore.colorFormat.class,
+          ...getClassObject(rgbStore.colorFormat.class),
         }}
         onPointerDown$={handlePointerDown}
         onPointerMove$={handlePointerMove}

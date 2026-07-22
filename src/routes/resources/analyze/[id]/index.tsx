@@ -39,14 +39,14 @@ export default component$(() => {
   return (
     <Analyze>
       <div class="my-12 grid w-full grid-cols-3 gap-4">
-        {results.value.map((field: Field, i: number) => {
+        {results.value.map((field, i) => {
           return (
             <div class="lum-card" key={`field${i}`}>
               <p class="text-xl font-bold wrap-break-word">
                 {field.name.replace(/\./g, '\n> ')}
               </p>
               <p class="lum-text-secondary">{field.value}</p>
-              {field.buttons?.map((button: any, i2: number) => {
+              {field.buttons?.map((button, i2) => {
                 return (
                   <a class="lum-btn" key={`button${i2}-${i}`} href={button.url}>
                     {button.text}
@@ -65,8 +65,6 @@ export default component$(() => {
 });
 
 export const head = generateHead({
-  title: 'Automatic Minecraft Spark Profile and Timings Analyzer - Birdflop',
-  description:
-    'Analyze your Spark Profile and Paper Timings to get optimization recommendations. Developed by Birdflop. ' +
-    defaultDescription,
+  title: 'Analysis Results - Birdflop',
+  description: defaultDescription,
 });

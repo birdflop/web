@@ -1,7 +1,7 @@
 declare interface Field {
   name: string;
   value: string;
-  buttons?: any[];
+  buttons?: { text: string; url: string }[];
   inline?: boolean;
 }
 

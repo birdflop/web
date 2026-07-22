@@ -15,6 +15,7 @@ import {
   backfillColorVectors,
 } from '~/util/admin';
 import { Label } from '@luminescent/ui-qwik';
+import type { PublicPresetWithUser } from '~/util/db';
 
 export const onGet: RequestHandler = function (props) {
   const admin = checkAdmin(props);
@@ -30,10 +31,35 @@ export default component$(() => {
 
   const isRunning = useSignal(false);
 
+  type AdminPreset = PublicPresetWithUser;
+
+  interface SimilarDistance {
+    from: number;
+    to: number;
+    distance: number;
+  }
+
+  interface SimilarGroup {
+    presets: AdminPreset[];
+    distances: SimilarDistance[];
+  }
+
+  interface SimilarCheckResults {
+    success?: boolean;
+    totalPresets?: number;
+    threshold?: number;
+    pairsChecked?: number;
+    totalChecked?: number;
+    totalWithVectors?: number;
+    pairsGrouped?: number;
+    groupCount?: number;
+    groups?: SimilarGroup[];
+  }
+
   const isCheckingSimilar = useSignal(false);
   const similarThreshold = useSignal(2.0);
-  const similarResults = useSignal<any>(null);
-  const loadedPresets = useSignal<any[]>([]);
+  const similarResults = useSignal<SimilarCheckResults | null>(null);
+  const loadedPresets = useSignal<AdminPreset[]>([]);
   const isLoadingPresets = useSignal(false);
   const loadedAt = useSignal<Date | null>(null);
 
@@ -138,7 +164,8 @@ export default component$(() => {
       const response = await loadAllPresets();
 
       if (response.success && response.presets) {
-        loadedPresets.value = response.presets;
+        loadedPresets.value =
+          response.presets as unknown as PublicPresetWithUser[];
         loadedAt.value = new Date();
         await addLog(
           'Find Similar',
@@ -451,39 +478,34 @@ export default component$(() => {
             {isCheckingSimilar.value ? 'Checking...' : 'Find Similar'}
           </button>
 
-          {similarResults.value && similarResults.value.groupCount > 0 && (
-            <div class="mt-6">
-              <div class="mb-4 rounded-lg bg-gray-900 p-4">
-                <h3 class="mb-2 text-lg font-bold">Results Summary</h3>
-                <p class="mb-2 text-gray-300">
-                  Found{' '}
-                  <span class="font-bold text-yellow-400">
-                    {similarResults.value.groupCount}
-                  </span>{' '}
-                  groups of similar presets out of{' '}
-                  <span class="text-lum-accent font-bold">
-                    {similarResults.value.totalPresets}
-                  </span>{' '}
-                  total presets.
-                </p>
-                <p class="text-sm text-gray-400">
-                  Threshold used:{' '}
-                  <span class="text-lum-accent font-semibold">
-                    {similarResults.value.threshold}
-                  </span>{' '}
-                  | Pairs checked:{' '}
-                  <span class="text-gray-300">
-                    {similarResults.value.pairsChecked}
-                  </span>{' '}
-                  | Pairs grouped:{' '}
-                  <span class="font-semibold text-green-400">
-                    {similarResults.value.pairsGrouped}
-                  </span>
-                </p>
-              </div>
+          {similarResults.value &&
+            (similarResults.value.groupCount ?? 0) > 0 && (
+              <div class="mt-6">
+                <h2 class="mb-4 text-xl font-bold text-gray-200">
+                  Similar Preset Groups ({similarResults.value.groupCount})
+                </h2>
+                <div class="mb-4 rounded-lg bg-gray-900 p-4 text-sm text-gray-300">
+                  <p>
+                    Found {similarResults.value.groupCount} group(s) of similar
+                    presets with similarity threshold{' '}
+                    <span class="font-semibold text-yellow-300">
+                      {similarResults.value.threshold}
+                    </span>
+                    .
+                  </p>
+                  <p class="mt-1 text-xs text-gray-400">
+                    Total pairs checked:{' '}
+                    <span class="text-gray-300">
+                      {similarResults.value.pairsChecked}
+                    </span>{' '}
+                    | Total grouped:{' '}
+                    <span class="text-gray-300">
+                      {similarResults.value.pairsGrouped}
+                    </span>
+                  </p>
+                </div>
 
-              {similarResults.value.groups.map(
-                (group: any, groupIndex: number) => (
+                {similarResults.value.groups?.map((group, groupIndex) => (
                   <div key={groupIndex} class="mb-4 rounded-lg bg-gray-900 p-4">
                     <h3 class="mb-3 text-lg font-bold text-yellow-400">
                       Group {groupIndex + 1} - {group.presets.length} Similar
@@ -496,12 +518,12 @@ export default component$(() => {
                         Distances (OKLAB space):
                       </p>
                       <div class="flex flex-wrap gap-2 text-xs">
-                        {group.distances.map((dist: any, i: number) => {
+                        {group.distances.map((dist, i) => {
                           const fromPreset = group.presets.find(
-                            (p: any) => p.id === dist.from
+                            (p) => p.id === dist.from
                           );
                           const toPreset = group.presets.find(
-                            (p: any) => p.id === dist.to
+                            (p) => p.id === dist.to
                           );
                           // Ensure distance is treated as a float
                           const distValue = Number(dist.distance);
@@ -526,25 +548,24 @@ export default component$(() => {
 
                     {/* Preset previews */}
                     <div class="grid gap-3 sm:grid-cols-2">
-                      {group.presets.map((preset: any) => (
+                      {group.presets.map((preset) => (
                         <div key={preset.id} class="relative">
                           <PresetPreview Preset={preset} />
                         </div>
                       ))}
                     </div>
                   </div>
-                )
-              )}
+                ))}
 
-              {similarResults.value.groupCount === 0 && (
-                <div class="rounded-lg border border-green-500/50 bg-green-500/20 p-4 text-center">
-                  <p class="font-semibold text-green-400">
-                    ✓ No similar presets found at this threshold!
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+                {similarResults.value.groupCount === 0 && (
+                  <div class="rounded-lg border border-green-500/50 bg-green-500/20 p-4 text-center">
+                    <p class="font-semibold text-green-400">
+                      ✓ No similar presets found at this threshold!
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
         </div>
       </div>
 

@@ -151,7 +151,7 @@ export default component$(() => {
           const newFormatting = rgbStore.formatting.map((seg) => {
             const newSeg = { ...seg };
             for (const key of changedKeys) {
-              delete (newSeg as any)[key];
+              delete (newSeg as Record<string, unknown>)[key];
             }
             return newSeg;
           });
@@ -167,7 +167,7 @@ export default component$(() => {
               return !isDefault;
             })
             .map((fmt) => {
-              const cleaned: any = { start: fmt.start, end: fmt.end };
+              const cleaned: FormatSegment = { start: fmt.start, end: fmt.end };
               for (const k of FORMAT_KEYS) {
                 if (fmt[k] !== undefined && fmt[k] !== defaultNorm[k]) {
                   cleaned[k] = fmt[k];
@@ -179,9 +179,9 @@ export default component$(() => {
               return cleaned;
             });
 
-          const merged: any[] = [];
+          const merged: FormatSegment[] = [];
           for (const seg of cleanedFormatting.sort(
-            (x: any, y: any) => x.start - y.start
+            (x, y) => x.start - y.start
           )) {
             const last = merged[merged.length - 1];
             if (
@@ -217,7 +217,7 @@ export default component$(() => {
       }
       const points = Array.from(boundaries).sort((a, b) => a - b);
 
-      const newSegments = [];
+      const newSegments: FormatSegment[] = [];
       for (let i = 0; i < points.length - 1; i++) {
         const a = points[i];
         const b = points[i + 1];
@@ -243,10 +243,8 @@ export default component$(() => {
         }
       }
 
-      const merged: any[] = [];
-      for (const seg of newSegments.sort(
-        (x: any, y: any) => x.start - y.start
-      )) {
+      const merged: FormatSegment[] = [];
+      for (const seg of newSegments.sort((x, y) => x.start - y.start)) {
         const last = merged[merged.length - 1];
         if (
           last &&

@@ -91,10 +91,14 @@ export default async function birdThreeJS(
   parrotTexture.magFilter = THREE.NearestFilter;
 
   // Apply texture to bird model
-  bird.traverse((child: any) => {
-    if (child.isMesh) {
-      child.material.map = parrotTexture;
-      child.material.map.flipY = false; // glTF textures usually have flipY = false
+  bird.traverse((child: THREE.Object3D) => {
+    if ((child as THREE.Mesh).isMesh) {
+      const mesh = child as THREE.Mesh<
+        THREE.BufferGeometry,
+        THREE.MeshStandardMaterial
+      >;
+      mesh.material.map = parrotTexture;
+      mesh.material.map.flipY = false; // glTF textures usually have flipY = false
     }
   });
 
@@ -258,7 +262,7 @@ export default async function birdThreeJS(
   }
 
   function updateRotationTowards(
-    bird: any,
+    bird: THREE.Object3D,
     targetAngle: number,
     deltaTime: number,
     speed = 6

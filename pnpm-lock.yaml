@@ -17,6 +17,7 @@ packages:
 
   '@pnpm/exe@11.13.0':
     resolution: {integrity: sha512-aXsm4VW1awRuh4X4G4fl+1xdV+L9DElKrgc4Yq/3zgGQQ12ATj1n3MMeosfa68aX/i7E9VyWT42adDSg8+kEFQ==}
+    deprecated: This is a broken version. Please install pnpm v11.13.1 or newer
     hasBin: true
 
   '@pnpm/linux-arm64@11.13.0':
@@ -119,6 +120,7 @@ packages:
   pnpm@11.13.0:
     resolution: {integrity: sha512-iNlHJNjy5sGGdEpVhMblnsrIaex7oV6ctM1ijo3HBmggskgdjuO1HqjaMjpzeAaKpYxVajcg0yt8IKBR0Ig2Og==}
     engines: {node: '>=22.13'}
+    deprecated: This is a broken version. Please install pnpm v11.13.1 or newer
     hasBin: true
 
 snapshots:
@@ -236,8 +238,8 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
       '@luminescent/ui-qwik':
-        specifier: 7.0.0-20
-        version: 7.0.0-20(@luminescent/ui@7.0.2)
+        specifier: 7.0.0-21
+        version: 7.0.0-21(@luminescent/ui@7.0.2)
       '@qwik.dev/core':
         specifier: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785
         version: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.6.7)(sass@1.101.0)(stylus@0.62.0)(tsx@4.23.1)(typescript@6.0.3)(yaml@2.9.0))(vitest@4.1.10)
@@ -1104,8 +1106,8 @@ packages:
     resolution: {integrity: sha512-W69uzPt9qAhqShl74bma9yzRqXv8FNJLz3R/R6vC4Z5rXYaZJ4W2fcITOUX33WBmKIlq6YNPrm6rWWY6tfMikw==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
 
-  '@luminescent/ui-qwik@7.0.0-20':
-    resolution: {integrity: sha512-k/yddFuf+ZEF5wBkvDxMH6inmFtY9J+VY48/rIvvb5g0tAVQgO4PE95TD/l3QJ3ggSXw7OC/Oz5U6tE8xmCGtA==}
+  '@luminescent/ui-qwik@7.0.0-21':
+    resolution: {integrity: sha512-7TKnJgr9zmTRuFD4PghnPr9B83He6FrnhKZLraEGlIlIXDGTshfhPXlwBSlnuQ1PhenKKOyTkJSKUi+Ou9+q9g==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
       '@luminescent/ui': 7.0.2
@@ -4283,7 +4285,7 @@ snapshots:
 
   '@luminescent/icons-qwik@0.1.1': {}
 
-  '@luminescent/ui-qwik@7.0.0-20(@luminescent/ui@7.0.2)':
+  '@luminescent/ui-qwik@7.0.0-21(@luminescent/ui@7.0.2)':
     dependencies:
       '@luminescent/ui': 7.0.2
 

@@ -8,14 +8,15 @@ export const onGet: RequestHandler = ({ text, json, cookie, query }) => {
   });
   const cookiesObject = Object.fromEntries(
     Object.entries(cookies).map(([key, value]) => {
+      let parsedVal: unknown = value.value;
       if (value.value.startsWith('{"')) {
         try {
-          value.value = JSON.parse(value.value);
+          parsedVal = JSON.parse(value.value);
         } catch (e) {
           console.error(`Failed to parse cookie ${key}:`, e);
         }
       }
-      return [key, value.value];
+      return [key, parsedVal];
     })
   );
 

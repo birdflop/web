@@ -32,23 +32,28 @@ function getMemory(memory: number, isContainer = false) {
   return Math.round(binaryMemory * 0.85);
 }
 
-function getJava(
-  config: Partial<
-    Record<AvailableConfig | 'existingFlags' | 'calcOverhead', any>
-  >
-): string {
+interface JavaConfig {
+  fileName?: string;
+  memory?: number;
+  existingFlags?: string[];
+  gui?: boolean;
+  calcOverhead?: boolean;
+  [key: string]: unknown;
+}
+
+function getJava(config: JavaConfig): string {
   let ram = config.calcOverhead
-    ? Math.ceil(((11 * config.memory) / 12 - 1200) / 100) * 100
-    : config.memory;
+    ? Math.ceil(((11 * (config.memory ?? 0)) / 12 - 1200) / 100) * 100
+    : (config.memory ?? 0);
   if (ram < 512) ram = 512;
 
   const base = [
     'java',
     `-Xms${ram}M`,
     `-Xmx${ram}M`,
-    ...config.existingFlags,
+    ...(config.existingFlags ?? []),
     '-jar',
-    config.fileName,
+    config.fileName ?? 'server.jar',
   ];
 
   // GUI variable is supported
@@ -72,7 +77,7 @@ const nixScript: NixScript = (config) => {
   const base = ['#!/usr/bin/env bash', ''];
 
   let fileName = config.fileName;
-  let memory: number | string = getMemory(config.memory);
+  let memory: number | string = getMemory(config.memory ?? 0);
 
   if (config.variables) {
     base.push(
@@ -90,7 +95,7 @@ const nixScript: NixScript = (config) => {
   const java = getJava({
     ...config,
     fileName,
-    memory,
+    memory: typeof memory === 'number' ? memory : undefined,
   });
 
   if (config.autoRestart) {
@@ -109,7 +114,7 @@ const nixScript: NixScript = (config) => {
 
   return {
     script: base,
-    flags: config.existingFlags,
+    flags: config.existingFlags ?? [],
   };
 };
 
@@ -141,7 +146,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       const base = [];
 
       let fileName = config.fileName;
-      let memory: number | string = getMemory(config.memory);
+      let memory: number | string = getMemory(config.memory ?? 0);
 
       if (config.variables) {
         base.push(`set fileName="${fileName}"`, `set /A memory=${memory}`, '');
@@ -153,7 +158,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       const java = getJava({
         ...config,
         fileName,
-        memory,
+        memory: typeof memory === 'number' ? memory : undefined,
       });
 
       if (config.autoRestart) {
@@ -172,7 +177,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
 
       return {
         script: base.join('\n'),
-        flags: config.existingFlags,
+        flags: config.existingFlags ?? [],
       };
     },
   },
@@ -202,7 +207,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       const base = [];
 
       let fileName = config.fileName;
-      let memory: number | string = getMemory(config.memory, true);
+      let memory: number | string = getMemory(config.memory as number, true);
 
       if (config.variables) {
         fileName = '{{SERVER_JARFILE}}';
@@ -210,7 +215,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
       }
 
       const flags = [
-        ...config.existingFlags,
+        ...(config.existingFlags ?? []),
         '-Dterminal.jline=false',
         '-Dterminal.ansi=true',
       ];
@@ -219,7 +224,7 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
         ...config,
         existingFlags: flags,
         fileName,
-        memory,
+        memory: typeof memory === 'number' ? memory : undefined,
       });
 
       base.push(java);
@@ -238,14 +243,14 @@ export const operatingSystem: EnvironmentOptions<OperatingSystemOption> = {
 
       const java = getJava({
         ...config,
-        memory: getMemory(config.memory),
+        memory: getMemory(config.memory as number),
       });
 
       base.push(java);
 
       return {
         script: base.join('\n'),
-        flags: config.existingFlags,
+        flags: config.existingFlags ?? [],
       };
     },
   },

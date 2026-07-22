@@ -44,7 +44,7 @@ export abstract class BasePlugin implements ServerPlugin {
     return this;
   }
 
-  abstract fromData(data: any): this;
+  abstract fromData(data: Record<string, unknown>): this;
   abstract fetchData(): Promise<this>;
   abstract fetchVersions(): Promise<this>;
   abstract toJSON(): PluginType;
