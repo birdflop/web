@@ -51,7 +51,7 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
 
   async fetchData() {
     const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
-    const data = await res.json();
+    const data: ModrinthProjectData = await res.json();
 
     return this.fromData(data);
   }
@@ -60,7 +60,7 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
     const res = await fetch(
       `https://api.modrinth.com/v2/project/${this.id}/version?loaders=["paper"]`
     );
-    const versions = await res.json();
+    const versions: ModrinthVersionData[] = await res.json();
     console.log('Fetched versions for plugin', this.name, versions);
 
     this.versions = versions.map((version) => ({
