@@ -5,7 +5,9 @@ import type {
   PluginSource,
 } from './ServerPlugin';
 
-export abstract class BasePlugin implements ServerPlugin {
+export abstract class BasePlugin<
+  T = Record<string, unknown>,
+> implements ServerPlugin<T> {
   id: number | string;
   abstract type: PluginSource;
   name?: string;
@@ -44,9 +46,9 @@ export abstract class BasePlugin implements ServerPlugin {
     return this;
   }
 
-  abstract fromData(data: Record<string, unknown>): this;
+  abstract fromData(data: T): this;
   abstract fetchData(): Promise<this>;
   abstract fetchVersions(): Promise<this>;
   abstract toJSON(): PluginType;
-  abstract clone(): ServerPlugin;
+  abstract clone(): this;
 }

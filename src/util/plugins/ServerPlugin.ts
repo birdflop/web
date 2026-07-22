@@ -68,7 +68,7 @@ export type PluginType = {
   sourceCodeLink?: string;
 };
 
-export function getPlugin(plugin: PluginType): ServerPlugin {
+export function getPlugin(plugin: PluginType) {
   switch (plugin.type) {
     case 'spigot':
       return new SpigotPlugin(plugin);
@@ -94,13 +94,13 @@ export function searchPlugins(
   }
 }
 
-export interface ServerPlugin extends PluginType {
+export interface ServerPlugin<T = Record<string, unknown>> extends PluginType {
   get(): Promise<this>;
   fetch(): Promise<this>;
-  fromData(data: Record<string, unknown>): this;
+  fromData(data: T): this;
   fetchData(): Promise<this>;
   fetchVersions(): Promise<this>;
 
   toJSON(): PluginType;
-  clone(): ServerPlugin;
+  clone(): this;
 }
