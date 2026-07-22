@@ -23,7 +23,9 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
     });
 
     const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
-    const searchData = await searchRes.json();
+    const searchData: {
+      hits: ModrinthSearchHit[];
+    } = await searchRes.json();
     return searchData.hits.map((data) =>
       new ModrinthPlugin({ id: data.project_id }).fromData(data)
     );
