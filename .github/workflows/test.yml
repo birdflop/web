@@ -27,11 +27,11 @@ jobs:
       - name: Install dependencies
         run: vp install --frozen-lockfile
 
+      - name: Build RGBirdflop Package
+        run: vp run build.pkg
+
       - name: Static Checks
         run: vp check
-
-      - name: Build Library Package
-        run: vp run build.pkg
 
       - name: Run Tests
         run: vp test
