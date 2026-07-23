@@ -24,9 +24,6 @@ jobs:
           node-version: '24'
           cache: true
 
-      - name: Install dependencies
-        run: vp install --frozen-lockfile
-
       - name: Build RGBirdflop Package
         run: vp run build.pkg
 

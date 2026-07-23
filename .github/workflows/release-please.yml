@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build package
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}

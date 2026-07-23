@@ -60,6 +60,10 @@ export function parseParams(params: Record<string, string>, name: names) {
         } else if (typeof defaultValue === 'boolean') {
           parsedValue = params[key] === 'true';
         } else if (typeof defaultValue === 'number') {
+          if (isNaN(Number(params[key]))) {
+            errors.push(`Invalid value found for ${key}: ${params[key]}`);
+            continue;
+          }
           parsedValue = Number(params[key]);
         } else {
           parsedValue = params[key];
