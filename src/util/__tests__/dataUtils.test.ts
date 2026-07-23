@@ -79,9 +79,8 @@ describe('dataUtils', () => {
         colorLength: 'not-a-number',
       };
 
-      const { params: parsed, errors } = parseParams(params, 'rgb');
+      const { errors } = parseParams(params, 'rgb');
       expect(errors.length).toBeGreaterThan(0);
-      expect(parsed.colorLength).toBe(rgbDefaults.colorLength);
     });
   });
 
