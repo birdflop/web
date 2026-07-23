@@ -23,9 +23,8 @@ jobs:
         with:
           node-version: '24'
           cache: true
-
-      - name: Install dependencies
-        run: vp install --update-checksums
+          run-install: |
+            - args: ['--update-checksums']
 
       - name: Build RGBirdflop Package
         run: vp run build.pkg
