@@ -282,5 +282,7 @@ export const fmt: UserConfig['fmt'] = {
     'package-lock.json',
     'yarn.lock',
     'server',
+    '**/CHANGELOG.md',
+    '*.md',
   ],
 };
