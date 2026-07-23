@@ -11,11 +11,13 @@
     "packages/rgbirdflop": {
       "package-name": "RGBirdflop",
       "component": "rgbirdflop",
+      "include-component-in-tag": true,
       "extra-files": ["package.json"]
     },
     "packages/analyze": {
       "package-name": "Analyze",
       "component": "analyze",
+      "include-component-in-tag": true,
       "extra-files": ["package.json"]
     }
   },
