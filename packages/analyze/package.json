@@ -1,6 +1,6 @@
 {
   "name": "@birdflop/analyze",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Spark Profile and Paper Timings analyzer for Minecraft servers.",
   "homepage": "https://birdflop.com/resources/analyze/",
   "bugs": {
