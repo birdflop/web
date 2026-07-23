@@ -88,16 +88,18 @@ export function applyMiniMessageFormatting(
   if (formatting.font) {
     output = applyFont(output, formatting.font);
   }
-  if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate)
-    output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
-  if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough)
-    output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
-  if (formatting.underline && rgbOptions.colorFormat.underline)
-    output = rgbOptions.colorFormat.underline.replace('$t', output);
-  if (formatting.italic && rgbOptions.colorFormat.italic)
-    output = rgbOptions.colorFormat.italic.replace('$t', output);
-  if (formatting.bold && rgbOptions.colorFormat.bold)
-    output = rgbOptions.colorFormat.bold.replace('$t', output);
+  if (rgbOptions.formatting && rgbOptions.formatting.length > 0) {
+    if (formatting.obfuscate && rgbOptions.colorFormat.obfuscate)
+      output = rgbOptions.colorFormat.obfuscate.replace('$t', output);
+    if (formatting.strikethrough && rgbOptions.colorFormat.strikethrough)
+      output = rgbOptions.colorFormat.strikethrough.replace('$t', output);
+    if (formatting.underline && rgbOptions.colorFormat.underline)
+      output = rgbOptions.colorFormat.underline.replace('$t', output);
+    if (formatting.italic && rgbOptions.colorFormat.italic)
+      output = rgbOptions.colorFormat.italic.replace('$t', output);
+    if (formatting.bold && rgbOptions.colorFormat.bold)
+      output = rgbOptions.colorFormat.bold.replace('$t', output);
+  }
   return output;
 }
 
@@ -253,7 +255,11 @@ function applySelectiveFormattingToText(
     if (currentFmt.font) {
       formatted = applyFont(formatted, currentFmt.font);
     }
-    if (rgbOptions.colorFormat.color === 'MiniMessage') {
+    if (
+      rgbOptions.colorFormat.color === 'MiniMessage' &&
+      rgbOptions.formatting &&
+      rgbOptions.formatting.length > 0
+    ) {
       if (currentFmt.bold) formatted = `<b>${formatted}</b>`;
       if (currentFmt.italic) formatted = `<i>${formatted}</i>`;
       if (currentFmt.underline) formatted = `<u>${formatted}</u>`;
