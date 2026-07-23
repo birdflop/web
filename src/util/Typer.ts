@@ -18,28 +18,14 @@ export function initiateTyper() {
   class CursorInstance {
     element: TyperElement;
     cursorDisplay: string;
-    on: boolean;
-    interval: ReturnType<typeof setInterval>;
     owner?: TyperInstance;
 
     constructor(element: TyperElement) {
       this.element = element;
+      element.classList.add('animate-caret-blink');
       this.cursorDisplay =
         element.dataset.cursordisplay || element.dataset.cursorDisplay || '_';
       element.innerHTML = this.cursorDisplay;
-      this.on = true;
-      element.style.transition = 'all 0.1s';
-      this.interval = setInterval(() => this.updateBlinkState(), 400);
-    }
-
-    updateBlinkState() {
-      if (this.on) {
-        this.element.style.opacity = '0';
-        this.on = false;
-      } else {
-        this.element.style.opacity = '1';
-        this.on = true;
-      }
     }
   }
 
@@ -91,15 +77,6 @@ export function initiateTyper() {
       const c = p.char;
       const currentDisplay = Array.from(this.words[w]).slice(0, c).join('');
       let atWordEnd = false;
-      if (this.cursor) {
-        this.cursor.element.style.opacity = '1';
-        this.cursor.on = true;
-        clearInterval(this.cursor.interval);
-        this.cursor.interval = setInterval(
-          () => this.cursor?.updateBlinkState(),
-          400
-        );
-      }
 
       e.innerHTML = currentDisplay;
 

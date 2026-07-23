@@ -291,7 +291,7 @@ export default component$(
               <Slot name="header" />
             </div>
 
-            <ButtonContainer class="[&>a]:lum-btn-p-1!">
+            <ButtonContainer class="[&>a]:lum-btn-p-1! hidden sm:block">
               {!loc.url.pathname.startsWith('/resources/rgb') && (
                 <Link href="/resources/rgb">
                   <Palette size={18} />
@@ -394,6 +394,7 @@ export default component$(
                 </button>
                 <SelectMenu
                   q:slot="label"
+                  align="right"
                   title={t('rgb.colors.format@@Color Format')}
                   id="format"
                   value={
@@ -493,32 +494,34 @@ export default component$(
               <Slot name="column3" />
             </div>
           </div>
-          <p class="mt-8">
-            RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
-            gradient creator that generates hex formatted text. RGB Birdflop is
-            a public resource developed by Birdflop, a 501(c)(3) nonprofit
-            providing affordable and accessible hosting and public resources. If
-            you would like to support our mission, please{' '}
-            <a href={donateLink}>click here</a> to make a charitable donation,
-            100% tax-deductible in the US.
-          </p>
-          <p>
-            Wanna automate generating gradients or use this in your own project?
-            We have{' '}
-            <a
-              class="text-lum-accent hover:underline"
-              href="/docs/rgbirdflop/npm_package"
-            >
-              an NPM package
-            </a>{' '}
-            and{' '}
-            <a
-              class="text-lum-accent hover:underline"
-              href="/docs/rgbirdflop/api"
-            >
-              an API!
-            </a>
-          </p>
+          <div class="text-lum-text-secondary mt-8 flex flex-col gap-2 text-sm sm:flex-row">
+            <p class="sm:border-lum-border/10 sm:border-r">
+              RGBirdflop (RGB Birdflop) is a free and open-source Minecraft RGB
+              gradient creator that generates hex formatted text. RGB Birdflop
+              is a public resource developed by Birdflop, a 501(c)(3) nonprofit
+              providing affordable and accessible hosting and public resources.
+              If you would like to support our mission, please{' '}
+              <a href={donateLink}>click here</a> to make a charitable donation,
+              100% tax-deductible in the US.
+            </p>
+            <p class="sm:text-right">
+              Wanna automate generating gradients or use this in your own
+              project? We have{' '}
+              <a
+                class="text-lum-accent hover:underline"
+                href="/docs/rgbirdflop/npm_package"
+              >
+                an NPM package
+              </a>{' '}
+              and{' '}
+              <a
+                class="text-lum-accent hover:underline"
+                href="/docs/rgbirdflop/api"
+              >
+                an API!
+              </a>
+            </p>
+          </div>
         </div>
         {showAds.value && adAsset && (
           <HostingAd variant={adAsset} position="Right" />

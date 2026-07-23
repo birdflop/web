@@ -151,20 +151,20 @@ export default component$(() => {
                       }, 100);
                     }}
                   >
-                    <p class="text-lum-text-secondary">
+                    <span class="text-lum-text-secondary">
                       Last quarter, clients paid{' '}
                       <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
                       reimbursements.
-                    </p>
-                    <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                    </span>
+                    <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                       {planName}
-                    </h3>
-                    <p class="text-lum-text-secondary">
+                    </span>
+                    <span class="text-lum-text-secondary">
                       {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB
                       plans
                       <br />
                       capped at ${plan.$PerGB}/GB
-                    </p>
+                    </span>
                     <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                       {plan.features.map((feature) => {
                         return <li key={feature}>{feature}</li>;
@@ -189,10 +189,10 @@ export default component$(() => {
                   href="https://client.birdflop.com/order/main/packages/discord/?group_id=12"
                   target="_blank"
                 >
-                  <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                  <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                     Discord Bot Hosting*
-                  </h3>
-                  <p class="text-lum-text-secondary">$3/mo - 1GB</p>
+                  </span>
+                  <span class="text-lum-text-secondary">$3/mo - 1GB</span>
                   <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                     <li>Falkenstein, Germany</li>
                     <li>Ryzen 9 5950X (1 vCore)</li>
@@ -204,10 +204,10 @@ export default component$(() => {
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=15"
                   target="_blank"
                 >
-                  <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                  <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                     US Dev/Hub*
-                  </h3>
-                  <p class="text-lum-text-secondary">$6/mo - 2GB</p>
+                  </span>
+                  <span class="text-lum-text-secondary">$6/mo - 2GB</span>
                   <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                     <li>US East (NYC / Ashburn VA)</li>
                     <li>Ryzen 9 3900XT or Better (1 vCore)</li>
@@ -219,10 +219,10 @@ export default component$(() => {
                   href="https://client.birdflop.com/order/config/index/us-premium/?group_id=8&pricing_id=7"
                   target="_blank"
                 >
-                  <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                  <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                     US Proxy*
-                  </h3>
-                  <p class="text-lum-text-secondary">$6/mo - 2GB</p>
+                  </span>
+                  <span class="text-lum-text-secondary">$6/mo - 2GB</span>
                   <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                     <li>US East (NYC / Ashburn VA)</li>
                     <li>Ryzen 9 3900XT or Better (4 vCores)</li>
@@ -234,10 +234,10 @@ export default component$(() => {
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=16"
                   target="_blank"
                 >
-                  <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                  <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                     EU Dev/Hub*
-                  </h3>
-                  <p class="text-lum-text-secondary">$4/mo - 2GB</p>
+                  </span>
+                  <span class="text-lum-text-secondary">$4/mo - 2GB</span>
                   <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                     <li>Falkenstein, Germany</li>
                     <li>Ryzen 9 5950X (1 vCore)</li>
@@ -249,10 +249,10 @@ export default component$(() => {
                   href="https://client.birdflop.com/order/config/index/eu-premium/?group_id=11&pricing_id=14"
                   target="_blank"
                 >
-                  <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                  <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                     EU Proxy*
-                  </h3>
-                  <p class="text-lum-text-secondary">$4/mo - 2GB</p>
+                  </span>
+                  <span class="text-lum-text-secondary">$4/mo - 2GB</span>
                   <ul class="text-lum-text-secondary ml-4 flex-1 list-disc">
                     <li>Falkenstein, Germany</li>
                     <li>Ryzen 9 5950X (4 vCores)</li>
@@ -296,12 +296,12 @@ export default component$(() => {
                         data-umami-event-plan={plansStore.plan}
                         data-umami-event-amount={gb}
                       >
-                        <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+                        <span class="mb-2 flex items-center gap-2 text-2xl font-bold">
                           {gb} GB
-                        </h3>
-                        <p class="text-lum-text-secondary">
+                        </span>
+                        <span class="text-lum-text-secondary">
                           {`~$${(Number(gb) * plans[plansStore.plan].$PerGBReimbursed).toFixed(2)}/mo after reimbursements.\nCapped at $${Number(gb) * plans[plansStore.plan].$PerGB}/mo.`}
-                        </p>
+                        </span>
                       </button>
                     );
                   })}

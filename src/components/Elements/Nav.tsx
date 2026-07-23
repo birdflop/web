@@ -28,8 +28,7 @@ import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 
 import { languages } from '~/speak-config';
-import Accordion from './Accordion';
-import { openItemsContext, SettingsContext } from '~/routes/layout';
+import { SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
 
 // Links used in multiple places, defined here to avoid duplication and potential inconsistencies
@@ -47,11 +46,14 @@ export default component$(() => {
   const signOut = useSignOut();
   const session = useSession();
 
-  const openItems = useContext(openItemsContext);
   const settingsStore = useContext(SettingsContext);
 
   return (
-    <Nav fixed colorClass="lum-grad-bg-nav-bg border-b-lum-border/10 shadow-lg">
+    <Nav
+      fixed
+      nohamburger
+      colorClass="lum-bg-transparent sm:lum-grad-bg-nav-bg sm:border-b-lum-border/10 sm:shadow-lg"
+    >
       <Link
         q:slot="start"
         href="/"
@@ -261,117 +263,6 @@ export default component$(() => {
           </button>
         </Form>
       )}
-
-      <Link
-        q:slot="mobile"
-        href="/docs"
-        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-      >
-        <Book size={20} /> {t('nav.docs@@Docs')}
-      </Link>
-      <Accordion
-        q:slot="mobile"
-        sectionName="nav-hosting"
-        class="lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss"
-      >
-        <Server size={20} /> {t('nav.hosting.title@@Hosting')}
-      </Accordion>
-      <div
-        class={{
-          'overflow-hidden transition-all duration-200': true,
-          'max-h-0 scale-98 opacity-0':
-            !openItems.value.includes('nav-hosting'),
-          'mt-1 max-h-screen opacity-100':
-            openItems.value.includes('nav-hosting'),
-        }}
-        q:slot="mobile"
-      >
-        <a
-          href="https://panel.birdflop.com/"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
-        </a>
-        <Link
-          href="/plans"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
-        </Link>
-        <a
-          href="https://client.birdflop.com/"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
-        </a>
-        <Link
-          href="/node-stats"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
-        </Link>
-      </div>
-      <Accordion
-        q:slot="mobile"
-        sectionName="nav-resources"
-        class="lum-bg-transparent hover:lum-bg-nav-bg nav-ignore-dismiss"
-      >
-        <Box size={20} /> {t('nav.resources.title@@Resources')}
-      </Accordion>
-      <div
-        class={{
-          'overflow-hidden transition-all duration-200': true,
-          'max-h-0 scale-98 opacity-0':
-            !openItems.value.includes('nav-resources'),
-          'mt-1 max-h-screen opacity-100':
-            openItems.value.includes('nav-resources'),
-        }}
-        q:slot="mobile"
-      >
-        <Link
-          href="/resources/rgb"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Palette size={20} />{' '}
-          {t('nav.resources.hexGradient.title@@RGBirdflop')}
-        </Link>
-        <Link
-          href="/resources/animtab"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Rainbow size={20} />{' '}
-          {t('nav.resources.animatedTAB.title@@Animated TAB')}
-        </Link>
-        <Link
-          href="/resources/analyze"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
-        </Link>
-        <Link
-          href="/resources/flags"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
-        </Link>
-        <Link
-          href="/resources/banner"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Presentation size={20} />{' '}
-          {t('nav.resources.banner.title@@Banner Generator')}
-        </Link>
-        <Link
-          href="/resources"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
-        >
-          <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
-        </Link>
-      </div>
-
-      <div q:slot="mobile" class="flex justify-evenly">
-        <SocialButtons />
-      </div>
     </Nav>
   );
 });
