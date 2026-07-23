@@ -209,6 +209,23 @@ export const lint: UserConfig['lint'] = {
       },
     },
     {
+      files: ['packages/analyze/**'],
+      rules: {
+        'typescript/no-explicit-any': 'off',
+        'typescript/no-unsafe-member-access': 'off',
+        'typescript/no-unsafe-assignment': 'off',
+        'typescript/no-unsafe-return': 'off',
+        'typescript/no-unsafe-call': 'off',
+        'typescript/no-unsafe-argument': 'off',
+        'typescript/no-redundant-type-constituents': 'off',
+        'typescript/no-duplicate-type-constituents': 'off',
+        'typescript/no-base-to-string': 'off',
+        'typescript/restrict-template-expressions': 'off',
+        'typescript/ban-ts-comment': 'off',
+        'typescript/only-throw-error': 'off',
+      },
+    },
+    {
       files: ['src/routes/**'],
       rules: {
         'typescript/only-throw-error': 'off',

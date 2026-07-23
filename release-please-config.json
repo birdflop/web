@@ -12,6 +12,11 @@
       "package-name": "RGBirdflop",
       "component": "rgbirdflop",
       "extra-files": ["package.json"]
+    },
+    "packages/analyze": {
+      "package-name": "Analyze",
+      "component": "analyze",
+      "extra-files": ["package.json"]
     }
   },
   "changelog-sections": [

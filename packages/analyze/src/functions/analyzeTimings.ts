@@ -1,27 +1,29 @@
 import type {
   AnalyzePlugin,
   BukkitConfig,
+  Field,
+  FieldOption,
   OptionData,
   PaperConfig,
   PufferfishConfig,
   PurpurConfig,
   ServerPropertiesConfig,
   SpigotConfig,
-} from '../types';
-import createField from './createField';
-import evalField from './evalField';
-import { analyzeJvmFlags } from './jvmFlags';
+} from '../types.js';
+import createField from './createField.js';
+import evalField from './evalField.js';
+import { analyzeJvmFlags } from './jvmFlags.js';
 
-import config_bukkit from '~/util/analyze/configs/bukkit';
-import plugins_paper from '~/util/analyze/configs/plugins/paper';
-import plugins_purpur from '~/util/analyze/configs/plugins/purpur';
-import config_purpur from '~/util/analyze/configs/purpur';
-import config_server_properties from '~/util/analyze/configs/server.properties';
-import servers from '~/util/analyze/configs/servers';
-import config_spigot from '~/util/analyze/configs/spigot';
-import config_paper_27 from '~/util/analyze/configs/timings/paper-27';
-import config_paper_28 from '~/util/analyze/configs/timings/paper-28';
-import config_pufferfish from '~/util/analyze/configs/timings/pufferfish';
+import config_bukkit from '../configs/bukkit.js';
+import plugins_paper from '../configs/plugins/paper.js';
+import plugins_purpur from '../configs/plugins/purpur.js';
+import config_purpur from '../configs/purpur.js';
+import config_server_properties from '../configs/server.properties.js';
+import servers from '../configs/servers.js';
+import config_spigot from '../configs/spigot.js';
+import config_paper_27 from '../configs/timings/paper-27.js';
+import config_paper_28 from '../configs/timings/paper-28.js';
+import config_pufferfish from '../configs/timings/pufferfish.js';
 
 interface TimingsData {
   timingsMaster: {
@@ -45,7 +47,7 @@ interface TimingsData {
   };
 }
 
-export default async function analyzeTimings(id: string) {
+export default async function analyzeTimings(id: string): Promise<Field[]> {
   const timings_json = `https://timings.aikar.co/data.php?id=${id}`;
 
   let request: TimingsData;
@@ -53,7 +55,7 @@ export default async function analyzeTimings(id: string) {
     const response_json = await fetch(timings_json, {
       headers: { Accept: 'application/json' },
     });
-    request = await response_json.json();
+    request = (await response_json.json()) as TimingsData;
   } catch (err) {
     return [
       {
@@ -126,7 +128,9 @@ export default async function analyzeTimings(id: string) {
 
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
-  const json: { versions: string[] } = await req.json();
+  const json: { versions: string[] } = (await req.json()) as {
+    versions: string[];
+  };
   const latest = json.versions[json.versions.length - 1];
 
   // ghetto version check

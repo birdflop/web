@@ -1,3 +1,5 @@
+import type { Field } from '../types.js';
+
 export function analyzeJvmFlags(
   flags: string,
   jvm_version: string,

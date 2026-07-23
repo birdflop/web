@@ -274,3 +274,15 @@ export interface FieldButton {
   text: ConfigPrimitive;
   url: ConfigPrimitive;
 }
+
+export interface Field {
+  name: string;
+  value: string;
+  buttons?: { text: string; url: string }[];
+  inline?: boolean;
+}
+
+export interface FieldOption extends Field {
+  prefix?: string;
+  suffix?: string;
+}

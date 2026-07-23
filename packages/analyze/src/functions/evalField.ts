@@ -1,5 +1,5 @@
-import type { DictOfVars, OptionData } from '../types';
-import createField from './createField';
+import type { DictOfVars, Field, OptionData } from '../types.js';
+import createField from './createField.js';
 
 export default function evalField(
   fields: Field[],

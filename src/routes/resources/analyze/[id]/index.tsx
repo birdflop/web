@@ -2,9 +2,7 @@ import { component$ } from '@qwik.dev/core';
 import { routeLoader$ } from '@qwik.dev/router';
 
 import Analyze from '~/components/analyze/Analyze';
-import analyzeProfile from '~/util/analyze/functions/analyzeProfile';
-import analyzeTimings from '~/util/analyze/functions/analyzeTimings';
-import { collector } from '~/util/analyze/functions/collector';
+import { analyzeProfile, analyzeTimings, collector } from '@birdflop/analyze';
 import { defaultDescription, generateHead } from '~/root';
 
 export const useResults = routeLoader$(async ({ params }) => {

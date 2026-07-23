@@ -6,6 +6,7 @@ on:
       - birdflop
     paths:
       - 'packages/rgbirdflop/**'
+      - 'packages/analyze/**'
       - '.release-please-manifest.json'
       - 'release-please-config.json'
 
@@ -28,15 +29,15 @@ jobs:
           manifest-file: .release-please-manifest.json
 
       - name: Checkout code
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
         uses: actions/checkout@v7
 
       - name: Setup pnpm
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
         uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
         uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -44,19 +45,42 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           scope: '@birdflop'
 
-      - name: Install dependencies
+      # rgbirdflop
+
+      - name: Install dependencies (rgbirdflop)
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: pnpm install
 
-      - name: Build package
+      - name: Build package (rgbirdflop)
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
         run: pnpm build
 
-      - name: Publish to npm
+      - name: Publish to npm (rgbirdflop)
         if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] }}
         working-directory: packages/rgbirdflop
+        run: npm publish --provenance --access public
+        env:
+          # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
+          # https://github.com/actions/setup-node/blob/633bb92bc0aabcae06e8ea93b85aecddd374c402/src/authutil.ts#L57
+          NODE_AUTH_TOKEN: ''
+
+      # analyze
+
+      - name: Install dependencies (analyze)
+        if: ${{ steps.release.outputs['packages/analyze--release_created'] }}
+        working-directory: packages/analyze
+        run: pnpm install
+
+      - name: Build package (analyze)
+        if: ${{ steps.release.outputs['packages/analyze--release_created'] }}
+        working-directory: packages/analyze
+        run: pnpm build
+
+      - name: Publish to npm (analyze)
+        if: ${{ steps.release.outputs['packages/analyze--release_created'] }}
+        working-directory: packages/analyze
         run: npm publish --provenance --access public
         env:
           # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work

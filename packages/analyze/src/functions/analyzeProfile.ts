@@ -1,25 +1,27 @@
 import type {
   AnalyzePlugin,
   BukkitConfig,
+  Field,
+  FieldOption,
   OptionData,
   PaperConfig,
   PurpurConfig,
   PufferfishConfig,
   ServerPropertiesConfig,
   SpigotConfig,
-} from '../types';
-import createField from './createField';
-import evalField from './evalField';
-import { analyzeJvmFlags } from './jvmFlags';
+} from '../types.js';
+import createField from './createField.js';
+import evalField from './evalField.js';
+import { analyzeJvmFlags } from './jvmFlags.js';
 
-import config_bukkit from '~/util/analyze/configs/bukkit';
-import plugins_paper from '~/util/analyze/configs/plugins/paper';
-import plugins_purpur from '~/util/analyze/configs/plugins/purpur';
-import config_paper from '~/util/analyze/configs/profile/paper';
-import config_purpur from '~/util/analyze/configs/purpur';
-import config_server_properties from '~/util/analyze/configs/server.properties';
-import servers from '~/util/analyze/configs/servers';
-import config_spigot from '~/util/analyze/configs/spigot';
+import config_bukkit from '../configs/bukkit.js';
+import plugins_paper from '../configs/plugins/paper.js';
+import plugins_purpur from '../configs/plugins/purpur.js';
+import config_paper from '../configs/profile/paper.js';
+import config_purpur from '../configs/purpur.js';
+import config_server_properties from '../configs/server.properties.js';
+import servers from '../configs/servers.js';
+import config_spigot from '../configs/spigot.js';
 
 const supportedPlatforms = ['paper', 'bukkit'];
 
@@ -47,7 +49,7 @@ interface SparkSampler {
   };
 }
 
-export default async function analyzeProfile(id: string) {
+export default async function analyzeProfile(id: string): Promise<Field[]> {
   const url_raw = `https://spark.lucko.me/${id}?raw=1`;
 
   let sampler: SparkSampler;
@@ -55,7 +57,7 @@ export default async function analyzeProfile(id: string) {
     const response_raw = await fetch(url_raw, {
       headers: { Accept: 'application/json' },
     });
-    sampler = await response_raw.json();
+    sampler = (await response_raw.json()) as SparkSampler;
   } catch (err) {
     return [
       {
@@ -107,7 +109,9 @@ export default async function analyzeProfile(id: string) {
   // fetch the latest mc version
   const req = await fetch('https://api.purpurmc.org/v2/purpur');
 
-  const json: { versions: string[] } = await req.json();
+  const json: { versions: string[] } = (await req.json()) as {
+    versions: string[];
+  };
   const latest = json.versions[json.versions.length - 1];
 
   const fields: Field[] = [];
@@ -166,16 +170,6 @@ export default async function analyzeProfile(id: string) {
         { text: 'Find a better host', url: 'https://www.birdflop.com' },
       ],
     });
-
-  // Probably a way to do this, idk yet
-  // const handlers = Object.keys(request_raw.idmap.handlers).map(i => { return request_raw.idmap.handlers[i]; });
-  // handlers.forEach(handler => {
-  // 	let handler_name = handler[1];
-  // 	if (handler_name.startsWith('Command Function - ') && handler_name.endsWith(':tick')) {
-  // 		handler_name = handler_name.split('Command Function - ')[1].split(':tick')[0];
-  // 		fields.push({ name: `❌ ${handler_name}`, value: 'This datapack uses command functions which are laggy.' });
-  // 	}
-  // });
 
   if (PROFILE_CHECK.plugins) {
     const server_names = Object.keys(PROFILE_CHECK.plugins);
@@ -251,15 +245,6 @@ export default async function analyzeProfile(id: string) {
         });
     }
   });
-
-  // No way to get gamerules from spark
-  // const worlds = sampler.metadata.platformStatistics.world.worlds;
-  // let high_mec = false;
-  // worlds.forEach(world => {
-  // 	const max_entity_cramming = parseInt(world.gamerules.maxEntityCramming);
-  // 	if (max_entity_cramming >= 24) high_mec = true;
-  // });
-  // if (high_mec) fields.push({ name: '❌ maxEntityCramming', value: 'Decrease this by running the /gamerule command in each world.\nRecommended: 8.' });
 
   if (fields.length == 0) {
     return [

@@ -28,7 +28,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm build.pkg && wrangler types && qwik build",
-    "build.pkg": "cd packages/rgbirdflop && pnpm run build",
+    "build.pkg": "cd packages/rgbirdflop && pnpm run build && cd ../analyze && pnpm run build",
     "build.client": "vp build",
     "build.preview": "vp build --ssr src/entry.preview.tsx",
     "build.server": "qwik check-client src dist && vp build -c adapters/cloudflare-workers/vite.config.ts",
@@ -61,6 +61,7 @@
   "devDependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
     "@auth/qwik": "0.9.3",
+    "@birdflop/analyze": "workspace:*",
     "@birdflop/rgbirdflop": "workspace:*",
     "@builder.io/qwik-city": "^1.20.0",
     "@luminescent/icons-qwik": "^0.1.1",

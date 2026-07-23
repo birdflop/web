@@ -1,4 +1,4 @@
-import type { DictOfVars } from '~/util/analyze/types';
+import type { DictOfVars } from '../types.js';
 export default function getConfig() {
   return {
     'entity-activation-range.animals': [

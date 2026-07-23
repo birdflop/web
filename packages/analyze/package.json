@@ -1,0 +1,49 @@
+{
+  "name": "@birdflop/analyze",
+  "version": "0.1.0",
+  "description": "Spark Profile and Paper Timings analyzer for Minecraft servers.",
+  "homepage": "https://birdflop.com/resources/analyze/",
+  "bugs": {
+    "url": "https://github.com/birdflop/web/issues"
+  },
+  "author": {
+    "name": "birdflop",
+    "url": "https://birdflop.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/birdflop/web.git"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib-types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib-types/index.d.ts"
+    }
+  },
+  "files": [
+    "lib",
+    "lib-types"
+  ],
+  "engines": {
+    "node": ">=24.13.0"
+  },
+  "license": "AGPL-3.0-or-later",
+  "private": false,
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "vp lint",
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "7.0.2"
+  }
+}

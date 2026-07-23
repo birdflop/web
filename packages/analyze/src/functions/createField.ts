@@ -1,4 +1,6 @@
-export default function createField(option: FieldOption) {
+import type { Field, FieldOption } from '../types.js';
+
+export default function createField(option: FieldOption): Field {
   const field: FieldOption = { name: option.name, value: option.value };
   if (option.prefix) field.name = option.prefix + ' ' + field.name;
   if (option.suffix) field.name = field.name + option.suffix;
