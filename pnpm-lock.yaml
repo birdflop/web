@@ -235,11 +235,11 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       '@luminescent/ui':
-        specifier: ^7.1.0
-        version: 7.1.0
+        specifier: ^7.2.0-1
+        version: 7.2.0-1
       '@luminescent/ui-qwik':
         specifier: 7.0.0-23
-        version: 7.0.0-23(@luminescent/ui@7.1.0)
+        version: 7.0.0-23(@luminescent/ui@7.2.0-1)
       '@qwik.dev/core':
         specifier: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785
         version: https://pkg.pr.new/QwikDev/qwik/@qwik.dev/core@8785(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.1.1)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.0)(sass@1.101.3)(stylus@0.62.0)(tsx@4.23.1)(typescript@6.0.3)(yaml@2.9.0))(vitest@4.1.10)
@@ -1267,8 +1267,8 @@ packages:
     peerDependencies:
       '@luminescent/ui': 7.1.0
 
-  '@luminescent/ui@7.1.0':
-    resolution: {integrity: sha512-ZC292KFM2e8b9q5V3ruIckR3Pqv0TYpiZPRm2CIvBXauuGI5jhcHUAYafA/PNkdSzX6nRHxgMCJShzmTsMPKkw==}
+  '@luminescent/ui@7.2.0-1':
+    resolution: {integrity: sha512-rxXYWh+pLTc3d5bkXFXAx26Jr7rI997Q30QgjHCz5HIPc3bee6NK9M/G2wqN5m9UCnO4iHXqE6HlwDf4On5FNA==}
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -4553,11 +4553,11 @@ snapshots:
 
   '@luminescent/icons-qwik@0.1.1': {}
 
-  '@luminescent/ui-qwik@7.0.0-23(@luminescent/ui@7.1.0)':
+  '@luminescent/ui-qwik@7.0.0-23(@luminescent/ui@7.2.0-1)':
     dependencies:
-      '@luminescent/ui': 7.1.0
+      '@luminescent/ui': 7.2.0-1
 
-  '@luminescent/ui@7.1.0': {}
+  '@luminescent/ui@7.2.0-1': {}
 
   '@mdx-js/mdx@3.1.1':
     dependencies:

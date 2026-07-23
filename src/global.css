@@ -35,7 +35,7 @@
   --color-lum-card-bg: var(--color-gray-850);
   --color-lum-accent: var(--color-blue-500);
   --breakpoint-3xl: 125rem;
-  --lum-depth: 1;
+  --lum-depth: 2;
 }
 
 @media (prefers-color-scheme: light) {

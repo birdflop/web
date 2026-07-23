@@ -25,7 +25,6 @@ const darkTheme = {
   '--color-lum-accent': 'var(--color-blue-500)',
   '--color-lum-text': 'var(--color-gray-100)',
   '--color-lum-text-secondary': 'var(--color-gray-400)',
-  '--lum-border-radius': '0.625rem',
 };
 
 const lightTheme = {
