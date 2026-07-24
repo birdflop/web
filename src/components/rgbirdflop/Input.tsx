@@ -17,6 +17,7 @@ import { inlineTranslate } from 'qwik-speak';
 import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
+import { MotdPreviewCard } from '~/components/Elements/MotdPreviewCard';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 import { getClassObject, SelectMenu } from '@luminescent/ui-qwik';
 import Formatting from '~/components/rgbirdflop/Formatting';
@@ -550,6 +551,31 @@ const MCPreviewGUISection = component$(
   }
 );
 
+// The default input field style
+const MCPreviewMOTDSection = component$(
+  ({
+    readOnly,
+    advanced,
+  }: {
+    readOnly: boolean | undefined;
+    advanced?: boolean;
+  }) => {
+    return (
+      <div class="absolute inset-0 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs">
+        <MotdPreviewCard class="w-full max-w-2xl p-3">
+          <InputField
+            readOnly={readOnly}
+            advanced={advanced}
+            class="-my-1 flex-1 text-lg"
+          >
+            <Slot />
+          </InputField>
+        </MotdPreviewCard>
+      </div>
+    );
+  }
+);
+
 // The Minecraft preview style for the input field
 const MCPreviewInput = component$(
   ({
@@ -597,7 +623,8 @@ const MCPreviewInput = component$(
             'absolute flex w-full flex-col text-2xl': true,
             'bottom-0 h-full overflow-auto wrap-break-word':
               previewStyle.value == 'chat' ||
-              previewStyle.value.includes('gui'),
+              previewStyle.value.includes('gui') ||
+              previewStyle.value == 'motd',
             'top-5 max-h-64 min-h-8 items-center justify-center px-2 text-center':
               previewStyle.value.includes('tab'),
           }}
@@ -620,6 +647,11 @@ const MCPreviewInput = component$(
             <MCPreviewGUISection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewGUISection>
+          )}
+          {previewStyle.value == 'motd' && (
+            <MCPreviewMOTDSection readOnly={readOnly} advanced={advanced}>
+              <Slot />
+            </MCPreviewMOTDSection>
           )}
         </div>
       </div>
@@ -737,6 +769,10 @@ export default component$(
                 {
                   name: t('rgb.inputText.preview.chat@@Minecraft Chat'),
                   value: 'chat',
+                },
+                {
+                  name: t('rgb.inputText.preview.motd@@Minecraft Server MOTD'),
+                  value: 'motd',
                 },
                 {
                   name: t(

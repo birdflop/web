@@ -30,10 +30,8 @@ import {
   type MotdFormat,
 } from '~/util/motd';
 import Output from '~/components/Elements/Output';
-
-const OBF_CHARS =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-const Ping5 = '/minecraft/ping_5.png';
+import { MotdPreviewCard } from '~/components/Elements/MotdPreviewCard';
+import { obfuscateText } from '~/util/rgb/obfuscator';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -179,14 +177,7 @@ export default component$(() => {
     const id = setInterval(() => {
       document.querySelectorAll<HTMLElement>('.motd-obf').forEach((el) => {
         const original = el.getAttribute('data-obf') ?? el.textContent ?? '';
-        let out = '';
-        for (const ch of original) {
-          out +=
-            ch === ' '
-              ? ' '
-              : OBF_CHARS[Math.floor(Math.random() * OBF_CHARS.length)];
-        }
-        el.textContent = out;
+        el.textContent = obfuscateText(original);
       });
     }, 70);
     taskCtx.cleanup(() => clearInterval(id));
@@ -236,61 +227,19 @@ export default component$(() => {
           background: 'linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%)',
         }}
       >
-        <div
-          class="rounded-lum flex items-start gap-3 border border-white/10 p-2"
-          style={{ background: 'rgba(0,0,0,0.45)' }}
+        <MotdPreviewCard
+          icon={store.icon}
+          label={store.label}
+          playersOnline={store.playersOnline}
+          playersMax={store.playersMax}
         >
-          {store.icon ? (
-            <img
-              src={store.icon}
-              width={64}
-              height={64}
-              alt="Server icon"
-              class="pixelated h-16 w-16 shrink-0"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          ) : (
-            <div
-              class="flex h-16 w-16 shrink-0 items-center justify-center text-3xl text-gray-500"
-              style={{ background: 'rgba(255,255,255,0.06)' }}
-            >
-              ?
-            </div>
-          )}
-          <div class="min-w-0 flex-1 leading-tight">
-            <div class="flex items-center justify-between gap-2">
-              <span
-                class="font-mc truncate text-white"
-                style={{ textShadow: '2px 2px 0 #3f3f3f' }}
-              >
-                {store.label}
-              </span>
-              <div class="font-mc flex shrink-0 items-center gap-1">
-                <span
-                  style={{ color: '#AAAAAA', textShadow: '2px 2px 0 #2a2a2a' }}
-                >
-                  {store.playersOnline}
-                  <span style={{ color: '#555555' }}>/</span>
-                  {store.playersMax}
-                </span>
-                <img
-                  src={Ping5}
-                  width={20}
-                  height={16}
-                  alt="ping"
-                  class="ml-1"
-                  style={{ imageRendering: 'pixelated' }}
-                />
-              </div>
-            </div>
-            <div class="text-lg whitespace-pre">
-              {renderMotdLine(store.line1)}
-            </div>
-            <div class="text-lg whitespace-pre">
-              {renderMotdLine(store.line2)}
-            </div>
+          <div class="text-lg whitespace-pre">
+            {renderMotdLine(store.line1)}
           </div>
-        </div>
+          <div class="text-lg whitespace-pre">
+            {renderMotdLine(store.line2)}
+          </div>
+        </MotdPreviewCard>
       </div>
 
       <div class="flex flex-col gap-6 lg:flex-row">
