@@ -174,12 +174,12 @@ export default component$(
           'Pacific/Guam', // US territories
           'Atlantic/Bermuda', // Close to US
         ];
-        const shouldShowAds = usPreferredRegions.some((region) =>
-          tz.startsWith(region)
-        );
-        //const shouldShowAds = !usPreferredRegions.some((region) =>
+        //const shouldShowAds = usPreferredRegions.some((region) =>
         //  tz.startsWith(region)
         //);
+        const shouldShowAds = !usPreferredRegions.some((region) =>
+          tz.startsWith(region)
+        );
 
         if (shouldShowAds) {
           showAds.value = true;
