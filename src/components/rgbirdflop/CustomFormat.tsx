@@ -8,6 +8,7 @@ import Strikethrough from 'lucide-icons-qwik/icons/Strikethrough';
 import Underline from 'lucide-icons-qwik/icons/Underline';
 import Wand2 from 'lucide-icons-qwik/icons/Wand2';
 import Replace from 'lucide-icons-qwik/icons/Replace';
+import TextWrap from 'lucide-icons-qwik/icons/TextWrap';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
@@ -167,6 +168,21 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             </div>
           </>
         )}
+        <Label
+          for="format-newline"
+          label={t('rgb.formatting.newline@@New Line')}
+        >
+          <TextWrap size={16} q:slot="before-label" />
+          <input
+            class="lum-input"
+            id="format-newline"
+            value={rgbStore.colorFormat.newline}
+            placeholder="&"
+            onInput$={(e, el) => {
+              rgbStore.colorFormat.newline = el.value;
+            }}
+          />
+        </Label>
       </div>
     </div>
   );

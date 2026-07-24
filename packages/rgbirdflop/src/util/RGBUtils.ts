@@ -19,8 +19,8 @@ export function segmentText(text: string, colorLength?: number): string[] {
   return out;
 }
 
-export function formatNewlines(text: string): string {
-  return text.replace(/\\n|\r?\n/g, '\\n');
+export function formatNewlines(text: string, newline?: string): string {
+  return text.replace(/\\n|\r?\n/g, newline !== undefined ? newline : '\\n');
 }
 
 export function isFormattingEqual(
@@ -88,7 +88,7 @@ export function applyMiniMessageFormatting(
 ): string {
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
-  let output = formatNewlines(text);
+  let output = formatNewlines(text, rgbOptions.colorFormat.newline);
   if (formatting.font) {
     output = applyFont(output, formatting.font);
   }
@@ -127,7 +127,7 @@ export function renderTemplateSegment(
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
 
-  let segText = formatNewlines(text);
+  let segText = formatNewlines(text, rgbOptions.colorFormat.newline);
   if (formatting.font) {
     segText = applyFont(segText, formatting.font);
   }
@@ -251,11 +251,11 @@ function applySelectiveFormattingToText(
   const flush = () => {
     if (!buffer) return;
     if (!currentFmt) {
-      out += formatNewlines(buffer);
+      out += formatNewlines(buffer, rgbOptions.colorFormat.newline);
       buffer = '';
       return;
     }
-    let formatted = formatNewlines(buffer);
+    let formatted = formatNewlines(buffer, rgbOptions.colorFormat.newline);
     if (currentFmt.font) {
       formatted = applyFont(formatted, currentFmt.font);
     }
@@ -455,7 +455,7 @@ function renderSingleColorOutput(
   }
 
   if (rgbOptions.trimSpaces && rgbOptions.text.trim() === '')
-    return formatNewlines(rgbOptions.text);
+    return formatNewlines(rgbOptions.text, rgbOptions.colorFormat.newline);
   const hex = singleHex.replace(/^#/, '');
   return renderTemplateSegment(
     hex,
@@ -572,7 +572,9 @@ function buildJsonExtraList(
     const shadow = shadowProvider();
 
     if (rgbOptions.trimSpaces && segment.trim() === '') {
-      extra.push({ text: formatNewlines(segment) });
+      extra.push({
+        text: formatNewlines(segment, rgbOptions.colorFormat.newline),
+      });
       charIndex += segment.length;
       continue;
     }
@@ -637,7 +639,7 @@ function renderTemplateGradient(
 
   for (const segment of segments) {
     if (rgbOptions.trimSpaces && segment.trim() === '') {
-      out += formatNewlines(segment);
+      out += formatNewlines(segment, rgbOptions.colorFormat.newline);
       gradient.next();
       charIndex += segment.length;
       continue;
@@ -664,7 +666,7 @@ function buildJsonFormatting(
   rgbOptions: typeof rgbDefaults,
   rgbShadow?: number[]
 ): JsonExtra {
-  let textVal = formatNewlines(segment);
+  let textVal = formatNewlines(segment, rgbOptions.colorFormat.newline);
   if (formatting.font) {
     textVal = applyFont(textVal, formatting.font);
   }

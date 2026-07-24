@@ -25,6 +25,7 @@ export interface ColorFormat {
   color: string;
   char?: string;
   class?: string;
+  newline?: string;
   bold?: string;
   italic?: string;
   underline?: string;
@@ -35,6 +36,7 @@ export interface ColorFormat {
 export const colorFormats: ColorFormat[] = [
   {
     color: 'MiniMessage',
+    newline: '<br>',
     bold: '<b>$t</b>',
     italic: '<i>$t</i>',
     underline: '<u>$t</u>',

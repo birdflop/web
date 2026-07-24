@@ -36,7 +36,7 @@ function renderTemplateSegment(
   out = out.replace('$f', buildFormatCodes(fmt, options));
   if (options.lowercase) out = out.toLowerCase();
 
-  let segText = formatNewlines(text);
+  let segText = formatNewlines(text, options.colorFormat.newline);
   if (fmt.font) {
     segText = applyFont(segText, fmt.font);
   }
@@ -78,11 +78,11 @@ function applySelectiveFormatting(
   const flush = () => {
     if (!buffer) return;
     if (!currentFmt) {
-      out += formatNewlines(buffer);
+      out += formatNewlines(buffer, options.colorFormat.newline);
       buffer = '';
       return;
     }
-    let formatted = formatNewlines(buffer);
+    let formatted = formatNewlines(buffer, options.colorFormat.newline);
     if (currentFmt.font) {
       formatted = applyFont(formatted, currentFmt.font);
     }
@@ -185,7 +185,7 @@ function renderTemplate(
       let rel = 0;
       for (const chunk of chunkText(segment.text, segment.colorLength)) {
         if (options.trimSpaces && chunk.trim() === '') {
-          segOut += formatNewlines(chunk);
+          segOut += formatNewlines(chunk, options.colorFormat.newline);
           nextHex();
           rel += chunk.length;
           continue;
@@ -222,9 +222,10 @@ interface JsonExtra {
 function buildJsonExtra(
   text: string,
   colorHexWithHash: string | undefined,
-  style: Formatting
+  style: Formatting,
+  options: typeof rgbDefaults
 ): JsonExtra {
-  let translatedText = formatNewlines(text);
+  let translatedText = formatNewlines(text, options.colorFormat.newline);
   if (style.font) {
     translatedText = applyFont(translatedText, style.font);
   }
@@ -253,10 +254,12 @@ function renderJson(
       let rel = 0;
       for (const ch of Array.from(segment.text)) {
         if (options.trimSpaces && ch.trim() === '') {
-          json.extra.push({ text: formatNewlines(ch) });
+          json.extra.push({
+            text: formatNewlines(ch, options.colorFormat.newline),
+          });
         } else {
           const fmt = getFormattingAtOffset(charOffset + rel, options);
-          json.extra.push(buildJsonExtra(ch, undefined, fmt));
+          json.extra.push(buildJsonExtra(ch, undefined, fmt, options));
         }
         rel += ch.length;
       }
@@ -267,13 +270,15 @@ function renderJson(
     let rel = 0;
     for (const chunk of chunkText(segment.text, segment.colorLength)) {
       if (options.trimSpaces && chunk.trim() === '') {
-        json.extra.push({ text: formatNewlines(chunk) });
+        json.extra.push({
+          text: formatNewlines(chunk, options.colorFormat.newline),
+        });
         nextHex();
         rel += chunk.length;
         continue;
       }
       const fmt = getFormattingAtOffset(charOffset + rel, options);
-      json.extra.push(buildJsonExtra(chunk, '#' + nextHex(), fmt));
+      json.extra.push(buildJsonExtra(chunk, '#' + nextHex(), fmt, options));
       rel += chunk.length;
     }
     charOffset += segment.text.length;
