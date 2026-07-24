@@ -19,6 +19,10 @@ export function segmentText(text: string, colorLength?: number): string[] {
   return out;
 }
 
+export function formatNewlines(text: string): string {
+  return text.replace(/\\n|\r?\n/g, '\\n');
+}
+
 export function isFormattingEqual(
   a: Formatting | null,
   b: Formatting | null
@@ -84,7 +88,7 @@ export function applyMiniMessageFormatting(
 ): string {
   if (rgbOptions.colorFormat.color !== 'MiniMessage') return text;
 
-  let output = text;
+  let output = formatNewlines(text);
   if (formatting.font) {
     output = applyFont(output, formatting.font);
   }
@@ -123,7 +127,7 @@ export function renderTemplateSegment(
   out = out.replace('$f', buildFormatCodes(formatting, rgbOptions));
   if (rgbOptions.lowercase) out = out.toLowerCase();
 
-  let segText = text;
+  let segText = formatNewlines(text);
   if (formatting.font) {
     segText = applyFont(segText, formatting.font);
   }
@@ -247,11 +251,11 @@ function applySelectiveFormattingToText(
   const flush = () => {
     if (!buffer) return;
     if (!currentFmt) {
-      out += buffer;
+      out += formatNewlines(buffer);
       buffer = '';
       return;
     }
-    let formatted = buffer;
+    let formatted = formatNewlines(buffer);
     if (currentFmt.font) {
       formatted = applyFont(formatted, currentFmt.font);
     }
@@ -451,7 +455,7 @@ function renderSingleColorOutput(
   }
 
   if (rgbOptions.trimSpaces && rgbOptions.text.trim() === '')
-    return rgbOptions.text;
+    return formatNewlines(rgbOptions.text);
   const hex = singleHex.replace(/^#/, '');
   return renderTemplateSegment(
     hex,
@@ -568,7 +572,7 @@ function buildJsonExtraList(
     const shadow = shadowProvider();
 
     if (rgbOptions.trimSpaces && segment.trim() === '') {
-      extra.push({ text: segment });
+      extra.push({ text: formatNewlines(segment) });
       charIndex += segment.length;
       continue;
     }
@@ -633,7 +637,7 @@ function renderTemplateGradient(
 
   for (const segment of segments) {
     if (rgbOptions.trimSpaces && segment.trim() === '') {
-      out += segment;
+      out += formatNewlines(segment);
       gradient.next();
       charIndex += segment.length;
       continue;
@@ -660,7 +664,7 @@ function buildJsonFormatting(
   rgbOptions: typeof rgbDefaults,
   rgbShadow?: number[]
 ): JsonExtra {
-  let textVal = segment;
+  let textVal = formatNewlines(segment);
   if (formatting.font) {
     textVal = applyFont(textVal, formatting.font);
   }

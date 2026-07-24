@@ -137,6 +137,7 @@ export default component$(
         );
       const restore = (el: HTMLElement) => {
         const dt = el.getAttribute('data-text') ?? '';
+        if (dt === '\n' || dt === '\r') return;
         if (el.textContent !== dt) el.textContent = dt;
       };
 
@@ -151,8 +152,9 @@ export default component$(
 
       const tick = () => {
         spans().forEach((el) => {
+          const dt = el.getAttribute('data-text') ?? '';
+          if (dt === '\n' || dt === '\r') return;
           if (el.classList.contains('obfuscate')) {
-            const dt = el.getAttribute('data-text') ?? '';
             el.textContent = obfuscateText(dt);
           } else {
             restore(el);

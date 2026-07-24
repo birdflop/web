@@ -108,6 +108,8 @@ export default component$<AdvancedRgbPreviewProps>(
           globalIndex >= selection.value.start &&
           globalIndex < selection.value.end;
 
+        const isNewline = charText === '\n' || charText === '\r';
+
         segmentSpans.push(
           <span
             key={`s${si}-char${index}`}
@@ -116,11 +118,21 @@ export default component$<AdvancedRgbPreviewProps>(
             style={{ color }}
             class={{
               'char-span': true,
+              'inline!': isNewline,
               'bg-blue/40 text-white!': !!isSelected,
               ...getFormattingClasses(fmt),
             }}
           >
-            {charText === ' ' ? '\u00A0' : charText}
+            {isNewline ? (
+              <>
+                {'\u00A0'}
+                <br />
+              </>
+            ) : charText === ' ' ? (
+              '\u00A0'
+            ) : (
+              charText
+            )}
           </span>
         );
       });
@@ -131,6 +143,19 @@ export default component$<AdvancedRgbPreviewProps>(
 
     if (cursorIndex === charOffset && showSelection) {
       spans.push(<span key="custom-cursor" class="custom-cursor" />);
+    }
+
+    const fullText = rgbSegments.value.map((s) => s.text).join('');
+    if (
+      fullText.length > 0 &&
+      (fullText[fullText.length - 1] === '\n' ||
+        fullText[fullText.length - 1] === '\r')
+    ) {
+      spans.push(
+        <span key="trailing-newline-space" class="inline!">
+          {'\u00A0'}
+        </span>
+      );
     }
 
     return spans;

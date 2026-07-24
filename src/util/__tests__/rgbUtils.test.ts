@@ -86,3 +86,52 @@ describe('MiniMessage formatting', () => {
     );
   });
 });
+
+describe('Line break formatting', () => {
+  it('should convert newlines to \\n in MiniMessage output', () => {
+    const options = {
+      ...rgbDefaults,
+      colorFormat: colorFormats[0], // MiniMessage
+      text: 'FIRST\nSECOND',
+      colors: [
+        { hex: '#FF0000', pos: 0 },
+        { hex: '#0000FF', pos: 100 },
+      ],
+    };
+
+    const output = generateOutput(options);
+    expect(output).toBe('<gradient:#FF0000:#0000FF>FIRST\\nSECOND</gradient>');
+  });
+
+  it('should convert newlines to \\n in legacy template format output', () => {
+    const options = {
+      ...rgbDefaults,
+      colorFormat: colorFormats[1], // &#$1$2$3$4$5$6$f$c
+      text: 'A\nB',
+      colors: [
+        { hex: '#FF0000', pos: 0 },
+        { hex: '#0000FF', pos: 100 },
+      ],
+    };
+
+    const output = generateOutput(options);
+    expect(output).toContain('\\n');
+    expect(output).not.toContain('\n');
+  });
+
+  it('should convert newlines to \\n in JSON output', () => {
+    const options = {
+      ...rgbDefaults,
+      colorFormat: colorFormats[2], // JSON
+      text: 'HELLO\nWORLD',
+      colors: [
+        { hex: '#FF0000', pos: 0 },
+        { hex: '#0000FF', pos: 100 },
+      ],
+    };
+
+    const output = generateOutput(options);
+    expect(output).toContain('\\n');
+    expect(output).not.toContain('\n');
+  });
+});

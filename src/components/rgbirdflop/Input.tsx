@@ -109,39 +109,58 @@ const InputField = component$(
 
     const getIndexFromXY = $(
       (clientX: number, clientY: number, container: HTMLElement) => {
-        const spans = container.querySelectorAll('.char-span');
+        const spans = container.querySelectorAll<HTMLElement>('.char-span');
         if (spans.length === 0) return 0;
 
+        let maxBottom = -Infinity;
+        let minTop = Infinity;
         let minDistY = Infinity;
         const spansWithDist = [];
 
         for (let i = 0; i < spans.length; i++) {
-          const rect = spans[i].getBoundingClientRect();
+          const el = spans[i];
+          const rect = el.getBoundingClientRect();
+          maxBottom = Math.max(maxBottom, rect.bottom);
+          minTop = Math.min(minTop, rect.top);
           const distY = Math.max(0, rect.top - clientY, clientY - rect.bottom);
           minDistY = Math.min(minDistY, distY);
-          spansWithDist.push({ index: i, rect, distY });
+          const isNewline =
+            el.getAttribute('data-text') === '\n' ||
+            el.getAttribute('data-text') === '\r';
+          spansWithDist.push({ index: i, rect, distY, isNewline });
         }
 
-        // Filter spans on the vertically closest line with a small tolerance (5px)
+        if (clientY > maxBottom + 10) {
+          return spans.length;
+        }
+        if (clientY < minTop - 10) {
+          return 0;
+        }
+
         const closestLineSpans = spansWithDist.filter(
           (item) => item.distY <= minDistY + 5
         );
 
         if (closestLineSpans.length === 0) return spans.length;
 
-        // Sort horizontally and locate position
         closestLineSpans.sort((a, b) => a.rect.left - b.rect.left);
 
         for (let i = 0; i < closestLineSpans.length; i++) {
           const item = closestLineSpans[i];
-          const charMiddle = item.rect.left + item.rect.width / 2;
-          if (clientX < charMiddle) {
-            return item.index;
+          if (item.isNewline) {
+            if (clientX < item.rect.right) {
+              return item.index;
+            }
+          } else {
+            const charMiddle = item.rect.left + item.rect.width / 2;
+            if (clientX < charMiddle) {
+              return item.index;
+            }
           }
         }
 
         const lastItem = closestLineSpans[closestLineSpans.length - 1];
-        return lastItem.index + 1;
+        return lastItem.isNewline ? lastItem.index : lastItem.index + 1;
       }
     );
 

@@ -12,6 +12,7 @@ import {
   type Formatting,
   isFormattingEqual,
   isDispersed,
+  formatNewlines,
 } from '@birdflop/rgbirdflop';
 import { chunkText, SegmentType } from './rgbSegments';
 
@@ -35,7 +36,7 @@ function renderTemplateSegment(
   out = out.replace('$f', buildFormatCodes(fmt, options));
   if (options.lowercase) out = out.toLowerCase();
 
-  let segText = text;
+  let segText = formatNewlines(text);
   if (fmt.font) {
     segText = applyFont(segText, fmt.font);
   }
@@ -77,11 +78,11 @@ function applySelectiveFormatting(
   const flush = () => {
     if (!buffer) return;
     if (!currentFmt) {
-      out += buffer;
+      out += formatNewlines(buffer);
       buffer = '';
       return;
     }
-    let formatted = buffer;
+    let formatted = formatNewlines(buffer);
     if (currentFmt.font) {
       formatted = applyFont(formatted, currentFmt.font);
     }
@@ -184,7 +185,7 @@ function renderTemplate(
       let rel = 0;
       for (const chunk of chunkText(segment.text, segment.colorLength)) {
         if (options.trimSpaces && chunk.trim() === '') {
-          segOut += chunk;
+          segOut += formatNewlines(chunk);
           nextHex();
           rel += chunk.length;
           continue;
@@ -223,7 +224,7 @@ function buildJsonExtra(
   colorHexWithHash: string | undefined,
   style: Formatting
 ): JsonExtra {
-  let translatedText = text;
+  let translatedText = formatNewlines(text);
   if (style.font) {
     translatedText = applyFont(translatedText, style.font);
   }
@@ -252,7 +253,7 @@ function renderJson(
       let rel = 0;
       for (const ch of Array.from(segment.text)) {
         if (options.trimSpaces && ch.trim() === '') {
-          json.extra.push({ text: ch });
+          json.extra.push({ text: formatNewlines(ch) });
         } else {
           const fmt = getFormattingAtOffset(charOffset + rel, options);
           json.extra.push(buildJsonExtra(ch, undefined, fmt));
@@ -266,7 +267,7 @@ function renderJson(
     let rel = 0;
     for (const chunk of chunkText(segment.text, segment.colorLength)) {
       if (options.trimSpaces && chunk.trim() === '') {
-        json.extra.push({ text: chunk });
+        json.extra.push({ text: formatNewlines(chunk) });
         nextHex();
         rel += chunk.length;
         continue;

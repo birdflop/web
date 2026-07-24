@@ -96,6 +96,8 @@ export default component$<RgbPreviewProps>(
         index >= selection.value.start &&
         index < selection.value.end;
 
+      const isNewline = segmentText === '\n' || segmentText === '\r';
+
       rendered.push(
         <span
           key={`char${index}`}
@@ -107,19 +109,41 @@ export default component$<RgbPreviewProps>(
           }}
           class={{
             'char-span': true,
+            'inline!': isNewline,
             'bg-blue/40 text-white!': !!isSelected && showSelection,
             ...getFormattingClasses(formatting),
           }}
           data-text={segmentText}
           data-index={index}
         >
-          {segmentText === ' ' ? '\u00A0' : segmentText}
+          {isNewline ? (
+            <>
+              {'\u00A0'}
+              <br />
+            </>
+          ) : segmentText === ' ' ? (
+            '\u00A0'
+          ) : (
+            segmentText
+          )}
         </span>
       );
     });
 
     if (cursorIndex === textArray.length && showSelection) {
       rendered.push(<span key="custom-cursor" class="custom-cursor" />);
+    }
+
+    if (
+      textArray.length > 0 &&
+      (textArray[textArray.length - 1] === '\n' ||
+        textArray[textArray.length - 1] === '\r')
+    ) {
+      rendered.push(
+        <span key="trailing-newline-space" class="inline!">
+          {'\u00A0'}
+        </span>
+      );
     }
 
     return rendered;
