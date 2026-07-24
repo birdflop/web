@@ -59,7 +59,7 @@ export const previewStyleContext = createContextId<Signal<string>>(
 export const rawEditModeContext =
   createContextId<Signal<boolean>>('raw-edit-mode');
 
-const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
+const ImgIconBg = '/branding/icon-bg-64x64.png';
 const ImgItem = '/banner/dyes/cyan_dye.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
 const ImgChestGui = '/minecraft/chest.png';
@@ -398,7 +398,7 @@ const MCPreviewTabSection = component$(
             width={24}
             height={24}
             class="rounded-none!"
-            src={ImgPwaIcon8x8}
+            src={ImgIconBg}
             alt="RGBirdflop"
             style="image-rendering: pixelated;"
           />
@@ -418,7 +418,7 @@ const MCPreviewTabSection = component$(
               width={24}
               height={24}
               class="rounded-none!"
-              src={ImgPwaIcon8x8}
+              src={ImgIconBg}
               alt="RGBirdflop"
               style="image-rendering: pixelated;"
             />

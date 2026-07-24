@@ -1,6 +1,6 @@
 import { component$, Slot } from '@qwik.dev/core';
 
-const ImgPwaIcon8x8 = '/branding/pwa-icon-8x8.png';
+const ImgIconBg = '/branding/icon-bg-64x64.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
 
 export interface MotdPreviewCardProps {
@@ -42,7 +42,7 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
           </div>
         ) : (
           <img
-            src={ImgPwaIcon8x8}
+            src={ImgIconBg}
             width={64}
             height={64}
             alt="Server Icon"
