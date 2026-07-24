@@ -31,6 +31,9 @@ import {
 } from '~/util/motd';
 import Output from '~/components/Elements/Output';
 import { MotdPreviewCard } from '~/components/Elements/MotdPreviewCard';
+import darkBackgrounds, {
+  lightBackgrounds,
+} from '~/components/Elements/Background';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
 const createImage = (src: string) =>
@@ -111,7 +114,7 @@ export default component$(() => {
     icon: '',
     format: 'properties' as MotdFormat,
     // Preview-only settings (not part of the MOTD itself).
-    label: 'A Minecraft Server',
+    label: 'Minecraft Server',
     playersOnline: 42,
     playersMax: 100,
   });
@@ -204,6 +207,9 @@ export default component$(() => {
       }
     })
   );
+  const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
+  const Background =
+    Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
@@ -216,18 +222,20 @@ export default component$(() => {
           "motd.description@@Design your server's message of the day with colors, formatting, and a favicon, then copy it straight into server.properties."
         )}
       </p>
-
       {/* Live server-list preview */}
       <p class="text-lum-text-secondary mb-2 text-sm">
         {t('motd.preview.label@@Preview')}
       </p>
-      <div
-        class="rounded-lum mb-6 overflow-hidden p-4"
-        style={{
-          background: 'linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%)',
-        }}
-      >
+      <div class="rounded-lum relative mb-6 flex justify-center overflow-hidden p-4">
+        <Background
+          width={1920}
+          height={1080}
+          class="rounded-lum absolute inset-0 h-full w-full scale-105 object-cover blur-sm"
+          id="bg"
+          alt="background"
+        />
         <MotdPreviewCard
+          class="relative z-10 w-full max-w-2xl"
           icon={store.icon}
           label={store.label}
           playersOnline={store.playersOnline}
@@ -241,7 +249,6 @@ export default component$(() => {
           </div>
         </MotdPreviewCard>
       </div>
-
       <div class="flex flex-col gap-6 lg:flex-row">
         {/* Editor */}
         <div class="flex flex-1 flex-col gap-4">

@@ -14,14 +14,14 @@ export interface MotdPreviewCardProps {
 export const MotdPreviewCard = component$<MotdPreviewCardProps>(
   ({
     icon,
-    label = 'A Minecraft Server',
+    label = 'Minecraft Server',
     playersOnline = 42,
     playersMax = 100,
     class: className = '',
   }) => {
     return (
       <div
-        class={`rounded-lum flex items-start gap-3 border border-white/10 p-2 text-base sm:text-lg ${className}`}
+        class={`flex items-start gap-2 border border-white/10 p-1 text-base sm:text-lg ${className}`}
         style={{ background: 'rgba(0,0,0,0.45)' }}
       >
         {icon ? (

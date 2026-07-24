@@ -579,9 +579,20 @@ const MCPreviewMOTDSection = component$(
     readOnly: boolean | undefined;
     advanced?: boolean;
   }) => {
+    const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
+    const Background =
+      Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
+
     return (
-      <div class="absolute inset-0 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs">
-        <MotdPreviewCard class="w-full max-w-2xl p-3">
+      <div class="rounded-lum font-mc relative flex w-full justify-center overflow-hidden p-4">
+        <Background
+          width={1920}
+          height={1080}
+          class="rounded-lum absolute inset-0 h-full w-full scale-105 object-cover blur-sm"
+          id="bg"
+          alt="background"
+        />
+        <MotdPreviewCard class="relative z-10 w-full max-w-2xl">
           <InputField
             readOnly={readOnly}
             advanced={advanced}
@@ -636,8 +647,7 @@ const MCPreviewInput = component$(
             'absolute flex w-full flex-col text-2xl': true,
             'bottom-0 h-full overflow-auto wrap-break-word':
               previewStyle.value == 'chat' ||
-              previewStyle.value.includes('gui') ||
-              previewStyle.value == 'motd',
+              previewStyle.value.includes('gui'),
             'top-5 max-h-64 min-h-8 items-center justify-center px-2 text-center':
               previewStyle.value.includes('tab'),
           }}
@@ -660,11 +670,6 @@ const MCPreviewInput = component$(
             <MCPreviewGUISection readOnly={readOnly} advanced={advanced}>
               <Slot />
             </MCPreviewGUISection>
-          )}
-          {previewStyle.value == 'motd' && (
-            <MCPreviewMOTDSection readOnly={readOnly} advanced={advanced}>
-              <Slot />
-            </MCPreviewMOTDSection>
           )}
         </div>
       </div>
@@ -726,7 +731,13 @@ export default component$(
           {!noFormatRow && <Formatting />}
         </div>
         <label for="input" class="relative mt-2 mb-4 flex flex-col items-start">
-          {previewStyle.value != 'default' && (
+          {previewStyle.value == 'motd' && (
+            <MCPreviewMOTDSection readOnly={readOnly} advanced={advanced}>
+              <Slot />
+              <Slot name="input" />
+            </MCPreviewMOTDSection>
+          )}
+          {previewStyle.value != 'default' && previewStyle.value != 'motd' && (
             <MCPreviewInput
               readOnly={readOnly}
               chatInput={
