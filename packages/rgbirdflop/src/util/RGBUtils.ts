@@ -355,8 +355,9 @@ export function calculateDispersedPosition(
 }
 
 export function isDispersed(colors: ColorStop[]): boolean {
-  return colors.some(
-    (color, i) => color.pos !== calculateDispersedPosition(colors.length, i)
+  return colors.every(
+    (color, i) =>
+      Math.abs(color.pos - calculateDispersedPosition(colors.length, i)) < 0.001
   );
 }
 

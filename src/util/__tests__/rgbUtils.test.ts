@@ -51,4 +51,38 @@ describe('MiniMessage formatting', () => {
     const output = generateOutput(options);
     expect(output).toBe('<b><color:#F97E9C>PETS</color></b>');
   });
+
+  it('should format dispersed 3-color MiniMessage gradient as a single gradient tag', () => {
+    const options = {
+      ...rgbDefaults,
+      colorFormat: colorFormats[0], // MiniMessage
+      text: 'TESTING',
+      colors: [
+        { hex: '#FF0000', pos: 0 },
+        { hex: '#00FF00', pos: 50 },
+        { hex: '#0000FF', pos: 100 },
+      ],
+    };
+
+    const output = generateOutput(options);
+    expect(output).toBe('<gradient:#FF0000:#00FF00:#0000FF>TESTING</gradient>');
+  });
+
+  it('should format non-dispersed (uneven) 3-color MiniMessage gradient as multiple gradient tags', () => {
+    const options = {
+      ...rgbDefaults,
+      colorFormat: colorFormats[0], // MiniMessage
+      text: '1234567890',
+      colors: [
+        { hex: '#FF0000', pos: 0 },
+        { hex: '#00FF00', pos: 20 },
+        { hex: '#0000FF', pos: 100 },
+      ],
+    };
+
+    const output = generateOutput(options);
+    expect(output).toBe(
+      '<gradient:#FF0000:#00FF00>12</gradient><gradient:#00FF00:#0000FF>34567890</gradient>'
+    );
+  });
 });
