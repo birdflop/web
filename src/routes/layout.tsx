@@ -289,10 +289,9 @@ export default component$(() => {
       )}
 
       {(themeStore.isDark === undefined || themeStore.isDark) && (
-        <img
+        <Background
           width={1920}
           height={1080}
-          src={Background}
           id="bg"
           alt="Background"
           class={{
@@ -304,10 +303,9 @@ export default component$(() => {
         />
       )}
       {(themeStore.isDark === undefined || !themeStore.isDark) && (
-        <img
+        <LightBackground
           width={1920}
           height={1080}
-          src={LightBackground}
           id="bg"
           alt="Background"
           class={{

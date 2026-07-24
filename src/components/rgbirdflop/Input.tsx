@@ -609,23 +609,17 @@ const MCPreviewInput = component$(
     advanced?: boolean;
   }) => {
     const Backgrounds = [...darkBackgrounds, ...lightBackgrounds];
-    const background = useSignal(Backgrounds[0]);
+    const Background =
+      Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
     const rgbStore = useContext(rgbStoreContext);
     const previewStyle = useContext(previewStyleContext);
-
-    // oxlint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(() => {
-      background.value =
-        Backgrounds[Math.floor(Math.random() * Backgrounds.length)];
-    });
 
     return (
       <div
         class="rounded-lum font-mc relative break-all"
         style={{ textShadow: '2px 2px 0 #373737' }}
       >
-        <img
-          src={background.value}
+        <Background
           width={1920}
           height={1080}
           class="rounded-lum overflow-hidden"

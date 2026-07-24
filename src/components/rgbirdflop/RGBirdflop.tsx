@@ -29,7 +29,10 @@ import Hash from 'lucide-icons-qwik/icons/Hash';
 import TestTube2 from 'lucide-icons-qwik/icons/TestTube2';
 import Palette from 'lucide-icons-qwik/icons/Palette';
 import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
-import HostingAd from '~/components/rgbirdflop/HostingAd';
+import HostingAd, {
+  AD_VARIANTS,
+  AdVariantKey,
+} from '~/components/Elements/HostingAd';
 import { obfuscateText } from '~/util/rgb/obfuscator';
 
 import Input from '~/components/rgbirdflop/Input';
@@ -57,17 +60,6 @@ export const showAllGradientsContext = createContextId<Signal<boolean>>(
   'showallgradients-context'
 );
 
-export const AD_VARIANTS = {
-  'ai-generated': {
-    image: '/ad-ai.png',
-    label: 'AI Generated',
-  },
-  'pemi-handmade': {
-    image: '/ad-pemi.png',
-    label: 'Handmade by Pemi',
-  },
-} as const;
-export type AdVariantKey = keyof typeof AD_VARIANTS;
 export const AD_VARIANT_STORAGE_KEY = 'rgb-ad-variant';
 
 export default component$(
@@ -98,7 +90,7 @@ export default component$(
     const rgbStore = useContext(rgbStoreContext);
     const openItems = useContext(openItemsContext);
 
-    const showAds = useSignal(false);
+    const showAds = useSignal<boolean>();
     const adVariant = useSignal<AdVariantKey | null>(null);
 
     useTask$(({ track }) => {
@@ -182,10 +174,12 @@ export default component$(
           'Pacific/Guam', // US territories
           'Atlantic/Bermuda', // Close to US
         ];
-        // const shouldShowAds = usPreferredRegions.some(region => tz.startsWith(region));
-        const shouldShowAds = !usPreferredRegions.some((region) =>
+        const shouldShowAds = usPreferredRegions.some((region) =>
           tz.startsWith(region)
         );
+        //const shouldShowAds = !usPreferredRegions.some((region) =>
+        //  tz.startsWith(region)
+        //);
 
         if (shouldShowAds) {
           showAds.value = true;
@@ -202,7 +196,6 @@ export default component$(
         console.warn('Ad region detection failed', err);
       }
     });
-    const adAsset = adVariant.value ? AD_VARIANTS[adVariant.value] : null;
 
     // Flopbird guide
     const birdStore = useContext(birdStoreContext);
@@ -284,8 +277,8 @@ export default component$(
 
     return (
       <section class="relative mx-auto flex min-h-svh w-full justify-center gap-8 px-6 pt-20">
-        {showAds.value && adAsset && (
-          <HostingAd variant={adAsset} position="Left" />
+        {showAds.value && adVariant.value && (
+          <HostingAd variant={adVariant.value} position="Left" />
         )}
         <div class="min-h-15 max-w-6xl">
           <div class="flex items-start gap-2">
@@ -525,8 +518,8 @@ export default component$(
             </p>
           </div>
         </div>
-        {showAds.value && adAsset && (
-          <HostingAd variant={adAsset} position="Right" />
+        {showAds.value && adVariant.value && (
+          <HostingAd variant={adVariant.value} position="Right" />
         )}
       </section>
     );
