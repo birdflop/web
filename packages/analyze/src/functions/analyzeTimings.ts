@@ -309,7 +309,7 @@ export default async function analyzeTimings(id: string): Promise<Field[]> {
     const suggestions = fields.length - 1;
     return [
       {
-        name: '❌ Timingcost (URGENT)',
+        name: '❌ Timingcost (CRITICAL)',
         value: `Your timingcost is ${timing_cost}. This value would be at most 200 on a reasonable server. Your cpu is critically overloaded and/or slow. Hiding ${suggestions} comparitively negligible suggestions until you resolve this fundamental problem.`,
         buttons: [
           { text: 'Find a better host', url: 'https://www.birdflop.com' },

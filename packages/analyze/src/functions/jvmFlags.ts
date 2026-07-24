@@ -90,7 +90,7 @@ export function analyzeJvmFlags(
       buttons: [
         {
           text: "Update Aikar's Flags",
-          url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
+          url: 'https://docs.papermc.io/paper/aikars-flags',
         },
       ],
     });
@@ -102,7 +102,7 @@ export function analyzeJvmFlags(
       buttons: [
         {
           text: "Use Aikar's Flags",
-          url: 'https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/',
+          url: 'https://docs.papermc.io/paper/aikars-flags',
         },
       ],
     });

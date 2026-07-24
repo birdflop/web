@@ -67,6 +67,16 @@ export default async function analyzeProfile(id: string): Promise<Field[]> {
     ];
   }
 
+  if (!sampler.metadata?.serverConfigurations) {
+    return [
+      {
+        name: '❌ Processing Error',
+        value:
+          'Birdflop cannot process this spark profile. This is a heap summary report.',
+      },
+    ];
+  }
+
   const platform = sampler.metadata.platform.name;
 
   let server_properties = {} as ServerPropertiesConfig,
@@ -125,11 +135,11 @@ export default async function analyzeProfile(id: string): Promise<Field[]> {
     return [
       {
         name: '❌ Processing Error',
-        value: `birdflop is unable to process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
+        value: `Birdflop cannot process this spark profile. It appears that the platform is not supported for analysis. Platform: ${platform}`,
       },
     ];
   }
-  if (mcversion.split(')')[0] != latest) {
+  if (mcversion != latest) {
     fields.push({
       name: '❌ Outdated',
       value: `You are using \`${mcversion}\`. Update to \`${latest}\`.`,
@@ -146,7 +156,7 @@ export default async function analyzeProfile(id: string): Promise<Field[]> {
   const brand = sampler.metadata.platform.brand;
   if (PROFILE_CHECK.servers.servers) {
     PROFILE_CHECK.servers.servers.forEach((server: FieldOption) => {
-      if (brand.includes(server.name)) fields.push(createField(server));
+      if (brand?.includes(server.name)) fields.push(createField(server));
     });
   }
 

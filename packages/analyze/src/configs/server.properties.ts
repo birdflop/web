@@ -59,5 +59,30 @@ export default function getConfig() {
         value: 'Increase this in server.properties.\nRecommended: 512.',
       },
     ],
+    'simulation-distance': [
+      {
+        expressions: [
+          {
+            bool: (dict_of_vars: DictOfVars) => {
+              const spigotSim =
+                dict_of_vars.spigot?.['world-settings']?.['default']?.[
+                  'simulation-distance'
+                ];
+              const serverSim = parseInt(
+                dict_of_vars.server_properties?.['simulation-distance'] ?? ''
+              );
+              return (
+                (spigotSim === 'default' && serverSim >= 9) ||
+                (spigotSim !== 'default' &&
+                  parseInt(String(spigotSim ?? '')) >= 9)
+              );
+            },
+            vars: ['spigot', 'server_properties'],
+          },
+        ],
+        prefix: '❌',
+        value: 'Decrease this in server.properties.\nRecommended: 5 or lower.',
+      },
+    ],
   };
 }

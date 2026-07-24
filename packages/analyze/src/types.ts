@@ -3,6 +3,7 @@ export type ConfigPrimitive = string;
 export interface ServerPropertiesConfig {
   'online-mode': ConfigPrimitive;
   'network-compression-threshold': ConfigPrimitive;
+  'simulation-distance'?: ConfigPrimitive;
   [key: ConfigPrimitive]: unknown;
 }
 

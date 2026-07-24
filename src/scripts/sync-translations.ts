@@ -229,7 +229,7 @@ async function deeplTranslate(
     throw new Error(`DeepL request failed (${response.status}): ${detail}`);
   }
 
-  const data = (await response.json()) as { translations: { text: string }[] };
+  const data = await response.json<{ translations: { text: string }[] }>();
   return data.translations.map((item) => item.text);
 }
 
