@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/birdflop/web/compare/analyze-v0.3.0...analyze-v0.4.0) (2026-07-24)
+
+
+### Features
+
+* add simulation-distance analysis, update Aikar's flag URLs, refine error handling, and improve profiling logic ([1e3b752](https://github.com/birdflop/web/commit/1e3b752abbd2d4b6678eb60fd69645df0214a11d))
+
 ## [0.3.0](https://github.com/birdflop/web/compare/analyze-v0.2.0...analyze-v0.3.0) (2026-07-23)
 
 
