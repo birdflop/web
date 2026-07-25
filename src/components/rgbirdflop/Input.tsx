@@ -59,7 +59,7 @@ export const previewStyleContext = createContextId<Signal<string>>(
 export const rawEditModeContext =
   createContextId<Signal<boolean>>('raw-edit-mode');
 
-const ImgIconBg = '/branding/icon-bg-64x64.png';
+const ImgIconBg = '/branding/icon-bg-8x8.png';
 const ImgItem = '/banner/dyes/cyan_dye.png';
 const ImgMcPing5 = '/minecraft/ping_5.png';
 const ImgChestGui = '/minecraft/chest.png';
@@ -393,49 +393,47 @@ const MCPreviewTabSection = component$(
             <Slot />
           </InputField>
         )}
-        <div class="mx-auto flex h-6 gap-0.5 overflow-hidden bg-[#aaaaaa]/20 pr-0.5 text-left text-2xl">
+        <div class="mx-auto flex h-5 gap-0.5 overflow-hidden bg-[#aaaaaa]/20 pr-0.5 text-left text-2xl">
           <img
-            width={24}
-            height={24}
-            class="rounded-none!"
+            width={20}
+            height={20}
+            class="aspect-square"
             src={ImgIconBg}
             alt="RGBirdflop"
-            style="image-rendering: pixelated;"
+            style={{ imageRendering: 'pixelated' }}
           />
-          <p class="-my-0.5 flex-1 text-white!">RGBirdflop</p>
+          <p class="-mt-0.5 flex-1 leading-none text-white!">RGBirdflop</p>
           <img
-            width={24}
-            height={24}
-            class="rounded-none!"
+            width={25}
+            height={20}
             src={ImgMcPing5}
             alt="RGBirdflop"
-            style="image-rendering: pixelated;"
+            style={{ imageRendering: 'pixelated' }}
           />
         </div>
         {previewStyle.value == 'tab-player' && (
           <div class="mx-auto flex gap-0.5 overflow-hidden bg-[#aaaaaa]/20 pr-0.5 text-left text-2xl">
             <img
-              width={24}
-              height={24}
-              class="rounded-none!"
+              width={20}
+              height={20}
+              class="aspect-square"
               src={ImgIconBg}
               alt="RGBirdflop"
-              style="image-rendering: pixelated;"
+              style={{ imageRendering: 'pixelated' }}
             />
             <InputField
               readOnly={readOnly}
               advanced={advanced}
-              class="-my-1 flex-1"
+              class="-mb-0.5 flex-1 leading-none"
             >
               <Slot />
             </InputField>
             <img
-              width={24}
-              height={24}
-              class="rounded-none!"
+              width={25}
+              height={20}
               src={ImgMcPing5}
               alt="RGBirdflop"
-              style="image-rendering: pixelated;"
+              style={{ imageRendering: 'pixelated' }}
             />
           </div>
         )}

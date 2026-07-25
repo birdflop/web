@@ -24,32 +24,14 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
         class={`flex items-start gap-2 border border-white/10 p-1 text-base sm:text-lg ${className}`}
         style={{ background: 'rgba(0,0,0,0.45)' }}
       >
-        {icon ? (
-          <img
-            src={icon}
-            width={64}
-            height={64}
-            alt="Server icon"
-            class="pixelated h-16 w-16 shrink-0"
-            style={{ imageRendering: 'pixelated' }}
-          />
-        ) : icon === '' ? (
-          <div
-            class="flex h-16 w-16 shrink-0 items-center justify-center text-3xl text-gray-500"
-            style={{ background: 'rgba(255,255,255,0.06)' }}
-          >
-            ?
-          </div>
-        ) : (
-          <img
-            src={ImgIconBg}
-            width={64}
-            height={64}
-            alt="Server Icon"
-            class="h-16 w-16 shrink-0 rounded-none!"
-            style={{ imageRendering: 'pixelated' }}
-          />
-        )}
+        <img
+          src={icon?.trim() || ImgIconBg}
+          width={64}
+          height={64}
+          alt="Server icon"
+          class="pixelated h-full w-auto"
+          style={{ imageRendering: 'pixelated' }}
+        />
         <div class="min-w-0 flex-1 leading-tight">
           <div class="flex items-center justify-between gap-2">
             <span

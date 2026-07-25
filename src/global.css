@@ -207,7 +207,7 @@ hr {
 
 /* Custom Cursor styling for transparent input overlay */
 .custom-cursor {
-  @apply bg-lum-text animate-caret-blink pointer-events-none -mx-0.5 inline-block h-[1em] w-1 rounded-full align-text-bottom;
+  @apply bg-lum-text animate-caret-blink pointer-events-none -mx-px inline-block h-[1em] w-0.5 rounded-full align-text-bottom;
 }
 .char-span {
   position: relative;
