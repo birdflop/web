@@ -594,7 +594,7 @@ const MCPreviewMOTDSection = component$(
           <InputField
             readOnly={readOnly}
             advanced={advanced}
-            class="-my-1 flex-1 text-lg"
+            class="-mb-0.5 flex-1 leading-none"
           >
             <Slot />
           </InputField>

@@ -241,10 +241,10 @@ export default component$(() => {
           playersOnline={store.playersOnline}
           playersMax={store.playersMax}
         >
-          <div class="text-lg whitespace-pre">
+          <div class="text-lg leading-none whitespace-pre">
             {renderMotdLine(store.line1)}
           </div>
-          <div class="text-lg whitespace-pre">
+          <div class="text-lg leading-none whitespace-pre">
             {renderMotdLine(store.line2)}
           </div>
         </MotdPreviewCard>

@@ -32,15 +32,15 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
           class="pixelated h-full w-auto"
           style={{ imageRendering: 'pixelated' }}
         />
-        <div class="min-w-0 flex-1 leading-tight">
-          <div class="flex items-center justify-between gap-2">
+        <div class="flex-1">
+          <div class="mb-1 flex items-center justify-between gap-2">
             <span
-              class="font-mc truncate text-white"
+              class="font-mc truncate leading-none text-white"
               style={{ textShadow: '2px 2px 0 #3f3f3f' }}
             >
               {label}
             </span>
-            <div class="font-mc flex shrink-0 items-center gap-1 text-sm sm:text-base">
+            <div class="font-mc flex shrink-0 items-center gap-1 text-sm leading-none sm:text-base">
               <span
                 style={{ color: '#AAAAAA', textShadow: '2px 2px 0 #2a2a2a' }}
               >
@@ -53,7 +53,7 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
                 width={20}
                 height={16}
                 alt="ping"
-                class="ml-1"
+                class="mx-1"
                 style={{ imageRendering: 'pixelated' }}
               />
             </div>
