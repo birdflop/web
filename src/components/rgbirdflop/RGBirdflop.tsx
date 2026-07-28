@@ -395,7 +395,12 @@ export default component$(
                   value={
                     rgbStore.customFormat
                       ? 'custom'
-                      : colorFormats.indexOf(rgbStore.colorFormat)
+                      : Math.max(
+                          0,
+                          colorFormats.findIndex(
+                            (f) => f.color === rgbStore.colorFormat?.color
+                          )
+                        ).toString()
                   }
                   class="lum-btn-p-1 w-full text-sm whitespace-nowrap"
                   btnProps={{
