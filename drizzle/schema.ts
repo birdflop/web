@@ -3,11 +3,16 @@ import {
   integer,
   text,
   primaryKey,
+  index,
 } from 'drizzle-orm/sqlite-core';
 import type { AdapterAccountType } from '@auth/qwik/adapters';
 import { sql } from 'drizzle-orm/sql/sql';
 import { rgbPreset } from '../src/util/rgb/presets';
 import { Settings } from '../src/routes/layout';
+import type {
+  ServerEdition,
+  ServerTag,
+} from '../src/util/serverlist/constants';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {
@@ -148,3 +153,116 @@ export const savedPresets = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.presetId] })]
 );
+
+// -------------------- Server List --------------------
+export const servers = sqliteTable(
+  'servers',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    // Owner who submitted the listing. Kept on delete so listings survive
+    // account removal, just unowned (and therefore admin-only to manage).
+    ownerId: text('ownerId').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    name: text('name').notNull(),
+    slug: text('slug').notNull().unique(),
+    description: text('description').notNull(),
+    shortDescription: text('shortDescription'),
+    edition: text('edition').$type<ServerEdition>().notNull().default('java'),
+    // Connection details. Java/Bedrock hosts are independent so a "both"
+    // listing can point each edition at a different address.
+    javaHost: text('javaHost'),
+    javaPort: integer('javaPort'),
+    bedrockHost: text('bedrockHost'),
+    bedrockPort: integer('bedrockPort'),
+    website: text('website'),
+    discord: text('discord'),
+    bannerUrl: text('bannerUrl'),
+    tags: text('tags', { mode: 'json' })
+      .$type<ServerTag[]>()
+      .notNull()
+      .default(sql`'[]'`),
+    // NuVotifier (Votifier v2) token-protocol delivery details.
+    votifierHost: text('votifierHost'),
+    votifierPort: integer('votifierPort'),
+    votifierToken: text('votifierToken'),
+    // Sponsored / featured placement (admin-granted in v1).
+    featured: integer('featured', { mode: 'boolean' })
+      .default(false)
+      .notNull(),
+    featuredUntil: integer('featuredUntil', { mode: 'timestamp_ms' }),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: integer('updatedAt', { mode: 'timestamp_ms' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (t) => [
+    index('servers_owner_idx').on(t.ownerId),
+    index('servers_featured_idx').on(t.featured),
+  ]
+);
+
+export type Server = typeof servers.$inferSelect;
+export type ServerInsert = typeof servers.$inferInsert;
+export interface ServerWithVotes extends Server {
+  monthlyVotes: number;
+  totalVotes: number;
+  owner?: User | null;
+}
+
+// -------------------- Server Votes --------------------
+export const serverVotes = sqliteTable(
+  'serverVotes',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    serverId: integer('serverId')
+      .notNull()
+      .references(() => servers.id, { onDelete: 'cascade' }),
+    // Minecraft username supplied at vote time (voting requires no login).
+    username: text('username').notNull(),
+    ip: text('ip'),
+    votifierDelivered: integer('votifierDelivered', { mode: 'boolean' })
+      .default(false)
+      .notNull(),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (t) => [
+    index('serverVotes_server_created_idx').on(t.serverId, t.createdAt),
+    index('serverVotes_username_idx').on(t.username),
+  ]
+);
+
+export type ServerVote = typeof serverVotes.$inferSelect;
+
+// -------------------- Server Reports --------------------
+export const serverReports = sqliteTable(
+  'serverReports',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    serverId: integer('serverId')
+      .notNull()
+      .references(() => servers.id, { onDelete: 'cascade' }),
+    reason: text('reason').notNull(),
+    details: text('details'),
+    reporterId: text('reporterId').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    ip: text('ip'),
+    resolved: integer('resolved', { mode: 'boolean' })
+      .default(false)
+      .notNull(),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (t) => [
+    index('serverReports_server_idx').on(t.serverId),
+    index('serverReports_resolved_idx').on(t.resolved),
+  ]
+);
+
+export type ServerReport = typeof serverReports.$inferSelect;

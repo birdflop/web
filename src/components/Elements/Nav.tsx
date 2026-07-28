@@ -160,6 +160,13 @@ export default component$(() => {
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
+          href="/serverlist"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <Server size={20} />{' '}
+          {t('nav.resources.serverList.title@@Server List')}
+        </Link>
+        <Link
           href="/resources"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >

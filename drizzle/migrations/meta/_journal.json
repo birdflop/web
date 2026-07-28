@@ -43,6 +43,13 @@
       "when": 1770347052461,
       "tag": "0005_exotic_iron_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1780222656777,
+      "tag": "0006_reflective_tarantula",
+      "breakpoints": true
     }
   ]
 }

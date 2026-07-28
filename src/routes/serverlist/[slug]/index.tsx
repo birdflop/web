@@ -1,0 +1,281 @@
+import { component$ } from '@qwik.dev/core';
+import {
+  routeLoader$,
+  Link,
+  type DocumentHead,
+  type DocumentHeadValue,
+} from '@qwik.dev/router';
+import { and, eq, gte, sql } from 'drizzle-orm';
+import Globe from 'lucide-icons-qwik/icons/Globe';
+import ServerIcon from 'lucide-icons-qwik/icons/Server';
+import Copy from 'lucide-icons-qwik/icons/Copy';
+import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
+import { generateHead } from '~/root';
+import { getDB, servers, serverVotes, users } from '~/util/db';
+import { getServerStatus } from '~/util/serverlist/status';
+import { renderBBCode, stripBBCode } from '~/util/serverlist/bbcode';
+import {
+  DEFAULT_JAVA_PORT,
+  DEFAULT_BEDROCK_PORT,
+} from '~/util/serverlist/constants';
+import { checkAdmin } from '~/routes/layout';
+import StatusBadge from '~/components/ServerList/StatusBadge';
+import VoteSection from '~/components/ServerList/VoteSection';
+import ServerControls from '~/components/ServerList/ServerControls';
+
+export const useServer = routeLoader$(async (event) => {
+  const db = getDB();
+  const server = await db
+    .select({ server: servers, owner: users })
+    .from(servers)
+    .where(eq(servers.slug, event.params.slug))
+    .leftJoin(users, eq(users.id, servers.ownerId))
+    .get();
+
+  if (!server) throw event.error(404, 'Server not found');
+
+  const monthStart = Date.UTC(
+    new Date().getUTCFullYear(),
+    new Date().getUTCMonth(),
+    1
+  );
+  const [monthlyRow, totalRow] = await Promise.all([
+    db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(serverVotes)
+      .where(
+        and(
+          eq(serverVotes.serverId, server.server.id),
+          gte(serverVotes.createdAt, new Date(monthStart))
+        )
+      )
+      .get(),
+    db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(serverVotes)
+      .where(eq(serverVotes.serverId, server.server.id))
+      .get(),
+  ]);
+
+  const status = await getServerStatus(server.server);
+
+  const session = event.sharedMap.get('session');
+  const isAdmin = checkAdmin(event);
+  const canManage =
+    isAdmin ||
+    (!!session?.user?.id && session.user.id === server.server.ownerId);
+
+  return {
+    server: server.server,
+    owner: server.owner,
+    status,
+    monthlyVotes: Number(monthlyRow?.count ?? 0),
+    totalVotes: Number(totalRow?.count ?? 0),
+    sitekey: event.env.get('TURNSTILE_SITEKEY') ?? '',
+    canManage,
+  };
+});
+
+const editionLabel: Record<string, string> = {
+  java: 'Java Edition',
+  bedrock: 'Bedrock Edition',
+  both: 'Java & Bedrock',
+};
+
+const ConnectRow = component$<{ label: string; address: string }>(
+  ({ label, address }) => (
+    <div class="flex items-center gap-2 text-sm">
+      <span class="text-lum-text-secondary w-20">{label}</span>
+      <code class="lum-card lum-bg-lum-input-bg/40 rounded-lum-1 flex-1 px-2 py-1">
+        {address}
+      </code>
+      <button
+        class="lum-btn rounded-lum-1 lum-bg-transparent hover:lum-bg-lum-input-bg/40 p-1.5"
+        title="Copy"
+        onClick$={() => navigator.clipboard?.writeText(address)}
+      >
+        <Copy size={16} />
+      </button>
+    </div>
+  )
+);
+
+export default component$(() => {
+  const data = useServer().value;
+  const s = data.server;
+  const javaAddr = s.javaHost
+    ? `${s.javaHost}${s.javaPort && s.javaPort !== DEFAULT_JAVA_PORT ? `:${s.javaPort}` : ''}`
+    : null;
+  const bedrockAddr = s.bedrockHost
+    ? `${s.bedrockHost}${s.bedrockPort && s.bedrockPort !== DEFAULT_BEDROCK_PORT ? `:${s.bedrockPort}` : ''}`
+    : null;
+
+  return (
+    <section class="mx-auto flex min-h-svh max-w-5xl flex-col px-6 pt-20">
+      <Link
+        href="/serverlist"
+        class="text-lum-text-secondary hover:text-lum-accent mb-2 text-sm"
+      >
+        ← Back to server list
+      </Link>
+
+      {s.bannerUrl && (
+        <img
+          src={s.bannerUrl}
+          alt={`${s.name} banner`}
+          class="rounded-lum mb-4 max-h-48 w-full object-cover"
+          width={900}
+          height={192}
+        />
+      )}
+
+      <div class="flex flex-wrap items-start gap-4">
+        {data.status?.icon && (
+          <img
+            src={data.status.icon}
+            width={72}
+            height={72}
+            alt={`${s.name} icon`}
+            class="rounded-lum-1 h-18 w-18"
+          />
+        )}
+        <div class="flex min-w-0 flex-1 flex-col gap-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-2xl font-extrabold">{s.name}</h1>
+            {s.featured && (
+              <span class="text-xs font-semibold text-yellow-400">
+                ★ Sponsored
+              </span>
+            )}
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <StatusBadge status={data.status} />
+            <span class="text-lum-text-secondary text-sm">
+              {editionLabel[s.edition] ?? s.edition}
+            </span>
+            {data.status?.version && (
+              <span class="text-lum-text-secondary text-sm">
+                {data.status.version}
+              </span>
+            )}
+          </div>
+          {s.tags.length > 0 && (
+            <div class="mt-1 flex flex-wrap gap-1">
+              {s.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/serverlist?tag=${encodeURIComponent(tag)}`}
+                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 px-2 py-0.5 text-xs"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div class="flex flex-col gap-4 md:col-span-2">
+          {data.status?.motd && (
+            <div class="lum-card">
+              <p class="text-lum-text-secondary font-mono text-sm whitespace-pre-wrap">
+                {data.status.motd}
+              </p>
+            </div>
+          )}
+          <div class="lum-card">
+            <h2 class="text-lg font-bold">About</h2>
+            <div
+              class="[&_a]:text-lum-accent [&_img]:rounded-lum-1 [&_blockquote]:border-lum-border/40 [&_blockquote]:text-lum-text-secondary [&_code]:bg-lum-input-bg/40 text-sm leading-relaxed break-words [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:pl-3 [&_code]:rounded [&_code]:px-1 [&_img]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
+              dangerouslySetInnerHTML={renderBBCode(s.description)}
+            />
+          </div>
+
+          <div class="lum-card gap-2">
+            <h2 class="flex items-center gap-2 text-lg font-bold">
+              <ServerIcon size={20} /> Connect
+            </h2>
+            {javaAddr && <ConnectRow label="Java" address={javaAddr} />}
+            {bedrockAddr && (
+              <ConnectRow label="Bedrock" address={bedrockAddr} />
+            )}
+            {data.status && (
+              <p class="text-lum-text-secondary mt-1 text-xs">
+                Status cached for up to 2 minutes.
+              </p>
+            )}
+          </div>
+
+          {(s.website || s.discord) && (
+            <div class="flex flex-wrap gap-2">
+              {s.website && (
+                <a
+                  href={s.website}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+                >
+                  <Globe size={18} /> Website
+                </a>
+              )}
+              {s.discord && (
+                <a
+                  href={s.discord}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+                >
+                  <SiDiscord size={18} /> Discord
+                </a>
+              )}
+            </div>
+          )}
+
+          <ServerControls
+            serverId={s.id}
+            slug={s.slug}
+            canManage={data.canManage}
+          />
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <VoteSection
+            serverId={s.id}
+            sitekey={data.sitekey}
+            monthlyVotes={data.monthlyVotes}
+          />
+          <div class="lum-card gap-1 text-sm">
+            <div class="flex justify-between">
+              <span class="text-lum-text-secondary">Votes this month</span>
+              <span class="font-bold">
+                {data.monthlyVotes.toLocaleString()}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-lum-text-secondary">All-time votes</span>
+              <span class="font-bold">{data.totalVotes.toLocaleString()}</span>
+            </div>
+            {data.owner?.name && (
+              <div class="flex justify-between">
+                <span class="text-lum-text-secondary">Owner</span>
+                <span class="ml-2 truncate font-bold">{data.owner.name}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+});
+
+export const head: DocumentHead = ({ resolveValue }) => {
+  const data = resolveValue(useServer);
+  return generateHead({
+    title: `${data.server.name} - Birdflop Server List`,
+    description:
+      data.server.shortDescription ||
+      stripBBCode(data.server.description).slice(0, 150),
+    image: data.server.bannerUrl || undefined,
+  }) as DocumentHeadValue;
+};
