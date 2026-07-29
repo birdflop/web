@@ -9,7 +9,7 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - '@luminescent/ui-qwik@7.0.0-17 || 7.0.0-18 || 7.0.0-19 || 7.0.0-20 || 7.0.0-21 || 7.0.0-22 || 7.0.0-23 || 7.0.0-25'
+  - '@luminescent/ui-qwik@7.0.0-25'
   - '@luminescent/ui@7.0.2 || 7.1.0 || 7.2.0-1'
   - lucide-icons-qwik@1.24.0-qwik-v2 || 1.25.0-qwik-v2
   - happy-dom@20.11.1

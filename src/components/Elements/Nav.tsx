@@ -53,6 +53,11 @@ export default component$(() => {
       fixed
       nohamburger
       colorClass="lum-grad-bg-nav-bg sm:border-b-lum-border/10 sm:shadow-lg"
+      mobileNavProps={{
+        style: {
+          '--lum-border-radius': '1.5rem',
+        },
+      }}
     >
       <Link
         q:slot="start"
@@ -267,9 +272,9 @@ export default component$(() => {
       <Link
         q:slot="mobile"
         href="/docs"
-        class="lum-btn-p-1! hover:lum-bg-nav-bg! flex-col text-xs!"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Book size={16} /> {t('nav.docs@@Docs')}
+        <Book size={20} /> {t('nav.docs@@Docs')}
       </Link>
       <Dropdown
         q:slot="mobile"
@@ -280,10 +285,10 @@ export default component$(() => {
         panelProps={{
           class: 'lum-grad-bg-nav-bg/100 rounded-lum-1',
         }}
-        class="lum-btn-p-1! hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! text-xs!"
+        class="hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! gap-1! p-1! text-[0.65rem]!"
       >
         <Fragment q:slot="dropdown">
-          <Server size={16} q:slot="dropdown" />
+          <Server size={20} q:slot="dropdown" />
           {t('nav.hosting.title@@Hosting')}
         </Fragment>
         <a
@@ -314,16 +319,16 @@ export default component$(() => {
       <Link
         q:slot="mobile"
         href="/resources/rgb"
-        class="lum-btn-p-1! hover:lum-bg-nav-bg! flex-col text-xs!"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Palette size={16} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </Link>
       <Link
         q:slot="mobile"
         href="/resources/analyze"
-        class="lum-btn-p-1! hover:lum-bg-nav-bg! flex-col text-xs!"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Zap size={16} /> {t('nav.resources.analyze.title@@Analyze')}
+        <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
       </Link>
       <Dropdown
         q:slot="mobile"
@@ -334,10 +339,10 @@ export default component$(() => {
         panelProps={{
           class: 'lum-grad-bg-nav-bg/100 rounded-lum-1',
         }}
-        class="lum-btn-p-1! hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! text-xs!"
+        class="hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! gap-1! p-1! text-[0.65rem]!"
       >
         <Fragment q:slot="dropdown">
-          <Box size={16} /> {t('nav.resources.title@@Resources')}
+          <Box size={20} /> {t('nav.resources.title@@Resources')}
         </Fragment>
         <Link
           href="/resources/animtab"
