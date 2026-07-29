@@ -213,3 +213,40 @@ hr {
   position: relative;
   display: inline-block;
 }
+
+/* Scroll-driven parallax animations */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    #hero {
+      animation: hero-parallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 100vh;
+    }
+
+    body:has(#hero) #bg {
+      animation: bg-parallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0px 100vh;
+    }
+  }
+}
+
+@keyframes hero-parallax {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 50vh, 0);
+  }
+}
+
+@keyframes bg-parallax {
+  from {
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+  to {
+    transform: translate3d(0, -33vh, 0);
+    filter: blur(50px);
+  }
+}

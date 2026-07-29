@@ -52,7 +52,12 @@ export default component$(() => {
     <Nav
       fixed
       nohamburger
-      colorClass="lum-bg-transparent sm:lum-grad-bg-nav-bg sm:border-b-lum-border/10 sm:shadow-lg"
+      colorClass="lum-grad-bg-nav-bg sm:border-b-lum-border/10 sm:shadow-lg"
+      mobileNavProps={{
+        style: {
+          '--lum-border-radius': '1.5rem',
+        },
+      }}
     >
       <Link
         q:slot="start"
@@ -270,6 +275,109 @@ export default component$(() => {
           </button>
         </Form>
       )}
+
+      <Link
+        q:slot="mobile"
+        href="/docs"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
+      >
+        <Book size={20} /> {t('nav.docs@@Docs')}
+      </Link>
+      <Dropdown
+        q:slot="mobile"
+        id="nav-hosting"
+        noChevron
+        top
+        align="center"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg/100 rounded-lum-1',
+        }}
+        class="hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! gap-1! p-1! text-[0.65rem]!"
+      >
+        <Fragment q:slot="dropdown">
+          <Server size={20} q:slot="dropdown" />
+          {t('nav.hosting.title@@Hosting')}
+        </Fragment>
+        <a
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+          href="https://panel.birdflop.com/"
+        >
+          <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
+        </a>
+        <Link
+          href="/plans"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
+        </Link>
+        <a
+          href="https://client.birdflop.com/"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
+        </a>
+        <Link
+          href="/node-stats"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
+        </Link>
+      </Dropdown>
+      <Link
+        q:slot="mobile"
+        href="/resources/rgb"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
+      >
+        <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+      </Link>
+      <Link
+        q:slot="mobile"
+        href="/resources/analyze"
+        class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
+      >
+        <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
+      </Link>
+      <Dropdown
+        q:slot="mobile"
+        id="nav-hosting"
+        noChevron
+        top
+        align="right"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg/100 rounded-lum-1',
+        }}
+        class="hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! gap-1! p-1! text-[0.65rem]!"
+      >
+        <Fragment q:slot="dropdown">
+          <Box size={20} /> {t('nav.resources.title@@Resources')}
+        </Fragment>
+        <Link
+          href="/resources/animtab"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <Rainbow size={20} />{' '}
+          {t('nav.resources.animatedTAB.title@@Animated TAB')}
+        </Link>
+        <Link
+          href="/resources/flags"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
+        </Link>
+        <Link
+          href="/resources/banner"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <Presentation size={20} />{' '}
+          {t('nav.resources.banner.title@@Banner Generator')}
+        </Link>
+        <Link
+          href="/resources"
+          class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
+        >
+          <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
+        </Link>
+      </Dropdown>
     </Nav>
   );
 });

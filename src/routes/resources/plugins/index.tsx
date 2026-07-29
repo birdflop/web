@@ -25,7 +25,7 @@ import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
 import { defaultDescription, generateHead } from '~/root';
-import { Label, SelectMenu } from '@luminescent/ui-qwik';
+import { Label, SelectMenu, Tabs } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
 import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
@@ -39,7 +39,6 @@ import {
   PluginType,
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
-import { Tabs } from '~/components/Elements/Tabs';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 
 const debug = true;

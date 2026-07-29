@@ -50,8 +50,7 @@ import { Notification, NotificationContext } from '~/util/Notification';
 import MobileNavbar from '~/components/rgbirdflop/MobileNavbar';
 import { donateLink } from '~/components/Elements/Nav';
 import { deepTrack } from '~/util/track';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
-import { ButtonContainer } from '../Elements/ButtonContainer';
+import { ButtonContainer, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { Link, useLocation } from '@qwik.dev/router';
 
 export const rgbStoreContext =

@@ -12,7 +12,7 @@ import {
   Selection,
   selectionContext,
 } from '~/components/rgbirdflop/Input';
-import { SelectMenu } from '@luminescent/ui-qwik';
+import { ButtonContainer, SelectMenu } from '@luminescent/ui-qwik';
 import {
   FormatSegment,
   Formatting,
@@ -24,7 +24,6 @@ import {
   combinedText,
   rgbSegmentsContext,
 } from '~/components/rgbirdflop/advanced/rgbSegments';
-import { ButtonContainer } from '../Elements/ButtonContainer';
 
 function getIntervalsInRange(
   start: number,

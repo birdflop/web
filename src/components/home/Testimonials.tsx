@@ -1,4 +1,4 @@
-import { component$, useOnWindow, $ } from '@qwik.dev/core';
+import { component$ } from '@qwik.dev/core';
 
 import { Anchor, Hoverable } from '@luminescent/ui-qwik';
 import { generateHead } from '~/root';
@@ -136,19 +136,6 @@ const testimonials = [
 ];
 
 export default component$(() => {
-  useOnWindow(
-    'scroll',
-    $(() => {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (mediaQuery.matches) return;
-      const bg = document.getElementById('bg')!;
-      bg.style.bottom = `${window.scrollY / 3}px`;
-      bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
-      const hero = document.getElementById('hero')!;
-      hero.style.transform = `translateY(${window.scrollY / 2}px)`;
-    })
-  );
-
   // pick random 6 testimonials to show
   const sixTestimonials = testimonials
     .sort(() => 0.5 - Math.random())
