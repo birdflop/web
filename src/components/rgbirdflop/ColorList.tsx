@@ -8,6 +8,7 @@ import {
   QRL,
 } from '@qwik.dev/core';
 import {
+  ButtonContainer,
   ColorPicker,
   Dropdown,
   Label,
@@ -45,7 +46,6 @@ import {
   showAllGradientsContext,
 } from '~/components/rgbirdflop/RGBirdflop';
 import { getColors } from './ColorMap';
-import { ButtonContainer } from '../Elements/ButtonContainer';
 
 const hexRegex = /^#?[0-9A-F]{0,8}$/i;
 const hexRegexNoOpacity = /^#?[0-9A-F]{0,6}$/i;

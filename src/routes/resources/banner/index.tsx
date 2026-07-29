@@ -28,7 +28,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { openItemsContext } from '~/routes/layout';
 import { defaultDescription, generateHead } from '~/root';
 import Output from '~/components/Elements/Output';
-import { ButtonContainer } from '~/components/Elements/ButtonContainer';
+import { ButtonContainer } from '@luminescent/ui-qwik';
 
 import colors from '~/util/banner/colors';
 import patterns from '~/util/banner/patterns';

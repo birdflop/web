@@ -45,7 +45,6 @@ import birdThreeJS from '~/util/birdThreeJS';
 import { useSession } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
 import { Session } from '@auth/qwik';
-import MobileNav from '~/components/Elements/MobileNav';
 
 export type Settings = {
   cookies?: boolean;
@@ -460,7 +459,6 @@ export default component$(() => {
           </div>
         </div>
       )}
-      <MobileNav />
       <Footer />
     </>
   );

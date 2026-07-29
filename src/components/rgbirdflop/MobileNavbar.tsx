@@ -7,7 +7,7 @@ import Sparkles from 'lucide-icons-qwik/icons/Sparkles';
 import { inlineTranslate } from 'qwik-speak';
 import { openItemsContext } from '~/routes/layout';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
-import { ButtonContainer } from '../Elements/ButtonContainer';
+import { ButtonContainer } from '@luminescent/ui-qwik';
 
 export default component$(() => {
   const t = inlineTranslate();
