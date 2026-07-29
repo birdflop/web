@@ -305,9 +305,7 @@ export default component$<PresetPreviewProps>(
               class="lum-btn lum-grad-bg-green/50 hover:lum-bg-green rounded-lum-2 lum-btn-p-1 text-sm"
               onClick$={() => {
                 publishRefs.modalRef.value?.showModal();
-                publishRefs.selectedPreset.value = JSON.stringify(
-                  Preset.preset
-                );
+                publishRefs.selectedPreset.value = Preset.preset ?? Preset;
               }}
             >
               <Send size={20} />{' '}

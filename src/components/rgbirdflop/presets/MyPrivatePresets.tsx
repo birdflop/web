@@ -11,13 +11,29 @@ import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { Form, Link } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { rgbPreset } from '~/util/rgb/presets';
-import { inlineTranslate } from 'qwik-speak';
-import { publishPreset } from '~/util/dataUtils';
-import { validatePresetSubmission } from '~/util/rgb/presets/presetValidation';
-import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
-import RgbPreview from '../RgbPreview';
 import PencilLine from 'lucide-icons-qwik/icons/PencilLine';
+import type { SimilarPreset } from '~/util/rgb/presets/vectorize';
+import { loadPreset, type rgbPreset } from '~/util/rgb/presets';
+import {
+  validatePresetSubmission,
+  type ValidationResult,
+} from '~/util/rgb/presets/presetValidation';
+import { publishPreset } from '~/util/dataUtils';
+import { inlineTranslate } from 'qwik-speak';
+import RgbPreview from '../RgbPreview';
+
+type PublishPresetResponse =
+  | {
+      success: true;
+      result?: Array<{ id: number }>;
+      warnings?: string[];
+    }
+  | {
+      success: false;
+      error?: unknown;
+      validationErrors?: Array<{ field: string; message: string }>;
+      similarPresets?: SimilarPreset[];
+    };
 
 export default component$(() => {
   const notifications = useContext(NotificationContext);
@@ -110,12 +126,36 @@ export default component$(() => {
 
             const presetSelectElem = form.querySelector(
               '#publish-preset-preset'
-            );
-            if (
-              !presetSelectElem ||
-              !(presetSelectElem instanceof HTMLSelectElement)
-            ) {
-              validationErrors.value = ['Preset select element not found.'];
+            ) as HTMLSelectElement | HTMLInputElement | null;
+
+            const presetJsonElem = form.querySelector(
+              '#publish-preset-json'
+            ) as HTMLTextAreaElement | null;
+
+            let preset: rgbPreset | undefined;
+            if (presetJsonElem && presetJsonElem.value.trim()) {
+              try {
+                preset = loadPreset(presetJsonElem.value);
+              } catch (e) {
+                validationErrors.value = [
+                  `Invalid Preset JSON: ${e instanceof Error ? e.message : String(e)}`,
+                ];
+                isSubmitting.value = false;
+                return;
+              }
+            } else if (selectedPreset.value) {
+              preset = { ...selectedPreset.value };
+            } else if (presetSelectElem && presetSelectElem.value) {
+              const idx = parseInt(presetSelectElem.value, 10);
+              if (!isNaN(idx) && privatePresets.value[idx]) {
+                preset = { ...privatePresets.value[idx] };
+              }
+            }
+
+            if (!preset) {
+              validationErrors.value = [
+                'Please select a preset or paste custom Preset JSON.',
+              ];
               isSubmitting.value = false;
               return;
             }
@@ -125,12 +165,11 @@ export default component$(() => {
                 '#publish-preset-includetext'
               ) as HTMLInputElement
             ).checked;
-            const preset = JSON.parse(presetSelectElem.value) as rgbPreset;
 
             if (!includetext) delete preset.text;
 
             // Client-side validation
-            const validation = await validatePresetSubmission(
+            const validation: ValidationResult = await validatePresetSubmission(
               {
                 name,
                 description,
@@ -159,67 +198,63 @@ export default component$(() => {
               }
             }
 
-            const result = await publishPreset({
+            const publishRes = (await publishPreset({
               name,
               description,
               preset,
-            });
+            })) as PublishPresetResponse;
 
             isSubmitting.value = false;
 
-            const notification = result.result?.[0]
-              ? new Notification()
-                  .setTitle('Preset Submitted!')
-                  .setDescription(
-                    'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.'
-                  )
-                  .setBgColor('lum-grad-bg-green/50')
-                  .setButtons([
-                    {
-                      text: 'View Preset',
-                      href: `/resources/rgb/presets/${result.result?.[0]?.id}`,
-                    },
-                  ])
-              : new Notification()
-                  .setTitle('Preset Submission Failed')
-                  .setDescription(
-                    'Your preset failed to submit. Is there already a preset with the same configuration?'
-                  )
-                  .setBgColor('lum-grad-bg-yellow/50')
-                  .setPersist(true);
+            if (publishRes.success) {
+              const createdId = publishRes.result?.[0]?.id;
+              const notification = new Notification()
+                .setTitle('Preset Submitted!')
+                .setDescription(
+                  'Your preset has been submitted for review. It may take a few days for it to be reviewed and published.'
+                )
+                .setBgColor('lum-grad-bg-green/50');
 
-            if (!result.success) {
-              const errorMsg =
-                typeof result.error === 'string'
-                  ? result.error
-                  : 'Unknown error';
-              notification
-                .setDescription(`Your preset failed to submit: ${errorMsg}`)
-                .setBgColor('lum-grad-bg-red/50')
-                .setPersist(true);
+              if (createdId) {
+                notification.setButtons([
+                  {
+                    text: 'View Preset',
+                    href: `/resources/rgb/presets/${createdId}`,
+                  },
+                ]);
+              }
 
-              if (result.validationErrors) {
-                validationErrors.value = result.validationErrors.map(
-                  (e) => `${e.field}: ${e.message}`
+              if (publishRes.warnings && publishRes.warnings.length > 0) {
+                notification.setDescription(
+                  `${notification.description}\n\nNote: ${publishRes.warnings.join(' ')}`
                 );
               }
-              if (result.similarPresets) {
-                similarPresets.value = result.similarPresets;
-              }
-            } else if (result.warnings && result.warnings.length > 0) {
-              notification.setDescription(
-                notification.description +
-                  '\n\nNote: ' +
-                  result.warnings.join(' ')
-              );
-            }
 
-            notifications.push(notification.toJSON());
-            if (result.success) {
+              notifications.push(notification.toJSON());
               modalRef.value?.close();
               selectedPreset.value = null;
               validationErrors.value = [];
               similarPresets.value = [];
+            } else {
+              const errorMsg =
+                typeof publishRes.error === 'string'
+                  ? publishRes.error
+                  : 'Unknown error';
+              const notification = new Notification()
+                .setTitle('Preset Submission Failed')
+                .setDescription(`Your preset failed to submit: ${errorMsg}`)
+                .setBgColor('lum-grad-bg-red/50')
+                .setPersist(true);
+
+              if (publishRes.validationErrors) {
+                validationErrors.value = publishRes.validationErrors.map(
+                  (e) => `${e.field}: ${e.message}`
+                );
+              }
+              if (publishRes.similarPresets) {
+                similarPresets.value = publishRes.similarPresets;
+              }
+              notifications.push(notification.toJSON());
             }
           }}
           class="flex flex-col gap-2"
@@ -234,66 +269,84 @@ export default component$(() => {
                 id="publish-preset-name"
               />
             </Label>
-            {selectedPreset.value && (
-              <Label
-                for="publish-preset-preset"
-                label="Select a preset to publish"
+            <Label
+              for="publish-preset-preset"
+              label="Select a preset to publish"
+            >
+              <SelectMenu
+                id="publish-preset-preset"
+                class="w-full"
+                values={privatePresets.value.map((preset, i) => ({
+                  name: preset.text ?? 'Saved Preset',
+                  value: i.toString(),
+                  custom: true,
+                }))}
+                onChange$={(e, el) => {
+                  selectedPreset.value =
+                    privatePresets.value[parseInt(el.value)];
+                }}
+                value={
+                  selectedPreset.value
+                    ? (() => {
+                        const targetStr =
+                          typeof selectedPreset.value === 'string'
+                            ? selectedPreset.value
+                            : JSON.stringify(selectedPreset.value);
+                        const idx = privatePresets.value.findIndex((p) => {
+                          if (p === selectedPreset.value) return true;
+                          try {
+                            return JSON.stringify(p) === targetStr;
+                          } catch {
+                            return false;
+                          }
+                        });
+                        return idx !== -1 ? idx.toString() : undefined;
+                      })()
+                    : undefined
+                }
               >
-                <SelectMenu
-                  id="publish-preset-preset"
-                  class="w-full"
-                  values={privatePresets.value.map((preset, i) => ({
-                    name: preset.text ?? 'Saved Preset',
-                    value: i.toString(),
-                    custom: true,
-                  }))}
-                  onChange$={(e, el) => {
-                    selectedPreset.value =
-                      privatePresets.value[parseInt(el.value)];
-                  }}
-                  value={privatePresets.value
-                    .indexOf(selectedPreset.value)
-                    .toString()}
-                >
-                  {privatePresets.value.map((preset, i) => (
-                    <span
-                      key={i}
-                      q:slot={JSON.stringify(preset)}
-                      class={{
-                        'font-mc tracking-tight break-all': true,
-                        'font-mc-bold': preset.baseFormatting?.bold,
-                        'font-mc-italic': preset.baseFormatting?.italic,
-                        'font-mc-bold-italic':
-                          preset.baseFormatting?.bold &&
-                          preset.baseFormatting?.italic,
-                        [`${preset.colorFormat?.class}`]:
-                          preset.colorFormat?.class,
-                      }}
-                    >
-                      <RgbPreview rgbStore={{ ...rgbDefaults, ...preset }} />
-                    </span>
-                  ))}
+                {privatePresets.value.map((preset, i) => (
                   <span
-                    q:slot="dropdown"
+                    key={i}
+                    q:slot={i.toString()}
                     class={{
                       'font-mc tracking-tight break-all': true,
-                      'font-mc-bold': selectedPreset.value.baseFormatting?.bold,
-                      'font-mc-italic':
-                        selectedPreset.value.baseFormatting?.italic,
+                      'font-mc-bold': preset.baseFormatting?.bold,
+                      'font-mc-italic': preset.baseFormatting?.italic,
                       'font-mc-bold-italic':
-                        selectedPreset.value.baseFormatting?.bold &&
-                        selectedPreset.value.baseFormatting?.italic,
-                      [`${selectedPreset.value.colorFormat?.class}`]:
-                        selectedPreset.value.colorFormat?.class,
+                        preset.baseFormatting?.bold &&
+                        preset.baseFormatting?.italic,
+                      [`${preset.colorFormat?.class}`]:
+                        preset.colorFormat?.class,
                     }}
                   >
                     <RgbPreview
-                      rgbStore={{ ...rgbDefaults, ...selectedPreset.value }}
+                      rgbStore={{ ...rgbDefaults, ...preset }}
+                      shadowLength={2}
                     />
                   </span>
-                </SelectMenu>
-              </Label>
-            )}
+                ))}
+                <span
+                  q:slot="dropdown"
+                  class={{
+                    'font-mc tracking-tight break-all': true,
+                    'font-mc-bold': selectedPreset.value?.baseFormatting?.bold,
+                    'font-mc-italic':
+                      selectedPreset.value?.baseFormatting?.italic,
+                    'font-mc-bold-italic':
+                      selectedPreset.value?.baseFormatting?.bold &&
+                      selectedPreset.value?.baseFormatting?.italic,
+                    [`${selectedPreset.value?.colorFormat?.class}`]:
+                      selectedPreset.value?.colorFormat?.class,
+                  }}
+                >
+                  <RgbPreview
+                    rgbStore={{ ...rgbDefaults, ...selectedPreset.value }}
+                    shadowLength={2}
+                  />
+                </span>
+              </SelectMenu>
+            </Label>
           </div>
 
           <Label for="publish-preset-description" label="Preset description">
