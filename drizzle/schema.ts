@@ -9,6 +9,8 @@ import type { AdapterAccountType } from '@auth/qwik/adapters';
 import { sql } from 'drizzle-orm/sql/sql';
 import { rgbPreset } from '../src/util/rgb/presets';
 import { Settings } from '../src/routes/layout';
+import type { PluginType } from '../src/util/plugins/ServerPlugin';
+import type { PluginsStoreType } from '../src/util/plugins/types';
 import type {
   ServerEdition,
   ServerTag,
@@ -26,6 +28,7 @@ export const users = sqliteTable('user', {
   image: text('image'),
   privatePresets: text('privatePresets', { mode: 'json' }).$type<rgbPreset[]>(),
   settings: text('settings', { mode: 'json' }).$type<Settings>(),
+  plugins: text('plugins', { mode: 'json' }).$type<PluginsStoreType>(),
   createdAt: integer('createdAt', { mode: 'timestamp_ms' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -192,6 +195,9 @@ export const servers = sqliteTable(
     // Sponsored / featured placement (admin-granted in v1).
     featured: integer('featured', { mode: 'boolean' }).default(false).notNull(),
     featuredUntil: integer('featuredUntil', { mode: 'timestamp_ms' }),
+    plugins: text('plugins', { mode: 'json' }).$type<{
+      [id: string]: PluginType;
+    }>(),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

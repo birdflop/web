@@ -20,6 +20,7 @@ import Palette from 'lucide-icons-qwik/icons/Palette';
 import Star from 'lucide-icons-qwik/icons/Star';
 import Laptop from 'lucide-icons-qwik/icons/Laptop';
 import Smartphone from 'lucide-icons-qwik/icons/Smartphone';
+import Blocks from 'lucide-icons-qwik/icons/Blocks';
 import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
 import { generateHead } from '~/root';
 import { getDB, servers, serverVotes, users } from '~/util/db';
@@ -266,6 +267,40 @@ export default component$(() => {
               <Palette size={18} /> RGB Gradient
             </Link>
           </div>
+
+          {s.plugins && Object.keys(s.plugins).length > 0 && (
+            <div class="lum-card mt-4 p-4">
+              <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
+                <Blocks size={20} /> Plugins ({Object.keys(s.plugins).length})
+              </h2>
+              <div class="flex flex-wrap gap-2">
+                {Object.values(s.plugins).map((plugin) => (
+                  <div
+                    key={String(plugin.id)}
+                    class="lum-card lum-bg-lum-input-bg/30 rounded-lum-1 flex items-center gap-2 px-3 py-1.5 text-xs"
+                  >
+                    {plugin.iconUrl && (
+                      <img
+                        src={plugin.iconUrl}
+                        alt={plugin.name || String(plugin.id)}
+                        class="h-4 w-4 rounded object-cover"
+                        width={16}
+                        height={16}
+                      />
+                    )}
+                    <span class="font-semibold">
+                      {plugin.name || plugin.id}
+                    </span>
+                    {plugin.currentVersion?.name && (
+                      <span class="text-lum-text-secondary">
+                        {plugin.currentVersion.name}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <ServerControls
             serverId={s.id}

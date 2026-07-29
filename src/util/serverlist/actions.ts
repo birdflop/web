@@ -299,3 +299,52 @@ export const reportServer = server$(async function (
     return { success: false as const, error: 'Failed to submit the report.' };
   }
 });
+
+export const getUserServers = server$(async function () {
+  const session = this.sharedMap.get('session');
+  const db = getDB();
+  if (!session?.user?.id || !db) return [];
+
+  const userServers = await db
+    .select({
+      id: servers.id,
+      name: servers.name,
+      slug: servers.slug,
+    })
+    .from(servers)
+    .where(eq(servers.ownerId, session.user.id))
+    .all();
+
+  return userServers;
+});
+
+export const updateServerPlugins = server$(async function (
+  serverId: number,
+  pluginsData: {
+    [id: string]: import('~/util/plugins/ServerPlugin').PluginType;
+  }
+) {
+  const session = this.sharedMap.get('session');
+  const db = getDB();
+  if (!session?.user?.id || !db)
+    return { success: false as const, error: 'Unauthorized' };
+
+  const admin = await isAdmin.call(this);
+
+  const existing = await db
+    .select({ ownerId: servers.ownerId })
+    .from(servers)
+    .where(eq(servers.id, serverId))
+    .get();
+
+  if (!existing) return { success: false as const, error: 'Server not found' };
+  if (!admin && existing.ownerId !== session.user.id)
+    return { success: false as const, error: 'Unauthorized' };
+
+  await db
+    .update(servers)
+    .set({ plugins: pluginsData, updatedAt: new Date() })
+    .where(eq(servers.id, serverId));
+
+  return { success: true as const };
+});

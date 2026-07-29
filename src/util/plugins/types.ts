@@ -59,3 +59,17 @@ export interface SpigotVersion {
   name: string;
   releaseDate: number;
 }
+
+export type ServerType = {
+  software: keyof typeof import('../flags').softwareOptions;
+  plugins: { [id: string]: import('./ServerPlugin').PluginType };
+  serverId?: number;
+};
+
+export type PluginsStoreType = {
+  servers: {
+    [serverName: string]: ServerType;
+  };
+  openServer?: string;
+  filter?: 'outdated' | import('./ServerPlugin').PluginSource;
+};
