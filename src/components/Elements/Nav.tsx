@@ -23,6 +23,7 @@ import Activity from 'lucide-icons-qwik/icons/Activity';
 import AppWindow from 'lucide-icons-qwik/icons/AppWindow';
 import Settings from 'lucide-icons-qwik/icons/Settings';
 import Loader2 from 'lucide-icons-qwik/icons/Loader2';
+import Gamepad2 from 'lucide-icons-qwik/icons/Gamepad2';
 
 import { inlineTranslate, useSpeakConfig, useSpeakLocale } from 'qwik-speak';
 import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
@@ -92,7 +93,7 @@ export default component$(() => {
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <Fragment q:slot="dropdown">
-          <Server size={20} /> {t('nav.hosting.title@@Hosting')}
+          <Birdflop size={20} /> {t('nav.hosting.title@@Hosting')}
         </Fragment>
         <a
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
@@ -165,19 +166,20 @@ export default component$(() => {
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
-          href="/serverlist"
-          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
-        >
-          <Server size={20} />{' '}
-          {t('nav.resources.serverList.title@@Server List')}
-        </Link>
-        <Link
           href="/resources"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
           <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
         </Link>
       </Dropdown>
+      <Link
+        q:slot="end"
+        href="/serverlist"
+        class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
+      >
+        <Gamepad2 size={20} />{' '}
+        {t('nav.resources.serverList.title@@Server List')}
+      </Link>
       <SelectMenu
         align="right"
         q:slot="end"

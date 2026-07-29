@@ -1,9 +1,12 @@
 import { component$ } from '@qwik.dev/core';
 import { Link, useNavigate } from '@qwik.dev/router';
 import Star from 'lucide-icons-qwik/icons/Star';
+import ChevronUp from 'lucide-icons-qwik/icons/ChevronUp';
+import Tag from 'lucide-icons-qwik/icons/Tag';
 import type { ServerWithVotes } from '~/util/db';
 import type { ServerStatus } from '~/util/serverlist/status';
 import { stripBBCode } from '~/util/serverlist/bbcode';
+import { formatVersionRange } from '~/util/serverlist/validation';
 import StatusBadge from './StatusBadge';
 
 interface ServerCardProps {
@@ -21,6 +24,11 @@ const editionLabel: Record<string, string> = {
 export default component$<ServerCardProps>(({ server, status, rank }) => {
   const nav = useNavigate();
   const preview = server.shortDescription || stripBBCode(server.description);
+  const versionText = formatVersionRange(
+    server.minVersion,
+    server.maxVersion,
+    status?.version
+  );
 
   return (
     // Whole card is clickable via the title link's stretched ::after overlay.
@@ -49,6 +57,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
         <div class="flex min-w-12 flex-col items-center justify-center text-center">
           <span class="text-lum-text-secondary text-xs">#{rank}</span>
           <div class="text-lum-accent flex flex-col items-center">
+            <ChevronUp size={14} />
             <span class="text-lg leading-none font-extrabold">
               {server.monthlyVotes.toLocaleString()}
             </span>
@@ -83,6 +92,11 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
             <span class="rounded-lum-1 bg-lum-input-bg/40 text-lum-text-secondary px-1.5 py-0.5 text-[10px] tracking-wide uppercase">
               {editionLabel[server.edition] ?? server.edition}
             </span>
+            {versionText && (
+              <span class="rounded-lum-1 bg-lum-input-bg/40 text-lum-text-secondary px-1.5 py-0.5 text-[10px] tracking-wide">
+                {versionText}
+              </span>
+            )}
           </div>
           <StatusBadge status={status} />
           <p class="text-lum-text-secondary line-clamp-2 text-sm">{preview}</p>
@@ -96,8 +110,9 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                     e.stopPropagation();
                     void nav(`/serverlist?tag=${encodeURIComponent(tag)}`);
                   }}
-                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 cursor-pointer px-2 py-0.5 text-xs"
+                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs"
                 >
+                  <Tag size={10} />
                   {tag}
                 </button>
               ))}

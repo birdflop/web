@@ -5,7 +5,7 @@ import {
   useSignal,
   type QRL,
 } from '@qwik.dev/core';
-import { ColorPicker } from '@luminescent/ui-qwik';
+import { ButtonContainer, ColorPicker } from '@luminescent/ui-qwik';
 import Bold from 'lucide-icons-qwik/icons/Bold';
 import Italic from 'lucide-icons-qwik/icons/Italic';
 import Underline from 'lucide-icons-qwik/icons/Underline';
@@ -39,9 +39,6 @@ const SIZE_PRESETS = [
   { label: 'Large', value: 22 },
   { label: 'Huge', value: 28 },
 ];
-
-const tbBtn =
-  'lum-btn lum-btn-p-1 lum-bg-transparent hover:lum-bg-lum-input-bg/60 rounded-lum-1';
 
 export default component$<BBCodeEditorProps>(
   ({ value, onChange$, id, maxLength, placeholder }) => {
@@ -138,142 +135,131 @@ export default component$<BBCodeEditorProps>(
       <div class="flex flex-col gap-1" ref={rootRef}>
         <div class="relative">
           {/* Toolbar */}
-          <div class="border-lum-border/10 bg-lum-input-bg/30 rounded-lum-1 flex flex-row flex-wrap items-center gap-1 border p-1">
-            <button
-              type="button"
-              title="Bold"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[b]', '[/b]', 'bold text')}
-            >
-              <Bold size={16} />
-            </button>
-            <button
-              type="button"
-              title="Italic"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[i]', '[/i]', 'italic text')}
-            >
-              <Italic size={16} />
-            </button>
-            <button
-              type="button"
-              title="Underline"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[u]', '[/u]', 'underlined')}
-            >
-              <Underline size={16} />
-            </button>
-            <button
-              type="button"
-              title="Strikethrough"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[s]', '[/s]', 'struck')}
-            >
-              <Strikethrough size={16} />
-            </button>
+          <div class="flex flex-row flex-wrap items-center gap-1">
+            <ButtonContainer class="lum-bg-lum-input-bg [&>button]:p-1!">
+              <button
+                type="button"
+                title="Bold"
+                preventdefault:mousedown
+                onClick$={() => wrap('[b]', '[/b]', 'bold text')}
+              >
+                <Bold size={16} />
+              </button>
+              <button
+                type="button"
+                title="Italic"
+                preventdefault:mousedown
+                onClick$={() => wrap('[i]', '[/i]', 'italic text')}
+              >
+                <Italic size={16} />
+              </button>
+              <button
+                type="button"
+                title="Underline"
+                preventdefault:mousedown
+                onClick$={() => wrap('[u]', '[/u]', 'underlined')}
+              >
+                <Underline size={16} />
+              </button>
+              <button
+                type="button"
+                title="Strikethrough"
+                preventdefault:mousedown
+                onClick$={() => wrap('[s]', '[/s]', 'struck')}
+              >
+                <Strikethrough size={16} />
+              </button>
+            </ButtonContainer>
 
-            <span class="bg-lum-border/20 mx-1 h-5 w-px shrink-0" />
+            <ButtonContainer class="lum-bg-lum-input-bg [&>button]:p-1!">
+              <button
+                type="button"
+                title="Link"
+                preventdefault:mousedown
+                onClick$={() => openMenu('link')}
+              >
+                <Link2 size={16} />
+              </button>
+              <button
+                type="button"
+                title="Image"
+                preventdefault:mousedown
+                onClick$={() => openMenu('image')}
+              >
+                <Image size={16} />
+              </button>
+              <button
+                type="button"
+                title="Color"
+                preventdefault:mousedown
+                onClick$={() => openMenu('color')}
+              >
+                <Palette size={16} />
+              </button>
+              <button
+                type="button"
+                title="Text size"
+                preventdefault:mousedown
+                onClick$={() => openMenu('size')}
+              >
+                <Type size={16} />
+              </button>
+            </ButtonContainer>
 
-            <button
-              type="button"
-              title="Link"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => openMenu('link')}
-            >
-              <Link2 size={16} />
-            </button>
-            <button
-              type="button"
-              title="Image"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => openMenu('image')}
-            >
-              <Image size={16} />
-            </button>
-            <button
-              type="button"
-              title="Color"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => openMenu('color')}
-            >
-              <Palette size={16} />
-            </button>
-            <button
-              type="button"
-              title="Text size"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => openMenu('size')}
-            >
-              <Type size={16} />
-            </button>
+            <ButtonContainer class="lum-bg-lum-input-bg [&>button]:p-1!">
+              <button
+                type="button"
+                title="Center"
+                preventdefault:mousedown
+                onClick$={() => wrap('[center]', '[/center]', 'centered text')}
+              >
+                <AlignCenter size={16} />
+              </button>
+              <button
+                type="button"
+                title="Quote"
+                preventdefault:mousedown
+                onClick$={() => wrap('[quote]', '[/quote]', 'quoted text')}
+              >
+                <Quote size={16} />
+              </button>
+              <button
+                type="button"
+                title="Code"
+                preventdefault:mousedown
+                onClick$={() => wrap('[code]', '[/code]', 'code')}
+              >
+                <Code size={16} />
+              </button>
+              <button
+                type="button"
+                title="List"
+                preventdefault:mousedown
+                onClick$={() => wrap('[list]\n[*] ', '\n[/list]', 'first item')}
+              >
+                <List size={16} />
+              </button>
+            </ButtonContainer>
 
-            <span class="bg-lum-border/20 mx-1 h-5 w-px shrink-0" />
-
-            <button
-              type="button"
-              title="Center"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[center]', '[/center]', 'centered text')}
-            >
-              <AlignCenter size={16} />
-            </button>
-            <button
-              type="button"
-              title="Quote"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[quote]', '[/quote]', 'quoted text')}
-            >
-              <Quote size={16} />
-            </button>
-            <button
-              type="button"
-              title="Code"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[code]', '[/code]', 'code')}
-            >
-              <Code size={16} />
-            </button>
-            <button
-              type="button"
-              title="List"
-              class={tbBtn}
-              preventdefault:mousedown
-              onClick$={() => wrap('[list]\n[*] ', '\n[/list]', 'first item')}
-            >
-              <List size={16} />
-            </button>
-
-            <button
-              type="button"
-              title={showPreview.value ? 'Edit' : 'Preview'}
-              class={{
-                'lum-btn lum-btn-p-1 rounded-lum-1 ml-auto': true,
-                'lum-bg-lum-accent/30': showPreview.value,
-                'lum-bg-transparent hover:lum-bg-lum-input-bg/60':
-                  !showPreview.value,
-              }}
-              preventdefault:mousedown
-              onClick$={() => {
-                menu.value = null;
-                showPreview.value = !showPreview.value;
-              }}
-            >
-              {showPreview.value ? <EyeOff size={16} /> : <Eye size={16} />}
-              <span class="text-xs">
-                {showPreview.value ? 'Edit' : 'Preview'}
-              </span>
-            </button>
+            <ButtonContainer class="lum-bg-lum-input-bg ml-auto [&>button]:p-1!">
+              <button
+                type="button"
+                title={showPreview.value ? 'Edit' : 'Preview'}
+                class={{
+                  'lum-bg-lum-accent/30': showPreview.value,
+                }}
+                preventdefault:mousedown
+                onClick$={() => {
+                  menu.value = null;
+                  showPreview.value = !showPreview.value;
+                }}
+              >
+                {showPreview.value ? <EyeOff size={16} /> : <Eye size={16} />}
+                <span class="text-xs">
+                  {showPreview.value ? 'Edit' : 'Preview'}
+                </span>
+              </button>
+            </ButtonContainer>
           </div>
 
           {/* Popovers */}

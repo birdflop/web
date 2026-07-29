@@ -1,5 +1,8 @@
 import { $, component$, useContext, useSignal } from '@qwik.dev/core';
+import { Label } from '@luminescent/ui-qwik';
 import ChevronUp from 'lucide-icons-qwik/icons/ChevronUp';
+import User from 'lucide-icons-qwik/icons/User';
+import CheckCircle2 from 'lucide-icons-qwik/icons/CheckCircle2';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { voteForServer } from '~/util/serverlist/actions';
 import Turnstile from './Turnstile';
@@ -81,7 +84,9 @@ export default component$<VoteSectionProps>(
     return (
       <div class="lum-card gap-3">
         <div class="flex items-center justify-between">
-          <h2 class="text-lg font-bold">Vote</h2>
+          <h2 class="flex items-center gap-2 text-lg font-bold">
+            <ChevronUp size={20} /> Vote
+          </h2>
           <span class="text-lum-text-secondary text-sm">
             <span class="text-lum-accent text-lg font-extrabold">
               {votes.value.toLocaleString()}
@@ -91,21 +96,23 @@ export default component$<VoteSectionProps>(
         </div>
 
         {voted.value ? (
-          <p class="text-green-400">
-            You've voted! Come back in 24 hours to vote again.
+          <p class="flex items-center gap-1.5 text-green-400">
+            <CheckCircle2 size={18} /> You've voted! Come back in 24 hours to
+            vote again.
           </p>
         ) : (
           <>
-            <label class="flex flex-col gap-1">
-              <span class="text-sm font-semibold">Minecraft username</span>
+            <Label for="mc-username" label="Minecraft username">
+              <User size={16} q:slot="before-label" />
               <input
+                id="mc-username"
                 class="lum-input"
                 value={username.value}
                 onInput$={(e, el) => (username.value = el.value)}
                 placeholder="Notch"
                 maxLength={32}
               />
-            </label>
+            </Label>
             <Turnstile sitekey={sitekey} token={token} />
             <button
               class="lum-btn lum-bg-blue hover:lum-bg-blue/80 self-start"

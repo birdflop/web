@@ -9,11 +9,23 @@ import { and, eq, gte, sql } from 'drizzle-orm';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import ServerIcon from 'lucide-icons-qwik/icons/Server';
 import Copy from 'lucide-icons-qwik/icons/Copy';
+import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
+import Clock from 'lucide-icons-qwik/icons/Clock';
+import Calendar from 'lucide-icons-qwik/icons/Calendar';
+import Trophy from 'lucide-icons-qwik/icons/Trophy';
+import User from 'lucide-icons-qwik/icons/User';
+import Tag from 'lucide-icons-qwik/icons/Tag';
+import Info from 'lucide-icons-qwik/icons/Info';
+import Palette from 'lucide-icons-qwik/icons/Palette';
+import Star from 'lucide-icons-qwik/icons/Star';
+import Laptop from 'lucide-icons-qwik/icons/Laptop';
+import Smartphone from 'lucide-icons-qwik/icons/Smartphone';
 import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
 import { generateHead } from '~/root';
 import { getDB, servers, serverVotes, users } from '~/util/db';
 import { getServerStatus } from '~/util/serverlist/status';
 import { renderBBCode, stripBBCode } from '~/util/serverlist/bbcode';
+import { formatVersionRange } from '~/util/serverlist/validation';
 import {
   DEFAULT_JAVA_PORT,
   DEFAULT_BEDROCK_PORT,
@@ -82,23 +94,28 @@ const editionLabel: Record<string, string> = {
   both: 'Java & Bedrock',
 };
 
-const ConnectRow = component$<{ label: string; address: string }>(
-  ({ label, address }) => (
-    <div class="flex items-center gap-2 text-sm">
-      <span class="text-lum-text-secondary w-20">{label}</span>
-      <code class="lum-card lum-bg-lum-input-bg/40 rounded-lum-1 flex-1 px-2 py-1">
-        {address}
-      </code>
-      <button
-        class="lum-btn rounded-lum-1 lum-bg-transparent hover:lum-bg-lum-input-bg/40 p-1.5"
-        title="Copy"
-        onClick$={() => navigator.clipboard?.writeText(address)}
-      >
-        <Copy size={16} />
-      </button>
-    </div>
-  )
-);
+const ConnectRow = component$<{
+  label: string;
+  address: string;
+  isBedrock?: boolean;
+}>(({ label, address, isBedrock }) => (
+  <div class="flex items-center gap-2 text-sm">
+    <span class="text-lum-text-secondary flex w-20 items-center gap-1.5">
+      {isBedrock ? <Smartphone size={14} /> : <Laptop size={14} />}
+      {label}
+    </span>
+    <code class="lum-card lum-bg-lum-input-bg/40 rounded-lum-1 flex-1 px-2 py-1">
+      {address}
+    </code>
+    <button
+      class="lum-btn rounded-lum-1 lum-bg-transparent hover:lum-bg-lum-input-bg/40 p-1.5"
+      title="Copy"
+      onClick$={() => navigator.clipboard?.writeText(address)}
+    >
+      <Copy size={16} />
+    </button>
+  </div>
+));
 
 export default component$(() => {
   const data = useServer().value;
@@ -114,9 +131,9 @@ export default component$(() => {
     <section class="mx-auto flex min-h-svh max-w-5xl flex-col px-6 pt-20">
       <Link
         href="/serverlist"
-        class="text-lum-text-secondary hover:text-lum-accent mb-2 text-sm"
+        class="text-lum-text-secondary hover:text-lum-accent mb-2 inline-flex items-center gap-1 text-sm"
       >
-        ← Back to server list
+        <ArrowLeft size={16} /> Back to server list
       </Link>
 
       {s.bannerUrl && (
@@ -143,8 +160,9 @@ export default component$(() => {
           <div class="flex flex-wrap items-center gap-2">
             <h1 class="text-2xl font-extrabold">{s.name}</h1>
             {s.featured && (
-              <span class="text-xs font-semibold text-yellow-400">
-                ★ Sponsored
+              <span class="flex items-center gap-1 text-xs font-semibold text-yellow-400">
+                <Star size={12} class="fill-yellow-400 text-yellow-400" />{' '}
+                Sponsored
               </span>
             )}
           </div>
@@ -153,9 +171,18 @@ export default component$(() => {
             <span class="text-lum-text-secondary text-sm">
               {editionLabel[s.edition] ?? s.edition}
             </span>
-            {data.status?.version && (
-              <span class="text-lum-text-secondary text-sm">
-                {data.status.version}
+            {formatVersionRange(
+              s.minVersion,
+              s.maxVersion,
+              data.status?.version
+            ) && (
+              <span class="text-lum-text-secondary flex items-center gap-1 text-sm">
+                <Tag size={14} />{' '}
+                {formatVersionRange(
+                  s.minVersion,
+                  s.maxVersion,
+                  data.status?.version
+                )}
               </span>
             )}
           </div>
@@ -165,8 +192,9 @@ export default component$(() => {
                 <Link
                   key={tag}
                   href={`/serverlist?tag=${encodeURIComponent(tag)}`}
-                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 px-2 py-0.5 text-xs"
+                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 flex items-center gap-1 px-2 py-0.5 text-xs"
                 >
+                  <Tag size={10} />
                   {tag}
                 </Link>
               ))}
@@ -185,7 +213,9 @@ export default component$(() => {
             </div>
           )}
           <div class="lum-card">
-            <h2 class="text-lg font-bold">About</h2>
+            <h2 class="flex items-center gap-2 text-lg font-bold">
+              <Info size={20} /> About
+            </h2>
             <div
               class="[&_a]:text-lum-accent [&_img]:rounded-lum-1 [&_blockquote]:border-lum-border/40 [&_blockquote]:text-lum-text-secondary [&_code]:bg-lum-input-bg/40 text-sm leading-relaxed break-words [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:pl-3 [&_code]:rounded [&_code]:px-1 [&_img]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
               dangerouslySetInnerHTML={renderBBCode(s.description)}
@@ -198,39 +228,44 @@ export default component$(() => {
             </h2>
             {javaAddr && <ConnectRow label="Java" address={javaAddr} />}
             {bedrockAddr && (
-              <ConnectRow label="Bedrock" address={bedrockAddr} />
+              <ConnectRow label="Bedrock" address={bedrockAddr} isBedrock />
             )}
             {data.status && (
-              <p class="text-lum-text-secondary mt-1 text-xs">
-                Status cached for up to 2 minutes.
+              <p class="text-lum-text-secondary mt-1 flex items-center gap-1.5 text-xs">
+                <Clock size={12} class="shrink-0" /> Status cached for up to 2
+                minutes.
               </p>
             )}
           </div>
 
-          {(s.website || s.discord) && (
-            <div class="flex flex-wrap gap-2">
-              {s.website && (
-                <a
-                  href={s.website}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
-                >
-                  <Globe size={18} /> Website
-                </a>
-              )}
-              {s.discord && (
-                <a
-                  href={s.discord}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
-                >
-                  <SiDiscord size={18} /> Discord
-                </a>
-              )}
-            </div>
-          )}
+          <div class="flex flex-wrap gap-2">
+            {s.website && (
+              <a
+                href={s.website}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+              >
+                <Globe size={18} /> Website
+              </a>
+            )}
+            {s.discord && (
+              <a
+                href={s.discord}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+              >
+                <SiDiscord size={18} /> Discord
+              </a>
+            )}
+            <Link
+              href={`/resources/rgb?s=${s.slug}`}
+              class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+            >
+              <Palette size={18} /> RGB Gradient
+            </Link>
+          </div>
 
           <ServerControls
             serverId={s.id}
@@ -245,20 +280,26 @@ export default component$(() => {
             sitekey={data.sitekey}
             monthlyVotes={data.monthlyVotes}
           />
-          <div class="lum-card gap-1 text-sm">
-            <div class="flex justify-between">
-              <span class="text-lum-text-secondary">Votes this month</span>
+          <div class="lum-card gap-2 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-lum-text-secondary flex items-center gap-1.5">
+                <Calendar size={16} /> Votes this month
+              </span>
               <span class="font-bold">
                 {data.monthlyVotes.toLocaleString()}
               </span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-lum-text-secondary">All-time votes</span>
+            <div class="flex items-center justify-between">
+              <span class="text-lum-text-secondary flex items-center gap-1.5">
+                <Trophy size={16} /> All-time votes
+              </span>
               <span class="font-bold">{data.totalVotes.toLocaleString()}</span>
             </div>
             {data.owner?.name && (
-              <div class="flex justify-between">
-                <span class="text-lum-text-secondary">Owner</span>
+              <div class="flex items-center justify-between">
+                <span class="text-lum-text-secondary flex items-center gap-1.5">
+                  <User size={16} /> Owner
+                </span>
                 <span class="ml-2 truncate font-bold">{data.owner.name}</span>
               </div>
             )}

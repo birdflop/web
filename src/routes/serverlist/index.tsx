@@ -1,11 +1,15 @@
 import { $, component$, useSignal } from '@qwik.dev/core';
 import { routeLoader$, useNavigate, Link } from '@qwik.dev/router';
-import { SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import Search from 'lucide-icons-qwik/icons/Search';
-import Server from 'lucide-icons-qwik/icons/Server';
+import Gamepad2 from 'lucide-icons-qwik/icons/Gamepad2';
 import Plus from 'lucide-icons-qwik/icons/Plus';
 import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
 import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Tag from 'lucide-icons-qwik/icons/Tag';
+import Activity from 'lucide-icons-qwik/icons/Activity';
+import Frown from 'lucide-icons-qwik/icons/Frown';
+import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
 import { generateHead } from '~/root';
 import { getDB } from '~/util/db';
 import { queryServers, type ServerListParams } from '~/util/serverlist/queries';
@@ -108,7 +112,7 @@ export default component$(() => {
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
         <span class="flex flex-1 items-center gap-3">
-          <Server size={32} />
+          <Gamepad2 size={32} />
           Minecraft Server List
         </span>
         {session.value?.user ? (
@@ -185,17 +189,24 @@ export default component$(() => {
           checked={data.onlineOnly}
           onChange$={(e, el) => void updateURL({ online: el.checked })}
         >
-          <span class="text-sm">Online servers only</span>
+          <span class="flex items-center gap-1.5 text-sm">
+            <Activity size={14} class="text-green-400" /> Online servers only
+          </span>
         </Toggle>
-        <label class="flex items-center gap-2 text-sm">
-          <span class="text-lum-text-secondary">Version</span>
+        <Label
+          for="version-filter"
+          label="Version"
+          class="flex-row items-center gap-2"
+        >
+          <Tag size={16} q:slot="before-label" />
           <input
+            id="version-filter"
             class="lum-input rounded-lum-1 w-28 py-1"
             placeholder="e.g. 1.21"
             value={data.version}
             onChange$={(e, el) => void updateURL({ version: el.value })}
           />
-        </label>
+        </Label>
         {data.liveRefined && (
           <span class="text-lum-text-secondary text-xs">
             Live filters apply to the top listings.
@@ -204,7 +215,8 @@ export default component$(() => {
       </div>
 
       {data.error && (
-        <p class="lum-card lum-bg-red/20 my-2">
+        <p class="lum-card lum-bg-red/20 my-2 flex items-center gap-2">
+          <AlertCircle size={20} class="text-red-400" />
           Failed to load servers: {data.error}
         </p>
       )}
@@ -219,13 +231,18 @@ export default component$(() => {
           />
         ))}
         {data.rows.length === 0 && !data.error && (
-          <p class="text-lum-text-secondary my-10 text-center">
-            No servers found.
-            <br />
-            <Link href="/serverlist/submit" class="text-lum-accent">
-              Be the first to add one!
+          <div class="lum-card my-10 flex flex-col items-center justify-center gap-2 p-8 text-center">
+            <Frown size={40} class="text-lum-text-secondary opacity-60" />
+            <p class="text-lum-text-secondary text-base font-semibold">
+              No servers found matching your criteria.
+            </p>
+            <Link
+              href="/serverlist/submit"
+              class="lum-btn lum-bg-blue hover:lum-bg-blue/80 mt-2 font-normal"
+            >
+              <Plus size={18} /> Be the first to add one!
             </Link>
-          </p>
+          </div>
         )}
       </div>
 

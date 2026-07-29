@@ -39,7 +39,7 @@ function buildAddress(host: string, port: number | null): string {
 async function fetchStatus(
   edition: 'java' | 'bedrock',
   host: string,
-  port: number | null,
+  port: number | null
 ): Promise<ServerStatus> {
   const url = `${API_BASE}/${edition}/${encodeURIComponent(buildAddress(host, port))}`;
 
@@ -90,18 +90,30 @@ async function fetchStatus(
  * the Java endpoint (it returns a favicon/MOTD) and fall back to Bedrock.
  */
 export async function getServerStatus(
-  server: Pick<Server, 'edition' | 'javaHost' | 'javaPort' | 'bedrockHost' | 'bedrockPort'>,
+  server: Pick<
+    Server,
+    'edition' | 'javaHost' | 'javaPort' | 'bedrockHost' | 'bedrockPort'
+  >
 ): Promise<ServerStatus | null> {
   const wantsJava = server.edition === 'java' || server.edition === 'both';
-  const wantsBedrock = server.edition === 'bedrock' || server.edition === 'both';
+  const wantsBedrock =
+    server.edition === 'bedrock' || server.edition === 'both';
 
   if (wantsJava && server.javaHost) {
-    const status = await fetchStatus('java', server.javaHost, server.javaPort ?? null);
+    const status = await fetchStatus(
+      'java',
+      server.javaHost,
+      server.javaPort ?? null
+    );
     if (status.online || !wantsBedrock || !server.bedrockHost) return status;
   }
 
   if (wantsBedrock && server.bedrockHost) {
-    return fetchStatus('bedrock', server.bedrockHost, server.bedrockPort ?? null);
+    return fetchStatus(
+      'bedrock',
+      server.bedrockHost,
+      server.bedrockPort ?? null
+    );
   }
 
   return null;

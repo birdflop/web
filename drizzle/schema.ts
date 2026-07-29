@@ -169,6 +169,9 @@ export const servers = sqliteTable(
     description: text('description').notNull(),
     shortDescription: text('shortDescription'),
     edition: text('edition').$type<ServerEdition>().notNull().default('java'),
+    minVersion: text('minVersion'),
+    maxVersion: text('maxVersion'),
+    rgbPreset: text('rgbPreset', { mode: 'json' }).$type<rgbPreset>(),
     // Connection details. Java/Bedrock hosts are independent so a "both"
     // listing can point each edition at a different address.
     javaHost: text('javaHost'),
@@ -187,9 +190,7 @@ export const servers = sqliteTable(
     votifierPort: integer('votifierPort'),
     votifierToken: text('votifierToken'),
     // Sponsored / featured placement (admin-granted in v1).
-    featured: integer('featured', { mode: 'boolean' })
-      .default(false)
-      .notNull(),
+    featured: integer('featured', { mode: 'boolean' }).default(false).notNull(),
     featuredUntil: integer('featuredUntil', { mode: 'timestamp_ms' }),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' })
       .default(sql`CURRENT_TIMESTAMP`)
@@ -252,9 +253,7 @@ export const serverReports = sqliteTable(
       onDelete: 'set null',
     }),
     ip: text('ip'),
-    resolved: integer('resolved', { mode: 'boolean' })
-      .default(false)
-      .notNull(),
+    resolved: integer('resolved', { mode: 'boolean' }).default(false).notNull(),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

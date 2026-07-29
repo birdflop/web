@@ -1,5 +1,6 @@
 // Input validation + normalization for server listings.
 
+import { loadPreset, type rgbPreset } from '../rgb/presets';
 import {
   LIMITS,
   isServerEdition,
@@ -13,6 +14,9 @@ export interface ServerFormInput {
   description?: string;
   shortDescription?: string;
   edition?: string;
+  minVersion?: string;
+  maxVersion?: string;
+  rgbPreset?: string | rgbPreset;
   javaHost?: string;
   javaPort?: string | number;
   bedrockHost?: string;
@@ -31,6 +35,9 @@ export interface NormalizedServer {
   description: string;
   shortDescription: string | null;
   edition: ServerEdition;
+  minVersion: string | null;
+  maxVersion: string | null;
+  rgbPreset: rgbPreset | null;
   javaHost: string | null;
   javaPort: number | null;
   bedrockHost: string | null;
@@ -65,7 +72,9 @@ function trimOrNull(value: string | undefined): string | null {
   return trimmed ? trimmed : null;
 }
 
-function parsePort(value: string | number | undefined): number | null | undefined {
+function parsePort(
+  value: string | number | undefined
+): number | null | undefined {
   if (value === undefined || value === '' || value === null) return null;
   const n = typeof value === 'number' ? value : parseInt(value, 10);
   if (!Number.isInteger(n)) return undefined; // signal "invalid"
@@ -90,16 +99,33 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
 
   const name = input.name?.trim() ?? '';
   if (!name) errors.push('Server name is required.');
-  else if (name.length > LIMITS.name) errors.push(`Server name must be ${LIMITS.name} characters or fewer.`);
+  else if (name.length > LIMITS.name)
+    errors.push(`Server name must be ${LIMITS.name} characters or fewer.`);
 
   const description = input.description?.trim() ?? '';
   if (!description) errors.push('Description is required.');
   else if (description.length > LIMITS.description)
-    errors.push(`Description must be ${LIMITS.description} characters or fewer.`);
+    errors.push(
+      `Description must be ${LIMITS.description} characters or fewer.`
+    );
 
   const shortDescription = trimOrNull(input.shortDescription);
   if (shortDescription && shortDescription.length > LIMITS.shortDescription)
-    errors.push(`Short description must be ${LIMITS.shortDescription} characters or fewer.`);
+    errors.push(
+      `Short description must be ${LIMITS.shortDescription} characters or fewer.`
+    );
+
+  const minVersion = trimOrNull(input.minVersion);
+  if (minVersion && minVersion.length > LIMITS.version)
+    errors.push(
+      `Minimum version must be ${LIMITS.version} characters or fewer.`
+    );
+
+  const maxVersion = trimOrNull(input.maxVersion);
+  if (maxVersion && maxVersion.length > LIMITS.version)
+    errors.push(
+      `Maximum version must be ${LIMITS.version} characters or fewer.`
+    );
 
   const edition = input.edition ?? 'java';
   if (!isServerEdition(edition)) errors.push('Invalid edition.');
@@ -107,25 +133,34 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
   const javaHost = trimOrNull(input.javaHost);
   const bedrockHost = trimOrNull(input.bedrockHost);
 
-  if (javaHost && !HOST_RE.test(javaHost)) errors.push('Java host is not a valid hostname or IP.');
-  if (bedrockHost && !HOST_RE.test(bedrockHost)) errors.push('Bedrock host is not a valid hostname or IP.');
+  if (javaHost && !HOST_RE.test(javaHost))
+    errors.push('Java host is not a valid hostname or IP.');
+  if (bedrockHost && !HOST_RE.test(bedrockHost))
+    errors.push('Bedrock host is not a valid hostname or IP.');
 
   const needsJava = edition === 'java' || edition === 'both';
   const needsBedrock = edition === 'bedrock' || edition === 'both';
-  if (needsJava && !javaHost) errors.push('A Java server address is required for Java/both listings.');
-  if (needsBedrock && !bedrockHost) errors.push('A Bedrock server address is required for Bedrock/both listings.');
+  if (needsJava && !javaHost)
+    errors.push('A Java server address is required for Java/both listings.');
+  if (needsBedrock && !bedrockHost)
+    errors.push(
+      'A Bedrock server address is required for Bedrock/both listings.'
+    );
 
   const javaPort = parsePort(input.javaPort);
-  if (javaPort === undefined) errors.push('Java port must be a number between 1 and 65535.');
+  if (javaPort === undefined)
+    errors.push('Java port must be a number between 1 and 65535.');
   const bedrockPort = parsePort(input.bedrockPort);
-  if (bedrockPort === undefined) errors.push('Bedrock port must be a number between 1 and 65535.');
+  if (bedrockPort === undefined)
+    errors.push('Bedrock port must be a number between 1 and 65535.');
 
   const website = trimOrNull(input.website);
   if (website && (!isValidUrl(website) || website.length > LIMITS.url))
     errors.push('Website must be a valid http(s) URL.');
 
   const discord = trimOrNull(input.discord);
-  if (discord && discord.length > LIMITS.url) errors.push('Discord link is too long.');
+  if (discord && discord.length > LIMITS.url)
+    errors.push('Discord link is too long.');
 
   const bannerUrl = trimOrNull(input.bannerUrl);
   if (bannerUrl && (!isValidUrl(bannerUrl) || bannerUrl.length > LIMITS.url))
@@ -133,14 +168,31 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
 
   const rawTags = Array.isArray(input.tags) ? input.tags : [];
   const tags = rawTags.filter(isServerTag);
-  if (tags.length > LIMITS.maxTags) errors.push(`You can select at most ${LIMITS.maxTags} tags.`);
-  if (rawTags.some((t) => !isServerTag(t))) errors.push('One or more selected tags are invalid.');
+  if (tags.length > LIMITS.maxTags)
+    errors.push(`You can select at most ${LIMITS.maxTags} tags.`);
+  if (rawTags.some((t) => !isServerTag(t)))
+    errors.push('One or more selected tags are invalid.');
 
   const votifierHost = trimOrNull(input.votifierHost);
-  if (votifierHost && !HOST_RE.test(votifierHost)) errors.push('Votifier host is not a valid hostname or IP.');
+  if (votifierHost && !HOST_RE.test(votifierHost))
+    errors.push('Votifier host is not a valid hostname or IP.');
   const votifierPort = parsePort(input.votifierPort);
-  if (votifierPort === undefined) errors.push('Votifier port must be a number between 1 and 65535.');
+  if (votifierPort === undefined)
+    errors.push('Votifier port must be a number between 1 and 65535.');
   const votifierToken = trimOrNull(input.votifierToken);
+
+  let rgbPresetData: rgbPreset | null = null;
+  if (input.rgbPreset) {
+    if (typeof input.rgbPreset === 'object') {
+      rgbPresetData = input.rgbPreset;
+    } else if (typeof input.rgbPreset === 'string' && input.rgbPreset.trim()) {
+      try {
+        rgbPresetData = loadPreset(input.rgbPreset);
+      } catch {
+        errors.push('Invalid RGBirdflop preset JSON.');
+      }
+    }
+  }
 
   if (errors.length > 0) return { valid: false, errors };
 
@@ -152,6 +204,9 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
       description,
       shortDescription,
       edition: edition as ServerEdition,
+      minVersion,
+      maxVersion,
+      rgbPreset: rgbPresetData,
       javaHost: needsJava ? javaHost : null,
       javaPort: needsJava ? (javaPort ?? null) : null,
       bedrockHost: needsBedrock ? bedrockHost : null,
@@ -172,4 +227,19 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
 export function isValidMcUsername(username: string): boolean {
   const trimmed = username.trim();
   return trimmed.length >= 1 && trimmed.length <= 32;
+}
+
+export function formatVersionRange(
+  minVersion?: string | null,
+  maxVersion?: string | null,
+  fallbackStatusVersion?: string | null
+): string | null {
+  const min = minVersion?.trim() || null;
+  const max = maxVersion?.trim() || null;
+  if (min && max) {
+    return min === max ? min : `${min} - ${max}`;
+  }
+  if (min) return `${min}+`;
+  if (max) return `Up to ${max}`;
+  return fallbackStatusVersion?.trim() || null;
 }

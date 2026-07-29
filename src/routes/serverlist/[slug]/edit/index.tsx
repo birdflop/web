@@ -2,6 +2,8 @@ import { component$ } from '@qwik.dev/core';
 import { routeLoader$, Link } from '@qwik.dev/router';
 import { eq } from 'drizzle-orm';
 import Pencil from 'lucide-icons-qwik/icons/Pencil';
+import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
+import ShieldAlert from 'lucide-icons-qwik/icons/ShieldAlert';
 import { generateHead } from '~/root';
 import { getDB, servers } from '~/util/db';
 import { checkAdmin } from '~/routes/layout';
@@ -35,15 +37,16 @@ export default component$(() => {
       </h1>
       <Link
         href={`/serverlist/${server.slug}`}
-        class="text-lum-text-secondary hover:text-lum-accent mb-4 text-sm"
+        class="text-lum-text-secondary hover:text-lum-accent mb-4 inline-flex items-center gap-1 text-sm"
       >
-        ← Back to listing
+        <ArrowLeft size={16} /> Back to listing
       </Link>
 
       {canManage ? (
         <ServerForm mode="edit" initial={server} />
       ) : (
-        <p class="lum-card lum-bg-red/20">
+        <p class="lum-card lum-bg-red/20 flex items-center gap-2">
+          <ShieldAlert size={20} class="text-red-400" />
           You don't have permission to edit this listing.
         </p>
       )}

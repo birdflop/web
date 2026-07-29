@@ -19,18 +19,26 @@ export interface VotifierResult {
 const MAGIC = 0x733a; // NuVotifier v2 message magic
 const SOCKET_TIMEOUT_MS = 5000;
 
-function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  label: string
+): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms),
+      setTimeout(
+        () => reject(new Error(`${label} timed out after ${ms}ms`)),
+        ms
+      )
     ),
   ]);
 }
 
 function toBase64(bytes: Uint8Array): string {
   let binary = '';
-  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i++)
+    binary += String.fromCharCode(bytes[i]);
   return btoa(binary);
 }
 
@@ -40,9 +48,13 @@ async function sign(payload: string, token: string): Promise<string> {
     new TextEncoder().encode(token),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ['sign'],
+    ['sign']
   );
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload));
+  const sig = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(payload)
+  );
   return toBase64(new Uint8Array(sig));
 }
 
@@ -53,9 +65,20 @@ async function sign(payload: string, token: string): Promise<string> {
  */
 export async function sendVotifierV2(
   config: VotifierConfig,
-  vote: { username: string; serviceName: string; address: string; timestamp: number },
+  vote: {
+    username: string;
+    serviceName: string;
+    address: string;
+    timestamp: number;
+  }
 ): Promise<VotifierResult> {
-  let socket: { readable: ReadableStream; writable: WritableStream; close: () => Promise<void> } | undefined;
+  let socket:
+    | {
+        readable: ReadableStream;
+        writable: WritableStream;
+        close: () => Promise<void>;
+      }
+    | undefined;
 
   try {
     // Dynamically imported so this module never gets pulled into a client bundle.
@@ -74,7 +97,11 @@ export async function sendVotifierV2(
     const decoder = new TextDecoder();
 
     // 1. Read the handshake: "VOTIFIER 2 <challenge>\n"
-    const handshake = await withTimeout(reader.read(), SOCKET_TIMEOUT_MS, 'Votifier handshake');
+    const handshake = await withTimeout(
+      reader.read(),
+      SOCKET_TIMEOUT_MS,
+      'Votifier handshake'
+    );
     if (handshake.done || !handshake.value) {
       throw new Error('Server closed connection during handshake');
     }
@@ -107,21 +134,43 @@ export async function sendVotifierV2(
     await withTimeout(writer.write(frame), SOCKET_TIMEOUT_MS, 'Votifier send');
 
     // 4. Read the response: {"status":"ok"} or {"status":"error",...}
-    const response = await withTimeout(reader.read(), SOCKET_TIMEOUT_MS, 'Votifier response');
-    const responseText = response.value ? decoder.decode(response.value).trim() : '';
+    const response = await withTimeout(
+      reader.read(),
+      SOCKET_TIMEOUT_MS,
+      'Votifier response'
+    );
+    const responseText = response.value
+      ? decoder.decode(response.value).trim()
+      : '';
 
     await writer.close().catch(() => {});
 
     try {
-      const parsed = JSON.parse(responseText) as { status?: string; cause?: string; error?: string };
+      const parsed = JSON.parse(responseText) as {
+        status?: string;
+        cause?: string;
+        error?: string;
+      };
       if (parsed.status === 'ok') return { delivered: true };
-      return { delivered: false, error: parsed.error || parsed.cause || `Server rejected vote: ${responseText}` };
+      return {
+        delivered: false,
+        error:
+          parsed.error ||
+          parsed.cause ||
+          `Server rejected vote: ${responseText}`,
+      };
     } catch {
       // Some implementations just close the socket on success.
-      return { delivered: false, error: `Unexpected Votifier response: "${responseText}"` };
+      return {
+        delivered: false,
+        error: `Unexpected Votifier response: "${responseText}"`,
+      };
     }
   } catch (err) {
-    return { delivered: false, error: err instanceof Error ? err.message : String(err) };
+    return {
+      delivered: false,
+      error: err instanceof Error ? err.message : String(err),
+    };
   } finally {
     await socket?.close().catch(() => {});
   }

@@ -22,12 +22,64 @@ import RGBirdflop, {
 } from '~/components/rgbirdflop/RGBirdflop';
 import AllGradientsPreview from '~/components/rgbirdflop/AllGradientsPreview';
 
-export const useRGBCookies = routeLoader$(({ cookie, url }) => {
+import { eq, like, or } from 'drizzle-orm';
+import { getDB, servers } from '~/util/db';
+import { loadPreset, type rgbPreset } from '~/util/rgb/presets';
+import { slugify } from '~/util/serverlist/validation';
+
+export const useRGBCookies = routeLoader$(async ({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
     cookie,
     'rgb',
     url.searchParams
   );
+
+  const serverParam =
+    url.searchParams.get('s') || url.searchParams.get('server');
+  if (serverParam) {
+    try {
+      const db = getDB();
+      if (db) {
+        const cleanParam = serverParam.trim();
+        const slugCandidate = slugify(cleanParam);
+        const serverRow = await db
+          .select({ name: servers.name, rgbPreset: servers.rgbPreset })
+          .from(servers)
+          .where(
+            or(
+              eq(servers.slug, cleanParam),
+              eq(servers.slug, slugCandidate),
+              like(servers.name, cleanParam)
+            )
+          )
+          .get();
+
+        if (serverRow) {
+          let serverPreset: rgbPreset | null = null;
+          if (serverRow.rgbPreset) {
+            serverPreset =
+              typeof serverRow.rgbPreset === 'string'
+                ? loadPreset(serverRow.rgbPreset)
+                : loadPreset(JSON.stringify(serverRow.rgbPreset));
+          }
+
+          if (!serverPreset) {
+            serverPreset = { text: serverRow.name };
+          } else if (!serverPreset.text) {
+            serverPreset.text = serverRow.name;
+          }
+
+          cookies.cookies = {
+            ...serverPreset,
+            ...cookies.cookies,
+          };
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching server preset for RGBirdflop:', err);
+    }
+  }
+
   return cookies;
 });
 

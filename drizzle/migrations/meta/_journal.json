@@ -50,6 +50,20 @@
       "when": 1780222656777,
       "tag": "0006_reflective_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1785353982476,
+      "tag": "0007_burly_madame_web",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1785354404711,
+      "tag": "0008_safe_nightshade",
+      "breakpoints": true
     }
   ]
 }

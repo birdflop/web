@@ -3,6 +3,7 @@ import { Link, useNavigate } from '@qwik.dev/router';
 import Flag from 'lucide-icons-qwik/icons/Flag';
 import Pencil from 'lucide-icons-qwik/icons/Pencil';
 import Trash2 from 'lucide-icons-qwik/icons/Trash2';
+import X from 'lucide-icons-qwik/icons/X';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { deleteServer, reportServer } from '~/util/serverlist/actions';
 
@@ -86,7 +87,7 @@ export default component$<ServerControlsProps>(
                     class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 rounded-lum-1"
                     onClick$={() => (confirmingDelete.value = false)}
                   >
-                    Cancel
+                    <X size={16} /> Cancel
                   </button>
                 </div>
               ) : (
@@ -109,7 +110,9 @@ export default component$<ServerControlsProps>(
 
         {reporting.value && (
           <div class="lum-card gap-2">
-            <span class="text-sm font-semibold">Report this server</span>
+            <span class="flex items-center gap-1.5 text-sm font-semibold">
+              <Flag size={16} /> Report this server
+            </span>
             <input
               class="lum-input"
               placeholder="Reason (e.g. offensive content, fake listing)"
@@ -121,7 +124,7 @@ export default component$<ServerControlsProps>(
               class="lum-btn lum-bg-red/30 hover:lum-bg-red/50 self-start"
               onClick$={submitReport}
             >
-              Submit report
+              <Flag size={16} /> Submit report
             </button>
           </div>
         )}

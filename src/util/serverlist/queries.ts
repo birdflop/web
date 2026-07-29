@@ -6,7 +6,7 @@
 // bounded candidate pool, refine in memory, then paginate. This keeps us from
 // fanning out hundreds of status requests on every page view.
 
-import { and, desc, eq, inArray, like, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
 import {
   type AppDatabase,
   servers,
@@ -47,11 +47,21 @@ function startOfMonthMs(): number {
 function buildWhere(params: ServerListParams) {
   const conditions = [];
   if (params.search) conditions.push(like(servers.name, `%${params.search}%`));
-  if (params.edition === 'java') conditions.push(inArray(servers.edition, ['java', 'both']));
-  else if (params.edition === 'bedrock') conditions.push(inArray(servers.edition, ['bedrock', 'both']));
+  if (params.edition === 'java')
+    conditions.push(inArray(servers.edition, ['java', 'both']));
+  else if (params.edition === 'bedrock')
+    conditions.push(inArray(servers.edition, ['bedrock', 'both']));
   if (params.tag) {
     conditions.push(
-      sql`EXISTS (SELECT 1 FROM json_each(${servers.tags}) WHERE json_each.value = ${params.tag})`,
+      sql`EXISTS (SELECT 1 FROM json_each(${servers.tags}) WHERE json_each.value = ${params.tag})`
+    );
+  }
+  if (params.version) {
+    conditions.push(
+      or(
+        like(servers.minVersion, `%${params.version}%`),
+        like(servers.maxVersion, `%${params.version}%`)
+      )
     );
   }
   return conditions.length ? and(...conditions) : undefined;
@@ -60,14 +70,14 @@ function buildWhere(params: ServerListParams) {
 function orderClause(sort: ServerSort) {
   // Sponsored/featured always pinned on top.
   switch (sort) {
-  case 'newest':
-    return [desc(servers.featured), desc(servers.createdAt)];
-  case 'allTimeVotes':
-    return [desc(servers.featured), desc(sql`totalVotes`)];
-  case 'players': // resolved live; fall back to monthly votes for the DB pull
-  case 'votes':
-  default:
-    return [desc(servers.featured), desc(sql`monthlyVotes`)];
+    case 'newest':
+      return [desc(servers.featured), desc(servers.createdAt)];
+    case 'allTimeVotes':
+      return [desc(servers.featured), desc(sql`totalVotes`)];
+    case 'players': // resolved live; fall back to monthly votes for the DB pull
+    case 'votes':
+    default:
+      return [desc(servers.featured), desc(sql`monthlyVotes`)];
   }
 }
 
@@ -76,7 +86,7 @@ async function selectRanked(
   where: ReturnType<typeof buildWhere>,
   sort: ServerSort,
   limit: number,
-  offset: number,
+  offset: number
 ): Promise<ServerWithVotes[]> {
   const monthStart = startOfMonthMs();
   const rows = await db
@@ -85,7 +95,7 @@ async function selectRanked(
       owner: users,
       monthlyVotes:
         sql<number>`COALESCE(SUM(CASE WHEN ${serverVotes.createdAt} >= ${monthStart} THEN 1 ELSE 0 END), 0)`.as(
-          'monthlyVotes',
+          'monthlyVotes'
         ),
       totalVotes: sql<number>`COUNT(${serverVotes.id})`.as('totalVotes'),
     })
@@ -106,19 +116,22 @@ async function selectRanked(
   }));
 }
 
-async function fetchStatuses(rows: ServerWithVotes[]): Promise<Record<number, ServerStatus | null>> {
+async function fetchStatuses(
+  rows: ServerWithVotes[]
+): Promise<Record<number, ServerStatus | null>> {
   const entries = await Promise.all(
-    rows.map(async (s) => [s.id, await getServerStatus(s)] as const),
+    rows.map(async (s) => [s.id, await getServerStatus(s)] as const)
   );
   return Object.fromEntries(entries);
 }
 
 export async function queryServers(
   db: AppDatabase,
-  params: ServerListParams,
+  params: ServerListParams
 ): Promise<ServerListResult> {
   const where = buildWhere(params);
-  const needsLive = params.onlineOnly || params.version !== '' || params.sort === 'players';
+  const needsLive =
+    params.onlineOnly || params.version !== '' || params.sort === 'players';
 
   if (!needsLive) {
     const totalRow = await db
@@ -133,9 +146,14 @@ export async function queryServers(
       where,
       params.sort,
       params.perPage,
-      (params.page - 1) * params.perPage,
+      (params.page - 1) * params.perPage
     );
-    return { rows, total, statuses: await fetchStatuses(rows), liveRefined: false };
+    return {
+      rows,
+      total,
+      statuses: await fetchStatuses(rows),
+      liveRefined: false,
+    };
   }
 
   // Live-refinement path: pull a bounded pool, ping it, then filter/sort/page.
@@ -143,16 +161,25 @@ export async function queryServers(
   const statuses = await fetchStatuses(pool);
 
   let filtered = pool;
-  if (params.onlineOnly) filtered = filtered.filter((s) => statuses[s.id]?.online);
+  if (params.onlineOnly)
+    filtered = filtered.filter((s) => statuses[s.id]?.online);
   if (params.version) {
     const v = params.version.toLowerCase();
-    filtered = filtered.filter((s) => statuses[s.id]?.version?.toLowerCase().includes(v));
+    filtered = filtered.filter(
+      (s) =>
+        s.minVersion?.toLowerCase().includes(v) ||
+        s.maxVersion?.toLowerCase().includes(v) ||
+        statuses[s.id]?.version?.toLowerCase().includes(v)
+    );
   }
 
   if (params.sort === 'players') {
     filtered = [...filtered].sort((a, b) => {
       if (a.featured !== b.featured) return a.featured ? -1 : 1;
-      return (statuses[b.id]?.players.online ?? 0) - (statuses[a.id]?.players.online ?? 0);
+      return (
+        (statuses[b.id]?.players.online ?? 0) -
+        (statuses[a.id]?.players.online ?? 0)
+      );
     });
   }
 

@@ -32,7 +32,10 @@ export const SERVER_TAGS = [
 export type ServerTag = (typeof SERVER_TAGS)[number];
 
 export function isServerTag(value: unknown): value is ServerTag {
-  return typeof value === 'string' && (SERVER_TAGS as readonly string[]).includes(value);
+  return (
+    typeof value === 'string' &&
+    (SERVER_TAGS as readonly string[]).includes(value)
+  );
 }
 
 // Server editions.
@@ -40,16 +43,27 @@ export const SERVER_EDITIONS = ['java', 'bedrock', 'both'] as const;
 export type ServerEdition = (typeof SERVER_EDITIONS)[number];
 
 export function isServerEdition(value: unknown): value is ServerEdition {
-  return typeof value === 'string' && (SERVER_EDITIONS as readonly string[]).includes(value);
+  return (
+    typeof value === 'string' &&
+    (SERVER_EDITIONS as readonly string[]).includes(value)
+  );
 }
 
 // Sort options for the public listing.
 // "votes" = current-month votes (the default ranking).
-export const SERVER_SORTS = ['votes', 'players', 'newest', 'allTimeVotes'] as const;
+export const SERVER_SORTS = [
+  'votes',
+  'players',
+  'newest',
+  'allTimeVotes',
+] as const;
 export type ServerSort = (typeof SERVER_SORTS)[number];
 
 export function isServerSort(value: unknown): value is ServerSort {
-  return typeof value === 'string' && (SERVER_SORTS as readonly string[]).includes(value);
+  return (
+    typeof value === 'string' &&
+    (SERVER_SORTS as readonly string[]).includes(value)
+  );
 }
 
 // Default port numbers used when an owner omits a port.
@@ -67,4 +81,5 @@ export const LIMITS = {
   shortDescription: 150,
   maxTags: 5,
   url: 300,
+  version: 30,
 } as const;

@@ -15,7 +15,7 @@ const ESCAPE: Record<string, string> = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  '\'': '&#39;',
+  "'": '&#39;',
 };
 
 function escapeHtml(input: string): string {
@@ -60,14 +60,23 @@ export function renderBBCode(input: string): string {
       .replace(/\[i\]([\s\S]*?)\[\/i\]/gi, '<em>$1</em>')
       .replace(/\[u\]([\s\S]*?)\[\/u\]/gi, '<u>$1</u>')
       .replace(/\[s\]([\s\S]*?)\[\/s\]/gi, '<s>$1</s>')
-      .replace(/\[center\]([\s\S]*?)\[\/center\]/gi, '<div style="text-align:center">$1</div>')
-      .replace(/\[quote\]([\s\S]*?)\[\/quote\]/gi, '<blockquote>$1</blockquote>')
+      .replace(
+        /\[center\]([\s\S]*?)\[\/center\]/gi,
+        '<div style="text-align:center">$1</div>'
+      )
+      .replace(
+        /\[quote\]([\s\S]*?)\[\/quote\]/gi,
+        '<blockquote>$1</blockquote>'
+      )
       .replace(/\[code\]([\s\S]*?)\[\/code\]/gi, '<code>$1</code>')
       // Color: [color=#fff] or [color=red]
-      .replace(/\[color=([^\]]+)\]([\s\S]*?)\[\/color\]/gi, (m, color, text) => {
-        const c = safeColor(color);
-        return c ? `<span style="color:${c}">${text}</span>` : text;
-      })
+      .replace(
+        /\[color=([^\]]+)\]([\s\S]*?)\[\/color\]/gi,
+        (m, color, text) => {
+          const c = safeColor(color);
+          return c ? `<span style="color:${c}">${text}</span>` : text;
+        }
+      )
       // Size: [size=16]
       .replace(/\[size=([^\]]+)\]([\s\S]*?)\[\/size\]/gi, (m, size, text) => {
         const sz = safeSize(size);
@@ -83,12 +92,16 @@ export function renderBBCode(input: string): string {
       // Links: [url]href[/url]
       .replace(/\[url\]([\s\S]*?)\[\/url\]/gi, (m, href) => {
         const u = safeUrl(href);
-        return u ? `<a href="${u}" target="_blank" rel="noopener noreferrer nofollow">${u}</a>` : href;
+        return u
+          ? `<a href="${u}" target="_blank" rel="noopener noreferrer nofollow">${u}</a>`
+          : href;
       })
       // Images: [img]src[/img]
       .replace(/\[img\]([\s\S]*?)\[\/img\]/gi, (m, src) => {
         const u = safeUrl(src);
-        return u ? `<img src="${u}" alt="" style="max-width:100%;height:auto" loading="lazy" />` : '';
+        return u
+          ? `<img src="${u}" alt="" style="max-width:100%;height:auto" loading="lazy" />`
+          : '';
       });
 
   for (let i = 0; i < 6; i++) {

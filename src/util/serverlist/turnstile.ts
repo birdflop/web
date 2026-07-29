@@ -17,7 +17,7 @@ interface TurnstileVerifyResponse {
 export async function verifyTurnstile(
   token: string | undefined | null,
   secret: string | undefined,
-  remoteIp?: string,
+  remoteIp?: string
 ): Promise<{ success: boolean; error?: string }> {
   // No secret configured -> Turnstile disabled, allow through.
   if (!secret) return { success: true };
