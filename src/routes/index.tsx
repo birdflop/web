@@ -1,10 +1,4 @@
-import {
-  component$,
-  useVisibleTask$,
-  useSignal,
-  useOnWindow,
-  $,
-} from '@qwik.dev/core';
+import { component$, useVisibleTask$, useSignal } from '@qwik.dev/core';
 import { Link } from '@qwik.dev/router';
 
 import { Birdflop } from '@luminescent/icons-qwik';
@@ -35,19 +29,6 @@ export default component$(() => {
 
   // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => initiateTyper());
-
-  useOnWindow(
-    'scroll',
-    $(() => {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (mediaQuery.matches) return;
-      const bg = document.getElementById('bg')!;
-      bg.style.bottom = `${window.scrollY / 3}px`;
-      bg.style.setProperty('--tw-blur', `blur(${window.scrollY / 20}px)`);
-      const hero = document.getElementById('hero')!;
-      hero.style.transform = `translateY(${window.scrollY / 2}px)`;
-    })
-  );
 
   return (
     <>
