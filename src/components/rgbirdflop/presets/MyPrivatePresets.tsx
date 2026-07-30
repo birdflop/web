@@ -128,7 +128,9 @@ export default component$(() => {
               '#publish-preset-preset'
             ) as HTMLSelectElement | HTMLInputElement | null;
 
-            const presetJsonElem = form.querySelector('#publish-preset-json');
+            const presetJsonElem = form.querySelector(
+              '#publish-preset-json'
+            ) as HTMLTextAreaElement | HTMLInputElement | null;
 
             let preset: rgbPreset | undefined;
             if (presetJsonElem && presetJsonElem.value.trim()) {

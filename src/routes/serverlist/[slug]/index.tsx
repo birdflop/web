@@ -33,6 +33,7 @@ import {
 } from '~/util/serverlist/constants';
 import { checkAdmin } from '~/routes/layout';
 import StatusBadge from '~/components/ServerList/StatusBadge';
+import ServerTitle from '~/components/ServerList/ServerTitle';
 import VoteSection from '~/components/ServerList/VoteSection';
 import ServerControls from '~/components/ServerList/ServerControls';
 
@@ -159,7 +160,9 @@ export default component$(() => {
         )}
         <div class="flex min-w-0 flex-1 flex-col gap-1">
           <div class="flex flex-wrap items-center gap-2">
-            <h1 class="text-2xl font-extrabold">{s.name}</h1>
+            <h1 class="text-2xl font-extrabold">
+              <ServerTitle name={s.name} rgbPreset={s.rgbPreset} />
+            </h1>
             {s.featured && (
               <span class="flex items-center gap-1 text-xs font-semibold text-yellow-400">
                 <Star size={12} class="fill-yellow-400 text-yellow-400" />{' '}

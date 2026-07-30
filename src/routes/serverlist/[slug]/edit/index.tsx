@@ -30,26 +30,28 @@ export default component$(() => {
   const { server, canManage } = useEditServer().value;
 
   return (
-    <section class="mx-auto flex min-h-svh max-w-3xl flex-col px-6 pt-20">
-      <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
-        <Pencil size={32} />
-        Edit {server.name}
-      </h1>
-      <Link
-        href={`/serverlist/${server.slug}`}
-        class="text-lum-text-secondary hover:text-lum-accent mb-4 inline-flex items-center gap-1 text-sm"
-      >
-        <ArrowLeft size={16} /> Back to listing
-      </Link>
+    <section class="relative mx-auto flex min-h-svh w-full justify-center gap-8 px-6 pt-20">
+      <div class="min-h-15 max-w-6xl">
+        <h1 class="my-2 flex items-center gap-3 text-2xl font-extrabold">
+          <Pencil size={32} />
+          Edit {server.name}
+        </h1>
+        <Link
+          href={`/serverlist/${server.slug}`}
+          class="text-lum-text-secondary hover:text-lum-accent mb-4 inline-flex items-center gap-1 text-sm"
+        >
+          <ArrowLeft size={16} /> Back to listing
+        </Link>
 
-      {canManage ? (
-        <ServerForm mode="edit" initial={server} />
-      ) : (
-        <p class="lum-card lum-bg-red/20 flex items-center gap-2">
-          <ShieldAlert size={20} class="text-red-400" />
-          You don't have permission to edit this listing.
-        </p>
-      )}
+        {canManage ? (
+          <ServerForm mode="edit" initial={server} />
+        ) : (
+          <p class="lum-card lum-bg-red/20 flex items-center gap-2">
+            <ShieldAlert size={20} class="text-red-400" />
+            You don't have permission to edit this listing.
+          </p>
+        )}
+      </div>
     </section>
   );
 });

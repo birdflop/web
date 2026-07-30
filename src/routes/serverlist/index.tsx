@@ -1,6 +1,6 @@
-import { $, component$, useSignal } from '@qwik.dev/core';
+import { $, component$, useSignal, type QRL } from '@qwik.dev/core';
 import { routeLoader$, useNavigate, Link } from '@qwik.dev/router';
-import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import { Dropdown, Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import Search from 'lucide-icons-qwik/icons/Search';
 import Gamepad2 from 'lucide-icons-qwik/icons/Gamepad2';
 import Plus from 'lucide-icons-qwik/icons/Plus';
@@ -10,6 +10,7 @@ import Tag from 'lucide-icons-qwik/icons/Tag';
 import Activity from 'lucide-icons-qwik/icons/Activity';
 import Frown from 'lucide-icons-qwik/icons/Frown';
 import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
+import Settings from 'lucide-icons-qwik/icons/Settings';
 import { generateHead } from '~/root';
 import { getDB } from '~/util/db';
 import { queryServers, type ServerListParams } from '~/util/serverlist/queries';
@@ -26,7 +27,10 @@ import ServerCard from '~/components/ServerList/ServerCard';
 export const useServers = routeLoader$(async ({ url }) => {
   const sp = url.searchParams;
   const page = Math.max(1, parseInt(sp.get('page') || '1', 10));
-  const perPage = 20;
+  const perPage = Math.max(
+    1,
+    Math.min(100, parseInt(sp.get('perPage') || '20', 10))
+  );
   const editionParam = sp.get('edition');
   const edition =
     editionParam === 'java'
@@ -79,6 +83,104 @@ export const useServers = routeLoader$(async ({ url }) => {
   }
 });
 
+const Pagination = component$(
+  ({
+    page,
+    perPage,
+    totalPages,
+    updateURL,
+    totalCount,
+    rowsLength,
+  }: {
+    page: number;
+    perPage: number;
+    totalPages: number;
+    updateURL: QRL<(params: Record<string, string | number | boolean>) => void>;
+    totalCount: number;
+    rowsLength: number;
+  }) => {
+    return (
+      <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
+        <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
+          {`Total servers: ${rowsLength}/${totalCount}`}
+          {totalPages > 1 && ` - Page ${page} of ${totalPages}`}
+        </p>
+        <div class="flex flex-1 items-center justify-center gap-2">
+          <button
+            class="lum-btn rounded-lum-1 p-1"
+            disabled={page === 1}
+            title="Previous"
+            onClick$={() => {
+              void updateURL({ page: Math.max(1, page - 1) });
+            }}
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <div class="lum-card sm:lum-bg-transparent flex-row gap-1 p-1 sm:p-0">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum: number;
+              if (totalPages <= 5) {
+                pageNum = i + 1;
+              } else if (page <= 3) {
+                pageNum = i + 1;
+              } else if (page >= totalPages - 2) {
+                pageNum = totalPages - 4 + i;
+              } else {
+                pageNum = page - 2 + i;
+              }
+              return (
+                <button
+                  key={pageNum}
+                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
+                    pageNum === page
+                      ? 'lum-grad-bg-lum-accent/20'
+                      : 'lum-bg-transparent'
+                  }`}
+                  onClick$={() => {
+                    void updateURL({ page: pageNum });
+                  }}
+                >
+                  {pageNum}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            class="lum-btn rounded-lum-1 p-1"
+            disabled={page >= totalPages}
+            onClick$={() => {
+              void updateURL({ page: Math.min(totalPages, page + 1) });
+            }}
+            title="Next"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+        <div class="flex items-center justify-center gap-2 sm:justify-end">
+          <p class="text-lum-text-secondary text-xs whitespace-nowrap">
+            Per page:
+          </p>
+          <SelectMenu
+            class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
+            value={perPage}
+            onChange$={(e, el) => {
+              const newPerPage = parseInt(el.value, 10);
+              void updateURL({ perPage: newPerPage, page: 1 });
+            }}
+            title="Items per page"
+            values={[
+              { name: '10', value: '10' },
+              { name: '20', value: '20' },
+              { name: '50', value: '50' },
+              { name: '100', value: '100' },
+            ]}
+          />
+        </div>
+      </div>
+    );
+  }
+);
+
 export default component$(() => {
   const data = useServers().value;
   const session = useSession();
@@ -88,7 +190,12 @@ export default component$(() => {
   const updateURL = $((updates: Record<string, string | number | boolean>) => {
     const url = new URL(window.location.href);
     Object.entries(updates).forEach(([k, v]) => {
-      if (v === '' || v === false || (k === 'page' && v === 1))
+      if (
+        v === '' ||
+        v === false ||
+        (k === 'page' && v === 1) ||
+        (k === 'perPage' && v === 20)
+      )
         url.searchParams.delete(k);
       else url.searchParams.set(k, String(v));
     });
@@ -132,9 +239,10 @@ export default component$(() => {
         Discover Minecraft servers and vote for your favorites. Rankings reset
         monthly.
       </p>
+      <div class="flex flex-col gap-2"></div>
 
       {/* Filters */}
-      <div class="sm:lum-card flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1 sm:p-1">
+      <div class="sm:lum-card mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1 sm:p-1">
         <div class="lum-card sm:lum-bg-transparent flex-1 flex-row items-center gap-1 p-1 sm:p-0">
           <Search size={20} class="mx-2" />
           <input
@@ -146,7 +254,7 @@ export default component$(() => {
         </div>
         <div class="flex flex-wrap items-center justify-center gap-1">
           <SelectMenu
-            class={{ 'rounded-lum-1 lum-bg-transparent': true }}
+            class="rounded-lum-1 lum-bg-transparent"
             value={data.sort}
             onChange$={(e, el) => void updateURL({ sort: el.value })}
             title="Sort by"
@@ -158,7 +266,7 @@ export default component$(() => {
             ]}
           />
           <SelectMenu
-            class={{ 'rounded-lum-1 lum-bg-transparent': true }}
+            class="rounded-lum-1 lum-bg-transparent"
             value={data.edition}
             onChange$={(e, el) =>
               void updateURL({ edition: el.value === 'all' ? '' : el.value })
@@ -171,7 +279,7 @@ export default component$(() => {
             ]}
           />
           <SelectMenu
-            class={{ 'rounded-lum-1 lum-bg-transparent': true }}
+            class="rounded-lum-1 lum-bg-transparent"
             value={data.tag ?? ''}
             onChange$={(e, el) => void updateURL({ tag: el.value })}
             title="Tag"
@@ -180,38 +288,51 @@ export default component$(() => {
               ...SERVER_TAGS.map((t) => ({ name: t, value: t })),
             ]}
           />
-        </div>
-      </div>
+          <Dropdown
+            align="right"
+            id="settings"
+            class="rounded-lum-1 lum-bg-transparent p-3"
+            panelProps={{
+              class: 'lum-grad-bg-lum-card-bg p-3 gap-3 min-w-56',
+            }}
+          >
+            <Settings q:slot="dropdown" size={16} />
 
-      <div class="my-2 flex flex-wrap items-center gap-4 px-1">
-        <Toggle
-          id="online-only"
-          checked={data.onlineOnly}
-          onChange$={(e, el) => void updateURL({ online: el.checked })}
-        >
-          <span class="flex items-center gap-1.5 text-sm">
-            <Activity size={14} class="text-green-400" /> Online servers only
-          </span>
-        </Toggle>
-        <Label
-          for="version-filter"
-          label="Version"
-          class="flex-row items-center gap-2"
-        >
-          <Tag size={16} q:slot="before-label" />
-          <input
-            id="version-filter"
-            class="lum-input rounded-lum-1 w-28 py-1"
-            placeholder="e.g. 1.21"
-            value={data.version}
-            onChange$={(e, el) => void updateURL({ version: el.value })}
-          />
-        </Label>
-        {data.liveRefined && (
-          <span class="text-lum-text-secondary text-xs">
-            Live filters apply to the top listings.
-          </span>
-        )}
+            <Toggle
+              id="online-only"
+              checked={data.onlineOnly}
+              onChange$={(e, el) => void updateURL({ online: el.checked })}
+            >
+              <span class="flex items-center gap-1.5 text-sm">
+                <Activity size={14} class="text-green-400" /> Online servers
+                only
+              </span>
+            </Toggle>
+
+            <Label
+              for="version-filter"
+              label="Version"
+              class="flex-col items-start gap-1"
+            >
+              <span class="text-lum-text-secondary flex items-center gap-1.5 text-xs">
+                <Tag size={14} /> Filter by version
+              </span>
+              <input
+                id="version-filter"
+                class="lum-input rounded-lum-1 w-full py-1 text-sm"
+                placeholder="e.g. 1.21"
+                value={data.version}
+                onChange$={(e, el) => void updateURL({ version: el.value })}
+              />
+            </Label>
+
+            {data.liveRefined && (
+              <p class="text-lum-text-secondary text-xs">
+                Live filters apply to the top listings.
+              </p>
+            )}
+          </Dropdown>
+        </div>
       </div>
 
       {data.error && (
@@ -221,7 +342,18 @@ export default component$(() => {
         </p>
       )}
 
-      <div class="mt-2 flex flex-col gap-2">
+      {totalPages > 1 && (
+        <Pagination
+          page={data.page}
+          perPage={data.perPage}
+          totalPages={totalPages}
+          updateURL={updateURL}
+          totalCount={data.total}
+          rowsLength={data.rows.length}
+        />
+      )}
+
+      <div class="mt-2 grid grid-cols-1 gap-2">
         {data.rows.map((server, i) => (
           <ServerCard
             key={server.id}
@@ -231,7 +363,7 @@ export default component$(() => {
           />
         ))}
         {data.rows.length === 0 && !data.error && (
-          <div class="lum-card my-10 flex flex-col items-center justify-center gap-2 p-8 text-center">
+          <div class="lum-card col-span-full my-10 flex flex-col items-center justify-center gap-2 p-8 text-center">
             <Frown size={40} class="text-lum-text-secondary opacity-60" />
             <p class="text-lum-text-secondary text-base font-semibold">
               No servers found matching your criteria.
@@ -247,29 +379,14 @@ export default component$(() => {
       </div>
 
       {totalPages > 1 && (
-        <div class="my-4 flex items-center justify-center gap-2">
-          <button
-            class="lum-btn rounded-lum-1 p-1"
-            disabled={data.page === 1}
-            onClick$={() =>
-              void updateURL({ page: Math.max(1, data.page - 1) })
-            }
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <span class="text-lum-text-secondary text-sm">
-            Page {data.page} of {totalPages}
-          </span>
-          <button
-            class="lum-btn rounded-lum-1 p-1"
-            disabled={data.page >= totalPages}
-            onClick$={() =>
-              void updateURL({ page: Math.min(totalPages, data.page + 1) })
-            }
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
+        <Pagination
+          page={data.page}
+          perPage={data.perPage}
+          totalPages={totalPages}
+          updateURL={updateURL}
+          totalCount={data.total}
+          rowsLength={data.rows.length}
+        />
       )}
     </section>
   );
