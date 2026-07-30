@@ -33,11 +33,12 @@ import { PresetPartial } from '~/util/db';
 import { useIsAdmin } from '~/routes/layout';
 import SiGithub from 'simple-icons-qwik/icons/SiGithub';
 import RgbPreview from '../RgbPreview';
+import { getFormattingClasses } from '../preview';
 const fallbackpfp = '/branding/icon.png';
 
 interface PresetPreviewProps extends LinkProps {
   Preset: PresetPartial;
-  defaults?: rgbPreset;
+  rgbStore?: rgbPreset;
   publishRefs?: {
     modalRef: Signal<HTMLDialogElement | undefined>;
     selectedPreset: Signal<rgbPreset | null>;
@@ -45,7 +46,7 @@ interface PresetPreviewProps extends LinkProps {
 }
 
 export default component$<PresetPreviewProps>(
-  ({ Preset, defaults, publishRefs, ...props }) => {
+  ({ Preset, rgbStore, publishRefs, ...props }) => {
     const t = inlineTranslate();
     const privatePresets = useContext(privatePresetsContext);
     const savedPresets = useContext(savedPresetsContext);
@@ -78,7 +79,7 @@ export default component$<PresetPreviewProps>(
             (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + '10',
           '--lum-border-radius': '1rem',
           background: `linear-gradient(to bottom right, ${(
-            Preset.preset.colors ?? defaults?.colors
+            Preset.preset.colors ?? rgbStore?.colors
           )
             ?.map((color) => `${color.hex}10 ${color.pos}%`)
             .join(', ')})`,
@@ -149,27 +150,20 @@ export default component$<PresetPreviewProps>(
         >
           <p
             class={{
-              'font-mc max-w-7xl text-2xl tracking-tight break-all sm:text-3xl': true,
-              'font-mc-bold':
-                Preset.preset.baseFormatting?.bold ||
-                defaults?.baseFormatting?.bold,
-              'font-mc-italic':
-                Preset.preset.baseFormatting?.italic ||
-                defaults?.baseFormatting?.italic,
-              'font-mc-bold-italic':
-                (Preset.preset.baseFormatting?.bold &&
-                  Preset.preset.baseFormatting?.italic) ||
-                (defaults?.baseFormatting?.bold &&
-                  defaults?.baseFormatting?.italic),
-              [`${Preset.preset.colorFormat?.class || defaults?.colorFormat?.class}`]:
-                Preset.preset.colorFormat?.class ||
-                defaults?.colorFormat?.class,
+              'max-w-7xl text-2xl sm:text-3xl': true,
+              ...getFormattingClasses(
+                {
+                  ...rgbStore?.baseFormatting,
+                  ...Preset.preset.baseFormatting,
+                },
+                Preset.preset.colorFormat?.class || rgbStore?.colorFormat?.class
+              ),
             }}
           >
             <RgbPreview
               rgbStore={{
                 ...rgbDefaults,
-                ...defaults,
+                ...rgbStore,
                 ...Preset.preset,
                 text: Preset.name,
               }}

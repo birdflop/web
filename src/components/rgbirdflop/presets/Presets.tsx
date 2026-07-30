@@ -32,6 +32,7 @@ import {
 } from '~/routes/resources/rgb/presets';
 import RgbPreview from '../RgbPreview';
 import { Label } from '@luminescent/ui-qwik';
+import { getFormattingClasses } from '../preview';
 
 export default component$(({ hidden }: { hidden: boolean }) => {
   const t = inlineTranslate();
@@ -210,12 +211,11 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <div
             key={i}
             class={{
-              'lum-btn lum-bg-transparent rounded-lum-1 font-mc w-full gap-0 p-0 tracking-tight break-all': true,
-              'font-mc-bold': preset.baseFormatting?.bold,
-              'font-mc-italic': preset.baseFormatting?.italic,
-              'font-mc-bold-italic':
-                preset.baseFormatting?.bold && preset.baseFormatting?.italic,
-              [`${preset.colorFormat?.class}`]: preset.colorFormat?.class,
+              'lum-btn lum-bg-transparent rounded-lum-1 w-full gap-0 p-0 break-all': true,
+              ...getFormattingClasses(
+                preset.baseFormatting,
+                preset.colorFormat?.class
+              ),
             }}
           >
             <button
@@ -257,14 +257,11 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           <div
             key={i}
             class={{
-              'lum-btn lum-bg-transparent rounded-lum-1 font-mc w-full gap-0 p-0 tracking-tight break-all': true,
-              'font-mc-bold': Preset.preset.baseFormatting?.bold,
-              'font-mc-italic': Preset.preset.baseFormatting?.italic,
-              'font-mc-bold-italic':
-                Preset.preset.baseFormatting?.bold &&
-                Preset.preset.baseFormatting?.italic,
-              [`${Preset.preset.colorFormat?.class}`]:
-                Preset.preset.colorFormat?.class,
+              'lum-btn lum-bg-transparent rounded-lum-1 w-full gap-0 p-0 break-all': true,
+              ...getFormattingClasses(
+                Preset.preset.baseFormatting,
+                Preset.preset.colorFormat?.class
+              ),
             }}
           >
             <button

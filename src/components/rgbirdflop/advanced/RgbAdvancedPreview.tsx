@@ -120,7 +120,7 @@ export default component$<AdvancedRgbPreviewProps>(
               'char-span': true,
               'inline!': isNewline,
               'bg-blue/40 text-white!': !!isSelected,
-              ...getFormattingClasses(fmt),
+              ...getFormattingClasses(fmt, rgbStore.colorFormat?.class),
             }}
           >
             {isNewline ? (

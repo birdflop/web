@@ -113,7 +113,7 @@ export default component$<AnimTABPreviewProps>(
             class={{
               'char-span': true,
               'bg-blue/40 text-white!': !!isSelected && showSelection,
-              ...getFormattingClasses(formatting),
+              ...getFormattingClasses(formatting, rgbStore.colorFormat?.class),
             }}
             data-index={globalIndex}
           >

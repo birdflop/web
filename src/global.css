@@ -155,15 +155,15 @@ hr {
 }
 
 .font-mc-bold {
-  font-family: MinecraftBold, MinecraftBoldAlt, MinecraftRus;
+  font-family: MinecraftBold, MinecraftBoldAlt;
 }
 
 .font-mc-italic {
-  font-family: MinecraftItalic, MinecraftItalicAlt, MinecraftRus;
+  font-family: MinecraftItalic, MinecraftItalicAlt;
 }
 
 .font-mc-bold-italic {
-  font-family: MinecraftBoldItalic, MinecraftBoldItalicAlt, MinecraftRus;
+  font-family: MinecraftBoldItalic, MinecraftBoldItalicAlt;
 }
 
 .font-terraria {
