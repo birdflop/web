@@ -176,12 +176,9 @@ export default component$(
         //const shouldShowAds = usPreferredRegions.some((region) =>
         //  tz.startsWith(region)
         //);
-        const forceAds =
-          loc.url.searchParams.get('ads') === 'true' ||
-          new URLSearchParams(window.location.search).get('ads') === 'true';
-        const shouldShowAds =
-          forceAds ||
-          !usPreferredRegions.some((region) => tz.startsWith(region));
+        const shouldShowAds = !usPreferredRegions.some((region) =>
+          tz.startsWith(region)
+        );
 
         if (shouldShowAds) {
           showAds.value = true;
