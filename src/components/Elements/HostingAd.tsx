@@ -110,7 +110,7 @@ export default component$<HostingAdProps>(({ variant, position }) => {
         data-umami-event-variant={AD_VARIANTS[variant].label}
         data-ad-position={position}
       >
-        {(themeStore.isDark === undefined || !themeStore.isDark) && (
+        {(themeStore.isDark === undefined || themeStore.isDark) && (
           <DarkImage
             alt="Ad Image - Birdflop Hosting"
             class={{
