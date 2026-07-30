@@ -9,33 +9,46 @@ import {
 //@ts-expect-error vite imagetools
 import AdPemi from '~/images/ad/AdPemi.png?jsx&format=avif&w=256;512;1024';
 //@ts-expect-error vite imagetools
+import AdPemiAIHorizontal from '~/images/ad/AdPemiAIHorizontal.png?jsx&format=avif&w=256;512;1024';
+//@ts-expect-error vite imagetools
 import AdPemiAIDark from '~/images/ad/AdPemiAIDark.png?jsx&format=avif&w=256;512;1024';
 //@ts-expect-error vite imagetools
+import AdPemiAIDarkHorizontal from '~/images/ad/AdPemiAIDarkHorizontal.png?jsx&format=avif&w=256;512;1024';
+//@ts-expect-error vite imagetools`
 import AdAI from '~/images/ad/AdAI.png?jsx&format=avif&w=256;512;1024';
 //@ts-expect-error vite imagetools
+import AdAIHorizontal from '~/images/ad/AdAIHorizontal.png?jsx&format=avif&w=256;512;1024';
+//@ts-expect-error vite imagetools
 import AdAIDark from '~/images/ad/AdAIDark.png?jsx&format=avif&w=256;512;1024';
+//@ts-expect-error vite imagetools
+import AdAIDarkHorizontal from '~/images/ad/AdAIDarkHorizontal.png?jsx&format=avif&w=256;512;1024';
 import { ThemeContext } from '~/util/themeUtil';
+import { getClassObject } from '@luminescent/ui-qwik';
 
 export const AD_VARIANTS = {
   'ai-generated': {
     light: AdAI as Component<PropsOf<'img'>>,
+    lightHorizontal: AdAIHorizontal as Component<PropsOf<'img'>>,
     dark: AdAIDark as Component<PropsOf<'img'>>,
+    darkHorizontal: AdAIDarkHorizontal as Component<PropsOf<'img'>>,
     label: 'AI Generated',
   },
   'pemi-handmade': {
     light: AdPemi as Component<PropsOf<'img'>>,
+    lightHorizontal: AdPemiAIHorizontal as Component<PropsOf<'img'>>,
     dark: AdPemiAIDark as Component<PropsOf<'img'>>,
+    darkHorizontal: AdPemiAIDarkHorizontal as Component<PropsOf<'img'>>,
     label: 'Handmade by Pemi',
   },
 } as const;
 export type AdVariantKey = keyof typeof AD_VARIANTS;
 
-interface HostingAdProps {
+interface HostingAdProps extends PropsOf<'div'> {
   variant: AdVariantKey;
-  position: 'Left' | 'Right';
+  position: 'Left' | 'Right' | 'Horizontal';
 }
 
-export default component$<HostingAdProps>(({ variant, position }) => {
+export default component$<HostingAdProps>(({ variant, position, ...props }) => {
   const tracked = useSignal(false);
 
   // Track ad impressions when they become visible
@@ -87,22 +100,32 @@ export default component$<HostingAdProps>(({ variant, position }) => {
     };
   });
 
-  const LightImage = AD_VARIANTS[variant].light;
-  const DarkImage = AD_VARIANTS[variant].dark;
+  const LightImage =
+    position === 'Horizontal'
+      ? AD_VARIANTS[variant].lightHorizontal
+      : AD_VARIANTS[variant].light;
+  const DarkImage =
+    position === 'Horizontal'
+      ? AD_VARIANTS[variant].darkHorizontal
+      : AD_VARIANTS[variant].dark;
 
   const themeStore = useContext(ThemeContext);
 
   return (
     <div
-      class={
-        position === 'Left'
-          ? 'hidden justify-center 2xl:flex'
-          : '3xl:flex hidden justify-center'
-      }
+      class={{
+        'hidden justify-center 2xl:flex': position === 'Left',
+        '3xl:flex hidden justify-center': position === 'Right',
+        'flex justify-center': position === 'Horizontal',
+        ...getClassObject(props.class),
+      }}
     >
       <a
         href="/#plans"
-        class="sticky top-24 h-144 w-96 opacity-70 transition-opacity hover:opacity-100"
+        class={{
+          'sticky top-24 w-full opacity-70 transition-opacity hover:opacity-100': true,
+          'h-144 max-w-96': position !== 'Horizontal',
+        }}
         aria-label="View Birdflop plans"
         data-umami-event="Hosting Ad Click"
         data-umami-event-page="RGBirdflop"

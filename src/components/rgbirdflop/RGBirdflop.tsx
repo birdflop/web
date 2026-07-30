@@ -484,6 +484,13 @@ export default component$(
                   <Decode hidden={!openItems.value.includes('decode')} />
                 </div>
                 <Slot name="column2" />
+                {showAds.value && adVariant.value && (
+                  <HostingAd
+                    variant={adVariant.value}
+                    position="Horizontal"
+                    class="flex md:col-span-2 2xl:hidden"
+                  />
+                )}
               </div>
             </div>
 
