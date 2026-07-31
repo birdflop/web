@@ -111,7 +111,7 @@ export default component$<RgbPreviewProps>(
             'char-span': true,
             'inline!': isNewline,
             'bg-blue/40 text-white!': !!isSelected && showSelection,
-            ...getFormattingClasses(formatting),
+            ...getFormattingClasses(formatting, rgbStore.colorFormat?.class),
           }}
           data-text={segmentText}
           data-index={index}

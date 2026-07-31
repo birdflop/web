@@ -3,7 +3,8 @@ import {
   rgbDefaults,
   type Formatting,
 } from '@birdflop/rgbirdflop';
-import { component$ } from '@qwik.dev/core';
+import { getClassObject } from '@luminescent/ui-qwik';
+import { ClassList, component$ } from '@qwik.dev/core';
 
 export function toCSS(rgb?: number[]): string {
   return `rgba(${rgb?.slice(0, 3).join(',') || '0,0,0'}, ${rgb?.[3] !== undefined ? rgb[3] / 255 : 1})`;
@@ -39,16 +40,31 @@ export function getEffectiveFormatting(
   return formatting;
 }
 
-export function getFormattingClasses(formatting: Formatting) {
-  return {
-    'font-mc-bold': !!formatting.bold,
-    'font-mc-italic': !!formatting.italic,
-    'font-mc-bold-italic': !!formatting.bold && !!formatting.italic,
-    underline: !!formatting.underline,
-    strikethrough: !!formatting.strikethrough,
+export function getFormattingClasses(
+  formatting?: Formatting,
+  Class?: ClassList
+) {
+  const decorations = {
+    underline: !!formatting?.underline,
+    strikethrough: !!formatting?.strikethrough,
     'underline-strikethrough':
-      !!formatting.underline && !!formatting.strikethrough,
-    obfuscate: !!formatting.obfuscate,
+      !!formatting?.underline && !!formatting?.strikethrough,
+    obfuscate: !!formatting?.obfuscate,
+  };
+
+  if (Class)
+    return {
+      ...getClassObject(Class),
+      'font-bold': !!formatting?.bold,
+      italic: !!formatting?.italic,
+      ...decorations,
+    };
+  return {
+    'font-mc': true,
+    'font-mc-bold': !!formatting?.bold,
+    'font-mc-italic': !!formatting?.italic,
+    'font-mc-bold-italic': !!formatting?.bold && !!formatting?.italic,
+    ...decorations,
   };
 }
 

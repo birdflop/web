@@ -35,6 +35,7 @@ import darkBackgrounds, {
   lightBackgrounds,
 } from '~/components/Elements/Background';
 import { obfuscateText } from '~/util/rgb/obfuscator';
+import { getFormattingClasses } from '~/components/rgbirdflop/preview';
 
 const createImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -85,14 +86,7 @@ function renderMotdLine(line: string) {
       key={`run${i}`}
       data-obf={run.style.obfuscated ? run.text : undefined}
       class={{
-        'font-mc': !run.style.bold && !run.style.italic,
-        'font-mc-bold': run.style.bold && !run.style.italic,
-        'font-mc-italic': run.style.italic && !run.style.bold,
-        'font-mc-bold-italic': run.style.bold && run.style.italic,
-        underline: run.style.underline && !run.style.strikethrough,
-        strikethrough: run.style.strikethrough && !run.style.underline,
-        'underline-strikethrough':
-          run.style.underline && run.style.strikethrough,
+        ...getFormattingClasses(run.style),
         'motd-obf': run.style.obfuscated,
       }}
       style={{
@@ -369,10 +363,13 @@ export default component$(() => {
                   onClick$={() => insertCode(`&${f.code}`)}
                   class={{
                     'lum-btn lum-bg-lum-input-bg/50 hover:lum-bg-lum-input-bg px-3 py-1.5 text-sm': true,
-                    'font-mc-bold': f.code === 'l',
-                    'font-mc-italic': f.code === 'o',
-                    underline: f.code === 'n',
-                    strikethrough: f.code === 'm',
+                    ...getFormattingClasses({
+                      bold: f.code === 'l',
+                      italic: f.code === 'o',
+                      underline: f.code === 'n',
+                      strikethrough: f.code === 'm',
+                      obfuscate: f.code === 'k',
+                    }),
                   }}
                 >
                   {f.code === 'r' ? <Eraser size={16} /> : null}

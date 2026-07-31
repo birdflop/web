@@ -551,7 +551,7 @@ export default component$(() => {
           <PresetPreview
             key={`${publicPreset.name}-${publicPreset.author}`}
             Preset={publicPreset}
-            defaults={presetStore.previewWithSettings ? rgbStore : undefined}
+            rgbStore={presetStore.previewWithSettings ? rgbStore : undefined}
           />
         ))}
         {publicPresets.length === 0 && (

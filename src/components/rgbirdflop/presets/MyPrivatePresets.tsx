@@ -21,6 +21,7 @@ import {
 import { publishPreset } from '~/util/dataUtils';
 import { inlineTranslate } from 'qwik-speak';
 import RgbPreview from '../RgbPreview';
+import { getFormattingClasses } from '../preview';
 
 type PublishPresetResponse =
   | {
@@ -310,14 +311,11 @@ export default component$(() => {
                     key={i}
                     q:slot={i.toString()}
                     class={{
-                      'font-mc tracking-tight break-all': true,
-                      'font-mc-bold': preset.baseFormatting?.bold,
-                      'font-mc-italic': preset.baseFormatting?.italic,
-                      'font-mc-bold-italic':
-                        preset.baseFormatting?.bold &&
-                        preset.baseFormatting?.italic,
-                      [`${preset.colorFormat?.class}`]:
-                        preset.colorFormat?.class,
+                      'break-all': true,
+                      ...getFormattingClasses(
+                        preset.baseFormatting,
+                        preset.colorFormat?.class
+                      ),
                     }}
                   >
                     <RgbPreview
@@ -329,15 +327,11 @@ export default component$(() => {
                 <span
                   q:slot="dropdown"
                   class={{
-                    'font-mc tracking-tight break-all': true,
-                    'font-mc-bold': selectedPreset.value?.baseFormatting?.bold,
-                    'font-mc-italic':
-                      selectedPreset.value?.baseFormatting?.italic,
-                    'font-mc-bold-italic':
-                      selectedPreset.value?.baseFormatting?.bold &&
-                      selectedPreset.value?.baseFormatting?.italic,
-                    [`${selectedPreset.value?.colorFormat?.class}`]:
-                      selectedPreset.value?.colorFormat?.class,
+                    'break-all': true,
+                    ...getFormattingClasses(
+                      selectedPreset.value?.baseFormatting,
+                      selectedPreset.value?.colorFormat?.class
+                    ),
                   }}
                 >
                   <RgbPreview
